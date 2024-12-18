@@ -2653,14 +2653,8 @@
 							</span>
 						</div>
 					</div>
-					<hr>
-					<!-- Travel Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Travel Information
-					</h4>
-
 					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="Form.service_type.value == 'charter_tour'">
+					<div *ngIf="Form.service_type.value == 'charter_tour'">
 						<div class="row">
 							<div class="col-md-4 key">
 								<span>
@@ -2674,6 +2668,13 @@
 							</div>
 						</div>
 					</div>
+					<hr>
+					<!-- Travel Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Travel Information
+					</h4>
+
+					
 
 					<!-- ################ Pickup ################### -->
 					<h5 class="p-2 m-0 text-xl preview-pickup-color">
@@ -3422,7 +3423,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Total Cost
+										Total Client Cost
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
@@ -3846,7 +3847,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Total Cost
+										Total Client Cost
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">

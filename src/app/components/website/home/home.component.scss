@@ -144,7 +144,7 @@ section {
 }
 
 .font-weight-bolder {
-	font-size: 19px !important;
+	font-size: 17.9px !important;
 }
 
 .after_icon::after {
@@ -267,6 +267,10 @@ section {
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		display: none;
 	}
+
+	.font-weight-bolder {
+		font-size: 15px !important;
+	}
 }
 
 .gear-bg-black {
@@ -274,6 +278,7 @@ section {
 }
 
 @media only screen and (max-width: 767px) {
+
 	.gear-bg {
 		color: #000 !important;
 	}

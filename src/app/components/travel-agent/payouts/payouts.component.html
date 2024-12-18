@@ -17,7 +17,6 @@
                                 *ngIf="invoices.length >0">
                                 <thead>
                                     <tr role="row">
-                                        <th>Transfer ID</th>
                                         <th>Date</th>
                                         <th>Amount</th>
                                         <th>Description</th>
@@ -25,16 +24,13 @@
                                 </thead>
                                 <tbody class="invoiceTbody" *ngFor="let invoice of invoices">
                                     <tr role="row" class="odd">
-                                        <td class="text-center" style="font-size: 17px;">
-                                            <p>{{invoice?.id}}</p>
-                                        </td>
-                                        <td class="text-center" style="font-size: 17px;">
+                                        <td class="text-center" style="font-size: 18px;font-weight: 500;">
                                             <p>{{ invoice?.created_at | date: 'dd-MMM-yyyy' }}</p>
                                         </td>
-                                        <td class="text-center" style="font-size: 17px;">
+                                        <td class="text-center" style="font-size: 18px;font-weight: 500;">
                                             <p>${{invoice?.amount}}</p>
                                         </td>
-                                        <td class="text-center" style="font-size: 17px;">
+                                        <td class="text-center" style="font-size: 18px;font-weight: 500;">
                                             <p>{{ invoice?.description ? invoice?.description :
                                                 invoice?.transfer_group}}</p>
                                         </td>
