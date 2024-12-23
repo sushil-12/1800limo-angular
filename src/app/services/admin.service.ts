@@ -1382,4 +1382,9 @@ export class AdminService {
 		return this.httpClient.get(path).toPromise();
 	}
 
+	//get invoice list
+	mapsPin(id) {
+		return this.httpClient.get(this.serverUrl + `affiliate-pincodes?vehicleId=${id}`);
+	}
+
 }
