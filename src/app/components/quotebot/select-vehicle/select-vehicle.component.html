@@ -387,11 +387,9 @@
 							<!-- VEHICLE: INFORMATION -->
 							<div id="vehinfo_{{ vehinfo_index }}" class="vehicle-info">
 								<!-- VEHICLE: PRICE -->
-								<div class="d-flex price mb-2" *ngIf="vehinfo?.number_of_vehicles <= 1">
+								<div class="d-flex price" *ngIf="vehinfo?.number_of_vehicles <= 1">
 									<div class="col-md-4 p-0" style="min-width: fit-content;">
-										{{ formatter(getKeyName()) | titlecase }} &nbsp;<span class="text-rate">
-											All Inclusive Rate<sup class="sup-red">*</sup>
-										</span>
+										{{ formatter(getKeyName()) | titlecase }} &nbsp;
 									</div>
 									<div class="col-md-4" style="min-width: fit-content;">
 										<span style="font-size: 20px;">
@@ -401,6 +399,9 @@
 										</span>
 									</div>
 								</div>
+								<span class="text-rate">
+									All Inclusive Rate include gratuity<sup class="sup-red">*</sup>
+								</span>
 								<div class="d-flex price">
 									<!-- <div class="col-md-12 p-0" style="min-width: fit-content;">
 										Vehicle Type
@@ -650,7 +651,7 @@
 									<p id="vehicle-name" class="vehicle-name-text-mobile">
 										{{vehinfo?.name}}
 									</p>
-									<p class="font-weight-bolder mb-1" style="font-size: 0.8rem;"
+									<p class="font-weight-bolder mb-1" style="font-size: 0.9rem;"
 										*ngIf="vehinfo?.number_of_vehicles <= 1">
 										<span style="color: #c94505;font-weight: 500;">
 											{{ formatter(getKeyName()) | titlecase }}&nbsp;
@@ -676,7 +677,7 @@
 										{{vehinfo?.estimated_price_round_trip}}
 									</p>
 									<p id="vehicle-name" class="text-rate mb-2">
-										All Inclusive Rate<sup class="sup-red">*</sup>
+										All Inclusive Rate include gratuity<sup class="sup-red">*</sup>
 									</p>
 									<div id="icons" class="d-flex mb-2" style="gap:8px;">
 										<div class="icon-container-mobile">
