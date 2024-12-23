@@ -97,6 +97,7 @@ import { SubscribersListComponent } from './subscribers-list/subscribers-list.co
 import { DriverDetailsComponent } from '../subscription/driver-details/driver-details.component';
 import { AddDriverSubscriberComponent } from '../subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { FarmOutBookingsComponent } from '../subscription/farm-out-bookings/farm-out-bookings.component';
+import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
 
 
 const routes: Routes = [
@@ -627,6 +628,11 @@ const routes: Routes = [
 		path: 'farm-out-bookings',
 		canActivate: [AdminGuardGuard],
 		component: FarmOutBookingsComponent
+	},
+	{
+		path: 'maps',
+		canActivate: [AdminGuardGuard],
+		component: AffiliateMapPinsComponent
 	},
 ];
 

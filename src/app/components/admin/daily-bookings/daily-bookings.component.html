@@ -195,7 +195,7 @@
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#accept_charge_modal"
 												(click)="acceptChargeClick(booking.booking_id)"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled') && booking?.created_by_role != 'subscriber')">
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled' && booking?.charged_amount == null) && booking?.created_by_role != 'subscriber')">
 												<div class="dropdown-item-icon"></div>
 												Accept & Charge (50%)
 											</a>
@@ -979,7 +979,7 @@
 						Travel Information
 					</h4>
 
-					
+
 
 					<!-- ################ Pickup ################### -->
 					<h5 class="m-0 my-2 font-weight-bolder text-2xl">

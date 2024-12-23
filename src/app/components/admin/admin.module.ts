@@ -123,6 +123,7 @@ import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account
 import { FleetComponent } from './cms/fleet/fleet.component';
 import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
 import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
+import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
 
 
 @NgModule({
@@ -218,7 +219,8 @@ import { SubscribersListComponent } from './subscribers-list/subscribers-list.co
 		LooseAffiliateAccountDetailsComponent,
 		FleetComponent,
 		FleetPageEditComponent,
-		SubscribersListComponent
+		SubscribersListComponent,
+		AffiliateMapPinsComponent
 	],
 	imports: [
 		CommonModule,
