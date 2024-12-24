@@ -185,8 +185,8 @@ export class AddVehicleComponent implements OnInit {
 			numberOfVehicles: [1],
 			seats: [4, [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: [2, [Validators.required, Validators.pattern("^[0-9]*$")]],
-			charterCancelPolicy: ['2', Validators.required],
-			nonCharterCancelPolicy: ['2', Validators.required],
+			charterCancelPolicy: ['24', Validators.required],
+			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenities: this.formBuilder.array([]),
@@ -1024,6 +1024,13 @@ export class AddVehicleComponent implements OnInit {
 		// 		return true
 		// 	}
 		// }
+	}
+
+	handleNonCharterCancelPolicy(event){
+		console.log('in function handleNonCharterCancelPolicy--->>', event)
+		this.addVehicleForm.patchValue({
+			charterCancelPolicy : event.value
+		})
 	}
 
 

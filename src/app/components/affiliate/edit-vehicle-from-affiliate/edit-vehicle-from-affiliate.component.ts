@@ -205,8 +205,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			numberOfVehicles: [],
 			seats: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-			charterCancelPolicy: ['2', Validators.required],
-			nonCharterCancelPolicy: ['2', Validators.required],
+			charterCancelPolicy: ['24', Validators.required],
+			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
@@ -605,6 +605,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	}
 	handleNonCharterCancelPolicy(event){
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
+		this.addVehicleForm.patchValue({
+			charterCancelPolicy : event.target.value
+		})
 		this.changeNonCharterCancelPolicy = true
 	}
 	handleChangeCharterCancelPolicy(event){

@@ -164,7 +164,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Airport / City / Cruise Port Cancel Policy <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
+						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1" (selectionChange)="handleNonCharterCancelPolicy($event)">
 							<mat-option value="">Choose Airport / City / Cruise Port Cancel Policy</mat-option>
 							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
 								[value]="nonCharterCancelOption.value">{{nonCharterCancelOption.label}}</mat-option>
