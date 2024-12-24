@@ -322,7 +322,7 @@
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
-										<p class="booking-id-font font-weight-bolder cursor-pointer">
+										<p [ngClass]="booking?.charged_amount != null ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? booking.grand_total : 0 )"></span>
 										</p>
@@ -681,7 +681,7 @@
 
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-keyboard="false" #sendEmailModalFocus>
+	aria-hidden="true" data-keyboard="false" data-backdrop="static" #sendEmailModalFocus>
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" style="background: #f5f4fe;">
 
@@ -827,6 +827,9 @@
 				</div>
 				<div class="row" [hidden]="!show">
 					<div class="col-md-12">
+						<div class="mt-2" style="margin-left: -100px;">
+							<input type="file" (change)="myUploader($event)" #fileInput />
+						</div>
 						<mat-form-field class="example-full-width" appearance="outline">
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
@@ -1939,10 +1942,10 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare - deducted_stripe_fee)
 										}}
 									</span>
-									({{adminSharePercent}}% of Base Rate)
+									({{adminSharePercent}}% of Base Rate - deducted stripe fee)
 								</div>
 							</div>
 						</div>

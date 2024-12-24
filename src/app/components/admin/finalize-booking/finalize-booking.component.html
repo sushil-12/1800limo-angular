@@ -454,9 +454,9 @@
 				<h3 class="mb-0 ">Payment</h3>
 			</div>
 			<div class="modal-body text-center">
-				<p *ngIf="paidAmount">Amount charged is <span
+				<p *ngIf="paidAmount">50% Amount charged is <span
 						class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
-				<p>Payable amount is <span class="font-weight-bold">{{currencySymbol}}{{(payableAmount -
+				<p>Balance Payable is <span class="font-weight-bold">{{currencySymbol}}{{(payableAmount -
 						paidAmount).toFixed(2)}}</span></p>
 				<span *ngIf="payableAmount<= 0" class="text-danger">Amount has been overcharger earlier</span>
 			</div>

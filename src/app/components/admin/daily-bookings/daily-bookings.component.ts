@@ -17,6 +17,7 @@ import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.se
 import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 import { MapsAPILoader } from "@agm/core";
+import { UploadService } from "src/app/services/upload.service";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -26,6 +27,7 @@ import { MapsAPILoader } from "@agm/core";
 export class DailyBookingsComponent implements OnInit {
 	exampleHeader = DatePickerComponent;
 	@ViewChild("inputmsg", { static: false }) message: ElementRef;
+	@ViewChild('fileInput') fileInput!: ElementRef;
 	@ViewChild("select") select: MatSelect;
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 	outputDateFormat = "YYYY-MM-DD";
@@ -78,6 +80,11 @@ export class DailyBookingsComponent implements OnInit {
 	public stripeErroMsg: string = '';
 	subs_end_date: any;
 	isCancelled: boolean = false;
+	fileUrl: String;
+	fileName: String;
+	fileType: String;
+	uploadedFile: any;
+	deducted_stripe_fee:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -86,6 +93,7 @@ export class DailyBookingsComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
 		private $mapsapi: MapsAPILoader,
+		private uploadService: UploadService,
 	) { }
 
 	ngOnInit(): void {
@@ -444,7 +452,7 @@ export class DailyBookingsComponent implements OnInit {
 			});
 	}
 
-	submit(message, format) {
+	async submit(message, format) {
 		console.log("format", format)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
@@ -469,6 +477,13 @@ export class DailyBookingsComponent implements OnInit {
 			this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
 		}
 
+		if (this.uploadedFile) {
+			this.spinner.show()
+			let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+			this.fileUrl = dataS.Location;
+			console.log("fileUrl", this.fileUrl)
+		}
+
 		let obj = {
 			bookingId: this.passengerDetails.booking_id,
 			reciptentName: this.reciptentName,
@@ -476,21 +491,38 @@ export class DailyBookingsComponent implements OnInit {
 			sendThrough: format ? "Phone" : "Email",
 			sendValue: this.sendInformation,
 			sendContent: message,
+			fileUrl: this.fileUrl,
+			filetype: this.fileType
 		};
 		this.adminService
 			.adminNotification(obj)
 			.pipe(
 				catchError((err) => {
+					this.spinner.hide();
 					return throwError(err);
 				})
 			)
 			.subscribe(({ message }: any) => {
+				this.spinner.hide();
 				this.notification_msg = message;
 				$("#notificationModal").modal("show");
 				console.log(message);
 				$("textarea").val("");
 			});
+
+		// Clear file input after success
+		this.uploadedFile = null;
+		this.fileUrl = null;
+		this.fileType = null;
+		if (this.fileInput) {
+			this.fileInput.nativeElement.value = ''; // Reset file input
+		}
+
 		$("#closeModal").click(() => {
+			this.fileInput.nativeElement.value = '';
+			this.uploadedFile = null;
+			this.fileType = null;
+			this.fileUrl = null;
 			$("#notificationModal").modal("hide");
 		});
 		$("#closeModal1").click(() => {
@@ -531,6 +563,10 @@ export class DailyBookingsComponent implements OnInit {
 		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
 		$("#sendEmailModal").modal("hide");
 		this.message.nativeElement.value = "";
+		this.fileInput.nativeElement.value = '';
+		this.uploadedFile = null;
+		this.fileType = null;
+		this.fileUrl = null;
 		this.show = false;
 		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
 	}
@@ -1012,6 +1048,8 @@ export class DailyBookingsComponent implements OnInit {
 				else {
 					this.adminSharePercent = 25
 				}
+				
+				this.deducted_stripe_fee = ((this?.bookingPreview?.share_array?.grandTotal ? this?.bookingPreview?.share_array?.grandTotal : this?.bookingPreview?.share_array?.returnGrandTotal) * 0.029) + 0.30
 				// if (this.bookingPreview?.payment_status == "unpaid") {
 				// 	console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
 				// 	if (this.bookingPreview?.share_array?.length != 0) {
@@ -1360,5 +1398,16 @@ export class DailyBookingsComponent implements OnInit {
 		window.open(url, '_blank'); // Opens the search in a new tab
 	}
 
+	myUploader(event) {
+		// this.loader = true;
+
+		this.uploadedFile = event.target.files[0]
+		console.log("file", this.uploadedFile)
+		if (this.uploadedFile) {
+			this.fileName = this.uploadedFile['name'];
+			this.fileType = this.uploadedFile['type'];
+			console.log("file", this.fileName, this.fileType)
+		}
+	}
 
 }
