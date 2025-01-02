@@ -166,7 +166,7 @@ export class EditVehicleComponent implements OnInit {
 		this.affiliateId = sessionStorage.getItem("affiliateId");
 
 		//data for dropdown of seats and luggage
-		for (let i = 2; i <= 75; i++) {
+		for (let i = 0; i <= 75; i++) {
 			this.luggageOptions.push(i);
 		}
 		for (let i = 4; i <= 75; i++) {

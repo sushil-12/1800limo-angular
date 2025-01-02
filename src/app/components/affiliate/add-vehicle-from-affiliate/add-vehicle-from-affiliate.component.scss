@@ -126,6 +126,18 @@
 	.mat-form-field{
 		margin-top: 20px !important;
 	}
+
+	.billing_inforamtion ul {
+		justify-content: center;
+		/* Keep buttons centered */
+		gap: 10px;
+		/* Smaller gap for mobile */
+	}
+
+	.billing_inforamtion li {
+		flex: 0 1 auto;
+		/* Allow the buttons to stay in one row */
+	}
 }
 
 .select-cancel-label {
@@ -281,4 +293,15 @@ top:2.05em}
     margin-left: 2px;
     color: #ff0000 !important;
     background: none !important;
+}
+
+
+.billing_inforamtion ul {
+	display: flex;
+	flex-wrap: nowrap;
+	/* Prevent wrapping */
+	justify-content: center;
+	/* Center align the buttons */
+	gap: 30px;
+	/* Adjust spacing between buttons */
 }

@@ -1,5 +1,5 @@
 .vehtype_extint img {
-	height       : 200px;
+	height: 200px;
 	border-radius: 15px;
 }
 
@@ -16,32 +16,35 @@
 }
 
 .camera-svg {
-	height    : 35px;
+	height: 35px;
 	margin-top: -5px;
-	cursor    : pointer;
+	cursor: pointer;
 }
 
 .camera-svg:hover {
 	transform: scale(1.2, 1.2);
 }
-.border-red{
+
+.border-red {
 	border: 3px solid red;
 	padding: 0px;
 	border-radius: 10px;
 }
 
 .camera-svg:focus {
-	outline  : none;
+	outline: none;
 	transform: scale(1.2, 1.2);
 }
+
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
 }
 
 ::ng-deep .col-md-3.margin-mat-field {
-    margin-top: -15px;
+	margin-top: -15px;
 }
-.margin-zero{
+
+.margin-zero {
 	margin-top: 0px;
 }
 
@@ -76,7 +79,7 @@
 		outline: none;
 
 		.radio-button:checked+.radio-tile {
-			color    : #000 !important;
+			color: #000 !important;
 			transform: scale(1, 1);
 
 			.radio-tile-label {
@@ -90,6 +93,16 @@
 	}
 }
 
+.billing_inforamtion ul {
+	display: flex;
+	flex-wrap: nowrap;
+	/* Prevent wrapping */
+	justify-content: center;
+	/* Center align the buttons */
+	gap: 30px;
+	/* Adjust spacing between buttons */
+}
+
 @media only screen and (max-width:767px) {
 	.mobilePadding {
 		padding: 0px 15px !important;
@@ -99,7 +112,20 @@
 		margin-top: 20px;
 	}
 
+	.billing_inforamtion ul {
+		justify-content: center;
+		/* Keep buttons centered */
+		gap: 10px;
+		/* Smaller gap for mobile */
+	}
+
+	.billing_inforamtion li {
+		flex: 0 1 auto;
+		/* Allow the buttons to stay in one row */
+	}
+
 }
-.asterisk{
+
+.asterisk {
 	font-size: 1.45rem;
 }

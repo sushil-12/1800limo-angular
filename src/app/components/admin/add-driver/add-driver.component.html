@@ -1206,24 +1206,18 @@
 		</div>
 	</section>
 	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="billing_inforamtion ">
-					<ul class="d-flex justify-content-center" style="gap:30px;">
-						<li>
-							<button class="custom-filled-back-button" type="button" (click)="backButton()"
-								data-toggle="tooltip" data-placement="top"
-								title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-						</li>
-						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
-						</li>
-						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
-								tabindex="1">SAVE</button></li>
-						<!-- <li>
-						</li> -->
-					</ul>
-				</div>
-			</div>
+		<div class="col-md-12">
+		  <div class="billing_inforamtion">
+			<ul class="d-flex justify-content-center">
+			  <li>
+				<button class="custom-filled-back-button" type="button" (click)="backButton()"
+						data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
+						tabindex="1">BACK</button>
+			  </li>
+			  <li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button></li>
+			  <li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton" tabindex="1">SAVE</button></li>
+			</ul>
+		  </div>
 		</div>
 	</div>
 
