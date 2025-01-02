@@ -48,6 +48,7 @@ import { SubscriptionPlansComponent } from './components/subscription/subscripti
 import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
+import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 
 
 const routes: Routes = [
@@ -87,6 +88,10 @@ const routes: Routes = [
 			{
 				path: 'fleet',
 				component: FleetComponent
+			},
+			{
+				path: 'tutorials',
+				component: TutorialsComponent
 			},
 			{
 				path: 'safety',

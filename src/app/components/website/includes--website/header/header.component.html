@@ -21,7 +21,7 @@
 		</button>
 		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
 			<div class="nav_top d-lg-block d-none text-center" style="flex-basis: auto; flex-grow: 1;">
-				<a href="tel:+18005466266" class="cell-no" tabindex="1">
+				<a href="tel:+18005466266" class="cell-no-header" style="color: #fff !important;font-weight: 700 !important;" tabindex="1">
 					<i class="fas fa-phone-alt" aria-hidden="true"></i>
 					+1-800-5466.266
 				</a>
@@ -31,6 +31,10 @@
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home"
 						tabindex="1">Home </a>
+				</li>
+				<!-- Added Tutorials link here -->
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="tutorials"
+						tabindex="1">Tutorials</a>
 				</li>
 				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us"
 						tabindex="1">ABOUT
@@ -78,8 +82,6 @@
 						Partner Login
 					</a> -->
 				</div>
-				<!-- <a class="nav-link join-us-button" [routerLinkActive]="['active']" routerLink="subscription"
-					tabindex="1" *ngIf="!isExcludedRoute()">Try Our New Reservation and Management Software</a> -->
 			</div>
 			<ng-template #loggedInUser>
 				<ul class="navbar-nav">
