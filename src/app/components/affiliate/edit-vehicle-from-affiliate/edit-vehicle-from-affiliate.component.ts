@@ -184,7 +184,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.affiliateId = currentUser?.account_id;
 
 		//data for dropdown of seats and luggage
-		for (let i = 2; i <= 75; i++)
+		for (let i = 0; i <= 75; i++)
 		{
 			this.luggageOptions.push(i);
 		}

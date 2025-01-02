@@ -1,5 +1,5 @@
 .vehtype_extint img {
-	height       : 200px;
+	height: 200px;
 	border-radius: 15px;
 }
 
@@ -14,16 +14,17 @@
 .vehtype_extint p {
 	margin-bottom: 0 !important;
 }
-.border-red{
+
+.border-red {
 	border: 3px solid red;
 	padding: 0px;
 	border-radius: 10px;
 }
 
 .camera-svg {
-	height    : 35px;
+	height: 35px;
 	margin-top: -5px;
-	cursor    : pointer;
+	cursor: pointer;
 }
 
 .camera-svg:hover {
@@ -31,32 +32,32 @@
 }
 
 .camera-svg:focus {
-	outline  : none;
+	outline: none;
 	transform: scale(1.2, 1.2);
 }
 
 .input-checkbox {
-	width : 100%;
+	width: 100%;
 	height: 100%;
 	cursor: pointer;
 
 	.checkbox {
-		width         : auto;
-		height        : auto;
-		font-size     : 1rem;
-		text-align    : center;
+		width: auto;
+		height: auto;
+		font-size: 1rem;
+		text-align: center;
 		text-transform: uppercase;
-		font-weight   : 500;
-		border-radius : 7px;
-		padding       : 1rem 2rem;
-		color         : var(--orange-color);
+		font-weight: 500;
+		border-radius: 7px;
+		padding: 1rem 2rem;
+		color: var(--orange-color);
 		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 		transition: box-shadow 0.25s ease, background-color 0.25s ease;
 	}
 
 	.checkbox.active {
 		background-color: #52a87a;
-		color           : #fff;
+		color: #fff;
 		box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.3);
 	}
 
@@ -67,7 +68,7 @@
 		outline: none;
 
 		.radio-button:checked+.radio-tile {
-			color    : #000 !important;
+			color: #000 !important;
 			transform: scale(1, 1);
 
 			.radio-tile-label {
@@ -85,181 +86,228 @@
 	.mobilePadding {
 		padding: 0px 15px !important;
 	}
+
+	.billing_inforamtion ul {
+		justify-content: center;
+		/* Keep buttons centered */
+		gap: 10px;
+		/* Smaller gap for mobile */
+	}
+
+	.billing_inforamtion li {
+		flex: 0 1 auto;
+	}
 }
 
 #Layer_2 {
-	width   : 10px;
+	width: 10px;
 	position: absolute;
-	right   : 5px;
-	fill    : #757575;
+	right: 5px;
+	fill: #757575;
 }
 
 .select-seat-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 .select-luggage-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 @media only screen and (max-width:767px) {
 	.select-luggage-label {
 		text-overflow: ellipsis;
-		overflow     : hidden;
-		width        : 285px;
-		white-space  : nowrap;
+		overflow: hidden;
+		width: 285px;
+		white-space: nowrap;
 	}
-	.mat-form-field{
+
+	.mat-form-field {
 		margin-top: 20px !important;
 	}
-	.year-margin-top{
+
+	.year-margin-top {
 		margin-top: 20px !important;
 	}
 }
 
 .select-cancel-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 .select-charter-cancel-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 
 
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
 }
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
 }
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
-	font-weight: normal!important;
-	font-size: 14px!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
 }
-:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass{font-weight: normal!important;
-	font-size: 14px!important;
+
+:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label {
+	top: 1.3675em
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
-top:2.05em}
+	top: 2.05em
+}
+
 :host ::ng-deep .mat-form-field {
 	.mat-form-field-outline {
-	  &-end {
-		border-radius: 0 10px 10px 0 !important;
-	  }
-  
-	  &-start {
-		border-radius: 10px 0 0 10px !important;
-		flex-grow: 1;
-	  }
+		&-end {
+			border-radius: 0 10px 10px 0 !important;
+		}
+
+		&-start {
+			border-radius: 10px 0 0 10px !important;
+			flex-grow: 1;
+		}
 	}
-  }
-  :host ::ng-deep .mat-form-field .mat-form-field-wrapper{
-		border-radius: 10px;
-		background-color: rgb(226, 226, 226,1);
-  } 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.75)!important;width:133.3333333333%}
+}
+
+:host ::ng-deep .mat-form-field .mat-form-field-wrapper {
+	border-radius: 10px;
+	background-color: rgb(226, 226, 226, 1);
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
+	top: -12px
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+	transform: translateY(-0.8em) scale(0.75) !important;
+	width: 133.3333333333%
+}
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-    border-top-color: #b2b2b2 !important;
+	border-top-color: #b2b2b2 !important;
 }
 
 
-:host ::ng-deep .selectInputStyle{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .selectInputStyle {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .ng-placeholder{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .ng-placeholder {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .ng-select-container{
+:host ::ng-deep .ng-select-container {
 	// background-color: #f5f4fe;
-	background-color: rgb(226, 226, 226,1) !important;
+	background-color: rgb(226, 226, 226, 1) !important;
 	border: #b2b2b2 2em;
-    border-radius: 10px;
+	border-radius: 10px;
 }
 
-:host ::ng-deep .ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder {
-    transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px);
-	color: #000;
-	top: 0.95em;
-}
-
-:host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder{
+:host ::ng-deep .ng-select .ng-has-value .ng-placeholder,
+.ng-select.ng-select-opened .ng-placeholder {
 	transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px);
 	color: #000;
 	top: 0.95em;
 }
+
+:host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder {
+	transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px);
+	color: #000;
+	top: 0.95em;
+}
+
 :host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
 	border-radius: 10px;
 }
 
-:host ::ng-deep .select-cancel-label,.select-seat-label,.select-charter-cancel-label,.select-luggage-label{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .select-cancel-label,
+.select-seat-label,
+.select-charter-cancel-label,
+.select-luggage-label {
+	background-color: rgb(226, 226, 226, 1) !important;
 	transform: translateY(0.8em) translateX(-0.75em) scale(0.9) !important;
 	opacity: 0.7;
 	background: none !important;
 }
-.mat-option{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-:host ::ng-deep .ng-option{
-	background-color: rgb(226, 226, 226,1) !important;
+
+.mat-option {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .mat-input-element{
+:host ::ng-deep .ng-option {
+	background-color: rgb(226, 226, 226, 1) !important;
+}
+
+:host ::ng-deep .mat-input-element {
 	font-weight: 500;
 }
 
@@ -269,16 +317,30 @@ top:2.05em}
 
 :host ::ng-deep .mat-select-value-text {
 	font-weight: 500 !important;
-  }
- :host ::ng-deep .ng-value {
+}
+
+:host ::ng-deep .ng-value {
 	font-weight: 400;
-  }
-  .asterisk{
+}
+
+.asterisk {
 	font-size: 19px;
 }
-.asterisk1{
+
+.asterisk1 {
 	font-size: 18px !important;
-    margin-left: 2px;
-    color: #ff0000 !important;
-    background: none !important;
+	margin-left: 2px;
+	color: #ff0000 !important;
+	background: none !important;
+}
+
+
+.billing_inforamtion ul {
+	display: flex;
+	flex-wrap: nowrap;
+	/* Prevent wrapping */
+	justify-content: center;
+	/* Center align the buttons */
+	gap: 30px;
+	/* Adjust spacing between buttons */
 }

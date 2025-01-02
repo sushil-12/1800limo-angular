@@ -1251,18 +1251,22 @@
 	</section>
 	<div class="container">
 		<div class="col-md-12">
-			<div class="billing_inforamtion ">
-				<ul class="d-flex justify-content-center" style="gap:30px;">
+			<div class="billing_inforamtion">
+				<ul class="d-flex justify-content-center">
 					<li>
-						<button class="custom-filled-back-button" type="button" routerLink="/affiliate/step4"
-							data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
-							tabindex="1">BACK</button>
+						<button class="custom-filled-back-button" routerLink="/affiliate/step5">
+							BACK
+						</button>
 					</li>
-					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+					<li>
+						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
+							RESET
+						</button>
 					</li>
-					<li><button class="custom-filled-button" (click)="submitForm()" tabindex="1">SAVE</button></li>
-					<!-- <li>
-						</li> -->
+					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
+							SAVE
+						</button>
+					</li>
 				</ul>
 			</div>
 		</div>

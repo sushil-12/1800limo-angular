@@ -589,7 +589,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 				this.$api.updateStepsCompletedObject(obj)
 				if (this.VehicleRateSettingsForm.value.id == '') {
 					this.$router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-						this.$router.navigate(['/affiliate/step6'])
+						this.$router.navigate(['/affiliate/step5'])
 					)
 				}
 				else {
