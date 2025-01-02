@@ -85,6 +85,7 @@ import { EditVehicleSubscriberComponent } from './components/subscription/edit-v
 import { DriverDetailsComponent } from './components/subscription/driver-details/driver-details.component';
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { FarmOutBookingsComponent } from './components/subscription/farm-out-bookings/farm-out-bookings.component';
+import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -136,6 +137,7 @@ import { FarmOutBookingsComponent } from './components/subscription/farm-out-boo
 		DriverDetailsComponent,
 		AddDriverSubscriberComponent,
 		FarmOutBookingsComponent,
+		TutorialsComponent,
 	],
 	imports: [
 		BrowserModule,

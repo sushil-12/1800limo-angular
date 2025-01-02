@@ -228,6 +228,15 @@ header a.nav-link.active {
 	}
 }
 
+.cell-no-header .fas {
+	color: var(--orange-color);
+}
+
+.cell-no-header:hover {
+	text-decoration: none;
+	color: var(--orange-color) !important
+}
+
 .cell-no .fas {
 	color: var(--orange-color);
 }

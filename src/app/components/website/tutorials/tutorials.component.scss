@@ -1,0 +1,77 @@
+/* Global styles for responsiveness */
+.card {
+    background-color: #8080801f;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 7px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures equal height for all cards */
+  }
+  
+  .card img {
+    width: 100px;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    margin-left: 15px;
+    flex-grow: 1; /* Makes card content take up remaining space */
+  }
+  
+  .title {
+    font-size: 19px;
+    font-weight: 700;
+  }
+  
+  .content {
+    font-size: 16px;
+    font-weight: 300;
+  }
+  
+  a:hover {
+    text-decoration: none;
+  }
+  
+  .arrow-container {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .fas.fa-chevron-right {
+    color: gray;
+  }
+  
+  .div_content {
+    max-width: 430px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  @media screen and (max-width: 767px) {
+    .div_content {
+      max-width: 310px;
+    }
+  }
+  
+  
+  .col-sm-12,
+  .col-md-6,
+  .col-lg-6 {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+  }
+  
+  @media screen and (min-width: 768px) {
+    .col-md-6,
+    .col-lg-6 {
+      width: 50%; /* Each card will take 50% of the width on medium and large screens */
+    }
+  }
+  
