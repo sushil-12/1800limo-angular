@@ -47,9 +47,9 @@
 								<th *ngIf="currentUser?.created_by_role == 'admin' ">Actions</th>
 							</tr>
 						</thead>
-						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
+						<tbody>
 							<tr *ngFor="let vehicle of vehicles; index as vehicle_index"
-								[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd" cdkDrag>
+								[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd">
 								<td>
 									<img src="{{vehicle.vehicle_image}}" />
 								</td>
