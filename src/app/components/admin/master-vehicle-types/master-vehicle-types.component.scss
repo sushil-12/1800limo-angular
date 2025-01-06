@@ -26,11 +26,25 @@
 	justify-content: center !important;
 }
 
-/* Disable scaling on the image when dragging */
+/* Prevent scaling of the image during drag */
 .cdk-drag-preview img {
 	transform: none !important;
+	width: auto !important;
+	height: auto !important;
 }
 
+/* Prevent the drag preview (image and container) from scaling */
 .cdk-drag-preview {
 	transform: none !important;
+	width: auto !important;
+	height: auto !important;
+	max-width: none !important;
+	max-height: none !important;
+}
+
+/* Prevent the entire row from being scaled during drag */
+.cdk-drag {
+	transform: none !important;
+	width: auto !important;
+	height: auto !important;
 }
