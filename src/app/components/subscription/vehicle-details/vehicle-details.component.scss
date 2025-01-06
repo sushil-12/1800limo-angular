@@ -33,3 +33,12 @@ a.notCompleted {
 	font-weight: 500 !important;
 	font-size: 17px;
 }
+
+/* Disable scaling on the image when dragging */
+.cdk-drag-preview img {
+	transform: none !important;
+}
+
+.cdk-drag-preview {
+	transform: none !important;
+}
