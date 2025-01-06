@@ -61,10 +61,10 @@
 								<th>Delete</th>
 							</tr>
 						</thead>
-						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
+						<tbody>
 							<ng-container *ngIf="vehicles">
 								<tr *ngFor="let vehicle of vehicles;index as vehicle_index"
-									[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd" cdkDrag>
+									[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd">
 									<td>
 										<a *ngIf="vehicle.isRatesCompleted; else pendingRates"
 											class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
