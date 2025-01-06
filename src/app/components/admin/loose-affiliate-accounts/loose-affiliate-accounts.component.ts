@@ -115,7 +115,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     }
     this.spinner.show();
 
-    var keyword = this.searchText;
+    var keyword = this.searchText?.replace(/&/g, '%26')
 
     // Load Our LooseAffiliateAcc using API
     this.adminService.getLooseAffiliaeAccounts(pageUrl, keyword).then(result => {
