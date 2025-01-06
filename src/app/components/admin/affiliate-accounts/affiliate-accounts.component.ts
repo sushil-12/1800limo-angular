@@ -194,7 +194,7 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
-		var keyword = this.searchText
+		var keyword = this.searchText?.replace(/&/g, '%26')
 		if (keyword.length > 0) {
 			this.filter_type = 'all'
 			console.log('keyword--->>>', keyword, this.filter_type)

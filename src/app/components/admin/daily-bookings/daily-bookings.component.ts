@@ -1089,13 +1089,13 @@ export class DailyBookingsComponent implements OnInit {
 
 	timer: any;
 	searchInBookings(search_value: string) {
-		this.searchText = search_value;
+		this.searchText = search_value
 		console.log("--->>>>>", search_value);
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			// this.saveCookie("search", this.searchText);
 			localStorage.setItem("DBSearch", this.searchText);
-			this.loadBookings(null, this.startDate, this.endDate, search_value);
+			this.loadBookings(null, this.startDate, this.endDate, search_value?.replace(/&/g, '%26'));
 		}, 700);
 	}
 

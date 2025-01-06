@@ -114,7 +114,7 @@ export class TravelPlannerComponent implements OnInit {
       console.log("pageurl", pageUrl)
       this.scroll('travel_agent_table')
     }
-    var keyword = this.searchText;
+    var keyword = this.searchText?.replace(/&/g, '%26')
 
     // Load Our travelPlanners using API
     this.adminService.travelPlannerAccounts(pageUrl, keyword).then(result => {

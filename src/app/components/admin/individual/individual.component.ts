@@ -109,7 +109,7 @@ export class IndividualComponent implements OnInit {
 			this.scroll('individual_table')
 		}
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
-		let keyword = this.searchText
+		let keyword = this.searchText?.replace(/&/g, '%26')
 		// console.log(keyword);
 		// Load Our individuals using API
 		this.adminService.individualAccounts(pageUrl, keyword).then(result => {
