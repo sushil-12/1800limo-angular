@@ -317,6 +317,10 @@ section {
 		text-shadow: none;
 		font-size: 40px;
 	}
+
+	.flip_div{
+		margin-bottom: 20px;
+	}
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
@@ -1122,3 +1126,9 @@ button.custom-filled-button {
     outline: none;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
 }
+
+.pickup-label {
+	margin-top: -24px;
+	display: block; /* Makes sure the label appears on its own line */
+  }
+  
