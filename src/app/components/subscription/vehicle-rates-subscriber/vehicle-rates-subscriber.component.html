@@ -1064,12 +1064,38 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test1" name="city_tax_percent_flat"
+										checked="" formControlName="city_tax_percent_flat" value="percent"
+										tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test1">Percent (<span
+												class="prefix">%</span>)
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test2" name="city_tax_percent_flat"
+										formControlName="city_tax_percent_flat" value="flat" tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test2">Flat (<span
+												class="prefix">{{currency_symbol}}</span>) </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
 									[ngClass]="form.city_tax_percent_flat.value == 'percent' ? 'active' : ''"
 									(click)="changeDetection.radioButton('city_tax_percent_flat', 'percent')">
-									<label>Percent</label>
+									<label>Percent (<span class="prefix">%</span>)</label>
 								</div>
 								<div id="cd-flat" class="card-type"
 									[ngClass]="form.city_tax_percent_flat.value == 'flat' ? 'active' : ''"
@@ -1079,7 +1105,7 @@
 									</label>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -1104,12 +1130,38 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test3" name="state_tax_percent_flat"
+										checked="" formControlName="state_tax_percent_flat" value="percent"
+										tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test3">Percent (<span
+												class="prefix">%</span>)
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test4" name="state_tax_percent_flat"
+										formControlName="state_tax_percent_flat" value="flat" tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test4">Flat (<span
+												class="prefix">{{currency_symbol}}</span>) </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
 									[ngClass]="form.state_tax_percent_flat.value == 'percent' ? 'active' : ''"
 									(click)="changeDetection.radioButton('state_tax_percent_flat', 'percent')">
-									<label>Percent</label>
+									<label>Percent (<span class="prefix">%</span>)</label>
 								</div>
 								<div id="cd-flat" class="card-type"
 									[ngClass]="form.state_tax_percent_flat.value == 'flat' ? 'active' : ''"
@@ -1119,7 +1171,7 @@
 									</label>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -1142,12 +1194,37 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test5" name="vat_percent_flat"
+										checked="" formControlName="vat_percent_flat" value="percent" tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test5">Percent (<span
+												class="prefix">%</span>)
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test6" name="vat_percent_flat"
+										formControlName="vat_percent_flat" value="flat" tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test6">Flat (<span
+												class="prefix">{{currency_symbol}}</span>) </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
 									[ngClass]="form.vat_percent_flat.value == 'percent' ? 'active' : ''"
 									(click)="changeDetection.radioButton('vat_percent_flat', 'percent')">
-									<label>Percent</label>
+									<label>Percent (<span class="prefix">%</span>)</label>
 								</div>
 								<div id="cd-flat" class="card-type"
 									[ngClass]="form.vat_percent_flat.value == 'flat' ? 'active' : ''"
@@ -1157,7 +1234,7 @@
 									</label>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -1182,12 +1259,38 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test7" name="workman_comp_percent_flat"
+										checked="" formControlName="workman_comp_percent_flat" value="percent"
+										tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test7">Percent (<span
+												class="prefix">%</span>)
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test8" name="workman_comp_percent_flat"
+										formControlName="workman_comp_percent_flat" value="flat" tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test8">Flat (<span
+												class="prefix">{{currency_symbol}}</span>) </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
 									[ngClass]="form.workman_comp_percent_flat.value == 'percent' ? 'active' : ''"
 									(click)="changeDetection.radioButton('workman_comp_percent_flat', 'percent')">
-									<label>Percent</label>
+									<label>Percent (<span class="prefix">%</span>)</label>
 								</div>
 								<div id="cd-flat" class="card-type"
 									[ngClass]="form.workman_comp_percent_flat.value == 'flat' ? 'active' : ''"
@@ -1197,7 +1300,7 @@
 									</label>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -1226,12 +1329,41 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test9"
+										name="other_transportation_tax_percent_flat" checked=""
+										formControlName="other_transportation_tax_percent_flat" value="percent"
+										tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test9">Percent (<span
+												class="prefix">%</span>)
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
+								<div class="custom-radio input-container">
+									<input class="radio-button" type="radio" id="test10"
+										name="other_transportation_tax_percent_flat"
+										formControlName="other_transportation_tax_percent_flat" value="flat"
+										tabindex="-1">
+									<div class="radio-tile box-shadow">
+										<label class="radio-tile-label" for="test10">Flat (<span
+												class="prefix">{{currency_symbol}}</span>) </label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
 									[ngClass]="form.other_transportation_tax_percent_flat.value == 'percent' ? 'active' : ''"
 									(click)="changeDetection.radioButton('other_transportation_tax_percent_flat', 'percent')">
-									<label>Percent</label>
+									<label>Percent (<span class="prefix">%</span>)</label>
 								</div>
 								<div id="cd-flat" class="card-type"
 									[ngClass]="form.other_transportation_tax_percent_flat.value == 'flat' ? 'active' : ''"
@@ -1241,7 +1373,7 @@
 									</label>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -1251,15 +1383,16 @@
 	</section>
 	<div class="container">
 		<div class="col-md-12">
-		  <div class="billing_inforamtion">
-			<ul class="d-flex justify-content-center">
-			  <li>
-				<button class="custom-filled-back-button" routerLink="/admin/vehicle-details">BACK</button>
-			  </li>
-			  <li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button></li>
-			  <li><button class="custom-filled-button" (click)="submitForm()"tabindex="1">SAVE</button></li>
-			</ul>
-		  </div>
+			<div class="billing_inforamtion">
+				<ul class="d-flex justify-content-center">
+					<li>
+						<button class="custom-filled-back-button" routerLink="/admin/vehicle-details">BACK</button>
+					</li>
+					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" tabindex="1">SAVE</button></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 
