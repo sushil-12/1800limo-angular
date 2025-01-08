@@ -82,7 +82,7 @@ p {
 
 .step-list img {
     position : absolute;
-    width    : 80px;
+    width    : 100px;
     top      : 50%;
     left     : 50%;
     transform: translate(-50%, -50%);
@@ -211,6 +211,10 @@ div#imageModal {
     .step-points {
         margin-left: 12px;
     }
+
+    .margin-bottom-mobile{
+        margin-bottom: 20px;
+    }
 }
 
 .modal-content:not(#photoTipModal .modal-content) {
@@ -249,4 +253,10 @@ div#imageModal {
     color           : #fff;
     border-color    : var(--green-color);
     padding         : 15px 40px;
+}
+
+@media (min-width: 768px) and (max-width: 1024px){
+    .margin-bottom-mobile{
+        margin-bottom: 70px;
+    }
 }
