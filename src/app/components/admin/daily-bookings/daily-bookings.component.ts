@@ -85,6 +85,37 @@ export class DailyBookingsComponent implements OnInit {
 	fileType: String;
 	uploadedFile: any;
 	deducted_stripe_fee:any;
+	// Define data for the chart
+	single: any[] = [
+		{
+		  "name": "Germany",
+		  "value": 8940000
+		},
+		{
+		  "name": "United States",
+		  "value": 5000000
+		},
+		{
+		  "name": "France",
+		  "value": 7200000
+		}
+	  ];
+	
+	  // Set the options for the chart
+	  view: any[] = [700, 400]; // Optional: Define the size of the chart
+	
+	  // Customize chart configurations (optional)
+	  showXAxis = true;
+	  showYAxis = true;
+	  gradient = true;
+	  showLegend = true;
+	  showXAxisLabel = true;
+	  xAxisLabel = 'Country';
+	  showYAxisLabel = true;
+	  yAxisLabel = 'Population';
+	  colorScheme = {
+		domain: ['#5AA454', '#A10D2D', '#C7B42C']
+	  };
 
 	constructor(
 		private adminService: AdminService,

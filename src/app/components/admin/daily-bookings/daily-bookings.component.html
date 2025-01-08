@@ -14,6 +14,10 @@
 				</button>
 			</div>
 		</div>
+		<ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="single" [xAxis]="showXAxis"
+			[yAxis]="showYAxis" [gradient]="gradient" [showXAxisLabel]="showXAxisLabel"
+			[xAxisLabel]="xAxisLabel" [showYAxisLabel]="showYAxisLabel" [yAxisLabel]="yAxisLabel">
+		</ngx-charts-bar-vertical>
 		<div class="containeredd mt-1 ">
 			<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 mt-2"
 				*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin') && stripeErroMsg">
@@ -322,7 +326,8 @@
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
-										<p [ngClass]="booking?.charged_amount != null ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
+										<p
+											[ngClass]="booking?.charged_amount != null ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? booking.grand_total : 0 )"></span>
 										</p>
@@ -1942,7 +1947,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare - deducted_stripe_fee)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare
+										- deducted_stripe_fee)
 										}}
 									</span>
 									({{adminSharePercent}}% of Base Rate - deducted stripe fee)
