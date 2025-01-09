@@ -124,6 +124,8 @@ import { FleetComponent } from './cms/fleet/fleet.component';
 import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
 import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
 import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 
 
 @NgModule({
@@ -220,7 +222,8 @@ import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pi
 		FleetComponent,
 		FleetPageEditComponent,
 		SubscribersListComponent,
-		AffiliateMapPinsComponent
+		AffiliateMapPinsComponent,
+		ReportsAdminComponent
 	],
 	imports: [
 		CommonModule,
@@ -247,7 +250,8 @@ import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pi
 		MatTableModule,
 		MatExpansionModule,
 		MatIconModule,
-		ClipboardModule
+		ClipboardModule,
+		NgxChartsModule
 	],
 	exports: [BookingStatusTextReplacePipe,MatIconModule]
 })

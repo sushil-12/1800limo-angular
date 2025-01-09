@@ -86,6 +86,7 @@ import { DriverDetailsComponent } from './components/subscription/driver-details
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { FarmOutBookingsComponent } from './components/subscription/farm-out-bookings/farm-out-bookings.component';
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -162,7 +163,8 @@ import { TutorialsComponent } from './components/website/tutorials/tutorials.com
 		SharedModule,
 		NgOtpInputModule,
 		MatRadioModule,
-		NgSelectModule
+		NgSelectModule,
+		NgxChartsModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

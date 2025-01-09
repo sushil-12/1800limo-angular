@@ -1387,4 +1387,9 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + `affiliate-pincodes?vehicleId=${id}`);
 	}
 
+	//bookings reports
+	getBookingsReport(year,status) {
+		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status);
+	}
+
 }

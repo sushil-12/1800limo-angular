@@ -622,9 +622,49 @@ const personallist = [
 	"Handicap"
 ];
 
+const reportsYear = [
+	{
+        "id": "2025",
+        "value": "2025"
+    },
+    {
+        "id": "2024",
+        "value": "2024"
+    },
+    {
+        "id": "2023",
+		"value": "2023"
+	},
+    {
+        "id": "2022",
+        "value": "2022"
+    }
+]
+
+const reportsStatus = [
+    {
+        "id": "Paid",
+        "value": "Paid"
+    },
+	{
+        "id": "Assigned",
+        "value": "Assigned"
+    },
+    {
+        "id": "Cancelled",
+		"value": "Cancelled"
+	},
+    {
+        "id": "Pending",
+        "value": "Pending"
+    }
+]
+
 export const constant_data = {
 	time_values,
 	hour_values,
 	countries,
-	personallist
+	personallist,
+	reportsYear,
+	reportsStatus
 }
