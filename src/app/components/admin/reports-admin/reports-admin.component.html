@@ -1,0 +1,45 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <section class="user_information">
+        <h2 class="headinginfo mb-2">Yearly Bookings Report</h2>
+        <div class="container vh-100 mb-2">
+            <div class="row align-items-center mb-2">
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Year</mat-label>
+                        <mat-select (selectionChange)="onYearChange($event)" [(value)]="year">
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let year of yearsData" [value]="year.id">
+                                {{ year.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Status</mat-label>
+                        <mat-select (selectionChange)="onStatusChange($event)" [(value)]="status">
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let status of statusData" [value]="status.id">
+                                {{ status.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row align-items-center mb-4">
+                <div class="col-md-3 py-2">
+                    <span style="font-size: 18px;font-weight: 500;">
+                        Total Bookings: {{bookingCount}}
+                    </span>
+                </div>
+            </div>
+            <!-- Bar chart -->
+            <ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="bookingsResult" [xAxis]="showXAxis"
+                [yAxis]="showYAxis" [gradient]="gradient" [showXAxisLabel]="showXAxisLabel" [xAxisLabel]="xAxisLabel"
+                [showYAxisLabel]="showYAxisLabel" [yAxisLabel]="yAxisLabel" [legend]="showLegend">
+            </ngx-charts-bar-vertical>
+            <!-- Bar chart -->
+        </div>
+    </section>
+</main>

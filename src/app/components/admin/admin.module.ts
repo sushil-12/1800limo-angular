@@ -125,6 +125,7 @@ import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.co
 import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
 import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 
 
 @NgModule({
@@ -221,7 +222,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 		FleetComponent,
 		FleetPageEditComponent,
 		SubscribersListComponent,
-		AffiliateMapPinsComponent
+		AffiliateMapPinsComponent,
+		ReportsAdminComponent
 	],
 	imports: [
 		CommonModule,

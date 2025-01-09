@@ -98,6 +98,7 @@ import { DriverDetailsComponent } from '../subscription/driver-details/driver-de
 import { AddDriverSubscriberComponent } from '../subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { FarmOutBookingsComponent } from '../subscription/farm-out-bookings/farm-out-bookings.component';
 import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
+import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 
 
 const routes: Routes = [
@@ -633,6 +634,11 @@ const routes: Routes = [
 		path: 'maps',
 		canActivate: [AdminGuardGuard],
 		component: AffiliateMapPinsComponent
+	},
+	{
+		path: 'reports-admin',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminComponent
 	},
 ];
 
