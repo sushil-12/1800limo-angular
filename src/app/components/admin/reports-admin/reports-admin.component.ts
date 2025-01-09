@@ -13,8 +13,10 @@ export class ReportsAdminComponent implements OnInit {
 
   public year:any = '2024';
   public status:any = 'Paid';
-  public yearsData: Array<any> = constant_data.reportsYear
-  public statusData: Array<any> = constant_data.reportsStatus
+  public vehicleType:any='all';
+  public yearsData: Array<any> = constant_data.reportsYear;
+  public statusData: Array<any> = constant_data.reportsStatus;
+  public vehicles:any;
   public bookingCount :any;
 	public bookingsResult: any[];
 	
@@ -58,27 +60,36 @@ export class ReportsAdminComponent implements OnInit {
 
   ngOnInit(): void {
 
-      this.loadBookingsReport(this.year,this.status)
+    // Load master vehicle
+    this.adminService.getOurVehicles().then((result:any) => {
+      this.vehicles = result.data;
+      console.log("veh resp", this.vehicles);
+    }).catch(err => {
+      console.log("err", err);
+    });
+
+      this.loadBookingsReport(this.year,this.status,this.vehicleType)
 
   }
 
-  //on change of year call data
-  onYearChange(event: any) {
-    this.year = event.value;
-    this.loadBookingsReport(this.year,this.status)
+  //on change of filters call data
+  onFilterChange(name,event: any) {
+    if(name == 'year'){
+      this.year = event.value;
+    }
+    else if(name == 'status'){
+      this.status = event.value; 
+    }
+    else if(name = 'vehicleType'){
+      this.vehicleType = event.value; 
+    }
+    this.loadBookingsReport(this.year,this.status,this.vehicleType)
   }
-
-  //on chnage of status call data
-  onStatusChange(event: any) {
-    this.status = event.value; 
-    this.loadBookingsReport(this.year,this.status)
-  }
-
 
   //load reports for bookings
-  loadBookingsReport(year,status){
+  loadBookingsReport(year,status,vehType){
     this.spinner.show()
-    this.adminService.getBookingsReport(year,status).subscribe((response: any) => {
+    this.adminService.getBookingsReport(year,status,vehType).subscribe((response: any) => {
       this.spinner.hide()
 			console.log("in function get bookings report", response);
       this.bookingsResult = response?.data?.monthlyBookings

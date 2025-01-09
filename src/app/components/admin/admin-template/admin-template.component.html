@@ -254,8 +254,27 @@
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/reports-admin" (click)="closeSidebarFunc(false)">Yearly
+										routerLink="/admin/reports-admin-bookings"
+										(click)="closeSidebarFunc(false)">Yearly
 										Bookings</a>
+								</div>
+							</div>
+							<div id="collapse6" class="collapse" aria-labelledby="headingUtilities"
+								data-parent="#accordionSidebar" tabIndex="-1">
+								<div class="py-2 collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/admin/reports-admin-vehicles-share"
+										(click)="closeSidebarFunc(false)">Vehicles Average Cost
+									</a>
+								</div>
+							</div>
+							<div id="collapse6" class="collapse" aria-labelledby="headingUtilities"
+								data-parent="#accordionSidebar" tabIndex="-1">
+								<div class="py-2 collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/admin/reports-admin-vehicles"
+										(click)="closeSidebarFunc(false)">Vehicle Type Share
+									</a>
 								</div>
 							</div>
 						</li>

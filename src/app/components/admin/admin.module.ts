@@ -126,6 +126,8 @@ import { SubscribersListComponent } from './subscribers-list/subscribers-list.co
 import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
+import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
+import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
 
 
 @NgModule({
@@ -223,7 +225,9 @@ import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 		FleetPageEditComponent,
 		SubscribersListComponent,
 		AffiliateMapPinsComponent,
-		ReportsAdminComponent
+		ReportsAdminComponent,
+		ReportsAdminVehiclesComponent,
+		ReportsAdminVehicleAverageComponent
 	],
 	imports: [
 		CommonModule,

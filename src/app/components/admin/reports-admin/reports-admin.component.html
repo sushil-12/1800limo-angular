@@ -7,7 +7,7 @@
                 <div class="col-md-3 py-2">
                     <mat-form-field appearance="outline" class="m-0">
                         <mat-label>Year</mat-label>
-                        <mat-select (selectionChange)="onYearChange($event)" [(value)]="year">
+                        <mat-select (selectionChange)="onFilterChange('year',$event)" [(value)]="year">
                             <!-- Dynamically generated options -->
                             <mat-option *ngFor="let year of yearsData" [value]="year.id">
                                 {{ year.value }}
@@ -18,10 +18,23 @@
                 <div class="col-md-3 py-2">
                     <mat-form-field appearance="outline" class="m-0">
                         <mat-label>Status</mat-label>
-                        <mat-select (selectionChange)="onStatusChange($event)" [(value)]="status">
+                        <mat-select (selectionChange)="onFilterChange('status',$event)" [(value)]="status">
                             <!-- Dynamically generated options -->
                             <mat-option *ngFor="let status of statusData" [value]="status.id">
                                 {{ status.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Vehicle Type</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('vehicleType',$event)" [(value)]="vehicleType">
+                            <!-- Extra option for 'All Vehicles' -->
+                            <mat-option [value]="'all'">All Vehicles</mat-option>
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let vehicle of vehicles" [value]="vehicle.ID">
+                                {{ vehicle.vehicle_name }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
