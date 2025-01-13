@@ -14,8 +14,11 @@ export class ReportsAdminComponent implements OnInit {
   public year:any = '2024';
   public status:any = 'Paid';
   public vehicleType:any='all';
+  public serviceType:any='all';
+  public transferType:any = 'all';
   public yearsData: Array<any> = constant_data.reportsYear;
   public statusData: Array<any> = constant_data.reportsStatus;
+  public serviceTypeData: Array<any> = constant_data.serviceType;
   public vehicles:any;
   public bookingCount :any;
 	public bookingsResult: any[];
@@ -68,28 +71,35 @@ export class ReportsAdminComponent implements OnInit {
       console.log("err", err);
     });
 
-      this.loadBookingsReport(this.year,this.status,this.vehicleType)
+      this.loadBookingsReport(this.year,this.status,this.vehicleType,this.serviceType,this.transferType)
 
   }
 
   //on change of filters call data
   onFilterChange(name,event: any) {
+    console.log("in filter change",name,event)
     if(name == 'year'){
       this.year = event.value;
     }
     else if(name == 'status'){
       this.status = event.value; 
     }
-    else if(name = 'vehicleType'){
+    else if(name == 'vehicleType'){
       this.vehicleType = event.value; 
     }
-    this.loadBookingsReport(this.year,this.status,this.vehicleType)
+    else if(name == 'serviceType'){
+      this.serviceType = event.value;
+    }
+    else if(name == 'transferType'){
+      this.transferType = event.value
+    }
+    this.loadBookingsReport(this.year,this.status,this.vehicleType,this.serviceType,this.transferType)
   }
 
   //load reports for bookings
-  loadBookingsReport(year,status,vehType){
+  loadBookingsReport(year,status,vehType,serType,transType){
     this.spinner.show()
-    this.adminService.getBookingsReport(year,status,vehType).subscribe((response: any) => {
+    this.adminService.getBookingsReport(year,status,vehType,serType,transType).subscribe((response: any) => {
       this.spinner.hide()
 			console.log("in function get bookings report", response);
       this.bookingsResult = response?.data?.monthlyBookings

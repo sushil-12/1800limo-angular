@@ -1,0 +1,94 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <section class="adminbox_shadow user_information">
+        <h2 class="headinginfo mb-2">User Based Report</h2>
+        <div class="container vh-100 mb-2">
+            <div class="row align-items-center mb-2">
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>User Type</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('userType',$event)" [(value)]="userType">
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let usertype of userTypesData" [value]="usertype.id">
+                                {{ usertype.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6 py-2">
+                    <ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
+                        placeholder="Select Account" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+                        [(ngModel)]="acc_id" (change)="handleClientAccount($event)">
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-4" *ngIf="false">
+                <div class="col-md-3 py-2">
+                    <span style="font-size: 18px;font-weight: 500;">
+                        Total Bookings:
+                    </span>
+                </div>
+                <div class="col-md-3 py-2">
+                    <span style="font-size: 18px;font-weight: 500;">
+                        Volume:
+                    </span>
+                </div>
+            </div>
+
+            <div class="containeredd driverside_table">
+                <div class="row">
+                    <div class="col-md-12 custom_table pl-0">
+                        <div class="table-responsive" style="min-height: 350px">
+                            <table class="table table-dark table-striped table-bordered dataTable dt-responsive"
+                                id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
+                                <thead>
+                                    <tr role="row">
+                                        <th>Date</th>
+                                        <th>Booking Number</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr role="row" class="odd">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <p class="text-danger text-lg" *ngIf="noError">
+                    No Results Found.
+                </p> -->
+                    </div>
+                    <!----PAGINATION---->
+                    <!----BACK BTN---->
+                    <!-- <nav aria-label="Page navigation example">
+                        <ul class="pagination pagination-circle pg-blue">
+                            <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(firstPageUrl)"><a
+                                    class="page-link">First</a></li>
+                            <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(prevPageUrl)">
+                                <a class="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let in of counter() ;let i = index"
+                                [ngClass]="(in==currentPage)?'page-item active':'page-item'"
+                                (click)="loadIndividuals(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+                                <a class="page-link">{{in}}</a>
+                            </li>
+                            <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(nextPageUrl)">
+                                <a class="page-link" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                            <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(lastPageUrl)"><a
+                                    class="page-link">Last</a></li>
+                        </ul>
+                    </nav> -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>

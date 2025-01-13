@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <main>
     <section class="user_information">
-        <h2 class="headinginfo mb-2">Yearly Bookings Report</h2>
+        <h2 class="headinginfo mb-2">Monthly Bookings Report</h2>
         <div class="container vh-100 mb-2">
             <div class="row align-items-center mb-2">
                 <div class="col-md-3 py-2">
@@ -39,6 +39,37 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Service Type</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('serviceType',$event)" [(value)]="serviceType">
+                            <!-- Extra option for 'All Vehicles' -->
+                            <mat-option [value]="'all'">All</mat-option>
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let serviceType of serviceTypeData" [value]="serviceType.id">
+                                {{ serviceType.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Transfer Type</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('transferType',$event)" [(value)]="transferType">
+                            <!-- Extra option for 'All Vehicles' -->
+                            <mat-option [value]="'all'">All</mat-option>
+                            <!-- Dynamically generated options -->
+                            <mat-option value="airport_to_city">Airport To City ?</mat-option>
+                            <mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+                            <mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+                            <mat-option value="city_to_city">City To City ?</mat-option>
+                            <mat-option value="city_to_airport">City To Airport ?</mat-option>
+                            <mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+                            <mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+                            <mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
             </div>
             <div class="row align-items-center mb-4">
                 <div class="col-md-3 py-2">
@@ -50,7 +81,8 @@
             <!-- Bar chart -->
             <ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="bookingsResult" [xAxis]="showXAxis"
                 [yAxis]="showYAxis" [gradient]="gradient" [showXAxisLabel]="showXAxisLabel" [xAxisLabel]="xAxisLabel"
-                [showYAxisLabel]="showYAxisLabel" [yAxisLabel]="yAxisLabel" [legend]="showLegend">
+                [showYAxisLabel]="showYAxisLabel" [yAxisLabel]="yAxisLabel" [legend]="showLegend"
+                [tooltipDisabled]="false">
             </ngx-charts-bar-vertical>
             <!-- Bar chart -->
         </div>

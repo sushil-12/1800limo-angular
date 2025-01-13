@@ -1388,8 +1388,8 @@ export class AdminService {
 	}
 
 	//bookings reports
-	getBookingsReport(year,status,vehType) {
-		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status + '&vehicle_type=' + vehType);
+	getBookingsReport(year,status,vehType,serviceType,transferType) {
+		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status + '&vehicle_type=' + vehType + '&service_type=' + serviceType + '&transfer_type=' + transferType);
 	}
 
 	//bookings percent by veh type reports

@@ -128,6 +128,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
 import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
+import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 
 
 @NgModule({
@@ -227,7 +228,8 @@ import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-ave
 		AffiliateMapPinsComponent,
 		ReportsAdminComponent,
 		ReportsAdminVehiclesComponent,
-		ReportsAdminVehicleAverageComponent
+		ReportsAdminVehicleAverageComponent,
+		ReportsAdminUsersComponent
 	],
 	imports: [
 		CommonModule,

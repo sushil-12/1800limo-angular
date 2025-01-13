@@ -101,6 +101,7 @@ import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pi
 import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
 import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
+import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 
 
 const routes: Routes = [
@@ -651,6 +652,11 @@ const routes: Routes = [
 		path: 'reports-admin-vehicles-share',
 		canActivate: [AdminGuardGuard],
 		component: ReportsAdminVehicleAverageComponent
+	},
+	{
+		path: 'reports-admin-users',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminUsersComponent
 	},
 ];
 
