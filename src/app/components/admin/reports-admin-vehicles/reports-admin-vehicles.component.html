@@ -1,0 +1,24 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <section class="user_information">
+        <h2 class="headinginfo mb-2">Vehicle Type Share by Bookings Report</h2>
+        <div class="container vh-100 mb-2">
+            <div class="row align-items-center">
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Year</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('year',$event)" [(value)]="year">
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let year of yearsData" [value]="year.id">
+                                {{ year.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <ngx-charts-advanced-pie-chart [view]="view" [scheme]="colorScheme" [results]="bookingsResult"
+                [tooltipDisabled]="false">
+            </ngx-charts-advanced-pie-chart>
+        </div>
+    </section>
+</main>

@@ -660,11 +660,43 @@ const reportsStatus = [
     }
 ]
 
+const serviceType = [
+	{
+        "id": "oneway",
+        "value": "One Way"
+    },
+    {
+        "id": "roundtrip",
+        "value": "Round Trip"
+    },
+    {
+        "id": "chartertour",
+		"value": "Charter Tour"
+	},
+]
+
+const userType = [
+	{
+        "id": "individual",
+        "value": "Individual"
+    },
+    {
+        "id": "driver",
+        "value": "Affiliates"
+    },
+    {
+        "id": "travel",
+		"value": "Travel Agent"
+	},
+]
+
 export const constant_data = {
 	time_values,
 	hour_values,
 	countries,
 	personallist,
 	reportsYear,
-	reportsStatus
+	reportsStatus,
+	serviceType,
+	userType
 }

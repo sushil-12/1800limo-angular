@@ -1388,8 +1388,29 @@ export class AdminService {
 	}
 
 	//bookings reports
-	getBookingsReport(year,status) {
-		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status);
+	getBookingsReport(year,status,vehType,serviceType,transferType) {
+		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status + '&vehicle_type=' + vehType + '&service_type=' + serviceType + '&transfer_type=' + transferType);
+	}
+
+	//bookings percent by veh type reports
+	getVehPercentReport(year) {
+		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-percentage' + '?year=' + year);
+	}
+
+	//average by veh type reports
+	getVehAverageReport(year) {
+		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-average' + '?year=' + year);
+	}
+
+	getUserBasedReport(url,acc_id) {
+		var path;
+		if (url) {
+			path = url + '&acc_id=' + acc_id;
+		}
+		else {
+			path = this.serverUrl + 'get-user-accounts-details' + '?acc_id=' + acc_id;
+		}
+		return this.httpClient.get(path).toPromise();;
 	}
 
 }

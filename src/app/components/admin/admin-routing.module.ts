@@ -99,6 +99,9 @@ import { AddDriverSubscriberComponent } from '../subscription/add-driver-subscri
 import { FarmOutBookingsComponent } from '../subscription/farm-out-bookings/farm-out-bookings.component';
 import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
 import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
+import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
+import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
+import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 
 
 const routes: Routes = [
@@ -636,9 +639,24 @@ const routes: Routes = [
 		component: AffiliateMapPinsComponent
 	},
 	{
-		path: 'reports-admin',
+		path: 'reports-admin-bookings',
 		canActivate: [AdminGuardGuard],
 		component: ReportsAdminComponent
+	},
+	{
+		path: 'reports-admin-vehicles',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminVehiclesComponent
+	},
+	{
+		path: 'reports-admin-vehicles-share',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminVehicleAverageComponent
+	},
+	{
+		path: 'reports-admin-users',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminUsersComponent
 	},
 ];
 

@@ -13,8 +13,13 @@ export class ReportsAdminComponent implements OnInit {
 
   public year:any = '2024';
   public status:any = 'Paid';
-  public yearsData: Array<any> = constant_data.reportsYear
-  public statusData: Array<any> = constant_data.reportsStatus
+  public vehicleType:any='all';
+  public serviceType:any='all';
+  public transferType:any = 'all';
+  public yearsData: Array<any> = constant_data.reportsYear;
+  public statusData: Array<any> = constant_data.reportsStatus;
+  public serviceTypeData: Array<any> = constant_data.serviceType;
+  public vehicles:any;
   public bookingCount :any;
 	public bookingsResult: any[];
 	
@@ -58,27 +63,43 @@ export class ReportsAdminComponent implements OnInit {
 
   ngOnInit(): void {
 
-      this.loadBookingsReport(this.year,this.status)
+    // Load master vehicle
+    this.adminService.getOurVehicles().then((result:any) => {
+      this.vehicles = result.data;
+      console.log("veh resp", this.vehicles);
+    }).catch(err => {
+      console.log("err", err);
+    });
+
+      this.loadBookingsReport(this.year,this.status,this.vehicleType,this.serviceType,this.transferType)
 
   }
 
-  //on change of year call data
-  onYearChange(event: any) {
-    this.year = event.value;
-    this.loadBookingsReport(this.year,this.status)
+  //on change of filters call data
+  onFilterChange(name,event: any) {
+    console.log("in filter change",name,event)
+    if(name == 'year'){
+      this.year = event.value;
+    }
+    else if(name == 'status'){
+      this.status = event.value; 
+    }
+    else if(name == 'vehicleType'){
+      this.vehicleType = event.value; 
+    }
+    else if(name == 'serviceType'){
+      this.serviceType = event.value;
+    }
+    else if(name == 'transferType'){
+      this.transferType = event.value
+    }
+    this.loadBookingsReport(this.year,this.status,this.vehicleType,this.serviceType,this.transferType)
   }
-
-  //on chnage of status call data
-  onStatusChange(event: any) {
-    this.status = event.value; 
-    this.loadBookingsReport(this.year,this.status)
-  }
-
 
   //load reports for bookings
-  loadBookingsReport(year,status){
+  loadBookingsReport(year,status,vehType,serType,transType){
     this.spinner.show()
-    this.adminService.getBookingsReport(year,status).subscribe((response: any) => {
+    this.adminService.getBookingsReport(year,status,vehType,serType,transType).subscribe((response: any) => {
       this.spinner.hide()
 			console.log("in function get bookings report", response);
       this.bookingsResult = response?.data?.monthlyBookings
