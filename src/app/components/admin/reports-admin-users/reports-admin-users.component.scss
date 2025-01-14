@@ -55,3 +55,7 @@ table {
 		margin: 0;
 	}
 }
+
+:host ::ng-deep  .ng-select .ng-select-container.ng-appearance-outline .ng-placeholder{
+	z-index: 0 !important;
+}

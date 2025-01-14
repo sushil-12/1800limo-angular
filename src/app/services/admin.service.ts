@@ -1402,4 +1402,15 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-average' + '?year=' + year);
 	}
 
+	getUserBasedReport(url,acc_id) {
+		var path;
+		if (url) {
+			path = url + '&acc_id=' + acc_id;
+		}
+		else {
+			path = this.serverUrl + 'get-user-accounts-details' + '?acc_id=' + acc_id;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
 }
