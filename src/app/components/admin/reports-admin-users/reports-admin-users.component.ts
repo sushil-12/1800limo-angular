@@ -58,7 +58,7 @@ export class ReportsAdminUsersComponent implements OnInit {
 
   getAccount(acc_type){
     this.spinner.show()
-    this.adminService.getAccountBytype(acc_type).subscribe((response: any) => {
+    this.adminService.getAccountBytypeforall(acc_type).subscribe((response: any) => {
       if (response.success && response.data.length > 0) {
         this.spinner.hide()
         this.ClientAccounts = response.data;
