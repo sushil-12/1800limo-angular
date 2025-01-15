@@ -110,16 +110,18 @@ export class ReportsAdminUsersComponent implements OnInit {
       this.lifetimeBookings = reports?.data?.lifetime_bookings
 
 			this.firstPage = 1;
-			this.lastPage = this.userBasedReportResponse.data?.data?.last_page;
-			this.totalPage = this.userBasedReportResponse.data?.data?.last_page;
-			this.currentPage = this.userBasedReportResponse.data?.data?.current_page;
-			this.from = this.userBasedReportResponse.data?.data?.from;
-			this.to = this.userBasedReportResponse.data?.data?.to;
-			this.path = this.userBasedReportResponse.data?.data?.path;
-			this.firstPageUrl = this.userBasedReportResponse.data?.data?.first_page_url;
-			this.lastPageUrl = this.userBasedReportResponse.data?.data?.last_page_url;
-			this.prevPageUrl = this.userBasedReportResponse.data?.data?.prev_page_url;
-			this.nextPageUrl = this.userBasedReportResponse.data?.data?.next_page_url;
+			this.lastPage = reports.data?.data?.last_page;
+			this.totalPage = reports.data?.data?.last_page;
+			this.currentPage = reports.data?.data?.current_page;
+			this.from = reports.data?.data?.from;
+			this.to = reports.data?.data?.to;
+			this.path = reports.data?.data?.path;
+			this.firstPageUrl = reports.data?.data?.first_page_url;
+			this.lastPageUrl = reports.data?.data?.last_page_url;
+			this.prevPageUrl = reports.data?.data?.prev_page_url;
+			this.nextPageUrl = reports.data?.data?.next_page_url;
+
+      console.log("data for pagnation",this.lastPage,this.totalPage,this.currentPage,this.from,this.to)
 			
 		})
 			.catch(err => {
