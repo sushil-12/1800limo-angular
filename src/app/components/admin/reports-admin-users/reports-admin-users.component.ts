@@ -104,22 +104,22 @@ export class ReportsAdminUsersComponent implements OnInit {
 		this.adminService.getUserBasedReport(pageUrl,this.acc_id).then((resp:any) => {
       this.spinner.hide()
       let reports = resp;
-			this.userBasedReportResponse = reports?.data?.data;
+			this.userBasedReportResponse = reports?.data?.data?.data;
       this.volume = reports?.data?.total_amount
       this.totalBookings = reports?.data?.total_bookings
       this.lifetimeBookings = reports?.data?.lifetime_bookings
 
 			this.firstPage = 1;
-			this.lastPage = this.userBasedReportResponse.data.last_page;
-			this.totalPage = this.userBasedReportResponse.data.last_page;
-			this.currentPage = this.userBasedReportResponse.data.current_page;
-			this.from = this.userBasedReportResponse.data.from;
-			this.to = this.userBasedReportResponse.data.to;
-			this.path = this.userBasedReportResponse.data.path;
-			this.firstPageUrl = this.userBasedReportResponse.data.first_page_url;
-			this.lastPageUrl = this.userBasedReportResponse.data.last_page_url;
-			this.prevPageUrl = this.userBasedReportResponse.data.prev_page_url;
-			this.nextPageUrl = this.userBasedReportResponse.data.next_page_url;
+			this.lastPage = this.userBasedReportResponse.data?.data?.last_page;
+			this.totalPage = this.userBasedReportResponse.data?.data?.last_page;
+			this.currentPage = this.userBasedReportResponse.data?.current_page;
+			this.from = this.userBasedReportResponse.data?.data?.from;
+			this.to = this.userBasedReportResponse.data?.data?.to;
+			this.path = this.userBasedReportResponse.data?.data?.path;
+			this.firstPageUrl = this.userBasedReportResponse.data?.data?.first_page_url;
+			this.lastPageUrl = this.userBasedReportResponse.data?.data?.last_page_url;
+			this.prevPageUrl = this.userBasedReportResponse.data?.data?.prev_page_url;
+			this.nextPageUrl = this.userBasedReportResponse.data?.data?.next_page_url;
 			
 		})
 			.catch(err => {
