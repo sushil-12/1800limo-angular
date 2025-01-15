@@ -112,7 +112,7 @@ export class ReportsAdminUsersComponent implements OnInit {
 			this.firstPage = 1;
 			this.lastPage = this.userBasedReportResponse.data?.data?.last_page;
 			this.totalPage = this.userBasedReportResponse.data?.data?.last_page;
-			this.currentPage = this.userBasedReportResponse.data?.current_page;
+			this.currentPage = this.userBasedReportResponse.data?.data?.current_page;
 			this.from = this.userBasedReportResponse.data?.data?.from;
 			this.to = this.userBasedReportResponse.data?.data?.to;
 			this.path = this.userBasedReportResponse.data?.data?.path;
