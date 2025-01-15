@@ -1413,4 +1413,8 @@ export class AdminService {
 		return this.httpClient.get(path).toPromise();;
 	}
 
+	getAccountBytypeforall(accountType) {
+		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType + '?get_report=all');
+	}
+
 }
