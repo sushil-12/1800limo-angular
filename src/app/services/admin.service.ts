@@ -1402,13 +1402,13 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-average' + '?year=' + year);
 	}
 
-	getUserBasedReport(url,acc_id) {
+	getUserBasedReport(url,acc_id,year,month) {
 		var path;
 		if (url) {
-			path = url + '&acc_id=' + acc_id;
+			path = url + '&acc_id=' + acc_id + '&year=' + year + '&month=' + month;
 		}
 		else {
-			path = this.serverUrl + 'get-user-accounts-details' + '?acc_id=' + acc_id;
+			path = this.serverUrl + 'get-user-accounts-details' + '?acc_id=' + acc_id + '&year=' + year + '&month=' + month;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}

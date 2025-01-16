@@ -18,7 +18,7 @@ export class ReportsAdminVehiclesComponent implements OnInit {
 
 
      // Set the options for the chart
-	  view: any[] = [window.innerWidth > 768 ? 700 : window.innerWidth * 0.9, 400]; // Optional: Define the size of the chart
+	  view: any[] = [900, 600]; // Optional: Define the size of the chart
 	
 
    colorScheme = {
@@ -30,10 +30,10 @@ export class ReportsAdminVehiclesComponent implements OnInit {
   onResize(event) {
     if (event.target.innerWidth <= 768) {
       // For mobile view (<= 768px), make the chart responsive
-      this.view = [event.target.innerWidth * 0.9, 400]; // 90% of screen width
+      this.view = [700, 500]; // 90% of screen width
     } else {
       // For larger screens, set a fixed size
-      this.view = [700, 400];  // Fixed width and height
+      this.view = [900, 500];  // Fixed width and height
     }
   }
  

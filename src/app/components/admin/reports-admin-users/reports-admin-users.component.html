@@ -18,7 +18,22 @@
                 <div class="col-md-6 py-2">
                     <ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
                         placeholder="Select Account" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-                        [(ngModel)]="acc_id" (change)="handleClientAccount($event)">
+                        [(ngModel)]="acc_id" (change)="handleClientAccount($event,'acc_id')">
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-2">
+                <div class="col-md-3 py-2">
+                    <ng-select appearance="outline" [items]="yearsData" bindLabel="value" bindValue="id"
+                        placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+                        [(ngModel)]="year" (change)="handleClientAccount($event,'year')">
+                    </ng-select>
+                </div>
+                <div class="col-md-3 py-2">
+                    <ng-select appearance="outline" [items]="yearsData" bindLabel="value" bindValue="id"
+                        placeholder="Select Month" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+                        [(ngModel)]="month" (change)="handleClientAccount($event,'month')">
                     </ng-select>
                 </div>
             </div>
