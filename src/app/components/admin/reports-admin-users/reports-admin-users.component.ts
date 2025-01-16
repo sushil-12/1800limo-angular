@@ -46,23 +46,27 @@ export class ReportsAdminUsersComponent implements OnInit {
     console.log("in filter change",name,event)
     if(name == 'userType'){
       this.userType = event.value;
+      this.getAccount(this.userType)
       this.acc_id = null
-      this.userBasedReportResponse = ''
       this.year = ''
       this.month = ''
     }
-    else if(name == 'year'){
+    else if(this. acc_id && name == 'year'){
       this.year = event.value
+      this.loadReport()
     }
-    else if(name == 'month'){
+    else if(this.acc_id && name == 'month'){
       this.month = event.value
+      this.loadReport()
     }
-    this.getAccount(this.userType)
   }
 
-  handleClientAccount(event,name){
+  handleClientAccount(event){
     console.log("in handleClientAccount",event)
-    this.loadReport()
+    if(event){
+      console.log("in event")
+      this.loadReport()
+    }
       
   }
 
