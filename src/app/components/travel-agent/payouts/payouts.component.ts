@@ -33,6 +33,9 @@ export class PayoutsComponent implements OnInit {
   public prevPageUrl: string;
   public nextPageUrl: string;
   public invoiceRes: any;
+  public totalBookings:any;
+  public volume:any;
+  public lifetimeBookings:any;
   audit_Trail: any;
   searchText: any = '';
   useDateFilter: boolean = true;
@@ -64,7 +67,10 @@ export class PayoutsComponent implements OnInit {
       .subscribe((data: any) => {
         this.spinner.hide();
         this.invoiceRes = data;
-        this.invoices = this.invoiceRes?.transfers
+        this.invoices = this.invoiceRes?.data?.data
+        this.volume = this.invoiceRes?.data?.total_amount
+        this.totalBookings = this.invoiceRes?.data?.total_bookings
+        this.lifetimeBookings = this.invoiceRes?.data?.lifetime_bookings
         console.log("result", this.invoiceRes)
 
       });

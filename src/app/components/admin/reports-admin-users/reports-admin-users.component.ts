@@ -17,6 +17,10 @@ export class ReportsAdminUsersComponent implements OnInit {
   public totalBookings:any;
   public volume:any;
   public lifetimeBookings:any;
+  public year:any='';
+  public yearsData: Array<any> = constant_data.reportsYear;
+  public monthsData: Array<any> = constant_data.reportsMonth;
+  public month:any='';
   public userTypesData:Array<any>=constant_data.userType
   public firstPage: Number;
 	public lastPage: Number;
@@ -42,18 +46,24 @@ export class ReportsAdminUsersComponent implements OnInit {
     console.log("in filter change",name,event)
     if(name == 'userType'){
       this.userType = event.value;
+      this.acc_id = null
+      this.userBasedReportResponse = ''
+      this.year = ''
+      this.month = ''
     }
-    this.acc_id = null
-    this.userBasedReportResponse = null
+    else if(name == 'year'){
+      this.year = event.value
+    }
+    else if(name == 'month'){
+      this.month = event.value
+    }
     this.getAccount(this.userType)
   }
 
-  handleClientAccount(event){
+  handleClientAccount(event,name){
     console.log("in handleClientAccount",event)
-    if(event){
-      console.log('acc_id',this.acc_id)
-      this.loadReport()
-    }
+    this.loadReport()
+      
   }
 
   getAccount(acc_type){
@@ -99,9 +109,9 @@ export class ReportsAdminUsersComponent implements OnInit {
 		return udpArr;
 	}
 
-  loadReport(pageUrl = null) {
+  loadReport(pageUrl = '') {
 		this.spinner.show();
-		this.adminService.getUserBasedReport(pageUrl,this.acc_id).then((resp:any) => {
+		this.adminService.getUserBasedReport(pageUrl,this.acc_id,this.year,this.month).then((resp:any) => {
       this.spinner.hide()
       let reports = resp;
 			this.userBasedReportResponse = reports?.data?.data?.data;
