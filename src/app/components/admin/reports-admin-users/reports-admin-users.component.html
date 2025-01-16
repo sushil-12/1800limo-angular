@@ -59,7 +59,7 @@
                                     <tr role="row" class="odd" *ngFor="let userData of userBasedReportResponse">
                                         <td><span>{{userData?.date | date: 'dd-MMM-yyyy' }}</span></td>
                                         <td><span>{{userData?.transfer_group ? userData?.transfer_group :
-                                                userData?.Description}}</span></td>
+                                                userData?.description}}</span></td>
                                         <td *ngIf="userType != 'driver' && userType != 'travel' ">
                                             <span>{{userData?.booking_number}}</span>
                                         </td>
