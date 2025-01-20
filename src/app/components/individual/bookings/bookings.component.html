@@ -151,6 +151,12 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Cancel Booking
                                             </a>
+                                            <a class="dropdown-item"
+                                                (click)="sendEmaiManuallClicked(booking.booking_id)" data-toggle="modal"
+                                                data-target="#sendEmailToAnyone">
+                                                <div class="dropdown-item-icon"></div>
+                                                Send Email to anyone
+                                            </a>
                                             <!-- <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
                                                 data-toggle="modal" data-target="#paymentModal"
                                                 (click)="payBooking(booking?.booking_id)">
@@ -1602,6 +1608,48 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="sendEmailToAnyone" tabindex="-1" role="dialog" aria-labelledby="sendEmailToAnyone"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-0">
+                <h3 class="mb-0">Booking : {{EmailFormF.reservation_id.value}}</h3>
+            </div>
+            <div class="modal-body text-center">
+                <form [formGroup]="sendEmailForm">
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>
+                                Enter Email <span class="asterisk">*</span>
+                            </mat-label>
+                            <input matInput placeholder="Email" type="text" formControlName="emailTarget"
+                                (focus)="$event.target.select()">
+                        </mat-form-field>
+                    </div>
+                    <div class="error-box">
+                        <div class="error-message"
+                            *ngIf="EmailFormF?.emailTarget.invalid && (EmailFormF.emailTarget.touched || EmailFormF.emailTarget.dirty)">
+                            <p class="text-danger text-lg m-0" *ngIf="EmailFormF.emailTarget.errors?.required">
+                                This field is required
+                            </p>
+                            <p class="text-danger text-lg m-0" *ngIf="EmailFormF.emailTarget.errors?.pattern">
+                                Please enter a valid Email Id
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" (click)="sendEmailToAnyone()">Send
+                    Email</button>
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
 <!-- confirm payment modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">

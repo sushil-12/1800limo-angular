@@ -1417,4 +1417,9 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType + '?get_report=all');
 	}
 
+	//send email to affiliate, customer etc
+	sendEmailToanyone(data) {
+		return this.httpClient.post(this.serverUrl + 'send-booking-details', data);
+	}
+
 }

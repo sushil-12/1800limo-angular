@@ -159,7 +159,7 @@ export class DailyBookingsComponent implements OnInit {
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ["", Validators.required],
-			emailTarget: ["", Validators.required],
+			emailTarget: ["",[Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 		});
 
 		this.MapController()
@@ -452,6 +452,7 @@ export class DailyBookingsComponent implements OnInit {
 			});
 	}
 
+	
 	async submit(message, format) {
 		console.log("format", format)
 		if (this.passengerDetails.selection_button == "Passenger") {
@@ -459,43 +460,43 @@ export class DailyBookingsComponent implements OnInit {
 				? this.passengerDetails.passenger_cell_isd +
 				this.passengerDetails.passenger_cell
 				: this.passengerDetails.passenger_email;
-			this.reciptentName = this.passengerDetails.passenger_name;
-		} else if (this.passengerDetails.selection_button == "Affiliate") {
-			this.sendInformation = format
+				this.reciptentName = this.passengerDetails.passenger_name;
+			} else if (this.passengerDetails.selection_button == "Affiliate") {
+				this.sendInformation = format
 				? this.passengerDetails.affiliate_dispatch_isd +
 				this.passengerDetails.affiliate_dispatch_number
 				: this.passengerDetails.dispatchEmail;
 			this.reciptentName =
-				this.passengerDetails.driver_first_name +
+			this.passengerDetails.driver_first_name +
 				this.passengerDetails.driver_last_name;
-		}
-		else {
-			this.sendInformation = format
+			}
+			else {
+				this.sendInformation = format
 				? (this.passengerDetails.loose_affiliate_phone_isd ? this.passengerDetails.loose_affiliate_phone_isd : '+1') +
 				(this.passengerDetails.loose_affiliate_phone ? this.passengerDetails.loose_affiliate_phone : '8005466266')
 				: (this.passengerDetails.loose_affiliate_email ? this.passengerDetails.loose_affiliate_email : 'info@1800limo.com');
-			this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
-		}
-
-		if (this.uploadedFile) {
-			this.spinner.show()
-			let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-			this.fileUrl = dataS.Location;
-			console.log("fileUrl", this.fileUrl)
-		}
-
-		let obj = {
-			bookingId: this.passengerDetails.booking_id,
-			reciptentName: this.reciptentName,
-			sendTo: this.passengerDetails.selection_button,
-			sendThrough: format ? "Phone" : "Email",
-			sendValue: this.sendInformation,
-			sendContent: message,
-			fileUrl: this.fileUrl,
-			filetype: this.fileType
+				this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
+			}
+			
+			if (this.uploadedFile) {
+				this.spinner.show()
+				let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+				this.fileUrl = dataS.Location;
+				console.log("fileUrl", this.fileUrl)
+			}
+			
+			let obj = {
+				bookingId: this.passengerDetails.booking_id,
+				reciptentName: this.reciptentName,
+				sendTo: this.passengerDetails.selection_button,
+				sendThrough: format ? "Phone" : "Email",
+				sendValue: this.sendInformation,
+				sendContent: message,
+				fileUrl: this.fileUrl,
+				filetype: this.fileType
 		};
 		this.adminService
-			.adminNotification(obj)
+		.adminNotification(obj)
 			.pipe(
 				catchError((err) => {
 					this.spinner.hide();
@@ -509,19 +510,19 @@ export class DailyBookingsComponent implements OnInit {
 				console.log(message);
 				$("textarea").val("");
 			});
-
-		// Clear file input after success
-		this.uploadedFile = null;
-		this.fileUrl = null;
-		this.fileType = null;
-		if (this.fileInput) {
-			this.fileInput.nativeElement.value = ''; // Reset file input
-		}
-
-		$("#closeModal").click(() => {
-			this.fileInput.nativeElement.value = '';
+			
+			// Clear file input after success
 			this.uploadedFile = null;
+			this.fileUrl = null;
 			this.fileType = null;
+			if (this.fileInput) {
+				this.fileInput.nativeElement.value = ''; // Reset file input
+			}
+			
+			$("#closeModal").click(() => {
+				this.fileInput.nativeElement.value = '';
+				this.uploadedFile = null;
+				this.fileType = null;
 			this.fileUrl = null;
 			$("#notificationModal").modal("hide");
 		});
@@ -532,33 +533,33 @@ export class DailyBookingsComponent implements OnInit {
 		this.message.nativeElement.value = "";
 		this.show = false;
 	}
-
+	
 	cancelSubscription() {
 		this.spinner.show()
 		let data = {
 			account_id: this.currentUser?.account_id
 		}
 		this.adminService
-			.cancelSubscription(data)
-			.pipe(
-				catchError((err) => {
-					this.spinner.hide()
-					return throwError(err);
-				})
-			)
-			.subscribe((response: any) => {
+		.cancelSubscription(data)
+		.pipe(
+			catchError((err) => {
 				this.spinner.hide()
-				this.$errorDialog.openDialog({
-					errors: {
-						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Your subscription have been cancelled successfully!</span>`
-					}
-				})
-				this.isCancelled = true
-				$("#cancelModal").modal("hide");
-			});
+				return throwError(err);
+			})
+		)
+		.subscribe((response: any) => {
+			this.spinner.hide()
+			this.$errorDialog.openDialog({
+				errors: {
+					error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Your subscription have been cancelled successfully!</span>`
+				}
+			})
+			this.isCancelled = true
+			$("#cancelModal").modal("hide");
+		});
 	}
 
-
+	
 	closeModal() {
 		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
 		$("#sendEmailModal").modal("hide");
@@ -570,81 +571,81 @@ export class DailyBookingsComponent implements OnInit {
 		this.show = false;
 		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
 	}
-
+	
 	scroll(id) {
 		// let el = document.getElementById(id);
 		// let elementRect = el.getBoundingClientRect();
 		// let absoluteElementTop = elementRect.top + window.pageYOffset;
 		// let topElement = absoluteElementTop - 200;
-
+		
 		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
 		// window.scrollTo({
-		// 	top: topElement,
-		// 	behavior: 'smooth'
-		// });
-
-		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView({ behavior: 'smooth' });
-	}
-
-	noError: boolean = false;
-	loadBookings(
-		pageUrl = null,
-		start_date: string,
-		end_date: string,
-		search_value: string = ""
-	) {
-		if (pageUrl) {
-			console.log("pageurl", pageUrl)
-			this.scroll('daily_bookings_table')
+			// 	top: topElement,
+			// 	behavior: 'smooth'
+			// });
+			
+			let el = document.getElementById(id);
+			console.log(`scrolling to ${id}`, el);
+			el.scrollIntoView({ behavior: 'smooth' });
 		}
-
+		
+		noError: boolean = false;
+		loadBookings(
+			pageUrl = null,
+			start_date: string,
+			end_date: string,
+			search_value: string = ""
+		) {
+			if (pageUrl) {
+				console.log("pageurl", pageUrl)
+				this.scroll('daily_bookings_table')
+		}
+		
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
-
+		
 		if (this.currentUser.created_by_role == 'admin') {
 			this.adminService
-				.loadBookings(
-					pageUrl,
-					start_date,
-					end_date,
-					this.useDateFilter,
-					search_value ?? "",
-					this.orderBy
-				)
-				.then((result: any) => {
-					if (result?.data?.data == 0) {
-						this.noError = true;
-					}
-					let date = new Date();
-					let timestamp = date.getTime();
-					date.setDate(date.getDate() + 7);
-					timestamp = date.getTime();
-					this.bookingsRes = result;
-					this.bookings = this.bookingsRes?.data?.data;
-					if (!this.useDateFilter && !this.searchText) {
-						this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
-					}
-					this.totalRecords = this.bookingsRes.data.total;
-					this.firstPage = 1;
-					this.lastPage = this.bookingsRes.data.last_page;
-					this.totalPage = this.bookingsRes.data.last_page;
-					this.currentPage = this.bookingsRes.data.current_page;
-					this.from = this.bookingsRes.data.from;
-					this.to = this.bookingsRes.data.to;
-					this.path = this.bookingsRes.data.path;
-					this.firstPageUrl = this.bookingsRes.data.first_page_url;
+			.loadBookings(
+				pageUrl,
+				start_date,
+				end_date,
+				this.useDateFilter,
+				search_value ?? "",
+				this.orderBy
+			)
+			.then((result: any) => {
+				if (result?.data?.data == 0) {
+					this.noError = true;
+				}
+				let date = new Date();
+				let timestamp = date.getTime();
+				date.setDate(date.getDate() + 7);
+				timestamp = date.getTime();
+				this.bookingsRes = result;
+				this.bookings = this.bookingsRes?.data?.data;
+				if (!this.useDateFilter && !this.searchText) {
+					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+				}
+				this.totalRecords = this.bookingsRes.data.total;
+				this.firstPage = 1;
+				this.lastPage = this.bookingsRes.data.last_page;
+				this.totalPage = this.bookingsRes.data.last_page;
+				this.currentPage = this.bookingsRes.data.current_page;
+				this.from = this.bookingsRes.data.from;
+				this.to = this.bookingsRes.data.to;
+				this.path = this.bookingsRes.data.path;
+				this.firstPageUrl = this.bookingsRes.data.first_page_url;
 					this.lastPageUrl = this.bookingsRes.data.last_page_url;
 					this.prevPageUrl = this.bookingsRes.data.prev_page_url;
 					this.nextPageUrl = this.bookingsRes.data.next_page_url;
 					this.subModules = localStorage.getItem("sub_modules") || "";
 					this.spinner.hide();
 				});
-		}
-		else {
-			this.adminService
+			}
+			else {
+				this.adminService
 				.loadFarmInBookings(
 					pageUrl,
 					start_date,
@@ -681,21 +682,21 @@ export class DailyBookingsComponent implements OnInit {
 					this.subModules = localStorage.getItem("sub_modules") || "";
 					this.spinner.hide();
 				});
+			}
+			
+			
 		}
-
-
-	}
-
-	handleShowMore(
-		pageUrl = null,
-		start_date: string,
-		end_date: string,
-		search_value: string = ""
-	) {
-		search_value == "" && this.spinner.show();
-		this.noError = false;
-		// Load Our bookings using API
-		this.adminService
+		
+		handleShowMore(
+			pageUrl = null,
+			start_date: string,
+			end_date: string,
+			search_value: string = ""
+		) {
+			search_value == "" && this.spinner.show();
+			this.noError = false;
+			// Load Our bookings using API
+			this.adminService
 			.loadBookings(
 				pageUrl,
 				start_date,
@@ -726,20 +727,20 @@ export class DailyBookingsComponent implements OnInit {
 				this.nextPageUrl = this.bookingsRes.data.next_page_url;
 				this.spinner.hide();
 			});
-	}
-
-	show = false;
-	openModal(booking: any, selection_button: string) {
-		try {
-			setTimeout(() => {
-				// $('textarea').attr('autofocus', 'autofocus');
-				this.sendEmailModalFocus.nativeElement
+		}
+		
+		show = false;
+		openModal(booking: any, selection_button: string) {
+			try {
+				setTimeout(() => {
+					// $('textarea').attr('autofocus', 'autofocus');
+					this.sendEmailModalFocus.nativeElement
 					.querySelector("textarea")
 					.focus();
-			}, 1000);
-		} catch (error) {
-			console.log("----------error------->>>>>> ", error);
-		}
+				}, 1000);
+			} catch (error) {
+				console.log("----------error------->>>>>> ", error);
+			}
 		console.log("passenger details", booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
@@ -750,25 +751,25 @@ export class DailyBookingsComponent implements OnInit {
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-
+		
 		let result = "";
-
+		
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-
+		
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-
+		
 		result += `${remainingMinutes} minutes`;
-
+		
 		return result;
 	}
 	mToMi(distance: number): string {
 		return (distance / 1609).toFixed(2);
 	}
-
+	
 	mToKm(distance: number): string {
 		return (distance / 1000).toFixed(2);
 	}
@@ -789,7 +790,7 @@ export class DailyBookingsComponent implements OnInit {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
-
+		
 		var i;
 		var udpArr = new Array();
 		for (i = startFrom; i < endTo; i++) {
@@ -797,7 +798,7 @@ export class DailyBookingsComponent implements OnInit {
 		}
 		return udpArr;
 	}
-
+	
 	changeDate(dateType, date) {
 		console.log("---------__>>>>>>", dateType, date);
 		this[dateType] = date;
@@ -824,22 +825,22 @@ export class DailyBookingsComponent implements OnInit {
 			var status = "disable";
 		}
 		this.adminService
-			.reservationStatus(id, status)
-			.pipe(
-				catchError((err) => {
-					this.spinner.hide(); //hide spinner
-					return throwError(err);
-				})
-			)
-			.subscribe((result) => {
+		.reservationStatus(id, status)
+		.pipe(
+			catchError((err) => {
 				this.spinner.hide(); //hide spinner
-			});
+				return throwError(err);
+			})
+		)
+		.subscribe((result) => {
+			this.spinner.hide(); //hide spinner
+		});
 	}
-
+	
 	get changeStatusF() {
 		return this.changeStatusForm.controls;
 	}
-
+	
 	changeBookingStatus(bookingId) {
 		this.changeStatusForm.patchValue({
 			reservation_id: bookingId,
@@ -848,6 +849,7 @@ export class DailyBookingsComponent implements OnInit {
 			this.select.open();
 		}, 600);
 	}
+	
 
 	submitChangeStatusForm() {
 		this.submitted = true;
@@ -900,6 +902,16 @@ export class DailyBookingsComponent implements OnInit {
 		});
 	}
 
+	sendEmaiManuallClicked(bookingId) {
+		console.log('in func send email click', bookingId)
+		this.sendEmailForm.patchValue({
+			reservation_id: bookingId,
+		});
+	}
+
+	get Form() {
+		return this.sendEmailForm.controls;
+	}
 
 	emailForm() {
 		this.submitted = true;
@@ -1408,6 +1420,40 @@ export class DailyBookingsComponent implements OnInit {
 			this.fileType = this.uploadedFile['type'];
 			console.log("file", this.fileName, this.fileType)
 		}
+	}
+
+	sendEmailToAnyone(){
+		if (this.sendEmailForm.invalid) {
+			return;
+		}
+
+		let body = {
+			id: this.sendEmailForm.get('reservation_id').value,
+			email: this.sendEmailForm.get('emailTarget').value
+
+		}
+		this.spinner.show()
+		this.adminService
+			.sendEmailToanyone(body)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					this.$errorDialog.openDialog({
+						errors: {
+							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
+						}
+					})
+				}
+			});
+
 	}
 
 }

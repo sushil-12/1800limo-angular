@@ -225,6 +225,12 @@
 												<div class="dropdown-item-icon"></div>
 												Email All
 											</a>
+											<a class="dropdown-item"
+												(click)="sendEmaiManuallClicked(booking.booking_id)" data-toggle="modal"
+												data-target="#sendEmailToAnyone">
+												<div class="dropdown-item-icon"></div>
+												Send Email to anyone
+											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal">
 												<div class="dropdown-item-icon"></div>
@@ -435,21 +441,21 @@
 							</span>
 						</div>
 					</div>
-						<!-- Number of Hours -->
-						<div *ngIf="bookingPreview.service_type == 'charter_tour'">
-							<div class="row">
-								<div class="col-md-4 key">
-									<span style="font-weight: 550 !important;">
-										Booking Hours
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{ bookingPreview.number_of_hours }}
-									</span>
-								</div>
+					<!-- Number of Hours -->
+					<div *ngIf="bookingPreview.service_type == 'charter_tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview.number_of_hours }}
+								</span>
 							</div>
 						</div>
+					</div>
 					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
 						<div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
@@ -845,7 +851,7 @@
 						Travel Information
 					</h4> -->
 
-				
+
 
 					<!-- ################ Pickup ################### -->
 					<h5 class="m-0 my-2 font-weight-bolder text-2xl preview-pickup-color">
@@ -927,7 +933,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						 <hr>
+						<hr>
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -944,9 +950,9 @@
 									#{{ textFormatter(bookingPreview.pickup_flight) }}
 								</span>
 								&nbsp;<span
-										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
-										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
-										Arrival time)</span>
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
 						<!-- Airline -->
@@ -1087,7 +1093,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						 <hr>
+						<hr>
 						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1105,9 +1111,9 @@
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									#{{ textFormatter(bookingPreview.dropoff_flight) }}
 								</span>&nbsp;<span
-								style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
-								(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
-								Arrival time)</span>
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
 						<!-- Airline -->
@@ -1800,6 +1806,47 @@
 
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="sendEmailToAnyone" tabindex="-1" role="dialog" aria-labelledby="sendEmailToAnyone"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Booking : {{EmailFormF.reservation_id.value}}</h3>
+			</div>
+			<div class="modal-body text-center">
+				<form [formGroup]="sendEmailForm">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Enter Email <span class="asterisk">*</span>
+							</mat-label>
+							<input matInput placeholder="Email" type="text" formControlName="emailTarget"
+								(focus)="$event.target.select()">
+						</mat-form-field>
+					</div>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="EmailFormF?.emailTarget.invalid && (EmailFormF.emailTarget.touched || EmailFormF.emailTarget.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="EmailFormF.emailTarget.errors?.required">
+								This field is required
+							</p>
+							<p class="text-danger text-lg m-0" *ngIf="EmailFormF.emailTarget.errors?.pattern">
+								Please enter a valid Email Id
+							</p>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="sendEmailToAnyone()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 <!-- invite agent modal -->
