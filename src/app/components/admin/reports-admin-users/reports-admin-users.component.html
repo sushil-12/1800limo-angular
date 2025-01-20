@@ -28,6 +28,7 @@
                     <mat-form-field appearance="outline" class="m-0">
                         <mat-label>Year</mat-label>
                         <mat-select (selectionChange)="onFilterChange('year',$event)" [(value)]="year">
+                            <mat-option [value]="'all'">All</mat-option>
                             <!-- Dynamically generated options -->
                             <mat-option *ngFor="let years of yearsData" [value]="years.id">
                                 {{ years.value }}
@@ -39,6 +40,7 @@
                     <mat-form-field appearance="outline" class="m-0">
                         <mat-label>Month</mat-label>
                         <mat-select (selectionChange)="onFilterChange('month',$event)" [(value)]="month">
+                            <mat-option [value]="'all'">All</mat-option>
                             <!-- Dynamically generated options -->
                             <mat-option *ngFor="let months of monthsData" [value]="months.id">
                                 {{ months.value }}
