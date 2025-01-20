@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { IndividualService } from 'src/app/services/individual.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { MapsAPILoader } from '@agm/core';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 
 @Component({
@@ -83,6 +84,7 @@ export class BookingsComponent implements OnInit {
 
 	constructor(
 		private affiliateService: AffiliateService,
+		private adminService :AdminService,
 		private travelAgentService: TravelAgentService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
@@ -137,7 +139,7 @@ export class BookingsComponent implements OnInit {
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
-			emailTarget: ['', Validators.required]
+			emailTarget: ["",[Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 		});
 
 		$("#search-field-my-booking").addClass("box-outline")
@@ -934,6 +936,51 @@ export class BookingsComponent implements OnInit {
 			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 			window.open(url, '_blank'); // Opens the search in a new tab
 		}
+	}
+
+	get EmailFormF() {
+		return this.sendEmailForm.controls;
+	}
+
+	sendEmaiManuallClicked(bookingId) {
+		console.log('in func send email click', bookingId)
+		this.sendEmailForm.patchValue({
+			reservation_id: bookingId,
+		});
+	}
+
+	sendEmailToAnyone(){
+		if (this.sendEmailForm.invalid) {
+			return;
+		}
+
+		let body = {
+			id: this.sendEmailForm.get('reservation_id').value,
+			email: this.sendEmailForm.get('emailTarget').value
+
+		}
+		this.spinner.show()
+		this.adminService
+			.sendEmailToanyone(body)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
+						}
+					})
+				}
+			});
+
 	}
 
 }
