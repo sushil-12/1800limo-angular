@@ -16,9 +16,11 @@
                     </mat-form-field>
                 </div>
             </div>
-            <ngx-charts-pie-grid [view]="view" [scheme]="colorScheme" [results]="bookingsResult"
-                [tooltipDisabled]="false" [label]="'Vehicle Share'">
-            </ngx-charts-pie-grid>
+            <div class="chart-container">
+                <ngx-charts-pie-grid [view]="view" [scheme]="colorScheme" [results]="bookingsResult"
+                    [tooltipDisabled]="false" [label]="'Vehicle Share %'">
+                </ngx-charts-pie-grid>
+            </div>
         </div>
     </section>
 </main>

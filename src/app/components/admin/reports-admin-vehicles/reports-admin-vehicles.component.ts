@@ -18,24 +18,14 @@ export class ReportsAdminVehiclesComponent implements OnInit {
 
 
      // Set the options for the chart
-	  view: any[] = [900, 600]; // Optional: Define the size of the chart
+	   view: any[] = [800, 600];
 	
 
    colorScheme = {
      domain: ['#1a73e8', '#ff4081', '#4caf50', '#ffeb3b', '#e91e63','#5AA454','#A10A28','#C7B42C','#AAAAAA']
    };
 
-     // Dynamically resize the chart view based on screen width
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    if (event.target.innerWidth <= 768) {
-      // For mobile view (<= 768px), make the chart responsive
-      this.view = [700, 500]; // 90% of screen width
-    } else {
-      // For larger screens, set a fixed size
-      this.view = [900, 500];  // Fixed width and height
-    }
-  }
+
  
 
   constructor(
@@ -45,7 +35,6 @@ export class ReportsAdminVehiclesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.loadVehPercentReport(this.year)
 
   }

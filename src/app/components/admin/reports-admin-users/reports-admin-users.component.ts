@@ -17,10 +17,10 @@ export class ReportsAdminUsersComponent implements OnInit {
   public totalBookings:any;
   public volume:any;
   public lifetimeBookings:any;
-  public year:any='';
+  public year:any='all';
   public yearsData: Array<any> = constant_data.reportsYear;
   public monthsData: Array<any> = constant_data.reportsMonth;
-  public month:any='';
+  public month:any='all';
   public userTypesData:Array<any>=constant_data.userType
   public firstPage: Number;
 	public lastPage: Number;
@@ -48,8 +48,8 @@ export class ReportsAdminUsersComponent implements OnInit {
       this.userType = event.value;
       this.getAccount(this.userType)
       this.acc_id = null
-      this.year = ''
-      this.month = ''
+      this.year = 'all'
+      this.month = 'all'
     }
     else if(this. acc_id && name == 'year'){
       this.year = event.value
