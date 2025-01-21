@@ -40,6 +40,12 @@ mat-progress-bar {
 	}
 }
 
+@media only screen and (min-width:767px) {
+	.hideDesktop {
+		display: none;
+	}
+}
+
 .hamburger {
 	display: flex;
 	flex-direction: column;

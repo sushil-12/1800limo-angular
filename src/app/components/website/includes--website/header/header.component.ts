@@ -214,6 +214,9 @@ export class HeaderComponent implements OnInit {
 		else if (role == 'sub_affiliate') {
 			this.router.navigateByUrl('/sub_affiliate/my-bookings');
 		}
+		else if(role == 'subscriber'){
+			this.router.navigateByUrl('/admin/daily-bookings-admin');
+		}
 		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();

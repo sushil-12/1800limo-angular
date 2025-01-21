@@ -406,20 +406,23 @@ export class SubscribersListComponent implements OnInit {
 			let bkp_crnt_dt = localStorage.getItem('currentUser')
 			let bkp_u_dt = localStorage.getItem('userData')
 			let bkp_currency_symbol = localStorage.getItem('currencySymbol')
+
 			localStorage.setItem('bkp_currency_symbol', bkp_currency_symbol)
 			localStorage.setItem('bkp_a_token', bkp_a_token)
 			localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
 			localStorage.setItem('bkp_u_dt', bkp_u_dt)
 			console.log("response", response)
+
 			localStorage.setItem('currencySymbol', JSON.stringify(this.loginAsUserResponse?.currency?.symbol))
 			localStorage.setItem('access_token', this.loginAsUserResponse.data?.access_token)
 			localStorage.setItem('currentUser', JSON.stringify(this.loginAsUserResponse.data?.user))
-			if (this.loginAsUserResponse?.data?.user?.is_profile_complete) {
-				this.router.navigateByUrl('/individual/bookings');
-			}
-			else {
-				this.router.navigateByUrl('/individual/profile')
-			}
+			localStorage.setItem("is_stripe_account_added", this.loginAsUserResponse.data?.subscriber_data?.is_stripe_account_added);
+			localStorage.setItem("current_period_end_date", this.loginAsUserResponse.data?.subscription_status?.current_period_end_date)
+			localStorage.setItem("is_subscription_cancelled", this.loginAsUserResponse.data?.subscriber_data?.is_cancelled)
+
+
+			this.router.navigateByUrl('/home')
+			
 
 		});
 

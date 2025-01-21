@@ -40,12 +40,15 @@
 									<th>Name</th>
 									<th>Email</th>
 									<th>Mobile</th>
-									<th>Address</th>
+									<th>Plan Selected</th>
+									<th>Status</th>
+									<th>Purchase Date</th>
 									<!-- <th>City</th> -->
 									<!-- <th>State</th> -->
 									<!-- <th>Country</th> -->
-									<th>Plan Selected</th>
 									<th>Vehicle Type</th>
+									<th>Address</th>
+
 
 								</tr>
 							</thead>
@@ -59,6 +62,11 @@
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
+											<a class="dropdown-item" (click)="loginAsUser(individual?.user_id)"
+												*ngIf="individual?.id">
+												<div class="dropdown-item-icon"></div>
+												Log into this account
+											</a>
 											<a class="dropdown-item" (click)="auditTrail(individual?.id)"
 												data-toggle="modal" data-target="#AuditTrailModal"
 												*ngIf="individual?.id">
@@ -84,18 +92,24 @@
 										data-messagetype="sms"><span
 											[innerHTML]="highlighText(individual?.CellIsd+individual?.CellNumber+' '+'('+individual?.CellNumberCountry.toUpperCase()+')')"></span>
 									</td>
-									<td><span [innerHTML]="highlighText(individual?.Address)"></span></td>
 									<!-- <td><span [innerHTML]="highlighText(individual?.city)"></span></td> -->
 									<!-- <td><span [innerHTML]="highlighText(individual?.state)"></span></td> -->
 									<!-- <td><span [innerHTML]="highlighText(individual?.Country)"></span></td> -->
 									<td><span
 											[innerHTML]="highlighText(individual?.product_name + ' ' + '($'+individual?.product_price+')')"></span>
 									</td>
+									<td><span
+											[innerHTML]="highlighText(individual?.subscription_status | titlecase)"></span>
+									</td>
+									<td><span
+											[innerHTML]="highlighText(individual?.purchase_date | date : 'dd-MMM-yyyy')"></span>
+									</td>
 									<ul
 										style="flex-direction: column !important; padding: 0px !important; margin: 0px !important;color: black;">
 										<li *ngFor="let vehcile of individual?.vehicles"><span
 												[innerHTML]="teset(vehcile)"></span></li>
 									</ul>
+									<td><span [innerHTML]="highlighText(individual?.Address)"></span></td>
 							</tbody>
 						</table>
 					</div>
