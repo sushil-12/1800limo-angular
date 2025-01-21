@@ -10,7 +10,7 @@ import { constant_data } from 'src/assets/js/data.js'
 })
 export class ReportsAdminUsersComponent implements OnInit {
 
-  public userType:any;
+  public userType:any='driver';
   public ClientAccounts:any;
   public acc_id:any;
   public userBasedReportResponse:any;
@@ -40,6 +40,9 @@ export class ReportsAdminUsersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.getAccount('driver')
+    
   }
 
   onFilterChange(name,event: any) {
@@ -51,7 +54,7 @@ export class ReportsAdminUsersComponent implements OnInit {
       this.year = 'all'
       this.month = 'all'
     }
-    else if(this. acc_id && name == 'year'){
+    else if(this.acc_id && name == 'year'){
       this.year = event.value
       this.loadReport()
     }
