@@ -340,7 +340,8 @@
 											data-target="#change_status_booking_Modal"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
 											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
-											{{booking.booking_status | bookingStatusTextReplace :
+											{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+											booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
 										</div>
 									</td>

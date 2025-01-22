@@ -1146,9 +1146,6 @@ button.link {
 }
 
 @media only screen and (max-width:480px) {
-	.hideInMobile {
-		display: none;
-	}
 
 	.text-rate {
 		color: #F3933D !important;
@@ -1165,8 +1162,14 @@ button.link {
 	}
 }
 
-@media only screen and (min-width:480px) {
+@media only screen and (min-width:1025px) {
 	.hideInDesktop {
+		display: none;
+	}
+}
+
+@media only screen and (max-width:1025px) {
+	.hideInMobile {
 		display: none;
 	}
 }

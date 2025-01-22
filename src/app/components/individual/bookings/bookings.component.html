@@ -183,7 +183,9 @@
                                     <td>
                                         <div data-toggle="modal" data-target="#change_status_booking_Modal"
                                             [className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-                                            {{textFormatter(booking?.booking_status) |titlecase}}
+                                            {{textFormatter(booking.booking_status == 'driver_unassigned' ? 'Unassigned'
+                                            :
+                                            booking.booking_status) |titlecase}}
                                         </div>
                                     </td>
                                     <td class="sorting_1">
