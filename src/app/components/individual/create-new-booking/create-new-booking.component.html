@@ -1496,6 +1496,28 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Departing Airport / City -->
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" class="vehicleLable mt-0"
+                            style="margin-top: 0px !important;">
+                            <mat-label>
+                                Departing Airport / City <span class="asterisk">*</span>
+                            </mat-label>
+                            <input formControlName="departing_airport_city" type="text" matInput
+                                placeholder="Departing Airport / City" (focus)="$event.target.select()" />
+                        </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.departing_airport_city.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1962,21 +1984,21 @@
                             </span>
                         </div>
                     </div>
-                         <!-- Number of Hours -->
-                         <div *ngIf="Form.service_type.value == 'charter_tour'">
-                            <div class="row">
-                                <div class="col-md-4 key">
-                                    <span>
-                                        Booking Hours
-                                    </span>
-                                </div>
-                                <div class="col-md-8 value">
-                                    <span class="font-weight-bolder">
-                                        {{ Form.number_of_hours.value }}
-                                    </span>
-                                </div>
+                    <!-- Number of Hours -->
+                    <div *ngIf="Form.service_type.value == 'charter_tour'">
+                        <div class="row">
+                            <div class="col-md-4 key">
+                                <span>
+                                    Booking Hours
+                                </span>
+                            </div>
+                            <div class="col-md-8 value">
+                                <span class="font-weight-bolder">
+                                    {{ Form.number_of_hours.value }}
+                                </span>
                             </div>
                         </div>
+                    </div>
                     <hr>
                     <!-- Driver Information -->
                     <h4 class="font-weight-bolder m-0 mt-3">
@@ -2173,7 +2195,7 @@
                         Travel Information
                     </h4>
 
-               
+
 
                     <!-- ################ Pickup ################### -->
                     <h5 class="p-2 m-0 text-xl preview-pickup-color">
