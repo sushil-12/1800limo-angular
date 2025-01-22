@@ -193,7 +193,8 @@
 								<td>
 									<div data-toggle="modal" data-target="#change_status_booking_Modal"
 										[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-										{{booking?.booking_status | bookingStatusTextReplace :
+										{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+										booking.booking_status | bookingStatusTextReplace :
 										'_' : ' ' |titlecase}}
 									</div>
 								</td>
@@ -1236,7 +1237,7 @@
 					</h4> -->
 
 				<!-- Number of Hours -->
-				
+
 				<hr>
 				<div class="mx-2">
 					<div class="row m-0">

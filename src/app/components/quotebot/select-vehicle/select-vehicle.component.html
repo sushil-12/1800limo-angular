@@ -393,7 +393,7 @@
 									</div>
 									<div class="col-md-4" style="min-width: fit-content;">
 										<span style="font-size: 20px;">
-											{{currencySymbol}}
+											{{currencySymbol ? currencySymbol : '$'}}
 											{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
 											vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 										</span>
@@ -416,7 +416,8 @@
 										Estimated One-Way
 									</div>
 									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol}}
+										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
+											currencySymbol : '$'}}
 											{{vehinfo?.estimated_price_one_way}}</span>
 									</div>
 								</div>
@@ -425,7 +426,8 @@
 										Estimated Round-Trip
 									</div>
 									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol}}
+										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
+											currencySymbol : '$'}}
 											{{vehinfo?.estimated_price_round_trip}}</span>
 									</div>
 								</div>
@@ -616,7 +618,18 @@
 								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
 							</p>
 						</button> -->
-						<button class="link">
+						<button class="link" *ngIf="vehinfo?.readMore">
+							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
+								<span (click)="editAffiliateAccount(vehinfo)">
+									{{vehinfo?.affiliate_company.slice(0,7) }}
+									<span *ngIf="vehinfo?.badge_city != 'N/A'"
+										style="text-transform: uppercase;">({{vehinfo?.badge_city}})</span>
+									{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
+								</span>
+								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
+							</p>
+						</button>
+						<button class="link" *ngIf="!vehinfo?.readMore">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company }}
@@ -630,8 +643,12 @@
 										(click)="openModal(vehinfo)" id="box">
 										<span>{{vehinfo?.affiliate_phone}}</span>
 									</p>
+									<!-- <a href="tel:{{vehinfo?.affiliate_phone}}">
+									{{vehinfo?.affiliate_phone}}
+								</a> -->
 								</span>
-								<!-- <span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span> -->
+								<!-- <a href="tel:+918219479708">+918219479708</a> -->
+								<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
 							</p>
 						</button>
 					</div>
@@ -656,7 +673,7 @@
 										<span style="color: #c94505;font-weight: 500;">
 											{{ formatter(getKeyName()) | titlecase }}&nbsp;
 										</span>
-										{{currencySymbol}}
+										{{currencySymbol ? currencySymbol : '$'}}
 										{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
 										vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 									</p>
@@ -665,7 +682,7 @@
 										<span style="color: #c94505;font-weight: 500;">
 											Estimated One-Way&nbsp;
 										</span>
-										{{currencySymbol}}
+										{{currencySymbol ? currencySymbol : '$'}}
 										{{vehinfo?.estimated_price_one_way}}
 									</p>
 									<p class="font-weight-bolder mb-1" style="font-size: 0.8rem;"
@@ -673,7 +690,7 @@
 										<span style="color: #c94505;font-weight: 500;">
 											Estimated Round-Trip
 										</span>
-										{{currencySymbol}}
+										{{currencySymbol ? currencySymbol : '$'}}
 										{{vehinfo?.estimated_price_round_trip}}
 									</p>
 									<p id="vehicle-name" class="text-rate mb-2">
