@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 	vehicles: any;
 	vehiclesRes: any;
 	minDate = new Date();
-	currentUser: string;
+	currentUser: any;
 	modalHeading: string;
 	modalInstructions: string;
 	modalType: string;
@@ -1411,7 +1411,16 @@ export class HomeComponent implements OnInit {
 	}
 
 	joinButton(){
-		this.router.navigate(['/subscription'])
+		if(this.currentUser?.created_by_role == 'subscriber'){
+			this.errorDialogService.openDialog({
+				errors:{
+					error:"You are already registered with as subscriber!"
+				}
+			})
+		}
+		else{
+			this.router.navigate(['/subscription'])
+		}
 	}
 }
 
