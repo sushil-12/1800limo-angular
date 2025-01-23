@@ -43,6 +43,7 @@
 									<th>Plan Selected</th>
 									<th>Status</th>
 									<th>Purchase Date</th>
+									<th>End Date</th>
 									<!-- <th>City</th> -->
 									<!-- <th>State</th> -->
 									<!-- <th>Country</th> -->
@@ -103,6 +104,9 @@
 									</td>
 									<td><span
 											[innerHTML]="highlighText(individual?.purchase_date | date : 'dd-MMM-yyyy')"></span>
+									</td>
+									<td><span
+											[innerHTML]="highlighText(individual?.subscription_end_date | date : 'dd-MMM-yyyy')"></span>
 									</td>
 									<ul
 										style="flex-direction: column !important; padding: 0px !important; margin: 0px !important;color: black;">
