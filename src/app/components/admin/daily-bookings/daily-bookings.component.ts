@@ -159,7 +159,7 @@ export class DailyBookingsComponent implements OnInit {
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ["", Validators.required],
-			emailTarget: ["",[Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+			emailTarget: ["",Validators.required],
 		});
 
 		this.MapController()

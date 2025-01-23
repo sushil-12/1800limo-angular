@@ -265,7 +265,7 @@
 												data-target="#sendEmailToAnyone"
 												*ngIf="currentUser?.roleName == 'admin'">
 												<div class="dropdown-item-icon"></div>
-												Send Email to anyone
+												Send Email to Anyone
 											</a>
 											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
 												*ngIf="(currentUser?.roleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
