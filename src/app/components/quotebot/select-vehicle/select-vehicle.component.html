@@ -513,8 +513,12 @@
 								<span class="d-flex cancel-policy mb-3" *ngIf="!vehinfo?.is_master_vehicle">
 									<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
 									&nbsp; Cancellation Policy: &nbsp; <span
-										style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}
+										style="font-weight: 500;margin-right: 1rem;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}
 									</span>
+									<p style="text-decoration: underline; color: #007fee;" data-toggle="modal"
+										data-target="#ModalAmenities" (click)="viewAmenities(vehinfo?.id)">
+										Amenities
+									</p>
 								</span>
 							</div>
 							<!-- INFORMATION ENDS -->
@@ -743,6 +747,10 @@
 								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
 								&nbsp; Cancellation Policy: &nbsp;<span
 									style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
+							</p>
+							<p style="text-decoration: underline; color: #007fee;" data-toggle="modal"
+								data-target="#ModalAmenities" (click)="viewAmenities(vehinfo?.id)">
+								Amenities
 							</p>
 						</div>
 						<div class="d-flex justify-content-between align-items-center mb-2"
@@ -1108,6 +1116,36 @@
 			<div class="modal-footer py-0" style="justify-content: center !important;">
 				<button type="button" class="custom-btn button2" data-dismiss="notificationModal"
 					id="closeModal1">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities">
+	<div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<p class="text-org-light font-weight-bolder">
+					Vehicle Amenities
+				</p>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="padding-top: 0 !important;">
+				<div class="row">
+					<div class="col-md-12">
+						<ul id="chargeable-amenities" style="list-style-type: 'disc'"
+							class="d-flex flex-wrap flex-column">
+							<li *ngFor="let amenity of vehicleListAmenity?.amenities">
+								<span class="text-orange">{{currencySymbol}}</span>
+								{{ amenity?.name }}
+							</li>
+						</ul>
+					</div>
+				</div>
+				{{vehicleListAmenity?.affiliate_id}}
+
 			</div>
 		</div>
 	</div>

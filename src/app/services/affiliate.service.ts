@@ -395,11 +395,15 @@ export class AffiliateService {
 	sendEmail(data) {
 		return this.httpClient.post(this.serverUrl + 'reservation-detail-email', data);
 	}
-	cancelBooking(id) {
+	rejectBooking(id) {
 		return this.httpClient.get(this.serverUrl + 'change-booking-status/rejected/' + id)
 	}
 	acceptBooking(id) {
 		return this.httpClient.get(this.serverUrl + 'change-booking-status/accepted/' + id)
+	}
+
+	cancelBooking(id) {
+		return this.httpClient.get(this.serverUrl + 'cancel-booking/' + id)
 	}
 
 

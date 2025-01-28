@@ -236,6 +236,7 @@ export class SelectVehicleComponent implements OnInit {
 	notification_msg: any;
 	passengerDetails: any;
 	currencySymbol: any;
+	vehicleListAmenity:any=[];
 
 
 	constructor(
@@ -1007,6 +1008,11 @@ export class SelectVehicleComponent implements OnInit {
 		$("#sendEmailModal").modal("hide");
 		this.message.nativeElement.value = "";
 		this.show = false;
+	}
+
+	viewAmenities(id){
+		this.vehicleListAmenity = this.vehicleDetails.find(item => item.id === id);
+		console.log("in veh amenity--->",this.vehicleListAmenity,'=====',this.vehicleListAmenity.amenities)
 	}
 
 
