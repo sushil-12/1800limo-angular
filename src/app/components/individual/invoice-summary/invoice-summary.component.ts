@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 import { IndividualService } from 'src/app/services/individual.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 declare var $: any;
@@ -36,6 +38,7 @@ export class InvoiceSummaryComponent implements OnInit {
 	currentUser: any;
 	constructor(
 		private router: Router,
+		private adminService : AdminService,
 		private spinner: NgxSpinnerService,
 		private individualService: IndividualService,
 		private $spinner: NgxSpinnerService,
@@ -77,6 +80,12 @@ export class InvoiceSummaryComponent implements OnInit {
 		})
 	}
 
+	TimestampToDate(timestamp: any) {
+		if (timestamp) {
+			return moment(timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a')
+		}
+	}
+
 	getInvoiceData() {
 
 		this.individualService.getInvoiceData(this.bookingId)
@@ -97,6 +106,37 @@ export class InvoiceSummaryComponent implements OnInit {
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 			});
+
+			this.adminService.getPaymentLogs(this.bookingId)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe(({ data, sucess, message }: any) => {
+				console.log("array response", data)
+				this.paymentHistory = data?.logs
+				this.paymentJson = []
+				for (let prop in this.paymentHistory) {
+					let itemObj = {
+						balance_transaction: prop,
+						amount: this.paymentHistory[prop]?.amount_captured,
+						type: 'Payment',
+						created: this.paymentHistory[prop]?.created_at
+					}
+					this.paymentJson.push(itemObj)
+					this.paymentHistory[prop].refunds.map(i => {
+						let obj1 = {
+							balance_transaction: i?.balance_transaction,
+							amount: i?.amount / 100,
+							created: i?.created,
+							type: 'Refund'
+						}
+						this.paymentJson.push(obj1)
+					})
+				}
+			});
+
 
 	}
 

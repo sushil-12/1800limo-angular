@@ -180,6 +180,12 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
+											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
+												data-toggle="modal" data-target="#cancelBooking"
+												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled')">
+												<div class="dropdown-item-icon"></div>
+												Cancel Booking
+											</a>
 											<!-- <a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
 												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
 												data-toggle="modal" data-target="#acceptBooking">
@@ -376,11 +382,11 @@
 	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
-			<div class="modal-header pb-0">
+			<!-- <div class="modal-header pb-0">
 				<h3 class="mb-0">Reject Booking</h3>
-			</div>
+			</div> -->
 			<div class="modal-body text-center">
-				<p>Are you sure, You want to Reject booking?</p>
+				<h5>Are you sure, You want to cancel booking?</h5>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="cancelBooking()">

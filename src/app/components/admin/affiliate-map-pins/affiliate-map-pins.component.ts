@@ -65,7 +65,11 @@ export class AffiliateMapPinsComponent implements OnInit {
             const marker = new google.maps.Marker({
               position: { lat: Number(location.latitude), lng: Number(location.longitude) },
               map: this.map,
-              title: location.affiliate_name
+              title: location.affiliate_name,
+              icon: {
+                url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red pin
+                scaledSize: new google.maps.Size(30, 30) // Adjust size if needed
+              }
             });
 
             const infoWindow = new google.maps.InfoWindow({

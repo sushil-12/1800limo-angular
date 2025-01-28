@@ -467,6 +467,7 @@
 								</p>
 								<p id="vehicle-price" class="font-weight-bolder" style="font-size: 0.7rem;"
 									*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
+									(All Inclusive Rate including tip) <br>
 									<span style="color: #c94505;font-weight: 500;">
 										From&nbsp;
 									</span>
@@ -477,7 +478,6 @@
 										undefined
 										?
 										vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }} </span>
-									(All Inclusive Rate)
 								</p>
 								<div id="icons" class="d-flex mb-2" style="gap:8px;">
 									<div class="icon-container-mobile">
