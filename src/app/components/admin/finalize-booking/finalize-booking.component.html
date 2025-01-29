@@ -154,9 +154,9 @@
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking" [currencyObject]="currencyObj"
-	[vehicle_created_by]="vehicle_created_by" [booking_created_from]="booking_created_from" (returnformvalue)="ReturnRateFormValue($event)"
-	(returnNumberOfHr)="HandleReturnNumberOfHr($event)" [isCreatedByAdmin]="isCreatedByAdmin"
-	[service_type]="service_type">
+	[vehicle_created_by]="vehicle_created_by" [booking_created_from]="booking_created_from"
+	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
+	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type">
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right">
@@ -407,7 +407,7 @@
 
 		<div class="col-md-12 text-right mr-4">
 			<button class="custom-filled-back-button" (click)="backButton()" style="margin-right: 30px !important;">
-				Back to Daily Bookings
+				<i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
 			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " data-toggle="modal"

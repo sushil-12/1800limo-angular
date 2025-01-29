@@ -515,8 +515,9 @@
 									&nbsp; Cancellation Policy: &nbsp; <span
 										style="font-weight: 500;margin-right: 1rem;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}
 									</span>
-									<p style="text-decoration: underline; color: #007fee;" data-toggle="modal"
-										data-target="#ModalAmenities" (click)="viewAmenities(vehinfo?.id)">
+									<p style="text-decoration: underline; color: #007fee;cursor: pointer;"
+										data-toggle="modal" data-target="#ModalAmenities"
+										(click)="viewAmenities(vehinfo?.id)">
 										Amenities
 									</p>
 								</span>
@@ -748,7 +749,7 @@
 								&nbsp; Cancellation Policy: &nbsp;<span
 									style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
 							</p>
-							<p style="text-decoration: underline; color: #007fee;" data-toggle="modal"
+							<p style="text-decoration: underline; color: #007fee;cursor: pointer;" data-toggle="modal"
 								data-target="#ModalAmenities" (click)="viewAmenities(vehinfo?.id)">
 								Amenities
 							</p>

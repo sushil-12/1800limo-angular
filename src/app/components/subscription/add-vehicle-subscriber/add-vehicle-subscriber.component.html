@@ -111,8 +111,7 @@
 						</mat-autocomplete>
 					</mat-form-field>
 					<div *ngIf="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint"
-						style="margin-bottom: 30px;">
+						class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 30px;">
 						<div *ngIf="f.year.errors.required">The Year is required</div>
 					</div>
 				</div>
@@ -173,7 +172,8 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Airport / City / Cruise Port Cancel Policy <span class="asterisk">*</span></mat-label>
+						<mat-label>Airport / City / Cruise Port Cancel Policy <span
+								class="asterisk">*</span></mat-label>
 						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
 							<mat-option value="">Choose Airport / City / Cruise Port Cancel Policy</mat-option>
 							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
@@ -182,11 +182,13 @@
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.nonCharterCancelPolicy.errors || f.nonCharterCancelPolicy.touched && f.nonCharterCancelPolicy.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Airport / City / Cruise Port Cancel Policy is required
+						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Airport / City / Cruise Port Cancel
+							Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Airport / City / Cruise Port Cancel Policy should be a
+						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Airport / City / Cruise Port Cancel
+							Policy should be a
 							number
 						</div>
 					</div>
@@ -220,8 +222,8 @@
 								<span class="theme-color">(optional)</span>
 							</ng-template>
 						</mat-label>
-						<input matInput placeholder="License plate # or other vehicle identifier" formControlName="licensePlate" tabindex="1"
-							(focus)="$event.target.select()">
+						<input matInput placeholder="License plate # or other vehicle identifier"
+							formControlName="licensePlate" tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-6">
@@ -1551,17 +1553,19 @@
 	</section>
 	<div class="container">
 		<div class="col-md-12">
-		  <div class="billing_inforamtion">
-			<ul class="d-flex justify-content-center">
-			  <li>
-				<button class="custom-filled-back-button" type="button" (click)="backButton()"
-						data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
-						tabindex="1">BACK</button>
-			  </li>
-			  <li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button></li>
-			  <li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton" tabindex="1">SAVE</button></li>
-			</ul>
-		  </div>
+			<div class="billing_inforamtion">
+				<ul class="d-flex justify-content-center">
+					<li>
+						<button class="custom-filled-back-button" type="button" (click)="backButton()"
+							data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
+							tabindex="1"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></button>
+					</li>
+					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
+							tabindex="1">SAVE</button></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </form>

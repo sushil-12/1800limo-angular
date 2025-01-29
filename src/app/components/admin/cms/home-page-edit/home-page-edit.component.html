@@ -31,7 +31,7 @@
 								<mat-form-field appearance="outline">
 									<mat-label>Content</mat-label>
 									<textarea matInput placeholder="Content" cdkTextareaAutosize rows="5"
-									#autosize="cdkTextareaAutosize" formControlName="content"></textarea>
+										#autosize="cdkTextareaAutosize" formControlName="content"></textarea>
 								</mat-form-field>
 							</div>
 						</div>
@@ -328,7 +328,8 @@
 		<div class="billing_inforamtion">
 			<ul>
 				<li><button class="custom-btn savebutton" (click)="saveHomePageSection()">SAVE</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
+				<li><button class="custom-btn backbutton" (click)="backButton()"><i class="fa fa-arrow-circle-left"
+							aria-hidden="true"></i></button> </li>
 			</ul>
 		</div>
 	</form>
