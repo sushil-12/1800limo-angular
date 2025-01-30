@@ -321,6 +321,12 @@ section {
 	.flip_div{
 		margin-bottom: 20px;
 	}
+
+	.three-d-button{
+		font-size: 15px !important;
+		font-weight: 700 !important;
+		border-radius: 10px !important;
+	}
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
@@ -1096,8 +1102,7 @@ button.custom-filled-button {
 
 
 .three-d-button {
-	padding: 0 18px;
-    border-radius: non;
+    border-radius: none;
     background: linear-gradient(135deg, #fac72c, #ff7b0563);
     color: #ffffff;
     font-weight: 600;
@@ -1107,7 +1112,6 @@ button.custom-filled-button {
     transition: all .3s ease;
     font-size: 20px;
     padding: 9px;
-    border: none;
     /* display: flex; */
     /* align-items: center; */
 }
@@ -1131,4 +1135,6 @@ button.custom-filled-button {
 	margin-top: -24px;
 	display: block; /* Makes sure the label appears on its own line */
   }
+
+
   
