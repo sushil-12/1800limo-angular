@@ -20,10 +20,10 @@ export class ReCaptchaService {
 
     this.siteKey = siteKey;
 
-    const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+    // const script = document.createElement('script');
+    // script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
 
-    this.document.head.appendChild(script);
+    // this.document.head.appendChild(script);
 
     this.loaded = true;
 }
