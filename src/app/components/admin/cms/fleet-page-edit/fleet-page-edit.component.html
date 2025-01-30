@@ -24,8 +24,8 @@
 							<div class="col-md-12" *ngIf="content">
 								<mat-form-field appearance="outline">
 									<mat-label>Content</mat-label>
-									<textarea matInput placeholder="Content" formControlName="content" cdkTextareaAutosize rows="5"
-									#autosize="cdkTextareaAutosize"></textarea>
+									<textarea matInput placeholder="Content" formControlName="content"
+										cdkTextareaAutosize rows="5" #autosize="cdkTextareaAutosize"></textarea>
 								</mat-form-field>
 							</div>
 
@@ -49,7 +49,8 @@
 		<section class="billing_inforamtion">
 			<ul>
 				<li><button class="custom-btn savebutton" (click)="saveEditValue()">SAVE</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
+				<li><button class="custom-btn backbutton" (click)="backButton()"><i class="fa fa-arrow-circle-left"
+							aria-hidden="true"></i></button> </li>
 			</ul>
 		</section>
 	</form>
