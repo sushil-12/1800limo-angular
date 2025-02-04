@@ -726,18 +726,15 @@
 						</div>
 						<div style="padding: 0px 14px 14px 14px;" *ngIf="!vehinfo?.is_master_vehicle">
 							<div class="vehicle-details-data-mobile">
-								<div class="d-flex justify-content-between" style="max-height: 25px;">
+								<div class="d-flex justify-content-center" style="max-height: 25px;gap: 10px;">
 									<p>
-										Year&nbsp;<span
-											style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
+										<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
 									</p>
 									<p>
-										Make&nbsp;<span
-											style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
+										<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
 									</p>
 									<p>
-										Model&nbsp;<span
-											style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
+										<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
 									</p>
 								</div>
 							</div>
@@ -1139,7 +1136,7 @@
 						<ul id="chargeable-amenities" style="list-style-type: 'disc'"
 							class="d-flex flex-wrap flex-column">
 							<li *ngFor="let amenity of vehicleListAmenity?.amenities">
-								<span class="text-orange">{{currencySymbol}}</span>
+								<!-- <span class="text-orange">{{currencySymbol}}</span> -->
 								{{ amenity?.name }}
 							</li>
 						</ul>

@@ -66,17 +66,17 @@
 							</div>
 							<div>
 								<div class="vehicle-details-data-mobile mb-2">
-									<div class="d-flex justify-content-between" style="max-height: 25px;">
+									<div class="d-flex justify-content-center" style="max-height: 25px;gap: 10px;">
 										<p>
-											Year&nbsp;<span
+											<span
 												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.year}}</span>
 										</p>
 										<p>
-											Make&nbsp;<span
+											<span
 												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.make}}</span>
 										</p>
 										<p>
-											Model&nbsp;<span
+											<span
 												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.model}}</span>
 										</p>
 									</div>
@@ -563,7 +563,7 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 				<h4 class="modal-title">
-					Detailed Fare Rate Slip
+					Estimated Rate Slip
 				</h4>
 				<h4 class="alert alert-danger"
 					style="padding :0.25rem 1.25rem; color: red !important;font-size: 15px !important;">
@@ -734,14 +734,14 @@
 <div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities" tab-index="-1">
 	<div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header">
+			<!-- <div class="modal-header">
 				<p class="text-org-light font-weight-bolder">
 					Vehicle Amenities
 				</p>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div>
+			</div> -->
 			<div class="modal-body">
 				<div class="row" *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
 					<div class="col-md-12">

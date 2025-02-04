@@ -1474,7 +1474,7 @@ footer {
 
 .footercontent a {
 	color: var(--orange-color);
-	font-size: 14px;
+	font-size: 18px;
 	text-decoration: none !important;
 	margin-bottom: 10px;
 	display: inline-block;

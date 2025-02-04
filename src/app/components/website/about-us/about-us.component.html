@@ -41,7 +41,7 @@
 							(click)="carouselSwitch('1994')" tabIndex="1" />
 						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
 							<h3>1994</h3>
-							<h2>The First Wireless Communication Vision For The Limo Industry</h2>
+							<p>The First Wireless Communication Vision For The Limo Industry</p>
 						</div>
 					</div>
 				</div>
@@ -123,6 +123,10 @@
 				<h4>{{carouselHeading}}</h4>
 				<div *ngIf="selectedCarousel === '2001'; else ShowOtherImage">
 					<img src="assets/images/about-us-img.jpg">
+				</div>
+				<h4 class="mt-4">{{carouselHeading2}}</h4>
+				<div *ngIf="selectedCarousel === '2001'; else ShowOtherImage">
+					<img src="assets/images/about-us-img-2001-2.jpg">
 				</div>
 				<ng-template #ShowOtherImage>
 					<div *ngIf="selectedCarousel === '1995'; else showInstructions">
