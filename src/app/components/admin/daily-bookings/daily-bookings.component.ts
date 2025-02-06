@@ -85,6 +85,7 @@ export class DailyBookingsComponent implements OnInit {
 	fileType: String;
 	uploadedFile: any;
 	deducted_stripe_fee:any;
+	total_amount:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -624,23 +625,24 @@ export class DailyBookingsComponent implements OnInit {
 				date.setDate(date.getDate() + 7);
 				timestamp = date.getTime();
 				this.bookingsRes = result;
-				this.bookings = this.bookingsRes?.data?.data;
+				this.bookings = this.bookingsRes?.data?.reservations?.data;
 				if (!this.useDateFilter && !this.searchText) {
 					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 				}
-				this.totalRecords = this.bookingsRes.data.total;
+				this.total_amount = this.bookingsRes?.data?.total_amount
+				this.totalRecords = this.bookingsRes.data?.reservations?.total;
 				this.firstPage = 1;
-				this.lastPage = this.bookingsRes.data.last_page;
-				this.totalPage = this.bookingsRes.data.last_page;
-				this.currentPage = this.bookingsRes.data.current_page;
-				this.from = this.bookingsRes.data.from;
-				this.to = this.bookingsRes.data.to;
-				this.path = this.bookingsRes.data.path;
-				this.firstPageUrl = this.bookingsRes.data.first_page_url;
-					this.lastPageUrl = this.bookingsRes.data.last_page_url;
-					this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-					this.nextPageUrl = this.bookingsRes.data.next_page_url;
-					this.subModules = localStorage.getItem("sub_modules") || "";
+				this.lastPage = this.bookingsRes.data?.reservations?.last_page;
+				this.totalPage = this.bookingsRes.data?.reservations?.last_page;
+				this.currentPage = this.bookingsRes.data?.reservations?.current_page;
+				this.from = this.bookingsRes.data?.reservations?.from;
+				this.to = this.bookingsRes.data?.reservations?.to;
+				this.path = this.bookingsRes.data?.reservations?.path;
+				this.firstPageUrl = this.bookingsRes.data?.reservations?.first_page_url;
+				this.lastPageUrl = this.bookingsRes.data?.reservations?.last_page_url;
+				this.prevPageUrl = this.bookingsRes.data?.reservations?.prev_page_url;
+				this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
+				this.subModules = localStorage.getItem("sub_modules") || "";
 					this.spinner.hide();
 				});
 			}
