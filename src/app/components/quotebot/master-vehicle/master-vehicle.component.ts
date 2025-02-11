@@ -50,6 +50,10 @@ export class MasterVehicleComponent implements OnInit {
 
 	FILTERS_ORDER = [
 		{
+			dp: 'extra-$-amenities',
+			rp: 'amenities'
+		},
+		{
 			dp: 'vehicle-type-preferences',
 			rp: 'vehicle-type'
 		},
@@ -83,10 +87,7 @@ export class MasterVehicleComponent implements OnInit {
 			dp: 'amenities',
 			rp: 'special-amenities'
 		},
-		{
-			dp: 'extra-$-amenities',
-			rp: 'amenities'
-		},
+		
 		{
 			dp: 'driver-preferences',
 			rp: [
