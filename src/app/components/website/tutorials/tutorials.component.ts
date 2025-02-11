@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AdminService } from 'src/app/services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 declare var $: any;
 
 @Component({
@@ -50,6 +50,27 @@ export class TutorialsComponent implements OnInit {
         "content": "A guide on how to use the search for vehicles, rates, and filters in the search engine and Quote-bot screen.",
       },
       {
+        "title": "How to edit a booking",
+        "category": "Create and Manage Bookings", 
+        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
+        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4',
+        "content": "A guide on how to edit a booking from one-way to round trip or charter tour from the booking dashboard.",
+      },
+      {
+        "title": "How to create a repeat booking",
+        "category": "Create and Manage Bookings", 
+        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
+        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Repeat+a+booking.mp4',
+        "content": "A guide on how to create a repeat booking.",
+      },
+      {
+        "title": "How to create a return booking",
+        "category": "Create and Manage Bookings", 
+        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
+        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Return+a+booking.mp4',
+        "content": "A guide on how to create a return booking.",
+      },
+      {
         "title": "How to register as an affiliate Operator",
         "category": "Register as an Affiliate Operator", 
         "image": "assets/images/images_tutorial/updated-images/loginasaffiliate.png",
@@ -57,35 +78,35 @@ export class TutorialsComponent implements OnInit {
         "content": "A step-by-step guide on how to sign up and register for an affiliate program.",
       },
       {
-        "title": "How to complete step 1 as affiliate",
+        "title": "How to complete step 1 as an affiliate",
         "category": "Register as an Affiliate Operator", 
         "image": "assets/images/images_tutorial/updated-images/step-1.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4',
         "content": "A guide on how to complete step 1 for registering as an affiliate.",
       },
       {
-        "title": "How to complete step 2 as affiliate",
+        "title": "How to complete step 2 as an affiliate",
         "category": "Register as an Affiliate Operator", 
         "image": "assets/images/images_tutorial/updated-images/step-2.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4',
         "content": "A guide on how to complete step 2 for registering as an affiliate.",
       },
       {
-        "title": "How to complete step 3 as affiliate",
+        "title": "How to complete step 3 as an affiliate",
         "category": "Register as an Affiliate Operator", 
         "image": "assets/images/images_tutorial/updated-images/step-3.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4',
         "content": "A guide on how to complete step 3 for registering as an affiliate.",
       },
       {
-        "title": "How to complete step 4 as affiliate",
+        "title": "How to complete step 4 as an affiliate",
         "category": "Register as an Affiliate Operator", 
         "image": "assets/images/images_tutorial/updated-images/step-4.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4',
         "content": "A guide on how to complete step 4 for registering as an affiliate.",
       },
       {
-        "title": "How to complete step 5 as affiliate",
+        "title": "How to complete step 5 as an affiliate",
         "category": "Register as an Affiliate Operator", 
         "image": "assets/images/images_tutorial/updated-images/step-5.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4',
@@ -106,7 +127,7 @@ export class TutorialsComponent implements OnInit {
         "content": "A step-by-step guide on how to sign up and register for a Travel Agent.",
       },
       {
-        "title": "How to create a booking as an Travel Agent",
+        "title": "How to create a booking as a Travel Agent",
         "category": "Register as a Travel Agent", 
         "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Booking+on+Travel+Agent+Account.mp4',
@@ -120,42 +141,22 @@ export class TutorialsComponent implements OnInit {
         "content": "A step-by-step guide on how to sign up and register for an Individual account.",
       },
       {
-        "title": "How to add a family member in individual account",
+        "title": "How to add a family member in Individual account",
         "category": "Register as Individual/Customer", 
         "image": "assets/images/images_tutorial/updated-images/familymember.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Adding+family+members+other+members+to+the+Individual+account.mp4',
         "content": "A guide on how to add a family member to your individual account.",
       },
+     
       {
-        "title": "How to edit a booking",
-        "category": "Create and Manage Bookings", 
-        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4',
-        "content": "A guide on how to edit a booking from one-way to round trip or charter tour from the booking dashboard.",
-      },
-      {
-        "title": "How to repeat a booking",
-        "category": "Create and Manage Bookings", 
-        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Repeat+a+booking.mp4',
-        "content": "A guide on how to create a repeat booking.",
-      },
-      {
-        "title": "How to return a booking",
-        "category": "Create and Manage Bookings", 
-        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Return+a+booking.mp4',
-        "content": "A guide on how to create a return booking.",
-      },
-      {
-        "title": "How to buy free plan",
+        "title": "How to advertise you fleet for free",
         "category": "Buy Chauffer Select Software",
         "image": "assets/images/images_tutorial/updated-images/freeplan.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Free+subscription+Plan.mp4',
         "content": "A step-by-step guide on how to buy the free plan of the Chauffer Select software.",
       },
       {
-        "title": "How to buy basic plan from our software",
+        "title": "How to buy basic plan with Chauffer Select software",
         "category": "Buy Chauffer Select Software",
         "image": "assets/images/images_tutorial/updated-images/basic.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Basic+Subscription+Plan.mp4',
@@ -176,7 +177,7 @@ export class TutorialsComponent implements OnInit {
         "content": "A guide on how to add bank details for STRIPE as new cutomer for Chauffer Select software.",
       },
       {
-        "title": "How to add invite drivers to your account",
+        "title": "How to invite drivers to your account",
         "category": "Buy Chauffer Select Software",
         "image": "assets/images/images_tutorial/updated-images/invitedriver.png",
         "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Invite+Driver.mp4',

@@ -548,7 +548,7 @@ header {
 .bannerform_wrapper .nav-item a {
 	color: #fff;
 	text-align: center;
-	font-size: 1.15em;
+	font-size: 0.95em;
 	text-transform: uppercase;
 }
 
@@ -682,6 +682,10 @@ header {
 	.owl-carousel .owl-nav button.owl-prev {
 		left: 0 !important;
 		top: 0 !important;
+	}
+
+	.bannerform_wrapper .nav-item a {
+		font-size: 0.75em;
 	}
 }
 

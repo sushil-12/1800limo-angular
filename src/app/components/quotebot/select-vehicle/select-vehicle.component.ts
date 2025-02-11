@@ -3,11 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { bindCallback, Observable, throwError } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../shared/shared.module';
-import { AdminService } from 'src/app/services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 
 declare let $: any
 
@@ -53,6 +53,10 @@ export class SelectVehicleComponent implements OnInit {
 
 	FILTERS_ORDER = [
 		{
+			dp: 'extra-$-amenities',
+			rp: 'amenities'
+		},
+		{
 			dp: 'vehicle-type-preferences',
 			rp: 'vehicle-type'
 		},
@@ -86,10 +90,7 @@ export class SelectVehicleComponent implements OnInit {
 			dp: 'amenities',
 			rp: 'special-amenities'
 		},
-		{
-			dp: 'extra-$-amenities',
-			rp: 'amenities'
-		},
+		
 		{
 			dp: 'driver-preferences',
 			rp: [
