@@ -5,11 +5,11 @@
 export const environment = {
 	production: false,
 	environmentName: 'Development',
-	serverUrl: "http://10.10.60.141:8000/api/",
+	// serverUrl: "http://10.20.20.66:8000/api/",
 	accessKeyId: "AKIAZTOUHGGRSIV2GIVY",
 	secretAccessKey: "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",  
 	recaptchaKey:"6Lcf2MYqAAAAAMPwdv97BZ_LBwX-1e9y2NcFsoIn",
-	// serverUrl: "https://1800limoapi.infodevbox.com/api/"
+	serverUrl: "https://1800limoapi.infodevbox.com/api/"
 };
 
 /*

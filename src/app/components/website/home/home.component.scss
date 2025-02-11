@@ -153,7 +153,7 @@ section {
 	position: absolute;
 	right: -8px;
 	position: absolute;
-	top: 29px;
+	top: 8px;
 	// transform: rotate(-90deg);
 }
 
@@ -163,7 +163,7 @@ section {
 	position: absolute;
 	right: -7px;
 	position: absolute;
-	top: 29px;
+	top: 8px;
 	// transform: rotate(90deg);
 }
 
@@ -1061,9 +1061,9 @@ a.user-profile:active::after {
 
 .whychoose_no a {
 	color: #000 !important;
-	background: var(--orange);
+	background-color: #F2C449;
 	font-size: 17px;
-	border: 1px solid var(--orange);
+	border: none;
 	line-height: 17px;
 	padding: 5px 15px;
 	transition: 0.2s;
@@ -1085,8 +1085,11 @@ a.user-profile:active::after {
 
 button.custom-filled-button {
 	padding: 0.475rem 1.358rem !important;
-	color: #fff !important;
-	font-size: 22px !important;
+	// color: #fff !important;
+	font-size: 18px !important;
+	background-color: #F2C449 !important;
+	border: none !important;
+	font-weight: 500;
 }
 
 
