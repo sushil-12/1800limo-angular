@@ -1094,7 +1094,7 @@ export class DailyBookingsComponent implements OnInit {
 			if (i % 2 === 0) {
 				formattedText += parts[i]; // Regular text part
 			} else {
-				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+				formattedText += `<span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
 			}
 		}
 
