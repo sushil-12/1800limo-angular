@@ -13,11 +13,11 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 declare var $: any;
 import * as moment from "moment";
-import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
+import { ErrorDialogService } from "../../../services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 import { MapsAPILoader } from "@agm/core";
-import { UploadService } from "src/app/services/upload.service";
+import { UploadService } from "../../../services/upload.service";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -471,6 +471,10 @@ export class DailyBookingsComponent implements OnInit {
 			this.passengerDetails.driver_first_name +
 				this.passengerDetails.driver_last_name;
 			}
+			else if(this.passengerDetails.selection_button == "created_by"){
+				this.sendInformation = format ? this.passengerDetails.created_by_phone : this.passengerDetails.created_by_email
+				this.reciptentName = this.passengerDetails.created_by_name
+			}
 			else {
 				this.sendInformation = format
 				? (this.passengerDetails.loose_affiliate_phone_isd ? this.passengerDetails.loose_affiliate_phone_isd : '+1') +
@@ -665,22 +669,23 @@ export class DailyBookingsComponent implements OnInit {
 					date.setDate(date.getDate() + 7);
 					timestamp = date.getTime();
 					this.bookingsRes = result;
-					this.bookings = this.bookingsRes?.data?.data;
+					this.bookings = this.bookingsRes?.data?.reservations?.data;
 					if (!this.useDateFilter && !this.searchText) {
 						this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 					}
-					this.totalRecords = this.bookingsRes.data.total;
+					this.totalRecords = this.bookingsRes.data?.reservations?.total;
+					this.total_amount = this.bookingsRes?.data?.total_amount
 					this.firstPage = 1;
-					this.lastPage = this.bookingsRes.data.last_page;
-					this.totalPage = this.bookingsRes.data.last_page;
-					this.currentPage = this.bookingsRes.data.current_page;
-					this.from = this.bookingsRes.data.from;
-					this.to = this.bookingsRes.data.to;
-					this.path = this.bookingsRes.data.path;
-					this.firstPageUrl = this.bookingsRes.data.first_page_url;
-					this.lastPageUrl = this.bookingsRes.data.last_page_url;
-					this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-					this.nextPageUrl = this.bookingsRes.data.next_page_url;
+					this.lastPage = this.bookingsRes.data?.reservations?.last_page;
+					this.totalPage = this.bookingsRes.data?.reservations?.last_page;
+					this.currentPage = this.bookingsRes.data?.reservations?.current_page;
+					this.from = this.bookingsRes.data?.reservations?.from;
+					this.to = this.bookingsRes.data?.reservations?.to;
+					this.path = this.bookingsRes.data?.reservations?.path;
+					this.firstPageUrl = this.bookingsRes.data?.reservations?.first_page_url;
+					this.lastPageUrl = this.bookingsRes.data?.reservations?.last_page_url;
+					this.prevPageUrl = this.bookingsRes.data?.reservations?.prev_page_url;
+					this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
 					this.subModules = localStorage.getItem("sub_modules") || "";
 					this.spinner.hide();
 				});
