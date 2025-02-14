@@ -256,7 +256,7 @@ input::-webkit-input-placeholder {
 }
 
 .preview-output-feild {
-	font-size: large;
+	font-size: 19px;
 }
 
 .view-button {
@@ -514,4 +514,10 @@ input::-webkit-input-placeholder {
 		gap: 20px;
 	}
 
+}
+
+@media (min-width: 992px){
+	.modal-lg{
+		max-width: 600px !important;
+	}
 }

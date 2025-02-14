@@ -3722,114 +3722,25 @@
 			<!-- *ngIf="Form.affiliate_type.value == 'loose_affiliate' -->
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg">
-					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-1">
-						Rates/Taxes
-					</h4>
-					<div class="mx-2" *ngIf=" RatesForm">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{currencySymbol}}{{ RatesForm.grand_total.toFixed(2) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<!-- && Form.affiliate_type.value!='affiliate' -->
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates ">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Trip Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{currencySymbol}}{{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
-								</span>
-							</div>
-						</div>
-						<hr>
-					</div>
-					<!-- Booking Type -->
-					<h4 class="font-weight-bolder m-0">
-						Booking Type
-					</h4>
-					<!-- Travel Info. -->
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Booking Information
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ textFormatter(Form.service_type.value) | titlecase }}
-								/
-								{{ textFormatter(Form.transfer_type.value) | titlecase }}
-								<span class="font-weight-bolder" *ngIf="Form.service_type.value == 'round_trip'">
-									/ {{ textFormatter(Form.return_transfer_type.value) | titlecase
-									}}
-								</span>
-							</span>
-						</div>
-					</div>
-					<!-- Number of Hours -->
-					<div *ngIf="Form.service_type.value == 'charter_tour'">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Booking Hours
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.number_of_hours.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="row preview-dropoff-color" *ngIf="Form?.cancellation_hours">
-						<div class="col-md-4 key">
-							<span>
-								Cancellation Period
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ Form?.cancellation_hours.value }} hours
-							</span>
-						</div>
-					</div>
-					<hr>
-
 
 					<!-- Travel Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<h5 class="font-weight-bolder m-0">
 						Travel Information
-					</h4>
-
-
-
-					<!-- ################ Pickup ################### -->
-					<h5 class="p-2 m-0 text-xl">
-						Pickup Details
 					</h5>
+					<!-- Pickup -->
+					<h6 class="m-0 my-2">
+						Pickup Details
+					</h6>
 					<!-- Pickup > Date -->
-					<div class="mx-2 preview-pickup-color">
+					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Date
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder preview-output-feild">
 									{{ dateFormat2(Form.pickup_date.value) }}
 									|
 									{{ dateFormat(Form.pickup_date.value) }}
@@ -3837,28 +3748,27 @@
 							</div>
 						</div>
 					</div>
-
 					<!-- Pickup > Time -->
-					<div class="mx-2 preview-pickup-color">
+					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Time
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder preview-output-feild">
 									{{ timeFormat2(Form.pickup_time.value) }}
 									|
 									{{ timeFormat(Form.pickup_time.value) }}
 								</span>
 							</div>
-						</div>
-						<hr>
-					</div>
 
+						</div>
+					</div>
+					<hr>
 					<!-- Pickup > City Details -->
-					<div class="mx-2 preview-pickup-color"
+					<div class="mx-2 "
 						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
 						<div class="row m-0">
 							<div class="col-md-4">
@@ -3878,7 +3788,7 @@
 					</div>
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('airport_')">
+					<div class="mx-2 " *ngIf="Form.transfer_type.value.includes('airport_')">
 						<!-- Airport -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -3955,7 +3865,7 @@
 					</div>
 
 					<!-- Pickup > Cruise Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('cruise_')">
+					<div class="mx-2 " *ngIf="Form.transfer_type.value.includes('cruise_')">
 						<!-- Cruise Port -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -4155,7 +4065,7 @@
 					</h4>
 
 					<!-- Passenger > Name -->
-					<div class="mx-2 preview-pickup-color">
+					<div class="mx-2 ">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -4170,7 +4080,7 @@
 						</div>
 					</div>
 					<!-- Passenger > Phone -->
-					<div class="mx-2 preview-pickup-color">
+					<div class="mx-2 ">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="color: #1e7500;">
@@ -4238,14 +4148,14 @@
 					</div>
 
 					<hr>
-					<div class="mx-2">
+					<div class="mx-4">
 						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
+							<div class="key">
+								<span style="font-weight: 550 !important;">
 									Special Instruction
 								</span>
 							</div>
-							<div class="col-md-8 value box-special-instruction">
+							<div class="value box-special-instruction">
 								<span class="font-weight-bolder" style="white-space: pre-wrap;"
 									[innerHTML]="highlightNumbers(Form?.booking_instructions.value || ' ')">
 									<!-- {{Form?.booking_instructions.value}} -->
@@ -4281,7 +4191,7 @@
 						</h5>
 
 						<!-- Return > Pickup > Date -->
-						<div class="mx-2 preview-pickup-color">
+						<div class="mx-2 ">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
@@ -4299,7 +4209,7 @@
 						</div>
 
 						<!-- Return > Pickup > Time -->
-						<div class="mx-2 preview-pickup-color">
+						<div class="mx-2 ">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
@@ -4318,7 +4228,7 @@
 						</div>
 
 						<!-- Return > Pickup > City Details -->
-						<div class="mx-2 preview-pickup-color"
+						<div class="mx-2 "
 							*ngIf="Form.return_transfer_type.value.includes('city_') || Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -4338,8 +4248,7 @@
 						</div>
 
 						<!-- Return > Pickup > Airline Details -->
-						<div class="mx-2 preview-pickup-color"
-							*ngIf="Form.return_transfer_type.value.includes('airport_')">
+						<div class="mx-2 " *ngIf="Form.return_transfer_type.value.includes('airport_')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -4387,8 +4296,7 @@
 						</div>
 
 						<!-- Return > Pickup > Cruise Details -->
-						<div class="mx-2 preview-pickup-color"
-							*ngIf="Form.return_transfer_type.value.includes('cruise_')">
+						<div class="mx-2 " *ngIf="Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -4591,20 +4499,18 @@
 
 				<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span>
+						<div class="key">
+							<span style="font-weight: 550 !important;">
 								Return Special Instruction
 							</span>
 						</div>
-						<div class="col-md-8 value box-special-instruction">
+						<div class="value box-special-instruction">
 							<span class="font-weight-bolder" style="white-space: pre-wrap;"
 								[innerHTML]="highlightNumbers(Form?.return_booking_instructions.value || ' ')">
 								<!-- {{Form?.return_booking_instructions.value}} -->
 							</span>
 						</div>
 					</div>
-
-					<hr>
 					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -4732,8 +4638,9 @@
 							</div>
 						</div>
 					</div>
+					<hr>
 				</div>
-				<hr>
+
 				<h4 class="font-weight-bolder m-0">
 					Vehicle Preferences
 				</h4>
@@ -5374,6 +5281,20 @@
 						</div>
 					</div>
 				</div>
+				<hr>
+				<div class="row preview-dropoff-color" *ngIf="Form?.cancellation_hours">
+					<div class="col-md-4 key">
+						<span>
+							Cancellation Period
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ getCancellationTime(Form?.cancellation_hours.value) }}
+						</span>
+					</div>
+				</div>
+
 
 
 
