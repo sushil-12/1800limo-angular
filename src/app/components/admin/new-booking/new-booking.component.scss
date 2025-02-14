@@ -145,6 +145,9 @@ ul {
 .preview-extra-stop-color {
 	color: #000000;
 }
+.preview-output-feild{
+	font-size: 19px;
+}
 
 .preview-dropoff-color {
 	color: #FF0000;
@@ -390,5 +393,11 @@ ul {
 @media only screen and (max-width: 768px) {
 	.pin-icon-preview {
 		font-size: 34px;
+	}
+}
+
+@media (min-width: 992px){
+	.modal-lg{
+		max-width: 600px !important;
 	}
 }

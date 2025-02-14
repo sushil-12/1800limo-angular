@@ -2226,81 +2226,8 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body" style="font-family: 'PT Serif', serif;">
+			<div class="modal-body" style="font-family: 'PT Serif', serif;padding: 0 !important;">
 				<div class="container text-lg">
-					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Rates/Taxes
-					</h4>
-					<div class="mx-2" *ngIf="RatesForm">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{currencySymbol}}{{ RatesForm.grand_total.toFixed(2) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Trip Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{currencySymbol}}{{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<!-- Booking Type -->
-					<h4 class="font-weight-bolder m-0">
-						Booking Type
-					</h4>
-					<!-- Travel Info. -->
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Booking Information
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ textFormatter(Form.service_type.value) | titlecase }}
-								/
-								{{ textFormatter(Form.transfer_type.value) | titlecase }}
-								<span class="font-weight-bolder" *ngIf="Form.service_type.value == 'round_trip'">
-									/ {{ textFormatter(Form.return_transfer_type.value) | titlecase
-									}}
-								</span>
-							</span>
-						</div>
-					</div>
-					<!-- Number of Hours -->
-					<div *ngIf="Form.service_type.value == 'charter_tour'">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Booking Hours
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.number_of_hours.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-
 
 					<!-- Loose Customer Information -->
 					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
@@ -2764,22 +2691,22 @@
 						</div>
 					</div>
 					<hr>
-					<div class="mx-2" *ngIf="Form?.booking_instructions.value">
+					<div class="mx-4" *ngIf="Form?.booking_instructions.value">
 						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
+							<div class="key">
+								<span style="font-weight: 550 !important;">
 									Special Instruction
 								</span>
 							</div>
-							<div class="col-md-8 value box-special-instruction">
+							<div class="value box-special-instruction">
 								<span class="font-weight-bolder" style="white-space: pre-wrap;"
 									[innerHTML]="highlightNumbers(Form?.booking_instructions.value || ' ')">
 									<!-- {{Form?.booking_instructions.value}} -->
 								</span>
 							</div>
 						</div>
-						<hr>
 					</div>
+					<hr>
 					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
 						<div class="row m-0">
 							<div class="col-md-4 key">
