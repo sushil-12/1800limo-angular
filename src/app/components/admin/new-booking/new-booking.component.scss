@@ -322,6 +322,10 @@ ul {
 	top: 0.95em;
 }
 
+:host ::ng-deep .cancellation_policy .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+	color: red !important;
+}
+
 :host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder {
 	transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px) !important;
 	color: #000;

@@ -233,6 +233,11 @@ export class NewBookingComponent implements OnInit {
 		}
 
 	}
+
+	change2(){
+		console.log("im heere")
+	}
+
 	buildBookingData() {
 		console.log('rebuild booking data')
 		this.booking_data = {
@@ -3808,5 +3813,24 @@ export class NewBookingComponent implements OnInit {
 		}
 	  }
 	  
-}
+	  onSearchAffiliateId(term,item){
+		console.log("term",term,"item",item)
+		// return item.bindNameAffiliate.toLowerCase().startsWith(term.toLowerCase())
 
+		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_name.toLowerCase().startsWith(term.toLowerCase()) || item.phone.startsWith(term)
+
+		//   console.log("in search",event)
+		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))
+	  }
+
+	  onSearchCancellation(term,item){
+		console.log("term",term,"item",item)
+	    return item.label.toLowerCase().startsWith(term.toLowerCase())
+      }
+	  
+	  onSearchLooseAffId(term,item){
+		console.log("term",term,"item",item)
+	    return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.startsWith(term)
+      }
+
+}
