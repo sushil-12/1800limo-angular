@@ -896,8 +896,9 @@
 							formControlName="susbcriber_name" readonly />
 					</mat-form-field>
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="bindNameAffiliate"
-						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
+					<ng-select [searchable]="true" appearance="outline" [searchFn]="onSearchAffiliateId"
+						[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
+						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
@@ -931,7 +932,8 @@
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
-					<ng-select appearance="outline" [items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchAffiliateId"
+						[items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="loose_affiliate_id"
 						(change)="handleLooseAffiliateChange($event)">
@@ -1112,7 +1114,25 @@
 							</div>
 						</div>
 					</div>
-					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -25px;">
+					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -10px;">
+						<ng-select appearance="outline" [items]="canceloptions" bindLabel="label" bindValue="value"
+							placeholder="Cancellation Policy" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="cancellation_hours"
+							[searchFn]="onSearchCancellation"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.cancellation_hours.invalid) }"
+							style="height:66px;">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.cancellation_hours.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 12px;">
+							<div *ngIf="Form.cancellation_hours.errors.required">The Cancellation Policy is
+								required
+							</div>
+							<div *ngIf="Form.cancellation_hours.errors.pattern">The Cancellation Policy should be
+								a
+								number</div>
+						</div>
+					</div>
+					<!-- <div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -25px;">
 						<mat-form-field appearance="outline">
 							<mat-label>Cancellation Policy</mat-label>
 							<mat-select formControlName="cancellation_hours" tabindex="1">
@@ -1130,7 +1150,7 @@
 								a
 								number</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -1328,17 +1348,16 @@
 							</div>
 						</div>
 					</div>
-					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -25px;">
-						<mat-form-field appearance="outline">
-							<mat-label>Cancellation Policy</mat-label>
-							<mat-select formControlName="cancellation_hours" tabindex="1">
-								<mat-option value="">Choose Cancellation Policy</mat-option>
-								<mat-option *ngFor="let canceloption of canceloptions"
-									[value]="canceloption.value">{{canceloption.label}}</mat-option>
-							</mat-select>
-						</mat-form-field>
-						<div *ngIf="submittedForm && Form.cancellation_hours.errors"
-							class="text-danger margin-bottom-thin my-mat-hint">
+					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -10px;">
+						<ng-select appearance="outline" [items]="canceloptions" bindLabel="label" bindValue="value"
+							placeholder="Cancellation Policy" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="cancellation_hours"
+							[searchFn]="onSearchCancellation"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.cancellation_hours.invalid) }"
+							style="height:66px;">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.cancellation_hours.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 12px;">
 							<div *ngIf="Form.cancellation_hours.errors.required">The Cancellation Policy is
 								required
 							</div>
@@ -3020,10 +3039,12 @@
 					</mat-form-field>
 
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="Return_AffiliateAccounts" bindLabel="bindNameAffiliate"
-						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="return_affiliate_id"
-						(change)="handleAffiliateChange($event)" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+					<ng-select appearance="outline" [searchable]="true" appearance="outline"
+						[searchFn]="onSearchAffiliateId" [items]="Return_AffiliateAccounts"
+						bindLabel="bindNameAffiliate" bindValue="id" placeholder="Select Affiliate"
+						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+						formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)"
+						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
 			</div>
@@ -3055,8 +3076,9 @@
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
-					<ng-select appearance="outline" [items]="Return_LooseAffiliateAccounts" bindLabel="name"
-						bindValue="id" placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
+					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchAffiliateId"
+						[items]="Return_LooseAffiliateAccounts" bindLabel="name" bindValue="id"
+						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_loose_affiliate_id"
 						(change)="handleReturnLooseAffiliateChange($event)">
 					</ng-select>
@@ -3242,17 +3264,16 @@
 							</div>
 						</div>
 					</div>
-					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -25px;">
-						<mat-form-field appearance="outline">
-							<mat-label>Cancellation Policy</mat-label>
-							<mat-select formControlName="return_cancellation_hours" tabindex="1">
-								<mat-option value="">Choose Cancellation Policy</mat-option>
-								<mat-option *ngFor="let canceloption of canceloptions"
-									[value]="canceloption.value">{{canceloption.label}}</mat-option>
-							</mat-select>
-						</mat-form-field>
-						<div *ngIf="submittedForm && Form.return_cancellation_hours.errors"
-							class="text-danger margin-bottom-thin my-mat-hint">
+					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -10px;">
+						<ng-select appearance="outline" [items]="canceloptions" bindLabel="label" bindValue="value"
+							placeholder="Cancellation Policy" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="return_cancellation_hours"
+							[searchFn]="onSearchCancellation"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_cancellation_hours.invalid) }"
+							style="height:66px;">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_cancellation_hours.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 12px;">
 							<div *ngIf="Form.return_cancellation_hours.errors.required">The Cancellation Policy is
 								required
 							</div>
@@ -3458,17 +3479,16 @@
 							</div>
 						</div>
 					</div>
-					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -25px;">
-						<mat-form-field appearance="outline">
-							<mat-label>Cancellation Policy</mat-label>
-							<mat-select formControlName="return_cancellation_hours" tabindex="1">
-								<mat-option value="">Choose Cancellation Policy</mat-option>
-								<mat-option *ngFor="let canceloption of canceloptions"
-									[value]="canceloption.value">{{canceloption.label}}</mat-option>
-							</mat-select>
-						</mat-form-field>
-						<div *ngIf="submittedForm && Form.return_cancellation_hours.errors"
-							class="text-danger margin-bottom-thin my-mat-hint">
+					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -10px;">
+						<ng-select appearance="outline" [items]="canceloptions" bindLabel="label" bindValue="value"
+							placeholder="Cancellation Policy" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="return_cancellation_hours"
+							[searchFn]="onSearchCancellation"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_cancellation_hours.invalid) }"
+							style="height:66px;">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_cancellation_hours.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 12px;">
 							<div *ngIf="Form.return_cancellation_hours.errors.required">The Cancellation Policy is
 								required
 							</div>
