@@ -213,15 +213,15 @@
 						<ng-template #hideZero6>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<mat-select formControlName="minimum_airport_departure_rate" tabindex="1"
+						<!-- <mat-select formControlName="minimum_airport_departure_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
 								{{ value }}
 							</mat-option>
-						</mat-select>
-						<!-- <input matInput type="number" placeholder="Minimum Airport Rate - Departure"
+						</mat-select> -->
+						<input matInput type="number" placeholder="Minimum Airport Rate - Departure"
 							(change)="updateRateRangeObject()" formControlName="minimum_airport_departure_rate"
-							tabindex="1" (focus)="$event.target.select()"> -->
+							tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_airport_departure_rate.errors || f.minimum_airport_departure_rate.touched && f.minimum_airport_departure_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -245,15 +245,15 @@
 						<ng-template #hideZero7>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<mat-select formControlName="minimum_airport_arrival_rate" tabindex="1"
+						<!-- <mat-select formControlName="minimum_airport_arrival_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
 								{{ value }}
 							</mat-option>
-						</mat-select>
-						<!-- <input matInput type="number" placeholder="Minimum Airport Arrival Rate"
+						</mat-select> -->
+						<input matInput type="number" placeholder="Minimum Airport Arrival Rate"
 							(change)="updateRateRangeObject()" formControlName="minimum_airport_arrival_rate"
-							tabindex="1" (focus)="$event.target.select()"> -->
+							tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_airport_arrival_rate.errors || f.minimum_airport_arrival_rate.touched && f.minimum_airport_arrival_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -278,15 +278,15 @@
 						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<mat-select formControlName="minimum_city_rate" tabindex="1"
+						<!-- <mat-select formControlName="minimum_city_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
 								{{ value }}
 							</mat-option>
-						</mat-select>
-						<!-- <input matInput type="number" placeholder="Minimum City to Intercity rate"
+						</mat-select> -->
+						<input matInput type="number" placeholder="Minimum City to Intercity rate"
 							formControlName="minimum_city_rate" (change)="updateRateRangeObject()" tabindex="1"
-							(focus)="$event.target.select()"> -->
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_city_rate.errors || f.minimum_city_rate.touched && f.minimum_city_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -314,16 +314,16 @@
 						<ng-template #hideZero9>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<mat-select formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
+						<!-- <mat-select formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
 								{{ value }}
 							</mat-option>
-						</mat-select>
-						<!-- <input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
+						</mat-select> -->
+						<input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
 							(keyup)="handleChangeMCPAR($event.target.value)" (change)="updateRateRangeObject()"
 							formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
-							(focus)="$event.target.select()"> -->
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_cruise_port_arrival_rate.errors || f.minimum_cruise_port_arrival_rate.touched && f.minimum_cruise_port_arrival_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -348,15 +348,15 @@
 						<ng-template #hideZero9>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<mat-select formControlName="minimum_cruise_port_departure_rate" tabindex="1"
+						<!-- <mat-select formControlName="minimum_cruise_port_departure_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
 								{{ value }}
 							</mat-option>
-						</mat-select>
-						<!-- <input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
+						</mat-select> -->
+						<input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
 							(change)="updateRateRangeObject()" formControlName="minimum_cruise_port_departure_rate"
-							tabindex="1" (focus)="$event.target.select()"> -->
+							tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_cruise_port_departure_rate.errors || f.minimum_cruise_port_departure_rate.touched && f.minimum_cruise_port_departure_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
