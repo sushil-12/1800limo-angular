@@ -932,7 +932,7 @@
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
-					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchAffiliateId"
+					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffId"
 						[items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="loose_affiliate_id"
@@ -3076,7 +3076,7 @@
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
-					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchAffiliateId"
+					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffId"
 						[items]="Return_LooseAffiliateAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_loose_affiliate_id"

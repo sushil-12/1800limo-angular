@@ -7,11 +7,11 @@
 				<h2 class="headinginfo">{{company_name | titlecase}} Bookings</h2>
 			</div>
 			<div class="col-md-5 add-member-div" *ngIf="currentUser?.roleName == 'driver' ">
-				<button class="custom-btn btn-add-other-memeber" (click)="upgradePlan()"
-					style="margin-right: 10px !important;color: #000 !important;">Buy Chauffeur Select
+				<button class="three-d-button" (click)="upgradePlan()" style="margin-right: 10px !important;">Buy
+					Chauffeur Select
 				</button>
 				<button class="custom-btn btn-add-other-memeber" (click)="addSubAffiliate()"
-					style="color: black !important;background-color: bisque !important;border-color: #fff !important;">
+					style="color: black !important;background-color: #f2c449 !important;border: none !important;">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 						viewBox="0 0 16 16">
 						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -278,7 +278,8 @@
 							</tbody>
 						</table>
 						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Running Total:
-							${{total_amount}}</p>
+							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
+						</p>
 					</div>
 					<p class="text-danger text-lg" *ngIf="noError">
 						No Results Found.

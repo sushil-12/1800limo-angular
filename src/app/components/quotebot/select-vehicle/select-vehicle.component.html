@@ -322,9 +322,9 @@
 					<div id="vehicle-listing-card_{{ vehinfo_index }}" class="card vehicle-listing-card"
 						*ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
 						(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
-						<!-- DIV: AFFILIATE INFO -->
+						<!-- DIV: AFFILIATE INFO FOR ADMIN-->
 						<div id="affiliate-info"
-							*ngIf="currentUser != null && currentUser?.roleName == 'admin' && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
+							*ngIf="currentUser != null && (currentUser?.roleName == 'admin') && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
 							<button class="link" *ngIf="vehinfo?.readMore">
 								<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 									<span (click)="editAffiliateAccount(vehinfo)">
@@ -374,6 +374,54 @@
 						<!-- <div *ngIf="vehinfo?.is_master_vehicle==true || vehinfo?.affiliate_id==''">
 							<p style="padding: 4px; font-weight: bolder;">Master vehicle</p>
 						</div> -->
+						<!-- AFFILIATE INFO FOR AFFILIATE -->
+						<div id="affiliate-info"
+							*ngIf="currentUser != null && (currentUser?.roleName == 'driver') && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
+							<button class="link" *ngIf="vehinfo?.readMore">
+								<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
+									<span>
+										{{vehinfo?.affiliate_company.slice(0,7) }}
+										<span *ngIf="vehinfo?.badge_city != 'N/A'"
+											style="text-transform: uppercase;">({{vehinfo?.badge_city}})</span>
+										{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
+									</span>
+									<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
+								</p>
+							</button>
+							<button class="link" *ngIf="!vehinfo?.readMore">
+								<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
+									<span>
+										{{vehinfo?.affiliate_company }}
+										<span *ngIf="vehinfo?.badge_city != 'N/A'"
+											style="text-transform: uppercase;">({{vehinfo?.badge_city}})</span>
+										{{'/ '+vehinfo?.affiliate_name }}
+										<!-- {{'/ '+vehinfo?.affiliate_phone}} -->
+									</span>|<br>
+									<span>
+										<p style="white-space: pre" data-toggle="modal" id="box">
+											<span>{{vehinfo?.affiliate_phone}}</span>
+										</p>
+										<!-- <a href="tel:{{vehinfo?.affiliate_phone}}">
+									{{vehinfo?.affiliate_phone}}
+								</a> -->
+									</span>
+									<!-- <a href="tel:+918219479708">+918219479708</a> -->
+									<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
+								</p>
+							</button>
+
+							<!-- <ng-template #readMoreTemp>
+						<p class="text-left text-secondary m-0 my-md-2" [class.show]="!show" >
+							{{ vehinfo.affiliate_company.length > 10 ? vehinfo.affiliate_company.slice(0,5)+"..." : vehinfo.affiliate_company }}
+							{{vehinfo.affiliate_name.length > 10 ?  '/ '+vehinfo.affiliate_name.slice(0,5)+'...' : '/ '+vehinfo.affiliate_name  }}
+						</p>
+						<p class="text-left text-secondary m-0 my-md-2" [class.show]="show">
+							{{ vehinfo.affiliate_company }}
+							{{'/ '+vehinfo.affiliate_name}}
+						</p>
+						<button (click)="show+index = !show+index">{{ show ? 'Show less': 'Show More' }}</button>
+					</ng-template> -->
+						</div>
 						<!-- AFFILIATE INFO ENDS -->
 
 						<!-- DIV: VEHICLE DETAILS -->

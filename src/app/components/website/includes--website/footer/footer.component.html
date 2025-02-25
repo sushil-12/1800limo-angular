@@ -64,8 +64,9 @@
 				<div class="col-md-12 block login_btn text-center">
 					<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
 						<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownFooter">
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							style="background-color: #33c658 !important;">LOGIN / CREATE</button>
+						<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
 							<a class="dropdown-item indv-btn font-weight-bolder" (click)="loginButtons('individual')"
 								style="color: #fff !important;opacity: 1;font-size: 21px;">Individual Account</a>
 							<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
@@ -95,9 +96,9 @@
 							<li class="nav-item dropdown no-caret dropdown-user">
 								<button
 									class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
-									style="padding: 0.875rem 2.258rem;" id="navbarDropdownUserImage"
-									href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">
+									style="padding: 0.875rem 2.258rem;background-color: #33c658 !important;"
+									id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									{{currentUser.affiliateCompanyName ?
 									currentUser.affiliateCompanyName : currentUser.name ?
 									currentUser.name : currentUser.FirstName +

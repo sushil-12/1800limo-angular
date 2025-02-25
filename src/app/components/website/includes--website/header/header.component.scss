@@ -228,3 +228,9 @@ ul {
 		font-size: 12px !important;
 	}
 }
+
+@media screen and (max-width:767px) {
+	li.nav-item a {
+		font-size: 15px !important;
+	}
+}
