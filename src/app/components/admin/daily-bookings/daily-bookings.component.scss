@@ -67,7 +67,7 @@ button {
 .x-circle-btn {
 	opacity: 1;
 	color: red;
-	font-size: xx-large;
+	font-size: xxx-large;
 	width: max-content;
 }
 
@@ -388,7 +388,9 @@ input::-webkit-input-placeholder {
 a.dropdown-item {
 	padding: 0.4rem 1.4rem !important;
 	font-size: 18px;
-	// font-weight: 550 !important;
+	font-weight: 500 !important;
+	font-family: "Roboto", sans-serif !important;
+	// text-transform: uppercase !important;
 }
 
 .asterisk {

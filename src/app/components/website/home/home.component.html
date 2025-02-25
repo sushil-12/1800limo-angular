@@ -58,8 +58,9 @@
 							<!-- <ul class="navbar-nav"> -->
 							<!-- <li class="nav-item dropdown no-caret dropdown-user"> -->
 							<button class="user-profile btn btn-icon btn-transparent-dark  custom-filled-button"
-								style="padding: 0.875rem 2.258rem;" role="button" data-toggle="dropdown"
-								aria-haspopup="true" aria-expanded="false" (click)="dashboard(currentUser?.roleName)">
+								style="padding: 0.875rem 2.258rem;background-color: #33c658 !important;" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+								(click)="dashboard(currentUser?.roleName)">
 								{{currentUser?.affiliateCompanyName ? currentUser?.affiliateCompanyName :
 								currentUser?.name}}
 							</button>
@@ -195,7 +196,7 @@
 						<a class="nav-link" [ngClass]="QBForm?.service_type?.value =='charter_tour' ? 'active' : ''"
 							(click)="quoteBotSwitch('charter_tour')" (keyup.enter)="quoteBotSwitch('charter_tour')"
 							tabindex="1">
-							HOURLY / TOUR
+							HOURLY
 						</a>
 					</li>
 				</ul>
@@ -988,7 +989,7 @@
 									</button>
 								</div>
 							</div>
-							<span>1 large bag = 2 carry-on</span>
+							<span style="margin-bottom: 5px !important;">1 large bag = 2 carry-on</span>
 
 							<!-- 
 								Quotebot Form ends

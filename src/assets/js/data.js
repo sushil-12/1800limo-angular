@@ -657,6 +657,14 @@ const reportsStatus = [
     {
         "id": "Pending",
         "value": "Pending"
+    },
+	{
+        "id": "Rejected",
+        "value": "Rejected"
+    },
+	{
+        "id": "Comped",
+        "value": "Comped"
     }
 ]
 
