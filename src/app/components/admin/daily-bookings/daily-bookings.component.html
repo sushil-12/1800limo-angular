@@ -873,7 +873,7 @@
 				<div class="row" [hidden]="!show">
 					<div class="col-md-12">
 						<div class="mt-2" style="margin-left: -100px;">
-							<input type="file" (change)="myUploader($event)" #fileInput />
+							<input type="file" (change)="myUploader($event)" #fileInput multiple />
 						</div>
 						<mat-form-field class="example-full-width" appearance="outline">
 							<mat-label>

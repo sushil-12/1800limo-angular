@@ -142,7 +142,8 @@
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Message modal -->
-<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true"
+    data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <button type="button" (click)="closeModal()" class="close closeButton x-circle-btn mt-2"
@@ -160,7 +161,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 mt-2 mb-2">
-                        <input type="file" (change)="myUploader($event)" #fileInput1 />
+                        <input type="file" (change)="myUploader($event)" #fileInput1 multiple />
                     </div>
                     <!-- <form [formGroup]="sendMessageForm" enctype="multipart/form-data">
                         <div class="form-group">
@@ -207,8 +208,8 @@
     aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content user_inforamtion">
-            <button type="button" (click)="closeModal()" class="close closeButton x-circle-btn"
-                data-dismiss="modal" aria-label="Close">
+            <button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+                aria-label="Close">
                 <i class="bi bi-x-circle"></i>
             </button>
             <div class="modal-header pb-0 d-flex justify-content-center">
@@ -247,7 +248,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-md-12 mt-3">
-                            <input type="file" (change)="myUploader($event)" #fileInput />
+                            <input type="file" (change)="myUploader($event)" #fileInput multiple />
                         </div>
                     </div>
                 </form>

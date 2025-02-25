@@ -237,17 +237,21 @@ export class TravelPlannerComponent implements OnInit {
   //submit email modal
   async sendEmail() {
     this.spinner.show()
-    if (this.uploadedFile) {
-      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-      this.fileUrl = dataS.Location;
-      console.log("fileUrl", this.fileUrl)
-    }
+    let fileData =[]
+		if (this.uploadedFile) {
+			for (let file of this.uploadedFile) {
+			let dataS = await this.uploadService.uploadFile(file);
+			fileData.push({
+			  fileUrl: dataS.Location,
+			  fileType: file.type
+			});
+		  }
+		}
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
       recipents: this.emails.value,
-      fileUrl: this.fileUrl,
-      filetype: this.fileType
+      fileData:fileData
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -323,15 +327,19 @@ export class TravelPlannerComponent implements OnInit {
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Travel Agent Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>Travel Agent Email: ${travelPlanner['email']}`)
     if (message != null) {
 			this.spinner.show()
-			if (this.uploadedFile) {
-				let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-				this.fileUrl = dataS.Location;
-				console.log("fileUrl", this.fileUrl)
-			}
+      let fileData =[]
+      if (this.uploadedFile) {
+        for (let file of this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(file);
+        fileData.push({
+          fileUrl: dataS.Location,
+          fileType: file.type
+        });
+        }
+      }
 			let body = {
 				sendContent: message,
-				fileUrl: this.fileUrl,
-				filetype: this.fileType
+				fileData:fileData
 			}
 			this.adminService.sendAffiliateMessage(type, travelPlanner['id'], body).subscribe((response: any) => {
 				this.spinner.hide()
@@ -455,13 +463,13 @@ export class TravelPlannerComponent implements OnInit {
   myUploader(event) {
     // this.loader = true;
 
-    this.uploadedFile = event.target.files[0]
+    this.uploadedFile = Array.from(event.target.files)
     console.log("file", this.uploadedFile)
-    if (this.uploadedFile) {
-      this.fileName = this.uploadedFile['name'];
-      this.fileType = this.uploadedFile['type'];
-      console.log("file", this.fileName, this.fileType)
-    }
+    // if (this.uploadedFile) {
+    //   this.fileName = this.uploadedFile['name'];
+    //   this.fileType = this.uploadedFile['type'];
+    //   console.log("file", this.fileName, this.fileType)
+    // }
   }
 
 }

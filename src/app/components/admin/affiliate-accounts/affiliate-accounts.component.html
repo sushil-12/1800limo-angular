@@ -353,7 +353,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12 mt-2 mb-2">
-						<input type="file" (change)="myUploader($event)" #fileInput1 />
+						<input type="file" (change)="myUploader($event)" #fileInput1 multiple />
 					</div>
 					<div class="col-md-12">
 						<p id="label">
@@ -379,8 +379,8 @@
 	aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
-			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn"
-				data-dismiss="modal" aria-label="Close">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close">
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0 d-flex justify-content-center">
@@ -420,7 +420,7 @@
 							</mat-form-field>
 						</div>
 						<div class="col-md-12 mt-3">
-							<input type="file" (change)="myUploader($event)" #fileInput />
+							<input type="file" (change)="myUploader($event)" #fileInput multiple />
 						</div>
 					</div>
 				</form>

@@ -482,13 +482,15 @@ export class DailyBookingsComponent implements OnInit {
 				: (this.passengerDetails.loose_affiliate_email ? this.passengerDetails.loose_affiliate_email : 'info@1800limo.com');
 				this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
 			}
-			
+			let fileData = []
 			if (this.uploadedFile) {
-				this.spinner.show()
-				let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-				this.fileUrl = dataS.Location;
-				console.log("fileUrl", this.fileUrl)
-			}
+				for (let file of this.uploadedFile) {
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+				  fileUrl: dataS.Location,
+				  fileType: file.type
+				});
+			  }}
 			
 			let obj = {
 				bookingId: this.passengerDetails.booking_id,
@@ -497,8 +499,7 @@ export class DailyBookingsComponent implements OnInit {
 				sendThrough: format ? "Phone" : "Email",
 				sendValue: this.sendInformation,
 				sendContent: message,
-				fileUrl: this.fileUrl,
-				filetype: this.fileType
+				fileData :fileData
 		};
 		this.adminService
 		.adminNotification(obj)
@@ -1420,13 +1421,13 @@ export class DailyBookingsComponent implements OnInit {
 	myUploader(event) {
 		// this.loader = true;
 
-		this.uploadedFile = event.target.files[0]
+		this.uploadedFile = Array.from(event.target.files)
 		console.log("file", this.uploadedFile)
-		if (this.uploadedFile) {
-			this.fileName = this.uploadedFile['name'];
-			this.fileType = this.uploadedFile['type'];
-			console.log("file", this.fileName, this.fileType)
-		}
+		// if (this.uploadedFile) {
+		// 	this.fileName = this.uploadedFile['name'];
+		// 	this.fileType = this.uploadedFile['type'];
+		// 	console.log("file", this.fileName, this.fileType)
+		// }
 	}
 
 	sendEmailToAnyone(){

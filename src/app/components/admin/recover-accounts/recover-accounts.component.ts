@@ -230,15 +230,19 @@ export class RecoverAccountsComponent implements OnInit {
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
       this.spinner.show()
+      let fileData =[]
       if (this.uploadedFile) {
-        let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-        this.fileUrl = dataS.Location;
-        console.log("fileUrl", this.fileUrl)
+        for (let file of this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(file);
+        fileData.push({
+          fileUrl: dataS.Location,
+          fileType: file.type
+        });
+        }
       }
       let body = {
         text_message: message,
-        fileUrl: this.fileUrl,
-        filetype: this.fileType
+        fileData : fileData
       }
       if (type == 'email') {
         body['email_address'] = travelPlanner?.email
@@ -326,13 +330,13 @@ export class RecoverAccountsComponent implements OnInit {
   myUploader(event) {
     // this.loader = true;
 
-    this.uploadedFile = event.target.files[0]
+    this.uploadedFile = Array.from(event.target.files)
     console.log("file", this.uploadedFile)
-    if (this.uploadedFile) {
-      this.fileName = this.uploadedFile['name'];
-      this.fileType = this.uploadedFile['type'];
-      console.log("file", this.fileName, this.fileType)
-    }
+    // if (this.uploadedFile) {
+    //   this.fileName = this.uploadedFile['name'];
+    //   this.fileType = this.uploadedFile['type'];
+    //   console.log("file", this.fileName, this.fileType)
+    // }
   }
 
 }
