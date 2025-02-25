@@ -188,10 +188,15 @@ export class SubscribersListComponent implements OnInit {
 	//submit email modal
 	async sendEmail() {
 		this.spinner.show()
+		let fileData =[]
 		if (this.uploadedFile) {
-			let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-			this.fileUrl = dataS.Location;
-			console.log("fileUrl", this.fileUrl)
+			for (let file of this.uploadedFile) {
+			let dataS = await this.uploadService.uploadFile(file);
+			fileData.push({
+			  fileUrl: dataS.Location,
+			  fileType: file.type
+			});
+		  }
 		}
 		const textContent = this.sendEmailForm.get('text_message')?.value;
 		const htmlContent = this.convertTextToHtml(textContent);
@@ -199,8 +204,7 @@ export class SubscribersListComponent implements OnInit {
 			subject: this.sendEmailForm.get('subject').value,
 			message: htmlContent,
 			recipents: this.emails.value,
-			fileUrl: this.fileUrl,
-			filetype: this.fileType
+			fileData:fileData
 		}
 		console.log("body-------->", body)
 
@@ -305,15 +309,19 @@ export class SubscribersListComponent implements OnInit {
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Subscriber Name: ${individual['FirstName']} ${individual['LastName']}<br/>Subscriber Email: ${individual['Email']}`)
 		if (message != null) {
 			this.spinner.show()
-			if (this.uploadedFile) {
-				let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-				this.fileUrl = dataS.Location;
-				console.log("fileUrl", this.fileUrl)
-			}
+			let fileData =[]
+		if (this.uploadedFile) {
+			for (let file of this.uploadedFile) {
+			let dataS = await this.uploadService.uploadFile(file);
+			fileData.push({
+			  fileUrl: dataS.Location,
+			  fileType: file.type
+			});
+		  }
+		}
 			let body = {
 				sendContent: message,
-				fileUrl: this.fileUrl,
-				filetype: this.fileType
+			fileData:fileData
 			}
 			this.adminService.sendAffiliateMessage(type, individual['id'], body).subscribe((response: any) => {
 				this.spinner.hide()
@@ -431,13 +439,13 @@ export class SubscribersListComponent implements OnInit {
 	myUploader(event) {
 		// this.loader = true;
 
-		this.uploadedFile = event.target.files[0]
+		this.uploadedFile = Array.from(event.target.files)
 		console.log("file", this.uploadedFile)
-		if (this.uploadedFile) {
-			this.fileName = this.uploadedFile['name'];
-			this.fileType = this.uploadedFile['type'];
-			console.log("file", this.fileName, this.fileType)
-		}
+		// if (this.uploadedFile) {
+		// 	this.fileName = this.uploadedFile['name'];
+		// 	this.fileType = this.uploadedFile['type'];
+		// 	console.log("file", this.fileName, this.fileType)
+		// }
 	}
 
 

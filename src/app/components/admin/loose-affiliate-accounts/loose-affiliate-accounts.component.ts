@@ -49,9 +49,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   emails = new FormControl('');
   audit_Trail: any = [];
   public sendMessageForm: FormGroup;
-  fileUrl: String;
-  fileName: String;
-  fileType: String;
+  fileUrl: any;
+  fileName: any;
+  fileType: any;
   uploadedFile: any;
 
 
@@ -187,18 +187,23 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   //submit email modal
   async sendEmail() {
     this.spinner.show()
+    let fileData = []
     if (this.uploadedFile) {
-      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-      this.fileUrl = dataS.Location;
-      console.log("fileUrl", this.fileUrl)
+      for (let file of this.uploadedFile) {
+      let dataS = await this.uploadService.uploadFile(file);
+      fileData.push({
+        fileUrl: dataS.Location,
+        fileType: file.type
+      });
     }
+  }
+    console.log("fileData",fileData)
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
       recipents: this.emails.value,
       account_type: 'loose_affiliate',
-      fileUrl: this.fileUrl,
-      filetype: this.fileType
+      fileData:fileData
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -321,6 +326,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   messagetype: Record<string, any>
   async sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
     console.log('Request to send a Message to travel agent id: ', type, travelPlanner, message)
+    let fileData = [];
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
@@ -328,15 +334,19 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     if (message != null) {
       this.spinner.show()
       if (this.uploadedFile) {
-        let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-        this.fileUrl = dataS.Location;
-        console.log("fileUrl", this.fileUrl)
+        for (let file of this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(file);
+        fileData.push({
+          fileUrl: dataS.Location,
+          fileType: file.type
+        });
       }
+    }
+    console.log("fileData", fileData)
       let body = {
         text_message: message,
         account_type: 'loose_affiliate',
-        fileUrl: this.fileUrl,
-        filetype: this.fileType
+        fileData: fileData
       }
       if (type == 'email') {
         body['email_address'] = travelPlanner?.email
@@ -376,13 +386,13 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   myUploader(event) {
     // this.loader = true;
 
-    this.uploadedFile = event.target.files[0]
+    this.uploadedFile = Array.from(event.target.files);
     console.log("file", this.uploadedFile)
-    if (this.uploadedFile) {
-      this.fileName = this.uploadedFile['name'];
-      this.fileType = this.uploadedFile['type'];
-      console.log("file", this.fileName, this.fileType)
-    }
+    // if (this.uploadedFile) {
+    //   this.fileName = this.uploadedFile['name'];
+    //   this.fileType = this.uploadedFile['type'];
+    //   console.log("file", this.fileName, this.fileType)
+    // }
   }
 
 
