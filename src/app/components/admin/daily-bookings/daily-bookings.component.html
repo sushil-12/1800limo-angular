@@ -294,7 +294,7 @@
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
 										<p
-											[ngClass]="booking?.charged_amount != null ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
+											[ngClass]="(booking?.charged_amount != null && booking?.booking_status !== 'paid' && booking?.booking_status !== 'paid_cash') ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? booking.grand_total : 0 )"></span>
 										</p>
