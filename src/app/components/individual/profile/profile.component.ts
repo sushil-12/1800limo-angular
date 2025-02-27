@@ -176,6 +176,7 @@ export class ProfileComponent implements OnInit {
 				this.response = result;
 				this.cardDetails = this.response?.data?.cards
 				this.addIndividualAccountForm.patchValue({
+					smsOptIn: this.response?.data?.sms_optin == 1 ? true : false,
 					firstName: this.response?.data?.first_name,
 					middleName: this.response?.data?.middle_name,
 					lastName: this.response?.data?.last_name,
@@ -227,9 +228,10 @@ export class ProfileComponent implements OnInit {
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
+			smsOptIn: [false, Validators.requiredTrue]  // Ensures the checkbox must be checked
+
 		});
 	}
-
 
 
 	onCountryChange(event, type) {

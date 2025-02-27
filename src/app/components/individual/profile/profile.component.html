@@ -125,6 +125,18 @@
                         </div>
                     </div>
                     <div class="col-md-12 mt-3">
+                        <div class="custom-control custom-checkbox d-inline-block">
+                            <input type="checkbox" id="smsOptIn" formControlName="smsOptIn"
+                                class="custom-control-input">
+                            <label for="smsOptIn" class="custom-control-label">Check this box to opt-in for SMS booking
+                                confirmations and reminders.</label>
+                        </div>
+                        <div *ngIf="submittedForm && f.smsOptIn.errors"
+                            class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="f.smsOptIn.errors.required">Please check this box.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-3">
                         <h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
                             <label class="alert alert-danger" style="color: red !important;">Choose exact address from
                                 the
