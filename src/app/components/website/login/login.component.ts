@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { ReCaptchaService } from '../../../services/re-captcha.service';
+// import { ReCaptchaService } from '../../../services/re-captcha.service';
 
 import { environment } from 'src/environments/environment';
 
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	referralCode: string = null;
 
 	constructor(private formBuilder: FormBuilder,
-		private recaptchaService: ReCaptchaService, 
+		// private recaptchaService: ReCaptchaService, 
 		private router: Router,
 		private authService: AuthService,
 		private changeDetectorRef: ChangeDetectorRef,
@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {
 
-		this.recaptchaService.load(environment.recaptchaKey);
+		// this.recaptchaService.load(environment.recaptchaKey);
 
 		this.loginForm = this.formBuilder.group({
 			phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
@@ -262,9 +262,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		this.loginForm.value.countryCode = this.countryCode
 		this.loginForm.value.phoneCountry = this.phoneCountry;
 
-		this.recaptchaService.execute('login', recaptchaToken => {
+		// this.recaptchaService.execute('login', recaptchaToken => {
 		// console.log("recaptcha token--->",recaptchaToken)
-		this.loginForm.value.recaptchaToken = recaptchaToken;
+		// this.loginForm.value.recaptchaToken = recaptchaToken;
 		console.log("login form",this.loginForm.value)
 		this.authService.login(this.loginForm.value)
 			.pipe(
@@ -301,6 +301,5 @@ export class LoginComponent implements OnInit, AfterViewInit {
 					this.router.navigateByUrl('/otp' + `?role=${this.Role}`);
 				}
 			});
-		});
-	}
+		}
 }
