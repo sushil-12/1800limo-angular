@@ -31,7 +31,7 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 	duplicateVehicleId: any;
 	vehcileId: any;
 	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
-
+	looseAffId:any;
 
 
 	constructor(
@@ -47,6 +47,7 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 		if (this.buildVehicleRateSettingsForm()) {
 			this.$route.queryParams.subscribe((params: any) => {
 				// fetch vehicle info and amenities
+				this.looseAffId = params.looseAffId
 				this.SetFormValue('vehicle_id', params.vehicleId)
 				if (params.duplicateVehicleId) {
 					this.fetchVehicleInfoDuplicate(params.vehicleId, params.duplicateVehicleId)
@@ -478,7 +479,13 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 		console.info('Fetching Vehicle Info ....')
 		if (vehicle_id == 0 || vehicle_id == null) {
 			console.log('Vehicle Not selected. ')
-			this.$router.navigate(['/admin/vehcile-details'])
+			if(this.looseAffId){
+				this.$router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+			}
+			else{
+				this.$router.navigate(['/admin/vehcile-details'])
+			}
+			
 			return false
 		}
 		this.$spinner.show()
@@ -585,9 +592,18 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 				this.$spinner.hide();//hide spinner
 				this.is_form_submitted = true; //disable submit button
 
+				if(this.looseAffId){
+					this.$router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+						this.$router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+					)
+				}
+				else{
 					this.$router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 						this.$router.navigate(['/admin/vehicle-details'])
 					)
+				}
+
+					
 
 			});
 	}

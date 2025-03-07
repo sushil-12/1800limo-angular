@@ -102,6 +102,7 @@ import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
 import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
 import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
+import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 
 
 const routes: Routes = [
@@ -657,6 +658,16 @@ const routes: Routes = [
 		path: 'reports-admin-users',
 		canActivate: [AdminGuardGuard],
 		component: ReportsAdminUsersComponent
+	},
+	{
+		path: 'loose-affliate-vehicles',
+		canActivate: [AdminGuardGuard],
+		component: LooseAffiliateVehiclesComponent
+	},
+	{
+		path: 'add-vehicle-loose-affiliate',
+		canActivate: [AdminGuardGuard],
+		component: AddVehicleSubscriberComponent
 	},
 ];
 

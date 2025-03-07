@@ -90,6 +90,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
 	isVehicleTypeSelected: boolean = false
+	looseAffId:any;
 
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -152,6 +153,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 				console.log('params--->>>', params)
 				this.paramResponse = { ...params.keys, ...params };
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
+				this.looseAffId = this.paramResponse.params.looseAffId
 			}
 			);
 		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
@@ -205,6 +207,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 			windowPermit2Image: [''],
 			usdotPermitImage: [''],
 			mcImage: [''],
+			loose_affiliate_id:['']
 		});
 		//Put Black color value by default in Color
 		let colorField: any = document.getElementById('colorField');
@@ -910,6 +913,14 @@ export class AddVehicleSubscriberComponent implements OnInit {
 		}
 		this.spinner.show(); // show spinner
 		this.disableSubmitButton = true; //disable submit button
+		
+		if(this.looseAffId){
+			console.log("in if loose aff id")
+			this.addVehicleForm.patchValue({
+				acc_id : null,
+				loose_affiliate_id : this.looseAffId
+			})
+		}
 
 		this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
 			.pipe(
@@ -926,11 +937,22 @@ export class AddVehicleSubscriberComponent implements OnInit {
 
 				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
 
-				this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id } });
+				if(this.looseAffId){
+					this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id ,looseAffId : this.looseAffId} });
+
+				}
+				else{
+					this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id } });
+				}
 			});
 	}
 	backButton() {
-		this.router.navigate(['admin/vehicle-details']);
+		if(this.looseAffId){
+			this.router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+		}
+		else{
+			this.router.navigate(['admin/vehicle-details']);
+		}
 	}
 
 	resetForm() {
