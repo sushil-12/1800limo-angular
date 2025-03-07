@@ -395,5 +395,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     // }
   }
 
+  viewVehicles(id){
+    this.router.navigate(['/admin/loose-affliate-vehicles'], { queryParams: { looseAffId: id } });
+  }
+
 
 }

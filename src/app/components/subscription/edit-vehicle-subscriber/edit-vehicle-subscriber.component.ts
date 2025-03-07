@@ -101,6 +101,7 @@ export class EditVehicleSubscriberComponent implements OnInit {
   errorMsg3: boolean;
   errorMsg4: boolean;
   duplicateVehcile: any;
+  looseAffId:any
 
   constructor(
     private adminService: AdminService,
@@ -158,6 +159,7 @@ export class EditVehicleSubscriberComponent implements OnInit {
         this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
         this.vehicleId = this.paramResponse.params.vehicleId;
         this.duplicateVehcile = this.paramResponse.params?.duplicateVehcile
+        this.looseAffId = this.paramResponse.params?.looseAffId
       }
       );
     this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
@@ -1105,8 +1107,14 @@ export class EditVehicleSubscriberComponent implements OnInit {
           this.disableSubmitButton = true; //enable submit button
 
           this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
-
-          this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id, relativeVehicleId: this.addVehicleForm.get('relative_vehicle_id').value } });
+          
+          if(this.looseAffId){
+          this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { looseAffId : this.looseAffId,  vehicleId: this.response.data.id, relativeVehicleId: this.addVehicleForm.get('relative_vehicle_id').value } });
+          }
+          else{
+            this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id, relativeVehicleId: this.addVehicleForm.get('relative_vehicle_id').value } });
+          }
+          
         });
     } else {
 
@@ -1125,7 +1133,12 @@ export class EditVehicleSubscriberComponent implements OnInit {
 
           this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles - this.response2.data.numberOfVehicles);
 
-          this.router.navigate(['admin/vehicle-details']);
+          if(this.looseAffId){
+            this.router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+          }
+          else{
+            this.router.navigate(['admin/vehicle-details']);
+          }
         });
     }
   }
@@ -1162,7 +1175,12 @@ export class EditVehicleSubscriberComponent implements OnInit {
   }
 
   backButton() {
-    this.router.navigate(['admin/vehicle-details']);
+    if(this.looseAffId){
+			this.router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+		}
+		else{
+			this.router.navigate(['admin/vehicle-details']);
+		}
   }
 
   changeMake(selectedMake, onFirstLoad = null) {

@@ -207,6 +207,12 @@ export class AdminService {
 		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
 		return result;
 	}
+
+	async adminLooseAffVehList(id, flag = true) {
+		const result = await this.httpClient.get(this.serverUrl + 'admin/get-loose-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
+		return result;
+	}
+
 	getLooseAffiliateVehicles(vehicle_type_id: number) {
 		let data = {}
 		data['filters'] = {}

@@ -1,0 +1,129 @@
+<ngx-spinner></ngx-spinner>
+<section class="driverbooking_top user_information">
+    <h2 class="headinginfo">ADD VEHICLE <span>(s)</span></h2>
+    <div class="containeredd">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="custom-btn add-button" (click)="addVehicleClick(vehicleTypeId)"
+                    tabindex="1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+                        viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path
+                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                    </svg> Add Vehicle
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="containeredd driverside_table">
+        <div class="row">
+            <div class="col-md-12 custom_table">
+                <div class="table-responsive">
+                    <table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+                        aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+                        <thead>
+                            <tr role="row">
+                                <th>Actions</th>
+                                <th>Image</th>
+                                <th>Vehicle Type</th>
+                                <th># of Vehicles</th>
+                                <th>Seats</th>
+                                <th>Year</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Color</th>
+                                <th>Amenities</th>
+                                <th>Plate #</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="vehicles">
+                                <tr *ngFor="let vehicle of vehicles;index as vehicle_index"
+                                    [attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd">
+                                    <td>
+                                        <a *ngIf="vehicle.isRatesCompleted; else pendingRates"
+                                            class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+                                            data-toggle="dropdown" id="navbarDropdownUserImage"
+                                            href="javascript:void(0);" role="button" aria-haspopup="true"
+                                            aria-expanded="false" tabindex="1"> <span>View</span>
+                                        </a>
+                                        <ng-template #pendingRates>
+                                            <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle notCompleted"
+                                                data-placement="bottom" title="Rates are not entered."
+                                                data-toggle="dropdown" id="navbarDropdownUserImage"
+                                                href="javascript:void(0);" role="button" aria-haspopup="true"
+                                                aria-expanded="false" tabindex="1"> <span>View</span>
+                                            </a>
+                                        </ng-template>
+                                        <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                                            aria-labelledby="navbarDropdownUserImage">
+                                            <a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)"
+                                                style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;">
+                                                <div class="dropdown-item-icon"></div>
+                                                Edit Vehicle
+                                            </a>
+                                            <a class="dropdown-item"
+                                                style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
+                                                [ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
+                                                (click)="clickEditVehicleRates(vehicle.ID)">
+                                                <div class="dropdown-item-icon"></div>
+                                                Edit Rates
+                                            </a>
+                                            <!-- <a class="dropdown-item" *ngIf="canAddVehicle"
+                                                style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
+                                                (click)="clickedDuplicateVehicle(vehicle.ID)">
+                                                <div class="dropdown-item-icon"></div>
+                                                Duplicate Vehicle
+                                            </a> -->
+                                        </div>
+                                    </td>
+                                    <td><img src="{{vehicle.vehicleImage}}"></td>
+                                    <td class="vehicleFontDesign">{{vehicle.vehicleType}}</td>
+                                    <td class="vehicleFontDesign">{{vehicle.numberOfVehicles}}</td>
+                                    <td class="vehicleFontDesign">{{vehicle.seats}}</td>
+                                    <td class="vehicleFontDesign">{{vehicle.year}}</td>
+                                    <td class="vehicleFontDesign">{{vehicle.make}}</td>
+                                    <td class="vehicleFontDesign">{{vehicle.model}}</td>
+                                    <td class="vehicleFontDesign">{{vehicle.color}}</td>
+                                    <td><button (click)="updateAmenityList(vehicle.amenities)"
+                                            class="button2 box-shadow" tabindex="1">Amenities</button></td>
+                                    <td class="vehicleFontDesign">{{vehicle.licensePlate}}</td>
+                                    <td>
+                                        <i class="fa fa-trash box-shadow" style="font-size: x-large; color:#d64646"
+                                            (click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
+                                            data-target="#deleteConfirmationModal"></i>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="!vehicles?.length">
+                                    <td colspan="12">No vehicle found!</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- </main> -->
+
+<app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
+
+<!-- Amenity list modal -->
+<div class="modal fade" id="amenityListModal" tabindex="-1" role="dialog" aria-labelledby="amenityListModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <ul class="mb-0">
+                    <li *ngFor="let amenity of amenityList">{{amenity}}</li>
+                </ul>
+            </div>
+            <div class="modal-footer py-0">
+                <button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
