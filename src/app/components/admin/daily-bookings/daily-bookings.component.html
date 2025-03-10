@@ -68,17 +68,17 @@
 				<!-- Search Button -->
 				<div class="align-btn d-flex justify-content-around" style="margin-top: 15px;">
 					<div class="col-sm-2 ml-n5">
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
-							Search
-						</button>
-					</div>
-					<div class="col-sm-2">
 						<button class="custom-filled-back-button"
 							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
 							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
 							Reset
+						</button>
+					</div>
+					<div class="col-sm-2">
+						<button class="custom-filled-button orange-button"
+							style="color:#fff;padding: 5px 12px !important;"
+							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
+							Search
 						</button>
 					</div>
 				</div>
@@ -139,10 +139,10 @@
 							<thead>
 								<tr role="row">
 									<th>Actions</th>
+									<th>Date</th>
 									<th>Booking</th>
 									<th>Total</th>
 									<th>Status</th>
-									<th>Date</th>
 									<th>Pax</th>
 									<th>Driver</th>
 									<th>Created By</th>
@@ -261,17 +261,6 @@
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>
-											<a class="dropdown-item" (click)="refundAction(booking?.stripe_refund_url)"
-												*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
-												<div class="dropdown-item-icon"></div>
-												Refund
-											</a>
-											<a class="dropdown-item"
-												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
-												*ngIf="currentUser?.roleName == 'admin' ">
-												<div class="dropdown-item-icon"></div>
-												View Client Cards
-											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal"
 												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
@@ -279,9 +268,28 @@
 												Audit Trial
 											</a>
 
+											<a class="dropdown-item"
+												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
+												*ngIf="currentUser?.roleName == 'admin' ">
+												<div class="dropdown-item-icon"></div>
+												View Client Cards
+											</a>
+											<a class="dropdown-item" (click)="refundAction(booking?.stripe_refund_url)"
+												*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
+												<div class="dropdown-item-icon"></div>
+												Refund
+											</a>
+
 										</div>
 									</td>
 
+									<td class="sorting_1">
+										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
+										</p>
+										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
+										</p>
+										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
+									</td>
 									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
 										data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking?.booking_id)">
@@ -308,13 +316,6 @@
 											booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
 										</div>
-									</td>
-									<td class="sorting_1">
-										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
