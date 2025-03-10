@@ -4,19 +4,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
 
 import { MapsAPILoader } from '@agm/core';
-import { AdminService } from 'src/app/services/admin.service';
-import { SharedModule } from 'src/app/components/shared/shared.module'
+import { AdminService } from '../../../services/admin.service';
+import { SharedModule } from '../../shared/shared.module'
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
-import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { param } from 'jquery';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from '../../../services/common.service';
 import { HttpClient } from '@angular/common/http';
-import {constant_data} from 'src/assets/js/data.js';
+import {constant_data} from '../../../../assets/js/data';
 
 declare var $: any
 @Component({
@@ -1418,10 +1418,22 @@ export class NewBookingComponent implements OnInit {
 		this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
 	}
 
+	chooseLooseAffiliate() {
+		// console.warn('Fetching Affiliate vehicles and drivers')
+		this.fetchLooseAffiliateVehicles(this.BookingForm.get('loose_affiliate_id').value)
+		// this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
+	}
+
 	chooseReturnAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchReturnAffiliateVehicles(this.BookingForm.get('return_affiliate_id').value)
 		this.fetchReturnAffiliateDrivers(this.BookingForm.get('return_affiliate_id').value)
+	}
+
+	chooseReturnLooseAffiliate() {
+		// console.warn('Fetching Affiliate vehicles and drivers')
+		this.fetchReturnLooseAffiliateVehicles(this.BookingForm.get('return_loose_affiliate_id').value)
+		// this.fetchReturnAffiliateDrivers(this.BookingForm.get('return_affiliate_id').value)
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
@@ -1593,6 +1605,66 @@ export class NewBookingComponent implements OnInit {
 		})
 	}
 
+	fetchLooseAffiliateVehicles(affiliate_id: any) {
+		if (!affiliate_id) {
+			console.error('Invalid Paramater affiliate_data', affiliate_id)
+			return
+		}
+		this.$spinner.show()
+		this.$api.adminLooseAffVehList(affiliate_id, false).then((response: any) => {
+			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
+			if (response.success && response.data.vehicleList.length > 0) {
+				this.VehicleList = response.data.vehicleList
+				// add a key with formatted name to every value
+				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+				// autofill data if isRatesCompleted:true
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				for (let i = 0; i < this.VehicleList.length; i++) {
+					if (this.VehicleList[i].isRatesCompleted) {
+						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+						if (affiliate_id == this.firstLoadAffiliateId) {
+							if (this.VehicleList[i].ID == this.firstLoadVehicleId) {
+								console.log('selected vehicle on first load---------------------------------->>>>>', this.VehicleList[i])
+								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+								this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
+								this.unique_key = this.VehicleList[i].unique_key
+								this.handleSelectVehicleType(this.VehicleList[i])
+								// this.autofillData('vehicle', this.VehicleList[i]);
+								break;
+							}
+						}
+						else {
+							console.log('new affiliate seleted')
+							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+							this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+							this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
+							this.unique_key = this.VehicleList[i].unique_key
+							this.handleSelectVehicleType(this.VehicleList[i])
+							// this.autofillData('vehicle', this.VehicleList[i]);
+							break;
+						}
+
+					}
+				}
+				// if (this.VehicleList.length == 1) {
+				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
+				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+				// 	this.autofillData('vehicle', this.VehicleList[0]);
+				// }
+				// else if(this.VehicleList.length){
+				// 	// need to re-code this condition #just a patch
+				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
+				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+				// 	this.autofillData('vehicle', this.VehicleList[0]);
+				// }
+			}
+			this.$spinner.hide()
+		})
+	}
+
 	fetchReturnAffiliateVehicles(return_affiliate_id: any) {
 		if (!return_affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
@@ -1600,6 +1672,66 @@ export class NewBookingComponent implements OnInit {
 		}
 		this.$spinner.show()
 		this.$api.adminAffiliateVehicleList(return_affiliate_id, false).then((response: any) => {
+			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
+			if (response.success && response.data.vehicleList.length > 0) {
+				this.return_VehicleList = response.data.vehicleList
+				// add a key with formatted name to every value
+				this.return_VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+				// autofill data if isRatesCompleted:true
+				this.return_vehicleType_arr = this.return_VehicleList = this.return_vehicleMake_arr = this.return_VehicleList = this.return_vehicleModal_arr = this.return_VehicleList = this.return_vehicleYear_arr = this.return_VehicleList = this.return_vehicleColor_arr = this.return_VehicleList
+				for (let i = 0; i < this.return_VehicleList.length; i++) {
+					if (this.return_VehicleList[i].isRatesCompleted) {
+						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.return_VehicleList[i].vehicleType)['id']
+						if (return_affiliate_id == this.firstLoadAffiliateId) {
+							if (this.return_VehicleList[i].ID == this.firstLoadVehicleId) {
+								console.log('selected vehicle on first load---------------------------------->>>>>', this.return_VehicleList[i])
+								this.SetFormValue('return_vehicle_id', this.return_VehicleList[i].ID);
+								this.SetFormValue('return_vehicle_type', this.return_VehicleList[i].vehicleType_id)
+								this.SetFormValue('return_vehicle_type_name', this.return_VehicleList[i].vehicleType)
+								this.return_unique_key = this.return_VehicleList[i].return_unique_key
+								this.handleReturnSelectVehicleType(this.return_VehicleList[i])
+								// this.autofillData('vehicle', this.return_VehicleList[i]);
+								break;
+							}
+						}
+						else {
+							console.log('new affiliate seleted')
+							this.SetFormValue('return_vehicle_id', this.return_VehicleList[i].ID);
+							this.SetFormValue('return_vehicle_type', this.return_VehicleList[i].vehicleType_id)
+							this.SetFormValue('return_vehicle_type_name', this.return_VehicleList[i].vehicleType)
+							this.return_unique_key = this.return_VehicleList[i].return_unique_key
+							this.handleReturnSelectVehicleType(this.return_VehicleList[i])
+							// this.autofillData('vehicle', this.VehicleList[i]);
+							break;
+						}
+
+					}
+				}
+				// if (this.VehicleList.length == 1) {
+				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
+				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+				// 	this.autofillData('vehicle', this.VehicleList[0]);
+				// }
+				// else if(this.VehicleList.length){
+				// 	// need to re-code this condition #just a patch
+				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
+				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+				// 	this.autofillData('vehicle', this.VehicleList[0]);
+				// }
+			}
+			this.$spinner.hide()
+		})
+	}
+
+	fetchReturnLooseAffiliateVehicles(return_affiliate_id: any) {
+		if (!return_affiliate_id) {
+			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
+			return
+		}
+		this.$spinner.show()
+		this.$api.adminLooseAffVehList(return_affiliate_id, false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.return_VehicleList = response.data.vehicleList
@@ -2979,10 +3111,37 @@ export class NewBookingComponent implements OnInit {
 			}
 		})
 
+		this.BookingForm.get('loose_affiliate_id').valueChanges.subscribe((value: number) => {
+			console.log("in affiliate info", this.booking_created_from)
+			if (value && this.booking_created_from == 'admin') {
+				console.log("in affiliate info")
+				this.chooseLooseAffiliate()
+				// this.fetchAffiliateInformation(value)
+				// if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
+				// 	this.scroll('booking_detail_section')
+				// }
+				// if (this.BookingForm.get('service_type').value == 'round_trip') {
+				// 	this.BookingForm.patchValue({
+				// 		return_affiliate_id: value
+				// 	})
+				// }
+			}
+		})
+
 		this.BookingForm.get('return_affiliate_id').valueChanges.subscribe((value: number) => {
 			if (value && this.booking_created_from == 'admin') {
 				this.chooseReturnAffiliate()
 				this.fetchReturnAffiliateInformation(value)
+				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
+					this.scroll('booking_detail_section')
+				}
+			}
+		})
+
+		this.BookingForm.get('return_loose_affiliate_id').valueChanges.subscribe((value: number) => {
+			if (value && this.booking_created_from == 'admin') {
+				this.chooseReturnLooseAffiliate()
+				// this.fetchReturnAffiliateInformation(value)
 				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
 					this.scroll('booking_detail_section')
 				}
