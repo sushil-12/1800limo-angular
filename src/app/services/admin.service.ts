@@ -653,6 +653,7 @@ export class AdminService {
 	blackCarLimoBusAccountStatus(id, status) {
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-status', { 'id': id, 'status': status });
 	}
+	
 	acceptAffiliate(acc_id) {
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-approval', { 'acc_id': acc_id });
 	}
@@ -1426,6 +1427,10 @@ export class AdminService {
 	//send email to affiliate, customer etc
 	sendEmailToanyone(data) {
 		return this.httpClient.post(this.serverUrl + 'send-booking-details', data);
+	}
+
+	converCurrenyEnableDisable(status) {
+		return this.httpClient.post(this.serverUrl + 'convert_currency', { 'convert_currency': status });
 	}
 
 }

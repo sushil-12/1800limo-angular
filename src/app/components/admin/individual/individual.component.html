@@ -348,6 +348,7 @@
 							<th scope="col">Description</th>
 							<th scope="col">Content</th>
 							<th scope="col" id="date">Created Date</th>
+							<th scope="col">File</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -366,6 +367,11 @@
 									(click)="viewEmailContent(record?.encrypted_id)">View
 									Content</a></td>
 							<td *ngIf="record?.user_type != 'loose_affiliate'">{{record?.created_at}}</td>
+							<td *ngIf="record?.user_type != 'loose_affiliate' ">
+								<div *ngFor="let url of record?.file_urls">
+									<a [href]="url" target="_blank">{{ url }}</a>
+								</div>
+							</td>
 						</tr>
 
 						<!-- </ng-container> -->
