@@ -37,7 +37,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 	currentUser:any;
 	color: ThemePalette = 'primary';
 	disabled = false;
-	convertCurrenyResp:any;
+	convertCurrenyResp:any
 
 	constructor(
 		private adminService: AdminService,
@@ -63,6 +63,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 			});
 
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+		this.convertCurrenyResp = this.currentUser.convert_currency == 0 ? false : true 
 
 		//add vehicle type form validation
 		this.addVehicleTypeForm = this.formBuilder.group({
