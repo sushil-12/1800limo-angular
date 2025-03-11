@@ -3982,6 +3982,11 @@ export class NewBookingComponent implements OnInit {
 		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))
 	  }
 
+	  onSearchLooseAffiliateId(term,item){
+		console.log("term",term,"item",item)
+		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.toString().startsWith(term)
+	  }
+
 	  onSearchCancellation(term,item){
 		console.log("term",term,"item",item)
 	    return item.label.toLowerCase().startsWith(term.toLowerCase())
