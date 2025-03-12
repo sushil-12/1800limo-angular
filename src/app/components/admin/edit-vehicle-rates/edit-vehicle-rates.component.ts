@@ -172,8 +172,12 @@ export class EditVehicleRatesComponent implements OnInit {
 							hours_day_rate: this.response.data.hours_day_rate,
 							day_rate: this.response.data.day_rate,
 							milage_rate: this.response.data.milage_rate,
+							upto_miles: this.response.data.upto_miles,
+							after_mileage_rate: this.response.data.after_mileage_rate,
 							km_mile: this.response.data.km_mile,
 							kilometer_rate: this.response.data.kilometer_rate,
+							upto_km: this.response.data.upto_km,
+							after_kilometer_rate: this.response.data.after_kilometer_rate,
 							minimum_airport_departure_rate: this.response.data.minimum_airport_departure_rate,
 							minimum_airport_arrival_rate: this.response.data.minimum_airport_arrival_rate,
 							minimum_city_rate: this.response.data.minimum_city_rate,
@@ -236,7 +240,11 @@ export class EditVehicleRatesComponent implements OnInit {
 			day_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			km_mile: ['mile', Validators.required],
 			milage_rate: ['', [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
+			upto_miles: ['', [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
+			after_mileage_rate: ['', [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
 			kilometer_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			upto_km: ['', [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
+			after_kilometer_rate: ['', [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_city_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -315,7 +323,7 @@ export class EditVehicleRatesComponent implements OnInit {
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
 	initRateRangeObject(): boolean {
-		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours',
+		let form_control_names = ['milage_rate','upto_miles','after_mileage_rate','upto_km','after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours',
 			'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate',
 			'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'in_town_extra_stop', 'outside_town_extra_stop',
 			'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
@@ -473,17 +481,33 @@ export class EditVehicleRatesComponent implements OnInit {
 				this.milage_rate_selected = false;
 				console.log('set validator for km')
 				this.addVehicleRatesForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72), Validators.max(15)]); // Set back the validator
+				this.addVehicleRatesForm.get('upto_km')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]); // Set back the validator
+				this.addVehicleRatesForm.get('after_kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72), Validators.max(15)]); // Set back the validator	
 				this.addVehicleRatesForm.get('milage_rate')?.clearValidators(); // Clear the validator
+				this.addVehicleRatesForm.get('upto_miles')?.clearValidators(); // Clear the validator
+				this.addVehicleRatesForm.get('after_mileage_rate')?.clearValidators(); // Clear the validator
 				this.addVehicleRatesForm.get('kilometer_rate')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('upto_km')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('after_kilometer_rate')?.updateValueAndValidity();
 				this.addVehicleRatesForm.get('milage_rate')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('upto_miles')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('after_mileage_rate')?.updateValueAndValidity();
 				break;
 			}
 			case 'mile': {
 				this.milage_rate_selected = true;
 				this.addVehicleRatesForm.get('milage_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(2.1), Validators.max(15)]); // Set back the validator
+				this.addVehicleRatesForm.get('upto_miles')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]); // Set back the validator
+				this.addVehicleRatesForm.get('after_mileage_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(2.1), Validators.max(15)]); // Set back the validator
 				this.addVehicleRatesForm.get('kilometer_rate')?.clearValidators();
-				this.addVehicleRatesForm.get('milage_rate')?.updateValueAndValidity()
+				this.addVehicleRatesForm.get('upto_km')?.clearValidators();
+				this.addVehicleRatesForm.get('after_kilometer_rate')?.clearValidators();
+				this.addVehicleRatesForm.get('milage_rate')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('upto_miles')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('after_mileage_rate')?.updateValueAndValidity();
 				this.addVehicleRatesForm.get('kilometer_rate')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('upto_km')?.updateValueAndValidity();
+				this.addVehicleRatesForm.get('after_kilometer_rate')?.updateValueAndValidity();
 				break;
 			}
 		}
