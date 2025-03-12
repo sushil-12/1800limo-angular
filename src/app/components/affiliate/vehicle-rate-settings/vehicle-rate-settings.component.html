@@ -170,7 +170,7 @@
 			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'">
 				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
 					<mat-label>Upto x miles<span class="asterisk">*</span></mat-label>
-					<mat-select formControlName="upto_km" tabindex="1" (onSelectionChange)="updateRateRangeObject()">
+					<mat-select formControlName="upto_miles" tabindex="1" (onSelectionChange)="updateRateRangeObject()">
 						<mat-option value="">Choose upto miles</mat-option>
 						<mat-option [value]="1">1</mat-option>
 						<mat-option [value]="2">2</mat-option>
@@ -191,14 +191,14 @@
 					<!-- <input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
 						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" /> -->
 				</mat-form-field>
-				<div *ngIf="form.upto_km.errors && (form.upto_km.touched || form.upto_km.errors)"
+				<div *ngIf="form.upto_miles.errors && (form.upto_miles.touched || form.upto_miles.errors)"
 					class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="form.upto_km.errors.required">This field is required</div>
+					<div *ngIf="form.upto_miles.errors.required">This field is required</div>
 				</div>
-				<div *ngIf="form.upto_km.errors" class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="form.upto_km.errors.pattern">Enter Numbers only</div>
-					<div *ngIf="form.upto_km.errors.min">Minimum value should be more than 2</div>
-					<div *ngIf="form.upto_km.errors.max">Rates are too expensive.</div>
+				<div *ngIf="form.upto_miles.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.upto_miles.errors.pattern">Enter Numbers only</div>
+					<div *ngIf="form.upto_miles.errors.min">Minimum value should be more than 2</div>
+					<div *ngIf="form.upto_miles.errors.max">Rates are too expensive.</div>
 				</div>
 				<!-- <div *ngIf="is_form_submitted && form.milage_rate.errors || form.milage_rate.touched && form.milage_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
