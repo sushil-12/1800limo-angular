@@ -281,6 +281,10 @@
 						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Running Total:
 							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
 						</p>
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Net Total:
+							<span
+								style="font-weight: 600;font-size: 22px;">${{net_total_amount.toLocaleString()}}</span>
+						</p>
 					</div>
 					<p class="text-danger text-lg" *ngIf="noError">
 						No Results Found.

@@ -105,6 +105,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// this.chargesForm.get('reservation_id').setValue(this.bookingId)
 					this.getBookingData()
 					this.paymentDetail(this.bookingId)
+					this.scroll('submitForm')
 				}
 			});
 		this.deleteCardForm = this.$form.group({
@@ -114,6 +115,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+	}
+
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView();
 	}
 
 
@@ -145,6 +152,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('primary cards--->>>>', this.primaryCards, this.primaryCards.length)
 				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
 				console.log('selected cards ----->>>', this.selectedCard)
+				setTimeout(() => {
+					this.scroll('submitForm')
+
+				}, 600)
 			})
 	}
 
