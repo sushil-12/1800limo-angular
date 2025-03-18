@@ -245,7 +245,7 @@ export class MyBookingsComponent implements OnInit {
 			}
 			this.totalRecords = this.bookingsRes?.data?.reservations?.total;
 			this.total_amount = this.bookingsRes?.data?.total_amount
-			this.net_total_amount = this.bookingsRes?.data?.net_total_amount
+			this.net_total_amount = this.bookingsRes?.data?.affiliate_total
 			this.noError = false
 			this.firstPage = 1;
 			this.lastPage = this.bookingsRes?.data?.reservations?.last_page;
