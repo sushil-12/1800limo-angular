@@ -30,7 +30,7 @@
 					</ul>
 				</div>
 				<div class="col-lg-6 col-md-12 mt-lg-0 mt-4">
-					<ol class="alert alert-box alert-danger">
+					<ol class="alert alert-box alert-danger" style="padding-left: 1.8rem !important;">
 						<li>Enter an all-inclusive rate in each rate bucket with your desired gratuity and office fees.
 						</li>
 						<li>Raise or lower your rates in real time depending on demand or season.</li>
@@ -106,7 +106,7 @@
 		<div class="row">
 			<!-- RATE BUCKET: MILEAGE RATE -->
 			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
-				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+				<mat-form-field class="mat-form-field-rates " appearance="outline">
 					<mat-label>{{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<mat-select formControlName="milage_rate" tabindex="1"
@@ -169,7 +169,7 @@
 				</div> -->
 			</div>
 			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'">
-				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+				<mat-form-field class="mat-form-field-rates " appearance="outline">
 					<mat-label>Upto x miles<span class="asterisk">*</span></mat-label>
 					<mat-select formControlName="upto_miles" tabindex="1" (onSelectionChange)="updateRateRangeObject()">
 						<mat-option value="">Choose upto miles</mat-option>
@@ -217,7 +217,7 @@
 				</div> -->
 			</div>
 			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'">
-				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+				<mat-form-field class="mat-form-field-rates " appearance="outline">
 					<mat-label>Additional {{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<mat-select formControlName="after_mileage_rate" tabindex="1"
@@ -283,7 +283,7 @@
 			<!-- RATE BUCKET: KILOMETER RATE -->
 			<ng-template #kilometer_rate>
 				<div class="col-md-4">
-					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>{{ currency_symbol }} per km
 							<span class="asterisk">*</span>
 						</mat-label>
@@ -348,7 +348,7 @@
 					</div> -->
 				</div>
 				<div class="col-md-4">
-					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Upto x kms<span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="upto_km" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
@@ -398,7 +398,7 @@
 					</div> -->
 				</div>
 				<div class="col-md-4">
-					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Additional {{ currency_symbol }} per km
 							<span class="asterisk">*</span>
 						</mat-label>

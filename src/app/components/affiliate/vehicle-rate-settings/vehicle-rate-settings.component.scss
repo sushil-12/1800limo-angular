@@ -224,6 +224,7 @@ div#rate-manager-slider {
 	.card-type {
 		padding: 0 !important;
 	}
+	:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.85)!important;width:133.3333333333%}
 }
 
 @media only screen and (max-width:575px) {
