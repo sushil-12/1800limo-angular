@@ -8,8 +8,8 @@
 	</div>
 	<section class="safety_wrapper">
 		<div class="container" *ngFor="let fleet of fleetContents">
-			<h3>{{fleet?.title}}</h3>
-			<p [innerHTML]="fleet?.content"></p>
+			<h3 *ngIf="fleet?.section_status == true">{{fleet?.title}}</h3>
+			<p [innerHTML]="fleet?.content" *ngIf="fleet?.section_status == true"></p>
 		</div>
 	</section>
 	<!----OUR CLIENTS------------->
