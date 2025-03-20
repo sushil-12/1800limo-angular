@@ -25,7 +25,7 @@ export class FooterComponent implements OnInit {
 	public accountStatus: string = "";
 	splitSteps: any;
 
-	QRimage = "assets/images/QRimage.png";
+	QRimage = "assets/images/QRimage.jpg";
 	constructor(
 		private authService: AuthService,
 		private spinner: NgxSpinnerService,

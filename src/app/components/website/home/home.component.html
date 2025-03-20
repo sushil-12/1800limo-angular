@@ -21,10 +21,8 @@
 							}}</h2>
 					</div>
 					<!-- MOBILE -->
-					<div class="text_mobile">
-						<button (click)="joinButton()" class="three-d-button" style="margin-bottom: 15px;">
-							Buy Chauffeur Select Software
-						</button>
+					<div class="text_mobile" style="margin-bottom: 20px !important;">
+
 						<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
 							<button class="nav-link dropdown-toggle custom-filled-button" href="#" id="dropdown05"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -158,15 +156,6 @@
 							fetchPageData('1-800-limo.com')?.subtitle }}<br>
 							{{ fetchPageData('1-800-limo.com')?.content }}</h2> -->
 					</div>
-				</div>
-			</div>
-
-			<div class="quoteform_homewrapper telephone_mobile">
-				<a href="tel:+18005466266" class="cell-no" tabindex="-1"><i class="fas fa-phone-alt"
-						aria-hidden="true"></i>
-					+1-800-5466.266</a>
-				<div class="g-translator mt-2">
-					<div id="google_translate_element_home_mobile"></div>
 				</div>
 			</div>
 
@@ -1007,9 +996,23 @@
 							Policy</a>
 					</div>
 				</div>
+				<div class="text_mobile">
+					<button (click)="joinButton()" class="three-d-button" style="margin-top: 18px;">
+						Buy Chauffeur Select Software
+					</button>
+					<div class="quoteform_homewrapper telephone_mobile"
+						style="border-bottom: none !important; margin: 0 !important;">
+						<a href="tel:+18005466266" class="cell-no" tabindex="-1"><i class="fas fa-phone-alt"
+								aria-hidden="true"></i>
+							+1-800-5466.266</a>
+						<div class="g-translator mt-2">
+							<div id="google_translate_element_home_mobile"></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<br>
+		<!-- <br> -->
 	</div>
 	<div id="ourfleet"></div>
 </section>
