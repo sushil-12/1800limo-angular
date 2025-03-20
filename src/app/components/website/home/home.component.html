@@ -15,7 +15,8 @@
 							</button>
 						</div>
 						<!-- DESKTOP -->
-						<h2><span tabindex="-1">{{ fetchPageData('1-800-limo.com')?.title }}</span> {{
+						<h2 *ngIf="fetchPageData('1-800-limo.com')?.section_status == 'enable' "><span tabindex="-1">{{
+								fetchPageData('1-800-limo.com')?.title }}</span> {{
 							fetchPageData('1-800-limo.com')?.subtitle }}<br> {{ fetchPageData('1-800-limo.com')?.content
 							}}</h2>
 					</div>
@@ -1014,7 +1015,8 @@
 </section>
 
 <!------------------VIEW OUR VEHICLES------------------------------->
-<section class="checkourveh_wrapper" style="background-color: black !important;">
+<section class="checkourveh_wrapper" style="background-color: black !important;"
+	*ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
 	<div class="container">
 		<h2 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
 		<hr>
@@ -1034,7 +1036,7 @@
 <!------------------OUR MISSION------------------------------->
 <section class="personalized_wrapper" id="section-services">
 	<div class="container">
-		<div class="ourmisservice_wrap">
+		<div class="ourmisservice_wrap" *ngIf="fetchPageData('OUR MISSION')?.section_status == 'enable' ">
 			<div class="ourmission_wrapper" appScrollToSection>
 				<h2>{{ fetchPageData('OUR MISSION')?.title }}</h2>
 				<hr>
@@ -1042,18 +1044,22 @@
 			</div>
 
 
-			<div class="ourservice_wrapper" appScrollToSection>
+			<div class="ourservice_wrapper" appScrollToSection
+				*ngIf="fetchPageData('OUR GLOBAL SERVICES')?.section_status == 'enable' ">
 				<h2 id="ourservice_wrapper">{{ fetchPageData('OUR GLOBAL SERVICES')?.title }}</h2>
 				<hr>
 				<p>{{ fetchPageData('OUR GLOBAL SERVICES')?.content }}</p>
 			</div>
 
 		</div>
-		<h2>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.title }}</h2>
+		<h2 *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">{{
+			fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.title }}</h2>
 		<hr>
-		<h6>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
+		<h6 *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">{{
+			fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
 
-		<div class=" whychoosemidle">
+		<div class=" whychoosemidle"
+			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<h6>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.content }}</h6>
 			<!-- Desktop -->
 			<div class="row">
@@ -1065,7 +1071,8 @@
 		</div>
 
 		<div class="item"></div>
-		<div class="owl-carousel owl-theme destinationCarousel">
+		<div class="owl-carousel owl-theme destinationCarousel"
+			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<div class="item"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
 				<img src="{{sliderData?.image}}" alt="a1">
@@ -1078,7 +1085,7 @@
 		</div>
 	</div>
 </section>
-<section class="whychoose_wrapper">
+<section class="whychoose_wrapper" *ngIf="fetchPageData('WHY CHOOSE US')?.section_status == 'enable' ">
 	<div class="container why_container">
 		<h2>{{ fetchPageData('WHY CHOOSE US')?.title }}</h2>
 		<hr>
@@ -1125,7 +1132,7 @@
 	</div>
 </section>
 <!---------------RIDE NOW--------------------------->
-<section class="ridenow_wrapper">
+<section class="ridenow_wrapper" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
@@ -1142,7 +1149,8 @@
 	</div>
 </section>
 <!----OUR CLIENTS------------->
-<section class="client_wrapper client_wrapper_desktop">
+<section class="client_wrapper client_wrapper_desktop"
+	*ngIf="fetchPageData('SOME OF OUR CLIENTS')?.section_status == 'enable' ">
 	<div class="container">
 		<h2>{{ fetchPageData('SOME OF OUR CLIENTS')?.title }}
 		</h2>
