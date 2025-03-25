@@ -979,7 +979,7 @@
 									</button>
 								</div>
 							</div>
-							<span style="margin-bottom: 5px !important;">1 large bag = 2 carry-on</span>
+							<span style="margin-bottom: 5px !important;">2 carry on = 1 large bag</span>
 
 							<!-- 
 								Quotebot Form ends
@@ -1021,8 +1021,8 @@
 <section class="checkourveh_wrapper" style="background-color: black !important;"
 	*ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
 	<div class="container">
-		<h2 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
 		<hr>
+		<h2 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
 		<h6 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
 		<div class="chk_vehicles_parent">
 			<div class="chk_vehicles owl-carousel owl-theme viewVehicleCarousel">
@@ -1048,7 +1048,8 @@
 
 
 			<div class="ourservice_wrapper" appScrollToSection
-				*ngIf="fetchPageData('OUR GLOBAL SERVICES')?.section_status == 'enable' ">
+				*ngIf="fetchPageData('OUR GLOBAL SERVICES')?.section_status == 'enable' "
+				style="background-color: lightgray !important;">
 				<h2 id="ourservice_wrapper">{{ fetchPageData('OUR GLOBAL SERVICES')?.title }}</h2>
 				<hr>
 				<p>{{ fetchPageData('OUR GLOBAL SERVICES')?.content }}</p>

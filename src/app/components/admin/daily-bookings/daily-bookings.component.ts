@@ -86,6 +86,7 @@ export class DailyBookingsComponent implements OnInit {
 	uploadedFile: any;
 	deducted_stripe_fee:any;
 	total_amount:any;
+	admin_total:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -635,6 +636,7 @@ export class DailyBookingsComponent implements OnInit {
 					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 				}
 				this.total_amount = this.bookingsRes?.data?.total_amount
+				this.admin_total = this.bookingsRes?.data?.admin_total
 				this.totalRecords = this.bookingsRes.data?.reservations?.total;
 				this.firstPage = 1;
 				this.lastPage = this.bookingsRes.data?.reservations?.last_page;
@@ -676,6 +678,7 @@ export class DailyBookingsComponent implements OnInit {
 					}
 					this.totalRecords = this.bookingsRes.data?.reservations?.total;
 					this.total_amount = this.bookingsRes?.data?.total_amount
+					this.admin_total = this.bookingsRes?.data?.admin_total
 					this.firstPage = 1;
 					this.lastPage = this.bookingsRes.data?.reservations?.last_page;
 					this.totalPage = this.bookingsRes.data?.reservations?.last_page;
@@ -722,6 +725,7 @@ export class DailyBookingsComponent implements OnInit {
 					this.bookingsRes.data?.reservations?.data
 				);
 				this.total_amount = this.bookingsRes?.data?.total_amount
+				this.admin_total = this.bookingsRes?.data?.admin_total
 				this.totalRecords = this.bookingsRes.data?.reservations?.total;
 				this.firstPage = 1;
 				this.lastPage = this.bookingsRes.data?.reservations?.last_page;

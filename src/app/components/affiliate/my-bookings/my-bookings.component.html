@@ -737,6 +737,21 @@
 					<h5 class="font-weight-bolder m-0">
 						Travel Information
 					</h5>
+					<!-- Number of Hours -->
+					<div *ngIf="bookingPreview.service_type == 'Charter Tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ bookingPreview.number_of_hours }}
+								</span>
+							</div>
+						</div>
+					</div>
 					<!-- Pickup -->
 					<h6 class="m-0 my-2">
 						Pickup Details
