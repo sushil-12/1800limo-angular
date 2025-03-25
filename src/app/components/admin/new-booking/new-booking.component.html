@@ -3747,6 +3747,21 @@
 					<h5 class="font-weight-bolder m-0">
 						Travel Information
 					</h5>
+					<!-- Number of Hours -->
+					<div *ngIf="Form.service_type.value == 'charter_tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ Form.number_of_hours.value }}
+								</span>
+							</div>
+						</div>
+					</div>
 					<!-- Pickup -->
 					<h6 class="m-0 my-2">
 						Pickup Details
