@@ -118,23 +118,28 @@ a.dropdown-item {
 }
 
 .headingAccepted {
-    font-size: 20px;
+    font-size: 18px;
     color: #00bd1f;
 }
 
 .headingInProgress {
-    font-size: 20px;
+    font-size: 18px;
     color: #0474fc;
 }
 
 .headingRejected {
-    font-size: 20px;
+    font-size: 18px;
     color: #fc0404;
 }
 
 .headingStripe {
-    font-size: 20px;
+    font-size: 18px;
     color: #ff69b4;
+}
+
+.headingStep1 {
+    font-size: 18px;
+    color: #636567;
 }
 
 .accpet_reject_div {
@@ -174,4 +179,15 @@ a.dropdown-item {
 .disabled {
     pointer-events: none;
     background-color: #a2a3a2 !important;
+}
+
+.headings_count{
+    gap: 10px;
+}
+
+@media screen and (max-width:767px) {
+    .headings_count{
+        flex-direction: column;
+        gap: 0px;
+    }
 }

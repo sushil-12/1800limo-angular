@@ -47,6 +47,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   show: boolean;
   allSelected = false;
   emails = new FormControl('');
+  phone_numbers = new FormControl();
   audit_Trail: any = [];
   public sendMessageForm: FormGroup;
   fileUrl: any;
@@ -167,8 +168,12 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       subject: "",
       text_message: ''
     })
+    this.emails.setValue('')
+    this.phone_numbers.setValue('')
+
     this.show = false
     $("#sendEmailModal").modal("hide");
+    $("#sendsmsModal").modal("hide");
   }
 
   selectAll() {
@@ -184,6 +189,52 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   stringifyOption(option: any): string {
     return JSON.stringify({ id: option.id, email: option.email });
   }
+
+
+	selectAllNumbers() {
+		if (this.allSelected) {
+			this.phone_numbers.patchValue([]);
+		} else {
+			const allValues = this.LooseAffiliateAcc.map(option => this.stringifyOptionNumber(option));
+			this.phone_numbers.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOptionNumber(option: any): string {
+		return JSON.stringify({ id: option.id, phoneNumber: (option?.phone_isd + option?.phone) });
+	}
+
+
+	sendEmailSms(){
+		this.spinner.show()
+		let body = {
+			message: this.sendEmailForm.get('text_message')?.value,
+			recipents: this.phone_numbers.value,
+      account_type: 'loose_affiliate',
+		}
+		console.log("in sms",body)
+
+		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+			this.errorDialog.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+			console.log("response-------->", response)
+		})
+
+		this.show = false
+		this.sendEmailForm.patchValue({
+			text_message: ''
+		})
+		this.phone_numbers.setValue('');
+
+		$("#sendsmsModal").modal("hide");
+
+	}
+
   //submit email modal
   async sendEmail() {
     this.spinner.show()
