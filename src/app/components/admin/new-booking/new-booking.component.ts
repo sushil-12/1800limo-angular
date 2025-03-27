@@ -1364,13 +1364,16 @@ export class NewBookingComponent implements OnInit {
 				driver_cell: looseAffData?.driver_phone,
 				driver_email: looseAffData?.driver_email,
 				loose_affiliate_id: looseAffData?.id,
-				is_old_loose_affiliate: true
+				is_old_loose_affiliate: true,
+				driver_cell_isd:looseAffData?.driver_isd,
+				driver_cell_country:looseAffData?.driver_phone_country
 			})
 			this.SetFormValue('lose_affiliate_name', looseAffData?.driver_name)
 			this.SetFormValue('lose_affiliate_phone', looseAffData?.driver_phone)
 			this.SetFormValue('lose_affiliate_email', looseAffData?.driver_email)
 			this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
+			this.loseAffiliateTelInput.setCountry(looseAffData?.driver_phone_country);
 		}
 		else {
 			this.BookingForm?.patchValue({
