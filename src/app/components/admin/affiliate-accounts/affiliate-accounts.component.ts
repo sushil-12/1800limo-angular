@@ -21,6 +21,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	@ViewChild('fileInput1') fileInput1!: ElementRef;
 	@ViewChild('message') message!: ElementRef;
 	emails = new FormControl();
+	phone_numbers = new FormControl();
 	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -29,6 +30,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	public paramResponse: any;
 	public affiliate_accounts: any;
 	public affiliate_accounts_emails: any = [];
+	public affiliate_accounts_numbers: any = [];
 	public affiliateType: string;
 	public heading: string;
 	public addButton: string;
@@ -209,6 +211,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
 			this.affiliate_accounts_emails = this.affiliate_accounts.filter(item => item.Email !== null)
+			this.affiliate_accounts_numbers = this.affiliate_accounts.filter(item => item.CellNumber !== null)
 			this.affiliate_accounts = this.affiliate_accounts.map(i => {
 				if (i?.LanguagesSpoken) {
 					console.log("in language iffff")
@@ -484,8 +487,11 @@ export class AffiliateAccountsComponent implements OnInit {
 			subject: "",
 			text_message: ''
 		})
+		this.emails.setValue('');
+		this.phone_numbers.setValue('');
 		this.show = false
 		$("#sendEmailModal").modal("hide");
+		$("#sendsmsModal").modal("hide");
 	}
 
 	selectAll() {
@@ -500,6 +506,20 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	stringifyOption(option: any): string {
 		return JSON.stringify({ id: option.id, email: option.Email });
+	}
+
+	selectAllNumbers() {
+		if (this.allSelected) {
+			this.phone_numbers.patchValue([]);
+		} else {
+			const allValues = this.affiliate_accounts_numbers.map(option => this.stringifyOptionNumber(option));
+			this.phone_numbers.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOptionNumber(option: any): string {
+		return JSON.stringify({ id: option.id, phoneNumber: (option?.CellIsd + option?.CellNumber) });
 	}
 
 	auditTrail(id: any) {
@@ -703,6 +723,33 @@ export class AffiliateAccountsComponent implements OnInit {
 		// 	this.fileType = this.uploadedFile['type'];
 		// 	console.log("file", this.fileName, this.fileType)
 		// }
+	}
+
+	sendEmailSms(){
+		this.spinner.show()
+		let body = {
+			message: this.sendEmailForm.get('text_message')?.value,
+			recipents: this.phone_numbers.value,
+		}
+		console.log("in sms",body)
+
+		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+			console.log("response-------->", response)
+		})
+
+		this.show = false
+		this.sendEmailForm.patchValue({
+			text_message: ''
+		})
+		this.phone_numbers.setValue('');
+
+		$("#sendsmsModal").modal("hide");
 	}
 
 }

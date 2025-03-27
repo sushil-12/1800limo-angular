@@ -44,6 +44,7 @@ export class IndividualComponent implements OnInit {
 	show: boolean;
 	allSelected = false;
 	emails = new FormControl('');
+	phone_numbers = new FormControl('');
 	audit_Trail: any = [];
 	fileUrl: String;
 	fileName: String;
@@ -161,8 +162,12 @@ export class IndividualComponent implements OnInit {
 			subject: "",
 			text_message: ''
 		})
+		this.emails.setValue('');
+		this.phone_numbers.setValue('');
+
 		this.show = false
 		$("#sendEmailModal").modal("hide");
+		$("#sendsmsModal").modal("hide");
 	}
 
 	selectAll() {
@@ -226,6 +231,49 @@ export class IndividualComponent implements OnInit {
 
 		$("#sendEmailModal").modal("hide");
 	}
+
+	selectAllNumbers() {
+		if (this.allSelected) {
+			this.phone_numbers.patchValue([]);
+		} else {
+			const allValues = this.individuals.map(option => this.stringifyOptionNumber(option));
+			this.phone_numbers.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOptionNumber(option: any): string {
+		return JSON.stringify({ id: option.id, phoneNumber: (option?.mobileIsd + option?.mobile) });
+	}
+
+
+	sendEmailSms(){
+		this.spinner.show()
+		let body = {
+			message: this.sendEmailForm.get('text_message')?.value,
+			recipents: this.phone_numbers.value,
+		}
+		console.log("in sms",body)
+
+		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+			this.errorDialog.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+			console.log("response-------->", response)
+		})
+
+		this.show = false
+		this.sendEmailForm.patchValue({
+			text_message: ''
+		})
+		this.phone_numbers.setValue('');
+
+		$("#sendsmsModal").modal("hide");
+	}
+
 
 	auditTrail(id: any) {
 		console.log("In function audit trail", id);

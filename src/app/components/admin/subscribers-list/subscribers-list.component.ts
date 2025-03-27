@@ -46,6 +46,7 @@ export class SubscribersListComponent implements OnInit {
 	show: boolean;
 	allSelected = false;
 	emails = new FormControl('');
+	phone_numbers= new FormControl('');
 	audit_Trail: any = [];
 	fileUrl: String;
 	fileName: String;
@@ -155,8 +156,12 @@ export class SubscribersListComponent implements OnInit {
 			subject: "",
 			text_message: ''
 		})
+		this.emails.setValue('')
+		this.phone_numbers.setValue('')
+
 		this.show = false
 		$("#sendEmailModal").modal("hide");
+		$("#sendsmsModal").modal("hide");
 	}
 
 	selectAll() {
@@ -172,6 +177,51 @@ export class SubscribersListComponent implements OnInit {
 	stringifyOption(option: any): string {
 		return JSON.stringify({ id: option.id, email: option.Email });
 	}
+
+
+	selectAllNumbers() {
+		if (this.allSelected) {
+			this.phone_numbers.patchValue([]);
+		} else {
+			const allValues = this.subs_emails.map(option => this.stringifyOptionNumber(option));
+			this.phone_numbers.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOptionNumber(option: any): string {
+		return JSON.stringify({ id: option.id, phoneNumber: (option?.CellIsd + option?.CellNumber) });
+	}
+
+
+	sendEmailSms(){
+		this.spinner.show()
+		let body = {
+			message: this.sendEmailForm.get('text_message')?.value,
+			recipents: this.phone_numbers.value,
+		}
+		console.log("in sms",body)
+
+		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+			this.errorDialog.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+			console.log("response-------->", response)
+		})
+
+		this.show = false
+		this.sendEmailForm.patchValue({
+			text_message: ''
+		})
+		this.phone_numbers.setValue('');
+
+		$("#sendsmsModal").modal("hide");
+
+	}
+
 
 	convertTextToHtml(text: string): string {
 		// Basic conversion of text to HTML
