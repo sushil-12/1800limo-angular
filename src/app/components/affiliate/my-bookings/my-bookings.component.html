@@ -95,7 +95,7 @@
 			<div>
 				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 						{{useDateFilter ? 'Uncheck to see current and future bookings' :
-						'Check to see bookings for 7 days or based upon dates and search by any term.' }}
+						'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
 					</mat-checkbox></p>
 			</div>
 		</div>
@@ -281,7 +281,7 @@
 						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Running Total:
 							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
 						</p>
-						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Net Total:
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Partner's Net Total:
 							<span
 								style="font-weight: 600;font-size: 22px;">${{net_total_amount.toLocaleString()}}</span>
 						</p>
