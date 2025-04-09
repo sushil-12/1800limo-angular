@@ -882,6 +882,18 @@ export class BookingComponent implements OnInit {
 	}
 
 
+	// Method to convert hours to days and hours
+	getCancellationTime(cancellationHours: number): string {
+		if (cancellationHours > 24) {
+		  const days = Math.floor(cancellationHours / 24);
+		  const remainingHours = cancellationHours % 24;
+		  return `${days} days ${remainingHours} hours`;
+		} else {
+		  return `${cancellationHours} hours`;
+		}
+	  }
+
+
 	sendEmailClicked(bookingId, emailTarget) {
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,

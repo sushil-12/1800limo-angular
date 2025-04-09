@@ -88,7 +88,7 @@
             <div>
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
                         {{useDateFilter ? 'Uncheck to see current and future bookings' :
-                        'Check to see bookings for 7 days or based upon dates and search by any term.' }}
+                        'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
                     </mat-checkbox></p>
             </div>
         </div>
@@ -698,7 +698,7 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                {{ bookingPreview?.cancellation_hours }} hours
+                                {{ getCancellationTime(bookingPreview.cancellation_hours) }}
                             </span>
                         </div>
                     </div>

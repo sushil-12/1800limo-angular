@@ -643,6 +643,17 @@ export class MyBookingsComponent implements OnInit {
     }
   }
 
+  // Method to convert hours to days and hours
+	getCancellationTime(cancellationHours: number): string {
+		if (cancellationHours > 24) {
+		  const days = Math.floor(cancellationHours / 24);
+		  const remainingHours = cancellationHours % 24;
+		  return `${days} days ${remainingHours} hours`;
+		} else {
+		  return `${cancellationHours} hours`;
+		}
+	  }
+
   previewRate(bookingId) {
     if (this.currentUser.roleName == 'sub_affiliate') {
       this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
