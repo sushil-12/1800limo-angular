@@ -623,7 +623,7 @@ export class DailyBookingsComponent implements OnInit {
 				this.orderBy
 			)
 			.then((result: any) => {
-				if (result?.data?.data == 0) {
+				if (result?.data?.reservations?.data == 0) {
 					this.noError = true;
 				}
 				let date = new Date();
@@ -664,7 +664,7 @@ export class DailyBookingsComponent implements OnInit {
 					this.orderBy
 				)
 				.then((result: any) => {
-					if (result?.data?.data == 0) {
+					if (result?.data?.reservations?.data == 0) {
 						this.noError = true;
 					}
 					let date = new Date();
@@ -717,7 +717,7 @@ export class DailyBookingsComponent implements OnInit {
 				this.orderBy
 			)
 			.then((result: any) => {
-				if (result?.data?.data == 0) {
+				if (result?.data?.reservations?.data == 0) {
 					this.noError = true;
 				}
 				this.bookingsRes = result;
