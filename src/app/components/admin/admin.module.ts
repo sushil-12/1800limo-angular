@@ -65,8 +65,7 @@ import { AffiliateStep5Component } from './affiliate-step5/affiliate-step5.compo
 import { AffiliateStep6Component } from './affiliate-step6/affiliate-step6.component';
 import { AddDriverComponent } from './add-driver/add-driver.component';
 
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
+
 import { BookingStatusTextReplacePipe } from 'src/app/pipes/booking-status-text-replace.pipe';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { SubAdminComponent } from './sub-admin/sub-admin.component';
@@ -130,7 +129,7 @@ import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-
 import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
-
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
 	declarations: [
@@ -243,8 +242,7 @@ import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loos
 		MatProgressBarModule,
 		MatSlideToggleModule,
 		Ng2TelInputModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+	    GoogleMapsModule,
 		MatNativeDateModule,
 		MatFormFieldModule,
 		MatInputModule,

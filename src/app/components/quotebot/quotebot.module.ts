@@ -24,8 +24,7 @@ import { AdminRoutingModule } from '../admin/admin-routing.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 @NgModule({
@@ -58,8 +57,7 @@ import { AgmDirectionModule } from 'agm-direction';
 		MatDialogModule,
 		MatProgressBarModule,
 		MatSlideToggleModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+		GoogleMapsModule
 	]
 })
 export class QuotebotModule { }

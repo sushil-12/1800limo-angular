@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,8 +13,8 @@ import { HttpClient } from '@angular/common/http';
 	templateUrl: './add-travel-planner-account.component.html',
 	styleUrls: ['./add-travel-planner-account.component.scss']
 })
-export class AddTravelPlannerAccountComponent implements OnInit
-{
+export class AddTravelPlannerAccountComponent implements OnInit {
+	@ViewChild('search1') search1!: ElementRef;
 
 	public addTravelPlannerAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -38,7 +37,6 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService,
 		private httpClient: HttpClient,
@@ -51,9 +49,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
+    geoCoder!: google.maps.Geocoder;
 
 	ngOnInit(): void
 	{
@@ -65,85 +61,6 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
 		})
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				this.ngZone.run(() =>
-				{
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					console.log(place);
-					this.addTravelPlannerAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng(),
-						address : place?.formatted_address
-					  });
-						for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
-								this.addTravelPlannerAccountForm.patchValue({
-									country: place.address_components[i].short_name
-								});
-								// this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.addTravelPlannerAccountForm.patchValue({
-									state: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-								this.addTravelPlannerAccountForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.addTravelPlannerAccountForm.patchValue({
-									zipCode: place.address_components[i].long_name
-								});
-							}
-							// else if (place.address_components[i].types[j] == "street_number") {
-							// 	this.addTravelPlannerAccountForm.patchValue({
-							// 		address: place.address_components[i].long_name
-							// 	});
-							// }
-						}
-					}
-					//Fill one way form pickup address fields
-					// this.addTravelPlannerAccountForm.patchValue({
-					// 	latitude: place.geometry.location.lat(),
-					// 	longitude: place.geometry.location.lng()
-					// });
-					// if (place.address_components[1])
-					// 	this.addTravelPlannerAccountForm.patchValue({
-					// 		city: place.address_components[1].long_name
-					// 	});
-					// if (place.address_components[2])
-					// 	this.addTravelPlannerAccountForm.patchValue({
-					// 		state: place.address_components[2].long_name
-					// 	});
-					// if (place.address_components[3])
-					// 	this.addTravelPlannerAccountForm.patchValue({
-					// 		country: place.address_components[3].long_name
-					// 	});
-					// if (place.address_components[4])
-					// 	this.addTravelPlannerAccountForm.patchValue({
-					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
-					// 	});
-				});
-				
-			});
-			
-		});
 
 		//add amenity form validation
 		this.buildTravelAgentForm()
@@ -226,6 +143,53 @@ export class AddTravelPlannerAccountComponent implements OnInit
 			name: [''],
 		});
 	}
+
+	ngAfterViewInit(): void {
+		this.geoCoder = new google.maps.Geocoder();
+	
+		const autocomplete = new google.maps.places.Autocomplete(
+		  this.search1.nativeElement,
+		  {
+			types: ['address'] // You can tweak this to 'address', etc.
+		  }
+		);
+	
+		autocomplete.addListener('place_changed', () => {
+		  this.ngZone.run(() => {
+			const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+			if (!place.geometry || !place.geometry.location) return;
+	
+			// Patch coordinates and formatted address
+			this.addTravelPlannerAccountForm.patchValue({
+			  latitude: place.geometry.location.lat(),
+			  longitude: place.geometry.location.lng(),
+			  address: place.formatted_address
+			});
+	
+			// Extract address components
+			place.address_components?.forEach(component => {
+			  const types = component.types;
+			  if (types.includes('country')) {
+				this.addTravelPlannerAccountForm.patchValue({
+				  country: component.short_name
+				});
+			  } else if (types.includes('administrative_area_level_1')) {
+				this.addTravelPlannerAccountForm.patchValue({
+				  state: component.long_name
+				});
+			  } else if (types.includes('administrative_area_level_3')) {
+				this.addTravelPlannerAccountForm.patchValue({
+				  city: component.long_name
+				});
+			  } else if (types.includes('postal_code')) {
+				this.addTravelPlannerAccountForm.patchValue({
+				  zipCode: component.long_name
+				});
+			  }
+			});
+		  });
+		});
+	  }
 
 
 	changeCountry(selectedCountryCode) {

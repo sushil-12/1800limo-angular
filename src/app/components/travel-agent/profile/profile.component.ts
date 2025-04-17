@@ -5,7 +5,6 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
-import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AffiliateService } from 'src/app/services/affiliate.service';
@@ -18,6 +17,9 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
+
   // timezone=new FormControl('')
   public profile_pic: any;
   public modalImage: string;
@@ -38,9 +40,6 @@ export class ProfileComponent implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
   response: any;
   defaultCountryCode: string;
   lastSegment: string;
@@ -51,7 +50,6 @@ export class ProfileComponent implements OnInit {
     private stateManagementService: StateManagementService,
     private formBuilder: FormBuilder,
     private customValidator: CustomvalidationService,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -108,59 +106,60 @@ export class ProfileComponent implements OnInit {
       this.yearOptions.push(currentYear + i);
     }
     this.buildProfileForm();
+
     //google map autocomplete
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          //Fill one way form pickup address fields
-          this.profileForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng(),
-            address:place?.formatted_address 
-          });
-          for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
-								this.profileForm.patchValue({
-									country: place.address_components[i].long_name
-								});
-								// this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.profileForm.patchValue({
-									state: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-								this.profileForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.profileForm.patchValue({
-									zip: place.address_components[i].long_name
-								});
-							}
-							// else if (place.address_components[i].types[j] == "street_number") {
-							// 	this.profileForm.patchValue({
-							// 		address: place.address_components[i].long_name
-							// 	});
-							// }
-						}
+		this.geoCoder = new google.maps.Geocoder();
+
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.profileForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.profileForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.profileForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.profileForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.profileForm.patchValue({
+							zipCode: component.long_name
+						});
 					}
-        });
-      });
-    });
+					// else if (types.includes('street_number')) {
+					// 	this.profileForm.patchValue({
+					// 		address: component.long_name
+					// 	});
+					// }
+				});
+			});
+		});
+		
+
     this.stateManagementService.setprogressBar(false);//hide progressbar
     if (this.currentUser?.is_profile_complete) {
       this.getProfileData()

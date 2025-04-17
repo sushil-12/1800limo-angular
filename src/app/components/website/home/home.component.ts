@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebsiteService } from '../../../services/website.service';
@@ -9,21 +8,13 @@ import { ErrorDialogService } from '../../../services/error-dialog/errordialog.s
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
-import { QuotebotService } from 'src/app/services/quotebot.service';
-
-import { SharedModule } from 'src/app/components/shared/shared.module';
-
-
+import { QuotebotService } from '../../../services/quotebot.service';
+import { SharedModule } from '../../../components/shared/shared.module';
 // data for select fields
-import { constant_data } from 'src/assets/js/data.js'
+import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
 
-
 declare var $: any;
-declare var SpinnerPicker: any
-
-
-
 
 @Component({
 	selector: 'app-home',
@@ -31,6 +22,11 @@ declare var SpinnerPicker: any
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+	@ViewChild('addressinput', { static: true }) addressinput!: ElementRef;
+	@ViewChild('dropaddressinput', { static: true }) dropaddressinput!: ElementRef;
+	@ViewChild('retaddressinput', { static: true }) retaddressinput!: ElementRef;
+	@ViewChild('retdropaddressinput', { static: true }) retdropaddressinput!: ElementRef;
+
 	vehicles: any;
 	vehiclesRes: any;
 	minDate = new Date();
@@ -40,8 +36,8 @@ export class HomeComponent implements OnInit {
 	modalType: string;
 	modalInformation: boolean = true;
 	selectedModal: string;
-	steps: string = "";
-	accountStatus: string = "";
+	steps: any = "";
+	accountStatus: any = "";
 	value: any;
 	splitSteps: any;
 	public innerWidth: any;
@@ -89,7 +85,6 @@ export class HomeComponent implements OnInit {
 
 
 	constructor(
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private formBuilder: FormBuilder,
 		private router: Router,
@@ -113,6 +108,12 @@ export class HomeComponent implements OnInit {
 	address: string;
 
 	ngOnInit() {
+
+		this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
+		this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
+		this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
+		this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
+
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
 
@@ -309,6 +310,42 @@ export class HomeComponent implements OnInit {
 
 	}
 
+	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
+		const autocomplete = new google.maps.places.Autocomplete(input, {
+			types: ['address']
+		});
+
+		autocomplete.addListener('place_changed', () => {
+			const place = autocomplete.getPlace();
+			if (!place.geometry) return;
+
+			const location = {
+				formatted_address: place.formatted_address,
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng()
+			};
+
+			this.onAutocompleteSelected(location, fieldName);
+			this.onLocationSelected(location, fieldName);
+		});
+	}
+
+	onAutocompleteSelected(location: any, fieldName: string) {
+		this.SetFormValue(fieldName, location.formatted_address);
+		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
+			this.fillReturnDetails();
+		}
+	}
+
+	onLocationSelected(location: any, fieldName: string) {
+		this.SetFormValue(`${fieldName}_lat`, location.latitude);
+		this.SetFormValue(`${fieldName}_long`, location.longitude);
+		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
+			this.fillReturnDetails();
+		}
+	}
+
+
 
 	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
@@ -416,25 +453,25 @@ export class HomeComponent implements OnInit {
 	 * @param event [any] Required. input event
 	 * @param field_name [string] Required. input field and key of the form
 	 */
-	onAutocompleteSelected(location: any, field_name: string) {
-		this.SetFormValue(field_name, location.formatted_address)
+	// onAutocompleteSelected(location: any, field_name: string) {
+	// 	this.SetFormValue(field_name, location.formatted_address)
 
-		// fill return address and airport for round trip
-		this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
-	}
+	// 	// fill return address and airport for round trip
+	// 	this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
+	// }
 
 	/**
 	 * fill the formatted address from google maps autocomplete
 	 * @param event [any] Required. input event
 	 * @param field_name [string] Required. input field and key of the form
 	 */
-	onLocationSelected(coordinates: any, field_name: string) {
-		this.SetFormValue(field_name + '_lat', coordinates['latitude'])
-		this.SetFormValue(field_name + '_long', coordinates['longitude'])
+	// onLocationSelected(coordinates: any, field_name: string) {
+	// 	this.SetFormValue(field_name + '_lat', coordinates['latitude'])
+	// 	this.SetFormValue(field_name + '_long', coordinates['longitude'])
 
-		this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
+	// 	this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
 
-	}
+	// }
 
 	/**
 	 * Fill Return Details for the form
@@ -685,31 +722,31 @@ export class HomeComponent implements OnInit {
 			this.airports_data_r_dropoff = JSON.parse(JSON.stringify(this.airports_data))
 		})
 	}
-	
+
 	returnSearchAirport(searchText: string) {
 		console.log('search text is->', searchText);
-	  
+
 		// Convert searchText to lowercase for case-insensitive comparison
 		const searchTextLower = searchText.toLowerCase();
-	  
+
 		// If the search term is exactly 3 characters, match it to the airport code (extracted from the 'airport' field)
 		if (searchText.length === 3) {
-		  return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-			// Extract the airport code (before the first dash) and match it with the search text
-			const airportCode = item['airport'].split('-')[0].toLowerCase();
-			return airportCode === searchTextLower;
-		  })));
+			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
+				// Extract the airport code (before the first dash) and match it with the search text
+				const airportCode = item['airport'].split('-')[0].toLowerCase();
+				return airportCode === searchTextLower;
+			})));
 		} else {
-		  // If the search term is longer than 3 characters, match it to the airport name or city
-		  return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-			// Match the search text against the airport name or city (case-insensitive)
-			return item['airport'].toLowerCase().includes(searchTextLower) ||   // Airport name match
-				   item['city'].toLowerCase().includes(searchTextLower);        // City name match
-		  })));
+			// If the search term is longer than 3 characters, match it to the airport name or city
+			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
+				// Match the search text against the airport name or city (case-insensitive)
+				return item['airport'].toLowerCase().includes(searchTextLower) ||   // Airport name match
+					item['city'].toLowerCase().includes(searchTextLower);        // City name match
+			})));
 		}
-	  }
-	  
-	  
+	}
+
+
 
 	searchAirport(letter: string, form_control: string) {
 		if (form_control == 'pickup_airport') {
@@ -955,62 +992,131 @@ export class HomeComponent implements OnInit {
 	}
 
 	calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[]) {
-		console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
+		console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates);
+
 		const newPromise = new Promise((resolve, reject) => {
-			this.mapsAPILoader.load().then(() => {
-				const distanceMatrixService = new google.maps.DistanceMatrixService()
+			// ✅ Ensure Google Maps API is available
+			if (!google || !google.maps) {
+				reject('Google Maps JavaScript API not loaded');
+				return;
+			}
 
-				// generate request for distance matrix service
-				const request = {
-					origins: [pickup_coordinates[0]],
-					destinations: [dropoff_coordinates[0]],
-					travelMode: google.maps.TravelMode.DRIVING,
-					unitSystem: google.maps.UnitSystem.METRIC,
-					avoidHighways: false,
-					avoidTolls: false
-				}
+			const distanceMatrixService = new google.maps.DistanceMatrixService();
 
-				if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1) {
-					request.origins = [pickup_coordinates[0], pickup_coordinates[1]]
-					request.destinations = [dropoff_coordinates[0], dropoff_coordinates[1]]
-				}
+			// generate request for distance matrix service
+			const request: google.maps.DistanceMatrixRequest = {
+				origins: [pickup_coordinates[0]],
+				destinations: [dropoff_coordinates[0]],
+				travelMode: google.maps.TravelMode.DRIVING,
+				unitSystem: google.maps.UnitSystem.METRIC,
+				avoidHighways: false,
+				avoidTolls: false
+			};
 
-				// get distance matrix of that route
-				distanceMatrixService.getDistanceMatrix(request, (response) => {
-					console.log(response)
-					if (response) {
-						try {
-							if ((response.rows[0].elements[0].status == 'ZERO_RESULTS') || (pickup_coordinates.length > 1 && response.rows[1].elements[1].status == 'ZERO_RESULTS')) {
-								reject('InvalidLocationPoints')
-								return
-							}
-							// push into the desired field
-							(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
-								distance: [response.rows[0].elements[0].distance, Validators.required],
-								duration: [response.rows[0].elements[0].duration, Validators.required]
-							}));
-							if (response.rows.length > 1) {
-								(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
-									distance: [response.rows[1].elements[1].distance, Validators.required],
-									duration: [response.rows[1].elements[1].duration, Validators.required]
-								}));
-							}
-							resolve(true)
-							return
-						} catch (err) {
-							reject(err)
-							return
+			if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1) {
+				request.origins = [pickup_coordinates[0], pickup_coordinates[1]];
+				request.destinations = [dropoff_coordinates[0], dropoff_coordinates[1]];
+			}
+
+			// get distance matrix of that route
+			distanceMatrixService.getDistanceMatrix(request, (response) => {
+				console.log(response);
+				if (response) {
+					try {
+						if (
+							response.rows[0].elements[0].status === 'ZERO_RESULTS' ||
+							(pickup_coordinates.length > 1 &&
+								response.rows[1].elements[1].status === 'ZERO_RESULTS')
+						) {
+							reject('InvalidLocationPoints');
+							return;
 						}
+
+						// push into the desired field
+						(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
+							distance: [response.rows[0].elements[0].distance, Validators.required],
+							duration: [response.rows[0].elements[0].duration, Validators.required]
+						}));
+
+						if (response.rows.length > 1) {
+							(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
+								distance: [response.rows[1].elements[1].distance, Validators.required],
+								duration: [response.rows[1].elements[1].duration, Validators.required]
+							}));
+						}
+
+						resolve(true);
+						return;
+					} catch (err) {
+						reject(err);
+						return;
 					}
-				})
-			}, (error) => {
-				console.log('Error while calculating distance. \n', error)
-			})
-			return
-		})
-		console.groupEnd()
-		return newPromise
+				}
+			});
+		});
+
+		console.groupEnd();
+		return newPromise;
 	}
+
+
+	// calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[]) {
+	// 	console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
+	// 	const newPromise = new Promise((resolve, reject) => {
+	// 		this.mapsAPILoader.load().then(() => {
+	// 			const distanceMatrixService = new google.maps.DistanceMatrixService()
+
+	// 			// generate request for distance matrix service
+	// 			const request = {
+	// 				origins: [pickup_coordinates[0]],
+	// 				destinations: [dropoff_coordinates[0]],
+	// 				travelMode: google.maps.TravelMode.DRIVING,
+	// 				unitSystem: google.maps.UnitSystem.METRIC,
+	// 				avoidHighways: false,
+	// 				avoidTolls: false
+	// 			}
+
+	// 			if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1) {
+	// 				request.origins = [pickup_coordinates[0], pickup_coordinates[1]]
+	// 				request.destinations = [dropoff_coordinates[0], dropoff_coordinates[1]]
+	// 			}
+
+	// 			// get distance matrix of that route
+	// 			distanceMatrixService.getDistanceMatrix(request, (response) => {
+	// 				console.log(response)
+	// 				if (response) {
+	// 					try {
+	// 						if ((response.rows[0].elements[0].status == 'ZERO_RESULTS') || (pickup_coordinates.length > 1 && response.rows[1].elements[1].status == 'ZERO_RESULTS')) {
+	// 							reject('InvalidLocationPoints')
+	// 							return
+	// 						}
+	// 						// push into the desired field
+	// 						(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
+	// 							distance: [response.rows[0].elements[0].distance, Validators.required],
+	// 							duration: [response.rows[0].elements[0].duration, Validators.required]
+	// 						}));
+	// 						if (response.rows.length > 1) {
+	// 							(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
+	// 								distance: [response.rows[1].elements[1].distance, Validators.required],
+	// 								duration: [response.rows[1].elements[1].duration, Validators.required]
+	// 							}));
+	// 						}
+	// 						resolve(true)
+	// 						return
+	// 					} catch (err) {
+	// 						reject(err)
+	// 						return
+	// 					}
+	// 				}
+	// 			})
+	// 		}, (error) => {
+	// 			console.log('Error while calculating distance. \n', error)
+	// 		})
+	// 		return
+	// 	})
+	// 	console.groupEnd()
+	// 	return newPromise
+	// }
 
 	ValidateForm(form: FormGroup) {
 		// remove return keys for other than round_trip
@@ -1381,10 +1487,10 @@ export class HomeComponent implements OnInit {
 			this.spinner.show();
 			this.router.navigateByUrl('/affiliate/my-bookings');
 		}
-		else if(role == 'sub_affiliate'){
+		else if (role == 'sub_affiliate') {
 			this.router.navigateByUrl('/sub_affiliate/my-bookings');
 		}
-		else{
+		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)
@@ -1410,15 +1516,15 @@ export class HomeComponent implements OnInit {
 			});
 	}
 
-	joinButton(){
-		if(this.currentUser?.created_by_role == 'subscriber'){
+	joinButton() {
+		if (this.currentUser?.created_by_role == 'subscriber') {
 			this.errorDialogService.openDialog({
-				errors:{
-					error:"You are already registered with as subscriber!"
+				errors: {
+					error: "You are already registered with as subscriber!"
 				}
 			})
 		}
-		else{
+		else {
 			this.router.navigate(['/subscription'])
 		}
 	}

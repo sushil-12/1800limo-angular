@@ -7,12 +7,11 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError, map, startWith } from 'rxjs/operators';
 import { throwError, from, Observable } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
-import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
-import { AdminService } from 'src/app/services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 import { HttpClient } from '@angular/common/http';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import {CommonService} from 'src/app/services/common.service'
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
+import {CommonService} from '../../../services/common.service'
 declare var $: any;
 
 @Component({
@@ -22,6 +21,7 @@ declare var $: any;
 })
 
 export class AffiliateStep1Component implements OnInit {
+	@ViewChild('search1') search1!: ElementRef;
 
 	public addAffiliateAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -72,7 +72,6 @@ export class AffiliateStep1Component implements OnInit {
 		private formBuilder: FormBuilder,
 		private authService: AuthService,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private stateManagementService: StateManagementService,
 		private ngZone: NgZone,
 		private httpClient: HttpClient,
@@ -88,9 +87,8 @@ export class AffiliateStep1Component implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
+	geoCoder!: google.maps.Geocoder;
+
 
 	ngAfterViewInit() {
 		//set current user country as default in phone number

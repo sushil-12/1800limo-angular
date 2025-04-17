@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +12,8 @@ import { throwError } from 'rxjs';
 	styleUrls: ['./edit-individual-account.component.scss']
 })
 export class EditIndividualAccountComponent implements OnInit {
+	@ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
 	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -30,7 +31,6 @@ export class EditIndividualAccountComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone
 	) { }
 
@@ -41,9 +41,6 @@ export class EditIndividualAccountComponent implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
 
 	ngOnInit(): void {
 		this.currentUser = JSON.parse(sessionStorage.getItem("currentUserData"))
@@ -92,44 +89,53 @@ export class EditIndividualAccountComponent implements OnInit {
 				this.WorkObject.setCountry(this.response.data.workCountry);
 			});
 
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() => {
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () => {
-				this.ngZone.run(() => {
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
-						return;
-					}
-					console.log(place);
-					//Fill one way form pickup address fields
-					this.addIndividualAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-					if (place.address_components[1])
-						this.addIndividualAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.addIndividualAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.addIndividualAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.addIndividualAccountForm.patchValue({
-							zipCode: place.address_components[4].long_name
-						});
-				});
-			});
+
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+		this.addIndividualAccountForm.patchValue({
+			address: place.formatted_address,
+			latitude: place.geometry.location.lat(),
+			longitude: place.geometry.location.lng()
 		});
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.addIndividualAccountForm.patchValue({
+				country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.addIndividualAccountForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.addIndividualAccountForm.patchValue({
+				city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.addIndividualAccountForm.patchValue({
+				zipCode: component.long_name
+            });
+          }
+        });
+      });
+    });
 
 
 	}

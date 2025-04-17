@@ -19,7 +19,26 @@
             </div>
         </div>
         <div class="google_map">
-            <div id="map" class="map"></div>
-        </div>
+            <google-map
+              height="500px"
+              width="100%"
+              [center]="mapCenter"
+              [zoom]="zoom">
+              
+              <map-marker
+                *ngFor="let marker of markers"
+                [position]="marker.position"
+                [title]="marker.title"
+                [options]="marker.options"
+                (mapClick)="openInfoWindow(markerRef, infoWindow)"
+                #markerRef>
+                
+                <map-info-window #infoWindow>
+                  <div [innerHTML]="marker.infoContent"></div>
+                </map-info-window>
+                
+              </map-marker>
+            </google-map>
+          </div>
     </section>
 </main>

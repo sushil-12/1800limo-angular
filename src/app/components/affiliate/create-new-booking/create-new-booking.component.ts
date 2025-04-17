@@ -1,31 +1,22 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, isDevMode } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, isDevMode, QueryList, ViewChildren } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError, pluck } from 'rxjs/operators';
-import { from, interval, throwError } from 'rxjs';
-import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
-
-import { SharedModule } from 'src/app/components/shared/shared.module'
-
-import { constant_data } from 'src/assets/js/data.js'
-
-
-
-import { StateManagementService } from 'src/app/services/statemanagement.service';
-import PlaceResult = google.maps.places.PlaceResult
-import { isIdentifier } from '@angular/compiler';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
+import { pluck } from 'rxjs/operators';
+import { SharedModule } from '../../../components/shared/shared.module'
+import { StateManagementService } from '../../../services/statemanagement.service';
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import * as moment from 'moment';
-import { CustomvalidationService } from 'src/app/services/customvalidation.service';
-import { AdminService } from 'src/app/services/admin.service';
-import { CommonService } from 'src/app/services/common.service';
+import { CustomvalidationService } from '../../../services/customvalidation.service';
+import { AdminService } from '../../../services/admin.service';
+import { CommonService } from '../../../services/common.service';
 import { HttpClient } from '@angular/common/http';
+import { GoogleMap } from '@angular/google-maps';
+
 declare var $: any
+declare var google: any;
 
 
 @Component({
@@ -34,7 +25,7 @@ declare var $: any
 	styleUrls: ['./create-new-booking.component.scss']
 })
 export class CreateNewBookingComponent implements OnInit {
-	@ViewChild('searchInput', { read: MatAutocompleteTrigger }) triggerAutoCompleteInput: MatAutocompleteTrigger
+	@ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 
@@ -155,9 +146,7 @@ export class CreateNewBookingComponent implements OnInit {
 		private httpClient: HttpClient,
 	) { }
 
-	openAutoCompletePanel() {
-		this.triggerAutoCompleteInput.openPanel();
-	}
+
 	ngOnInit(): void {
 
 		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
@@ -198,6 +187,39 @@ export class CreateNewBookingComponent implements OnInit {
 		this.fetchAirportsAndBigData()
 
 	}
+
+
+	initAutocomplete(input: ElementRef, control: string, index?: number, is_return: boolean = false) {
+		const autocomplete = new google.maps.places.Autocomplete(input.nativeElement, {
+			types: ['address'],
+			// componentRestrictions: { country: 'us' }
+		});
+
+		autocomplete.addListener('place_changed', () => {
+			const place = autocomplete.getPlace();
+			if (!place.geometry || !place.geometry.location) return;
+
+			const formatted_address = place.formatted_address;
+			const location = {
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng()
+			};
+
+			// 👇 Special case: if this is the loose customer input
+			if (control === 'loose_customer') {
+				this.fillLooseCustomerAddress(place);
+				return;
+			}
+
+			if (control === 'extra_stops' || control === 'return_extra_stops') {
+				this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
+			} else {
+				this.fillAddress(control, { formatted_address });
+				this.fillLocationPoints(control, location);
+			}
+		});
+	}
+
 
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
@@ -401,7 +423,7 @@ export class CreateNewBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
-			departing_airport_city:['']
+			departing_airport_city: ['']
 		})
 
 		// let month = new Date().getMonth()
@@ -542,7 +564,7 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('return_pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_pickup_airline.value));
 			this.SetFormValue('return_dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
-			this.SetFormValue('origin_airport_city',editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city )
+			this.SetFormValue('origin_airport_city', editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city)
 
 			if (editing_data.driver_image) {
 				this.SetFormValue('driver_image_id', editing_data.driver_image.id);
@@ -1648,7 +1670,7 @@ export class CreateNewBookingComponent implements OnInit {
 				// 	}
 				// })
 				if (this.currentUser?.roleName == 'sub_affiliate') {
-					this.$router.navigate(['/sub_affiliate/farm-out']).then(()=>{
+					this.$router.navigate(['/sub_affiliate/farm-out']).then(() => {
 						window.location.reload()
 					})
 				}
@@ -1824,7 +1846,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
-				if(value.includes("cruise_")){
+				if (value.includes("cruise_")) {
 					this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
 					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
 				}
@@ -2349,25 +2371,47 @@ export class CreateNewBookingComponent implements OnInit {
 		})
 	}
 
-	fillLooseCustomerAddress(value: any) {
-		console.log('Addresss-->>>', value);
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
-		value.address_components.forEach(component => {
+	// fillLooseCustomerAddress(value: any) {
+	// 	console.log('Addresss-->>>', value);
+	// 	(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
+	// 	value.address_components.forEach(component => {
+	// 		const types = component.types;
+	// 		if (types.includes('postal_code')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+	// 		} else if (types.includes('locality')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+	// 		} else if (types.includes('administrative_area_level_1')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+	// 		} else if (types.includes('country')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+	// 		}
+	// 	});
+	// 	(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
+	// 	this.BookingForm.updateValueAndValidity();
+	// }
+
+	fillLooseCustomerAddress(place: any) {
+		console.log('Addresss-->>>', place);
+
+		const looseCustomerGroup = <FormGroup>this.BookingForm.get('loose_customer');
+		looseCustomerGroup.get('address').setValue(place.formatted_address);
+
+		place.address_components.forEach(component => {
 			const types = component.types;
 			if (types.includes('postal_code')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+				looseCustomerGroup.get('zipCode').setValue(component.long_name);
 			} else if (types.includes('locality')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+				looseCustomerGroup.get('city').setValue(component.long_name);
 			} else if (types.includes('administrative_area_level_1')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+				looseCustomerGroup.get('state').setValue(component.long_name);
 			} else if (types.includes('country')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+				looseCustomerGroup.get('country').setValue(component.long_name);
 			}
 		});
-		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
+
+		looseCustomerGroup.updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}
-
 
 
 	onLCTeleCountryChange(event: any) {

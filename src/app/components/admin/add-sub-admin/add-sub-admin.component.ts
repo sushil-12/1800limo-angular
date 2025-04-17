@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +12,7 @@ import { throwError } from 'rxjs';
 	styleUrls: ['./add-sub-admin.component.scss']
 })
 export class AddSubAdminComponent implements OnInit {
+	@ViewChild('search1') search1!:ElementRef;
 
 	public addSubAdminAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -27,7 +27,6 @@ export class AddSubAdminComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone
 	) { }
 
@@ -38,9 +37,7 @@ export class AddSubAdminComponent implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
 	ngOnInit(): void {
 		//add amenity form validation
@@ -104,61 +101,54 @@ export class AddSubAdminComponent implements OnInit {
 					this.spinner.hide();//hide spinner
 				});
 		}
-
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() => {
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () => {
-				this.ngZone.run(() => {
-
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
-						return;
-					}
-					console.log(place);
-					this.addSubAdminAccountForm.patchValue({
-						zipCode: '',
-						city: '',
-						state: '',
-						country: ''
-					})
-					this.addSubAdminAccountForm.patchValue({
-						address: place.formatted_address
-					})
-					//Fill one way form pickup address fields
-					this.addSubAdminAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-					place.address_components.forEach(component => {
-						const types = component.types;
-
-						if (types.includes('postal_code')) {
-							this.addSubAdminAccountForm.patchValue({
-								zipCode: component.long_name
-							});
-						} else if (types.includes('locality')) {
-							this.addSubAdminAccountForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addSubAdminAccountForm.patchValue({
-								state: component.long_name
-							});
-						} else if (types.includes('country')) {
-							this.addSubAdminAccountForm.patchValue({
-								country: component.long_name
-							});
-						}
-					});
-				});
-			});
-		});
 	}
+
+	ngAfterViewInit(): void {
+		this.initGoogleAutocomplete();
+	  }
+
+	initGoogleAutocomplete(): void{ 
+		this.geoCoder = new google.maps.Geocoder;
+
+		const autocomplete = new google.maps.places.Autocomplete(this.search1.nativeElement, {
+			types: ['address'] // or 'address'
+		  });
+
+		autocomplete.addListener('place_changed', () => {
+			this.ngZone.run(() => {
+			  const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+	  
+			  if (!place.geometry || !place.geometry.location) return;
+	  
+			  const lat = place.geometry.location.lat();
+			  const lng = place.geometry.location.lng();
+	  
+			  this.addSubAdminAccountForm.patchValue({
+				address: place.formatted_address,
+				latitude: lat,
+				longitude: lng
+			  });
+	  
+			  place.address_components?.forEach(component => {
+				const types = component.types;
+	  
+				if (types.includes('locality')) {
+				  this.addSubAdminAccountForm.patchValue({ city: component.long_name });
+				}
+				if (types.includes('administrative_area_level_1')) {
+				  this.addSubAdminAccountForm.patchValue({ state: component.long_name });
+				}
+				if (types.includes('country')) {
+				  this.addSubAdminAccountForm.patchValue({ country: component.long_name });
+				}
+				if (types.includes('postal_code')) {
+				  this.addSubAdminAccountForm.patchValue({ zipCode: component.long_name });
+				}
+			  });
+			});
+		  });
+
+	 }
 
 	onCountryChange(event) {
 		this.addSubAdminAccountForm.patchValue({

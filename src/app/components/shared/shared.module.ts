@@ -21,8 +21,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SignatureDirectiveDirective } from '../../directives/signature-directive.directive';
 import { DateFormatDirective } from '../../directives/date-format.directive';
 import { MatSliderModule } from '@angular/material/slider';
-
-import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
@@ -48,8 +46,8 @@ export const DATE_FORMATS = {
 	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent],
 	imports: [
 		CommonModule,
-		PinchZoomModule, MatAutocompleteModule,
-		MatGoogleMapsAutocompleteModule,
+		PinchZoomModule,
+		MatAutocompleteModule,
 		MatIconModule,
 		MatButtonModule
 
@@ -70,7 +68,6 @@ export const DATE_FORMATS = {
 		DateFormatDirective,
 		SignatureDirectiveDirective,
 		NgxMaterialTimepickerModule,
-		MatGoogleMapsAutocompleteModule,
 		MatSliderModule,
 		MatCheckboxModule,
 		MatSlideToggleModule,

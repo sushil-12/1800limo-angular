@@ -1,4 +1,3 @@
-import { MapsAPILoader } from '@agm/core';
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,6 +15,8 @@ declare var $: any;
   styleUrls: ['./partner-registration.component.scss']
 })
 export class PartnerRegistrationComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
   public registrationForm: FormGroup;
   public otpForm: FormGroup;
@@ -34,7 +35,6 @@ export class PartnerRegistrationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private authService: AuthService,
     private errorDialog: ErrorDialogService,
@@ -50,10 +50,6 @@ export class PartnerRegistrationComponent implements OnInit {
   longitude: number;
   zoom: number;
   address: string;
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
-
   ngOnInit(): void {
 
     this.planName = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_name
@@ -61,59 +57,57 @@ export class PartnerRegistrationComponent implements OnInit {
 
     this.buildregistrationForm();
 
-    //google map autocomplete
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        console.log('auto fill address-->>>')
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          this.registrationForm.patchValue({
-            zipCode: '',
-            city: '',
-            state: '',
-            country: ''
-          })
-          this.registrationForm.patchValue({
-            address: place.formatted_address
-          })
-          //Fill one way form pickup address fields
-          this.registrationForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
-          });
-          place.address_components.forEach(component => {
-            const types = component.types;
+   //google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
 
-            if (types.includes('postal_code')) {
-              this.registrationForm.patchValue({
-                zipCode: component.long_name
-              });
-            } else if (types.includes('locality')) {
-              this.registrationForm.patchValue({
-                city: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_1')) {
-              this.registrationForm.patchValue({
-                state: component.long_name
-              });
-            } else if (types.includes('country')) {
-              this.registrationForm.patchValue({
-                country: component.long_name
-              });
-            }
-          });
-        });
-      });
-    });
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.registrationForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.registrationForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.registrationForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.registrationForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.registrationForm.patchValue({
+							zipCode: component.long_name
+						});
+					}
+					// else if (types.includes('street_number')) {
+					// 	this.registrationForm.patchValue({
+					// 		address: component.long_name
+					// 	});
+					// }
+				});
+			});
+		});
 
     this.otpForm = this.formBuilder.group({
       otp: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(6), Validators.maxLength(6)]],

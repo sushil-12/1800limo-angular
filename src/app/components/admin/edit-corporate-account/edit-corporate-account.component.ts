@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -29,7 +28,6 @@ export class EditCorporateAccountComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone
 	) { }
 
@@ -101,48 +99,6 @@ export class EditCorporateAccountComponent implements OnInit
 				this.HomeObject.setCountry(this.response.data.homeCountry);
 			});
 
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				this.ngZone.run(() =>
-				{
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					console.log(place);
-					//Fill one way form pickup address fields
-					this.editCorporateAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-					if (place.address_components[1])
-						this.editCorporateAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.editCorporateAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.editCorporateAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.editCorporateAccountForm.patchValue({
-							zipCode: place.address_components[place.address_components.length - 1].long_name
-						});
-				});
-			});
-		});
 
 		//add amenity form validation
 		this.editCorporateAccountForm = this.formBuilder.group({

@@ -9,8 +9,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from 'src/app/services/admin.service';
+import { GoogleMap } from '@angular/google-maps';
 declare var $: any;
 
 @Component({
@@ -19,7 +19,13 @@ declare var $: any;
   styleUrls: ['./my-bookings.component.scss']
 })
 export class MyBookingsComponent implements OnInit {
+  @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild('inputmsg', { static: false }) message: ElementRef;
+
+  zoom = 7;
+  mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
+  directionsRenderer!: google.maps.DirectionsRenderer;
+
   color: ThemePalette = 'primary';
   outputDateFormat = 'YYYY-MM-DD';
   public totalRecords: any;
@@ -71,7 +77,7 @@ export class MyBookingsComponent implements OnInit {
     private $errors: ErrorDialogService,
     private stateManagementService: StateManagementService,
     private formBuilder: FormBuilder,
-    private $mapsapi: MapsAPILoader,) { }
+  ) { }
 
   ngOnInit(): void {
 
@@ -118,76 +124,60 @@ export class MyBookingsComponent implements OnInit {
     $("#search-field-my-booking").addClass("box-outline")
   }
 
-
   MapController() {
     console.log('Map has been initialised.')
-    let waypoints = []
-    let origin: google.maps.LatLng
-    let destination: google.maps.LatLng
-    let map: google.maps.Map
+    let origin: google.maps.LatLng;
+    let destination: google.maps.LatLng;
+    const waypoints: google.maps.DirectionsWaypoint[] = [];
 
-    this.$mapsapi.load().then(() => {
-
-      // console.log('Return Map has been initialised. ')
-      // map
-      map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 7,
-        center: new google.maps.LatLng(41.850033, -87.6500523),
-        scaleControl: true
-      })
+    // Base values
+    origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
+    destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
 
 
-      // defaults for Source/Target - City
-      origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
-      destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
-
-      //defaults for Source/Target - City
-      origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
-      destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
-
-      // Overrides
-      if (this.bookingPreview?.transfer_type.includes('airport_')) {
-        // override for Source - Airport
-        // console.log('Override for Source Airport')
-        origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
-      }
-      if (this.bookingPreview?.transfer_type.includes('_airport')) {
-        // override for Target - Airport
-        // console.log('Override for Target Airport')
-        destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
-      }
-
-      this.drawMap(map, {
-        origin,
-        destination,
-        waypoints,
-        optimizeWaypoints: true,
-        travelMode: google.maps.TravelMode.DRIVING
-      })
-    })
-  }
-
-
-  drawMap(map: google.maps.Map, request: Object) {
-    if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
-      console.error('Request Object is not properly according to specified requirements.')
-      return
+    // Override based on transfer_type
+    if (this.bookingPreview.transfer_type?.includes('airport_')) {
+      origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
     }
 
-    this.$mapsapi.load().then(() => {
-      const directionsRenderer = new google.maps.DirectionsRenderer()
-      const directionsService = new google.maps.DirectionsService()
-      directionsRenderer.setMap(map)
+    if (this.bookingPreview.transfer_type?.includes('_airport')) {
+      destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
+    }
 
-      directionsService.route(request, (response: any, status: string) => {
-        if (status == google.maps.DirectionsStatus.OK) {
-          console.log('Directions Service Response: ', response)
-          directionsRenderer.setDirections(response)
-        }
-      })
 
+
+    this.drawMap({
+      origin,
+      destination,
+      waypoints,
+      optimizeWaypoints: true,
+      travelMode: google.maps.TravelMode.DRIVING
     })
+
   }
+
+  drawMap(request: google.maps.DirectionsRequest) {
+    const directionsService = new google.maps.DirectionsService();
+    this.directionsRenderer = new google.maps.DirectionsRenderer();
+
+    const mapInstance = this.map.googleMap;
+    if (!mapInstance) {
+      console.error('Map is not initialized yet');
+      return;
+    }
+
+    this.directionsRenderer.setMap(mapInstance);
+
+    directionsService.route(request, (response, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+        console.log('Directions loaded:', response);
+        this.directionsRenderer.setDirections(response);
+      } else {
+        console.error('Directions request failed due to ' + status);
+      }
+    });
+  }
+
 
   scroll(id) {
     // let el = document.getElementById(id);
@@ -224,7 +214,7 @@ export class MyBookingsComponent implements OnInit {
       date.setDate(date.getDate() + 7);
       timestamp = date.getTime();
       this.bookingsRes = result;
-      this.currencySymbol =  this.bookingsRes?.currency?.symbol
+      this.currencySymbol = this.bookingsRes?.currency?.symbol
       this.bookings = this.bookingsRes?.data?.data;
       if (!this.useDateFilter && !this.searchText) {
         this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
@@ -644,15 +634,15 @@ export class MyBookingsComponent implements OnInit {
   }
 
   // Method to convert hours to days and hours
-	getCancellationTime(cancellationHours: number): string {
-		if (cancellationHours > 24) {
-		  const days = Math.floor(cancellationHours / 24);
-		  const remainingHours = cancellationHours % 24;
-		  return `${days} days ${remainingHours} hours`;
-		} else {
-		  return `${cancellationHours} hours`;
-		}
-	  }
+  getCancellationTime(cancellationHours: number): string {
+    if (cancellationHours > 24) {
+      const days = Math.floor(cancellationHours / 24);
+      const remainingHours = cancellationHours % 24;
+      return `${days} days ${remainingHours} hours`;
+    } else {
+      return `${cancellationHours} hours`;
+    }
+  }
 
   previewRate(bookingId) {
     if (this.currentUser.roleName == 'sub_affiliate') {

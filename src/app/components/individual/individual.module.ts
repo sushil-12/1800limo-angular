@@ -10,8 +10,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Ng2TelInputModule } from 'ng2-tel-input';
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatInputModule } from '@angular/material/input';
@@ -36,6 +34,7 @@ import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { FamilyMembersComponent } from './family-members/family-members.component';
 import { FamilyMemberAccountComponent } from './family-member-account/family-member-account.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 
@@ -51,8 +50,7 @@ import { FamilyMemberAccountComponent } from './family-member-account/family-mem
 		ReactiveFormsModule,
 		MatSlideToggleModule,
 		Ng2TelInputModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+		GoogleMapsModule,
 		MatNativeDateModule,
 		MatMomentDateModule,
 		MatInputModule,

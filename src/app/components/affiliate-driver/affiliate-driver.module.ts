@@ -9,8 +9,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2TelInputModule } from 'ng2-tel-input';
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatInputModule } from '@angular/material/input';
@@ -27,6 +25,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 @NgModule({
@@ -40,8 +39,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 		ReactiveFormsModule,
 		MatSlideToggleModule,
 		Ng2TelInputModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+		GoogleMapsModule,
 		MatNativeDateModule,
 		MatMomentDateModule,
 		MatInputModule,

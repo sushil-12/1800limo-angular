@@ -10,8 +10,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Ng2TelInputModule } from 'ng2-tel-input';
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatInputModule } from '@angular/material/input';
@@ -42,6 +40,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accounts.component';
 import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
 import { PayoutsComponent } from './payouts/payouts.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 @NgModule({
@@ -72,8 +71,7 @@ import { PayoutsComponent } from './payouts/payouts.component';
 		ReactiveFormsModule,
 		MatSlideToggleModule,
 		Ng2TelInputModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+		GoogleMapsModule,
 		MatNativeDateModule,
 		MatMomentDateModule,
 		MatInputModule,

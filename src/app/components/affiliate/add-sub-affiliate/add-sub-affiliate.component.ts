@@ -1,12 +1,11 @@
-import { MapsAPILoader } from '@agm/core';
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AdminService } from 'src/app/services/admin.service';
-import { AffiliateService } from 'src/app/services/affiliate.service';
+import { AdminService } from '../../../services/admin.service';
+import { AffiliateService } from '../../../services/affiliate.service';
 
 declare var $ :any;
 @Component({
@@ -15,6 +14,8 @@ declare var $ :any;
   styleUrls: ['./add-sub-affiliate.component.scss']
 })
 export class AddSubAffiliateComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
   public profileForm: FormGroup;
   public submittedForm: boolean;
@@ -31,16 +32,12 @@ export class AddSubAffiliateComponent implements OnInit {
      longitude: number;
      zoom: number;
      address: string;
-     private geoCoder;
-     @ViewChild('search1')
-     public searchElementRef: ElementRef;
      response: any;
      defaultCountryCode: string;
      lastSegment: string;
 
   constructor(
     private formBuilder: FormBuilder,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -72,58 +69,57 @@ export class AddSubAffiliateComponent implements OnInit {
       this.getProfile()
     }
 
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          //Fill one way form pickup address fields
+  //google map autocomplete
+  this.geoCoder = new google.maps.Geocoder();
+
+  const autocomplete = new google.maps.places.Autocomplete(
+    this.search1.nativeElement,
+    {
+      types: ['address'] // You can tweak this to 'address', etc.
+    }
+  );
+
+  autocomplete.addListener("place_changed", () => {
+    this.ngZone.run(() => {
+      //get the place result
+      const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) return;
+
+      this.profileForm.patchValue({
+        address: place.formatted_address,
+        latitude: place.geometry.location.lat(),
+        longitude: place.geometry.location.lng()
+      });
+
+
+      // Extract address components
+      place.address_components?.forEach(component => {
+        const types = component.types;
+        if (types.includes('country')) {
           this.profileForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng(),
-            address:place?.formatted_address 
+            country: component.short_name
           });
-          for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
-								this.profileForm.patchValue({
-									country: place.address_components[i].long_name
-								});
-								// this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.profileForm.patchValue({
-									state: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-								this.profileForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.profileForm.patchValue({
-									zip: place.address_components[i].long_name
-								});
-							}
-							// else if (place.address_components[i].types[j] == "street_number") {
-							// 	this.profileForm.patchValue({
-							// 		address: place.address_components[i].long_name
-							// 	});
-							// }
-						}
-					}
-        });
+        } else if (types.includes('administrative_area_level_1')) {
+          this.profileForm.patchValue({
+            state: component.long_name
+          });
+        } else if (types.includes('administrative_area_level_3')) {
+          this.profileForm.patchValue({
+            city: component.long_name
+          });
+        } else if (types.includes('postal_code')) {
+          this.profileForm.patchValue({
+            zipCode: component.long_name
+          });
+        }
+        // else if (types.includes('street_number')) {
+        // 	this.profileForm.patchValue({
+        // 		address: component.long_name
+        // 	});
+        // }
       });
     });
+  });
 
   }
 

@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { CustomvalidationService } from '../../../services/customvalidation.service';
 
 @Component({
 	selector: 'app-add-corporate-account',
@@ -31,7 +30,6 @@ export class AddCorporateAccountComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService
 	) { }
@@ -43,9 +41,8 @@ export class AddCorporateAccountComponent implements OnInit
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
+	geoCoder!: google.maps.Geocoder;
+	@ViewChild('search1') search1!: ElementRef;
 
 	ngOnInit(): void
 	{
@@ -54,48 +51,6 @@ export class AddCorporateAccountComponent implements OnInit
 		{
 			this.yearOptions.push(currentYear + i);
 		}
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				this.ngZone.run(() =>
-				{
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					console.log(place);
-					//Fill one way form pickup address fields
-					this.addCorporateAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-					if (place.address_components[1])
-						this.addCorporateAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.addCorporateAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.addCorporateAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.addCorporateAccountForm.patchValue({
-							zipCode: place.address_components[place.address_components.length - 1].long_name
-						});
-				});
-			});
-		});
 
 		//add amenity form validation
 		this.addCorporateAccountForm = this.formBuilder.group({
@@ -148,6 +103,51 @@ export class AddCorporateAccountComponent implements OnInit
 			});
 		});
 	}
+
+	ngAfterViewInit(): void {
+		this.initGoogleAutocomplete();
+    }
+
+	initGoogleAutocomplete(): void {
+		this.geoCoder = new google.maps.Geocoder();
+	
+		const autocomplete = new google.maps.places.Autocomplete(this.search1.nativeElement, {
+		  types: ['address'] // or 'address'
+		});
+	
+		autocomplete.addListener('place_changed', () => {
+		  this.ngZone.run(() => {
+			const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+	
+			if (!place.geometry || !place.geometry.location) return;
+	
+			const lat = place.geometry.location.lat();
+			const lng = place.geometry.location.lng();
+	
+			this.addCorporateAccountForm.patchValue({
+			  latitude: lat,
+			  longitude: lng
+			});
+	
+			place.address_components?.forEach(component => {
+			  const types = component.types;
+	
+			  if (types.includes('locality')) {
+				this.addCorporateAccountForm.patchValue({ city: component.long_name });
+			  }
+			  if (types.includes('administrative_area_level_1')) {
+				this.addCorporateAccountForm.patchValue({ state: component.long_name });
+			  }
+			  if (types.includes('country')) {
+				this.addCorporateAccountForm.patchValue({ country: component.long_name });
+			  }
+			  if (types.includes('postal_code')) {
+				this.addCorporateAccountForm.patchValue({ zipCode: component.long_name });
+			  }
+			});
+		  });
+		});
+	  }
 
 	onCountryChange(event, type)
 	{

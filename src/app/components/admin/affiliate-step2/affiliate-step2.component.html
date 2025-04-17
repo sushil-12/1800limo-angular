@@ -535,7 +535,7 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address"
+						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address" autocomplete="off"
 							#search1 tabindex="1" (focus)="$event.target.select()"
 							(keyup)="removeErrorSsn($event.target.value,'address')">
 					</mat-form-field>

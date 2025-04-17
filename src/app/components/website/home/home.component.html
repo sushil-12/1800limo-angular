@@ -530,6 +530,14 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
+														id="pickup_address" #addressinput
+														[value]="QBForm?.pickup_address?.value"
+														formControlName="pickup_address" (focus)="addressinput.select()"
+														tabindex="1" class="input-f font-weight-bolder" />
+
+													<!-- <input type="text"
+														style="height:46px !important;font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -537,7 +545,7 @@
 														(focus)="$event.target.select()" tabindex="1"
 														class="input-f font-weight-bolder" matGoogleMapsAutocomplete
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'pickup_address')"
-														(onLocationSelected)="onLocationSelected($event, 'pickup_address')" />
+														(onLocationSelected)="onLocationSelected($event, 'pickup_address')" /> -->
 												</div>
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
@@ -629,6 +637,15 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
+														id="dropoff_address" #dropaddressinput
+														[value]="QBForm?.dropoff_address?.value"
+														formControlName="dropoff_address"
+														(focus)="dropaddressinput.select()" tabindex="1"
+														class="input-f font-weight-bolder" />
+
+													<!-- <input type="text"
+														style="height:46px !important;font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'Dropoff Address - City/FBO ': 'Cruise Port Name / Address'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -636,7 +653,7 @@
 														(focus)="$event.target.select()" tabindex="1"
 														class="input-f font-weight-bolder" matGoogleMapsAutocomplete
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'dropoff_address')"
-														(onLocationSelected)="onLocationSelected($event, 'dropoff_address')" />
+														(onLocationSelected)="onLocationSelected($event, 'dropoff_address')" /> -->
 												</div>
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
@@ -820,6 +837,16 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
+														id="return_pickup_address" #retaddressinput
+														formControlName="return_pickup_address"
+														[value]="QBForm?.return_pickup_address?.value"
+														(focus)="retaddressinput.select()" tabindex="1"
+														class="input-f font-weight-bolder" />
+
+
+													<!-- <input type="text"
+														style="height:46px !important;font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'Return Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														matGoogleMapsAutocomplete tabindex="1"
@@ -828,7 +855,7 @@
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup_address')"
 														(onLocationSelected)="onLocationSelected($event, 'return_pickup_address')"
 														formControlName="return_pickup_address"
-														class="input-f font-weight-bolder">
+														class="input-f font-weight-bolder"> -->
 												</div>
 												<div class="cross-svg">
 													<svg *ngIf="retaddressinput?.value" fill="#000000"
@@ -918,6 +945,15 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
+														id="return_dropoff_address" #retdropaddressinput
+														formControlName="return_dropoff_address"
+														[value]="QBForm?.return_dropoff_address?.value"
+														(focus)="retdropaddressinput.select()" tabindex="1"
+														class="input-f font-weight-bolder" />
+
+													<!-- <input type="text"
+														style="height:46px !important;font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'Return Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"
@@ -925,7 +961,7 @@
 														(focus)="$event.target.select()"
 														[value]="QBForm?.return_dropoff_address?.value"
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff_address')"
-														(onLocationSelected)="onLocationSelected($event, 'return_dropoff_address')">
+														(onLocationSelected)="onLocationSelected($event, 'return_dropoff_address')"> -->
 												</div>
 												<div class="cross-svg">
 													<svg *ngIf="retdropaddressinput?.value" fill="#000000"

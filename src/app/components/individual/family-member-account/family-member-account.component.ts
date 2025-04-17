@@ -1,12 +1,11 @@
-import { MapsAPILoader } from '@agm/core';
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { IndividualService } from 'src/app/services/individual.service';
-import { TravelAgentService } from 'src/app/services/travel-agent.service';
+import { IndividualService } from '../../../services/individual.service';
+import { TravelAgentService } from '../../../services/travel-agent.service';
 
 @Component({
   selector: 'app-family-member-account',
@@ -14,6 +13,8 @@ import { TravelAgentService } from 'src/app/services/travel-agent.service';
   styleUrls: ['./family-member-account.component.scss']
 })
 export class FamilyMemberAccountComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
   public addFamilyMemberAccountForm: FormGroup;
   public submittedForm: boolean;
@@ -31,7 +32,6 @@ export class FamilyMemberAccountComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private formBuilder: FormBuilder,
     private $routeurl: ActivatedRoute,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
   ) { }
 
@@ -42,9 +42,6 @@ export class FamilyMemberAccountComponent implements OnInit {
   longitude: number;
   zoom: number;
   address: string;
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
   currentUser: any;
 
   ngOnInit(): void {
@@ -96,75 +93,59 @@ export class FamilyMemberAccountComponent implements OnInit {
           this.MobileObject.setCountry(this.response.data.mobileCountry);
         });
     }
-    //google map autocomplete
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        console.log('auto fill address-->>>')
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          this.addFamilyMemberAccountForm.patchValue({
-            zipCode: '',
-            city: '',
-            state: '',
-            country: ''
-          })
-          this.addFamilyMemberAccountForm.patchValue({
-            address: place.formatted_address
-          })
-          //Fill one way form pickup address fields
-          this.addFamilyMemberAccountForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
-          });
-          place.address_components.forEach(component => {
-            const types = component.types;
 
-            if (types.includes('postal_code')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                zipCode: component.long_name
-              });
-            } else if (types.includes('locality')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                city: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_1')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                state: component.long_name
-              });
-            } else if (types.includes('country')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                country: component.long_name
-              });
-            }
+  //google map autocomplete
+  this.geoCoder = new google.maps.Geocoder();
+
+  const autocomplete = new google.maps.places.Autocomplete(
+    this.search1.nativeElement,
+    {
+      types: ['address'] // You can tweak this to 'address', etc.
+    }
+  );
+
+  autocomplete.addListener("place_changed", () => {
+    this.ngZone.run(() => {
+      //get the place result
+      const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) return;
+
+      this.addFamilyMemberAccountForm.patchValue({
+        address: place.formatted_address,
+        latitude: place.geometry.location.lat(),
+        longitude: place.geometry.location.lng()
+      });
+
+
+      // Extract address components
+      place.address_components?.forEach(component => {
+        const types = component.types;
+        if (types.includes('country')) {
+          this.addFamilyMemberAccountForm.patchValue({
+            country: component.short_name
           });
-          // if (place.address_components[1])
-          // 	this.addFamilyMemberAccountForm.patchValue({
-          // 		city: place.address_components[1].long_name
-          // 	});
-          // if (place.address_components[2])
-          // 	this.addFamilyMemberAccountForm.patchValue({
-          // 		state: place.address_components[2].long_name
-          // 	});
-          // if (place.address_components[3])
-          // 	this.addFamilyMemberAccountForm.patchValue({
-          // 		country: place.address_components[3].long_name
-          // 	});
-          // if (place.address_components[4])
-          // 	this.addFamilyMemberAccountForm.patchValue({
-          // 		zipCode: place.address_components[place.address_components.length - 1].long_name
-          // 	});
-        });
+        } else if (types.includes('administrative_area_level_1')) {
+          this.addFamilyMemberAccountForm.patchValue({
+            state: component.long_name
+          });
+        } else if (types.includes('administrative_area_level_3')) {
+          this.addFamilyMemberAccountForm.patchValue({
+            city: component.long_name
+          });
+        } else if (types.includes('postal_code')) {
+          this.addFamilyMemberAccountForm.patchValue({
+            zipCode: component.long_name
+          });
+        }
+        // else if (types.includes('street_number')) {
+        // 	this.addFamilyMemberAccountForm.patchValue({
+        // 		address: component.long_name
+        // 	});
+        // }
       });
     });
+  });
+      
 
   }
 

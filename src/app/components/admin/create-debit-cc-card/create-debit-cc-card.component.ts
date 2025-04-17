@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Router, ActivatedRoute} from '@angular/router';
@@ -13,6 +12,9 @@ import { throwError } from 'rxjs';
   styleUrls: ['./create-debit-cc-card.component.scss']
 })
 export class CreateDebitCcCardComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
+
+  geoCoder!: google.maps.Geocoder;
 
   public createCCDebitCardForm: FormGroup;
   public submittedForm:boolean;
@@ -28,57 +30,11 @@ export class CreateDebitCcCardComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private formBuilder: FormBuilder,
     private activatedroute:ActivatedRoute,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone
     ) { }
 
 
-  //google map autocomplete
-  title: string = 'Akshay project';
-  latitude: number;
-  longitude: number;
-  zoom: number;
-  address: string;
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
-
   ngOnInit(): void {
-
-
-      //google map autocomplete
-      this.mapsAPILoader.load().then(() => {
-        // this.setCurrentLocation();
-        this.geoCoder = new google.maps.Geocoder;
-        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-        autocomplete.addListener("place_changed", () => {
-          this.ngZone.run(() => {
-            //get the place result
-            let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-            //verify result
-            if (place.geometry === undefined || place.geometry === null) {
-              return;
-            }
-            // console.log(place);
-            if(place.address_components[1])
-              this.createCCDebitCardForm.patchValue({
-                otherCity:place.address_components[1].long_name
-              });
-            if(place.address_components[2])
-              this.createCCDebitCardForm.patchValue({
-                otherState:place.address_components[2].long_name
-              });
-            if(place.address_components[3])
-              this.createCCDebitCardForm.patchValue({
-                otherCountry:place.address_components[3].long_name
-              });
-            if(place.address_components[4])
-              this.createCCDebitCardForm.patchValue({
-                otherZip:place.address_components[place.address_components.length - 1].long_name
-              });
-          });
-        });
-      });
 
       //add card form validation
       this.createCCDebitCardForm = this.formBuilder.group({
@@ -95,6 +51,46 @@ export class CreateDebitCcCardComponent implements OnInit {
         otherState: ['', Validators.required],
         otherZip: ['', [Validators.required,Validators.pattern("^[0-9]*$")]],
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener('place_changed', () => {
+      this.ngZone.run(() => {
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.createCCDebitCardForm.patchValue({
+              otherCountry: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.createCCDebitCardForm.patchValue({
+              otherState: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.createCCDebitCardForm.patchValue({
+              otherCity: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.createCCDebitCardForm.patchValue({
+              otherZip: component.long_name
+            });
+          }
+        });
+      });
+    });
   }
 
   onCountryChange(event,type)
