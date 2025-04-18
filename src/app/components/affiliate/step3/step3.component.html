@@ -40,11 +40,8 @@
 					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Agency / Insurance
 							Telephone # <span class="asterisk">*</span></label>
-						<input matInput placeholder="1234567890" (focus)="$event.target.select()"
-							formControlName="AgentTelephone" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-							(countryChange)="onCountryChange($event,'AgentTelephone')" class="phoneNumberClass"
-							(intlTelInputObject)="telInputObjectAgentTelephone($event)" tabIndex="1" />
+						<input matInput #phoneInput placeholder="1234567890" formControlName="AgentTelephone"
+							class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentTelephone.errors || f.AgentTelephone.touched && f.AgentTelephone.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">

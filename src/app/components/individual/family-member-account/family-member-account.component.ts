@@ -6,6 +6,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IndividualService } from '../../../services/individual.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
   selector: 'app-family-member-account',
@@ -13,8 +14,9 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
   styleUrls: ['./family-member-account.component.scss']
 })
 export class FamilyMemberAccountComponent implements OnInit {
+  @ViewChild('phoneInput') phoneInput!: ElementRef;
   @ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
+  geoCoder!: google.maps.Geocoder;
 
   public addFamilyMemberAccountForm: FormGroup;
   public submittedForm: boolean;
@@ -94,60 +96,84 @@ export class FamilyMemberAccountComponent implements OnInit {
         });
     }
 
-  //google map autocomplete
-  this.geoCoder = new google.maps.Geocoder();
-
-  const autocomplete = new google.maps.places.Autocomplete(
-    this.search1.nativeElement,
-    {
-      types: ['address'] // You can tweak this to 'address', etc.
-    }
-  );
-
-  autocomplete.addListener("place_changed", () => {
-    this.ngZone.run(() => {
-      //get the place result
-      const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-      if (!place.geometry || !place.geometry.location) return;
-
-      this.addFamilyMemberAccountForm.patchValue({
-        address: place.formatted_address,
-        latitude: place.geometry.location.lat(),
-        longitude: place.geometry.location.lng()
-      });
-
-
-      // Extract address components
-      place.address_components?.forEach(component => {
-        const types = component.types;
-        if (types.includes('country')) {
-          this.addFamilyMemberAccountForm.patchValue({
-            country: component.short_name
-          });
-        } else if (types.includes('administrative_area_level_1')) {
-          this.addFamilyMemberAccountForm.patchValue({
-            state: component.long_name
-          });
-        } else if (types.includes('administrative_area_level_3')) {
-          this.addFamilyMemberAccountForm.patchValue({
-            city: component.long_name
-          });
-        } else if (types.includes('postal_code')) {
-          this.addFamilyMemberAccountForm.patchValue({
-            zipCode: component.long_name
-          });
-        }
-        // else if (types.includes('street_number')) {
-        // 	this.addFamilyMemberAccountForm.patchValue({
-        // 		address: component.long_name
-        // 	});
-        // }
-      });
-    });
-  });
-      
 
   }
+
+  ngAfterViewInit() {
+    this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      // autoPlaceholder: 'aggressive',
+      utilsScript:
+        'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    });
+
+    this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'mobile')
+    });
+
+    this.initautoComplete()
+
+
+  }
+
+  initautoComplete() {
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.addFamilyMemberAccountForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.addFamilyMemberAccountForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.addFamilyMemberAccountForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.addFamilyMemberAccountForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.addFamilyMemberAccountForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+          // else if (types.includes('street_number')) {
+          // 	this.addFamilyMemberAccountForm.patchValue({
+          // 		address: component.long_name
+          // 	});
+          // }
+        });
+      });
+    });
+  }
+
 
   buildAddIndividualForm() {
     this.addFamilyMemberAccountForm = this.formBuilder.group({

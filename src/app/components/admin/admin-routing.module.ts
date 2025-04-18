@@ -30,8 +30,6 @@ import { EditIndividualAccountComponent } from './edit-individual-account/edit-i
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { EditCardComponent } from './edit-card/edit-card.component';
-import { AddCorporateAccountComponent } from './add-corporate-account/add-corporate-account.component';
-import { EditCorporateAccountComponent } from './edit-corporate-account/edit-corporate-account.component';
 import { StaffComponent } from './staff/staff.component';
 import { AddStaffComponent } from './add-staff/add-staff.component';
 import { EditStaffComponent } from './edit-staff/edit-staff.component';

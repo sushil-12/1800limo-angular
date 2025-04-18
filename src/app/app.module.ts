@@ -3,7 +3,6 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Ng2TelInputModule } from 'ng2-tel-input';//for country code list
 import { HttpConfigInterceptor } from './interceptors/http-config.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
@@ -147,7 +146,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 		QuotebotModule,
 		HttpClientModule,
 		GoogleMapsModule,
-		Ng2TelInputModule,
 		MatDialogModule,
 		MatProgressBarModule,
 		MatFormFieldModule,

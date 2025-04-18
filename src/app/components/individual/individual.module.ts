@@ -9,7 +9,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { Ng2TelInputModule } from 'ng2-tel-input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatInputModule } from '@angular/material/input';
@@ -49,7 +48,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		FormsModule,
 		ReactiveFormsModule,
 		MatSlideToggleModule,
-		Ng2TelInputModule,
 		GoogleMapsModule,
 		MatNativeDateModule,
 		MatMomentDateModule,

@@ -30,7 +30,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddDriverFromAffiliateComponent } from './add-driver-from-affiliate/add-driver-from-affiliate.component';
 import { AddVehicleFromAffiliateComponent } from './add-vehicle-from-affiliate/add-vehicle-from-affiliate.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { Ng2TelInputModule } from 'ng2-tel-input';
 import { MyBookingsComponent } from './my-bookings/my-bookings.component';
 import { AdminModule } from '../admin/admin.module';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
@@ -95,7 +94,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		FormsModule,
 		ReactiveFormsModule,
 		MatSlideToggleModule,
-		Ng2TelInputModule,
 		AdminModule,
 		GoogleMapsModule,
 		MatNativeDateModule,
