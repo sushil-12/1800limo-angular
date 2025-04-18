@@ -1,5 +1,5 @@
 .modal-header .close {
-	margin : 0 !important;
+	margin: 0 !important;
 	padding: 0 !important;
 }
 
@@ -9,8 +9,8 @@
 
 .modal .modal-body ul {
 	margin-left: 5px !important;
-	padding    : 0 !important;
-	height     : 35px !important;
+	padding: 0 !important;
+	height: 35px !important;
 }
 
 .number.passengers_qty button {
@@ -18,10 +18,33 @@
 }
 
 .passengers_qty input[type="number"] {
-	border          : 2px solid #808080 !important;
+	border: 2px solid #808080 !important;
 	background-color: #e9e9e9 !important;
 }
 
 .modal-header {
 	justify-content: center !important;
+}
+
+/* Prevent scaling of the image during drag */
+.cdk-drag-preview img {
+	transform: none !important;
+	width: auto !important;
+	height: auto !important;
+}
+
+/* Prevent the drag preview (image and container) from scaling */
+.cdk-drag-preview {
+	transform: none !important;
+	width: auto !important;
+	height: auto !important;
+	max-width: none !important;
+	max-height: none !important;
+}
+
+/* Prevent the entire row from being scaled during drag */
+.cdk-drag {
+	transform: none !important;
+	width: auto !important;
+	height: auto !important;
 }

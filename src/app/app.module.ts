@@ -73,6 +73,20 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
+import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
+import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
+import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
+import { AddBankComponent } from './components/subscription/add-bank/add-bank.component';
+import { AddVehicleSubscriberComponent } from './components/subscription/add-vehicle-subscriber/add-vehicle-subscriber.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { VehicleDetailsComponent } from './components/subscription/vehicle-details/vehicle-details.component';
+import { VehicleRatesSubscriberComponent } from './components/subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
+import { EditVehicleSubscriberComponent } from './components/subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
+import { DriverDetailsComponent } from './components/subscription/driver-details/driver-details.component';
+import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
+import { FarmOutBookingsComponent } from './components/subscription/farm-out-bookings/farm-out-bookings.component';
+import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -113,6 +127,18 @@ import { ModifyBookingComponent } from './components/email-pages/modify-booking/
 		AutoFocusDirective,
 		IndividualConfirmationComponent,
 		ModifyBookingComponent,
+		PartnerRegistrationComponent,
+		SubscriptionPlansComponent,
+		PaymentDetailsComponent,
+		AddBankComponent,
+		AddVehicleSubscriberComponent,
+		VehicleDetailsComponent,
+		VehicleRatesSubscriberComponent,
+		EditVehicleSubscriberComponent,
+		DriverDetailsComponent,
+		AddDriverSubscriberComponent,
+		FarmOutBookingsComponent,
+		TutorialsComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -136,7 +162,9 @@ import { ModifyBookingComponent } from './components/email-pages/modify-booking/
 		NgxSpinnerModule,
 		SharedModule,
 		NgOtpInputModule,
-		MatRadioModule
+		MatRadioModule,
+		NgSelectModule,
+		NgxChartsModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

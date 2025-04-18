@@ -15,8 +15,7 @@ declare var $: any;
 	templateUrl: './amenities-special.component.html',
 	styleUrls: ['./amenities-special.component.scss']
 })
-export class AmenitiesSpecialComponent implements OnInit
-{
+export class AmenitiesSpecialComponent implements OnInit {
 
 
 	color: ThemePalette = 'primary';
@@ -35,6 +34,7 @@ export class AmenitiesSpecialComponent implements OnInit
 	public disableAddButton: boolean = false;
 	public disableEditButton: boolean = false;
 	public checkChargeable: boolean;
+	currentUser:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -42,23 +42,22 @@ export class AmenitiesSpecialComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder) { }
 
-	ngOnInit(): void 
-	{
+	ngOnInit(): void {
 		/** spinner starts on init */
 		this.spinner.show();
 
 		// Load Our amenities using API
-		this.adminService.getSpecialAmenities().then(result =>
-		{
+		this.adminService.getSpecialAmenities().then(result => {
 			this.specialAmenitiesRes = result;
 			this.specialAmenities = this.specialAmenitiesRes.data;
 			sessionStorage.setItem('specialAmenity', JSON.stringify(this.specialAmenities));
 			this.spinner.hide();//hide spinner
 		})
-			.catch(err =>
-			{
+			.catch(err => {
 				this.spinner.hide();//hide spinner
 			});
+
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 		//add amenity type form validation
 		this.addAmenitiesForm = this.formBuilder.group({
@@ -72,13 +71,10 @@ export class AmenitiesSpecialComponent implements OnInit
 		});
 	}
 
-	serach(val)
-	{
+	serach(val) {
 		let allAmenities = JSON.parse(sessionStorage.getItem('specialAmenity'));
-		let searchAmenities = allAmenities.filter(function (amenity)
-		{
-			if (amenity.name.toLowerCase().search(val) != -1)
-			{
+		let searchAmenities = allAmenities.filter(function (amenity) {
+			if (amenity.name.toLowerCase().search(val) != -1) {
 				return true;
 			}
 		});
@@ -86,18 +82,15 @@ export class AmenitiesSpecialComponent implements OnInit
 		this.specialAmenities = searchAmenities;
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addAmenitiesForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		this.submitted = true;
 		// console.log(this.addAmenitiesForm);return false;
 		// stop here if form is invalid
-		if (this.addAmenitiesForm.invalid)
-		{
+		if (this.addAmenitiesForm.invalid) {
 			return;
 		}
 
@@ -106,37 +99,31 @@ export class AmenitiesSpecialComponent implements OnInit
 
 		this.adminService.addSpecialAmenity(this.addAmenitiesForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					$('#addAmenityModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				$('#addAmenityModal').modal('hide');
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/specialAmenity']);
 				});
 			});
 	}
 
-	editSpecialAmenity(id)
-	{
+	editSpecialAmenity(id) {
 		this.spinner.show();
 
 		this.adminService.getSpecialAmenity(id)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				console.log(this.response)
 				this.editAmenitiesForm.patchValue({
@@ -148,17 +135,14 @@ export class AmenitiesSpecialComponent implements OnInit
 			});
 	}
 
-	get fEdit()
-	{
+	get fEdit() {
 		return this.editAmenitiesForm.controls;
 	}
-	updateAmenityForm()
-	{
+	updateAmenityForm() {
 		// console.log(this.editAmenitiesForm);return false;
 		this.submittedEditForm = true;
 		// stop here if form is invalid
-		if (this.editAmenitiesForm.invalid)
-		{
+		if (this.editAmenitiesForm.invalid) {
 			return;
 		}
 
@@ -167,51 +151,42 @@ export class AmenitiesSpecialComponent implements OnInit
 
 		this.adminService.updateSpecialAmenity(this.editAmenitiesForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					$('#editAmenityModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				$('#editAmenityModal').modal('hide');
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/specialAmenity']);
 				});
 			});
 	}
 
-	enableDisableClicked(event, id)
-	{
+	enableDisableClicked(event, id) {
 		this.spinner.show();//show spinner
 		console.log(event.checked);
-		if (event.checked)
-		{
+		if (event.checked) {
 			var status = 'enable';
 		}
-		else
-		{
+		else {
 			var status = 'disable';
 		}
 		this.adminService.specialAmenityStatus(id, status)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 
 				this.spinner.hide();//hide spinner
 			});
 	}
 
-	drop(event: CdkDragDrop<string[]>)
-	{
+	drop(event: CdkDragDrop<string[]>) {
 		// moveItemInArray(this.amenities, event.previousIndex, event.currentIndex);
 		console.log(event, "check event")
 		console.log("previous index", event.previousIndex)
@@ -219,10 +194,8 @@ export class AmenitiesSpecialComponent implements OnInit
 		this.spinner.show();
 		let id = this.specialAmenities[event.previousIndex].id
 		console.log(id, "////////////")
-		this.adminService.changeSpecialAmenitySortingOrder({ special_amenity_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) =>
-		{
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-			{
+		this.adminService.changeSpecialAmenitySortingOrder({ special_amenity_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) => {
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 				this.router.navigate(['/admin/specialAmenity']);
 			});
 			this.spinner.hide();

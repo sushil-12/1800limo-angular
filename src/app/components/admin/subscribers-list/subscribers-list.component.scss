@@ -1,0 +1,58 @@
+.x-cross-btn {
+    background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
+}
+
+.x-close-btn {
+    float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    border: none;
+    z-index: 10;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
+    transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
+    transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
+
+    &:hover {
+        text-decoration: underline;
+        color: var(--blue);
+    }
+}
+
+.modal#messageModal {
+    .modal-body {
+        p {
+            font-size: 1rem;
+            font-weight: 500;
+
+            span {
+                font-size: 1.1rem;
+            }
+        }
+
+        textarea#message {
+            width: 100%;
+            border-radius: 1rem;
+            padding: 1rem;
+            max-height: 15rem;
+        }
+    }
+}
+
+.dropdown-item{
+    padding: .35rem 1.5rem !important;
+	font-size: 16px;
+	font-weight: 500 !important;
+	font-family: "Roboto", sans-serif !important;
+  }

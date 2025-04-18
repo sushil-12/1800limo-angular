@@ -88,6 +88,21 @@ import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loos
 import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
 import { FleetComponent } from './cms/fleet/fleet.component';
 import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
+import { AddBankComponent } from '../subscription/add-bank/add-bank.component';
+import { AddVehicleSubscriberComponent } from '../subscription/add-vehicle-subscriber/add-vehicle-subscriber.component';
+import { VehicleDetailsComponent } from '../subscription/vehicle-details/vehicle-details.component';
+import { VehicleRatesSubscriberComponent } from '../subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
+import { EditVehicleSubscriberComponent } from '../subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
+import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
+import { DriverDetailsComponent } from '../subscription/driver-details/driver-details.component';
+import { AddDriverSubscriberComponent } from '../subscription/add-driver-subscriber/add-driver-subscriber.component';
+import { FarmOutBookingsComponent } from '../subscription/farm-out-bookings/farm-out-bookings.component';
+import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
+import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
+import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
+import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
+import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
+import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 
 
 const routes: Routes = [
@@ -232,11 +247,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: CreateNewBooking2Component
 	},
-	{
-		path: 'booking-logs',
-		canActivate: [SubAdminGuard],
-		component: BookingLogsComponent
-	},
+	// {
+	// 	path: 'booking-logs',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: BookingLogsComponent
+	// },
 	{
 		path: 'finalize-booking',
 		canActivate: [SubAdminGuard],
@@ -262,11 +277,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: IndividualComponent
 	},
-	{
-		path: 'corporate-account-admin',
-		canActivate: [SubAdminGuard],
-		component: CorporateComponent
-	},
+	// {
+	// 	path: 'corporate-account-admin',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: CorporateComponent
+	// },
 	{
 		path: 'travel-planner-account-admin',
 		canActivate: [SubAdminGuard],
@@ -372,16 +387,16 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: EditIndividualAccountComponent
 	},
-	{
-		path: 'add-corporate-account',
-		canActivate: [SubAdminGuard],
-		component: AddCorporateAccountComponent
-	},
-	{
-		path: 'edit-corporate-account',
-		canActivate: [SubAdminGuard],
-		component: EditCorporateAccountComponent
-	},
+	// {
+	// 	path: 'add-corporate-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: AddCorporateAccountComponent
+	// },
+	// {
+	// 	path: 'edit-corporate-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: EditCorporateAccountComponent
+	// },
 	{
 		path: 'travel-planner-account',
 		// canActivate: [],
@@ -503,6 +518,11 @@ const routes: Routes = [
 		component: LooseAffiliateAccountDetailsComponent
 	},
 	{
+		path: 'add-bank-details',
+		canActivate: [AdminGuardGuard],
+		component: AddBankComponent
+	},
+	{
 		path: 'affiliate',
 		canActivate: [SubAdminGuard],
 		component: AffiliateStepsTemplateComponent,
@@ -563,7 +583,92 @@ const routes: Routes = [
 				component: AffiliateStep6Component
 			}
 		]
-	}
+	},
+	{
+		path: 'vehicle-details',
+		canActivate: [AdminGuardGuard],
+		component: VehicleDetailsComponent
+	},
+	{
+		path: 'driver-details',
+		canActivate: [AdminGuardGuard],
+		component: DriverDetailsComponent
+	},
+	{
+		path: 'add-vehicle-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: AddVehicleSubscriberComponent
+	},
+	{
+		path: 'edit-vehicle-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: EditVehicleSubscriberComponent
+	},
+	{
+		path: 'add-vehicle-rates-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: VehicleRatesSubscriberComponent
+	},
+	{
+		path: 'edit-vehicle-rates-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: VehicleRatesSubscriberComponent
+	},
+	{
+		path: 'add-driver-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: AddDriverSubscriberComponent
+	},
+	{
+		path: 'edit-driver-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: AddDriverSubscriberComponent
+	},
+	{
+		path: 'subscribers-list',
+		canActivate: [AdminGuardGuard],
+		component: SubscribersListComponent
+	},
+	{
+		path: 'farm-out-bookings',
+		canActivate: [AdminGuardGuard],
+		component: FarmOutBookingsComponent
+	},
+	{
+		path: 'maps',
+		canActivate: [AdminGuardGuard],
+		component: AffiliateMapPinsComponent
+	},
+	{
+		path: 'reports-admin-bookings',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminComponent
+	},
+	{
+		path: 'reports-admin-vehicles',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminVehiclesComponent
+	},
+	{
+		path: 'reports-admin-vehicles-share',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminVehicleAverageComponent
+	},
+	{
+		path: 'reports-admin-users',
+		canActivate: [AdminGuardGuard],
+		component: ReportsAdminUsersComponent
+	},
+	{
+		path: 'loose-affliate-vehicles',
+		canActivate: [AdminGuardGuard],
+		component: LooseAffiliateVehiclesComponent
+	},
+	{
+		path: 'add-vehicle-loose-affiliate',
+		canActivate: [AdminGuardGuard],
+		component: AddVehicleSubscriberComponent
+	},
 ];
 
 @NgModule({

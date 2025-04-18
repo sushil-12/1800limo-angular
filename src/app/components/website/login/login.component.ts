@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+// import { ReCaptchaService } from '../../../services/re-captcha.service';
 
 import { environment } from 'src/environments/environment';
 
@@ -32,6 +33,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	referralCode: string = null;
 
 	constructor(private formBuilder: FormBuilder,
+		// private recaptchaService: ReCaptchaService, 
 		private router: Router,
 		private authService: AuthService,
 		private changeDetectorRef: ChangeDetectorRef,
@@ -111,10 +113,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
+
+		// this.recaptchaService.load(environment.recaptchaKey);
+
 		this.loginForm = this.formBuilder.group({
 			phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			role: ['', Validators.required],
-			invite_code: ['']
+			invite_code: [''],
 		});
 
 		if (this.router.url === '/admin-login') {
@@ -141,7 +146,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			const role = params['role'];
 			console.log('Role:', role, params);
 
-			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual']
+			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual','sub_affiliate','subscriber']
 
 			console.log('Role:', role);
 			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]
@@ -172,6 +177,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 	loginSubTravelAgent() {
 		this.router.navigate(['/login/sub_travel_agent']).then(() => {
+			window.location.reload()
+		})
+
+	}
+	loginSubAffiliate() {
+		this.router.navigate(['/login/sub_affiliate']).then(() => {
 			window.location.reload()
 		})
 
@@ -251,6 +262,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		this.loginForm.value.countryCode = this.countryCode
 		this.loginForm.value.phoneCountry = this.phoneCountry;
 
+		// this.recaptchaService.execute('login', recaptchaToken => {
+		// console.log("recaptcha token--->",recaptchaToken)
+		// this.loginForm.value.recaptchaToken = recaptchaToken;
+		console.log("login form",this.loginForm.value)
 		this.authService.login(this.loginForm.value)
 			.pipe(
 				catchError(err => {
@@ -261,12 +276,23 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			)
 			.subscribe((result: any) => {
 				this.response = result;
-				var userId = this.response.data.id;
+				var userId;
+				var email;
+				if(this.response?.data?.is_driver){
+					userId = this.response?.data?.user?.id
+					email = this.response?.data?.user?.email
+					sessionStorage.setItem("isDriver",'Driver')
+				}
+				else{
+					userId = this.response?.data?.id;
+					email = this.response?.data?.email
+					sessionStorage.setItem("isDriver",'')
+				}
 				sessionStorage.setItem('userId', '' + userId);
 				if (this.response.data.family_data?.id) {
 					sessionStorage.setItem('family_id', this.response.data.family_data.id)
 				}
-				let email = this.response?.data?.email
+
 				if (environment['environmentName'] !== 'Production') {
 
 					console.log('role', this.Role)
@@ -275,5 +301,5 @@ export class LoginComponent implements OnInit, AfterViewInit {
 					this.router.navigateByUrl('/otp' + `?role=${this.Role}`);
 				}
 			});
-	}
+		}
 }

@@ -173,9 +173,9 @@ ul {
 	font-weight: 700;
 }
 
-.preview-pickup-color {
-	color: #007500;
-}
+// .preview-pickup-color {
+// 	color: #007500;
+// }
 
 .preview-dropoff-color {
 	color: #FF0000;
@@ -372,4 +372,14 @@ ul {
 .border-red {
 	border: 3px solid red;
 	border-radius: 12px;
+}
+
+@media (min-width: 992px){
+	.modal-lg{
+		max-width: 600px !important;
+	}
+}
+
+.preview-output-feild {
+	font-size: 19px;
 }

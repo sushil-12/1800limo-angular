@@ -30,7 +30,7 @@ export class NewBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
-		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
+		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -454,21 +454,17 @@ export class NewBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
+			departing_airport_city:['']
 		})
 
-		let month = new Date().getMonth()
-		let date: string | number = new Date().getDate() + 1
-		let year = new Date().getFullYear()
+		let date = new Date();
+		let timestamp = date.getTime();
 
-
-		let full_date = new Date(year, month, date).toISOString()
-		// 10 days later
-		let future_full_date = new Date(year, month, date).toISOString()
-		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
-		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
+		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
+		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
-		this.SetFormValue('return_booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
+		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -919,7 +915,7 @@ export class NewBookingComponent implements OnInit {
 	fetchClientAccounts(account_type: string) {
 		const legend = {
 			individual: 'individual',
-			corporate: 'corporate',
+			// corporate: 'corporate',
 			travel_planner: 'travel'
 		}
 
@@ -1816,6 +1812,10 @@ export class NewBookingComponent implements OnInit {
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
+				if(value.includes("cruise_")){
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
+					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				}
 				console.log("setting value of cruise port and name mandatory")
 				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
 				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
@@ -1851,6 +1851,7 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			if (value.includes('airport_')) {
+				this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text pax with pickup instructions when ship has arrived.");
 				console.log("setting value of pickup flight mandatory")
 				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('pickup_flight').updateValueAndValidity();
@@ -1929,6 +1930,8 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').setValidators([Validators.required]);
+					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				} else {
 					console.log("setting value of return pickup flight not mandatory")
 					this.BookingForm.get('return_pickup_flight').clearValidators();
@@ -1937,6 +1940,8 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').clearValidators();
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').clearValidators();
+					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
 			}
 		})

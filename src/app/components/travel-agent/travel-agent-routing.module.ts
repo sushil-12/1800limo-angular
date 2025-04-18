@@ -14,6 +14,7 @@ import { TravelClientAccountsComponent } from './travel-client-accounts/travel-c
 import { AddClientAccountComponent } from './add-client-account/add-client-account.component';
 import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accounts.component';
 import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
+import { PayoutsComponent } from './payouts/payouts.component';
 const routes: Routes = [
   {
 		path: '',
@@ -54,6 +55,11 @@ const routes: Routes = [
   {
     path:'invoice-summary',
     component:InvoiceDashSummaryComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'payouts',
+    component:PayoutsComponent,
     canActivate: [CheckProfileCompleteGuard],
   },
   {

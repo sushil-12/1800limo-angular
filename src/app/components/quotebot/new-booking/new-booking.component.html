@@ -660,6 +660,93 @@
 				</div> -->
 				<!-- </div> -->
 				<!-- <div class="row"> -->
+
+				<div class="row px-4">
+					<!-- Service Type -->
+					<div class="flex-grow-1 m-2">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Service Type
+								</mat-label>
+								<mat-select formControlName="service_type"
+									(selectionChange)="onSelectionChangeServiceType($event)">
+									<mat-option value="one_way">One Way ?</mat-option>
+									<mat-option value="round_trip">Round Trip ?</mat-option>
+									<mat-option value="charter_tour">Charter/Tour ?</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<!-- Transfer Type -->
+					<div class="flex-grow-1 m-2">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label class="">
+									Transfer Type
+								</mat-label>
+								<mat-select formControlName="transfer_type" class="font-weight-bolder"
+									(selectionChange)="changeTransferType($event.value)">
+									<mat-option value="airport_to_city">Airport To City ?</mat-option>
+									<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+									<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+									<mat-option value="city_to_city">City To City ?</mat-option>
+									<mat-option value="city_to_airport">City To Airport ?</mat-option>
+									<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+									<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+									<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
+									<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
+											*ngFor="let tf_type of booking_params.transfer_types">
+											{{ textFormatterTransferType(tf_type) | titlecase }}
+										</mat-option> -->
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<!-- Return Transfer Type -->
+					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label class="">
+									Return Transfer Type
+								</mat-label>
+								<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+									(selectionChange)="changeReturnTransferType($event.value)">
+									<mat-option value="airport_to_city">Airport To City ?</mat-option>
+									<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+									<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+									<mat-option value="city_to_city">City To City ?</mat-option>
+									<mat-option value="city_to_airport">City To Airport ?</mat-option>
+									<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+									<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+									<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
+									<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
+											*ngFor="let tf_type of booking_params.transfer_types">
+											{{ textFormatterTransferType(tf_type) | titlecase }}
+										</mat-option> -->
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<!-- Hours -->
+					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Number of Hours
+								</mat-label>
+								<input type="number" matInput placeholder="Enter Hours"
+									formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+									(keyup)="handleNoOfHours($event.target.value)" (focus)="$event.target.select()" />
+								<span matSuffix>Hrs.</span>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+
 				<!-- Meet Greet Choices -->
 				<div class="row col-md-12 ml-2">
 					<mat-form-field appearance="outline" class="flex-grow-1 m-2">
@@ -1072,15 +1159,16 @@
 				<!-- Special Instructions -->
 				<div class="col-md-12 my-2 margin-left-pointtwo">
 					<mat-form-field appearance="outline">
-						<mat-label>
-							Special Instructions
+						<mat-label style="color:red;">
+							Special Instructions / Exact Building Name
 						</mat-label>
 						<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
 							formControlName="booking_instructions" rows="5"></textarea>
 					</mat-form-field>
 				</div>
 				<div class="row m-2">
-					<p class="text-lg" style="color: #dc3545!important;">
+					<p class="text-lg"
+						style="color: #dc3545!important;font-weight: 500;background: yellow;padding: 5px;">
 						NOTE : Enter pickup and drop off locations first, then enter extra stops.
 					</p>
 				</div>
@@ -1639,6 +1727,29 @@
 								</div>
 							</div>
 						</div>
+
+						<!-- Departing Airport / City -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline" class="vehicleLable mt-0"
+								style="margin-top: 0px !important;">
+								<mat-label>
+									Departing Airport / City <span class="asterisk">*</span>
+								</mat-label>
+								<input formControlName="departing_airport_city" type="text" matInput
+									placeholder="Departing Airport / City" (focus)="$event.target.select()" />
+							</mat-form-field>
+							<div class="error-box">
+								<div class="error-message"
+									*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)"
+									style="margin-top:-15px">
+									<p class="text-danger text-lg m-0"
+										*ngIf="Form.departing_airport_city.errors?.required">
+										This field is required
+									</p>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 
@@ -1855,8 +1966,8 @@
 
 				<div class="col-md-12 my-2 margin-left-pointtwo">
 					<mat-form-field appearance="outline">
-						<mat-label>
-							Special Instructions
+						<mat-label style="color:red;">
+							Special Instructions / Exact Building Name
 						</mat-label>
 						<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
 							rows="5"></textarea>

@@ -3,11 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { bindCallback, Observable, throwError } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../shared/shared.module';
-import { AdminService } from 'src/app/services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 
 declare let $: any
 
@@ -53,6 +53,10 @@ export class SelectVehicleComponent implements OnInit {
 
 	FILTERS_ORDER = [
 		{
+			dp: 'extra-$-amenities',
+			rp: 'amenities'
+		},
+		{
 			dp: 'vehicle-type-preferences',
 			rp: 'vehicle-type'
 		},
@@ -84,12 +88,9 @@ export class SelectVehicleComponent implements OnInit {
 		,
 		{
 			dp: 'amenities',
-			rp: 'amenities'
-		},
-		{
-			dp: 'extra-$-amenities',
 			rp: 'special-amenities'
 		},
+		
 		{
 			dp: 'driver-preferences',
 			rp: [
@@ -112,7 +113,7 @@ export class SelectVehicleComponent implements OnInit {
 			]
 		},
 		{
-			dp: 'vehicle-service-area',
+			dp: 'vehicle-service-area-type',
 			rp: 'vehicle-service-area'
 		},
 		{
@@ -199,6 +200,7 @@ export class SelectVehicleComponent implements OnInit {
 	vehicleDetails: any;
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
+	booking_created_from: string = 'admin';
 
 	// Filters
 
@@ -235,6 +237,7 @@ export class SelectVehicleComponent implements OnInit {
 	notification_msg: any;
 	passengerDetails: any;
 	currencySymbol: any;
+	vehicleListAmenity:any=[];
 
 
 	constructor(
@@ -557,6 +560,7 @@ export class SelectVehicleComponent implements OnInit {
 		if (this.quotebot_form != null) {
 			data = this.quotebot_form
 			data['filters'] = this.filters.request
+			data['user_id'] = this.currentUser?.id
 		}
 		// console.group('Sending Data to backend ... ', data)
 		// console.groupEnd()
@@ -782,6 +786,9 @@ export class SelectVehicleComponent implements OnInit {
 	bookNow(vehicle_selected: any) {
 		// // console.log('Will navigate to Book Now Page ...')
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
+		if (vehicle_selected?.created_by != 1) {
+			this.booking_created_from = 'subscriber'
+		}
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				if (this.bookingId) {
@@ -790,7 +797,7 @@ export class SelectVehicleComponent implements OnInit {
 				}
 				else {
 					this.$router.navigate(['/admin/new-booking'],
-						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: (JSON.parse(localStorage.getItem('currentUser'))['created_by_role'] == 'admin' ? 'admin' : this.booking_created_from) } })
 				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
@@ -799,7 +806,7 @@ export class SelectVehicleComponent implements OnInit {
 				this.$router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
 			}
 		} else {
 			// this.$errorDialog.openDialog({
@@ -1002,6 +1009,11 @@ export class SelectVehicleComponent implements OnInit {
 		$("#sendEmailModal").modal("hide");
 		this.message.nativeElement.value = "";
 		this.show = false;
+	}
+
+	viewAmenities(id){
+		this.vehicleListAmenity = this.vehicleDetails.find(item => item.id === id);
+		console.log("in veh amenity--->",this.vehicleListAmenity,'=====',this.vehicleListAmenity.amenities)
 	}
 
 

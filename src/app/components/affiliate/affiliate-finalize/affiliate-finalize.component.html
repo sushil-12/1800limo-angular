@@ -374,13 +374,14 @@
 	<div class="row" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
 		<div class="col-md-12 text-right">
 			<button type="button" class="custom-filled-button ratesButton m-3"
-				[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
+				[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="submitForm()">
 				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 			</button>
 		</div>
 		<div class="col-md-12">
 			<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking: <span
 				class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
+				<p class="alert alert-danger">Note- 25% of extra tip will be added to admin share</p>
 		</div>
 	</div>
 	<div class="row" *ngIf="BookingDetail?.payment_status=='unpaid' && editRate" style="margin: -80px 0px 0px 0px;">
@@ -636,7 +637,7 @@
 		<div class="d-flex align-items-center mr-4">
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-blue' : 'color-grey' " (click)="makePayment('cash')">
-				Pay with cash
+				Paid cash
 			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " (click)="makePayment('card')">

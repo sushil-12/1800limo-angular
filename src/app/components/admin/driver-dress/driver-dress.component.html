@@ -57,7 +57,7 @@
 									</mat-slide-toggle>
 								</td>
 								<td>
-									<a class="user-profileded btn btn-icon btn-transparent-dark"
+									<a [ngClass]="currentUser?.account_id == driverDress?.created_by ?  'user-profileded btn btn-icon btn-transparent-dark' : 'disabled user-profileded btn btn-icon btn-transparent-dark' "
 										id="navbarDropdownUserImage" (click)="editDriverDress(driverDress.id)"
 										role="button" tabindex="1"> <span>Edit</span>
 									</a>

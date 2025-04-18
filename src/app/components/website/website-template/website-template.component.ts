@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-website-template',
@@ -7,8 +8,20 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class WebsiteTemplateComponent implements OnInit {
+  currentRoute: string = '';
+  excludedRoutes: string[] = ['/subscription', '/partner-registration', '/payment-details']
 
-  constructor() { }
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = this.router.url;
+      }
+    });
+  }
+
+  isExcludedRoute(): boolean {
+    return this.excludedRoutes.includes(this.currentRoute);
+  }
 
   ngOnInit(): void {
   }

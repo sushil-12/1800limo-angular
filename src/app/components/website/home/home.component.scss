@@ -123,7 +123,7 @@ section {
 }
 
 #search-button-container {
-	height: 80px;
+	height: 60px;
 	width: 100%;
 	display: table;
 
@@ -144,7 +144,7 @@ section {
 }
 
 .font-weight-bolder {
-	font-size: 19px !important;
+	font-size: 17.9px !important;
 }
 
 .after_icon::after {
@@ -153,7 +153,7 @@ section {
 	position: absolute;
 	right: -8px;
 	position: absolute;
-	top: 29px;
+	top: 8px;
 	// transform: rotate(-90deg);
 }
 
@@ -163,7 +163,7 @@ section {
 	position: absolute;
 	right: -7px;
 	position: absolute;
-	top: 29px;
+	top: 8px;
 	// transform: rotate(90deg);
 }
 
@@ -171,7 +171,7 @@ section {
 	margin-top: 2px;
 	margin-left: -14px;
 	margin-bottom: 12px;
-	scale: 1.5;
+	scale: 1.8;
 	transform: rotate(90deg);
 }
 
@@ -267,6 +267,10 @@ section {
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		display: none;
 	}
+
+	.font-weight-bolder {
+		font-size: 14.5px !important;
+	}
 }
 
 .gear-bg-black {
@@ -274,6 +278,7 @@ section {
 }
 
 @media only screen and (max-width: 767px) {
+
 	.gear-bg {
 		color: #000 !important;
 	}
@@ -311,6 +316,16 @@ section {
 		box-shadow: none;
 		text-shadow: none;
 		font-size: 40px;
+	}
+
+	// .flip_div{
+	// 	margin-bottom: 20px;
+	// }
+
+	.three-d-button{
+		font-size: 18px !important;
+		font-weight: 700 !important;
+		border-radius: 10px !important;
 	}
 }
 
@@ -693,6 +708,7 @@ a.user-profile:active::after {
 	border-radius: 14px;
 	box-shadow: 5px 3px 20px -6px #f5f4fe;
 	background-color: #f5f4fe;
+	width: 430px;
 }
 
 .cross-svg {
@@ -1045,9 +1061,9 @@ a.user-profile:active::after {
 
 .whychoose_no a {
 	color: #000 !important;
-	background: var(--orange);
+	background-color: #F2C449;
 	font-size: 17px;
-	border: 1px solid var(--orange);
+	border: none;
 	line-height: 17px;
 	padding: 5px 15px;
 	transition: 0.2s;
@@ -1056,15 +1072,24 @@ a.user-profile:active::after {
 
 @media only screen and (max-width:767px) {
 	.dropdown-menu a {
-		font-size: 19px;
+		font-size: 17px;
+	}
+}
+
+@media only screen and (min-width:769px) {
+	.errorMsg {
+		width: 755px;
 	}
 }
 
 
 button.custom-filled-button {
 	padding: 0.475rem 1.358rem !important;
-	color: #fff !important;
-	font-size: 22px !important;
+	// color: #fff !important;
+	font-size: 18px !important;
+	background-color: #F2C449 !important;
+	border: none !important;
+	font-weight: 500;
 }
 
 
@@ -1077,3 +1102,42 @@ button.custom-filled-button {
 .logout-background {
 	background: #8080805c !important;
 }
+
+
+.three-d-button {
+    border-radius: none;
+    background: linear-gradient(135deg, #fac72c, #ff7b0563);
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+    transition: all .3s ease;
+    font-size: 20px;
+    padding: 9px;
+    /* display: flex; */
+    /* align-items: center; */
+}
+
+.three-d-button:hover {
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.three-d-button:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);
+    transform: translateY(2px);
+}
+
+.three-d-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+.pickup-label {
+	margin-top: -24px;
+	display: block; /* Makes sure the label appears on its own line */
+  }
+
+
+  

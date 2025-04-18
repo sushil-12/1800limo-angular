@@ -1,15 +1,13 @@
-.owl-carousel
-{
+.owl-carousel {
 	width: 100% !important;
 }
-#big
-{
-	.item
-	{
+
+#big {
+	.item {
 		width: auto;
 		margin: 0 auto;
-		img
-		{
+
+		img {
 			max-width: 337px;
 			width: 100%;
 			border-radius: 0.25rem;
@@ -19,17 +17,16 @@
 		}
 	}
 }
+
 @media screen and (max-width:767px) {
-	.justify-content-end{
+	.justify-content-end {
 		justify-content: center !important;
 	}
 }
-#thumbs
-{
-	.item
-	{
-		img
-		{
+
+#thumbs {
+	.item {
+		img {
 			object-fit: cover;
 			margin: 5px 9px;
 			max-width: 70px;
@@ -38,36 +35,53 @@
 		}
 	}
 }
-.rounded-pill{
+
+.rounded-pill {
 	width: 70px;
 	color: #FFF !important;
 	padding: 7px 14px;
 }
 
-hr
-{
+hr {
 	margin: 0.5rem 0 0.5rem 0;
 	border-top: 1px solid transparent;
 }
-hr.perforated-line
-{
+
+hr.perforated-line {
 	border-top: 2px dashed #424242ad;
-	margin: 2.4rem 0;
+	// margin: 2.4rem 0;
 }
-hr.blue-line
-{
+
+hr.blue-line {
 	border-top: 1px solid #8ab4f8;
+}
+
+//vehicle card icon 
+.icon-container-mobile {
+	padding: 0px 2px 0px 2px;
+	min-width: fit-content;
+	border: 1px solid #D9D9D9;
+	border-radius: 15px;
+	background: #f3f0f0;
+}
+
+.vehicle-details-data-mobile {
+	background: #f7f7f7;
+	padding: 5px;
+	border: 0.5px solid #f7f7f7;
+	box-shadow: 0px 4px 8px -1px rgb(0 0 0 / 10%);
+	font-size: 15px;
 }
 
 .cont-block {
 	font-weight: 500;
-	color      : #000;
+	color: #000;
 }
 
 
 .btn {
 	border-radius: 100px;
-	margin       : 5px;
+	margin: 5px;
 }
 
 
@@ -76,11 +90,11 @@ hr.blue-line
 .org-Btn {
 	border-radius: 8px;
 	// background: rgba(243, 147, 61, 0.2);
-	border       : none;
+	border: none;
 }
 
 .pass-det {
-	padding  : 5px 10px;
+	padding: 5px 10px;
 	font-size: 18px !important;
 }
 
@@ -95,33 +109,37 @@ hr.blue-line
 
 .img-Block #google_map {
 	max-width: 100%;
-	height   : 225px;
+	height: 225px;
 }
 
 #map {
-	height       : 100%;
+	height: 100%;
 	border-radius: 10px;
-	margin-top   : 15px;
+	margin-top: 15px;
 }
 
 
+
+.checkbox-block {
+	label.custom-control-label {
+		font-size: 17.5px;
+		// margin-top   : 14px;
+		margin-bottom: 14px;
+		font-weight: 600;
+
+	}
+
+	#charter-price p {
+		font-size: 18px;
+	}
+}
+
 .price-Blc {
-	.checkbox-block
-	{		
-		label.custom-control-label {
-			font-size    : 1.5rem;
-			margin-top   : 14px;
-			margin-bottom: 14px;
-			font-weight  : 600;
-			
-			small {
-				font-size: 1.3rem;
-			}
-		}
-		#charter-price p
-		{
-			font-size: 1.3rem;
-		}
+	margin-top: -10px;
+	margin-bottom: 10px;
+
+	small {
+		font-size: 0.8rem;
 	}
 }
 
@@ -132,7 +150,7 @@ hr.blue-line
 
 
 .price-Blc .custom-control-input:checked~.custom-control-label::before {
-	border-color    : #f3933d;
+	border-color: #f3933d;
 	background-color: #f3933d;
 }
 
@@ -145,31 +163,31 @@ hr.blue-line
 }
 
 img.img-cir {
-	width             : 182px;
-	height            : 182px;
-	border-radius     : 100px;
-	border            : 2px solid #00000081;
-	-o-object-fit     : cover;
-	object-fit        : cover;
+	width: 182px;
+	height: 182px;
+	border-radius: 100px;
+	border: 2px solid #00000081;
+	-o-object-fit: cover;
+	object-fit: cover;
 	-o-object-position: center top;
-	object-position   : center top;
+	object-position: center top;
 }
 
 .list-box ul {
-	display              : grid;
+	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	max-width            : 700px;
+	max-width: 700px;
 }
 
 .list-unstyled li {
-	position    : relative;
+	position: relative;
 	padding-left: 22px;
 }
 
 .b-cus.btn.btn-back {
-	background  : #cccccc;
+	background: #cccccc;
 	border-color: #9f9f9f;
-	color       : #1d1d1d;
+	color: #1d1d1d;
 }
 
 
@@ -187,43 +205,41 @@ img.img-cir {
 }
 
 button.custom-btn {
-	width                  : -webkit-fit-content;
-	width                  : -moz-fit-content;
-	width                  : fit-content;
-	height                 : -webkit-fit-content;
-	height                 : -moz-fit-content;
-	height                 : fit-content;
-	padding                : 0.275rem 0.67rem;
-	background-color       : var(--orange);
-	border                 : 1.5px solid var(--orange);
-	border-radius          : 20px;
-	box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-	transition             : box-shadow 0.1s ease-in-out;
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+	height: -webkit-fit-content;
+	height: -moz-fit-content;
+	height: fit-content;
+	padding: 0.275rem 0.67rem;
+	background-color: var(--orange);
+	border: 1.5px solid var(--orange);
+	border-radius: 20px;
+	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition: box-shadow 0.1s ease-in-out;
 	color: #000000;
 	margin: 0 3px;
 }
 
 .btn-bg-green {
-	width                  : -webkit-fit-content;
-	width                  : -moz-fit-content;
-	width                  : fit-content;
-	height                 : -webkit-fit-content;
-	height                 : -moz-fit-content;
-	height                 : fit-content;
-	padding                : 0.275rem 0.67rem;
-	background-color 	   :rgb(51, 198, 88);
-	border                 : 1.5px solid rgb(51, 198, 88);
-	border-radius          : 20px;
-    box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-	transition             : box-shadow 0.1s ease-in-out;
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+	height: -webkit-fit-content;
+	height: -moz-fit-content;
+	height: fit-content;
+	padding: 0.275rem 0.67rem;
+	background-color: rgb(51, 198, 88);
+	border: 1.5px solid rgb(51, 198, 88);
+	border-radius: 20px;
+	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition: box-shadow 0.1s ease-in-out;
 	color: #000000;
 	margin: 0 3px;
 }
 
-section.pre-Details
-{
-	p
-	{
+section.pre-Details {
+	p {
 		margin: 0;
 	}
 }
@@ -232,7 +248,7 @@ section.pre-Details
 	.img-Block img {
 		max-width: 255px;
 	}
-	
+
 	.car-cap .org-Btn {
 		max-width: 100%;
 	}
@@ -242,50 +258,49 @@ section.pre-Details
 	.img-Block img {
 		max-width: 100%;
 	}
-	.car-Details .cont-Block {
-		margin-top: 20px;
-	}
+
+	// .car-Details .cont-Block {
+	// 	margin-top: 20px;
+	// }
 	.list-box ul {
 		display: block;
 	}
 }
 
-button.custom-filled-button
-{
+button.custom-filled-button {
 	margin: 0 0.275rem;
 }
+
 button.custom-filled-back-button {
 	margin: 0 0.275rem;
 }
 
-p.pv-title, p.pv-title-value
-{
+p.pv-title,
+p.pv-title-value {
 	font-size: 1rem;
 }
-p.pv-title-value
-{
+
+p.pv-title-value {
 	font-weight: 600;
 }
-p.pv-title-value.pv-details
-{
+
+p.pv-title-value.pv-details {
 	font-weight: 600;
 	font-size: 1.3rem;
 }
-p.pv-title.pv-details
-{
+
+p.pv-title.pv-details {
 	font-weight: 600;
 	font-size: 1.2rem;
 }
 
 
-.modal
-{
-	.modal-header
-	{
-		p
-		{
+.modal {
+	.modal-header {
+		p {
 			font-size: 1.6rem;
 		}
+
 		button.close {
 			color: #ff0000;
 			font-size: 2rem;
@@ -294,23 +309,17 @@ p.pv-title.pv-details
 	}
 }
 
-.modal#ModalDriverDetails
-{
-	.modal-body
-	{
-		#driver-image img
-		{
+.modal#ModalDriverDetails {
+	.modal-body {
+		#driver-image img {
 			border-radius: 50%;
 		}
 	}
 }
 
-.modal#ModalAmenities
-{
-	.modal-body
-	{
-		#chargeable-amenities > li
-		{
+.modal#ModalAmenities {
+	.modal-body {
+		#chargeable-amenities>li {
 			flex: 0 0 60%;
 			max-width: 60%;
 			white-space: break-spaces;
@@ -324,10 +333,9 @@ p.pv-title.pv-details
 		max-width: 55px;
 		height: 37px;
 	}
-	.modal#ModalAmenities
-	{
-		.modal-body #chargeable-amenities > li
-		{
+
+	.modal#ModalAmenities {
+		.modal-body #chargeable-amenities>li {
 			flex: 0 0 50%;
 			max-width: 50%;
 		}

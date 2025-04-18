@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 	vehicles: any;
 	vehiclesRes: any;
 	minDate = new Date();
-	currentUser: string;
+	currentUser: any;
 	modalHeading: string;
 	modalInstructions: string;
 	modalType: string;
@@ -685,27 +685,31 @@ export class HomeComponent implements OnInit {
 			this.airports_data_r_dropoff = JSON.parse(JSON.stringify(this.airports_data))
 		})
 	}
-	returnSearchAirport(searchText: any) {
+	
+	returnSearchAirport(searchText: string) {
 		console.log('search text is->', searchText);
-
+	  
 		// Convert searchText to lowercase for case-insensitive comparison
 		const searchTextLower = searchText.toLowerCase();
-
-		// Filter based on the length of searchText
+	  
+		// If the search term is exactly 3 characters, match it to the airport code (extracted from the 'airport' field)
 		if (searchText.length === 3) {
-			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-				// Check if the airport code starts with the search text
-				return item['airport'].slice(0, 3).toLowerCase().startsWith(searchTextLower);
-			})));
+		  return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
+			// Extract the airport code (before the first dash) and match it with the search text
+			const airportCode = item['airport'].split('-')[0].toLowerCase();
+			return airportCode === searchTextLower;
+		  })));
 		} else {
-			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-				// Check if the search text matches the beginning of city, airport (before dash), or name
-				return item.city.toLowerCase().startsWith(searchTextLower) ||
-					item.airport.split('-')[0].toLowerCase().startsWith(searchTextLower) ||
-					item?.name.toLowerCase().startsWith(searchTextLower);
-			})));
+		  // If the search term is longer than 3 characters, match it to the airport name or city
+		  return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
+			// Match the search text against the airport name or city (case-insensitive)
+			return item['airport'].toLowerCase().includes(searchTextLower) ||   // Airport name match
+				   item['city'].toLowerCase().includes(searchTextLower);        // City name match
+		  })));
 		}
-	}
+	  }
+	  
+	  
 
 	searchAirport(letter: string, form_control: string) {
 		if (form_control == 'pickup_airport') {
@@ -1281,7 +1285,7 @@ export class HomeComponent implements OnInit {
 				this.modalInformation = true;
 				this.selectedModal = 'modal_4';
 				this.modalHeading = "Consistent Quality Service";
-				this.modalInstructions = "Other TNCs claim to be Good, Fast and Cheap. We all know you can’t be all three and most would be happy to choose only two and hope for the best. <br> What’s the point of being in business if you’re not consistently Good, Cheap, or Fast? You can’t	afford to be late for a meeting, a plane, or a group or business event! You don’t want to over pay, ever! You want service to be consistent! Does your TNC do all three? How about two? <br> 1-800-LIMO.COM’s only goal is to be Good, all of the time, for worry-free transportation! <br> <strong>Fast Invoicing</strong> Just get in and go. You’ll get a very accurate all-inclusive rate when you book a ride and you’ll get a receipt by the time you exit your ride. We started the cashless transaction 16 years ago. You’ll know the total cost of your ride before leaving your vehicle. Just click the Pay button. <br> If your driver blows you away with kindness and personality, tip your driver extra in cash or on the app, and you can request that same great driver whenever you travel. What could be better than an extra tip and a repeat booking? We love clients like you and share that love and let	your friends know how good we are.";
+				this.modalInstructions = "Other TNCs claim to be Good, Fast and Cheap. We all know you can’t be all three and most would be happy to choose only two and hope for the best. <br> What’s the point of being in business if you’re not consistently Good, Cheap, or Fast? You can’t	afford to be late for a meeting, a plane, or a group or business event! You don’t want to over pay, ever! You want service to be consistent! Does your TNC do all three? How about two? <br> 1-800-LIMO.COM’s only goal is to be Good, all of the time, for worry-free transportation! <br> <strong>Fast Invoicing</strong> Just get in and go. You’ll get a very accurate all-inclusive rate when you book a ride and you’ll get a receipt by the time you exit your ride. We started the cashless transaction 16 years ago. You’ll know the Total Cost of your ride before leaving your vehicle. Just click the Pay button. <br> If your driver blows you away with kindness and personality, tip your driver extra in cash or on the app, and you can request that same great driver whenever you travel. What could be better than an extra tip and a repeat booking? We love clients like you and share that love and let	your friends know how good we are.";
 				break;
 			}
 		}
@@ -1326,7 +1330,7 @@ export class HomeComponent implements OnInit {
 
 	// loginbuttons
 	loginButtons(role: string) {
-		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual') {
+		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual' && role != 'subscriber') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
@@ -1377,7 +1381,10 @@ export class HomeComponent implements OnInit {
 			this.spinner.show();
 			this.router.navigateByUrl('/affiliate/my-bookings');
 		}
-		else {
+		else if(role == 'sub_affiliate'){
+			this.router.navigateByUrl('/sub_affiliate/my-bookings');
+		}
+		else{
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)
@@ -1401,6 +1408,19 @@ export class HomeComponent implements OnInit {
 					console.log("Logout Successfully");
 				}
 			});
+	}
+
+	joinButton(){
+		if(this.currentUser?.created_by_role == 'subscriber'){
+			this.errorDialogService.openDialog({
+				errors:{
+					error:"You are already registered with as subscriber!"
+				}
+			})
+		}
+		else{
+			this.router.navigate(['/subscription'])
+		}
 	}
 }
 

@@ -81,7 +81,17 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6" *ngIf="milage_rate_selected; else kilometer_rate">
+				<div class="col-md-6">
+					<label class="alert alert-danger mt-2">
+						Select {{currencySymbol}} rate for the first x {{milage_rate_selected ? 'miles' : 'kms'}}, and
+						then choose a rate for the additional {{milage_rate_selected ? 'miles' : 'kms'}} beyond the
+						selected distance. For ex- 4{{currencySymbol}} per mile for 12 miles and 3{{currencySymbol}} per
+						mile if booking goes above 12 miles.
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4" *ngIf="milage_rate_selected; else kilometer_rate">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>{{currencySymbol}} per mile<span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -90,8 +100,41 @@
 						<ng-template #hideZero>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput type="number" placeholder="Mileage Rate" formControlName="milage_rate"
-							(change)="updateRateRangeObject()" tabindex="1" value="0" (focus)="$event.target.select()">
+						<mat-select formControlName="milage_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option value="">Choose Per Mile</mat-option>
+							<mat-option [value]="2.50">2.50</mat-option>
+							<mat-option [value]="2.75">2.75</mat-option>
+							<mat-option [value]="3">3</mat-option>
+							<mat-option [value]="3.25">3.25</mat-option>
+							<mat-option [value]="3.40">3.40</mat-option>
+							<mat-option [value]="3.50">3.50</mat-option>
+							<mat-option [value]="3.60">3.60</mat-option>
+							<mat-option [value]="3.75">3.75</mat-option>
+							<mat-option [value]="4">4</mat-option>
+							<mat-option [value]="4.25">4.25</mat-option>
+							<mat-option [value]="4.50">4.50</mat-option>
+							<mat-option [value]="4.75">4.75</mat-option>
+							<mat-option [value]="5">5</mat-option>
+							<mat-option [value]="5.25">5.25</mat-option>
+							<mat-option [value]="5.50">5.50</mat-option>
+							<mat-option [value]="5.75">5.75</mat-option>
+							<mat-option [value]="6">6</mat-option>
+							<mat-option [value]="6.25">6.25</mat-option>
+							<mat-option [value]="6.75">6.75</mat-option>
+							<mat-option [value]="7">7</mat-option>
+							<mat-option [value]="7.5">7.5</mat-option>
+							<mat-option [value]="8">8</mat-option>
+							<mat-option [value]="9">9</mat-option>
+							<mat-option [value]="10">10</mat-option>
+							<mat-option [value]="11">11</mat-option>
+							<mat-option [value]="12">12</mat-option>
+							<mat-option [value]="13">13</mat-option>
+							<mat-option [value]="14">14</mat-option>
+							<mat-option [value]="15">15</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Mileage Rate" formControlName="milage_rate"
+							(change)="updateRateRangeObject()" tabindex="1" value="0" (focus)="$event.target.select()"> -->
 					</mat-form-field>
 					<div *ngIf="f.milage_rate.errors && (f.milage_rate.touched || f.milage_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -109,8 +152,111 @@
 						<div>Any value required</div>
 					</div>
 				</div>
+				<div class="col-md-4" *ngIf="milage_rate_selected">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Upto x miles<span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="upto_miles" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option value="">Choose upto miles</mat-option>
+							<mat-option [value]="1">1</mat-option>
+							<mat-option [value]="2">2</mat-option>
+							<mat-option [value]="3">3</mat-option>
+							<mat-option [value]="4">4</mat-option>
+							<mat-option [value]="5">5</mat-option>
+							<mat-option [value]="6">6</mat-option>
+							<mat-option [value]="7">7</mat-option>
+							<mat-option [value]="8">8</mat-option>
+							<mat-option [value]="9">9</mat-option>
+							<mat-option [value]="10">10</mat-option>
+							<mat-option [value]="11">11</mat-option>
+							<mat-option [value]="12">12</mat-option>
+							<mat-option [value]="13">13</mat-option>
+							<mat-option [value]="14">14</mat-option>
+							<mat-option [value]="15">15</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Mileage Rate" formControlName="upto_miles"
+							(change)="updateRateRangeObject()" tabindex="1" value="0" (focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="f.upto_miles.errors && (f.upto_miles.touched || f.upto_miles.errors)"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.upto_miles.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.upto_miles.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.upto_miles.errors.pattern">Enter Numbers only</div>
+						<div *ngIf="f.upto_miles.errors.min">Minimum value should be more than 2</div>
+						<div *ngIf="f.upto_miles.errors.max">Rates are too expensive.
+						</div>
+					</div>
+
+					<div *ngIf="IsZeroValidator(f.upto_miles.value, 'upto_miles')"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Any value required</div>
+					</div>
+				</div>
+				<div class="col-md-4" *ngIf="milage_rate_selected">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Additional {{currencySymbol}} per mile<span class="asterisk">*</span></mat-label>
+						<span matPrefix
+							*ngIf="f.after_mileage_rate.value == null || f.after_mileage_rate.value == ''; else hideZero">{{currencySymbol}}
+							&nbsp;</span>
+						<ng-template #hideZero>
+							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						</ng-template>
+						<mat-select formControlName="after_mileage_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option value="">Choose after Mile</mat-option>
+							<mat-option [value]="2.50">2.50</mat-option>
+							<mat-option [value]="2.75">2.75</mat-option>
+							<mat-option [value]="3">3</mat-option>
+							<mat-option [value]="3.25">3.25</mat-option>
+							<mat-option [value]="3.40">3.40</mat-option>
+							<mat-option [value]="3.50">3.50</mat-option>
+							<mat-option [value]="3.60">3.60</mat-option>
+							<mat-option [value]="3.75">3.75</mat-option>
+							<mat-option [value]="4">4</mat-option>
+							<mat-option [value]="4.25">4.25</mat-option>
+							<mat-option [value]="4.50">4.50</mat-option>
+							<mat-option [value]="4.75">4.75</mat-option>
+							<mat-option [value]="5">5</mat-option>
+							<mat-option [value]="5.25">5.25</mat-option>
+							<mat-option [value]="5.50">5.50</mat-option>
+							<mat-option [value]="5.75">5.75</mat-option>
+							<mat-option [value]="6">6</mat-option>
+							<mat-option [value]="6.25">6.25</mat-option>
+							<mat-option [value]="6.75">6.75</mat-option>
+							<mat-option [value]="7">7</mat-option>
+							<mat-option [value]="7.5">7.5</mat-option>
+							<mat-option [value]="8">8</mat-option>
+							<mat-option [value]="9">9</mat-option>
+							<mat-option [value]="10">10</mat-option>
+							<mat-option [value]="11">11</mat-option>
+							<mat-option [value]="12">12</mat-option>
+							<mat-option [value]="13">13</mat-option>
+							<mat-option [value]="14">14</mat-option>
+							<mat-option [value]="15">15</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Mileage Rate" formControlName="after_mileage_rate"
+							(change)="updateRateRangeObject()" tabindex="1" value="0" (focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="f.after_mileage_rate.errors && (f.after_mileage_rate.touched || f.after_mileage_rate.errors)"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.after_mileage_rate.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.after_mileage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.after_mileage_rate.errors.pattern">Enter Numbers only</div>
+						<div *ngIf="f.after_mileage_rate.errors.min">Minimum value should be more than 2</div>
+						<div *ngIf="f.after_mileage_rate.errors.max">Rates are too expensive.
+						</div>
+					</div>
+
+					<div *ngIf="IsZeroValidator(f.after_mileage_rate.value, 'after_mileage_rate')"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Any value required</div>
+					</div>
+				</div>
+
 				<ng-template #kilometer_rate>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
 							<mat-label>{{currencySymbol}} per km<span class="asterisk">*</span></mat-label>
 							<span matPrefix
@@ -119,8 +265,41 @@
 							<ng-template #hideZero>
 								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 							</ng-template>
-							<input matInput type="number" placeholder="Kilometer Rate" formControlName="kilometer_rate"
-								(change)="updateRateRangeObject()" tabindex="1" (focus)="$event.target.select()">
+							<mat-select formControlName="kilometer_rate" tabindex="1"
+								(onSelectionChange)="updateRateRangeObject()">
+								<mat-option value="">Choose Per Km</mat-option>
+								<mat-option [value]="2.50">2.50</mat-option>
+								<mat-option [value]="2.75">2.75</mat-option>
+								<mat-option [value]="3">3</mat-option>
+								<mat-option [value]="3.25">3.25</mat-option>
+								<mat-option [value]="3.40">3.40</mat-option>
+								<mat-option [value]="3.50">3.50</mat-option>
+								<mat-option [value]="3.60">3.60</mat-option>
+								<mat-option [value]="3.75">3.75</mat-option>
+								<mat-option [value]="4">4</mat-option>
+								<mat-option [value]="4.25">4.25</mat-option>
+								<mat-option [value]="4.50">4.50</mat-option>
+								<mat-option [value]="4.75">4.75</mat-option>
+								<mat-option [value]="5">5</mat-option>
+								<mat-option [value]="5.25">5.25</mat-option>
+								<mat-option [value]="5.50">5.50</mat-option>
+								<mat-option [value]="5.75">5.75</mat-option>
+								<mat-option [value]="6">6</mat-option>
+								<mat-option [value]="6.25">6.25</mat-option>
+								<mat-option [value]="6.75">6.75</mat-option>
+								<mat-option [value]="7">7</mat-option>
+								<mat-option [value]="7.5">7.5</mat-option>
+								<mat-option [value]="8">8</mat-option>
+								<mat-option [value]="9">9</mat-option>
+								<mat-option [value]="10">10</mat-option>
+								<mat-option [value]="11">11</mat-option>
+								<mat-option [value]="12">12</mat-option>
+								<mat-option [value]="13">13</mat-option>
+								<mat-option [value]="14">14</mat-option>
+								<mat-option [value]="15">15</mat-option>
+							</mat-select>
+							<!-- <input matInput type="number" placeholder="Kilometer Rate" formControlName="kilometer_rate"
+								(change)="updateRateRangeObject()" tabindex="1" (focus)="$event.target.select()"> -->
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.kilometer_rate.errors || f.kilometer_rate.touched && f.kilometer_rate.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -132,6 +311,108 @@
 							<div *ngIf="f.kilometer_rate.errors.max">Rates are too expensive.</div>
 						</div>
 						<div *ngIf="IsZeroValidator(f.kilometer_rate.value, 'kilometer_rate')"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div>Any value required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field class="mat-form-field-rates" appearance="outline">
+							<mat-label>Upto x kms<span class="asterisk">*</span></mat-label>
+							<mat-select formControlName="upto_km" tabindex="1"
+								(onSelectionChange)="updateRateRangeObject()">
+								<mat-option value="">Choose upto kms</mat-option>
+								<mat-option [value]="1">1</mat-option>
+								<mat-option [value]="2">2</mat-option>
+								<mat-option [value]="3">3</mat-option>
+								<mat-option [value]="4">4</mat-option>
+								<mat-option [value]="5">5</mat-option>
+								<mat-option [value]="6">6</mat-option>
+								<mat-option [value]="7">7</mat-option>
+								<mat-option [value]="8">8</mat-option>
+								<mat-option [value]="9">9</mat-option>
+								<mat-option [value]="10">10</mat-option>
+								<mat-option [value]="11">11</mat-option>
+								<mat-option [value]="12">12</mat-option>
+								<mat-option [value]="13">13</mat-option>
+								<mat-option [value]="14">14</mat-option>
+								<mat-option [value]="15">15</mat-option>
+							</mat-select>
+							<!-- <input matInput type="number" placeholder="Mileage Rate" formControlName="upto_km"
+								(change)="updateRateRangeObject()" tabindex="1" value="0" (focus)="$event.target.select()"> -->
+						</mat-form-field>
+						<div *ngIf="f.upto_km.errors && (f.upto_km.touched || f.upto_km.errors)"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.upto_km.errors.required">This field is required</div>
+						</div>
+						<div *ngIf="f.upto_km.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.upto_km.errors.pattern">Enter Numbers only</div>
+							<div *ngIf="f.upto_km.errors.min">Minimum value should be more than 2</div>
+							<div *ngIf="f.upto_km.errors.max">Rates are too expensive.
+							</div>
+						</div>
+
+						<div *ngIf="IsZeroValidator(f.upto_km.value, 'upto_km')"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div>Any value required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field class="mat-form-field-rates" appearance="outline">
+							<mat-label>Additional {{currencySymbol}} per km<span class="asterisk">*</span></mat-label>
+							<span matPrefix
+								*ngIf="f.after_kilometer_rate.value == null || f.after_kilometer_rate.value == ''; else hideZero">{{currencySymbol}}
+								&nbsp;</span>
+							<ng-template #hideZero>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
+							</ng-template>
+							<mat-select formControlName="after_kilometer_rate" tabindex="1"
+								(onSelectionChange)="updateRateRangeObject()">
+								<mat-option value="">Choose after Km</mat-option>
+								<mat-option [value]="2.50">2.50</mat-option>
+								<mat-option [value]="2.75">2.75</mat-option>
+								<mat-option [value]="3">3</mat-option>
+								<mat-option [value]="3.25">3.25</mat-option>
+								<mat-option [value]="3.40">3.40</mat-option>
+								<mat-option [value]="3.50">3.50</mat-option>
+								<mat-option [value]="3.60">3.60</mat-option>
+								<mat-option [value]="3.75">3.75</mat-option>
+								<mat-option [value]="4">4</mat-option>
+								<mat-option [value]="4.25">4.25</mat-option>
+								<mat-option [value]="4.50">4.50</mat-option>
+								<mat-option [value]="4.75">4.75</mat-option>
+								<mat-option [value]="5">5</mat-option>
+								<mat-option [value]="5.25">5.25</mat-option>
+								<mat-option [value]="5.50">5.50</mat-option>
+								<mat-option [value]="5.75">5.75</mat-option>
+								<mat-option [value]="6">6</mat-option>
+								<mat-option [value]="6.25">6.25</mat-option>
+								<mat-option [value]="6.75">6.75</mat-option>
+								<mat-option [value]="7">7</mat-option>
+								<mat-option [value]="7.5">7.5</mat-option>
+								<mat-option [value]="8">8</mat-option>
+								<mat-option [value]="9">9</mat-option>
+								<mat-option [value]="10">10</mat-option>
+								<mat-option [value]="11">11</mat-option>
+								<mat-option [value]="12">12</mat-option>
+								<mat-option [value]="13">13</mat-option>
+								<mat-option [value]="14">14</mat-option>
+								<mat-option [value]="15">15</mat-option>
+							</mat-select>
+							<!-- <input matInput type="number" placeholder="Mileage Rate" formControlName="after_kilometer_rate"
+								(change)="updateRateRangeObject()" tabindex="1" value="0" (focus)="$event.target.select()"> -->
+						</mat-form-field>
+						<div *ngIf="f.after_kilometer_rate.errors && (f.after_kilometer_rate.touched || f.after_kilometer_rate.errors)"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.after_kilometer_rate.errors.required">This field is required</div>
+						</div>
+						<div *ngIf="f.after_kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.after_kilometer_rate.errors.pattern">Enter Numbers only</div>
+							<div *ngIf="f.after_kilometer_rate.errors.min">Minimum value should be more than 2</div>
+							<div *ngIf="f.after_kilometer_rate.errors.max">Rates are too expensive.
+							</div>
+						</div>
+
+						<div *ngIf="IsZeroValidator(f.after_kilometer_rate.value, 'after_kilometer_rate')"
 							class="text-danger margin-bottom-thin my-mat-hint">
 							<div>Any value required</div>
 						</div>
@@ -149,6 +430,12 @@
 						<ng-template #hideZero6>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
+						<!-- <mat-select formControlName="minimum_airport_departure_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select> -->
 						<input matInput type="number" placeholder="Minimum Airport Rate - Departure"
 							(change)="updateRateRangeObject()" formControlName="minimum_airport_departure_rate"
 							tabindex="1" (focus)="$event.target.select()">
@@ -175,6 +462,12 @@
 						<ng-template #hideZero7>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
+						<!-- <mat-select formControlName="minimum_airport_arrival_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select> -->
 						<input matInput type="number" placeholder="Minimum Airport Arrival Rate"
 							(change)="updateRateRangeObject()" formControlName="minimum_airport_arrival_rate"
 							tabindex="1" (focus)="$event.target.select()">
@@ -202,6 +495,12 @@
 						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
+						<!-- <mat-select formControlName="minimum_city_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select> -->
 						<input matInput type="number" placeholder="Minimum City to Intercity rate"
 							formControlName="minimum_city_rate" (change)="updateRateRangeObject()" tabindex="1"
 							(focus)="$event.target.select()">
@@ -232,6 +531,12 @@
 						<ng-template #hideZero9>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
+						<!-- <mat-select formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select> -->
 						<input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
 							(keyup)="handleChangeMCPAR($event.target.value)" (change)="updateRateRangeObject()"
 							formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
@@ -251,7 +556,7 @@
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum Cruise Port Rate - Departure
+						<mat-label>Minimum Cruise Port - Departure
 							<!-- <span class="asterisk">*</span> -->
 						</mat-label>
 						<span matPrefix
@@ -260,6 +565,12 @@
 						<ng-template #hideZero9>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
+						<!-- <mat-select formControlName="minimum_cruise_port_departure_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select> -->
 						<input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
 							(change)="updateRateRangeObject()" formControlName="minimum_cruise_port_departure_rate"
 							tabindex="1" (focus)="$event.target.select()">
@@ -391,9 +702,15 @@
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Shared Ride Rate - Per Person</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
+						<mat-select formControlName="per_person_group_ride_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Shared Ride Rate - Per Person"
 							(change)="updateRateRangeObject()" formControlName="per_person_group_ride_rate" tabindex="1"
-							(focus)="$event.target.select()">
+							(focus)="$event.target.select()"> -->
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.per_person_group_ride_rate.errors || f.per_person_group_ride_rate.touched && f.per_person_group_ride_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -425,77 +742,109 @@
 					</div>
 				</div> -->
 			<div class="row">
-			<div class="col-md-12 mt-2">
-				<label class="alert alert-danger" style="font-size: 0.9rem !important;">
-					You may add Early/Late rate between 11 PM and 5.30 AM.</label>
-			</div>
-			<div class="col-md-6">
-				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>Early AM / Late PM Surge Rate</mat-label>
-					<span matPrefix>{{currencySymbol}} &nbsp;</span>
-					<input matInput type="number" placeholder="Early AM / Late PM" (change)="updateRateRangeObject()"
-						formControlName="early_late_charges" tabindex="1" (focus)="$event.target.select()">
-				</mat-form-field>
-				<div *ngIf="submittedForm && f.early_late_charges.errors || f.early_late_charges.touched && f.early_late_charges.errors"
-					class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="f.early_late_charges.errors.pattern">Enter Numbers only</div>
+				<div class="col-md-12 mt-2">
+					<label class="alert alert-danger" style="font-size: 0.9rem !important;">
+						You may add Early/Late rate between 11 PM and 5.30 AM.</label>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>Holiday Surge Rate</mat-label>
-					<span matPrefix>{{currencySymbol}} &nbsp;</span>
-					<input matInput type="number" placeholder="Holiday Rate" (change)="updateRateRangeObject()"
-						formControlName="holiday_charges" tabindex="1" (focus)="$event.target.select()">
-				</mat-form-field>
-				<div *ngIf="submittedForm && f.holiday_charges.errors || f.holiday_charges.touched && f.holiday_charges.errors"
-					class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="f.holiday_charges.errors.pattern">Enter Numbers only</div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>Friday/Saturday Night Surge Rate</mat-label>
-					<span matPrefix>{{currencySymbol}} &nbsp;</span>
-					<input matInput type="number" placeholder="Friday/Saturday Night" (change)="updateRateRangeObject()"
-						formControlName="friday_saturday_charges" tabindex="1" (focus)="$event.target.select()">
-				</mat-form-field>
-				<div *ngIf="submittedForm && f.friday_saturday_charges.errors || f.friday_saturday_charges.touched && f.friday_saturday_charges.errors"
-					class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="f.friday_saturday_charges.errors.pattern">Enter Numbers only</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>Extra stop - same town</mat-label>
-					<span matPrefix>{{currencySymbol}} &nbsp;</span>
-					<input matInput type="number" placeholder="Extra stop - same town"
-						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1"
-						(focus)="$event.target.select()">
-				</mat-form-field>
-				<div *ngIf="submittedForm && f.in_town_extra_stop.errors || f.in_town_extra_stop.touched && f.in_town_extra_stop.errors"
-					class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="f.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>Extra stop - different town</mat-label>
-					<span matPrefix
-						*ngIf="f.outside_town_extra_stop.value == null || f.outside_town_extra_stop.value == ''; else hideZero16">{{currencySymbol}}
-						&nbsp;</span>
-					<ng-template #hideZero16>
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Early AM / Late PM Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-					</ng-template>
-					<input matInput type="number" placeholder="Extra stop - different town"
-						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1"
-						(focus)="$event.target.select()">
-				</mat-form-field>
-				<div *ngIf="submittedForm && f.outside_town_extra_stop.errors || f.outside_town_extra_stop.touched && f.outside_town_extra_stop.errors"
-					class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="f.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
+						<mat-select formControlName="early_late_charges" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Early AM / Late PM"
+							(change)="updateRateRangeObject()" formControlName="early_late_charges" tabindex="1"
+							(focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.early_late_charges.errors || f.early_late_charges.touched && f.early_late_charges.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.early_late_charges.errors.pattern">Enter Numbers only</div>
+					</div>
 				</div>
-			</div>
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Holiday Surge Rate</mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<mat-select formControlName="holiday_charges" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Holiday Rate" (change)="updateRateRangeObject()"
+							formControlName="holiday_charges" tabindex="1" (focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.holiday_charges.errors || f.holiday_charges.touched && f.holiday_charges.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.holiday_charges.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Friday/Saturday Night Surge Rate</mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<mat-select formControlName="friday_saturday_charges" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Friday/Saturday Night"
+							(change)="updateRateRangeObject()" formControlName="friday_saturday_charges" tabindex="1"
+							(focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.friday_saturday_charges.errors || f.friday_saturday_charges.touched && f.friday_saturday_charges.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.friday_saturday_charges.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Extra stop - same town</mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<mat-select formControlName="in_town_extra_stop" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Extra stop - same town"
+							(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1"
+							(focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.in_town_extra_stop.errors || f.in_town_extra_stop.touched && f.in_town_extra_stop.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Extra stop - different town</mat-label>
+						<span matPrefix
+							*ngIf="f.outside_town_extra_stop.value == null || f.outside_town_extra_stop.value == ''; else hideZero16">{{currencySymbol}}
+							&nbsp;</span>
+						<ng-template #hideZero16>
+							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						</ng-template>
+						<mat-select formControlName="outside_town_extra_stop" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
+						<!-- <input matInput type="number" placeholder="Extra stop - different town"
+							(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1"
+							(focus)="$event.target.select()"> -->
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.outside_town_extra_stop.errors || f.outside_town_extra_stop.touched && f.outside_town_extra_stop.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
 			</div>
 			<div class="col-md-12">
 				<h2 class="headinginfo my-4">

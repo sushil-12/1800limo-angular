@@ -15,8 +15,7 @@ declare var $: any;
 	templateUrl: './amenities.component.html',
 	styleUrls: ['./amenities.component.scss']
 })
-export class AmenitiesComponent implements OnInit
-{
+export class AmenitiesComponent implements OnInit {
 
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -34,6 +33,7 @@ export class AmenitiesComponent implements OnInit
 	public disableAddButton: boolean = false;
 	public disableEditButton: boolean = false;
 	public checkChargeable: boolean;
+	currentUser: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -41,23 +41,22 @@ export class AmenitiesComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder) { }
 
-	ngOnInit(): void 
-	{
+	ngOnInit(): void {
 		/** spinner starts on init */
 		this.spinner.show();
 
 		// Load Our amenities using API
-		this.adminService.getAmenities().then(result =>
-		{
+		this.adminService.getAmenities().then(result => {
 			this.amenitiesRes = result;
 			this.amenities = this.amenitiesRes.data;
 			sessionStorage.setItem('amenities', JSON.stringify(this.amenities));
 			this.spinner.hide();//hide spinner
 		})
-			.catch(err =>
-			{
+			.catch(err => {
 				this.spinner.hide();//hide spinner
 			});
+
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 		//add amenity type form validation
 		this.addAmenitiesForm = this.formBuilder.group({
@@ -73,13 +72,10 @@ export class AmenitiesComponent implements OnInit
 		});
 	}
 
-	serach(val)
-	{
+	serach(val) {
 		let allAmenities = JSON.parse(sessionStorage.getItem('amenities'));
-		let searchAmenities = allAmenities.filter(function (amenity)
-		{
-			if (amenity.name.toLowerCase().search(val) != -1)
-			{
+		let searchAmenities = allAmenities.filter(function (amenity) {
+			if (amenity.name.toLowerCase().search(val) != -1) {
 				return true;
 			}
 		});
@@ -87,18 +83,15 @@ export class AmenitiesComponent implements OnInit
 		this.amenities = searchAmenities;
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addAmenitiesForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		this.submitted = true;
 		// console.log(this.addAmenitiesForm);return false;
 		// stop here if form is invalid
-		if (this.addAmenitiesForm.invalid)
-		{
+		if (this.addAmenitiesForm.invalid) {
 			return;
 		}
 
@@ -107,37 +100,31 @@ export class AmenitiesComponent implements OnInit
 
 		this.adminService.addAmenity(this.addAmenitiesForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					$('#addAmenityModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				$('#addAmenityModal').modal('hide');
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/amenities']);
 				});
 			});
 	}
 
-	editAmenity(id)
-	{
+	editAmenity(id) {
 		this.spinner.show();
 
 		this.adminService.getAmenity(id)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				console.log(this.response)
 				this.editAmenitiesForm.patchValue({
@@ -146,12 +133,10 @@ export class AmenitiesComponent implements OnInit
 					chargeable: this.response.data.chargeable
 					// chargeable:'no'
 				});
-				if (this.response.data.chargeable == 'yes')
-				{
+				if (this.response.data.chargeable == 'yes') {
 					this.checkChargeable = true;
 				}
-				else
-				{
+				else {
 					this.checkChargeable = false;
 				}
 				$('#editAmenityModal').modal('show');
@@ -159,17 +144,14 @@ export class AmenitiesComponent implements OnInit
 			});
 	}
 
-	get fEdit()
-	{
+	get fEdit() {
 		return this.editAmenitiesForm.controls;
 	}
-	updateAmenityForm()
-	{
+	updateAmenityForm() {
 		// console.log(this.editAmenitiesForm);return false;
 		this.submittedEditForm = true;
 		// stop here if form is invalid
-		if (this.editAmenitiesForm.invalid)
-		{
+		if (this.editAmenitiesForm.invalid) {
 			return;
 		}
 
@@ -178,81 +160,66 @@ export class AmenitiesComponent implements OnInit
 
 		this.adminService.updateAmenity(this.editAmenitiesForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					$('#editAmenityModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				$('#editAmenityModal').modal('hide');
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/amenities']);
 				});
 			});
 	}
 
-	enableDisableClicked(event, id)
-	{
+	enableDisableClicked(event, id) {
 		this.spinner.show();//show spinner
 		console.log(event.checked);
-		if (event.checked)
-		{
+		if (event.checked) {
 			var status = 'enable';
 		}
-		else
-		{
+		else {
 			var status = 'disable';
 		}
 		this.adminService.amenityStatus(id, status)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 
 				this.spinner.hide();//hide spinner
 			});
 	}
 
-	chargeableChange(e)
-	{
-		if (e.target.checked)
-		{
+	chargeableChange(e) {
+		if (e.target.checked) {
 			this.addAmenitiesForm.patchValue({
 				chargeable: 'yes'
 			});
-		} else
-		{
+		} else {
 			this.addAmenitiesForm.patchValue({
 				chargeable: 'no'
 			});
 		}
 	}
 
-	editChargeableChange(e)
-	{
-		if (e.target.checked)
-		{
+	editChargeableChange(e) {
+		if (e.target.checked) {
 			this.editAmenitiesForm.patchValue({
 				chargeable: 'yes'
 			});
-		} else
-		{
+		} else {
 			this.editAmenitiesForm.patchValue({
 				chargeable: 'no'
 			});
 		}
 	}
 
-	drop(event: CdkDragDrop<string[]>)
-	{
+	drop(event: CdkDragDrop<string[]>) {
 		// moveItemInArray(this.amenities, event.previousIndex, event.currentIndex);
 		console.log(event, "check event")
 		console.log("previous index", event.previousIndex)
@@ -260,10 +227,8 @@ export class AmenitiesComponent implements OnInit
 		this.spinner.show();
 		let id = this.amenities[event.previousIndex].ID
 		console.log(id, "////////////")
-		this.adminService.changeAmenitySortingOrder({ amenity_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) =>
-		{
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-			{
+		this.adminService.changeAmenitySortingOrder({ amenity_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) => {
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 				this.router.navigate(['/admin/amenities']);
 			});
 			this.spinner.hide();

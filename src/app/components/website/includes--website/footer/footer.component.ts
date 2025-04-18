@@ -18,14 +18,14 @@ export class FooterComponent implements OnInit {
 	// onKeyDown(event: KeyboardEvent) {
 	//   event.preventDefault();
 	// }
-	copyright_text: string = new Date().getFullYear().toString() + '1800LIMO.COM All rights reserved.'
+	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM All rights reserved.'
 	public currentUser;
 	public Value: any;
 	public steps: string = "";
 	public accountStatus: string = "";
 	splitSteps: any;
 
-	QRimage = "assets/images/QRimage.png";
+	QRimage = "assets/images/QRimage.jpg";
 	constructor(
 		private authService: AuthService,
 		private spinner: NgxSpinnerService,
@@ -80,7 +80,7 @@ export class FooterComponent implements OnInit {
 
 	// loginbuttons
 	loginButtons(role: string) {
-		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual') {
+		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual' && role != 'subscriber') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'

@@ -2,9 +2,23 @@
 <main>
 	<!-- Main page content-->
 	<section class="user_information">
-		<h2 class="headinginfo"> Master Vehicle Types </h2>
+		<div class="row">
+			<div class="col-md-6">
+				<h2 class="headinginfo"> Master Vehicle Types </h2>
+			</div>
+			<div class="col-md-6 d-flex align-items-baseline justify-content-center">
+				<mat-slide-toggle class="example-margin" [color]="color" [disabled]="disabled"
+					[checked]="convertCurrenyResp" (change)="enableDisableClicked($event)" style="margin-right: 20px;">
+				</mat-slide-toggle>
+				<h6>
+					{{currentUser?.convert_currency ?
+					'Turn off to view rates in USD' : 'Turn on to view rates in country currency'}}
+				</h6>
+			</div>
+		</div>
+
 		<div class="containeredd">
-			<div class="row">
+			<div class="row" *ngIf="currentUser?.created_by_role == 'admin' ">
 				<div class="col-md-12">
 					<button class="custom-btn add-button" (click)="openAddModal()">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
@@ -14,10 +28,11 @@
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg> Add Vehicle Type
 					</button>
+
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row" *ngIf="currentUser?.created_by_role == 'admin' ">
 				<div class="col-md-12">
 					<label class="alert alert-danger">Note: Add each different vehicle first. Enter rates and taxes for
 						each vehicle.</label>
@@ -44,19 +59,19 @@
 							<tr role="row">
 								<th>Image</th>
 								<th>Vehicle Type</th>
-								<th>Actions</th>
+								<th *ngIf="currentUser?.created_by_role == 'admin' ">Actions</th>
 							</tr>
 						</thead>
-						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
+						<tbody>
 							<tr *ngFor="let vehicle of vehicles; index as vehicle_index"
-								[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd" cdkDrag>
+								[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd">
 								<td>
 									<img src="{{vehicle.vehicle_image}}" />
 								</td>
 								<td>
 									<p>{{vehicle.vehicle_name}}</p>
 								</td>
-								<td>
+								<td *ngIf="currentUser?.created_by_role == 'admin' ">
 									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
 										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,10 +83,10 @@
 											<div class="dropdown-item-icon"></div>
 											Edit Vehicle Type
 										</a>
-										<a class="dropdown-item" routerLink="edit" href="javascript:void(0)">
+										<!-- <a class="dropdown-item" routerLink="edit" href="javascript:void(0)">
 											<div class="dropdown-item-icon"></div>
 											Disable Vehicle Type
-										</a>
+										</a> -->
 										<a class="dropdown-item" (click)="changeRouting(vehicle)">
 											<div class="dropdown-item-icon"></div>
 											Vehicle Rates

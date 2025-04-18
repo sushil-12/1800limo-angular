@@ -3,20 +3,21 @@
 		.tile {
 			position: relative;
 			width: 12rem;
-			height: auto;
-			margin: 10px;
-			border-radius: 1rem;
-			border: 2px solid var(--green);
-			padding: 1rem;
-			min-height: 7rem;
-			flex-basis: 10rem;
+			height: 4em;
+			margin: .5rem;
+			/* border-radius: 1rem; */
+			border: 2px solid #5dbd8a;
+			/* padding: 1rem; */
+			/* min-height: 7rem; */
+			/* flex-basis: 10rem; */
 			box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-			transition: box-shadow 0.25s ease, background-color 0.25s ease;
+			transform: scale(1);
+			/* transition: box-shadow 0.25s ease, background-color 0.25s ease; */
 
 			#check-icon {
 				position: absolute;
 				margin: 0 auto;
-				transform: translate(-15px, -30px);
+				transform: translate(-2px, -21px);
 
 				i {
 					padding: 3px;
@@ -30,16 +31,26 @@
 
 			#tile-name {
 				p {
-					font-size: 1.2rem;
+					text-align: center;
+					font-size: 0.70rem;
+					font-weight: 500;
 					text-transform: uppercase;
-					font-weight: 600;
+					letter-spacing: 1px;
+					color: #000;
+					/* margin-bottom: 25px; */
+					margin-top: 10px;
+				}
+
+				.active-tile {
+					color: #fff;
+					/* White text for active/selected tile */
 				}
 			}
 		}
 
 		.tile.active {
-			background-color: var(--green);
-			box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+			background-color: #5dbd8a;
+			box-shadow: 0 6px 20px -6px rgba(0, 0, 0, .6);
 		}
 	}
 }
@@ -267,6 +278,14 @@
 		height: 4em;
 		width: 100%;
 		margin: 0.5rem;
+	}
+
+	#radio-tiles-container {
+		.radio-tiles {
+			.tile {
+				width: 100%;
+			}
+		}
 	}
 
 	.radio-tile-label {
@@ -695,7 +714,7 @@ div#imageModal {
 
 .choose_ameniteslist {
 	flex-direction: column !important;
-	height: 30vh !important;
+	height: 38vh !important;
 }
 
 @media (min-width: 767px) and (max-width:821px) {

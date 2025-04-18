@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import * as moment from 'moment';
 
 
 @Injectable({
@@ -11,6 +12,8 @@ import { AuthService } from './auth.service';
 
 export class AdminService {
 	big_data_list: any = undefined;
+	current_date: any;
+	current_time: any;
 
 
 	private serverUrl = environment.serverUrl;
@@ -20,6 +23,16 @@ export class AdminService {
 				this.big_data_list = response.data
 			})
 		}
+
+		let date = new Date();
+		let timestamp = date.getTime();
+
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+
+		this.current_date = moment(timestamp).format("YYYY-MM-DD");
+		this.current_time = `${hours}:${minutes}:${seconds}`;
 	}
 
 	getAirportsAndBigData() {
@@ -194,6 +207,12 @@ export class AdminService {
 		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
 		return result;
 	}
+
+	async adminLooseAffVehList(id, flag = true) {
+		const result = await this.httpClient.get(this.serverUrl + 'admin/get-loose-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
+		return result;
+	}
+
 	getLooseAffiliateVehicles(vehicle_type_id: number) {
 		let data = {}
 		data['filters'] = {}
@@ -634,6 +653,7 @@ export class AdminService {
 	blackCarLimoBusAccountStatus(id, status) {
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-status', { 'id': id, 'status': status });
 	}
+	
 	acceptAffiliate(acc_id) {
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-approval', { 'acc_id': acc_id });
 	}
@@ -870,7 +890,7 @@ export class AdminService {
 	}
 
 	createBooking(data: any, update_type: string) {
-		if (update_type == 'return' || update_type == 'repeat') {
+		if (update_type == 'return' || update_type == 'repeat' || update_type == 'round') {
 			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
 		}
 		if (data.reservation_id) {
@@ -940,10 +960,30 @@ export class AdminService {
 	loadBookings(url, startDate, endDate, useDateFilter, keyword = '', orderBy) {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+	loadFarmInBookings(url, startDate, endDate, useDateFilter, keyword = '', orderBy) {
+		var path;
+		if (url) {
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		else {
+			path = this.serverUrl + 'subscribers/get-farmin-reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+	loadFarmOutBookingSubscriber(url, startDate, endDate, useDateFilter, keyword = '', orderBy) {
+		var path;
+		if (url) {
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		else {
+			path = this.serverUrl + 'subscribers/get-farmout-reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -984,18 +1024,18 @@ export class AdminService {
 	}
 
 	sendNotificationAllAccounts(type: 'email' | 'sms', id: number, data: any) {
-		// return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
-		let resp: any
-		const accessToken = this.authService.getAccessToken();
-		resp = fetch(`${this.serverUrl}admin-send-notification/${type}/${id}`, {
-			method: 'POST',
-			body: data,
-			headers: {
-				Authorization: `Bearer ${accessToken}`
-			}
-		})
+		return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}/${id}`, data)
+		// let resp: any
+		// const accessToken = this.authService.getAccessToken();
+		// resp = fetch(`${this.serverUrl}admin-send-notification/${type}/${id}`, {
+		// 	method: 'POST',
+		// 	body: data,
+		// 	headers: {
+		// 		Authorization: `Bearer ${accessToken}`
+		// 	}
+		// })
 
-		return resp;
+		// return resp;
 	}
 
 	//invoices
@@ -1217,6 +1257,11 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}send-email-data-to-users`, body)
 	}
 
+	//send sms
+	sendSmsAffiliate(body: any) {
+		return this.httpClient.post(`${this.serverUrl}send-sms-to-users`, body)
+	}
+
 	changeTimezone(value) {
 		return this.httpClient.put(`${this.serverUrl}update-timezone/${value}`, '')
 	}
@@ -1282,8 +1327,115 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
 	}
 
-	acceptCharge(data){
-		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`,data)
+	acceptCharge(data) {
+		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`, data)
+	}
+
+	chargeBack(data) {
+		return this.httpClient.post(this.serverUrl + `admin/charge-back-affiliate`, data)
+	}
+
+	chargeBackPermission(acc_id, permission) {
+		return this.httpClient.post(this.serverUrl + 'affiliate/charge-back-permission', { 'acc_id': acc_id, 'permission': permission });
+	}
+
+	addSubscriberBank(data, type = '') {
+		console.log("type", type)
+		if (type == 'edit') {
+			return this.httpClient.put(this.serverUrl + 'edit-subscriber-bank', data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'add-subscriber-bank', data);
+		}
+	}
+
+	getSubsriberBank(acc_id) {
+		return this.httpClient.get(this.serverUrl + `get-subscriber-bank/${acc_id}`);
+	}
+
+	chargeSubscriberForVehicle(id) {
+		return this.httpClient.post(this.serverUrl + `charge-subscriber-for-vehicle`, { 'account_id': id })
+	}
+
+	subscribersAccounts(url, keyword) {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'admin/subscriber-accounts' + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
+	cancelSubscription(data) {
+		return this.httpClient.post(this.serverUrl + 'cancel-subscription', data);
+	}
+
+	//get invoice list
+	payouts(data) {
+		return this.httpClient.post(this.serverUrl + `get-payouts`, data);
+	}
+
+	//get invoice list
+	inviteDriver(data) {
+		return this.httpClient.post(this.serverUrl + `send-an-invite-email`, data);
+	}
+
+	//Booking
+	loadDriverBookings(url, keyword, startDate, endDate, useDateFilter) {
+		var path;
+		if (url) {
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		else {
+			path = this.serverUrl + 'driver/get-all-reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+
+	//get invoice list
+	mapsPin(id) {
+		return this.httpClient.get(this.serverUrl + `affiliate-pincodes?vehicleId=${id}`);
+	}
+
+	//bookings reports
+	getBookingsReport(year,status,vehType,serviceType,transferType) {
+		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status + '&vehicle_type=' + vehType + '&service_type=' + serviceType + '&transfer_type=' + transferType);
+	}
+
+	//bookings percent by veh type reports
+	getVehPercentReport(year) {
+		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-percentage' + '?year=' + year);
+	}
+
+	//average by veh type reports
+	getVehAverageReport(year) {
+		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-average' + '?year=' + year);
+	}
+
+	getUserBasedReport(url,acc_id,year,month) {
+		var path;
+		if (url) {
+			path = url + '&acc_id=' + acc_id + '&year=' + year + '&month=' + month;
+		}
+		else {
+			path = this.serverUrl + 'get-user-accounts-details' + '?acc_id=' + acc_id + '&year=' + year + '&month=' + month;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
+	getAccountBytypeforall(accountType) {
+		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType + '?get_report=all');
+	}
+
+	//send email to affiliate, customer etc
+	sendEmailToanyone(data) {
+		return this.httpClient.post(this.serverUrl + 'send-booking-details', data);
+	}
+
+	converCurrenyEnableDisable(status) {
+		return this.httpClient.post(this.serverUrl + 'convert_currency', { 'convert_currency': status });
 	}
 
 }

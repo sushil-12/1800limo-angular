@@ -622,9 +622,105 @@ const personallist = [
 	"Handicap"
 ];
 
+const reportsYear = [
+	{
+        "id": "2025",
+        "value": "2025"
+    },
+    {
+        "id": "2024",
+        "value": "2024"
+    },
+    {
+        "id": "2023",
+		"value": "2023"
+	},
+    {
+        "id": "2022",
+        "value": "2022"
+    }
+]
+
+const reportsStatus = [
+    {
+        "id": "Paid",
+        "value": "Paid"
+    },
+	{
+        "id": "Assigned",
+        "value": "Assigned"
+    },
+    {
+        "id": "Cancelled",
+		"value": "Cancelled"
+	},
+    {
+        "id": "Pending",
+        "value": "Pending"
+    },
+	{
+        "id": "Rejected",
+        "value": "Rejected"
+    },
+	{
+        "id": "Comped",
+        "value": "Comped"
+    }
+]
+
+const serviceType = [
+	{
+        "id": "oneway",
+        "value": "One Way"
+    },
+    {
+        "id": "roundtrip",
+        "value": "Round Trip"
+    },
+    {
+        "id": "chartertour",
+		"value": "Charter Tour"
+	},
+]
+
+const userType = [
+	{
+        "id": "individual",
+        "value": "Individual"
+    },
+    {
+        "id": "driver",
+        "value": "Affiliates"
+    },
+    {
+        "id": "travel",
+		"value": "Travel Agent"
+	},
+]
+
+const reportsMonth = [
+	{ "id": 1, "value": "January" },
+    { "id": 2, "value": "February" },
+    { "id": 3, "value": "March" },
+    { "id": 4, "value": "April" },
+    { "id": 5, "value": "May" },
+    { "id": 6, "value": "June" },
+    { "id": 7, "value": "July" },
+    { "id": 8, "value": "August" },
+    { "id": 9, "value": "September" },
+    { "id": 10, "value": "October" },
+    { "id": 11, "value": "November" },
+    { "id": 12, "value": "December" },
+]
+
 export const constant_data = {
 	time_values,
 	hour_values,
 	countries,
-	personallist
+	personallist,
+	reportsYear,
+	reportsStatus,
+	serviceType,
+	reportsMonth,
+	userType
 }

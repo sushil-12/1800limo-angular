@@ -182,19 +182,19 @@ $primary-color: #5dbd8a;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #000;
-    margin-bottom: 25px !important;
-    margin-top: 0px !important;
+    // margin-bottom: 25px !important;
+    margin-top: 5px !important;
   }
 
   .GigOperator .radio-tile-label {
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #000;
-    margin-bottom: 45px !important;
-    margin-top: 10px !important;
+    margin-bottom: 40px !important;
+    margin-top: 15px !important;
   }
 }
 
@@ -307,7 +307,7 @@ $primary-color: #5dbd8a;
 
 .choose_ameniteslist {
   flex-direction: column !important;
-  height: 30vh !important;
+  height: 38vh !important;
 }
 
 @media (min-width: 767px) and (max-width:821px) {

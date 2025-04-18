@@ -1,0 +1,9 @@
+// ::ng-deep ngx-charts-pie-grid text[ngx-charts-count-up] {
+//     display: none !important;
+// }
+.chart-container {
+    width: 100%;                /* Set container width to 100% of parent */
+    overflow-x: auto;           /* Enable horizontal scrolling */
+    overflow-y: hidden;         /* Hide vertical overflow if not needed */
+    white-space: nowrap;        /* Prevent wrapping of chart elements */
+  }

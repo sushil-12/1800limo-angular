@@ -236,3 +236,32 @@ button.custom-filled-accept-button {
     font-weight: 500 !important;
     font-size: 15px !important;
   }
+
+  .input-with-icon {
+    position: relative;
+  }
+  
+  .phoneNumberClass {
+    padding-right: 40px; /* Space for the phone icon */
+  }
+  
+  .phone_icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; /* Increased size for the icon container */
+    height: 32px;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .phone_icon svg {
+    width: 28px; /* Increased size for the icon itself */
+    height: 28px;
+    fill: #33a867; /* Adjust color if necessary */
+  }
+  

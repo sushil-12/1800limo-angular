@@ -28,7 +28,7 @@ export class NewBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport?", "cruise_to_city"],
-		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
+		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -121,6 +121,7 @@ export class NewBookingComponent implements OnInit {
 	unique_key: any;
 	firstLoadAffiliateId: any;
 	firstLoadVehicleId: any;
+	currentUser: any;
 
 
 	constructor(
@@ -144,6 +145,9 @@ export class NewBookingComponent implements OnInit {
 		this.triggerAutoCompleteInput.openPanel();
 	}
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
 
 		// build the form first 
 		this.buildBookingForm()
@@ -294,7 +298,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
-			vehicle_type: ['',[Validators.required]],
+			vehicle_type: ['', [Validators.required]],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -393,21 +397,17 @@ export class NewBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
+			departing_airport_city:['']
 		})
 
-		let month = new Date().getMonth()
-		let date: string | number = new Date().getDate() + 1
-		let year = new Date().getFullYear()
+		let date = new Date();
+		let timestamp = date.getTime();
 
-
-		let full_date = new Date(year, month, date).toISOString()
-		// 10 days later
-		let future_full_date = new Date(year, month, date).toISOString()
-		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
-		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
+		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
+		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
-		this.SetFormValue('return_booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
+		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
@@ -469,7 +469,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	prefillViaBookingID(booking_id: number) {
-		console.warn('Prefilling via Booking Id', booking_id)
+		console.log('Prefilling via Booking Id', booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
 			this.bookingResponse = response.data
@@ -518,6 +518,8 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_pickup_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this.Form?.return_pickup_airline?.value));
 			this.SetFormValue('return_dropoff_airport_option', this.BigData?.airportsData?.find((item: any) => item?.id == this?.Form?.return_dropoff_airport?.value));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this?.Form?.return_dropoff_airline?.value));
+			this.SetFormValue('origin_airport_city',editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city )
+			
 			if (this.BookingForm?.get('updateType')?.value == 'edit') {
 				// this.scroll('travel_date')
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
@@ -821,7 +823,7 @@ export class NewBookingComponent implements OnInit {
 		console.log('fetchClientAccounts->>', account_type)
 		const legend = {
 			individual: 'individual',
-			corporate: 'corporate',
+			// corporate: 'corporate',
 			travel_planner: 'travel'
 		}
 
@@ -1191,7 +1193,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('passenger_cell', data.mobile)
 			this.SetFormValue('passenger_cell_isd', data.mobileIsd)
 			this.SetFormValue('passenger_cell_country', data.mobileCountry)
-			this.SetFormValue('origin_airport_city', data.origin_airport_city)
+			this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 			this.SetFormValue('pickup_flight', data.pickup_flight)
 			this.SetFormValue('dropoff_flight', data.dropoff_flight)
 		}
@@ -1451,7 +1453,7 @@ export class NewBookingComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.RatesForm) {
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.BookingForm.value.rateArray?.min_rate_involved) {
 				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 			}
 			else {
@@ -1466,6 +1468,7 @@ export class NewBookingComponent implements OnInit {
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
+			adminShare = adminShare + (this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount * 0.25)
 			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
 				baseRate: base_rate,
@@ -1508,6 +1511,7 @@ export class NewBookingComponent implements OnInit {
 			let returnGrandTotal = this.BookingForm.value.return_grand_total
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
+			adminShare = adminShare + (this.BookingForm.value.returnRateArray.misc.Extra_Gratuity.amount * 0.25)
 			let returnShareArray = {
 				baseRate: base_rate,
 				returnGrandTotal: returnGrandTotal,
@@ -1575,7 +1579,12 @@ export class NewBookingComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				this.nav_to_farmIn ? this.$router.navigate(['/affiliate/my-bookings']) : this.$router.navigate(['/affiliate/farm-out'])
+				if (this.currentUser.roleName == 'sub_affiliate') {
+					this.nav_to_farmIn ? this.$router.navigate(['/sub_affiliate/my-bookings']) : this.$router.navigate(['/sub_affiliate/farm-out'])
+				}
+				else {
+					this.nav_to_farmIn ? this.$router.navigate(['/affiliate/my-bookings']) : this.$router.navigate(['/affiliate/farm-out'])
+				}
 
 				this.$spinner.hide()
 			})
@@ -1851,6 +1860,10 @@ export class NewBookingComponent implements OnInit {
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
+				if(value.includes("cruise_")){
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when  docked.  2. Driver - Text pax with pickup instructions when ship has arrived..");
+					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				}
 				console.log("setting value of cruise port and name mandatory")
 				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
 				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
@@ -1884,6 +1897,7 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			if (value.includes('airport_')) {
+				this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text pax with pickup instructions when ship has arrived.");
 				console.log("setting value of pickup flight mandatory")
 				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('pickup_flight').updateValueAndValidity();
@@ -1958,6 +1972,8 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').setValidators([Validators.required]);
+				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				} else {
 					console.log("setting value of return pickup flight not mandatory")
 					this.BookingForm.get('return_pickup_flight').clearValidators();
@@ -1966,6 +1982,8 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').clearValidators();
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').clearValidators();
+				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
 			}
 
@@ -2455,21 +2473,21 @@ export class NewBookingComponent implements OnInit {
 		}, 5000)
 	}
 
-		// numbers in red and seperated to next line
-		highlightNumbers(text: string): string {
-			const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
-	
-			// Process parts and apply formatting
-			let formattedText = '';
-			for (let i = 0; i < parts.length; i++) {
-				if (i % 2 === 0) {
-					formattedText += parts[i]; // Regular text part
-				} else {
-					formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-				}
+	// numbers in red and seperated to next line
+	highlightNumbers(text: string): string {
+		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
 			}
-	
-			return formattedText;
 		}
-		
+
+		return formattedText;
+	}
+
 }

@@ -166,7 +166,7 @@ export class EditVehicleComponent implements OnInit {
 		this.affiliateId = sessionStorage.getItem("affiliateId");
 
 		//data for dropdown of seats and luggage
-		for (let i = 2; i <= 75; i++) {
+		for (let i = 0; i <= 75; i++) {
 			this.luggageOptions.push(i);
 		}
 		for (let i = 4; i <= 75; i++) {
@@ -189,8 +189,8 @@ export class EditVehicleComponent implements OnInit {
 			numberOfVehicles: [],
 			seats: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-			charterCancelPolicy: ['2', Validators.required],
-			nonCharterCancelPolicy: ['2', Validators.required],
+			charterCancelPolicy: ['24', Validators.required],
+			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
@@ -1220,6 +1220,13 @@ export class EditVehicleComponent implements OnInit {
 			// If the service type is already selected, remove it from the array
 			this.service.splice(index, 1);
 		}
+	}
+
+	handleNonCharterCancelPolicy(event){
+		console.log('in function handleNonCharterCancelPolicy--->>', event.value)
+		this.addVehicleForm.patchValue({
+			charterCancelPolicy : event.value
+		})
 	}
 
 }

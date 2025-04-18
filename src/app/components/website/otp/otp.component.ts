@@ -206,7 +206,12 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 		let userId = sessionStorage.getItem('userId');
 		let family_id = sessionStorage.getItem('family_id')
-		this.otpForm.value.userId = userId;
+		if (sessionStorage.getItem("isDriver") == 'Driver') {
+			this.otpForm.value.driver_id = userId;
+		}
+		else {
+			this.otpForm.value.userId = userId;
+		}
 		this.otpForm.value.family_id = family_id
 
 		this.authService.verifyOtp(this.otpForm.value)
@@ -234,6 +239,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
 				localStorage.setItem('access_token', this.response?.data?.access_token);
 				localStorage.setItem('currencySymbol', JSON.stringify(this.response?.currency?.symbol))
+				localStorage.setItem("is_stripe_account_added", this.response.data?.subscriber_data?.is_stripe_account_added);
+				localStorage.setItem("current_period_end_date", this.response.data?.subscription_status?.current_period_end_date)
+				localStorage.setItem("is_subscription_cancelled", this.response.data?.subscriber_data?.is_cancelled)
 				if (this.response?.data?.is_family_member) {
 					localStorage.setItem('is_family_member', this.response?.data?.is_family_member)
 					localStorage.setItem("family_member_data", JSON.stringify(this.response?.data?.family_member_data))
@@ -250,7 +258,12 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 				switch (this.response.data.user.roleName) {
 					case 'admin': {
-						this.router.navigateByUrl('/admin');
+						if (this.response.data?.user?.created_by_role == 'subscriber' && !this.response.data?.subscriber_data?.is_stripe_account_added) {
+							this.router.navigateByUrl('/admin/add-bank-details');
+						}
+						else {
+							this.router.navigateByUrl('/admin');
+						}
 						break;
 					}
 					case 'sub_admin': {
@@ -353,6 +366,14 @@ export class OtpComponent implements OnInit, OnDestroy {
 						else {
 							this.router.navigateByUrl('/sub_travel_agent/profile')
 						}
+						break;
+					}
+					case 'sub_affiliate': {
+						this.router.navigateByUrl('/sub_affiliate/my-bookings');
+						break;
+					}
+					case 'affiliate_driver': {
+						this.router.navigateByUrl('/affiliate_driver/my-bookings');
 						break;
 					}
 					default: {

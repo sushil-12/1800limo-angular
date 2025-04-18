@@ -134,7 +134,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
       work_contact_number: [''],
       workIsd: ['+1', Validators.required],
       workCountry: ['us'],
-      mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(9), Validators.maxLength(15)]],
       mobileIsd: ['+1', Validators.required],
       mobileCountry: ['us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],

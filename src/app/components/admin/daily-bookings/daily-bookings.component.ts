@@ -13,10 +13,11 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 declare var $: any;
 import * as moment from "moment";
-import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
+import { ErrorDialogService } from "../../../services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 import { MapsAPILoader } from "@agm/core";
+import { UploadService } from "../../../services/upload.service";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -26,6 +27,7 @@ import { MapsAPILoader } from "@agm/core";
 export class DailyBookingsComponent implements OnInit {
 	exampleHeader = DatePickerComponent;
 	@ViewChild("inputmsg", { static: false }) message: ElementRef;
+	@ViewChild('fileInput') fileInput!: ElementRef;
 	@ViewChild("select") select: MatSelect;
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 	outputDateFormat = "YYYY-MM-DD";
@@ -63,7 +65,7 @@ export class DailyBookingsComponent implements OnInit {
 	notification_msg: any;
 	status_list: any = [];
 	audit_Trail: any = [];
-	currentUser: any = JSON.parse(localStorage.getItem("userData")) || "";
+	currentUser: any = JSON.parse(localStorage.getItem("currentUser")) || "";
 	subModules: any = localStorage.getItem("sub_modules") || "";
 	useDateFilter: boolean = false;
 	use_created_at: boolean = false;
@@ -73,6 +75,18 @@ export class DailyBookingsComponent implements OnInit {
 	adminSharePercent: any;
 	previewCopyData: any;
 	accept_charge_id: any;
+	public is_stripe_added: any;
+	public stripeResp: any;
+	public stripeErroMsg: string = '';
+	subs_end_date: any;
+	isCancelled: boolean = false;
+	fileUrl: String;
+	fileName: String;
+	fileType: String;
+	uploadedFile: any;
+	deducted_stripe_fee:any;
+	total_amount:any;
+	admin_total:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -81,6 +95,7 @@ export class DailyBookingsComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
 		private $mapsapi: MapsAPILoader,
+		private uploadService: UploadService,
 	) { }
 
 	ngOnInit(): void {
@@ -94,19 +109,19 @@ export class DailyBookingsComponent implements OnInit {
 		// const localeDateString = date.toLocaleDateString(undefined, options).
 		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
-		// this.startDate = localStorage.getItem("admin_startDate")
-		// 	? localStorage.getItem("admin_startDate")
-		// 	: moment(timestamp).format("YYYY-MM-DD");
+		this.startDate = localStorage.getItem("admin_startDate")
+			? localStorage.getItem("admin_startDate")
+			: moment(timestamp).format("YYYY-MM-DD");
 
-		this.startDate = moment(timestamp).format("YYYY-MM-DD");
+		// this.startDate = moment(timestamp).format("YYYY-MM-DD");
 
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
-		// this.endDate = localStorage.getItem("admin_endDate")
-		// 	? localStorage.getItem("admin_endDate")
-		// 	: moment(timestamp).format("YYYY-MM-DD");
+		this.endDate = localStorage.getItem("admin_endDate")
+			? localStorage.getItem("admin_endDate")
+			: moment(timestamp).format("YYYY-MM-DD");
 
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
+		// this.endDate = moment(timestamp).format("YYYY-MM-DD");
 
 		this.searchText = localStorage.getItem("DBSearch")
 			? localStorage.getItem("DBSearch")
@@ -135,33 +150,6 @@ export class DailyBookingsComponent implements OnInit {
 				this.status_list = data;
 			});
 
-		// this.filtertype = this.adminService.checkCookie('filtertype') ?
-		// 	this.adminService.getCookie('filtertype') :
-		// 	"bookingid";
-
-		// if (this.adminService.checkCookie('startDate'))
-		// {
-		// 	this.startDate = this.adminService.getCookie('startDate');
-		// }
-
-		// Override End Date
-		// if (this.adminService.checkCookie('endDate'))
-		// {
-		// 	this.endDate = this.adminService.getCookie('endDate');
-		// }
-
-		// // Override Search Text
-		// if (this.adminService.checkCookie('search'))
-		// {
-		// 	this.searchText = this.adminService.getCookie('search');
-		// }
-
-		// Override Filter Type
-		// if (this.adminService.checkCookie('filtertype'))
-		// {
-		// 	this.filtertype = this.adminService.getCookie('filtertype');
-		// }
-
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 
 		//change status booking form validation
@@ -173,10 +161,16 @@ export class DailyBookingsComponent implements OnInit {
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ["", Validators.required],
-			emailTarget: ["", Validators.required],
+			emailTarget: ["",Validators.required],
 		});
 
 		this.MapController()
+		if (this.currentUser?.created_by_role == 'subscriber') {
+			this.stripeDetailsCheck()
+			this.subs_end_date = localStorage.getItem('current_period_end_date')
+			this.isCancelled = JSON.parse(localStorage.getItem('is_subscription_cancelled'))
+		}
+
 	}
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");
@@ -185,6 +179,37 @@ export class DailyBookingsComponent implements OnInit {
 		this.sendEmailModalFocus.nativeElement
 			.querySelector("textarea")
 			.focus();
+	}
+
+	stripeDetailsCheck() {
+		this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
+		console.log("is stripe", this.is_stripe_added)
+		this.spinner.show()
+		this.adminService.getSubsriberBank(this.currentUser?.account_id)
+			.pipe(
+				catchError(err => {
+					// this.stateManagementService.setprogressBar(false);
+					this.spinner.hide()
+					return throwError(err);
+				})
+			).subscribe(result => {
+				this.spinner.hide()
+				this.stripeResp = result
+				console.log(this.stripeResp)
+				console.log(this.stripeResp?.data?.stripe_account_status == 'unverified')
+				if (this.stripeResp?.data?.stripe_account_status == 'unverified' && this.is_stripe_added) {
+					console.log("in if")
+					this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
+				}
+				else if (!this.is_stripe_added) {
+					this.stripeErroMsg = 'Please fill out the bank details to activate payments.'
+				}
+				else {
+					this.stripeErroMsg = ''
+				}
+
+				console.log('Error msg:', this.stripeErroMsg)
+			})
 	}
 
 	MapController() {
@@ -262,8 +287,12 @@ export class DailyBookingsComponent implements OnInit {
 		this.useDateFilter = value;
 		this.saveCookie("useDateFilter", value);
 		let date = new Date();
-		date.setDate(date.getDate() + 7);
+		date.setDate(date.getDate());
 		let timestamp = date.getTime();
+		this.startDate = moment(timestamp).format("YYYY-MM-DD");
+		// let date = new Date();
+		date.setDate(date.getDate() + 7);
+		timestamp = date.getTime();
 		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
@@ -425,53 +454,83 @@ export class DailyBookingsComponent implements OnInit {
 			});
 	}
 
-	submit(message, format) {
+	
+	async submit(message, format) {
 		console.log("format", format)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
 				this.passengerDetails.passenger_cell
 				: this.passengerDetails.passenger_email;
-			this.reciptentName = this.passengerDetails.passenger_name;
-		} else if (this.passengerDetails.selection_button == "Affiliate") {
-			this.sendInformation = format
+				this.reciptentName = this.passengerDetails.passenger_name;
+			} else if (this.passengerDetails.selection_button == "Affiliate") {
+				this.sendInformation = format
 				? this.passengerDetails.affiliate_dispatch_isd +
 				this.passengerDetails.affiliate_dispatch_number
 				: this.passengerDetails.dispatchEmail;
 			this.reciptentName =
-				this.passengerDetails.driver_first_name +
+			this.passengerDetails.driver_first_name +
 				this.passengerDetails.driver_last_name;
-		}
-		else {
-			this.sendInformation = format
+			}
+			else if(this.passengerDetails.selection_button == "created_by"){
+				this.sendInformation = format ? this.passengerDetails.created_by_phone : this.passengerDetails.created_by_email
+				this.reciptentName = this.passengerDetails.created_by_name
+			}
+			else {
+				this.sendInformation = format
 				? (this.passengerDetails.loose_affiliate_phone_isd ? this.passengerDetails.loose_affiliate_phone_isd : '+1') +
 				(this.passengerDetails.loose_affiliate_phone ? this.passengerDetails.loose_affiliate_phone : '8005466266')
 				: (this.passengerDetails.loose_affiliate_email ? this.passengerDetails.loose_affiliate_email : 'info@1800limo.com');
-			this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
-		}
-
-		let obj = {
-			bookingId: this.passengerDetails.booking_id,
-			reciptentName: this.reciptentName,
-			sendTo: this.passengerDetails.selection_button,
-			sendThrough: format ? "Phone" : "Email",
-			sendValue: this.sendInformation,
-			sendContent: message,
+				this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
+			}
+			let fileData = []
+			if (this.uploadedFile) {
+				for (let file of this.uploadedFile) {
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+				  fileUrl: dataS.Location,
+				  fileType: file.type
+				});
+			  }}
+			
+			let obj = {
+				bookingId: this.passengerDetails.booking_id,
+				reciptentName: this.reciptentName,
+				sendTo: this.passengerDetails.selection_button,
+				sendThrough: format ? "Phone" : "Email",
+				sendValue: this.sendInformation,
+				sendContent: message,
+				fileData :fileData
 		};
 		this.adminService
-			.adminNotification(obj)
+		.adminNotification(obj)
 			.pipe(
 				catchError((err) => {
+					this.spinner.hide();
 					return throwError(err);
 				})
 			)
 			.subscribe(({ message }: any) => {
+				this.spinner.hide();
 				this.notification_msg = message;
 				$("#notificationModal").modal("show");
 				console.log(message);
 				$("textarea").val("");
 			});
-		$("#closeModal").click(() => {
+			
+			// Clear file input after success
+			this.uploadedFile = null;
+			this.fileUrl = null;
+			this.fileType = null;
+			if (this.fileInput) {
+				this.fileInput.nativeElement.value = ''; // Reset file input
+			}
+			
+			$("#closeModal").click(() => {
+				this.fileInput.nativeElement.value = '';
+				this.uploadedFile = null;
+				this.fileType = null;
+			this.fileUrl = null;
 			$("#notificationModal").modal("hide");
 		});
 		$("#closeModal1").click(() => {
@@ -481,48 +540,80 @@ export class DailyBookingsComponent implements OnInit {
 		this.message.nativeElement.value = "";
 		this.show = false;
 	}
+	
+	cancelSubscription() {
+		this.spinner.show()
+		let data = {
+			account_id: this.currentUser?.account_id
+		}
+		this.adminService
+		.cancelSubscription(data)
+		.pipe(
+			catchError((err) => {
+				this.spinner.hide()
+				return throwError(err);
+			})
+		)
+		.subscribe((response: any) => {
+			this.spinner.hide()
+			this.$errorDialog.openDialog({
+				errors: {
+					error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Your subscription have been cancelled successfully!</span>`
+				}
+			})
+			this.isCancelled = true
+			$("#cancelModal").modal("hide");
+		});
+	}
 
+	
 	closeModal() {
 		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
 		$("#sendEmailModal").modal("hide");
 		this.message.nativeElement.value = "";
+		this.fileInput.nativeElement.value = '';
+		this.uploadedFile = null;
+		this.fileType = null;
+		this.fileUrl = null;
 		this.show = false;
 		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
 	}
-
+	
 	scroll(id) {
 		// let el = document.getElementById(id);
 		// let elementRect = el.getBoundingClientRect();
 		// let absoluteElementTop = elementRect.top + window.pageYOffset;
 		// let topElement = absoluteElementTop - 200;
-
+		
 		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
 		// window.scrollTo({
-		// 	top: topElement,
-		// 	behavior: 'smooth'
-		// });
-
-		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView({ behavior: 'smooth' });
-	}
-
-	noError: boolean = false;
-	loadBookings(
-		pageUrl = null,
-		start_date: string,
-		end_date: string,
-		search_value: string = ""
-	) {
-		if (pageUrl) {
-			console.log("pageurl", pageUrl)
-			this.scroll('daily_bookings_table')
+			// 	top: topElement,
+			// 	behavior: 'smooth'
+			// });
+			
+			let el = document.getElementById(id);
+			console.log(`scrolling to ${id}`, el);
+			el.scrollIntoView({ behavior: 'smooth' });
 		}
-
+		
+		noError: boolean = false;
+		loadBookings(
+			pageUrl = null,
+			start_date: string,
+			end_date: string,
+			search_value: string = ""
+		) {
+			if (pageUrl) {
+				console.log("pageurl", pageUrl)
+				this.scroll('daily_bookings_table')
+		}
+		
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
-		this.adminService
+		
+		if (this.currentUser.created_by_role == 'admin') {
+			this.adminService
 			.loadBookings(
 				pageUrl,
 				start_date,
@@ -532,7 +623,7 @@ export class DailyBookingsComponent implements OnInit {
 				this.orderBy
 			)
 			.then((result: any) => {
-				if (result?.data?.data == 0) {
+				if (result?.data?.reservations?.data == 0) {
 					this.noError = true;
 				}
 				let date = new Date();
@@ -540,39 +631,83 @@ export class DailyBookingsComponent implements OnInit {
 				date.setDate(date.getDate() + 7);
 				timestamp = date.getTime();
 				this.bookingsRes = result;
-				this.bookings = this.bookingsRes?.data?.data;
-				if (!this.useDateFilter) {
+				this.bookings = this.bookingsRes?.data?.reservations?.data;
+				if (!this.useDateFilter && !this.searchText) {
 					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 				}
-				this.totalRecords = this.bookingsRes.data.total;
+				this.total_amount = this.bookingsRes?.data?.total_amount
+				this.admin_total = this.bookingsRes?.data?.admin_total
+				this.totalRecords = this.bookingsRes.data?.reservations?.total;
 				this.firstPage = 1;
-				this.lastPage = this.bookingsRes.data.last_page;
-				this.totalPage = this.bookingsRes.data.last_page;
-				this.currentPage = this.bookingsRes.data.current_page;
-				this.from = this.bookingsRes.data.from;
-				this.to = this.bookingsRes.data.to;
-				this.path = this.bookingsRes.data.path;
-				this.firstPageUrl = this.bookingsRes.data.first_page_url;
-				this.lastPageUrl = this.bookingsRes.data.last_page_url;
-				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-				this.nextPageUrl = this.bookingsRes.data.next_page_url;
+				this.lastPage = this.bookingsRes.data?.reservations?.last_page;
+				this.totalPage = this.bookingsRes.data?.reservations?.last_page;
+				this.currentPage = this.bookingsRes.data?.reservations?.current_page;
+				this.from = this.bookingsRes.data?.reservations?.from;
+				this.to = this.bookingsRes.data?.reservations?.to;
+				this.path = this.bookingsRes.data?.reservations?.path;
+				this.firstPageUrl = this.bookingsRes.data?.reservations?.first_page_url;
+				this.lastPageUrl = this.bookingsRes.data?.reservations?.last_page_url;
+				this.prevPageUrl = this.bookingsRes.data?.reservations?.prev_page_url;
+				this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
 				this.subModules = localStorage.getItem("sub_modules") || "";
-				this.currentUser =
-					JSON.parse(localStorage.getItem("userData")) || "";
-				this.spinner.hide();
-			});
-	}
-
-	handleShowMore(
-		pageUrl = null,
-		start_date: string,
-		end_date: string,
-		search_value: string = ""
-	) {
-		search_value == "" && this.spinner.show();
-		this.noError = false;
-		// Load Our bookings using API
-		this.adminService
+					this.spinner.hide();
+				});
+			}
+			else {
+				this.adminService
+				.loadFarmInBookings(
+					pageUrl,
+					start_date,
+					end_date,
+					this.useDateFilter,
+					search_value ?? "",
+					this.orderBy
+				)
+				.then((result: any) => {
+					if (result?.data?.reservations?.data == 0) {
+						this.noError = true;
+					}
+					let date = new Date();
+					let timestamp = date.getTime();
+					date.setDate(date.getDate() + 7);
+					timestamp = date.getTime();
+					this.bookingsRes = result;
+					this.bookings = this.bookingsRes?.data?.reservations?.data;
+					if (!this.useDateFilter && !this.searchText) {
+						this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+					}
+					this.totalRecords = this.bookingsRes.data?.reservations?.total;
+					this.total_amount = this.bookingsRes?.data?.total_amount
+					this.admin_total = this.bookingsRes?.data?.admin_total
+					this.firstPage = 1;
+					this.lastPage = this.bookingsRes.data?.reservations?.last_page;
+					this.totalPage = this.bookingsRes.data?.reservations?.last_page;
+					this.currentPage = this.bookingsRes.data?.reservations?.current_page;
+					this.from = this.bookingsRes.data?.reservations?.from;
+					this.to = this.bookingsRes.data?.reservations?.to;
+					this.path = this.bookingsRes.data?.reservations?.path;
+					this.firstPageUrl = this.bookingsRes.data?.reservations?.first_page_url;
+					this.lastPageUrl = this.bookingsRes.data?.reservations?.last_page_url;
+					this.prevPageUrl = this.bookingsRes.data?.reservations?.prev_page_url;
+					this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
+					this.subModules = localStorage.getItem("sub_modules") || "";
+					this.spinner.hide();
+				});
+			}
+			
+			
+		}
+		
+		handleShowMore(
+			pageUrl = null,
+			start_date: string,
+			end_date: string,
+			search_value: string = ""
+		) {
+			search_value == "" && this.spinner.show();
+			this.noError = false;
+			// Load Our bookings using API
+			this.adminService
 			.loadBookings(
 				pageUrl,
 				start_date,
@@ -582,41 +717,43 @@ export class DailyBookingsComponent implements OnInit {
 				this.orderBy
 			)
 			.then((result: any) => {
-				if (result?.data?.data == 0) {
+				if (result?.data?.reservations?.data == 0) {
 					this.noError = true;
 				}
 				this.bookingsRes = result;
 				this.bookings = this.bookings.concat(
-					this.bookingsRes.data.data
+					this.bookingsRes.data?.reservations?.data
 				);
-				this.totalRecords = this.bookingsRes.data.total;
+				this.total_amount = this.bookingsRes?.data?.total_amount
+				this.admin_total = this.bookingsRes?.data?.admin_total
+				this.totalRecords = this.bookingsRes.data?.reservations?.total;
 				this.firstPage = 1;
-				this.lastPage = this.bookingsRes.data.last_page;
-				this.totalPage = this.bookingsRes.data.last_page;
-				this.currentPage = this.bookingsRes.data.current_page;
-				this.from = this.bookingsRes.data.from;
-				this.to = this.bookingsRes.data.to;
-				this.path = this.bookingsRes.data.path;
-				this.firstPageUrl = this.bookingsRes.data.first_page_url;
-				this.lastPageUrl = this.bookingsRes.data.last_page_url;
-				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-				this.nextPageUrl = this.bookingsRes.data.next_page_url;
+				this.lastPage = this.bookingsRes.data?.reservations?.last_page;
+				this.totalPage = this.bookingsRes.data?.reservations?.last_page;
+				this.currentPage = this.bookingsRes.data?.reservations?.current_page;
+				this.from = this.bookingsRes.data?.reservations?.from;
+				this.to = this.bookingsRes.data?.reservations?.to;
+				this.path = this.bookingsRes.data?.reservations?.path;
+				this.firstPageUrl = this.bookingsRes.data?.reservations?.first_page_url;
+				this.lastPageUrl = this.bookingsRes.data?.reservations?.last_page_url;
+				this.prevPageUrl = this.bookingsRes.data?.reservations?.prev_page_url;
+				this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
 				this.spinner.hide();
 			});
-	}
-
-	show = false;
-	openModal(booking: any, selection_button: string) {
-		try {
-			setTimeout(() => {
-				// $('textarea').attr('autofocus', 'autofocus');
-				this.sendEmailModalFocus.nativeElement
+		}
+		
+		show = false;
+		openModal(booking: any, selection_button: string) {
+			try {
+				setTimeout(() => {
+					// $('textarea').attr('autofocus', 'autofocus');
+					this.sendEmailModalFocus.nativeElement
 					.querySelector("textarea")
 					.focus();
-			}, 1000);
-		} catch (error) {
-			console.log("----------error------->>>>>> ", error);
-		}
+				}, 1000);
+			} catch (error) {
+				console.log("----------error------->>>>>> ", error);
+			}
 		console.log("passenger details", booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
@@ -627,25 +764,25 @@ export class DailyBookingsComponent implements OnInit {
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-
+		
 		let result = "";
-
+		
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-
+		
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-
+		
 		result += `${remainingMinutes} minutes`;
-
+		
 		return result;
 	}
 	mToMi(distance: number): string {
 		return (distance / 1609).toFixed(2);
 	}
-
+	
 	mToKm(distance: number): string {
 		return (distance / 1000).toFixed(2);
 	}
@@ -666,7 +803,7 @@ export class DailyBookingsComponent implements OnInit {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
-
+		
 		var i;
 		var udpArr = new Array();
 		for (i = startFrom; i < endTo; i++) {
@@ -674,7 +811,7 @@ export class DailyBookingsComponent implements OnInit {
 		}
 		return udpArr;
 	}
-
+	
 	changeDate(dateType, date) {
 		console.log("---------__>>>>>>", dateType, date);
 		this[dateType] = date;
@@ -688,6 +825,8 @@ export class DailyBookingsComponent implements OnInit {
 			return "I/O";
 		} else if (type == "gig_operator") {
 			return "G";
+		} else if (type == 'subscriber') {
+			return "S";
 		}
 	}
 	enableDisableClicked(event, id) {
@@ -699,22 +838,22 @@ export class DailyBookingsComponent implements OnInit {
 			var status = "disable";
 		}
 		this.adminService
-			.reservationStatus(id, status)
-			.pipe(
-				catchError((err) => {
-					this.spinner.hide(); //hide spinner
-					return throwError(err);
-				})
-			)
-			.subscribe((result) => {
+		.reservationStatus(id, status)
+		.pipe(
+			catchError((err) => {
 				this.spinner.hide(); //hide spinner
-			});
+				return throwError(err);
+			})
+		)
+		.subscribe((result) => {
+			this.spinner.hide(); //hide spinner
+		});
 	}
-
+	
 	get changeStatusF() {
 		return this.changeStatusForm.controls;
 	}
-
+	
 	changeBookingStatus(bookingId) {
 		this.changeStatusForm.patchValue({
 			reservation_id: bookingId,
@@ -723,6 +862,7 @@ export class DailyBookingsComponent implements OnInit {
 			this.select.open();
 		}, 600);
 	}
+	
 
 	submitChangeStatusForm() {
 		this.submitted = true;
@@ -775,6 +915,16 @@ export class DailyBookingsComponent implements OnInit {
 		});
 	}
 
+	sendEmaiManuallClicked(bookingId) {
+		console.log('in func send email click', bookingId)
+		this.sendEmailForm.patchValue({
+			reservation_id: bookingId,
+		});
+	}
+
+	get Form() {
+		return this.sendEmailForm.controls;
+	}
 
 	emailForm() {
 		this.submitted = true;
@@ -923,6 +1073,8 @@ export class DailyBookingsComponent implements OnInit {
 				else {
 					this.adminSharePercent = 25
 				}
+				
+				this.deducted_stripe_fee = ((this?.bookingPreview?.share_array?.grandTotal ? this?.bookingPreview?.share_array?.grandTotal : this?.bookingPreview?.share_array?.returnGrandTotal) * 0.029) + 0.30
 				// if (this.bookingPreview?.payment_status == "unpaid") {
 				// 	console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
 				// 	if (this.bookingPreview?.share_array?.length != 0) {
@@ -953,7 +1105,7 @@ export class DailyBookingsComponent implements OnInit {
 			if (i % 2 === 0) {
 				formattedText += parts[i]; // Regular text part
 			} else {
-				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+				formattedText += `<span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
 			}
 		}
 
@@ -962,13 +1114,13 @@ export class DailyBookingsComponent implements OnInit {
 
 	timer: any;
 	searchInBookings(search_value: string) {
-		this.searchText = search_value;
+		this.searchText = search_value
 		console.log("--->>>>>", search_value);
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			// this.saveCookie("search", this.searchText);
 			localStorage.setItem("DBSearch", this.searchText);
-			this.loadBookings(null, this.startDate, this.endDate, search_value);
+			this.loadBookings(null, this.startDate, this.endDate, search_value?.replace(/&/g, '%26'));
 		}, 700);
 	}
 
@@ -1232,5 +1384,100 @@ export class DailyBookingsComponent implements OnInit {
 
 	}
 
+	chargeBackAction() {
+		this.spinner.show()
+		let data = {
+			reservation_id: this.accept_charge_id
+		}
+		this.adminService
+			.chargeBack(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide();
+				$("#charge_back_modal").modal("hide");
+				this.$errorDialog.openDialog({
+					errors: {
+						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Payment have been charged back successfully!</span>`
+					}
+				})
+				console.log("accept charge action", response);
+			});
+
+	}
+
+	addBank() {
+		this.router.navigate(['/admin/add-bank-details'])
+	}
+
+	// redirect to client cards page
+	viewClientCardAction(id) {
+		this.router.navigate([`/admin/cards`], { queryParams: { accountType: 'individual', accountId: id } });
+	}
+
+	// redirect to refund url
+	refundAction(url) {
+		window.open(url, '_blank'); // Opens the search in a new tab
+	}
+
+	myUploader(event) {
+		// this.loader = true;
+
+		this.uploadedFile = Array.from(event.target.files)
+		console.log("file", this.uploadedFile)
+		// if (this.uploadedFile) {
+		// 	this.fileName = this.uploadedFile['name'];
+		// 	this.fileType = this.uploadedFile['type'];
+		// 	console.log("file", this.fileName, this.fileType)
+		// }
+	}
+
+	sendEmailToAnyone(){
+		if (this.sendEmailForm.invalid) {
+			return;
+		}
+
+		let body = {
+			id: this.sendEmailForm.get('reservation_id').value,
+			email: this.sendEmailForm.get('emailTarget').value
+
+		}
+		this.spinner.show()
+		this.adminService
+			.sendEmailToanyone(body)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					this.$errorDialog.openDialog({
+						errors: {
+							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
+						}
+					})
+				}
+			});
+
+	}
+
+	// Method to convert hours to days and hours
+	getCancellationTime(cancellationHours: number): string {
+		if (cancellationHours > 24) {
+		  const days = Math.floor(cancellationHours / 24);
+		  const remainingHours = cancellationHours % 24;
+		  return `${days} days ${remainingHours} hours`;
+		} else {
+		  return `${cancellationHours} hours`;
+		}
+	  }
 
 }

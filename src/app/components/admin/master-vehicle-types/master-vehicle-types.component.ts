@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ThemePalette } from '@angular/material/core';
 declare var $: any;
 
 
@@ -33,6 +34,10 @@ export class MasterVehicleTypesComponent implements OnInit {
 	public showProgressBarEdit: boolean = false;
 	public editVehiclePic: string;
 	vehicleId: any;
+	currentUser:any;
+	color: ThemePalette = 'primary';
+	disabled = false;
+	convertCurrenyResp:any
 
 	constructor(
 		private adminService: AdminService,
@@ -57,6 +62,10 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 			});
 
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+		this.convertCurrenyResp = this.currentUser.convert_currency == 0 ? false : true 
+
 		//add vehicle type form validation
 		this.addVehicleTypeForm = this.formBuilder.group({
 			vehicleType: ['', Validators.required],
@@ -75,6 +84,31 @@ export class MasterVehicleTypesComponent implements OnInit {
 			seats: [1],
 			luggage: [0]
 		});
+	}
+
+	enableDisableClicked(event) {
+		this.spinner.show();//show spinner
+		console.log(event.checked);
+		if (event.checked) {
+			var status = 1;
+		}
+		else {
+			var status = 0;
+		}
+		this.adminService.converCurrenyEnableDisable(status)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe((result:any) => {
+				this.spinner.hide(); // Hide spinner when successful
+				this.convertCurrenyResp = result.data.convert_currency == 0 ? false : true 
+				  this.currentUser.convert_currency = result.data.convert_currency;
+				  localStorage.setItem("currentUser", JSON.stringify(this.currentUser));
+	          
+			});
+				
 	}
 
 	drop(event: CdkDragDrop<string[]>) {

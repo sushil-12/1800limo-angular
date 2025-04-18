@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ArnString } from 'aws-sdk/clients/glue';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
@@ -12,6 +13,7 @@ export class AboutUsComponent implements OnInit
 {
     public carouselLabel: string;
     public carouselHeading: string;
+    public carouselHeading2:ArnString;
     public carouselInstructions: string;
     public carouselType: string;
     public carouselInformation: boolean = true;
@@ -44,6 +46,7 @@ export class AboutUsComponent implements OnInit
                 this.selectedCarousel = '2001';
                 this.carouselLabel = "2001";
                 this.carouselHeading = "Chicago Sun-Times Article 1-800-LIMO.COM Comes To Market";
+                this.carouselHeading2 = "First Website Design and Functionality";
                 this.carouselInstructions = "";
                 break;
             }
@@ -113,7 +116,7 @@ export class AboutUsComponent implements OnInit
         });
         
         this.getAboutPageContent();
-        this.getAboutUsSectionDataByID();
+        // this.getAboutUsSectionDataByID();
     }
 
     getAboutPageContent()

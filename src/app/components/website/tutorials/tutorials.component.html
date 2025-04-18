@@ -1,0 +1,202 @@
+<ngx-spinner></ngx-spinner>
+<div class="innerpage_wrapper">
+    <div class="innerpage_topbanner">
+        <h2>
+            Watch Our Tutorials
+            <hr>
+        </h2>
+    </div>
+    <section class="safety_wrapper">
+        <div class="container">
+            <div class="row">
+                <!-- Loop through groupedTutorials categories -->
+                <div *ngFor="let category of objectKeys(groupedTutorials)">
+
+                    <!-- Display category header -->
+                    <div class="col-12">
+                        <h2 class="category-title">{{ category }}</h2>
+                    </div>
+
+                    <!-- Loop through tutorials in the current category -->
+                    <div class="row">
+                        <!-- Loop through the tutorials for each category -->
+                        <div *ngFor="let tip of groupedTutorials[category]" class="col-sm-12 col-md-6 col-lg-6"
+                            style="margin-bottom: 15px;">
+                            <a [href]="tip.link" target="_blank" class="card">
+                                <div class="d-flex flex-direction-column div_content">
+                                    <img src="{{ tip.image }}" alt="{{ tip.title }}">
+                                    <div class="card-content">
+                                        <p class="title">{{ tip.title }}</p>
+                                        <p class="content">{{ tip.content }}</p>
+                                    </div>
+                                    <div class="arrow-container">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div> <!-- End row for tutorials -->
+
+                </div> <!-- End category -->
+            </div> <!-- End main row -->
+        </div>
+    </section>
+
+
+    <!----OUR CLIENTS------------->
+    <section class="client_wrapper client_wrapper_desktop">
+        <div class="container">
+            <h2>SOME OF OUR CLIENTS
+            </h2>
+            <hr>
+            <div class="row logo_image" style="height: 120px !important;">
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client8.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client9.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client12.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client17.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client19.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client2.svg" alt="client1">
+                </div>
+            </div>
+            <div class="row logo_image" style="height: 120px !important;">
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client1.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client21.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client3.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client5.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client4.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client18.png" alt="client1">
+                </div>
+            </div>
+            <div class="row logo_image" style="height: 120px !important;">
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client20.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client16.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client6.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client10.png" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client15.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client13.jpg" alt="client1">
+                </div>
+            </div>
+            <div class="row logo_image" style="height: 120px !important;">
+                <div class="col-3 col-md-3"></div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client14.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client11.svg" alt="client1">
+                </div>
+                <div class="col-2 col-md-2">
+                    <img src="assets/images/client7.png" alt="client1">
+                </div>
+                <div class="col-3 col-md-3"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- OUR CLIENTS FOR MOBILE -->
+    <section class="client_wrapper client_wrapper_mobile">
+        <div class="container">
+            <h2>SOME OF OUR CLIENTS
+            </h2>
+            <hr>
+            <div class="client_logo owl-carousel owl-theme">
+                <div class="item">
+                    <img src="assets/images/client8.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client9.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client13.jpg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client2.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client17.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client19.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client1.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client21.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client3.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client5.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client4.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client18.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client20.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client16.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client6.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client10.png" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client15.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client12.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client14.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client11.svg" alt="client1">
+                </div>
+                <div class="item">
+                    <img src="assets/images/client7.png" alt="client1">
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

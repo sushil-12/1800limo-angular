@@ -163,6 +163,17 @@ div#rate-manager-slider {
 		font-size    : 18px;
 		font-weight  : 600;
 	}
+	.billing_inforamtion ul {
+		justify-content: center;
+		/* Keep buttons centered */
+		gap: 10px;
+		/* Smaller gap for mobile */
+	}
+
+	.billing_inforamtion li {
+		flex: 0 1 auto;
+		/* Allow the buttons to stay in one row */
+	}
 }
 
 
@@ -213,6 +224,7 @@ div#rate-manager-slider {
 	.card-type {
 		padding: 0 !important;
 	}
+	:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.85)!important;width:133.3333333333%}
 }
 
 @media only screen and (max-width:575px) {
@@ -319,4 +331,15 @@ top:2.05em}
   .border-red{
 	border: 2px solid red;
 	border-radius: 4px;
+}
+
+
+.billing_inforamtion ul {
+	display: flex;
+	flex-wrap: nowrap;
+	/* Prevent wrapping */
+	justify-content: center;
+	/* Center align the buttons */
+	gap: 30px;
+	/* Adjust spacing between buttons */
 }

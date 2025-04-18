@@ -21,6 +21,7 @@ export class VehicleDetailsComponent implements OnInit {
 	distance: any = 0
 	duration: any = 0
 	bookingId: any = null
+	booking_created_from: string = 'admin';
 
 	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
 	currencySymbol: any;
@@ -325,6 +326,9 @@ export class VehicleDetailsComponent implements OnInit {
 	bookNow() {
 		console.log('Will navigate to Book Now Page ...')
 		let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		if (vehicle_selected?.created_by != 1) {
+			this.booking_created_from = 'subscriber'
+		}
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				// this._router.navigate(['/admin/new-booking'])
@@ -333,9 +337,8 @@ export class VehicleDetailsComponent implements OnInit {
 					this._router.navigate(['/admin/new-booking'],
 						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: 'reaffiliate', updateType: 'reaffiliate', reaffiliate_book_id: this.bookingId } })
 				} else {
-
 					this._router.navigate(['/admin/new-booking'],
-						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, created_by: (JSON.parse(localStorage.getItem('currentUser'))['created_by_role'] == 'admin' ? 'admin' : this.booking_created_from) } })
 				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
@@ -347,7 +350,7 @@ export class VehicleDetailsComponent implements OnInit {
 				this._router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } }
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, created_by: this.booking_created_from } }
 				)
 			}
 		} else {

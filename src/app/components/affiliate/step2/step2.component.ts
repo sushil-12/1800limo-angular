@@ -1204,4 +1204,25 @@ export class Step2Component implements OnInit {
 	selectDropdownExYear() {
 		$('.selectExYearLabel').removeClass('selectExYearLabel ').addClass('select-ex-year-label');
 	}
+
+	acceptRejectConsent(event) {
+		this.spinner.show();//show spinner
+		console.log(event.checked);
+		if (event.checked) {
+			var permission = 'yes';
+		}
+		else {
+			var permission = 'no';
+		}
+		this.affiliateService.chargeBackPermission(this.affiliateId, permission)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe(result => {
+
+				this.spinner.hide();//hide spinner
+			});
+	}
 }

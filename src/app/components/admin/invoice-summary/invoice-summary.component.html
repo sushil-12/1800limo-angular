@@ -124,6 +124,32 @@
 						</div>
 						<div class="div border-top">
 							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.accoutDetail?.first_name">Client Name </dt>
+								<dd class="invoice-text-b">{{invoiceData.accoutDetail?.first_name}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.accoutDetail?.mobile">Client Phone</dt>
+								<dd class="invoice-text-b"> {{invoiceData.accoutDetail?.mobile}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.accoutDetail?.email">Client Email</dt>
+								<dd class="invoice-text-b"> {{invoiceData.accoutDetail?.email}}</dd>
+
+							</dl>
+						</div>
+						<div class="div border-top">
+							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.affiliate_company_name">Affiliate Company </dt>
+								<dd class="invoice-text-b">{{invoiceData.affiliate_company_name}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.affiliate_name">
+									Affiliate Name
+								</dt>
+								<dd class="invoice-text-b text-break">{{invoiceData.affiliate_name}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.affiliate_phone">Affiliate Phone</dt>
+								<dd class="invoice-text-b"> {{invoiceData.affiliate_phone}}</dd>
+
+							</dl>
+						</div>
+						<div class="div border-top">
+							<dl class="m-0">
 								<dt class="invoice-p" *ngIf="invoiceData.pickup_address">Pickup Address
 								</dt>
 								<dd class="invoice-text-b"> {{invoiceData.pickup_address}}
@@ -329,9 +355,17 @@
 	</section>
 	<section class="billing_inforamtion">
 		<div class="row m-2">
-			<button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;"
-				type="button" (click)="backButton()" tabindex="1">OK</button>
-			<button class="custom-btn refund-btn box-shadow ml-3" style="height: 40px;width: 130px; font-size: 14px;
+			<button class="ok-btn custom-ok-btn" type="button" (click)="backButton()" tabindex="1"
+				style="background-color: black !important;">
+				<svg width="41" height="16" viewBox="0 0 41 16" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M37.963 0.500001H0.5L0.5 2H19.7407H36.963C37.7914 2 38.463 2.67157 38.463 3.5V9C38.463 9.82843 37.7914 10.5 36.963 10.5H19.7407H19.2407V10V6.59305L14.4313 10.75L19.2407 14.907V13V12.5H19.7407H37.963C38.6378 12.5 39.2838 12.2351 39.7591 11.7656C40.2342 11.2963 40.5 10.661 40.5 10V2.5C40.5 1.82723 40.2315 1.35011 39.8074 1.0275C39.3675 0.692862 38.7244 0.500001 37.963 0.500001Z"
+						fill="#fff" stroke="#fff" />
+				</svg>
+			</button>
+			<!-- <button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 17px;"
+				type="button" (click)="backButton()" tabindex="1">Back</button> -->
+			<button class="custom-btn refund-btn box-shadow ml-3" style="height: 40px;width: 130px; font-size: 17px;
 				padding: 10px;" data-toggle="modal" data-target="#paymentLogs"
 				*ngIf="invoiceData.billing_detail.payment_method !='cash'">Payment logs</button>
 		</div>

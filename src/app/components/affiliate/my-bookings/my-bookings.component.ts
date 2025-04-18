@@ -7,8 +7,8 @@ import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
 import { MapsAPILoader } from '@agm/core';
 declare var $: any;
 
@@ -60,6 +60,11 @@ export class MyBookingsComponent implements OnInit {
 	shareArray: any;
 	rates_preview: any;
 	currencySymbol: any;
+	currentUser: any;
+	vehiclesRes: any;
+	numberOfVehicles: any;
+	total_amount:any;
+	net_total_amount:any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -71,6 +76,8 @@ export class MyBookingsComponent implements OnInit {
 		private $mapsapi: MapsAPILoader,) { }
 
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
@@ -103,6 +110,7 @@ export class MyBookingsComponent implements OnInit {
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
 		this.loadBookings();
+		this.loadVehicles();
 
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
@@ -212,6 +220,7 @@ export class MyBookingsComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
+
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
@@ -230,31 +239,42 @@ export class MyBookingsComponent implements OnInit {
 			date.setDate(date.getDate() + 7);
 			timestamp = date.getTime();
 			this.bookingsRes = result;
-			this.bookings = this.bookingsRes?.data?.data;
-			if (!this.useDateFilter) {
+			this.bookings = this.bookingsRes?.data?.reservations?.data;
+			if (!this.useDateFilter && !this.searchText) {
 				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			}
-			this.totalRecords = this.bookingsRes?.data?.total;
+			this.totalRecords = this.bookingsRes?.data?.reservations?.total;
+			this.total_amount = this.bookingsRes?.data?.total_amount
+			this.net_total_amount = this.bookingsRes?.data?.affiliate_total
 			this.noError = false
 			this.firstPage = 1;
-			this.lastPage = this.bookingsRes?.data?.last_page;
-			this.totalPage = this.bookingsRes?.data?.last_page;
-			this.currentPage = this.bookingsRes?.data?.current_page;
-			this.from = this.bookingsRes?.data?.from;
-			this.to = this.bookingsRes?.data.to;
-			this.path = this.bookingsRes?.data?.path;
-			this.firstPageUrl = this.bookingsRes?.data?.first_page_url;
-			this.lastPageUrl = this.bookingsRes?.data?.last_page_url;
-			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
-			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
+			this.lastPage = this.bookingsRes?.data?.reservations?.last_page;
+			this.totalPage = this.bookingsRes?.data?.reservations?.last_page;
+			this.currentPage = this.bookingsRes?.data?.reservations?.current_page;
+			this.from = this.bookingsRes?.data?.reservations?.from;
+			this.to = this.bookingsRes?.data.reservations?.to;
+			this.path = this.bookingsRes?.data?.reservations?.path;
+			this.firstPageUrl = this.bookingsRes?.data?.reservations?.first_page_url;
+			this.lastPageUrl = this.bookingsRes?.data?.reservations?.last_page_url;
+			this.prevPageUrl = this.bookingsRes?.data?.reservations?.prev_page_url;
+			this.nextPageUrl = this.bookingsRes?.data?.reservations?.next_page_url;
 			this.spinner.hide();//hide spinner
-			if (this.bookingsRes?.data?.data.length == 0) {
+			if (this.bookingsRes?.data?.reservations?.data.length == 0) {
 				this.noError = true
 			}
 		})
 			.catch(err => {
 				this.spinner.hide();//hide spinner
 			});
+	}
+
+
+	loadVehicles() {
+		this.affiliateService.affiliateVehicleList(true).then(result => {
+			this.vehiclesRes = result;
+			this.numberOfVehicles = this.vehiclesRes?.data?.totalNumberOfVehicles;
+			localStorage.setItem("affiliateVehicles", this.numberOfVehicles)
+		});
 	}
 
 	FormatDate(date: string) {
@@ -272,12 +292,12 @@ export class MyBookingsComponent implements OnInit {
 	formatBaseRate(baseRate: string | number): string {
 		// Convert baseRate to a number if it is a string
 		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
-	
+
 		// Check if numericValue is a valid number
 		if (!isNaN(numericValue)) {
 			return numericValue.toFixed(2);
 		}
-	
+
 		// Return a default value or an empty string if baseRate is not a valid number
 		return '0.00';
 	}
@@ -574,17 +594,37 @@ export class MyBookingsComponent implements OnInit {
 				})
 			)
 			.subscribe(({ data, success, message }: any) => {
-				if (success == true) {
 					this.spinner.hide();//hide spinner
 					this.loadBookings()
 					$('#cancelBooking').modal('hide');
-					// this.$errors.openDialog({
-					// 	errors: {
-					// 		error: `<span class='text-success'>${message}</span>`
-					// 	}
-					// })
-				}
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-success'>Cancellation request have been successfully send to admin!</span>`
+						}
+					})
+				
 			});
+
+		// this.affiliateService.rejectBooking(this.cancelBookingId)
+		// 	.pipe(
+		// 		catchError(err => {
+		// 			this.spinner.hide();//hide spinner
+		// 			$('#cancelBooking').modal('hide');
+		// 			return throwError(err);
+		// 		})
+		// 	)
+		// 	.subscribe(({ data, success, message }: any) => {
+		// 		if (success == true) {
+		// 			this.spinner.hide();//hide spinner
+		// 			this.loadBookings()
+		// 			$('#cancelBooking').modal('hide');
+		// 			// this.$errors.openDialog({
+		// 			// 	errors: {
+		// 			// 		error: `<span class='text-success'>${message}</span>`
+		// 			// 	}
+		// 			// })
+		// 		}
+		// 	});
 	}
 
 	acceptBooking() {
@@ -631,24 +671,58 @@ export class MyBookingsComponent implements OnInit {
 
 
 	editAction(bookingId, updateType) {
-		this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		if (this.currentUser.roleName == 'sub_affiliate') {
+			this.router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
+		else {
+				this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
 	}
 
 	finalizeAction(bookingId) {
-		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		if (this.currentUser.roleName == 'sub_affiliate') {
+			this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		}
+		else {
+			this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		}
 	}
 
 	previewRate(bookingId) {
-		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
+		if (this.currentUser.roleName == 'sub_affiliate') {
+			this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
+		}
+		else {
+			this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
+		}
 	}
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 
 		if (actionType == 'return') {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			if (this.currentUser.roleName == 'sub_affiliate') {
+				this.router.navigate(['/sub_affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			}
+			else {
+				this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			}
 		}
 		else {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			if (this.currentUser.roleName == 'sub_affiliate') {
+				this.router.navigate(['/sub_affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			}
+			else {
+				this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			}
+		}
+	}
+
+	invoiceAction(bookingId) {
+		if (this.currentUser.roleName == 'sub_affiliate') {
+			this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
+		}
+		else {
+			this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
 	}
 
@@ -685,9 +759,16 @@ export class MyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#change_status_booking_Modal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate(['/affiliate/my-bookings']);
-					});
+					if (this.currentUser.roleName == 'sub_affiliate') {
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						});
+					}
+					else {
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/affiliate/my-bookings']);
+						});
+					}
 				}
 			});
 	}
@@ -722,9 +803,17 @@ export class MyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate(['/affiliate/my-bookings']);
-					});
+					if (this.currentUser.roleName == 'sub_affiliate') {
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						});
+					}
+					else {
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/affiliate/my-bookings']);
+						});
+					}
+
 				}
 			});
 	}
@@ -845,4 +934,24 @@ export class MyBookingsComponent implements OnInit {
 			window.open(url, '_blank'); // Opens the search in a new tab
 		}
 	}
+
+	addSubAffiliate() {
+		this.router.navigate(['/affiliate/add-sub-affiliate']);
+	}
+
+	upgradePlan() {
+		this.router.navigate(['/subscription']);
+	}
+
+		// Method to convert hours to days and hours
+		getCancellationTime(cancellationHours: number): string {
+			if (cancellationHours > 24) {
+			  const days = Math.floor(cancellationHours / 24);
+			  const remainingHours = cancellationHours % 24;
+			  return `${days} days ${remainingHours} hours`;
+			} else {
+			  return `${cancellationHours} hours`;
+			}
+		  }
+
 }

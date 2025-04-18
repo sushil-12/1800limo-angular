@@ -9,6 +9,15 @@
 		<a class="navbar-brand" href="">
 			<img src="assets/images/HomepageLogo.png" tabindex="1">
 		</a>
+		<div class="nav_top d-md-none d-lg-none text-center"
+			style="flex-basis: auto; flex-grow: 1;padding: 6px 48px 5px 0px !important;">
+			<a href="tel:+18005466266" class="cell-no-header"
+				style="color: #fff !important;font-weight: 700 !important;font-size: 11px !important;" tabindex="1">
+				<i class="fas fa-phone-alt" aria-hidden="true"></i>
+				+1-800-5466.266
+			</a>
+			<!-- <div class="g-translator d-flex justify-content-center"><div id="google_translate_element_home_desktop"></div></div> -->
+		</div>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
 			aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30"
@@ -21,7 +30,8 @@
 		</button>
 		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
 			<div class="nav_top d-lg-block d-none text-center" style="flex-basis: auto; flex-grow: 1;">
-				<a href="tel:+18005466266" class="cell-no" tabindex="1">
+				<a href="tel:+18005466266" class="cell-no-header"
+					style="color: #fff !important;font-weight: 700 !important;" tabindex="1">
 					<i class="fas fa-phone-alt" aria-hidden="true"></i>
 					+1-800-5466.266
 				</a>
@@ -32,6 +42,10 @@
 				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home"
 						tabindex="1">Home </a>
 				</li>
+				<!-- Added Tutorials link here -->
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="tutorials"
+						tabindex="1">Tutorials</a>
+				</li>
 				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us"
 						tabindex="1">ABOUT
 						US / HISTORY</a>
@@ -41,9 +55,9 @@
 				</li>
 				<li class="nav-item"> <a class="nav-link" [routerLink]="['services']" tabindex="1">SERVICES</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety"
+				<!-- <li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety"
 						tabindex="1">Safety</a>
-				</li>
+				</li> -->
 			</ul>
 			<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
 				<a class="nav-link dropdown-toggle" tabindex="1" href="#" id="dropdown05" data-toggle="dropdown"
@@ -52,11 +66,11 @@
 				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
 					<a class="dropdown-item indv-btn" (click)="loginButtons('individual')" style="font-size: 21px;">
-						Individual
+						Individual Account
 					</a>
 					<a class="dropdown-item ta-btn text-header-drop" (click)="loginButtons('travel_agent')"
 						style="font-size: 21px;">
-						Travel Agent
+						Travel Agent Account
 					</a>
 					<!-- <a class="dropdown-item nav-disabled" style="color: #000 !important;font-size: 21px;"
 						(click)="loginButtons('corporate')">
@@ -73,6 +87,10 @@
 						(click)="loginButtons('sub_admin')">
 						Sub Admin
 					</a>
+					<!-- <a class="dropdown-item ta-btn sub-admin-dropdown text-header-drop" style="font-size: 21px;"
+						(click)="loginButtons('subscriber')">
+						Partner Login
+					</a> -->
 				</div>
 			</div>
 			<ng-template #loggedInUser>
@@ -81,8 +99,9 @@
 						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" tabindex="1"
 							id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false" *ngIf="(currentUser?.roleName != 'individual')">
-							{{ currentUser?.affiliate_company ? currentUser?.affiliate_company
-							: currentUser?.name
+							{{ currentUser?.roleName == 'driver' ? currentUser?.affiliate_company ?
+							currentUser?.affiliate_company
+							: currentUser?.FirstName + currentUser?.Lastname.charAt(0) : currentUser?.name
 							?
 							currentUser?.name : currentUser?.FirstName +
 							currentUser?.LastName?.charAt(0)}}
@@ -104,9 +123,9 @@
 								<div class="dropdown-user-details">
 									<div class="dropdown-user-details-name"
 										*ngIf="(currentUser?.roleName != 'individual')">
-										{{currentUser?.affiliate_company ?
-										currentUser?.affiliate_company :
-										currentUser?.name ?
+										{{currentUser?.roleName == 'driver' ? currentUser?.affiliate_company ?
+										currentUser?.affiliate_company
+										: currentUser?.FirstName + currentUser?.Lastname.charAt(0) : currentUser?.name ?
 										currentUser?.name : currentUser?.FirstName +
 										currentUser?.LastName.charAt(0)}}
 									</div>
@@ -195,7 +214,6 @@
 					</li>
 				</ul>
 			</ng-template>
-
 		</div>
 	</nav>
 </header>

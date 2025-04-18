@@ -6,9 +6,10 @@
 			<div class="row">
 				<div class="col-12" style="font-size: 20px; margin-top: 15px;">
 					Click icon
-					<a href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Affiliate+registration+step+1.mp4"
-						target="_blank" title="View Tutorial"><img src="../../../../assets/images/tutorial_icon.svg"
-							height="40" style="background: greenyellow; width: 40px !important;" /></a>
+					<a href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4"
+						target="_blank" title="View Tutorial"><img
+							src="../../../../assets/images/images_tutorial/updated-images/step-1.png" height="40"
+							style="width: 30px !important;" /></a>
 					to view STEP 1 tutorials
 				</div>
 				<div class="col-12">
@@ -23,7 +24,7 @@
 				<div class="col-md-12">
 					<div id="radio-tiles-container" class="w-auto">
 						<div class="radio-tiles d-flex flex-wrap align-items-center justify-content-around">
-							<div class=" wrapper tile text-center" id="tile_{{ tile_index }}"
+							<div class="wrapper tile text-center" id="tile_{{ tile_index }}"
 								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
 								(click)="affiliateTypeSwitch(tile_index)"
 								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
@@ -33,10 +34,11 @@
 								<input type="radio" (mouseover)="changeTooltipText(tile)"
 									id="radio-button_{{ tile_index }}" class="radio-button" />
 								<div id="tile-name">
-									<p id="tooltip">
-										{{ tile.includes('black') ? 'Black Car/Limo Owner Op.' : tile.includes('fleet')?
-										'Fleet/Coach Operator Owned' : tile.includes('taxi') ? 'Taxi Operator' :
-										'Gig/Uber Black Operator' }}
+									<p id="tooltip" [ngClass]="{'active-tile': f.AffiliateType.value == tile}">
+										{{ tile.includes('black') ? 'Blk Car / 1 Vehicle Owner Op' :
+										tile.includes('fleet')?
+										'Fleet Operator / 2 or More' : tile.includes('taxi') ? 'Taxi Operator' :
+										'UberX • Comfort • XL• Black/SUV (Casual Dress) Driver' }}
 									</p>
 									<div class="tooltip">{{tooltipText}}</div>
 								</div>

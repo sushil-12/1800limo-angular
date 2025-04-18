@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { MapsAPILoader } from '@agm/core';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 
 @Component({
@@ -80,6 +81,7 @@ export class BookingComponent implements OnInit {
 
 	constructor(
 		private affiliateService: AffiliateService,
+		private adminService : AdminService,
 		private travelAgentService: TravelAgentService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
@@ -143,7 +145,7 @@ export class BookingComponent implements OnInit {
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
-			emailTarget: ['', Validators.required]
+			emailTarget: ["",[Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 		});
 
 		$("#search-field-my-booking").addClass("box-outline")
@@ -263,7 +265,7 @@ export class BookingComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if(!this.useDateFilter){
+			if(!this.useDateFilter  && !this.searchText){
 				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			}
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -831,6 +833,9 @@ export class BookingComponent implements OnInit {
 		if (actionType == 'return') {
 			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
 		}
+		else if (actionType == 'round') {
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'round' } });
+		}
 		else {
 			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
 		}
@@ -875,6 +880,18 @@ export class BookingComponent implements OnInit {
 				}
 			});
 	}
+
+
+	// Method to convert hours to days and hours
+	getCancellationTime(cancellationHours: number): string {
+		if (cancellationHours > 24) {
+		  const days = Math.floor(cancellationHours / 24);
+		  const remainingHours = cancellationHours % 24;
+		  return `${days} days ${remainingHours} hours`;
+		} else {
+		  return `${cancellationHours} hours`;
+		}
+	  }
 
 
 	sendEmailClicked(bookingId, emailTarget) {
@@ -1008,6 +1025,65 @@ export class BookingComponent implements OnInit {
 			window.open(url, '_blank'); // Opens the search in a new tab
 		}
 	}
+
+	formatBaseRate(baseRate: string | number): string {
+		// Convert baseRate to a number if it is a string
+		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
+
+		// Check if numericValue is a valid number
+		if (!isNaN(numericValue)) {
+			return numericValue.toFixed(2);
+		}
+
+		// Return a default value or an empty string if baseRate is not a valid number
+		return '0.00';
+	}
+
+	get EmailFormF() {
+		return this.sendEmailForm.controls;
+	}
+
+	sendEmaiManuallClicked(bookingId) {
+		console.log('in func send email click', bookingId)
+		this.sendEmailForm.patchValue({
+			reservation_id: bookingId,
+		});
+	}
+
+	sendEmailToAnyone(){
+		if (this.sendEmailForm.invalid) {
+			return;
+		}
+
+		let body = {
+			id: this.sendEmailForm.get('reservation_id').value,
+			email: this.sendEmailForm.get('emailTarget').value
+
+		}
+		this.spinner.show()
+		this.adminService
+			.sendEmailToanyone(body)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide(); //hide spinner
+					$("#sendEmailToAnyone").modal("hide");
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
+						}
+					})
+				}
+			});
+
+	}
+
 }
 
 

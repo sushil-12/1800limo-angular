@@ -1,0 +1,25 @@
+<main>
+    <section class="user_information">
+        <h2 class="headinginfo">See All Affiliates On Map</h2>
+        <div class="containeredd">
+            <div class="row align-items-center mt-1">
+                <div class="col-md-3 py-2">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Vehicle Type</mat-label>
+                        <mat-select (selectionChange)="onVehicleChange($event)" [(value)]="selectedVehicleId">
+                            <!-- Extra option for 'All Vehicles' -->
+                            <mat-option [value]="'all'">All Vehicles</mat-option>
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let vehicle of vehicles" [value]="vehicle.ID">
+                                {{ vehicle.vehicle_name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="google_map">
+            <div id="map" class="map"></div>
+        </div>
+    </section>
+</main>

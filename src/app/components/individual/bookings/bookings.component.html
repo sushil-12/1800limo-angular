@@ -54,18 +54,19 @@
                 <!-- Search Button -->
                 <div class="align-btn d-flex justify-content-around">
                     <div class="col-sm-2 ml-n5">
-                        <button class="custom-filled-button orange-button"
-                            style="color:#fff;padding: 5px 12px !important;"
-                            (click)="loadBookings(); saveCookie('indv_startDate', startDate); saveCookie('indv_endDate', endDate);saveCookie('indv_search',searchText)">
-                            Search
-                        </button>
-                    </div>
-                    <div class="col-sm-2">
                         <button class="custom-filled-back-button"
                             style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
                             (click)=" reset();loadBookings()">
                             Reset
                         </button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="custom-filled-button orange-button"
+                            style="color:#fff;padding: 5px 12px !important;"
+                            (click)="loadBookings(); saveCookie('indv_startDate', startDate); saveCookie('indv_endDate', endDate);saveCookie('indv_search',searchText)">
+                            Search
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -85,7 +86,7 @@
             <div>
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
                         {{useDateFilter ? 'Uncheck to see current and future bookings' :
-                        'Check to see bookings for 7 days or based upon dates and search by any term.' }}
+                        'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
                     </mat-checkbox>
 
                 </p>
@@ -138,11 +139,24 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
                                             </a>
+                                            <a *ngIf="booking.service_type=='oneway' && (booking?.booking_status != 'driver_unassigned')"
+                                                class="dropdown-item" data-toggle="modal"
+                                                data-target="#return_repeat_booking_Modal"
+                                                (click)="returnRepeatAction(booking?.booking_id,'round')">
+                                                <div class="dropdown-item-icon"></div>
+                                                Round Trip
+                                            </a>
                                             <a class="dropdown-item" (click)="editAction(booking?.booking_id,'cancel')"
                                                 data-toggle="modal" data-target="#cancel_booking_modal"
                                                 *ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled')">
                                                 <div class="dropdown-item-icon"></div>
                                                 Cancel Booking
+                                            </a>
+                                            <a class="dropdown-item"
+                                                (click)="sendEmaiManuallClicked(booking.booking_id)" data-toggle="modal"
+                                                data-target="#sendEmailToAnyone">
+                                                <div class="dropdown-item-icon"></div>
+                                                Send Email to Anyone
                                             </a>
                                             <!-- <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
                                                 data-toggle="modal" data-target="#paymentModal"
@@ -170,7 +184,9 @@
                                     <td>
                                         <div data-toggle="modal" data-target="#change_status_booking_Modal"
                                             [className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-                                            {{textFormatter(booking?.booking_status) |titlecase}}
+                                            {{textFormatter(booking.booking_status == 'driver_unassigned' ? 'Unassigned'
+                                            :
+                                            booking.booking_status) |titlecase}}
                                         </div>
                                     </td>
                                     <td class="sorting_1">
@@ -291,7 +307,7 @@
                     </h4>
                     <div class="row">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Grand Total
                             </span>
                         </div>
@@ -303,7 +319,7 @@
                     </div>
                     <div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Refund amount
                             </span>
                         </div>
@@ -315,7 +331,7 @@
                     </div>
                     <div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 New total
                             </span>
                         </div>
@@ -333,7 +349,7 @@
                     <!-- Booking Information -->
                     <div class="row">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Booking Information
                             </span>
                         </div>
@@ -350,15 +366,31 @@
                             </span>
                         </div>
                     </div>
+
+                    <!-- Number of Hours -->
+                    <div *ngIf="bookingPreview.service_type == 'charter_tour'">
+                        <div class="row">
+                            <div class="col-md-4 key">
+                                <span style="font-weight: 550 !important;">
+                                    Booking Hours
+                                </span>
+                            </div>
+                            <div class="col-md-8 value">
+                                <span class="font-weight-bolder preview-output-feild">
+                                    {{ bookingPreview.number_of_hours }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Cancellation Period
                             </span>
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                {{ bookingPreview?.cancellation_hours }} hours
+                                {{ getCancellationTime(bookingPreview.cancellation_hours) }}
                             </span>
                         </div>
                     </div>
@@ -369,7 +401,7 @@
                     </h4>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Vehicle Type
                             </span>
                         </div>
@@ -381,7 +413,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Vehicle Make
                             </span>
                         </div>
@@ -393,7 +425,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Vehicle Model
                             </span>
                         </div>
@@ -405,7 +437,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Vehicle Year
                             </span>
                         </div>
@@ -417,7 +449,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Vehicle Color
                             </span>
                         </div>
@@ -429,7 +461,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Licence plate
                             </span>
                         </div>
@@ -441,7 +473,7 @@
                     </div>
                     <div class="row p-2">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 No. of seats
                             </span>
                         </div>
@@ -467,7 +499,7 @@
                         <div class="mx-2">
                             <div class="row m-0">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Name
                                     </span>
                                 </div>
@@ -484,7 +516,7 @@
                         <div class="mx-2">
                             <div class="row m-0">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Email
                                     </span>
                                 </div>
@@ -500,7 +532,7 @@
                         <div class="mx-2">
                             <div class="row m-0">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Phone
                                     </span>
                                 </div>
@@ -530,7 +562,7 @@
                         <div class="mx-2">
                             <div class="row m-0">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Name
                                     </span>
                                 </div>
@@ -546,7 +578,7 @@
                         <div class="mx-2">
                             <div class="row m-0">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Email
                                     </span>
                                 </div>
@@ -562,7 +594,7 @@
                         <div class="mx-2">
                             <div class="row m-0">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Phone
                                     </span>
                                 </div>
@@ -585,7 +617,7 @@
 					</h4>
 					<div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index">
 						<div class="col-md-4 key" *ngIf="item?.key!='ratesDetail' && item?.value!=0">
-							<span>
+							<span style="font-weight: 550 !important;">
 								{{formatText(item?.key) | titlecase}}
 							</span>
 						</div>
@@ -608,7 +640,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Name
                                 </span>
                             </div>
@@ -625,7 +657,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Email
                                 </span>
                             </div>
@@ -641,7 +673,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Phone
                                 </span>
                             </div>
@@ -671,7 +703,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Name
                                 </span>
                             </div>
@@ -687,7 +719,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Email
                                 </span>
                             </div>
@@ -703,7 +735,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Phone
                                 </span>
                             </div>
@@ -718,7 +750,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     No. of passenger
                                 </span>
                             </div>
@@ -732,7 +764,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Luggage count
                                 </span>
                             </div>
@@ -751,31 +783,16 @@
 						Travel Information
 					</h4> -->
 
-                    <!-- Number of Hours -->
-                    <div class="mx-2" *ngIf="bookingPreview.service_type == 'charter_tour'">
-                        <div class="row">
-                            <div class="col-md-4 key">
-                                <span>
-                                    Booking Hours
-                                </span>
-                            </div>
-                            <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
-                                    {{ bookingPreview.number_of_hours }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- ################ Pickup ################### -->
-                    <h5 class="m-0 my-2 text-xl preview-pickup-color">
+                    <h5 class="m-0 my-2 font-weight-bolder text-2xl preview-pickup-color">
                         Pickup Details
                     </h5>
                     <!-- Pickup > Date -->
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Date
                                 </span>
                             </div>
@@ -793,7 +810,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Time
                                 </span>
                             </div>
@@ -813,7 +830,7 @@
                         *ngIf="bookingPreview.transfer_type.includes('city_') || bookingPreview.transfer_type.includes('cruise_')">
                         <div class="row m-0">
                             <div class="col-md-4">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     {{bookingPreview.extra_stops ? 'First Pickup' : 'Address'}}
                                 </span>
                             </div>
@@ -833,7 +850,7 @@
                         <!-- Airport -->
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Airport
                                 </span>
                             </div>
@@ -847,9 +864,10 @@
                         </div>
                         <!-- Airport -->
                         <!-- Airline -->
+                        <hr>
                         <div class="row m-0 preview-pickup-color">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Airline
                                 </span>
                             </div>
@@ -857,19 +875,26 @@
                                 <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
                                     (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
                                     {{ textFormatter(bookingPreview.pickup_airline_name) }}
-                                </span>
+                                </span>&nbsp;
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                    (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
+                                    #{{ textFormatter(bookingPreview.pickup_flight) }}
+                                </span>&nbsp;<span
+                                    style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+                                    (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
+                                    Arrival time)</span>
                             </div>
                         </div>
                         <!-- Airline -->
                         <!-- Flight Number -->
-                        <hr>
+                        <!-- <hr>
                         <div class="row m-0 preview-pickup-color">
                             <div class="col-md-5 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Flight Number &nbsp;<span
                                         style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
                                         (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
-										Arrival time)</span>
+                                        Arrival time)</span>
                                 </span>
                             </div>
                             <div class="col-md-7 value">
@@ -878,7 +903,7 @@
                                     {{ textFormatter(bookingPreview.pickup_flight) }}
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
                         <hr>
                         <!-- Flight Number -->
                     </div>
@@ -888,7 +913,7 @@
                         <!-- Cruise Port -->
                         <div class="row m-0">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Cruise Port
                                 </span>
                             </div>
@@ -902,7 +927,7 @@
                         <!-- Cruise Ship Name -->
                         <div class="row m-0 preview-pickup-color">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Cruise Ship Name
                                 </span>
                             </div>
@@ -916,7 +941,7 @@
                         <!-- Ship Arrival time -->
                         <div class="row m-0 preview-pickup-color">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Ship Arrival time
                                 </span>
                             </div>
@@ -937,7 +962,7 @@
                             *ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
                             <div class="row m-0 mx-2">
                                 <div class="col-md-4 key">
-                                    <span>
+                                    <span style="font-weight: 550 !important;">
                                         Stop {{ stop_index + 1 }}
                                     </span>
                                 </div>
@@ -957,7 +982,7 @@
                     <!-- <hr> -->
 
                     <!-- ############# Dropoff ################# -->
-                    <h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
+                    <h5 class="px-2 m-0 my-3 font-weight-bolder text-2xl preview-dropoff-color">
                         Drop Off Details
                     </h5>
                     <!-- Dropoff > City Details -->
@@ -965,7 +990,7 @@
                         *ngIf="bookingPreview.transfer_type.includes('_city') || bookingPreview.transfer_type.includes('_cruise')">
                         <div class="row">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Address
                                 </span>
                             </div>
@@ -984,7 +1009,7 @@
                         <!-- Airport -->
                         <div class="row">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Airport
                                 </span>
                             </div>
@@ -998,38 +1023,49 @@
                         </div>
                         <!-- Airport -->
                         <!-- Airline -->
+                        <hr>
                         <div class="row preview-dropoff-color">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Airline
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+                                <span class="font-weight-bolder preview-output-feild"
+                                    style="cursor: pointer;color: #007500 !important;"
                                     (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_airline_name) }}
-                                </span>
+                                </span>&nbsp;
+                                <span class="font-weight-bolder preview-output-feild"
+                                    style="cursor: pointer;color: #007500 !important;"
+                                    (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
+                                    {{ textFormatter(bookingPreview.dropoff_flight) }}
+                                </span>&nbsp;<span
+                                    style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+                                    (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+                                    Arrival time)</span>
                             </div>
                         </div>
                         <!-- Airline -->
                         <!-- Flight Number -->
-                        <hr>
+                        <!-- <hr>
                         <div class="row preview-dropoff-color">
                             <div class="col-md-5 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Flight Number &nbsp;<span
                                         style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
                                         (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
-										Arrival time)</span>
+                                        Arrival time)</span>
                                 </span>
                             </div>
                             <div class="col-md-7 value">
-                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+                                <span class="font-weight-bolder preview-output-feild"
+                                    style="cursor: pointer;color: #007500 !important;"
                                     (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_flight) }}
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Flight Number -->
                     </div>
 
@@ -1038,7 +1074,7 @@
                         <!-- Cruise Port -->
                         <div class="row">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Cruise Port
                                 </span>
                             </div>
@@ -1053,7 +1089,7 @@
                         <!-- Cruise Ship Name -->
                         <div class="row preview-dropoff-color">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Cruise Ship Name
                                 </span>
                             </div>
@@ -1068,7 +1104,7 @@
                         <!-- Ship Arrival time -->
                         <div class="row preview-dropoff-color">
                             <div class="col-md-4 key">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Ship Arrival time
                                 </span>
                             </div>
@@ -1087,7 +1123,7 @@
                         <hr>
                         <div class="row m-0">
                             <div class="col-md-4">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Estimated Total Distance
                                 </span>
                             </div>
@@ -1102,7 +1138,7 @@
                     <div class="mx-2">
                         <div class="row m-0">
                             <div class="col-md-4">
-                                <span>
+                                <span style="font-weight: 550 !important;">
                                     Estimated time
                                 </span>
                             </div>
@@ -1125,7 +1161,7 @@
                 <div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
                     <div class="row m-0">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Meet and Greet
                             </span>
                         </div>
@@ -1140,7 +1176,7 @@
                 <div class="mx-2">
                     <div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Return Meet and Greet
                             </span>
                         </div>
@@ -1157,7 +1193,7 @@
                 <div class="mx-2">
                     <div class="row m-0">
                         <div class="col-md-4 key">
-                            <span>
+                            <span style="font-weight: 550 !important;">
                                 Special Instruction
                             </span>
                         </div>
@@ -1194,7 +1230,7 @@
                             <div class="row m-0">
                                 <div class="col-md-4 key d-flex align-items-center">
                                     <span class="">
-                                        Total Cost
+                                        Total Client Cost
                                     </span>
                                 </div>
                                 <div class="col-md-8 value preview-airport-color">
@@ -1575,6 +1611,48 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="sendEmailToAnyone" tabindex="-1" role="dialog" aria-labelledby="sendEmailToAnyone"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-0">
+                <h3 class="mb-0">Booking : {{EmailFormF.reservation_id.value}}</h3>
+            </div>
+            <div class="modal-body text-center">
+                <form [formGroup]="sendEmailForm">
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>
+                                Enter Email <span class="asterisk">*</span>
+                            </mat-label>
+                            <input matInput placeholder="Email" type="text" formControlName="emailTarget"
+                                (focus)="$event.target.select()">
+                        </mat-form-field>
+                    </div>
+                    <div class="error-box">
+                        <div class="error-message"
+                            *ngIf="EmailFormF?.emailTarget.invalid && (EmailFormF.emailTarget.touched || EmailFormF.emailTarget.dirty)">
+                            <p class="text-danger text-lg m-0" *ngIf="EmailFormF.emailTarget.errors?.required">
+                                This field is required
+                            </p>
+                            <p class="text-danger text-lg m-0" *ngIf="EmailFormF.emailTarget.errors?.pattern">
+                                Please enter a valid Email Id
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" (click)="sendEmailToAnyone()">Send
+                    Email</button>
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
 <!-- confirm payment modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">

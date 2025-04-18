@@ -79,6 +79,8 @@ export class FinalizeBookingComponent implements OnInit {
 	isFinalizeButton: boolean = false;
 	currencyObj: any;
 	currencySymbol: any;
+	vehicle_created_by:any;
+	booking_created_from:any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -200,7 +202,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
 				this.CardsInformation = response?.data?.cards
-				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
+				this.primaryCards = this.CardsInformation
 				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
 				this.finalize_params['distance'] = this.BookingDetail.distance
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
@@ -211,6 +213,8 @@ export class FinalizeBookingComponent implements OnInit {
 				this.paidAmount = response.data?.charged_amount ? parseFloat(response.data?.charged_amount) : 0
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
+				this.vehicle_created_by = response?.data?.vehicle_created_by
+				this.booking_created_from = response?.data?.created_by_role
 				setTimeout(() => {
 					this.scroll('submitForm')
 
@@ -329,6 +333,12 @@ export class FinalizeBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['farmoutShare'] = base_rate * 0.10
 			}
+			else if (this.booking_created_from == 'subscriber') {
+				this.adminSharePercent = 0
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = 0
+				shareArray['affiliateShare'] = grandTotal - stripeFee
+			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -400,7 +410,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 	makePayment() {
 		$('#paymentModal').modal('hide')
-		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid)
+		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid,this.cardForm.value,this.paymentMethod)
 		console.log('-----=====?>>>>>', this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length > 0))
 		let dataToSend: any
 		if (this.paymentMethod == 'cash') {
@@ -445,7 +455,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('<<<<--card form detail-->>>')
+						console.log('<<<<--card form detail-->>>',dataToSend)
 					}
 					else {
 						dataToSend = {
@@ -457,7 +467,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('selected card-->>>')
+						console.log('selected card-->>>',dataToSend)
 					}
 				}
 				this.$spinner.show()
@@ -581,5 +591,10 @@ export class FinalizeBookingComponent implements OnInit {
 		if (this.BookingDetail.payment_status == 'paid') {
 			this.visibility = false
 		}
+	}
+
+	backButton()
+	{
+		this.$router.navigate(['/admin/daily-bookings-admin']);
 	}
 }

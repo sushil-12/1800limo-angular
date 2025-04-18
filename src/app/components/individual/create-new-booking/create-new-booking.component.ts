@@ -31,7 +31,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
-		client_account_types: ['individual', 'corporate', 'travel_planner'],
+		client_account_types: ['individual', 'travel_planner'],
 		affiliate_accounts: ['affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -137,6 +137,7 @@ export class CreateNewBookingComponent implements OnInit {
 	currentUser: any;
 	currencySymbol: any;
 	currencyObj: any;
+	booking_created_from: string = 'admin';
 
 	constructor(
 		private $form: FormBuilder,
@@ -170,6 +171,7 @@ export class CreateNewBookingComponent implements OnInit {
 			if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
 				this.affiliate_id = parseInt(params.affiliate_id)
+				this.booking_created_from = params?.created_by
 			}
 			if (params && params.is_master_vehicle == 'true') {
 				this.master_vehicle_id = params.vehicle_id
@@ -327,21 +329,17 @@ export class CreateNewBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
+			departing_airport_city:[''],
 		})
 
-		let month = new Date().getMonth()
-		let date: string | number = new Date().getDate() + 1
-		let year = new Date().getFullYear()
+		let date = new Date();
+		let timestamp = date.getTime();
 
-
-		let full_date = new Date(year, month, date).toISOString()
-		// 10 days later
-		let future_full_date = new Date(year, month, date).toISOString()
-		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
-		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
+		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
+		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
-		this.SetFormValue('return_booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
+		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -436,6 +434,8 @@ export class CreateNewBookingComponent implements OnInit {
 			this.vehicleImgUrl = response?.data?.vehicle_images[0]
 			this.driverImgUrl = response?.data?.driver_image
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false;
+			this.booking_created_from = response?.data?.vehicle_created_by == 1 ? 'admin' : 'subscriber'
+
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			this.fillDriverInfo(editing_data);
@@ -465,6 +465,7 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('return_pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_pickup_airline.value));
 			this.SetFormValue('return_dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
+			this.SetFormValue('origin_airport_city',editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city )
 
 			if (editing_data.driver_image) {
 				this.SetFormValue('driver_image_id', editing_data.driver_image.id);
@@ -522,7 +523,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.scroll('pickup_address')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 			}
@@ -530,6 +531,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.fetchRates(booking_id)
 	}
 	fetchRates(bookingId: number = 0) {
+		console.log("in fetch rates")
 		this.$api.fetchAdminNewBookingRates(null, bookingId).subscribe((response: any) => {
 			this.subtotal = 0
 			this.r_subtotal = 0
@@ -561,7 +563,7 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
 
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				this.subtotal += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
@@ -583,11 +585,16 @@ export class CreateNewBookingComponent implements OnInit {
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta", this.subtotal)
 			}
-			else if (this.updateType == 'repeat' || this.updateType == 'return') {
+			else if ((this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') && this.currentUser?.created_by_role != 'subscriber') {
 				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta in repeat or return", this.subtotal)
+			}
+			else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber'){
+				console.log("in if created from sub")
+				let adminShare = 0
+				this.subtotal += adminShare
 			}
 			else {
 				let adminShare = (base_rate * 25) / 100
@@ -645,11 +652,15 @@ export class CreateNewBookingComponent implements OnInit {
 					this.r_subtotal += adminShare + this.r_agentShare
 					console.log("in if created by ta", this.r_subtotal)
 				}
-				else if (this.updateType == 'repeat' || this.updateType == 'return') {
+				else if ((this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') && this.booking_created_from != 'subscriber') {
 					let adminShare = (base_rate * 15) / 100
 					this.r_agentShare = base_rate * 0.10
 					this.r_subtotal += adminShare + this.r_agentShare
 					console.log("in if created by ta in repeat or return", this.subtotal)
+				}
+				else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber'){
+					let adminShare = 0
+					this.r_subtotal += adminShare
 				}
 				else {
 					let adminShare = (base_rate * 25) / 100
@@ -670,7 +681,7 @@ export class CreateNewBookingComponent implements OnInit {
 				this.SetFormValue('passenger_cell', data?.mobile)
 				this.SetFormValue('passenger_cell_isd', data?.mobileIsd)
 				this.SetFormValue('passenger_cell_country', data?.mobileCountry)
-				this.SetFormValue('origin_airport_city', data?.origin_airport_city)
+				this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 				this.SetFormValue('pickup_flight', data?.pickup_flight)
 				this.SetFormValue('dropoff_flight', data?.dropoff_flight)
 			}
@@ -1207,7 +1218,7 @@ export class CreateNewBookingComponent implements OnInit {
 	fetchClientAccounts(account_type: string) {
 		const legend = {
 			individual: 'individual',
-			corporate: 'corporate',
+			// corporate: 'corporate',
 			travel_planner: 'travel'
 		}
 
@@ -1652,6 +1663,10 @@ export class CreateNewBookingComponent implements OnInit {
 
 				// set cruise ship name and cruise port mandatory
 				if (value.includes('_cruise') || value.includes('cruise_')) {
+					if(value.includes("cruise_")){
+						this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
+						// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+					}
 					console.log("setting value of return cruise port and name mandatory")
 					this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
 					this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
@@ -1685,6 +1700,7 @@ export class CreateNewBookingComponent implements OnInit {
 				}
 
 				if (value.includes('airport_')) {
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text pax with pickup instructions when ship has arrived.");
 					console.log("setting value of return pickup flight mandatory")
 					this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
@@ -1692,6 +1708,8 @@ export class CreateNewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').setValidators([Validators.required]);
+				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				} else {
 					console.log("setting value of return pickup flight not mandatory")
 					this.BookingForm.get('return_pickup_flight').clearValidators();
@@ -1700,6 +1718,8 @@ export class CreateNewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').clearValidators();
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').clearValidators();
+				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
 			}
 
@@ -1985,7 +2005,7 @@ export class CreateNewBookingComponent implements OnInit {
 		if (this.rateArray) {
 			console.log('in function createReservationShareArray iffffff')
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 			}
 			else {
@@ -2008,6 +2028,7 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
+			adminShare = adminShare + (this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount * 0.25)
 			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
 				baseRate: base_rate,
@@ -2025,12 +2046,27 @@ export class CreateNewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if ((this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') && this.currentUser?.created_by_role != 'subscriber') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
+			else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber'){
+				this.adminSharePercent = 0
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = 0
+				shareArray['travelAgentShare'] = 0
+				shareArray['affiliateShare'] = grandTotal - stripeFee
+			}
+			else if (this.currentUser?.created_by_role == 'subscriber'  && this.booking_created_from == 'admin'){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10
+				
+			}
+
 			this.shareArray = shareArray
 			console.log('in function createReservationShareArray-->>>', base_rate, shareArray)
 
@@ -2061,6 +2097,7 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
+			adminShare = adminShare + (this.BookingForm.value.returnRateArray.misc.Extra_Gratuity.amount * 0.25)
 			let returnShareArray = {
 				baseRate: base_rate,
 				returnGrandTotal: returnGrandTotal,
@@ -2074,7 +2111,13 @@ export class CreateNewBookingComponent implements OnInit {
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10
 			}
-
+			else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber' ){
+				this.adminSharePercent = 0
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				returnShareArray['deducted_admin_share'] = 0
+				returnShareArray['travelAgentShare'] = 0
+				returnShareArray['affiliateShare'] = returnGrandTotal - stripeFee
+			}
 			this.r_shareArray = returnShareArray
 			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
@@ -2091,6 +2134,9 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+		if(this.currentUser?.created_by_role == 'subscriber'){
+			value["booking_created_from"] = 'subscriber'
+		}
 		value['currency'] = this.currencyObj?.currency
 		value['is_master_vehicle'] = this.is_master_vehicle
 		value['proceed'] = this.proceed
@@ -2225,7 +2271,7 @@ export class CreateNewBookingComponent implements OnInit {
 					}
 				}
 				let base_rate = 0
-				if (this.BookingForm.value?.service_type == 'charter_tour') {
+				if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
 					base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				}
 				else {
@@ -2288,6 +2334,14 @@ export class CreateNewBookingComponent implements OnInit {
 			// }    
 			this.affiliate_id = selected_vehicle?.affiliate_id
 
+			if (selected_vehicle?.created_by != 1) {
+				console.log("in affiliate info")
+				this.booking_created_from == 'subscriber'
+			}
+			else if (selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber') {
+				this.booking_created_from == 'admin'
+
+			}
 
 			//dropOFF
 			this.SetFormValue('service_type', QB?.service_type)

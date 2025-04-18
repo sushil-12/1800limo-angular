@@ -1,0 +1,61 @@
+:host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
+	height: 100%;
+}
+
+
+:host ::ng-deep .ng-select-container {
+	// background-color: #f5f4fe;
+	// background-color: rgb(226, 226, 226, 1) !important;
+	border: #b2b2b2 2em;
+	border-radius: 10px;
+}
+
+:host ::ng-deep .ng-select .ng-has-value .ng-placeholder,
+.ng-select.ng-select-opened .ng-placeholder {
+	transform: translateY(-0.98125em) scale(0.8) perspective(100px) translateZ(0.001px);
+	color: #000;
+	top: 0.95em;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+:host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder {
+	transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px) !important;
+	color: #000;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+:host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline:after {
+	height: 100%;
+	border-radius: 10px;
+}
+
+:host ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder{
+    font-weight: 500 !important;
+}
+
+.ng-select{
+    padding-bottom: 0 !important;
+}
+
+
+table {
+	width: 100;
+	white-space: break-spaces;
+	padding: 10px;
+	min-width: 5rem;
+
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+
+	tbody td>p {
+		margin: 0;
+	}
+}
+
+:host ::ng-deep  .ng-select .ng-select-container.ng-appearance-outline .ng-placeholder{
+	z-index: 0 !important;
+}

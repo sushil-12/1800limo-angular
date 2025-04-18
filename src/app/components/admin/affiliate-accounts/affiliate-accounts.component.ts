@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -8,6 +8,7 @@ import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { UploadService } from 'src/app/services/upload.service';
 declare var $: any;
 
 @Component({
@@ -16,7 +17,11 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
+	@ViewChild('fileInput') fileInput!: ElementRef;
+	@ViewChild('fileInput1') fileInput1!: ElementRef;
+	@ViewChild('message') message!: ElementRef;
 	emails = new FormControl();
+	phone_numbers = new FormControl();
 	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -25,6 +30,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	public paramResponse: any;
 	public affiliate_accounts: any;
 	public affiliate_accounts_emails: any = [];
+	public affiliate_accounts_numbers: any = [];
 	public affiliateType: string;
 	public heading: string;
 	public addButton: string;
@@ -63,6 +69,10 @@ export class AffiliateAccountsComponent implements OnInit {
 	loginAsUserResponse: any;
 	allSelected = false;
 	audit_Trail: any = [];
+	fileUrl: String;
+	fileName: String;
+	fileType: String;
+	uploadedFile: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -71,6 +81,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
+		private uploadService: UploadService,
 		private affiliateService: AffiliateService,
 		private activatedRoute: ActivatedRoute) { }
 
@@ -185,7 +196,7 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
-		var keyword = this.searchText
+		var keyword = this.searchText?.replace(/&/g, '%26')
 		if (keyword.length > 0) {
 			this.filter_type = 'all'
 			console.log('keyword--->>>', keyword, this.filter_type)
@@ -199,6 +210,8 @@ export class AffiliateAccountsComponent implements OnInit {
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
+			this.affiliate_accounts_emails = this.affiliate_accounts.filter(item => item.Email !== null)
+			this.affiliate_accounts_numbers = this.affiliate_accounts.filter(item => item.CellNumber !== null)
 			this.affiliate_accounts = this.affiliate_accounts.map(i => {
 				if (i?.LanguagesSpoken) {
 					console.log("in language iffff")
@@ -404,18 +417,49 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	messagetype: Record<string, any>
-	sendMessage(type: 'email' | 'sms', affiliate: Object, message: string = null) {
+	async sendMessage(type: 'email' | 'sms', affiliate: Object, message: string = null) {
 		console.log('Request to send a Message to affiliate id: ', type, affiliate['id'])
 		this.messagetype = { type, affiliate }
 		$('#messageModal').modal('show')
 		$('#messageModal').find('.modal-header').find('h4').text('Contact to Affiliate via ' + type.toUpperCase())
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Affiliate Name: ${affiliate['FirstName']} ${affiliate['LastName']}<br/>Affiliate Email: ${affiliate['Email']}`)
 		if (message != null) {
-			this.adminService.sendAffiliateMessage(type, affiliate['id'], { sendContent: message }).subscribe((response: any) => {
-				if (response.success) {
-					console.log('Message Sent Successfully. ')
-				}
+			this.spinner.show()
+			let fileData=[]
+			if (this.uploadedFile) {
+				for (let file of this.uploadedFile) {
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+				  fileUrl: dataS.Location,
+				  fileType: file.type
+				});
+			  }}
+			let body = {
+				sendContent: message,
+				fileData:fileData
+			}
+			this.adminService.sendAffiliateMessage(type, affiliate['id'], body).subscribe((response: any) => {
+				this.spinner.hide()
+				this.$errors.openDialog({
+					errors: {
+						error: `<span class='text-success'>${response.message}</span>`
+					}
+				})
+				console.log("response-------->", response)
 			})
+
+			// Clear file input after success
+			this.uploadedFile = null;
+			this.fileUrl = null;
+			this.fileType = null;
+			if (this.fileInput1) {
+				this.fileInput1.nativeElement.value = ''; // Reset file input
+			}
+			if (this.message) {
+				this.message.nativeElement.value = ''; // Reset message input
+			}
+
+			$("#messageModal").modal("hide");
 		}
 	}
 
@@ -433,19 +477,28 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	//close email modal
 	closeModal() {
+		this.fileInput.nativeElement.value = '';
+		this.fileInput1.nativeElement.value = '';
+		this.message.nativeElement.value = '';
+		this.uploadedFile = null
+		this.fileUrl = null
+		this.fileType = null
 		this.sendEmailForm.patchValue({
 			subject: "",
 			text_message: ''
 		})
+		this.emails.setValue('');
+		this.phone_numbers.setValue('');
 		this.show = false
 		$("#sendEmailModal").modal("hide");
+		$("#sendsmsModal").modal("hide");
 	}
 
 	selectAll() {
 		if (this.allSelected) {
 			this.emails.patchValue([]);
 		} else {
-			const allValues = this.affiliate_accounts.map(option => this.stringifyOption(option));
+			const allValues = this.affiliate_accounts_emails.map(option => this.stringifyOption(option));
 			this.emails.setValue(allValues);
 		}
 		this.allSelected = !this.allSelected;
@@ -453,6 +506,20 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	stringifyOption(option: any): string {
 		return JSON.stringify({ id: option.id, email: option.Email });
+	}
+
+	selectAllNumbers() {
+		if (this.allSelected) {
+			this.phone_numbers.patchValue([]);
+		} else {
+			const allValues = this.affiliate_accounts_numbers.map(option => this.stringifyOptionNumber(option));
+			this.phone_numbers.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOptionNumber(option: any): string {
+		return JSON.stringify({ id: option.id, phoneNumber: (option?.CellIsd + option?.CellNumber) });
 	}
 
 	auditTrail(id: any) {
@@ -492,14 +559,24 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	//submit email modal
-	sendEmail() {
+	async sendEmail() {
 		this.spinner.show()
+		let fileData = []
+		if (this.uploadedFile) {
+			for (let file of this.uploadedFile) {
+			let dataS = await this.uploadService.uploadFile(file);
+			fileData.push({
+			  fileUrl: dataS.Location,
+			  fileType: file.type
+			});
+		  }}
 		const textContent = this.sendEmailForm.get('text_message')?.value;
 		const htmlContent = this.convertTextToHtml(textContent);
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
 			message: htmlContent,
-			recipents: this.emails.value
+			recipents: this.emails.value,
+			fileData:fileData
 		}
 		console.log("body-------->", body)
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -518,6 +595,15 @@ export class AffiliateAccountsComponent implements OnInit {
 			text_message: ''
 		})
 		this.emails.setValue('');
+
+		// Clear file input after success
+		this.uploadedFile = null;
+		this.fileUrl = null;
+		this.fileType = null;
+		if (this.fileInput) {
+			this.fileInput.nativeElement.value = ''; // Reset file input
+		}
+
 		$("#sendEmailModal").modal("hide");
 	}
 
@@ -625,6 +711,45 @@ export class AffiliateAccountsComponent implements OnInit {
 				}
 			}
 		});
+	}
+
+	myUploader(event) {
+		// this.loader = true;
+
+		this.uploadedFile = Array.from(event.target.files)
+		console.log("file", this.uploadedFile)
+		// if (this.uploadedFile) {
+		// 	this.fileName = this.uploadedFile['name'];
+		// 	this.fileType = this.uploadedFile['type'];
+		// 	console.log("file", this.fileName, this.fileType)
+		// }
+	}
+
+	sendEmailSms(){
+		this.spinner.show()
+		let body = {
+			message: this.sendEmailForm.get('text_message')?.value,
+			recipents: this.phone_numbers.value,
+		}
+		console.log("in sms",body)
+
+		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+			console.log("response-------->", response)
+		})
+
+		this.show = false
+		this.sendEmailForm.patchValue({
+			text_message: ''
+		})
+		this.phone_numbers.setValue('');
+
+		$("#sendsmsModal").modal("hide");
 	}
 
 }

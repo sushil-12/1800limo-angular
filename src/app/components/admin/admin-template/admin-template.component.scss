@@ -19,6 +19,11 @@ mat-progress-bar {
 	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
     border-radius: 12px;
 }
+
+.sidebar_admin_li{
+	margin-bottom: 5px;
+}
+
 :host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd {
 	display: none !important;
 }
@@ -39,3 +44,26 @@ mat-progress-bar {
 		display: none;
 	}
 }
+
+@media only screen and (min-width:767px) {
+	.hideDesktop {
+		display: none;
+	}
+}
+
+.hamburger {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 30px;  /* Set the width of the hamburger icon */
+	height: 26px; /* Set the height of the hamburger icon */
+	cursor: pointer; /* Add cursor pointer to make it clickable */
+  }
+  
+  .line {
+	width: 100%;
+	height: 4px;  /* Set the thickness of each line */
+	background-color: black;  /* Color of the lines */
+	border-radius: 4px;  /* Rounded corners for smoothness */
+  }
+  

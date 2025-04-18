@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { StateManagementService } from '../../../../services/statemanagement.service';
-import { Router, Scroll } from '@angular/router';
+import { NavigationEnd, Router, Scroll } from '@angular/router';
 import { filter, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -26,6 +26,8 @@ export class HeaderComponent implements OnInit {
 	total_count: any;
 	splitSteps: any;
 	desktopWidth: any;
+	routeForSubscriptionProcess: any;
+	excludedRoutes: string[] = ['/subscription', '/partner-registration', '/payment-details', '/quotebot/master-vehicle', '/quotebot/select-vehicle', '/quotebot/vehicle-details']
 
 	constructor(
 		private router: Router,
@@ -42,6 +44,18 @@ export class HeaderComponent implements OnInit {
 			this.currentRoute = tree.root.children.primary.segments[0].path;
 			console.log(this.currentRoute)
 		});
+
+		//to remove join us btn from header
+		this.router.events.subscribe(event => {
+			if (event instanceof NavigationEnd) {
+				this.routeForSubscriptionProcess = this.router.url;
+			}
+		});
+
+	}
+
+	isExcludedRoute(): boolean {
+		return this.excludedRoutes.includes(this.routeForSubscriptionProcess);
 	}
 
 	ngOnInit(): void {
@@ -143,7 +157,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 	loginButtons(role: string) {
-		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual') {
+		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual' && role != 'subscriber') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
@@ -196,6 +210,12 @@ export class HeaderComponent implements OnInit {
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 			console.log("step 0  dashboard");
 
+		}
+		else if (role == 'sub_affiliate') {
+			this.router.navigateByUrl('/sub_affiliate/my-bookings');
+		}
+		else if(role == 'subscriber'){
+			this.router.navigateByUrl('/admin/daily-bookings-admin');
 		}
 		else {
 			console.log(`redirecting to ${role}/bookings`)

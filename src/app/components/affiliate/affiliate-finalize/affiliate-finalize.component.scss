@@ -19,10 +19,29 @@ p {
     pointer-events: none;
 }
 
-.color-green {
+.color-green-finalize {
     border: 2px solid #a2a3a2;
     background-color: var(--green-color);
     color: #fff;
+}
+
+.color-green {
+    border: 2px solid #a2a3a2;
+    // background-color: var(--green-color);
+    color: #fff;
+    animation: blink-animation 2s steps(3, start) infinite;
+}
+
+@keyframes blink-animation {
+    0% {
+        background-color: var(--green-color); /* Green */
+    }
+    50% {
+        background-color: red; /* Red */
+    }
+    100% {
+        background-color: var(--green-color); /* Green */
+    }
 }
 
 .color-blue {

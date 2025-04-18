@@ -30,6 +30,7 @@ export class VehicleColorComponent implements OnInit {
   public response:any;
   public disableAddButton:boolean=false;
   public disableEditButton:boolean=false;
+  currentUser:any;
 
   constructor(
     private adminService:AdminService,
@@ -49,6 +50,8 @@ export class VehicleColorComponent implements OnInit {
           sessionStorage.setItem('colors',JSON.stringify(this.colors));
           this.spinner.hide();//hide spinner
         });
+
+        this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
         //add color type form validation
         this.addColorsForm = this.formBuilder.group({

@@ -2,72 +2,92 @@
 <main>
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information" id="daily_bookings_table">
-		<h2 class="headinginfo">See All booking on all Accounts </h2>
+		<div class="row">
+			<div class="col-md-7">
+				<h2 class="headinginfo">See All booking on all Accounts </h2>
+			</div>
+			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;"
+				*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin') && !isCancelled ">
+				<button class="custom-filled-button green-button invite-agent-button" data-toggle="modal"
+					data-target="#cancelModal">
+					Cancel Subscription
+				</button>
+			</div>
+		</div>
 		<div class="containeredd mt-1 ">
-
+			<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 mt-2"
+				*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin') && stripeErroMsg">
+				<label class="alert alert-danger"
+					style="padding :0.35rem 0.85rem; color: #000 !important; font-weight: 700 !important;font-size: 18px;">
+					NOTE: {{stripeErroMsg}}
+					<a (click)="addBank()" style="text-decoration: underline !important;">Click Here</a></label>
+			</h3>
 			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
-						<mat-label>
-							Start Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-							(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-						<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-					</mat-form-field>
-					<!-- <mat-form-field appearance="outline">
+				<div class="horizontal-scroll-container">
+					<div class="col-6 col-md-4">
+						<mat-form-field appearance="outline" class="text-xl scroll-item">
+							<mat-label>
+								Start Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+								placeholder="Start Date" id="id_4"
+								(dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
+								[value]="startDate" [max]="endDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>Start date <span class="asterisk"> * </span></mat-label>
 							<input matInput [matDatepicker]="picker3">
 							<mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
 							<mat-datepicker #picker3 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						  </mat-form-field> -->
-				</div>
+					</div>
 
-				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
-						<mat-label>
-							End Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-							placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-							(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-						<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-					</mat-form-field>
-					<!-- <mat-form-field appearance="outline">
+					<!-- End-Date -->
+					<div class="col-6 col-md-4">
+						<mat-form-field appearance="outline" class="text-xl scroll-item">
+							<mat-label>
+								End Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+							<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>End date <span class="asterisk"> * </span></mat-label>
 							<input matInput [matDatepicker]="picker4">
 							<mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
 							<mat-datepicker #picker4 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						  </mat-form-field> -->
+					</div>
 				</div>
 				<!-- Search Button -->
-				<div class="align-btn d-flex justify-content-around">
+				<div class="align-btn d-flex justify-content-around" style="margin-top: 15px;">
 					<div class="col-sm-2 ml-n5">
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
-							Search
-						</button>
-					</div>
-					<div class="col-sm-2">
 						<button class="custom-filled-back-button"
 							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
 							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
 							Reset
 						</button>
 					</div>
+					<div class="col-sm-2">
+						<button class="custom-filled-button orange-button"
+							style="color:#fff;padding: 5px 12px !important;"
+							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
+							Search
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="row d-flex justify-content-between">
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 							{{useDateFilter ? 'Uncheck to see current and future bookings' :
-							'Check to see bookings for 7 days or based upon dates and search by any term.' }}
+							'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
 						</mat-checkbox></p>
 				</div>
 
@@ -119,12 +139,13 @@
 							<thead>
 								<tr role="row">
 									<th>Actions</th>
+									<th>Date</th>
 									<th>Booking</th>
 									<th>Total</th>
 									<th>Status</th>
-									<th>Date</th>
 									<th>Pax</th>
 									<th>Driver</th>
+									<th>Created By</th>
 									<th>Booking Type</th>
 									<th>Vehicle</th>
 									<!-- <th>Status</th> -->
@@ -142,7 +163,7 @@
 											aria-labelledby="navbarDropdownUserImage"
 											style="min-height: 200px;max-height: 480px;overflow-y: scroll; z-index: 2;">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 
 												<div class="dropdown-item-icon"></div>
@@ -152,11 +173,11 @@
 												data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking')">
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('repeat_booking')">
 												<div class="dropdown-item-icon" *></div>
 												Repeat
 											</a>
-											<a *ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status == 'pending'))"
+											<a *ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status == 'pending'))"
 												class="dropdown-item" data-toggle="modal"
 												data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"
@@ -164,42 +185,45 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
-											<a *ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))"
-												class="dropdown-item" data-toggle="modal"
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'round'}"
+												*ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && booking?.service_type == 'oneway')">
+												<div class="dropdown-item-icon" *></div>
+												Round Trip
+											</a>
+											<a class="dropdown-item" data-toggle="modal"
 												data-target="#accept_charge_modal"
-												(click)="acceptChargeClick(booking.booking_id)">
+												(click)="acceptChargeClick(booking.booking_id)"
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled' && booking?.charged_amount == null) && booking?.created_by_role != 'subscriber')">
 												<div class="dropdown-item-icon"></div>
-												Accept & Charge
+												Accept & Charge (50%)
+											</a>
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#charge_back_modal"
+												(click)="acceptChargeClick(booking.booking_id)"
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.affiliate_charged_amount != null && booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+												<div class="dropdown-item-icon"></div>
+												Charge Back
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.RoleName == 'admin' || subModules.includes('invoice_booking'))">
+												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
 												<div class="dropdown-item-icon"></div>
 												Invoice
-											</a>
-											<!-- <a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
-													data-toggle="modal" data-target="#change_status_booking_Modal">
-													<div class="dropdown-item-icon"></div>
-													Change Status
-												</a> -->
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'customer')"
-												data-toggle="modal" data-target="#emailModal"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_customer')">
-												<div class="dropdown-item-icon"></div>
-												Email Customer
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
 												data-toggle="modal" data-target="#emailModal"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_affiliate')">
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_affiliate')">
 												<div class="dropdown-item-icon"></div>
 												{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose Affiliate'
 												}}
@@ -207,65 +231,65 @@
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
 												data-toggle="modal" data-target="#emailPassenger"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_passenger')">
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_passenger')">
 												<div class="dropdown-item-icon"></div>
 												Email Passenger
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
 												data-toggle="modal" data-target="#emailAll"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_all')">
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_all')">
 												<div class="dropdown-item-icon"></div>
 												Email All
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
 												data-toggle="modal" data-target="#updatedEmailAll"
-												*ngIf="currentUser?.RoleName == 'admin' && booking?.show_changed_fields">
+												*ngIf="currentUser?.roleName == 'admin' && booking?.show_changed_fields">
 												<div class="dropdown-item-icon"></div>
 												Send Updated Email
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmaiManuallClicked(booking.booking_id)" data-toggle="modal"
+												data-target="#sendEmailToAnyone"
+												*ngIf="currentUser?.roleName == 'admin'">
+												<div class="dropdown-item-icon"></div>
+												Send Email to Anyone
+											</a>
+											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
+												*ngIf="(currentUser?.roleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
+												<div class="dropdown-item-icon"></div>
+												ReAffiliate
 											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
-												*ngIf="(currentUser?.RoleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
-												<div class="dropdown-item-icon"></div>
-												ReAffiliate
-											</a>
-											<!-- <a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
-												data-toggle="modal" data-target="#emailAll"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_all')">
-												<div class="dropdown-item-icon"></div>
-												Email All
-											</a> -->
-											<!-- <a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
-												data-toggle="modal" data-target="#updatedEmailAll"
-												*ngIf="currentUser?.RoleName == 'admin' && booking?.show_changed_fields">
-												<div class="dropdown-item-icon"></div>
-												Send Updated Email
-											</a> -->
-											<!-- <a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
-												data-toggle="modal" data-target="#AuditTrailModal"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
-												<div class="dropdown-item-icon"></div>
-												Audit Trial
-											</a>
-											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
-												*ngIf="(currentUser?.RoleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
-												<div class="dropdown-item-icon"></div>
-												ReAffiliate
-											</a> -->
 
+											<a class="dropdown-item"
+												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
+												*ngIf="currentUser?.roleName == 'admin' ">
+												<div class="dropdown-item-icon"></div>
+												View Client Cards
+											</a>
+											<a class="dropdown-item" (click)="refundAction(booking?.stripe_refund_url)"
+												*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
+												<div class="dropdown-item-icon"></div>
+												Refund
+											</a>
 
 										</div>
 									</td>
 
+									<td class="sorting_1">
+										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
+										</p>
+										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
+										</p>
+										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
+									</td>
 									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
 										data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking?.booking_id)">
@@ -277,7 +301,8 @@
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
-										<p class="booking-id-font font-weight-bolder cursor-pointer">
+										<p
+											[ngClass]="(booking?.charged_amount != null && booking?.booking_status !== 'paid' && booking?.booking_status !== 'paid_cash') ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? booking.grand_total : 0 )"></span>
 										</p>
@@ -285,23 +310,17 @@
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
 											data-target="#change_status_booking_Modal"
-											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
+											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
 											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
-											{{booking.booking_status | bookingStatusTextReplace :
+											{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+											booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
 										</div>
-									</td>
-									<td class="sorting_1">
-										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')" id="box"
-											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
+											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
 											<span [innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
@@ -319,7 +338,7 @@
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Loose_Affiliate')"
-											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span
 												[innerHTML]="highlighText(booking.loose_affiliate_name ? booking.loose_affiliate_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
@@ -331,7 +350,7 @@
 										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Affiliate')"
-												[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+												[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
 												<span class="text-capitalize"
 													[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
@@ -347,7 +366,7 @@
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
-													[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+													[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(click)="openModal(booking, 'Affiliate')">
 													<span class="text-capitalize"
 														[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
@@ -369,6 +388,15 @@
 
 									</td>
 									<td>
+										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
+											(click)="openModal(booking, 'created_by')" id="box"
+											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
+											<span [innerHTML]="highlighText(booking.created_by_name)"></span> |
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText( booking.created_by_phone)"></span>
+										</p>
+									</td>
+									<td>
 										<span>
 											{{ textFormatter(booking?.service_type) | titlecase }}
 											/
@@ -388,6 +416,12 @@
 								</tr>
 							</tbody>
 						</table>
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Running Total:
+							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
+						</p>
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="admin_total">Admin Total:
+							<span style="font-weight: 600;font-size: 22px;">${{admin_total.toLocaleString()}}</span>
+						</p>
 					</div>
 					<p class="text-danger text-lg" *ngIf="noError">
 						No Results Found.
@@ -553,6 +587,47 @@
 
 </div>
 
+<div class="modal fade" id="sendEmailToAnyone" tabindex="-1" role="dialog" aria-labelledby="sendEmailToAnyone"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Booking : {{Form.reservation_id.value}}</h3>
+			</div>
+			<div class="modal-body text-center">
+				<form [formGroup]="sendEmailForm">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Enter Email <span class="asterisk">*</span>
+							</mat-label>
+							<input matInput placeholder="Email" type="text" formControlName="emailTarget"
+								(focus)="$event.target.select()">
+						</mat-form-field>
+					</div>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form?.emailTarget.invalid && (Form.emailTarget.touched || Form.emailTarget.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.emailTarget.errors?.required">
+								This field is required
+							</p>
+							<p class="text-danger text-lg m-0" *ngIf="Form.emailTarget.errors?.pattern">
+								Please enter a valid Email Id
+							</p>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="sendEmailToAnyone()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
@@ -603,7 +678,8 @@
 </div>
 
 <!-- Accept charge modal -->
-<div class="modal fade" id="accept_charge_modal" tabindex="-1" role="dialog" aria-labelledby="accept_charge_modal" aria-hidden="true">
+<div class="modal fade" id="accept_charge_modal" tabindex="-1" role="dialog" aria-labelledby="accept_charge_modal"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center">
@@ -617,9 +693,25 @@
 	</div>
 </div>
 
+<!-- charge back modal -->
+<div class="modal fade" id="charge_back_modal" tabindex="-1" role="dialog" aria-labelledby="charge_back_modal"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p style="font-size: 19px;font-weight: 400;">Are you sure, You want to charge back for this booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="chargeBackAction()">Charge</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-keyboard="false" #sendEmailModalFocus>
+	aria-hidden="true" data-keyboard="false" data-backdrop="static" #sendEmailModalFocus>
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" style="background: #f5f4fe;">
 
@@ -644,6 +736,8 @@
 							Connect with {{ passengerDetails?.passenger_name }} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
 							Connect with {{ passengerDetails?.loose_affiliate_name }} Via</h5>
+						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'created_by'">
+							Connect with {{ passengerDetails?.created_by_name }} Via</h5>
 					</div>
 					<div class="d-flex" style=" width: -webkit-fill-available;">
 						<div class="col-md-4" (click)="messageField('Phone')">
@@ -688,6 +782,23 @@
 						<div class="col-md-4">
 							<a *ngIf="passengerDetails?.selection_button == 'Passenger'"
 								href="tel:{{passengerDetails?.passenger_cell_isd}}{{passengerDetails?.passenger_cell}}">
+								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 122.88 122.88">
+									<defs>
+										<style>
+											.phoneCls-1 {
+												fill: #33a867;
+												fill-rule: evenodd;
+											}
+										</style>
+									</defs>
+									<path class="phoneCls-1"
+										d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0ZM48.1,56.19A49.35,49.35,0,0,0,55.39,66.4a41.25,41.25,0,0,0,11.55,8.51,1.14,1.14,0,0,0,1,0,4.48,4.48,0,0,0,1.39-1A16.91,16.91,0,0,0,70.6,72.4c1.85-2.44,4.15-5.47,7.39-4l.2.11L89,74.77l.11.07a4.84,4.84,0,0,1,2,4.2,11.43,11.43,0,0,1-1.58,5.37,11.06,11.06,0,0,1-5.2,4.6A23.63,23.63,0,0,1,78,90.75a21.69,21.69,0,0,1-9.8-.82,43.06,43.06,0,0,1-9.85-4.76L58.05,85c-1.6-1-3.33-2.07-5-3.33a62.69,62.69,0,0,1-16.65-18.9c-3.46-6.26-5.34-13-4.32-19.44a14,14,0,0,1,4.72-8.85A12.68,12.68,0,0,1,46.18,32a1.35,1.35,0,0,1,1.09.7L54.21,44.4a3.68,3.68,0,0,1,.59,3.92,7.71,7.71,0,0,1-2.66,3c-.37.32-.82.64-1.29,1-1.55,1.12-3.32,2.42-2.71,4l0-.05Z" />
+								</svg>
+								<h6 class="headingStyle">Make Call</h6>
+							</a>
+							<a *ngIf="passengerDetails?.selection_button == 'created_by'"
+								href="tel:{{passengerDetails?.created_by_phone}}">
 								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 122.88 122.88">
 									<defs>
@@ -765,6 +876,9 @@
 				</div>
 				<div class="row" [hidden]="!show">
 					<div class="col-md-12">
+						<div class="mt-2" style="margin-left: -100px;">
+							<input type="file" (change)="myUploader($event)" #fileInput multiple />
+						</div>
 						<mat-form-field class="example-full-width" appearance="outline">
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
@@ -818,12 +932,6 @@
 
 
 
-
-
-
-
-
-
 <!-- booking periview -->
 <div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -835,83 +943,20 @@
 				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button> -->
-				<button class="custom-filled-button orange-button" data-toggle="modal" data-target="#previewCopyData" (click)="closePreview()">Show Content</button>
+				<button class="custom-filled-button orange-button" data-toggle="modal" data-target="#previewCopyData"
+					(click)="closePreview()">Show Content</button>
 			</div>
-			<div class="modal-body" style="font-family: 'PT Serif', serif;">
+			<div class="modal-body" style="font-family: 'PT Serif', serif;padding: 0 !important;">
 				<div class="container text-lg" *ngIf="bookingPreview">
 
-					<h4 class="font-weight-bolder m-0 mt-1">
-						Rates / Taxes
-					</h4>
-					<div class="row" *ngIf="bookingPreview?.grand_total">
-						<div class="col-md-4 key">
-							<span>
-								Grand Total
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{bookingPreview?.currency_symbol}} {{ bookingPreview?.grand_total }}
-							</span>
-						</div>
-					</div>
-					<!-- Booking Type -->
-					<h4 class="font-weight-bolder m-0">
-						Booking Type
-					</h4>
-					<!-- Booking Information -->
-					<div class="row">
-						<div class="col-md-4 key">
-							<span>
-								Booking Information
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview?.service_type) | titlecase }}
-								/
-								{{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
-								<span class="font-weight-bolder" *ngIf="bookingPreview?.service_type == 'round_trip'">
-									/ {{ textFormatter(bookingPreview?.return_transfer_type) |
-									titlecase
-									}}
-								</span>
-							</span>
-						</div>
-					</div>
-					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
-						<div class="col-md-4 key">
-							<span>
-								Cancellation Period
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.cancellation_hours }} hours
-							</span>
-						</div>
-					</div>
-					<hr>
-					<!-- Booking Information - Ends -->
-
-
-
-
-
-					<!-- Grand Total -->
-
-
-
 					<!-- Travel Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<h5 class="font-weight-bolder m-0">
 						Travel Information
-					</h4>
-
-					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+					</h5>
+					<div *ngIf="bookingPreview?.service_type == 'Charter Tour'">
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Booking Hours
 								</span>
 							</div>
@@ -922,16 +967,15 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- ################ Pickup ################### -->
-					<h5 class="m-0 my-2 text-xl">
+					<!-- Pickup -->
+					<h6 class="m-0 my-2">
 						Pickup Details
-					</h5>
+					</h6>
 					<!-- Pickup > Date -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Date
 								</span>
 							</div>
@@ -949,7 +993,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Time
 								</span>
 							</div>
@@ -965,12 +1009,12 @@
 					</div>
 
 					<!-- Pickup > City Details -->
-					<div class="mx-2 preview-pickup-color"
+					<div class="mx-2"
 						*ngIf="bookingPreview?.transfer_type.includes('city_') || bookingPreview?.transfer_type.includes('cruise_')">
 						<hr>
 						<div class="row m-0">
 							<div class="col-md-4">
-								<span>
+								<span style="font-weight: 550 !important;">
 									{{bookingPreview?.extra_stops ? 'First Pickup' : 'Address'}}
 								</span>
 							</div>
@@ -987,12 +1031,12 @@
 
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
+					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
 						<!-- Airport -->
 						<hr>
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airport
 								</span>
 							</div>
@@ -1006,43 +1050,29 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-
-						<div class="row m-0 preview-pickup-color">
+						<hr>
+						<div class="row m-0 ">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airline
 								</span>
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
-								</span>
-							</div>
-						</div>
-						<!-- Airline -->
-						<!-- Flight Number -->
-						<hr>
-						<div class="row m-0 preview-pickup-color">
-							<div class="col-md-5 key">
-								<span>
-									Flight Number &nbsp;<span
-										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
-										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
-										Arrival time)</span>
-								</span>
-							</div>
-							<div class="col-md-7 value">
-								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;"
+								</span> &nbsp;<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
-									{{ textFormatter(bookingPreview?.pickup_flight) }}
-								</span>
+									#{{ textFormatter(bookingPreview?.pickup_flight) }}
+								</span>&nbsp;
+								<span
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
-						<!-- Flight Number -->
-
 					</div>
 
 					<!-- Pickup > Cruise Details -->
@@ -1050,7 +1080,7 @@
 						<!-- Cruise Port -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Port
 								</span>
 							</div>
@@ -1064,7 +1094,7 @@
 						<!-- Cruise Ship Name -->
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Ship Name
 								</span>
 							</div>
@@ -1078,7 +1108,7 @@
 						<!-- Ship Arrival time -->
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Ship Arrival time
 								</span>
 							</div>
@@ -1099,7 +1129,7 @@
 							*ngFor="let stop of bookingPreview?.extra_stops; index as stop_index">
 							<div class="row m-0 mx-2">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Stop {{ stop_index + 1 }}
 									</span>
 								</div>
@@ -1119,15 +1149,15 @@
 						*ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
+					<h6 class="m-0 mb-1">
 						Drop Off Details
-					</h5>
+					</h6>
 					<!-- Dropoff > City Details -->
-					<div class="mx-2 preview-dropoff-color"
+					<div class="mx-2"
 						*ngIf="bookingPreview?.transfer_type.includes('_city') || bookingPreview?.transfer_type.includes('_cruise')">
-						<div class="row">
+						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Address
 								</span>
 							</div>
@@ -1142,11 +1172,11 @@
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
+					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airport
 								</span>
 							</div>
@@ -1160,41 +1190,30 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						<div class="row preview-dropoff-color">
+						<hr>
+						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airline
 								</span>
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
-								</span>
-							</div>
-						</div>
-						<!-- Airline -->
-						<!-- Flight Number -->
-						<hr>
-						<div class="row preview-dropoff-color">
-							<div class="col-md-5 key">
-								<span>
-									Flight Number &nbsp;<span
-										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
-										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
-										Arrival time)</span>
-								</span>
-							</div>
-							<div class="col-md-7 value">
+								</span>&nbsp;
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
-									{{ textFormatter(bookingPreview?.dropoff_flight) }}
-								</span>
+									#{{ textFormatter(bookingPreview?.dropoff_flight) }}
+								</span>&nbsp;
+								<span
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
-						<!-- Flight Number -->
 					</div>
 
 					<!-- Dropoff > Cruise Details -->
@@ -1202,7 +1221,7 @@
 						<!-- Cruise Port -->
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Port
 								</span>
 							</div>
@@ -1217,7 +1236,7 @@
 						<!-- Cruise Ship Name -->
 						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Ship Name
 								</span>
 							</div>
@@ -1232,7 +1251,7 @@
 						<!-- Ship Arrival time -->
 						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Ship Arrival time
 								</span>
 							</div>
@@ -1246,14 +1265,14 @@
 					</div>
 					<!-- Dropoff > Cruise Details - Ends -->
 
-					<!-- 2ND p -->
+
 					<!-- Distance Details -->
 					<div class="mx-2">
 						<hr>
 						<div class="row m-0">
 							<div class="col-md-4">
-								<span>
-									Estimated Total Distance
+								<span style="font-weight: 550 !important;">
+									Estimated Distance
 								</span>
 							</div>
 							<div class="col-md-8 ">
@@ -1267,7 +1286,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Estimated time
 								</span>
 							</div>
@@ -1280,23 +1299,22 @@
 
 					</div>
 					<hr>
-					<br>
 					<div class="google_map">
 						<div id="map" class="map"></div>
 					</div>
-					<br>
-					<!-- Distance Details -->
 					<hr>
+					<!-- Distance Details -->
+
 					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<h5 class="font-weight-bolder m-0 mb-2">
 						Passenger Information
-					</h4>
+					</h5>
 
 					<!-- Passenger > Name -->
 					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
@@ -1311,7 +1329,7 @@
 					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;color: #1e7500;">
 									Phone
 								</span>
 							</div>
@@ -1329,7 +1347,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
@@ -1345,7 +1363,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									No. of passenger
 								</span>
 							</div>
@@ -1359,7 +1377,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Luggage count
 								</span>
 							</div>
@@ -1372,15 +1390,16 @@
 					</div>
 
 					<hr>
-					<div class="mx-2">
+					<div class="mx-4">
 						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
+							<div class="key">
+								<span style="font-weight: 550 !important;">
 									Special Instruction
 								</span>
 							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+							<div class="value box-special-instruction">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+									[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
 									<!-- {{ highlightNumbers(bookingPreview?.booking_instructions) }} -->
 								</span>
 							</div>
@@ -1390,7 +1409,7 @@
 					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Meet and Greet
 								</span>
 							</div>
@@ -1404,7 +1423,7 @@
 					<div class="mx-2">
 						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Return Meet and Greet
 								</span>
 							</div>
@@ -1417,110 +1436,21 @@
 					</div>
 					<hr>
 
-					<!-- Grand Total -->
-					<h4 class="font-weight-bolder m-0">
-						Vehicle Preferences
-					</h4>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Type
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_type_name}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Make
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_make}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Model
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_model}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Year
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_year}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Color
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_color}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Licence plate
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_license_plate}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								No. of seats
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_seats}}
-							</span>
-						</div>
-					</div>
-					<hr>
 					<!-- affiliate details -->
 					<ng-container *ngIf="bookingPreview?.affiliate_type == 'affiliate' then affiliateUser">
 					</ng-container>
 
 					<!-- Affiliate -->
 					<ng-template #affiliateUser>
-						<h4 class="font-weight-bolder m-0 mt-3">
+						<h5 class="font-weight-bolder m-0 mb-2">
 							Affiliate Information
-						</h4>
+						</h5>
 
 						<!-- Affiliate > Name -->
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Name
 									</span>
 								</div>
@@ -1537,7 +1467,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Email
 									</span>
 								</div>
@@ -1553,7 +1483,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Phone
 									</span>
 								</div>
@@ -1573,15 +1503,15 @@
 					</ng-container>
 
 					<ng-template #looseAffiliate>
-						<h4 class="font-weight-bolder m-0 mt-3">
+						<h5 class="font-weight-bolder m-0 mb-2">
 							Loose Affiliate Information
-						</h4>
+						</h5>
 
 						<!-- Loose Affiliate > Name -->
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Name
 									</span>
 								</div>
@@ -1597,7 +1527,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Email
 									</span>
 								</div>
@@ -1613,7 +1543,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Phone
 									</span>
 								</div>
@@ -1628,15 +1558,120 @@
 
 					</ng-template>
 					<hr>
+
+					<!-- Vehicle Info -->
+					<h5 class="font-weight-bolder m-0 mb-2">
+						Vehicle Preferences
+					</h5>
+					<div class="mx-2 mb-1">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Vehicle Type
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_type_name}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 mb-1">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Vehicle Make
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_make}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 mb-1">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Vehicle Model
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_model}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 mb-1">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Vehicle Year
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_year}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 mb-1">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Vehicle Color
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_color}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 mb-1">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Licence plate
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_license_plate}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									No. of seats
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.vehicle_seats}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+
 					<!-- Driver Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<h5 class="font-weight-bolder m-0 mb-2">
 						Driver Information
-					</h4>
+					</h5>
 					<!-- Driver Name -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
@@ -1653,7 +1688,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
@@ -1669,7 +1704,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Phone
 								</span>
 							</div>
@@ -1686,7 +1721,7 @@
 
 					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Refund amount
 							</span>
 						</div>
@@ -1699,7 +1734,7 @@
 					</div>
 					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								New total
 							</span>
 						</div>
@@ -1711,139 +1746,16 @@
 						</div>
 					</div>
 
-
-
-
-
-
-
-					<!-- Rate Distribution Information -->
-					<!-- <div class="distribution_rate"
-						*ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
-						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution {{bookingPreview?.loose_affiliate}}
-						</h4>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Base Rate
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{rates_preview?.ride_base_rate.toFixed(2)}}
-									</span>
-									(Fare Base Rate)
-								</div>
-							</div>
-						</div>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Admin Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{rates_preview?.admin_share.toFixed(2) }}
-									</span>
-									({{adminSharePercent}} of Base Rate)
-								</div>
-							</div>
-						</div>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Other Taxes
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{rates_preview?.other_taxes.toFixed(2)}}
-									</span>
-									(Total of all taxes and other charges)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Total Cost
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{rates_preview?.total_price.toFixed(2)}}
-									</span>
-									(Actual Cost to Customer)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Stripe fees
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{rates_preview?.stripe_fees.toFixed(2)}}
-									</span>
-									(Platform fee 2.9% + 30 cents - <b>Paid from Admin share</b>)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Actual Amount Recieved
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{(rates_preview?.total_price -
-										rates_preview?.stripe_fees).toFixed(2)}}
-									</span>
-									(Excluding platform fee)
-								</div>
-							</div>
-						</div>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Payout
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{rates_preview?.affiliate_share.toFixed(2)}}
-									</span>
-									( Total Price - (Ride Base Rate + Other Taxes) )
-								</div>
-							</div>
-						</div>
-					</div> -->
-					<!-- *ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0" -->
+					<!-- Rates Distribution -->
 					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
-						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution 
-						</h4>
+						<h5 class="font-weight-bolder m-0 mb-2">
+							Rates Distribution
+						</h5>
 
-						<div class="mx-2">
+						<div class="mx-2 mb-1">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
 										Base Rate
 									</span>
 								</div>
@@ -1855,26 +1767,27 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2">
+						<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.adminShare != '0' ">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
+								<div class="col-md-4 key">
 									<span class="font-weight-bolder" style="color: #1e7500">
 										Admin Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare
+										- deducted_stripe_fee)
 										}}
 									</span>
-									({{adminSharePercent}}% of Base Rate)
+									({{adminSharePercent}}% of Base Rate - deducted stripe fee)
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="bookingPreview?.share_array?.travelAgentShare">
+						<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.travelAgentShare">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
 										Travel Agent Share
 									</span>
 								</div>
@@ -1887,11 +1800,11 @@
 								</div>
 							</div>
 						</div>
-						
-						<div class="mx-2">
+
+						<div class="mx-2 mb-1">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
 										Stripe fees
 									</span>
 								</div>
@@ -1904,10 +1817,10 @@
 							</div>
 						</div>
 
-						<div class="mx-2">
+						<div class="mx-2 mb-1">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
 										Affliate Payout
 									</span>
 								</div>
@@ -1919,10 +1832,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="bookingPreview?.share_array?.farmoutShare">
+						<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.farmoutShare">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
 										Affliate Farm out share
 									</span>
 								</div>
@@ -1936,26 +1849,38 @@
 						</div>
 						<div class="mx-2">
 							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
-										Total Cost
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
+										Total Client Cost
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
-											formatBaseRate(bookingPreview?.share_array?.grandTotal) :
-											formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
+										formatBaseRate(bookingPreview?.share_array?.grandTotal) :
+										formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
 							</div>
 						</div>
 					</div>
+					<hr>
+					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Cancellation Period
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ getCancellationTime(bookingPreview.cancellation_hours) }}
+							</span>
+						</div>
+					</div>
 				</div>
 
 			</div>
-
 
 
 			<div class="modal-footer justify-content-end">
@@ -1972,12 +1897,31 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-body">
-				<pre style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
-		</div>
-		<div class="modal-footer justify-content-end">
-			<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true" class="bi bi-x-circle"></span>
-			</button>
-		</div>
+				<pre
+					style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h5 class="text-center">Are you sure you want to cancel your subscription?</h5>
+				<span class="d-block text-center">Cancellation will be effective after {{subs_end_date}}</span>
+			</div>
+			<div class="modal-footer py-0">
+				<button type="button" class="custom-btn button2" data-dismiss="modal" aria-label="Close">No</button>
+				<button type="button" class="custom-btn button2" (click)="cancelSubscription()">
+					Yes, Cancel now
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

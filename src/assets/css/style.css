@@ -228,6 +228,15 @@ header a.nav-link.active {
 	}
 }
 
+.cell-no-header .fas {
+	color: var(--orange-color);
+}
+
+.cell-no-header:hover {
+	text-decoration: none;
+	color: var(--orange-color) !important
+}
+
 .cell-no .fas {
 	color: var(--orange-color);
 }
@@ -336,7 +345,7 @@ header a.nav-link.active {
 }
 
 .bannerform_wrapper .quoteform_homewrapper .tab_innerform {
-	border-bottom: 1px solid #646464;
+	border-bottom: 1px solid #fff;
 	padding: 5px 25px 0px 25px;
 }
 
@@ -500,7 +509,7 @@ header {
 .bannerform_wrapper .quoteform_homewrapper label {
 	color: #fff;
 	margin-bottom: 2px;
-	font-size: 12px;
+	font-size: 15px;
 	font-weight: 300;
 }
 
@@ -673,6 +682,10 @@ header {
 	.owl-carousel .owl-nav button.owl-prev {
 		left: 0 !important;
 		top: 0 !important;
+	}
+
+	.bannerform_wrapper .nav-item a {
+		font-size: 0.95em;
 	}
 }
 
@@ -1465,7 +1478,7 @@ footer {
 
 .footercontent a {
 	color: var(--orange-color);
-	font-size: 14px;
+	font-size: 18px;
 	text-decoration: none !important;
 	margin-bottom: 10px;
 	display: inline-block;
@@ -1556,7 +1569,7 @@ footer {
 
 .footer {
 	padding: 15px 0;
-	border-top: 1px solid #6e6e6e;
+	border-top: 1px solid #fff;
 	color: #fff;
 	font-size: 15px;
 	line-height: 25px;
@@ -3101,7 +3114,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .text_desktop {
-	padding-top: 110px;
+	/* padding-top: 110px; */
 }
 
 @media only screen and (max-width:767px) {

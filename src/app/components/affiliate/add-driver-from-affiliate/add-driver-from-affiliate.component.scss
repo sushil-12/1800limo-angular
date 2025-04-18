@@ -11,6 +11,23 @@
 	height: 195px;
 }
 
+.vehtype_extint_potrait img {
+	height: 380px;
+	width: 300px;
+	margin-left: 20px;
+	border-radius: 15px;
+}
+
+.vehtype_extint_potrait .emptyImage {
+	height: 380px;
+	width: 300px;
+}
+
+.vehtype_extint_potrait .emptyImage img {
+	height: 360px;
+	width: 260px;
+}
+
 hr {
 	margin-top: 0;
 }
@@ -278,7 +295,7 @@ hr {
 
 .choose_ameniteslist {
 	flex-direction: column !important;
-	height: 34vh !important;
+	height: 38vh !important;
 }
 
 @media (min-width: 767px) and (max-width:821px) {
@@ -291,4 +308,28 @@ hr {
 	.choose_ameniteslist {
 		height: auto !important;
 	}
+
+	.billing_inforamtion ul {
+		justify-content: center;
+		/* Keep buttons centered */
+		gap: 10px;
+		/* Smaller gap for mobile */
+	}
+
+	.billing_inforamtion li {
+		flex: 0 1 auto;
+		/* Allow the buttons to stay in one row */
+	}
+}
+
+
+
+.billing_inforamtion ul {
+	display: flex;
+	flex-wrap: nowrap;
+	/* Prevent wrapping */
+	justify-content: center;
+	/* Center align the buttons */
+	gap: 30px;
+	/* Adjust spacing between buttons */
 }

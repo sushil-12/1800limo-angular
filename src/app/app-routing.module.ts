@@ -42,6 +42,13 @@ import { IndividualConfirmationComponent } from './components/email-pages/indivi
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
 import { SubTravelAgentTemplateComponent } from './components/sub-travel-agent/sub-travel-agent-template/sub-travel-agent-template.component';
 import { IndividualTemplateComponent } from './components/individual/individual-template/individual-template.component';
+import { SubAffiliateTemplateComponent } from './components/sub-affiliate/sub-affiliate-template/sub-affiliate-template.component';
+import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
+import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
+import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
+import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
+import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
+import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 
 
 const routes: Routes = [
@@ -49,6 +56,10 @@ const routes: Routes = [
 		path: '',
 		redirectTo: '/home',
 		pathMatch: 'full'
+	},
+	{
+		path: 'add-driver-details-from-invite',
+		component: AddDriverSubscriberComponent,
 	},
 	{
 		path: '',
@@ -77,6 +88,10 @@ const routes: Routes = [
 			{
 				path: 'fleet',
 				component: FleetComponent
+			},
+			{
+				path: 'tutorials',
+				component: TutorialsComponent
 			},
 			{
 				path: 'safety',
@@ -138,7 +153,18 @@ const routes: Routes = [
 				path: 'transaction-history',
 				component: TransactionHistoryComponent
 			},
-
+			{
+				path: 'subscription',
+				component: SubscriptionPlansComponent
+			},
+			{
+				path: 'partner-registration',
+				component: PartnerRegistrationComponent
+			},
+			{
+				path: 'payment-details',
+				component: PaymentDetailsComponent
+			},
 			{
 				path: 'email',
 				children: [
@@ -270,6 +296,34 @@ const routes: Routes = [
 		]
 	},
 	{
+		path: 'sub_affiliate',
+		component: SubAffiliateTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'subaffiliate'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/sub-affiliate/sub-affiliate.module').then(m => m.SubAffiliateModule)
+			}
+		]
+	},
+	{
+		path: 'affiliate_driver',
+		component: AffiliateDriverTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'affiliatedriver'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/affiliate-driver/affiliate-driver.module').then(m => m.AffiliateDriverModule)
+			}
+		]
+	},
+	{
 		path: 'travel_agent',
 		component: AgentTemplateComponent,
 		// canActivate: [AdminGuardGuard],
@@ -318,7 +372,8 @@ const routes: Routes = [
 	{
 		path: '**',
 		component: PageNotFoundComponent
-	}
+	},
+
 ];
 
 @NgModule({

@@ -16,6 +16,7 @@ declare var $: any;
 export class AdminTemplateComponent implements OnInit {
 	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM'
 	public role: string;
+	public created_by_role: any;
 	public affiliateAccountStatus: string;
 	public userImage: string = 'assets/images/user.png';
 	public userName: string = 'Admin';
@@ -28,6 +29,7 @@ export class AdminTemplateComponent implements OnInit {
 	chevron2: boolean = false;
 	chevron3: boolean = false;
 	chevron4: boolean = false;
+	bkpData:any='';
 
 	modules: any = localStorage.getItem('modules') || ''
 	subModules: any = localStorage.getItem('sub_modules') || ''
@@ -51,6 +53,8 @@ export class AdminTemplateComponent implements OnInit {
 
 	ngOnInit(): void {
 
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ? JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
+
 		console.log('On load admin template component')
 		this.getPermission()
 		this.screenWidth = window.innerWidth;
@@ -72,6 +76,7 @@ export class AdminTemplateComponent implements OnInit {
 		this.affiliateAccountStatus = localStorage.getItem("account_approval");
 
 		const currentUser = this.authService.currentUserValue;
+		this.created_by_role = currentUser?.created_by_role
 		this.role = currentUser.roleName;
 		this.name = currentUser.name
 
@@ -273,6 +278,30 @@ export class AdminTemplateComponent implements OnInit {
 				}
 				this.router.navigate(['/']);
 			});
+	}
+
+	backToAdmin() {
+		console.log("in backto admin")
+		let bkp_a_token = localStorage.getItem('bkp_a_token')
+		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
+		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		let bkp_currency_symbol = localStorage.getItem('bkp_currency_symbol')
+
+		localStorage.setItem('currencySymbol', bkp_currency_symbol)
+		localStorage.setItem('access_token', bkp_a_token)
+		localStorage.setItem('currentUser', bkp_crnt_dt)
+		localStorage.setItem('userData', bkp_u_dt)
+
+		localStorage.removeItem('bkp_a_token')
+		localStorage.removeItem('bkp_crnt_dt')
+		localStorage.removeItem('bkp_u_dt')
+		localStorage.removeItem('bkp_currency_symbol')
+		localStorage.removeItem('is_stripe_account_added')
+		localStorage.removeItem('current_period_end_date')
+		localStorage.removeItem('is_subscription_cancelled')
+
+		this.router.navigateByUrl('/home');
+
 	}
 
 }

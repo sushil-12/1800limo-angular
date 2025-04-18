@@ -168,7 +168,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
     this.profileForm = this.formBuilder.group({
       name: [''],
       operator_name: [''],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(7), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       phone_country: ['us'],
       email: ['info@1800limo.com', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
@@ -232,7 +232,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
           phone: this.getProfileResponseData?.data?.phone,
           phone_isd: this.getProfileResponseData?.data?.phone_isd,
           phone_country: this.getProfileResponseData?.data?.phone_country,
-          work: this.getProfileResponseData?.data?.work_phone,
+          work: this.getProfileResponseData?.data?.work_phone == 0 ? '' : this.getProfileResponseData?.data?.work_phone,
           work_isd: this.getProfileResponseData?.data?.work_isd,
           work_country: this.getProfileResponseData?.data?.work_country,
           email: this.getProfileResponseData?.data?.email,
@@ -303,6 +303,12 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       return;
     }
 
+    if(this.profileForm.get('badge_city_name').value == ''){
+      this.profileForm.patchValue({
+        badge_city : ''
+      })
+    }
+
     console.log(this.profileForm.value);
     this.spinner.show();
 
@@ -316,9 +322,14 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
-        this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
-          window.location.reload();
-        });
+        if(this.userId){
+          this.router.navigate(['/admin/loose-affiliate-accounts'])
+        }
+        else{
+          this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
+            window.location.reload();
+          });
+        }
         console.log("profile created", this.response)
       });
 

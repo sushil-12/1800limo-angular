@@ -167,6 +167,16 @@ ul {
 	.allinner_wrapper header nav .navbar-nav li a {
 		color: var(--orange-color) !important;
 	}
+
+	.join-us-button {
+		width: 90%;
+		margin: 8px 10px;
+		font-size: 16px !important;
+	}
+
+	.nav-item.dropdown.button-signin {
+		flex-direction: column;
+	}
 }
 
 // @media only screen and (max-width:767px) {
@@ -204,4 +214,23 @@ ul {
 
 .navbar .dropdown-menu {
 	left: -136px !important;
+}
+
+
+
+.nav-item.dropdown.button-signin {
+	display: flex;
+	flex-direction: row;
+}
+
+@media screen and (max-width:1024px) {
+	li.nav-item a {
+		font-size: 12px !important;
+	}
+}
+
+@media screen and (max-width:767px) {
+	li.nav-item a {
+		font-size: 15px !important;
+	}
 }

@@ -1,0 +1,65 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <!-- Main page content-->
+    <section class="user_information" id="invoice_ta">
+        <h2 class="headinginfo">Payouts</h2>
+        <div class="row align-items-center ml-2 mt-2 mb-1" *ngIf="invoices.length>0">
+            <div class="col-md-3 py-2">
+                <span style="font-size: 18px;font-weight: 500;">
+                    Lifetime Bookings: {{lifetimeBookings}}
+                </span>
+            </div>
+            <div class="col-md-3 py-2">
+                <span style="font-size: 18px;font-weight: 500;">
+                    Total Paid Bookings: {{totalBookings}}
+                </span>
+            </div>
+            <div class="col-md-3 py-2">
+                <span style="font-size: 18px;font-weight: 500;">
+                    Volume: ${{volume}}
+                </span>
+            </div>
+        </div>
+
+
+        <section class="adminbox_shadow user_information">
+            <div class="containeredd driverside_table">
+                <div class="row">
+                    <p class="text-danger text-lg" style="margin-left:10px" *ngIf="invoices.length==0">
+                        No Results Found.
+                    </p>
+                    <div class="col-md-12 custom_table">
+                        <div class="table-responsive" style="min-height: 350px">
+                            <table class="table table-dark table-striped table-bordered dataTable dt-responsive"
+                                id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0"
+                                *ngIf="invoices.length >0">
+                                <thead>
+                                    <tr role="row">
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoiceTbody" *ngFor="let invoice of invoices">
+                                    <tr role="row" class="odd">
+                                        <td class="text-center" style="font-size: 18px;font-weight: 500;">
+                                            <p>{{ invoice?.created_at | date: 'dd-MMM-yyyy' }}</p>
+                                        </td>
+                                        <td class="text-center" style="font-size: 18px;font-weight: 500;">
+                                            <p>{{ invoice?.description ? invoice?.description :
+                                                invoice?.transfer_group}}</p>
+                                        </td>
+                                        <td class="text-center" style="font-size: 18px;font-weight: 500;">
+                                            <p>${{invoice?.amount}}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </section>
+</main>

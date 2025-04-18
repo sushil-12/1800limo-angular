@@ -29,7 +29,7 @@ export class CreateBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
-		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
+		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -347,21 +347,16 @@ export class CreateBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
+			departing_airport_city:[''],
 		})
+		let date = new Date();
+		let timestamp = date.getTime();
 
-		let month = new Date().getMonth()
-		let date: string | number = new Date().getDate() + 1
-		let year = new Date().getFullYear()
-
-
-		let full_date = new Date(year, month, date).toISOString()
-		// 10 days later
-		let future_full_date = new Date(year, month, date).toISOString()
-		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
-		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
+		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
+		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
-		this.SetFormValue('return_booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
+		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -485,7 +480,8 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('return_pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_pickup_airline.value));
 			this.SetFormValue('return_dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
-
+			this.SetFormValue('origin_airport_city',editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city )
+			
 			if (editing_data.driver_image) {
 				this.SetFormValue('driver_image_id', editing_data.driver_image.id);
 				this.driver_image['image'] = editing_data.driver_image.image;
@@ -542,7 +538,7 @@ export class CreateBookingComponent implements OnInit {
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.scroll('pickup_address')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 			}
@@ -581,7 +577,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour'  && !this.min_rate_involved) {
 
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				this.subtotal += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
@@ -603,7 +599,7 @@ export class CreateBookingComponent implements OnInit {
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta", this.subtotal)
 			}
-			else if (this.updateType == 'repeat' || this.updateType == 'return') {
+			else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
 				this.subtotal += adminShare + this.agentShare
@@ -665,7 +661,7 @@ export class CreateBookingComponent implements OnInit {
 					this.r_subtotal += adminShare + this.r_agentShare
 					console.log("in if created by ta", this.r_subtotal)
 				}
-				else if (this.updateType == 'repeat' || this.updateType == 'return') {
+				else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 					let adminShare = (base_rate * 15) / 100
 					this.r_agentShare = base_rate * 0.10
 					this.r_subtotal += adminShare + this.r_agentShare
@@ -690,7 +686,7 @@ export class CreateBookingComponent implements OnInit {
 				this.SetFormValue('passenger_cell', data?.mobile)
 				this.SetFormValue('passenger_cell_isd', data?.mobileIsd)
 				this.SetFormValue('passenger_cell_country', data?.mobileCountry)
-				this.SetFormValue('origin_airport_city', data?.origin_airport_city)
+				this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 				this.SetFormValue('pickup_flight', data?.pickup_flight)
 				this.SetFormValue('dropoff_flight', data?.dropoff_flight)
 			}
@@ -1284,7 +1280,7 @@ export class CreateBookingComponent implements OnInit {
 	fetchClientAccounts(account_type: string) {
 		const legend = {
 			individual: 'individual',
-			corporate: 'corporate',
+			// corporate: 'corporate',
 			travel_planner: 'travel'
 		}
 
@@ -1678,6 +1674,10 @@ export class CreateBookingComponent implements OnInit {
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
+				if(value.includes("cruise_")){
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
+					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				}
 				console.log("setting value of cruise port and name mandatory")
 				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
 				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
@@ -1711,6 +1711,10 @@ export class CreateBookingComponent implements OnInit {
 			}
 
 			if (value.includes('airport_')) {
+			
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text pax with pickup instructions when ship has arrived.");
+					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				
 				console.log("setting value of pickup flight mandatory")
 				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('pickup_flight').updateValueAndValidity();
@@ -1788,6 +1792,8 @@ export class CreateBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').setValidators([Validators.required]);
+				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				} else {
 					console.log("setting value of return pickup flight not mandatory")
 					this.BookingForm.get('return_pickup_flight').clearValidators();
@@ -1796,6 +1802,8 @@ export class CreateBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_pickup_airport_option').clearValidators();
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').clearValidators();
+				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
 			}
 		})
@@ -1857,7 +1865,7 @@ export class CreateBookingComponent implements OnInit {
 		// })
 
 		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
 				this.chooseUser(value)
 			}
 		})
@@ -1928,7 +1936,7 @@ export class CreateBookingComponent implements OnInit {
 		// 	}
 		// })
 		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
 				this.handleTravelStaffAccounts({ id: value })
 			}
 		})
@@ -2306,7 +2314,7 @@ export class CreateBookingComponent implements OnInit {
 		if (this.rateArray) {
 			console.log('in function createReservationShareArray iffffff', this.rateArray)
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 			}
 			else {
@@ -2330,6 +2338,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
+			adminShare = adminShare + (this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount * 0.25)
 			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
 				baseRate: base_rate,
@@ -2346,7 +2355,7 @@ export class CreateBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
@@ -2384,6 +2393,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
+			adminShare = adminShare + (this.BookingForm.value.returnRateArray.misc.Extra_Gratuity.amount * 0.25)
 			let returnShareArray = {
 				baseRate: base_rate,
 				returnGrandTotal: returnGrandTotal,
@@ -2579,7 +2589,7 @@ export class CreateBookingComponent implements OnInit {
 					}
 				}
 				let base_rate = 0
-				if (this.BookingForm.value?.service_type == 'charter_tour') {
+				if (this.BookingForm.value?.service_type == 'charter_tour'  && !this.min_rate_involved) {
 					base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				}
 				else {

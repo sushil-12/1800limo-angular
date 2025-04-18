@@ -122,6 +122,14 @@ import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loos
 import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
 import { FleetComponent } from './cms/fleet/fleet.component';
 import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
+import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
+import { AffiliateMapPinsComponent } from './affiliate-map-pins/affiliate-map-pins.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ReportsAdminComponent } from './reports-admin/reports-admin.component';
+import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-admin-vehicles.component';
+import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
+import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
+import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 
 
 @NgModule({
@@ -216,7 +224,14 @@ import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.co
 		LooseAffiliateAccountsComponent,
 		LooseAffiliateAccountDetailsComponent,
 		FleetComponent,
-		FleetPageEditComponent
+		FleetPageEditComponent,
+		SubscribersListComponent,
+		AffiliateMapPinsComponent,
+		ReportsAdminComponent,
+		ReportsAdminVehiclesComponent,
+		ReportsAdminVehicleAverageComponent,
+		ReportsAdminUsersComponent,
+		LooseAffiliateVehiclesComponent
 	],
 	imports: [
 		CommonModule,
@@ -243,7 +258,8 @@ import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.co
 		MatTableModule,
 		MatExpansionModule,
 		MatIconModule,
-		ClipboardModule
+		ClipboardModule,
+		NgxChartsModule
 	],
 	exports: [BookingStatusTextReplacePipe,MatIconModule]
 })

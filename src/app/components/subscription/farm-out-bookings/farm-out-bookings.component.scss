@@ -1,0 +1,489 @@
+.adminbox_shadow.user_information {
+	font-family: "PT Serif", serif !important;
+	background-color: #f5f4fe;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+	opacity: 0.03 !important;
+	background-color: #f3933d !important;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+	background-color: #f3933d !important;
+}
+
+:host ::ng-deep .mat-checkbox-ripple .mat-ripple-element,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+	background-color: #f3933d !important;
+}
+
+
+textarea.mat-input-element.cdk-textarea-autosize {
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.adminbox_shadow.user_information .mat-form-field,
+.mat-calendar {
+	font-family: "PT Serif", serif !important;
+}
+
+.box-outline {
+	border: solid 3px;
+	border-radius: 4px;
+}
+
+.layout_shadow {
+	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
+	border-radius: 12px;
+}
+
+section {
+	color: #000;
+	border-radius: 12px;
+	padding: 12px;
+	margin: 0.6rem auto;
+	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
+}
+
+hr {
+	border-top: 1px solid black
+}
+
+button {
+	font-family: "PT Serif", serif !important;
+}
+
+.none-display {
+	display: none;
+}
+
+.booking_status {
+	font-size: medium;
+	color: #fff;
+}
+
+.x-circle-btn {
+	opacity: 1;
+	color: red;
+	font-size: xx-large;
+	width: max-content;
+}
+
+.pending {
+	background-color: #0474fc;
+}
+
+.partial_paid {
+	background-color: #00CCCC;
+}
+
+.partial_refund {
+	background-color: #212529;
+}
+
+.paid_cash {
+	background-color: #D1B000;
+}
+
+.paid {
+	background-color: #D1B000;
+}
+
+.driver_unassigned {
+	background-color: #dc3545;
+}
+
+.assigned {
+	background-color: var(--green-color);
+}
+
+.rejected {
+	background-color: #dc3545;
+}
+
+.cancelled {
+	background-color: #FF69B4;
+}
+
+.en_route_pu {
+	background-color: #6454ac;
+}
+
+.on_location {
+	background-color: #7289da;
+}
+
+.en_route_do {
+	background-color: #1abc9c;
+}
+
+.ended {
+	background-color: #8cc43c;
+}
+
+.finalized {
+	background-color: #71c5e8;
+}
+
+.non_payable {
+	background-color: #ec4c8c;
+}
+
+.comped {
+	background-color: #C4A484;
+}
+
+.refund {
+	background-color: #A020F0;
+}
+
+.btnclass {
+	margin-top: 20px;
+	height: 60px;
+	width: 100%;
+}
+
+.loc-logo {
+	font-size: 18px;
+}
+
+
+.odd p {
+	cursor: pointer;
+}
+
+.btnStyle {
+	color: #fff !important;
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+	padding: 10px 40px;
+	transition: box-shadow 0.1s ease-in-out;
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+// .currency{
+// 	color: green;
+//     font-weight: bold;
+// }
+
+.modal-header {
+	justify-content: center;
+}
+
+// .modal-content {
+//     padding: 0 !important;
+// }
+
+#sendEmailModal .modal-content hr {
+	border: 2px solid var(--orange-color);
+	width: 180px;
+	background-color: var(--orange-color);
+	// margin          : 10px 347px 20px 347px;
+	display: block;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#Layer_1 {
+	height: 48px;
+	width: 48px;
+}
+
+.mailBoxStyle svg {
+	width: 60px;
+	height: 60px;
+	margin-top: -5px;
+}
+
+.iconStyle {
+	margin: 20px 20px 10px 20px;
+	cursor: pointer;
+}
+
+.iconStyle a {
+	text-decoration: none;
+	color: #000;
+}
+
+.headingStyle {
+	margin-top: 7px;
+}
+
+.saveButton {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	position: absolute;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+.box-special-instruction {
+	overflow-y: auto;
+	max-height: 200px;
+}
+
+table {
+	width: 100;
+	white-space: break-spaces;
+	padding: 10px;
+	min-width: 5rem;
+
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+
+	tbody td>p {
+		margin: 0;
+	}
+}
+
+a:hover {
+	text-decoration: none;
+	// color: unset !important;
+}
+
+input,
+input::placeholder,
+input::-webkit-input-placeholder {
+	padding: 0 !important;
+}
+
+
+.booking-id-font {
+	font-size: 20px;
+}
+
+.preview-output-feild {
+	font-size: large;
+}
+
+.view-button {
+	background-color: #5373aa !important;
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+}
+
+.x-cross-btn {
+	background: #fff !important;
+	color: #ff0000 !important;
+	/* position: absolute; */
+	top: 5px;
+	right: 15px;
+	border-radius: 20px;
+	width: 25px;
+	opacity: 1 !important;
+}
+
+.x-close-btn {
+	float: right;
+	font-size: 1.8rem;
+	font-weight: 700;
+	line-height: 1;
+	border: none;
+	z-index: 10;
+}
+
+.center {
+	margin: 0;
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.preview-pickup-color {
+	color: #007500;
+}
+
+.preview-dropoff-color {
+	color: #FF0000;
+	align-items: baseline;
+}
+
+.preview-airport-color {
+	color: #00008B;
+}
+
+.preview-extra-stop-color {
+	color: #000000;
+}
+
+.disabled-btn {
+	pointer-events: none;
+	cursor: not-allowed !important;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+	.startdate {
+		padding-right: 5px;
+	}
+
+	.startdate2 {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.startdate3 {
+		padding-left: 5px;
+	}
+
+	.btnclass {
+		// padding-right: 5px;
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width: 575px) {
+	#AuditTrailModal {
+		.modal-body {
+			overflow: auto;
+
+			table {
+				width: 450px;
+
+				thead tr th#date {
+					width: 115px
+				}
+			}
+		}
+	}
+
+
+	.align-btn {
+		flex-direction: row-reverse;
+		align-items: end;
+		width: 100%;
+		margin: 1rem;
+	}
+
+	// .bottom-container{
+	// 	border:1px solid green !important;
+
+	// }
+
+	// .bottom-container > button{
+	// 	position: relative;
+	// 	border:1px solid pink;
+	// 	bottom: 10px
+	// }
+}
+
+a.dropdown-item {
+	padding: 0.5rem 1.4rem !important;
+	font-size: 18px;
+	font-weight: 500 !important;
+	font-family: "Roboto", sans-serif !important;
+}
+
+.asterisk {
+	font-size: 1.5rem;
+}
+
+
+.sortCheckBox {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.pin-icon-preview {
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px) {
+	.sortCheckBox {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.pin-icon-preview {
+		font-size: 34px;
+	}
+}
+
+.google_map {
+	width: auto;
+	max-height: 300px;
+	height: 300px;
+
+	.map {
+		width: 100%;
+		height: 100%;
+		border-radius: 17px;
+	}
+}
+
+:host ::ng-deep.mat-checkbox-layout,
+.mat-checkbox-label {
+	white-space: normal !important;
+}
+
+.horizontal-scroll-container {
+	display: flex;
+	/* Arrange items in a row */
+	overflow-x: auto;
+	/* Enable horizontal scrolling */
+	white-space: nowrap;
+	/* Prevent items from wrapping */
+	gap: 95px;
+	/* Space between items */
+	scrollbar-width: thin;
+	/* Thin scrollbar for Firefox */
+	scrollbar-color: #888 #f1f1f1;
+	/* Custom colors for Firefox */
+	max-width: 637px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+	height: 8px;
+	/* Height of the scrollbar */
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+	background-color: #888;
+	/* Scrollbar thumb color */
+	border-radius: 4px;
+	/* Rounded corners for the scrollbar thumb */
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-track {
+	background-color: #f1f1f1;
+	/* Scrollbar track color */
+}
+
+.scroll-item {
+	min-width: 300px;
+}
+
+@media (max-width: 768px) {
+	.scroll-item {
+		min-width: 180px;
+		/* Adjust item width for smaller screens */
+	}
+
+	.horizontal-scroll-container {
+		gap: 20px;
+	}
+
+}

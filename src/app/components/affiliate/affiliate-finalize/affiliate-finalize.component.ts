@@ -67,6 +67,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	bookdataresp: any;
 	currencySymbol: any;
 	paidAmount:any;
+	currentUser:any;
 
 	constructor(
 		private $api: AdminService,
@@ -81,6 +82,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		// this.spinner.show()
 		this.buildingCardForm();
 		this.activatedroute.queryParams
@@ -90,13 +93,19 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log("booking id---->>>>>>", this.bookingId,)
 
 				if (!this.bookingId) {
-					this.router.navigate(['/affiliate/my-bookings']);
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.router.navigate(['/sub_affiliate/my-bookings']);
+					}
+					else{
+						this.router.navigate(['/affiliate/my-bookings']);
+					}
 				}
 				else {
 					// this.buildChargesFormGroup()
 					// this.chargesForm.get('reservation_id').setValue(this.bookingId)
 					this.getBookingData()
 					this.paymentDetail(this.bookingId)
+					this.scroll('submitForm')
 				}
 			});
 		this.deleteCardForm = this.$form.group({
@@ -106,6 +115,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+	}
+
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView();
 	}
 
 
@@ -133,10 +148,14 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.service_type = data?.booking_detail?.service_type
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
-				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
+				this.primaryCards = this.CardsInformation
 				console.log('primary cards--->>>>', this.primaryCards, this.primaryCards.length)
 				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
 				console.log('selected cards ----->>>', this.selectedCard)
+				setTimeout(() => {
+					this.scroll('submitForm')
+
+				}, 600)
 			})
 	}
 
@@ -230,7 +249,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-						this.router.navigate(['/affiliate/my-bookings']);
+						if(this.currentUser.roleName == 'sub_affiliate'){
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						}
+						else{
+							this.router.navigate(['/affiliate/my-bookings']);
+						}
 
 						// this.loadBookings()
 						// $('#cancelBooking').modal('hide');
@@ -258,7 +282,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-						this.router.navigate(['/affiliate/my-bookings']);
+						if(this.currentUser.roleName == 'sub_affiliate'){
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						}
+						else{
+							this.router.navigate(['/affiliate/my-bookings']);
+						}
 
 						// this.loadBookings()
 						// $('#acceptBooking').modal('hide');
@@ -359,7 +388,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			this.getBookingData(this.bookingId)
 			this.$errors.openDialog({
 				errors: {
-					error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Please click on Charge button!</span>`
+					error: `<span class='text-danger font-weight-bolder text-2xl' style="font-size: 24px;">Please click charge button to get paid !</span>`
 				}
 			})
 
@@ -431,7 +460,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				if(this.currentUser.roleName == 'sub_affiliate'){
+					this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				}
+				else{
+					this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				}
 				console.log('response---------------------->>', response)
 				this.spinner.hide()
 			})
@@ -480,7 +514,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// 		error: `<span class='text-success'>${response.message}</span>`
 					// 	}
 					// })
-					this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					}
+					else{
+						this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					}
 					console.log('response---------------------->>', response)
 					this.spinner.hide()
 				})
