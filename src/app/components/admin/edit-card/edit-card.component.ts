@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,7 +11,7 @@ import { throwError } from 'rxjs';
   templateUrl: './edit-card.component.html',
   styleUrls: ['./edit-card.component.scss']
 })
-export class EditCardComponent implements OnInit {
+export class EditCardComponent implements OnInit, AfterViewInit {
   @ViewChild('search1') search1!: ElementRef;
   geoCoder!: google.maps.Geocoder;
 
@@ -85,6 +85,29 @@ export class EditCardComponent implements OnInit {
         this.spinner.hide();//hide spinner
       });
 
+
+
+
+    //add card form validation
+    this.editCardForm = this.formBuilder.group({
+      id: [this.cardId, [Validators.required, Validators.pattern("^[0-9].*$")]],
+      acc_id: [this.accountId, [Validators.required, Validators.pattern("^[0-9].*$")]],
+      secondaryCardType: ['', Validators.required],
+      secondaryCardNumber: [''],
+      secondaryCountryOfRegionResidence: ['', Validators.required],
+      secondaryCSC: [''],
+      secondaryMMYY: [''],
+      secondaryFirstName: ['', Validators.required],
+      secondaryLastName: ['', Validators.required],
+      secondaryPhone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      secondaryStreetAddress: ['', Validators.required],
+      secondaryCity: ['', Validators.required],
+      secondaryState: ['', Validators.required],
+      secondaryZip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+    });
+  }
+
+  ngAfterViewInit(): void {
     //google map autocomplete
     this.geoCoder = new google.maps.Geocoder();
 
@@ -124,25 +147,6 @@ export class EditCardComponent implements OnInit {
           }
         });
       });
-    });
-
-
-    //add card form validation
-    this.editCardForm = this.formBuilder.group({
-      id: [this.cardId, [Validators.required, Validators.pattern("^[0-9].*$")]],
-      acc_id: [this.accountId, [Validators.required, Validators.pattern("^[0-9].*$")]],
-      secondaryCardType: ['', Validators.required],
-      secondaryCardNumber: [''],
-      secondaryCountryOfRegionResidence: ['', Validators.required],
-      secondaryCSC: [''],
-      secondaryMMYY: [''],
-      secondaryFirstName: ['', Validators.required],
-      secondaryLastName: ['', Validators.required],
-      secondaryPhone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-      secondaryStreetAddress: ['', Validators.required],
-      secondaryCity: ['', Validators.required],
-      secondaryState: ['', Validators.required],
-      secondaryZip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
     });
   }
 

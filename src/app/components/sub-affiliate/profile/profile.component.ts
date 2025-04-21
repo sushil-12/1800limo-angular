@@ -72,57 +72,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.getProfile()
 
 
-    //google map autocomplete
-    this.geoCoder = new google.maps.Geocoder();
-
-    const autocomplete = new google.maps.places.Autocomplete(
-      this.search1.nativeElement,
-      {
-        types: ['address'] // You can tweak this to 'address', etc.
-      }
-    );
-
-    autocomplete.addListener("place_changed", () => {
-      this.ngZone.run(() => {
-        //get the place result
-        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-        if (!place.geometry || !place.geometry.location) return;
-
-        this.profileForm.patchValue({
-          address: place.formatted_address,
-          latitude: place.geometry.location.lat(),
-          longitude: place.geometry.location.lng()
-        });
-
-
-        // Extract address components
-        place.address_components?.forEach(component => {
-          const types = component.types;
-          if (types.includes('country')) {
-            this.profileForm.patchValue({
-              country: component.short_name
-            });
-          } else if (types.includes('administrative_area_level_1')) {
-            this.profileForm.patchValue({
-              state: component.long_name
-            });
-          } else if (types.includes('administrative_area_level_3')) {
-            this.profileForm.patchValue({
-              city: component.long_name
-            });
-          } else if (types.includes('postal_code')) {
-            this.profileForm.patchValue({
-              zipCode: component.long_name
-            });
-          }
-          // else if (types.includes('street_number')) {
-          // 	this.profileForm.patchValue({
-          // 		address: component.long_name
-          // 	});
-          // }
-        });
-      });
-    });
+   
 
   }
 
@@ -149,6 +99,59 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       const countryData = this.OfficeObject.getSelectedCountryData();
       this.onCountryChange(countryData, 'work_contact_number');
     });
+
+     //google map autocomplete
+     this.geoCoder = new google.maps.Geocoder();
+
+     const autocomplete = new google.maps.places.Autocomplete(
+       this.search1.nativeElement,
+       {
+         types: ['address'] // You can tweak this to 'address', etc.
+       }
+     );
+ 
+     autocomplete.addListener("place_changed", () => {
+       this.ngZone.run(() => {
+         //get the place result
+         const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+         if (!place.geometry || !place.geometry.location) return;
+ 
+         this.profileForm.patchValue({
+           address: place.formatted_address,
+           latitude: place.geometry.location.lat(),
+           longitude: place.geometry.location.lng()
+         });
+ 
+ 
+         // Extract address components
+         place.address_components?.forEach(component => {
+           const types = component.types;
+           if (types.includes('country')) {
+             this.profileForm.patchValue({
+               country: component.short_name
+             });
+           } else if (types.includes('administrative_area_level_1')) {
+             this.profileForm.patchValue({
+               state: component.long_name
+             });
+           } else if (types.includes('administrative_area_level_3')) {
+             this.profileForm.patchValue({
+               city: component.long_name
+             });
+           } else if (types.includes('postal_code')) {
+             this.profileForm.patchValue({
+               zipCode: component.long_name
+             });
+           }
+           // else if (types.includes('street_number')) {
+           // 	this.profileForm.patchValue({
+           // 		address: component.long_name
+           // 	});
+           // }
+         });
+       });
+     });
+     
   }
 
   buildProfileForm() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input, AfterViewInit } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StateManagementService } from '../../../services/statemanagement.service';
@@ -18,7 +18,7 @@ declare var $: any;
 	templateUrl: './step2.component.html',
 	styleUrls: ['./step2.component.scss'],
 })
-export class Step2Component implements OnInit {
+export class Step2Component implements OnInit, AfterViewInit {
 	@ViewChild('search1') search1!: ElementRef;
 	geoCoder!: google.maps.Geocoder;
 
@@ -98,8 +98,7 @@ export class Step2Component implements OnInit {
 
 	ngOnInit(): void {
 		$('.HeadingH1').css({ display: "block" })
-		//code related to autocomplete and map
-		this.mapFunction();
+		//code related to autocomplete and ma
 
 		//show Email verification modal on first time completing step 1
 		const showEmailVerificationAlert = sessionStorage.getItem("showEmailVerificationAlert");
@@ -430,8 +429,12 @@ export class Step2Component implements OnInit {
 	public search2ElementRef: ElementRef;
 
 
+	ngAfterViewInit(): void {
+		this.mapFunction()
+	}
+
 	mapFunction() {
-	
+
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
 
@@ -475,7 +478,7 @@ export class Step2Component implements OnInit {
 							zipCode: component.long_name
 						});
 					}
-					else if(types.includes('street_number')){
+					else if (types.includes('street_number')) {
 						this.addBankForm.patchValue({
 							street: component.long_name
 						})
@@ -484,7 +487,7 @@ export class Step2Component implements OnInit {
 			});
 			this.spinner.hide()
 		});
-		  
+
 	}
 
 

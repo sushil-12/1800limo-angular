@@ -93,6 +93,35 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 			});
 
 
+		
+
+
+	}
+
+	ngAfterViewInit() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'mobile');
+		});
+
+		// Background Company Tel
+		this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
+		this.workInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'work_contact_number');
+		});
+
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
 
@@ -139,33 +168,7 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 				});
 			});
 		});
-
-
-	}
-
-	ngAfterViewInit() {
-
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: false,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-		};
-
-		// Cell Number
-		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
-		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.MobileObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'mobile');
-		});
-
-		// Background Company Tel
-		this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
-		this.workInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.WorkObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'work_contact_number');
-		});
+		
 	}
 
 

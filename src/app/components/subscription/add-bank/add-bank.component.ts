@@ -90,7 +90,6 @@ export class AddBankComponent implements OnInit {
     this.is_stripe_added = JSON.parse(localStorage.getItem('is_stripe_account_added'))
     console.log("is stripe",this.is_stripe_added)
 
-    this.mapFunction();
 
     const currentYear = (new Date()).getFullYear();
     //prepare list of days for DOB
@@ -184,6 +183,10 @@ export class AddBankComponent implements OnInit {
   longitude: number;
   requestLatitude: number;
   requestLongitude: number;
+
+  ngAfterViewInit(): void {
+		this.mapFunction()
+	}
 
   mapFunction() {
 	

@@ -110,7 +110,6 @@ export class StripeFormComponent implements OnInit {
 			// 	this.router.navigate(["/admin/travel-planner-account/step2"])
 			//  }
 		}
-		this.mapFunction();
 
 		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
@@ -215,6 +214,10 @@ export class StripeFormComponent implements OnInit {
 	requestLatitude: number;
 	requestLongitude: number;
 	TaxIdMatch: string;
+
+	ngAfterViewInit(): void {
+		this.mapFunction()
+	}
 
 	mapFunction() {
 	

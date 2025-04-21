@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -14,15 +14,15 @@ import { ErrorDialogService } from '../../../services/error-dialog/errordialog.s
 import { CommonService } from '../../../services/common.service';
 
 @Component({
-  selector: 'app-travel-agent-stripe-form',
-  templateUrl: './travel-agent-stripe-form.component.html',
-  styleUrls: ['./travel-agent-stripe-form.component.scss']
+	selector: 'app-travel-agent-stripe-form',
+	templateUrl: './travel-agent-stripe-form.component.html',
+	styleUrls: ['./travel-agent-stripe-form.component.scss']
 })
-export class TravelAgentStripeFormComponent implements OnInit {
+export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 	@ViewChild('search1') search1!: ElementRef;
 	geoCoder!: google.maps.Geocoder;
 
- 
+
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
 	public submittedForm: boolean;
@@ -55,12 +55,12 @@ export class TravelAgentStripeFormComponent implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
-	enableSsnField:boolean=false;
-	ssn_copy:any;
-	ssnErrorMessage:string;
-	addressErrorMessage:string;
-	dobErrorMessage:string;
-	public AddressCheckStripe = ['address','street','city','country']
+	enableSsnField: boolean = false;
+	ssn_copy: any;
+	ssnErrorMessage: string;
+	addressErrorMessage: string;
+	dobErrorMessage: string;
+	public AddressCheckStripe = ['address', 'street', 'city', 'country']
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -88,25 +88,24 @@ export class TravelAgentStripeFormComponent implements OnInit {
 
 	ngOnInit(): void {
 		// const currentUser = localStorage.getItem("travelAgent_id")
-		
-		if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
+
+		if (JSON.parse(sessionStorage.getItem('step_completed_obj'))) {
 			let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
-			console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
-			if(check_step.step2 == "completed"){
+			console.log(check_step.step1, check_step.step2, "chekc step 1 and 2")
+			if (check_step.step2 == "completed") {
 				//  this.router.navigate(["/admin/travel-planner-account/step1"])
 				//  this.errordialog.openDialog({
-					// 	errors: {
-						// 		error: `Please complete previous step first.`
-						// 	}
-						// })
-						this.travelAgentId = localStorage.getItem("travelAgent_id")
-			 }
+				// 	errors: {
+				// 		error: `Please complete previous step first.`
+				// 	}
+				// })
+				this.travelAgentId = localStorage.getItem("travelAgent_id")
+			}
 			//  else{
 			// 	this.router.navigate(["/admin/travel-planner-account/step2"])
 			//  }
 		}
 
-		this.mapFunction();
 
 		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
@@ -124,7 +123,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		}
 		//add amenity form validation
 		this.buildBankForm()
-		
+
 		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 			for (const key in data) {
 				this.currencyOptions.push(data[key])
@@ -170,11 +169,11 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		}
 
 	}
-	
-	buildBankForm(){
+
+	buildBankForm() {
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
-			acc_id: [localStorage.getItem("travelAgent_id"), [ Validators.pattern("^[0-9].*$")]],//affiliate account id
+			acc_id: [localStorage.getItem("travelAgent_id"), [Validators.pattern("^[0-9].*$")]],//affiliate account id
 			BankName: [''],
 			BankAddress: [''],
 			AccountHolderFirstName: ['', Validators.required],
@@ -217,8 +216,12 @@ export class TravelAgentStripeFormComponent implements OnInit {
 	requestLatitude: number;
 	requestLongitude: number;
 
+	ngAfterViewInit(): void {
+		this.mapFunction()
+	}
+
 	mapFunction() {
-	
+
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
 
@@ -271,7 +274,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			});
 			this.spinner.hide()
 		});
-		  
+
 	}
 
 	getFormData() {
@@ -336,51 +339,51 @@ export class TravelAgentStripeFormComponent implements OnInit {
 						id_front_image: this.response.data.bankinfo.id_front_image.ID,
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
-					this.ssn_copy=this.response?.data?.bankinfo?.ssn
+					this.ssn_copy = this.response?.data?.bankinfo?.ssn
 					// if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
 					// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 					// 	this.enableSsnField=false
 					// 			console.log("in if ssn error",this.enableSsnField)
 					// }
-					if(this.response?.data?.error_fields?.length > 0){
+					if (this.response?.data?.error_fields?.length > 0) {
 						const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
-						console.log(hasNonEmptyObjects,"hasnonnonono")
-						if(!hasNonEmptyObjects){
+						console.log(hasNonEmptyObjects, "hasnonnonono")
+						if (!hasNonEmptyObjects) {
 							this.enableSsnField = true
 						}
-						else{
+						else {
 
-							this.response?.data?.error_fields?.forEach(item=>{
-								if(item.field == 'ssn'){
+							this.response?.data?.error_fields?.forEach(item => {
+								if (item.field == 'ssn') {
 									this.enableSsnField = false
 									this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
-									console.log('error mesage---->',this.ssnErrorMessage)
+									console.log('error mesage---->', this.ssnErrorMessage)
 								}
-								else{
+								else {
 									this.enableSsnField = true
 								}
-								 if(this.AddressCheckStripe?.includes(item?.field)){
+								if (this.AddressCheckStripe?.includes(item?.field)) {
 									console.log("in if addressssssssss-->")
 									this.addressErrorMessage = 'Please enter a valid address'
-									console.log('error mesage---->',this.addressErrorMessage)
+									console.log('error mesage---->', this.addressErrorMessage)
 									// this.enableSsnField = true
 
 								}
-								if(item?.field == 'dob'){
+								if (item?.field == 'dob') {
 									this.dobErrorMessage = 'Please enter a valid dob'
-									console.log('error mesage---->',this.dobErrorMessage)
+									console.log('error mesage---->', this.dobErrorMessage)
 									// this.enableSsnField = true
-								}									
-						  })
+								}
+							})
 						}
-					
+
 					}
-					else{
-						this.enableSsnField=true
+					else {
+						this.enableSsnField = true
 					}
-					console.log("trueeee===>",this.enableSsnField)
+					console.log("trueeee===>", this.enableSsnField)
 					//to check varificatiom failed tax id error only
-					if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+					if (this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')) {
 						this.enableSsnField = false
 						this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 					}
@@ -442,34 +445,34 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		}
 	}
 
-	handleCurrency(value:any){
-		console.log(value , this.filteredOptions)
-		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
+	handleCurrency(value: any) {
+		console.log(value, this.filteredOptions)
+		this.currencyOptions = this.currencyOptions_copy.filter((i: any) => i.countryName.toLowerCase().includes(value.toLowerCase()))
 	}
 
-	selectCurrency(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
-		if(isUserInput){
+	selectCurrency(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', isUserInput)
+		if (isUserInput) {
 			this.addBankForm.patchValue({
-				currency:option.countryName + '-' + option.symbol
+				currency: option.countryName + '-' + option.symbol
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 	}
-	onSelectionChange(event){
-		console.log('event- onSelectionChange>>', event.option.value,event.option.viewValue)
+	onSelectionChange(event) {
+		console.log('event- onSelectionChange>>', event.option.value, event.option.viewValue)
 		this.addBankForm.patchValue({
-			currency:event.option.value,
-			currencyShow : event.option.viewValue
+			currency: event.option.value,
+			currencyShow: event.option.viewValue
 		})
 	}
-	currencySelection(value){
-		this.currencyOptions_copy.map(i=>{
-			let concatValue = i.currency+'-'+i.currencyCountry
-			if(value == concatValue){
+	currencySelection(value) {
+		this.currencyOptions_copy.map(i => {
+			let concatValue = i.currency + '-' + i.currencyCountry
+			if (value == concatValue) {
 				console.log('select option-->>', value)
 				this.addBankForm.patchValue({
-					currencyShow : i.countryName + '-' + i.symbol
+					currencyShow: i.countryName + '-' + i.symbol
 				})
 			}
 		})
@@ -512,11 +515,11 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		}
 
 	}
-	showOnlyLast4Digit(value){
-		if(value){
+	showOnlyLast4Digit(value) {
+		if (value) {
 			value = value.toString()
 			return '*'.repeat(value.length - 4) + value.slice(-4)
-		}else{
+		} else {
 			return ''
 		}
 	}
@@ -607,7 +610,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 	}
 
 	async idCardImageChange1(dataUrl, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -647,7 +650,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 	}
 
 	async idCardImageChange(event, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -724,12 +727,12 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		console.log("after--->", this.ssn_copy)
 
 	}
-	removeErrorSsn(value:any,type:string){
-		console.log("TYPE----->",type)
-		if(type == 'ssn'){
+	removeErrorSsn(value: any, type: string) {
+		console.log("TYPE----->", type)
+		if (type == 'ssn') {
 			this.ssnErrorMessage = ""
 		}
-		else if(type == 'address'){
+		else if (type == 'address') {
 			this.addressErrorMessage = ""
 		}
 		// else if(type == 'dob'){
@@ -737,7 +740,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		// 	this.dobErrorMessage = ""
 		// }
 	}
-	removeDobError(){
+	removeDobError() {
 		console.log("in dobbbbhbbb")
 		this.dobErrorMessage = ""
 	}
@@ -751,21 +754,21 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		}
 		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
-			ssn:this.ssn_copy
+			ssn: this.ssn_copy
 		})
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
 		this.spinner.show();
-		this.adminService.addBankOfTravelAgent(this.addBankForm.value,this.travelAgentId)
+		this.adminService.addBankOfTravelAgent(this.addBankForm.value, this.travelAgentId)
 			.pipe(
 				catchError(err => {
 					this.addBankForm.patchValue({
-						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+						ssn: this.showOnlyLast4Digit(this.ssn_copy)
 					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
-					
+
 					return throwError(err);
 				})
 			)
@@ -774,20 +777,20 @@ export class TravelAgentStripeFormComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 				this.travelService.getStepsCompleted(this.travelAgentId)
-				.pipe(
-					catchError(err => {
-						return throwError(err);
-					})
-				).subscribe(({ data }: any) => {
-					if (data) {
-						const stepCompleted = data.step_completed;
-						const stepCompletedObj = data.step_completed_obj;
-						sessionStorage.setItem('step_completed_obj',JSON.stringify(stepCompletedObj))
-					}
-					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/travel-planner-account-admin'])
-				);
-				});				
+					.pipe(
+						catchError(err => {
+							return throwError(err);
+						})
+					).subscribe(({ data }: any) => {
+						if (data) {
+							const stepCompleted = data.step_completed;
+							const stepCompletedObj = data.step_completed_obj;
+							sessionStorage.setItem('step_completed_obj', JSON.stringify(stepCompletedObj))
+						}
+						this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+							this.router.navigate(['/admin/travel-planner-account-admin'])
+						);
+					});
 			});
 	}
 	closeButton() {
@@ -797,10 +800,10 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		const keepValues = [
 			this.addBankForm.controls.ssn.value,
 		]
-	
+
 		this.buildBankForm();
-	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
-		
+		this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+
 		this.id_front_image = "";
 		this.id_back_image = "";
 		window.scrollTo({ top: 0, behavior: 'smooth' });

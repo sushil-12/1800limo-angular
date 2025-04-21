@@ -109,10 +109,6 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit() {
 
-		this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
-		this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
-		this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
-		this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
 
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
@@ -307,6 +303,11 @@ export class HomeComponent implements OnInit {
 			var myVar = setInterval(function () { myTimer() }, 0);
 
 		}
+
+		this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
+		this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
+		this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
+		this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
 
 	}
 

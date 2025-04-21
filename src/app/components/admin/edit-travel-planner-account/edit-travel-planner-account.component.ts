@@ -107,57 +107,7 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				this.FaxObject.setCountry(this.response?.data?.faxCountry);
 			});
 
-		//google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
-
-		const autocomplete = new google.maps.places.Autocomplete(
-			this.search1.nativeElement,
-			{
-				types: ['address'] // You can tweak this to 'address', etc.
-			}
-		);
-
-		autocomplete.addListener("place_changed", () => {
-			this.ngZone.run(() => {
-				//get the place result
-				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-				if (!place.geometry || !place.geometry.location) return;
-
-				this.editTravelPlannerAccountForm.patchValue({
-					address: place.formatted_address,
-					latitude: place.geometry.location.lat(),
-					longitude: place.geometry.location.lng()
-				});
-
-
-				// Extract address components
-				place.address_components?.forEach(component => {
-					const types = component.types;
-					if (types.includes('country')) {
-						this.editTravelPlannerAccountForm.patchValue({
-							country: component.short_name
-						});
-					} else if (types.includes('administrative_area_level_1')) {
-						this.editTravelPlannerAccountForm.patchValue({
-							state: component.long_name
-						});
-					} else if (types.includes('administrative_area_level_3')) {
-						this.editTravelPlannerAccountForm.patchValue({
-							city: component.long_name
-						});
-					} else if (types.includes('postal_code')) {
-						this.editTravelPlannerAccountForm.patchValue({
-							zipCode: component.long_name
-						});
-					}
-					// else if (types.includes('street_number')) {
-					// 	this.editTravelPlannerAccountForm.patchValue({
-					// 		address: component.long_name
-					// 	});
-					// }
-				});
-			});
-		});
+		
 
 
 
@@ -230,6 +180,59 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 			const countryData = this.OfficePhoneObject.getSelectedCountryData();
 			this.onCountryChange(countryData, 'officeNumber');
 		});
+
+		//google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
+
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.editTravelPlannerAccountForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.editTravelPlannerAccountForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.editTravelPlannerAccountForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.editTravelPlannerAccountForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.editTravelPlannerAccountForm.patchValue({
+							zipCode: component.long_name
+						});
+					}
+					// else if (types.includes('street_number')) {
+					// 	this.editTravelPlannerAccountForm.patchValue({
+					// 		address: component.long_name
+					// 	});
+					// }
+				});
+			});
+		});
+		
 	}
 
 	onCountryChange(event, type) {
