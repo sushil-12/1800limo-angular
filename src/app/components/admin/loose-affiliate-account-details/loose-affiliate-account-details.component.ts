@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,6 +9,7 @@ import { AuthService } from '../../../services/auth.service';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 
@@ -17,10 +18,12 @@ declare var $: any;
   templateUrl: './loose-affiliate-account-details.component.html',
   styleUrls: ['./loose-affiliate-account-details.component.scss']
 })
-export class LooseAffiliateAccountDetailsComponent implements OnInit {
+export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
+  geoCoder!: google.maps.Geocoder;
+  @ViewChild('mobileInput') mobileInput!: ElementRef;
+  @ViewChild('workInput') workInput!: ElementRef;
 
   public profileForm: FormGroup;
   public submittedForm: boolean;
@@ -95,52 +98,52 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
         })
     }
 
-   //google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
 
-		const autocomplete = new google.maps.places.Autocomplete(
-			this.search1.nativeElement,
-			{
-				types: ['address'] // You can tweak this to 'address', etc.
-			}
-		);
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
 
-		autocomplete.addListener("place_changed", () => {
-			this.ngZone.run(() => {
-				//get the place result
-				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-				if (!place.geometry || !place.geometry.location) return;
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
 
-				this.profileForm.patchValue({
-					address: place.formatted_address,
-					latitude: place.geometry.location.lat(),
-					longitude: place.geometry.location.lng()
-				});
+        this.profileForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
 
 
-				// Extract address components
-				place.address_components?.forEach(component => {
-					const types = component.types;
-					if (types.includes('country')) {
-						this.profileForm.patchValue({
-							country: component.short_name
-						});
-					} else if (types.includes('administrative_area_level_1')) {
-						this.profileForm.patchValue({
-							state: component.long_name
-						});
-					} else if (types.includes('administrative_area_level_3')) {
-						this.profileForm.patchValue({
-							city: component.long_name
-						});
-					} else if (types.includes('postal_code')) {
-						this.profileForm.patchValue({
-							zipCode: component.long_name
-						});
-					}
-				});
-			});
-		});
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.profileForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.profileForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.profileForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.profileForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+        });
+      });
+    });
 
 
   }
@@ -153,6 +156,29 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
     this.selectedLanguages = [1]
     this.profileForm.patchValue({ language: this.selectedLanguages });
+
+
+    const telOptions = {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    };
+
+    // Cell Number
+    this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+    this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'phone');
+    });
+
+    // Background Company Tel
+    this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
+    this.workInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'work');
+    });
   }
 
   buildProfileForm() {
@@ -294,9 +320,9 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       return;
     }
 
-    if(this.profileForm.get('badge_city_name').value == ''){
+    if (this.profileForm.get('badge_city_name').value == '') {
       this.profileForm.patchValue({
-        badge_city : ''
+        badge_city: ''
       })
     }
 
@@ -313,10 +339,10 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
-        if(this.userId){
+        if (this.userId) {
           this.router.navigate(['/admin/loose-affiliate-accounts'])
         }
-        else{
+        else {
           this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
             window.location.reload();
           });

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone , AfterViewInit} from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,15 +6,17 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import * as intlTelInput from 'intl-tel-input';
 
 
 @Component({
-  selector: 'app-demo-add-individual',
-  templateUrl: './demo-add-individual.component.html',
-  styleUrls: ['./demo-add-individual.component.scss']
+	selector: 'app-demo-add-individual',
+	templateUrl: './demo-add-individual.component.html',
+	styleUrls: ['./demo-add-individual.component.scss']
 })
-export class DemoAddIndividualComponent implements OnInit
-{
+export class DemoAddIndividualComponent implements OnInit, AfterViewInit  {
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('workInput') workInput!: ElementRef;
 
 	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -45,39 +47,58 @@ export class DemoAddIndividualComponent implements OnInit
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.buildAddIndividualForm();
 		const currentYear = (new Date()).getFullYear();
-		for (let i = 0; i < 40; i++)
-		{
+		for (let i = 0; i < 40; i++) {
 			this.yearOptions.push(currentYear + i);
 		}
 		//google map autocomplete
 
 		//add amenity form validation
-		
+
 		/* Card Number Spacing */
 
-		$('#card-number').on('keypress change blur', function ()
-		{
-			$(this).val(function (index, value)
-			{
+		$('#card-number').on('keypress change blur', function () {
+			$(this).val(function (index, value) {
 				return value.replace(/[^a-z0-9]+/gi, '')
 				// .replace(/(.{4})/g, '$1 ')
 			});
 		});
 
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
+		$('#card-number').on('copy cut paste', function () {
+			setTimeout(function () {
 				$('#card-number').trigger("change");
 			});
 		});
 	}
 
-	buildAddIndividualForm(){
+	ngAfterViewInit() {
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'mobile');
+		});
+
+		// Background Company Tel
+		this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
+		this.workInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'work_contact_number');
+		});
+
+	}
+
+	buildAddIndividualForm() {
 		this.addIndividualAccountForm = this.formBuilder.group({
 			role: ['5', [Validators.required, Validators.pattern("^[0-9].*$")]],//individual
 			firstName: ['', Validators.required],
@@ -107,17 +128,14 @@ export class DemoAddIndividualComponent implements OnInit
 	}
 
 
-	onCountryChange(event, type)
-	{
-		if (type == 'mobile')
-		{
+	onCountryChange(event, type) {
+		if (type == 'mobile') {
 			this.addIndividualAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
 		}
-		else
-		{
+		else {
 			this.addIndividualAccountForm.patchValue({
 				workIsd: '+' + event.dialCode,
 				workCountry: event.iso2
@@ -125,27 +143,22 @@ export class DemoAddIndividualComponent implements OnInit
 		}
 		// console.log(this.countryCode);
 	}
-	telInputObjectMobile(obj)
-	{
+	telInputObjectMobile(obj) {
 		this.MobileObject = obj;
 	}
-	telInputObjectWork(obj)
-	{
+	telInputObjectWork(obj) {
 		this.WorkObject = obj;
 	}
-	get f()
-	{
+	get f() {
 		return this.addIndividualAccountForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addIndividualAccountForm.invalid)
-		{
+		if (this.addIndividualAccountForm.invalid) {
 			return;
 		}
 
@@ -156,15 +169,13 @@ export class DemoAddIndividualComponent implements OnInit
 		console.log(this.addIndividualAccountForm.value)
 		this.adminService.addAccount(this.addIndividualAccountForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -173,12 +184,10 @@ export class DemoAddIndividualComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.buildAddIndividualForm()
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/individual-account-admin']);
 	}
 

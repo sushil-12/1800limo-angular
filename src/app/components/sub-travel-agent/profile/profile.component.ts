@@ -1,6 +1,7 @@
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as intlTelInput from 'intl-tel-input';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -16,9 +17,11 @@ declare var $: any;
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild('search1') search1!: ElementRef;
   geoCoder!: google.maps.Geocoder;
+  @ViewChild('mobileInput') mobileInput!: ElementRef;
+  @ViewChild('workInput') workInput!: ElementRef;
 
   public profileForm: FormGroup;
   public submittedForm: boolean;
@@ -129,6 +132,31 @@ export class ProfileComponent implements OnInit {
     }
 
 
+  }
+
+  ngAfterViewInit() {
+
+    const telOptions = {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    };
+
+    // Cell Number
+    this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+    this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'mobile');
+    });
+
+    // Background Company Tel
+    this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
+    this.workInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'work_contact_number');
+    });
   }
 
   buildProfileForm() {

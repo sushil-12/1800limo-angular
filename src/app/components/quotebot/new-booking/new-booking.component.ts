@@ -11,9 +11,10 @@ import { AdminService } from '../../../services/admin.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
+import * as intlTelInput from 'intl-tel-input';
 
 declare var $: any
-declare var google: any;
+
 
 @Component({
 	selector: 'app-new-booking',
@@ -22,6 +23,8 @@ declare var google: any;
 })
 export class NewBookingComponent implements OnInit {
 	@ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
+	@ViewChild('phoneInput') phoneInput!: ElementRef;
+	iti: any;
 
 
 	todays_date: string = moment().format('YYYY-MM-DD');
@@ -220,6 +223,7 @@ export class NewBookingComponent implements OnInit {
 		});
 	}
 
+
 	buildBookingData() {
 		console.log('rebuild booking data')
 		this.booking_data = {
@@ -278,6 +282,22 @@ export class NewBookingComponent implements OnInit {
 			this.scroll('id="pickup_address"')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
+
+		this.iti = intlTelInput(this.phoneInput.nativeElement, {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			// autoPlaceholder: 'aggressive',
+			utilsScript:
+				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		});
+
+		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.iti.getSelectedCountryData();
+			this.onLCTeleCountryChange(countryData)
+		});
+
 	}
 
 	dateFormat(value: any) {

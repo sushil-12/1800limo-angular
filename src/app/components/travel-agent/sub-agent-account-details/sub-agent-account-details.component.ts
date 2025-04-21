@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -10,7 +10,8 @@ import { AuthService } from '../../../services/auth.service';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
-declare var $ :any;
+import * as intlTelInput from 'intl-tel-input';
+declare var $: any;
 
 
 @Component({
@@ -18,30 +19,32 @@ declare var $ :any;
   templateUrl: './sub-agent-account-details.component.html',
   styleUrls: ['./sub-agent-account-details.component.scss']
 })
-export class SubAgentAccountDetailsComponent implements OnInit {
+export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
+  geoCoder!: google.maps.Geocoder;
+  @ViewChild('mobileInput') mobileInput!: ElementRef;
+  @ViewChild('workInput') workInput!: ElementRef;
 
   public profileForm: FormGroup;
   public submittedForm: boolean;
   public OfficeObject: any;
   public MobileObject: any;
-  currentUser:any;
-  agency_name:any;
-  invite_code:any;
-  userId:any;
-  getProfileResponseData:any;
+  currentUser: any;
+  agency_name: any;
+  invite_code: any;
+  userId: any;
+  getProfileResponseData: any;
   timezoneForm: FormGroup;
 
-   	//google map autocomplete
-     title: string = 'AGM project';
-     latitude: number;
-     longitude: number;
-     zoom: number;
-     address: string;
-     response: any;
-     defaultCountryCode: string;
-     lastSegment: string;
+  //google map autocomplete
+  title: string = 'AGM project';
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
+  response: any;
+  defaultCountryCode: string;
+  lastSegment: string;
 
   constructor(
     private stateManagementService: StateManagementService,
@@ -51,7 +54,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private route: ActivatedRoute,
-    private authService:AuthService,
+    private authService: AuthService,
     private travelAgentService: TravelAgentService,
     private adminService: AdminService,
   ) { }
@@ -59,9 +62,9 @@ export class SubAgentAccountDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     localStorage.removeItem('review_referral_url')
-    this.route.queryParams.subscribe((params:any)=>{
-			this.userId = params?.id
-		})
+    this.route.queryParams.subscribe((params: any) => {
+      this.userId = params?.id
+    })
 
     this.buildProfileForm()
     this.timezoneForm = this.formBuilder.group({
@@ -70,58 +73,85 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     this.getProfile()
 
 
-   //google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
+  }
 
-		const autocomplete = new google.maps.places.Autocomplete(
-			this.search1.nativeElement,
-			{
-				types: ['address'] // You can tweak this to 'address', etc.
-			}
-		);
+  ngAfterViewInit() {
 
-		autocomplete.addListener("place_changed", () => {
-			this.ngZone.run(() => {
-				//get the place result
-				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-				if (!place.geometry || !place.geometry.location) return;
+    const telOptions = {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    };
 
-				this.profileForm.patchValue({
-					address: place.formatted_address,
-					latitude: place.geometry.location.lat(),
-					longitude: place.geometry.location.lng()
-				});
+    // Cell Number
+    this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+    this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'mobile');
+    });
+
+    // Background Company Tel
+    this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
+    this.workInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      this.onCountryChange(countryData, 'work_contact_number');
+    });
 
 
-				// Extract address components
-				place.address_components?.forEach(component => {
-					const types = component.types;
-					if (types.includes('country')) {
-						this.profileForm.patchValue({
-							country: component.short_name
-						});
-					} else if (types.includes('administrative_area_level_1')) {
-						this.profileForm.patchValue({
-							state: component.long_name
-						});
-					} else if (types.includes('administrative_area_level_3')) {
-						this.profileForm.patchValue({
-							city: component.long_name
-						});
-					} else if (types.includes('postal_code')) {
-						this.profileForm.patchValue({
-							zipCode: component.long_name
-						});
-					}
-				});
-			});
-		});
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.profileForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.profileForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.profileForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.profileForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.profileForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+        });
+      });
+    });
 
   }
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
-      acc_id:[''],
+      acc_id: [''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
@@ -136,7 +166,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
       city: [''],
       state: [''],
       country: ['', Validators.required],
-      zip: ['',[Validators.required,Validators.pattern("^[0-9]*$")]],
+      zip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
       agency_name: ['', Validators.required],
@@ -149,18 +179,18 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     return this.profileForm.controls;
   }
 
-  getProfile(){
+  getProfile() {
     this.spinner.show();
     this.travelAgentService.getSubAgentAccountDetails(this.userId)
-     .then(({ data }: any) => {
-      this.spinner.hide();//hide spinner
-      this.getProfileResponseData = data
-      this.timezoneForm.patchValue({
-        timezone : data?.timezone
-      })
+      .then(({ data }: any) => {
+        this.spinner.hide();//hide spinner
+        this.getProfileResponseData = data
+        this.timezoneForm.patchValue({
+          timezone: data?.timezone
+        })
         this.profileForm.patchValue({
           acc_id: data?.acc_id,
-          tp_id : data?.tp_id,
+          tp_id: data?.tp_id,
           firstName: data?.first_name,
           middleName: data?.middle_name,
           lastName: data?.last_name,
@@ -191,7 +221,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
         console.log('profile data-->>>>', data)
         this.MobileObject.setCountry(data?.mobileCountry)
         this.OfficeObject.setCountry(data?.workCountry);
-      }).catch((err)=>{
+      }).catch((err) => {
         this.spinner.hide();//hide spinner
         console.log(err)
       })
@@ -237,11 +267,10 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     this.MobileObject = obj;
   }
 
- 
 
 
-  submitForm()
-	{
+
+  submitForm() {
     console.log(this.profileForm);
     this.submittedForm = true;
     // stop here if form is invalid
@@ -253,78 +282,76 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     this.spinner.show();
 
     this.travelAgentService.updateSubAgentAccount(this.profileForm.value)
-    .pipe(
-      catchError(err => {
+      .pipe(
+        catchError(err => {
+          this.spinner.hide();//hide spinner
+          return throwError(err);
+        })
+      )
+      .subscribe(result => {
+        this.response = result;
+        console.log("profile updated", this.response)
         this.spinner.hide();//hide spinner
-        return throwError(err);
+        this.router.navigate(['/travel_agent/sub-agent-accounts']);
       })
-    )
-    .subscribe(result => {
-      this.response = result;
-      console.log("profile updated",this.response)
-      this.spinner.hide();//hide spinner
-      this.router.navigate(['/travel_agent/sub-agent-accounts']);
-    })
 
 
-	}
+  }
 
-  
+
   acceptRejectAffiliate(status) {
-		this.spinner.show();
-		// this.disableSubmitButton=true; //disable submit button
-		console.log('acc_id', this.getProfileResponseData?.acc_id,status,'status')
+    this.spinner.show();
+    // this.disableSubmitButton=true; //disable submit button
+    console.log('acc_id', this.getProfileResponseData?.acc_id, status, 'status')
 
-		this.travelAgentService.acceptRejectAffiliate(this.getProfileResponseData?.acc_id,status)
-			.pipe(
-				catchError(err => {
-					this.spinner.hide();//hide spinner
-					return throwError(err);
-				})
-			)
-			.subscribe(({ data, success, message }: any) => {
-				if (success == true) {
-					this.spinner.hide();//hide spinner
+    this.travelAgentService.acceptRejectAffiliate(this.getProfileResponseData?.acc_id, status)
+      .pipe(
+        catchError(err => {
+          this.spinner.hide();//hide spinner
+          return throwError(err);
+        })
+      )
+      .subscribe(({ data, success, message }: any) => {
+        if (success == true) {
+          this.spinner.hide();//hide spinner
           this.router.navigate(['/travel_agent/sub-agent-accounts'])
-					// this.loadClientAccounts()
-				}
-			});
-	}
+          // this.loadClientAccounts()
+        }
+      });
+  }
 
 
-	resetForm()
-	{
+  resetForm() {
     const keepValues = [
       this.profileForm.controls.mobile.value,
       this.profileForm.controls.id.value,
       this.profileForm.controls.mobileIsd.value,
       this.profileForm.controls.mobileCountry.value,
       this.profileForm.controls.agency_name.value
-      
-     ];
-  
-     this.buildProfileForm();
-     this.profileForm.controls.mobile.patchValue(keepValues[0]);
-     this.profileForm.controls.id.patchValue(keepValues[1]);
-     this.profileForm.controls.mobileIsd.patchValue(keepValues[2]);
-     this.profileForm.controls.mobileCountry.patchValue(keepValues[3]);
-     this.profileForm.controls.agency_name.patchValue(keepValues[4])
-  
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-	}
-	backButton()
-	{
-		this.router.navigate(['/travel_agent/sub-agent-accounts']);
-	}
+
+    ];
+
+    this.buildProfileForm();
+    this.profileForm.controls.mobile.patchValue(keepValues[0]);
+    this.profileForm.controls.id.patchValue(keepValues[1]);
+    this.profileForm.controls.mobileIsd.patchValue(keepValues[2]);
+    this.profileForm.controls.mobileCountry.patchValue(keepValues[3]);
+    this.profileForm.controls.agency_name.patchValue(keepValues[4])
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  backButton() {
+    this.router.navigate(['/travel_agent/sub-agent-accounts']);
+  }
   onTimezoneChange(event: any): void {
     const selectedValue = event.value;
     console.log('Selected Timezone:', selectedValue);
     this.adminService
-			.changeTimezone(selectedValue)
-			.pipe()
-			.subscribe((response: any) => {
-				console.log(response,'timezone changed success');
-			});
+      .changeTimezone(selectedValue)
+      .pipe()
+      .subscribe((response: any) => {
+        console.log(response, 'timezone changed success');
+      });
 
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { IndividualService } from '../../../services/individual.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -14,9 +15,11 @@ declare var $: any;
 	templateUrl: './profile.component.html',
 	styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewInit {
 	@ViewChild('search1') search1!: ElementRef;
 	geoCoder!: google.maps.Geocoder;
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('workInput') workInput!: ElementRef;
 
 	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -74,6 +77,53 @@ export class ProfileComponent implements OnInit {
 		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
 		console.log("is_family_member", this.is_family_member)
 
+
+
+		//add amenity form validation
+
+		/* Card Number Spacing */
+
+		$('#card-number').on('keypress change blur', function () {
+			$(this).val(function (index, value) {
+				return value.replace(/[^a-z0-9]+/gi, '')
+				// .replace(/(.{4})/g, '$1 ')
+			});
+		});
+
+		$('#card-number').on('copy cut paste', function () {
+			setTimeout(function () {
+				$('#card-number').trigger("change");
+			});
+		});
+	}
+
+
+	ngAfterViewInit() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'mobile');
+		});
+
+		// Background Company Tel
+		this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
+		this.workInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'work');
+		});
+
+
+
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
 
@@ -125,24 +175,7 @@ export class ProfileComponent implements OnInit {
 				});
 			});
 		});
-		
 
-		//add amenity form validation
-
-		/* Card Number Spacing */
-
-		$('#card-number').on('keypress change blur', function () {
-			$(this).val(function (index, value) {
-				return value.replace(/[^a-z0-9]+/gi, '')
-				// .replace(/(.{4})/g, '$1 ')
-			});
-		});
-
-		$('#card-number').on('copy cut paste', function () {
-			setTimeout(function () {
-				$('#card-number').trigger("change");
-			});
-		});
 	}
 
 	getProfile() {

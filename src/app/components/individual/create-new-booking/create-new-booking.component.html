@@ -155,11 +155,6 @@
 						<mat-label>
 							Phone
 						</mat-label>
-						<input matInput placeholder="Phone Number" type="text" readonly formControlName="driver_cell"
-							(focus)="$event.target.select()"
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-							(intlTelInputObject)="DrvTelInputObject($event)" readonly
-							(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 					</mat-form-field>
 				</div>
 				<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
@@ -398,11 +393,6 @@
                                     <label
                                         class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
                                     </label>
-                                    <input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-												preferredCountries: ['us', 'ca', 'mx', 'gb']
-											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
-                                        (countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
-                                        (focus)="$event.target.select()" />
                                 </mat-form-field>
                                 <div class="error-box">
                                     <div class="error-message"
@@ -641,11 +631,10 @@
                             <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
                                 Cell <span class="asterisk">*</span>
                             </label>
-                            <input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
-									preferredCountries: ['us', 'ca', 'mx', 'gb']
-								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
-                                (countryChange)="SetFormValue('passenger_cell_isd','+'+ $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
+                            <input matInput #cellInput type="number" placeholder="1234567890"
+                                formControlName="passenger_cell" class="phoneNumberClass" tabindex="1"
                                 (focus)="$event.target.select()" />
+
                         </mat-form-field>
                         <div class="error-box">
                             <div class="error-message"

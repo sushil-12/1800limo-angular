@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,7 +12,7 @@ import * as intlTelInput from 'intl-tel-input';
 	templateUrl: './add-sub-admin.component.html',
 	styleUrls: ['./add-sub-admin.component.scss']
 })
-export class AddSubAdminComponent implements OnInit {
+export class AddSubAdminComponent  implements OnInit, AfterViewInit {
 	@ViewChild('search1') search1!: ElementRef;
 	@ViewChild('phoneInput') phoneInput!: ElementRef;
 

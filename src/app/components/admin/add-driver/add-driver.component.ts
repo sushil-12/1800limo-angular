@@ -20,7 +20,7 @@ declare var $: any;
 	templateUrl: './add-driver.component.html',
 	styleUrls: ['./add-driver.component.scss']
 })
-export class AddDriverComponent implements OnInit {
+export class AddDriverComponent implements OnInit, AfterViewInit {
 	@ViewChild('cellInput') cellInput!: ElementRef;
 	@ViewChild('backgroundCompanyTelInput') backgroundCompanyTelInput!: ElementRef;
 	@ViewChild('policeTelInput') policeTelInput!: ElementRef;

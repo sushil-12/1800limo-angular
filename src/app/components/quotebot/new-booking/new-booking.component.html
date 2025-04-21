@@ -214,12 +214,9 @@
 									<label
 										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
 									</label>
-									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-												preferredCountries: ['us', 'ca', 'mx', 'gb']
-											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
-										(keyup)="handleLooseCustomerPhone($event)"
-										(countryChange)="onLCTeleCountryChange($event)"
-										(focus)="$event.target.select()" />
+									<input #phoneInput placeholder="1234567890" type="tel" formControlName="phone"
+										class="phoneNumberClass" (keyup)="handleLooseCustomerPhone($event)" />
+
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -483,11 +480,6 @@
 								<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
 									Cell
 								</label>
-								<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
-										preferredCountries: ['us', 'ca', 'mx', 'gb']
-									}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
-									(countryChange)="SetFormValue('passenger_cell_isd','+'+ $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
-									(focus)="$event.target.select()" />
 							</mat-form-field>
 							<div class="error-box">
 								<div class="error-message"

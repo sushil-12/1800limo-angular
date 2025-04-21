@@ -16,9 +16,10 @@ import { CommonService } from '../../../services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { constant_data } from '../../../../assets/js/data';
 import { GoogleMap } from '@angular/google-maps';
+import * as intlTelInput from 'intl-tel-input';
 
 declare var $: any
-declare var google: any;
+
 @Component({
 	selector: 'app-new-booking',
 	templateUrl: './new-booking.component.html',
@@ -26,6 +27,12 @@ declare var google: any;
 })
 export class NewBookingComponent implements OnInit {
 	@ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('passenger_cellInput') passenger_cellInput!: ElementRef;
+	@ViewChild('lose_affiliate_phoneInput') lose_affiliate_phoneInput!: ElementRef;
+	@ViewChild('driver_cellInput') driver_cellInput!: ElementRef;
+	@ViewChild('return_lose_affiliate_phoneInput') return_lose_affiliate_phoneInput!: ElementRef;
+	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
 
 
 	todays_date: string = moment().format('YYYY-MM-DD');
@@ -287,11 +294,52 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	ngAfterViewInit(): void {
+
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
 			this.scroll('pickup_adress')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.LCTelObject.getSelectedCountryData();
+			this.onLCTeleCountryChange(countryData);
+		});
+
+		this.PaxTelObject = intlTelInput(this.passenger_cellInput.nativeElement, telOptions);
+		this.passenger_cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+		});
+
+		this.driverCellTelInput = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.driverCellTelInput.getSelectedCountryData();
+			this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+		});
+
+		this.loseAffiliateTelInput = intlTelInput(this.lose_affiliate_phoneInput.nativeElement, telOptions);
+		this.lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+			this.handleCountryChangeLA(countryData);
+		});
+
+		this.driverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
+		this.return_driver_cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.driverCellTelInput.getSelectedCountryData();
+			this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+		});
+
 	}
 
 	dateFormat(value: any) {

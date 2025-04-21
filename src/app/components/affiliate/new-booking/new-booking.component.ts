@@ -14,9 +14,10 @@ import { StateManagementService } from '../../../services/statemanagement.servic
 import { HttpClient } from '@angular/common/http';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GoogleMap } from '@angular/google-maps';
+import * as intlTelInput from 'intl-tel-input';
 
 declare var $: any
-declare var google: any;
+
 @Component({
 	selector: 'app-new-booking',
 	templateUrl: './new-booking.component.html',
@@ -25,6 +26,9 @@ declare var google: any;
 export class NewBookingComponent implements OnInit {
 
 	@ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('passengercellInput') passengercellInput!: ElementRef;
+	@ViewChild('drivercellInput') drivercellInput!: ElementRef;
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 
@@ -181,6 +185,37 @@ export class NewBookingComponent implements OnInit {
 		// fetch the big data
 		this.fetchAirportsAndBigData()
 
+	}
+
+
+	ngAfterViewInit() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.LCTelObject.getSelectedCountryData();
+			this.SetFormValue('loose_customer>phone_isd', countryData.dialCode); this.SetFormValue('loose_customer>phone_country', countryData.iso2)
+		});
+
+		this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
+		this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+		});
+
+		this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, telOptions);
+		this.drivercellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.DrvTelObject.getSelectedCountryData();
+			this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+		});
 	}
 
 

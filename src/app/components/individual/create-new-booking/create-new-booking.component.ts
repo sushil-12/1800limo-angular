@@ -11,8 +11,9 @@ import { pluck } from 'rxjs/operators';
 import { IndividualService } from '../../../services/individual.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { HttpClient } from '@angular/common/http';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any
-declare var google: any;
+
 
 @Component({
 	selector: 'app-create-new-booking',
@@ -28,6 +29,7 @@ export class CreateNewBookingComponent implements OnInit {
 	@ViewChild('returnDropoffInput') returnDropoffInput!: ElementRef<HTMLInputElement>
 	@ViewChildren('returnExtraStopInput') returnExtraStopInputs!: QueryList<ElementRef<HTMLInputElement>>
 	// @ViewChild('returnExtraStopInput') returnExtraStopInput!: ElementRef<HTMLInputElement>
+	@ViewChild('cellInput') cellInput!: ElementRef;
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 	months: any = [{ value: '01' }, { value: '02' }, { value: '03' }, { value: '04' }, { value: '05' }, { value: '06' }, { value: '07' }, { value: '08' }, { value: '09' }, { value: '10' }, { value: '11' }, { value: '12' }]
@@ -206,6 +208,22 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 
 	ngAfterViewInit(): void {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+		});
+
 		// Single inputs
 		this.initAutocomplete(this.pickupInput, 'pickup')
 		this.initAutocomplete(this.dropoffInput, 'dropoff')

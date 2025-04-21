@@ -1,20 +1,25 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
 	selector: 'app-edit-travel-planner-account',
 	templateUrl: './edit-travel-planner-account.component.html',
 	styleUrls: ['./edit-travel-planner-account.component.scss']
 })
-export class EditTravelPlannerAccountComponent implements OnInit {
+export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 
 	@ViewChild('search1') search1!: ElementRef;
 	geoCoder!: google.maps.Geocoder;
+	@ViewChild('officeInput') officeInput!: ElementRef;
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('faxInput') faxInput!: ElementRef;
+	@ViewChild('officeNumberInput') officeNumberInput!: ElementRef;
 
 	public editTravelPlannerAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -187,6 +192,43 @@ export class EditTravelPlannerAccountComponent implements OnInit {
 			office_country_code: ['us'],
 			latitude: [''],
 			longitude: [''],
+		});
+	}
+
+
+	ngAfterViewInit(): void {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.OfficeObject = intlTelInput(this.officeInput.nativeElement, telOptions);
+		this.officeInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.OfficeObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'office');
+		});
+
+		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'mobile');
+		});
+
+		this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
+		this.faxInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.FaxObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'fax');
+		});
+
+		this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
+		this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.OfficePhoneObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'officeNumber');
 		});
 	}
 
