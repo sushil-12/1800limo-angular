@@ -98,6 +98,20 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
         })
     }
 
+
+
+  }
+
+  ngAfterViewInit(): void {
+    // Focus on the input field when the component has fully initialized
+    if (this.nameInput) {
+      this.nameInput.nativeElement.focus();
+    }
+
+    this.selectedLanguages = [1]
+    this.profileForm.patchValue({ language: this.selectedLanguages });
+
+
     //google map autocomplete
     this.geoCoder = new google.maps.Geocoder();
 
@@ -144,18 +158,6 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
         });
       });
     });
-
-
-  }
-
-  ngAfterViewInit(): void {
-    // Focus on the input field when the component has fully initialized
-    if (this.nameInput) {
-      this.nameInput.nativeElement.focus();
-    }
-
-    this.selectedLanguages = [1]
-    this.profileForm.patchValue({ language: this.selectedLanguages });
 
 
     const telOptions = {
