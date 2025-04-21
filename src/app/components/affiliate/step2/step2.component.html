@@ -840,12 +840,6 @@
 					</mat-form-field>
 				</div> -->
 				<!-- <div class="col-md-6 d-md-block d-none"></div> -->
-				<div class="col-md-12 map-wrapper" *ngIf="latitude">
-					<agm-map [latitude]="latitude" [longitude]="longitude">
-						<agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true">
-						</agm-marker>
-					</agm-map>
-				</div>
 
 				<div class="col-md-6">
 					<label class="select-country-label">Country <span class="asterisk1">*</span></label>
@@ -1537,13 +1531,6 @@
 										This field is required
 									</div>
 								</div>
-							</div>
-							<div class="col-md-12 map-wrapper" *ngIf="requestLatitude">
-								<agm-map [latitude]="requestLatitude" [longitude]="requestLongitude">
-									<agm-marker [latitude]="requestLatitude" [longitude]="requestLongitude"
-										[markerDraggable]="true">
-									</agm-marker>
-								</agm-map>
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
