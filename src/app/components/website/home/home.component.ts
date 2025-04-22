@@ -22,10 +22,10 @@ declare var $: any;
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-	@ViewChild('addressinput', { static: true }) addressinput!: ElementRef;
-	@ViewChild('dropaddressinput', { static: true }) dropaddressinput!: ElementRef;
-	@ViewChild('retaddressinput', { static: true }) retaddressinput!: ElementRef;
-	@ViewChild('retdropaddressinput', { static: true }) retdropaddressinput!: ElementRef;
+	@ViewChild('addressinput') addressinput!: ElementRef;
+	@ViewChild('dropaddressinput') dropaddressinput!: ElementRef;
+	@ViewChild('retaddressinput') retaddressinput!: ElementRef;
+	@ViewChild('retdropaddressinput') retdropaddressinput!: ElementRef;
 
 	vehicles: any;
 	vehiclesRes: any;
@@ -233,6 +233,7 @@ export class HomeComponent implements OnInit {
 		});
 
 		this.fetchHomePageData();
+		this.Subscriptions();
 
 		// $('.scrollDownButton').css('left', '3px');
 		// $('.scrollDownButton').css('right', '');
@@ -303,15 +304,12 @@ export class HomeComponent implements OnInit {
 			var myVar = setInterval(function () { myTimer() }, 0);
 
 		}
-
-		this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
-		this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
-		this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
-		this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
+		this.initializeallloadGoogleAutocomplete()
 
 	}
 
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
+		console.log("in loadf auto complete", input, fieldName)
 		const autocomplete = new google.maps.places.Autocomplete(input, {
 			types: ['address']
 		});
@@ -346,6 +344,37 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
+	initializeallloadGoogleAutocomplete() {
+		if (this.addressinput) {
+			this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
+		}
+		if (this.dropaddressinput) {
+			this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
+		}
+		if (this.retaddressinput) {
+			this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'pickup_address');
+		}
+		if (this.retdropaddressinput) {
+			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'dropoff_address');
+		}
+	}
+
+	Subscriptions() {
+
+		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
+			console.log("in value chanes", value)
+			setTimeout(() => {
+				this.initializeallloadGoogleAutocomplete()
+			}, 200)
+		})
+
+		this.quoteBotForm.get('dropoff_type').valueChanges.subscribe((value: string) => {
+			console.log("in value chanes", value)
+			setTimeout(() => {
+				this.initializeallloadGoogleAutocomplete()
+			}, 200)
+		})
+	}
 
 
 	fetchPageData(section: string) {
