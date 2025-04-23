@@ -160,7 +160,7 @@ export class FarmOutBookingsComponent implements OnInit {
 			emailTarget: ["", Validators.required],
 		});
 
-		this.MapController()
+		// this.MapController()
 		if (this.currentUser?.created_by_role == 'subscriber') {
 			this.stripeDetailsCheck()
 			this.subs_end_date = localStorage.getItem('current_period_end_date')
@@ -230,13 +230,16 @@ export class FarmOutBookingsComponent implements OnInit {
 
 
 
-		this.drawMap({
-			origin,
-			destination,
-			waypoints,
-			optimizeWaypoints: true,
-			travelMode: google.maps.TravelMode.DRIVING
-		})
+		setTimeout(() => {
+			this.drawMap({
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		}, 100)
+
 
 	}
 

@@ -184,7 +184,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.sendEmailModalFocus.nativeElement
 			.querySelector("textarea")
 			.focus();
-		this.MapController();
+		// this.MapController();
 	}
 
 	stripeDetailsCheck() {
@@ -239,14 +239,16 @@ export class DailyBookingsComponent implements OnInit {
 		}
 
 
+		setTimeout(() => {
+			this.drawMap({
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		}, 100)
 
-		this.drawMap({
-			origin,
-			destination,
-			waypoints,
-			optimizeWaypoints: true,
-			travelMode: google.maps.TravelMode.DRIVING
-		})
 
 	}
 

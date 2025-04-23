@@ -131,7 +131,7 @@ export class MyBookingsComponent implements OnInit {
 
 		$("#search-field-my-booking").addClass("box-outline")
 
-		this.MapController()
+		// this.MapController()
 	}
 
 	ngAfterViewInit(): void {
@@ -158,15 +158,24 @@ export class MyBookingsComponent implements OnInit {
 			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
 		}
 
+		setTimeout(() => {
+			this.drawMap({
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		}, 100)
 
 
-		this.drawMap({
-			origin,
-			destination,
-			waypoints,
-			optimizeWaypoints: true,
-			travelMode: google.maps.TravelMode.DRIVING
-		})
+		// this.drawMap({
+		// 	origin,
+		// 	destination,
+		// 	waypoints,
+		// 	optimizeWaypoints: true,
+		// 	travelMode: google.maps.TravelMode.DRIVING
+		// })
 
 	}
 

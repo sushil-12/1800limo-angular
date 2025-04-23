@@ -149,7 +149,7 @@ export class BookingsComponent implements OnInit {
 
 		$("#search-field-my-booking").addClass("box-outline")
 
-		this.MapController()
+		// this.MapController()
 	}
 
 	ngAfterViewInit(): void {
@@ -178,14 +178,16 @@ export class BookingsComponent implements OnInit {
 		}
 
 
+		setTimeout(() => {
+			this.drawMap({
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		}, 100)
 
-		this.drawMap({
-			origin,
-			destination,
-			waypoints,
-			optimizeWaypoints: true,
-			travelMode: google.maps.TravelMode.DRIVING
-		})
 
 	}
 
