@@ -154,6 +154,7 @@ export class NewBookingComponent implements OnInit {
 	currentUser: any;
 	booking_created_from: string = 'admin';
 	veh_created_by: any;
+	minDate = new Date();
 
 	constructor(
 		private $form: FormBuilder,
@@ -175,6 +176,7 @@ export class NewBookingComponent implements OnInit {
 	}
 	ngOnInit(): void {
 
+		
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 		// build the form first 
 		this.buildBookingForm()
