@@ -1,7 +1,5 @@
-
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { GoogleMap } from '@angular/google-maps';
-import { AdminService } from '../../../services/admin.service';
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-affiliate-map-pins',
@@ -9,12 +7,8 @@ import { AdminService } from '../../../services/admin.service';
   styleUrls: ['./affiliate-map-pins.component.scss']
 })
 export class AffiliateMapPinsComponent implements OnInit {
-  @ViewChild(GoogleMap) googleMap!: GoogleMap;
-
-  mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
-  zoom = 7;
-  markers: any[] = [];
-
+  map: google.maps.Map;
+  markers: google.maps.Marker[] = []; // Store the markers
   vehiclesRes: any;
   vehicles: any;
   selectedVehicleId: string = 'all';
@@ -24,7 +18,7 @@ export class AffiliateMapPinsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadMarkers('all');
+    this.MapController();
 
     // Load master vehicle
     this.adminService.getOurVehicles().then(result => {
@@ -36,37 +30,54 @@ export class AffiliateMapPinsComponent implements OnInit {
     });
   }
 
+  MapController() {
+    console.log('Map has been initialised.');
+
+      this.map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 7,
+        center: new google.maps.LatLng(41.850033, -87.6500523),
+        scaleControl: true
+      });
+
+      // Fetch coordinates and add markers
+      this.loadMarkers('all');
+
+  }
 
   onVehicleChange(event: any) {
     const selectedValue = event.value; // The selected value (id or "all")
     this.loadMarkers(selectedValue); // Call the loadMarkers method with the selected value
   }
 
-
   loadMarkers(selectedValue: string) {
-    this.markers = []; // Clear old markers
+    // Clear existing markers
+    this.clearMarkers();
 
     this.adminService.mapsPin(selectedValue).subscribe(
       (data: any) => {
         console.log("data", data);
 
-        this.markers = data
-          .filter(loc => loc.latitude && loc.longitude)
-          .map(loc => ({
-            position: {
-              lat: Number(loc.latitude),
-              lng: Number(loc.longitude)
-            },
-            title: loc.affiliate_name,
-            options: {
-              animation: google.maps.Animation.DROP
-            },
-            infoContent: `
-              <b>${loc.affiliate_name} (${loc.affiliate_type})</b><br>
-              ${loc.mobile}<br>
-              ${loc.vehicles}
-            `
-          }));
+        data.forEach((location) => {
+          if (location.latitude && location.longitude) {
+            const marker = new google.maps.Marker({
+              position: { lat: Number(location.latitude), lng: Number(location.longitude) },
+              map: this.map,
+              title: location.affiliate_name,
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+              content: `<b>${location.affiliate_name} (${location.affiliate_type})</b><br>${location.mobile}<br>${location.vehicles}`
+            });
+
+            marker.addListener('click', () => {
+              infoWindow.open(this.map, marker);
+            });
+
+            this.markers.push(marker); // Add marker to the array
+          } else {
+            console.warn('Invalid location data:', location);
+          }
+        });
       },
       (error) => {
         console.error('Error fetching marker data:', error);
@@ -74,8 +85,9 @@ export class AffiliateMapPinsComponent implements OnInit {
     );
   }
 
-  openInfoWindow(marker: any, infoWindow: any) {
-    infoWindow.open(marker);
+  clearMarkers() {
+    // Set each marker's map to null to remove it from the map
+    this.markers.forEach(marker => marker.setMap(null));
+    this.markers = []; // Reset the markers array
   }
-
 }
