@@ -86,7 +86,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       localStorage.setItem('looseAffiliateSearch', text)
-      this.loadSubLooseAffiliateAcc()
+      // this.loadSubLooseAffiliateAcc()
     }, 700)
   }
 
@@ -448,6 +448,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
   viewVehicles(id){
     this.router.navigate(['/admin/loose-affliate-vehicles'], { queryParams: { looseAffId: id } });
+  }
+
+  reset(){
+    this.searchText =""
+    localStorage.removeItem('looseAffiliateSearch')
   }
 
 

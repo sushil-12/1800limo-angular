@@ -83,8 +83,12 @@ export class TravelPlannerComponent implements OnInit {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       localStorage.setItem('TravelAgentSearch', text)
-      this.loadTravelPlanners()
+      // this.loadTravelPlanners()
     }, 700)
+  }
+  reset(){
+    this.searchText = ""
+    localStorage.removeItem('TravelAgentSearch')
   }
   handleKeypressEvents() {
     clearTimeout(this.timer)
