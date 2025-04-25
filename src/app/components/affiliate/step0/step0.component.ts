@@ -20,6 +20,28 @@ export class Step0Component implements OnInit {
 	public Step0Information: boolean = true;
 	public selectedStep: string;
 	public modalImage: string;
+	public features: Array<String> = [
+		'Free Advertising',
+		'All-inclusive rates',
+		'10% Commission on Bookings',
+		'Reservation Management Tools',
+		'Enhanced Communication Channels',
+		'Integrated Bankinh & Payments'
+	]
+
+	public advantages: Array<String> = [
+		'Cost Savings',
+		'Increased Visibilty',
+		'Additional Revenue System',
+		'Centralized Management'
+	]
+
+	public benefits: Array<String> = [
+		'Business Growth Opportunities',
+		'Higher Customer Satisfaction',
+		'Operatonal Flexibiltiy',
+		'Free Tools & Resources'
+	]
 
 	public vehicleList: Array<String> = [
 		"Acura TLX",
