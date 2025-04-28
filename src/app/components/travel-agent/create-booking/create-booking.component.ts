@@ -1779,6 +1779,7 @@ export class CreateBookingComponent implements OnInit {
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
+				this.initAllAutocompletes()
 				this.init_return_rates = true;
 				setTimeout(() => {
 					this.MapController(true)
@@ -1948,6 +1949,10 @@ export class CreateBookingComponent implements OnInit {
 					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
 			}
+		})
+
+		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {
+			this.initAllAutocompletes()
 		})
 
 		// Account Type Subscription

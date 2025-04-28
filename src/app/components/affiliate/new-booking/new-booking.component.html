@@ -278,8 +278,7 @@
 									<mat-label>
 										Address
 									</mat-label>
-									<input #autoInput type="text" matInput placeholder="Type your address"
-										(focus)="initAutocomplete(autoInput, 'loose_customer')"
+									<input #loosecustomerInput type="text" matInput placeholder="Type your address"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 							</div>
@@ -972,9 +971,8 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
-							<input #autoInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'pickup', null)"
-								(focus)="initAutocomplete(autoInput, 'pickup')" (focus)="$event.target.select()" />
+							<input #pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 				</div>
@@ -1163,9 +1161,8 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
-							<input #autoInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'dropoff', null)"
-								(focus)="initAutocomplete(autoInput, 'dropoff')" (focus)="$event.target.select()" />
+							<input #dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 				</div>
@@ -1365,10 +1362,8 @@
 				<div class="extra-stop-field col-11">
 					<mat-form-field appearance="outline">
 						<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
-						<input #autoInput type="text" matInput placeholder="Type your address"
-							[value]="fetchStopValue('extra_stops', stop_index)"
-							(focus)="initAutocomplete(autoInput, 'extra_stops', stop_index)"
-							(focus)="$event.target.select()" />
+						<input #extraStopInput type="text" matInput placeholder="Type your address"
+							[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
 					</mat-form-field>
 				</div>
 				<div class="col-1 p-0 p-md-3">
@@ -1714,10 +1709,8 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
-							<input #autoInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_pickup', null)"
-								(focus)="initAutocomplete(autoInput, 'return_pickup')"
-								(focus)="$event.target.select()" />
+							<input #return_pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 				</div>
@@ -1930,10 +1923,8 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
-							<input #autoInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_dropoff', null)"
-								(focus)="initAutocomplete(autoInput, 'return_dropoff')"
-								(focus)="$event.target.select()" />
+							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 				</div>
@@ -2119,9 +2110,8 @@
 				<div class="extra-stop-field col-md-11">
 					<mat-form-field appearance="outline">
 						<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
-						<input #autoInput type="text" matInput placeholder="Type your address"
+						<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
 							[value]="fetchStopValue('return_extra_stops', stop_index)"
-							(focus)="initAutocomplete(autoInput, 'return_extra_stops', stop_index, true)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
 				</div>
