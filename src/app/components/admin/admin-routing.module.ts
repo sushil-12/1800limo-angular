@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MasterVehicleTypesComponent } from './master-vehicle-types/master-vehicle-types.component';
 import { DailyBookingsComponent } from './daily-bookings/daily-bookings.component';
-// import { CreateNewBookingComponent } from './create-new-booking-old/create-new-booking.component';
-import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
 import { QuoteComponent } from './quote/quote.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { IndividualComponent } from './individual/individual.component';
@@ -32,8 +30,6 @@ import { EditIndividualAccountComponent } from './edit-individual-account/edit-i
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { EditCardComponent } from './edit-card/edit-card.component';
-import { AddCorporateAccountComponent } from './add-corporate-account/add-corporate-account.component';
-import { EditCorporateAccountComponent } from './edit-corporate-account/edit-corporate-account.component';
 import { StaffComponent } from './staff/staff.component';
 import { AddStaffComponent } from './add-staff/add-staff.component';
 import { EditStaffComponent } from './edit-staff/edit-staff.component';
@@ -52,8 +48,8 @@ import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { SubAdminComponent } from './sub-admin/sub-admin.component';
 import { AddSubAdminComponent } from './add-sub-admin/add-sub-admin.component';
-import { AdminGuardGuard } from 'src/app/guards/admin-guard.guard';
-import { SubAdminGuard } from 'src/app/guards/sub-admin.guard';
+import { AdminGuardGuard } from '../../../app/guards/admin-guard.guard';
+import { SubAdminGuard } from '../../../app/guards/sub-admin.guard';
 import { CreateDebitCcCardComponent } from './create-debit-cc-card/create-debit-cc-card.component';
 import { HomePageComponent } from './cms/home-page/home-page.component';
 import { HomePageEditComponent } from './cms/home-page-edit/home-page-edit.component';
@@ -230,28 +226,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: AffiliateBookingComponent
 	},
-
-	{
-		path: 'create-new-booking',
-		canActivate: [SubAdminGuard],
-		pathMatch: 'full',
-		// component: CreateNewBookingComponent
-	},
 	{
 		path: 'new-booking',
 		canActivate: [SubAdminGuard],
 		component: NewBookingComponent
 	},
-	{
-		path: 'booking-details',
-		canActivate: [SubAdminGuard],
-		component: CreateNewBooking2Component
-	},
-	// {
-	// 	path: 'booking-logs',
-	// 	canActivate: [SubAdminGuard],
-	// 	component: BookingLogsComponent
-	// },
 	{
 		path: 'finalize-booking',
 		canActivate: [SubAdminGuard],

@@ -50,11 +50,9 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Dept Tel # /
 								Ex <span class="asterisk">
 									*</span></label>
-							<input matInput placeholder="Dept Tel # / Ex" formControlName="deptTel" ng2TelInput
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								placeholder="1234567890" class="phoneNumberClass"
-								(countryChange)="onCountryChange($event,'deptTel')"
-								(intlTelInputObject)="telInputObjectDeptTel($event)" tabIndex="1" />
+							<input matInput #mobileInput type="number" placeholder="Dept Tel # / Ex"
+								formControlName="deptTel" class="phoneNumberClass" tabindex="1"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.deptTel.errors || f.deptTel.touched && f.deptTel.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -83,11 +81,8 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span
 									class="asterisk">
 									*</span></label>
-							<input matInput placeholder="Cell" formControlName="cellNumber" ng2TelInput
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								placeholder="1234567890" class="phoneNumberClass"
-								(countryChange)="onCountryChange($event,'cellNumber')"
-								(intlTelInputObject)="telInputObjectCell($event)" tabIndex="1" />
+							<input matInput #cellInput type="number" placeholder="Cell" formControlName="cellNumber"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cellNumber.errors || f.cellNumber.touched && f.cellNumber.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">

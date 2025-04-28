@@ -77,8 +77,14 @@ export class RecoverAccountsComponent implements OnInit {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       localStorage.setItem('allAccountsSearch', text)
-      this.loadAccounts()
+      // this.loadAccounts()
     }, 700)
+  }
+
+  reset() {
+    this.searchText = ""
+    localStorage.removeItem('allAccountsSearch')
+
   }
   handleKeypressEvents() {
     clearTimeout(this.timer)
@@ -230,19 +236,19 @@ export class RecoverAccountsComponent implements OnInit {
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
       this.spinner.show()
-      let fileData =[]
+      let fileData = []
       if (this.uploadedFile) {
         for (let file of this.uploadedFile) {
-        let dataS = await this.uploadService.uploadFile(file);
-        fileData.push({
-          fileUrl: dataS.Location,
-          fileType: file.type
-        });
+          let dataS = await this.uploadService.uploadFile(file);
+          fileData.push({
+            fileUrl: dataS.Location,
+            fileType: file.type
+          });
         }
       }
       let body = {
         text_message: message,
-        fileData : fileData
+        fileData: fileData
       }
       if (type == 'email') {
         body['email_address'] = travelPlanner?.email

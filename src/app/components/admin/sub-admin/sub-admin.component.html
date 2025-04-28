@@ -22,13 +22,30 @@
               </div>
                -->
 
-				<div class="col-md-12 mb-3">
+				<div class="col-md-8 mb-3">
 					<mat-form-field appearance="outline">
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput placeholder="Search Filter by Key word"
 							(keyup)="handleSearchKeyword($event.target.value)" id="keyword" [value]="searchText"
 							autofocus>
 					</mat-form-field>
+				</div>
+				<div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">
+                    <div>
+						<button class="custom-filled-button orange-button"
+							style="color:#fff;padding: 5px 12px !important;"
+							(click)="loadSubAdmin()" tabindex="-1">
+							Search
+						</button>
+					</div>
+					<div>
+						<button class="custom-filled-back-button"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+							(click)="reset(); loadSubAdmin()" tabindex="-1">
+							Reset
+						</button>
+					</div>
+					
 				</div>
 				<!-- <div class="col-md-2 mb-3">
 					<button class="custom-btn button2 btnclass btn-shadow" (click)="loadSubAdmin()">SEARCH</button>

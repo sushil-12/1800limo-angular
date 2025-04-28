@@ -5,6 +5,8 @@ import {
 	EventEmitter,
 	Input,
 	OnInit,
+	ViewChild,
+	ElementRef,
 } from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
 import {
@@ -26,6 +28,7 @@ import { CustomvalidationService } from "../../../services/customvalidation.serv
 import { SharedModule } from "../../shared/shared.module";
 import { AdminService } from "src/app/services/admin.service";
 import { CommonService } from "src/app/services/common.service";
+import * as intlTelInput from "intl-tel-input";
 declare var $: any;
 
 @Component({
@@ -35,6 +38,12 @@ declare var $: any;
 })
 export class AddDriverFromAffiliateComponent
 	implements OnInit, AfterViewInit, AfterViewChecked {
+
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('backgroundCompanyTelInput') backgroundCompanyTelInput!: ElementRef;
+	@ViewChild('policeTelInput') policeTelInput!: ElementRef;
+
+
 	globalFunctions = this.globals;
 
 	color: ThemePalette = "primary";
@@ -107,6 +116,37 @@ export class AddDriverFromAffiliateComponent
 	) { }
 
 	ngAfterViewInit() {
+
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'CellNumber');
+		});
+
+		// Background Company Tel
+		this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, telOptions);
+		this.backgroundCompanyTelInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'BackgroundCompanyTelNumber');
+		});
+
+		// Police Force Tel
+		this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, telOptions);
+		this.policeTelInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'PoliceForceTelephone');
+		});
+
 		//set current user country as default in phone number
 		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
 		this.BackgroundCompanyTelNumberObject.setCountry(

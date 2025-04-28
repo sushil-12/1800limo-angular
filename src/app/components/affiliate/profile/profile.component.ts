@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
   selector: 'app-profile',
@@ -14,6 +15,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('cellInput') cellInput!: ElementRef;
 
   public profile_pic: any;
   public imageSrc: string;
@@ -26,12 +28,12 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private affiliateService: AffiliateService,
-    private stateManagementService:StateManagementService,
+    private stateManagementService: StateManagementService,
     private router: Router,
     private fb: FormBuilder,
     private commonServices: CommonService,
-		private $api: AdminService,
-  ) {  }
+    private $api: AdminService,
+  ) { }
 
   ngOnInit(): void {
 
@@ -48,15 +50,15 @@ export class ProfileComponent implements OnInit {
       ).subscribe(({ data }: any) => {
         this.stateManagementService.setprogressBar(false);//hide progressbar
         this.timezoneForm.patchValue({
-          timezone : data?.timezone
+          timezone: data?.timezone
         })
         this.profile_pic = data?.profile_pic;
         let userInfo = JSON.parse(localStorage.getItem('userData'))
-        if(userInfo){
+        if (userInfo) {
           userInfo['profile_picture'] = data?.profile_pic
-          localStorage.setItem('userData' , JSON.stringify(userInfo))
+          localStorage.setItem('userData', JSON.stringify(userInfo))
         }
-        console.log('--->> profile pic--->>>' , this.profile_pic)
+        console.log('--->> profile pic--->>>', this.profile_pic)
         let first_name: any = document.getElementById('first_name');
         first_name.value = data?.first_name;
         let middle_name: any = document.getElementById('middle_name');
@@ -67,19 +69,34 @@ export class ProfileComponent implements OnInit {
         email.value = data?.email;
         let phone: any = document.getElementById('phone');
         phone.value = data?.phone;
-         //set country flag in phone number fields
-         this.AffiliatePhoneObject.setCountry(data?.phone_country);
+        //set country flag in phone number fields
+        this.AffiliatePhoneObject.setCountry(data?.phone_country);
       });
-		$('.HeadingH1').css({display: "none"})
+    $('.HeadingH1').css({ display: "none" })
 
   }
+
+  ngAfterViewInit() {
+
+    const telOptions = {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    };
+
+    // Cell Number
+    this.AffiliatePhoneObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+  }
+
   telInputObjectCell(obj) {
     this.AffiliatePhoneObject = obj;
   }
   async profile_pic_change(event) {
-    if(!await this.commonServices.handleFile(event)) {
-			return;
-		}
+    if (!await this.commonServices.handleFile(event)) {
+      return;
+    }
     this.stateManagementService.setprogressBar(true);//show progressbar
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {
@@ -97,9 +114,9 @@ export class ProfileComponent implements OnInit {
           .subscribe(({ data, message }: any) => {
             this.profile_pic = data.image;
             let userInfo = JSON.parse(localStorage.getItem('userData'))
-            if(userInfo){
+            if (userInfo) {
               userInfo['profile_picture'] = data?.image
-              localStorage.setItem('userData' , JSON.stringify(userInfo))
+              localStorage.setItem('userData', JSON.stringify(userInfo))
             }
             this.stateManagementService.setprogressBar(false);//hide progressbar
             this.snackbarMsg = message;
@@ -130,11 +147,11 @@ export class ProfileComponent implements OnInit {
     const selectedValue = event.value;
     console.log('Selected Timezone:', selectedValue);
     this.$api
-			.changeTimezone(selectedValue)
-			.pipe()
-			.subscribe((response: any) => {
-				console.log(response,'timezone changed success');
-			});
+      .changeTimezone(selectedValue)
+      .pipe()
+      .subscribe((response: any) => {
+        console.log(response, 'timezone changed success');
+      });
 
   }
   closeButton() {

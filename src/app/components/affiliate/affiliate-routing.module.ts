@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AffiliateStepsGuard } from 'src/app/guards/affiliate-steps.guard';
-import { AffiliateOtherRouteGuard } from 'src/app/guards/affiliate-other-route.guard';
+import { AffiliateStepsGuard } from '../../guards/affiliate-steps.guard';
+import { AffiliateOtherRouteGuard } from '../../guards/affiliate-other-route.guard';
 import { AccountStatusComponent } from './account-status/account-status.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { AddDriverFromAffiliateComponent } from './add-driver-from-affiliate/add-driver-from-affiliate.component';
@@ -9,7 +9,6 @@ import { AddVehicleFromAffiliateComponent } from './add-vehicle-from-affiliate/a
 import { AddVehicleRatesFromAffiliateComponent } from './add-vehicle-rates-from-affiliate/add-vehicle-rates-from-affiliate.component';
 
 import { AffiliateComponent } from './affiliate.component';
-import { CreateNewBookingDetailComponent } from './create-new-booking-detail/create-new-booking-detail.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
 import { DuplicateVehicleRatesComponent } from './duplicate-vehicle-rates/duplicate-vehicle-rates.component';
 import { DuplicateVehicleComponent } from './duplicate-vehicle/duplicate-vehicle.component';
@@ -135,11 +134,6 @@ const routes: Routes = [
 		path: 'new-booking',
 		canActivate: [AffiliateOtherRouteGuard],
 		component: NewBookingComponent
-	},
-	{
-		path: 'create-new-booking-detail',
-		canActivate: [AffiliateOtherRouteGuard],
-		component: CreateNewBookingDetailComponent
 	},
 	{
 		path: 'invoice-summary',

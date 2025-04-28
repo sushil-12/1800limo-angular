@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { Ng2TelInputModule } from 'ng2-tel-input';//for country code list
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -19,7 +18,6 @@ import { AdminComponent } from './admin.component';
 import { MasterVehicleTypesComponent } from './master-vehicle-types/master-vehicle-types.component';
 import { DailyBookingsComponent } from './daily-bookings/daily-bookings.component';
 // import { CreateNewBookingComponent } from './create-new-booking-old/create-new-booking.component';
-import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
 import { QuoteComponent } from './quote/quote.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { CreateDebitCcCardComponent } from './create-debit-cc-card/create-debit-cc-card.component';
@@ -48,8 +46,6 @@ import { EditIndividualAccountComponent } from './edit-individual-account/edit-i
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { EditCardComponent } from './edit-card/edit-card.component';
-import { AddCorporateAccountComponent } from './add-corporate-account/add-corporate-account.component';
-import { EditCorporateAccountComponent } from './edit-corporate-account/edit-corporate-account.component';
 import { StaffComponent } from './staff/staff.component';
 import { AddStaffComponent } from './add-staff/add-staff.component';
 import { EditStaffComponent } from './edit-staff/edit-staff.component';
@@ -65,8 +61,7 @@ import { AffiliateStep5Component } from './affiliate-step5/affiliate-step5.compo
 import { AffiliateStep6Component } from './affiliate-step6/affiliate-step6.component';
 import { AddDriverComponent } from './add-driver/add-driver.component';
 
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
+
 import { BookingStatusTextReplacePipe } from 'src/app/pipes/booking-status-text-replace.pipe';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { SubAdminComponent } from './sub-admin/sub-admin.component';
@@ -130,7 +125,7 @@ import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-
 import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
-
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
 	declarations: [
@@ -138,7 +133,6 @@ import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loos
 		MasterVehicleTypesComponent,
 		DailyBookingsComponent,
 		// CreateNewBookingComponent,
-		CreateNewBooking2Component,
 		QuoteComponent,
 		InvoiceComponent,
 		CreateDebitCcCardComponent,
@@ -167,8 +161,6 @@ import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loos
 		CardsComponent,
 		AddCardComponent,
 		EditCardComponent,
-		AddCorporateAccountComponent,
-		EditCorporateAccountComponent,
 		StaffComponent,
 		AddStaffComponent,
 		EditStaffComponent,
@@ -242,9 +234,7 @@ import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loos
 		MatDialogModule,
 		MatProgressBarModule,
 		MatSlideToggleModule,
-		Ng2TelInputModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+	    GoogleMapsModule,
 		MatNativeDateModule,
 		MatFormFieldModule,
 		MatInputModule,

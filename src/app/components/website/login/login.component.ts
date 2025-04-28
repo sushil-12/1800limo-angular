@@ -9,6 +9,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 // import { ReCaptchaService } from '../../../services/re-captcha.service';
 
 import { environment } from 'src/environments/environment';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
 	selector: 'app-login',
@@ -16,6 +17,7 @@ import { environment } from 'src/environments/environment';
 	styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, AfterViewInit {
+	@ViewChild('phoneInput') phoneInput!: ElementRef;
 
 	public loginForm: FormGroup;
 	public submitted = false;
@@ -100,6 +102,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	}
 	ngAfterViewInit() {
 
+		this.countryChangeObject = intlTelInput(this.phoneInput.nativeElement, {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			// autoPlaceholder: 'aggressive',
+			utilsScript:
+				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		});
+
+		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.countryChangeObject.getSelectedCountryData();
+			this.onCountryChange(countryData)
+		});
+
 		// get login user details
 		let loginData = JSON.parse(localStorage.getItem('userData'))
 		if (loginData) {
@@ -146,7 +163,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			const role = params['role'];
 			console.log('Role:', role, params);
 
-			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual','sub_affiliate','subscriber']
+			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual', 'sub_affiliate', 'subscriber']
 
 			console.log('Role:', role);
 			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]
@@ -265,7 +282,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		// this.recaptchaService.execute('login', recaptchaToken => {
 		// console.log("recaptcha token--->",recaptchaToken)
 		// this.loginForm.value.recaptchaToken = recaptchaToken;
-		console.log("login form",this.loginForm.value)
+		console.log("login form", this.loginForm.value)
 		this.authService.login(this.loginForm.value)
 			.pipe(
 				catchError(err => {
@@ -278,15 +295,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
 				this.response = result;
 				var userId;
 				var email;
-				if(this.response?.data?.is_driver){
+				if (this.response?.data?.is_driver) {
 					userId = this.response?.data?.user?.id
 					email = this.response?.data?.user?.email
-					sessionStorage.setItem("isDriver",'Driver')
+					sessionStorage.setItem("isDriver", 'Driver')
 				}
-				else{
+				else {
 					userId = this.response?.data?.id;
 					email = this.response?.data?.email
-					sessionStorage.setItem("isDriver",'')
+					sessionStorage.setItem("isDriver", '')
 				}
 				sessionStorage.setItem('userId', '' + userId);
 				if (this.response.data.family_data?.id) {
@@ -301,5 +318,5 @@ export class LoginComponent implements OnInit, AfterViewInit {
 					this.router.navigateByUrl('/otp' + `?role=${this.Role}`);
 				}
 			});
-		}
+	}
 }

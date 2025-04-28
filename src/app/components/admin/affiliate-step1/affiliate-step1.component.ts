@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone} from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -7,12 +7,12 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError, map, startWith } from 'rxjs/operators';
 import { throwError, from, Observable } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
-import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
-import { AdminService } from 'src/app/services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 import { HttpClient } from '@angular/common/http';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import {CommonService} from 'src/app/services/common.service'
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
+import { CommonService } from '../../../services/common.service'
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -21,7 +21,12 @@ declare var $: any;
 	styleUrls: ['./affiliate-step1.component.scss']
 })
 
-export class AffiliateStep1Component implements OnInit {
+export class AffiliateStep1Component implements OnInit, AfterViewInit {
+	@ViewChild('search1') search1!: ElementRef;
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('dispatchInput') dispatchInput!: ElementRef;
+	@ViewChild('companyCellNumberInput') companyCellNumberInput!: ElementRef;
+	@ViewChild('FaxInput') FaxInput!: ElementRef;
 
 	public addAffiliateAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -72,7 +77,6 @@ export class AffiliateStep1Component implements OnInit {
 		private formBuilder: FormBuilder,
 		private authService: AuthService,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private stateManagementService: StateManagementService,
 		private ngZone: NgZone,
 		private httpClient: HttpClient,
@@ -88,11 +92,44 @@ export class AffiliateStep1Component implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
+	geoCoder!: google.maps.Geocoder;
+
 
 	ngAfterViewInit() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'CellNumber');
+		});
+
+		this.DispatchObject = intlTelInput(this.dispatchInput.nativeElement, telOptions);
+		this.dispatchInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.DispatchObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'Dispatch');
+		});
+
+		this.FaxObject = intlTelInput(this.FaxInput.nativeElement, telOptions);
+		this.FaxInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.FaxObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'Fax');
+		});
+
+		this.CompanyCellNumberObject = intlTelInput(this.companyCellNumberInput.nativeElement, telOptions);
+		this.companyCellNumberInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'CompanyCellNumber');
+		});
+
 		//set current user country as default in phone number
 		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
 		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
@@ -101,7 +138,7 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	ngOnInit(): void {
-		
+
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
 		this.buildAffiliateAccountForm();
@@ -536,7 +573,7 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	async businessCardImageChange1(imageUrl, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true); //show progressBar
@@ -591,51 +628,51 @@ export class AffiliateStep1Component implements OnInit {
 	// 		return true
 	// 	}
 	// }
-   async businessCardImageChange(event, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+	async businessCardImageChange(event, imageType, imageId = null) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
-			// this.stateManagementService.setprogressBar(true); //show progressBar
-			const reader = new FileReader();
-			if (event.target.files && event.target.files.length) {
-				const [file] = event.target.files;
-				reader.readAsDataURL(file);
-				reader.onload = () => {
-					this.imageSrc = reader.result as string;
-					this.adminService.uploadVehicleImage(this.imageSrc)
-						.pipe(
-							catchError(err => {
-								// this.stateManagementService.setprogressBar(false); // hide progressBar
-								return throwError(err);
-							})
-						)
-						.subscribe(({ data }: any) => {
-							switch (imageType) {
-								case 'BusinessFrontPhoto': {
-									this.addAffiliateAccountForm.patchValue({
-										BusinessFrontPhoto: data.id,
-									});
-									this.BusinessFrontPhoto = data.image;
-									this.BusinessFrontPhotoId = data.id;
-									break;
-								}
-								case 'BusinessBackPhoto': {
-									this.addAffiliateAccountForm.patchValue({
-										BusinessBackPhoto: data.id,
-									});
-									this.BusinessBackPhoto = data.image;
-									this.BusinessBackPhotoId = data.id;
-									break;
-								}
-								default: {
-									break;
-								}
-							}
+		// this.stateManagementService.setprogressBar(true); //show progressBar
+		const reader = new FileReader();
+		if (event.target.files && event.target.files.length) {
+			const [file] = event.target.files;
+			reader.readAsDataURL(file);
+			reader.onload = () => {
+				this.imageSrc = reader.result as string;
+				this.adminService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err => {
 							// this.stateManagementService.setprogressBar(false); // hide progressBar
-						});
-				};
-			}
-		
+							return throwError(err);
+						})
+					)
+					.subscribe(({ data }: any) => {
+						switch (imageType) {
+							case 'BusinessFrontPhoto': {
+								this.addAffiliateAccountForm.patchValue({
+									BusinessFrontPhoto: data.id,
+								});
+								this.BusinessFrontPhoto = data.image;
+								this.BusinessFrontPhotoId = data.id;
+								break;
+							}
+							case 'BusinessBackPhoto': {
+								this.addAffiliateAccountForm.patchValue({
+									BusinessBackPhoto: data.id,
+								});
+								this.BusinessBackPhoto = data.image;
+								this.BusinessBackPhotoId = data.id;
+								break;
+							}
+							default: {
+								break;
+							}
+						}
+						// this.stateManagementService.setprogressBar(false); // hide progressBar
+					});
+			};
+		}
+
 
 
 		// console.log(this.addInsuranceForm.value);

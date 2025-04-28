@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import * as intlTelInput from 'intl-tel-input';
 // import { MAT_DATE_FORMATS } from '@angular/material/core';
 
 // export const MY_DATE_FORMATS = {
@@ -28,8 +29,9 @@ import { throwError } from 'rxjs';
 	// 	{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
 	// ]
 })
-export class AddStaffComponent implements OnInit
-{
+export class AddStaffComponent implements OnInit, AfterViewInit {
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('cellInput') cellInput!: ElementRef;
 
 	public addStaffForm: FormGroup;
 	public submittedForm: boolean;
@@ -50,18 +52,15 @@ export class AddStaffComponent implements OnInit
 		private activatedroute: ActivatedRoute,
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		//pick vehicle id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				this.accountId = this.paramResponse.params.accountId;
 				this.accountType = this.paramResponse.params.accountType;
-				if (!this.accountId)
-				{
+				if (!this.accountId) {
 					this.router.navigate(['/admin/staff'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 				}
 			}
@@ -88,13 +87,11 @@ export class AddStaffComponent implements OnInit
 		// Load Our languages using API
 		this.adminService.staffLanguages()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 				this.response = result;
 				this.languages = this.response.data;
 
@@ -102,16 +99,39 @@ export class AddStaffComponent implements OnInit
 			});
 	}
 
-	onCountryChange(event, type)
-	{
-		if (type == 'deptTel')
-		{
+	ngAfterViewInit() {
+
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.DeptNumberObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.DeptNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'deptTel');
+		});
+
+		// Background Company Tel
+		this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.cellInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'cellNumber');
+		});
+	}
+
+	onCountryChange(event, type) {
+		if (type == 'deptTel') {
 			this.addStaffForm.patchValue({
 				deptTel: '+' + event.dialCode
 			});
 		}
-		else
-		{
+		else {
 			this.addStaffForm.patchValue({
 				cell: '+' + event.dialCode
 			});
@@ -119,48 +139,39 @@ export class AddStaffComponent implements OnInit
 		// console.log(this.countryCode);
 	}
 	changeDetection = {
-		staffStartDate: (event: any) =>
-		{
+		staffStartDate: (event: any) => {
 			this.addStaffForm.patchValue({
 				staffStartDate: event.target.value
 			})
 		}
 	}
-	telInputObjectCell(obj)
-	{
+	telInputObjectCell(obj) {
 		this.CellNumberObject = obj;
 	}
-	telInputObjectDeptTel(obj)
-	{
+	telInputObjectDeptTel(obj) {
 		this.DeptNumberObject = obj;
 	}
-	onCheckboxChange(e)
-	{
+	onCheckboxChange(e) {
 		const languageSpoken: FormArray = this.addStaffForm.get('languageSpoken') as FormArray;
 
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			languageSpoken.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = languageSpoken.controls.findIndex(x => x.value === e.target.value);
 			languageSpoken.removeAt(index);
 		}
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addStaffForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addStaffForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addStaffForm.invalid)
-		{
+		if (this.addStaffForm.invalid) {
 			return;
 		}
 
@@ -171,15 +182,13 @@ export class AddStaffComponent implements OnInit
 
 		this.adminService.addStaff(this.addStaffForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -188,12 +197,10 @@ export class AddStaffComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addStaffForm.reset();
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/staff'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 	}
 

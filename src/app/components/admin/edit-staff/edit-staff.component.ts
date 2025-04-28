@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import * as intlTelInput from 'intl-tel-input';
 // import { MAT_DATE_FORMATS } from '@angular/material/core';
 
 // export const MY_DATE_FORMATS = {
@@ -28,8 +29,9 @@ import { throwError } from 'rxjs';
 	// 	{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
 	// ]
 })
-export class EditStaffComponent implements OnInit
-{
+export class EditStaffComponent implements OnInit {
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('workInput') workInput!: ElementRef;
 
 	public editStaffForm: FormGroup;
 	public submittedForm: boolean;
@@ -42,6 +44,7 @@ export class EditStaffComponent implements OnInit
 	public staffId: string;
 	public languages: string;
 	public languagesFormControl: any;
+	public deptObject: any;
 	public CellNumberObject: any;
 
 
@@ -53,19 +56,16 @@ export class EditStaffComponent implements OnInit
 		private activatedroute: ActivatedRoute,
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		//pick vehicle id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				this.accountId = this.paramResponse.params.accountId;
 				this.accountType = this.paramResponse.params.accountType;
 				this.staffId = this.paramResponse.params.staffId;
-				if (!this.accountId)
-				{
+				if (!this.accountId) {
 					this.router.navigate(['/admin/staff'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 				}
 			}
@@ -94,25 +94,21 @@ export class EditStaffComponent implements OnInit
 		// Load Our languages using API
 		this.adminService.staffLanguages()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 				this.response = result;
 				this.languages = this.response.data;
 
 				this.adminService.getStaff(this.staffId)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.spinner.hide();//hide spinner
 							return throwError(err);
 						})
-					).subscribe(result2 =>
-					{
+					).subscribe(result2 => {
 
 						this.response2 = result2;
 
@@ -135,29 +131,24 @@ export class EditStaffComponent implements OnInit
 						var i;
 						const totalLanguages: any = this.languages;
 						const selectedLanguages = this.response2.data.languages;
-						for (i = 0; i < totalLanguages.length; i++)
-						{
+						for (i = 0; i < totalLanguages.length; i++) {
 							// console.log(totalLanguages[i]);
-							var checkedLanguage = selectedLanguages.findIndex(function (post)
-							{
+							var checkedLanguage = selectedLanguages.findIndex(function (post) {
 								if (post == totalLanguages[i].id)
 									return true;
 							});
 							// console.log(checkedLanguage);
-							if (checkedLanguage >= 0)
-							{
+							if (checkedLanguage >= 0) {
 								var checkBool = true;
 							}
-							else
-							{
+							else {
 								var checkBool = false;
 							}
 							languagesGet.push(new FormControl(checkBool));
 						}
 						this.languagesFormControl = languagesGet.controls;
 						var j;
-						for (j = 0; j < selectedLanguages.length; j++)
-						{
+						for (j = 0; j < selectedLanguages.length; j++) {
 							languageSpoken.push(new FormControl(selectedLanguages[j]));
 						}
 					});
@@ -165,28 +156,50 @@ export class EditStaffComponent implements OnInit
 				this.spinner.hide();//hide spinner
 			});
 	}
+
+
+	ngAfterViewInit() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.deptObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.deptObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'deptTel');
+		});
+
+		// Background Company Tel
+		this.CellNumberObject = intlTelInput(this.workInput.nativeElement, telOptions);
+		this.workInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'cellNumber');
+		});
+
+	}
 	changeDetection = {
-		staffStartDate: (event: any) =>
-		{
+		staffStartDate: (event: any) => {
 			this.editStaffForm.patchValue({
 				staffStartDate: event.target.value
 			})
 		}
 	}
-	telInputObjectCell(obj)
-	{
+	telInputObjectCell(obj) {
 		this.CellNumberObject = obj;
 	}
-	onCountryChange(event, type)
-	{
-		if (type == 'deptTel')
-		{
+	onCountryChange(event, type) {
+		if (type == 'deptTel') {
 			this.editStaffForm.patchValue({
 				deptTel: '+' + event.dialCode
 			});
 		}
-		else
-		{
+		else {
 			this.editStaffForm.patchValue({
 				cell: '+' + event.dialCode
 			});
@@ -194,33 +207,27 @@ export class EditStaffComponent implements OnInit
 		// console.log(this.countryCode);
 	}
 
-	onCheckboxChange(e)
-	{
+	onCheckboxChange(e) {
 		const languageSpoken: FormArray = this.editStaffForm.get('languageSpoken') as FormArray;
 
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			languageSpoken.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = languageSpoken.controls.findIndex(x => x.value === e.target.value);
 			languageSpoken.removeAt(index);
 		}
 	}
 
-	get f()
-	{
+	get f() {
 		return this.editStaffForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.editStaffForm);
 		// console.log(JSON.stringify(this.editVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.editStaffForm.invalid)
-		{
+		if (this.editStaffForm.invalid) {
 			return;
 		}
 
@@ -231,15 +238,13 @@ export class EditStaffComponent implements OnInit
 
 		this.adminService.editStaff(this.editStaffForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -248,12 +253,10 @@ export class EditStaffComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.editStaffForm.reset();
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/staff'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 	}
 

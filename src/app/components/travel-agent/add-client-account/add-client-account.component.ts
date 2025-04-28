@@ -1,7 +1,7 @@
-import { MapsAPILoader } from '@agm/core';
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as intlTelInput from 'intl-tel-input';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,20 +10,24 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 
 @Component({
-  selector: 'app-add-client-account',
-  templateUrl: './add-client-account.component.html',
-  styleUrls: ['./add-client-account.component.scss']
+	selector: 'app-add-client-account',
+	templateUrl: './add-client-account.component.html',
+	styleUrls: ['./add-client-account.component.scss']
 })
-export class AddClientAccountComponent implements OnInit {
+export class AddClientAccountComponent implements OnInit, AfterViewInit {
+	@ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('workInput') workInput!: ElementRef;
 
-  public addIndividualAccountForm: FormGroup;
+	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 	public response: any;
 	public yearOptions: any = [];
 	public MobileObject: any;
 	public WorkObject: any;
-  clientId: any = null;
+	clientId: any = null;
 	type: any = null;
 
 	constructor(
@@ -32,7 +36,6 @@ export class AddClientAccountComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private $routeurl: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService
 	) { }
@@ -44,160 +47,76 @@ export class AddClientAccountComponent implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
-	currentUser:any;
+	currentUser: any;
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		this.buildAddIndividualForm();
-    this.$routeurl.queryParams.subscribe((params: any) => {
-      console.log('params---->>>>>', params)
-      this.clientId = params?.clientId
-	  if(params && params.type){
-		this.type = params.type
-	  }
+		this.$routeurl.queryParams.subscribe((params: any) => {
+			console.log('params---->>>>>', params)
+			this.clientId = params?.clientId
+			if (params && params.type) {
+				this.type = params.type
+			}
 		})
 		const currentYear = (new Date()).getFullYear();
-		for (let i = 0; i < 40; i++)
-		{
+		for (let i = 0; i < 40; i++) {
 			this.yearOptions.push(currentYear + i);
 		}
 
-    if(this.clientId){
-      this.travelService.getClientAccount(this.clientId)
-        .pipe(
-          catchError(err =>
-          {
-            this.spinner.hide();//hide spinner
-            return throwError(err);
-          })
-        ).subscribe(result =>
-        {
-          this.response = result;
-  
-          this.addIndividualAccountForm.patchValue({
-            id: this.clientId,
-            firstName: this.response.data.first_name,
-            middleName: this.response.data.middle_name,
-            lastName: this.response.data.last_name,
-            mobile: this.response.data.mobile,
-            mobileIsd: this.response.data.mobileIsd,
-            work: this.response.data.work_contact_number,
-            workIsd: this.response.data.workIsd,
-            email: this.response.data.email,
-            address: this.response.data.address,
-            city: this.response.data.city,
-            state: this.response.data.state,
-            country: this.response.data.country,
-            zipCode: this.response.data.zip,
-            latitude: this.response.data.latitude,
-            longitude: this.response.data.longitude,
-          });
-          this.spinner.hide();//hide spinner
-          this.MobileObject.setCountry(this.response.data.mobileCountry);
-          this.WorkObject.setCountry(this.response.data.workCountry);
-        });
-    }
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				console.log('auto fill address-->>>')
-				this.ngZone.run(() =>
-				{
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					console.log(place);
-					this.addIndividualAccountForm.patchValue({
-						zipCode: '',
-						city:'',
-						state : '',
-						country:''
+		if (this.clientId) {
+			this.travelService.getClientAccount(this.clientId)
+				.pipe(
+					catchError(err => {
+						this.spinner.hide();//hide spinner
+						return throwError(err);
 					})
+				).subscribe(result => {
+					this.response = result;
+
 					this.addIndividualAccountForm.patchValue({
-						address: place.formatted_address
-					})
-					//Fill one way form pickup address fields
-					this.addIndividualAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
+						id: this.clientId,
+						firstName: this.response.data.first_name,
+						middleName: this.response.data.middle_name,
+						lastName: this.response.data.last_name,
+						mobile: this.response.data.mobile,
+						mobileIsd: this.response.data.mobileIsd,
+						work: this.response.data.work_contact_number,
+						workIsd: this.response.data.workIsd,
+						email: this.response.data.email,
+						address: this.response.data.address,
+						city: this.response.data.city,
+						state: this.response.data.state,
+						country: this.response.data.country,
+						zipCode: this.response.data.zip,
+						latitude: this.response.data.latitude,
+						longitude: this.response.data.longitude,
 					});
-					place.address_components.forEach(component => {
-						const types = component.types;
-				
-						if (types.includes('postal_code')) {
-							this.addIndividualAccountForm.patchValue({
-								zipCode: component.long_name
-							});
-						} else if (types.includes('locality')) {
-							this.addIndividualAccountForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addIndividualAccountForm.patchValue({
-								state: component.long_name
-							});
-						} else if (types.includes('country')) {
-							this.addIndividualAccountForm.patchValue({
-								country: component.long_name
-							});
-						}
-					  });
-					// if (place.address_components[1])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		city: place.address_components[1].long_name
-					// 	});
-					// if (place.address_components[2])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		state: place.address_components[2].long_name
-					// 	});
-					// if (place.address_components[3])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		country: place.address_components[3].long_name
-					// 	});
-					// if (place.address_components[4])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
-					// 	});
+					this.spinner.hide();//hide spinner
+					this.MobileObject.setCountry(this.response.data.mobileCountry);
+					this.WorkObject.setCountry(this.response.data.workCountry);
 				});
-			});
-		});
+		}
 
 		//add amenity form validation
-		
+
 		/* Card Number Spacing */
 
-		$('#card-number').on('keypress change blur', function ()
-		{
-			$(this).val(function (index, value)
-			{
+		$('#card-number').on('keypress change blur', function () {
+			$(this).val(function (index, value) {
 				return value.replace(/[^a-z0-9]+/gi, '')
 				// .replace(/(.{4})/g, '$1 ')
 			});
 		});
 
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
+		$('#card-number').on('copy cut paste', function () {
+			setTimeout(function () {
 				$('#card-number').trigger("change");
 			});
 		});
 
-		if(this.type=='edit'){
-			['name','number','cvc','exp_month','exp_year'].forEach(i=>{
+		if (this.type == 'edit') {
+			['name', 'number', 'cvc', 'exp_month', 'exp_year'].forEach(i => {
 				console.log('i--_>>>>>', i)
 				this.addIndividualAccountForm.get(i).clearValidators();
 				this.addIndividualAccountForm.get(i).updateValueAndValidity();
@@ -205,9 +124,90 @@ export class AddClientAccountComponent implements OnInit {
 		}
 	}
 
-	buildAddIndividualForm(){
+
+	ngAfterViewInit() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		// Cell Number
+		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'mobile');
+		});
+
+		// Background Company Tel
+		this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
+		this.workInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			this.onCountryChange(countryData, 'work');
+		});
+
+
+		//google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
+
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.addIndividualAccountForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.addIndividualAccountForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.addIndividualAccountForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.addIndividualAccountForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.addIndividualAccountForm.patchValue({
+							zipCode: component.long_name
+						});
+					}
+					// else if (types.includes('street_number')) {
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		address: component.long_name
+					// 	});
+					// }
+				});
+			});
+		});
+
+
+	}
+
+	buildAddIndividualForm() {
 		this.addIndividualAccountForm = this.formBuilder.group({
-      id: [''],
+			id: [''],
 			role: ['5', [Validators.required, Validators.pattern("^[0-9].*$")]],//individual
 			firstName: ['', Validators.required],
 			middleName: [''],
@@ -234,22 +234,19 @@ export class AddClientAccountComponent implements OnInit {
 			name: ['', Validators.required],
 		});
 	}
-	
 
 
-	onCountryChange(event, type)
-	{
+
+	onCountryChange(event, type) {
 		console.log(event)
-		if (type == 'mobile')
-		{
-			console.log("in mobile",event.dialCode,event.iso2)
+		if (type == 'mobile') {
+			console.log("in mobile", event.dialCode, event.iso2)
 			this.addIndividualAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
 		}
-		else
-		{
+		else {
 			this.addIndividualAccountForm.patchValue({
 				workIsd: '+' + event.dialCode,
 				workCountry: event.iso2
@@ -257,27 +254,22 @@ export class AddClientAccountComponent implements OnInit {
 		}
 		// console.log(this.countryCode);
 	}
-	telInputObjectMobile(obj)
-	{
+	telInputObjectMobile(obj) {
 		this.MobileObject = obj;
 	}
-	telInputObjectWork(obj)
-	{
+	telInputObjectWork(obj) {
 		this.WorkObject = obj;
 	}
-	get f()
-	{
+	get f() {
 		return this.addIndividualAccountForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addIndividualAccountForm.invalid)
-		{
+		if (this.addIndividualAccountForm.invalid) {
 			return;
 		}
 
@@ -286,17 +278,15 @@ export class AddClientAccountComponent implements OnInit {
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
 		console.log(this.addIndividualAccountForm.value)
-		this.travelService.addAccount(this.addIndividualAccountForm.value,this.clientId)
+		this.travelService.addAccount(this.addIndividualAccountForm.value, this.clientId)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -305,15 +295,14 @@ export class AddClientAccountComponent implements OnInit {
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		const keepValues = [
 			this.addIndividualAccountForm.controls.mobile.value,
 			this.addIndividualAccountForm.controls.id.value,
 			this.addIndividualAccountForm.controls.mobileIsd.value,
 			this.addIndividualAccountForm.controls.mobileCountry.value,
-			
-		 ];
+
+		];
 
 		this.buildAddIndividualForm()
 		this.addIndividualAccountForm.controls.mobile.patchValue(keepValues[0]);
@@ -323,8 +312,7 @@ export class AddClientAccountComponent implements OnInit {
 
 		console.log(this.addIndividualAccountForm.value)
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate([`${this.currentUser?.roleName}/individual-account-admin`]);
 	}
 
