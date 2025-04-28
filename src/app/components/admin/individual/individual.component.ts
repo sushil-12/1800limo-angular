@@ -78,9 +78,16 @@ export class IndividualComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem('individualSearch', text)
-			this.loadIndividuals()
+			// this.loadIndividuals()
 		}, 700)
 	}
+
+
+	reset(){
+		this.searchText =""
+		localStorage.removeItem('individualSearch')
+	  }
+
 	handleKeypressEvents() {
 		clearTimeout(this.timer)
 	}

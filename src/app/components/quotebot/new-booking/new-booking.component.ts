@@ -38,6 +38,7 @@ export class NewBookingComponent implements OnInit {
 	dynamicImageUrl: string = 'https://1800limoapi.infodevbox.com/storage/images/rEu5OQ7U4fsUhn0qikabAeLbQEonNxYHZiNfKo8S.png'; // Replace with your dynamic URL
 	driverImgUrl: string = "../../../../assets/images/driverImg.jpg"
 	vehicleImgUrl: string = ""
+	minDate = new Date();
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],

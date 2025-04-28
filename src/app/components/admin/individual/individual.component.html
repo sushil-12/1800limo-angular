@@ -32,13 +32,30 @@
 			</div>
 
 			<div class="row">
-				<div class="col-md-12 mt-3 mb-3">
+				<div class="col-md-8 mb-3">
 					<mat-form-field appearance="outline">
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput placeholder="Search by name, email, cell phone, address, country"
 							(focus)="$event.target.select()" (keyup)="handleSearchKeyword($event.target.value)"
 							[value]="searchText" id="keyword" autofocus>
 					</mat-form-field>
+				</div>
+				<div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">
+                    <div>
+						<button class="custom-filled-button orange-button"
+							style="color:#fff;padding: 5px 12px !important;"
+							(click)="loadIndividuals()" tabindex="-1">
+							Search
+						</button>
+					</div>
+					<div>
+						<button class="custom-filled-back-button"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+							(click)="reset(); loadIndividuals()" tabindex="-1">
+							Reset
+						</button>
+					</div>
+					
 				</div>
 				<!-- <div class="col-md-2  mt-3 mb-3">
 					<button class="custom-btn button2 btnclass" (click)="loadIndividuals()">SEARCH</button>

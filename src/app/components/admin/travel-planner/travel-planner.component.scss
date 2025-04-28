@@ -25,6 +25,17 @@
     top: 1.3675em !important;
 }
 
+.mb-search{
+  margin-bottom: -1rem;
+}
+
+@media only screen and (max-width: 767px) {
+  .mb-search{
+    margin-bottom: .5rem;
+  }
+}
+
+
 .x-cross-btn {
 	background: #fff !important;
 	color: #ff0000 !important;

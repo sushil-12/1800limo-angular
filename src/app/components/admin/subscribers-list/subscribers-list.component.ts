@@ -46,7 +46,7 @@ export class SubscribersListComponent implements OnInit {
 	show: boolean;
 	allSelected = false;
 	emails = new FormControl('');
-	phone_numbers= new FormControl('');
+	phone_numbers = new FormControl('');
 	audit_Trail: any = [];
 	fileUrl: String;
 	fileName: String;
@@ -81,8 +81,12 @@ export class SubscribersListComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem('subscriberSeacrh', text)
-			this.loadSubscribers()
+			// this.loadSubscribers()
 		}, 700)
+	}
+	reset() {
+		this.searchText = "";
+		localStorage.removeItem('subscriberSeacrh')
 	}
 	handleKeypressEvents() {
 		clearTimeout(this.timer)
@@ -106,8 +110,8 @@ export class SubscribersListComponent implements OnInit {
 	}
 
 	loadSubscribers(pageUrl = null) {
-		/** spinner starts on init */
-		// this.spinner.show();
+
+		this.spinner.show();
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('individual_table')
@@ -132,10 +136,10 @@ export class SubscribersListComponent implements OnInit {
 			this.prevPageUrl = this.individualsRes.data.prev_page_url;
 			this.nextPageUrl = this.individualsRes.data.next_page_url;
 			// sessionStorage.setItem('individuals',JSON.stringify(this.individuals));
-			// this.spinner.hide();//hide spinner
+			this.spinner.hide();
 		})
 			.catch(err => {
-				// this.spinner.hide();//hide spinner
+				this.spinner.hide();//hide spinner
 			});
 	}
 
@@ -194,13 +198,13 @@ export class SubscribersListComponent implements OnInit {
 	}
 
 
-	sendEmailSms(){
+	sendEmailSms() {
 		this.spinner.show()
 		let body = {
 			message: this.sendEmailForm.get('text_message')?.value,
 			recipents: this.phone_numbers.value,
 		}
-		console.log("in sms",body)
+		console.log("in sms", body)
 
 		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
 			this.errorDialog.openDialog({
@@ -238,15 +242,15 @@ export class SubscribersListComponent implements OnInit {
 	//submit email modal
 	async sendEmail() {
 		this.spinner.show()
-		let fileData =[]
+		let fileData = []
 		if (this.uploadedFile) {
 			for (let file of this.uploadedFile) {
-			let dataS = await this.uploadService.uploadFile(file);
-			fileData.push({
-			  fileUrl: dataS.Location,
-			  fileType: file.type
-			});
-		  }
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+					fileUrl: dataS.Location,
+					fileType: file.type
+				});
+			}
 		}
 		const textContent = this.sendEmailForm.get('text_message')?.value;
 		const htmlContent = this.convertTextToHtml(textContent);
@@ -254,7 +258,7 @@ export class SubscribersListComponent implements OnInit {
 			subject: this.sendEmailForm.get('subject').value,
 			message: htmlContent,
 			recipents: this.emails.value,
-			fileData:fileData
+			fileData: fileData
 		}
 		console.log("body-------->", body)
 
@@ -359,19 +363,19 @@ export class SubscribersListComponent implements OnInit {
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Subscriber Name: ${individual['FirstName']} ${individual['LastName']}<br/>Subscriber Email: ${individual['Email']}`)
 		if (message != null) {
 			this.spinner.show()
-			let fileData =[]
-		if (this.uploadedFile) {
-			for (let file of this.uploadedFile) {
-			let dataS = await this.uploadService.uploadFile(file);
-			fileData.push({
-			  fileUrl: dataS.Location,
-			  fileType: file.type
-			});
-		  }
-		}
+			let fileData = []
+			if (this.uploadedFile) {
+				for (let file of this.uploadedFile) {
+					let dataS = await this.uploadService.uploadFile(file);
+					fileData.push({
+						fileUrl: dataS.Location,
+						fileType: file.type
+					});
+				}
+			}
 			let body = {
 				sendContent: message,
-			fileData:fileData
+				fileData: fileData
 			}
 			this.adminService.sendAffiliateMessage(type, individual['id'], body).subscribe((response: any) => {
 				this.spinner.hide()
@@ -480,7 +484,7 @@ export class SubscribersListComponent implements OnInit {
 
 
 			this.router.navigateByUrl('/home')
-			
+
 
 		});
 

@@ -138,6 +138,7 @@ export class CreateNewBookingComponent implements OnInit {
 	currencySymbol: any;
 	currencyObj: any;
 	currentUser: any;
+	minDate = new Date();
 
 
 	constructor(

@@ -1015,7 +1015,7 @@ header {
 .ourmission_wrapper {
 	text-align: center !important;
 	padding: 30px 30px;
-	width: 44%;
+	width: 100%;
 	background-color: var(--orange-color);
 }
 

@@ -39,6 +39,7 @@ export class NewBookingComponent implements OnInit {
 	@ViewChild('drivercellInput') drivercellInput!: ElementRef;
 
 	todays_date: string = moment().format('YYYY-MM-DD');
+	minDate = new Date();
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport?", "cruise_to_city"],

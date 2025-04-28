@@ -85,13 +85,17 @@ export class SubAdminComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem('subAdminSearch' , text)
-      this.loadSubAdmin()
+      // this.loadSubAdmin()
 		}, 700)
 	}
 	handleKeypressEvents() {
 		clearTimeout(this.timer)
 	}
 
+  reset(){
+    this.searchText = "";
+    localStorage.removeItem('subAdminSearch')
+  }
   addSubAdminClick(subAdminId)
   {
     this.router.navigate(['/admin/add-sub-admin'],{queryParams:{subAdminId:subAdminId}});
