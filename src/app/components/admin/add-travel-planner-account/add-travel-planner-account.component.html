@@ -40,7 +40,7 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact<span
 									class="asterisk"></span></label>
 
-							<input matInput #officeInput type="number" placeholder="Contact" formControlName="office"
+							<input matInput #officeInput placeholder="Contact" formControlName="office"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 
 
@@ -73,7 +73,7 @@
 									class="asterisk">
 									*</span></label>
 
-							<input matInput #mobileInput type="number" placeholder="mobile" formControlName="mobile"
+							<input matInput #mobileInput placeholder="mobile" formControlName="mobile"
 								class="phoneNumberClass" tabindex="1" [readonly]="travelPlannerId"
 								(focus)="$event.target.select()" />
 
@@ -182,7 +182,7 @@
 								class="mat-form-field-label mat-empty mat-form-field-empty labelClass margin-left-minus">Fax<span
 									class="asterisk"></span></label>
 
-							<input matInput #faxInput type="number" placeholder="fax" formControlName="fax"
+							<input matInput #faxInput placeholder="fax" formControlName="fax"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 
 						</mat-form-field>
@@ -214,7 +214,7 @@
 								Help Desk <span class="asterisk">
 									*</span></label>
 
-							<input matInput #officeNumberInput type="number" placeholder="24hr Agent Help Desk"
+							<input matInput #officeNumberInput placeholder="24hr Agent Help Desk"
 								formControlName="officeNumber" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />
 

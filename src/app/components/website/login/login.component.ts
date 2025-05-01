@@ -114,6 +114,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.countryChangeObject.getSelectedCountryData();
+			console.log("in country change",countryData)
 			this.onCountryChange(countryData)
 		});
 

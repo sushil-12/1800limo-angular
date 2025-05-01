@@ -61,6 +61,8 @@ export class Step3Component implements OnInit, AfterViewInit {
 	) { }
 
 	ngAfterViewInit() {
+
+		// init flag
 		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -73,6 +75,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
+			console.log("in country change",countryData)
 			this.onCountryChange(countryData, 'AgentTelephone')
 		});
 

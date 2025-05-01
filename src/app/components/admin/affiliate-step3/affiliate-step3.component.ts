@@ -48,6 +48,8 @@ export class AffiliateStep3Component implements OnInit {
 		private customValidator: CustomvalidationService) { }
 
 	ngAfterViewInit() {
+
+		// init flag
 		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -60,6 +62,7 @@ export class AffiliateStep3Component implements OnInit {
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
+			console.log("in country change",countryData)
 			this.onCountryChange(countryData, 'AgentTelephone')
 		});
 

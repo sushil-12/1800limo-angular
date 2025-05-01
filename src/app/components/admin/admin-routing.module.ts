@@ -30,9 +30,6 @@ import { EditIndividualAccountComponent } from './edit-individual-account/edit-i
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { EditCardComponent } from './edit-card/edit-card.component';
-import { StaffComponent } from './staff/staff.component';
-import { AddStaffComponent } from './add-staff/add-staff.component';
-import { EditStaffComponent } from './edit-staff/edit-staff.component';
 import { AddTravelPlannerAccountComponent } from './add-travel-planner-account/add-travel-planner-account.component';
 import { EditTravelPlannerAccountComponent } from './edit-travel-planner-account/edit-travel-planner-account.component';
 import { AffiliateStepsTemplateComponent } from './affiliate-steps-template/affiliate-steps-template.component';
@@ -74,7 +71,6 @@ import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.componen
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
-import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
@@ -356,11 +352,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: AddIndividualAccountComponent
 	},
-	{
-		path: 'demo-add-individual-account',
-		canActivate: [SubAdminGuard],
-		component: DemoAddIndividualComponent
-	},
+	// {
+	// 	path: 'demo-add-individual-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: DemoAddIndividualComponent
+	// },
 	{
 		path: 'edit-individual-account',
 		canActivate: [SubAdminGuard],
@@ -425,21 +421,21 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: EditCardComponent
 	},
-	{
-		path: 'staff',
-		canActivate: [SubAdminGuard],
-		component: StaffComponent
-	},
-	{
-		path: 'add-staff',
-		canActivate: [SubAdminGuard],
-		component: AddStaffComponent
-	},
-	{
-		path: 'edit-staff',
-		canActivate: [SubAdminGuard],
-		component: EditStaffComponent
-	},
+	// {
+	// 	path: 'staff',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: StaffComponent
+	// },
+	// {
+	// 	path: 'add-staff',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: AddStaffComponent
+	// },
+	// {
+	// 	path: 'edit-staff',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: EditStaffComponent
+	// },
 	{
 		path: 'invoice-summary',
 		canActivate: [SubAdminGuard],

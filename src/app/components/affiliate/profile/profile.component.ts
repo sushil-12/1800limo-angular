@@ -78,6 +78,7 @@ export class ProfileComponent implements OnInit {
 
   ngAfterViewInit() {
 
+    // init flag
     const telOptions = {
       initialCountry: 'us',
       preferredCountries: ['us', 'ca', 'mx', 'gb'],

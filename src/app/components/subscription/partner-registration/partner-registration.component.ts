@@ -67,6 +67,8 @@ export class PartnerRegistrationComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+
+    //init flag
     this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
       initialCountry: 'us',
       preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -79,6 +81,7 @@ export class PartnerRegistrationComponent implements OnInit {
 
     this.phoneInput.nativeElement.addEventListener('countrychange', () => {
       const countryData = this.MobileObject.getSelectedCountryData();
+      console.log("in country chnage",countryData)
       this.onCountryChange(countryData, 'mobile')
     });
 
