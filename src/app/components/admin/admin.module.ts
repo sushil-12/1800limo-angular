@@ -46,9 +46,6 @@ import { EditIndividualAccountComponent } from './edit-individual-account/edit-i
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { EditCardComponent } from './edit-card/edit-card.component';
-import { StaffComponent } from './staff/staff.component';
-import { AddStaffComponent } from './add-staff/add-staff.component';
-import { EditStaffComponent } from './edit-staff/edit-staff.component';
 import { AddTravelPlannerAccountComponent } from './add-travel-planner-account/add-travel-planner-account.component';
 import { EditTravelPlannerAccountComponent } from './edit-travel-planner-account/edit-travel-planner-account.component';
 import { AffiliateStepsTemplateComponent } from './affiliate-steps-template/affiliate-steps-template.component';
@@ -106,7 +103,6 @@ import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.com
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
@@ -161,9 +157,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		CardsComponent,
 		AddCardComponent,
 		EditCardComponent,
-		StaffComponent,
-		AddStaffComponent,
-		EditStaffComponent,
 		AddTravelPlannerAccountComponent,
 		EditTravelPlannerAccountComponent,
 		AffiliateStepsTemplateComponent,
@@ -207,7 +200,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		StaffPermissionsComponent,
 		StaffRolesListComponent,
 		BookingLogsComponent,
-		DemoAddIndividualComponent,
 		AffiliateBookingComponent,
 		TravelAgentStepsComponent,
 		TravelAgentStripeFormComponent,

@@ -148,38 +148,8 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 
 	ngAfterViewInit(): void {
 
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: false,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-		};
+		this.initallphonefields()
 
-		// Cell Number
-		this.OfficeObject = intlTelInput(this.officeInput.nativeElement, telOptions);
-		this.officeInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.OfficeObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'office');
-		});
-
-		this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
-		this.mobileInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.MobileObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'mobile');
-		});
-
-		this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
-		this.faxInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.FaxObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'fax');
-		});
-
-		this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
-		this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.OfficePhoneObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'officeNumber');
-		});
 
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
@@ -233,6 +203,67 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 			});
 		});
 		
+	}
+
+
+	initallphonefields() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			// autoPlaceholder: 'aggressive',
+			utilsScript:
+				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		}
+
+
+
+		if (this.officeInput) {
+			console.log('onput', this.officeInput, this.officeInput.nativeElement)
+			this.OfficeObject = intlTelInput(this.officeInput.nativeElement, telOptions);
+			this.officeInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.OfficeObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'office')
+			});
+		}
+
+		if (this.mobileInput) {
+			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
+			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+
+			this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.MobileObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'mobile');
+			});
+		}
+
+		if (this.faxInput) {
+			console.log('onput', this.faxInput, this.faxInput.nativeElement)
+			this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
+
+			this.faxInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.FaxObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'fax')
+			});
+		}
+
+		if (this.officeNumberInput) {
+			console.log('onput', this.officeNumberInput, this.officeNumberInput.nativeElement)
+			this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
+
+			this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.OfficePhoneObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'officeNumber')
+			});
+		}
+
+
 	}
 
 	onCountryChange(event, type) {
