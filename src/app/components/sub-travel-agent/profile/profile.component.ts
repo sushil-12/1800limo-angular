@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       timezone: [''],
     });
 
-    
+
     if (this.currentUser?.is_profile_complete) {
       this.getProfile()
     }
@@ -84,28 +84,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-
-    const telOptions = {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: false,
-      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-    };
-
-    // Cell Number
-    this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
-    this.mobileInput.nativeElement.addEventListener('countrychange', () => {
-      const countryData = this.MobileObject.getSelectedCountryData();
-      this.onCountryChange(countryData, 'mobile');
-    });
-
-    // Background Company Tel
-    this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
-    this.workInput.nativeElement.addEventListener('countrychange', () => {
-      const countryData = this.OfficeObject.getSelectedCountryData();
-      this.onCountryChange(countryData, 'work_contact_number');
-    });
+    this.initallphonefields()
 
     //google map autocomplete
     this.geoCoder = new google.maps.Geocoder();
@@ -159,7 +138,51 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       });
     });
 
-    
+
+  }
+
+  initallphonefields() {
+
+    if (this.mobileInput) {
+      console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
+      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+
+      this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.MobileObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'mobile')
+      });
+    }
+
+    if (this.workInput) {
+      console.log('onput', this.workInput, this.workInput.nativeElement)
+      this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+
+      this.workInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.OfficeObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'work_contact_number');
+      });
+    }
+
+
+
   }
 
   buildProfileForm() {

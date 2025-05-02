@@ -220,7 +220,6 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
 			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
-
 			this.mobileInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.MobileObject.getSelectedCountryData();
 				console.log("in change", countryData)
@@ -231,7 +230,6 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		if (this.faxInput) {
 			console.log('onput', this.faxInput, this.faxInput.nativeElement)
 			this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
-
 			this.faxInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.FaxObject.getSelectedCountryData();
 				console.log("in change", countryData)
@@ -242,7 +240,6 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		if (this.officeNumberInput) {
 			console.log('onput', this.officeNumberInput, this.officeNumberInput.nativeElement)
 			this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
-
 			this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.OfficePhoneObject.getSelectedCountryData();
 				console.log("in change", countryData)
