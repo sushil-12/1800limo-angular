@@ -94,49 +94,6 @@ export class AffiliateStep1Component implements OnInit, AfterViewInit {
 	address: string;
 	geoCoder!: google.maps.Geocoder;
 
-
-	ngAfterViewInit() {
-
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: false,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-		};
-
-		// Cell Number
-		this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
-		this.cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.CellNumberObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'CellNumber');
-		});
-
-		this.DispatchObject = intlTelInput(this.dispatchInput.nativeElement, telOptions);
-		this.dispatchInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.DispatchObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'Dispatch');
-		});
-
-		this.FaxObject = intlTelInput(this.FaxInput.nativeElement, telOptions);
-		this.FaxInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.FaxObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'Fax');
-		});
-
-		this.CompanyCellNumberObject = intlTelInput(this.companyCellNumberInput.nativeElement, telOptions);
-		this.companyCellNumberInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
-			this.onCountryChange(countryData, 'CompanyCellNumber');
-		});
-
-		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
-		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
-		this.FaxObject.setCountry(this.currentUser.phoneCountry);
-		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
-	}
-
 	ngOnInit(): void {
 
 		this.currentUser = this.authService.currentUserValue;
@@ -340,6 +297,67 @@ export class AffiliateStep1Component implements OnInit, AfterViewInit {
 		}
 		window.scrollTo(0, 0);
 	}
+
+
+	ngAfterViewInit() {
+
+		this.initallphonefields()
+
+	}
+
+	initallphonefields() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		if (this.cellInput) {
+			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.CellNumberObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'CellNumber');
+			});
+		}
+
+		if (this.dispatchInput) {
+			this.DispatchObject = intlTelInput(this.dispatchInput.nativeElement, telOptions);
+			this.dispatchInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.DispatchObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'Dispatch');
+			});
+		}
+
+		if (this.FaxInput) {
+			this.FaxObject = intlTelInput(this.FaxInput.nativeElement, telOptions);
+			this.FaxInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.FaxObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'Fax');
+			});
+		}
+		if (this.companyCellNumberInput) {
+			this.CompanyCellNumberObject = intlTelInput(this.companyCellNumberInput.nativeElement, telOptions);
+			this.companyCellNumberInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'CompanyCellNumber');
+			});
+		}
+
+		//set current user country as default in phone number
+		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
+		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
+		this.FaxObject.setCountry(this.currentUser.phoneCountry);
+		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
+	}
+
+
 
 	buildAffiliateAccountForm() {
 		this.addAffiliateAccountForm = this.formBuilder.group({

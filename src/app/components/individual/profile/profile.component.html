@@ -38,7 +38,7 @@
                         <mat-form-field appearance="outline" class="mat-custom-phone cellLabelClass">
                             <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
                                     class="asterisk"> *</span></label>
-                            <input matInput #mobileInput type="number" placeholder="Mobile" formControlName="mobile"
+                            <input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
                                 class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 
                         </mat-form-field>
@@ -74,7 +74,7 @@
                             <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
                                     class="asterisk">
                                 </span></label>
-                            <input matInput #workInput type="number" placeholder="work" formControlName="work"
+                            <input matInput #workInput placeholder="work" formControlName="work"
                                 class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
                                 [readonly]="is_family_member" />
                         </mat-form-field>

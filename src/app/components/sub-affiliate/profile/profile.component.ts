@@ -72,86 +72,109 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.getProfile()
 
 
-   
+
 
   }
 
   ngAfterViewInit() {
+    this.initallphonefields()
 
-    const telOptions = {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: false,
-      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-    };
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
 
-    // Cell Number
-    this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
-    this.mobileInput.nativeElement.addEventListener('countrychange', () => {
-      const countryData = this.MobileObject.getSelectedCountryData();
-      this.onCountryChange(countryData, 'mobile');
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.profileForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.profileForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.profileForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.profileForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.profileForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+          // else if (types.includes('street_number')) {
+          // 	this.profileForm.patchValue({
+          // 		address: component.long_name
+          // 	});
+          // }
+        });
+      });
     });
 
-    // Background Company Tel
-    this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
-    this.workInput.nativeElement.addEventListener('countrychange', () => {
-      const countryData = this.OfficeObject.getSelectedCountryData();
-      this.onCountryChange(countryData, 'work_contact_number');
-    });
+  }
 
-     //google map autocomplete
-     this.geoCoder = new google.maps.Geocoder();
+  initallphonefields() {
 
-     const autocomplete = new google.maps.places.Autocomplete(
-       this.search1.nativeElement,
-       {
-         types: ['address'] // You can tweak this to 'address', etc.
-       }
-     );
- 
-     autocomplete.addListener("place_changed", () => {
-       this.ngZone.run(() => {
-         //get the place result
-         const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-         if (!place.geometry || !place.geometry.location) return;
- 
-         this.profileForm.patchValue({
-           address: place.formatted_address,
-           latitude: place.geometry.location.lat(),
-           longitude: place.geometry.location.lng()
-         });
- 
- 
-         // Extract address components
-         place.address_components?.forEach(component => {
-           const types = component.types;
-           if (types.includes('country')) {
-             this.profileForm.patchValue({
-               country: component.short_name
-             });
-           } else if (types.includes('administrative_area_level_1')) {
-             this.profileForm.patchValue({
-               state: component.long_name
-             });
-           } else if (types.includes('administrative_area_level_3')) {
-             this.profileForm.patchValue({
-               city: component.long_name
-             });
-           } else if (types.includes('postal_code')) {
-             this.profileForm.patchValue({
-               zipCode: component.long_name
-             });
-           }
-           // else if (types.includes('street_number')) {
-           // 	this.profileForm.patchValue({
-           // 		address: component.long_name
-           // 	});
-           // }
-         });
-       });
-     });
-     
+    if (this.mobileInput) {
+      console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
+      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+
+      this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.MobileObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'mobile')
+      });
+    }
+
+    if (this.workInput) {
+      console.log('onput', this.workInput, this.workInput.nativeElement)
+      this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+
+      this.workInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.OfficeObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'work_contact_number');
+      });
+    }
+
+
+
   }
 
   buildProfileForm() {

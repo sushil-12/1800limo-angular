@@ -100,23 +100,33 @@ export class FamilyMemberAccountComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: false,
-      // autoPlaceholder: 'aggressive',
-      utilsScript:
-        'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-    });
+    this.initphonefield()
 
-    this.phoneInput.nativeElement.addEventListener('countrychange', () => {
-      const countryData = this.MobileObject.getSelectedCountryData();
-      this.onCountryChange(countryData, 'mobile')
-    });
 
     this.initautoComplete()
 
+
+  }
+
+  initphonefield() {
+
+    if (this.phoneInput) {
+      this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+
+      this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.MobileObject.getSelectedCountryData();
+        console.log("in country chnage", countryData)
+        this.onCountryChange(countryData, 'mobile')
+      });
+    }
 
   }
 
