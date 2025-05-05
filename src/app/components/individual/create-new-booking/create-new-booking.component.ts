@@ -211,6 +211,7 @@ export class CreateNewBookingComponent implements OnInit {
 	ngAfterViewInit(): void {
 
 		this.initAllAutocompletes()
+		this.initphonefield()
 
 		// Re-initialize when dynamic views update
 		this.extraStopInputs.changes.subscribe(() => {
@@ -221,21 +222,32 @@ export class CreateNewBookingComponent implements OnInit {
 			setTimeout(() => this.initAllAutocompletes(), 100);
 		});
 
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: false,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-		};
 
-		// Cell Number
-		this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
-		this.cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.PaxTelObject.getSelectedCountryData();
-			this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
-		});
+	}
 
+
+	initphonefield() {
+
+		if(this.cellInput){
+			console.log("in phone", this.cellInput,this.cellInput.nativeElement)
+			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+	
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				console.log("in country change", countryData)
+				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+			});
+
+		}
+		
 
 	}
 
