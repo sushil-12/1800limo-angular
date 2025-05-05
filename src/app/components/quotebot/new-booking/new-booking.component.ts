@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, QueryList, ViewChild, ViewChildren, isDevMode } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, QueryList, ViewChild, ViewChildren, isDevMode } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { SharedModule } from '../../shared/shared.module';
@@ -21,7 +21,9 @@ declare var $: any
 	templateUrl: './new-booking.component.html',
 	styleUrls: ['./new-booking.component.scss']
 })
-export class NewBookingComponent implements OnInit {
+export class NewBookingComponent implements OnInit,AfterViewInit {
+	@ViewChild('cellInput', { static: false }) cellInput!: ElementRef;
+
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
@@ -30,8 +32,7 @@ export class NewBookingComponent implements OnInit {
 	@ViewChildren('extraStopInput') extraStopInputs!: QueryList<ElementRef>;
 	@ViewChildren('returnExtraStopInput') returnExtraStopInputs!: QueryList<ElementRef>;
 
-	@ViewChild('phoneInput') phoneInput!: ElementRef;
-	iti: any;
+
 
 
 	todays_date: string = moment().format('YYYY-MM-DD');
@@ -163,6 +164,8 @@ export class NewBookingComponent implements OnInit {
 
 		// build the form first 
 		this.$spinner.show('fetchspinner');
+
+
 		this.buildBookingForm()
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (params && params.bookingId && !this.booking_id) {
@@ -253,8 +256,9 @@ export class NewBookingComponent implements OnInit {
 
 		});
 	}
-	ngAfterViewInit(): void {
+	ngAfterViewInit(): void { 
 
+		this.initphonefield()
 
 		this.initAllAutocompletes()
 
@@ -273,20 +277,31 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 
-		this.iti = intlTelInput(this.phoneInput.nativeElement, {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: false,
-			// autoPlaceholder: 'aggressive',
-			utilsScript:
-				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-		});
 
-		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.iti.getSelectedCountryData();
-			this.onLCTeleCountryChange(countryData)
-		});
+	}
+	  
+	initphonefield() {
+
+		if (this.cellInput) {
+			console.log("in phone", this.cellInput, this.cellInput.nativeElement)
+			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				console.log("in country change", countryData)
+				this.onLCTeleCountryChange(countryData)
+			});
+
+		}
+
 
 	}
 
@@ -821,23 +836,26 @@ export class NewBookingComponent implements OnInit {
 
 
 	async MapController(is_return: boolean = false) {
-		// console.log('Map has been initialised.')
 		try {
 			let waypoints = []
 			let origin: google.maps.LatLng
 			let destination: google.maps.LatLng
-			let map: google.maps.Map
+			let map: google.maps.Map;
 
+			// Wait for Maps API to be ready (it should be ready when component loads if using @angular/google-maps properly)
 			await this.mapsApiReady();
 
 			if (is_return) {
-				// console.log('Return Map has been initialised. ')
-				// map
-				map = new google.maps.Map(document.getElementById('return_map'), {
+				const element = document.getElementById('return_map');
+				if (!element) throw new Error('Return map element not found');
+
+
+				map = new google.maps.Map(element, {
 					zoom: 7,
-					center: new google.maps.LatLng(41.850033, -87.6500523),
+					center: { lat: 41.850033, lng: -87.6500523 },
 					scaleControl: true
-				})
+				});
+
 
 				// waypoints
 				if (this.ReturnExtraStops.length > 0) {
@@ -867,11 +885,14 @@ export class NewBookingComponent implements OnInit {
 				}
 			}
 			else {
-				map = new google.maps.Map(document.getElementById("map"), {
+				const element = document.getElementById('map');
+				if (!element) throw new Error('Map element not found');
+
+				map = new google.maps.Map(element, {
 					zoom: 7,
-					center: new google.maps.LatLng(41.850033, -87.6500523),
+					center: { lat: 41.850033, lng: -87.6500523 },
 					scaleControl: true
-				})
+				});
 
 				// waypoints
 				if (this.ExtraStops.length > 0) {
