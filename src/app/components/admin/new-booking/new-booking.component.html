@@ -483,9 +483,9 @@
 									<label
 										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
 									</label>
-									<input matInput #cellInput type="number" placeholder="1234567890"
-										formControlName="phone" class="phoneNumberClass" tabindex="1"
-										(focus)="$event.target.select()" (keyup)="handleLooseCustomerPhone($event)" />
+									<input matInput #cellInput placeholder="1234567890" formControlName="phone"
+										class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+										(keyup)="handleLooseCustomerPhone($event)" />
 
 								</mat-form-field>
 								<div class="error-box">
@@ -765,7 +765,7 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
 								Cell <span class="asterisk">*</span>
 							</label>
-							<input matInput #passenger_cellInput type="number" placeholder="1234567890"
+							<input matInput #passenger_cellInput placeholder="1234567890"
 								formControlName="passenger_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
@@ -959,7 +959,7 @@
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
 								class="asterisk">*</span>
 						</label>
-						<input matInput #lose_affiliate_phoneInput type="number" placeholder="1234567890"
+						<input matInput #lose_affiliate_phoneInput placeholder="1234567890"
 							formControlName="lose_affiliate_phone" class="phoneNumberClass" tabindex="1"
 							(focus)="$event.target.select()" (keyup)="handleLooseAffiliatePhone()" />
 					</mat-form-field>
@@ -1448,9 +1448,8 @@
 							<mat-label>
 								Phone
 							</mat-label>
-							<input matInput #driver_cellInput type="number" placeholder="1234567890"
-								formControlName="driver_cell" class="phoneNumberClass" tabindex="1"
-								(focus)="$event.target.select()" readonly />
+							<input matInput #driver_cellInput placeholder="1234567890" formControlName="driver_cell"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 						</mat-form-field>
 					</div>
 
@@ -1459,9 +1458,8 @@
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
 							</label>
-							<input matInput #driver_cellInput type="number" placeholder="1234567890"
-								formControlName="driver_cell" class="phoneNumberClass" tabindex="1"
-								(focus)="$event.target.select()" />
+							<input matInput #driver_cellInput placeholder="1234567890" formControlName="driver_cell"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1643,7 +1641,7 @@
 						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
 							placeholder="Travel Date"
 							(dateChangeWithFormat)="SetFormValue('pickup_date', $event);SetFormValue('return_pickup_date', $event)"
-							formControlName="pickup_date" (click)="onwy_dt.open()"  [min]="minDate" readonly />
+							formControlName="pickup_date" (click)="onwy_dt.open()" [min]="minDate" readonly />
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
 						<mat-datepicker #onwy_dt></mat-datepicker>
 					</mat-form-field>
@@ -3117,7 +3115,7 @@
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
 								class="asterisk">*</span>
 						</label>
-						<input matInput #return_lose_affiliate_phoneInput type="number" placeholder="1234567890"
+						<input matInput #return_lose_affiliate_phoneInput placeholder="1234567890"
 							formControlName="return_lose_affiliate_phone" class="phoneNumberClass" tabindex="1"
 							(focus)="$event.target.select()" (keyup)="handleLooseAffiliatePhone()" />
 					</mat-form-field>
@@ -3597,7 +3595,7 @@
 							<mat-label>
 								Phone
 							</mat-label>
-							<input matInput #return_driver_cellInput type="number" placeholder="1234567890"
+							<input matInput #return_driver_cellInput placeholder="1234567890"
 								formControlName="return_driver_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
@@ -3610,7 +3608,7 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
 							</label>
 
-							<input matInput #return_driver_cellInput type="number" placeholder="1234567890"
+							<input matInput #return_driver_cellInput placeholder="1234567890"
 								formControlName="return_driver_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />
 
