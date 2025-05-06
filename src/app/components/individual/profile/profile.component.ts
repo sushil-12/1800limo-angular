@@ -196,6 +196,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 			});
 		}
 
+		this.MobileObject.setCountry(this.defaultCountryCode)
+		this.WorkObject.setCountry(this.defaultCountryCode)
+
 
 
 	}

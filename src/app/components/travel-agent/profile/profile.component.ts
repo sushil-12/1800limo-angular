@@ -252,6 +252,11 @@ export class ProfileComponent implements OnInit {
       });
     }
 
+    this.MobileObject.setCountry(this.defaultCountryCode)
+    this.OfficeObject.setCountry(this.defaultCountryCode)
+    this.OfficePhoneObject.setCountry(this.defaultCountryCode)
+    this.FaxObject.setCountry(this.defaultCountryCode)
+
 
   }
 
