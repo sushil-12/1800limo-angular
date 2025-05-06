@@ -43,7 +43,7 @@ export class NewBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport?", "cruise_to_city"],
-		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
+		client_account_types: ['individual'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -199,6 +199,7 @@ export class NewBookingComponent implements OnInit {
 
 	ngAfterViewInit() {
 
+		this.initphonefield()
 		this.initAllAutocompletes()
 
 		// Re-initialize when dynamic views update
@@ -210,6 +211,12 @@ export class NewBookingComponent implements OnInit {
 			setTimeout(() => this.initAllAutocompletes(), 100);
 		});
 
+	}
+
+
+	initphonefield() {
+		console.log("in init phone", this.cellInput, this.passengercellInput, this.drivercellInput)
+
 		const telOptions = {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -218,24 +225,33 @@ export class NewBookingComponent implements OnInit {
 			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
 		};
 
-		// Cell Number
-		this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
-		this.cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.LCTelObject.getSelectedCountryData();
-			this.SetFormValue('loose_customer>phone_isd', countryData.dialCode); this.SetFormValue('loose_customer>phone_country', countryData.iso2)
-		});
+		if (this.cellInput) {
+			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.LCTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('loose_customer>phone_isd', countryData.dialCode); this.SetFormValue('loose_customer>phone_country', countryData.iso2)
+			});
+		}
 
-		this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
-		this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.PaxTelObject.getSelectedCountryData();
-			this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
-		});
+		if (this.passengercellInput) {
+			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
+			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+			});
+		}
 
-		this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, telOptions);
-		this.drivercellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.DrvTelObject.getSelectedCountryData();
-			this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
-		});
+			if (this.drivercellInput) {
+				this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, telOptions);
+				this.drivercellInput.nativeElement.addEventListener('countrychange', () => {
+					const countryData = this.DrvTelObject.getSelectedCountryData();
+					console.log("in country chnage", countryData)
+					this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+				});
+			}
+
 	}
 
 	initAllAutocompletes() {
@@ -683,9 +699,9 @@ export class NewBookingComponent implements OnInit {
 
 			this.service_type = response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour'
 
-			if (this.Form?.updateType?.value == 'edit') {
-				this.booking_params?.client_account_types?.pop()
-			}
+			// if (this.Form?.updateType?.value == 'edit') {
+			// 	this.booking_params?.client_account_types?.pop()
+			// }
 			this.booking_id = this.Form?.reservation_id?.value;
 			// this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
@@ -1157,6 +1173,9 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show()
 		this.affiliateService.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
+				setTimeout(()=>{
+					this.initphonefield()
+				},200)
 				this.DriverList = response.data.data
 				let isValueSet = false
 				for (let i = 0; i < this.DriverList.length; i++) {
@@ -1746,9 +1765,9 @@ export class NewBookingComponent implements OnInit {
 		this.driver_image = {}
 		this.vehicle_image = {}
 
-		if (!this.booking_params['client_account_types'].includes('loose_customer')) {
-			this.booking_params['client_account_types'].push('loose_customer')
-		}
+		// if (!this.booking_params['client_account_types'].includes('loose_customer')) {
+		// 	this.booking_params['client_account_types'].push('loose_customer')
+		// }
 
 		// if directly navigated to create new booking mode from edit booking mode
 		if (this.BigData_COPY) {
@@ -2138,6 +2157,9 @@ export class NewBookingComponent implements OnInit {
 		// Account Type Subscription
 		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_customer') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.initAllAutocompletes()
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer

@@ -188,7 +188,7 @@ export class NewBookingComponent implements OnInit {
 
 	ngOnInit(): void {
 
-		
+
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 		// build the form first 
 		this.buildBookingForm()
@@ -292,11 +292,13 @@ export class NewBookingComponent implements OnInit {
 			setTimeout(() => this.initAllAutocompletes(), 100);
 		});
 
-		this.initallphonefields()
+		this.initphonefield()
 
 	}
 
-	initallphonefields(): void {
+	initphonefield() {
+		console.log("in init phone", this.cellInput, this.passenger_cellInput, this.driver_cellInput, this.lose_affiliate_phoneInput, this.return_driver_cellInput)
+
 		const telOptions = {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -305,35 +307,64 @@ export class NewBookingComponent implements OnInit {
 			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
 		};
 
-		this.PaxTelObject = intlTelInput(this.passenger_cellInput.nativeElement, telOptions);
-		this.passenger_cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.PaxTelObject.getSelectedCountryData();
-			this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
-		});
+		if (this.passenger_cellInput) {
+			this.PaxTelObject = intlTelInput(this.passenger_cellInput.nativeElement, telOptions);
+			this.passenger_cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+			});
+		}
 
-		this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
-		this.cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.LCTelObject.getSelectedCountryData();
-			this.onLCTeleCountryChange(countryData);
-		});
+		if (this.cellInput) {
+			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.LCTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onLCTeleCountryChange(countryData);
+				this.PaxTelObject.setCountry(countryData.iso2)
+			});
+		}
 
-		this.driverCellTelInput = intlTelInput(this.driver_cellInput.nativeElement, telOptions);
-		this.driver_cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.driverCellTelInput.getSelectedCountryData();
-			this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
-		});
+		if (this.driver_cellInput) {
+			this.driverCellTelInput = intlTelInput(this.driver_cellInput.nativeElement, telOptions);
+			this.driver_cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.driverCellTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+			});
+		}
 
-		this.loseAffiliateTelInput = intlTelInput(this.lose_affiliate_phoneInput.nativeElement, telOptions);
-		this.lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
-			this.handleCountryChangeLA(countryData);
-		});
+		if (this.return_driver_cellInput) {
+			this.driverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
+			this.return_driver_cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.driverCellTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+			});
+		}
 
-		this.driverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
-		this.return_driver_cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.driverCellTelInput.getSelectedCountryData();
-			this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
-		});
+		if (this.lose_affiliate_phoneInput) {
+			this.loseAffiliateTelInput = intlTelInput(this.lose_affiliate_phoneInput.nativeElement, telOptions);
+			this.lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.handleCountryChangeLA(countryData);
+			});
+		}
+
+		if (this.return_lose_affiliate_phoneInput) {
+			this.loseAffiliateTelInput = intlTelInput(this.return_lose_affiliate_phoneInput.nativeElement, telOptions);
+			this.return_lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('return_lose_affiliate_phone_isd', '+' + countryData.dialCode); this.SetFormValue('return_lose_affiliate_phone_country', countryData.iso2)
+				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+				this.driverCellTelInput.setCountry(countryData.iso2)
+			});
+		}
+
+
 	}
 
 
@@ -2002,6 +2033,9 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show()
 		this.$api.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.DriverList = response.data.data
 				console.log('driver list', this.DriverList)
 				let isValueSet = false
@@ -2037,6 +2071,9 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show()
 		this.$api.driverList(return_affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.return_DriverList = response.data.data
 				console.log('driver list', this.return_DriverList)
 				let isValueSet = false
@@ -2807,6 +2844,9 @@ export class NewBookingComponent implements OnInit {
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.initAllAutocompletes()
 				this.init_return_rates = true;
 				setTimeout(() => {
@@ -3024,6 +3064,9 @@ export class NewBookingComponent implements OnInit {
 		// Account Type Subscription
 		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_customer') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.initAllAutocompletes()
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer
@@ -3093,6 +3136,9 @@ export class NewBookingComponent implements OnInit {
 		})
 		this.BookingForm.get('travel_client_acc').valueChanges.subscribe((value: any) => {
 			if (value == 'travel_loose_customer') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer
 				for (let item in loose_customer.controls) {
@@ -3158,6 +3204,9 @@ export class NewBookingComponent implements OnInit {
 				this.booking_created_from = 'admin'
 			}
 			if (value == 'loose_affiliate') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.fetchAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
@@ -3218,6 +3267,9 @@ export class NewBookingComponent implements OnInit {
 				this.fetchReturnAffiliateVehicles((this.BookingForm.get('return_affiliate_id').value))
 			}
 			if (value == 'loose_affiliate') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.BookingForm.patchValue({
 					return_affiliate_id: ''
 				})

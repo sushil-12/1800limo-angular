@@ -214,7 +214,7 @@ export class CreateBookingComponent implements OnInit {
 
 	ngAfterViewInit() {
 
-
+		this.initphonefield()
 		this.initAllAutocompletes()
 
 		// Re-initialize when dynamic views update
@@ -226,6 +226,10 @@ export class CreateBookingComponent implements OnInit {
 			setTimeout(() => this.initAllAutocompletes(), 100);
 		});
 
+	}
+
+	initphonefield() {
+		console.log("in init phone", this.cellInput, this.passengercellInput)
 
 		const telOptions = {
 			initialCountry: 'us',
@@ -235,17 +239,24 @@ export class CreateBookingComponent implements OnInit {
 			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
 		};
 
-		this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
-		this.cellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.LCTelObject.getSelectedCountryData();
-			this.SetFormValue('loose_customer>phone_isd', countryData.dialCode); this.SetFormValue('loose_customer>phone_country', countryData.iso2)
-		});
+		if (this.passengercellInput) {
+			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
+			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+			});
+		}
 
-		this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
-		this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
-			const countryData = this.PaxTelObject.getSelectedCountryData();
-			this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
-		});
+		if (this.cellInput) {
+			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.LCTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('loose_customer>phone_isd', countryData.dialCode); this.SetFormValue('loose_customer>phone_country', countryData.iso2)
+			});
+		}
+
 	}
 
 	initAutocomplete(input: ElementRef | HTMLInputElement, control: string, index?: number, is_return: boolean = false) {
@@ -984,6 +995,9 @@ export class CreateBookingComponent implements OnInit {
 			this.BookingForm.get('travel_client_id').updateValueAndValidity();
 		}
 		else {
+			setTimeout(() => {
+				this.initphonefield()
+			}, 200)
 			this.BookingForm.get('travel_client_id').clearValidators();
 			this.BookingForm.get('travel_client_id').updateValueAndValidity();
 		}
