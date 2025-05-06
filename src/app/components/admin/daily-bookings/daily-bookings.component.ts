@@ -744,6 +744,15 @@ export class DailyBookingsComponent implements OnInit {
 		
 		show = false;
 		openModal(booking: any, selection_button: string) {
+			console.log('Double-click detected, opening modal for:', booking);
+			$("#sendEmailModal").modal("show");
+			// Trigger the Bootstrap modal
+			// const modalElement = document.getElementById('sendEmailModal');
+			// if (modalElement) {
+			//   const modal = new bootstrap.Modal(modalElement);
+			//   modal.show();
+			// }
+
 			try {
 				setTimeout(() => {
 					// $('textarea').attr('autofocus', 'autofocus');

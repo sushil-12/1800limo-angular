@@ -107,10 +107,10 @@
 												[innerHTML]="highlighText(individual?.FirstName+' '+individual?.MiddleName+' '+individual?.LastName)"></span>
 										</td>
 									</ng-template>
-									<td class="clickable" (click)="sendMessage('email', individual)"
+									<td class="clickable" (dblclick)="sendMessage('email', individual)"
 										data-messagetype="email"><span
 											[innerHTML]="highlighText(individual?.Email)"></span></td>
-									<td class="clickable" (click)="sendMessage('sms', individual)"
+									<td class="clickable" (dblclick)="sendMessage('sms', individual)"
 										data-messagetype="sms"><span
 											[innerHTML]="highlighText(individual?.CellIsd+individual?.CellNumber+' '+'('+individual?.CellNumberCountry.toUpperCase()+')')"></span>
 									</td>
