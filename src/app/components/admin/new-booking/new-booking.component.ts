@@ -322,6 +322,7 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.LCTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.onLCTeleCountryChange(countryData);
+				this.PaxTelObject.setCountry(countryData.iso2)
 			});
 		}
 
@@ -359,6 +360,7 @@ export class NewBookingComponent implements OnInit {
 				console.log("in country chnage", countryData)
 				this.SetFormValue('return_lose_affiliate_phone_isd', '+' + countryData.dialCode); this.SetFormValue('return_lose_affiliate_phone_country', countryData.iso2)
 				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+				this.driverCellTelInput.setCountry(countryData.iso2)
 			});
 		}
 
