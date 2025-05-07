@@ -170,7 +170,7 @@ export class SubscribersListComponent implements OnInit {
 
 	selectAll() {
 		if (this.allSelected) {
-			this.emails.patchValue([]);
+			this.emails.patchValue('');
 		} else {
 			const allValues = this.individuals.map(option => this.stringifyOption(option));
 			this.emails.setValue(allValues);
@@ -185,7 +185,7 @@ export class SubscribersListComponent implements OnInit {
 
 	selectAllNumbers() {
 		if (this.allSelected) {
-			this.phone_numbers.patchValue([]);
+			this.phone_numbers.patchValue('');
 		} else {
 			const allValues = this.subs_emails.map(option => this.stringifyOptionNumber(option));
 			this.phone_numbers.setValue(allValues);

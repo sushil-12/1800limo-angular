@@ -5,10 +5,10 @@ import { AuthService } from '../../../services/auth.service';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
-import { throwError, Subscription, interval } from 'rxjs';
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { NgOtpInputComponent } from 'ng-otp-input';
+import { Subscription, interval, throwError } from 'rxjs';
+
 declare var $: any;
 
 @Component({

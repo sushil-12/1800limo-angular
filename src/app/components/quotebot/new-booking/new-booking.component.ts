@@ -959,7 +959,7 @@ export class NewBookingComponent implements OnInit,AfterViewInit {
 	}
 
 
-	drawMap(map: google.maps.Map, request: Object, is_return: boolean) {
+	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
 		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
 			console.error('Request Object is not properly according to specified requirements.')
 			return

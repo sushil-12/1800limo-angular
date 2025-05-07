@@ -496,7 +496,7 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	selectAll() {
 		if (this.allSelected) {
-			this.emails.patchValue([]);
+			this.emails.patchValue('');
 		} else {
 			const allValues = this.affiliate_accounts_emails.map(option => this.stringifyOption(option));
 			this.emails.setValue(allValues);
@@ -510,7 +510,7 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	selectAllNumbers() {
 		if (this.allSelected) {
-			this.phone_numbers.patchValue([]);
+			this.phone_numbers.patchValue('');
 		} else {
 			const allValues = this.affiliate_accounts_numbers.map(option => this.stringifyOptionNumber(option));
 			this.phone_numbers.setValue(allValues);

@@ -1,19 +1,15 @@
 
 # Limo1800
 
-This project was generated with [Angular CLI] version 11.2.19.
+This project was generated with [Angular CLI] version 14.2.12.
+
+# Upgrade
+
+Run `ng update @angular/core@14 @angular/cli@14` to upgrade the angular version
 
 # Installation
 
 Run `npm install` to install node_modules
-
-To fix otp input and print library node module missing files, run the following commands:-
-Run `npm install --save ng-otp-input`
-Run `npm install --save ngx-print`
-
-# Upgrade
-
-Run `ng update @angular/core@11.2.19 @angular/cli@11.2.19` to upgrade the angular version
 
 
 ## Development server
