@@ -110,10 +110,10 @@
                                 <td>
                                     <span [innerHTML]="highlighText(account.name)"></span>
                                 </td>
-                                <td class="clickable" (click)="sendMessage('sms', account)" data-messagetype="sms"><span
+                                <td class="clickable" (dblclick)="sendMessage('sms', account)" data-messagetype="sms"><span
                                         [innerHTML]="highlighText(account.isd+account.phone+' '+'('+account?.phoneCountry.toUpperCase()+')')"></span>
                                 </td>
-                                <td class="clickable" (click)="sendMessage('email', account)" data-messagetype="email">
+                                <td class="clickable" (dblclick)="sendMessage('email', account)" data-messagetype="email">
                                     <span [innerHTML]="highlighText(account.email)"></span>
                                 </td>
                                 <td>

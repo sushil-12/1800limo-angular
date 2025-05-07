@@ -139,10 +139,10 @@
 												[innerHTML]="highlighText(individual?.first_name+' '+individual?.middle_name+' '+individual?.last_name)"></span>
 										</td>
 									</ng-template>
-									<td class="clickable" (click)="sendMessage('email', individual)"
+									<td class="clickable" (dblclick)="sendMessage('email', individual)"
 										data-messagetype="email"><span
 											[innerHTML]="highlighText(individual?.email)"></span></td>
-									<td class="clickable" (click)="sendMessage('sms', individual)"
+									<td class="clickable" (dblclick)="sendMessage('sms', individual)"
 										data-messagetype="sms"><span
 											[innerHTML]="highlighText(individual?.mobileIsd+individual?.mobile+' '+'('+individual?.mobileCountry.toUpperCase()+')')"></span>
 									</td>
