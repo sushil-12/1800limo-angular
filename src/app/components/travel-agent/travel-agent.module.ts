@@ -16,10 +16,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from '../shared/shared.module';
-import { NgxPrintModule } from 'ngx-print';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateBookingComponent } from './create-booking/create-booking.component';
-import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -76,9 +74,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatSelectModule,
 		NgSelectModule,
 		MatRadioModule,
-		PinchZoomModule,
 		SharedModule,
-		NgxPrintModule,
 		MatDialogModule,
 		MatFormFieldModule,
 		MatTabsModule,

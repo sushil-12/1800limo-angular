@@ -47,7 +47,6 @@ import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-ra
 import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
 import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affiliate-finalize-rates.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
-import { NgxPrintModule } from 'ngx-print';
 import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
 import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
@@ -104,7 +103,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatRadioModule,
 		// PinchZoomModule,
 		SharedModule,
-		NgxPrintModule
 	]
 })
 export class AffiliateModule { }

@@ -91,7 +91,6 @@ import { RatesFormComponent } from './rates-form/rates-form.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
-import { NgxPrintModule } from 'ngx-print';
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
@@ -234,7 +233,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		SharedModule,
 		MatRadioModule,
 		NgSelectModule,
-		NgxPrintModule,
 		MatChipsModule,
 		MatTabsModule,
 		MatTableModule,

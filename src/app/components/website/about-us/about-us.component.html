@@ -121,30 +121,28 @@
 			<div class="aboutnw_sliderdesc carousel" id="myCarousel">
 				<h3>{{carouselLabel}}</h3>
 				<h4>{{carouselHeading}}</h4>
-				<div *ngIf="selectedCarousel === '2001'; else ShowOtherImage">
+				<div *ngIf="selectedCarousel === '2001'">
 					<img src="assets/images/about-us-img.jpg">
-				</div>
-				<h4 class="mt-4">{{carouselHeading2}}</h4>
-				<div *ngIf="selectedCarousel === '2001'; else ShowOtherImage">
+					<h4 class="mt-4">{{carouselHeading2}}</h4>
 					<img src="assets/images/about-us-img-2001-2.jpg">
 				</div>
-				<ng-template #ShowOtherImage>
-					<div *ngIf="selectedCarousel === '1995'; else showInstructions">
+				<div *ngIf="selectedCarousel !== '2001'">
+					<div *ngIf="selectedCarousel === '1995'">
 						<div class="row img_1995">
 							<div class="col-md-4"> <img src="assets/images/skylimo.png"></div>
 							<div class="col-md-4"><img src="assets/images/people.png"></div>
 							<div class="col-md-4"><img src="assets/images/black.png"></div>
 						</div>
 					</div>
-					<ng-template #showInstructions>
-						<div *ngIf="selectedCarousel === '2007'; else showParagraph">
+					<div *ngIf="selectedCarousel !== '1995'">
+						<div *ngIf="selectedCarousel === '2007'">
 							<img src="assets/images/about-2007.png">
 						</div>
-						<ng-template #showParagraph>
+						<div *ngIf="selectedCarousel !== '2007'" h>
 							<p [innerHTML]="carouselInstructions"></p>
-						</ng-template>
-					</ng-template>
-				</ng-template>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>

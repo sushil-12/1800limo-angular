@@ -92,9 +92,9 @@
 									</td>
 									<td>{{subAdmin.first_name +' '}}{{subAdmin?.middle_name ? subAdmin?.middle_name : '
 										'}} {{subAdmin.last_name}}</td>
-									<td class="clickable" (click)="sendMessage('email', subAdmin)"
+									<td class="clickable" (dblclick)="sendMessage('email', subAdmin)"
 										data-messagetype="email">{{subAdmin.email}}</td>
-									<td class="clickable" (click)="sendMessage('sms', subAdmin)" data-messagetype="sms">
+									<td class="clickable" (dblclick)="sendMessage('sms', subAdmin)" data-messagetype="sms">
 										{{subAdmin.mobileIsd+subAdmin.mobile}}</td>
 									<td>{{subAdmin.address}}</td>
 									<td>{{subAdmin.city}}</td>

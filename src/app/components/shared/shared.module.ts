@@ -6,7 +6,6 @@ import { InvalidControlScrollDirective } from 'src/app/directives/scroll-to-inva
 import { ImageModalComponent } from '../affiliate/modals/image-modal/image-modal.component';
 import { DeleteConfirmationComponent } from '../affiliate/modals/delete-confirmation/delete-confirmation.component';
 import { PhotoInstructionsComponent } from '../affiliate/modals/photo-instructions/photo-instructions.component'
-import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
@@ -46,7 +45,6 @@ export const DATE_FORMATS = {
 	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent],
 	imports: [
 		CommonModule,
-		PinchZoomModule,
 		MatAutocompleteModule,
 		MatIconModule,
 		MatButtonModule

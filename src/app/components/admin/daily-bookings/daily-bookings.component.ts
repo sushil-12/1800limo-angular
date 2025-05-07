@@ -734,14 +734,23 @@ export class DailyBookingsComponent implements OnInit {
 				this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
 				this.spinner.hide();
 			});
-	}
+		}
+		
+		show = false;
+		openModal(booking: any, selection_button: string) {
+			console.log('Double-click detected, opening modal for:', booking);
+			$("#sendEmailModal").modal("show");
+			// Trigger the Bootstrap modal
+			// const modalElement = document.getElementById('sendEmailModal');
+			// if (modalElement) {
+			//   const modal = new bootstrap.Modal(modalElement);
+			//   modal.show();
+			// }
 
-	show = false;
-	openModal(booking: any, selection_button: string) {
-		try {
-			setTimeout(() => {
-				// $('textarea').attr('autofocus', 'autofocus');
-				this.sendEmailModalFocus.nativeElement
+			try {
+				setTimeout(() => {
+					// $('textarea').attr('autofocus', 'autofocus');
+					this.sendEmailModalFocus.nativeElement
 					.querySelector("textarea")
 					.focus();
 			}, 1000);
