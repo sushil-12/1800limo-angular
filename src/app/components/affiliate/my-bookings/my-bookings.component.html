@@ -121,8 +121,8 @@
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
 									<td [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
-										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
-											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold {{ booking.booking_status }}"
+										    href="javascript:void(0);" role="button"
 											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 											<span>View</span>
 										</a>
