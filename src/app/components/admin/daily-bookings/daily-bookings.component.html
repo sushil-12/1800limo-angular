@@ -193,6 +193,19 @@
 												<div class="dropdown-item-icon" *></div>
 												Round Trip
 											</a>
+											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+												data-toggle="modal" data-target="#AuditTrailModal"
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
+												<div class="dropdown-item-icon"></div>
+												Audit Trial
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
+												data-toggle="modal" data-target="#updatedEmailAll"
+												*ngIf="currentUser?.roleName == 'admin' && booking?.show_changed_fields">
+												<div class="dropdown-item-icon"></div>
+												Send Updated Email
+											</a>
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#accept_charge_modal"
 												(click)="acceptChargeClick(booking.booking_id)"
@@ -243,13 +256,6 @@
 												Email All
 											</a>
 											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
-												data-toggle="modal" data-target="#updatedEmailAll"
-												*ngIf="currentUser?.roleName == 'admin' && booking?.show_changed_fields">
-												<div class="dropdown-item-icon"></div>
-												Send Updated Email
-											</a>
-											<a class="dropdown-item"
 												(click)="sendEmaiManuallClicked(booking.booking_id)" data-toggle="modal"
 												data-target="#sendEmailToAnyone"
 												*ngIf="currentUser?.roleName == 'admin'">
@@ -261,12 +267,7 @@
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>
-											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
-												data-toggle="modal" data-target="#AuditTrailModal"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
-												<div class="dropdown-item-icon"></div>
-												Audit Trial
-											</a>
+								
 
 											<a class="dropdown-item"
 												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
