@@ -734,23 +734,23 @@ export class DailyBookingsComponent implements OnInit {
 				this.nextPageUrl = this.bookingsRes.data?.reservations?.next_page_url;
 				this.spinner.hide();
 			});
-		}
-		
-		show = false;
-		openModal(booking: any, selection_button: string) {
-			console.log('Double-click detected, opening modal for:', booking);
-			$("#sendEmailModal").modal("show");
-			// Trigger the Bootstrap modal
-			// const modalElement = document.getElementById('sendEmailModal');
-			// if (modalElement) {
-			//   const modal = new bootstrap.Modal(modalElement);
-			//   modal.show();
-			// }
+	}
 
-			try {
-				setTimeout(() => {
-					// $('textarea').attr('autofocus', 'autofocus');
-					this.sendEmailModalFocus.nativeElement
+	show = false;
+	openModal(booking: any, selection_button: string) {
+		console.log('Double-click detected, opening modal for:', booking);
+		$("#sendEmailModal").modal("show");
+		// Trigger the Bootstrap modal
+		// const modalElement = document.getElementById('sendEmailModal');
+		// if (modalElement) {
+		//   const modal = new bootstrap.Modal(modalElement);
+		//   modal.show();
+		// }
+
+		try {
+			setTimeout(() => {
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement
 					.querySelector("textarea")
 					.focus();
 			}, 1000);
@@ -1012,6 +1012,13 @@ export class DailyBookingsComponent implements OnInit {
 
 	textFormatter(text: string) {
 		try {
+			// Convert to lowercase for consistent matching
+			const normalized = text.toLowerCase();
+
+			// Hardcoded replacements
+			if (normalized === 'oneway') return 'One way';
+			if (normalized === 'chartertour') return 'Charter tour';
+
 			return text.replace(/[\\\_$]+/g, " ");
 		} catch {
 			return text;
