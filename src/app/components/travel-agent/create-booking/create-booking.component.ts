@@ -997,6 +997,7 @@ export class CreateBookingComponent implements OnInit {
 		else {
 			setTimeout(() => {
 				this.initphonefield()
+				this.initAllAutocompletes()
 			}, 200)
 			this.BookingForm.get('travel_client_id').clearValidators();
 			this.BookingForm.get('travel_client_id').updateValueAndValidity();

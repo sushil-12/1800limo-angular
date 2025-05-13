@@ -84,6 +84,7 @@ import { AddDriverSubscriberComponent } from './components/subscription/add-driv
 import { FarmOutBookingsComponent } from './components/subscription/farm-out-bookings/farm-out-bookings.component';
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -160,6 +161,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
+		{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { hideRequiredMarker: true } },
 		ErrorDialogService,
 		{ provide: ErrorHandler, useClass: GloabalErrorHandlerService }
 	],
