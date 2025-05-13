@@ -1,21 +1,19 @@
 
 # Limo1800 
 
-This project was generated with [Angular CLI] version 14.2.12.
+This project was generated with [Angular CLI] version 17.
 
 # Upgrade
 
-Run `ng update @angular/core@14 @angular/cli@14` to upgrade the angular version
-
+Run `npm install -g @angular/cli@17.0.0` to upgrade the angular version
 
 # Upgrade
 
-Run `ng update @angular/core@11.2.19 @angular/cli@11.2.19` to upgrade the angular version
+Run `ng update  @angular/cli@17  @angular/core@17` to upgrade the angular version
 
 # Installation
 
 Run `npm install` to install node_modules
-
 
 ## Development server
 
