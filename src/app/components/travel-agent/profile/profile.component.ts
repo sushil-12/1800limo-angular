@@ -218,7 +218,7 @@ export class ProfileComponent implements OnInit {
       this.cellInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.OfficeObject.getSelectedCountryData();
         console.log("in change", countryData)
-        this.onCountryChange(countryData, 'office')
+        this.onCountryChange(countryData, 'work_contact_number')
       });
     }
 
@@ -248,7 +248,7 @@ export class ProfileComponent implements OnInit {
       this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.OfficePhoneObject.getSelectedCountryData();
         console.log("in change", countryData)
-        this.onCountryChange(countryData, 'officeNumber')
+        this.onCountryChange(countryData, 'office_number')
       });
     }
 
