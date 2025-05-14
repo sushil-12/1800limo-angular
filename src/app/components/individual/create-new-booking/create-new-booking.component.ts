@@ -174,6 +174,9 @@ export class CreateNewBookingComponent implements OnInit {
 				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				if(params.updateType == 'round'){
+					this.service_type ='round_trip'
+				}
 			}
 			if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
