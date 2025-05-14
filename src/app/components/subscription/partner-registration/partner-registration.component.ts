@@ -1,7 +1,7 @@
-import { MapsAPILoader } from '@agm/core';
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as intlTelInput from 'intl-tel-input';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -16,6 +16,9 @@ declare var $: any;
   styleUrls: ['./partner-registration.component.scss']
 })
 export class PartnerRegistrationComponent implements OnInit {
+  @ViewChild('phoneInput') phoneInput!: ElementRef;
+  @ViewChild('search1') search1!: ElementRef;
+  geoCoder!: google.maps.Geocoder;
 
   public registrationForm: FormGroup;
   public otpForm: FormGroup;
@@ -34,7 +37,6 @@ export class PartnerRegistrationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private authService: AuthService,
     private errorDialog: ErrorDialogService,
@@ -50,10 +52,6 @@ export class PartnerRegistrationComponent implements OnInit {
   longitude: number;
   zoom: number;
   address: string;
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
-
   ngOnInit(): void {
 
     this.planName = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_name
@@ -61,59 +59,6 @@ export class PartnerRegistrationComponent implements OnInit {
 
     this.buildregistrationForm();
 
-    //google map autocomplete
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        console.log('auto fill address-->>>')
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          this.registrationForm.patchValue({
-            zipCode: '',
-            city: '',
-            state: '',
-            country: ''
-          })
-          this.registrationForm.patchValue({
-            address: place.formatted_address
-          })
-          //Fill one way form pickup address fields
-          this.registrationForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
-          });
-          place.address_components.forEach(component => {
-            const types = component.types;
-
-            if (types.includes('postal_code')) {
-              this.registrationForm.patchValue({
-                zipCode: component.long_name
-              });
-            } else if (types.includes('locality')) {
-              this.registrationForm.patchValue({
-                city: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_1')) {
-              this.registrationForm.patchValue({
-                state: component.long_name
-              });
-            } else if (types.includes('country')) {
-              this.registrationForm.patchValue({
-                country: component.long_name
-              });
-            }
-          });
-        });
-      });
-    });
 
     this.otpForm = this.formBuilder.group({
       otp: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(6), Validators.maxLength(6)]],
@@ -121,12 +66,91 @@ export class PartnerRegistrationComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+
+    //init flag
+    this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      // autoPlaceholder: 'aggressive',
+      utilsScript:
+        'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    });
+
+    this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      console.log("in country chnage",countryData)
+      this.onCountryChange(countryData, 'mobile')
+    });
+
+    this.initautoComplete()
+
+
+  }
+
+  initautoComplete() {
+
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.registrationForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.registrationForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.registrationForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.registrationForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.registrationForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+          // else if (types.includes('street_number')) {
+          // 	this.registrationForm.patchValue({
+          // 		address: component.long_name
+          // 	});
+          // }
+        });
+      });
+    });
+  }
+
   buildregistrationForm() {
     this.registrationForm = this.formBuilder.group({
       userId: [''],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      company_name:['',[Validators.required]],
+      company_name: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(9), Validators.maxLength(15)]],
       countryCode: ['+1', Validators.required],
       phoneCountry: ['us'],
@@ -267,12 +291,12 @@ export class PartnerRegistrationComponent implements OnInit {
       return;
     }
 
-    if(this.enableOtpField){
+    if (this.enableOtpField) {
       console.log("phone not verified")
       // this.errorDialog.openDialog({
       //   errors: {
-			// 		error: `Please verify your mobile number!`
-			// 	}
+      // 		error: `Please verify your mobile number!`
+      // 	}
       // })
       return;
     }

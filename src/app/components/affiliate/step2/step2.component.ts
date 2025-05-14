@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input } from '@angular/core';
-import { AgmCoreModule, MapsAPILoader } from '@agm/core'; import { AffiliateService } from '../../../services/affiliate.service';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input, AfterViewInit } from '@angular/core';
+import { AffiliateService } from '../../../services/affiliate.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,7 +18,9 @@ declare var $: any;
 	templateUrl: './step2.component.html',
 	styleUrls: ['./step2.component.scss'],
 })
-export class Step2Component implements OnInit {
+export class Step2Component implements OnInit, AfterViewInit {
+	@ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
@@ -86,7 +88,6 @@ export class Step2Component implements OnInit {
 		private httpClient: HttpClient,
 		private activatedroute: ActivatedRoute,
 		private stateManagementService: StateManagementService,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private spinner: NgxSpinnerService,
@@ -97,8 +98,7 @@ export class Step2Component implements OnInit {
 
 	ngOnInit(): void {
 		$('.HeadingH1').css({ display: "block" })
-		//code related to autocomplete and map
-		this.mapFunction();
+		//code related to autocomplete and ma
 
 		//show Email verification modal on first time completing step 1
 		const showEmailVerificationAlert = sessionStorage.getItem("showEmailVerificationAlert");
@@ -425,122 +425,71 @@ export class Step2Component implements OnInit {
 	longitude: number;
 	requestLatitude: number;
 	requestLongitude: number;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
 	@ViewChild('search2')
 	public search2ElementRef: ElementRef;
 
 
-	mapFunction() {
-		this.mapsAPILoader.load().then(() => {
-			//For Address field
-			console.log(this.searchElementRef.nativeElement.value, this.search2ElementRef.nativeElement)
-			// if(this.canChangeAddress){// disable suggestion for set location field in edit case
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () => {
-				this.ngZone.run(() => {
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-
-					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
-						return;
-					}
-					console.log(place)
-					for (var i = 0; i < place.address_components.length; i++) {
-						for (let j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i]?.types[j] == "country") {
-								this.addBankForm.patchValue({
-									country: place.address_components[i].short_name
-								});
-								this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i]?.types[j] == "administrative_area_level_1") {
-								this.addBankForm.patchValue({
-									state: place.address_components[i].short_name
-								});
-							}
-							else if (place.address_components[i]?.types[j] == "administrative_area_level_2") {
-								this.addBankForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i]?.types[j] == "postal_code") {
-								this.addBankForm.patchValue({
-									zipCode: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i]?.types[j] == "street_number") {
-								this.addBankForm.patchValue({
-									street: place.address_components[i].long_name
-								});
-							}
-						}
-					}
-					this.addBankForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng(),
-					});
-					this.latitude = place.geometry.location.lat();
-					this.longitude = place.geometry.location.lng();
-				});
-			});
-			// }     
-
-			//For request Address change
-			let autocomplete2 = new google.maps.places.Autocomplete(this.search2ElementRef.nativeElement);
-			autocomplete2.addListener("place_changed", () => {
-				this.ngZone.run(() => {
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete2.getPlace();
-
-					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
-						return;
-					}
-					console.log(place)
-					for (var i = 0; i < place.address_components.length; i++) {
-						for (let j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i]?.types[j] == "country") {
-								this.requestAddressChangeForm.patchValue({
-									requestCountry: place.address_components[i].short_name
-								});
-								this.changeCountryRequestAddresschange(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i]?.types[j] == "administrative_area_level_1") {
-								this.requestAddressChangeForm.patchValue({
-									requestState: place.address_components[i].short_name
-								});
-							}
-							else if (place.address_components[i]?.types[j] == "administrative_area_level_2") {
-								this.requestAddressChangeForm.patchValue({
-									requestCity: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i]?.types[j] == "postal_code") {
-								this.requestAddressChangeForm.patchValue({
-									requestZipCode: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i]?.types[j] == "street_number") {
-								this.requestAddressChangeForm.patchValue({
-									requestStreet: place.address_components[i].long_name
-								});
-							}
-						}
-					}
-					this.requestAddressChangeForm.patchValue({
-						requestAddress: place.formatted_address,
-						requestLatitude: place.geometry.location.lat(),
-						requestLongitude: place.geometry.location.lng(),
-					});
-					this.requestLatitude = place.geometry.location.lat();
-					this.requestLongitude = place.geometry.location.lng();
-				});
-			});
-		});
+	ngAfterViewInit(): void {
+		this.mapFunction()
 	}
+
+	mapFunction() {
+
+		//google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
+
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.addBankForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.addBankForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.addBankForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.addBankForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.addBankForm.patchValue({
+							zipCode: component.long_name
+						});
+					}
+					else if (types.includes('street_number')) {
+						this.addBankForm.patchValue({
+							street: component.long_name
+						})
+					}
+				});
+			});
+			this.spinner.hide()
+		});
+
+	}
+
 
 	closeButton() {
 		this.closeTab.emit();

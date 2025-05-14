@@ -1,32 +1,48 @@
-import { Component, EventEmitter, OnInit, ViewChild, isDevMode, ElementRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
 
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { SharedModule } from '../../shared/shared.module'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { param } from 'jquery';
 import { CommonService } from '../../../services/common.service';
 import { HttpClient } from '@angular/common/http';
-import {constant_data} from '../../../../assets/js/data';
+import { constant_data } from '../../../../assets/js/data';
+import { GoogleMap } from '@angular/google-maps';
+import * as intlTelInput from 'intl-tel-input';
 
 declare var $: any
+
 @Component({
 	selector: 'app-new-booking',
 	templateUrl: './new-booking.component.html',
 	styleUrls: ['./new-booking.component.scss']
 })
 export class NewBookingComponent implements OnInit {
+	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
+	@ViewChild('pickupInput') pickupInput!: ElementRef;
+	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
+	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
+	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
+	@ViewChild('return_dropoffInput') return_dropoffInput!: ElementRef;
+	@ViewChildren('extraStopInput') extraStopInputs!: QueryList<ElementRef>;
+	@ViewChildren('returnExtraStopInput') returnExtraStopInputs!: QueryList<ElementRef>;
 
-	@ViewChild('searchInput', { read: MatAutocompleteTrigger }) triggerAutoCompleteInput: MatAutocompleteTrigger
+
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('passenger_cellInput') passenger_cellInput!: ElementRef;
+	@ViewChild('lose_affiliate_phoneInput') lose_affiliate_phoneInput!: ElementRef;
+	@ViewChild('driver_cellInput') driver_cellInput!: ElementRef;
+	@ViewChild('return_lose_affiliate_phoneInput') return_lose_affiliate_phoneInput!: ElementRef;
+	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
+
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 	time_values: Array<any> = constant_data.time_values
@@ -161,7 +177,6 @@ export class NewBookingComponent implements OnInit {
 		private $api: AdminService,
 		private $shared: SharedModule,
 		private $spinner: NgxSpinnerService,
-		private $mapsapi: MapsAPILoader,
 		private $errors: ErrorDialogService,
 		private $router: Router,
 		private $routeurl: ActivatedRoute,
@@ -171,12 +186,9 @@ export class NewBookingComponent implements OnInit {
 		private httpClient: HttpClient,
 	) { }
 
-	openAutoCompletePanel() {
-		this.triggerAutoCompleteInput.openPanel();
-	}
 	ngOnInit(): void {
 
-		
+
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 		// build the form first 
 		this.buildBookingForm()
@@ -236,7 +248,7 @@ export class NewBookingComponent implements OnInit {
 
 	}
 
-	change2(){
+	change2() {
 		console.log("im heere")
 	}
 
@@ -262,12 +274,166 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	ngAfterViewInit(): void {
+
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
 			this.scroll('pickup_adress')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
+
+		this.initAllAutocompletes()
+
+		// Re-initialize when dynamic views update
+		this.extraStopInputs.changes.subscribe(() => {
+			setTimeout(() => this.initAllAutocompletes(), 100);
+		});
+
+		this.returnExtraStopInputs.changes.subscribe(() => {
+			setTimeout(() => this.initAllAutocompletes(), 100);
+		});
+
+		this.initphonefield()
+
 	}
+
+	initphonefield() {
+		console.log("in init phone", this.cellInput, this.passenger_cellInput, this.driver_cellInput, this.lose_affiliate_phoneInput, this.return_driver_cellInput)
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		if (this.passenger_cellInput) {
+			this.PaxTelObject = intlTelInput(this.passenger_cellInput.nativeElement, telOptions);
+			this.passenger_cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+			});
+		}
+
+		if (this.cellInput) {
+			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.LCTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onLCTeleCountryChange(countryData);
+				this.PaxTelObject.setCountry(countryData.iso2)
+			});
+		}
+
+		if (this.driver_cellInput) {
+			this.driverCellTelInput = intlTelInput(this.driver_cellInput.nativeElement, telOptions);
+			this.driver_cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.driverCellTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+			});
+		}
+
+		if (this.return_driver_cellInput) {
+			this.driverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
+			this.return_driver_cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.driverCellTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+			});
+		}
+
+		if (this.lose_affiliate_phoneInput) {
+			this.loseAffiliateTelInput = intlTelInput(this.lose_affiliate_phoneInput.nativeElement, telOptions);
+			this.lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.handleCountryChangeLA(countryData);
+			});
+		}
+
+		if (this.return_lose_affiliate_phoneInput) {
+			this.loseAffiliateTelInput = intlTelInput(this.return_lose_affiliate_phoneInput.nativeElement, telOptions);
+			this.return_lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('return_lose_affiliate_phone_isd', '+' + countryData.dialCode); this.SetFormValue('return_lose_affiliate_phone_country', countryData.iso2)
+				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+				this.driverCellTelInput.setCountry(countryData.iso2)
+			});
+		}
+
+
+	}
+
+
+
+
+	initAllAutocompletes() {
+		setTimeout(() => {
+			if (this.pickupInput) {
+				this.initAutocomplete(this.pickupInput.nativeElement, 'pickup');
+			}
+			if (this.dropoffInput) {
+				this.initAutocomplete(this.dropoffInput.nativeElement, 'dropoff');
+			}
+			if (this.loosecustomerInput) {
+				this.initAutocomplete(this.loosecustomerInput.nativeElement, 'loose_customer');
+			}
+			if (this.return_pickupInput) {
+				this.initAutocomplete(this.return_pickupInput.nativeElement, 'return_pickup');
+			}
+			if (this.return_dropoffInput) {
+				this.initAutocomplete(this.return_dropoffInput.nativeElement, 'return_dropoff');
+			}
+
+			// Dynamic fields: extra stops
+			this.extraStopInputs.forEach((input, index) => {
+				this.initAutocomplete(input, 'extra_stops', index, false);
+			});
+
+			this.returnExtraStopInputs.forEach((input, index) => {
+				this.initAutocomplete(input, 'return_extra_stops', index, true);
+			});
+
+		}, 200);
+	}
+
+	initAutocomplete(input: ElementRef | HTMLInputElement, control: string, index?: number, is_return: boolean = false) {
+		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
+		console.log("initautocomplete", nativeInput)
+
+		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
+			types: ['address'],
+			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
+		});
+
+		autocomplete.addListener('place_changed', () => {
+			const place = autocomplete.getPlace();
+			if (!place.geometry || !place.geometry.location) return;
+
+			const formatted_address = place.formatted_address;
+			const location = {
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng()
+			};
+
+			// 👇 Special case: if this is the loose customer input
+			if (control === 'loose_customer') {
+				this.fillLooseCustomerAddress(place);
+				return;
+			}
+
+			// if (control === 'extra_stops' || control === 'return_extra_stops') {
+			// 	this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
+			// } else {
+			this.fillAddress(control, { formatted_address });
+			this.fillLocationPoints(control, location);
+			// }
+		});
+	}
+
 
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
@@ -459,7 +625,7 @@ export class NewBookingComponent implements OnInit {
 			pickup_airline_name: [''],
 			pickup_flight: [''],
 			origin_airport_city: [''],
-			departing_airport_city:[''],
+			departing_airport_city: [''],
 			cruise_port: [''],
 			cruise_name: [''],
 			cruise_time: ['12:00 am'],
@@ -620,10 +786,10 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
-	handleChangePickupTime(event){
-		console.log("in pickupt time",event)
+	handleChangePickupTime(event) {
+		console.log("in pickupt time", event)
 		this.BookingForm.patchValue({
-			pickup_time : event.value
+			pickup_time: event.value
 		})
 	}
 
@@ -715,8 +881,8 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_pickup_airline.value));
 			this.SetFormValue('return_dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
-			this.SetFormValue('origin_airport_city',editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city )
-			
+			this.SetFormValue('origin_airport_city', editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city)
+
 			if (editing_data.driver_image) {
 				this.SetFormValue('driver_image_id', editing_data.driver_image.id);
 				this.driver_image['image'] = editing_data.driver_image.image;
@@ -867,31 +1033,39 @@ export class NewBookingComponent implements OnInit {
 	}
 
 
-	MapController(is_return: boolean = false) {
-		// console.log('Map has been initialised.')
-		let waypoints = []
-		let origin: google.maps.LatLng
-		let destination: google.maps.LatLng
-		let map: google.maps.Map
+	// MapController.ts
 
-		this.$mapsapi.load().then(() => {
+	async MapController(is_return: boolean = false) {
+		try {
+			let waypoints = []
+			let origin: google.maps.LatLng
+			let destination: google.maps.LatLng
+			let map: google.maps.Map;
+
+			// Wait for Maps API to be ready (it should be ready when component loads if using @angular/google-maps properly)
+			await this.mapsApiReady();
+
 			if (is_return) {
-				// console.log('Return Map has been initialised. ')
-				// map
-				map = new google.maps.Map(document.getElementById('return_map'), {
-					zoom: 7,
-					center: new google.maps.LatLng(41.850033, -87.6500523),
-					scaleControl: true
-				})
+				const element = document.getElementById('return_map');
+				if (!element) throw new Error('Return map element not found');
 
-				// waypoints
+				map = new google.maps.Map(element, {
+					zoom: 7,
+					center: { lat: 41.850033, lng: -87.6500523 },
+					scaleControl: true
+				});
+
+				// Waypoints
 				if (this.ReturnExtraStops.length > 0) {
 					for (let i = 0; i < this.ReturnExtraStops.length; i++) {
-						let stop = (<FormGroup>(<FormArray>this.BookingForm.get('return_extra_stops')).at(i))
+						const stop = (<FormGroup>(<FormArray>this.BookingForm.get('return_extra_stops')).at(i));
 						waypoints.push({
-							location: new google.maps.LatLng(stop.get('latitude').value, stop.get('longitude').value),
+							location: new google.maps.LatLng(
+								stop.get('latitude').value,
+								stop.get('longitude').value
+							),
 							stopover: true
-						})
+						});
 					}
 				}
 
@@ -910,28 +1084,34 @@ export class NewBookingComponent implements OnInit {
 					// console.log('Return Override for Target Airport')
 					destination = new google.maps.LatLng(this.Form.return_dropoff_airport_latitude.value, this.Form.return_dropoff_airport_longitude.value)
 				}
-			}
-			else {
-				map = new google.maps.Map(document.getElementById("map"), {
-					zoom: 7,
-					center: new google.maps.LatLng(41.850033, -87.6500523),
-					scaleControl: true
-				})
 
-				// waypoints
+			} else {
+				const element = document.getElementById('map');
+				if (!element) throw new Error('Map element not found');
+
+				map = new google.maps.Map(element, {
+					zoom: 7,
+					center: { lat: 41.850033, lng: -87.6500523 },
+					scaleControl: true
+				});
+
 				if (this.ExtraStops.length > 0) {
 					for (let i = 0; i < this.ExtraStops.length; i++) {
-						let stop = (<FormGroup>(<FormArray>this.BookingForm.get('extra_stops')).at(i))
+						const stop = (<FormGroup>(<FormArray>this.BookingForm.get('extra_stops')).at(i));
 						waypoints.push({
-							location: new google.maps.LatLng(stop.get('latitude').value, stop.get('longitude').value),
+							location: new google.maps.LatLng(
+								stop.get('latitude').value,
+								stop.get('longitude').value
+							),
 							stopover: true
-						})
+						});
 					}
 				}
 
 				//defaults for Source/Target - City
 				origin = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
 				destination = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
+
 
 				// Overrides
 				if (this.Form.transfer_type.value.includes('airport_')) {
@@ -944,67 +1124,88 @@ export class NewBookingComponent implements OnInit {
 					// console.log('Override for Target Airport')
 					destination = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
 				}
-
 			}
-			this.drawMap(map, {
+
+			const request: google.maps.DirectionsRequest = {
 				origin,
 				destination,
 				waypoints,
 				optimizeWaypoints: true,
 				travelMode: google.maps.TravelMode.DRIVING
-			}, is_return)
-		})
+			};
+
+			this.drawMap(map, request, is_return);
+		} catch (error) {
+			console.error('Error initializing MapController:', error);
+		}
 	}
 
 
-	drawMap(map: google.maps.Map, request: Object, is_return: boolean) {
-		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
-			console.error('Request Object is not properly according to specified requirements.')
-			return
+
+
+	// drawMap.ts
+
+	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
+		if (!request.origin || !request.destination) {
+			console.error('Request object missing origin/destination');
+			return;
 		}
 
-		this.$mapsapi.load().then(() => {
-			const directionsRenderer = new google.maps.DirectionsRenderer()
-			const directionsService = new google.maps.DirectionsService()
-			directionsRenderer.setMap(map)
+		const directionsRenderer = new google.maps.DirectionsRenderer();
+		const directionsService = new google.maps.DirectionsService();
+		directionsRenderer.setMap(map);
 
-			directionsService.route(request, (response: any, status: string) => {
-				if (status == google.maps.DirectionsStatus.OK) {
-					// console.log('Directions Service Response: ', response)
-					directionsRenderer.setDirections(response)
+		directionsService.route(request, (response, status) => {
+			if (status === google.maps.DirectionsStatus.OK) {
+				directionsRenderer.setDirections(response);
 
-					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
-						if (is_return) {
-							this.return_distance = response.distance
-							if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
-								this.buildBookingData()
-							}
-							this.BookingForm.patchValue({
-								returnJourneyDistance: response.distance,
-								returnJourneyTime: response.time
-							})
-							console.log("returnJourneyTime=========>", this.BookingForm.get('returnJourneyTime').value)
-						} else {
-							this.distance = response.distance
-							if (!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length) {
-								this.buildBookingData()
-							}
-							this.BookingForm.patchValue({
-								journeyDistance: response.distance,
-								journeyTime: response.time
-							})
-							console.log("returnJourneyTime=========>", this.BookingForm.get('journeyTime').value)
+				this.fetchDistanceAndTime(response).then((res: { distance: number; time: number }) => {
+					if (is_return) {
+						this.return_distance = res.distance;
+						if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
+							this.buildBookingData();
 						}
-						// this.distance_for_rates = ((): string =>
-						// {
-						// 	return (this.mToKm(this.distance))
-						// })()
-					})
-				}
-			})
-
-		})
+						this.BookingForm.patchValue({
+							returnJourneyDistance: res.distance,
+							returnJourneyTime: res.time
+						});
+					} else {
+						this.distance = res.distance;
+						if (!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length) {
+							this.buildBookingData();
+						}
+						this.BookingForm.patchValue({
+							journeyDistance: res.distance,
+							journeyTime: res.time
+						});
+					}
+				});
+			} else {
+				console.error('Directions request failed due to', status);
+			}
+		});
 	}
+
+
+	mapsApiReady(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (window['google'] && window['google'].maps) {
+				resolve();
+			} else {
+				const check = setInterval(() => {
+					if (window['google'] && window['google'].maps) {
+						clearInterval(check);
+						resolve();
+					}
+				}, 100);
+				setTimeout(() => {
+					clearInterval(check);
+					reject('Google Maps API not available');
+				}, 5000); // Timeout after 5s
+			}
+		});
+	}
+
 
 	get Form() {
 		return this.BookingForm.controls;
@@ -1367,8 +1568,8 @@ export class NewBookingComponent implements OnInit {
 				driver_email: looseAffData?.driver_email,
 				loose_affiliate_id: looseAffData?.id,
 				is_old_loose_affiliate: true,
-				driver_cell_isd:looseAffData?.driver_isd,
-				driver_cell_country:looseAffData?.driver_phone_country
+				driver_cell_isd: looseAffData?.driver_isd,
+				driver_cell_country: looseAffData?.driver_phone_country
 			})
 			this.SetFormValue('lose_affiliate_name', looseAffData?.driver_name)
 			this.SetFormValue('lose_affiliate_phone', looseAffData?.driver_phone)
@@ -1832,6 +2033,9 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show()
 		this.$api.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.DriverList = response.data.data
 				console.log('driver list', this.DriverList)
 				let isValueSet = false
@@ -1867,6 +2071,9 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show()
 		this.$api.driverList(return_affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.return_DriverList = response.data.data
 				console.log('driver list', this.return_DriverList)
 				let isValueSet = false
@@ -2637,6 +2844,10 @@ export class NewBookingComponent implements OnInit {
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
+				this.initAllAutocompletes()
 				this.init_return_rates = true;
 				setTimeout(() => {
 					this.MapController(true)
@@ -2807,7 +3018,7 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_dropoff_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
-					
+
 				} else {
 					console.log("setting value of return dropoff flight not mandatory")
 					// this.BookingForm.get('return_dropoff_flight').clearValidators();
@@ -2827,7 +3038,7 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
 					this.BookingForm.get('departing_airport_city').setValidators([Validators.required]);
-				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				} else {
 					console.log("setting value of return pickup flight not mandatory")
 					this.BookingForm.get('return_pickup_flight').clearValidators();
@@ -2837,7 +3048,7 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airport_option').clearValidators();
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
 					this.BookingForm.get('departing_airport_city').clearValidators();
-				    this.BookingForm.get('departing_airport_city').updateValueAndValidity();
+					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
 			}
 
@@ -2853,6 +3064,10 @@ export class NewBookingComponent implements OnInit {
 		// Account Type Subscription
 		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_customer') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
+				this.initAllAutocompletes()
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer
 				for (let item in loose_customer.controls) {
@@ -2921,6 +3136,9 @@ export class NewBookingComponent implements OnInit {
 		})
 		this.BookingForm.get('travel_client_acc').valueChanges.subscribe((value: any) => {
 			if (value == 'travel_loose_customer') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer
 				for (let item in loose_customer.controls) {
@@ -2986,6 +3204,9 @@ export class NewBookingComponent implements OnInit {
 				this.booking_created_from = 'admin'
 			}
 			if (value == 'loose_affiliate') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.fetchAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
@@ -3046,6 +3267,9 @@ export class NewBookingComponent implements OnInit {
 				this.fetchReturnAffiliateVehicles((this.BookingForm.get('return_affiliate_id').value))
 			}
 			if (value == 'loose_affiliate') {
+				setTimeout(() => {
+					this.initphonefield()
+				}, 200)
 				this.BookingForm.patchValue({
 					return_affiliate_id: ''
 				})
@@ -3562,25 +3786,47 @@ export class NewBookingComponent implements OnInit {
 		})
 	}
 
-	fillLooseCustomerAddress(value: any) {
-		console.log('Addresss-->>>', value);
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
-		value.address_components.forEach(component => {
+	// fillLooseCustomerAddress(value: any) {
+	// 	console.log('Addresss-->>>', value);
+	// 	(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
+	// 	value.address_components.forEach(component => {
+	// 		const types = component.types;
+	// 		if (types.includes('postal_code')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+	// 		} else if (types.includes('locality')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+	// 		} else if (types.includes('administrative_area_level_1')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+	// 		} else if (types.includes('country')) {
+	// 			(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+	// 		}
+	// 	});
+	// 	(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
+	// 	this.BookingForm.updateValueAndValidity();
+	// }
+
+	fillLooseCustomerAddress(place: any) {
+		console.log('Addresss-->>>', place);
+
+		const looseCustomerGroup = <FormGroup>this.BookingForm.get('loose_customer');
+		looseCustomerGroup.get('address').setValue(place.formatted_address);
+
+		place.address_components.forEach(component => {
 			const types = component.types;
 			if (types.includes('postal_code')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+				looseCustomerGroup.get('zipCode').setValue(component.long_name);
 			} else if (types.includes('locality')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+				looseCustomerGroup.get('city').setValue(component.long_name);
 			} else if (types.includes('administrative_area_level_1')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+				looseCustomerGroup.get('state').setValue(component.long_name);
 			} else if (types.includes('country')) {
-				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+				looseCustomerGroup.get('country').setValue(component.long_name);
 			}
 		});
-		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
+
+		looseCustomerGroup.updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}
-
 
 
 	onLCTeleCountryChange(event: any) {
@@ -3969,37 +4215,37 @@ export class NewBookingComponent implements OnInit {
 	// Method to convert hours to days and hours
 	getCancellationTime(cancellationHours: number): string {
 		if (cancellationHours > 24) {
-		  const days = Math.floor(cancellationHours / 24);
-		  const remainingHours = cancellationHours % 24;
-		  return `${days} days ${remainingHours} hours`;
+			const days = Math.floor(cancellationHours / 24);
+			const remainingHours = cancellationHours % 24;
+			return `${days} days ${remainingHours} hours`;
 		} else {
-		  return `${cancellationHours} hours`;
+			return `${cancellationHours} hours`;
 		}
-	  }
-	  
-	  onSearchAffiliateId(term,item){
-		console.log("term",term,"item",item)
+	}
+
+	onSearchAffiliateId(term, item) {
+		console.log("term", term, "item", item)
 		// return item.bindNameAffiliate.toLowerCase().startsWith(term.toLowerCase())
 
 		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_name.toLowerCase().startsWith(term.toLowerCase()) || item.phone.startsWith(term)
 
 		//   console.log("in search",event)
 		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))
-	  }
+	}
 
-	  onSearchLooseAffiliateId(term,item){
-		console.log("term",term,"item",item)
+	onSearchLooseAffiliateId(term, item) {
+		console.log("term", term, "item", item)
 		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.toString().startsWith(term)
-	  }
+	}
 
-	  onSearchCancellation(term,item){
-		console.log("term",term,"item",item)
-	    return item.label.toLowerCase().startsWith(term.toLowerCase())
-      }
-	  
-	  onSearchLooseAffId(term,item){
-		console.log("term",term,"item",item)
-	    return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.startsWith(term)
-      }
+	onSearchCancellation(term, item) {
+		console.log("term", term, "item", item)
+		return item.label.toLowerCase().startsWith(term.toLowerCase())
+	}
+
+	onSearchLooseAffId(term, item) {
+		console.log("term", term, "item", item)
+		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.startsWith(term)
+	}
 
 }

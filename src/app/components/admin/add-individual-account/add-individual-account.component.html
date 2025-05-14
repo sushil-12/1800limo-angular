@@ -1,4 +1,4 @@
-<ngx-spinner></ngx-spinner>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <main>
 	<!-- Main page content-->
 	<form [formGroup]="addIndividualAccountForm" appInvalidControlScroll>
@@ -39,12 +39,8 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
 									class="asterisk">
 									*</span></label>
-							<input matInput placeholder="Mobile" formControlName="mobile" ng2TelInput
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								placeholder="1234567890" class="phoneNumberClass"
-								(countryChange)="onCountryChange($event,'mobile')"
-								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
-								(focus)="$event.target.select()" />
+							<input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -78,11 +74,8 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
 									class="asterisk">
 								</span></label>
-							<input matInput type="number" placeholder="Work/Home" formControlName="work" ng2TelInput
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								placeholder="1234567890" class="phoneNumberClass"
-								(countryChange)="onCountryChange($event,'work')"
-								(intlTelInputObject)="telInputObjectWork($event)" (focus)="$event.target.select()" />
+							<input matInput #workInput placeholder="Work/Home" formControlName="work"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -127,7 +120,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Address</mat-label>
 							<input formControlName="address" type="text" matInput placeholder="Address" #search1
-								(focus)="$event.target.select()">
+								autocomplete="off" (focus)="$event.target.select()">
 						</mat-form-field>
 						<!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
 						<div *ngIf="submittedForm && f.address.errors" class="text-danger">

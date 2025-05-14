@@ -1,4 +1,4 @@
-<ngx-spinner></ngx-spinner>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <main>
     <!-- Main page content-->
     <form [formGroup]="createCCDebitCardForm">
@@ -104,7 +104,7 @@
                         <div class="col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Street Address<span class="asterisk">*</span></mat-label>
-                                <input matInput placeholder="Street Address" formControlName="otherStreetAddress"
+                                <input matInput placeholder="Street Address" formControlName="otherStreetAddress" autocomplete="off"
                                     #search1>
                             </mat-form-field>
                             <div *ngIf="submittedForm && f.otherStreetAddress.errors" class="text-danger">

@@ -1,14 +1,14 @@
-<ngx-spinner name="fetchspinner">
+<ngx-spinner type="ball-scale-multiple" name="fetchspinner">
 	<p style="color: white; font-size: 0.95rem; width: max-content">
 		Searching our large database of vehicles and drivers....
 	</p>
 </ngx-spinner>
-<ngx-spinner name="savespinner">
+<ngx-spinner type="ball-scale-multiple" name="savespinner">
 	<p style="color: white; font-size: 0.95rem; width: max-content">
 		Saving your details. Please Wait...
 	</p>
 </ngx-spinner>
-<ngx-spinner name="normalspinner"></ngx-spinner>
+<ngx-spinner type="ball-scale-multiple" name="normalspinner"></ngx-spinner>
 <div class="d-flex justify-content-end mr-3 " *ngIf="updateType=='edit'">
 	<h3 class="m-0"> <span class="badge badge-secondary">Booking #{{booking_id}}</span></h3>
 </div>
@@ -262,10 +262,6 @@
 							<label
 								class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
 							</label>
-							<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-									preferredCountries: ['us', 'ca', 'mx', 'gb']
-								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObjectUSA($event)"
-								(focus)="$event.target.select()" style="cursor: not-allowed;" readonly/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -487,12 +483,10 @@
 									<label
 										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
 									</label>
-									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-												preferredCountries: ['us', 'ca', 'mx', 'gb']
-											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
-										(keyup)="handleLooseCustomerPhone($event)"
-										(countryChange)="onLCTeleCountryChange($event)"
-										(focus)="$event.target.select()" />
+									<input matInput #cellInput placeholder="1234567890" formControlName="phone"
+										class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+										(keyup)="handleLooseCustomerPhone($event)" />
+
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -528,10 +522,12 @@
 									<mat-label>
 										Address
 									</mat-label>
-									<input type="text" matInput placeholder="Type your address"
+									<input #loosecustomerInput type="text" matInput placeholder="Type your address"
+										(focus)="$event.target.select()" />
+									<!-- <input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
 										(onAutocompleteSelected)="fillLooseCustomerAddress($event)"
-										(focus)="$event.target.select()" />
+										(focus)="$event.target.select()" /> -->
 								</mat-form-field>
 							</div>
 						</div>
@@ -769,10 +765,8 @@
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
 								Cell <span class="asterisk">*</span>
 							</label>
-							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
-									preferredCountries: ['us', 'ca', 'mx', 'gb']
-								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
-								(countryChange)="SetFormValue('passenger_cell_isd','+'+ $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
+							<input matInput #passenger_cellInput placeholder="1234567890"
+								formControlName="passenger_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
@@ -965,11 +959,9 @@
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
 								class="asterisk">*</span>
 						</label>
-						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
-								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
-							(keyup)="handleLooseAffiliatePhone()" (countryChange)="handleCountryChangeLA($event)"
-							(focus)="$event.target.select()" />
+						<input matInput #lose_affiliate_phoneInput placeholder="1234567890"
+							formControlName="lose_affiliate_phone" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keyup)="handleLooseAffiliatePhone()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -1456,11 +1448,8 @@
 							<mat-label>
 								Phone
 							</mat-label>
-							<input matInput placeholder="Phone Number" type="text" readonly
-								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-								(intlTelInputObject)="DrvTelInputObject($event)"
-								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
+							<input matInput #driver_cellInput placeholder="1234567890" formControlName="driver_cell"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 						</mat-form-field>
 					</div>
 
@@ -1469,11 +1458,8 @@
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
 							</label>
-							<input matInput formControlName="driver_cell" ng2TelInput [ng2TelInputOptions]="{
-									preferredCountries: ['us', 'ca', 'mx', 'gb']
-								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="DrvTelInputObject($event)"
-								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)"
-								(focus)="$event.target.select()" />
+							<input matInput #driver_cellInput placeholder="1234567890" formControlName="driver_cell"
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1694,10 +1680,12 @@
 					<div class="col-md-12" id="pickup_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
-							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+							<input #pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
 								(onAutocompleteSelected)="fillAddress('pickup', $event)"
-								(onLocationSelected)="fillLocationPoints('pickup', $event)" />
+								(onLocationSelected)="fillLocationPoints('pickup', $event)" /> -->
 						</mat-form-field>
 					</div>
 				</div>
@@ -1899,10 +1887,12 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
-							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+							<input #dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
 								(onAutocompleteSelected)="fillAddress('dropoff', $event)"
-								(onLocationSelected)="fillLocationPoints('dropoff', $event)" />
+								(onLocationSelected)="fillLocationPoints('dropoff', $event)" /> -->
 						</mat-form-field>
 					</div>
 				</div>
@@ -2102,15 +2092,14 @@
 			</div>
 
 			<!-- Extra Stop Address Field -->
+
 			<div class="row mt-2 mb-4 align-items-center m-0"
-				*ngFor="let extra_stop of ExtraStops.controls; index as stop_index">
+				*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
 				<div class="extra-stop-field col-11">
 					<mat-form-field appearance="outline">
-						<mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
-						<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
-							(onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
-							(focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)"
-							(onLocationSelected)="fillExtraStop(false, stop_index, null, $event);" />
+						<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
+						<input #extraStopInput type="text" matInput placeholder="Type your address"
+							[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
 					</mat-form-field>
 				</div>
 				<div class="col-1 p-0 p-md-3">
@@ -2119,15 +2108,8 @@
 							(click)="deleteExtraStop(false, stop_index)"></i>
 					</div>
 				</div>
-				<!-- <div class="col-11">
-					<mat-form-field appearance="outline">
-						<mat-label> Extra Stop Instruction {{ stop_index + 1 }} </mat-label>
-						<input type="text" matInput placeholder="Special Instruction" 
-						(focus)="$event.target.select()" [value]="fetchSpecialInstruction('extra_stops', stop_index)"
-						(keyup)="fillExtraStopInstruction(false, stop_index,$event)"/>
-					</mat-form-field>
-				</div> -->
 			</div>
+
 			<!-- Extra Stop Address Field Ends -->
 
 
@@ -2542,10 +2524,12 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
-							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+							<input #return_pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
 								(onAutocompleteSelected)="fillAddress('return_pickup', $event)"
-								(onLocationSelected)="fillLocationPoints('return_pickup', $event)" />
+								(onLocationSelected)="fillLocationPoints('return_pickup', $event)" /> -->
 						</mat-form-field>
 					</div>
 				</div>
@@ -2746,10 +2730,12 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
-							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()"
 								(onAutocompleteSelected)="fillAddress('return_dropoff', $event)"
-								(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" />
+								(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" /> -->
 						</mat-form-field>
 					</div>
 				</div>
@@ -2948,7 +2934,7 @@
 				</div>
 			</div>
 			<!-- Extra Stop Address Field -->
-			<div class="row my-2 align-items-center"
+			<!-- <div class="row my-2 align-items-center"
 				*ngFor="let extra_stop of ReturnExtraStops.controls; index as stop_index">
 				<div class="extra-stop-field col-md-11">
 					<mat-form-field appearance="outline" class="">
@@ -2967,7 +2953,26 @@
 							(click)="deleteExtraStop(true, stop_index)"></i>
 					</div>
 				</div>
+			</div> -->
+
+			<div class="row my-2 align-items-center"
+				*ngFor="let extra_stop of ReturnExtraStops.controls; let stop_index = index">
+				<div class="extra-stop-field col-md-11">
+					<mat-form-field appearance="outline">
+						<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
+						<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
+							[value]="fetchStopValue('return_extra_stops', stop_index)"
+							(focus)="$event.target.select()" />
+					</mat-form-field>
+				</div>
+				<div class="col-md-1">
+					<div class="delete-icons">
+						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
+							(click)="deleteExtraStop(true, stop_index)"></i>
+					</div>
+				</div>
 			</div>
+
 			<!-- Extra Stop Address Field Ends -->
 
 
@@ -3110,12 +3115,9 @@
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
 								class="asterisk">*</span>
 						</label>
-						<input matInput formControlName="return_lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
-								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
-							(keyup)="handleLooseAffiliatePhone()"
-							(countryChange)="SetFormValue('return_lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('return_lose_affiliate_phone_country', $event.iso2)"
-							(focus)="$event.target.select()" />
+						<input matInput #return_lose_affiliate_phoneInput placeholder="1234567890"
+							formControlName="return_lose_affiliate_phone" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keyup)="handleLooseAffiliatePhone()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -3593,11 +3595,9 @@
 							<mat-label>
 								Phone
 							</mat-label>
-							<input matInput placeholder="Phone Number" type="text" readonly
-								formControlName="return_driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-								(intlTelInputObject)="DrvTelInputObject($event)"
-								(countryChange)="SetFormValue('return_driver_cell_isd', '+' + $event.dialCode); SetFormValue('return_driver_cell_country', $event.iso2)" />
+							<input matInput #return_driver_cellInput placeholder="1234567890"
+								formControlName="return_driver_cell" class="phoneNumberClass" tabindex="1"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
 					</div>
 
@@ -3607,11 +3607,11 @@
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
 							</label>
-							<input matInput formControlName="return_driver_cell" ng2TelInput [ng2TelInputOptions]="{
-									preferredCountries: ['us', 'ca', 'mx', 'gb']
-								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="DrvTelInputObject($event)"
-								(countryChange)="SetFormValue('return_driver_cell_isd', '+' + $event.dialCode); SetFormValue('return_driver_cell_country', $event.iso2)"
+
+							<input matInput #return_driver_cellInput placeholder="1234567890"
+								formControlName="return_driver_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />
+
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"

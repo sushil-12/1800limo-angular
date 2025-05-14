@@ -28,11 +28,10 @@ import { UserTemplateComponent } from './components/user/user-template/user-temp
 import { LoginComponent } from './components/website/login/login.component';
 import { OtpComponent } from './components/website/otp/otp.component';
 import { AdminTemplateComponent } from './components/admin/admin-template/admin-template.component';
-import { AffiliateGuard } from 'src/app/guards/affiliate.guard';
+import { AffiliateGuard } from '../app/guards/affiliate.guard';
 import { AffiliateTemplateComponent } from './components/affiliate/affiliate-template/affiliate-template.component';
 import { AffiliateEmailConfirmationComponent } from './components/email-pages/affiliate-email-confirmation/affiliate-email-confirmation.component';
 import { DispatchEmailConfirmationComponent } from './components/email-pages/dispatch-email-confirmation/dispatch-email-confirmation.component';
-import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 import { AgentTemplateComponent } from './components/travel-agent/agent-template/agent-template.component';
@@ -364,10 +363,6 @@ const routes: Routes = [
 				loadChildren: () => import('./components/individual/individual.module').then(m => m.IndividualModule)
 			}
 		]
-	},
-	{
-		path: 'locate-map',
-		component: LocateMapComponent
 	},
 	{
 		path: '**',

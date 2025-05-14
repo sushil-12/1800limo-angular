@@ -1,7 +1,21 @@
 
-# Limo1800
+# Limo1800 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.1.
+This project was generated with [Angular CLI] version 14.2.12.
+
+# Upgrade
+
+Run `ng update @angular/core@14 @angular/cli@14` to upgrade the angular version
+
+
+# Upgrade
+
+Run `ng update @angular/core@11.2.19 @angular/cli@11.2.19` to upgrade the angular version
+
+# Installation
+
+Run `npm install` to install node_modules
+
 
 ## Development server
 
@@ -23,6 +37,6 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
+## Further help TEST
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

@@ -7,8 +7,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 
 //
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule } from 'agm-direction';
+
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule, MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MatInputModule } from '@angular/material/input';
@@ -31,11 +30,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddDriverFromAffiliateComponent } from './add-driver-from-affiliate/add-driver-from-affiliate.component';
 import { AddVehicleFromAffiliateComponent } from './add-vehicle-from-affiliate/add-vehicle-from-affiliate.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { Ng2TelInputModule } from 'ng2-tel-input';
 import { MyBookingsComponent } from './my-bookings/my-bookings.component';
 import { AdminModule } from '../admin/admin.module';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
-import { CreateNewBookingDetailComponent } from './create-new-booking-detail/create-new-booking-detail.component';
 import { EditVehicleFromAffiliateComponent } from './edit-vehicle-from-affiliate/edit-vehicle-from-affiliate.component';
 import { EditVehicleRatesFromAffiliateComponent } from './edit-vehicle-rates-from-affiliate/edit-vehicle-rates-from-affiliate.component';
 import { AddVehicleRatesFromAffiliateComponent } from './add-vehicle-rates-from-affiliate/add-vehicle-rates-from-affiliate.component';
@@ -50,10 +47,10 @@ import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-ra
 import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
 import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affiliate-finalize-rates.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
-import { NgxPrintModule } from 'ngx-print';
 import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
 import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
 	declarations: [
@@ -70,7 +67,6 @@ import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affi
 		AddVehicleFromAffiliateComponent,
 		MyBookingsComponent,
 		CreateNewBookingComponent,
-		CreateNewBookingDetailComponent,
 		EditVehicleFromAffiliateComponent,
 		EditVehicleRatesFromAffiliateComponent,
 		AddVehicleRatesFromAffiliateComponent,
@@ -97,10 +93,8 @@ import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affi
 		FormsModule,
 		ReactiveFormsModule,
 		MatSlideToggleModule,
-		Ng2TelInputModule,
 		AdminModule,
-		AgmCoreModule,
-		AgmDirectionModule,
+		GoogleMapsModule,
 		MatNativeDateModule,
 		MatMomentDateModule,
 		MatInputModule,
@@ -109,7 +103,6 @@ import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affi
 		MatRadioModule,
 		// PinchZoomModule,
 		SharedModule,
-		NgxPrintModule
 	]
 })
 export class AffiliateModule { }

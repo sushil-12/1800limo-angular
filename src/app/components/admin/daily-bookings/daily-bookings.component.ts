@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { AdminService } from "../../../services/admin.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -16,8 +16,8 @@ import * as moment from "moment";
 import { ErrorDialogService } from "../../../services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
-import { MapsAPILoader } from "@agm/core";
 import { UploadService } from "../../../services/upload.service";
+import { GoogleMap } from '@angular/google-maps';
 
 @Component({
 	selector: "app-daily-bookings",
@@ -25,11 +25,14 @@ import { UploadService } from "../../../services/upload.service";
 	styleUrls: ["./daily-bookings.component.scss"],
 })
 export class DailyBookingsComponent implements OnInit {
+	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
+
 	exampleHeader = DatePickerComponent;
 	@ViewChild("inputmsg", { static: false }) message: ElementRef;
 	@ViewChild('fileInput') fileInput!: ElementRef;
 	@ViewChild("select") select: MatSelect;
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
+
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -44,7 +47,7 @@ export class DailyBookingsComponent implements OnInit {
 	public lastPageUrl: string;
 	public prevPageUrl: string;
 	public nextPageUrl: string;
-	public sendMessageField: boolean = null;
+	public sendMessageField: any = null;
 	public bookingsRes: any;
 	public bookings: any = [];
 	public bookingStatusColor: string;
@@ -88,13 +91,16 @@ export class DailyBookingsComponent implements OnInit {
 	total_amount: any;
 	admin_total: any;
 
+	zoom = 7;
+	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
+	directionsRenderer!: google.maps.DirectionsRenderer;
+
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
-		private $mapsapi: MapsAPILoader,
 		private uploadService: UploadService,
 	) { }
 
@@ -164,7 +170,6 @@ export class DailyBookingsComponent implements OnInit {
 			emailTarget: ["", Validators.required],
 		});
 
-		this.MapController()
 		if (this.currentUser?.created_by_role == 'subscriber') {
 			this.stripeDetailsCheck()
 			this.subs_end_date = localStorage.getItem('current_period_end_date')
@@ -179,6 +184,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.sendEmailModalFocus.nativeElement
 			.querySelector("textarea")
 			.focus();
+		// this.MapController();
 	}
 
 	stripeDetailsCheck() {
@@ -214,73 +220,60 @@ export class DailyBookingsComponent implements OnInit {
 
 	MapController() {
 		console.log('Map has been initialised.')
-		let waypoints = []
-		let origin: google.maps.LatLng
-		let destination: google.maps.LatLng
-		let map: google.maps.Map
+		let origin: google.maps.LatLng;
+		let destination: google.maps.LatLng;
+		const waypoints: google.maps.DirectionsWaypoint[] = [];
 
-		this.$mapsapi.load().then(() => {
-
-			// console.log('Return Map has been initialised. ')
-			// map
-			map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 7,
-				center: new google.maps.LatLng(41.850033, -87.6500523),
-				scaleControl: true
-			})
+		// Base values
+		origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
+		destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
 
 
-			// defaults for Source/Target - City
-			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
-			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+		// Override based on transfer_type
+		if (this.bookingPreview.transfer_type?.includes('airport_')) {
+			origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
+		}
 
-			//defaults for Source/Target - City
-			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
-			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+		if (this.bookingPreview.transfer_type?.includes('_airport')) {
+			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
+		}
 
-			// Overrides
-			if (this.bookingPreview?.transfer_type.includes('airport_')) {
-				// override for Source - Airport
-				// console.log('Override for Source Airport')
-				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
-			}
-			if (this.bookingPreview?.transfer_type.includes('_airport')) {
-				// override for Target - Airport
-				// console.log('Override for Target Airport')
-				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
-			}
 
-			this.drawMap(map, {
+		setTimeout(() => {
+			this.drawMap({
 				origin,
 				destination,
 				waypoints,
 				optimizeWaypoints: true,
 				travelMode: google.maps.TravelMode.DRIVING
 			})
-		})
+		}, 100)
+
+
 	}
 
+	drawMap(request: google.maps.DirectionsRequest) {
+		const directionsService = new google.maps.DirectionsService();
+		this.directionsRenderer = new google.maps.DirectionsRenderer();
 
-	drawMap(map: google.maps.Map, request: Object) {
-		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
-			console.error('Request Object is not properly according to specified requirements.')
-			return
+		const mapInstance = this.map.googleMap;
+		if (!mapInstance) {
+			console.error('Map is not initialized yet');
+			return;
 		}
 
-		this.$mapsapi.load().then(() => {
-			const directionsRenderer = new google.maps.DirectionsRenderer()
-			const directionsService = new google.maps.DirectionsService()
-			directionsRenderer.setMap(map)
+		this.directionsRenderer.setMap(mapInstance);
 
-			directionsService.route(request, (response: any, status: string) => {
-				if (status == google.maps.DirectionsStatus.OK) {
-					console.log('Directions Service Response: ', response)
-					directionsRenderer.setDirections(response)
-				}
-			})
-
-		})
+		directionsService.route(request, (response, status) => {
+			if (status === google.maps.DirectionsStatus.OK) {
+				console.log('Directions loaded:', response);
+				this.directionsRenderer.setDirections(response);
+			} else {
+				console.error('Directions request failed due to ' + status);
+			}
+		});
 	}
+
 
 	handleChangeCheckbox(value: any) {
 		console.log("event---->> ", value);
@@ -1264,15 +1257,6 @@ export class DailyBookingsComponent implements OnInit {
 								response?.data?.dropoffDetail.address
 							);
 					}
-					// this.router.navigate(['/locate-map'], {
-					// 	queryParams: {
-					// 		plat: response?.data?.pickupDetail?.lat.toString(),
-					// 		plng: response?.data?.pickupDetail?.long.toString(),
-					// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
-					// 		dlng: response.data?.dropoffDetail?.long.toString(),
-					// 	},
-					// 	queryParamsHandling: 'merge'
-					// });
 					if (this.iOS()) {
 						setTimeout(() => {
 							window.location.href = iosDirectionUrl;

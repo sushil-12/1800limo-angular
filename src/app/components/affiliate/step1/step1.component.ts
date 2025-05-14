@@ -11,6 +11,7 @@ import { CustomvalidationService } from "../../../services/customvalidation.serv
 import { HttpClient } from "@angular/common/http";
 import { AdminService } from "src/app/services/admin.service";
 import { CommonService } from "src/app/services/common.service";
+import * as intlTelInput from "intl-tel-input";
 declare var $: any;
 
 @Component({
@@ -21,6 +22,10 @@ declare var $: any;
 export class Step1Component implements OnInit, AfterViewInit {
 	@ViewChild("resetImages")
 	imagesVariable: ElementRef;
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('dispatchInput') dispatchInput!: ElementRef;
+	@ViewChild('companyCellNumberInput') companyCellNumberInput!: ElementRef;
+	@ViewChild('FaxInput') FaxInput!: ElementRef;
 
 	public addAffiliateAccountForm: FormGroup;
 	public updateAffiliateEmailForm: FormGroup;
@@ -100,14 +105,6 @@ export class Step1Component implements OnInit, AfterViewInit {
 		private customValidator: CustomvalidationService
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
-
-	ngAfterViewInit() {
-		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
-		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
-		this.FaxObject.setCountry(this.currentUser.phoneCountry);
-		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
-	}
 
 	ngOnInit(): void {
 
@@ -411,6 +408,64 @@ export class Step1Component implements OnInit, AfterViewInit {
 			});
 
 	}
+
+
+	ngAfterViewInit() {
+		this.initallphonefields()
+	}
+
+	initallphonefields() {
+
+		const telOptions = {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		};
+
+		if (this.cellInput) {
+			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.CellNumberObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'CellNumber');
+			});
+		}
+
+		if (this.dispatchInput) {
+			this.DispatchObject = intlTelInput(this.dispatchInput.nativeElement, telOptions);
+			this.dispatchInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.DispatchObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'Dispatch');
+			});
+		}
+
+		if (this.FaxInput) {
+			this.FaxObject = intlTelInput(this.FaxInput.nativeElement, telOptions);
+			this.FaxInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.FaxObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'Fax');
+			});
+		}
+		if (this.companyCellNumberInput) {
+			this.CompanyCellNumberObject = intlTelInput(this.companyCellNumberInput.nativeElement, telOptions);
+			this.companyCellNumberInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.onCountryChange(countryData, 'CompanyCellNumber');
+			});
+		}
+
+		//set current user country as default in phone number
+		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
+		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
+		this.FaxObject.setCountry(this.currentUser.phoneCountry);
+		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
+	}
+
 
 	buildAffiliateAccountForm() {
 		this.addAffiliateAccountForm = this.formBuilder.group({

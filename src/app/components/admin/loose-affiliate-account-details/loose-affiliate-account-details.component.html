@@ -30,12 +30,8 @@
                                 Mobile<span class="asterisk"> *</span>
                             </label>
                             <div class="input-with-icon">
-                                <input matInput placeholder="Mobile" formControlName="phone" ng2TelInput
-                                    [ng2TelInputOptions]="{'initialCountry': defaultCountryCode, 'preferredCountries': ['us', 'in', 'ca', 'mx', 'gb']}"
-                                    placeholder="1234567890" class="phoneNumberClass"
-                                    (countryChange)="onCountryChange($event, 'phone')"
-                                    (intlTelInputObject)="telInputObjectMobile($event)"
-                                    (focus)="$event.target.select()" />
+                                <input matInput #phoneInput placeholder="Mobile" formControlName="phone"
+                                    class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()" />
                                 <a class="phone_icon" *ngIf="userId"
                                     href="tel:{{f?.phone_isd?.value}}{{f?.phone?.value}}">
                                     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
@@ -89,11 +85,8 @@
                     <div class="col-md-6">
                         <mat-form-field appearance="outline" class="mat-custom-phone cellLabelClass">
                             <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work</label>
-                            <input matInput placeholder="Mobile" formControlName="work" ng2TelInput
-                                [ng2TelInputOptions]="{'initialCountry': defaultCountryCode,'preferredCountries': ['us','in','ca','mx','gb']}"
-                                placeholder="1234567890" class="phoneNumberClass"
-                                (countryChange)="onCountryChange($event,'work')"
-                                (intlTelInputObject)="telInputObjectOffice($event)" (focus)="$event.target.select()" />
+                            <input matInput #workInput placeholder="Mobile" formControlName="work"
+                                class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
                             class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">

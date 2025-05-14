@@ -670,15 +670,6 @@ export class AffiliateBookingComponent implements OnInit {
 					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
 						encodeURIComponent(response?.data?.dropoffDetail.address)
 				}
-				// this.router.navigate(['/locate-map'], {
-				// 	queryParams: {
-				// 		plat: response?.data?.pickupDetail?.lat.toString(),
-				// 		plng: response?.data?.pickupDetail?.long.toString(),
-				// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
-				// 		dlng: response.data?.dropoffDetail?.long.toString(),
-				// 	},
-				// 	queryParamsHandling: 'merge'
-				// });
 				if (this.iOS()) {
 					setTimeout(() => {
 						window.location.href = iosDirectionUrl;

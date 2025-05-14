@@ -1,4 +1,4 @@
-import { AfterViewInit, AfterViewChecked, Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { AfterViewInit, AfterViewChecked, Component, EventEmitter, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +12,7 @@ import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from 'src/app/services/common.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -19,7 +20,12 @@ declare var $: any;
 	templateUrl: './add-driver.component.html',
 	styleUrls: ['./add-driver.component.scss']
 })
-export class AddDriverComponent implements OnInit {
+export class AddDriverComponent implements OnInit, AfterViewInit {
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('backgroundCompanyTelInput') backgroundCompanyTelInput!: ElementRef;
+	@ViewChild('policeTelInput') policeTelInput!: ElementRef;
+
+
 	globalFunctions = this.globals
 
 	color: ThemePalette = 'primary';
@@ -88,27 +94,6 @@ export class AddDriverComponent implements OnInit {
 		private customValidator: CustomvalidationService,
 		private globals: SharedModule) { }
 
-	ngAfterViewInit() {
-		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
-		this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
-		this.addDriverForm.patchValue({
-			Country: this.currentUser.CellNumberCountry.toUpperCase()
-		});
-	}
-	ngAfterViewChecked() {
-		$(".backbutton").tooltip({
-			trigger: 'hover'
-		});
-		$(".backbutton").on('mouseleave', function () {
-			$(this).tooltip('dispose');
-		});
-		$(".backbutton").on('click', function () {
-			$(this).tooltip('dispose');
-		});
-	}
 	ngOnInit(): void {
 		this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
 		this.httpClient
@@ -406,6 +391,101 @@ export class AddDriverComponent implements OnInit {
 				}
 			});
 		// this.stateManagementService.setprogressBar(false);
+	}
+
+	ngAfterViewChecked() {
+		$(".backbutton").tooltip({
+			trigger: 'hover'
+		});
+		$(".backbutton").on('mouseleave', function () {
+			$(this).tooltip('dispose');
+		});
+		$(".backbutton").on('click', function () {
+			$(this).tooltip('dispose');
+		});
+	}
+
+
+
+
+
+	ngAfterViewInit() {
+		this.initallphonefields()
+	}
+
+
+	initallphonefields() {
+
+		if (this.cellInput) {
+			console.log('onput', this.cellInput, this.cellInput.nativeElement)
+			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.CellNumberObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'CellNumber')
+			});
+		}
+
+		if (this.backgroundCompanyTelInput) {
+			console.log('onput', this.backgroundCompanyTelInput, this.backgroundCompanyTelInput.nativeElement)
+			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.backgroundCompanyTelInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData(); 
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'background'); 
+			});
+		}
+
+
+
+		if (this.policeTelInput) {
+			console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
+			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.policeTelInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData(); 
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'PoliceForceTelephone'); 
+			});
+		}
+
+		//set current user country as default in phone number
+		this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
+		this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
+		this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
+		this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
+		this.addDriverForm.patchValue({
+			Country: this.currentUser.CellNumberCountry.toUpperCase()
+		});
+
+
+
 	}
 
 	closeButton() {

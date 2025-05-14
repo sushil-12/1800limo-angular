@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { MapsAPILoader } from '@agm/core'
 import * as moment from 'moment';
+import { GoogleMap } from '@angular/google-maps';
 
 declare let $: any
 
@@ -13,6 +13,13 @@ declare let $: any
 	styleUrls: ['./vehicle-details.component.scss']
 })
 export class VehicleDetailsComponent implements OnInit {
+	@ViewChild('map') map!: GoogleMap;
+
+	zoom = 15;
+	center = { lat: 41.850033, lng: -87.6500523 };
+	mapOptions: google.maps.MapOptions = {
+		scaleControl: true,
+	};
 
 	selected_vehicle: any	// selected vehicle details from previous page
 	quotebot_form: any	// quotebot details from previous page
@@ -30,7 +37,6 @@ export class VehicleDetailsComponent implements OnInit {
 		private _router: Router,
 		private _activatedRoute: ActivatedRoute,
 		private _errorDialogService: ErrorDialogService,
-		private mapsApiLoader: MapsAPILoader
 	) { }
 
 	ngOnInit(): void {
@@ -91,9 +97,6 @@ export class VehicleDetailsComponent implements OnInit {
 
 
 		})
-
-		// initialize Map
-		this.initMap()
 
 		var config = {
 			items: this.selected_vehicle.vehicle_images.length + 1,
@@ -189,69 +192,71 @@ export class VehicleDetailsComponent implements OnInit {
 	}
 	//ngOnInit ends
 
+	ngAfterViewInit() {
+		this.initMap();
+	}
+
 	initMap(): any {
-		this.mapsApiLoader.load().then(() => {
-			const directionsService = new google.maps.DirectionsService()
-			const directionsRenderer = new google.maps.DirectionsRenderer()
-			const map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 15,
-				center: { lat: 41.850033, lng: -87.6500523 },
-				scaleControl: true
-			})
+		const directionsService = new google.maps.DirectionsService();
+		const directionsRenderer = new google.maps.DirectionsRenderer();
+		directionsRenderer.setMap(this.map.googleMap!);
 
-			directionsRenderer.setMap(map)
+		const origin = this.getOrigin();
+		const destination = this.getDestination();
 
-			let obj = {}
-			switch (this.quotebot_form.pickup_type) {
-				case 'airport':
-					obj['origin'] = {
-						lat: Number(this.quotebot_form.pickup_airport_lat),
-						lng: Number(this.quotebot_form.pickup_airport_long)
-					}
-					break
-				case 'city':
-				case 'cruise':
-				case 'cruise_port':
-					obj['origin'] = {
-						lat: Number(this.quotebot_form.pickup_address_lat),
-						lng: Number(this.quotebot_form.pickup_address_long)
-					}
-					break
+		const request: google.maps.DirectionsRequest = {
+			origin,
+			destination,
+			travelMode: google.maps.TravelMode.DRIVING,
+		  };
+
+		  directionsService.route(request, (response, status) => {
+			if (status === google.maps.DirectionsStatus.OK && response) {
+			  directionsRenderer.setDirections(response);
+	  
+			  response.routes.forEach(route => {
+				route.legs.forEach(leg => {
+				  this.distance += leg.distance?.value || 0;
+				  this.duration += leg.duration?.value || 0;
+				  console.log('Leg distance (m):', leg.distance?.value);
+				  console.log('Leg duration (s):', leg.duration?.value);
+				});
+			  });
+			} else {
+			  console.error('Directions request failed due to', status);
 			}
-			switch (this.quotebot_form.dropoff_type) {
-				case 'airport':
-					obj['destination'] = {
-						lat: Number(this.quotebot_form.dropoff_airport_lat),
-						lng: Number(this.quotebot_form.dropoff_airport_long)
-					}
-					break
-				case 'city':
-				case 'cruise':
-				case 'cruise_port':
-					obj['destination'] = {
-						lat: Number(this.quotebot_form.dropoff_address_lat),
-						lng: Number(this.quotebot_form.dropoff_address_long)
-					}
-					break
-			}
-
-			obj['travelMode'] = google.maps.TravelMode.DRIVING
-
-			directionsService.route(obj, (response, error) => {
-				console.log('Directions Service Response: ', response)
-				console.log('Distance-->>>>>', response?.routes)
-				response?.routes?.map((i: any) => {
-					i?.legs.map((j) => {
-						this.distance += j.distance.value
-						this.duration += j.duration.value
-						console.log('--<distance>>', j.distance.value)
-						console.log('--<duration>>', j.duration.value)
-
-					})
-				})
-				directionsRenderer.setDirections(response)
-			})
-		})
+		  });
+		}
+	  
+		getOrigin(): google.maps.LatLngLiteral {
+		  switch (this.quotebot_form.pickup_type) {
+			case 'airport':
+			  return {
+				lat: Number(this.quotebot_form.pickup_airport_lat),
+				lng: Number(this.quotebot_form.pickup_airport_long),
+			  };
+			default:
+			  return {
+				lat: Number(this.quotebot_form.pickup_address_lat),
+				lng: Number(this.quotebot_form.pickup_address_long),
+			  };
+		  }
+		}
+	  
+		getDestination(): google.maps.LatLngLiteral {
+		  switch (this.quotebot_form.dropoff_type) {
+			case 'airport':
+			  return {
+				lat: Number(this.quotebot_form.dropoff_airport_lat),
+				lng: Number(this.quotebot_form.dropoff_airport_long),
+			  };
+			default:
+			  return {
+				lat: Number(this.quotebot_form.dropoff_address_lat),
+				lng: Number(this.quotebot_form.dropoff_address_long),
+			  };
+		  }
+	
 	}
 
 

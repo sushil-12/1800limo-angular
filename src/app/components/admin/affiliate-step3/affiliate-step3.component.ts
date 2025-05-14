@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { formatDate } from '@angular/common';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -16,6 +17,7 @@ declare var $: any;
 	styleUrls: ['./affiliate-step3.component.scss']
 })
 export class AffiliateStep3Component implements OnInit {
+	@ViewChild('phoneInput') phoneInput!: ElementRef;
 
 	public imageSrc: string;
 	public addInsuranceForm: FormGroup;
@@ -46,9 +48,30 @@ export class AffiliateStep3Component implements OnInit {
 		private customValidator: CustomvalidationService) { }
 
 	ngAfterViewInit() {
+
+		// init flag
+		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			// autoPlaceholder: 'aggressive',
+			utilsScript:
+				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		});
+
+		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
+			console.log("in country change",countryData)
+			this.onCountryChange(countryData, 'AgentTelephone')
+		});
+
+
 		//set current user country as default in phone number
 		this.AgentTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
 	}
+
+	
 	ngOnInit(): void {
 		this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
 		for (let [key, value] of Object.entries(this.stepsObj)) {

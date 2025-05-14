@@ -1,4 +1,3 @@
-import { MapsAPILoader } from '@agm/core';
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services/admin.service';
 
@@ -16,7 +15,6 @@ export class AffiliateMapPinsComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private $mapsapi: MapsAPILoader,
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +33,6 @@ export class AffiliateMapPinsComponent implements OnInit {
   MapController() {
     console.log('Map has been initialised.');
 
-    this.$mapsapi.load().then(() => {
       this.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,
         center: new google.maps.LatLng(41.850033, -87.6500523),
@@ -44,7 +41,7 @@ export class AffiliateMapPinsComponent implements OnInit {
 
       // Fetch coordinates and add markers
       this.loadMarkers('all');
-    });
+
   }
 
   onVehicleChange(event: any) {

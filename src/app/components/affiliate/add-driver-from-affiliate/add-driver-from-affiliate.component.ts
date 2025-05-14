@@ -5,6 +5,8 @@ import {
 	EventEmitter,
 	Input,
 	OnInit,
+	ViewChild,
+	ElementRef,
 } from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
 import {
@@ -26,6 +28,7 @@ import { CustomvalidationService } from "../../../services/customvalidation.serv
 import { SharedModule } from "../../shared/shared.module";
 import { AdminService } from "src/app/services/admin.service";
 import { CommonService } from "src/app/services/common.service";
+import * as intlTelInput from "intl-tel-input";
 declare var $: any;
 
 @Component({
@@ -35,6 +38,12 @@ declare var $: any;
 })
 export class AddDriverFromAffiliateComponent
 	implements OnInit, AfterViewInit, AfterViewChecked {
+
+	@ViewChild('cellInput') cellInput!: ElementRef;
+	@ViewChild('backgroundCompanyTelInput') backgroundCompanyTelInput!: ElementRef;
+	@ViewChild('policeTelInput') policeTelInput!: ElementRef;
+
+
 	globalFunctions = this.globals;
 
 	color: ThemePalette = "primary";
@@ -106,34 +115,6 @@ export class AddDriverFromAffiliateComponent
 		private globals: SharedModule
 	) { }
 
-	ngAfterViewInit() {
-		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
-		this.BackgroundCompanyTelNumberObject.setCountry(
-			this.currentUser.phoneCountry
-		);
-		this.PoliceForceTelephoneObject.setCountry(
-			this.currentUser.phoneCountry
-		);
-		this.changeCountry(this.currentUser.phoneCountry.toUpperCase());
-		this.addDriverForm.patchValue({
-			Country: this.currentUser.phoneCountry.toUpperCase(),
-		});
-		// this.affiliateService.proDriverYears.subscribe((data) => {
-		// 	this.proDriverYears = data;
-		// });
-	}
-	ngAfterViewChecked() {
-		$(".backbutton").tooltip({
-			trigger: "hover",
-		});
-		$(".backbutton").on("mouseleave", function () {
-			$(this).tooltip("dispose");
-		});
-		$(".backbutton").on("click", function () {
-			$(this).tooltip("dispose");
-		});
-	}
 
 	ngOnInit(): void {
 		console.log('add-driver-from-affiliate-component init()------------_>>>>>>>>>>>')
@@ -528,6 +509,99 @@ export class AddDriverFromAffiliateComponent
 			this.f.starRatingValue.setValidators([Validators.required]);
 			this.addDriverForm.updateValueAndValidity();
 		}
+	}
+
+
+	ngAfterViewInit() {
+		this.initallphonefields()
+	}
+	ngAfterViewChecked() {
+		$(".backbutton").tooltip({
+			trigger: "hover",
+		});
+		$(".backbutton").on("mouseleave", function () {
+			$(this).tooltip("dispose");
+		});
+		$(".backbutton").on("click", function () {
+			$(this).tooltip("dispose");
+		});
+	}
+
+	initallphonefields() {
+
+		if (this.cellInput) {
+			console.log('onput', this.cellInput, this.cellInput.nativeElement)
+			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.cellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.CellNumberObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'CellNumber')
+			});
+		}
+
+		if (this.backgroundCompanyTelInput) {
+			console.log('onput', this.backgroundCompanyTelInput, this.backgroundCompanyTelInput.nativeElement)
+			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.backgroundCompanyTelInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'background');
+			});
+		}
+
+
+
+		if (this.policeTelInput) {
+			console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
+			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.policeTelInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'PoliceForceTelephone');
+			});
+		}
+		//set current user country as default in phone number
+		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
+		this.BackgroundCompanyTelNumberObject.setCountry(
+			this.currentUser.phoneCountry
+		);
+		this.PoliceForceTelephoneObject.setCountry(
+			this.currentUser.phoneCountry
+		);
+		this.changeCountry(this.currentUser.phoneCountry.toUpperCase());
+		this.addDriverForm.patchValue({
+			Country: this.currentUser.phoneCountry.toUpperCase(),
+		});
+
+
+
 	}
 
 	SetFormValue(form_control: string, value: any) {

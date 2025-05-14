@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -34,7 +33,6 @@ export class AddCardComponent implements OnInit
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
 		private stateManagementService: StateManagementService,
-		private mapsAPILoader: MapsAPILoader,
 		private spinner: NgxSpinnerService,
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService

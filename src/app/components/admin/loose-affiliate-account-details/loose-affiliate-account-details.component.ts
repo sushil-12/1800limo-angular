@@ -1,15 +1,15 @@
-import { MapsAPILoader } from '@agm/core';
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AdminService } from 'src/app/services/admin.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { CustomvalidationService } from 'src/app/services/customvalidation.service';
-import { StateManagementService } from 'src/app/services/statemanagement.service';
-import { TravelAgentService } from 'src/app/services/travel-agent.service';
+import { AdminService } from '../../../services/admin.service';
+import { AuthService } from '../../../services/auth.service';
+import { CustomvalidationService } from '../../../services/customvalidation.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
+import { TravelAgentService } from '../../../services/travel-agent.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 
@@ -18,8 +18,12 @@ declare var $: any;
   templateUrl: './loose-affiliate-account-details.component.html',
   styleUrls: ['./loose-affiliate-account-details.component.scss']
 })
-export class LooseAffiliateAccountDetailsComponent implements OnInit {
+export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('nameInput') nameInput: ElementRef;
+  @ViewChild('search1') search1!: ElementRef;
+  geoCoder!: google.maps.Geocoder;
+  @ViewChild('phoneInput') phoneInput!: ElementRef;
+  @ViewChild('workInput') workInput!: ElementRef;
 
   public profileForm: FormGroup;
   public submittedForm: boolean;
@@ -40,9 +44,6 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
   longitude: number;
   zoom: number;
   address: string;
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
   response: any;
   defaultCountryCode: string;
   lastSegment: string;
@@ -51,7 +52,6 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
     private stateManagementService: StateManagementService,
     private formBuilder: FormBuilder,
     private customValidator: CustomvalidationService,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -98,58 +98,6 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
         })
     }
 
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          //Fill one way form pickup address fields
-          this.profileForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng(),
-            address: place?.formatted_address
-          });
-          for (var i = 0; i < place.address_components.length; i++) {
-            for (var j = 0; j < place.address_components[i].types.length; j++) {
-              if (place.address_components[i].types[j] == "country") {
-                this.profileForm.patchValue({
-                  country: place.address_components[i].long_name
-                });
-                // this.changeCountry(place.address_components[i].short_name)
-              }
-              else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-                this.profileForm.patchValue({
-                  state: place.address_components[i].long_name
-                });
-              }
-              else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-                this.profileForm.patchValue({
-                  city: place.address_components[i].long_name
-                });
-              }
-              else if (place.address_components[i].types[j] == "postal_code") {
-                this.profileForm.patchValue({
-                  zip: place.address_components[i].long_name
-                });
-              }
-              // else if (place.address_components[i].types[j] == "street_number") {
-              // 	this.profileForm.patchValue({
-              // 		address: place.address_components[i].long_name
-              // 	});
-              // }
-            }
-          }
-        });
-      });
-    });
 
 
   }
@@ -162,6 +110,100 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
     this.selectedLanguages = [1]
     this.profileForm.patchValue({ language: this.selectedLanguages });
+
+
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.profileForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.profileForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.profileForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.profileForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.profileForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+        });
+      });
+    });
+
+    this.initallphonefields()
+  }
+
+  initallphonefields(){
+
+    if(this.phoneInput){
+      console.log('onput',this.phoneInput,this.phoneInput.nativeElement)
+      this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+  
+      this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.MobileObject.getSelectedCountryData();
+        console.log("in change",countryData)
+        this.onCountryChange(countryData,'phone')
+      });
+    }
+
+    if(this.workInput){
+      console.log('onput',this.workInput,this.workInput.nativeElement)
+      this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
+        initialCountry: 'us',
+        preferredCountries: ['us', 'ca', 'mx', 'gb'],
+        separateDialCode: true,
+        nationalMode: false,
+        // autoPlaceholder: 'aggressive',
+        utilsScript:
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+      });
+  
+      this.workInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.OfficeObject.getSelectedCountryData(); 
+        console.log("in change",countryData)
+        this.onCountryChange(countryData, 'work');
+      });
+    }
+
+  
+
   }
 
   buildProfileForm() {
@@ -303,9 +345,9 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       return;
     }
 
-    if(this.profileForm.get('badge_city_name').value == ''){
+    if (this.profileForm.get('badge_city_name').value == '') {
       this.profileForm.patchValue({
-        badge_city : ''
+        badge_city: ''
       })
     }
 
@@ -322,10 +364,10 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
-        if(this.userId){
+        if (this.userId) {
           this.router.navigate(['/admin/loose-affiliate-accounts'])
         }
-        else{
+        else {
           this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
             window.location.reload();
           });

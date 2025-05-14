@@ -1,4 +1,4 @@
-<!-- <ngx-spinner></ngx-spinner> -->
+<!-- <ngx-spinner type="ball-scale-multiple"></ngx-spinner> -->
 <section class="user_information affiliate_steps_border_radius" *ngIf="affiliateId && isStep2Completed">
 	<h2 class="headinginfo adminbox_shadow" *ngIf="affiliateId && isStep2Completed">Bank Account Status</h2>
 	<div class="container">
@@ -535,7 +535,7 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address"
+						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address" autocomplete="off"
 							#search1 tabindex="1" (focus)="$event.target.select()"
 							(keyup)="removeErrorSsn($event.target.value,'address')">
 					</mat-form-field>
@@ -568,12 +568,6 @@
 						</mat-autocomplete>
 					</mat-form-field>
 				</div> -->
-				<div class="col-md-12 map-wrapper" *ngIf="latitude">
-					<agm-map [latitude]="latitude" [longitude]="longitude">
-						<agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true">
-						</agm-marker>
-					</agm-map>
-				</div>
 				<div class="col-md-12 mt-3">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
 						<label class="alert alert-danger">Verify All Fields Under the Map - Especially - Complete

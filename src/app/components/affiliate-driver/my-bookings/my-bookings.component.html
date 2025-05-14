@@ -1,4 +1,4 @@
-<ngx-spinner></ngx-spinner>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <main>
     <!-- Main page content-->
     <section class="adminbox_shadow user_information" id="bookings_affiliate">
@@ -1093,8 +1093,13 @@
                     <hr>
                     <br>
                     <div class="google_map">
-                        <div id="map" class="map"></div>
-                    </div>
+						<google-map
+						  height="300px"
+						  width="100%"
+						  [center]="mapCenter"
+						  [zoom]="zoom"
+						></google-map>
+					  </div>
                     <br>
                     <hr>
                     <!-- Passenger Information -->

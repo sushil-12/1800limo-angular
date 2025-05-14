@@ -5,12 +5,12 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
-import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import * as intlTelInput from 'intl-tel-input';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +18,13 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
+  geoCoder!: google.maps.Geocoder;
+  @ViewChild('cellInput') cellInput!: ElementRef;
+  @ViewChild('mobileInput') mobileInput!: ElementRef;
+  @ViewChild('faxInput') faxInput!: ElementRef;
+  @ViewChild('officeNumberInput') officeNumberInput!: ElementRef;
+
   // timezone=new FormControl('')
   public profile_pic: any;
   public modalImage: string;
@@ -32,26 +39,22 @@ export class ProfileComponent implements OnInit {
   public OfficePhoneObject: any;
   public currentUser: any = JSON.parse(localStorage.getItem('currentUser'))
 
-  	//google map autocomplete
-	title: string = 'AGM project';
-	latitude: number;
-	longitude: number;
-	zoom: number;
-	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
+  //google map autocomplete
+  title: string = 'AGM project';
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
   response: any;
   defaultCountryCode: string;
   lastSegment: string;
-  accountStatus:any;
+  accountStatus: any;
 
   constructor(
     private affiliateService: AffiliateService,
     private stateManagementService: StateManagementService,
     private formBuilder: FormBuilder,
     private customValidator: CustomvalidationService,
-    private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -63,40 +66,37 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountStatus = localStorage.getItem('agentAccountStatus')
-     if(this.accountStatus == 'rejected'){
+    if (this.accountStatus == 'rejected') {
       this.errorDialog.openDialog({
         errors: {
           error: `Your account is being rejected by admin. Currently we are logging you out. Please contact admin!`
         }
       })
-      setTimeout(()=>{
+      setTimeout(() => {
         console.log("in timeout")
         // this.spinner.show('logoutspinner')
         this.authService.logout()
-        .pipe(
-          catchError(err =>
-          {
+          .pipe(
+            catchError(err => {
+              // this.spinner.hide('logoutspinner');//hide spinner
+              return throwError(err);
+            })
+          ).subscribe(({ success }: any) => {
             // this.spinner.hide('logoutspinner');//hide spinner
-            return throwError(err);
-          })
-        ).subscribe(({ success }: any) =>
-        {
-          // this.spinner.hide('logoutspinner');//hide spinner
-          if (success == true)
-          {
-            this.stateManagementService.removeUser();
-          }
-          this.router.navigate(['/']);
-        });
-       },15000)
+            if (success == true) {
+              this.stateManagementService.removeUser();
+            }
+            this.router.navigate(['/']);
+          });
+      }, 15000)
     }
-  //  else if(this.accountStatus == 'pending'){
-  //     this.errorDialog.openDialog({
-  //       errors: {
-  //         error: `Please wait! As your account status is ${this.accountStatus} from admin.`
-  //       }
-  //     }) 
-  //   }
+    //  else if(this.accountStatus == 'pending'){
+    //     this.errorDialog.openDialog({
+    //       errors: {
+    //         error: `Please wait! As your account status is ${this.accountStatus} from admin.`
+    //       }
+    //     }) 
+    //   }
     this.route.url.subscribe(segments => {
       // The "step" part is in the last segment
       const lastSegment = segments[segments.length - 1];
@@ -108,59 +108,9 @@ export class ProfileComponent implements OnInit {
       this.yearOptions.push(currentYear + i);
     }
     this.buildProfileForm();
-    //google map autocomplete
-    this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          //get the place result
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          console.log(place);
-          //Fill one way form pickup address fields
-          this.profileForm.patchValue({
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng(),
-            address:place?.formatted_address 
-          });
-          for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
-								this.profileForm.patchValue({
-									country: place.address_components[i].long_name
-								});
-								// this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.profileForm.patchValue({
-									state: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-								this.profileForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.profileForm.patchValue({
-									zip: place.address_components[i].long_name
-								});
-							}
-							// else if (place.address_components[i].types[j] == "street_number") {
-							// 	this.profileForm.patchValue({
-							// 		address: place.address_components[i].long_name
-							// 	});
-							// }
-						}
-					}
-        });
-      });
-    });
+
+
+
     this.stateManagementService.setprogressBar(false);//hide progressbar
     if (this.currentUser?.is_profile_complete) {
       this.getProfileData()
@@ -187,10 +137,133 @@ export class ProfileComponent implements OnInit {
 
   }
 
+
+
+  ngAfterViewInit() {
+
+    this.initallphonefields()
+
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.profileForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
+
+
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.profileForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.profileForm.patchValue({
+              state: component.long_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.profileForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.profileForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+          // else if (types.includes('street_number')) {
+          // 	this.profileForm.patchValue({
+          // 		address: component.long_name
+          // 	});
+          // }
+        });
+      });
+    });
+
+
+  }
+
+  initallphonefields() {
+
+    const telOptions = {
+      initialCountry: 'us',
+      preferredCountries: ['us', 'ca', 'mx', 'gb'],
+      separateDialCode: true,
+      nationalMode: false,
+      // autoPlaceholder: 'aggressive',
+      utilsScript:
+        'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    }
+
+
+
+    if (this.cellInput) {
+      console.log('onput', this.cellInput, this.cellInput.nativeElement)
+      this.OfficeObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+      this.cellInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.OfficeObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'work_contact_number')
+      });
+    }
+
+    if (this.mobileInput) {
+      console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
+      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+      this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.MobileObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'mobile');
+      });
+    }
+
+    if (this.faxInput) {
+      console.log('onput', this.faxInput, this.faxInput.nativeElement)
+      this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
+      this.faxInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.FaxObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'fax')
+      });
+    }
+
+    if (this.officeNumberInput) {
+      console.log('onput', this.officeNumberInput, this.officeNumberInput.nativeElement)
+      this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
+      this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.OfficePhoneObject.getSelectedCountryData();
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'office_number')
+      });
+    }
+
+    this.MobileObject.setCountry(this.defaultCountryCode)
+    this.OfficeObject.setCountry(this.defaultCountryCode)
+    this.OfficePhoneObject.setCountry(this.defaultCountryCode)
+    this.FaxObject.setCountry(this.defaultCountryCode)
+
+
+  }
+
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
       acc_id: [''],
-      tp_id:[''],
+      tp_id: [''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
@@ -205,7 +278,7 @@ export class ProfileComponent implements OnInit {
       city: [''],
       state: [''],
       country: ['', Validators.required],
-      zip: ['',[Validators.required]],
+      zip: ['', [Validators.required]],
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
@@ -223,7 +296,7 @@ export class ProfileComponent implements OnInit {
       exp_month: [''],
       exp_year: [''],
       name: [''],
-      timezone : ['']
+      timezone: ['']
     });
   }
   get f() {
@@ -242,7 +315,7 @@ export class ProfileComponent implements OnInit {
         this.profile_pic = data?.profile_pic;
         this.profileForm.patchValue({
           acc_id: data?.acc_id,
-          tp_id : data?.tp_id,
+          tp_id: data?.tp_id,
           firstName: data?.first_name,
           middleName: data?.middle_name,
           lastName: data?.last_name,
@@ -332,11 +405,11 @@ export class ProfileComponent implements OnInit {
     // $("#imageModal").show();
   }
   fillAddress(form_control: string, address: any) {
-		console.log('Address: ', address)
-		this.profileForm.patchValue({
+    console.log('Address: ', address)
+    this.profileForm.patchValue({
       address: address.formatted_address
     })
-	}
+  }
 
   profile_pic_change(event) {
     console.log('in function upload profile pic')
@@ -357,9 +430,9 @@ export class ProfileComponent implements OnInit {
           .subscribe(({ data, message }: any) => {
             this.profile_pic = data.image;
             let userInfo = JSON.parse(localStorage.getItem('userData'))
-            if(userInfo){
+            if (userInfo) {
               userInfo['profile_picture'] = data?.image
-              localStorage.setItem('userData' , JSON.stringify(userInfo))
+              localStorage.setItem('userData', JSON.stringify(userInfo))
             }
             this.stateManagementService.setprogressBar(false);//hide progressbar
             // this.snackbarMsg = message;
@@ -395,17 +468,17 @@ export class ProfileComponent implements OnInit {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'))
         if (this.response?.data?.is_profile_complete) {
           currentUser['is_profile_complete'] = true
-          currentUser['name'] = this.response?.data?.first_name +' ' + this.response?.data?.last_name
+          currentUser['name'] = this.response?.data?.first_name + ' ' + this.response?.data?.last_name
           currentUser['account_id'] = this.response?.data?.acc_id
           localStorage.setItem('currentUser', JSON.stringify(currentUser))
-          if(this.lastSegment=='step1'){
-          this.router.navigateByUrl('/travel_agent/profile/step2').then(() => {
-            window.location.reload();
-          });
+          if (this.lastSegment == 'step1') {
+            this.router.navigateByUrl('/travel_agent/profile/step2').then(() => {
+              window.location.reload();
+            });
 
           }
-          else{
-          window.location.reload()
+          else {
+            window.location.reload()
           }
         }
 

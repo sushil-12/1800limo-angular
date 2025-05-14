@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MasterVehicleTypesComponent } from './master-vehicle-types/master-vehicle-types.component';
 import { DailyBookingsComponent } from './daily-bookings/daily-bookings.component';
-// import { CreateNewBookingComponent } from './create-new-booking-old/create-new-booking.component';
-import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
 import { QuoteComponent } from './quote/quote.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { IndividualComponent } from './individual/individual.component';
@@ -32,11 +30,6 @@ import { EditIndividualAccountComponent } from './edit-individual-account/edit-i
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { EditCardComponent } from './edit-card/edit-card.component';
-import { AddCorporateAccountComponent } from './add-corporate-account/add-corporate-account.component';
-import { EditCorporateAccountComponent } from './edit-corporate-account/edit-corporate-account.component';
-import { StaffComponent } from './staff/staff.component';
-import { AddStaffComponent } from './add-staff/add-staff.component';
-import { EditStaffComponent } from './edit-staff/edit-staff.component';
 import { AddTravelPlannerAccountComponent } from './add-travel-planner-account/add-travel-planner-account.component';
 import { EditTravelPlannerAccountComponent } from './edit-travel-planner-account/edit-travel-planner-account.component';
 import { AffiliateStepsTemplateComponent } from './affiliate-steps-template/affiliate-steps-template.component';
@@ -52,8 +45,8 @@ import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { SubAdminComponent } from './sub-admin/sub-admin.component';
 import { AddSubAdminComponent } from './add-sub-admin/add-sub-admin.component';
-import { AdminGuardGuard } from 'src/app/guards/admin-guard.guard';
-import { SubAdminGuard } from 'src/app/guards/sub-admin.guard';
+import { AdminGuardGuard } from '../../../app/guards/admin-guard.guard';
+import { SubAdminGuard } from '../../../app/guards/sub-admin.guard';
 import { CreateDebitCcCardComponent } from './create-debit-cc-card/create-debit-cc-card.component';
 import { HomePageComponent } from './cms/home-page/home-page.component';
 import { HomePageEditComponent } from './cms/home-page-edit/home-page-edit.component';
@@ -78,7 +71,6 @@ import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.componen
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
-import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
@@ -230,28 +222,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: AffiliateBookingComponent
 	},
-
-	{
-		path: 'create-new-booking',
-		canActivate: [SubAdminGuard],
-		pathMatch: 'full',
-		// component: CreateNewBookingComponent
-	},
 	{
 		path: 'new-booking',
 		canActivate: [SubAdminGuard],
 		component: NewBookingComponent
 	},
-	{
-		path: 'booking-details',
-		canActivate: [SubAdminGuard],
-		component: CreateNewBooking2Component
-	},
-	// {
-	// 	path: 'booking-logs',
-	// 	canActivate: [SubAdminGuard],
-	// 	component: BookingLogsComponent
-	// },
 	{
 		path: 'finalize-booking',
 		canActivate: [SubAdminGuard],
@@ -377,11 +352,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: AddIndividualAccountComponent
 	},
-	{
-		path: 'demo-add-individual-account',
-		canActivate: [SubAdminGuard],
-		component: DemoAddIndividualComponent
-	},
+	// {
+	// 	path: 'demo-add-individual-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: DemoAddIndividualComponent
+	// },
 	{
 		path: 'edit-individual-account',
 		canActivate: [SubAdminGuard],
@@ -446,21 +421,21 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: EditCardComponent
 	},
-	{
-		path: 'staff',
-		canActivate: [SubAdminGuard],
-		component: StaffComponent
-	},
-	{
-		path: 'add-staff',
-		canActivate: [SubAdminGuard],
-		component: AddStaffComponent
-	},
-	{
-		path: 'edit-staff',
-		canActivate: [SubAdminGuard],
-		component: EditStaffComponent
-	},
+	// {
+	// 	path: 'staff',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: StaffComponent
+	// },
+	// {
+	// 	path: 'add-staff',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: AddStaffComponent
+	// },
+	// {
+	// 	path: 'edit-staff',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: EditStaffComponent
+	// },
 	{
 		path: 'invoice-summary',
 		canActivate: [SubAdminGuard],

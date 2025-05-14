@@ -1,4 +1,4 @@
-<ngx-spinner></ngx-spinner>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 
 <section class="adminbox_shadow user_information" id="farmout_bookings">
 	<h2 class="headinginfo">
@@ -1142,8 +1142,14 @@
 				<hr>
 				<br>
 				<div class="google_map">
-					<div id="map" class="map"></div>
-				</div>
+					<div class="google_map">
+						<google-map
+						  height="300px"
+						  width="100%"
+						  [center]="mapCenter"
+						  [zoom]="zoom"
+						></google-map>
+					  </div>
 				<br>
 				<hr>
 				<!-- Passenger Information -->

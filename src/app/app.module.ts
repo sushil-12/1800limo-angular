@@ -3,7 +3,6 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Ng2TelInputModule } from 'ng2-tel-input';//for country code list
 import { HttpConfigInterceptor } from './interceptors/http-config.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
@@ -39,8 +38,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 
 //maps
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AgmCoreModule } from '@agm/core';            // @agm/core
-import { AgmDirectionModule } from 'agm-direction';   // agm-direction
+import { GoogleMapsModule } from '@angular/google-maps';
 import { QuotebotModule } from './components/quotebot/quotebot.module';
 import { WebsiteTemplateComponent } from './components/website/website-template/website-template.component';
 import { QuotebotTemplateComponent } from './components/quotebot/quotebot-template/quotebot-template.component';
@@ -63,7 +61,6 @@ import { DispatchEmailConfirmationComponent } from './components/email-pages/dis
 import { ScrollToSectionDirective } from './directives/scroll-to-section.directive';
 import { PageUnderConstructionComponent } from './components/page-under-construction/page-under-construction.component';
 import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
-import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 import { NgOtpInputModule } from 'ng-otp-input';
@@ -87,6 +84,7 @@ import { AddDriverSubscriberComponent } from './components/subscription/add-driv
 import { FarmOutBookingsComponent } from './components/subscription/farm-out-bookings/farm-out-bookings.component';
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -119,7 +117,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 		ScrollToSectionDirective,
 		PageUnderConstructionComponent,
 		HtmlToTextPipe,
-		LocateMapComponent,
 		BookingStatusVerificationComponent,
 		TransactionHistoryComponent,
 		AutoDetectOtpDirective,
@@ -147,14 +144,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 		BrowserAnimationsModule,
 		ReactiveFormsModule,
 		MatSidenavModule,
-		AgmCoreModule.forRoot({
-			apiKey: 'AIzaSyDjV38fI9kDAaVJKqEq2sdgLAHXQPC3Up4',
-			libraries: ['places', 'geometry']
-		}),
-		AgmDirectionModule,
 		QuotebotModule,
 		HttpClientModule,
-		Ng2TelInputModule,
+		GoogleMapsModule,
 		MatDialogModule,
 		MatProgressBarModule,
 		MatFormFieldModule,
@@ -169,6 +161,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
+		{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { hideRequiredMarker: true } },
 		ErrorDialogService,
 		{ provide: ErrorHandler, useClass: GloabalErrorHandlerService }
 	],

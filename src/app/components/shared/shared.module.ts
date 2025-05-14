@@ -6,7 +6,6 @@ import { InvalidControlScrollDirective } from 'src/app/directives/scroll-to-inva
 import { ImageModalComponent } from '../affiliate/modals/image-modal/image-modal.component';
 import { DeleteConfirmationComponent } from '../affiliate/modals/delete-confirmation/delete-confirmation.component';
 import { PhotoInstructionsComponent } from '../affiliate/modals/photo-instructions/photo-instructions.component'
-import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
@@ -21,8 +20,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SignatureDirectiveDirective } from '../../directives/signature-directive.directive';
 import { DateFormatDirective } from '../../directives/date-format.directive';
 import { MatSliderModule } from '@angular/material/slider';
-
-import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
@@ -48,8 +45,7 @@ export const DATE_FORMATS = {
 	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent],
 	imports: [
 		CommonModule,
-		PinchZoomModule, MatAutocompleteModule,
-		MatGoogleMapsAutocompleteModule,
+		MatAutocompleteModule,
 		MatIconModule,
 		MatButtonModule
 
@@ -70,7 +66,6 @@ export const DATE_FORMATS = {
 		DateFormatDirective,
 		SignatureDirectiveDirective,
 		NgxMaterialTimepickerModule,
-		MatGoogleMapsAutocompleteModule,
 		MatSliderModule,
 		MatCheckboxModule,
 		MatSlideToggleModule,

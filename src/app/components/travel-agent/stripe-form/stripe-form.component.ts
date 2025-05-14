@@ -1,4 +1,3 @@
-import { MapsAPILoader } from '@agm/core';
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -20,8 +19,8 @@ declare var $: any;
 	styleUrls: ['./stripe-form.component.scss']
 })
 export class StripeFormComponent implements OnInit {
-
-
+	@ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
@@ -79,7 +78,6 @@ export class StripeFormComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
 		private stateManagementService: StateManagementService,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private commonServices: CommonService,
@@ -112,7 +110,6 @@ export class StripeFormComponent implements OnInit {
 			// 	this.router.navigate(["/admin/travel-planner-account/step2"])
 			//  }
 		}
-		this.mapFunction();
 
 		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
@@ -216,68 +213,70 @@ export class StripeFormComponent implements OnInit {
 	longitude: number;
 	requestLatitude: number;
 	requestLongitude: number;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
 	TaxIdMatch: string;
 
-	mapFunction() {
-		this.mapsAPILoader.load().then(() => {
-			//For Address field
-			console.log('---search ref element-->>>>>>', this.searchElementRef.nativeElement.value)
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () => {
-				this.ngZone.run(() => {
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+	ngAfterViewInit(): void {
+		this.mapFunction()
+	}
 
-					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
-						return;
+	mapFunction() {
+	
+		//google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
+
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.addBankForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.addBankForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.addBankForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.addBankForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.addBankForm.patchValue({
+							zipCode: component.long_name
+						});
 					}
-					console.log('---->> place', place)
-					for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
-								this.addBankForm.patchValue({
-									country: place.address_components[i].short_name
-								});
-								this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.addBankForm.patchValue({
-									state: place.address_components[i].short_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2" || place.address_components[i].types[j] == "administrative_area_level_3") {
-								this.addBankForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.addBankForm.patchValue({
-									zipCode: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "street_number") {
-								this.addBankForm.patchValue({
-									street: place.address_components[i].long_name
-								});
-							}
-						}
+					else if (types.includes('street_number')){
+						this.addBankForm.patchValue({
+							street: component.long_name
+						});
 					}
-					this.addBankForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng(),
-					});
-					this.latitude = place.geometry.location.lat();
-					this.longitude = place.geometry.location.lng();
+					// }
 				});
 			});
-			// }  
 			this.spinner.hide()
 		});
+		  
 	}
+
 
 	getFormData() {
 		console.log('in function get bank data travel agent')

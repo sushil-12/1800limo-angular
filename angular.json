@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "src/styles.scss",
               "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",

@@ -1,4 +1,4 @@
-<ngx-spinner></ngx-spinner>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <main>
     <!-- Main page content-->
     <form [formGroup]="addFamilyMemberAccountForm" appInvalidControlScroll>
@@ -30,12 +30,9 @@
                             <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
                                     class="asterisk">
                                     *</span></label>
-                            <input matInput placeholder="Mobile" formControlName="phone_number" ng2TelInput
-                                [ng2TelInputOptions]="{'initialCountry': 'us','preferredCountries': ['us','in','ca','mx','gb']}"
-                                placeholder="1234567890" class="phoneNumberClass" [readonly]="clientId"
-                                (countryChange)="onCountryChange($event,'mobile')"
-                                (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
-                                (focus)="$event.target.select()" />
+                            <input matInput #phoneInput placeholder="Mobile" formControlName="phone_number"
+                                class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
+                                [readonly]="clientId" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.phone_number?.errors || f?.phone_number?.touched && f?.phone_number?.errors"
                             class="text-danger margin-bottom-thin my-mat-hint">

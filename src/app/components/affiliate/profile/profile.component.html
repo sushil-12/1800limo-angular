@@ -65,8 +65,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="read-only mat-custom-phone">
                             <mat-label>Driver Phone<span class="asterisk"></span></mat-label>
-                            <input id="phone" (intlTelInputObject)="telInputObjectCell($event)" matInput
-                                placeholder="Driver Phone" ng2TelInput readonly tabIndex="1" />
+                            <input id="phone" #cellInput matInput placeholder="Driver Phone" readonly tabIndex="1" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">

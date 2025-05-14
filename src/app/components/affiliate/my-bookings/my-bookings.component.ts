@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
-import { MapsAPILoader } from '@agm/core';
+import { GoogleMap } from '@angular/google-maps';
 declare var $: any;
 
 @Component({
@@ -18,7 +18,13 @@ declare var $: any;
 	styleUrls: ['./my-bookings.component.scss']
 })
 export class MyBookingsComponent implements OnInit {
+	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
+
+	zoom = 7;
+	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
+	directionsRenderer!: google.maps.DirectionsRenderer;
+
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
 	public totalRecords: any;
@@ -63,8 +69,8 @@ export class MyBookingsComponent implements OnInit {
 	currentUser: any;
 	vehiclesRes: any;
 	numberOfVehicles: any;
-	total_amount:any;
-	net_total_amount:any;
+	total_amount: any;
+	net_total_amount: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -73,7 +79,7 @@ export class MyBookingsComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private stateManagementService: StateManagementService,
 		private formBuilder: FormBuilder,
-		private $mapsapi: MapsAPILoader,) { }
+	) { }
 
 	ngOnInit(): void {
 
@@ -125,82 +131,74 @@ export class MyBookingsComponent implements OnInit {
 
 		$("#search-field-my-booking").addClass("box-outline")
 
-		this.MapController()
+		// this.MapController()
 	}
 
 	ngAfterViewInit(): void {
 		$("#search-field-my-booking").addClass("box-outline")
 	}
 
-
 	MapController() {
 		console.log('Map has been initialised.')
-		let waypoints = []
-		let origin: google.maps.LatLng
-		let destination: google.maps.LatLng
-		let map: google.maps.Map
+		let origin: google.maps.LatLng;
+		let destination: google.maps.LatLng;
+		const waypoints: google.maps.DirectionsWaypoint[] = [];
 
-		this.$mapsapi.load().then(() => {
-
-			// console.log('Return Map has been initialised. ')
-			// map
-			map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 7,
-				center: new google.maps.LatLng(41.850033, -87.6500523),
-				scaleControl: true
-			})
+		// Base values
+		origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
+		destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
 
 
-			// defaults for Source/Target - City
-			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
-			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+		// Override based on transfer_type
+		if (this.bookingPreview.transfer_type?.includes('airport_')) {
+			origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
+		}
 
-			//defaults for Source/Target - City
-			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
-			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+		if (this.bookingPreview.transfer_type?.includes('_airport')) {
+			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
+		}
 
-			// Overrides
-			if (this.bookingPreview?.transfer_type.includes('airport_')) {
-				// override for Source - Airport
-				// console.log('Override for Source Airport')
-				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
-			}
-			if (this.bookingPreview?.transfer_type.includes('_airport')) {
-				// override for Target - Airport
-				// console.log('Override for Target Airport')
-				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
-			}
-
-			this.drawMap(map, {
+		setTimeout(() => {
+			this.drawMap({
 				origin,
 				destination,
 				waypoints,
 				optimizeWaypoints: true,
 				travelMode: google.maps.TravelMode.DRIVING
 			})
-		})
+		}, 100)
+
+
+		// this.drawMap({
+		// 	origin,
+		// 	destination,
+		// 	waypoints,
+		// 	optimizeWaypoints: true,
+		// 	travelMode: google.maps.TravelMode.DRIVING
+		// })
+
 	}
 
+	drawMap(request: google.maps.DirectionsRequest) {
+		const directionsService = new google.maps.DirectionsService();
+		this.directionsRenderer = new google.maps.DirectionsRenderer();
 
-	drawMap(map: google.maps.Map, request: Object) {
-		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
-			console.error('Request Object is not properly according to specified requirements.')
-			return
+		const mapInstance = this.map.googleMap;
+		if (!mapInstance) {
+			console.error('Map is not initialized yet');
+			return;
 		}
 
-		this.$mapsapi.load().then(() => {
-			const directionsRenderer = new google.maps.DirectionsRenderer()
-			const directionsService = new google.maps.DirectionsService()
-			directionsRenderer.setMap(map)
+		this.directionsRenderer.setMap(mapInstance);
 
-			directionsService.route(request, (response: any, status: string) => {
-				if (status == google.maps.DirectionsStatus.OK) {
-					console.log('Directions Service Response: ', response)
-					directionsRenderer.setDirections(response)
-				}
-			})
-
-		})
+		directionsService.route(request, (response, status) => {
+			if (status === google.maps.DirectionsStatus.OK) {
+				console.log('Directions loaded:', response);
+				this.directionsRenderer.setDirections(response);
+			} else {
+				console.error('Directions request failed due to ' + status);
+			}
+		});
 	}
 
 	scroll(id) {
@@ -594,15 +592,15 @@ export class MyBookingsComponent implements OnInit {
 				})
 			)
 			.subscribe(({ data, success, message }: any) => {
-					this.spinner.hide();//hide spinner
-					this.loadBookings()
-					$('#cancelBooking').modal('hide');
-					this.$errors.openDialog({
-						errors: {
-							error: `<span class='text-success'>Cancellation request have been successfully send to admin!</span>`
-						}
-					})
-				
+				this.spinner.hide();//hide spinner
+				this.loadBookings()
+				$('#cancelBooking').modal('hide');
+				this.$errors.openDialog({
+					errors: {
+						error: `<span class='text-success'>Cancellation request have been successfully send to admin!</span>`
+					}
+				})
+
 			});
 
 		// this.affiliateService.rejectBooking(this.cancelBookingId)
@@ -675,7 +673,7 @@ export class MyBookingsComponent implements OnInit {
 			this.router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 		else {
-				this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 	}
 
@@ -943,15 +941,15 @@ export class MyBookingsComponent implements OnInit {
 		this.router.navigate(['/subscription']);
 	}
 
-		// Method to convert hours to days and hours
-		getCancellationTime(cancellationHours: number): string {
-			if (cancellationHours > 24) {
-			  const days = Math.floor(cancellationHours / 24);
-			  const remainingHours = cancellationHours % 24;
-			  return `${days} days ${remainingHours} hours`;
-			} else {
-			  return `${cancellationHours} hours`;
-			}
-		  }
+	// Method to convert hours to days and hours
+	getCancellationTime(cancellationHours: number): string {
+		if (cancellationHours > 24) {
+			const days = Math.floor(cancellationHours / 24);
+			const remainingHours = cancellationHours % 24;
+			return `${days} days ${remainingHours} hours`;
+		} else {
+			return `${cancellationHours} hours`;
+		}
+	}
 
 }

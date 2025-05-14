@@ -1,9 +1,11 @@
 import {
-Component,
-EventEmitter,
-Input,
-OnInit,
-AfterViewInit,
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	AfterViewInit,
+	ViewChild,
+	ElementRef,
 } from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -16,6 +18,7 @@ import { formatDate } from "@angular/common";
 import { CustomvalidationService } from "../../../services/customvalidation.service";
 import { AdminService } from "src/app/services/admin.service";
 import { CommonService } from "src/app/services/common.service";
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -24,6 +27,8 @@ declare var $: any;
 	styleUrls: ["./step3.component.scss"],
 })
 export class Step3Component implements OnInit, AfterViewInit {
+	@ViewChild('phoneInput') phoneInput!: ElementRef;
+
 	public imageSrc: string;
 	public addInsuranceForm: FormGroup;
 	public submittedForm: boolean;
@@ -56,9 +61,33 @@ export class Step3Component implements OnInit, AfterViewInit {
 	) { }
 
 	ngAfterViewInit() {
-		//set current user country as default in phone number
+
+		// init flag
+		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, {
+			initialCountry: 'us',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: false,
+			// autoPlaceholder: 'aggressive',
+			utilsScript:
+				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+		});
+
+		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
+			console.log("in country change",countryData)
+			this.onCountryChange(countryData, 'AgentTelephone')
+		});
+
 		this.AgentTelephoneObject.setCountry(this.currentUser.phoneCountry);
+
 	}
+
+	// ngAfterViewInit() {
+	// 	//set current user country as default in phone number
+	// 	this.AgentTelephoneObject.setCountry(this.currentUser.phoneCountry);
+	// }
+
 	ngOnInit(): void {
 		$('.HeadingH1').css({ display: "block" })
 		//show "stripe can take upto 24 hours" modal on first time completing step 2

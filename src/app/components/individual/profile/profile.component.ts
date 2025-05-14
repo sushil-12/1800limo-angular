@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { MapsAPILoader } from '@agm/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { IndividualService } from '../../../services/individual.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -8,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -15,7 +15,11 @@ declare var $: any;
 	templateUrl: './profile.component.html',
 	styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewInit {
+	@ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
+	@ViewChild('mobileInput') mobileInput!: ElementRef;
+	@ViewChild('workInput') workInput!: ElementRef;
 
 	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -37,7 +41,6 @@ export class ProfileComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService,
 		private individualService: IndividualService,
@@ -50,9 +53,6 @@ export class ProfileComponent implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	private geoCoder;
-	@ViewChild('search1')
-	public searchElementRef: ElementRef;
 
 	ngOnInit(): void {
 		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
@@ -77,75 +77,7 @@ export class ProfileComponent implements OnInit {
 		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
 		console.log("is_family_member", this.is_family_member)
 
-		//google map autocomplete
-		this.mapsAPILoader.load().then(() => {
-			// this.setCurrentLocation();
-			this.geoCoder = new google.maps.Geocoder;
-			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () => {
-				console.log('auto fill address-->>>')
-				this.ngZone.run(() => {
-					//get the place result
-					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null) {
-						return;
-					}
-					console.log(place);
-					this.addIndividualAccountForm.patchValue({
-						zipCode: '',
-						city: '',
-						state: '',
-						country: ''
-					})
-					this.addIndividualAccountForm.patchValue({
-						address: place.formatted_address
-					})
-					//Fill one way form pickup address fields
-					this.addIndividualAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-					place.address_components.forEach(component => {
-						const types = component.types;
 
-						if (types.includes('postal_code')) {
-							this.addIndividualAccountForm.patchValue({
-								zipCode: component.long_name
-							});
-						} else if (types.includes('locality')) {
-							this.addIndividualAccountForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addIndividualAccountForm.patchValue({
-								state: component.long_name
-							});
-						} else if (types.includes('country')) {
-							this.addIndividualAccountForm.patchValue({
-								country: component.long_name
-							});
-						}
-					});
-					// if (place.address_components[1])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		city: place.address_components[1].long_name
-					// 	});
-					// if (place.address_components[2])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		state: place.address_components[2].long_name
-					// 	});
-					// if (place.address_components[3])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		country: place.address_components[3].long_name
-					// 	});
-					// if (place.address_components[4])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
-					// 	});
-				});
-			});
-		});
 
 		//add amenity form validation
 
@@ -163,6 +95,112 @@ export class ProfileComponent implements OnInit {
 				$('#card-number').trigger("change");
 			});
 		});
+	}
+
+
+	ngAfterViewInit() {
+
+		this.initallphonefields()
+
+		//google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
+
+		const autocomplete = new google.maps.places.Autocomplete(
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
+		);
+
+		autocomplete.addListener("place_changed", () => {
+			this.ngZone.run(() => {
+				//get the place result
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				this.addIndividualAccountForm.patchValue({
+					address: place.formatted_address,
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.addIndividualAccountForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.addIndividualAccountForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.addIndividualAccountForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.addIndividualAccountForm.patchValue({
+							zipCode: component.long_name
+						});
+					}
+					// else if (types.includes('street_number')) {
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		address: component.long_name
+					// 	});
+					// }
+				});
+			});
+		});
+
+	}
+
+	initallphonefields() {
+
+		if (this.mobileInput) {
+			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
+			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.mobileInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.MobileObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'mobile')
+			});
+		}
+
+		if (this.workInput) {
+			console.log('onput', this.workInput, this.workInput.nativeElement)
+			this.WorkObject = intlTelInput(this.workInput.nativeElement, {
+				initialCountry: 'us',
+				preferredCountries: ['us', 'ca', 'mx', 'gb'],
+				separateDialCode: true,
+				nationalMode: false,
+				// autoPlaceholder: 'aggressive',
+				utilsScript:
+					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			});
+
+			this.workInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.WorkObject.getSelectedCountryData();
+				console.log("in change", countryData)
+				this.onCountryChange(countryData, 'work');
+			});
+		}
+
+		this.MobileObject.setCountry(this.defaultCountryCode)
+		this.WorkObject.setCountry(this.defaultCountryCode)
+
+
+
 	}
 
 	getProfile() {
