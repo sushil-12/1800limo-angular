@@ -894,7 +894,7 @@
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="pickup_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
-							style="height:66px;">
+							style="height:66px;"  [readonly]="blockaddressfield">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -979,7 +979,7 @@
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()"  [readonly]="blockaddressfield"/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1057,7 +1057,7 @@
 							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
-							style="height:66px;">
+							style="height:66px;"  [readonly]="blockaddressfield">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -1120,7 +1120,7 @@
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()"  [readonly]="blockaddressfield"/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1426,7 +1426,7 @@
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_pickup_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
-							style="height:66px;">
+							style="height:66px;" [readonly]="blockaddressfield">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -1513,7 +1513,7 @@
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()" [readonly]="blockaddressfield"/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1598,7 +1598,7 @@
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_dropoff_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
-							style="height:66px;">
+							style="height:66px;" [readonly]="blockaddressfield">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -1663,7 +1663,7 @@
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()" [readonly]="blockaddressfield"/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -3031,6 +3031,20 @@
 				<button type="submit" class="custom-filled-button" data-dismiss="modal" (click)="submitForm(true)">
 					Save
 				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="repeatreturnmodal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+
+			<div class="modal-body text-center">
+				<p style="color: red;font-size: 20px;">For repeat or return bookings, please ensure that the pickup and drop-off addresses must match those of the original booking. Click here to change an address.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="navigatetoQuote()">Quote</button>
 			</div>
 		</div>
 	</div>

@@ -151,6 +151,7 @@ export class CreateBookingComponent implements OnInit {
 	currentUser: any;
 	currencySymbol: any;
 	currencyObj: any;
+	blockaddressfield: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -180,8 +181,8 @@ export class CreateBookingComponent implements OnInit {
 				console.log("update type", this.updateType)
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
-				if(params.updateType == 'round'){
-					this.service_type ='round_trip'
+				if (params.updateType == 'round') {
+					this.service_type = 'round_trip'
 				}
 			}
 			if (params && params.new == 'true') {
@@ -669,6 +670,8 @@ export class CreateBookingComponent implements OnInit {
 			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.scroll('pickup_address')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+				$("#repeatreturnmodal").modal("show");
+				this.blockaddressfield = true
 			}
 		})
 		this.fetchRates(booking_id)
