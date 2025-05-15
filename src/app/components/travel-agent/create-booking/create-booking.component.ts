@@ -2965,4 +2965,9 @@ export class CreateBookingComponent implements OnInit {
 		return formattedText;
 	}
 
+	navigatetoQuote() {
+		$("#repeatreturnmodal").modal("hide");
+		this.$router.navigate(['/quotebot_section'])
+	}
+
 }
