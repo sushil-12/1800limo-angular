@@ -2,10 +2,5 @@
 dist/
 .vscode
 node_modules
-<<<<<<< HEAD
 .DS_Store
 .angular/cache/
-=======
-
-.angular/cache
->>>>>>> 44cbb53ba972e137812835ab477c00e8c70b7122
