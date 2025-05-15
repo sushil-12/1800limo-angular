@@ -390,7 +390,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		var startFrom;
 		var endTo;
 
-		if (this.currentPage < 5) {
+		if (this.currentPage as number < 5) {
 			startFrom = 0;
 			endTo = this.totalPage;
 		}
