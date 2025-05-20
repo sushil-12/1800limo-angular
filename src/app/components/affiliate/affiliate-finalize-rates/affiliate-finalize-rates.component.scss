@@ -59,13 +59,15 @@
 	display: block;
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
 	font-weight: 500 !important;
 	font-size: 19px !important;
 	color: #191919;
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
 	top: 1.6675em !important;
 }
 

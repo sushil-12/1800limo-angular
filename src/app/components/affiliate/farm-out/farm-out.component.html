@@ -5,7 +5,7 @@
 		Farm Out Bookings
 	</h2>
 	<!-- DIVISION: SEARCH PARAMETERS -->
-	<div class="row px-4 align-items-center mt-4 mb-3">
+	<div class="row my-2 align-items-center pl-4 mb-3">
 		<!-- START DATE -->
 		<div class="horizontal-scroll-container">
 			<div class="col-6 col-md-4">
@@ -56,6 +56,8 @@
 				</button>
 			</div>
 		</div>
+	</div>
+	<div class="row my-2 mb-1 pl-4">
 		<div class="col-md-12">
 			<div id="search-field-farmout">
 				<mat-form-field appearance="outline" class="m-0">
@@ -67,10 +69,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="ml-4">
+	<div class="row pl-4">
 		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 				{{useDateFilter ? 'Uncheck to see current and future bookings' :
-				'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
+				'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)'
+				}}
 			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -112,8 +115,8 @@
 							<tr role="row" class="odd" *ngFor="let booking of bookings">
 								<td [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
 									<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold {{ booking.booking_status }}"
-									 	href="javascript:void(0);" role="button"
-										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										href="javascript:void(0);" role="button" data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="false">
 										<span>View</span>
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -1143,38 +1146,33 @@
 				<br>
 				<div class="google_map">
 					<div class="google_map">
-						<google-map
-						  height="300px"
-						  width="100%"
-						  [center]="mapCenter"
-						  [zoom]="zoom"
-						></google-map>
-					  </div>
-				<br>
-				<hr>
-				<!-- Passenger Information -->
-				<h4 class="font-weight-bolder m-0 mt-3">
-					Passenger Information
-				</h4>
+						<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+					</div>
+					<br>
+					<hr>
+					<!-- Passenger Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Passenger Information
+					</h4>
 
-				<!-- Passenger > Name -->
-				<div class="mx-2 preview-pickup-color">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Name
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview?.passenger_name) }}
-							</span>
+					<!-- Passenger > Name -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.passenger_name) }}
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<!-- Passenger > Email -->
-				<!-- <div class="mx-2">
+					<!-- Passenger > Email -->
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1189,259 +1187,205 @@
 						</div>
 					</div> -->
 
-				<!-- Passenger > Phone -->
-				<div class="mx-2 preview-pickup-color">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;color: #1e7500;">
-								Phone
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<a class="font-weight-bolder preview-output-feild cursor-pointer" style="color: #1e7500;"
-								href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
-								({{ bookingPreview?.passenger_cell_isd }})
-								{{ textFormatter(bookingPreview?.passenger_cell) }}
-							</a>
-							<!-- <span class="font-weight-bolder preview-output-feild">
+					<!-- Passenger > Phone -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;color: #1e7500;">
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<a class="font-weight-bolder preview-output-feild cursor-pointer"
+									style="color: #1e7500;"
+									href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
+									({{ bookingPreview?.passenger_cell_isd }})
+									{{ textFormatter(bookingPreview?.passenger_cell) }}
+								</a>
+								<!-- <span class="font-weight-bolder preview-output-feild">
 								({{ bookingPreview?.passenger_cell_isd }})
 								{{ textFormatter(bookingPreview?.passenger_cell) }}
 							</span> -->
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="mx-2">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								No. of passenger
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.total_passengers }}
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="mx-2">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Luggage count
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.luggage_count }}
-							</span>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									No. of passenger
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.total_passengers }}
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- Travel Information -->
-				<!-- <h4 class="font-weight m-0 mt-3">
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Luggage count
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.luggage_count }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- Travel Information -->
+					<!-- <h4 class="font-weight m-0 mt-3">
 						Travel Information
 					</h4> -->
 
-				<!-- Number of Hours -->
+					<!-- Number of Hours -->
 
-				<hr>
-				<div class="mx-2">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Special Instruction
-							</span>
-						</div>
-						<div class="col-md-8 value box-special-instruction">
-							<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
-								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
-								<!-- {{ textFormatter(bookingPreview?.booking_instructions)| titlecase }} -->
-							</span>
-						</div>
-					</div>
-				</div>
-				<hr>
-				<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Meet and Greet
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
-							</span>
+					<hr>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+									[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+									<!-- {{ textFormatter(bookingPreview?.booking_instructions)| titlecase }} -->
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<hr>
-				<div class="mx-2">
-					<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Return Meet and Greet
-							</span>
+					<hr>
+					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
 						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
-							</span>
-						</div>
-						<hr>
 					</div>
-				</div>
+					<hr>
+					<div class="mx-2">
+						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+							<div class="col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+							<hr>
+						</div>
+					</div>
 
-				<!-- Grand Total -->
-				<h4 class="font-weight-bolder m-0">
-					Vehicle Preferences
-				</h4>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							Vehicle Type
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_type_name}}
-						</span>
-					</div>
-				</div>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							Vehicle Make
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_make}}
-						</span>
-					</div>
-				</div>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							Vehicle Model
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_model}}
-						</span>
-					</div>
-				</div>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							Vehicle Year
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_year}}
-						</span>
-					</div>
-				</div>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							Vehicle Color
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_color}}
-						</span>
-					</div>
-				</div>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							Licence plate
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_license_plate}}
-						</span>
-					</div>
-				</div>
-				<div class="row p-2">
-					<div class="col-md-4 key">
-						<span style="font-weight: 550 !important;">
-							No. of seats
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder preview-output-feild">
-							{{ bookingPreview?.vehicle_seats}}
-						</span>
-					</div>
-				</div>
-				<hr>
-				<!-- Driver Information -->
-				<h4 class="font-weight-bolder m-0 mt-3">
-					Driver Information
-				</h4>
-				<!-- Driver Name -->
-				<div class="mx-2">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Name
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Driver Email -->
-				<div class="mx-2">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Email
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview?.driver_email) }}
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Driver Cell -->
-				<div class="mx-2">
-					<div class="row m-0">
-						<div class="col-md-4 key">
-							<span style="font-weight: 550 !important;">
-								Phone
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								({{ bookingPreview?.driver_cell_isd }}) {{
-								bookingPreview?.driver_cell }}
-							</span>
-						</div>
-					</div>
-				</div>
-				<hr>
-				<!-- Affiliate -->
-				<div>
-					<h4 class="font-weight-bolder m-0 mt-3">
-						{{bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose'}}
+					<!-- Grand Total -->
+					<h4 class="font-weight-bolder m-0">
+						Vehicle Preferences
 					</h4>
-
-					<!-- Affiliate > Name -->
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Vehicle Type
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_type_name}}
+							</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Vehicle Make
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_make}}
+							</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Vehicle Model
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_model}}
+							</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Vehicle Year
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_year}}
+							</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Vehicle Color
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_color}}
+							</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								Licence plate
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_license_plate}}
+							</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">
+								No. of seats
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.vehicle_seats}}
+							</span>
+						</div>
+					</div>
+					<hr>
+					<!-- Driver Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Driver Information
+					</h4>
+					<!-- Driver Name -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1451,14 +1395,13 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{isAffiliate ? bookingPreview?.affiliate_name :
-									bookingPreview?.lose_affiliate_name }}
+									{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
 								</span>
 							</div>
 						</div>
 					</div>
 
-					<!-- Affiliate > Email -->
+					<!-- Driver Email -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1468,14 +1411,13 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{isAffiliate ? bookingPreview?.affiliate_email :
-									bookingPreview?.lose_affiliate_email }}
+									{{ textFormatter(bookingPreview?.driver_email) }}
 								</span>
 							</div>
 						</div>
 					</div>
 
-					<!-- Affiliate > Phone -->
+					<!-- Driver Cell -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1485,16 +1427,73 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{isAffiliate ? bookingPreview?.affiliate_phone :
-									bookingPreview?.lose_affiliate_phone }}
-
+									({{ bookingPreview?.driver_cell_isd }}) {{
+									bookingPreview?.driver_cell }}
 								</span>
 							</div>
 						</div>
 					</div>
 					<hr>
-				</div>
-				<!-- <div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
+					<!-- Affiliate -->
+					<div>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							{{bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose'}}
+						</h4>
+
+						<!-- Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{isAffiliate ? bookingPreview?.affiliate_name :
+										bookingPreview?.lose_affiliate_name }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{isAffiliate ? bookingPreview?.affiliate_email :
+										bookingPreview?.lose_affiliate_email }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span style="font-weight: 550 !important;">
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{isAffiliate ? bookingPreview?.affiliate_phone :
+										bookingPreview?.lose_affiliate_phone }}
+
+									</span>
+								</div>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<!-- <div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
 					<h4 class="font-weight-bolder m-0 my-3">
 						Rates Distribution
 					</h4>
@@ -1604,16 +1603,16 @@
 					</div>
 				</div>  -->
 
-			</div>
+				</div>
 
 
 
-			<div class="modal-footer justify-content-end">
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true" class="bi bi-x-circle"></span>
-				</button>
+				<div class="modal-footer justify-content-end">
+					<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true" class="bi bi-x-circle"></span>
+					</button>
 
+				</div>
 			</div>
 		</div>
 	</div>
-</div>

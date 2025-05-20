@@ -69,26 +69,32 @@ a.dropdown-item.active {
     background-color: #74767629;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
 mat-progress-bar.my-color .mat-progress-bar-fill::after {
     background-color: var(--orange-color);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version. */
 .mat-progress-bar-buffer {
     background-color: #000;
 }
 
-.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
+.mat-mdc-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
     background-color: #aadac0;
 }
 
-.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
+.mat-mdc-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
     background-color: var(--green-color);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 .mat-slide-toggle-bar {
     background: rgb(0 0 0 / 24%);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 .mat-slide-toggle-thumb {
     background-color: #000;
 }
@@ -180,13 +186,14 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     margin-left: 40px;
 }
 
-.mat-autocomplete-panel.mat-autocomplete-visible {
+.mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible {
     visibility: visible;
+    position: absolute;
     top: -35px;
     left: 15px;
 }
 
-.mat-autocomplete-panel.mat-autocomplete-visible .mat-option .mat-option-text {
+.mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible .mat-mdc-option {
     font-weight: 600;
     font-size: 18px;
 }
@@ -1259,6 +1266,12 @@ a.user-profile:active::after {
     margin-top: -5px;
 }
 
+/* adding css for user information label */
+.user_information mat-label {
+    font-size: 1.1rem;
+    color: #000;
+}
+
 .user_information input::placeholder,
 .user_information select::placeholder,
 .user_information textarea::placeholder {
@@ -1495,7 +1508,7 @@ h2.headinginfo .orangeHeading {
     transform: translateX(-15px) translateY(35px) !important;
 }
 
-.cdk-overlay-pane .mat-select-panel {
+.cdk-overlay-pane .mat-mdc-select-panel {
     max-height: 45vh !important;
 }
 
@@ -2251,10 +2264,12 @@ button:focus {
     width: 100%;
 }
 
-.mat-custom-phone.mat-form-field-hide-placeholder .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-custom-phone.mat-form-field-hide-placeholder .mat-mdc-form-field-label {
     padding-left: 52px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-custom-phone .mat-form-field-outline-start {
     width: 0 !important;
 }
@@ -2272,34 +2287,37 @@ button:focus {
     padding: 8px 15px !important;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
     width: 100%;
     margin-top: 20px;
 }
 
 @media only screen and (max-width: 767px) {
-    .mat-form-field {
+    .mat-mdc-form-field {
         width: 100%;
         margin-top: 10px;
     }
 }
 
-.mat-form-field.read-only {
+.mat-mdc-form-field.read-only {
     background-color: #d3d3d396;
 }
 
-.mat-form-field.read-only .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-mdc-form-field.read-only .mat-mdc-form-field-label {
     color: #000;
 }
 
 
 /* for vehicle rates */
 
-.mat-form-field-rates.mat-form-field-should-float .mat-form-field-infix {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-form-field-rates.mat-form-field-should-float .mat-mdc-form-field-infix {
     position: initial;
 }
 
-.mat-form-field-rates.mat-form-field-should-float .mat-form-field-label-wrapper {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-form-field-rates.mat-form-field-should-float .mat-mdc-form-field-label-wrapper {
     top: 0;
     left: 15px;
 }
@@ -2307,7 +2325,9 @@ button:focus {
 
 /*  */
 
-.mat-form-field-wrapper {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+/* changed mat form field wrapper */
+.mat-mdc-text-field-wrapper {
     margin: 0 !important;
     padding: 0 !important;
     background-color: #fff;
@@ -2319,6 +2339,7 @@ button:focus {
     font-size: 90%;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-form-field-prefix {
     top: -1px !important;
     font-weight: 500;
@@ -2328,15 +2349,17 @@ button:focus {
 
 /* increase height of all mat selects */
 
-.mat-select-panel {
+.mat-mdc-select-panel {
     max-height: 65vh !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 .mat-select-disabled .mat-select-value {
     color: #000;
 }
 
-.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-mdc-form-field-label {
     color: #000;
 }
 
@@ -2378,6 +2401,7 @@ button:focus {
     padding: 1rem 0;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
 mat-dialog-container {
     border-radius: 1rem !important;
 }
@@ -2988,7 +3012,8 @@ table #navbarDropdownUserImage {
     color: #808080 !important;
 }
 
-.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
     padding-left: 0px;
     background-color: #fff;
     max-width: 170px;
@@ -3057,24 +3082,28 @@ table #navbarDropdownUserImage {
     outline: var(--orange-color) !important;
 }
 
-.gratuityToggle.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
+.gratuityToggle.mat-mdc-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
     transform: translate3d(30px, 0, 0);
 }
 
-.gratuityToggle .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
+.gratuityToggle .mat-mdc-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
     background-color: #aadac0;
     width: 50px;
     height: 25px;
     border-radius: 25px;
 }
 
-.gratuityToggle .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
+.gratuityToggle .mat-mdc-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
     background-color: var(--green-color);
     height: 25px;
     width: 25px;
     margin-top: 3px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 .gratuityToggle .mat-slide-toggle-thumb {
     background-color: #000;
     height: 25px;
@@ -3082,6 +3111,7 @@ table #navbarDropdownUserImage {
     margin-top: 3px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
 .gratuityToggle .mat-slide-toggle-bar {
     background: rgb(0 0 0 / 24%);
     height: 25px;
@@ -3089,7 +3119,8 @@ table #navbarDropdownUserImage {
     border-radius: 25px;
 }
 
-.gratuityToggle.mat-slide-toggle .mat-slide-toggle-ripple {
+/* TODO(mdc-migration): The following rule targets internal classes of slide-toggle that may no longer apply for the MDC version. */
+.gratuityToggle.mat-mdc-slide-toggle .mat-slide-toggle-ripple {
     position: absolute;
     top: calc(50% - 14px);
     left: calc(50% - 18px);
@@ -3099,10 +3130,11 @@ table #navbarDropdownUserImage {
     pointer-events: none;
 }
 
-.gratuityToggle.mat-slide-toggle.mat-checked .mat-ripple-element {
+.gratuityToggle.mat-mdc-slide-toggle.mat-checked .mat-ripple-element {
     background-color: #000;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of slider that may no longer apply for the MDC version. */
 .mat-accent .mat-slider-track-fill,
 .mat-accent .mat-slider-thumb,
 .mat-accent .mat-slider-thumb-label {
@@ -3138,8 +3170,8 @@ table #navbarDropdownUserImage {
     }
 }
 
-#selectDropdown.mat-select-panel .mat-optgroup-label,
-.mat-select-panel .mat-option {
+#selectDropdown.mat-mdc-select-panel .mat-mdc-optgroup-label,
+.mat-select-panel .mat-mdc-option {
     font-size: inherit;
     line-height: 3em;
     height: 2.5em !important;

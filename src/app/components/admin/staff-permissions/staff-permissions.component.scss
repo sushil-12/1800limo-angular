@@ -4,22 +4,26 @@
     overflow: hidden;
   }
   
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep .mat-tab-labels {
     flex-direction: column;
   }
   
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-tab-group {
     flex-grow: 1;
     display: flex;
     flex-direction: row;
   }
   
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep .mat-tab-body-wrapper {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
   
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-tab-body {
     flex-grow: 1;
     display: flex;
@@ -31,6 +35,7 @@
   }
   
   /* Styles for the active tab label */
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-label.mat-tab-label-active {
       background-color: transparent;
       color: #fff;
@@ -39,11 +44,13 @@
       border-right: 2px solid #f29439;
   }
   /* Styles for the active tab label */
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-label {
       background-color: transparent;
       /* background-color: lightgray; */
   }
 
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-label-content{
     padding: 20px;
     font-size: 16px;
@@ -52,6 +59,7 @@
     text-transform: uppercase;
   }
 
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-label{
     margin:0px 10px 10px 0px;
     border-radius: 8px;
@@ -60,6 +68,7 @@
     padding: 0px 0px !important;
   }
 
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-list{
   max-height: 560px;
   height: 100%;
@@ -79,20 +88,23 @@ td{
 
 @media only screen and (max-width: 475px)
 {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-tab-group {
     flex-grow: 1;
     display: flex;
     flex-direction: column !important;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-labels{
     justify-content: start;
     flex-direction: row;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-label-content{
     font-size: smaller;
     white-space: break-spaces !important;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   :host ::ng-deep.mat-tab-list{
     overflow-y: initial;
   }

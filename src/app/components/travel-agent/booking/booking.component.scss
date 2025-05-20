@@ -3,27 +3,30 @@
 	background-color: #f5f4fe;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
 	opacity: 0.03 !important;
 	background-color: #f3933d !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
 	background-color: #f3933d !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep .mat-checkbox-ripple .mat-ripple-element,
 .mat-checkbox-checked.mat-accent .mat-checkbox-background {
 	background-color: #f3933d !important;
 }
 
-textarea.mat-input-element.cdk-textarea-autosize {
+textarea.mat-mdc-input-element.cdk-textarea-autosize {
 	font-size: 22px;
 	font-weight: bold;
 }
 
-.adminbox_shadow.user_information .mat-form-field,
+.adminbox_shadow.user_information .mat-mdc-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
 }
@@ -501,6 +504,7 @@ a.dropdown-item {
 	}
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
     white-space: normal !important;

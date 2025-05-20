@@ -1,4 +1,6 @@
-.mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+.mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	padding-left: 0px;
 	// background-color: #fff;
 	max-width: 70px;
@@ -7,7 +9,8 @@
 	top: 24px;
 }
 
-.phoneLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+.phoneLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	padding-left: 0px;
 	// background-color: #fff;
 	max-width: 120px;
@@ -25,60 +28,73 @@
 	border-radius: 12px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
 	border-top-color: #f44336 !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
 	border-top-color: #3f51b5 !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
 	border-top-color: rgba(0, 0, 0, .12) !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
 	border-top-color: #3f51b5 !important;
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
 	border-top-color: rgba(0, 0, 0, .87) !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
 	border-top-color: #f44336 !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
 	border-top-color: #3f51b5 !important;
 }
 
-:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
 	border-top-color: rgba(0, 0, 0, .12) !important;
 }
 
-:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
 	border-top-color: rgba(0, 0, 0, .87) !important;
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
 	font-weight: normal !important;
 	font-size: 14px !important;
 	color: #191919;
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
 	top: 1.3675em
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
 	font-weight: normal !important;
 	font-size: 14px !important;
 	color: #191919;
 	top: 1.55em
 }
 
-:host ::ng-deep .mat-form-field {
+:host ::ng-deep .mat-mdc-form-field {
+	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 	.mat-form-field-outline {
 		&-end {
 			border-radius: 0 10px 10px 0 !important;
@@ -91,21 +107,25 @@
 	}
 }
 
-:host ::ng-deep .mat-form-field .mat-form-field-wrapper {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
 	border-radius: 10px;
 	background-color: rgb(226, 226, 226, 1);
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
 	top: -1px
 }
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
 	transform: translateY(-1em) scale(0.99) !important;
 	width: 133.3333333333%
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
 	border-top-color: #b2b2b2 !important;
 }
@@ -115,7 +135,7 @@
 }
 
 
-.mat-option {
+.mat-mdc-option {
 	background-color: rgb(226, 226, 226, 1) !important;
 }
 
@@ -128,7 +148,7 @@
 	margin-left: 2px;
 }
 
-:host ::ng-deep .mat-input-element {
+:host ::ng-deep .mat-mdc-input-element {
 	font-weight: 500;
 }
 
