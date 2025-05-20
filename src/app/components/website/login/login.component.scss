@@ -1,8 +1,9 @@
-.mat-form-field {
+.mat-mdc-form-field {
 	margin-top: 0px;
 }
 
-.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	background-color: #fff;
 	max-width       : 120px;
 	top             : 30px;
@@ -63,7 +64,8 @@ label+input[type=radio]+label {
 	margin-left: 2px;
 }
 
-:host ::ng-deep .mat-form-field-wrapper{
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep .mat-mdc-text-field-wrapper{
 	border: solid 3px;
 	border-radius: 8px;
 }

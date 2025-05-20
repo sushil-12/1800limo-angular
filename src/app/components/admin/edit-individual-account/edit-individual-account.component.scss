@@ -1,4 +1,6 @@
-.mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+.mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	padding-left    : 0px;
 	background-color: #fff;
 	max-width       : 70px;
@@ -7,7 +9,8 @@
 	top             : 30px;
 }
 
-.cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+.cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	padding-left    : 0px;
 	// background-color: #e5e5e5;
 	max-width       : 70px;

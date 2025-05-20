@@ -2,20 +2,36 @@
 
 @include mat.core();
 
-$my-theme: mat.define-light-theme((
-  color: (
-    primary: mat.define-palette(mat.$indigo-palette),
-    accent: mat.define-palette(mat.$pink-palette),
-    warn: mat.define-palette(mat.$red-palette),
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
-));
+$my-theme: mat.define-light-theme((color: (primary: mat.define-palette(mat.$indigo-palette),
+                accent: mat.define-palette(mat.$pink-palette),
+                warn: mat.define-palette(mat.$red-palette),
+            ),
+            typography: mat.define-typography-config(),
+            density: 0,
+        ));
 
 @include mat.all-component-themes($my-theme);
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.mat-form-field-empty.mat-form-field-label {
+
+// removed hint fields in mat form field
+.mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+}
+
+// fixed padding for mat form fields
+.mdc-text-field--outlined .mat-mdc-form-field-infix,
+.mdc-text-field--no-label .mat-mdc-form-field-infix {
+    padding: var(--mat-form-field-container-vertical-padding);
+}
+
+// checkbox color styles
+.mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background, .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
+    border-color: #f3933d !important;
+    background-color: #f3933d !important;
+}
+
+
+.mat-form-field-empty .mat-mdc-form-field-label {
     color: #808080;
 }
 
@@ -311,20 +327,21 @@ section {
 }
 
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.vehicleLable.mat-form-field-appearance-outline .mat-form-field-flex {
+
+.vehicleLable.mat-form-field-appearance-outline .mat-mdc-form-field-flex {
     padding: 0 .75em 0 .75em;
     position: relative;
     height: 62px !important;
+
     // margin-top: -12px !important;
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-infix {
+   
+    .mat-mdc-form-field-infix {
         margin-top: -5px !important;
     }
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.vehicleLable.mat-form-field-appearance-outline .mat-form-field-label {
+
+.vehicleLable.mat-form-field-appearance-outline .mat-mdc-form-field-label {
     top: 1.84375em;
     margin-top: 0 !important;
 }

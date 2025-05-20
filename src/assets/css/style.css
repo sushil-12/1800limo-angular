@@ -1,40 +1,40 @@
 input::-webkit-input-placeholder,
-.mat-input-element::-webkit-input-placeholder {
+.mat-mdc-input-element::-webkit-input-placeholder {
 	font-weight: bold !important;
 }
 
 input::-moz-placeholder,
-.mat-input-element::-moz-placeholder {
+.mat-mdc-input-element::-moz-placeholder {
 	font-weight: bold !important;
 }
 
 input:-ms-input-placeholder,
-.mat-input-element:-ms-input-placeholder {
+.mat-mdc-input-element:-ms-input-placeholder {
 	font-weight: bold !important;
 }
 
 input::-ms-input-placeholder,
-.mat-input-element::-ms-input-placeholder {
+.mat-mdc-input-element::-ms-input-placeholder {
 	font-weight: bold !important;
 }
 
 input::placeholder,
-.mat-input-element::placeholder {
+.mat-mdc-input-element::placeholder {
 	font-weight: bold !important;
 }
 
 input::-webkit-input-placeholder,
-.mat-input-element::-webkit-input-placeholder {
+.mat-mdc-input-element::-webkit-input-placeholder {
 	font-weight: bold !important;
 }
 
 input::-ms-input-placeholder,
-.mat-input-element::-ms-input-placeholder {
+.mat-mdc-input-element::-ms-input-placeholder {
 	font-weight: bold !important;
 }
 
 input::-moz-input-placeholder,
-.mat-input-element::-moz-input-placeholder {
+.mat-mdc-input-element::-moz-input-placeholder {
 	font-weight: bold !important;
 }
 
@@ -82,7 +82,7 @@ body {
 }
 
 #cdk-overlay-0 .mat-calendar,
-#cdk-overlay-0 .mat-button {
+#cdk-overlay-0 .mat-mdc-button {
 	font-family: 'PT Serif', serif !important;
 }
 
@@ -460,13 +460,6 @@ header a.nav-link.active {
 	font-weight: 700;
 }
 
-.pickupdate .mat-focus-indicator.mat-icon-button.mat-button-base svg {
-	position: relative;
-	top: -2px;
-	width: 20px;
-	font-size: 22px;
-}
-
 header {
 	background-color: #000;
 }
@@ -527,6 +520,7 @@ header {
 	text-align: center;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .bannerform_wrapper .quoteform_homewrapper span.mat-button-wrapper {
 	color: #fff !important;
 }
@@ -2693,51 +2687,67 @@ max-width     : 50%;padding:30px;*/
 	color: #189cf0;
 }
 
-.pickupdate .mat-form-field-flex.ng-tns-c46-0 {
+
+.pickupdate .mat-mdc-form-field-flex.ng-tns-c46-0 {
 	padding: 0;
 }
 
-.pickupdate .mat-form-field {
+.pickupdate .mat-mdc-form-field {
 	width: 100%;
 }
 
-.pickupdate .mat-form-field-suffix.ng-star-inserted {
+.pickupdate .mat-mdc-form-field-icon-suffix.ng-star-inserted {
 	position: absolute;
 	right: 0;
-	top: -1px;
+	top: -8px;
 	color: #fff;
 	background-color: var(--orange-color);
 	padding: 0;
 	border-radius: 0px 4px 4px 0px;
-	height: 30px;
+	height: 40px;
 }
 
-.pickupdate .mat-form-field-wrapper {
+.pickupdate .mat-mdc-text-field-wrapper {
 	position: relative;
 	padding: 0;
 }
 
-.pickupdate .mat-form-field-flex.ng-tns-c46-0 {
+.pickupdate .mat-mdc-form-field-flex.ng-tns-c46-0 {
 	padding: 0;
 }
 
-.pickupdate .mat-form-field-infix {
+.pickupdate .mat-mdc-form-field-infix {
 	border: 0 !important;
 	padding: 0 !important;
+	min-height: 30px !important;
 }
 
-.pickupdate .mat-focus-indicator.mat-icon-button.mat-button-base {
+.pickupdate .mat-mdc-form-field-infix input{
+	padding: 4px 0 0 10px;
+}
+
+.pickupdate .mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-base {
 	line-height: 3px;
 	max-width: 30px;
 	max-height: 30px;
-
+	left: -8px;
 }
 
-.pickupdate .mat-form-field-flex {
+.pickupdate .mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-base svg{
+	color: #fff !important;
+	height: 22px;
+}
+
+.pickupdate .mdc-text-field--filled{
+	height: 30px;
+}
+
+
+.pickupdate .mat-mdc-form-field-flex {
 	padding: 0 !important;
 }
 
-.pickupdate .mat-form-field-underline {
+.pickupdate .mat-mdc-form-field-underline {
 	bottom: 0 !important;
 	opacity: 0
 }
@@ -4281,7 +4291,7 @@ header .navbar-toggler {
 	color: #000 !important;
 }
 
-.returnPickupDate .mat-form-field-suffix.ng-star-inserted {
+.returnPickupDate .mat-mdc-form-field-icon-suffix.ng-star-inserted {
 	position: absolute;
 	left: 0;
 	right: auto;

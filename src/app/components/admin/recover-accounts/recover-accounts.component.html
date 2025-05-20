@@ -24,7 +24,6 @@
             <div class="row">
                 <div class="col-md-8 mb-3">
                     <mat-form-field appearance="outline">
-                        <mat-label>Search Filter by Keyword</mat-label>
                         <input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
                             (focus)="$event.target.select()" [value]="searchText"
                             placeholder="Search by name, email, cell phone, role" id="keyword">

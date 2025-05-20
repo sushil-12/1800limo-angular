@@ -69,22 +69,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="row d-flex justify-content-between">
-				<div class="col-md-12">
-					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+			<div class="row d-flex justify-content-between pl-2">
+				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 							{{useDateFilter ? 'Uncheck to see current and future bookings' :
 							'Check to see bookings for 7 days or based upon dates and search by any term.' }}
-						</mat-checkbox></p>
-				</div>
-
-				<!-- <div class="col-md-6 sortCheckBox"> -->
-				<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_pickup_date')"
-							[checked]="use_pickup_date">Order by pickup date</mat-checkbox></p> -->
-				<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked)" [checked]="use_created_at">Order by
-							Booking id</mat-checkbox></p>
-				</div> -->
+				</mat-checkbox></p>
 			</div>
-			<div class="row my-2 mb-3">
+			<div class="row mb-2">
 				<!-- <div class="col-md-3">
 						<div id="filter-type">
 							<mat-form-field appearance="outline" class="m-0">

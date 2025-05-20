@@ -119,7 +119,7 @@ agm-map {
 	z-index: 10000 !important;
 }
 
-#verificationDocumentModal .mat-form-field {
+#verificationDocumentModal .mat-mdc-form-field {
 	margin-top: 0;
 }
 
@@ -144,11 +144,13 @@ agm-map {
 	font-weight: 500;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 .mat-select-disabled .mat-select-value {
 	color: #000;
 }
 
-.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-mdc-form-field-label {
 	color: #000;
 }
 
