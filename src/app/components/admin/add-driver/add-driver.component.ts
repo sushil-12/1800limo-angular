@@ -28,7 +28,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 	globalFunctions = this.globals
 
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	public driverId: string;
 	public paramResponse: any;
 	public imageSrc: string;

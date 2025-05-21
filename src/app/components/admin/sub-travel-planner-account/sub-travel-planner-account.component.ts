@@ -14,7 +14,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 })
 export class SubTravelPlannerAccountComponent implements OnInit {
 
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

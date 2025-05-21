@@ -15,7 +15,7 @@ declare var $: any;
 })
 export class VehicleYearsComponent implements OnInit {
 
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

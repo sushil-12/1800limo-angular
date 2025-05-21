@@ -15,7 +15,7 @@ declare var $: any;
 })
 export class DriverLanguageComponent implements OnInit {
 
-  colorToggle: ThemePalette = 'primary';
+  colorToggle: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

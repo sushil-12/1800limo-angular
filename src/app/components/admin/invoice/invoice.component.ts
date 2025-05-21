@@ -14,7 +14,7 @@ import * as moment from 'moment';
 })
 export class InvoiceComponent implements OnInit {
 
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

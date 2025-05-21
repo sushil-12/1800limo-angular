@@ -18,7 +18,7 @@ export class IndividualComponent implements OnInit {
 	@ViewChild('fileInput') fileInput!: ElementRef;
 	@ViewChild('fileInput1') fileInput1!: ElementRef;
 	@ViewChild('message') message!: ElementRef;
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	checked = false;
 	disabled = false;
 

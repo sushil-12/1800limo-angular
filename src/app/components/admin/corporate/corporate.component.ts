@@ -13,7 +13,7 @@ import {ThemePalette} from '@angular/material/core';
 })
 export class CorporateComponent implements OnInit {
 
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

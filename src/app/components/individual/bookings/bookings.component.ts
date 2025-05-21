@@ -34,7 +34,7 @@ export class BookingsComponent implements OnInit {
 
 	exampleHeader = DatePickerComponent
 
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	outputDateFormat = 'YYYY-MM-DD';
 	public totalRecords: any;
 	public firstPage: Number;

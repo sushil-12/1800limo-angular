@@ -5,58 +5,53 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormGroup, FormBuilder, Validator } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
-  selector: 'app-fleet',
-  templateUrl: './fleet.component.html',
-  styleUrls: ['./fleet.component.scss']
+	selector: 'app-fleet',
+	templateUrl: './fleet.component.html',
+	styleUrls: ['./fleet.component.scss']
 })
 export class FleetComponent implements OnInit {
 
-  public heading: string;
+	public heading: string;
 	public fleetContents: any;
+	color: ThemePalette = 'accent';
 
-  constructor(
-    private adminServices: AdminService,
+	constructor(
+		private adminServices: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBulider: FormBuilder,
-  ) { }
+	) { }
 
-  ngOnInit(): void {
-    this.heading = 'Fleet';
+	ngOnInit(): void {
+		this.heading = 'Fleet';
 		this.getFleetContent();
-  }
+	}
 
-  getFleetContent()
-	{
+	getFleetContent() {
 		this.adminServices.getStepContentData('fleet').pipe(
-			catchError(err =>
-			{
+			catchError(err => {
 
 				return throwError(err);
 			})
-		).subscribe(({ data }: any) =>
-		{
+		).subscribe(({ data }: any) => {
 			console.log(data);
 			this.fleetContents = data;
 		})
 
 	}
 
-	editAction(sectionID)
-	{
+	editAction(sectionID) {
 		this.router.navigate(['/admin/cms/fleet/edit/' + sectionID]);
 	}
 
-	changeFleetActionStatus(event, id)
-	{
-		this.adminServices.changeFleetSectionStatus(id, event.checked).pipe(catchError(err =>
-		{
+	changeFleetActionStatus(event, id) {
+		this.adminServices.changeFleetSectionStatus(id, event.checked).pipe(catchError(err => {
 			return throwError(err)
 		})
-		).subscribe(({ data }: any) =>
-		{
+		).subscribe(({ data }: any) => {
 			console.log(data);
 		})
 		//$("#statusEnabledisabledModal").modal();
