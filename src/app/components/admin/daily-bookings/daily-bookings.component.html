@@ -1754,7 +1754,7 @@
 					</div>
 
 					<!-- Rates Distribution -->
-					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
+					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned' && !bookingPreview?.share_array">
 						<h5 class="font-weight-bolder m-0 mb-2">
 							Rates Distribution
 						</h5>
@@ -1872,7 +1872,7 @@
 							</div>
 						</div>
 					</div>
-					<hr>
+					<hr *ngIf="bookingPreview?.affiliate_type != 'unassigned' && !bookingPreview?.share_array">
 					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
 						<div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
