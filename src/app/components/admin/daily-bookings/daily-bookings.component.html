@@ -86,10 +86,12 @@
 			</div>
 			<div class="row d-flex justify-content-between">
 				<div class="col-md-12 m-0 p-0 pl-2">
-					<p style="margin: 0;"><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+					<p style="margin: 0;">
+						<mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 							{{useDateFilter ? 'Uncheck to see current and future bookings' :
-							'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
-						</mat-checkbox></p>
+							'Check box to see next 7 days bookings, change calender, or search by any term (name,booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
+						</mat-checkbox>
+					</p>
 				</div>
 
 				<!-- <div class="col-md-6 sortCheckBox"> -->
@@ -268,7 +270,7 @@
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>
-								
+
 
 											<a class="dropdown-item"
 												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
@@ -320,8 +322,8 @@
 										</div>
 									</td>
 									<td>
-										<p style="white-space: pre"
-											(dblclick)="openModal(booking, 'Passenger')" id="box"
+										<p style="white-space: pre" (dblclick)="openModal(booking, 'Passenger')"
+											id="box"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
 											<span [innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span class="font-weight-bolder"
@@ -338,8 +340,7 @@
 
 									</td>
 									<td>
-										<p 
-											(dblclick)="openModal(booking, 'Loose_Affiliate')"
+										<p (dblclick)="openModal(booking, 'Loose_Affiliate')"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span
@@ -350,8 +351,7 @@
 												[innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
 										</p>
 										<ng-template #otherAffiliate>
-											<p 
-												(dblclick)="openModal(booking, 'Affiliate')"
+											<p (dblclick)="openModal(booking, 'Affiliate')"
 												[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
 												<span class="text-capitalize"
@@ -367,8 +367,7 @@
 													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
 											</p>
 											<ng-template #gigOperator>
-												<p 
-													[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+												<p [ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(dblclick)="openModal(booking, 'Affiliate')">
 													<span class="text-capitalize"
 														[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
@@ -390,8 +389,8 @@
 
 									</td>
 									<td>
-										<p style="white-space: pre" 
-											(dblclick)="openModal(booking, 'created_by')" id="box"
+										<p style="white-space: pre" (dblclick)="openModal(booking, 'created_by')"
+											id="box"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
 											<span [innerHTML]="highlighText(booking.created_by_name)"></span> |
 											<span class="font-weight-bolder"
@@ -1302,13 +1301,8 @@
 					</div>
 					<hr>
 					<div class="google_map">
-						<google-map
-						  height="300px"
-						  width="100%"
-						  [center]="mapCenter"
-						  [zoom]="zoom"
-						></google-map>
-					  </div>
+						<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+					</div>
 					<hr>
 					<!-- Distance Details -->
 
@@ -1754,7 +1748,7 @@
 					</div>
 
 					<!-- Rates Distribution -->
-					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned' && !bookingPreview?.share_array">
+					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
 						<h5 class="font-weight-bolder m-0 mb-2">
 							Rates Distribution
 						</h5>
@@ -1768,7 +1762,9 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate
+										? bookingPreview?.share_array?.baseRate :
+										bookingPreview?.rates_preview?.ride_base_rate)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1783,7 +1779,9 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate((bookingPreview?.share_array?.adminShare
+										? bookingPreview?.share_array?.adminShare :
+										bookingPreview?.rates_preview?.admin_share)
 										- deducted_stripe_fee)
 										}}
 									</span>
@@ -1817,7 +1815,9 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee
+										? bookingPreview?.share_array?.stripeFee :
+										bookingPreview?.rates_preview?.stripe_fees)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1833,7 +1833,10 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare
+										? bookingPreview?.share_array?.affiliateShare :
+										bookingPreview?.rates_preview?.affiliate_share
+										)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
@@ -1865,14 +1868,16 @@
 									<span class="font-weight-bolder preview-output-feild">
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
 										formatBaseRate(bookingPreview?.share_array?.grandTotal) :
-										formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
+										formatBaseRate(bookingPreview?.share_array?.returnGrandTotal ?
+										bookingPreview?.share_array?.returnGrandTotal :
+										bookingPreview?.rates_preview?.total_price)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
 							</div>
 						</div>
 					</div>
-					<hr *ngIf="bookingPreview?.affiliate_type != 'unassigned' && !bookingPreview?.share_array">
+					<hr *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
 					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
 						<div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
