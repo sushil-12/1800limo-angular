@@ -25,7 +25,7 @@ export class MyBookingsComponent implements OnInit {
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
 	directionsRenderer!: google.maps.DirectionsRenderer;
 
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	outputDateFormat = 'YYYY-MM-DD';
 	public totalRecords: any;
 	public firstPage: Number;

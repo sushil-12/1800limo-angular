@@ -14,7 +14,7 @@ import { TravelAgentService } from 'src/app/services/travel-agent.service';
 })
 export class TravelClientAccountsComponent implements OnInit {
 
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

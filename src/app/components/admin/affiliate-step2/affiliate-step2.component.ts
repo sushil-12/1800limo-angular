@@ -10,6 +10,7 @@ import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from '../../../services/common.service';
+import { ThemePalette } from '@angular/material/core';
 declare var $: any;
 
 @Component({
@@ -67,6 +68,7 @@ export class AffiliateStep2Component implements OnInit {
 	isAddressSelected: boolean = false;
 	isRoutingSelected: boolean = false;
 	disabled = false;
+	color: ThemePalette = 'accent';
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -354,53 +356,53 @@ export class AffiliateStep2Component implements OnInit {
 		this.loadCards(this.affiliateId)
 
 	}
-	
+
 	ngAfterViewInit(): void {
 		this.geoCoder = new google.maps.Geocoder;
-	
+
 		const autocomplete = new google.maps.places.Autocomplete(
-		  this.search1.nativeElement,
-		  {
-			types: ['address'] // You can tweak this to 'address', etc.
-		  }
+			this.search1.nativeElement,
+			{
+				types: ['address'] // You can tweak this to 'address', etc.
+			}
 		);
-	
+
 		autocomplete.addListener('place_changed', () => {
-		  this.ngZone.run(() => {
-			const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-			if (!place.geometry || !place.geometry.location) return;
-	
-			// Patch coordinates and formatted address
-			this.addBankForm.patchValue({
-			  latitude: place.geometry.location.lat(),
-			  longitude: place.geometry.location.lng(),
-			  address: place.formatted_address
+			this.ngZone.run(() => {
+				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+				if (!place.geometry || !place.geometry.location) return;
+
+				// Patch coordinates and formatted address
+				this.addBankForm.patchValue({
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng(),
+					address: place.formatted_address
+				});
+
+				// Extract address components
+				place.address_components?.forEach(component => {
+					const types = component.types;
+					if (types.includes('country')) {
+						this.addBankForm.patchValue({
+							country: component.short_name
+						});
+					} else if (types.includes('administrative_area_level_1')) {
+						this.addBankForm.patchValue({
+							state: component.long_name
+						});
+					} else if (types.includes('administrative_area_level_3')) {
+						this.addBankForm.patchValue({
+							city: component.long_name
+						});
+					} else if (types.includes('postal_code')) {
+						this.addBankForm.patchValue({
+							zipCode: component.long_name
+						});
+					}
+				});
 			});
-	
-			// Extract address components
-			place.address_components?.forEach(component => {
-			  const types = component.types;
-			  if (types.includes('country')) {
-				this.addBankForm.patchValue({
-				  country: component.short_name
-				});
-			  } else if (types.includes('administrative_area_level_1')) {
-				this.addBankForm.patchValue({
-				  state: component.long_name
-				});
-			  } else if (types.includes('administrative_area_level_3')) {
-				this.addBankForm.patchValue({
-				  city: component.long_name
-				});
-			  } else if (types.includes('postal_code')) {
-				this.addBankForm.patchValue({
-				  zipCode: component.long_name
-				});
-			  }
-			});
-		  });
 		});
-	  }
+	}
 
 
 	showOnlyLast4Digit(value) {

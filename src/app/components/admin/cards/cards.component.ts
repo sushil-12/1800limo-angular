@@ -18,7 +18,7 @@ declare var $: any;
 })
 export class CardsComponent implements OnInit {
 
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	checked = false;
 	disabled = false;
 

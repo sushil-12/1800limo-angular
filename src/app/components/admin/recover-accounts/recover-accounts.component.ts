@@ -18,7 +18,7 @@ declare var $: any;
 export class RecoverAccountsComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('message') message!: ElementRef;
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

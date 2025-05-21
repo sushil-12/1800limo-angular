@@ -188,9 +188,6 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 
 .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible {
     visibility: visible;
-    position: absolute;
-    top: -35px;
-    left: 15px;
 }
 
 .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible .mat-mdc-option {
@@ -1167,7 +1164,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 
 select::placeholder {
     color: #000;
-    opacity: 1;
+    /* opacity: 1; */
 }
 
 .user-profile span {
@@ -1275,7 +1272,7 @@ a.user-profile:active::after {
 .user_information input::placeholder,
 .user_information select::placeholder,
 .user_information textarea::placeholder {
-    opacity: 1;
+    /* opacity: 1; */
     color: #889097;
 }
 
@@ -1504,9 +1501,9 @@ h2.headinginfo .orangeHeading {
     border-top-color: #f8f87c;
 }
 
-.cdk-overlay-pane {
+/* .cdk-overlay-pane {
     transform: translateX(-15px) translateY(35px) !important;
-}
+} */
 
 .cdk-overlay-pane .mat-mdc-select-panel {
     max-height: 45vh !important;
@@ -2340,10 +2337,11 @@ button:focus {
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.mat-form-field-prefix {
-    top: -1px !important;
-    font-weight: 500;
-    color: var(--orange-color);
+.mat-mdc-form-field-icon-prefix{
+    top: 1px !important;
+    left: 10px !important;
+    font-weight: 500 !important;
+    color: var(--orange-color) !important;
 }
 
 

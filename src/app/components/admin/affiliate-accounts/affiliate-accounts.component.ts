@@ -23,7 +23,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	emails = new FormControl();
 	phone_numbers = new FormControl();
 	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	checked = false;
 	disabled = false;
 	show: boolean;

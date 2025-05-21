@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
@@ -17,6 +18,7 @@ export class BadgeCitiesComponent implements OnInit {
 
   public editCityForm: FormGroup;
   public addCityForm: FormGroup;
+  color: ThemePalette = 'accent';
   
   constructor( 
     private adminService:AdminService,

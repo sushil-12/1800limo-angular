@@ -16,7 +16,7 @@ declare var $: any;
 })
 export class MeetAndGreetComponent implements OnInit
 {
-	colorToggle: ThemePalette = 'primary';
+	colorToggle: ThemePalette = 'accent';
 	checked = false;
 	disabled = false;
 

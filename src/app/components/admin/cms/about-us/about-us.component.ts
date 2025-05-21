@@ -4,17 +4,18 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
 	selector: 'app-about-us',
 	templateUrl: './about-us.component.html',
 	styleUrls: ['./about-us.component.scss']
 })
-export class AboutUsComponent implements OnInit
-{
+export class AboutUsComponent implements OnInit {
 
 	public heading: string;
 	public aboutUsSecionsData: any;
+	color: ThemePalette = 'accent';
 
 	constructor(
 		private spinner: NgxSpinnerService,
@@ -22,22 +23,18 @@ export class AboutUsComponent implements OnInit
 		private adminService: AdminService
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.heading = 'About Us';
 		this.getAboutPageContent();
 	}
 
-	getAboutPageContent()
-	{
+	getAboutPageContent() {
 		//this.spinner.show();
 		this.adminService.getAboutUsPageContent().pipe(
-			catchError(err =>
-			{
+			catchError(err => {
 				return throwError(err);
 			})
-		).subscribe(({ data }: any) =>
-		{
+		).subscribe(({ data }: any) => {
 			console.log(data);
 			this.spinner.hide();
 			this.aboutUsSecionsData = data;
@@ -46,21 +43,17 @@ export class AboutUsComponent implements OnInit
 
 
 	// after clicking edit button
-	editAboutUsPageSectionContent(id)
-	{
+	editAboutUsPageSectionContent(id) {
 		this.route.navigate(['admin/cms/about-us/edit/' + id]);
 	}
 
-	changeSectionStatus(event, id)
-	{
+	changeSectionStatus(event, id) {
 		this.spinner.show();
-		this.adminService.changeAboutUSSectionStauts(id, event.checked).pipe(catchError(err =>
-		{
+		this.adminService.changeAboutUSSectionStauts(id, event.checked).pipe(catchError(err => {
 			this.spinner.hide();
 			return throwError(err)
 		})
-		).subscribe(({ data }: any) =>
-		{
+		).subscribe(({ data }: any) => {
 			console.log(data);
 			this.spinner.hide();
 		})

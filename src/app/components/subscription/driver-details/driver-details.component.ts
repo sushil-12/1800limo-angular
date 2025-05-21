@@ -16,7 +16,7 @@ declare var $: any;
 	styleUrls: ['./driver-details.component.scss']
 })
 export class DriverDetailsComponent implements OnInit {
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	checked = false;
 	disabled = false;
 

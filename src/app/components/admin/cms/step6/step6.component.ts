@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
@@ -19,6 +20,7 @@ export class Step6Component implements OnInit
 	heading: string = "Step 6 - Terms and Conditions"
 
 	step6Contents: any
+	color: ThemePalette = 'accent';
 
 	constructor(
 		private adminServices: AdminService,

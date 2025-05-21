@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { ThemePalette } from '@angular/material/core';
 declare var $: any;
 
 @Component({
@@ -16,6 +17,7 @@ export class HomePageComponent implements OnInit
 
 	public heading: string;
 	public homePageContents: any;
+	color: ThemePalette = 'accent';
 
 	constructor(
 		private adminServices: AdminService,

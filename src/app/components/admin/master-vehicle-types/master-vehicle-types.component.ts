@@ -35,7 +35,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 	public editVehiclePic: string;
 	vehicleId: any;
 	currentUser:any;
-	color: ThemePalette = 'primary';
+	color: ThemePalette = 'accent';
 	disabled = false;
 	convertCurrenyResp:any
 

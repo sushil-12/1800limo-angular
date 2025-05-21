@@ -16,7 +16,7 @@ declare var $:any;
 })
 export class SubAgentAccountsComponent implements OnInit {
 
-  color: ThemePalette = 'primary';
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 

@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormGroup, FormBuilder, Validator } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
 	selector: 'app-step0',
@@ -16,6 +17,7 @@ export class Step0Component implements OnInit
 
 	public heading: string;
 	public step0Contents: any;
+	color: ThemePalette = 'accent';
 
 	constructor(
 		private adminServices: AdminService,
