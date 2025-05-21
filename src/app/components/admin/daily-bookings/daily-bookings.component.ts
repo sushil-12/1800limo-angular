@@ -1084,7 +1084,7 @@ export class DailyBookingsComponent implements OnInit {
 					this.adminSharePercent = 25
 				}
 
-				this.deducted_stripe_fee = ((this?.bookingPreview?.share_array?.grandTotal ? this?.bookingPreview?.share_array?.grandTotal : this?.bookingPreview?.share_array?.returnGrandTotal) * 0.029) + 0.30
+				this.deducted_stripe_fee = ((this?.bookingPreview?.share_array?.grandTotal ? this?.bookingPreview?.share_array?.grandTotal : this?.bookingPreview?.share_array?.returnGrandTotal ? this?.bookingPreview?.share_array?.returnGrandTotal : this.bookingPreview?.rates_preview?.total_price) * 0.029) + 0.30
 				// if (this.bookingPreview?.payment_status == "unpaid") {
 				// 	console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
 				// 	if (this.bookingPreview?.share_array?.length != 0) {
