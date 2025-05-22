@@ -492,9 +492,7 @@
 						<!-- <span matPrefix
 								*ngIf="f.minimum_city_rate.value == null || f.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
 								0 &nbsp;</span> -->
-						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
 						<!-- <mat-select formControlName="minimum_city_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
