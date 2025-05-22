@@ -767,9 +767,12 @@
 						<!-- <ng-template #hideZero12> -->
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						<!-- </ng-template> -->
-						<input type="number" matInput placeholder="Shared Ride Rate - Per Person"
-							formControlName="per_person_group_ride_rate" (focus)="$event.target.select()"
-							(change)="updateRateRangeObject()" tabindex="1" />
+						<mat-select formControlName="per_person_group_ride_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.per_person_group_ride_rate.errors || form.per_person_group_ride_rate.touched && form.per_person_group_ride_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -796,9 +799,12 @@
 						<ng-template #hideZero21> -->
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						<!-- </ng-template> -->
-						<input type="number" matInput placeholder="Early Am/Late Pm"
-							formControlName="early_late_charges" tabindex="1" (change)="updateRateRangeObject()"
-							(focus)="$event.target.select()" />
+						<mat-select formControlName="early_late_charges" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.early_late_charges.errors || form.early_late_charges.touched && form.early_late_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -820,8 +826,12 @@
 						<ng-template #hideZero22> -->
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						<!-- </ng-template> -->
-						<input type="number" matInput placeholder="Holiday Rate" formControlName="holiday_charges"
-							tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
+						<mat-select formControlName="holiday_charges" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.holiday_charges.errors || form.holiday_charges.touched && form.holiday_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -849,9 +859,12 @@
 							{{currency_symbol}} &nbsp;
 						</span>
 						<!-- </ng-template> -->
-						<input type="number" matInput placeholder="Friday/Saturday Night"
-							formControlName="friday_saturday_charges" tabindex="1" (focus)="$event.target.select()"
-							(change)="updateRateRangeObject()" />
+						<mat-select formControlName="friday_saturday_charges" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.friday_saturday_charges.errors || form.friday_saturday_charges.touched && form.friday_saturday_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -864,9 +877,12 @@
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Extra stop - same town</mat-label>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
-						<input matInput type="number" placeholder="Extra stop - same town"
-							(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1"
-							(focus)="$event.target.select()">
+						<mat-select formControlName="in_town_extra_stop" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -877,9 +893,12 @@
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Extra stop - different town</mat-label>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
-						<input matInput type="number" placeholder="Extra stop - different town"
-							(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1"
-							(focus)="$event.target.select()">
+						<mat-select formControlName="outside_town_extra_stop" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
+								{{ value }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">

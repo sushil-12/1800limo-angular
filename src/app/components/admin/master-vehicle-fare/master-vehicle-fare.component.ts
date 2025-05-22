@@ -25,7 +25,7 @@ export class MasterVehicleFareComponent implements OnInit
 	currency_options: any
 	rate_range_object: any = {}
 	thumb_value: number = 0
-
+	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 	constructor(
 		private $api: AdminService,

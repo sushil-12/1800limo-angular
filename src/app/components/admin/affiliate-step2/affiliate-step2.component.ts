@@ -94,9 +94,7 @@ export class AffiliateStep2Component implements OnInit {
 
 
 	ngOnInit(): void {
-		//code related to autocomplete and map
-		this.spinner.show()
-
+		
 		//prepare list of years for add card
 		const currentYear = (new Date()).getFullYear();
 		for (let i = 0; i < 40; i++) {
@@ -186,8 +184,9 @@ export class AffiliateStep2Component implements OnInit {
 			this.badgeOptions = res?.data
 			this.filteredOptions = res?.data
 		})
-
+		this.spinner.show()
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
+			this.spinner.hide()
 			this.countryOptions = data;
 			if (this.affiliateId) {
 				if (this.stepCompleted.includes('2')) {
