@@ -52,9 +52,8 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
-						<label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span
-								class="asterisk"> *</span></label>
+					<mat-form-field appearance="outline" class="mobileField">
+						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
 						<input matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
 							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 
@@ -957,11 +956,10 @@
 							</div>
 						</div>
 						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="mat-custom-phone">
+							<mat-form-field appearance="outline" class="mobileField">
 								<mat-label>Background company Telephone # <span class="asterisk">*</span></mat-label>
 
-								<input matInput #backgroundCompanyTelInput
-									placeholder="Background company Telephone #"
+								<input matInput #backgroundCompanyTelInput placeholder="Background company Telephone #"
 									formControlName="BackgroundCompanyTelNumber" class="phoneNumberClass" tabindex="1"
 									(focus)="$event.target.select()" />
 
@@ -1109,7 +1107,7 @@
 							</div>
 						</div>
 						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="mat-custom-phone">
+							<mat-form-field appearance="outline" class="mobileField">
 								<mat-label>Police Depart. Tel #</mat-label>
 								<input matInput #policeTelInput placeholder="Police Depart. Tel #"
 									formControlName="PoliceForceTelephone" class="phoneNumberClass" tabindex="1"
