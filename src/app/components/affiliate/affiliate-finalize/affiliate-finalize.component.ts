@@ -451,7 +451,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			dataToSend = {
 				reservation_id: this.bookingId,
 				grand_total: this.edit_rates_value?.grand_total,
-				payment_method: 'cash'
+				paymentMethod: 'cash'
 			}
 			this.spinner.show()
 			this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
@@ -479,7 +479,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 					dataToSend = {
 						reservation_id: this.bookingId,
 						grand_total: this.edit_rates_value.grand_total,
-						payment_method: 'cash'
+						paymentMethod: 'cash'
 					}
 				}
 				else {
@@ -487,7 +487,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 						dataToSend = {
 							CreditCardsDetail: { ...this.cardForm.value },
 							isExistingCard: false,
-							payment_method: 'credit_card',
+							paymentMethod: 'credit_card',
 							reservation_id: this.bookingId,
 							grand_total: this.edit_rates_value.grand_total
 						}
@@ -496,7 +496,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 					else {
 						dataToSend = {
 							isExistingCard: true,
-							payment_method: 'credit_card',
+							paymentMethod: 'credit_card',
 							CreditCardsDetail: {
 								cardID: this.selectedCard?.ID
 							},
