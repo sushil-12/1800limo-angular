@@ -627,10 +627,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
-                            <label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-                                Cell <span class="asterisk">*</span>
-                            </label>
+                        <mat-form-field appearance="outline" class="mobileField m-0">
+                            <mat-label>Passenger Cell <span class="asterisk">*</span></mat-label>
                             <input matInput #cellInput placeholder="1234567890" formControlName="passenger_cell"
                                 class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 
@@ -1011,7 +1009,7 @@
                                 Cruise Port
                             </mat-label>
                             <input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-                                (focus)="$event.target.select()" [readonly]="blockaddressfield"/>
+                                (focus)="$event.target.select()" [readonly]="blockaddressfield" />
                         </mat-form-field>
                         <div class="error-box">
                             <div class="error-message"
@@ -1153,7 +1151,7 @@
                                 Cruise Port
                             </mat-label>
                             <input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-                                (focus)="$event.target.select()" [readonly]="blockaddressfield"/>
+                                (focus)="$event.target.select()" [readonly]="blockaddressfield" />
                         </mat-form-field>
                         <div class="error-box">
                             <div class="error-message"
@@ -1528,7 +1526,7 @@
                                 Cruise Port
                             </mat-label>
                             <input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
-                                (focus)="$event.target.select()" [readonly]="blockaddressfield"/>
+                                (focus)="$event.target.select()" [readonly]="blockaddressfield" />
                         </mat-form-field>
                         <div class="error-box">
                             <div class="error-message"
@@ -1679,7 +1677,7 @@
                                 Cruise Port
                             </mat-label>
                             <input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
-                                (focus)="$event.target.select()" [readonly]="blockaddressfield"/>
+                                (focus)="$event.target.select()" [readonly]="blockaddressfield" />
                         </mat-form-field>
                         <div class="error-box">
                             <div class="error-message"
@@ -2947,16 +2945,18 @@
     </div>
 </div>
 
-<div class="modal fade" id="repeatreturnmodal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
+<div class="modal fade" id="repeatreturnmodal" tabindex="-1" role="dialog" aria-labelledby="emailModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
 
-			<div class="modal-body text-center">
-				<p style="color: red;font-size: 20px;">For repeat or return bookings, please ensure that the pickup and drop-off addresses must match those of the original booking. Click here to change the address.</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="custom-btn savebutton" (click)="navigatetoQuote()">Quote</button>
-			</div>
-		</div>
-	</div>
+            <div class="modal-body text-center">
+                <p style="color: red;font-size: 20px;">For repeat or return bookings, please ensure that the pickup and
+                    drop-off addresses must match those of the original booking. Click here to change the address.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" (click)="navigatetoQuote()">Quote</button>
+            </div>
+        </div>
+    </div>
 </div>

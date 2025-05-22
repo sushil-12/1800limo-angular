@@ -35,9 +35,8 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field appearance="outline" class="mat-custom-phone cellLabelClass">
-                            <label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
-                                    class="asterisk"> *</span></label>
+                        <mat-form-field appearance="outline" class="mobileField">
+                            <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
                             <input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
                                 class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 
@@ -71,7 +70,8 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileLabelClass">
-                            <label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
+                            <label
+                                class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
                                     class="asterisk">
                                 </span></label>
                             <input matInput #workInput placeholder="work" formControlName="work"

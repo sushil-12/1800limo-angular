@@ -236,10 +236,8 @@
 
 							<!-- Phone -->
 							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
-									<label
-										class="mat-mdc-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
-									</label>
+								<mat-form-field appearance="outline" class="mobileField m-0">
+									<mat-label>Phone</mat-label>
 									<input matInput #cellInput placeholder="1234567890" formControlName="phone"
 										class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 
@@ -582,11 +580,8 @@
 
 					<!-- Passenger Cell -->
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
-							<label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-								Cell <span class="asterisk">*</span>
-							</label>
-
+						<mat-form-field appearance="outline" class="mobileField m-0">
+							<mat-label>Passenger Cell<span class="asterisk"> *</span></mat-label>
 							<input matInput #passengercellInput placeholder="1234567890"
 								formControlName="passenger_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />
@@ -930,15 +925,12 @@
 
 					<!-- Affiliate Driver Cell -->
 					<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
+						<mat-form-field appearance="outline" class="mobileField m-0">
 							<mat-label>
 								Phone
 							</mat-label>
-
-
 							<input matInput #drivercellInput placeholder="1234567890" formControlName="driver_cell"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
-
 						</mat-form-field>
 					</div>
 

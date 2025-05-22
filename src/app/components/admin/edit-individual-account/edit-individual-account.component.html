@@ -35,11 +35,9 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="read-only mat-custom-phone cellLabelClass">
-							<label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
-									class="asterisk">
-									*</span></label>
-							<input matInput #mobileInput  placeholder="Mobile" formControlName="mobile"
+						<mat-form-field appearance="outline" class="read-only mobileField">
+							<mat-label>Mobile<span class="asterisk"> *</span></mat-label>
+							<input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
@@ -70,11 +68,9 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="mobileLabelClass">
-							<label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
-									class="asterisk">
-								</span></label>
-							<input matInput #workInput  placeholder="Contact" formControlName="work"
+						<mat-form-field appearance="outline" class="mobileField">
+							<mat-label>Work/Home</mat-label>
+							<input matInput #workInput placeholder="Contact" formControlName="work"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"

@@ -5,95 +5,99 @@
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	background-color: #fff;
-	max-width       : 120px;
-	top             : 30px;
-	padding-left    : 0px;
-	text-align      : center;
-	left            : -5px;
+	max-width: 120px;
+	top: 30px;
+	padding-left: 0px;
+	text-align: center;
+	left: -5px;
 }
-.row{
+
+.row {
 	justify-content: space-around;
 }
 
-$bg         : #33c658;
+$bg : #33c658;
 $borderWidth: 2px;
 
 body {
-	background : $bg;
+	background: $bg;
 	font-family: roboto;
 }
 
 input[type=radio] {
-	position  : absolute;
+	position: absolute;
 	visibility: hidden;
-	display   : none;
+	display: none;
 }
 
 .role label {
-	color         : #000;
-	display       : table-cell;
-	cursor        : pointer;
-	font-weight   : bold;
-	padding       : 5px 10px;
-	margin        : 0;
+	color: #000;
+	display: table-cell;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 5px 10px;
+	margin: 0;
 	vertical-align: middle;
-	text-align    : start;
-	left          : 40px;
-	font-size     : 13px !important;
+	text-align: start;
+	left: 40px;
+	font-size: 13px !important;
 }
 
 input[type=radio]:checked+label {
-	color     : lighten($bg, 60%);
+	color: lighten($bg, 60%);
 	background: $bg;
 }
 
 label+input[type=radio]+label {
 	border-left: solid $borderWidth $bg;
-	text-align : center;
+	text-align: center;
 }
 
-.hide-alert{
+.hide-alert {
 	display: none;
 }
+
 .radio-group {
-	border       : solid 1px $bg;
-	display      : inline-block;
+	border: solid 1px $bg;
+	display: inline-block;
 	border-radius: 10px;
-	overflow     : hidden;
+	overflow: hidden;
 	background-color: #FFF;
 	margin-left: 2px;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .mat-mdc-text-field-wrapper{
+:host ::ng-deep .mat-mdc-text-field-wrapper {
 	border: solid 3px;
 	border-radius: 8px;
 }
 
-#formContent{
+#formContent {
 	background-color: #f5f4fe;
 }
 
 @media only screen and (max-width:767px) {
 	.radio-group {
-		border       : solid $borderWidth $bg;
-		display      : grid;
+		border: solid $borderWidth $bg;
+		display: grid;
 		border-radius: 10px;
-		overflow     : hidden;
+		overflow: hidden;
 		margin-bottom: 12px;
 		height: 42px;
 	}
 
 	label+input[type=radio]+label {
 		border-left: none;
-		border-top : solid $borderWidth $bg;
-		text-align : center;
+		border-top: solid $borderWidth $bg;
+		text-align: center;
 	}
 }
-.referral_code_div{
+
+.referral_code_div {
 	margin-top: 10px;
 }
-.sign-in-sub-ta-button{
+
+.sign-in-sub-ta-button {
 	padding: 3px 13px !important;
 	background: var(--blue) !important;
 	color: #fff !important;
@@ -101,4 +105,14 @@ label+input[type=radio]+label {
 	font-weight: 500 !important;
 	cursor: pointer !important;
 	text-decoration: none !important;
+}
+
+// override css for label  
+:host ::ng-deep .mobileFieldlogin .mdc-floating-label.mat-mdc-floating-label {
+    padding-left: 90px !important;
+}
+
+:host ::ng-deep .mobileFieldlogin .mdc-floating-label.mat-mdc-floating-label.mdc-floating-label--float-above {
+	padding-top: 8px !important;
+    padding-left: 0px !important;
 }

@@ -33,10 +33,8 @@
 					</div>
 
 					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>Contact<span class="asterisk">
-									*</span></mat-label>
-
+						<mat-form-field appearance="outline" class="mobileField">
+							<mat-label>Contact<span class="asterisk"> *</span></mat-label>
 							<input matInput #officeInput placeholder="Contact" formControlName="office"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
@@ -63,10 +61,8 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="read-only mat-custom-phone cellLabelClass">
-							<label class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
-									class="asterisk">
-									*</span></label>
+						<mat-form-field appearance="outline" class="read-only mobileField">
+							<mat-label>Mobile<span class="asterisk"> *</span></mat-label>
 							<input matInput #mobileInput placeholder="mobile" formControlName="mobile"
 								class="phoneNumberClass" tabindex="1" [readonly]="travelPlannerId"
 								(focus)="$event.target.select()" />
@@ -139,11 +135,10 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<mat-form-field appearance="outline">
-							<mat-label>Fax<span class="asterisk">
-									*</span></mat-label>
-							<input matInput #faxInput placeholder="fax" formControlName="fax"
-								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+						<mat-form-field appearance="outline" class="mobileField">
+							<mat-label>Fax</mat-label>
+							<input matInput #faxInput placeholder="fax" formControlName="fax" class="phoneNumberClass"
+								tabindex="1" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.fax.errors || f.fax.touched && f.fax.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -168,10 +163,8 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<mat-form-field appearance="outline">
-							<mat-label>Office
-								Phone<span class="asterisk">
-									*</span></mat-label>
+						<mat-form-field appearance="outline" class="mobileField">
+							<mat-label>Office Phone<span class="asterisk"> *</span></mat-label>
 							<input matInput #officeNumberInput placeholder="24hr Agent Help Desk"
 								formControlName="officeNumber" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" />

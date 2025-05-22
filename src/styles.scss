@@ -398,3 +398,19 @@ section {
 //     font-size: 1.65rem;
 //     margin-left: 6px;
 //   }
+
+
+
+// for mobile fields with flag move label after flag
+.mobileField .mdc-floating-label.mat-mdc-floating-label {
+    padding-left: 90px !important;
+}
+// for mobile fields with flag move label to left after click
+.mobileField .mdc-floating-label.mat-mdc-floating-label.mdc-floating-label--float-above {
+    padding-left: 0px !important;
+}
+
+// override z-index to show flag lists in mobile field
+.mat-mdc-text-field-wrapper{
+    z-index: auto !important;
+}
