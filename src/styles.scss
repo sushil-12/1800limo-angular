@@ -409,3 +409,8 @@ section {
 .mobileField .mdc-floating-label.mat-mdc-floating-label.mdc-floating-label--float-above {
     padding-left: 0px !important;
 }
+
+// override z-index to show flag lists in mobile field
+.mat-mdc-text-field-wrapper{
+    z-index: auto !important;
+}
