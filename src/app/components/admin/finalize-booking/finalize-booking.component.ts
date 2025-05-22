@@ -79,8 +79,9 @@ export class FinalizeBookingComponent implements OnInit {
 	isFinalizeButton: boolean = false;
 	currencyObj: any;
 	currencySymbol: any;
-	vehicle_created_by:any;
-	booking_created_from:any;
+	vehicle_created_by: any;
+	booking_created_from: any;
+	is_readonly_min_rate: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -215,6 +216,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				this.vehicle_created_by = response?.data?.vehicle_created_by
 				this.booking_created_from = response?.data?.created_by_role
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				setTimeout(() => {
 					this.scroll('submitForm')
 
@@ -273,8 +275,7 @@ export class FinalizeBookingComponent implements OnInit {
 		try {
 			return text?.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -290,7 +291,7 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
 			let base_rate = 0
-			if (this.service_type == 'charter_tour') {
+			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
 				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate * this.finalize_params.number_of_hours
 			}
 			else {
@@ -410,7 +411,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 	makePayment() {
 		$('#paymentModal').modal('hide')
-		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid,this.cardForm.value,this.paymentMethod)
+		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid, this.cardForm.value, this.paymentMethod)
 		console.log('-----=====?>>>>>', this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length > 0))
 		let dataToSend: any
 		if (this.paymentMethod == 'cash') {
@@ -455,7 +456,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('<<<<--card form detail-->>>',dataToSend)
+						console.log('<<<<--card form detail-->>>', dataToSend)
 					}
 					else {
 						dataToSend = {
@@ -467,7 +468,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('selected card-->>>',dataToSend)
+						console.log('selected card-->>>', dataToSend)
 					}
 				}
 				this.$spinner.show()
@@ -593,8 +594,7 @@ export class FinalizeBookingComponent implements OnInit {
 		}
 	}
 
-	backButton()
-	{
+	backButton() {
 		this.$router.navigate(['/admin/daily-bookings-admin']);
 	}
 }
