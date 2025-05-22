@@ -66,8 +66,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 	isFinalizeButton: boolean = false;
 	bookdataresp: any;
 	currencySymbol: any;
-	paidAmount:any;
-	currentUser:any;
+	paidAmount: any;
+	currentUser: any;
+	is_readonly_min_rate: boolean = false;
 
 	constructor(
 		private $api: AdminService,
@@ -93,10 +94,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log("booking id---->>>>>>", this.bookingId,)
 
 				if (!this.bookingId) {
-					if(this.currentUser.roleName == 'sub_affiliate'){
+					if (this.currentUser.roleName == 'sub_affiliate') {
 						this.router.navigate(['/sub_affiliate/my-bookings']);
 					}
-					else{
+					else {
 						this.router.navigate(['/affiliate/my-bookings']);
 					}
 				}
@@ -136,11 +137,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.bookdataresp = data
 				this.BookingDetail = data?.booking_detail
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
-					this.transferType = this.BookingDetail?.transfer_type
+				this.transferType = this.BookingDetail?.transfer_type
 				this.paidAmount = this.BookingDetail?.charged_amount
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
 				this.isFarmoutBooking = data?.booking_detail?.reservation_type == 'farmout' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
+				this.is_readonly_min_rate = data?.booking_detail?.min_rate_involved ? true : false
 				this.init_rates = true;
 				this.hours = data?.booking_detail?.number_of_hours
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
@@ -164,8 +166,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		try {
 			return text?.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -249,10 +250,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-						if(this.currentUser.roleName == 'sub_affiliate'){
+						if (this.currentUser.roleName == 'sub_affiliate') {
 							this.router.navigate(['/sub_affiliate/my-bookings']);
 						}
-						else{
+						else {
 							this.router.navigate(['/affiliate/my-bookings']);
 						}
 
@@ -282,10 +283,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-						if(this.currentUser.roleName == 'sub_affiliate'){
+						if (this.currentUser.roleName == 'sub_affiliate') {
 							this.router.navigate(['/sub_affiliate/my-bookings']);
 						}
-						else{
+						else {
 							this.router.navigate(['/affiliate/my-bookings']);
 						}
 
@@ -304,7 +305,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
 			let base_rate = 0
-			if (this.service_type == 'charter_tour') {
+			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
 				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate * this.finalize_params.number_of_hours
 			}
 			else {
@@ -460,10 +461,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				if(this.currentUser.roleName == 'sub_affiliate'){
+				if (this.currentUser.roleName == 'sub_affiliate') {
 					this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
 				}
-				else{
+				else {
 					this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
 				}
 				console.log('response---------------------->>', response)
@@ -514,10 +515,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// 		error: `<span class='text-success'>${response.message}</span>`
 					// 	}
 					// })
-					if(this.currentUser.roleName == 'sub_affiliate'){
+					if (this.currentUser.roleName == 'sub_affiliate') {
 						this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
 					}
-					else{
+					else {
 						this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
 					}
 					console.log('response---------------------->>', response)
