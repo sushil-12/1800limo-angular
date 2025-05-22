@@ -243,14 +243,14 @@ export class NewBookingComponent implements OnInit {
 			});
 		}
 
-			if (this.drivercellInput) {
-				this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, telOptions);
-				this.drivercellInput.nativeElement.addEventListener('countrychange', () => {
-					const countryData = this.DrvTelObject.getSelectedCountryData();
-					console.log("in country chnage", countryData)
-					this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
-				});
-			}
+		if (this.drivercellInput) {
+			this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, telOptions);
+			this.drivercellInput.nativeElement.addEventListener('countrychange', () => {
+				const countryData = this.DrvTelObject.getSelectedCountryData();
+				console.log("in country chnage", countryData)
+				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+			});
+		}
 
 	}
 
@@ -492,7 +492,7 @@ export class NewBookingComponent implements OnInit {
 			return_meet_greet_choices: [2],
 			return_meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			return_pickup_date: [''],
-			return_pickup_time: ['12:00 pm'],
+			return_pickup_time: ['12:00 am'],
 			return_extra_stops: this.$form.array([]),
 			return_pickup: [''],
 			return_pickup_latitude: [''],
@@ -658,6 +658,8 @@ export class NewBookingComponent implements OnInit {
 				// this.scroll('travel_date')
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', editing_data?.pickup_date)
+				this.SetFormValue('return_pickup_date', editing_data?.pickup_date)
+
 			}
 
 			if (editing_data?.driver_image) {
@@ -1173,9 +1175,9 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show()
 		this.affiliateService.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
-				setTimeout(()=>{
+				setTimeout(() => {
 					this.initphonefield()
-				},200)
+				}, 200)
 				this.DriverList = response.data.data
 				let isValueSet = false
 				for (let i = 0; i < this.DriverList.length; i++) {

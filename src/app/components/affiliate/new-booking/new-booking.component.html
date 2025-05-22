@@ -1688,14 +1688,12 @@
 						<mat-label>
 							Arrival Time
 						</mat-label>
-						<input [ngxTimepicker]="rt_onwy_tm" matInput formControlName="return_pickup_time"
-							(focus)="$event.target.select()" />
+						<input [ngxTimepicker]="rt_onwy_tm" formControlName="return_pickup_time" matInput readonly />
 					</mat-form-field>
 					<ngx-material-timepicker #rt_onwy_tm
-						[defaultTime]="Form.return_pickup_time.value"></ngx-material-timepicker>
+						[defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
 				</div>
 			</div>
-
 
 
 			<h4 class="pl-2">
@@ -1894,22 +1892,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-12 my-2">
-				<mat-form-field appearance="outline">
-					<mat-label style="color:red;">
-						Special Instructions / Exact Building Name
-					</mat-label>
-					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-						(focus)="$event.target.select()" rows="5"></textarea>
-				</mat-form-field>
-			</div>
-			<div class="row m-2">
-				<p class="text-lg" style="color: #dc3545!important;">
-					NOTE : Enter pickup and drop off locations first, then enter extra stops.
-				</p>
-			</div>
-
-
 
 
 			<h4 class="pl-2">
@@ -2088,6 +2070,22 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label style="color:red;">
+						Special Instructions / Exact Building Name
+					</mat-label>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
+						(focus)="$event.target.select()" rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+
 
 
 			<!-- Extra Stops -->
