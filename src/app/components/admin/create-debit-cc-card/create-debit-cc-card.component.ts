@@ -73,7 +73,7 @@ export class CreateDebitCcCardComponent implements OnInit {
           const types = component.types;
           if (types.includes('country')) {
             this.createCCDebitCardForm.patchValue({
-              otherCountry: component.short_name
+              otherCountry: component.long_name
             });
           } else if (types.includes('administrative_area_level_1')) {
             this.createCCDebitCardForm.patchValue({

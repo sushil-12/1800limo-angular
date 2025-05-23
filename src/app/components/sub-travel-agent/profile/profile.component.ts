@@ -59,7 +59,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
     console.log(this.currentUser)
-    this.agency_name = localStorage.getItem('agency_name')
+    this.agency_name = localStorage.getItem('agency_name') ? localStorage.getItem('agency_name') : this.currentUser?.agency_name
     this.invite_code = localStorage.getItem('invite_code')
     this.buildProfileForm()
     this.timezoneForm = this.formBuilder.group({
@@ -112,9 +112,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         // Extract address components
         place.address_components?.forEach(component => {
           const types = component.types;
+          console.log("types",types,component)
           if (types.includes('country')) {
             this.profileForm.patchValue({
-              country: component.short_name
+              country: component.long_name
             });
           } else if (types.includes('administrative_area_level_1')) {
             this.profileForm.patchValue({

@@ -130,7 +130,7 @@ export class EditCardComponent implements OnInit, AfterViewInit {
           const types = component.types;
           if (types.includes('country')) {
             this.editCardForm.patchValue({
-              secondaryCountry: component.short_name
+              secondaryCountry: component.long_name
             });
           } else if (types.includes('administrative_area_level_1')) {
             this.editCardForm.patchValue({
