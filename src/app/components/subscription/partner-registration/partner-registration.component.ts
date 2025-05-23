@@ -120,7 +120,7 @@ export class PartnerRegistrationComponent implements OnInit {
           const types = component.types;
           if (types.includes('country')) {
             this.registrationForm.patchValue({
-              country: component.short_name
+              country: component.long_name
             });
           } else if (types.includes('administrative_area_level_1')) {
             this.registrationForm.patchValue({
