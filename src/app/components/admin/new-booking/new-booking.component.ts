@@ -312,7 +312,7 @@ export class NewBookingComponent implements OnInit {
 			this.passenger_cellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
-				this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
 			});
 		}
 
@@ -928,11 +928,9 @@ export class NewBookingComponent implements OnInit {
 			// }
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
-			try {
+			setTimeout(() => {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-			} catch {
-				console.error('Set Country Value is null.')
-			}
+			}, 2000)
 			if (this.Form.affiliate_type.value == 'loose_affiliate') {
 				setTimeout(() => {
 					this.loseAffiliateTelInput.setCountry(this.BookingForm.get('lose_affiliate_phone_country').value);
@@ -3858,26 +3856,7 @@ export class NewBookingComponent implements OnInit {
 	// 	// console.log(this.countryCode);
 	// }
 
-	LCTelInputObject(event: any) {
-		console.log('LCTelInputObject', event)
-		this.LCTelObject = event;
-	}
 
-	LCTelInputObjectUSA(event: any) {
-		event.setCountry('us');
-	}
-
-	PaxTelInputObject(event: any) {
-		this.PaxTelObject = event;
-	}
-
-	LATelInputObject(event: any) {
-		this.loseAffiliateTelInput = event;
-	}
-
-	DrvTelInputObject(event: any) {
-		this.driverCellTelInput = event;
-	}
 	// addLineBreak(){
 	// 	console.log('add line break __>>' , this.BookingForm.get('booking_instructions').value)
 	// 	// this.BookingForm.patchValue({

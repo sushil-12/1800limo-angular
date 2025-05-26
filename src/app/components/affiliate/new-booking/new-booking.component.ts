@@ -239,7 +239,7 @@ export class NewBookingComponent implements OnInit {
 			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
-				this.SetFormValue('passenger_cell_isd', countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
 			});
 		}
 
