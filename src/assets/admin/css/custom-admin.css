@@ -1251,7 +1251,7 @@ a.user-profile:active::after {
 }
 
 .user_information label {
-    font-size: 1.1rem;
+    font-size: 1.1rem !important;
     font-weight: 500 !important;
     color: #000;
     margin-bottom: 0;

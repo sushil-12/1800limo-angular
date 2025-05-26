@@ -414,3 +414,17 @@ section {
 .mat-mdc-text-field-wrapper{
     z-index: auto !important;
 }
+
+// override mat radio lable css
+.mat-mdc-radio-button .mdc-form-field label{
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+// override mat-checkbox label
+.mat-mdc-checkbox .mdc-form-field label{
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
