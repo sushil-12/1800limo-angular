@@ -2472,9 +2472,6 @@ export class CreateNewBookingComponent implements OnInit {
 	LCTelInputObject(event: any) {
 		this.LCTelObject = event;
 	}
-	LCTelInputObjectUSA(event: any) {
-		event.setCountry('us');
-	}
 
 	LATelInputObject(event: any) {
 		this.LATelObject = event;

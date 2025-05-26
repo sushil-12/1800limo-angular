@@ -705,18 +705,12 @@ export class NewBookingComponent implements OnInit {
 			// 	this.booking_params?.client_account_types?.pop()
 			// }
 			this.booking_id = this.Form?.reservation_id?.value;
-			// this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
-			try {
+			// this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''\
+			setTimeout(() => {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-			} catch {
-				console.error('Set Country Value is null.')
-			}
-			if (this.Form.affiliate_type.value == 'loose_affiliate') {
-				setTimeout(() => {
-					this.LATelObject.setCountry(this.BookingForm.get('lose_affiliate_phone_country').value);
-					this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
-				}, 2000)
-			}
+				this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+			}, 2000)
+
 			this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
 			this.$spinner.hide('normalspinner')
 			this.scroll('booking_detail')
