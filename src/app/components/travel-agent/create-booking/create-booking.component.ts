@@ -257,7 +257,7 @@ export class CreateBookingComponent implements OnInit {
 			this.cellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.LCTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
-				this.SetFormValue('loose_customer>phone_isd', countryData.dialCode); this.SetFormValue('loose_customer>phone_country', countryData.iso2)
+				this.onLCTeleCountryChange(countryData)
 			});
 		}
 
