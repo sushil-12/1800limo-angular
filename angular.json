@@ -2,6 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
+  "defaultProject": "limo1800",
   "projects": {
     "limo1800": {
       "projectType": "application",
@@ -51,7 +52,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -149,7 +149,6 @@
       }
     }
   },
-  "defaultProject": "limo1800",
   "cli": {
     "analytics": false
   }
