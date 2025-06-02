@@ -90,18 +90,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "limo1800:build"
+            "buildTarget": "limo1800:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "limo1800:build:production"
+              "buildTarget": "limo1800:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "limo1800:build"
+            "buildTarget": "limo1800:build"
           }
         },
         "test": {
