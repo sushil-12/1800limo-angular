@@ -428,3 +428,8 @@ section {
     font-size: 1rem;
     font-weight: 500;
 }
+
+//hide checkbox in front of mat sleects
+.mat-pseudo-checkbox-minimal {
+    display: none !important;
+  }
