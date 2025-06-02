@@ -428,3 +428,14 @@ section {
     font-size: 1rem;
     font-weight: 500;
 }
+
+//hide checkbox in front of mat selects if not multiple
+.mat-pseudo-checkbox-minimal {
+    display: none !important;
+}
+
+// override css for mat sleects to  remove extra white space from top and bottom
+div.mat-mdc-select-panel{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}

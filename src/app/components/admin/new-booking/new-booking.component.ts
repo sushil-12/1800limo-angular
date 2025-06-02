@@ -2217,6 +2217,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 			this.SetFormValue('pickup_flight', data.pickup_flight)
 			this.SetFormValue('dropoff_flight', data.dropoff_flight)
+			this.PaxTelObject.setCountry(data.mobileCountry);
 		}
 
 		if (filling_for === 'cruise') {
@@ -2272,9 +2273,11 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('driver_cell', info?.CellNumber)
 			this.SetFormValue('driver_cell_isd', info?.CellIsd)
 			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
+			setTimeout(() => {
+				this.driverCellTelInput.setCountry(info?.CellNumberCountry);
+			}, 2000)
 			this.SetFormValue('driver_email', info?.Email)
 			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
-			this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 		}
 		if (filling_for == 'return_driver') {
 			console.log('autofill data driver info-->>>', data, this.return_DriverList)
@@ -2291,9 +2294,11 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_driver_cell', info?.CellNumber)
 			this.SetFormValue('return_driver_cell_isd', info?.CellIsd)
 			this.SetFormValue('return_driver_cell_country', info?.CellNumberCountry)
+			setTimeout(() => {
+				this.driverCellTelInput.setCountry(info?.CellNumberCountry);
+			}, 2000)
 			this.SetFormValue('return_driver_email', info?.Email)
 			this.SetFormValue('return_driver_phone_type', info?.PhoneType ?? '');
-			this.driverCellTelInput.setCountry(this.BookingForm.get('return_driver_cell_country').value);
 		}
 	}
 
