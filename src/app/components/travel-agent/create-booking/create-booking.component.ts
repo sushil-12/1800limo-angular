@@ -820,6 +820,7 @@ export class CreateBookingComponent implements OnInit {
 				this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 				this.SetFormValue('pickup_flight', data?.pickup_flight)
 				this.SetFormValue('dropoff_flight', data?.dropoff_flight)
+				this.PaxTelObject.setCountry(data?.mobileCountry)
 			}
 
 		} catch (error) {
