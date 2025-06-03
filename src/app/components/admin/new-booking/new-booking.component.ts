@@ -425,12 +425,12 @@ export class NewBookingComponent implements OnInit {
 				return;
 			}
 
-			// if (control === 'extra_stops' || control === 'return_extra_stops') {
-			// 	this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
-			// } else {
+			if (control === 'extra_stops' || control === 'return_extra_stops') {
+				this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
+			} else {
 			this.fillAddress(control, { formatted_address });
 			this.fillLocationPoints(control, location);
-			// }
+			}
 		});
 	}
 
