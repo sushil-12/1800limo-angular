@@ -1171,7 +1171,7 @@
 						</mat-label>
 						<span matPrefix
 							*ngIf="amenity.value.value.price == null || amenity.value.value.price == ''; else hideZero18">
-							{{currency_symbol}} 0 &nbsp;</span>
+							{{currency_symbol}} &nbsp;</span>
 						<ng-template #hideZero18>
 							<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 						</ng-template>
