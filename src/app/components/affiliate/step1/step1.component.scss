@@ -626,9 +626,9 @@ mat-mdc-form-field-label {
 	background: none !important;
 }
 
-:host ::ng-deep .iti__selected-flag {
-	transform: translateY(5px);
-}
+// :host ::ng-deep .iti__selected-flag {
+// 	transform: translateY(5px);
+// }
 
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
