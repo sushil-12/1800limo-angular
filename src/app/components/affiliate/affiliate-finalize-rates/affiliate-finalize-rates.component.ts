@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 
@@ -84,7 +85,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 	constructor(
 		private $form: FormBuilder,
-		// private $api: AdminService,
+		private $api: AdminService,
 		private affiliateService: AffiliateService,
 		private $spinner: NgxSpinnerService,
 		private $route: ActivatedRoute,
@@ -237,6 +238,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		this.getRatesData().subscribe((response) => {
 			if (response && Object.keys(response).length > 0) {
 				this.buildRatesForm('RatesForm', response);
+				// Force recalculation for all_inclusive_rates
+				for (let subform in this.RateForm.all_inclusive_rates.controls) {
+					this.calculateAmount('RatesForm', 'all_inclusive_rates', subform);
+				}
 			}
 		})
 
@@ -278,6 +283,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 							this.calculateAmount('ReturnRatesForm', formgroup, subform)
 						}
 					}
+				}
+				// Force recalculation for all_inclusive_rates in ReturnRatesForm
+				for (let subform in this.ReturnRateForm.all_inclusive_rates.controls) {
+					this.calculateAmount('ReturnRatesForm', 'all_inclusive_rates', subform);
 				}
 			}
 		});
@@ -347,7 +356,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	}
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$spinner.show()
-		this.affiliateService.finalizeRates(bookingId).subscribe((response: any) => {
+		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
 			this.$spinner.hide()
 			if (response?.success && response?.data?.rateArray) {
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
@@ -376,6 +385,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
 		// Base Value for foundation of the whole algorithm
+		console.log("AFFILIATE DEBUF", data)
 		if (data.hasOwnProperty("rate_label")) {
 			return this.$form.group({ ...data });
 		}
@@ -701,7 +711,23 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				else if (this.isFarmoutBooking) {
 					baseRateAmount = baseRateAmount + this.farmoutShare;
 				}
-				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
+				// DEBUG LOG
+				console.log('[DEBUG][Affiliate] Base Rate Calculation:', {
+					baseRateAmount,
+					calc_admin_share: this.calc_admin_share,
+					travel_agent_share: this.travel_agent_share,
+					farmoutShare: this.farmoutShare,
+					admin_share: this.admin_share,
+					travel_share: this.travel_share,
+					isCreatedByAdmin: this.isCreatedByAdmin,
+					isTravelShare: this.isTravelShare,
+					isFarmoutBooking: this.isFarmoutBooking,
+					service_type: this.service_type,
+					nums: this.nums,
+					hours: this.hours,
+					is_readonly_min_rate: this.is_readonly_min_rate,
+					RatesForm: this.RatesForm?.value,
+				});
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
 				console.log("in this total baserate---->", this.total, baseRateAmount)
 			}
