@@ -208,6 +208,7 @@ export class NewBookingComponent implements OnInit,AfterViewInit {
 		console.log('rebuild booking data')
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
+			return_vehicle_id: this.BookingForm.get('vehicle_id').value,
 			transfer_type: this.transfer_type,
 			service_type: this.service_type,
 			numberOfVehicles: 1,
@@ -973,12 +974,11 @@ export class NewBookingComponent implements OnInit,AfterViewInit {
 			if (status == google.maps.DirectionsStatus.OK) {
 				// console.log('Directions Service Response: ', response)
 				directionsRenderer.setDirections(response)
-
 				this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 					if (is_return) {
 						this.return_distance = response.distance
 						if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
-							// this.buildBookingData()
+							this.buildBookingData()
 						}
 						this.BookingForm.patchValue({
 							returnJourneyDistance: response.distance,
