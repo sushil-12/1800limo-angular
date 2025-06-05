@@ -141,7 +141,7 @@
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
-					<p>Dropoff Ship Arrival time</p>
+					<p>Ship Departure time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>
 				</div>
