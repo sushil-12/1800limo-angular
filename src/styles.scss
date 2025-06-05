@@ -439,3 +439,9 @@ div.mat-mdc-select-panel{
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
+
+// override css for mat autocomplete-panel to  remove extra white space from top and bottom
+div.mat-mdc-autocomplete-panel{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
