@@ -89,7 +89,7 @@
 					<p style="margin: 0;">
 						<mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 							{{useDateFilter ? 'Uncheck to see current and future bookings' :
-							'Check box to see next 7 days bookings, change calender, or search by any term (name,booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
+							'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
 						</mat-checkbox>
 					</p>
 				</div>
@@ -232,7 +232,7 @@
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
+												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid' || booking.payment_status=='transfer_failed') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
@@ -306,7 +306,7 @@
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
 										<p
-											[ngClass]="(booking?.charged_amount != null && booking?.booking_status !== 'paid' && booking?.booking_status !== 'paid_cash') ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : 'booking-id-font font-weight-bolder cursor-pointer' ">
+											[ngClass]="(booking?.charged_amount != null && booking?.booking_status !== 'paid' && booking?.booking_status !== 'paid_cash') ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : (booking?.payment_status== 'transfer_failed') ? 'booking-id-font font-weight-bolder cursor-pointer text-red' : 'booking-id-font font-weight-bolder cursor-pointer' ">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? booking.grand_total : 0 )"></span>
 										</p>

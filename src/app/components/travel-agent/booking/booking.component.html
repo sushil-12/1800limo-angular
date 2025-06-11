@@ -197,7 +197,7 @@
 											</a>
 											<a class="dropdown-item" routerLink="/travel_agent/invoice-summary"
 												[queryParams]="{bookingId: booking?.booking_id}"
-												*ngIf="(booking?.payment_status=='paid' || booking?.payment_status=='paid_cash')">
+												*ngIf="(booking?.payment_status=='paid' || booking?.payment_status=='paid_cash' || booking?.payment_status=='transfer_failed')">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>

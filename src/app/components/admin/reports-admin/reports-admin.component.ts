@@ -11,7 +11,7 @@ import { constant_data } from 'src/assets/js/data.js'
 })
 export class ReportsAdminComponent implements OnInit {
 
-  public year:any = '2024';
+  public year:any = '2025';
   public status:any = 'Paid';
   public vehicleType:any='all';
   public serviceType:any='all';

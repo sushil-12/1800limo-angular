@@ -82,6 +82,7 @@ export class FinalizeBookingComponent implements OnInit {
 	vehicle_created_by: any;
 	booking_created_from: any;
 	is_readonly_min_rate: boolean = false;
+	paymentSuccessMessage: String = '';
 
 	constructor(
 		private $form: FormBuilder,
@@ -210,7 +211,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 				this.affiliate_type = response.data.affiliate_type
-				this.visibility = response.data.payment_status == 'paid' ? false : true
+				this.visibility = (response.data.payment_status == 'paid' || response.data.payment_status == 'transfer_failed') ? false : true
 				this.paidAmount = response.data?.charged_amount ? parseFloat(response.data?.charged_amount) : 0
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
@@ -468,7 +469,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('selected card-->>>', dataToSend)
+						console.log( 'selected card-->>>', dataToSend)
 					}
 				}
 				this.$spinner.show()
@@ -479,9 +480,12 @@ export class FinalizeBookingComponent implements OnInit {
 					// 	}
 					// })
 					// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
-					this.$router.navigate(['/admin/daily-bookings-admin'])
-					console.log('response---------------------->>', response)
 					this.$spinner.hide()
+					$('#paymentSuccessModal').modal('show')
+					this.paymentSuccessMessage = response?.data?.message
+					// this.$router.navigate(['/admin/daily-bookings-admin'])
+					console.log('response---------------------->>', response)
+					
 				})
 			}
 			else {
@@ -503,6 +507,11 @@ export class FinalizeBookingComponent implements OnInit {
 			}
 		}
 
+	}
+
+	redirecttodailybooking(){
+		$('#paymentSuccessModal').modal('hide')
+		this.$router.navigate(['/admin/daily-bookings-admin'])
 	}
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
@@ -589,7 +598,7 @@ export class FinalizeBookingComponent implements OnInit {
 	showSaveButton(visibility: boolean) {
 		this.visibility = !this.visibility
 		console.log(this.BookingDetail.payment_status)
-		if (this.BookingDetail.payment_status == 'paid') {
+		if (this.BookingDetail.payment_status == 'paid' || this.BookingDetail.payment_status == 'transfer_failed') {
 			this.visibility = false
 		}
 	}

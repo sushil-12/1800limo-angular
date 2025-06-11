@@ -5,7 +5,8 @@
 	<div class="invoicesum_header">
 		<div class="row">
 			<div class="col-md-6">
-				<h3 class="text-lg pl-0">Booking <span style="font-size: 25px;font-weight: 500;"># {{ this.bookingId }}</span></h3>
+				<h3 class="text-lg pl-0">Booking <span style="font-size: 25px;font-weight: 500;"># {{ this.bookingId
+						}}</span></h3>
 			</div>
 			<div class="col-md-6 text-right">
 				<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status | titlecase}}</h3>
@@ -379,9 +380,9 @@
 			</button>
 		</div>
 		<div class="col-md-12">
-			<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking: <span
-				class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
-				<p class="alert alert-danger">Note- 25% of extra tip will be added to admin share</p>
+			<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this
+				booking: <span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
+			<p class="alert alert-danger">Note- 25% of extra tip will be added to admin share</p>
 		</div>
 	</div>
 	<div class="row" *ngIf="BookingDetail?.payment_status=='unpaid' && editRate" style="margin: -80px 0px 0px 0px;">
@@ -400,7 +401,7 @@
 
 
 <section class="section-container mt-2"
-	*ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
+	*ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='transfer_failed' )&& paymentDetailByCard?.length > 0 ">
 	<h4 class="section-dropdown-header mb-0">
 		Past Payments
 	</h4>
@@ -663,6 +664,20 @@
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="deleteCard()">Delete</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-success">
+				<h4 class="mb-0 ">{{paymentSuccessMessage}}</h4>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="redirecttodailybooking()">
+					Okay</button>
 			</div>
 		</div>
 	</div>
