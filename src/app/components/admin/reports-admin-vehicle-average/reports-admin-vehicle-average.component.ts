@@ -13,7 +13,7 @@ import { constant_data } from 'src/assets/js/data.js'
 })
 export class ReportsAdminVehicleAverageComponent implements OnInit {
 
-  public year:any = '2024';
+  public year:any = '2025';
   public yearsData: Array<any> = constant_data.reportsYear;
 	public bookingsResult: any[];
 

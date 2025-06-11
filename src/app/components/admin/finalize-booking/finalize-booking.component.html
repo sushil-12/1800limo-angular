@@ -175,7 +175,7 @@
 
 <!-- Rates Section End -->
 <section class="section-container"
-	*ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
+	*ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund' || BookingDetail?.payment_status=='transfer_failed')&& paymentDetailByCard?.length > 0 ">
 	<h4 class="section-dropdown-header mb-0">
 		Past Payments
 	</h4>
@@ -469,6 +469,20 @@
 				<button type="button" class="custom-btn savebutton" (click)="makePayment()"
 					[hidden]="payableAmount <= 0">
 					Charge</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-success">
+				<h4 class="mb-0 ">{{paymentSuccessMessage}}</h4>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="redirecttodailybooking()">
+					Okay</button>
 			</div>
 		</div>
 	</div>

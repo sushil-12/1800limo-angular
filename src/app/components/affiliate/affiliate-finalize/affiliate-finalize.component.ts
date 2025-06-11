@@ -9,6 +9,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+declare var $: any;
 
 @Component({
 	selector: 'app-affiliate-finalize',
@@ -69,6 +70,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	paidAmount: any;
 	currentUser: any;
 	is_readonly_min_rate: boolean = false;
+	paymentSuccessMessage: String = '';
 
 	constructor(
 		private $api: AdminService,
@@ -137,7 +139,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.bookdataresp = data
 				this.BookingDetail = data?.booking_detail
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
-				this.transferType = this.BookingDetail?.transfer_type
+					this.transferType = this.BookingDetail?.transfer_type
 				this.paidAmount = this.BookingDetail?.charged_amount
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
 				this.isFarmoutBooking = data?.booking_detail?.reservation_type == 'farmout' ? true : false
@@ -515,12 +517,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// 		error: `<span class='text-success'>${response.message}</span>`
 					// 	}
 					// })
-					if (this.currentUser.roleName == 'sub_affiliate') {
-						this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
-					}
-					else {
-						this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
-					}
+					this.spinner.hide()
+					$('#paymentSuccessModal').modal('show')
+					this.paymentSuccessMessage = response?.data?.message
 					console.log('response---------------------->>', response)
 					this.spinner.hide()
 				})
@@ -544,6 +543,16 @@ export class AffiliateFinalizeComponent implements OnInit {
 			}
 		}
 
+	}
+
+	redirecttodailybooking() {
+		$('#paymentSuccessModal').modal('hide')
+		if (this.currentUser.roleName == 'sub_affiliate') {
+			this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+		}
+		else {
+			this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+		}
 	}
 
 	deleteCard() {
