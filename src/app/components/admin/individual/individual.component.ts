@@ -50,6 +50,7 @@ export class IndividualComponent implements OnInit {
 	fileName: String;
 	fileType: String;
 	uploadedFile: any;
+	indvaccountacount: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -83,10 +84,10 @@ export class IndividualComponent implements OnInit {
 	}
 
 
-	reset(){
-		this.searchText =""
+	reset() {
+		this.searchText = ""
 		localStorage.removeItem('individualSearch')
-	  }
+	}
 
 	handleKeypressEvents() {
 		clearTimeout(this.timer)
@@ -111,7 +112,7 @@ export class IndividualComponent implements OnInit {
 
 	loadIndividuals(pageUrl = null) {
 		/** spinner starts on init */
-		// this.spinner.show();
+		this.spinner.show();
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('individual_table')
@@ -121,9 +122,10 @@ export class IndividualComponent implements OnInit {
 		// console.log(keyword);
 		// Load Our individuals using API
 		this.adminService.individualAccounts(pageUrl, keyword).then(result => {
+			this.spinner.hide();//hide spinner
 			this.individualsRes = result;
 			this.individuals = this.individualsRes?.data?.data;
-
+			this.indvaccountacount = this.individualsRes?.data?.count
 			this.firstPage = 1;
 			this.lastPage = this.individualsRes.data.last_page;
 			this.totalPage = this.individualsRes.data.last_page;
@@ -136,10 +138,9 @@ export class IndividualComponent implements OnInit {
 			this.prevPageUrl = this.individualsRes.data.prev_page_url;
 			this.nextPageUrl = this.individualsRes.data.next_page_url;
 			// sessionStorage.setItem('individuals',JSON.stringify(this.individuals));
-			// this.spinner.hide();//hide spinner
 		})
 			.catch(err => {
-				// this.spinner.hide();//hide spinner
+				this.spinner.hide();//hide spinner
 			});
 	}
 
@@ -194,21 +195,21 @@ export class IndividualComponent implements OnInit {
 	//submit email modal
 	async sendEmail() {
 		this.spinner.show()
-		let fileData =[]
+		let fileData = []
 		if (this.uploadedFile) {
 			for (let file of this.uploadedFile) {
-			let dataS = await this.uploadService.uploadFile(file);
-			fileData.push({
-			  fileUrl: dataS.Location,
-			  fileType: file.type
-			});
-		  }
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+					fileUrl: dataS.Location,
+					fileType: file.type
+				});
+			}
 		}
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
 			message: this.sendEmailForm.get('text_message').value,
 			recipents: this.emails.value,
-			fileData:fileData
+			fileData: fileData
 		}
 		console.log("body-------->", body)
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -254,13 +255,13 @@ export class IndividualComponent implements OnInit {
 	}
 
 
-	sendEmailSms(){
+	sendEmailSms() {
 		this.spinner.show()
 		let body = {
 			message: this.sendEmailForm.get('text_message')?.value,
 			recipents: this.phone_numbers.value,
 		}
-		console.log("in sms",body)
+		console.log("in sms", body)
 
 		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
 			this.errorDialog.openDialog({
@@ -337,18 +338,19 @@ export class IndividualComponent implements OnInit {
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Individual Name: ${individual['first_name']} ${individual['last_name']}<br/>Individual Email: ${individual['email']}`)
 		if (message != null) {
 			this.spinner.show()
-			let fileData =[]
+			let fileData = []
 			if (this.uploadedFile) {
 				for (let file of this.uploadedFile) {
-				let dataS = await this.uploadService.uploadFile(file);
-				fileData.push({
-				  fileUrl: dataS.Location,
-				  fileType: file.type
-				});
-			  }}
+					let dataS = await this.uploadService.uploadFile(file);
+					fileData.push({
+						fileUrl: dataS.Location,
+						fileType: file.type
+					});
+				}
+			}
 			let body = {
 				sendContent: message,
-				fileData:fileData
+				fileData: fileData
 			}
 			this.adminService.sendAffiliateMessage(type, individual['id'], body).subscribe((response: any) => {
 				this.spinner.hide()

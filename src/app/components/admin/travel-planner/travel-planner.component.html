@@ -24,16 +24,13 @@
 					</button>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<label class="alert alert-danger">Note: Add each different Travel Agent first. Enter rates and
-						taxes for each Travel Agent.</label>
-				</div>
-				<div class="col-md-6 d-flex justify-content-end" style="gap: 12px;">
+			<div class="row" style="margin-bottom: -15px;">
+				<div class="col-md-12 d-flex headings_count" style="gap: 10px;">
 					<h3 class="headingAccepted">Accepted: {{travelAccountCount?.accepted}}</h3>
 					<h3 class="headingInProgress">Pending: {{travelAccountCount?.pending_count}}</h3>
 					<h3 class="headingRejected">Rejected: {{travelAccountCount?.rejected}}</h3>
 					<h3 class="headingStripe">Waiting for approval: {{travelAccountCount?.waiting_for_approval}}</h3>
+					<h3 class="headingUnregistered">Unregistered: {{travelAccountCount?.unregistered}}</h3>
 				</div>
 			</div>
 

@@ -135,6 +135,22 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       this.lastPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.last_page_url;
       this.prevPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.prev_page_url;
       this.nextPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.next_page_url;
+      const emails = [];
+      let withEmail = 0;
+      let withoutEmail = 0;
+
+      this.LooseAffiliateAcc?.forEach(item => {
+        if (item?.email) {
+          emails.push(item.email);
+          withEmail++;
+        } else {
+          withoutEmail++;
+        }
+      });
+
+      console.log('Emails:', emails);
+      console.log('With Email:', withEmail);
+      console.log('Without Email:', withoutEmail);
       // sessionStorage.setItem('LooseAffiliateAcc',JSON.stringify(this.LooseAffiliateAcc));
       this.spinner.hide();//hide spinner
     })
@@ -162,8 +178,8 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     this.fileInput1.nativeElement.value = '';
     this.message.nativeElement.value = '';
     this.uploadedFile = null
-		this.fileUrl = null
-		this.fileType = null
+    this.fileUrl = null
+    this.fileType = null
     this.sendEmailForm.patchValue({
       subject: "",
       text_message: ''
@@ -191,49 +207,49 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
 
-	selectAllNumbers() {
-		if (this.allSelected) {
-			this.phone_numbers.patchValue('');
-		} else {
-			const allValues = this.LooseAffiliateAcc.map(option => this.stringifyOptionNumber(option));
-			this.phone_numbers.setValue(allValues);
-		}
-		this.allSelected = !this.allSelected;
-	}
+  selectAllNumbers() {
+    if (this.allSelected) {
+      this.phone_numbers.patchValue('');
+    } else {
+      const allValues = this.LooseAffiliateAcc.map(option => this.stringifyOptionNumber(option));
+      this.phone_numbers.setValue(allValues);
+    }
+    this.allSelected = !this.allSelected;
+  }
 
-	stringifyOptionNumber(option: any): string {
-		return JSON.stringify({ id: option.id, phoneNumber: (option?.phone_isd + option?.phone) });
-	}
+  stringifyOptionNumber(option: any): string {
+    return JSON.stringify({ id: option.id, phoneNumber: (option?.phone_isd + option?.phone) });
+  }
 
 
-	sendEmailSms(){
-		this.spinner.show()
-		let body = {
-			message: this.sendEmailForm.get('text_message')?.value,
-			recipents: this.phone_numbers.value,
+  sendEmailSms() {
+    this.spinner.show()
+    let body = {
+      message: this.sendEmailForm.get('text_message')?.value,
+      recipents: this.phone_numbers.value,
       account_type: 'loose_affiliate',
-		}
-		console.log("in sms",body)
+    }
+    console.log("in sms", body)
 
-		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
-			this.errorDialog.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
-			this.spinner.hide()
-			console.log("response-------->", response)
-		})
+    this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+      this.errorDialog.openDialog({
+        errors: {
+          error: `<span class='text-success'>${response.message}</span>`
+        }
+      })
+      this.spinner.hide()
+      console.log("response-------->", response)
+    })
 
-		this.show = false
-		this.sendEmailForm.patchValue({
-			text_message: ''
-		})
-		this.phone_numbers.setValue('');
+    this.show = false
+    this.sendEmailForm.patchValue({
+      text_message: ''
+    })
+    this.phone_numbers.setValue('');
 
-		$("#sendsmsModal").modal("hide");
+    $("#sendsmsModal").modal("hide");
 
-	}
+  }
 
   //submit email modal
   async sendEmail() {
@@ -241,20 +257,20 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     let fileData = []
     if (this.uploadedFile) {
       for (let file of this.uploadedFile) {
-      let dataS = await this.uploadService.uploadFile(file);
-      fileData.push({
-        fileUrl: dataS.Location,
-        fileType: file.type
-      });
+        let dataS = await this.uploadService.uploadFile(file);
+        fileData.push({
+          fileUrl: dataS.Location,
+          fileType: file.type
+        });
+      }
     }
-  }
-    console.log("fileData",fileData)
+    console.log("fileData", fileData)
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
       recipents: this.emails.value,
       account_type: 'loose_affiliate',
-      fileData:fileData
+      fileData: fileData
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -317,7 +333,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     console.log("In function audit trail", id);
     this.spinner.show();
     this.adminService
-      .communicationLogs(id)
+      .communicationLogs(id, 'loose_affiliate')
       .pipe(
         catchError((err) => {
           return throwError(err);
@@ -386,14 +402,14 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       this.spinner.show()
       if (this.uploadedFile) {
         for (let file of this.uploadedFile) {
-        let dataS = await this.uploadService.uploadFile(file);
-        fileData.push({
-          fileUrl: dataS.Location,
-          fileType: file.type
-        });
+          let dataS = await this.uploadService.uploadFile(file);
+          fileData.push({
+            fileUrl: dataS.Location,
+            fileType: file.type
+          });
+        }
       }
-    }
-    console.log("fileData", fileData)
+      console.log("fileData", fileData)
       let body = {
         text_message: message,
         account_type: 'loose_affiliate',
@@ -446,12 +462,12 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     // }
   }
 
-  viewVehicles(id){
+  viewVehicles(id) {
     this.router.navigate(['/admin/loose-affliate-vehicles'], { queryParams: { looseAffId: id } });
   }
 
-  reset(){
-    this.searchText =""
+  reset() {
+    this.searchText = ""
     localStorage.removeItem('looseAffiliateSearch')
   }
 

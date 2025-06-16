@@ -1,181 +1,197 @@
-.btnclass
-{
-    margin-top: 25px;
-    height: 60px;
-    width: 100%;
+.btnclass {
+  margin-top: 25px;
+  height: 60px;
+  width: 100%;
 }
-.mat-form-field-hide-placeholder{
-	border: solid 3px;
-    border-radius: 4px;
+
+.mat-form-field-hide-placeholder {
+  border: solid 3px;
+  border-radius: 4px;
 }
 
 
 
-.btnclass
-{
-    margin-top: 25px;
-    height: 60px;
-    width: 100%;
-}
-.mat-form-field-hide-placeholder{
-	border: solid 3px;
-    border-radius: 4px;
-}
- /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
- .mat-form-field-appearance-outline .mat-mdc-form-field-label {
-    top: 1.3675em !important;
+.btnclass {
+  margin-top: 25px;
+  height: 60px;
+  width: 100%;
 }
 
-.mb-search{
+.mat-form-field-hide-placeholder {
+  border: solid 3px;
+  border-radius: 4px;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-form-field-appearance-outline .mat-mdc-form-field-label {
+  top: 1.3675em !important;
+}
+
+.mb-search {
   margin-bottom: -1rem;
 }
 
 @media only screen and (max-width: 767px) {
-  .mb-search{
+  .mb-search {
     margin-bottom: .5rem;
   }
 }
 
 
 .x-cross-btn {
-	background: #fff !important;
-	color: #ff0000 !important;
-	/* position: absolute; */
-	top: 5px;
-	right: 15px;
-	border-radius: 20px;
-	width: 25px;
-	opacity: 1 !important;
+  background: #fff !important;
+  color: #ff0000 !important;
+  /* position: absolute; */
+  top: 5px;
+  right: 15px;
+  border-radius: 20px;
+  width: 25px;
+  opacity: 1 !important;
 }
 
 .x-close-btn {
-	float: right;
-	font-size: 1.8rem;
-	font-weight: 700;
-	line-height: 1;
-	border: none;
-	z-index: 10;
+  float: right;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  border: none;
+  z-index: 10;
 }
 
 table {
-	width: 100;
-	white-space: break-spaces;
-	padding: 10px;
-	min-width: 5rem;
+  width: 100;
+  white-space: break-spaces;
+  padding: 10px;
+  min-width: 5rem;
 
-	thead th {
-		color: #000000;
-		font-weight: 600;
-	}
+  thead th {
+    color: #000000;
+    font-weight: 600;
+  }
 
-	tbody td>p {
-		margin: 0;
-	}
+  tbody td>p {
+    margin: 0;
+  }
 }
 
 a:hover {
-	text-decoration: none;
-	color: unset !important;
+  text-decoration: none;
+  color: unset !important;
 }
 
-.dropdown-item{
-	padding: 0.7rem 1.8rem !important;
-	font-size: 16px;
-	font-weight: 500 !important;
-	font-family: "Roboto", sans-serif !important;
+.dropdown-item {
+  padding: 0.7rem 1.8rem !important;
+  font-size: 16px;
+  font-weight: 500 !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
-.clickable
-{
-    cursor: pointer;
-    transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
-    transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
-    transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
-    &:hover
-    {
-        text-decoration: underline;
-        color: var(--blue);
-    }
-}
-.modal#messageModal
-{
-    .modal-body
-    {
-        p
-        {
-            font-size: 1rem;
-            font-weight: 500;
-            span
-            {
-                font-size: 1.1rem;
-            }
-        }
-        textarea#message
-        {
-            width: 100%;
-            border-radius: 1rem;
-            padding: 1rem;
-            max-height: 15rem;
-        }
-    }
-}
+.clickable {
+  cursor: pointer;
+  transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
 
-.accpet_reject_div{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+  &:hover {
+    text-decoration: underline;
+    color: var(--blue);
   }
-
-  .acceptButton{
-    background-color: #00bd1f;
-    color: #fff;
-    border: none;
-    border-radius: 10rem;
-    // margin-right: 0.5rem;
-    width: 80px;
-    font-size: 17px;
-    font-weight: 500;
 }
-.rejectButton{
-    background-color: #fc0404;
-    color: #fff;
-    border: none;
-    border-radius: 10rem;
-    // margin-right: 0.5rem;
-    width: 80px;
-    font-size: 17px;
-    font-weight: 500;
+
+.modal#messageModal {
+  .modal-body {
+    p {
+      font-size: 1rem;
+      font-weight: 500;
+
+      span {
+        font-size: 1.1rem;
+      }
+    }
+
+    textarea#message {
+      width: 100%;
+      border-radius: 1rem;
+      padding: 1rem;
+      max-height: 15rem;
+    }
+  }
+}
+
+.accpet_reject_div {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.acceptButton {
+  background-color: #00bd1f;
+  color: #fff;
+  border: none;
+  border-radius: 10rem;
+  // margin-right: 0.5rem;
+  width: 80px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.rejectButton {
+  background-color: #fc0404;
+  color: #fff;
+  border: none;
+  border-radius: 10rem;
+  // margin-right: 0.5rem;
+  width: 80px;
+  font-size: 17px;
+  font-weight: 500;
 
 }
-.accepted{
+
+.accepted {
   background-color: #00bd1f;
 }
-.rejected{
+
+.rejected {
   background-color: #fc0404;
 }
-.pending{
-    background-color: #0474fc;
-}
-.approval_status{
-  font-size:medium;
-  color:#fff;
+
+.pending {
+  background-color: #0474fc;
 }
 
-.headingAccepted{
-    font-size: 20px;
-    color: #00bd1f;
-      }
-    
-      .headingInProgress{
-        font-size: 20px;
-        color: #0474fc;
-      }
-    
-      .headingRejected{
-        font-size: 20px;
-        color: #fc0404;
-      }
-      .headingStripe{
-        font-size: 20px;
-        color: #ff69b4;
-      }
+.approval_status {
+  font-size: medium;
+  color: #fff;
+}
+
+.headingAccepted {
+  font-size: 20px;
+  color: #00bd1f;
+}
+
+.headingInProgress {
+  font-size: 20px;
+  color: #0474fc;
+}
+
+.headingRejected {
+  font-size: 20px;
+  color: #fc0404;
+}
+
+.headingStripe {
+  font-size: 20px;
+  color: #ff69b4;
+}
+
+.headingUnregistered{
+  font-size: 20px;
+  color: #636567;
+}
+
+@media screen and (max-width:767px) {
+  .headings_count{
+      flex-direction: column;
+      gap: 0px;
+  }
+}
