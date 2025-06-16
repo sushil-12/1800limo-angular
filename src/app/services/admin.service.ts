@@ -653,7 +653,7 @@ export class AdminService {
 	blackCarLimoBusAccountStatus(id, status) {
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-status', { 'id': id, 'status': status });
 	}
-	
+
 	acceptAffiliate(acc_id) {
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-approval', { 'acc_id': acc_id });
 	}
@@ -1323,8 +1323,8 @@ export class AdminService {
 	getLooseAffAccDetails(id: any) {
 		return this.httpClient.get(this.serverUrl + `get-loose-affiliate/${id}`);
 	}
-	communicationLogs(id) {
-		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
+	communicationLogs(id, user_type: any = null) {
+		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}?user_type=${user_type}`)
 	}
 
 	acceptCharge(data) {
@@ -1400,7 +1400,7 @@ export class AdminService {
 	}
 
 	//bookings reports
-	getBookingsReport(year,status,vehType,serviceType,transferType) {
+	getBookingsReport(year, status, vehType, serviceType, transferType) {
 		return this.httpClient.get(this.serverUrl + 'get-monthly-booking-count' + '?year=' + year + '&status=' + status + '&vehicle_type=' + vehType + '&service_type=' + serviceType + '&transfer_type=' + transferType);
 	}
 
@@ -1414,7 +1414,7 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-booking-average' + '?year=' + year);
 	}
 
-	getUserBasedReport(url,acc_id,year,month) {
+	getUserBasedReport(url, acc_id, year, month) {
 		var path;
 		if (url) {
 			path = url + '&acc_id=' + acc_id + '&year=' + year + '&month=' + month;
