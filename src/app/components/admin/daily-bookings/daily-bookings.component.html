@@ -287,12 +287,14 @@
 										</div>
 									</td>
 
-									<td class="sorting_1">
-										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
+									<td class="sorting_1" (dblclick)="editAction(booking?.booking_id,booking?.booking_status)">
+											<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date)
+												}}
+											</p>
+											<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time)
+												}}
+											</p>
+											<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
 										data-target="#previewBookingOnID"
@@ -730,15 +732,15 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Affiliate'">
-							Connect with {{ passengerDetails?.driver_first_name }} {{
+							Connect with '{{ passengerDetails?.driver_first_name }}' (Driver) {{
 							passengerDetails?.driver_last_name
 							}} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
-							Connect with {{ passengerDetails?.passenger_name }} Via</h5>
+							Connect with '{{ passengerDetails?.passenger_name }}' (Passenger) Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
-							Connect with {{ passengerDetails?.loose_affiliate_name }} Via</h5>
+							Connect with '{{ passengerDetails?.loose_affiliate_name }}' (Loose Affiliate) Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'created_by'">
-							Connect with {{ passengerDetails?.created_by_name }} Via</h5>
+							Connect with '{{ passengerDetails?.created_by_name }}' (Creator) Via</h5>
 					</div>
 					<div class="d-flex" style=" width: -webkit-fill-available;">
 						<div class="col-md-4" (click)="messageField('Phone')">

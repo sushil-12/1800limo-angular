@@ -232,7 +232,7 @@
 											<select formControlName="pickup_type" class="font-weight-bolder"
 												tabindex="1"
 												[class.errorValid]="submitted && QBForm?.pickup_type?.errors">
-												<option value="city">City / FBO Address</option>
+												<option value="city">City (FBO) Address</option>
 												<option value="airport">Airport</option>
 												<option value="cruise">Cruise Port</option>
 											</select>
@@ -260,7 +260,7 @@
 												tabindex="1"
 												[class.errorValid]="submitted && QBForm?.dropoff_type?.errors">
 												<option Value="airport">Airport</option>
-												<option Value="city">City / FBO Address</option>
+												<option Value="city">City (FBO) Address</option>
 												<option Value="cruise">Cruise Port</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
@@ -530,7 +530,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
 														formControlName="pickup_address" (focus)="addressinput.select()"
@@ -637,7 +637,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
 														formControlName="dropoff_address"
@@ -837,7 +837,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address"
 														[value]="QBForm?.return_pickup_address?.value"
@@ -945,7 +945,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address"
 														[value]="QBForm?.return_dropoff_address?.value"

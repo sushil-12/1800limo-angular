@@ -450,11 +450,11 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Driver'">
-							Connect with {{ passengerDetails?.driver_name }} Via</h5>
+							Connect with '{{ passengerDetails?.driver_name }}' (Driver) Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
-							Connect with {{ passengerDetails?.passenger_name }} Via</h5>
+							Connect with '{{ passengerDetails?.passenger_name }}' (Passenger) Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
-							Connect with {{ passengerDetails?.loose_affiliate_name }} Via</h5>
+							Connect with '{{ passengerDetails?.loose_affiliate_name }}' (Loose Affiliate) Via</h5>
 					</div>
 					<div class="d-flex" style=" width: -webkit-fill-available;">
 						<div class="col-md-4" (click)="messageField('Phone')">
