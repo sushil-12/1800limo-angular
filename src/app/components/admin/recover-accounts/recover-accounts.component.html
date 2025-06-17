@@ -125,7 +125,7 @@
                                     <span>{{formatText(account.is_connected) | titlecase}}</span>
                                 </td>
                                 <td>
-                                    <span [innerHTML]="highlighText(account.created_at?.split('T')[0])"></span>
+                                    <span [innerHTML]="highlighText(account.created_at?.split('T')[0] | date: 'dd-MMM-yyyy')"></span>
                                 </td>
 
                                 <!-- <td><span [innerHTML]="highlighText(account.agency_name)"></span></td>

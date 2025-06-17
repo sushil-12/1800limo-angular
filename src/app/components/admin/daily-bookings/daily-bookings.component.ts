@@ -1481,4 +1481,11 @@ export class DailyBookingsComponent implements OnInit {
 		}
 	}
 
+
+	editAction(booking_id, booking_status) {
+		if (booking_status != 'paid' && booking_status != 'paid_cash') {
+			this.router.navigate(['/admin/new-booking'], { queryParams: { bookingId: booking_id, updateType: 'edit' } });
+		}
+	}
+
 }
