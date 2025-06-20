@@ -740,13 +740,6 @@ export class DailyBookingsComponent implements OnInit {
 	openModal(booking: any, selection_button: string) {
 		console.log('Double-click detected, opening modal for:', booking);
 		$("#sendEmailModal").modal("show");
-		// Trigger the Bootstrap modal
-		// const modalElement = document.getElementById('sendEmailModal');
-		// if (modalElement) {
-		//   const modal = new bootstrap.Modal(modalElement);
-		//   modal.show();
-		// }
-
 		try {
 			setTimeout(() => {
 				// $('textarea').attr('autofocus', 'autofocus');
@@ -953,15 +946,20 @@ export class DailyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide(); //hide spinner
 					$("#emailModal").modal("hide");
-					this.router
-						.navigateByUrl("/RefreshComponent", {
-							skipLocationChange: true,
-						})
-						.then(() => {
-							this.router.navigate([
-								"/admin/daily-bookings-admin",
-							]);
-						});
+					this.$errorDialog.openDialog({
+						errors: {
+							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
+						}
+					})
+					// this.router
+					// 	.navigateByUrl("/RefreshComponent", {
+					// 		skipLocationChange: true,
+					// 	})
+					// 	.then(() => {
+					// 		this.router.navigate([
+					// 			"/admin/daily-bookings-admin",
+					// 		]);
+					// 	});
 				}
 			});
 	}
