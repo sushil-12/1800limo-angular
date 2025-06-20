@@ -428,8 +428,8 @@ export class NewBookingComponent implements OnInit {
 			if (control === 'extra_stops' || control === 'return_extra_stops') {
 				this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
 			} else {
-			this.fillAddress(control, { formatted_address });
-			this.fillLocationPoints(control, location);
+				this.fillAddress(control, { formatted_address });
+				this.fillLocationPoints(control, location);
 			}
 		});
 	}
@@ -802,6 +802,11 @@ export class NewBookingComponent implements OnInit {
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
+		if (this.updateType == 'reaffiliate') {
+			this.BookingForm.patchValue({
+				updateType: 'reaffiliate'
+			})
+		}
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
