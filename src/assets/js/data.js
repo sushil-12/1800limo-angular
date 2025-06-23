@@ -713,6 +713,21 @@ const reportsMonth = [
     { "id": 12, "value": "December" },
 ]
 
+const userTypeSlug = [
+	{
+        "id": "individual",
+        "value": "Individual"
+    },
+    {
+        "id": "driver",
+        "value": "Affiliates"
+    },
+    {
+        "id": "travel_agent",
+		"value": "Travel Agent"
+	},
+]
+
 export const constant_data = {
 	time_values,
 	hour_values,
@@ -722,5 +737,6 @@ export const constant_data = {
 	reportsStatus,
 	serviceType,
 	reportsMonth,
-	userType
+	userType,
+	userTypeSlug
 }

@@ -31,24 +31,46 @@
                 </div>
                 <div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">
                     <div>
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadAccounts()" tabindex="-1">
-							Search
-						</button>
-					</div>
-					<div>
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-							(click)="reset(); loadAccounts()" tabindex="-1">
-							Reset
-						</button>
-					</div>
-					
-				</div>
+                        <button class="custom-filled-button orange-button"
+                            style="color:#fff;padding: 5px 12px !important;" (click)="loadAccounts()" tabindex="-1">
+                            Search
+                        </button>
+                    </div>
+                    <div>
+                        <button class="custom-filled-back-button"
+                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+                            (click)="reset(); loadAccounts()" tabindex="-1">
+                            Reset
+                        </button>
+                    </div>
+
+                </div>
                 <!-- <div class="col-md-2  mt-3 mb-3">
                     <button class="custom-btn button2 btnclass" (click)="loadTravelPlanners()">Search</button>
 				</div> -->
+            </div>
+            <div class="row pt-2">
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Account Type</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('accountType',$event)" [(value)]="accountType">
+                            <!-- Extra option for 'All Vehicles' -->
+                            <mat-option [value]="'all'">All</mat-option>
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let user of userType" [value]="user.id">
+                                {{ user.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <p style="margin: 0;">
+                        <mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="unregistered">
+                            {{unregistered ? 'Uncheck to see all accounts' :
+                            'Check box to see unregistered accounts' }}
+                        </mat-checkbox>
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -109,10 +131,12 @@
                                 <td>
                                     <span [innerHTML]="highlighText(account.name)"></span>
                                 </td>
-                                <td class="clickable" (dblclick)="sendMessage('sms', account)" data-messagetype="sms"><span
+                                <td class="clickable" (dblclick)="sendMessage('sms', account)" data-messagetype="sms">
+                                    <span
                                         [innerHTML]="highlighText(account.isd+account.phone+' '+'('+account?.phoneCountry.toUpperCase()+')')"></span>
                                 </td>
-                                <td class="clickable" (dblclick)="sendMessage('email', account)" data-messagetype="email">
+                                <td class="clickable" (dblclick)="sendMessage('email', account)"
+                                    data-messagetype="email">
                                     <span [innerHTML]="highlighText(account.email)"></span>
                                 </td>
                                 <td>
@@ -125,7 +149,8 @@
                                     <span>{{formatText(account.is_connected) | titlecase}}</span>
                                 </td>
                                 <td>
-                                    <span [innerHTML]="highlighText(account.created_at?.split('T')[0] | date: 'dd-MMM-yyyy')"></span>
+                                    <span
+                                        [innerHTML]="highlighText(account.created_at?.split('T')[0] | date: 'dd-MMM-yyyy')"></span>
                                 </td>
 
                                 <!-- <td><span [innerHTML]="highlighText(account.agency_name)"></span></td>
