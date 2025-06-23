@@ -565,13 +565,13 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
 	}
 
-	getAccounts(url, isDeletedAcc, keyword) {
+	getAccounts(url, isDeletedAcc, keyword, accountType, unregistered) {
 		var path;
 		if (url) {
-			path = url + '&deleted=' + isDeletedAcc + '&search=' + keyword;;
+			path = url + '&deleted=' + isDeletedAcc + '&search=' + keyword + '&role=' + accountType + '&unregistered=' + unregistered;
 		}
 		else {
-			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc + '&search=' + keyword;
+			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc + '&search=' + keyword + '&role=' + accountType + '&unregistered=' + unregistered;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}

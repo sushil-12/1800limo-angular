@@ -35,21 +35,21 @@
                 </div>
                 <div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">
                     <div>
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadSubLooseAffiliateAcc()" tabindex="-1">
-							Search
-						</button>
-					</div>
-					<div>
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-							(click)="reset(); loadSubLooseAffiliateAcc()" tabindex="-1">
-							Reset
-						</button>
-					</div>
-					
-				</div>
+                        <button class="custom-filled-button orange-button"
+                            style="color:#fff;padding: 5px 12px !important;" (click)="loadSubLooseAffiliateAcc()"
+                            tabindex="-1">
+                            Search
+                        </button>
+                    </div>
+                    <div>
+                        <button class="custom-filled-back-button"
+                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+                            (click)="reset(); loadSubLooseAffiliateAcc()" tabindex="-1">
+                            Reset
+                        </button>
+                    </div>
+
+                </div>
                 <!-- <div class="col-md-2  mt-3 mb-3">
 					<button class="custom-btn button2 btnclass" (click)="loadSubLooseAffiliateAcc()">Search</button>
 				</div> -->
@@ -65,12 +65,11 @@
                             <tr role="row">
                                 <th>Actions</th>
                                 <th>Company Name</th>
+                                <th>Mobile</th>
                                 <th>Owner Name</th>
                                 <th>Address</th>
                                 <th>Badge City</th>
                                 <th>Email</th>
-                                <th>Mobile</th>
-                             
                             </tr>
                         </thead>
                         <tbody>
@@ -109,6 +108,10 @@
                                 <td>
                                     <span [innerHTML]="highlighText(LooseAffiliate?.name)"></span>
                                 </td>
+                                <td class="clickable" (dblclick)="sendMessage('sms', LooseAffiliate)"
+                                    data-messagetype="sms"><span
+                                        [innerHTML]="highlighText(LooseAffiliate?.phone_isd+LooseAffiliate?.phone)"></span>
+                                </td>
                                 <td>
                                     <span [innerHTML]="highlighText(LooseAffiliate?.operator_name)">
                                     </span>
@@ -120,11 +123,8 @@
                                 <td class="clickable" (dblclick)="sendMessage('email', LooseAffiliate)"
                                     data-messagetype="email"><span
                                         [innerHTML]="highlighText(LooseAffiliate?.email)"></span></td>
-                                <td class="clickable" (dblclick)="sendMessage('sms', LooseAffiliate)"
-                                    data-messagetype="sms"><span
-                                        [innerHTML]="highlighText(LooseAffiliate?.phone_isd+LooseAffiliate?.phone)"></span>
-                                </td>
-                              
+
+
 
                             </tr>
 

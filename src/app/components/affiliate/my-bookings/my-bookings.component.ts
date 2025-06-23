@@ -471,6 +471,10 @@ export class MyBookingsComponent implements OnInit {
 				: this.passengerDetails?.driver_email;
 			this.reciptentName = this.passengerDetails?.driver_name;
 		}
+		else if (this.passengerDetails.selection_button == "created_by") {
+			this.sendInformation = format ? this.passengerDetails.created_by_phone : this.passengerDetails.created_by_email
+			this.reciptentName = this.passengerDetails.created_by_name
+		}
 		else {
 			this.sendInformation = format
 				? this.passengerDetails.loose_affiliate_phone_isd +

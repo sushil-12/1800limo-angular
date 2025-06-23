@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { UploadService } from 'src/app/services/upload.service';
+import { constant_data } from 'src/assets/js/data.js'
 declare var $: any;
 
 @Component({
@@ -50,6 +51,9 @@ export class RecoverAccountsComponent implements OnInit {
   fileName: String;
   fileType: String;
   uploadedFile: any;
+  accountType: any = 'all'
+  userType: Array<any> = constant_data.userTypeSlug;
+  unregistered: Boolean = false;
 
   constructor(
     private adminService: AdminService,
@@ -81,8 +85,16 @@ export class RecoverAccountsComponent implements OnInit {
     }, 700)
   }
 
+  handleChangeCheckbox(value: any) {
+    console.log("event---->> ", value);
+    this.unregistered = value;
+    this.loadAccounts()
+  }
+
   reset() {
-    this.searchText = ""
+    this.searchText = "";
+    this.unregistered = false;
+    this.accountType = 'all';
     localStorage.removeItem('allAccountsSearch')
 
   }
@@ -118,7 +130,7 @@ export class RecoverAccountsComponent implements OnInit {
     var keyword = this.searchText;
 
     // Load Our travelPlanners using API
-    this.adminService.getAccounts(pageUrl, this.isDeletedAcc, keyword).then((result: any) => {
+    this.adminService.getAccounts(pageUrl, this.isDeletedAcc, keyword, this.accountType, this.unregistered).then((result: any) => {
       let response = result
       this.accounts = result?.data?.users?.data;
       this.accounts_count = result?.data?.account_counts;
@@ -151,6 +163,7 @@ export class RecoverAccountsComponent implements OnInit {
   formatText(value) {
     return value ? value.replaceAll('_', ' ') : 'N/A'
   }
+
   handleChangeToggle() {
     this.isDeletedAcc = !this.isDeletedAcc;
     if (this.isDeletedAcc) {
@@ -161,6 +174,14 @@ export class RecoverAccountsComponent implements OnInit {
       this.showActionColumn = true
       this.title = "All"
     }
+  }
+
+  onFilterChange(name, event: any) {
+    console.log("in filter change", name, event)
+    if (name == 'accountType') {
+      this.accountType = event.value;
+    }
+    this.loadAccounts()
   }
 
   enableDisableClickedDelete(id) {
