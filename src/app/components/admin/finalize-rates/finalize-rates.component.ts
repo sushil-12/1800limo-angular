@@ -692,6 +692,25 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				else if (this.isFarmoutBooking) {
 					baseRateAmount = baseRateAmount + this.farmoutShare;
 				}
+
+				// DEBUG LOG
+				console.log('[DEBUG][ADMIN] Base Rate Calculation:', {
+					baseRateAmount,
+					calc_admin_share: this.calc_admin_share,
+					travel_agent_share: this.travel_agent_share,
+					farmoutShare: this.farmoutShare,
+					admin_share: this.admin_share,
+					travel_share: this.travel_share,
+					isCreatedByAdmin: this.isCreatedByAdmin,
+					isTravelShare: this.isTravelShare,
+					isFarmoutBooking: this.isFarmoutBooking,
+					service_type: this.service_type,
+					nums: this.nums,
+					hours: this.hours,
+					is_readonly_min_rate: this.is_readonly_min_rate,
+					RatesForm: this.RatesForm?.value,
+				});
+
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
 				// console.log("in this total baserate---->", this.total, baseRateAmount)

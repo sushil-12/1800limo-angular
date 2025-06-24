@@ -223,8 +223,7 @@
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ (grandtotal.toFixed(2) -
-			calc_admin_share.toFixed(2)) - travel_agent_share.toFixed(2)}}
+			<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ affiliatePayout.toFixed(2)}}
 		</div>
 	</div>
 	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">

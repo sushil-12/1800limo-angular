@@ -82,6 +82,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	farmoutShare: any = 0;
 	r_farmoutShare: any = 0;
 	currencySymbol: any;
+	affiliatePayout: any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -479,6 +480,14 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			value["sub_total"] = this.subtotal;
 
 			this.formvalue.emit(value);
+
+			// creating affiliate payout to show only on the client side
+			if (this.isTravelShare && !this.isCreatedByAdmin) {
+				this.affiliatePayout = this.grandtotal - this.calc_admin_share - this.travel_agent_share;
+			}
+			else{
+				this.affiliatePayout = this.grandtotal - this.calc_admin_share
+			}
 		}
 		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {
 			if (this.vehicles !== 0) {
