@@ -346,7 +346,7 @@
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span
-												[innerHTML]="highlighText(booking.loose_affiliate_name ? booking.loose_affiliate_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
+												[innerHTML]="highlighText(booking.loose_aff_driver_name ? booking.loose_aff_driver_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.loose_affiliate_phone_isd ? booking.loose_affiliate_phone_isd : '+1')"></span>
 											<span class="font-weight-bolder"
