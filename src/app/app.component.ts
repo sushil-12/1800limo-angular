@@ -30,7 +30,7 @@ export class AppComponent implements OnInit
 			this.errors = data;
 		});
 
-		this.loadClarity();
+		// this.loadClarity();
 
 	}
 
