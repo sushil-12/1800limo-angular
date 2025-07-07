@@ -35,14 +35,14 @@ export class AppComponent implements OnInit
 	}
 
 	loadClarity() {
-		const clarityId = environment.production ? 's8h568cke2' : 's4gfuspb5j';
+		// const clarityId = environment.production ? 's8h568cke2' : 's4gfuspb5j';
 	
 		const clarityScriptContent = `
 		  (function(c,l,a,r,i,t,y){
 			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 			t=l.createElement(r); t.async=1; t.src="https://www.clarity.ms/tag/"+i;
 			y=l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t,y);
-		  })(window, document, "clarity", "script", "${clarityId}");
+		  })(window, document, "clarity", "script", "s8h568cke2");
 		`;
 	
 		const script = document.createElement('script');
