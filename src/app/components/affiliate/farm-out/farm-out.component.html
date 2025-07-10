@@ -191,7 +191,7 @@
 								<td class="text-center font-weight-bolder cursor-pointer">
 									<p class="booking-id-font font-weight-bolder cursor-pointer">
 										<span class="currency">{{currencySymbol}}</span><span
-											[innerHTML]="highlighText(booking.grand_total)"></span>
+											[innerHTML]="highlighText((booking.grand_total).toFixed(2))"></span>
 									</p>
 								</td>
 								<td>

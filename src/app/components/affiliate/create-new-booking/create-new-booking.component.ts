@@ -1715,9 +1715,12 @@ export class CreateNewBookingComponent implements OnInit {
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			adminShare = adminShare + (this.BookingForm.value.returnRateArray.misc.Extra_Gratuity.amount * 0.25)
+			let deducted_admin_share = adminShare - stripeFee
 			let returnShareArray = {
 				baseRate: base_rate,
 				returnGrandTotal: returnGrandTotal,
+				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
+				grandTotal: returnGrandTotal,
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				affiliateShare: returnGrandTotal - adminShare
