@@ -1051,6 +1051,17 @@ export class FarmOutBookingsComponent implements OnInit {
 		);
 	}
 
+	// Method to convert hours to days and hours
+	getCancellationTime(cancellationHours: number): string {
+		if (cancellationHours > 24) {
+			const days = Math.floor(cancellationHours / 24);
+			const remainingHours = cancellationHours % 24;
+			return `${days} days ${remainingHours} hours`;
+		} else {
+			return `${cancellationHours} hours`;
+		}
+	}
+
 	showLocationPointOnMap(booking_id: number, type: string) {
 		// const options = {
 		// 	enableHighAccuracy: true,

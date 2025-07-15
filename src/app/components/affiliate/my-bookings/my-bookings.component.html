@@ -1161,7 +1161,7 @@
 						</div>
 					</div>
 					<!-- Passenger > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1174,7 +1174,7 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 
 					<div class="mx-2">
@@ -1673,13 +1673,14 @@
 						</div>
 					</div>
 					<hr>
-					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
-						<div class="col-md-4 key">
+					<div class="row preview-dropoff-color align-items-center flex-wrap flex-md-nowrap"
+						*ngIf="bookingPreview?.cancellation_hours">
+						<div class="col-6 col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Cancellation Period
 							</span>
 						</div>
-						<div class="col-md-8 value">
+						<div class="col-6 col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
 								{{ getCancellationTime(bookingPreview.cancellation_hours) }}
 							</span>

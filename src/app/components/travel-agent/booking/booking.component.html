@@ -459,13 +459,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
-						<div class="col-md-4 key">
+					<div class="row preview-dropoff-color align-items-center flex-wrap flex-md-nowrap"
+						*ngIf="bookingPreview?.cancellation_hours">
+						<div class="col-6 col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Cancellation Period
 							</span>
 						</div>
-						<div class="col-md-8 value">
+						<div class="col-6 col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
 								{{ getCancellationTime(bookingPreview.cancellation_hours) }}
 							</span>
