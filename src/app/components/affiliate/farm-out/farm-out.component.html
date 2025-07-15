@@ -789,13 +789,13 @@
 					</h5>
 					<!-- Pickup > Date -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-3 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Date
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-9 col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
 									{{ dateFormat2(bookingPreview?.pickup_date) }}
 									|
@@ -807,13 +807,13 @@
 
 					<!-- Pickup > Time -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-3 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Time
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-9 col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
 									{{ timeFormat2(bookingPreview?.pickup_time) }}
 									|
@@ -999,7 +999,7 @@
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
+					<div class="mx-4 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
