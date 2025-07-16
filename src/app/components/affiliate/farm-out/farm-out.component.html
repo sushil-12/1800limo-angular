@@ -752,13 +752,13 @@
 						</div>
 					</div>
 					<div *ngIf="bookingPreview?.service_type == 'charter_tour'">
-						<div class="row">
-							<div class="col-md-4 key">
+						<div class="row align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-8 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Booking Hours
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-4 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.number_of_hours }}
 								</span>
@@ -1158,13 +1158,13 @@
 
 					<!-- Passenger > Name -->
 					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.passenger_name) }}
 								</span>
@@ -1174,13 +1174,13 @@
 
 					<!-- Passenger > Email -->
 					<!-- <div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.passenger_email) }}
 								</span>
@@ -1190,13 +1190,13 @@
 
 					<!-- Passenger > Phone -->
 					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;color: #1e7500;">
 									Phone
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<a class="font-weight-bolder preview-output-field cursor-pointer"
 									style="color: #1e7500;"
 									href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
@@ -1211,13 +1211,13 @@
 						</div>
 					</div>
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									No. of passenger
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.total_passengers }}
 								</span>
@@ -1225,13 +1225,13 @@
 						</div>
 					</div>
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Luggage count
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.luggage_count }}
 								</span>
@@ -1295,14 +1295,14 @@
 
 					<!-- Grand Total -->
 					<h4 class="font-weight-bolder m-0">
-						Vehicle Preferences
+						Vehicle Type
 					</h4>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Type
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_type_name}}
@@ -1310,11 +1310,11 @@
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Make
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_make}}
@@ -1322,11 +1322,11 @@
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Model
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_model}}
@@ -1334,11 +1334,11 @@
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Year
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_year}}
@@ -1346,11 +1346,11 @@
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Color
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_color}}
@@ -1358,11 +1358,11 @@
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Licence plate
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_license_plate}}
@@ -1370,14 +1370,14 @@
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								No. of seats
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
-								{{ bookingPreview?.vehicle_seats}}
+								{{ bookingPreview?.vehicle_seats}} pax / {{bookingPreview.vehicle_luggage}} luggage
 							</span>
 						</div>
 					</div>
@@ -1388,13 +1388,13 @@
 					</h4>
 					<!-- Driver Name -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
 								</span>
@@ -1404,13 +1404,13 @@
 
 					<!-- Driver Email -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.driver_email) }}
 								</span>
@@ -1420,13 +1420,13 @@
 
 					<!-- Driver Cell -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Phone
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-8 col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									({{ bookingPreview?.driver_cell_isd }}) {{
 									bookingPreview?.driver_cell }}
@@ -1443,13 +1443,13 @@
 
 						<!-- Affiliate > Name -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Name
 									</span>
 								</div>
-								<div class="col-md-8 value">
+								<div class="col-8 col-md-8 value">
 									<span class="font-weight-bolder preview-output-field">
 										{{isAffiliate ? bookingPreview?.affiliate_name :
 										bookingPreview?.lose_affiliate_name }}
@@ -1460,13 +1460,13 @@
 
 						<!-- Affiliate > Email -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Email
 									</span>
 								</div>
-								<div class="col-md-8 value">
+								<div class="col-8 col-md-8 value">
 									<span class="font-weight-bolder preview-output-field">
 										{{isAffiliate ? bookingPreview?.affiliate_email :
 										bookingPreview?.lose_affiliate_email }}
@@ -1477,13 +1477,13 @@
 
 						<!-- Affiliate > Phone -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Phone
 									</span>
 								</div>
-								<div class="col-md-8 value">
+								<div class="col-8 col-md-8 value">
 									<span class="font-weight-bolder preview-output-field">
 										{{isAffiliate ? bookingPreview?.affiliate_phone :
 										bookingPreview?.lose_affiliate_phone }}
