@@ -755,7 +755,7 @@
 							</span>
 						</div>
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{bookingPreview?.currency_symbol}} {{ bookingPreview?.grand_total }}
 							</span>
 						</div>
@@ -772,7 +772,7 @@
 							</span>
 						</div>
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ textFormatter(bookingPreview?.service_type) | titlecase }}
 								/
 								{{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
@@ -784,15 +784,16 @@
 							</span>
 						</div>
 					</div>
-					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
-						<div class="col-md-4 key">
+					<div class="row preview-dropoff-color align-items-center flex-wrap flex-md-nowrap"
+						*ngIf="bookingPreview?.cancellation_hours">
+						<div class="col-6 col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Cancellation Period
 							</span>
 						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.cancellation_hours }} hours
+						<div class="col-6 col-md-8 value">
+							<span class="font-weight-bolder preview-output-field">
+								{{ getCancellationTime(bookingPreview.cancellation_hours) }}
 							</span>
 						</div>
 					</div>
@@ -814,14 +815,14 @@
 
 					<!-- Number of Hours -->
 					<div class="mx-2" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
-						<div class="row">
-							<div class="col-md-4 key">
+						<div class="row align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-8 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Booking Hours
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-4 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.number_of_hours }}
 								</span>
 							</div>
@@ -834,14 +835,14 @@
 					</h5>
 					<!-- Pickup > Date -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-3 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Date
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-9 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ dateFormat2(bookingPreview?.pickup_date) }}
 									|
 									{{ dateFormat(bookingPreview?.pickup_date) }}
@@ -852,14 +853,14 @@
 
 					<!-- Pickup > Time -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-3 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Time
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-9 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ timeFormat2(bookingPreview?.pickup_time) }}
 									|
 									{{ timeFormat(bookingPreview?.pickup_time) }}
@@ -880,7 +881,7 @@
 								</span>
 							</div>
 							<div class="col-md-8">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.pickup) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup)"><i
@@ -902,7 +903,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.pickup_airport_name) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup_airport_name)"><i
@@ -919,11 +920,11 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild"
+								<span class="font-weight-bolder preview-output-field"
 									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
-								</span> &nbsp;<span class="font-weight-bolder preview-output-feild"
+								</span> &nbsp;<span class="font-weight-bolder preview-output-field"
 									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									#{{ textFormatter(bookingPreview?.pickup_flight) }}
@@ -944,7 +945,7 @@
 								</span>
 							</div>
 							<div class="col-md-7 value">
-								<span class="font-weight-bolder preview-output-feild"
+								<span class="font-weight-bolder preview-output-field"
 									style="cursor: pointer;text-decoration: underline;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_flight) }}
@@ -965,7 +966,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.cruise_port) | titlecase }}
 								</span>
 							</div>
@@ -979,7 +980,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.cruise_name) | titlecase }}
 								</span>
 							</div>
@@ -993,7 +994,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.cruise_time) | titlecase }}
 								</span>
 							</div>
@@ -1014,7 +1015,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{ stop.address }}
 									</span>
 									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
@@ -1042,7 +1043,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.dropoff) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff)"><i
@@ -1052,7 +1053,7 @@
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
+					<div class="mx-4" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1061,7 +1062,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.dropoff_airport_name ) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_airport_name)"><i
@@ -1078,12 +1079,12 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild"
+								<span class="font-weight-bolder preview-output-field"
 									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>&nbsp;
-								<span class="font-weight-bolder preview-output-feild"
+								<span class="font-weight-bolder preview-output-field"
 									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									#{{ textFormatter(bookingPreview?.dropoff_flight) }}
@@ -1107,7 +1108,7 @@
 								</span>
 							</div>
 							<div class="col-md-7 value">
-								<span class="font-weight-bolder preview-output-feild"
+								<span class="font-weight-bolder preview-output-field"
 									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
@@ -1127,7 +1128,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.cruise_port) | titlecase }}
 								</span>
 							</div>
@@ -1142,7 +1143,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.cruise_name) | titlecase }}
 								</span>
 							</div>
@@ -1157,7 +1158,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.cruise_time) }}
 								</span>
 							</div>
@@ -1170,14 +1171,14 @@
 					<!-- Distance Details -->
 					<div class="mx-2">
 						<hr>
-						<div class="row m-0">
-							<div class="col-md-4">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4">
 								<span style="font-weight: 550 !important;">
-									Estimated Total Distance
+									Distance
 								</span>
 							</div>
-							<div class="col-md-8 ">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 ">
+								<span class="font-weight-bolder preview-output-field">
 									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
 									}} Km
 								</span>
@@ -1185,14 +1186,14 @@
 						</div>
 					</div>
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4">
 								<span style="font-weight: 550 !important;">
-									Estimated time
+									Time
 								</span>
 							</div>
-							<div class="col-md-8">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8">
+								<span class="font-weight-bolder preview-output-field">
 									{{convertToMinutes(bookingPreview?.duration)}}
 								</span>
 							</div>
@@ -1219,14 +1220,14 @@
 
 					<!-- Passenger > Name -->
 					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.passenger_name) }}
 								</span>
 							</div>
@@ -1234,14 +1235,14 @@
 					</div>
 					<!-- Passenger > Phone -->
 					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Phone
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<a class="font-weight-bolder preview-output-feild cursor-pointer"
+							<div class="col-8 col-md-8 value">
+								<a class="font-weight-bolder preview-output-field cursor-pointer"
 									style="color: #1e7500;"
 									href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
 									({{ bookingPreview?.passenger_cell_isd }})
@@ -1252,14 +1253,14 @@
 					</div>
 					<!-- Passenger > Email -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.passenger_email) }}
 								</span>
 							</div>
@@ -1268,28 +1269,28 @@
 
 
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									No. of passenger
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.total_passengers }}
 								</span>
 							</div>
 						</div>
 					</div>
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Luggage count
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.luggage_count }}
 								</span>
 							</div>
@@ -1305,7 +1306,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+								<span class="font-weight-bolder preview-output-field" style="white-space: pre-wrap;"
 									[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
 									<!-- {{ highlightNumbers(bookingPreview?.booking_instructions) }} -->
 								</span>
@@ -1321,7 +1322,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
 								</span>
 							</div>
@@ -1335,7 +1336,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
 								</span>
 							</div>
@@ -1345,89 +1346,89 @@
 
 					<!-- Grand Total -->
 					<h4 class="font-weight-bolder m-0">
-						Vehicle Preferences
+						Vehicle Type
 					</h4>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Type
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_type_name}}
 							</span>
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Make
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_make}}
 							</span>
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Model
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_model}}
 							</span>
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Year
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_year}}
 							</span>
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Color
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_color}}
 							</span>
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Licence plate
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{ bookingPreview?.vehicle_license_plate}}
 							</span>
 						</div>
 					</div>
 					<div class="row p-2">
-						<div class="col-md-4 key">
+						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								No. of seats
 							</span>
-						</div>
+						</div> -->
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_seats}}
+							<span class="font-weight-bolder preview-output-field">
+								{{ bookingPreview?.vehicle_seats}} pax / {{bookingPreview?.vehicle_luggage}} luggage
 							</span>
 						</div>
 					</div>
@@ -1444,14 +1445,14 @@
 
 						<!-- Affiliate > Name -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Name
 									</span>
 								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild"
+								<div class="col-8 col-md-8 value">
+									<span class="font-weight-bolder preview-output-field"
 										*ngIf="bookingPreview?.MiddleName == null;else affiliateMiddleName">
 										{{ textFormatter(bookingPreview?.affiliate_name) }}
 									</span>
@@ -1461,14 +1462,14 @@
 
 						<!-- Affiliate > Email -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Email
 									</span>
 								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
+								<div class="col-8 col-md-8 value">
+									<span class="font-weight-bolder preview-output-field">
 										{{ textFormatter(bookingPreview?.affiliate_email) }}
 									</span>
 								</div>
@@ -1477,14 +1478,14 @@
 
 						<!-- Affiliate > Phone -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Phone
 									</span>
 								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
+								<div class="col-8 col-md-8 value">
+									<span class="font-weight-bolder preview-output-field">
 										({{ bookingPreview?.affiliate_phone_isd }}){{
 										textFormatter(bookingPreview?.affiliate_phone) }}
 									</span>
@@ -1505,14 +1506,14 @@
 
 						<!-- Loose Affiliate > Name -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Name
 									</span>
 								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
+								<div class="col-8 col-md-8 value">
+									<span class="font-weight-bolder preview-output-field">
 										{{ textFormatter(bookingPreview?.lose_affiliate_name) }}
 									</span>
 								</div>
@@ -1521,14 +1522,14 @@
 
 						<!-- Loose Affiliate > Email -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Email
 									</span>
 								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
+								<div class="col-8 col-md-8 value">
+									<span class="font-weight-bolder preview-output-field">
 										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
 									</span>
 								</div>
@@ -1537,14 +1538,14 @@
 
 						<!-- Loose Affiliate > Phone -->
 						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
+							<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+								<div class="col-4 col-md-4 key">
 									<span style="font-weight: 550 !important;">
 										Phone
 									</span>
 								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
+								<div class="col-8 col-md-8 value">
+									<span class="font-weight-bolder preview-output-field">
 										({{ bookingPreview?.lose_affiliate_phone_isd }}){{
 										textFormatter(bookingPreview?.lose_affiliate_phone) }}
 									</span>
@@ -1560,14 +1561,14 @@
 					</h4>
 					<!-- Driver Name -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{bookingPreview?.driver_name ? (textFormatter(bookingPreview?.driver_name) |
 									titlecase) : '1800Limo Chauffeurs' }}
 								</span>
@@ -1577,14 +1578,14 @@
 
 					<!-- Driver Email -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ textFormatter(bookingPreview?.driver_email) }}
 								</span>
 							</div>
@@ -1593,14 +1594,14 @@
 
 					<!-- Driver Cell -->
 					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Phone
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.driver_cell_isd ? ( bookingPreview?.driver_cell_isd ) : '(+1) '
 									}}{{
 									bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}
@@ -1617,7 +1618,7 @@
 							</span>
 						</div>
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{bookingPreview?.currency_symbol}}
 								{{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
@@ -1630,7 +1631,7 @@
 							</span>
 						</div>
 						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
+							<span class="font-weight-bolder preview-output-field">
 								{{bookingPreview?.currency_symbol}} {{(bookingPreview?.grand_total-
 								bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
@@ -1658,7 +1659,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{rates_preview?.ride_base_rate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
@@ -1674,7 +1675,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{rates_preview?.admin_share.toFixed(2) }}
 									</span>
 									({{adminSharePercent}} of Base Rate)
@@ -1690,7 +1691,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{rates_preview?.other_taxes.toFixed(2)}}
 									</span>
 									(Total of all taxes and other charges)
@@ -1705,7 +1706,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{rates_preview?.total_price.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
@@ -1720,7 +1721,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{rates_preview?.stripe_fees.toFixed(2)}}
 									</span>
 									(Platform fee 2.9% + 30 cents - <b>Paid from Admin share</b>)
@@ -1735,7 +1736,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{(rates_preview?.total_price -
 										rates_preview?.stripe_fees).toFixed(2)}}
 									</span>
@@ -1752,7 +1753,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{rates_preview?.affiliate_share.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
@@ -1774,7 +1775,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate)}}
 									</span>
 									(Fare Base Rate)
@@ -1789,7 +1790,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare)
 										}}
 									</span>
@@ -1806,7 +1807,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.travelAgentShare)
 										}}
 									</span>
@@ -1823,7 +1824,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
@@ -1839,7 +1840,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
@@ -1854,7 +1855,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.farmoutShare)}}
 									</span>
 									( 10 % of Base Rate)
@@ -1869,7 +1870,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
+									<span class="font-weight-bolder preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
 										formatBaseRate(bookingPreview?.share_array?.grandTotal) :
 										formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
