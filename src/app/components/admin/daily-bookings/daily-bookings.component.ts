@@ -743,9 +743,9 @@ export class DailyBookingsComponent implements OnInit {
 		try {
 			setTimeout(() => {
 				// $('textarea').attr('autofocus', 'autofocus');
-				this.sendEmailModalFocus.nativeElement
-					.querySelector("textarea")
-					.focus();
+				this.sendEmailModalFocus.nativeElement.querySelector("textarea").focus();
+				//add default message in the textarea
+				this.message.nativeElement.value = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
 			}, 1000);
 		} catch (error) {
 			console.log("----------error------->>>>>> ", error);

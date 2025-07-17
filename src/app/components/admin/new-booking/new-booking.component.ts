@@ -1604,7 +1604,10 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('lose_affiliate_name', looseAffData?.driver_name)
 			this.SetFormValue('lose_affiliate_phone', looseAffData?.driver_phone)
 			this.SetFormValue('lose_affiliate_email', looseAffData?.driver_email)
-			this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
+			const isd = looseAffData?.driver_isd || '';
+			const formattedISD = isd.startsWith('+') ? isd : `+${isd}`;
+			this.SetFormValue('lose_affiliate_phone_isd', formattedISD);
+			// this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
 			this.loseAffiliateTelInput.setCountry(looseAffData?.driver_phone_country);
 		}
@@ -1633,7 +1636,10 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_lose_affiliate_name', looseAffData?.driver_name)
 			this.SetFormValue('return_lose_affiliate_phone', looseAffData?.driver_phone)
 			this.SetFormValue('return_lose_affiliate_email', looseAffData?.driver_email)
-			this.SetFormValue('return_lose_affiliate_phone_isd', looseAffData?.driver_isd)
+			const isd = looseAffData?.driver_isd || '';
+			const formattedISD = isd.startsWith('+') ? isd : `+${isd}`;
+			this.SetFormValue('return_lose_affiliate_phone_isd', formattedISD);
+			// this.SetFormValue('return_lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('return_lose_affiliate_phone_country', looseAffData?.driver_phone_country)
 		}
 		else {
@@ -2651,14 +2657,33 @@ export class NewBookingComponent implements OnInit {
 
 	}
 
+	// checks value if there is + in country code or not and if not it adds up the +
+	ensurePlusPrefix(value: any): string {
+		if (!value) return '';
+		const str = value.toString().trim();
+		return str.startsWith('+') ? str : '+' + str;
+	}
 
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+
+		// to ensure driver_cell_isd and lose_affiliate_cell_isd be saved with + in code because on edit it is not saving on set form value
+		this.BookingForm.patchValue({
+			driver_cell_isd: this.ensurePlusPrefix(this.BookingForm?.get('driver_cell_isd')?.value),
+			lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('lose_affiliate_phone_isd')?.value)
+		});
+
 		// this.BookingForm['currency'] = this.currencyObj?.currency
 		if (this.service_type == 'round_trip') {
 			this.BookingForm.get('return_vehicle_type').setValidators([Validators.required]);
 			this.BookingForm.get('return_vehicle_type').updateValueAndValidity()
+
+			this.BookingForm.patchValue({
+				return_driver_cell_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_driver_cell_isd')?.value),
+				return_lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_lose_affiliate_phone_isd')?.value)
+			});
+
 		}
 		else {
 			this.BookingForm.get('return_vehicle_type').clearValidators()
@@ -2952,7 +2977,7 @@ export class NewBookingComponent implements OnInit {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-			if(value.includes("city_")){
+			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 			}
 
@@ -3032,7 +3057,7 @@ export class NewBookingComponent implements OnInit {
 			console.log("in return_transfer_type value changes", value)
 
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
-				if(value.includes("city_")){
+				if (value.includes("city_")) {
 					this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 				}
 
