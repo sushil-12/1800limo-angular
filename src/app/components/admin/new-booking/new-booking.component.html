@@ -2663,12 +2663,11 @@
 		<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 		<!-- Affiliate Vehicle Information -->
 		<!-- New section conatiner for Vehicle details -->
-		<div class="section-container mt-2">
+		<div class="section-container mt-2" *ngIf="service_type == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
 			<h4>
 				Vehicle Preferences
 			</h4>
-			<div class="row px-4"
-				*ngIf="service_type == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
+			<div class="row px-4">
 				<!-- Vehicle Type -->
 				<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
 					<ng-select appearance="outline" [items]="return_vehicleType_arr" bindLabel="formatted_name"

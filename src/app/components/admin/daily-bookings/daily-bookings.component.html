@@ -1345,7 +1345,21 @@
 						</div>
 					</div>
 					<!-- Passenger > Email -->
-					<div class="mx-2">
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
+							<div class="col-4 col-md-4 key">
+								<span style="font-weight: 550 !important;">
+									Email
+								</span>
+							</div>
+							<div class="col-8 col-md-8 value">
+								<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									{{ textFormatter(bookingPreview?.passenger_email) }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1358,7 +1372,7 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 
 					<div class="mx-2">
@@ -1473,7 +1487,7 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field">
+									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.affiliate_email) }}
 									</span>
 								</div>
@@ -1533,7 +1547,7 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field">
+									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
 									</span>
 								</div>
@@ -1694,7 +1708,7 @@
 								</span>
 							</div>
 							<div class="col-8 col-md-8 value">
-								<span class="font-weight-bolder preview-output-field">
+								<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
 									{{ textFormatter(bookingPreview?.driver_email) }}
 								</span>
 							</div>
