@@ -1897,7 +1897,7 @@ export class CreateBookingComponent implements OnInit {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-
+			this.initAllAutocompletes()
 			if(value.includes("city_")){
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 			}
@@ -1973,7 +1973,7 @@ export class CreateBookingComponent implements OnInit {
 
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in return_transfer_type value changes", value)
-
+			this.initAllAutocompletes()
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
 
 				if(value.includes("city_")){
