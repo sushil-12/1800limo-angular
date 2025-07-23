@@ -561,6 +561,7 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 	changeTransferType(type: string) {
 		this.transfer_type = type
+		this.initAllAutocompletes()
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
 			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
@@ -1021,6 +1022,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 	changeReturnTransferType(event: any) {
 		this.return_transfer_type = event
+		this.initAllAutocompletes()
 	}
 
 
