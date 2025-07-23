@@ -557,6 +557,7 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	changeTransferType(type: string) {
+		this.initAllAutocompletes()
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
 		} else {
