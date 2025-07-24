@@ -1026,6 +1026,32 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 
 
+	// for showing details when client account is chosen
+	getUserValue(key: string): string {
+		const lowerKey = key.toLowerCase();
+
+		// Create a mapping of normalized keys to possible variations
+		const variations = {
+			name: ['name', 'Name'],
+			mobile: ['mobile', 'Mobile'],
+			email: ['email', 'Email'],
+			country: ['country', 'Country'],
+			zip: ['zip', 'zipCode', 'Zip', 'ZipCode'],
+			address: ['address', 'Address']
+		};
+
+		const possibleKeys = variations[lowerKey] || [key];
+
+		for (const k of possibleKeys) {
+			if (this.chosen_user && this.chosen_user[k] !== undefined) {
+				return this.chosen_user[k];
+			}
+		}
+
+		return ''; // default fallback if nothing found
+	}
+
+
 	chooseUser(account_id: number) {
 		console.log('in function choose user---------------------------')
 		this.$spinner.show()
