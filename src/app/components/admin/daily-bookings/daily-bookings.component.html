@@ -1925,6 +1925,10 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-body">
+				<div class="d-flex mb-4" style="gap: 20px;">
+					<button class="custom-filled-button orange-button" data-dismiss="modal" [routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
+					<button class="custom-filled-button orange-button" data-dismiss="modal" [routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
+				</div>
 				<pre
 					style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
 			</div>

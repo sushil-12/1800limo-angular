@@ -162,6 +162,17 @@
 																		filter_text_index] ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 													</span>
 												</div>
+												<div class="d-flex ml-2 mb-4">
+													<button type="button" (click)="clearFilters(null)"
+														class="custom-filled-button orange-button mr-4">
+														Clear
+													</button>
+													<button type="button" (click)="getVehicleDetails(); openfilters=false"
+														class="custom-filled-button green-button">
+														Apply filter
+													</button>
+						
+												</div>
 												<!-- SHOW MORE BUTTON ENDS -->
 											</div>
 											<!-- FILTER CHECKLIST AND FILTER CONTENT AREA ENDS -->
@@ -169,7 +180,7 @@
 
 										<!-- IF RP IS AN ARRAY -->
 										<!-- INNER ACCORDION -->
-										<div class="accordion pl-4" id="innerAccordionExample">
+										<div class="accordion pl-2" id="innerAccordionExample">
 											<div class="card-body" *ngIf="isArray(filter_text.rp)">
 												<!-- INNER CARD 1 -->
 												<div class="card"
@@ -202,7 +213,7 @@
 														</div>
 														<!-- Search Field -->
 														<div class="filter-field mb-3">
-															<div class="input-group mb-3 ">
+															<div class="input-group mb-3" style="width: 90%;">
 																<div class="input-group-prepend bg-white">
 																	<div class="input-group-text">
 																		<i class="fa fa-search" style="color:grey;"></i>
@@ -254,6 +265,17 @@
 																		<i class="bi font-weight-bolder" [ngClass]="filters.vars['showMore_inner_' + inner_filter_text.rp + '_' +
 																		inner_filter_text_index] ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 																	</span>
+																</div>
+																<div class="d-flex ml-2 mb-4">
+																	<button type="button" (click)="clearFilters(null)"
+																		class="custom-filled-button orange-button mr-4">
+																		Clear
+																	</button>
+																	<button type="button" (click)="getVehicleDetails(); openfilters=false"
+																		class="custom-filled-button green-button">
+																		Apply filter
+																	</button>
+										
 																</div>
 																<!-- SHOW MORE BUTTON ENDS -->
 															</div>
