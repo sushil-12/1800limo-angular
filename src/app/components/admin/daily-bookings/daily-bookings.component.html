@@ -1601,25 +1601,25 @@
 							</div> -->
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
-									{{ bookingPreview?.vehicle_make}}
+									{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}}
 								</span>
 							</div>
 						</div>
 					</div>
-					<div class="mx-2 mb-1">
+					<!-- <div class="mx-2 mb-1">
 						<div class="row m-0">
-							<!-- <div class="col-md-4 key">
+							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Vehicle Model
 								</span>
-							</div> -->
+							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-field">
 									{{ bookingPreview?.vehicle_model}}
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="mx-2 mb-1">
 						<div class="row m-0">
 							<!-- <div class="col-md-4 key">
@@ -1925,6 +1925,10 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-body">
+				<div class="d-flex mb-4" style="gap: 20px;">
+					<button class="custom-filled-button orange-button" data-dismiss="modal" [routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
+					<button class="custom-filled-button orange-button" data-dismiss="modal" [routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
+				</div>
 				<pre
 					style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
 			</div>

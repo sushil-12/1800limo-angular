@@ -50,12 +50,34 @@ export class MasterVehicleComponent implements OnInit {
 
 	FILTERS_ORDER = [
 		{
-			dp: 'extra-$-amenities',
-			rp: 'amenities'
-		},
-		{
 			dp: 'vehicle-type-preferences',
 			rp: 'vehicle-type'
+		},
+			
+		{
+			dp: 'driver-preferences',
+			rp: [
+				{
+					dp: 'dresses',
+					rp: 'driver-dresses'
+				},
+				{
+					dp: 'languages',
+					rp: 'driver-languages'
+				},
+				{
+					dp: 'gender',
+					rp: 'driver-gender'
+				},
+				{
+					dp: 'background',
+					rp: 'driver-background'
+				}
+			]
+		},
+		{
+			dp: 'extra-$-amenities',
+			rp: 'amenities'
 		},
 		{
 			dp: 'make-model',
@@ -86,28 +108,6 @@ export class MasterVehicleComponent implements OnInit {
 		{
 			dp: 'amenities',
 			rp: 'special-amenities'
-		},
-		
-		{
-			dp: 'driver-preferences',
-			rp: [
-				{
-					dp: 'dresses',
-					rp: 'driver-dresses'
-				},
-				{
-					dp: 'languages',
-					rp: 'driver-languages'
-				},
-				{
-					dp: 'gender',
-					rp: 'driver-gender'
-				},
-				{
-					dp: 'background',
-					rp: 'driver-background'
-				}
-			]
 		},
 		{
 			dp: 'vehicle-service-area-type',

@@ -411,26 +411,6 @@ a.dropdown-item {
 	font-size: 26px;
 }
 
-@media only screen and (max-width: 768px) {
-	.sortCheckBox {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
-
-	.pin-icon-preview {
-		font-size: 34px;
-	}
-
-	.scroll-item {
-		min-width: 180px;
-		/* Adjust item width for smaller screens */
-	}
-
-	.horizontal-scroll-container {
-		gap: 20px;
-	}
-}
 
 .google_map {
 	width: auto;
@@ -496,6 +476,26 @@ a.dropdown-item {
 	color: red;
 }
 
+@media (max-width: 768px) {
+	.sortCheckBox {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.pin-icon-preview {
+		font-size: 34px;
+	}
+
+	.scroll-item {
+		min-width: 180px;
+		/* Adjust item width for smaller screens */
+	}
+
+	.horizontal-scroll-container {
+		gap: 20px;
+	}
+}
 
 
 @media (min-width: 992px){
