@@ -37,8 +37,8 @@ hr{
 .margin-top-minus-20{
 	margin-top: -20px !important;
 }
-.margin-bottom-minus-10{
-	margin-bottom: -10px !important;
+.margin-bottom-minus-20{
+	margin-bottom: -20px !important;
 }
 mat-form-field {
 	margin: 1rem 0 !important;
@@ -362,6 +362,10 @@ top:2.05em}
 
 .pin-icon-preview{
 	font-size: 26px;
+}
+
+.border-secondary {
+	margin: 0 0 6px !important;
 }
 
 @media only screen and (max-width: 768px){
