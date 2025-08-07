@@ -8,6 +8,7 @@ import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
 	selector: 'app-add-travel-planner-account',
@@ -46,6 +47,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService,
 		private httpClient: HttpClient,
+		private errors: ErrorDialogService
 	) { }
 
 
@@ -372,6 +374,16 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addTravelPlannerAccountForm.invalid) {
+			return;
+		}
+
+
+		if (this.addTravelPlannerAccountForm.get('address').value != '' && this.addTravelPlannerAccountForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
 			return;
 		}
 

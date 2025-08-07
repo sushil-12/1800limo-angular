@@ -10,6 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 
@@ -58,6 +59,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     private route: ActivatedRoute,
     private authService: AuthService,
     private adminService: AdminService,
+    private errors: ErrorDialogService
   ) { }
 
   ngOnInit(): void {
@@ -162,10 +164,10 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     this.initallphonefields()
   }
 
-  initallphonefields(){
+  initallphonefields() {
 
-    if(this.phoneInput){
-      console.log('onput',this.phoneInput,this.phoneInput.nativeElement)
+    if (this.phoneInput) {
+      console.log('onput', this.phoneInput, this.phoneInput.nativeElement)
       this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
         initialCountry: 'us',
         preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -175,16 +177,16 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
       });
-  
+
       this.phoneInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.MobileObject.getSelectedCountryData();
-        console.log("in change",countryData)
-        this.onCountryChange(countryData,'phone')
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'phone')
       });
     }
 
-    if(this.workInput){
-      console.log('onput',this.workInput,this.workInput.nativeElement)
+    if (this.workInput) {
+      console.log('onput', this.workInput, this.workInput.nativeElement)
       this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
         initialCountry: 'us',
         preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -194,15 +196,15 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
       });
-  
+
       this.workInput.nativeElement.addEventListener('countrychange', () => {
-        const countryData = this.OfficeObject.getSelectedCountryData(); 
-        console.log("in change",countryData)
+        const countryData = this.OfficeObject.getSelectedCountryData();
+        console.log("in change", countryData)
         this.onCountryChange(countryData, 'work');
       });
     }
 
-  
+
 
   }
 
@@ -349,6 +351,16 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
       this.profileForm.patchValue({
         badge_city: ''
       })
+    }
+
+
+    if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
+      this.errors.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
+      return;
     }
 
     console.log(this.profileForm.value);

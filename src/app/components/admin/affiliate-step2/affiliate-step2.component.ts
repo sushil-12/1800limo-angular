@@ -11,6 +11,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from '../../../services/common.service';
 import { ThemePalette } from '@angular/material/core';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -89,12 +90,13 @@ export class AffiliateStep2Component implements OnInit {
 		private el: ElementRef,
 		private customValidator: CustomvalidationService,
 		private commonServices: CommonService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private errors: ErrorDialogService
 	) { }
 
 
 	ngOnInit(): void {
-		
+
 		//prepare list of years for add card
 		const currentYear = (new Date()).getFullYear();
 		for (let i = 0; i < 40; i++) {
@@ -381,7 +383,7 @@ export class AffiliateStep2Component implements OnInit {
 				// Extract address components
 				place.address_components?.forEach(component => {
 					const types = component.types;
-					console.log("{DEBUG} Address file data",types,component)
+					console.log("{DEBUG} Address file data", types, component)
 					if (types.includes('country')) {
 						this.addBankForm.patchValue({
 							country: component.short_name
@@ -756,9 +758,22 @@ export class AffiliateStep2Component implements OnInit {
 		if (this.addBankForm.invalid) {
 			return;
 		}
+
+		if (this.addBankForm.get('address').value != '' && this.addBankForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
+			return;
+		}
+
 		this.addBankForm.patchValue({
 			ssn: this.ssn_copy
 		})
+
+
+
 		this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));

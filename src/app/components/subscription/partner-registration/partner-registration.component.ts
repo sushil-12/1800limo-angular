@@ -81,7 +81,7 @@ export class PartnerRegistrationComponent implements OnInit {
 
     this.phoneInput.nativeElement.addEventListener('countrychange', () => {
       const countryData = this.MobileObject.getSelectedCountryData();
-      console.log("in country chnage",countryData)
+      console.log("in country chnage", countryData)
       this.onCountryChange(countryData, 'mobile')
     });
 
@@ -288,6 +288,16 @@ export class PartnerRegistrationComponent implements OnInit {
     this.submittedForm = true
 
     if (this.registrationForm.invalid) {
+      return;
+    }
+
+
+    if (this.registrationForm.get('address').value != '' && this.registrationForm.get('latitude').value == '') {
+      this.errorDialog.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
       return;
     }
 

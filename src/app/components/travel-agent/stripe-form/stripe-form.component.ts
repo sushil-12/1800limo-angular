@@ -54,19 +54,19 @@ export class StripeFormComponent implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
-	enableSsnField:boolean=false;
-	ssn_copy:any;
-	ssnErrorMessage:string;
-	addressErrorMessage:string;
-	dobErrorMessage:string;
-	public AddressCheckStripe = ['address','street','city','country']
+	enableSsnField: boolean = false;
+	ssn_copy: any;
+	ssnErrorMessage: string;
+	addressErrorMessage: string;
+	dobErrorMessage: string;
+	public AddressCheckStripe = ['address', 'street', 'city', 'country']
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
 	filteredOptions: any;
 	badgeOptions: any;
 	travelAgentId: any;
-	acc_id1:any;
+	acc_id1: any;
 	agentAccountStatus: any;
 
 	constructor(
@@ -92,20 +92,20 @@ export class StripeFormComponent implements OnInit {
 		this.acc_id1 = currentUser?.account_id
 
 		//checking if step 2 completed then setting travel agent id to call edit bank api
-		if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
+		if (JSON.parse(sessionStorage.getItem('step_completed_obj'))) {
 			let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
-			console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
-			if(check_step.step2 == "completed"){
+			console.log(check_step.step1, check_step.step2, "chekc step 1 and 2")
+			if (check_step.step2 == "completed") {
 				//  this.router.navigate(["/admin/travel-planner-account/step1"])
 				//  this.errordialog.openDialog({
-					// 	errors: {
-						// 		error: `Please complete previous step first.`
-						// 	}
-						// })
-						const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-		                this.travelAgentId = currentUser?.account_id
-						// this.travelAgentId = localStorage.getItem("travelAgent_id")
-			 }
+				// 	errors: {
+				// 		error: `Please complete previous step first.`
+				// 	}
+				// })
+				const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+				this.travelAgentId = currentUser?.account_id
+				// this.travelAgentId = localStorage.getItem("travelAgent_id")
+			}
 			//  else{
 			// 	this.router.navigate(["/admin/travel-planner-account/step2"])
 			//  }
@@ -220,7 +220,7 @@ export class StripeFormComponent implements OnInit {
 	}
 
 	mapFunction() {
-	
+
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
 
@@ -264,7 +264,7 @@ export class StripeFormComponent implements OnInit {
 							zipCode: component.long_name
 						});
 					}
-					else if (types.includes('street_number')){
+					else if (types.includes('street_number')) {
 						this.addBankForm.patchValue({
 							street: component.long_name
 						});
@@ -274,7 +274,7 @@ export class StripeFormComponent implements OnInit {
 			});
 			this.spinner.hide()
 		});
-		  
+
 	}
 
 
@@ -340,47 +340,47 @@ export class StripeFormComponent implements OnInit {
 						id_front_image: this.response.data.bankinfo.id_front_image.ID,
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
-					this.ssn_copy=this.response?.data?.bankinfo?.ssn
-					if(this.response?.data?.error_fields?.length > 0){
+					this.ssn_copy = this.response?.data?.bankinfo?.ssn
+					if (this.response?.data?.error_fields?.length > 0) {
 						const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
-						console.log(hasNonEmptyObjects,"hasnonnonono")
-						if(!hasNonEmptyObjects){
+						console.log(hasNonEmptyObjects, "hasnonnonono")
+						if (!hasNonEmptyObjects) {
 							this.enableSsnField = true
 						}
-						else{
+						else {
 
-							this.response?.data?.error_fields?.forEach(item=>{
-								if(item.field == 'ssn'){
+							this.response?.data?.error_fields?.forEach(item => {
+								if (item.field == 'ssn') {
 									this.enableSsnField = false
 									this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
-									console.log('error mesage---->',this.ssnErrorMessage)
+									console.log('error mesage---->', this.ssnErrorMessage)
 								}
-								else{
+								else {
 									this.enableSsnField = true
 								}
-								 if(this.AddressCheckStripe?.includes(item?.field)){
+								if (this.AddressCheckStripe?.includes(item?.field)) {
 									console.log("in if addressssssssss-->")
 									this.addressErrorMessage = 'Please enter a valid address'
-									console.log('error mesage---->',this.addressErrorMessage)
+									console.log('error mesage---->', this.addressErrorMessage)
 									// this.enableSsnField = true
 
 								}
-								if(item?.field == 'dob'){
+								if (item?.field == 'dob') {
 									this.dobErrorMessage = 'Please enter a valid dob'
-									console.log('error mesage---->',this.dobErrorMessage)
+									console.log('error mesage---->', this.dobErrorMessage)
 									// this.enableSsnField = true
-								}									
-						  })
+								}
+							})
 						}
-					
+
 					}
-					else{
+					else {
 						this.enableSsnField = true
 
 					}
-					console.log("trueeee===>",this.enableSsnField)
+					console.log("trueeee===>", this.enableSsnField)
 					//to check varificatiom failed tax id error only
-					if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+					if (this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')) {
 						this.enableSsnField = false
 						this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 					}
@@ -453,34 +453,34 @@ export class StripeFormComponent implements OnInit {
 		}
 	}
 
-	handleCurrency(value:any){
-		console.log(value , this.filteredOptions)
-		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
+	handleCurrency(value: any) {
+		console.log(value, this.filteredOptions)
+		this.currencyOptions = this.currencyOptions_copy.filter((i: any) => i.countryName.toLowerCase().includes(value.toLowerCase()))
 	}
 
-	selectCurrency(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
-		if(isUserInput){
+	selectCurrency(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', isUserInput)
+		if (isUserInput) {
 			this.addBankForm.patchValue({
-				currency:option.countryName + '-' + option.symbol
+				currency: option.countryName + '-' + option.symbol
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 	}
-	onSelectionChange(event){
-		console.log('event- onSelectionChange>>', event.option.value,event.option.viewValue)
+	onSelectionChange(event) {
+		console.log('event- onSelectionChange>>', event.option.value, event.option.viewValue)
 		this.addBankForm.patchValue({
-			currency:event.option.value,
-			currencyShow : event.option.viewValue
+			currency: event.option.value,
+			currencyShow: event.option.viewValue
 		})
 	}
-	currencySelection(value){
-		this.currencyOptions_copy.map(i=>{
-			let concatValue = i.currency+'-'+i.currencyCountry
-			if(value == concatValue){
+	currencySelection(value) {
+		this.currencyOptions_copy.map(i => {
+			let concatValue = i.currency + '-' + i.currencyCountry
+			if (value == concatValue) {
 				console.log('select option-->>', value)
 				this.addBankForm.patchValue({
-					currencyShow : i.countryName + '-' + i.symbol
+					currencyShow: i.countryName + '-' + i.symbol
 				})
 			}
 		})
@@ -559,11 +559,11 @@ export class StripeFormComponent implements OnInit {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
-	showOnlyLast4Digit(value){
-		if(value){
+	showOnlyLast4Digit(value) {
+		if (value) {
 			value = value.toString()
 			return '*'.repeat(value.length - 4) + value.slice(-4)
-		}else{
+		} else {
 			return ''
 		}
 	}
@@ -618,7 +618,7 @@ export class StripeFormComponent implements OnInit {
 	}
 
 	async idCardImageChange1(dataUrl, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -658,7 +658,7 @@ export class StripeFormComponent implements OnInit {
 	}
 
 	async idCardImageChange(event, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -735,12 +735,12 @@ export class StripeFormComponent implements OnInit {
 		console.log("after--->", this.ssn_copy)
 
 	}
-	removeErrorSsn(value:any,type:string){
-		console.log("TYPE----->",type)
-		if(type == 'ssn'){
+	removeErrorSsn(value: any, type: string) {
+		console.log("TYPE----->", type)
+		if (type == 'ssn') {
 			this.ssnErrorMessage = ""
 		}
-		else if(type == 'address'){
+		else if (type == 'address') {
 			this.addressErrorMessage = ""
 		}
 		// else if(type == 'dob'){
@@ -748,7 +748,7 @@ export class StripeFormComponent implements OnInit {
 		// 	this.dobErrorMessage = ""
 		// }
 	}
-	removeDobError(){
+	removeDobError() {
 		console.log("in dobbbbhbbb")
 		this.dobErrorMessage = ""
 	}
@@ -760,23 +760,34 @@ export class StripeFormComponent implements OnInit {
 		if (this.addBankForm.invalid) {
 			return;
 		}
+
+
+		if (this.addBankForm.get('address').value != '' && this.addBankForm.get('latitude').value == '') {
+			this.error.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
+			return;
+		}
+
 		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
-			ssn:this.ssn_copy
+			ssn: this.ssn_copy
 		})
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
 		this.spinner.show();
-		this.travelService.addBankOfAffiliate(this.addBankForm.value,this.travelAgentId)
+		this.travelService.addBankOfAffiliate(this.addBankForm.value, this.travelAgentId)
 			.pipe(
 				catchError(err => {
 					this.addBankForm.patchValue({
-						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+						ssn: this.showOnlyLast4Digit(this.ssn_copy)
 					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
-					
+
 					return throwError(err);
 				})
 			)
@@ -785,32 +796,32 @@ export class StripeFormComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 				this.travelService.getStepsCompleted(this.travelAgentId)
-				.pipe(
-					catchError(err => {
-						return throwError(err);
-					})
-				).subscribe(({ data }: any) => {
-					if (data) {
-						const stepCompleted = data.step_completed;
-						const stepCompletedObj = data.step_completed_obj;
-						sessionStorage.setItem('step_completed_obj',JSON.stringify(stepCompletedObj))
-					this.agentAccountStatus =localStorage.setItem('agentAccountStatus',data?.account_approval)
-					}
-					if(this.agentAccountStatus == 'pending' || this.agentAccountStatus == 'rejected'){
-						this.error.openDialog({
-							errors: {
-							  error: `Please wait!As your account is under approval from admin.We'll notify you once approved.`
-							}
-						  })
-						  this.router.navigate([`/travel_agent/profile/step1`]);
-					}
-					else{
-						this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-						this.router.navigate(['/travel_agent/bookings'])
-					);
-					}
-				
-				});				
+					.pipe(
+						catchError(err => {
+							return throwError(err);
+						})
+					).subscribe(({ data }: any) => {
+						if (data) {
+							const stepCompleted = data.step_completed;
+							const stepCompletedObj = data.step_completed_obj;
+							sessionStorage.setItem('step_completed_obj', JSON.stringify(stepCompletedObj))
+							this.agentAccountStatus = localStorage.setItem('agentAccountStatus', data?.account_approval)
+						}
+						if (this.agentAccountStatus == 'pending' || this.agentAccountStatus == 'rejected') {
+							this.error.openDialog({
+								errors: {
+									error: `Please wait!As your account is under approval from admin.We'll notify you once approved.`
+								}
+							})
+							this.router.navigate([`/travel_agent/profile/step1`]);
+						}
+						else {
+							this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+								this.router.navigate(['/travel_agent/bookings'])
+							);
+						}
+
+					});
 			});
 	}
 	closeButton() {
@@ -824,20 +835,20 @@ export class StripeFormComponent implements OnInit {
 			this.addBankForm.controls.ssn.value
 			// this.addBankForm.controls.mobileIsd.value,
 			// this.addBankForm.controls.mobileCountry.value
-			
-		 ];
-	
-		 
-		 // this.addBankForm.reset();
-		 this.addBankForm.reset();
+
+		];
+
+
+		// this.addBankForm.reset();
+		this.addBankForm.reset();
 		//  this.addBankForm.controls.mobile.patchValue(keepValues[0]);
-		 this.addBankForm.controls.id.patchValue(keepValues[0]);
-		 this.addBankForm.controls.acc_id.patchValue(keepValues[1]);
-		 this.addBankForm.controls.ssn.patchValue(keepValues[2]);
+		this.addBankForm.controls.id.patchValue(keepValues[0]);
+		this.addBankForm.controls.acc_id.patchValue(keepValues[1]);
+		this.addBankForm.controls.ssn.patchValue(keepValues[2]);
 
 		//  this.addBankForm.controls.mobileIsd.patchValue(keepValues[3]);
 		//  this.addBankForm.controls.mobileCountry.patchValue(keepValues[4]);
-		
+
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}

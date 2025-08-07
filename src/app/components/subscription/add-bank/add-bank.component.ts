@@ -19,7 +19,7 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class AddBankComponent implements OnInit {
   @ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
+  geoCoder!: google.maps.Geocoder;
 
 
   public addBankForm: FormGroup;
@@ -88,7 +88,7 @@ export class AddBankComponent implements OnInit {
 
     this.subsciberId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
     this.is_stripe_added = JSON.parse(localStorage.getItem('is_stripe_account_added'))
-    console.log("is stripe",this.is_stripe_added)
+    console.log("is stripe", this.is_stripe_added)
 
 
     const currentYear = (new Date()).getFullYear();
@@ -185,60 +185,60 @@ export class AddBankComponent implements OnInit {
   requestLongitude: number;
 
   ngAfterViewInit(): void {
-		this.mapFunction()
-	}
+    this.mapFunction()
+  }
 
   mapFunction() {
-	
-		//google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
 
-		const autocomplete = new google.maps.places.Autocomplete(
-			this.search1.nativeElement,
-			{
-				types: ['address'] // You can tweak this to 'address', etc.
-			}
-		);
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
 
-		autocomplete.addListener("place_changed", () => {
-			this.ngZone.run(() => {
-				//get the place result
-				const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-				if (!place.geometry || !place.geometry.location) return;
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.search1.nativeElement,
+      {
+        types: ['address'] // You can tweak this to 'address', etc.
+      }
+    );
 
-				this.addBankForm.patchValue({
-					address: place.formatted_address,
-					latitude: place.geometry.location.lat(),
-					longitude: place.geometry.location.lng()
-				});
+    autocomplete.addListener("place_changed", () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) return;
+
+        this.addBankForm.patchValue({
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng()
+        });
 
 
-				// Extract address components
-				place.address_components?.forEach(component => {
-					const types = component.types;
-					if (types.includes('country')) {
-						this.addBankForm.patchValue({
-							country: component.short_name
-						});
-					} else if (types.includes('administrative_area_level_1')) {
-						this.addBankForm.patchValue({
-							state: component.short_name
-						});
-					} else if (types.includes('administrative_area_level_3')) {
-						this.addBankForm.patchValue({
-							city: component.long_name
-						});
-					} else if (types.includes('postal_code')) {
-						this.addBankForm.patchValue({
-							zipCode: component.long_name
-						});
-					}
-				});
-			});
-			this.spinner.hide()
-		});
-		  
-	}
+        // Extract address components
+        place.address_components?.forEach(component => {
+          const types = component.types;
+          if (types.includes('country')) {
+            this.addBankForm.patchValue({
+              country: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_1')) {
+            this.addBankForm.patchValue({
+              state: component.short_name
+            });
+          } else if (types.includes('administrative_area_level_3')) {
+            this.addBankForm.patchValue({
+              city: component.long_name
+            });
+          } else if (types.includes('postal_code')) {
+            this.addBankForm.patchValue({
+              zipCode: component.long_name
+            });
+          }
+        });
+      });
+      this.spinner.hide()
+    });
+
+  }
 
   getFormData() {
     console.log('in function get bank data  agent')
@@ -713,6 +713,16 @@ export class AddBankComponent implements OnInit {
     this.submittedForm = true;
     // stop here if form is invalid
     if (this.addBankForm.invalid) {
+      return;
+    }
+
+
+    if (this.addBankForm.get('address').value != '' && this.addBankForm.get('latitude').value == '') {
+      this.errordialog.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
       return;
     }
 

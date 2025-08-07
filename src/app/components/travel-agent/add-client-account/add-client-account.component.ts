@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 
 @Component({
@@ -37,7 +38,8 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 		private formBuilder: FormBuilder,
 		private $routeurl: ActivatedRoute,
 		private ngZone: NgZone,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private errors: ErrorDialogService
 	) { }
 
 
@@ -185,7 +187,7 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 	}
 
 	initallphonefields() {
-		console.log("in init phone",this.mobileInput,this.workInput)
+		console.log("in init phone", this.mobileInput, this.workInput)
 
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
@@ -294,6 +296,15 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addIndividualAccountForm.invalid) {
+			return;
+		}
+
+		if (this.addIndividualAccountForm.get('address').value != '' && this.addIndividualAccountForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
 			return;
 		}
 

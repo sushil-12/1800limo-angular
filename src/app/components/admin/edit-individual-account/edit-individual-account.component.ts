@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
 	selector: 'app-edit-individual-account',
@@ -34,7 +35,8 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private ngZone: NgZone
+		private ngZone: NgZone,
+		private errors: ErrorDialogService
 	) { }
 
 
@@ -253,6 +255,16 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addIndividualAccountForm.invalid) {
+			return;
+		}
+
+
+		if (this.addIndividualAccountForm.get('address').value != '' && this.addIndividualAccountForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
 			return;
 		}
 

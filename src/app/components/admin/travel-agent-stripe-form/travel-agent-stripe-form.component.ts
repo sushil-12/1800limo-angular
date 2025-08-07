@@ -752,10 +752,22 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 		if (this.addBankForm.invalid) {
 			return;
 		}
+
+		if (this.addBankForm.get('address').value != '' && this.addBankForm.get('latitude').value == '') {
+			this.errordialog.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
+			return;
+		}
+
 		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
 			ssn: this.ssn_copy
 		})
+
+
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
