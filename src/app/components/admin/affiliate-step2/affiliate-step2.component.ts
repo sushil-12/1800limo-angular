@@ -381,13 +381,14 @@ export class AffiliateStep2Component implements OnInit {
 				// Extract address components
 				place.address_components?.forEach(component => {
 					const types = component.types;
+					console.log("{DEBUG} Address file data",types,component)
 					if (types.includes('country')) {
 						this.addBankForm.patchValue({
-							country: component.long_name
+							country: component.short_name
 						});
 					} else if (types.includes('administrative_area_level_1')) {
 						this.addBankForm.patchValue({
-							state: component.long_name
+							state: component.short_name
 						});
 					} else if (types.includes('administrative_area_level_3')) {
 						this.addBankForm.patchValue({

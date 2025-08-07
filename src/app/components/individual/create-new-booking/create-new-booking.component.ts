@@ -553,6 +553,7 @@ export class CreateNewBookingComponent implements OnInit {
 			this.driverImgUrl = response?.data?.driver_image
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false;
 			this.booking_created_from = response?.data?.vehicle_created_by == 1 ? 'admin' : 'subscriber'
+			this.is_master_vehicle = response?.data?.affiliate_type == "unassigned" ? true : false
 
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
@@ -796,7 +797,7 @@ export class CreateNewBookingComponent implements OnInit {
 			if (filling_for === 'passenger') {
 				console.log('--->>>> filling passenger info', data)
 				data.middle_name ?
-					this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
+				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
 				this.SetFormValue('passenger_email', data?.email)
 				this.SetFormValue('passenger_cell', data?.mobile)
 				this.SetFormValue('passenger_cell_isd', data?.mobileIsd)
