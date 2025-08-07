@@ -173,11 +173,11 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 					const types = component.types;
 					if (types.includes('country')) {
 						this.addTravelPlannerAccountForm.patchValue({
-							country: component.long_name
+							country: component.short_name
 						});
 					} else if (types.includes('administrative_area_level_1')) {
 						this.addTravelPlannerAccountForm.patchValue({
-							state: component.long_name
+							state: component.short_name
 						});
 					} else if (types.includes('administrative_area_level_3')) {
 						this.addTravelPlannerAccountForm.patchValue({

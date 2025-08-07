@@ -249,11 +249,11 @@ export class StripeFormComponent implements OnInit {
 					const types = component.types;
 					if (types.includes('country')) {
 						this.addBankForm.patchValue({
-							country: component.long_name
+							country: component.short_name
 						});
 					} else if (types.includes('administrative_area_level_1')) {
 						this.addBankForm.patchValue({
-							state: component.long_name
+							state: component.short_name
 						});
 					} else if (types.includes('administrative_area_level_3')) {
 						this.addBankForm.patchValue({
