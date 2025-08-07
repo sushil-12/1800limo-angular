@@ -11,6 +11,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 
@@ -57,6 +58,7 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private travelAgentService: TravelAgentService,
     private adminService: AdminService,
+    private errors: ErrorDialogService
   ) { }
 
   ngOnInit(): void {
@@ -128,10 +130,10 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
 
   }
 
-  initallphonefields(){
+  initallphonefields() {
 
-    if(this.mobileInput){
-      console.log('onput',this.mobileInput,this.mobileInput.nativeElement)
+    if (this.mobileInput) {
+      console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
       this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
         initialCountry: 'us',
         preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -141,16 +143,16 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
       });
-  
+
       this.mobileInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.MobileObject.getSelectedCountryData();
-        console.log("in change",countryData)
-        this.onCountryChange(countryData,'mobile')
+        console.log("in change", countryData)
+        this.onCountryChange(countryData, 'mobile')
       });
     }
 
-    if(this.workInput){
-      console.log('onput',this.workInput,this.workInput.nativeElement)
+    if (this.workInput) {
+      console.log('onput', this.workInput, this.workInput.nativeElement)
       this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
         initialCountry: 'us',
         preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -160,15 +162,15 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
         utilsScript:
           'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
       });
-  
+
       this.workInput.nativeElement.addEventListener('countrychange', () => {
-        const countryData = this.OfficeObject.getSelectedCountryData(); 
-        console.log("in change",countryData)
+        const countryData = this.OfficeObject.getSelectedCountryData();
+        console.log("in change", countryData)
         this.onCountryChange(countryData, 'work_contact_number');
       });
     }
 
-  
+
 
   }
 
@@ -301,6 +303,16 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
       return;
     }
 
+
+    if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
+      this.errors.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
+      return;
+    }
+
     console.log(this.profileForm.value);
     this.spinner.show();
 
@@ -363,9 +375,11 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
   backButton() {
     this.router.navigate(['/travel_agent/sub-agent-accounts']);
   }
+
   onTimezoneChange(event: any): void {
     const selectedValue = event.value;
     console.log('Selected Timezone:', selectedValue);

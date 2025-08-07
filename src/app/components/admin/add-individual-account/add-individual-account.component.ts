@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
 		private ngZone: NgZone,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private errors: ErrorDialogService
 	) { }
 
 
@@ -230,6 +232,15 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addIndividualAccountForm.invalid) {
+			return;
+		}
+
+		if (this.addIndividualAccountForm.get('address').value != '' && this.addIndividualAccountForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
 			return;
 		}
 

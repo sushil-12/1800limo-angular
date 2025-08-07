@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
 	selector: 'app-edit-travel-planner-account',
@@ -38,7 +39,8 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private ngZone: NgZone
+		private ngZone: NgZone,
+		private errors: ErrorDialogService
 	) { }
 
 
@@ -107,7 +109,7 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				this.FaxObject.setCountry(this.response?.data?.faxCountry);
 			});
 
-		
+
 
 
 
@@ -202,7 +204,7 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				});
 			});
 		});
-		
+
 	}
 
 
@@ -315,6 +317,16 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.editTravelPlannerAccountForm.invalid) {
+			return;
+		}
+
+
+		if (this.editTravelPlannerAccountForm.get('address').value != '' && this.editTravelPlannerAccountForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
 			return;
 		}
 

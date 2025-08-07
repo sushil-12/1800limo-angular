@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 declare var $: any;
@@ -53,6 +54,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private travelAgentService: TravelAgentService,
     private adminService: AdminService,
+    private errors: ErrorDialogService
   ) { }
 
   ngOnInit(): void {
@@ -112,7 +114,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         // Extract address components
         place.address_components?.forEach(component => {
           const types = component.types;
-          console.log("types",types,component)
+          console.log("types", types, component)
           if (types.includes('country')) {
             this.profileForm.patchValue({
               country: component.long_name
@@ -312,6 +314,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.submittedForm = true;
     // stop here if form is invalid
     if (this.profileForm.invalid) {
+      return;
+    }
+
+
+    if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
+      this.errors.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
       return;
     }
 

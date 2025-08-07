@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private affiliateService: AffiliateService,
     private adminService: AdminService,
+    private errors: ErrorDialogService
   ) { }
 
   ngOnInit(): void {
@@ -277,6 +279,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.submittedForm = true;
     // stop here if form is invalid
     if (this.profileForm.invalid) {
+      return;
+    }
+
+
+    if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
+      this.errors.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
       return;
     }
 

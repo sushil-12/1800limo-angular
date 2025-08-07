@@ -11,6 +11,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -93,7 +94,8 @@ export class Step2Component implements OnInit, AfterViewInit {
 		private spinner: NgxSpinnerService,
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private errors: ErrorDialogService
 	) { }
 
 	ngOnInit(): void {
@@ -952,6 +954,17 @@ export class Step2Component implements OnInit, AfterViewInit {
 		if (this.addBankForm.invalid) {
 			return;
 		}
+
+
+		if (this.addBankForm.get('address').value != '' && this.addBankForm.get('latitude').value == '') {
+			this.errors.openDialog({
+				errors: {
+					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+				}
+			})
+			return;
+		}
+
 		this.addBankForm.value.stepCompleted = this.affiliateService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
 			ssn: this.ssn_copy

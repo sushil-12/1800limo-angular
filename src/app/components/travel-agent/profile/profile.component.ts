@@ -451,6 +451,16 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
+
+    if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
+      this.errorDialog.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
+      return;
+    }
+
     console.log(this.profileForm.value);
     // console.log(JSON.stringify(this.addVehicleRatesForm.value));
     this.spinner.show();

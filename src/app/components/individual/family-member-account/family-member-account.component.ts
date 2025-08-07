@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { IndividualService } from '../../../services/individual.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import * as intlTelInput from 'intl-tel-input';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
   selector: 'app-family-member-account',
@@ -35,6 +36,7 @@ export class FamilyMemberAccountComponent implements OnInit {
     private formBuilder: FormBuilder,
     private $routeurl: ActivatedRoute,
     private ngZone: NgZone,
+    private errors: ErrorDialogService
   ) { }
 
 
@@ -239,6 +241,16 @@ export class FamilyMemberAccountComponent implements OnInit {
     this.submittedForm = true;
     // stop here if form is invalid
     if (this.addFamilyMemberAccountForm.invalid) {
+      return;
+    }
+
+
+    if (this.addFamilyMemberAccountForm.get('address').value != '' && this.addFamilyMemberAccountForm.get('latitude').value == '') {
+      this.errors.openDialog({
+        errors: {
+          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+        }
+      })
       return;
     }
 
