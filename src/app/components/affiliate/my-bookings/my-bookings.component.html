@@ -1492,7 +1492,7 @@
 							</div>
 						</div>
 					</div>
-					<hr>
+					
 
 					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
@@ -1522,7 +1522,8 @@
 					</div>
 
 					<!-- Rates Distribution -->
-					<div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
+					<div class="distribution_rate" *ngIf="(bookingPreview?.payment_status != 'paid' && bookingPreview?.payment_status != 'transfer_failed')">
+						<hr>
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
