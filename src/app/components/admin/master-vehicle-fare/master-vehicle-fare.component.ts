@@ -14,8 +14,7 @@ declare var $: any;
 	templateUrl: './master-vehicle-fare.component.html',
 	styleUrls: ['./master-vehicle-fare.component.scss']
 })
-export class MasterVehicleFareComponent implements OnInit
-{
+export class MasterVehicleFareComponent implements OnInit {
 	VehicleRateSettingsForm: FormGroup
 
 	is_form_submitted: boolean = false
@@ -25,7 +24,7 @@ export class MasterVehicleFareComponent implements OnInit
 	currency_options: any
 	rate_range_object: any = {}
 	thumb_value: number = 0
-	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+	public ratesArrayValues = [0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 	constructor(
 		private $api: AdminService,
@@ -35,12 +34,9 @@ export class MasterVehicleFareComponent implements OnInit
 		private $spinner: NgxSpinnerService
 	) { }
 
-	ngOnInit(): void
-	{
-		if (this.buildVehicleRateSettingsForm())
-		{
-			this.$route.queryParams.subscribe((params: any) =>
-			{
+	ngOnInit(): void {
+		if (this.buildVehicleRateSettingsForm()) {
+			this.$route.queryParams.subscribe((params: any) => {
 				// fetch vehicle info and amenities
 				this.SetFormValue('vehicle_id', params.vehicleTypeId)
 				this.fetchVehicleInfo(params.vehicleTypeId)
@@ -48,20 +44,16 @@ export class MasterVehicleFareComponent implements OnInit
 			})
 
 			// fetch currencies
-			this.currencies.then((data: any) =>
-			{
+			this.currencies.then((data: any) => {
 				this.currency_options = data
-				for (let key in this.currency_options)
-				{
+				for (let key in this.currency_options) {
 					const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-					if (key.toLowerCase() == currentUser.phoneCountry.toLowerCase())
-					{
+					if (key.toLowerCase() == currentUser.phoneCountry.toLowerCase()) {
 						this.SetFormValue('currency', this.currency_options[key]['currencyCountry'])
 						this.currency_symbol = this.currency_options[key]['symbol']
 					}
 				}
-			}, (error: string) =>
-			{
+			}, (error: string) => {
 				console.error(error)
 			})
 
@@ -71,22 +63,17 @@ export class MasterVehicleFareComponent implements OnInit
 	// NGONINIT ENDS
 
 
-	get form()
-	{
+	get form() {
 		return this.VehicleRateSettingsForm.controls
 	}
 
 	/**
 	 * Fetch the currencies from static JSON files
 	 */
-	get currencies()
-	{
-		return new Promise((resolve, reject) =>
-		{
-			this.$api.getCurrencies().subscribe((response: any) =>
-			{
-				if (!response || Object.keys(response).length == 0 || response.length == 0)
-				{
+	get currencies() {
+		return new Promise((resolve, reject) => {
+			this.$api.getCurrencies().subscribe((response: any) => {
+				if (!response || Object.keys(response).length == 0 || response.length == 0) {
 					reject("Could not fetch Currencies. ")
 					return // end the function
 				}
@@ -101,8 +88,7 @@ export class MasterVehicleFareComponent implements OnInit
 	 * @params form_control: String [Required] Form Control name
 	 * @params value: String [Required] value to be saved in form
 	 */
-	SetFormValue(form_control: string, value: any)
-	{
+	SetFormValue(form_control: string, value: any) {
 		console.log('Setting Value of ', form_control, ': ', value)
 		this.VehicleRateSettingsForm.get(form_control).setValue(value)
 		this.VehicleRateSettingsForm.updateValueAndValidity()
@@ -114,10 +100,9 @@ export class MasterVehicleFareComponent implements OnInit
 	 * like saving a form value or assigning a variable
 	 */
 	changeDetection = {
-		radioButton: (value: string, form_control: string) =>
-		{
+		radioButton: (value: string, form_control: string) => {
 			this.SetFormValue(form_control, value)
-			if(value =="kilometer"){
+			if (value == "kilometer") {
 				console.log('set validator for km')
 				this.VehicleRateSettingsForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72), Validators.max(15)]); // Set back the validator
 				this.VehicleRateSettingsForm.get('upto_km')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]); // Set back the validator
@@ -132,7 +117,7 @@ export class MasterVehicleFareComponent implements OnInit
 				this.VehicleRateSettingsForm.get('upto_miles')?.updateValueAndValidity();
 				this.VehicleRateSettingsForm.get('after_mileage_rate')?.updateValueAndValidity();
 			}
-			else if(value =="mile"){
+			else if (value == "mile") {
 				console.log('set validator for mile')
 				this.VehicleRateSettingsForm.get('milage_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(2.1), Validators.max(15)]); // Set back the validator
 				this.VehicleRateSettingsForm.get('upto_miles')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]); // Set back the validator
@@ -146,21 +131,17 @@ export class MasterVehicleFareComponent implements OnInit
 				this.VehicleRateSettingsForm.get('kilometer_rate')?.updateValueAndValidity();
 				this.VehicleRateSettingsForm.get('upto_km')?.updateValueAndValidity();
 				this.VehicleRateSettingsForm.get('after_kilometer_rate')?.updateValueAndValidity();
-				
+
 			}
 		},
-		currencySymbol: (value: any) =>
-		{
-			for (let key in this.currency_options)
-			{
-				if (key == value.currencyCountry)
-				{
+		currencySymbol: (value: any) => {
+			for (let key in this.currency_options) {
+				if (key == value.currencyCountry) {
 					this.currency_symbol = this.currency_options[key]['currency']
 				}
 			}
 		},
-		gratuity: (new_value: any, form_control: string) =>
-		{
+		gratuity: (new_value: any, form_control: string) => {
 			this.SetFormValue(form_control, new_value ? 'yes' : 'no')
 		}
 	}
@@ -168,8 +149,7 @@ export class MasterVehicleFareComponent implements OnInit
 	/**
 	 * Build the form and applies the validations
 	 */
-	buildVehicleRateSettingsForm(): boolean
-	{
+	buildVehicleRateSettingsForm(): boolean {
 		this.VehicleRateSettingsForm = this.$form.group({
 			id: [''],
 			acc_id: [''],
@@ -193,8 +173,8 @@ export class MasterVehicleFareComponent implements OnInit
 			minimum_cruise_port_departure_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_on_demand_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			per_person_group_ride_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			in_town_extra_stop : [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			outside_town_extra_stop : [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			in_town_extra_stop: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			outside_town_extra_stop: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			airport_city_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -218,65 +198,56 @@ export class MasterVehicleFareComponent implements OnInit
 			state_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			vat: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			workmans_comp: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]]
+			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			wait_time_cost: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			wait_time_unit: ['minute'],
+			wait_time_value: ['15']
 		})
 
-		if (this.VehicleRateSettingsForm)
-		{
+		if (this.VehicleRateSettingsForm) {
 			return true
 		}
-		else
-		{
+		else {
 			return false
 		}
 	}
 
-	prefillTheForm(current_selected_vehicle: number = 0)
-	{
+	prefillTheForm(current_selected_vehicle: number = 0) {
 		this.VehicleRateSettingsForm.get('hourly_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.VehicleRateSettingsForm.patchValue({ hourly_rate_after_five_hours: value });
 			}
 		);
 		this.VehicleRateSettingsForm.get('hourly_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.dayRateCalculations()
 			}
 		);
 		this.VehicleRateSettingsForm.get('hourly_rate_after_five_hours').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.dayRateCalculations()
 			}
 		);
 		this.VehicleRateSettingsForm.get('hours_day_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.dayRateCalculations()
 			}
 		);
 
 		// fetch previous vehicle rates on edit case
 		(current_selected_vehicle != 0 || current_selected_vehicle != null) && this.$api.getMasterVehicleRates(current_selected_vehicle).pipe(
-			catchError(err =>
-			{
+			catchError(err => {
 				console.error('Error: ', err)
 				return throwError(err)
 			})
-		).subscribe((response: any) =>
-		{
+		).subscribe((response: any) => {
 			if (response.data == null) return
 
 
 
-			if (this.currency_options)
-			{
-				for (let key in this.currency_options)
-				{
-					if (key == response.data.currency)
-					{
+			if (this.currency_options) {
+				for (let key in this.currency_options) {
+					if (key == response.data.currency) {
 						this.SetFormValue('currency', this.currency_options[key]['currencyCountry'])
 						this.currency_symbol = this.currency_options[key]['symbol']
 					}
@@ -333,39 +304,34 @@ export class MasterVehicleFareComponent implements OnInit
 				booster_seat: response.data.booster_seat,
 				bike_rack: response.data.bike_rack,
 				per_diem: response.data.per_diem,
-				in_town_extra_stop : response.data?.in_town_extra_stop,
-				outside_town_extra_stop : response.data?.outside_town_extra_stop
+				in_town_extra_stop: response.data?.in_town_extra_stop,
+				outside_town_extra_stop: response.data?.outside_town_extra_stop,
+				wait_time_cost: response.data?.wait_time_cost || 0
 			});
-			this.changeDetection.radioButton(response.data.km_mile ?? 'mile','km_mile')
+			this.changeDetection.radioButton(response.data.km_mile ?? 'mile', 'km_mile')
 			this.updateRateRangeObject();
 		})
 		this.initRateRangeObject();
 	}
 
-	fetchVehicleInfo(vehicle_id: number = 0): boolean
-	{
-		if (vehicle_id == 0 || vehicle_id == null)
-		{
+	fetchVehicleInfo(vehicle_id: number = 0): boolean {
+		if (vehicle_id == 0 || vehicle_id == null) {
 			console.log('Vehicle Not selected. ')
 			this.$router.navigate(['/admin/master-vehicle-types'])
 			return false
 		}
 		this.$spinner.show()
 		this.$api.getMasterVehicleInfo(vehicle_id).pipe(
-			catchError(err =>
-			{
+			catchError(err => {
 				this.$spinner.hide()
 				console.error('Error: ', err)
 				return throwError(err)
 			})
-		).subscribe((response: any) =>
-		{
+		).subscribe((response: any) => {
 			this.$spinner.hide()
 			this.vehicle_info = response.data
-			if (response.data.amenities)
-			{
-				for (let key in response.data.amenities)
-				{
+			if (response.data.amenities) {
+				for (let key in response.data.amenities) {
 					this.AmenitiesRates.addControl(key, this.$form.group({ ...response.data.amenities[key] }))
 				}
 			}
@@ -376,8 +342,7 @@ export class MasterVehicleFareComponent implements OnInit
 	/**
 	 * Day Rate Calculations
 	 */
-	dayRateCalculations()
-	{
+	dayRateCalculations() {
 		let dayRateValue = (this.VehicleRateSettingsForm.get('hourly_rate').value * 5) + (this.VehicleRateSettingsForm.get('hourly_rate_after_five_hours').value * (this.VehicleRateSettingsForm.get('hours_day_rate').value - 5));
 		this.VehicleRateSettingsForm.patchValue({
 			day_rate: dayRateValue
@@ -385,51 +350,40 @@ export class MasterVehicleFareComponent implements OnInit
 	}
 
 
-	changeAmenityRate(babySeatKey, babySeatValue)
-	{
+	changeAmenityRate(babySeatKey, babySeatValue) {
 		//changes in amenity rates formGroup
-		if (babySeatValue.label == 'Baby_Seat')
-		{
+		if (babySeatValue.label == 'Baby_Seat') {
 			Object.entries(this.VehicleRateSettingsForm.value.amenities_rates).forEach(
-				([key, value]: any) =>
-				{
-					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_')
-					{
+				([key, value]: any) => {
+					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
 						(this.AmenitiesRates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
 					}
 				});
 		}
 	}
 
-	get AmenitiesRates()
-	{
+	get AmenitiesRates() {
 		return this.VehicleRateSettingsForm.get("amenities_rates") as FormGroup
 	}
 
-	createItem(e): FormGroup
-	{
+	createItem(e): FormGroup {
 		return this.$form.group({ ...e });
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.VehicleRateSettingsForm.value);
 
 		this.form.km_mile.value == 'mile' ? this.SetFormValue('kilometer_rate', 0) : this.SetFormValue('milage_rate', 0)
 
 
 		let tree = this.$router.parseUrl(this.$router.url);
-		if (tree.root.children.primary.segments[2])
-		{
+		if (tree.root.children.primary.segments[2]) {
 			var lastPartUrl = tree.root.children.primary.segments[2].path;
-			if (lastPartUrl == 'step5')
-			{
+			if (lastPartUrl == 'step5') {
 				let currentUser = JSON.parse(localStorage.getItem('currentUser'))
 				let stepCompleted = JSON.parse(localStorage.getItem('stepCompleted'))
-				if (currentUser.account_id)
-				{
-					if (parseInt(stepCompleted) >= 4)
-					{
+				if (currentUser.account_id) {
+					if (parseInt(stepCompleted) >= 4) {
 						this.VehicleRateSettingsForm.patchValue({
 							acc_id: currentUser.account_id
 						});
@@ -442,8 +396,7 @@ export class MasterVehicleFareComponent implements OnInit
 
 		// stop here if form is invalid
 		console.log(this.VehicleRateSettingsForm)
-		if (this.VehicleRateSettingsForm.invalid)
-		{
+		if (this.VehicleRateSettingsForm.invalid) {
 			this.is_form_submitted = false
 			return;
 		}
@@ -452,15 +405,13 @@ export class MasterVehicleFareComponent implements OnInit
 
 		this.$api.editMasterVehicleRates(this.VehicleRateSettingsForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.$spinner.hide();//hide spinner
 					this.is_form_submitted = false; //disable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe((response: any) =>
-			{
+			.subscribe((response: any) => {
 				this.$spinner.hide();//hide spinner
 				this.is_form_submitted = true; //disable submit button
 
@@ -475,36 +426,18 @@ export class MasterVehicleFareComponent implements OnInit
 	 * @params form_control_source: Source string to copy the value from
 	 * @params form_control_target: Target string to copy the value to
 	 */
-	cloneValue(form_control_source: string, form_control_target: string)
-	{
+	cloneValue(form_control_source: string, form_control_target: string) {
 		console.log('Cloning.')
 		this.SetFormValue(form_control_target, this.VehicleRateSettingsForm.get(form_control_source).value)
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
-	initRateRangeObject(): boolean
-	{
-		let form_control_names = ['milage_rate','upto_miles','after_mileage_rate','upto_km','after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'early_late_charges', 'holiday_charges', 'friday_saturday_charges', 'per_person_group_ride_rate']
-		form_control_names.forEach((name: string) =>
-		{
+	initRateRangeObject(): boolean {
+		let form_control_names = ['milage_rate', 'upto_miles', 'after_mileage_rate', 'upto_km', 'after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'early_late_charges', 'holiday_charges', 'friday_saturday_charges', 'per_person_group_ride_rate', 'wait_time_cost']
+		form_control_names.forEach((name: string) => {
 			this.rate_range_object[name] = this.VehicleRateSettingsForm.get(name).value ?? 0
 		})
 		console.log('Rate Range Object Initialised ', this.rate_range_object)
@@ -515,10 +448,8 @@ export class MasterVehicleFareComponent implements OnInit
 	 * Updates the rate range object with new value if touched
 	 * @param form_name name of the form control
 	 */
-	updateRateRangeObject()
-	{
-		for (let form_name in this.rate_range_object)
-		{
+	updateRateRangeObject() {
+		for (let form_name in this.rate_range_object) {
 			// console.log(form_name, typeof this.VehicleRateSettingsForm.get(form_name).value)
 			this.rate_range_object[form_name] = parseFloat(this.VehicleRateSettingsForm.get(form_name).value.toFixed(2))
 		}
@@ -529,29 +460,23 @@ export class MasterVehicleFareComponent implements OnInit
 	 * 
 	 * @param range_value current value of the slider
 	 */
-	getRateRange(range_value: number)
-	{
+	getRateRange(range_value: number) {
 		console.log('range_value', range_value)
 		this.thumb_value = range_value
 		this.SetFormValue('rate_range', range_value)
 		// --------- For Flat ------------------
-		if (this.form.rate_range_percent_flat.value == 'flat')
-		{
+		if (this.form.rate_range_percent_flat.value == 'flat') {
 			// for neutral
-			if (range_value == 0)
-			{
-				for (const key in this.rate_range_object)
-				{
+			if (range_value == 0) {
+				for (const key in this.rate_range_object) {
 					this.SetFormValue('rate_range', '0')
 					this.SetFormValue(key, this.rate_range_object[key])
 				}
 			}
 
 			// for negative side indicator
-			if (range_value < 0)
-			{
-				for (const key in this.rate_range_object)
-				{
+			if (range_value < 0) {
+				for (const key in this.rate_range_object) {
 					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
 					// decrease by number and set value upto two decimal places and update
 					// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) - Math.abs(range_value)) * 100) / 100
@@ -561,10 +486,8 @@ export class MasterVehicleFareComponent implements OnInit
 			}
 
 			// for positive side indicator
-			if (range_value > 0)
-			{
-				for (const key in this.rate_range_object)
-				{
+			if (range_value > 0) {
+				for (const key in this.rate_range_object) {
 					this.rate_range_object[key] == null && this.SetFormValue(key, 0) 	// set 0 if null
 
 					// let value = this.rate_range_object[key]
@@ -577,22 +500,17 @@ export class MasterVehicleFareComponent implements OnInit
 			console.log(this.rate_range_object)
 		}
 		// -------------- For Percentage ------------------
-		else
-		{
+		else {
 			// for neutral
-			if (range_value == 0)
-			{
-				for (const key in this.rate_range_object)
-				{
+			if (range_value == 0) {
+				for (const key in this.rate_range_object) {
 					this.SetFormValue('rate_range', '0')
 					this.SetFormValue(key, this.rate_range_object[key])
 				}
 			}
 			// for negative side indicator
-			if (range_value < 0)
-			{
-				for (const key in this.rate_range_object)
-				{
+			if (range_value < 0) {
+				for (const key in this.rate_range_object) {
 					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
 
 					// decrease by percentage and set value upto two decimal places and update
@@ -603,10 +521,8 @@ export class MasterVehicleFareComponent implements OnInit
 			}
 
 			// for positive side indicator
-			if (range_value > 0)
-			{
-				for (const key in this.rate_range_object)
-				{
+			if (range_value > 0) {
+				for (const key in this.rate_range_object) {
 					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
 
 					// decrease by percentage and set value upto two decimal places and update
@@ -623,14 +539,11 @@ export class MasterVehicleFareComponent implements OnInit
 	 * 
 	 * @params value: Number [Required] expected values(1/-1)
 	 */
-	changeThumb(value: number, style?: string)
-	{
-		if (style == '+')
-		{
+	changeThumb(value: number, style?: string) {
+		if (style == '+') {
 			this.getRateRange(this.thumb_value + value)
 		}
-		if (style == '-')
-		{
+		if (style == '-') {
 			this.getRateRange(this.thumb_value - value)
 		}
 	}
@@ -639,18 +552,16 @@ export class MasterVehicleFareComponent implements OnInit
 	/**
 	 * Resets the whole form to initial values i.e. when the form is newly built
 	 */
-	resetForm()
-	
-		{
-			const keepValues = [
+	resetForm() {
+		const keepValues = [
 			this.VehicleRateSettingsForm.controls.acc_id.value,
 			this.VehicleRateSettingsForm.controls.id.value,
-			]
-			
-		
-		 this.VehicleRateSettingsForm.reset();
-		 this.VehicleRateSettingsForm.controls.acc_id.patchValue(keepValues[0]);
-		 this.VehicleRateSettingsForm.controls.id.patchValue(keepValues[1]);
+		]
+
+
+		this.VehicleRateSettingsForm.reset();
+		this.VehicleRateSettingsForm.controls.acc_id.patchValue(keepValues[0]);
+		this.VehicleRateSettingsForm.controls.id.patchValue(keepValues[1]);
 
 		console.log(this.VehicleRateSettingsForm.value)
 	}

@@ -40,7 +40,7 @@ export class AddVehicleRatesComponent implements OnInit {
 	rate_range_object: any = {}
 	thumb_value: number = 0;
 	relativeVehicleId: any;
-	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+	public ratesArrayValues = [0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 
 	constructor(
@@ -132,6 +132,9 @@ export class AddVehicleRatesComponent implements OnInit {
 			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			wait_time_cost: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			wait_time_unit: ['minute'],
+			wait_time_value: ['15']
 		});
 		//autopopulate values of departure in arrival
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
@@ -325,7 +328,8 @@ export class AddVehicleRatesComponent implements OnInit {
 					friday_saturday_charges: this.response.data.friday_saturday_charges,
 					holiday_charges: this.response.data.holiday_charges,
 					in_town_extra_stop: this.response.data?.in_town_extra_stop,
-					outside_town_extra_stop: this.response.data?.outside_town_extra_stop
+					outside_town_extra_stop: this.response.data?.outside_town_extra_stop,
+					wait_time_cost: this.response.data?.wait_time_cost || 0
 				});
 				this.km_mile_switch(this.response.data.km_mile);//show selected input field 
 				// this.stateManagementService.setprogressBar(false);
@@ -380,10 +384,10 @@ export class AddVehicleRatesComponent implements OnInit {
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
 	initRateRangeObject(): boolean {
-		let form_control_names = ['milage_rate','upto_miles','after_mileage_rate','upto_km','after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours',
+		let form_control_names = ['milage_rate', 'upto_miles', 'after_mileage_rate', 'upto_km', 'after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours',
 			'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate',
 			'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'in_town_extra_stop', 'outside_town_extra_stop',
-			'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
+			'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate', 'wait_time_cost']
 		form_control_names.forEach((name: string) => {
 			this.rate_range_object[name] = this.addVehicleRatesForm.get(name).value ?? 0
 		})

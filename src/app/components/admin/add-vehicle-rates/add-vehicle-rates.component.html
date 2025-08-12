@@ -492,7 +492,7 @@
 						<!-- <span matPrefix
 								*ngIf="f.minimum_city_rate.value == null || f.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
 								0 &nbsp;</span> -->
-							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<!-- <mat-select formControlName="minimum_city_rate" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
 							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
@@ -868,6 +868,19 @@
 					<div *ngIf="submittedForm && f.outside_town_extra_stop.errors || f.outside_town_extra_stop.touched && f.outside_town_extra_stop.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Wait Time Rate - per 15 min <span class="asterisk">*</span></mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<input matInput type="number" placeholder="Wait Time Rate - per 15 min"
+							(change)="updateRateRangeObject()" formControlName="wait_time_cost" tabindex="1"
+							(focus)="$event.target.select()" />
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.wait_time_cost.errors || f.wait_time_cost.touched && f.wait_time_cost.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.wait_time_cost.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
 			</div>
