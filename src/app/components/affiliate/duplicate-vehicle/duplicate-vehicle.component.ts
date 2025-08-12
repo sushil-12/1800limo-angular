@@ -477,6 +477,9 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 
 	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
+		this.addVehicleForm.patchValue({
+			charterCancelPolicy : event.target.value
+		})
 		this.changeNonCharterCancelPolicy = true
 	}
 	handleChangeCharterCancelPolicy(event) {
