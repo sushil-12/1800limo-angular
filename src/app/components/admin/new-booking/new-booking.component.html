@@ -736,7 +736,7 @@
 						<mat-label>
 							Name <span class="asterisk">*</span>
 						</mat-label>
-						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
+						<input type="text" #lose_aff_name_input matInput placeholder="Full Name" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_name" (keyup)="handleLooseAffiliateName()" />
 					</mat-form-field>
 					<div class="error-box">
