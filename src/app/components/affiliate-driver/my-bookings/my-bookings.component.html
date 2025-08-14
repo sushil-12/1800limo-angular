@@ -87,8 +87,7 @@
             </div>
             <div class="row pl-2">
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-                        {{useDateFilter ? 'Uncheck to see current and future bookings' :
-                        'Check box to see next 7 days bookings, change calender, or search by any term (name, booking#, airport, city, cell phone, status, $ amount, vehicle type)' }}
+                    {{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and see the next 7 days future bookings, or change the start date, click search, and see past bookings from that date' }}
                     </mat-checkbox></p>
             </div>
         </div>

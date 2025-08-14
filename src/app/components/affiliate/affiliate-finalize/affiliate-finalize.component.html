@@ -362,15 +362,34 @@
 
 </section>
 
-
-
+<section class="section-container mt-2">
+	<h4 class="m-0">
+		Waiting Time (if any)
+	</h4>
+	<form [formGroup]="finalizeDataForm" appInvalidControlScroll>
+		<div class="row px-4">
+			<div class="col-md-4 mb-2">
+				<mat-form-field appearance="outline">
+					<mat-label>Enter waiting time</mat-label>
+					<input matInput placeholder="Enter waiting time" formControlName="waiting_time_in_mins" tabindex="1"
+						(focus)="$event.target.select()">
+				</mat-form-field>
+				<div *ngIf="submittedForm && f.waiting_time_in_mins.errors || f.waiting_time_in_mins.touched && f.waiting_time_in_mins.errors"
+					class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f.waiting_time_in_mins.errors.pattern">Enter Numbers only</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
 
 <section class="section-container mt-2">
 	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 		(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance" [isTravelShare]="isTravelShare"
 		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
-		[isCreatedByAdmin]="isCreatedByAdmin" [isFarmoutBooking]="isFarmoutBooking" [service_type]="service_type">
+		[isCreatedByAdmin]="isCreatedByAdmin" [isFarmoutBooking]="isFarmoutBooking" [service_type]="service_type"
+		[waiting_time_in_mins]="f.waiting_time_in_mins.value" [wait_time_cost]="wait_time_cost">
 	</app-affiliate-finalize-rates>
 	<div class="row" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
 		<div class="col-md-12 text-right">
@@ -669,7 +688,8 @@
 	</div>
 </div>
 
-<div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal" aria-hidden="true">
+<div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-success">

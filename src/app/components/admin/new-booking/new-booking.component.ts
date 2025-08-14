@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
@@ -17,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { constant_data } from '../../../../assets/js/data';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
+import { P } from '@angular/cdk/keycodes';
 
 declare var $: any
 
@@ -27,6 +28,8 @@ declare var $: any
 })
 export class NewBookingComponent implements OnInit {
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
+	@ViewChild('lose_aff_name_input') lose_aff_name_input: ElementRef;
+
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
@@ -171,6 +174,7 @@ export class NewBookingComponent implements OnInit {
 	booking_created_from: string = 'admin';
 	veh_created_by: any;
 	minDate = new Date();
+	waiting_time_in_mins: any = 0 ;
 
 	constructor(
 		private $form: FormBuilder,
@@ -850,6 +854,7 @@ export class NewBookingComponent implements OnInit {
 			})
 			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
+			this.waiting_time_in_mins = this.bookingResponse?.waiting_time_in_mins
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
@@ -3280,8 +3285,12 @@ export class NewBookingComponent implements OnInit {
 			if (value == 'loose_affiliate') {
 				setTimeout(() => {
 					this.initphonefield()
+					if (this.lose_aff_name_input) {
+						this.lose_aff_name_input.nativeElement.focus()
+					}
 				}, 200)
 				this.fetchAffiliates('loose_affiliate')
+
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])

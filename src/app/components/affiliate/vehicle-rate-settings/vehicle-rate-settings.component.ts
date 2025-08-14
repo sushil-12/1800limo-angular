@@ -29,7 +29,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 	thumb_value: number = 0
 	duplicateVehicleId: any;
 	vehcileId: any;
-	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+	public ratesArrayValues = [0, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 
 	constructor(
@@ -178,7 +178,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: [0, [Validators.required, Validators.min(0.1), Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_charter_hours:[2, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_charter_hours: [2, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hourly_rate_after_five_hours: [0, [Validators.required, Validators.min(0.1), Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			day_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -222,6 +222,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			wait_time_cost: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			wait_time_unit: ['minute'],
+			wait_time_value: ['15']
 		})
 		this.changeDetection.radioButton('km_mile', 'mile')
 
@@ -294,7 +297,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 				id: response.data.id,
 				vehicle_id: response.data.vehicle_id,
 				hourly_rate: response.data.hourly_rate ?? 0,
-				minimum_charter_hours:Number(response.data?.minimum_charter_hours),
+				minimum_charter_hours: Number(response.data?.minimum_charter_hours),
 				hourly_rate_after_five_hours: response.data.hourly_rate_after_five_hours ?? 0,
 				hours_day_rate: response.data.hours_day_rate ?? 0,
 				day_rate: response.data.day_rate ?? 0,
@@ -343,7 +346,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 				outside_town_extra_stop: response.data.outside_town_extra_stop,
 				early_late_charges: response.data.early_late_charges,
 				holiday_charges: response.data.holiday_charges,
-				friday_saturday_charges: response.data.friday_saturday_charges
+				friday_saturday_charges: response.data.friday_saturday_charges,
+				wait_time_cost: response.data.wait_time_cost ?? 0
 			});
 			console.group(this.VehicleRateSettingsForm)
 			console.groupEnd()
@@ -414,7 +418,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 				id: response.data.id,
 				vehicle_id: response.data.vehicle_id,
 				hourly_rate: response.data.hourly_rate ?? 0,
-				minimum_charter_hours:Number(response.data?.minimum_charter_hours),
+				minimum_charter_hours: Number(response.data?.minimum_charter_hours),
 				hourly_rate_after_five_hours: response.data.hourly_rate_after_five_hours ?? 0,
 				hours_day_rate: response.data.hours_day_rate ?? 0,
 				day_rate: response.data.day_rate ?? 0,
@@ -463,7 +467,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 				outside_town_extra_stop: response.data.outside_town_extra_stop,
 				early_late_charges: response.data.early_late_charges,
 				holiday_charges: response.data.holiday_charges,
-				friday_saturday_charges: response.data.friday_saturday_charges
+				friday_saturday_charges: response.data.friday_saturday_charges,
+				wait_time_cost: response.data.wait_time_cost ?? 0
 			});
 			console.group(this.VehicleRateSettingsForm)
 			console.groupEnd()
@@ -659,7 +664,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
 	initRateRangeObject(): boolean {
-		let form_control_names = ['milage_rate' ,'upto_miles','after_mileage_rate','upto_km','after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
+		let form_control_names = ['milage_rate', 'upto_miles', 'after_mileage_rate', 'upto_km', 'after_kilometer_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate', 'wait_time_cost']
 		form_control_names.forEach((name: string) => {
 			this.rate_range_object[name] = this.VehicleRateSettingsForm.get(name).value ?? 0
 		})
@@ -787,16 +792,16 @@ export class VehicleRateSettingsComponent implements OnInit {
 		this.VehicleRateSettingsForm.patchValue({
 			currency: '$',
 			hourly_rate: 0,
-			minimum_charter_hours:2,
+			minimum_charter_hours: 2,
 			hourly_rate_after_five_hours: 0,
 			hours_day_rate: 8,
 			day_rate: 0,
 			km_mile: 'mile',
 			milage_rate: '',
-			after_mileage_rate:'',
-			after_kilometer_rate:'',
-			upto_miles:'',
-			upto_km:'',
+			after_mileage_rate: '',
+			after_kilometer_rate: '',
+			upto_miles: '',
+			upto_km: '',
 			kilometer_rate: '',
 			minimum_airport_departure_rate: 0,
 			minimum_airport_arrival_rate: 0,

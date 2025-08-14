@@ -26,6 +26,8 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
 	@Input('service_type') service_type: any;
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
+	@Input('waiting_time_in_mins') waiting_time_in_mins: any;
+	@Input('wait_time_cost') wait_time_cost: any;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
@@ -186,6 +188,25 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				this.initReturnRates()
 				this.calculateTotal('ReturnRatesForm')
 				this.calculateGrandTotal('ReturnRatesForm')
+			}
+		}
+
+		// push rates in wait bucket based upon the waiting time
+		if (changes.waiting_time_in_mins) {
+			if (this.waiting_time_in_mins <= 15) {
+				this.handleNegtiveValue('all_inclusive_rates', 'Wait', 'baserate', 0)
+			}
+			else if (this.waiting_time_in_mins <= 30 && this.waiting_time_in_mins > 15) {
+				this.handleNegtiveValue('all_inclusive_rates', 'Wait', 'baserate', Number(this.wait_time_cost))
+			}
+			else if (this.waiting_time_in_mins <= 45 && this.waiting_time_in_mins > 30) {
+				this.handleNegtiveValue('all_inclusive_rates', 'Wait', 'baserate', Number(this.wait_time_cost) * 2)
+			}
+			else if (this.waiting_time_in_mins <= 60 && this.waiting_time_in_mins > 45) {
+				this.handleNegtiveValue('all_inclusive_rates', 'Wait', 'baserate', Number(this.wait_time_cost) * 3)
+			}
+			else if (this.waiting_time_in_mins > 60) {
+				this.handleNegtiveValue('all_inclusive_rates', 'Wait', 'baserate', Number(this.wait_time_cost) * 4)
 			}
 		}
 	}
@@ -485,7 +506,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			if (this.isTravelShare && !this.isCreatedByAdmin) {
 				this.affiliatePayout = this.grandtotal - this.calc_admin_share - this.travel_agent_share;
 			}
-			else{
+			else {
 				this.affiliatePayout = this.grandtotal - this.calc_admin_share
 			}
 		}

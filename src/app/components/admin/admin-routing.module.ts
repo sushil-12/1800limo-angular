@@ -56,11 +56,6 @@ import { AboutUsComponent } from './cms/about-us/about-us.component';
 import { AboutUsEditComponent } from './cms/about-us-edit/about-us-edit.component';
 import { Step6Component } from './cms/step6/step6.component';
 import { EditStep6Component } from './cms/edit-step6/edit-step6.component';
-import { EditMasterVehicleComponent } from './edit-master-vehicle/edit-master-vehicle.component';
-import { MasterVehiclesComponent } from './master-vehicles/master-vehicles.component';
-import { AddMasterVehicleComponent } from './add-master-vehicle/add-master-vehicle.component';
-import { AddMasterVehicleRatesComponent } from './add-master-vehicle-rates/add-master-vehicle-rates.component';
-import { EditMasterVehicleRatesComponent } from './edit-master-vehicle-rates/edit-master-vehicle-rates.component';
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
@@ -159,28 +154,8 @@ const routes: Routes = [
 		component: MasterVehicleTypesComponent
 	},
 	{
-		path: 'master-vehicle-types/vehicles',
-		component: MasterVehiclesComponent
-	},
-	{
-		path: 'master-vehicle-types/edit-vehicle',
-		component: EditMasterVehicleComponent
-	},
-	{
-		path: 'master-vehicle-types/add-vehicle',
-		component: AddMasterVehicleComponent
-	},
-	{
 		path: 'master-vehicle-types/master-vehicle-fare',
 		component: MasterVehicleFareComponent
-	},
-	{
-		path: 'master-vehicle-types/add-vehicle-rate',
-		component: AddMasterVehicleRatesComponent
-	},
-	{
-		path: 'master-vehicle-types/edit-vehicle-rate',
-		component: EditMasterVehicleRatesComponent
 	},
 	{
 		path: 'add-vehicle',

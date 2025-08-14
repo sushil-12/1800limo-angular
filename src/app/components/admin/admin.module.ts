@@ -72,15 +72,8 @@ import { AboutUsEditComponent } from './cms/about-us-edit/about-us-edit.componen
 import { EditStep6Component } from './cms/edit-step6/edit-step6.component';
 import { Step6Component } from './cms/step6/step6.component';
 import { AffiliateAccountsComponent } from './affiliate-accounts/affiliate-accounts.component';
-import { EditMasterVehicleComponent } from './edit-master-vehicle/edit-master-vehicle.component';
-import { AddMasterVehicleComponent } from './add-master-vehicle/add-master-vehicle.component';
-import { MasterVehiclesComponent } from './master-vehicles/master-vehicles.component';
-
 import { SharedModule } from '../shared/shared.module';
-import { AddMasterVehicleRatesComponent } from './add-master-vehicle-rates/add-master-vehicle-rates.component';
-import { EditMasterVehicleRatesComponent } from './edit-master-vehicle-rates/edit-master-vehicle-rates.component';
 // import { InvalidControlScrollDirective } from 'src/app/directives/scroll-to-invalid.directive';
-
 import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component';
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
@@ -180,11 +173,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		EditStep6Component,
 		Step6Component,
 		AffiliateAccountsComponent,
-		EditMasterVehicleComponent,
-		MasterVehiclesComponent,
-		AddMasterVehicleComponent,
-		AddMasterVehicleRatesComponent,
-		EditMasterVehicleRatesComponent,
 		MeetAndGreetComponent,
 		AmenitiesInteriorComponent,
 		AmenitiesSpecialComponent,
