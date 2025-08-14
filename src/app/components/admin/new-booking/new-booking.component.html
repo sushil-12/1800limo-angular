@@ -736,8 +736,9 @@
 						<mat-label>
 							Name <span class="asterisk">*</span>
 						</mat-label>
-						<input type="text" #lose_aff_name_input matInput placeholder="Full Name" (focus)="$event.target.select()"
-							formControlName="lose_affiliate_name" (keyup)="handleLooseAffiliateName()" />
+						<input type="text" #lose_aff_name_input matInput placeholder="Full Name"
+							(focus)="$event.target.select()" formControlName="lose_affiliate_name"
+							(keyup)="handleLooseAffiliateName()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -2663,7 +2664,8 @@
 		<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 		<!-- Affiliate Vehicle Information -->
 		<!-- New section conatiner for Vehicle details -->
-		<div class="section-container mt-2" *ngIf="service_type == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
+		<div class="section-container mt-2"
+			*ngIf="service_type == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
 			<h4>
 				Vehicle Preferences
 			</h4>
@@ -3067,6 +3069,10 @@
 
 
 		<div class="row">
+			<div class="col-md-12">
+				<p class="alert alert-danger" *ngIf="waiting_time_in_mins">Note- Driver waiting time for this booking was:
+					<span class="font-weight-bold">{{waiting_time_in_mins}} minutes</span></p>
+			</div>
 			<div class="col-md-12 d-flex preview_button_edit">
 				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 					Reset

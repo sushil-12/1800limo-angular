@@ -83,6 +83,7 @@ export class FinalizeBookingComponent implements OnInit {
 	booking_created_from: any;
 	is_readonly_min_rate: boolean = false;
 	paymentSuccessMessage: String = '';
+	waiting_time_in_mins:any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -199,8 +200,9 @@ export class FinalizeBookingComponent implements OnInit {
 				this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 				this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 				this.BookingDetail = response.data
+				this.waiting_time_in_mins = this.BookingDetail?.waiting_time_in_mins
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
-					this.transferType = this.BookingDetail.transfer_type
+				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
 				this.CardsInformation = response?.data?.cards

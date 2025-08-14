@@ -71,6 +71,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 	currentUser: any;
 	is_readonly_min_rate: boolean = false;
 	paymentSuccessMessage: String = '';
+	finalizeDataForm: FormGroup;
+	submittedForm: boolean;
+	wait_time_cost: any;
 
 	constructor(
 		private $api: AdminService,
@@ -116,6 +119,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 			accId: ["", Validators.required],
 		});
 
+		this.finalizeDataForm = this.$form.group({
+			waiting_time_in_mins: [0, [Validators.pattern("^[0-9]*$")]],
+		})
+
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 	}
@@ -124,6 +131,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
 		el.scrollIntoView();
+	}
+
+	get f() {
+		return this.finalizeDataForm.controls;
 	}
 
 
@@ -138,6 +149,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('response getBookingData Affiliate--->>>>', data)
 				this.bookdataresp = data
 				this.BookingDetail = data?.booking_detail
+				this.finalizeDataForm.patchValue({
+					waiting_time_in_mins: this.BookingDetail?.waiting_time_in_mins ?? 0
+				})
+				this.wait_time_cost = this.BookingDetail?.wait_time_cost
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
 					this.transferType = this.BookingDetail?.transfer_type
 				this.paidAmount = this.BookingDetail?.charged_amount
@@ -359,6 +374,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 		}
 	}
 	submitForm() {
+
+		this.submittedForm = true;
+		if (this.finalizeDataForm.invalid) {
+			return;
+		}
+
 		this.spinner.show();
 
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
@@ -374,7 +395,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 			sub_total: this.edit_rates_value.sub_total,
 			grand_total: this.edit_rates_value.grand_total,
 			number_of_hours: this.finalize_params['number_of_hours'],
-			shareArray: this.shareArray
+			shareArray: this.shareArray,
+			waiting_time_in_mins: this.finalizeDataForm.get('waiting_time_in_mins').value
 		}
 		console.log('final obj -------------->>>>>>>', body)
 		console.log('\n\n Submitting Form', body);

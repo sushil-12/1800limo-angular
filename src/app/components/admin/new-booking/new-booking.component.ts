@@ -174,6 +174,7 @@ export class NewBookingComponent implements OnInit {
 	booking_created_from: string = 'admin';
 	veh_created_by: any;
 	minDate = new Date();
+	waiting_time_in_mins: any = 0 ;
 
 	constructor(
 		private $form: FormBuilder,
@@ -853,6 +854,7 @@ export class NewBookingComponent implements OnInit {
 			})
 			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
+			this.waiting_time_in_mins = this.bookingResponse?.waiting_time_in_mins
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
