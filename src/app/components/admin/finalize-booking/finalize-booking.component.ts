@@ -83,7 +83,7 @@ export class FinalizeBookingComponent implements OnInit {
 	booking_created_from: any;
 	is_readonly_min_rate: boolean = false;
 	paymentSuccessMessage: String = '';
-	waiting_time_in_mins:any = 0;
+	waiting_time_in_mins: any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -202,7 +202,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.BookingDetail = response.data
 				this.waiting_time_in_mins = this.BookingDetail?.waiting_time_in_mins
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
-				this.transferType = this.BookingDetail.transfer_type
+					this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
 				this.CardsInformation = response?.data?.cards
@@ -471,7 +471,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log( 'selected card-->>>', dataToSend)
+						console.log('selected card-->>>', dataToSend)
 					}
 				}
 				this.$spinner.show()
@@ -485,9 +485,11 @@ export class FinalizeBookingComponent implements OnInit {
 					this.$spinner.hide()
 					$('#paymentSuccessModal').modal('show')
 					this.paymentSuccessMessage = response?.data?.message
+					setTimeout(() => {
+						this.redirecttodailybooking()
+					}, 5000)
 					// this.$router.navigate(['/admin/daily-bookings-admin'])
 					console.log('response---------------------->>', response)
-					
 				})
 			}
 			else {
@@ -511,7 +513,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 	}
 
-	redirecttodailybooking(){
+	redirecttodailybooking() {
 		$('#paymentSuccessModal').modal('hide')
 		this.$router.navigate(['/admin/daily-bookings-admin'])
 	}

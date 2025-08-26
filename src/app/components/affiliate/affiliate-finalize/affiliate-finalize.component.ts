@@ -411,12 +411,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 			console.log('response-->>', response)
 			this.finalize_btn = "Finalized"
 			this.getBookingData(this.bookingId)
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-danger font-weight-bolder text-2xl' style="font-size: 24px;">Please click charge button to get paid !</span>`
-				}
-			})
-
+			$('#clickchargeModal').modal('show')
+			setTimeout(() => {
+				$('#clickchargeModal').modal('hide')
+			}, 2500)
 		})
 
 
@@ -544,6 +542,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 					this.paymentSuccessMessage = response?.data?.message
 					console.log('response---------------------->>', response)
 					this.spinner.hide()
+					setTimeout(() => {
+						this.redirecttodailybooking()
+					}, 5000)
 				})
 			}
 			else {
