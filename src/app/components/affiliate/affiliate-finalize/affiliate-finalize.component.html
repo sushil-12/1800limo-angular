@@ -689,16 +689,31 @@
 </div>
 
 <div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal"
-	aria-hidden="true">
+	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-success">
-				<h4 class="mb-0 ">{{paymentSuccessMessage}}</h4>
+				<h4 class="mb-1" style="font-weight: 600;font-size: 23px;">{{paymentSuccessMessage}} !</h4>
 			</div>
-			<div class="modal-footer">
+			<!-- <div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="redirecttodailybooking()">
 					Okay</button>
+			</div> -->
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="clickchargeModal" tabindex="-1" role="dialog" aria-labelledby="clickchargeModal"
+	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-danger">
+				<h4 class="mb-1" style="font-weight: 600;font-size: 23px;">Please click charge button to get paid !</h4>
 			</div>
+			<!-- <div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="redirecttodailybooking()">
+					Okay</button>
+			</div> -->
 		</div>
 	</div>
 </div>
