@@ -487,7 +487,7 @@ export class FinalizeBookingComponent implements OnInit {
 					this.paymentSuccessMessage = response?.data?.message
 					setTimeout(() => {
 						this.redirecttodailybooking()
-					}, 5000)
+					}, 2500)
 					// this.$router.navigate(['/admin/daily-bookings-admin'])
 					console.log('response---------------------->>', response)
 				})

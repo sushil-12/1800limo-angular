@@ -544,7 +544,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 					this.spinner.hide()
 					setTimeout(() => {
 						this.redirecttodailybooking()
-					}, 5000)
+					}, 2500)
 				})
 			}
 			else {

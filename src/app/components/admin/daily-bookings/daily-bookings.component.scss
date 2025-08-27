@@ -503,3 +503,10 @@ a.dropdown-item {
 		max-width: 600px !important;
 	}
 }
+
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 550px;
+    }
+}

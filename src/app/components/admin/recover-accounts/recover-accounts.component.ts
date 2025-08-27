@@ -54,6 +54,7 @@ export class RecoverAccountsComponent implements OnInit {
   accountType: any = 'all'
   userType: Array<any> = constant_data.userTypeSlug;
   unregistered: Boolean = false;
+  successMessage: any;
 
   constructor(
     private adminService: AdminService,
@@ -282,11 +283,11 @@ export class RecoverAccountsComponent implements OnInit {
 
       this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, body).subscribe((response: any) => {
         this.spinner.hide()
-        this.errorDialog.openDialog({
-          errors: {
-            error: `<span class='text-success'>${response.message}</span>`
-          }
-        })
+        $('#successModal').modal('show')
+        this.successMessage = response?.message
+        setTimeout(() => {
+          $('#successModal').modal('hide')
+        }, 2000)
         console.log("response-------->", response)
       })
 
