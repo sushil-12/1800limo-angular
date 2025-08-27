@@ -41,7 +41,7 @@ export class TravelPlannerComponent implements OnInit {
   sendEmailForm: FormGroup;
   show: boolean;
   emails = new FormControl('');
-  phone_numbers= new FormControl('');
+  phone_numbers = new FormControl('');
   allSelected = false;
   public travel_accounts_email: any = [];
   searchText: any;
@@ -52,6 +52,7 @@ export class TravelPlannerComponent implements OnInit {
   fileName: String;
   fileType: String;
   uploadedFile: any;
+  successMessage: any;
 
   constructor(
     private adminService: AdminService,
@@ -86,7 +87,7 @@ export class TravelPlannerComponent implements OnInit {
       // this.loadTravelPlanners()
     }, 700)
   }
-  reset(){
+  reset() {
     this.searchText = ""
     localStorage.removeItem('TravelAgentSearch')
   }
@@ -219,47 +220,47 @@ export class TravelPlannerComponent implements OnInit {
   }
 
 
-	selectAllNumbers() {
-		if (this.allSelected) {
-			this.phone_numbers.patchValue('');
-		} else {
-			const allValues = this.travel_accounts_email.map(option => this.stringifyOptionNumber(option));
-			this.phone_numbers.setValue(allValues);
-		}
-		this.allSelected = !this.allSelected;
-	}
+  selectAllNumbers() {
+    if (this.allSelected) {
+      this.phone_numbers.patchValue('');
+    } else {
+      const allValues = this.travel_accounts_email.map(option => this.stringifyOptionNumber(option));
+      this.phone_numbers.setValue(allValues);
+    }
+    this.allSelected = !this.allSelected;
+  }
 
-	stringifyOptionNumber(option: any): string {
-		return JSON.stringify({ id: option.id, phoneNumber: (option?.mobileIsd + option?.mobile) });
-	}
+  stringifyOptionNumber(option: any): string {
+    return JSON.stringify({ id: option.id, phoneNumber: (option?.mobileIsd + option?.mobile) });
+  }
 
 
-	sendEmailSms(){
-		this.spinner.show()
-		let body = {
-			message: this.sendEmailForm.get('text_message')?.value,
-			recipents: this.phone_numbers.value,
-		}
-		console.log("in sms",body)
+  sendEmailSms() {
+    this.spinner.show()
+    let body = {
+      message: this.sendEmailForm.get('text_message')?.value,
+      recipents: this.phone_numbers.value,
+    }
+    console.log("in sms", body)
 
-		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
-			this.errorDialog.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
-			this.spinner.hide()
-			console.log("response-------->", response)
-		})
+    this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
+      $('#successModal').modal('show')
+      this.successMessage = response?.message
+      setTimeout(() => {
+        $('#successModal').modal('hide')
+      }, 2000)
+      this.spinner.hide()
+      console.log("response-------->", response)
+    })
 
-		this.show = false
-		this.sendEmailForm.patchValue({
-			text_message: ''
-		})
-		this.phone_numbers.setValue('');
+    this.show = false
+    this.sendEmailForm.patchValue({
+      text_message: ''
+    })
+    this.phone_numbers.setValue('');
 
-		$("#sendsmsModal").modal("hide");
-	}
+    $("#sendsmsModal").modal("hide");
+  }
 
 
   auditTrail(id: any) {
@@ -290,29 +291,29 @@ export class TravelPlannerComponent implements OnInit {
   //submit email modal
   async sendEmail() {
     this.spinner.show()
-    let fileData =[]
-		if (this.uploadedFile) {
-			for (let file of this.uploadedFile) {
-			let dataS = await this.uploadService.uploadFile(file);
-			fileData.push({
-			  fileUrl: dataS.Location,
-			  fileType: file.type
-			});
-		  }
-		}
+    let fileData = []
+    if (this.uploadedFile) {
+      for (let file of this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(file);
+        fileData.push({
+          fileUrl: dataS.Location,
+          fileType: file.type
+        });
+      }
+    }
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
       recipents: this.emails.value,
-      fileData:fileData
+      fileData: fileData
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
-      this.errorDialog.openDialog({
-        errors: {
-          error: `<span class='text-success'>${response.message}</span>`
-        }
-      })
+      $('#successModal').modal('show')
+      this.successMessage = response?.message
+      setTimeout(() => {
+        $('#successModal').modal('hide')
+      }, 2000)
       this.spinner.hide()
       console.log("response-------->", response)
     })
@@ -379,44 +380,44 @@ export class TravelPlannerComponent implements OnInit {
     $('#messageModal').find('.modal-header').find('h4').text('Contact to Travel Agent via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Travel Agent Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>Travel Agent Email: ${travelPlanner['email']}`)
     if (message != null) {
-			this.spinner.show()
-      let fileData =[]
+      this.spinner.show()
+      let fileData = []
       if (this.uploadedFile) {
         for (let file of this.uploadedFile) {
-        let dataS = await this.uploadService.uploadFile(file);
-        fileData.push({
-          fileUrl: dataS.Location,
-          fileType: file.type
-        });
+          let dataS = await this.uploadService.uploadFile(file);
+          fileData.push({
+            fileUrl: dataS.Location,
+            fileType: file.type
+          });
         }
       }
-			let body = {
-				sendContent: message,
-				fileData:fileData
-			}
-			this.adminService.sendAffiliateMessage(type, travelPlanner['id'], body).subscribe((response: any) => {
-				this.spinner.hide()
-				this.errorDialog.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
-				console.log("response-------->", response)
-			})
+      let body = {
+        sendContent: message,
+        fileData: fileData
+      }
+      this.adminService.sendAffiliateMessage(type, travelPlanner['id'], body).subscribe((response: any) => {
+        this.spinner.hide()
+        $('#successModal').modal('show')
+        this.successMessage = response?.message
+        setTimeout(() => {
+          $('#successModal').modal('hide')
+        }, 2000)
+        console.log("response-------->", response)
+      })
 
-			// Clear file input after success
-			this.uploadedFile = null;
-			this.fileUrl = null;
-			this.fileType = null;
-			if (this.fileInput1) {
-				this.fileInput1.nativeElement.value = ''; // Reset file input
-			}
-			if (this.message) {
-				this.message.nativeElement.value = ''; // Reset message input
-			}
+      // Clear file input after success
+      this.uploadedFile = null;
+      this.fileUrl = null;
+      this.fileType = null;
+      if (this.fileInput1) {
+        this.fileInput1.nativeElement.value = ''; // Reset file input
+      }
+      if (this.message) {
+        this.message.nativeElement.value = ''; // Reset message input
+      }
 
-			$("#messageModal").modal("hide");
-		}
+      $("#messageModal").modal("hide");
+    }
   }
 
   enableDisableClicked(event, id) {

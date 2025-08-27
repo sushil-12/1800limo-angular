@@ -54,6 +54,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   fileName: any;
   fileType: any;
   uploadedFile: any;
+  successMessage: any;
 
 
   constructor(
@@ -232,11 +233,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     console.log("in sms", body)
 
     this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
-      this.errorDialog.openDialog({
-        errors: {
-          error: `<span class='text-success'>${response.message}</span>`
-        }
-      })
+      $('#successModal').modal('show')
+      this.successMessage = response?.message
+      setTimeout(() => {
+        $('#successModal').modal('hide')
+      }, 2000)
       this.spinner.hide()
       console.log("response-------->", response)
     })
@@ -274,11 +275,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
-      this.errorDialog.openDialog({
-        errors: {
-          error: `<span class='text-success'>${response.message}</span>`
-        }
-      })
+      $('#successModal').modal('show')
+      this.successMessage = response?.message
+      setTimeout(() => {
+        $('#successModal').modal('hide')
+      }, 2000)
       this.spinner.hide()
       console.log("response-------->", response)
     })
@@ -426,11 +427,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
       this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, body).subscribe((response: any) => {
         this.spinner.hide()
-        this.errorDialog.openDialog({
-          errors: {
-            error: `<span class='text-success'>${response.message}</span>`
-          }
-        })
+        $('#successModal').modal('show')
+        this.successMessage = response?.message
+        setTimeout(() => {
+          $('#successModal').modal('hide')
+        }, 2000)
         console.log("response-------->", response)
       })
 

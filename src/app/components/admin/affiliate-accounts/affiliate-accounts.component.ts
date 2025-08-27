@@ -73,6 +73,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	fileName: String;
 	fileType: String;
 	uploadedFile: any;
+	successMessage: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -425,26 +426,27 @@ export class AffiliateAccountsComponent implements OnInit {
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Affiliate Name: ${affiliate['FirstName']} ${affiliate['LastName']}<br/>Affiliate Email: ${affiliate['Email']}`)
 		if (message != null) {
 			this.spinner.show()
-			let fileData=[]
+			let fileData = []
 			if (this.uploadedFile) {
 				for (let file of this.uploadedFile) {
-				let dataS = await this.uploadService.uploadFile(file);
-				fileData.push({
-				  fileUrl: dataS.Location,
-				  fileType: file.type
-				});
-			  }}
+					let dataS = await this.uploadService.uploadFile(file);
+					fileData.push({
+						fileUrl: dataS.Location,
+						fileType: file.type
+					});
+				}
+			}
 			let body = {
 				sendContent: message,
-				fileData:fileData
+				fileData: fileData
 			}
 			this.adminService.sendAffiliateMessage(type, affiliate['id'], body).subscribe((response: any) => {
 				this.spinner.hide()
-				this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
+				$('#successModal').modal('show')
+				this.successMessage = response?.message
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 1500)
 				console.log("response-------->", response)
 			})
 
@@ -564,28 +566,34 @@ export class AffiliateAccountsComponent implements OnInit {
 		let fileData = []
 		if (this.uploadedFile) {
 			for (let file of this.uploadedFile) {
-			let dataS = await this.uploadService.uploadFile(file);
-			fileData.push({
-			  fileUrl: dataS.Location,
-			  fileType: file.type
-			});
-		  }}
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+					fileUrl: dataS.Location,
+					fileType: file.type
+				});
+			}
+		}
 		const textContent = this.sendEmailForm.get('text_message')?.value;
 		const htmlContent = this.convertTextToHtml(textContent);
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
 			message: htmlContent,
 			recipents: this.emails.value,
-			fileData:fileData
+			fileData: fileData
 		}
 		console.log("body-------->", body)
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			this.spinner.hide()
+			$('#successModal').modal('show')
+			this.successMessage = response?.message
+			setTimeout(() => {
+				$('#successModal').modal('hide')
+			}, 1500)
 			console.log("response-------->", response)
 		})
 
@@ -725,21 +733,21 @@ export class AffiliateAccountsComponent implements OnInit {
 		// }
 	}
 
-	sendEmailSms(){
+	sendEmailSms() {
 		this.spinner.show()
 		let body = {
 			message: this.sendEmailForm.get('text_message')?.value,
 			recipents: this.phone_numbers.value,
 		}
-		console.log("in sms",body)
+		console.log("in sms", body)
 
 		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
 			this.spinner.hide()
+			$('#successModal').modal('show')
+			this.successMessage = response?.message
+			setTimeout(() => {
+				$('#successModal').modal('hide')
+			}, 1500)
 			console.log("response-------->", response)
 		})
 

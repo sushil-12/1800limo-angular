@@ -90,7 +90,7 @@ export class DailyBookingsComponent implements OnInit {
 	deducted_stripe_fee: any;
 	total_amount: any;
 	admin_total: any;
-
+	successMessage: any;
 	zoom = 7;
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
 	directionsRenderer!: google.maps.DirectionsRenderer;
@@ -507,7 +507,11 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe(({ message }: any) => {
 				this.spinner.hide();
 				this.notification_msg = message;
-				$("#notificationModal").modal("show");
+				$('#successModal').modal('show')
+				this.successMessage = message
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 				console.log(message);
 				$("textarea").val("");
 			});
@@ -550,11 +554,11 @@ export class DailyBookingsComponent implements OnInit {
 			)
 			.subscribe((response: any) => {
 				this.spinner.hide()
-				this.$errorDialog.openDialog({
-					errors: {
-						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Your subscription have been cancelled successfully!</span>`
-					}
-				})
+				$('#successModal').modal('show')
+				this.successMessage = 'Your subscription have been cancelled successfully'
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 				this.isCancelled = true
 				$("#cancelModal").modal("hide");
 			});
@@ -946,11 +950,11 @@ export class DailyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide(); //hide spinner
 					$("#emailModal").modal("hide");
-					this.$errorDialog.openDialog({
-						errors: {
-							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
-						}
-					})
+					$('#successModal').modal('show')
+					this.successMessage = 'Email have been sent successfully'
+					setTimeout(() => {
+						$('#successModal').modal('hide')
+					}, 2000)
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
 					// 		skipLocationChange: true,
@@ -1373,11 +1377,11 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				$("#accept_charge_modal").modal("hide");
-				this.$errorDialog.openDialog({
-					errors: {
-						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Half payment have been charged successfully!</span>`
-					}
-				})
+				$('#successModal').modal('show')
+				this.successMessage = 'Half payment have been charged successfully'
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 				console.log("accept charge action", response);
 			});
 
@@ -1398,11 +1402,11 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				$("#charge_back_modal").modal("hide");
-				this.$errorDialog.openDialog({
-					errors: {
-						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Payment have been charged back successfully!</span>`
-					}
-				})
+				$('#successModal').modal('show')
+				this.successMessage = 'Payment have been charged back successfully'
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 				console.log("accept charge action", response);
 			});
 
@@ -1458,11 +1462,11 @@ export class DailyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide(); //hide spinner
 					$("#sendEmailToAnyone").modal("hide");
-					this.$errorDialog.openDialog({
-						errors: {
-							error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Email have been sent successfully!</span>`
-						}
-					})
+					$('#successModal').modal('show')
+					this.successMessage = 'Email have been sent successfully'
+					setTimeout(() => {
+						$('#successModal').modal('hide')
+					}, 2000)
 				}
 			});
 

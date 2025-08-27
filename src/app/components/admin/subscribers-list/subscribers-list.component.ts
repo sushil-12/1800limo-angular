@@ -53,6 +53,7 @@ export class SubscribersListComponent implements OnInit {
 	fileType: String;
 	uploadedFile: any;
 	public subs_emails: any = [];
+	successMessage: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -207,11 +208,11 @@ export class SubscribersListComponent implements OnInit {
 		console.log("in sms", body)
 
 		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
-			this.errorDialog.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			$('#successModal').modal('show')
+			this.successMessage = response?.message
+			setTimeout(() => {
+				$('#successModal').modal('hide')
+			}, 2000)
 			this.spinner.hide()
 			console.log("response-------->", response)
 		})
@@ -263,11 +264,11 @@ export class SubscribersListComponent implements OnInit {
 		console.log("body-------->", body)
 
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
-			this.errorDialog.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			$('#successModal').modal('show')
+				this.successMessage = response?.message
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 			this.spinner.hide()
 			console.log("response-------->", response)
 		})
@@ -379,11 +380,11 @@ export class SubscribersListComponent implements OnInit {
 			}
 			this.adminService.sendAffiliateMessage(type, individual['id'], body).subscribe((response: any) => {
 				this.spinner.hide()
-				this.errorDialog.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
+				$('#successModal').modal('show')
+				this.successMessage = response?.message
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 				console.log("response-------->", response)
 			})
 
