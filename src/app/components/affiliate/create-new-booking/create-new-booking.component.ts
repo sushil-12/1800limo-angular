@@ -1714,14 +1714,14 @@ export class CreateNewBookingComponent implements OnInit {
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare: (grandTotal - adminShare)
+				affiliateShare: grandTotal - base_rate * 0.25
 			}
-
 			// add conditions here to change share percentage
 			this.adminSharePercent = 15
 			shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 			shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 			shareArray['farmoutShare'] = base_rate * 0.10
+			shareArray['affiliateShare'] = grandTotal - base_rate * 0.25
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -1751,14 +1751,14 @@ export class CreateNewBookingComponent implements OnInit {
 				grandTotal: returnGrandTotal,
 				stripeFee: stripeFee,
 				adminShare: adminShare,
-				affiliateShare: returnGrandTotal - adminShare
+				affiliateShare: returnGrandTotal - base_rate * 0.25
 			}
 			// travelAgentShare : 
 			this.adminSharePercent = 15
 			returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 			returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 			returnShareArray['farmoutShare'] = base_rate * 0.10
-
+			returnShareArray['affiliateShare'] = returnGrandTotal - base_rate * 0.25
 			this.r_shareArray = returnShareArray
 			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;

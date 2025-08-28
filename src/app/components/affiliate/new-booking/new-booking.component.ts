@@ -1676,6 +1676,7 @@ export class NewBookingComponent implements OnInit {
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['farmoutShare'] = base_rate * 0.10
+				shareArray['affiliateShare'] = grandTotal - base_rate * 0.25
 			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
