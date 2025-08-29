@@ -585,10 +585,10 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		};
 	}
 
-	async vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
-		if (!await this.commonServices.handleFile(event)) {
-			return;
-		}
+	 vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
+		// if (!await this.commonServices.handleFile(event)) {
+		// 	return;
+		// }
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = imgUrl
 		this.adminService
