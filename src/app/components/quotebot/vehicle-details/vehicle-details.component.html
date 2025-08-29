@@ -752,7 +752,7 @@
 						<p class="font-weight-bolder">
 							Chargeable Amenities
 						</p>
-						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
+						<ul id="chargeable-amenities" style="list-style-type: disc" class="d-flex flex-wrap">
 							<li [attr.id]="'ul-ch-list-item_' + amenity_index"
 								*ngFor="let amenity of selected_vehicle.amenities['chargeable']; index as amenity_index">
 								<span class="text-orange">{{currencySymbol}}</span>
@@ -766,7 +766,7 @@
 						<p class="font-weight-bolder">
 							Non-Chargeable Amenities
 						</p>
-						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
+						<ul id="chargeable-amenities" style="list-style-type: disc" class="d-flex flex-wrap">
 							<li [attr.id]="'ul-noch-list-item_' + amenity_index"
 								*ngFor="let amenity of selected_vehicle.amenities['non-chargeable']; index as amenity_index">
 								{{ amenity.name }}

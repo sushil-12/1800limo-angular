@@ -1084,8 +1084,8 @@
 						<mat-label>
 							Email
 						</mat-label>
-						<input matInput formControlName="driver_email" type="text"
-							(focus)="$event.target.select()" placeholder="Email">
+						<input matInput formControlName="driver_email" type="text" (focus)="$event.target.select()"
+							placeholder="Email">
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -1190,7 +1190,8 @@
 		<!-- Section Booking details start -->
 		<div class="section-container mt-2" id="pickup_adress">
 			<h4 id="booking_detail_section" style="margin-bottom: 0;">
-				Booking Details
+				Booking Details <button type="submit" class="custom-filled-button mr-1 ml-3 mb-2"
+					(click)="submitForm(false)" *ngIf="updateType != 'create' ">Preview</button>
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -3070,8 +3071,10 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<p class="alert alert-danger" *ngIf="waiting_time_in_mins">Note- Driver waiting time for this booking was:
-					<span class="font-weight-bold">{{waiting_time_in_mins}} minutes</span></p>
+				<p class="alert alert-danger" *ngIf="waiting_time_in_mins">Note- Driver waiting time for this booking
+					was:
+					<span class="font-weight-bold">{{waiting_time_in_mins}} minutes</span>
+				</p>
 			</div>
 			<div class="col-md-12 d-flex preview_button_edit">
 				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
