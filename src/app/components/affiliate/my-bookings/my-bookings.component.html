@@ -285,10 +285,10 @@
 								</tr>
 							</tbody>
 						</table>
-						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Running Total:
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Client's Billing Total:
 							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
 						</p>
-						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Partner's Net Total:
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Your Net Income:
 							<span
 								style="font-weight: 600;font-size: 22px;">${{net_total_amount.toLocaleString()}}</span>
 						</p>
@@ -1649,7 +1649,7 @@
 			</div>
 
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" style="font-size: 50px !important;">
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
