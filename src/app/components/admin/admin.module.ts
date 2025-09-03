@@ -114,6 +114,7 @@ import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-ave
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component';
 
 @NgModule({
 	declarations: [
@@ -202,7 +203,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		ReportsAdminVehiclesComponent,
 		ReportsAdminVehicleAverageComponent,
 		ReportsAdminUsersComponent,
-		LooseAffiliateVehiclesComponent
+		LooseAffiliateVehiclesComponent,
+		CcoAccountsComponent
 	],
 	imports: [
 		CommonModule,

@@ -90,6 +90,7 @@ import { ReportsAdminVehiclesComponent } from './reports-admin-vehicles/reports-
 import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-average/reports-admin-vehicle-average.component';
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
+import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component'
 
 
 const routes: Routes = [
@@ -451,6 +452,11 @@ const routes: Routes = [
 		path: 'all-accounts',
 		canActivate: [AdminGuardGuard],
 		component: RecoverAccountsComponent
+	},
+	{
+		path: 'cco-accounts',
+		canActivate: [AdminGuardGuard],
+		component: CcoAccountsComponent
 	},
 	{
 		path: 'loose-affiliate-accounts',
