@@ -248,6 +248,10 @@
 										routerLink="/admin/all-accounts"
 										*ngIf="role=='admin' || modules.includes('individual_account')"
 										(click)="closeSidebarFunc(false)">All Accounts</a>
+										<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/admin/cco-accounts"
+										*ngIf="role=='admin' || modules.includes('individual_account')"
+										(click)="closeSidebarFunc(false)">CCO Accounts</a>
 
 								</div>
 							</div>

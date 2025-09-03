@@ -565,6 +565,17 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
 	}
 
+	getCcoAccounts(url, keyword, accountType) {
+		var path;
+		if (url) {
+			path = url + '&account_type=' + accountType + '&search=' + keyword ;
+		}
+		else {
+			path = this.serverUrl + 'cco-accounts' + '?account_type=' + accountType + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
 	getAccounts(url, isDeletedAcc, keyword, accountType, unregistered) {
 		var path;
 		if (url) {
@@ -575,6 +586,7 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
+
 	getTravelPlannerAccount(id) {
 		return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 	}

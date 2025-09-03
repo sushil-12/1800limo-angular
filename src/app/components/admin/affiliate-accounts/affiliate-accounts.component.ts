@@ -22,7 +22,6 @@ export class AffiliateAccountsComponent implements OnInit {
 	@ViewChild('message') message!: ElementRef;
 	emails = new FormControl();
 	phone_numbers = new FormControl();
-	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'accent';
 	checked = false;
 	disabled = false;
