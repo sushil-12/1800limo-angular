@@ -568,7 +568,7 @@ export class AdminService {
 	getCcoAccounts(url, keyword, accountType) {
 		var path;
 		if (url) {
-			path = url + '&account_type=' + accountType + '&search=' + keyword ;
+			path = url + '&account_type=' + accountType + '&search=' + keyword;
 		}
 		else {
 			path = this.serverUrl + 'cco-accounts' + '?account_type=' + accountType + '&search=' + keyword;
@@ -627,6 +627,10 @@ export class AdminService {
 
 	deleteAccount(id) {
 		return this.httpClient.delete(this.serverUrl + 'admin/delete-user/' + id);
+	}
+
+	deleteCcoAccount(data) {
+		return this.httpClient.delete(this.serverUrl + 'cco-accounts/delete', { body: data });
 	}
 
 

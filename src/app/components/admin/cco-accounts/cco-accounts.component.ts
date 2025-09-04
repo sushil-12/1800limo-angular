@@ -17,7 +17,7 @@ declare var $: any;
 })
 export class CcoAccountsComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
-	@ViewChild('fileInput1') fileInput1!: ElementRef;
+  @ViewChild('fileInput1') fileInput1!: ElementRef;
   @ViewChild('message') message!: ElementRef;
   color: ThemePalette = 'accent';
   checked = false;
@@ -68,7 +68,7 @@ export class CcoAccountsComponent {
   sendEmailForm: FormGroup;
   emails = new FormControl();
   allSelected = false;
-  account_emails:any;
+  account_emails: any;
 
 
   constructor(
@@ -188,6 +188,27 @@ export class CcoAccountsComponent {
     this.alertMessage = "Are you sure you want to delete this account?"
   }
 
+  deleteAccount() {
+    $('#deleteConfirmationModal').modal('hide');
+    console.log('in function delete account', this.accountToDelete)
+    let body = {
+      account_type: this.accountType,
+      id: this.accountToDelete
+    }
+    this.adminService.deleteCcoAccount(body)
+      .pipe(
+        catchError(err => {
+          // this.stateManagementService.setprogressBar(false);
+          return throwError(err);
+        })
+      ).subscribe(result => {
+        this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/admin/cco-accounts']);
+        });
+        this.loadAccounts()
+      });
+
+  }
 
   highlighText(args: string) {
     if (!this.searchText) { return args ? args : 'N/A'; }
@@ -215,17 +236,17 @@ export class CcoAccountsComponent {
     this.fileUrl = null;
     $("#messageModal").modal("hide");
     this.sendEmailForm.patchValue({
-			subject: "",
-			text_message: ''
-		})
-		this.emails.setValue('');
-		$("#sendEmailModal").modal("hide");
+      subject: "",
+      text_message: ''
+    })
+    this.emails.setValue('');
+    $("#sendEmailModal").modal("hide");
   }
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement) {
-		textarea.style.height = 'auto';
-		textarea.style.height = textarea.scrollHeight + 'px';
-	}
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 
 
   //build email modal
@@ -295,8 +316,8 @@ export class CcoAccountsComponent {
   }
 
   get Form() {
-		return this.sendEmailForm.controls;
-	}
+    return this.sendEmailForm.controls;
+  }
 
   enableDisableClicked(event, id) {
     this.spinner.show();//show spinner
@@ -360,84 +381,84 @@ export class CcoAccountsComponent {
   }
 
 
-	selectAll() {
-		if (this.allSelected) {
-			this.emails.patchValue('');
-		} else {
-			const allValues = this.account_emails.map(option => this.stringifyOption(option));
-			this.emails.setValue(allValues);
-		}
-		this.allSelected = !this.allSelected;
-	}
+  selectAll() {
+    if (this.allSelected) {
+      this.emails.patchValue('');
+    } else {
+      const allValues = this.account_emails.map(option => this.stringifyOption(option));
+      this.emails.setValue(allValues);
+    }
+    this.allSelected = !this.allSelected;
+  }
 
-	stringifyOption(option: any): string {
-		return JSON.stringify({ id: option.id, email: option.email });
-	}
+  stringifyOption(option: any): string {
+    return JSON.stringify({ id: option.id, email: option.email });
+  }
 
   convertTextToHtml(text: string): string {
-		// Basic conversion of text to HTML
-		// Replace newlines with <br> tags
-		const escapedText = text
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;')
-			.replace(/\n/g, '<br>');
+    // Basic conversion of text to HTML
+    // Replace newlines with <br> tags
+    const escapedText = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
 
-		return `<p>${escapedText}</p>`;
-	}
+    return `<p>${escapedText}</p>`;
+  }
 
-  	//submit email modal
-	async sendEmail() {
-		this.spinner.show()
-		let fileData = []
-		if (this.uploadedFile) {
-			for (let file of this.uploadedFile) {
-				let dataS = await this.uploadService.uploadFile(file);
-				fileData.push({
-					fileUrl: dataS.Location,
-					fileType: file.type
-				});
-			}
-		}
-		const textContent = this.sendEmailForm.get('text_message')?.value;
-		const htmlContent = this.convertTextToHtml(textContent);
-		let body = {
-			subject: this.sendEmailForm.get('subject').value,
-			message: htmlContent,
-			recipents: this.emails.value,
-			fileData: fileData
-		}
-		console.log("body-------->", body)
-		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
-			// this.$errors.openDialog({
-			// 	errors: {
-			// 		error: `<span class='text-success'>${response.message}</span>`
-			// 	}
-			// })
-			this.spinner.hide()
-			$('#successModal').modal('show')
-			this.successMessage = response?.message
-			setTimeout(() => {
-				$('#successModal').modal('hide')
-			}, 1500)
-			console.log("response-------->", response)
-		})
+  //submit email modal
+  async sendEmail() {
+    this.spinner.show()
+    let fileData = []
+    if (this.uploadedFile) {
+      for (let file of this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(file);
+        fileData.push({
+          fileUrl: dataS.Location,
+          fileType: file.type
+        });
+      }
+    }
+    const textContent = this.sendEmailForm.get('text_message')?.value;
+    const htmlContent = this.convertTextToHtml(textContent);
+    let body = {
+      subject: this.sendEmailForm.get('subject').value,
+      message: htmlContent,
+      recipents: this.emails.value,
+      fileData: fileData
+    }
+    console.log("body-------->", body)
+    this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
+      // this.$errors.openDialog({
+      // 	errors: {
+      // 		error: `<span class='text-success'>${response.message}</span>`
+      // 	}
+      // })
+      this.spinner.hide()
+      $('#successModal').modal('show')
+      this.successMessage = response?.message
+      setTimeout(() => {
+        $('#successModal').modal('hide')
+      }, 1500)
+      console.log("response-------->", response)
+    })
 
-		this.sendEmailForm.patchValue({
-			subject: "",
-			text_message: ''
-		})
-		this.emails.setValue('');
+    this.sendEmailForm.patchValue({
+      subject: "",
+      text_message: ''
+    })
+    this.emails.setValue('');
 
-		// Clear file input after success
-		this.uploadedFile = null;
-		this.fileUrl = null;
-		this.fileType = null;
-		if (this.fileInput1) {
-			this.fileInput1.nativeElement.value = ''; // Reset file input
-		}
+    // Clear file input after success
+    this.uploadedFile = null;
+    this.fileUrl = null;
+    this.fileType = null;
+    if (this.fileInput1) {
+      this.fileInput1.nativeElement.value = ''; // Reset file input
+    }
 
-		$("#sendEmailModal").modal("hide");
-	}
+    $("#sendEmailModal").modal("hide");
+  }
 
 }
