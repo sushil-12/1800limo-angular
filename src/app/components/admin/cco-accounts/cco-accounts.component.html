@@ -9,7 +9,7 @@
                     <mat-form-field appearance="outline">
                         <input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
                             (focus)="$event.target.select()" [value]="searchText"
-                            placeholder="Search by name, email, cell phone" id="keyword">
+                            placeholder="Search by name, email, mobile" id="keyword">
                     </mat-form-field>
                 </div>
                 <div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="row pt-2 mb-3">
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <mat-form-field appearance="outline" class="m-0">
                         <mat-label>Account Type</mat-label>
                         <mat-select (selectionChange)="onFilterChange('accountType',$event)" [(value)]="accountType">
@@ -41,9 +41,20 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-md-6 d-flex align-items-center">
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="m-0">
+                        <mat-label>Data Qaulity</mat-label>
+                        <mat-select (selectionChange)="onFilterChange('dataQuality',$event)" [(value)]="dataQuality">
+                            <!-- Dynamically generated options -->
+                            <mat-option *ngFor="let type of data_quality_array" [value]="type.id">
+                                {{ type.value }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
                     <button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendEmailModal"
-                        (click)="buildSendEmailForm();" style="margin: 0;">
+                        (click)="buildSendEmailForm();" style="margin: 0;" disabled>
                         Send Email
                     </button>
                 </div>
