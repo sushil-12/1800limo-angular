@@ -48,7 +48,8 @@ export class CcoAccountsComponent {
   fileName: String;
   fileType: String;
   uploadedFile: any;
-  accountType: any = 'affiliate'
+  accountType: any = 'affiliate';
+  dataQuality: any = 'valid'
   userType = [
     {
       "id": "individual",
@@ -61,6 +62,25 @@ export class CcoAccountsComponent {
     {
       "id": "travel_agent",
       "value": "Travel Agent"
+    },
+  ];
+
+  data_quality_array = [
+    {
+      "id": "valid",
+      "value": "Valid"
+    },
+    {
+      "id": "suspicious",
+      "value": "Suspicious"
+    },
+    {
+      "id": "invalid",
+      "value": "Invalid"
+    },
+    {
+      "id": "needs_review",
+      "value": "Needs review"
     },
   ]
 
@@ -108,6 +128,7 @@ export class CcoAccountsComponent {
   reset() {
     this.searchText = "";
     this.accountType = 'affiliate';
+    this.dataQuality = 'valid';
     localStorage.removeItem('ccoAccountsSearch')
 
   }
@@ -143,7 +164,7 @@ export class CcoAccountsComponent {
     var keyword = this.searchText;
 
     // Load Our travelPlanners using API
-    this.adminService.getCcoAccounts(pageUrl, keyword, this.accountType).then((result: any) => {
+    this.adminService.getCcoAccounts(pageUrl, keyword, this.accountType, this.dataQuality).then((result: any) => {
       let response = result
       this.accounts = result?.data?.data;
       this.account_emails = this.accounts.filter(item => item.email !== null)
@@ -177,6 +198,9 @@ export class CcoAccountsComponent {
     console.log("in filter change", name, event)
     if (name == 'accountType') {
       this.accountType = event.value;
+    }
+    else if (name == 'dataQuality') {
+      this.dataQuality = event.value
     }
     this.loadAccounts()
   }

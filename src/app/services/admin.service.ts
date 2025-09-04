@@ -565,13 +565,13 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
 	}
 
-	getCcoAccounts(url, keyword, accountType) {
+	getCcoAccounts(url, keyword, accountType, dataQuality) {
 		var path;
 		if (url) {
-			path = url + '&account_type=' + accountType + '&search=' + keyword;
+			path = url + '&account_type=' + accountType + '&data_quality=' + dataQuality + '&search=' + keyword;
 		}
 		else {
-			path = this.serverUrl + 'cco-accounts' + '?account_type=' + accountType + '&search=' + keyword;
+			path = this.serverUrl + 'cco-accounts' + '?account_type=' + accountType + '&data_quality=' + dataQuality + '&search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
