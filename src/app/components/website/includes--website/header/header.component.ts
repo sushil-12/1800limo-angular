@@ -194,7 +194,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 	dashboard(role) {
-		if (role == 'affiliate') {
+		if (role == 'affiliate' || role == 'driver') {
 			let isAffiliate_approved = localStorage.getItem('account_approval')
 			this.spinner.show();//show spinner
 			if (isAffiliate_approved == "accepted") {
@@ -214,7 +214,7 @@ export class HeaderComponent implements OnInit {
 		else if (role == 'sub_affiliate') {
 			this.router.navigateByUrl('/sub_affiliate/my-bookings');
 		}
-		else if(role == 'subscriber'){
+		else if (role == 'subscriber') {
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 		}
 		else {
@@ -226,7 +226,20 @@ export class HeaderComponent implements OnInit {
 	redirectCompleteProfile(role) {
 		console.log('redirecting to complete profile', role)
 		this.spinner.show()
-		this.router.navigateByUrl(`${role}/profile`)
+		if (role == 'affiliate' || role == 'driver') {
+			let isAffiliate_approved = localStorage.getItem('account_approval')
+			this.spinner.show();//show spinner
+			if (isAffiliate_approved == "accepted") {
+				this.router.navigateByUrl('/affiliate/my-bookings');
+			}
+			else {
+				this.router.navigateByUrl('/affiliate');
+				console.log("step 0  dashboard")
+			}
+		}
+		else {
+			this.router.navigateByUrl(`${role}/profile`)
+		}
 	}
 
 
