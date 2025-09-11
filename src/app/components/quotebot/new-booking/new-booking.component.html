@@ -836,7 +836,14 @@
 
 
 				<h4 class="pl-2 mt-3" id="pickup_details">
-					Pickup
+					Pickup <h6 *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')"
+						class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
+							FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
+							addeess in the next field.
+						</label>
+
+					</h6>
 				</h4>
 
 				<!-- Pickup - Address Field -->
@@ -901,6 +908,17 @@
 
 						</div>
 
+						<!-- FBO new filed -->
+						<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
+							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+								<mat-label>
+									Enter FBO address
+								</mat-label>
+								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+									formControlName="fbo_address" (focus)="$event.target.select()" />
+							</mat-form-field>
+						</div>
+
 						<!-- Airline -->
 						<div class=" col-md-6">
 							<!-- <mat-form-field appearance="outline">
@@ -943,10 +961,13 @@
 							<mat-form-field appearance="outline" class="vehicleLable mt-0"
 								style="margin-top: 0px !important;">
 								<mat-label>
-									Flight / Tail # <span class="asterisk">*</span>
+									{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+										class="asterisk">*</span>
 								</mat-label>
-								<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-									formControlName="pickup_flight" (focus)="$event.target.select()" />
+								<input type="text" matInput
+									placeholder="{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+									aria-label="Flight" formControlName="pickup_flight"
+									(focus)="$event.target.select()" />
 							</mat-form-field>
 							<div class="error-box">
 								<div class="error-message"
@@ -1631,7 +1652,14 @@
 
 
 				<h4 class="pl-2">
-					Return Pickup
+					Return Pickup <h6 *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')"
+						class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
+							FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
+							addeess in the next field.
+						</label>
+
+					</h6>
 				</h4>
 
 				<!-- Return Pickup - Address Field -->
@@ -1695,6 +1723,17 @@
 							</div>
 						</div>
 
+						<!-- FBO new filed -->
+						<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
+							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+								<mat-label>
+									Enter FBO address
+								</mat-label>
+								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+									formControlName="return_fbo_address" (focus)="$event.target.select()" />
+							</mat-form-field>
+						</div>
+
 						<!-- Airline -->
 						<div class="col-md-6 ">
 							<!-- <mat-form-field appearance="outline">
@@ -1738,10 +1777,13 @@
 							<mat-form-field appearance="outline" class="vehicleLable mt-0"
 								style="margin-top: 0px !important;">
 								<mat-label>
-									Flight / Tail # <span class="asterisk">*</span>
+									{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+										class="asterisk">*</span>
 								</mat-label>
-								<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-									formControlName="return_pickup_flight" (focus)="$event.target.select()" />
+								<input type="text" matInput
+									placeholder="{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+									aria-label="Flight" formControlName="return_pickup_flight"
+									(focus)="$event.target.select()" />
 							</mat-form-field>
 							<div class="error-box">
 								<div class="error-message"

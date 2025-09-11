@@ -948,7 +948,14 @@
 
 
 			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
-				Pickup
+				Pickup <h6 *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')"
+					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
+						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
+						addeess in the next field.
+					</label>
+
+				</h6>
 			</h4>
 
 			<!-- Pickup - Address Field -->
@@ -990,6 +997,17 @@
 
 					</div>
 
+					<!-- FBO new filed -->
+					<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO address
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+								formControlName="fbo_address" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
 					<!-- Airline -->
 					<div class="col-md-6 mb-2">
 						<!-- Ng-Select > Airline -->
@@ -1014,10 +1032,12 @@
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight / Tail # <span class="asterisk">*</span>
+								{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+									class="asterisk">*</span>
 							</mat-label>
-							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-								formControlName="pickup_flight" (focus)="$event.target.select()" />
+							<input type="text" matInput
+								placeholder="{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+								aria-label="Flight" formControlName="pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)">
@@ -1068,7 +1088,8 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
+						<div class="error-box"
+							*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
 							<div class="error-message"
 								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
 								style="margin-top:-15px">
@@ -1088,7 +1109,8 @@
 							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
+						<div class="error-box"
+							*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
 							<div class="error-message"
 								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
 								style="margin-top:-15px">
@@ -1184,7 +1206,8 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)">
+						<div class="error-box"
+							*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)">
 							<div class="error-message"
 								*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
 								style="margin-top:-15px">
@@ -1210,7 +1233,8 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
+						<div class="error-box"
+							*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
 							<div class="error-message"
 								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
 								style="margin-top:-15px">
@@ -1230,7 +1254,8 @@
 							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
+						<div class="error-box"
+							*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
 							<div class="error-message"
 								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
 								style="margin-top:-15px">
@@ -1379,7 +1404,14 @@
 			</div>
 
 			<h4 class="pl-2" style="margin-bottom: 0;">
-				Return Pickup
+				Return Pickup<h6 *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')"
+					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
+						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
+						addeess in the next field.
+					</label>
+
+				</h6>
 			</h4>
 
 			<!-- Return Pickup - Address Field -->
@@ -1419,6 +1451,18 @@
 						</div>
 					</div>
 
+					<!-- FBO new filed -->
+					<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO address
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+								formControlName="return_fbo_address" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+
 					<!-- Airline -->
 					<div class="col-md-6 mb-2">
 						<!-- Ng-Select > Return > Pickup > Airline -->
@@ -1443,12 +1487,16 @@
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight / Tail # <span class="asterisk">*</span>
+								{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+									class="asterisk">*</span>
 							</mat-label>
-							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
+							<input type="text" matInput
+								placeholder="{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+								aria-label="Flight" formControlName="return_pickup_flight"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)">
+						<div class="error-box"
+							*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)">
 							<div class="error-message"
 								*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)"
 								style="margin-top:-15px">
@@ -1469,7 +1517,8 @@
 							<input formControlName="departing_airport_city" type="text" matInput
 								placeholder="Departing Airport / City" (focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)">
+						<div class="error-box"
+							*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)">
 							<div class="error-message"
 								*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)"
 								style="margin-top:-15px">
@@ -1496,7 +1545,8 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
+						<div class="error-box"
+							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
 							<div class="error-message"
 								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
 								style="margin-top:-15px">
@@ -1516,7 +1566,8 @@
 							<input formControlName="return_cruise_name" type="text" matInput
 								placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
+						<div class="error-box"
+							*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
 							<div class="error-message"
 								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
 								style="margin-top:-15px">
@@ -1612,7 +1663,8 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)">
+						<div class="error-box"
+							*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)">
 							<div class="error-message"
 								*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
 								style="margin-top:-15px">
@@ -1638,7 +1690,8 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
+						<div class="error-box"
+							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
 							<div class="error-message"
 								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
 								style="margin-top:-15px">
@@ -1658,7 +1711,8 @@
 							<input formControlName="return_cruise_name" type="text" matInput
 								placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 						</mat-form-field>
-						<div class="error-box" *ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
+						<div class="error-box"
+							*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
 							<div class="error-message"
 								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
 								style="margin-top:-15px">
