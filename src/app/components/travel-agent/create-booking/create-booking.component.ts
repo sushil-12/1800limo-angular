@@ -477,6 +477,8 @@ export class CreateBookingComponent implements OnInit {
 			reservation_id: [''],
 			updateType: [''],
 			departing_airport_city: [''],
+			fbo_address:[''],
+			return_fbo_address:['']
 		})
 		let date = new Date();
 		let timestamp = date.getTime();

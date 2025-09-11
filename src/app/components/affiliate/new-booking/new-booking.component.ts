@@ -531,7 +531,9 @@ export class NewBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
-			departing_airport_city: ['']
+			departing_airport_city: [''],
+			fbo_address:[''],
+			return_fbo_address:['']
 		})
 
 		let date = new Date();
