@@ -542,9 +542,23 @@ export class CreateBookingComponent implements OnInit {
 				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 				// format the name of each airports/airlines data as 'code - name, city, country'
-				this.BigData.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
+				this.BigData.airportsData.map((item: any) => {
+					if (item.id === 3283) {
+						item['formatted_name'] = `${item.code} - ${item.name}`;
+					} else {
+						item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`;
+					}
+					return item;
+				});
 				this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
-				this.BigData_COPY.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
+				this.BigData_COPY.airportsData.map((item: any) => {
+					if (item.id === 3283) {
+						item['formatted_name'] = `${item.code} - ${item.name}`;
+					} else {
+						item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`;
+					}
+					return item;
+				});
 				this.BigData_COPY.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 
 				this.MapController();
