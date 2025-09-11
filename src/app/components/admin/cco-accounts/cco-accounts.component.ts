@@ -89,6 +89,7 @@ export class CcoAccountsComponent {
   emails = new FormControl();
   allSelected = false;
   account_emails: any;
+  accounts_count:any;
 
 
   constructor(
@@ -168,6 +169,7 @@ export class CcoAccountsComponent {
       let response = result
       this.accounts = result?.data?.data;
       this.account_emails = this.accounts.filter(item => item.email !== null)
+      this.accounts_count = result?.data?.total_count
 
       this.firstPage = 1;
       this.lastPage = result.data?.last_page;
