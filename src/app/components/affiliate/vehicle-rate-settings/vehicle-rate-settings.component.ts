@@ -220,7 +220,6 @@ export class VehicleRateSettingsComponent implements OnInit {
 			workmans_comp: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			wait_time_cost: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			wait_time_unit: ['minute'],
@@ -345,7 +344,6 @@ export class VehicleRateSettingsComponent implements OnInit {
 				in_town_extra_stop: response.data.in_town_extra_stop,
 				outside_town_extra_stop: response.data.outside_town_extra_stop,
 				early_late_charges: response.data.early_late_charges,
-				holiday_charges: response.data.holiday_charges,
 				friday_saturday_charges: response.data.friday_saturday_charges,
 				wait_time_cost: response.data.wait_time_cost ?? 0
 			});
@@ -466,7 +464,6 @@ export class VehicleRateSettingsComponent implements OnInit {
 				in_town_extra_stop: response.data.in_town_extra_stop,
 				outside_town_extra_stop: response.data.outside_town_extra_stop,
 				early_late_charges: response.data.early_late_charges,
-				holiday_charges: response.data.holiday_charges,
 				friday_saturday_charges: response.data.friday_saturday_charges,
 				wait_time_cost: response.data.wait_time_cost ?? 0
 			});

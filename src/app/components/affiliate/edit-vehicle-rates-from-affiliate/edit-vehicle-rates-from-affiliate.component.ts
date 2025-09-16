@@ -88,7 +88,6 @@ export class EditVehicleRatesFromAffiliateComponent implements OnInit
 			per_person_group_ride_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			early_late_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			holiday_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			friday_saturday_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			rate_range: ['0'],
@@ -259,7 +258,6 @@ export class EditVehicleRatesFromAffiliateComponent implements OnInit
 							per_person_group_ride_rate: this.response.data.per_person_group_ride_rate,
 							airport_city_percentage_booking_cancel_charges: this.response.data.airport_city_percentage_booking_cancel_charges,
 							early_late_charges: this.response.data.early_late_charges,
-							holiday_charges: this.response.data.holiday_charges,
 							friday_saturday_charges: this.response.data.friday_saturday_charges,
 							charter_percentage_booking_cancel_charges: this.response.data.charter_percentage_booking_cancel_charges,
 							rate_range_percent_flat: this.response.data.rate_range_percent_flat,
@@ -475,7 +473,7 @@ export class EditVehicleRatesFromAffiliateComponent implements OnInit
 	rate_range_object: any = {}		// STORE ORIGINAL VALUES INTO AN OBJECT
 	initRateRangeObject()
 	{
-		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'early_late_charges', 'holiday_charges', 'friday_saturday_charges', 'per_person_group_ride_rate']
+		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'early_late_charges', 'friday_saturday_charges', 'per_person_group_ride_rate']
 		form_control_names.forEach((name: string) =>
 		{
 			this.rate_range_object[name] = this.addVehicleRatesForm.get(name).value ?? 0

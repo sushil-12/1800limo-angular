@@ -393,28 +393,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- EARLY AM/LATE PM  -->
-
-				<!-- HOLIDAY RATE -->
-				<div class="col-md-6">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Holiday Rate</mat-label>
-						<span matPrefix
-							*ngIf="form.holiday_charges.value == null || form.holiday_charges.value == ''; else hideZero22">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero22>
-							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Holiday Rate" (change)="updateRateRangeObject()"
-							formControlName="holiday_charges" tabindex="1">
-					</mat-form-field>
-					<div *ngIf="submittedForm && form.holiday_charges.errors || form.holiday_charges.touched && form.holiday_charges.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="form.holiday_charges.errors.pattern">Enter Numbers only
-						</div>
-					</div>
-				</div>
-				<!-- HOLIDAY RATE -->
+				<!-- EARLY AM/LATE PM  --
 
 				<!-- FRIDAY/SATURDAY RATE -->
 				<div class="col-md-6">
