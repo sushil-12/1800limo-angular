@@ -215,7 +215,6 @@ export class EditVehicleRatesComponent implements OnInit {
 							per_diem: this.response.data.per_diem,
 							early_late_charges: this.response.data.early_late_charges,
 							friday_saturday_charges: this.response.data.friday_saturday_charges,
-							holiday_charges: this.response.data.holiday_charges,
 							in_town_extra_stop: this.response.data?.in_town_extra_stop,
 							outside_town_extra_stop: this.response.data?.outside_town_extra_stop,
 							wait_time_cost: this.response.data?.wait_time_cost || 0
@@ -277,7 +276,6 @@ export class EditVehicleRatesComponent implements OnInit {
 			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			wait_time_cost: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			wait_time_unit: ['minute'],

@@ -767,24 +767,6 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Holiday Surge Rate</mat-label>
-						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						<mat-select formControlName="holiday_charges" tabindex="1"
-							(onSelectionChange)="updateRateRangeObject()">
-							<mat-option *ngFor="let value of ratesArrayValues" [value]="value">
-								{{ value }}
-							</mat-option>
-						</mat-select>
-						<!-- <input matInput type="number" placeholder="Holiday Rate" (change)="updateRateRangeObject()"
-							formControlName="holiday_charges" tabindex="1" (focus)="$event.target.select()"> -->
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.holiday_charges.errors || f.holiday_charges.touched && f.holiday_charges.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.holiday_charges.errors.pattern">Enter Numbers only</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Friday/Saturday Night Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<mat-select formControlName="friday_saturday_charges" tabindex="1"
