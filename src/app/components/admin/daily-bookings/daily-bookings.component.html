@@ -270,7 +270,6 @@
 												ReAffiliate
 											</a>
 
-
 											<a class="dropdown-item"
 												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
 												*ngIf="currentUser?.roleName == 'admin' ">
@@ -281,6 +280,14 @@
 												*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
 												<div class="dropdown-item-icon"></div>
 												Refund
+											</a>
+
+											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
+
+												<div class="dropdown-item-icon"></div>
+												Edit / Change
 											</a>
 
 										</div>

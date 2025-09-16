@@ -575,8 +575,10 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			reservation_id: [''],
 			updateType: [''],
 			departing_airport_city: [''],
-			fbo_address:[''],
-			return_fbo_address:['']
+			fbo_address: [''],
+			return_fbo_address: [''],
+			fbo_name: [''],
+			return_fbo_name: ['']
 		})
 
 		let date = new Date();
@@ -2358,6 +2360,11 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		})
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
+			console.log("value in pickup_airport--->",value)
+			if(value == 3283){
+				this.BookingForm.get('pickup_airline_option').clearValidators();
+				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 				this.SetFormValue('pickup_airport_name', airport_selected.formatted_name);
@@ -2412,6 +2419,11 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 		// Return Pickup Airport
 		this.BookingForm.get('return_pickup_airport').valueChanges.subscribe((value: string) => {
+			console.log("value in pickup_airport--->",value)
+			if(value == '3283'){
+				this.BookingForm.get('return_pickup_airline_option').clearValidators();
+				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 				this.SetFormValue('return_pickup_airport_name', airport_selected.formatted_name);

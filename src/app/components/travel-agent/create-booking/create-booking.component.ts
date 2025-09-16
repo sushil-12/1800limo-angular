@@ -477,8 +477,10 @@ export class CreateBookingComponent implements OnInit {
 			reservation_id: [''],
 			updateType: [''],
 			departing_airport_city: [''],
-			fbo_address:[''],
-			return_fbo_address:['']
+			fbo_address: [''],
+			return_fbo_address: [''],
+			fbo_name: [''],
+			return_fbo_name: ['']
 		})
 		let date = new Date();
 		let timestamp = date.getTime();
@@ -1916,7 +1918,7 @@ export class CreateBookingComponent implements OnInit {
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
 			this.initAllAutocompletes()
-			if(value.includes("city_")){
+			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 			}
 
@@ -1994,7 +1996,7 @@ export class CreateBookingComponent implements OnInit {
 			this.initAllAutocompletes()
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
 
-				if(value.includes("city_")){
+				if (value.includes("city_")) {
 					this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 				}
 
@@ -2351,6 +2353,11 @@ export class CreateBookingComponent implements OnInit {
 		})
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
+			console.log("value in pickup_airport--->",value)
+			if(value == 3283){
+				this.BookingForm.get('pickup_airline_option').clearValidators();
+				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 				this.SetFormValue('pickup_airport_name', airport_selected.formatted_name);
@@ -2405,6 +2412,11 @@ export class CreateBookingComponent implements OnInit {
 
 		// Return Pickup Airport
 		this.BookingForm.get('return_pickup_airport').valueChanges.subscribe((value: string) => {
+			console.log("value in pickup_airport--->",value)
+			if(value == '3283'){
+				this.BookingForm.get('return_pickup_airline_option').clearValidators();
+				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 				this.SetFormValue('return_pickup_airport_name', airport_selected.formatted_name);

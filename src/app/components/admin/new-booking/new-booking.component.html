@@ -1335,7 +1335,7 @@
 					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
 						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-						addeess in the next field.
+						address in the next field.
 					</label>
 
 				</h6>
@@ -1388,13 +1388,24 @@
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress"
 								formControlName="fbo_address" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 
+					<!-- FBO name -->
+					<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO name
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
+								formControlName="fbo_name" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
 					<!-- Airline -->
-					<div class="col-md-6 mb-2">
+					<div class="col-md-6 mb-2" *ngIf="Form.pickup_airport.value != '3283' ">
 						<!-- Ng-Select > Airline -->
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
@@ -1416,10 +1427,12 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
 							<mat-label>
-								{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span class="asterisk">*</span>
+								{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+									class="asterisk">*</span>
 							</mat-label>
-							<input type="text" matInput placeholder="{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}" aria-label="Flight"
-								formControlName="pickup_flight" (focus)="$event.target.select()" />
+							<input type="text" matInput
+								placeholder="{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+								aria-label="Flight" formControlName="pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)">
@@ -2123,7 +2136,7 @@
 					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
 						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-						addeess in the next field.
+						address in the next field.
 					</label>
 
 				</h6>
@@ -2176,13 +2189,24 @@
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress"
 								formControlName="return_fbo_address" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 
+					<!-- FBO name -->
+					<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO name
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
+								formControlName="return_fbo_name" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
 					<!-- Airline -->
-					<div class="col-md-6 mb-2">
+					<div class="col-md-6 mb-2" *ngIf="Form.return_pickup_airport.value != '3283' ">
 
 						<!-- Ng-Select > Return > Pickup > Airline -->
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
@@ -2205,10 +2229,13 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
 							<mat-label>
-								{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span class="asterisk">*</span>
+								{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+									class="asterisk">*</span>
 							</mat-label>
-							<input type="text" matInput placeholder="{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}" aria-label="Flight"
-								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
+							<input type="text" matInput
+								placeholder="{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+								aria-label="Flight" formControlName="return_pickup_flight"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)">
