@@ -717,7 +717,9 @@ export class NewBookingComponent implements OnInit {
 			susbcriber_name: [''],
 			return_susbcriber_name: [''],
 			fbo_address: [''],
-			return_fbo_address: ['']
+			return_fbo_address: [''],
+			fbo_name: [''],
+			return_fbo_name: ['']
 		})
 
 		// let month = new Date().getMonth()

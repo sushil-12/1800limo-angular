@@ -840,7 +840,7 @@
 						class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
 							FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-							addeess in the next field.
+							address in the next field.
 						</label>
 
 					</h6>
@@ -919,8 +919,20 @@
 							</mat-form-field>
 						</div>
 
+
+						<!-- FBO name -->
+						<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
+							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+								<mat-label>
+									Enter FBO name
+								</mat-label>
+								<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
+									formControlName="fbo_name" (focus)="$event.target.select()" />
+							</mat-form-field>
+						</div>
+
 						<!-- Airline -->
-						<div class=" col-md-6">
+						<div class="col-md-6" *ngIf="Form.pickup_airport.value != '3283' ">
 							<!-- <mat-form-field appearance="outline">
 								<mat-label>
 									Airline
@@ -1656,7 +1668,7 @@
 						class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
 							FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-							addeess in the next field.
+							address in the next field.
 						</label>
 
 					</h6>
@@ -1734,8 +1746,19 @@
 							</mat-form-field>
 						</div>
 
+						<!-- FBO name -->
+						<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
+							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+								<mat-label>
+									Enter FBO name
+								</mat-label>
+								<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
+									formControlName="return_fbo_name" (focus)="$event.target.select()" />
+							</mat-form-field>
+						</div>
+
 						<!-- Airline -->
-						<div class="col-md-6 ">
+						<div class="col-md-6" *ngIf="Form.return_pickup_airport.value != '3283' ">
 							<!-- <mat-form-field appearance="outline">
 								<mat-label>
 									Airline

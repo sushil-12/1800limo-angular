@@ -521,8 +521,10 @@ export class CreateNewBookingComponent implements OnInit {
 			reservation_id: [''],
 			updateType: [''],
 			departing_airport_city: [''],
-			fbo_address:[''],
-			return_fbo_address:['']
+			fbo_address: [''],
+			return_fbo_address: [''],
+			fbo_name: [''],
+			return_fbo_name: ['']
 		})
 
 		// let month = new Date().getMonth()

@@ -448,8 +448,10 @@ export class CreateNewBookingComponent implements OnInit {
 			reservation_id: [''],
 			updateType: [''],
 			departing_airport_city: [''],
-			fbo_address:[''],
-			return_fbo_address:['']
+			fbo_address: [''],
+			return_fbo_address: [''],
+			fbo_name: [''],
+			return_fbo_name: ['']
 		})
 
 		let date = new Date();
@@ -813,7 +815,7 @@ export class CreateNewBookingComponent implements OnInit {
 			if (filling_for === 'passenger') {
 				console.log('--->>>> filling passenger info', data)
 				data.middle_name ?
-				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
+					this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
 				this.SetFormValue('passenger_email', data?.email)
 				this.SetFormValue('passenger_cell', data?.mobile)
 				this.SetFormValue('passenger_cell_isd', data?.mobileIsd)
@@ -1957,7 +1959,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
 			this.initAllAutocompletes()
-			if(value.includes("city_")){
+			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 			}
 
@@ -2034,7 +2036,7 @@ export class CreateNewBookingComponent implements OnInit {
 			console.log("in return_transfer_type value changes", value)
 			this.initAllAutocompletes()
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
-				if(value.includes("city_")){
+				if (value.includes("city_")) {
 					this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 				}
 

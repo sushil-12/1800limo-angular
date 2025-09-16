@@ -575,8 +575,10 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			reservation_id: [''],
 			updateType: [''],
 			departing_airport_city: [''],
-			fbo_address:[''],
-			return_fbo_address:['']
+			fbo_address: [''],
+			return_fbo_address: [''],
+			fbo_name: [''],
+			return_fbo_name: ['']
 		})
 
 		let date = new Date();
