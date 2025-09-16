@@ -70,10 +70,6 @@ export class SelectVehicleComponent implements OnInit {
 				{
 					dp: 'gender',
 					rp: 'driver-gender'
-				},
-				{
-					dp: 'background',
-					rp: 'driver-background'
 				}
 			]
 		},
@@ -425,10 +421,10 @@ export class SelectVehicleComponent implements OnInit {
 			this.cutTillMinimum(this.min_length)	// cut the list till min length
 
 
-			this.filters.copy['driver-background'] = [{
-				slug: 'child_certified_driver',
-				name: 'Child Certified Driver'
-			}]
+			// this.filters.copy['driver-background'] = [{
+			// 	slug: 'child_certified_driver',
+			// 	name: 'Child Certified Driver'
+			// }]
 			// fetch the last selected category
 			// this.$state.get().subscribe((data: any) =>
 			// {
