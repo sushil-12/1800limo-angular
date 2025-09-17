@@ -169,7 +169,7 @@ export class AddVehicleRatesComponent implements OnInit {
 		);
 
 		if (this.relativeVehicleId) {
-			this.getVehicleRates()
+			this.getVehicleRates(this.relativeVehicleId)
 			this.adminService.getVehicleInfo(this.vehicle_id, this.relativeVehicleId)
 				.pipe(
 					catchError(err => {
@@ -196,30 +196,32 @@ export class AddVehicleRatesComponent implements OnInit {
 				});
 		}
 		else {
+			// fetch rates to fill based upon master vehicle
 			this.adminService.getVehicleInfo(this.vehicle_id)
-				.pipe(
-					catchError(err => {
-						// this.stateManagementService.setprogressBar(false);
-						return throwError(err);
-					})
-				).subscribe(({ data }: any) => {
-					if (data.amenities) {
-						Object.entries(data.amenities).forEach(
-							([key, value]) => {
-								console.log(key, value)
-								this.amenites_rates.addControl(key, this.createItem(value))
-							}
-						);
-					}
-					console.log(this.amenites_rates.controls, "?????????????????????????????")
-					this.vehicleType = data.vehicleType;
-					this.vehicleColor = data.vehicleColor;
-					this.vehicleMake = data.vehicleMake;
-					this.vehicleModel = data.vehicleModel;
-					this.vehicleYear = data.vehicleYear;
-					this.vehicle_image = data.vehicle_image;
+			.pipe(
+				catchError(err => {
 					// this.stateManagementService.setprogressBar(false);
-				});
+					return throwError(err);
+				})
+			).subscribe(({ data }: any) => {
+				if (data.amenities) {
+					Object.entries(data.amenities).forEach(
+						([key, value]) => {
+							console.log(key, value)
+							this.amenites_rates.addControl(key, this.createItem(value))
+						}
+					);
+				}
+				console.log(this.amenites_rates.controls, "?????????????????????????????")
+				this.vehicleType = data.vehicleType;
+				this.vehicleColor = data.vehicleColor;
+				this.vehicleMake = data.vehicleMake;
+				this.vehicleModel = data.vehicleModel;
+				this.vehicleYear = data.vehicleYear;
+				this.vehicle_image = data.vehicle_image;
+				// this.stateManagementService.setprogressBar(false);
+			});
+			this.getVehicleRates(this.vehicle_id)
 		}
 
 
@@ -229,10 +231,10 @@ export class AddVehicleRatesComponent implements OnInit {
 		this.updateRateRangeObject()
 	}
 
-	getVehicleRates() {
+	getVehicleRates(id) {
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 		//get vehicle rates
-		this.adminService.getVehicleRates(this.relativeVehicleId)
+		this.adminService.getVehicleRates(id)
 			.pipe(
 				catchError(err => {
 					// this.stateManagementService.setprogressBar(false);
