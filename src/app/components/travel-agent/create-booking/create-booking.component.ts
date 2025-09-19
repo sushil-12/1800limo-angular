@@ -688,7 +688,7 @@ export class CreateBookingComponent implements OnInit {
 			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.scroll('pickup_address')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
-				$("#repeatreturnmodal").modal("show");
+				// $("#repeatreturnmodal").modal("show");
 				this.blockaddressfield = true
 			}
 		})
@@ -3068,7 +3068,7 @@ export class CreateBookingComponent implements OnInit {
 	}
 
 	navigatetoQuote() {
-		$("#repeatreturnmodal").modal("hide");
+		// $("#repeatreturnmodal").modal("hide");
 		this.$router.navigate(['/quotebot_section'])
 	}
 
