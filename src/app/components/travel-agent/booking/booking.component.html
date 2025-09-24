@@ -132,7 +132,7 @@
 					</mat-checkbox>
 					<mat-checkbox *ngIf="currentUser?.roleName == 'sub_travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and see the next 7 days future bookings, change the start date, click search, and see past bookings from that date' }}
+						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and see thenext 7 days future bookings, change the start date, click search, and see past bookings from that date' }}
 					</mat-checkbox>
 				</p>
 			</div>
@@ -502,7 +502,8 @@
 						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
-								{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{ bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
+								{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{
+								bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
 							</span>
 						</div>
 					</div>
@@ -568,7 +569,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.affiliate_email) }}
 									</span>
 								</div>
@@ -630,7 +632,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
 									</span>
 								</div>
@@ -1196,13 +1199,8 @@
 					<hr>
 					<br>
 					<div class="google_map">
-						<google-map
-						  height="300px"
-						  width="100%"
-						  [center]="mapCenter"
-						  [zoom]="zoom"
-						></google-map>
-					  </div>
+						<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+					</div>
 					<br>
 					<hr>
 
@@ -1461,7 +1459,8 @@
 
 
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" style="font-size: 50px !important;">
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+					style="font-size: 50px !important;">
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
@@ -1841,8 +1840,12 @@
 
 			<div class="invite-agent-modal-header d-flex flex-column align-items-center justify-content-center mb-1">
 				<h4 style="font-size:20px;">Invite agents under your company name!</h4>
-				<h4 style="font-size:17px; color: red;">Note: File must contain emails with column header 'Email'
+				<h4 style="font-size:17px; color: red;">Download sample and upload the same after filling emails
 				</h4>
+				<a href="../../../../assets/template/invite-template.xlsx" download="invite-template.xlsx" class="btn btn-link"
+					style="font-size: 16px; font-weight: 600; color: blue;">
+					📥 Download Sample Excel File
+				</a>
 			</div>
 
 			<form [formGroup]="inviteAgentForm" enctype="multipart/form-data" style="margin-top: -15px;">
