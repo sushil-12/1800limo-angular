@@ -320,6 +320,12 @@
 								</tr>
 							</tbody>
 						</table>
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Client's Billing Total:
+							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
+						</p>
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="ta_share_total">Your Net Income:
+							<span style="font-weight: 600;font-size: 22px;">${{ta_share_total.toLocaleString()}}</span>
+						</p>
 					</div>
 					<p class="text-danger text-lg" *ngIf="noError">
 						No Results Found?.
