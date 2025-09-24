@@ -162,7 +162,7 @@ export class SubTravelPlannerAccountComponent implements OnInit {
     if (travelPlanner?.account_approval == 'pending' || travelPlanner?.account_approval == 'rejected') {
       this.errorDialog.openDialog({
         errors: {
-          error: `Sorry! You can not log into this account as this account is currently ${travelPlanner?.account_approval} by Super Travel Agent,`
+          error: `Sorry! You can not log into this account as this account is currently ${travelPlanner?.account_approval} by Super Travel Advisor,`
         }
       })
     }

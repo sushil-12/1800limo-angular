@@ -499,7 +499,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService
 			.adminNotification(obj)
 			.pipe(
-				catchError((err) => {
+				catchError((err) => { 
 					this.spinner.hide();
 					return throwError(err);
 				})

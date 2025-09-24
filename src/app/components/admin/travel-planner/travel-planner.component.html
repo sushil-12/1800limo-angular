@@ -2,7 +2,7 @@
 <main>
 	<!-- Main page content-->
 	<section class="user_information" id="travel_agent_table">
-		<h2 class="headinginfo"> Travel Agent Accounts </h2>
+		<h2 class="headinginfo"> Travel Advisor Accounts </h2>
 		<div class="containeredd">
 			<div class="row">
 				<div class="col-md-12">
@@ -12,7 +12,7 @@
 							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 							<path
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-						</svg> Add Travel Agent
+						</svg> Add Travel Advisor
 					</button>
 					<button class="custom-btn send-email-button ml-2" data-toggle="modal" data-target="#sendEmailModal"
 						(click)="buildSendEmailForm();">
@@ -100,7 +100,7 @@
 										aria-labelledby="navbarDropdownUserImage">
 										<a class="dropdown-item" (click)="clickEditTravelPlanner(travelPlanner.id)">
 											<div class="dropdown-item-icon"></div>
-											Edit Travel Agent Account
+											Edit Travel Advisor Account
 										</a>
 										<a class="dropdown-item" (click)="clickTravelPlannerCards(travelPlanner.id)">
 											<div class="dropdown-item-icon"></div>
@@ -116,7 +116,7 @@
 										</a>
 										<a class="dropdown-item" (click)="viewSubAgents(travelPlanner.id)">
 											<div class="dropdown-item-icon"></div>
-											View Sub Agents
+											View Sub Advisors
 										</a>
 										<a class="dropdown-item" (click)="auditTrail(travelPlanner.id)"
 											data-toggle="modal" data-target="#AuditTrailModal">
@@ -258,7 +258,7 @@
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0 d-flex justify-content-center">
-				<h3 class="mb-0" id="exampleModalLabel">Send Email to Travel Agents</h3>
+				<h3 class="mb-0" id="exampleModalLabel">Send Email to Travel Advisors</h3>
 			</div>
 			<div class="modal-body">
 				<form [formGroup]="sendEmailForm" appInvalidControlScroll>
