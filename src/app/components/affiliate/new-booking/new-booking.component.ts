@@ -361,7 +361,7 @@ export class NewBookingComponent implements OnInit {
 	}
 	textFormatterClientAccounts(text: string) {
 		try {
-			return text == 'travel_planner' ? 'Travel Agent' : text.replace(/[\\\_$]+/g, ' ')
+			return text == 'travel_planner' ? 'Travel Advisor' : text.replace(/[\\\_$]+/g, ' ')
 		}
 		catch {
 			return text

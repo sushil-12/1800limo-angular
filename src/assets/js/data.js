@@ -618,7 +618,7 @@ const personallist = [
 	"Individuals and Couples",
 	"Memorial Services",
 	"Small and Large Group Transfers",
-	"Travel Agent Friendly",
+	"Travel Advisor Friendly",
 	"Handicap"
 ];
 
@@ -694,7 +694,7 @@ const userType = [
     },
     {
         "id": "travel",
-		"value": "Travel Agent"
+		"value": "Travel Advisor"
 	},
 ]
 
@@ -724,7 +724,7 @@ const userTypeSlug = [
     },
     {
         "id": "travel_agent",
-		"value": "Travel Agent"
+		"value": "Travel Advisor"
 	},
 ]
 

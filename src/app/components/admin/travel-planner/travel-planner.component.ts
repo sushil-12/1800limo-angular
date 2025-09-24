@@ -377,8 +377,8 @@ export class TravelPlannerComponent implements OnInit {
     console.log('Request to send a Message to travel agent id: ', type, travelPlanner['id'])
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
-    $('#messageModal').find('.modal-header').find('h4').text('Contact to Travel Agent via ' + type.toUpperCase())
-    $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Travel Agent Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>Travel Agent Email: ${travelPlanner['email']}`)
+    $('#messageModal').find('.modal-header').find('h4').text('Contact to Travel Advisor via ' + type.toUpperCase())
+    $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Travel Advisor Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>Travel Advisor Email: ${travelPlanner['email']}`)
     if (message != null) {
       this.spinner.show()
       let fileData = []

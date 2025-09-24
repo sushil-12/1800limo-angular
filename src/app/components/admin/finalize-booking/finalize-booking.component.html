@@ -165,15 +165,13 @@
 			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
 	</div>
-	<div class="col-md-12">
-		<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
+		<!-- <p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
 			<span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span>
-		</p>
-		<div class="col-md-12">
+		</p> -->
+		<div class="col-md-12" *ngIf="waiting_time_in_mins">
 			<p class="alert alert-danger" *ngIf="waiting_time_in_mins">Note- Driver waiting time for this booking was:
 				<span class="font-weight-bold">{{waiting_time_in_mins}} minutes</span></p>
 		</div>
-	</div>
 </div>
 
 

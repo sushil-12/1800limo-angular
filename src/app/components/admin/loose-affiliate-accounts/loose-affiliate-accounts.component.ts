@@ -393,7 +393,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
   messagetype: Record<string, any>
   async sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, travelPlanner, message)
+    console.log('Request to send a Message to travel advisor id: ', type, travelPlanner, message)
     let fileData = [];
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')

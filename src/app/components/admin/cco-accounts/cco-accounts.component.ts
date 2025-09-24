@@ -61,7 +61,7 @@ export class CcoAccountsComponent {
     },
     {
       "id": "travel_agent",
-      "value": "Travel Agent"
+      "value": "Travel Advisor"
     },
   ];
 
@@ -285,7 +285,7 @@ export class CcoAccountsComponent {
 
   messagetype: Record<string, any>
   async sendMessage(type: 'email' | 'sms', user: any, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, user, message)
+    console.log('Request to send a Message to travel advisor id: ', type, user, message)
     this.messagetype = { type, user }
     console.log("messageType", this.messagetype)
     $('#messageModal').modal('show')

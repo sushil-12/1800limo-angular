@@ -120,11 +120,11 @@
 					<mat-radio-group aria-label="Select an option" formControlName="sub_account_type">
 						<mat-radio-button [value]="'travel_agent'" class="my-2 ml-4 mr-3"
 							(change)="handleChangeWithAgent('travel_agent')">
-							Super Agent
+							Super Advisor
 						</mat-radio-button>
 						<mat-radio-button [value]="'sub_travel_agent'" class="my-2 ml-4 mr-3"
 							(change)="handleChangeWithAgent('sub_travel_agent')">
-							Sub Agent
+							Sub AgeAdvisornt
 						</mat-radio-button>
 					</mat-radio-group>
 				</div>
@@ -132,14 +132,14 @@
 			<div class="row px-4" *ngIf="Form['sub_account_type'].value != 'travel_agent'">
 				<div class="col-md-12">
 					<ng-select appearance="outline" [items]="subAgentAccounts" bindLabel="name" bindValue="id"
-						placeholder="Select Sub Agent Account" dropdownPosition="bottom" [markFirst]="true"
+						placeholder="Select Sub Advisor Account" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="sub_account_id"
 						(change)="handleSubAgentAccounts($event)" style="padding-bottom: 0px;"
 						[ngClass]="{ 'border-red': (submitBookingForm && Form.sub_account_id.invalid) }">
 					</ng-select>
 					<div *ngIf="(submitBookingForm && Form.sub_account_id.invalid) "
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="Form.sub_account_id.errors.required">Select a sub agent
+						<div *ngIf="Form.sub_account_id.errors.required">Select a sub advisor
 							account</div>
 					</div>
 				</div>
@@ -1835,7 +1835,7 @@
 			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-						Travel Agent share
+						Travel Advisor share
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
@@ -1881,7 +1881,7 @@
 			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-						Travel Agent share
+						Travel Advisor share
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
@@ -2553,7 +2553,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Travel Agent Share
+										Travel Advisor Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
@@ -2964,7 +2964,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Travel Agent Share
+										Travel Advisor Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">

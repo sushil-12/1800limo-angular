@@ -4,9 +4,9 @@
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information" id="daily_bookings_table">
 		<div class="row">
-			<div class="col-md-7">
+			<!-- <div class="col-md-7">
 				<h2 class="headinginfo">See All booking on all Accounts </h2>
-			</div>
+			</div> -->
 			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;"
 				*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin') && !isCancelled ">
 				<button class="custom-filled-button green-button invite-agent-button" data-toggle="modal"
@@ -1786,7 +1786,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span style="font-weight: 550 !important;">
-										Travel Agent Share
+										Travel Advisor Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
