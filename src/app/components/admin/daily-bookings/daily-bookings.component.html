@@ -323,8 +323,7 @@
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
 											data-target="#change_status_booking_Modal"
-											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
-											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
+											[ngClass]="booking?.booking_status == 'paid' ? 'badge badge-pill booking_status disabled-btn ' + booking.booking_status : 'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
 											{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
 											booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
