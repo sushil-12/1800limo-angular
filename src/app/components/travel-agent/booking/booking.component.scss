@@ -507,5 +507,112 @@ a.dropdown-item {
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
-    white-space: normal !important;
+	white-space: normal !important;
+}
+
+
+
+// INVITE MODAL CSS
+.modal-dialog {
+	max-width: 420px;
+}
+
+.modal-header {
+	border-bottom: 1px solid #dee2e6;
+	padding: 0.75rem 1rem;
+}
+
+.modal-body {
+	padding: 0 1rem;
+}
+
+.modal-footer {
+	border-top: 1px solid #dee2e6;
+	padding: 0.75rem 1rem;
+}
+
+.file-upload-area {
+	background-color: #f8f9fa;
+	border: 1px dashed #ced4da;
+	transition: all 0.2s ease;
+	min-height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.file-upload-area:hover {
+	background-color: #e9ecef;
+	border-color: #6c757d;
+}
+
+.file-upload-area.border-success {
+	background-color: #f8fff9;
+}
+
+.alert-warning {
+	background-color: #fff3cd;
+	border-color: #ffeaa7;
+	color: #856404;
+	font-size: 0.8rem;
+}
+
+.modal-dialog input {
+	padding: 10px !important;
+}
+
+/* Divider Styling */
+.divider {
+	position: relative;
+	text-align: center;
+}
+
+.divider::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background-color: #dee2e6;
+	z-index: 1;
+}
+
+.divider-text {
+	display: inline-block;
+	background-color: white;
+	padding: 0 1rem;
+	position: relative;
+	z-index: 2;
+	color: #6c757d;
+	font-weight: 500;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 576px) {
+	.modal-dialog {
+		margin: 0.5rem;
+		max-width: calc(100% - 1rem);
+	}
+
+	.modal-content {
+		border-radius: 0.5rem;
+	}
+
+	.file-upload-area {
+		min-height: 80px;
+		padding: 1rem !important;
+	}
+
+	.btn-sm {
+		padding: 0.25rem 0.5rem;
+		font-size: 0.875rem;
+	}
+}
+
+/* iPad specific adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+	.modal-dialog {
+		max-width: 450px;
+	}
 }
