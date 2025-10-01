@@ -498,8 +498,12 @@ export class MyBookingsComponent implements OnInit {
 					return throwError(err)
 				})
 			).subscribe(({ message }: any) => {
-				this.notification_msg = message;
-				$("#notificationModal").modal("show");
+				$('#successModal').modal('show')
+				this.notification_msg = message
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
+				console.log(message);
 				$("textarea").val("");
 			})
 		$("#closeModal").click(() => {
