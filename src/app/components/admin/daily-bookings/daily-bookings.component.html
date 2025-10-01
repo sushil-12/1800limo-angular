@@ -171,6 +171,13 @@
 												<div class="dropdown-item-icon"></div>
 												Edit / Change
 											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
+												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+												<!-- *ngIf="booking.payment_status!='paid'" -->
+												<div class="dropdown-item-icon"></div>
+												Finalize
+											</a>
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"
@@ -222,13 +229,7 @@
 												<div class="dropdown-item-icon"></div>
 												Charge Back
 											</a>
-											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
-												<div class="dropdown-item-icon"></div>
-												Finalize
-											</a>
+
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
 												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid' || booking.payment_status=='transfer_failed') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
@@ -281,7 +282,13 @@
 												<div class="dropdown-item-icon"></div>
 												Refund
 											</a>
-
+											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
+												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+												<!-- *ngIf="booking.payment_status!='paid'" -->
+												<div class="dropdown-item-icon"></div>
+												Finalize
+											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
 												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
@@ -1493,7 +1500,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.affiliate_email) }}
 									</span>
 								</div>
@@ -1553,7 +1561,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
 									</span>
 								</div>
@@ -1607,7 +1616,8 @@
 							</div> -->
 							<div class="col-md-12 value">
 								<span class="font-weight-bolder preview-output-field">
-									{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{ bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
+									{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{
+									bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
 								</span>
 							</div>
 						</div>
@@ -1890,7 +1900,8 @@
 
 
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" style="font-size: 50px !important;">
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+					style="font-size: 50px !important;">
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
@@ -1904,8 +1915,10 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<div class="d-flex mb-4" style="gap: 20px;">
-					<button class="custom-filled-button orange-button" data-dismiss="modal" [routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
-					<button class="custom-filled-button orange-button" data-dismiss="modal" [routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
+					<button class="custom-filled-button orange-button" data-dismiss="modal"
+						[routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
+					<button class="custom-filled-button orange-button" data-dismiss="modal"
+						[routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
 				</div>
 				<pre
 					style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
@@ -1936,8 +1949,8 @@
 	</div>
 </div>
 
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true" data-bs-backdrop="static" 
-data-bs-keyboard="false">
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true"
+	data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-success">

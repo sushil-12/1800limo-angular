@@ -238,6 +238,21 @@ export class DailyBookingsComponent implements OnInit {
 			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
 		}
 
+		// if (this.bookingPreview?.extra_stops?.length > 0) {
+		// 	console.log("in extra stop",this.bookingPreview.extra_stops)
+		// 	for (let i = 0; i < this.bookingPreview?.extra_stops.length; i++) {
+		// 		const stop = (this.bookingPreview?.extra_stops.at(i));
+		// 		console.log("in extra stop",stop)
+		// 		waypoints.push({
+		// 			location: new google.maps.LatLng(
+		// 				stop.get('latitude').value,
+		// 				stop.get('longitude').value
+		// 			),
+		// 			stopover: true
+		// 		});
+		// 	}
+		// }
+
 
 		setTimeout(() => {
 			this.drawMap({
