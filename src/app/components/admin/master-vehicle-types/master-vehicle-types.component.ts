@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
+import { CommonService } from '../../../services/common.service';
 declare var $: any;
 
 
@@ -43,7 +44,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 		private adminService: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
-		private formBuilder: FormBuilder) { }
+		private formBuilder: FormBuilder,
+		private commonServices: CommonService) { }
 
 	ngOnInit(): void {
 
@@ -62,7 +64,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 			});
 
-		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser") || '{}');
 
 		this.convertCurrenyResp = this.currentUser.convert_currency == 0 ? false : true 
 
@@ -71,8 +73,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 			vehicleType: ['', Validators.required],
 			vehicleImage: ['', Validators.required],
 			vehicleImageInput: ['', Validators.required],
-			seats: [1],
-			luggage: [0]
+			seats: [1, Validators.required],
+			luggage: [0, Validators.required]
 		});
 
 		// edit vehicle type form validation
@@ -81,8 +83,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 			vehicleType: ['', Validators.required],
 			vehicleImageInput: '',
 			vehicleImage: '',
-			seats: [1],
-			luggage: [0]
+			seats: [1, Validators.required],
+			luggage: [0, Validators.required]
 		});
 	}
 
@@ -129,7 +131,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 	}
 	serach(val) {
 		console.log(val);
-		let allVehicleTypes = JSON.parse(sessionStorage.getItem('vehiclesTypes'));
+		let allVehicleTypes = JSON.parse(sessionStorage.getItem('vehiclesTypes') || '[]');
 		let searchVehicles = allVehicleTypes.filter(function (vehicleType) {
 			if (vehicleType.vehicle_name.toLowerCase().search(val) != -1) {
 				return true;
@@ -143,7 +145,11 @@ export class MasterVehicleTypesComponent implements OnInit {
 		return this.addVehicleTypeForm.controls;
 	}
 
-	onFileChange(event) {
+	async onFileChange(event) {
+		if (!await this.commonServices.handleFile(event)) {
+			return;
+		}
+
 		const reader = new FileReader();
 
 		if (event.target.files && event.target.files.length) {
@@ -151,13 +157,22 @@ export class MasterVehicleTypesComponent implements OnInit {
 			reader.readAsDataURL(file);
 
 			reader.onload = () => {
-
 				this.imageSrc = reader.result as string;
-
-				this.addVehicleTypeForm.patchValue({
-					vehicleImage: reader.result
-				});
-
+				this.spinner.show();
+				
+				this.adminService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err => {
+							this.spinner.hide();
+							return throwError(err);
+						})
+					)
+					.subscribe((response: any) => {
+						this.addVehicleTypeForm.patchValue({
+							vehicleImage: response.data.id
+						});
+						this.spinner.hide();
+					});
 			};
 		}
 	}
@@ -225,7 +240,11 @@ export class MasterVehicleTypesComponent implements OnInit {
 			});
 	}
 
-	onFileUpdate(event) {
+	async onFileUpdate(event) {
+		if (!await this.commonServices.handleFile(event)) {
+			return;
+		}
+
 		const reader = new FileReader();
 
 		if (event.target.files && event.target.files.length) {
@@ -233,13 +252,22 @@ export class MasterVehicleTypesComponent implements OnInit {
 			reader.readAsDataURL(file);
 
 			reader.onload = () => {
-
 				this.imageSrc = reader.result as string;
-
-				this.addVehicleTypeForm.patchValue({
-					vehicleImage: reader.result
-				});
-
+				this.spinner.show();
+				
+				this.adminService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err => {
+							this.spinner.hide();
+							return throwError(err);
+						})
+					)
+					.subscribe((response: any) => {
+						this.editVehicleTypeForm.patchValue({
+							vehicleImage: response.data.id
+						});
+						this.spinner.hide();
+					});
 			};
 		}
 	}
