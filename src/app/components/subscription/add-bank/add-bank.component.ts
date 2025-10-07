@@ -196,7 +196,8 @@ export class AddBankComponent implements OnInit {
     const autocomplete = new google.maps.places.Autocomplete(
       this.search1.nativeElement,
       {
-        types: ['address'] // You can tweak this to 'address', etc.
+        types: ['geocode'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
       }
     );
 

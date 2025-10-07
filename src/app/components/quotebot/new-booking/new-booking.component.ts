@@ -341,7 +341,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		console.log("initautocomplete", nativeInput)
 
 		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['address'],
+			types: ['geocode'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
 		});
 

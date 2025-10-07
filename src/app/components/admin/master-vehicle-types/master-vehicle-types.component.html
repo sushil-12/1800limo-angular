@@ -259,10 +259,7 @@
 						<br>
 						<input multiple type="file" formControlName="vehicleImageInput"
 							(change)="onFileUpdate($event)" />
-						<div *ngIf="submitted && fEdit.vehicleImageInput.errors" class="text-danger">
-							<div *ngIf="fEdit.vehicleImageInput.errors.required">The Vehicle Image is required</div>
-						</div>
-						<img src="{{editVehiclePic}}" height="100px">
+						<img src="{{imageSrc || editVehiclePic}}" height="100px">
 					</div>
 					<div class="row mt-3">
 						<!-- Number of Passengers -->

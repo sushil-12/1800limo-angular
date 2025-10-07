@@ -129,7 +129,8 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		this.geoCoder = new google.maps.Geocoder;
 
 		const autocomplete = new google.maps.places.Autocomplete(this.search1.nativeElement, {
-			types: ['address'] // or 'address'
+			types: ['geocode'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+            fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
 		});
 
 		autocomplete.addListener('place_changed', () => {
