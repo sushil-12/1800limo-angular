@@ -311,8 +311,10 @@ export class HomeComponent implements OnInit {
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
 		console.log("in loadf auto complete", input, fieldName)
 		const autocomplete = new google.maps.places.Autocomplete(input, {
-			types: ['address']
-		});
+            types: ['geocode'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+            fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+        });
+ 
 
 		autocomplete.addListener('place_changed', () => {
 			const place = autocomplete.getPlace();
