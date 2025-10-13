@@ -873,6 +873,11 @@ export class FarmOutBookingsComponent implements OnInit {
 		return moment(value, "YYYY-MM-DD").format("L");
 	}
 
+	dateFormatToDay(value: any) {
+		return moment(value, "YYYY-MM-DD").format('dddd');
+	}
+
+
 	timeFormat(value: any) {
 		if (value.toUpperCase() == "12:00 AM") {
 			return "0000 h";

@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { GoogleMap } from '@angular/google-maps';
+import { UploadService } from 'src/app/services/upload.service';
 declare var $: any;
 
 @Component({
@@ -20,6 +21,7 @@ declare var $: any;
 export class MyBookingsComponent implements OnInit {
 	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
+	@ViewChild('fileInput') fileInput!: ElementRef;
 
 	zoom = 7;
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
@@ -71,6 +73,10 @@ export class MyBookingsComponent implements OnInit {
 	numberOfVehicles: any;
 	total_amount: any;
 	net_total_amount: any;
+	uploadedFile: any;
+	fileUrl: String;
+	fileName: String;
+	fileType: String;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -79,6 +85,7 @@ export class MyBookingsComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private stateManagementService: StateManagementService,
 		private formBuilder: FormBuilder,
+		private uploadService: UploadService,
 	) { }
 
 	ngOnInit(): void {
@@ -438,7 +445,11 @@ export class MyBookingsComponent implements OnInit {
 
 	closeModal() {
 		this.message.nativeElement.value = ""
-		this.show = false
+		this.fileInput.nativeElement.value = '';
+		this.uploadedFile = null;
+		this.fileType = null;
+		this.fileUrl = null;
+		this.show = false;
 	}
 	messageField(format) {
 		this.show = true;
@@ -456,7 +467,7 @@ export class MyBookingsComponent implements OnInit {
 
 
 
-	submit(message, format) {
+	async submit(message, format) {
 		console.log('format', format, this.passengerDetails)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
@@ -482,6 +493,17 @@ export class MyBookingsComponent implements OnInit {
 				: this.passengerDetails.loose_affiliate_email;
 			this.reciptentName = this.passengerDetails.loose_affiliate_name;
 		}
+		let fileData = []
+		if (this.uploadedFile) {
+			for (let file of this.uploadedFile) {
+				let dataS = await this.uploadService.uploadFile(file);
+				fileData.push({
+					fileUrl: dataS.Location,
+					fileType: file.type
+				});
+			}
+		}
+		
 		let obj = {
 			bookingId: this.passengerDetails.booking_id,
 			reciptentName: this.reciptentName,
@@ -489,7 +511,9 @@ export class MyBookingsComponent implements OnInit {
 			sendThrough: format ? "Phone" : "Email",
 			sendValue: this.sendInformation,
 			sendContent: message,
+			fileData: fileData
 		};
+
 		console.log('submit modal values---->>', obj)
 		this.affiliateService.affiliateNotification(obj)
 			.pipe(
@@ -506,7 +530,21 @@ export class MyBookingsComponent implements OnInit {
 				console.log(message);
 				$("textarea").val("");
 			})
+
+
+		// Clear file input after success
+		this.uploadedFile = null;
+		this.fileUrl = null;
+		this.fileType = null;
+		if (this.fileInput) {
+			this.fileInput.nativeElement.value = ''; // Reset file input
+		}
+
 		$("#closeModal").click(() => {
+			this.fileInput.nativeElement.value = '';
+			this.uploadedFile = null;
+			this.fileType = null;
+			this.fileUrl = null;
 			$("#notificationModal").modal("hide");
 		});
 		$("#closeModal1").click(() => {
@@ -560,6 +598,11 @@ export class MyBookingsComponent implements OnInit {
 	dateFormat2(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('L')
 	}
+
+	dateFormatToDay(value: any) {
+		return moment(value, "YYYY-MM-DD").format('dddd');
+	}
+	
 	FormatTime(time: string) {
 		return moment(time, "HH:mm:ss").format("LT");
 	}
@@ -958,6 +1001,19 @@ export class MyBookingsComponent implements OnInit {
 		} else {
 			return `${cancellationHours} hours`;
 		}
+	}
+
+
+	myUploader(event) {
+		// this.loader = true;
+
+		this.uploadedFile = Array.from(event.target.files)
+		console.log("file", this.uploadedFile)
+		// if (this.uploadedFile) {
+		// 	this.fileName = this.uploadedFile['name'];
+		// 	this.fileType = this.uploadedFile['type'];
+		// 	console.log("file", this.fileName, this.fileType)
+		// }
 	}
 
 }

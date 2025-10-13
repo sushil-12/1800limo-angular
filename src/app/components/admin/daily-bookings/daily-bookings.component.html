@@ -890,7 +890,7 @@
 				</div>
 				<div class="row" [hidden]="!show">
 					<div class="col-md-12">
-						<div class="mt-2" style="margin-left: -100px;">
+						<div class="mt-2" style="margin-left: -100px;" *ngIf="!sendMessageField">
 							<input type="file" (change)="myUploader($event)" #fileInput multiple />
 						</div>
 						<mat-form-field class="example-full-width" appearance="outline">
@@ -997,7 +997,9 @@
 								<span class="font-weight-bolder preview-output-field">
 									{{ dateFormat2(bookingPreview?.pickup_date) }}
 									|
-									{{ dateFormat(bookingPreview?.pickup_date) }}
+									{{ dateFormat(bookingPreview?.pickup_date) }} 
+									|
+									{{dateFormatToDay(bookingPreview?.pickup_date)}}
 								</span>
 							</div>
 						</div>

@@ -352,6 +352,10 @@ export class FarmOutComponent implements OnInit {
 		return moment(value, 'YYYY-MM-DD').format('L')
 	}
 
+	dateFormatToDay(value: any) {
+		return moment(value, "YYYY-MM-DD").format('dddd');
+	}
+
 	changeDate(dateType, date) {
 		if (dateType == 'startDate') {
 			this.startDate = date;

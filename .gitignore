@@ -2,5 +2,6 @@
 dist/
 .vscode
 node_modules
-.DS_Store
 .angular/cache/
+.DS_Store
+src/.DS_Store
