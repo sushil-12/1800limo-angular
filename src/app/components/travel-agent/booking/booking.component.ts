@@ -694,6 +694,12 @@ export class BookingComponent implements OnInit {
 	dateFormat2(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('L')
 	}
+
+	dateFormatToDay(value: any) {
+		return moment(value, "YYYY-MM-DD").format('dddd');
+	}
+
+	
 	FormatTime(time: string) {
 		return moment(time, "HH:mm:ss").format("LT");
 	}

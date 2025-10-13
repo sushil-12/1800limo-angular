@@ -1584,7 +1584,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">
-                    Preview Booking
+                    Preview Booking <span *ngIf="updateType == 'edit'" style="font-weight: 500;"># {{booking_id}}</span>
                 </h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -1880,6 +1880,8 @@
                                     {{ dateFormat2(Form.pickup_date.value) }}
                                     |
                                     {{ dateFormat(Form.pickup_date.value) }}
+                                    |
+                                    {{dateFormatToDay(Form.pickup_date.value)}}
                                 </span>
                             </div>
                         </div>
@@ -2221,6 +2223,8 @@
                                         {{ dateFormat2(Form.return_pickup_date.value) }}
                                         |
                                         {{ dateFormat(Form.return_pickup_date.value) }}
+                                        |
+                                        {{dateFormatToDay(Form.return_pickup_date.value)}}
                                     </span>
                                 </div>
                             </div>
