@@ -140,14 +140,14 @@ header a.nav-link.active {
 	color: var(--orange-color) !important;
 }
 
-.allinner_wrapper header nav .navbar-nav li a {
+/* .allinner_wrapper header nav .navbar-nav li a {
 	font-size: 14px;
 	text-transform: uppercase;
 	font-weight: 700;
 	color: #fff !important;
-	padding-left: 15px !important;
+	padding-left: 20px !important;
 	padding-right: 15px !important;
-}
+} */
 
 .home_header nav .navbar-nav li a {
 	font-size: 16px;
@@ -178,10 +178,10 @@ header a.nav-link.active {
 }
 
 @media only screen and (min-width:998px) and (max-width:1112px) {
-	.allinner_wrapper header nav .navbar-nav li a {
+	/* .allinner_wrapper header nav .navbar-nav li a {
 		padding-left: 10px !important;
 		padding-right: 10px !important;
-	}
+	} */
 
 	.navbar .collapse {
 		padding-top: 10px;
@@ -209,9 +209,9 @@ header a.nav-link.active {
 }
 
 @media only screen and (min-device-width: 640px) and (max-device-width: 997px) and (orientation: landscape) {
-	header {
+	/* header {
 		height: 85px !important;
-	}
+	} */
 
 	.bannerform_wrapper {
 		padding: 110px 15px 50px 15px !important;
@@ -219,9 +219,9 @@ header a.nav-link.active {
 }
 
 @media only screen and (min-device-width: 640px) and (max-device-width: 997px) {
-	header {
+	/* header {
 		height: 85px !important;
-	}
+	} */
 
 	.bannerform_wrapper {
 		padding: 110px 15px 50px 15px !important;
@@ -3435,10 +3435,10 @@ i.cross-btn {
 .navbar-dark .navbar-toggler-icon {
 	background: none;
 }
-
+/* 
 header .navbar-toggler {
 	padding: 0px .75rem;
-}
+} */
 
 
 /***************RESPONSIVE MEDIA QUERY**********************************/
@@ -3466,9 +3466,9 @@ header .navbar-toggler {
 }
 
 @media only screen and (max-width: 991px) {
-	header {
+	/* header {
 		height: 125px;
-	}
+	} */
 
 	.aboutnw_history img {
 		margin: 0px auto 30px auto;
@@ -3672,12 +3672,12 @@ header .navbar-toggler {
 	header a.navbar-brand {
 		margin: auto
 	}
-
+/* 
 	header button.navbar-toggler {
 		position: absolute;
 		right: 0;
 		top: 20px;
-	}
+	} */
 
 	.navbar-brand img {
 		max-width: 240px;
