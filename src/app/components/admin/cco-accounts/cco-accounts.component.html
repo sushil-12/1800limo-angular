@@ -256,9 +256,8 @@
                                     Text Message <span class="asterisk">*</span>
                                 </mat-label>
                                 <textarea matInput #textArea
-                                    style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
-                                    formControlName="text_message" (focus)="$event.target.select()"
-                                    (input)="adjustTextareaHeight(textArea)" rows="5">
+                                    style="white-space: pre-wrap; font-weight: 500; overflow: auto; resize: vertical;"
+                                    formControlName="text_message" (focus)="$event.target.select()" rows="7">
 								</textarea>
                             </mat-form-field>
                         </div>

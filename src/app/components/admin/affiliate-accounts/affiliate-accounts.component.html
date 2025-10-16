@@ -57,8 +57,8 @@
 				<div class="col-md-4 py-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<input type="text" matInput [value]="searchText" (focus)="$event.target.select()"
-							(keyup)="handleSearchKeyword($event.target.value)" placeholder="Search"
-							id="keyword1" autofocus>
+							(keyup)="handleSearchKeyword($event.target.value)" placeholder="Search" id="keyword1"
+							autofocus>
 					</mat-form-field>
 				</div>
 				<div class="col-md-2 py-2">
@@ -407,10 +407,9 @@
 									Text Message <span class="asterisk">*</span>
 								</mat-label>
 								<textarea matInput #textArea
-									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
-									formControlName="text_message" (focus)="$event.target.select()"
-									(input)="adjustTextareaHeight(textArea)" rows="5">
-								</textarea>
+									style="white-space: pre-wrap; font-weight: 500; overflow: auto; resize: vertical;"
+									formControlName="text_message" (focus)="$event.target.select()" rows="7">
+							  </textarea>
 							</mat-form-field>
 						</div>
 						<div class="col-md-12">
@@ -460,9 +459,8 @@
 									Text Message <span class="asterisk">*</span>
 								</mat-label>
 								<textarea matInput #textArea
-									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
-									formControlName="text_message" (focus)="$event.target.select()"
-									(input)="adjustTextareaHeight(textArea)" rows="5">
+									style="white-space: pre-wrap; font-weight: 500; overflow: auto; resize: vertical;"
+									formControlName="text_message" (focus)="$event.target.select()" rows="7">
 								</textarea>
 							</mat-form-field>
 						</div>
@@ -552,8 +550,8 @@
 	</div>
 </div>
 
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true" data-bs-backdrop="static" 
-data-bs-keyboard="false">
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true"
+	data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0 d-flex justify-content-center text-success">

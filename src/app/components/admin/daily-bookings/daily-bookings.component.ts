@@ -94,6 +94,7 @@ export class DailyBookingsComponent implements OnInit {
 	zoom = 7;
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
 	directionsRenderer!: google.maps.DirectionsRenderer;
+	showCopyIcon: boolean = false
 
 	constructor(
 		private adminService: AdminService,
@@ -773,6 +774,39 @@ export class DailyBookingsComponent implements OnInit {
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}
+
+	async copyPreviewText() {
+		// 1) Prepare text: convert <br> to newlines, strip tags (or keep as needed)
+		const plainText = (this.previewCopyData || '')
+		  .replace(/<br\s*\/?>/gi, '\n')   // convert <br> -> newline
+		  .replace(/<\/?b>/gi, '')        // remove <b> tags
+		  .replace(/&nbsp;/gi, ' ');      // optional: handle HTML entities
+	  
+		// 2) Try navigator.clipboard first (works on secure contexts and modern browsers)
+		try {
+		  if (navigator.clipboard && navigator.clipboard.writeText) {
+			await navigator.clipboard.writeText(plainText);
+			// this.showCopiedToast(); // or alert('Copied!');
+			this.showCopyIcon = true
+			console.log("in function copy link to clipboard")
+			setTimeout(() => {
+				this.showCopyIcon = false
+			}, 2500)
+			return;
+		  }
+		} catch (err) {
+		  // ignore and fallback
+		  console.warn('navigator.clipboard.writeText failed:', err);
+		}
+	  
+	  }
+	  
+	  
+	  showCopiedToast() {
+		alert('Copied to clipboard!');
+	  }
+	  
+	  
 
 	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
