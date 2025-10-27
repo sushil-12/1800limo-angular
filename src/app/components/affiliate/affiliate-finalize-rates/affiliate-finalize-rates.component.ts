@@ -504,10 +504,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 			// creating affiliate payout to show only on the client side
 			if (this.isTravelShare && !this.isCreatedByAdmin) {
-				this.affiliatePayout = this.grandtotal - this.calc_admin_share - this.travel_agent_share;
+				this.affiliatePayout = this.vehicles !=0 ?  this.grandtotal - (this.calc_admin_share * this.vehicles) - (this.travel_agent_share * this.vehicles) : this.grandtotal - this.calc_admin_share - this.travel_agent_share;
 			}
 			else {
-				this.affiliatePayout = this.grandtotal - this.calc_admin_share
+				this.affiliatePayout = this.vehicles !=0 ? this.grandtotal - (this.calc_admin_share * this.vehicles) : this.grandtotal - this.calc_admin_share
 			}
 		}
 		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {

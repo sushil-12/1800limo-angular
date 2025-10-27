@@ -483,7 +483,7 @@
 											style="font-size :1.2rem ;">{{vehinfo?.name}}</span>
 									</div>
 								</div>
-								<div class="d-flex price mb-2" *ngIf="vehinfo?.number_of_vehicles > 1">
+								<div class="d-flex price mb-4" *ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_one_way)">
 									<div class="col-md-8 p-0" style="min-width: fit-content;">
 										Estimated One-Way
 									</div>
@@ -493,7 +493,7 @@
 											{{vehinfo?.estimated_price_one_way}}</span>
 									</div>
 								</div>
-								<div class="d-flex price mb-2" *ngIf="vehinfo?.number_of_vehicles > 1">
+								<div class="d-flex price mb-4" *ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_round_trip)">
 									<div class="col-md-8 p-0" style="min-width: fit-content;">
 										Estimated Round-Trip
 									</div>
@@ -501,6 +501,16 @@
 										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
 											currencySymbol : '$'}}
 											{{vehinfo?.estimated_price_round_trip}}</span>
+									</div>
+								</div>
+								<div class="d-flex price mb-4" *ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_charter_tour)">
+									<div class="col-md-8 p-0" style="min-width: fit-content;">
+										Estimated Charter Tour
+									</div>
+									<div class="col-md-4" style="min-width: fit-content;">
+										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
+											currencySymbol : '$'}}
+											{{vehinfo?.estimated_price_charter_tour}}</span>
 									</div>
 								</div>
 								<!-- <div class="col-md-12 mb-3 p-0">
@@ -755,7 +765,7 @@
 										vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 									</p>
 									<p class="font-weight-bolder mb-2" style="font-size: 0.8rem;"
-										*ngIf="vehinfo?.number_of_vehicles > 1">
+										*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_one_way)">
 										<span style="color: #c94505;font-weight: 500;">
 											Estimated One-Way&nbsp;
 										</span>
@@ -763,12 +773,20 @@
 										{{vehinfo?.estimated_price_one_way}}
 									</p>
 									<p class="font-weight-bolder mb-1" style="font-size: 0.8rem;"
-										*ngIf="vehinfo?.number_of_vehicles > 1">
+										*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_round_trip)">
 										<span style="color: #c94505;font-weight: 500;">
 											Estimated Round-Trip
 										</span>
 										{{currencySymbol ? currencySymbol : '$'}}
 										{{vehinfo?.estimated_price_round_trip}}
+									</p>
+									<p class="font-weight-bolder mb-1" style="font-size: 0.8rem;"
+										*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_charter_tour)">
+										<span style="color: #c94505;font-weight: 500;">
+											Estimated Charter Tour
+										</span>
+										{{currencySymbol ? currencySymbol : '$'}}
+										{{vehinfo?.estimated_price_charter_tour}}
 									</p>
 									<p id="vehicle-name" class="text-rate mb-2">
 										All Inclusive Rate include gratuity<sup class="sup-red">*</sup>

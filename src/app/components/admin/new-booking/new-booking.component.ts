@@ -2583,6 +2583,9 @@ export class NewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.RatesForm.amenities)) {
 				base_rate += this.RatesForm.amenities[key].baserate;
 			}
+			if(this.BookingForm.value.number_of_vehicles != 0 ){
+				base_rate *= this.BookingForm.value.number_of_vehicles
+			}
 			console.log("extra gratutiy", this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount, "min rate", this.BookingForm.value.rateArray?.min_rate_involved)
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
@@ -2633,6 +2636,9 @@ export class NewBookingComponent implements OnInit {
 			}
 			for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
 				base_rate += this.ReturnRatesForm.amenities[key].baserate;
+			}
+			if(this.BookingForm.value.number_of_vehicles != 0 ){
+				base_rate *= this.BookingForm.value.number_of_vehicles
 			}
 			let returnGrandTotal = this.BookingForm.value.return_grand_total
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
