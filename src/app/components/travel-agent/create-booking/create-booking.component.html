@@ -124,7 +124,7 @@
 						</mat-radio-button>
 						<mat-radio-button [value]="'sub_travel_agent'" class="my-2 ml-4 mr-3"
 							(change)="handleChangeWithAgent('sub_travel_agent')">
-							Sub AgeAdvisornt
+							Sub Advisor
 						</mat-radio-button>
 					</mat-radio-group>
 				</div>
@@ -1839,7 +1839,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
-					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ agentShare.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ Form.number_of_vehicles.value > 1  ? (agentShare.toFixed(2) * Form.number_of_vehicles.value) : agentShare.toFixed(2) }}
 				</div>
 			</div>
 		</div>

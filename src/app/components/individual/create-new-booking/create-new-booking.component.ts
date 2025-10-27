@@ -2410,6 +2410,10 @@ export class CreateNewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.rateArray.amenities)) {
 				base_rate += this.rateArray.amenities[key].baserate;
 			}
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				base_rate *= this.Form.number_of_vehicles.value
+			}
+
 			let grandTotal = this.grandtotal
 			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
 				grandTotal = grandTotal * this.Form.number_of_vehicles.value
@@ -2479,6 +2483,10 @@ export class CreateNewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.returnRateArray.amenities)) {
 				base_rate += this.returnRateArray.amenities[key].baserate;
 			}
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				base_rate *= this.Form.number_of_vehicles.value
+			}
+			
 			let returnGrandTotal = this.r_grandtotal
 			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
 				returnGrandTotal = returnGrandTotal * this.Form.number_of_vehicles.value

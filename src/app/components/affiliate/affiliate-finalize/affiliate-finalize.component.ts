@@ -340,6 +340,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
 			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
 			// }
+			if(this.finalize_params.number_of_vehicles != 0 ){
+				base_rate *= this.finalize_params.number_of_vehicles
+			}
+			
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
