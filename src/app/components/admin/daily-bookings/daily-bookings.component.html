@@ -88,7 +88,7 @@
 				<div class="col-md-12 m-0 p-0 pl-2">
 					<p style="margin: 0;">
 						<mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-							{{useDateFilter ? 'Uncheck the box and see all future bookings.' : 'Check the box and see the next 7 days future bookings, change the start date, click search, and see past bookings from that date' }}
+							{{useDateFilter ? 'Uncheck the box and see all future bookings.' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
 						</mat-checkbox>
 					</p>
 				</div>
@@ -897,9 +897,12 @@
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
 							</mat-label>
-							<textarea matInput id="myTextarea" placeholder="Write a Message...." id="clearField"
-								cdkTextareaAutosize cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
-								(focus)="$event.target.select()" style="font-weight: 600;"></textarea>
+
+							<textarea matInput id="myTextarea" #inputmsg placeholder="Write a Message...."
+								id="clearField" (focus)="$event.target.select()"
+								style="white-space: pre-wrap; font-weight: 600; overflow: auto; resize: vertical;"
+								formControlName="text_message" (focus)="$event.target.select()" rows="5">
+							</textarea>
 						</mat-form-field>
 						<div class="d-flex justify-content-center mt-2">
 							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"
@@ -1921,6 +1924,15 @@
 						[routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
 					<button class="custom-filled-button orange-button" data-dismiss="modal"
 						[routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
+					<button  class="close x-copy-btn" (click)="copyPreviewText()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+						class="bi bi-check2" viewBox="0 0 16 16" *ngIf="showCopyIcon">
+						<path
+							d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+					</svg>
+					<i class="bi bi-clipboard2-check" data-bs-toggle="tooltip" *ngIf="!showCopyIcon"
+						data-bs-placement="top" title="Copy data"></i>
+					</button>
 				</div>
 				<pre
 					style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>

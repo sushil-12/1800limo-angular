@@ -94,7 +94,7 @@
 			</div>
 			<div class="row pl-2">
 				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and see the next 7 days future bookings, change the start date, click search, and see past bookings from that date' }}
+						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
 					</mat-checkbox></p>
 			</div>
 		</div>
@@ -288,7 +288,7 @@
 						<p style="font-size: 19px;font-weight: 600;" *ngIf="total_amount">Client's Billing Total:
 							<span style="font-weight: 600;font-size: 22px;">${{total_amount.toLocaleString()}}</span>
 						</p>
-						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Your Net Income:
+						<p style="font-size: 19px;font-weight: 600;" *ngIf="net_total_amount">Net Future Income:
 							<span
 								style="font-weight: 600;font-size: 22px;">${{net_total_amount.toLocaleString()}}</span>
 						</p>
@@ -656,9 +656,13 @@
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
 							</mat-label>
-							<textarea matInput placeholder="Write a Message...." id="clearField" cdkTextareaAutosize
-								cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
-								(focus)="$event.target.select()" style="font-weight: 700;"></textarea>
+
+							<textarea matInput id="myTextarea" #inputmsg placeholder="Write a Message...."
+							id="clearField" (focus)="$event.target.select()"
+							style="white-space: pre-wrap; font-weight: 600; overflow: auto; resize: vertical;"
+							formControlName="text_message" (focus)="$event.target.select()" rows="5">
+						   </textarea>
+
 						</mat-form-field>
 						<div class="d-flex justify-content-center mt-2">
 							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"

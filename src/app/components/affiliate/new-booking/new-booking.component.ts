@@ -289,7 +289,7 @@ export class NewBookingComponent implements OnInit {
 		console.log("initautocomplete", nativeInput)
 
 		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['geocode'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
 		});
@@ -1674,6 +1674,9 @@ export class NewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.RatesForm.amenities)) {
 				base_rate += this.RatesForm.amenities[key].baserate;
 			}
+			if(this.BookingForm.value.number_of_vehicles != 0 ){
+				base_rate *= this.BookingForm.value.number_of_vehicles
+			}
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
@@ -1717,6 +1720,9 @@ export class NewBookingComponent implements OnInit {
 			}
 			for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
 				base_rate += this.ReturnRatesForm.amenities[key].baserate;
+			}
+			if(this.BookingForm.value.number_of_vehicles != 0 ){
+				base_rate *= this.BookingForm.value.number_of_vehicles
 			}
 			let returnGrandTotal = this.BookingForm.value.return_grand_total
 			let stripeFee = returnGrandTotal * 0.05 + 0.30

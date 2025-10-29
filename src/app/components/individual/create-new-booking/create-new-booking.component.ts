@@ -288,7 +288,7 @@ export class CreateNewBookingComponent implements OnInit {
 		console.log("initautocomplete", nativeInput)
 
 		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['geocode'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
 		});
@@ -2410,6 +2410,10 @@ export class CreateNewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.rateArray.amenities)) {
 				base_rate += this.rateArray.amenities[key].baserate;
 			}
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				base_rate *= this.Form.number_of_vehicles.value
+			}
+
 			let grandTotal = this.grandtotal
 			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
 				grandTotal = grandTotal * this.Form.number_of_vehicles.value
@@ -2479,6 +2483,10 @@ export class CreateNewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.returnRateArray.amenities)) {
 				base_rate += this.returnRateArray.amenities[key].baserate;
 			}
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				base_rate *= this.Form.number_of_vehicles.value
+			}
+			
 			let returnGrandTotal = this.r_grandtotal
 			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
 				returnGrandTotal = returnGrandTotal * this.Form.number_of_vehicles.value
