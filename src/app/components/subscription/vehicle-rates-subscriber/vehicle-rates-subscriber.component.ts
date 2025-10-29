@@ -297,7 +297,7 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 			}
 			this.VehicleRateSettingsForm.patchValue({
 				id: response.data.id,
-				vehicle_id: response.data.vehicle_id,
+				// vehicle_id: response.data.vehicle_id, // Keep vehicle_id from query params, don't overwrite
 				hourly_rate: response.data.hourly_rate ?? 0,
 				minimum_charter_hours: Number(response.data?.minimum_charter_hours),
 				hourly_rate_after_five_hours: response.data.hourly_rate_after_five_hours ?? 0,
@@ -416,7 +416,7 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 			}
 			this.VehicleRateSettingsForm.patchValue({
 				id: response.data.id,
-				vehicle_id: response.data.vehicle_id,
+				// vehicle_id: response.data.vehicle_id, // Keep vehicle_id from query params, don't overwrite
 				hourly_rate: response.data.hourly_rate ?? 0,
 				minimum_charter_hours: Number(response.data?.minimum_charter_hours),
 				hourly_rate_after_five_hours: response.data.hourly_rate_after_five_hours ?? 0,
