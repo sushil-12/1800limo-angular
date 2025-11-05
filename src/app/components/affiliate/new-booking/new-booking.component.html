@@ -1290,6 +1290,39 @@
 					</div>
 				</div>
 			</div>
+
+				<!-- Extra Stops -->
+				<div class="row mt-3">
+					<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
+						<h4 class="m-0">
+							Extra Stops
+						</h4>
+						<div class="mx-4">
+							<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
+								Add Stop
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- Extra Stop Address Field -->
+				<div class="row mt-2 mb-4 align-items-center m-0"
+					*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
+					<div class="extra-stop-field col-11">
+						<mat-form-field appearance="outline">
+							<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
+							<input #extraStopInput type="text" matInput placeholder="Type your address"
+								[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+					<div class="col-1 p-0 p-md-3">
+						<div class="delete-icon">
+							<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
+								(click)="deleteExtraStop(false, stop_index)"></i>
+						</div>
+					</div>
+				</div>
+				<!-- Extra Stop Address Field Ends -->
+
 			<!-- Special Instructions -->
 			<div class="col-md-12 my-2">
 				<mat-form-field appearance="outline">
@@ -1306,37 +1339,7 @@
 				</p>
 			</div>
 
-			<!-- Extra Stops -->
-			<div class="row mt-3">
-				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-					<h4 class="m-0">
-						Extra Stops
-					</h4>
-					<div class="mx-4">
-						<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
-							Add Stop
-						</button>
-					</div>
-				</div>
-			</div>
-			<!-- Extra Stop Address Field -->
-			<div class="row mt-2 mb-4 align-items-center m-0"
-				*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
-				<div class="extra-stop-field col-11">
-					<mat-form-field appearance="outline">
-						<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
-						<input #extraStopInput type="text" matInput placeholder="Type your address"
-							[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
-					</mat-form-field>
-				</div>
-				<div class="col-1 p-0 p-md-3">
-					<div class="delete-icon">
-						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
-							(click)="deleteExtraStop(false, stop_index)"></i>
-					</div>
-				</div>
-			</div>
-			<!-- Extra Stop Address Field Ends -->
+		
 
 
 			<!-- AGM Map -->
@@ -1999,23 +2002,6 @@
 				</div>
 			</div>
 
-			<div class="col-md-12 my-2">
-				<mat-form-field appearance="outline">
-					<mat-label style="color:red;">
-						Special Instructions / Exact Building Name
-					</mat-label>
-					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-						(focus)="$event.target.select()" rows="5"></textarea>
-				</mat-form-field>
-			</div>
-			<div class="row m-2">
-				<p class="text-lg" style="color: #dc3545!important;">
-					NOTE : Enter pickup and drop off locations first, then enter extra stops.
-				</p>
-			</div>
-
-
-
 			<!-- Extra Stops -->
 			<div class="row my-3 justify-items-end">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
@@ -2048,6 +2034,25 @@
 				</div>
 			</div>
 			<!-- Extra Stop Address Field Ends -->
+
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label style="color:red;">
+						Special Instructions / Exact Building Name
+					</mat-label>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
+						(focus)="$event.target.select()" rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+
+
+
+			
 
 
 			<!-- AGM Map -->
