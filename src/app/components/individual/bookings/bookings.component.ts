@@ -90,7 +90,7 @@ export class BookingsComponent implements OnInit {
 
 	constructor(
 		private affiliateService: AffiliateService,
-		private adminService :AdminService,
+		private adminService: AdminService,
 		private travelAgentService: TravelAgentService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
@@ -144,7 +144,7 @@ export class BookingsComponent implements OnInit {
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
-			emailTarget: ["",[Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+			emailTarget: ["", [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 		});
 
 		$("#search-field-my-booking").addClass("box-outline")
@@ -240,7 +240,7 @@ export class BookingsComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if (!this.useDateFilter  && !this.searchText) {
+			if (!this.useDateFilter && !this.searchText) {
 				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			}
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -593,6 +593,11 @@ export class BookingsComponent implements OnInit {
 		}
 	}
 
+	editActionCancelModal() {
+		$("#cancel_booking_modal").modal("hide");
+		this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: this.bookingId, updateType: 'edit', nav: 'true' } });
+	}
+
 	cancelBooking() {
 		this.spinner.show()
 		this.individualService.cancelBooking(this.bookingId)
@@ -659,7 +664,7 @@ export class BookingsComponent implements OnInit {
 		if (actionType == 'return') {
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
 		}
-		else if(actionType == 'repeat'){
+		else if (actionType == 'repeat') {
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
 		}
 		else {
@@ -671,18 +676,18 @@ export class BookingsComponent implements OnInit {
 	highlightNumbers(text: string): string {
 		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
 
-        // Process parts and apply formatting
-        let formattedText = '';
-        for (let i = 0; i < parts.length; i++) {
-            if (i % 2 === 0) {
-                formattedText += parts[i]; // Regular text part
-            } else {
-                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-            }
-        }
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+			}
+		}
 
-        return formattedText;
-    }
+		return formattedText;
+	}
 
 	get changeStatusF() {
 		return this.changeStatusForm.controls;
@@ -722,13 +727,13 @@ export class BookingsComponent implements OnInit {
 	// Method to convert hours to days and hours
 	getCancellationTime(cancellationHours: number): string {
 		if (cancellationHours > 24) {
-		  const days = Math.floor(cancellationHours / 24);
-		  const remainingHours = cancellationHours % 24;
-		  return `${days} days ${remainingHours} hours`;
+			const days = Math.floor(cancellationHours / 24);
+			const remainingHours = cancellationHours % 24;
+			return `${days} days ${remainingHours} hours`;
 		} else {
-		  return `${cancellationHours} hours`;
+			return `${cancellationHours} hours`;
 		}
-	  }
+	}
 
 	sendEmailClicked(bookingId, emailTarget) {
 		this.sendEmailForm.patchValue({
@@ -955,7 +960,7 @@ export class BookingsComponent implements OnInit {
 		});
 	}
 
-	sendEmailToAnyone(){
+	sendEmailToAnyone() {
 		if (this.sendEmailForm.invalid) {
 			return;
 		}
