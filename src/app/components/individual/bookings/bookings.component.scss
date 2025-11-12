@@ -587,6 +587,12 @@ a.dropdown-item {
 	}
 }
 
+@media (min-width: 992px){
+	.modal-lg{
+		max-width: 600px !important;
+	}
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {

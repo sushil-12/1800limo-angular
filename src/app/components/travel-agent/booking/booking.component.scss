@@ -616,3 +616,9 @@ a.dropdown-item {
 		max-width: 450px;
 	}
 }
+
+@media (min-width: 992px){
+	.modal-lg{
+		max-width: 600px !important;
+	}
+}
