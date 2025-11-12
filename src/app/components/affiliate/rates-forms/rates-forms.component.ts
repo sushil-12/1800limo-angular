@@ -87,6 +87,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	r_farmoutShare: any = 0;
 	farmoutShare: any = 0;
 	currencySymbol: any;
+	previousBookingData: any = null;
 
 	constructor(
 		private $form: FormBuilder,
@@ -434,22 +435,146 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	}
 
 	fetchRatesArrayByAffiliateVehicle(data) {
+		// Check if booking_data has changed
+		const bookingDataChanged = this.hasBookingDataChanged(data);
+		const isFirstTime = this.previousBookingData === null;
+		const isDataComplete = this.isBookingDataComplete(data);
+
+
+		// On first time load: Only store data if it's complete, otherwise skip
+		if (isFirstTime && (this.bookingType == 'edit' || this.bookingType == 'repeat')) {
+			if (isDataComplete) {
+				console.log('[buildBookingData] First time load with complete data - storing booking_data but NOT calculating rates');
+				this.previousBookingData = JSON.parse(JSON.stringify(data));
+			} else {
+				console.log('[buildBookingData] First time load with incomplete data - skipping (waiting for complete data)');
+			}
+			return;
+		}
+
+		// If no changes detected (and not first time), skip processing
+		if (!bookingDataChanged) {
+			console.log('[buildBookingData] No changes detected in booking_data. Skipping rate calculation.');
+			return;
+		}
+		
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
 			data, this.master_vehicle_id)
 		let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 		data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
-			if (this.bookingType != 'edit' && this.bookingType != 'repeat') {
-				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-				this.ratesdata.next(response?.data?.rateArray)
-				this.initRates();
-			}
+
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
+			this.ratesdata.next(response?.data?.rateArray)
+			this.initRates();
+
 			if (data.service_type == 'round_trip') {
 				this.returnRatesdata.next(response?.data?.retrunRateArray)
 				this.initReturnRates()
 			}
+			// Store current booking_data as previous for next comparison
+			this.previousBookingData = JSON.parse(JSON.stringify(data));
+			console.log('[buildBookingData] Method completed successfully');
+		}, (error: any) => {
+			console.error('[buildBookingData] API error:', error);
 		});
+	}
+
+
+	/**
+	 * Compares current booking_data with previous booking_data to detect changes
+	 * @param currentBookingData - The current booking data object
+	 * @returns true if data has changed, false otherwise
+	 */
+	private hasBookingDataChanged(currentBookingData: any): boolean {
+		// First call - no previous data, so consider it as changed
+		if (this.previousBookingData === null) {
+			console.log('[hasBookingDataChanged] First call - no previous data, considering as changed');
+			return true;
+		}
+
+		// Deep comparison of booking_data objects
+		const previous = this.previousBookingData;
+		const current = currentBookingData;
+
+		// Compare all properties
+		const keysToCompare = [
+			'vehicle_id',
+			'transfer_type',
+			'service_type',
+			'numberOfVehicles',
+			'distance',
+			'return_distance',
+			'no_of_hours',
+			'is_master_vehicle',
+			'extra_stops',
+			'return_extra_stops',
+			'pickup_time',
+			'return_pickup_time',
+			'return_vehicle_id',
+			'return_affiliate_type'
+		];
+
+		for (const key of keysToCompare) {
+			const previousValue = previous[key];
+			const currentValue = current[key];
+
+			// Deep comparison for arrays/objects (extra_stops, return_extra_stops)
+			if (Array.isArray(previousValue) && Array.isArray(currentValue)) {
+				if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
+					console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+						previous: previousValue,
+						current: currentValue
+					});
+					return true;
+				}
+			} else if (previousValue !== currentValue) {
+				console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+					previous: previousValue,
+					current: currentValue
+				});
+				return true;
+			}
+		}
+
+		console.log('[hasBookingDataChanged] No changes detected');
+		return false;
+	}
+
+	/**
+	 * Checks if booking_data is complete/valid (not initial/incomplete state)
+	 * @param bookingData - The booking data object to check
+	 * @returns true if data is complete, false if incomplete/initial state
+	 */
+	private isBookingDataComplete(bookingData: any): boolean {
+		// Check if vehicle_id is present and not empty
+		const hasVehicleId = bookingData?.vehicle_id &&
+			bookingData.vehicle_id !== '' &&
+			bookingData.vehicle_id !== null &&
+			bookingData.vehicle_id !== undefined;
+
+		// Check if distance is set (greater than 0) - this indicates actual route calculation
+		const hasDistance = bookingData?.distance !== undefined &&
+			bookingData?.distance !== null &&
+			bookingData?.distance > 0;
+
+		// Check if service_type is valid (not empty or initial state)
+		const hasServiceType = bookingData?.service_type &&
+			bookingData.service_type !== '' &&
+			bookingData.service_type !== null;
+
+		const isComplete = hasVehicleId && hasDistance && hasServiceType;
+
+		console.log('[isBookingDataComplete] Checking data completeness:', {
+			hasVehicleId,
+			hasDistance,
+			hasDistanceValue: bookingData?.distance,
+			hasServiceType,
+			isComplete
+		});
+
+		return isComplete;
 	}
 
 	getRatesData() {
@@ -622,7 +747,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else {
-				console.log('in function calculateBaseRateShare1', this.RatesForm,((this.book_data?.service_type == 'charter_tour' || this.book_data?.service_type == 'chartertour') && !this.is_readonly_min_rate),this.is_readonly_min_rate,this.book_data?.service_type)
+				console.log('in function calculateBaseRateShare1', this.RatesForm, ((this.book_data?.service_type == 'charter_tour' || this.book_data?.service_type == 'chartertour') && !this.is_readonly_min_rate), this.is_readonly_min_rate, this.book_data?.service_type)
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
