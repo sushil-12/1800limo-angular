@@ -1758,9 +1758,12 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center">
-				<p style="font-size: 20px; font-weight:500;">Are you sure, You want to cancel the booking?</p>
-			</div>
-			<div class="modal-footer">
+                <p style="font-size: 20px; font-weight:600;color: red;">Are you sure, You want to cancel the booking?</p>
+                <p style="font-size: 19px; font-weight:500;">Click Edit / Change to make changes to the booking instead of cancelling</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" (click)="editActionCancelModal()">Edit / Change
+                </button>
 				<button type="button" class="custom-btn savebutton" (click)="cancelBooking()">Yes
 				</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">No</button>

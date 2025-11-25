@@ -152,6 +152,7 @@ export class CreateBookingComponent implements OnInit {
 	currencySymbol: any;
 	currencyObj: any;
 	blockaddressfield: boolean = false;
+	previousBookingData: any = null;
 
 	constructor(
 		private $form: FormBuilder,
@@ -269,7 +270,7 @@ export class CreateBookingComponent implements OnInit {
 
 		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
 			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
 		});
 
@@ -2359,8 +2360,8 @@ export class CreateBookingComponent implements OnInit {
 		})
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
-			console.log("value in pickup_airport--->",value)
-			if(value == 3283){
+			console.log("value in pickup_airport--->", value)
+			if (value == 3283) {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
 			}
@@ -2418,8 +2419,8 @@ export class CreateBookingComponent implements OnInit {
 
 		// Return Pickup Airport
 		this.BookingForm.get('return_pickup_airport').valueChanges.subscribe((value: string) => {
-			console.log("value in pickup_airport--->",value)
-			if(value == '3283'){
+			console.log("value in pickup_airport--->", value)
+			if (value == '3283') {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 			}
@@ -2663,7 +2664,7 @@ export class CreateBookingComponent implements OnInit {
 			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
 				base_rate *= this.Form.number_of_vehicles.value
 			}
-			
+
 			let returnGrandTotal = this.r_grandtotal
 			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
 				returnGrandTotal = returnGrandTotal * this.Form.number_of_vehicles.value
@@ -2878,10 +2879,32 @@ export class CreateBookingComponent implements OnInit {
 
 		}
 
+		// Check if booking_data has changed
+		const bookingDataChanged = this.hasBookingDataChanged(booking_data);
+		const isFirstTime = this.previousBookingData === null;
+		const isDataComplete = this.isBookingDataComplete(booking_data);
+
+		// On first time load: Only store data if it's complete, otherwise skip
+		if (isFirstTime && (this.bookingType == 'edit' || this.bookingType == 'repeat')) {
+			if (isDataComplete) {
+				console.log('[buildBookingData] First time load with complete data - storing booking_data but NOT calculating rates');
+				this.previousBookingData = JSON.parse(JSON.stringify(booking_data));
+			} else {
+				console.log('[buildBookingData] First time load with incomplete data - skipping (waiting for complete data)');
+			}
+			return;
+		}
+
+		// If no changes detected (and not first time), skip processing
+		if (!bookingDataChanged) {
+			console.log('[buildBookingData] No changes detected in booking_data. Skipping rate calculation.');
+			return;
+		}
+
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
 		// booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
-			if (this.updateType != 'edit' && this.updateType != 'repeat' && this.Form.affiliate_type.value != 'loose_affiliate') {
+			if (this.Form.affiliate_type.value != 'loose_affiliate') {
 				this.subtotal = 0
 				this.r_subtotal = 0
 				this.min_rate_involved = response?.data?.min_rate_involved
@@ -2950,7 +2973,107 @@ export class CreateBookingComponent implements OnInit {
 				//   this.r_agentShare = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 				this.r_grandtotal = (parseFloat(this.r_subtotal))
 			}
+		// Store current booking_data as previous for next comparison
+		this.previousBookingData = JSON.parse(JSON.stringify(booking_data));
+		console.log('[buildBookingData] Method completed successfully');
+	}, (error: any) => {
+		console.error('[buildBookingData] API error:', error);
+	});
+	}
+
+	/**
+	 * Compares current booking_data with previous booking_data to detect changes
+	 * @param currentBookingData - The current booking data object
+	 * @returns true if data has changed, false otherwise
+	 */
+	private hasBookingDataChanged(currentBookingData: any): boolean {
+		// First call - no previous data, so consider it as changed
+		if (this.previousBookingData === null) {
+			console.log('[hasBookingDataChanged] First call - no previous data, considering as changed');
+			return true;
+		}
+
+		// Deep comparison of booking_data objects
+		const previous = this.previousBookingData;
+		const current = currentBookingData;
+
+		// Compare all properties
+		const keysToCompare = [
+			'vehicle_id',
+			'transfer_type',
+			'service_type',
+			'numberOfVehicles',
+			'distance',
+			'return_distance',
+			'no_of_hours',
+			'is_master_vehicle',
+			'extra_stops',
+			'return_extra_stops',
+			'pickup_time',
+			'return_pickup_time',
+			'return_vehicle_id',
+			'return_affiliate_type'
+		];
+
+		for (const key of keysToCompare) {
+			const previousValue = previous[key];
+			const currentValue = current[key];
+
+			// Deep comparison for arrays/objects (extra_stops, return_extra_stops)
+			if (Array.isArray(previousValue) && Array.isArray(currentValue)) {
+				if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
+					console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+						previous: previousValue,
+						current: currentValue
+					});
+					return true;
+				}
+			} else if (previousValue !== currentValue) {
+				console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+					previous: previousValue,
+					current: currentValue
+				});
+				return true;
+			}
+		}
+
+		console.log('[hasBookingDataChanged] No changes detected');
+		return false;
+	}
+
+	/**
+	 * Checks if booking_data is complete/valid (not initial/incomplete state)
+	 * @param bookingData - The booking data object to check
+	 * @returns true if data is complete, false if incomplete/initial state
+	 */
+	private isBookingDataComplete(bookingData: any): boolean {
+		// Check if vehicle_id is present and not empty
+		const hasVehicleId = bookingData?.vehicle_id &&
+			bookingData.vehicle_id !== '' &&
+			bookingData.vehicle_id !== null &&
+			bookingData.vehicle_id !== undefined;
+
+		// Check if distance is set (greater than 0) - this indicates actual route calculation
+		const hasDistance = bookingData?.distance !== undefined &&
+			bookingData?.distance !== null &&
+			bookingData?.distance > 0;
+
+		// Check if service_type is valid (not empty or initial state)
+		const hasServiceType = bookingData?.service_type &&
+			bookingData.service_type !== '' &&
+			bookingData.service_type !== null;
+
+		const isComplete = hasVehicleId && hasDistance && hasServiceType;
+
+		console.log('[isBookingDataComplete] Checking data completeness:', {
+			hasVehicleId,
+			hasDistance,
+			hasDistanceValue: bookingData?.distance,
+			hasServiceType,
+			isComplete
 		});
+
+		return isComplete;
 	}
 
 	setValueByBookNow() {

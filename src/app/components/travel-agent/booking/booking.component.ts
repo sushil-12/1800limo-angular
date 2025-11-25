@@ -786,6 +786,11 @@ export class BookingComponent implements OnInit {
 		}
 	}
 
+	editActionCancelModal() {
+		$("#cancel_booking_modal").modal("hide");
+		this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: this.cancelBookingId, updateType: 'edit', nav: 'true' } });
+	}
+
 	finalizeAction(bookingId) {
 		this.router.navigate([`/${this.currentUser?.roleName}/finalize-booking`], { queryParams: { bookingId: bookingId } });
 	}
