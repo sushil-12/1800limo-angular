@@ -813,7 +813,7 @@
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-3">
 					<div class="col-md-12" id="pickup_address">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #pickupInput type="text" matInput placeholder="Type your address"
 								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
@@ -829,7 +829,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-4">
 					<!-- Airport -->
-					<div class="col-md-6 mb-2" id="pickup_address" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+					<div class="col-md-6 mb-2" id="pickup_address">
 
 						<!-- Ng-Select - Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
@@ -838,7 +838,7 @@
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="pickup_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
-							style="height:66px;" [readonly]="blockaddressfield">
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -944,12 +944,12 @@
 				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-								(focus)="$event.target.select()" [readonly]="blockaddressfield" />
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
@@ -1005,7 +1005,7 @@
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
 								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
@@ -1021,7 +1021,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-4">
 					<!-- Airport -->
-					<div class="col-md-6 mb-2" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+					<div class="col-md-6 mb-2">
 
 						<!-- Ng-Select > Dropoff > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
@@ -1029,7 +1029,7 @@
 							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
-							style="height:66px;" [readonly]="blockaddressfield">
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -1088,12 +1088,12 @@
 				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-								(focus)="$event.target.select()" [readonly]="blockaddressfield" />
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
@@ -1142,21 +1142,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- Special Instructions -->
-			<div class="col-md-12 my-2">
-				<mat-form-field appearance="outline">
-					<mat-label style="color:red;">
-						Special Instructions / Exact Building Name
-					</mat-label>
-					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-						formControlName="booking_instructions" rows="5"></textarea>
-				</mat-form-field>
-			</div>
-			<div class="row m-2">
-				<p class="text-lg" style="color: #dc3545!important;font-weight: 500;background: yellow;padding: 5px;">
-					NOTE : Enter pickup and drop off locations first, then enter extra stops.
-				</p>
-			</div>
+
 			<!-- Extra Stops -->
 			<div class="row mt-3">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
@@ -1190,6 +1176,23 @@
 
 
 			<!-- Extra Stop Address Field Ends -->
+			 
+			<!-- Special Instructions -->
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label style="color:red;">
+						Special Instructions / Exact Building Name
+					</mat-label>
+					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+						formControlName="booking_instructions" rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;font-weight: 500;background: yellow;padding: 5px;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+			
 			<!-- AGM Map -->
 			<div class="row">
 				<!-- AGM Map -->
@@ -1359,7 +1362,7 @@
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
 								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
@@ -1377,7 +1380,7 @@
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-3">
 					<!-- Airport -->
-					<div class="col-md-6 mb-2" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+					<div class="col-md-6 mb-2">
 
 						<!-- Ng-Select > Return > Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
@@ -1386,7 +1389,7 @@
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_pickup_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
-							style="height:66px;" [readonly]="blockaddressfield">
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -1495,12 +1498,12 @@
 				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
-								(focus)="$event.target.select()" [readonly]="blockaddressfield" />
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
@@ -1559,7 +1562,7 @@
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
 								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
@@ -1577,7 +1580,7 @@
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-3">
 					<!-- Airport -->
-					<div class="col-md-6 mb-2" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+					<div class="col-md-6 mb-2">
 
 						<!-- Ng-Select > Return > Dropoff > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
@@ -1586,7 +1589,7 @@
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_dropoff_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
-							style="height:66px;" [readonly]="blockaddressfield">
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
@@ -1647,12 +1650,12 @@
 				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" [ngClass]="blockaddressfield ? 'block-cursor' : '' ">
+						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
 							</mat-label>
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
-								(focus)="$event.target.select()" [readonly]="blockaddressfield" />
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
 							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
