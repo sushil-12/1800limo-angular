@@ -272,8 +272,10 @@ header a.nav-link.active {
 }
 
 .bannerform_wrapper {
-	padding: 115px 25px 0px 25px;
-	background-image: url(../images/banner1.jpg);
+	margin: 25px 50px;
+	border-radius: 20px;
+	padding: 60px 25px 0px 25px;
+	background: linear-gradient(279.48deg, rgba(18, 18, 18, 0.5) 4.05%, #121212 86.45%), url('../images/banner1.jpg');
 	background-size: cover;
 	background-position: top center;
 	height: auto;
@@ -283,30 +285,53 @@ header a.nav-link.active {
 
 .bannerform_wrapper .bannertext {
 	width: 550px;
+	padding-top: 60px;
 }
 
 .bannerform_wrapper .bannertext h2 {
-	/* background-color: rgba(8, 15, 30, 0.68); */
+	font-weight: 500;
+	font-size: 2.8vw;
+	line-height: 130%;
+	vertical-align: middle;
+	text-transform: capitalize;
 	padding: 0px;
-	/* word-spacing: 2px; */
-	/*font-family  : 'Roboto', sans-serif;*/
 	color: #fff !important;
-	font-size: 1.8vw;
-	font-weight: 600;
-	border-radius: 3px;
-	line-height: 3.2vw;
 	text-align: left;
 }
 
 .bannerform_wrapper .bannertext h2 span {
+	font-weight: 500;
+	font-size: 2.6vw;
+	line-height: 130%;
+	vertical-align: middle;
+	text-transform: capitalize;
 	color: var(--orange-color);
-	font-weight: 600;
+}
+
+.bannerform_wrapper .bannertext h4 {
+	color: #fff;
+	font-weight: 300;
+	font-size: 1vw;
+	line-height: 150%;
+	vertical-align: middle;
+	text-transform: capitalize;
+
+}
+
+.bannerform_wrapper .bannertext h5 {
+	font-weight: 400;
+	font-size: 20px;
+	line-height: 150%;
+	vertical-align: middle;
+	text-transform: capitalize;
+	color: #fff;
 }
 
 .bannerform_wrapper .quoteform_homewrapper {
 	width: 480px;
 	background-color: rgba(0, 0, 0, 0.68);
 	border-radius: 3px;
+	margin-bottom: 20px;
 }
 
 .bannerform_wrapper .quoteform_homewrapper h3 {
@@ -680,6 +705,11 @@ header {
 
 	.bannerform_wrapper .nav-item a {
 		font-size: 0.95em;
+	}
+
+	.bannerform_wrapper .bannertext {
+		padding-top: 0px;
+		margin-top: -40px;
 	}
 }
 
@@ -2722,7 +2752,7 @@ max-width     : 50%;padding:30px;*/
 	min-height: 30px !important;
 }
 
-.pickupdate .mat-mdc-form-field-infix input{
+.pickupdate .mat-mdc-form-field-infix input {
 	padding: 4px 0 0 10px;
 }
 
@@ -2733,12 +2763,12 @@ max-width     : 50%;padding:30px;*/
 	left: -8px;
 }
 
-.pickupdate .mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-base svg{
+.pickupdate .mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-base svg {
 	color: #fff !important;
 	height: 22px;
 }
 
-.pickupdate .mdc-text-field--filled{
+.pickupdate .mdc-text-field--filled {
 	height: 30px;
 }
 
@@ -3124,7 +3154,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .text_desktop {
-	/* padding-top: 110px; */
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 }
 
 @media only screen and (max-width:767px) {
@@ -3137,9 +3169,7 @@ input[type=number]::-webkit-outer-spin-button {
 	.text_mobile {
 		display: none;
 	}
-}
 
-@media only screen and (min-width:768px) {
 	.telephone_mobile {
 		display: none;
 	}
@@ -3435,6 +3465,7 @@ i.cross-btn {
 .navbar-dark .navbar-toggler-icon {
 	background: none;
 }
+
 /* 
 header .navbar-toggler {
 	padding: 0px .75rem;
@@ -3463,6 +3494,11 @@ header .navbar-toggler {
 	.bannerform_wrapper .bannertext {
 		width: 380px;
 	}
+
+	.bannerform_wrapper .bannertext h4 {
+		max-width: 360px;
+	}
+
 }
 
 @media only screen and (max-width: 991px) {
@@ -3493,15 +3529,6 @@ header .navbar-toggler {
 		margin-right: 20px;
 	}
 
-	.bannerform_wrapper .bannertext h2 span {
-		color: var(--orange-color);
-		font-weight: 600;
-	}
-
-	.bannerform_wrapper .bannertext h2 {
-		font-size: 1.8vw;
-		line-height: 28px;
-	}
 
 	.bannerform_wrapper .bannertext {
 		width: 35%;
@@ -3672,7 +3699,8 @@ header .navbar-toggler {
 	header a.navbar-brand {
 		margin: auto
 	}
-/* 
+
+	/* 
 	header button.navbar-toggler {
 		position: absolute;
 		right: 0;
@@ -3919,15 +3947,6 @@ header .navbar-toggler {
 	.bannerform_wrapper .quoteform_homewrapper h3,
 	.personalized_wrapper h3 {
 		font-size: 22px;
-	}
-
-	.bannerform_wrapper .bannertext h2 {
-		margin-bottom: 16px;
-		padding: 10px 15px;
-		line-height: 21px;
-		font-size: 17px;
-		text-align: center;
-		display: block;
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper span {
@@ -4656,4 +4675,14 @@ header .navbar-toggler {
 	width: 100%;
 	text-align: center;
 	background-color: #00bfff;
+}
+
+
+@media only screen and (max-width:440px) {
+
+	.bannerform_wrapper {
+		margin: 0 !important;
+		border-radius: 0 !important;
+	}
+
 }
