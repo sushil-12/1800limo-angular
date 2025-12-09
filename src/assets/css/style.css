@@ -662,6 +662,45 @@ header {
 	font-weight: 600;
 }
 
+.ourmisservice_wrap {
+	background-color: #fff !important;
+}
+
+.ourmisservice_wrap h2 {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: left;
+	text-transform: capitalize;
+	color: #000;
+}
+
+.ourmisservice_wrap h2 span {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-transform: capitalize;
+	color: var(--orange-color);
+}
+
+.ourmisservice_wrap_image{
+	display: flex;
+	justify-content: center;
+}
+
+.ourmisservice_wrap_content {
+	background: linear-gradient(264.04deg, rgba(243, 147, 61, 0.1) 4.98%, rgba(141, 85, 35, 0) 89.26%);
+	border-radius: 20px;
+}
+
+.ourmisservice_wrap_content p{
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	text-transform: capitalize;
+	color: rgba(18, 18, 18, 0.6);
+}
+
 .chk_vehicles_parent {
 	min-height: 160px;
 }
@@ -1140,11 +1179,11 @@ height:280px !important;
 	width: 44%;
 }
 
-.ourmisservice_wrap {
+/* .ourmisservice_wrap {
 	display: flex;
 	margin-bottom: 40px;
 	justify-content: space-around;
-}
+} */
 
 .ourservice_wrapper hr {
 	border: 2px solid var(--orange-color);
@@ -3626,9 +3665,9 @@ header .navbar-toggler {
 		text-align: center;
 	}
 
-	.ourmisservice_wrap {
+	/* .ourmisservice_wrap {
 		flex-wrap: wrap;
-	}
+	} */
 
 	.ourmission_wrapper,
 	.ourservice_wrapper {
@@ -4704,6 +4743,20 @@ header .navbar-toggler {
 	}
 
 	.checkourveh_wrapper h6 {
+		font-size: 12px;
+
+	}
+
+	.ourmisservice_wrap h2 {
+		font-size: 24px;
+	}
+
+	.ourmisservice_wrap h2 span {
+		font-size: 24px;
+
+	}
+
+	.ourmisservice_wrap h6 {
 		font-size: 12px;
 
 	}
