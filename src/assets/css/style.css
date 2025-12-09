@@ -609,6 +609,7 @@ header {
 }
 
 .checkourveh_wrapper {
+	margin: 25px 50px;
 	padding: 12px 0px;
 	background-size: cover;
 	/* background-image: url(../images/textureimg.png); */
@@ -626,20 +627,30 @@ header {
 }
 
 .checkourveh_wrapper h2 {
-	text-align: center;
-	color: #000;
-	font-size: 28px;
 	font-weight: 600;
-	text-transform: uppercase;
-	margin-bottom: 0.5rem !important;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: #000;
+}
+
+.checkourveh_wrapper h2 span {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: var(--orange-color);
 }
 
 .checkourveh_wrapper h6 {
-	text-align: center;
-	color: #000;
-	font-size: 18px;
 	font-weight: 400;
-	/* margin-bottom: 20px; */
+	font-size: 16px;
+	line-height: 150%;
+	text-align: center;
+	text-transform: capitalize;
+	color: rgba(18, 18, 18, 1);
 }
 
 .checkourveh_wrapper p {
@@ -687,9 +698,10 @@ header {
 	position: absolute;
 	top: 79px;
 	right: -55px;
-	background: transparent !important;
-	width: 18px;
-	/* height    : 18px; */
+	background: var(--orange-color) !important;
+	width: 32px;
+	height: 32px;
+	border-radius: 40px;
 }
 
 @media only screen and (max-width:767px) {
@@ -713,23 +725,24 @@ header {
 	}
 }
 
-.owl-carousel .owl-nav button.owl-next svg:hover {
-	fill: var(--orange-color);
+.owl-carousel .owl-nav button.owl-next svg {
+	fill: #fff !important;
+	height: 18px !important;
 }
 
 .owl-carousel .owl-nav button.owl-prev {
 	position: absolute;
 	top: 79px;
 	left: -55px !important;
-	background: transparent !important;
-	width: 18px;
-	/* height          : 18px; */
-	/* border-radius   : 50%; */
-	/* opacity         : 1 !important; */
+	background: var(--orange-color) !important;
+	width: 32px;
+	height: 32px;
+	border-radius: 40px;
 }
 
-.owl-carousel .owl-nav button.owl-prev svg:hover {
-	fill: var(--orange-color);
+.owl-carousel .owl-nav button.owl-prev svg {
+	fill: #fff !important;
+	height: 18px !important;
 }
 
 .viewVehicleCarousel .owl-nav button {
@@ -3188,13 +3201,13 @@ margin-top: 50px !important;
 } */
 
 .chk_vehicles.owl-theme .owl-dots .owl-dot span {
-	width: 4px;
+	width: 6px;
 	height: 4px;
-	background: #fff;
+	background: rgba(243, 147, 61, 0.4) !important;
 }
 
 .chk_vehicles.owl-theme .owl-dots .owl-dot.active span {
-	width: 4px;
+	width: 25px;
 	height: 4px;
 	background: var(--orange-color) !important;
 }
@@ -3940,10 +3953,6 @@ header .navbar-toggler {
 		margin-top: 20px;
 	}
 
-	.checkourveh_wrapper h6 {
-		font-size: 20px;
-	}
-
 	.bannerform_wrapper .quoteform_homewrapper h3,
 	.personalized_wrapper h3 {
 		font-size: 22px;
@@ -4683,6 +4692,20 @@ header .navbar-toggler {
 	.bannerform_wrapper {
 		margin: 0 !important;
 		border-radius: 0 !important;
+	}
+
+	.checkourveh_wrapper h2 {
+		font-size: 24px;
+	}
+
+	.checkourveh_wrapper h2 span {
+		font-size: 24px;
+
+	}
+
+	.checkourveh_wrapper h6 {
+		font-size: 12px;
+
 	}
 
 }
