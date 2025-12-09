@@ -144,7 +144,7 @@ section {
 }
 
 .font-weight-bolder {
-	font-size: 17.9px !important;
+	font-size: 17px !important;
 }
 
 .after_icon::after {
@@ -206,6 +206,16 @@ section {
 // 		max-width: 900px;
 //  	}
 @media (min-width: 1200px) {
+
+	.container,
+	.container-lg,
+	.container-fluid,
+	.container-md,
+	.container-sm,
+	.container-xl {
+		max-width: 1320px !important;
+	}
+
 	.checkourveh_wrapper .container {
 		max-width: 1140px;
 	}
@@ -257,6 +267,7 @@ section {
 .modal-dialog {
 	max-width: 800px;
 }
+
 
 @media only screen and (max-width: 1024px) {
 	.text_desktop br {
@@ -318,15 +329,6 @@ section {
 		font-size: 40px;
 	}
 
-	// .flip_div{
-	// 	margin-bottom: 20px;
-	// }
-
-	.three-d-button{
-		font-size: 18px !important;
-		font-weight: 700 !important;
-		border-radius: 10px !important;
-	}
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
@@ -1105,39 +1107,48 @@ button.custom-filled-button {
 
 
 .three-d-button {
-    border-radius: none;
-    background: linear-gradient(135deg, #fac72c, #ff7b0563);
-    color: #ffffff;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
-    transition: all .3s ease;
-    font-size: 20px;
-    padding: 9px;
-    /* display: flex; */
-    /* align-items: center; */
+	width: 319px;
+	height: 45px;
+	opacity: 1;
+	border-radius: 20px;
+	background: var(--orange-color);
+	color: #ffffff;
+	font-weight: 600;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
 }
 
 .three-d-button:hover {
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-3px);
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+	transform: translateY(-3px);
 }
 
 .three-d-button:active {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);
-    transform: translateY(2px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);
+	transform: translateY(2px);
 }
 
 .three-d-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
 }
 
 .pickup-label {
 	margin-top: -24px;
-	display: block; /* Makes sure the label appears on its own line */
-  }
+	display: block;
+	/* Makes sure the label appears on its own line */
+}
 
 
-  
+.contact-number{
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 150%;
+	text-align: center;
+	color: #fff;
+	color: #000 !important;
+	border-radius: 24px;
+	background: rgba(243, 243, 243, 1);
+	padding: 5px 15px 5px 15px
+}
