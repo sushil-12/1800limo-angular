@@ -997,27 +997,13 @@
 		</div>
 	</div>
 </section>
-<section class="personalized_wrapper" id="section-services">
-	<div class="container">
-		<h2 *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">{{
-			fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.title }}</h2>
-		<hr>
-		<h6 *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">{{
-			fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
+<!-- PERSONALIZED DESTINATIONS -->
+<section class="personalized_wrapper" id="section-services"
+	*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
+	<div class="container-fluid">
+		<h2>Personalized <span>Destination and Amenities</span></h2>
+		<h6>{{fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
 
-		<div class=" whychoosemidle"
-			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
-			<h6>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.content }}</h6>
-			<!-- Desktop -->
-			<div class="row">
-				<div class="col-6 col-xl-4 rightPart"
-					*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
-					<i class="fa fa-check"></i><span>{{list1.list}}</span>
-				</div>
-			</div>
-		</div>
-
-		<div class="item"></div>
 		<div class="owl-carousel owl-theme destinationCarousel"
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<div class="item"
@@ -1030,6 +1016,28 @@
 				</div>
 			</div>
 		</div>
+		
+		<h4>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.content }}</h4>
+
+		<div class="whychoosemidle"
+			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
+			<!-- Desktop -->
+			<div class="row col-12">
+				<ul class="row col-12 col-md-8 list-unstyled">
+					<li class="col-6"
+						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
+						<i class="fa-regular fa-circle-check"></i>
+						<span class="ml-2">{{ list1.list }}</span>
+					</li>
+				</ul>
+				<div class="col-12 col-md-4">
+					<img src="'../../../../../../assets/images/personalized_img.png" />
+				</div>
+			</div>
+		</div>
+
+		
+
 	</div>
 </section>
 <!-- WHY CHOOOSE US -->
@@ -1044,7 +1052,8 @@
 						<img src="../../../../assets/images/why_choose1.png" />
 						<h3>The Best Drivers and Vehicles</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
-							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info <i
+								class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
@@ -1053,8 +1062,8 @@
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/why_choose2.png" />
 						<h3>Strong Background Checks</h3>
-						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" (click)="modalSwitch('modal_2')" data-target="#myModal"
-							tabindex="1">More
+						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
+							(click)="modalSwitch('modal_2')" data-target="#myModal" tabindex="1">More
 							Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
@@ -1065,7 +1074,8 @@
 						<img src="../../../../assets/images/why_choose3.png" />
 						<h3>The Best Value</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info <i
+								class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
@@ -1075,7 +1085,8 @@
 						<img src="../../../../assets/images/why_choose4.jpg" />
 						<h3>Consistent Quality Service</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info <i
+								class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>

@@ -661,7 +661,9 @@ header {
 }
 
 .ourmisservice_wrap {
-	background-color: #fff !important;
+	background: linear-gradient(359.09deg, rgba(18, 18, 18, 0.05) 6.25%, rgba(161, 161, 161, 0) 99.69%);
+	padding: 20px;
+	background-color: transparent !important;
 }
 
 .ourmisservice_wrap h2 {
@@ -1207,33 +1209,53 @@ height:280px !important;
 }
 
 .personalized_wrapper {
-	padding: 20px 0;
-	background-color: #000;
+	margin: 25px 50px;
+	padding: 50px;
+	background-size: cover;
+	/* background-image: url(../images/textureimg.png); */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 20px;
+	background-color: #fff !important;
 }
 
 .personalized_wrapper h2 {
-	text-align: center;
-	font-size: 28px;
-	text-transform: uppercase;
-	color: #fff;
 	font-weight: 600;
-	margin-bottom: 0.5rem !important;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: left;
+	text-transform: capitalize;
+	color: #000;
+}
+
+.personalized_wrapper h2 span {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: left;
+	text-transform: capitalize;
+	color: var(--orange-color);
 }
 
 .personalized_wrapper h6 {
-	margin-bottom: 20px;
-	text-align: center;
-	font-size: 17px;
-	color: #fff;
 	font-weight: 400;
+	font-size: 16px;
+	line-height: 150%;
+	text-align: left;
+	text-transform: capitalize;
+	color: rgba(18, 18, 18, 1);
 }
 
-.personalized_wrapper hr {
-	border: 1.5px solid var(--orange-color);
-	width: 100px;
-	background-color: var(--orange-color);
-	margin: 0px auto 20px auto;
+.personalized_wrapper h4 {
+	font-weight: 500;
+	font-size: 18px;
+	line-height: 150%;
+	text-align: left;
+	text-transform: capitalize;
+	color: #000;
 }
+
 
 .personalized_wrapper h3 {
 	text-align: center;
@@ -1432,11 +1454,21 @@ height:280px !important;
 }
 
 .whychoosemidle {
-	padding: 0px 0px 30px 0px;
-	background-color: #000;
-	border-radius: 5px;
-	/* background-image   :url(../images/whychoose_midbg.jpg);
-background-repeat      : no-repeat; background-position: bottom right; */
+	padding: 15px;
+	background: linear-gradient(264.04deg, rgba(141, 85, 35, 0) 4.98%, rgba(243, 147, 61, 0.1) 89.26%);
+	border-radius: 20px;
+	min-height: 400px;
+}
+
+.whychoosemidle img{
+	height: 400px;
+	border-radius: 16px;
+	object-fit: cover;
+    width: 100%;
+}
+
+.whychoosemidle .col-12 ul>li {
+    padding: 18px;
 }
 
 @media only screen and (max-width:767px) {
@@ -1456,16 +1488,17 @@ background-repeat      : no-repeat; background-position: bottom right; */
 	padding: 0
 }
 
-.whychoosemidle .rightPart i {
+.whychoosemidle i {
 	color: var(--orange-color);
 }
 
 .whychoosemidle span {
-	font-size: 15px;
+	font-size: 16px;
 	list-style-type: none;
 	line-height: normal;
 	margin: 0 0 12px;
-	color: #fff;
+	color: #000;
+	font-weight: 500;
 }
 
 .whychoosemidle h3 {
@@ -3434,6 +3467,15 @@ margin-top: 50px !important;
 	.whychoose_no h3 {
 		font-size: 14px;
 	}
+
+	.whychoosemidle span{
+		font-size: 12px;
+	}
+
+	.whychoosemidle .col-12 ul>li {
+		padding: 16px;
+	}
+
 }
 
 
@@ -3698,11 +3740,6 @@ header .navbar-toggler {
 		padding: 15px 0px 0px 0px;
 	}
 
-	.personalized_wrapper h6 {
-		border-bottom: 1px solid var(--orange-color);
-		padding-bottom: 25px;
-	}
-
 	.desktop_quote {
 		display: none
 	}
@@ -3927,7 +3964,6 @@ header .navbar-toggler {
 
 	.ourmission_wrapper p,
 	.ourservice_wrapper p,
-	.personalized_wrapper h6,
 	.personalized_wrapper p,
 	.whychoose_wrapper h6 {
 		font-size: 18px;
@@ -3947,11 +3983,6 @@ header .navbar-toggler {
 	.ourservice_wrapper h2 {
 		font-size: 28px;
 		text-align: center
-	}
-
-	.personalized_wrapper h2 {
-		font-size: 30px;
-		text-align: center !important
 	}
 
 	.personalized_wrapper hr {
@@ -4694,22 +4725,29 @@ header .navbar-toggler {
 
 @media only screen and (max-width:440px) {
 
-	.bannerform_wrapper {
+	.bannerform_wrapper, 
+	.personalized_wrapper {
 		margin: 0 !important;
 		border-radius: 0 !important;
 	}
 
-	.checkourveh_wrapper{
+	.checkourveh_wrapper,
+	.whychoose_wrapper,
+	.client_wrapper {
 		margin: 25px 25px;
 	}
 
-	.checkourveh_wrapper h2 {
+	.checkourveh_wrapper h2,
+	.ourmisservice_wrap h2,
+	.checkourveh_wrapper h2 span,
+	.ourmisservice_wrap h2 span,
+	.whychoose_wrapper h2,
+	.whychoose_wrapper h2 span,
+	.client_wrapper h2,
+	.client_wrapper h2 span,
+	.personalized_wrapper h2,
+	.personalized_wrapper h2 span {
 		font-size: 24px;
-	}
-
-	.checkourveh_wrapper h2 span {
-		font-size: 24px;
-
 	}
 
 	.checkourveh_wrapper h6 {
@@ -4717,46 +4755,25 @@ header .navbar-toggler {
 
 	}
 
-	.ourmisservice_wrap h2 {
-		font-size: 24px;
-	}
-
-	.ourmisservice_wrap h2 span {
-		font-size: 24px;
-
-	}
-
-	.ourmisservice_wrap h6 {
-		font-size: 14px;
-
-	}
-
-	.whychoose_wrapper{
-		margin: 25px 25px;
-	}
-
-	.whychoose_wrapper h2 {
-		font-size: 24px;
-	}
-
-	.whychoose_wrapper h2 span {
-		font-size: 24px;
-	}
-
-	.whychoose_wrapper p {
+	.ourmisservice_wrap h6,
+	.whychoose_wrapper p,
+	.personalized_wrapper h6,
+	.whychoosemidle span{
 		font-size: 14px;
 	}
 
-	.client_wrapper{
-		margin: 25px 25px;
+	.personalized_wrapper h4{
+		font-size: 16px;
+	}
+	
+	.whychoosemidle{
+		background: linear-gradient(264.04deg, rgba(243, 147, 61, 0.1) 4.98%, rgba(141, 85, 35, 0) 89.26%);
 	}
 
-	.client_wrapper h2 {
-		font-size: 24px;
+	
+	.whychoosemidle .col-12 ul>li {
+		padding: 12px;
 	}
 
-	.client_wrapper h2 span {
-		font-size: 24px;
-	}
 
 }
