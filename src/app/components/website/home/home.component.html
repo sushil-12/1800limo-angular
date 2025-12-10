@@ -8,7 +8,7 @@
 					<!-- DESKTOP -->
 					<div class="text_desktop">
 						<h2>
-							Go Anywhere with <br> <span>1-800-Limo.Com</span>
+							Go Anywhere with <br> <span>1-800-LIMO.COM</span>
 						</h2>
 						<h4>{{fetchPageData('1-800-limo.com')?.title }} {{fetchPageData('1-800-limo.com')?.subtitle}} {{
 							fetchPageData('1-800-limo.com')?.content}}</h4>
@@ -1032,46 +1032,50 @@
 		</div>
 	</div>
 </section>
+<!-- WHY CHOOOSE US -->
 <section class="whychoose_wrapper" *ngIf="fetchPageData('WHY CHOOSE US')?.section_status == 'enable' ">
-	<div class="container why_container">
-		<h2>{{ fetchPageData('WHY CHOOSE US')?.title }}</h2>
-		<hr>
-		<h6>{{ fetchPageData('WHY CHOOSE US')?.content }}</h6>
+	<div class="container-fluid">
+		<h2>Why <span>Choose Us</span></h2>
+		<p>{{ fetchPageData('WHY CHOOSE US')?.content }}</p>
 		<div class="row text-center">
-			<div class="col-md-6">
-				<div class="row">
+			<div class="col-md-3">
+				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
-						<h3>The Best Drivers and Nicest Vehicles</h3>
+						<img src="../../../../assets/images/why_choose1.png" />
+						<h3>The Best Drivers and Vehicles</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
-							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info</a>
+							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
+			<div class="col-md-3">
+				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
-						<h3>Strong Background Checks and Vehicle Inspections</h3>
-						<a data-toggle="modal" name="modalType" (click)="modalSwitch('modal_2')" data-target="#myModal"
+						<img src="../../../../assets/images/why_choose2.png" />
+						<h3>Strong Background Checks</h3>
+						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" (click)="modalSwitch('modal_2')" data-target="#myModal"
 							tabindex="1">More
-							Info</a>
+							Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12 whychoose_no Qualitymargin">
+			<div class="col-md-3">
+				<div class="row p-2">
+					<div class="col-md-12 whychoose_no">
+						<img src="../../../../assets/images/why_choose3.png" />
 						<h3>The Best Value</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a>
+							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12 whychoose_no Qualitymargin">
+			<div class="col-md-3">
+				<div class="row p-2">
+					<div class="col-md-12 whychoose_no">
+						<img src="../../../../assets/images/why_choose4.jpg" />
 						<h3>Consistent Quality Service</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info</a>
+							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
@@ -1096,10 +1100,8 @@
 <!----OUR CLIENTS------------->
 <section class="client_wrapper client_wrapper_desktop"
 	*ngIf="fetchPageData('SOME OF OUR CLIENTS')?.section_status == 'enable' ">
-	<div class="container">
-		<h2>{{ fetchPageData('SOME OF OUR CLIENTS')?.title }}
-		</h2>
-		<hr>
+	<div class="container-fluid">
+		<h2>Some of <span>Our Clients</span></h2>
 		<div class="row logo_image justify-content-center">
 			<div class="col-2 col-md-2" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
 				<img src="{{clientLogo?.path}}" alt="client1">
@@ -1110,10 +1112,9 @@
 
 <!-- OUR CLIENTS FOR MOBILE -->
 <section class="client_wrapper client_wrapper_mobile">
-	<div class="container">
-		<h2>SOME OF OUR CLIENTS
-		</h2>
-		<hr>
+	<div class="container-fluid">
+		<h2>Some of <span>Our Clients</span></h2>
+
 		<div class="client_logo owl-carousel owl-theme">
 			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
 				<img src="{{clientLogo?.path}}" alt="client1">

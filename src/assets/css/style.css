@@ -332,6 +332,7 @@ header a.nav-link.active {
 	background-color: rgba(0, 0, 0, 0.68);
 	border-radius: 3px;
 	margin-bottom: 20px;
+	border: 1px solid rgba(243, 147, 61, 0.2);
 }
 
 .bannerform_wrapper .quoteform_homewrapper h3 {
@@ -467,9 +468,6 @@ header a.nav-link.active {
 		margin: 0 15px !important;
 	}
 
-	.whychoose_wrapper h3 {
-		line-height: 30px;
-	}
 }
 
 .footer_logincreateacct:hover {
@@ -683,7 +681,7 @@ header {
 	color: var(--orange-color);
 }
 
-.ourmisservice_wrap_image{
+.ourmisservice_wrap_image {
 	display: flex;
 	justify-content: center;
 }
@@ -693,7 +691,7 @@ header {
 	border-radius: 20px;
 }
 
-.ourmisservice_wrap_content p{
+.ourmisservice_wrap_content p {
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
@@ -1278,17 +1276,6 @@ height:280px !important;
 	background-color: #ccc
 }
 
-.whychoose_wrapper {
-	padding: 20px 0;
-	background-size: cover;
-	/* background-image: url(../images/textureimg.png); */
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: black !important;
-	color: white !important;
-}
-
 .rightPart {
 	margin-left: 75px !important;
 }
@@ -1317,21 +1304,45 @@ height:280px !important;
 	}
 }
 
-.whychoose_wrapper h2 {
-	text-transform: uppercase;
-	text-align: center;
-	font-size: 28px;
-	color: #fff;
-	font-weight: 600;
-	margin-bottom: 0.5rem !important;
+.whychoose_wrapper {
+	margin: 25px 50px;
+	padding: 50px;
+	background-size: cover;
+	/* background-image: url(../images/textureimg.png); */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 20px;
+	background: linear-gradient(0deg, #121212, #121212), linear-gradient(280.43deg, rgba(0, 0, 0, 0) 12.37%, rgba(243, 147, 61, 0.2) 97.66%);
+
 }
 
-.whychoose_wrapper h6 {
-	margin-bottom: 40px;
+.whychoose_wrapper h2 {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
 	text-align: center;
-	font-size: 18px;
-	color: #fff;
+	text-transform: capitalize;
+	color: #ffffff;
+}
+
+.whychoose_wrapper h2 span {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: var(--orange-color);
+}
+
+.whychoose_wrapper p {
 	font-weight: 400;
+	font-size: 16px;
+	line-height: 150%;
+	text-align: center;
+	text-transform: capitalize;
+	color: rgba(255, 255, 255, 0.8);
+	margin-bottom: 20px;
 }
 
 .whychoose_wrapper .numb {
@@ -1352,7 +1363,29 @@ height:280px !important;
 
 .whychoose_no {
 	margin-bottom: 20px;
-	padding-left: 0;
+	padding: 20px;
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(243, 147, 61, 0.2);
+	background: linear-gradient(180deg, rgba(243, 147, 61, 0.01) 0%, rgba(153, 153, 153, 0) 100%);
+	min-height: 300px;
+	max-height: 300px;
+	border-radius: 16px;
+}
+
+.whychoose_no img {
+	width: 240px;
+	height: 155px;
+	border-radius: 16px;
+	margin-bottom: 30px;
+}
+
+.whychoose_no h3 {
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 140%;
+	text-align: center;
+	color: #fff;
+
 }
 
 @media only screen and (max-width:500px) {
@@ -1362,12 +1395,17 @@ height:280px !important;
 }
 
 .whychoose_no a {
+	display: block;
+	width: 100%;
+	background: rgba(243, 147, 61, 1);
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 20px;
+	letter-spacing: -0.23px;
 	color: #fff;
-	background: var(--orange);
-	font-size: 17px;
 	border: 1px solid var(--orange);
 	line-height: 17px;
-	padding: 5px 15px;
+	padding: 8px 10px;
 	transition: 0.2s;
 	border-radius: 10px;
 }
@@ -1378,12 +1416,6 @@ height:280px !important;
 	background: var(--orange);
 }
 
-.whychoose_wrapper h3 {
-	text-align: center;
-	font-size: 18px;
-	color: #fff;
-	font-weight: 600;
-}
 
 .why_container {
 	border-top: 1px solid white;
@@ -1391,22 +1423,6 @@ height:280px !important;
 	padding: 20px 0px;
 }
 
-@media only screen and (max-width:1023px) {
-	.whychoose_wrapper h3 {
-		text-align: center;
-		font-size: 20px;
-		color: #fff;
-		font-weight: 600;
-		height: auto;
-	}
-}
-
-.whychoose_wrapper p {
-	text-align: left;
-	font-size: 16px;
-	color: #fff;
-	font-weight: 400;
-}
 
 .whychoose_wrapper hr {
 	border: 2px solid var(--orange-color);
@@ -1463,7 +1479,9 @@ background-repeat      : no-repeat; background-position: bottom right; */
 
 .client_wrapper {
 	background-color: #000 !important;
-	padding: 30px 0 30px 0 !important;
+	padding: 30px !important;
+	margin: 25px 50px;
+	border-radius: 20px;
 }
 
 .client_wrapper .owl-carousel .owl-nav button.owl-prev {
@@ -2030,18 +2048,22 @@ footer .footer a {
 }
 
 
-
-.client_wrapper {
-	padding: 70px 0px;
-	background-color: #fff;
+.client_wrapper h2 {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: #ffffff;
 }
 
-.client_wrapper h2 {
+.client_wrapper h2 span {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
 	text-align: center;
-	color: #fff;
-	font-size: 28px;
-	font-weight: bold;
-	margin-bottom: 0.5rem !important;
+	text-transform: capitalize;
+	color: var(--orange-color);
 }
 
 .client_wrapper hr {
@@ -3399,6 +3421,19 @@ margin-top: 50px !important;
 		margin-left: 16px;
 		margin-right: 0px;
 	}
+
+	.whychoose_no {
+		min-height: 320px;
+		max-height: 320px;
+	}
+
+	.whychoose_no img {
+		width: 190px;
+	}
+
+	.whychoose_no h3 {
+		font-size: 14px;
+	}
 }
 
 
@@ -3860,11 +3895,6 @@ header .navbar-toggler {
 		margin-bottom: 15px
 	}
 
-	.whychoose_no {
-		border-bottom: 1px solid #ccc;
-		padding-bottom: 30px;
-	}
-
 	@media (min-width:300px) and (max-width:812px) {
 		.Qualitymargin {
 			margin-bottom: 0;
@@ -3874,13 +3904,6 @@ header .navbar-toggler {
 	/* .whychoose_wrapper .numb{margin:0px auto 15px} */
 	.whychoosemidle li {
 		font-size: 16px;
-	}
-
-
-	.whychoose_wrapper h3,
-	.whychoose_wrapper p,
-	.whychoose_no {
-		text-align: center
 	}
 
 	.checkourveh_wrapper,
@@ -3897,7 +3920,7 @@ header .navbar-toggler {
 		margin-bottom: 20px;
 	}
 
-	.ourmission_wrapper hr{
+	.ourmission_wrapper hr {
 		margin: 0px auto 20px auto;
 		display: block;
 	}
@@ -3921,8 +3944,7 @@ header .navbar-toggler {
 	}
 
 	.ourmission_wrapper h2,
-	.ourservice_wrapper h2,
-	.whychoose_wrapper h2 {
+	.ourservice_wrapper h2 {
 		font-size: 28px;
 		text-align: center
 	}
@@ -4677,6 +4699,10 @@ header .navbar-toggler {
 		border-radius: 0 !important;
 	}
 
+	.checkourveh_wrapper{
+		margin: 25px 25px;
+	}
+
 	.checkourveh_wrapper h2 {
 		font-size: 24px;
 	}
@@ -4703,6 +4729,34 @@ header .navbar-toggler {
 	.ourmisservice_wrap h6 {
 		font-size: 14px;
 
+	}
+
+	.whychoose_wrapper{
+		margin: 25px 25px;
+	}
+
+	.whychoose_wrapper h2 {
+		font-size: 24px;
+	}
+
+	.whychoose_wrapper h2 span {
+		font-size: 24px;
+	}
+
+	.whychoose_wrapper p {
+		font-size: 14px;
+	}
+
+	.client_wrapper{
+		margin: 25px 25px;
+	}
+
+	.client_wrapper h2 {
+		font-size: 24px;
+	}
+
+	.client_wrapper h2 span {
+		font-size: 24px;
 	}
 
 }

@@ -1061,17 +1061,6 @@ a.user-profile:active::after {
 	}
 }
 
-.whychoose_no a {
-	color: #000 !important;
-	background-color: #F2C449;
-	font-size: 17px;
-	border: none;
-	line-height: 17px;
-	padding: 5px 15px;
-	transition: 0.2s;
-	border-radius: 10px;
-}
-
 @media only screen and (max-width:767px) {
 	.dropdown-menu a {
 		font-size: 17px;
