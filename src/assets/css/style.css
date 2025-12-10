@@ -1460,25 +1460,6 @@ background-repeat      : no-repeat; background-position: bottom right; */
 	margin-bottom: 20px;
 }
 
-.ridenow_wrapper {
-	background-color: #000 !important;
-	padding: 20px 0 !important;
-	padding-bottom: 20px !important;
-}
-
-@media only screen and (max-width:500px) {
-	.ridenow_wrapper {
-		background-color: #000 !important;
-		padding: 30px 0 !important;
-		padding-bottom: 0px !important;
-	}
-}
-
-@media only screen and (max-width:767px) and (orientation: landscape) {
-	.ridenow_wrapper .col-md-4 {
-		display: none;
-	}
-}
 
 .client_wrapper {
 	background-color: #000 !important;
@@ -1495,32 +1476,6 @@ background-repeat      : no-repeat; background-position: bottom right; */
 	position: absolute;
 	top: 55px;
 	right: -50px;
-}
-
-.ridenow_wrapper h2 {
-	display: inline-block;
-	font-size: 28px;
-	color: #fff;
-	font-weight: 600;
-	text-transform: uppercase;
-	margin-bottom: 0.5rem !important;
-}
-
-.ridenow_wrapper hr {
-	border: 2px solid var(--orange-color);
-	width: 100px;
-	background-color: var(--orange-color);
-	margin: 0px auto 20px auto;
-}
-
-.ridenow_wrapper img {
-	width: 100%
-}
-
-.ridenow_wrapper p {
-	font-size: 16px;
-	color: #fff;
-	font-weight: 300;
 }
 
 footer {
@@ -3921,19 +3876,13 @@ header .navbar-toggler {
 		font-size: 16px;
 	}
 
-	.ridenow_wrapper h2 {
-		font-size: 26px;
-		text-align: center
-	}
 
 	.whychoose_wrapper h3,
 	.whychoose_wrapper p,
-	.whychoose_no,
-	.ridenow_wrapper p {
+	.whychoose_no {
 		text-align: center
 	}
 
-	.ridenow_wrapper,
 	.checkourveh_wrapper,
 	.personalized_wrapper {
 		padding: 30px 0;
@@ -3948,8 +3897,7 @@ header .navbar-toggler {
 		margin-bottom: 20px;
 	}
 
-	.ourmission_wrapper hr,
-	.ridenow_wrapper hr {
+	.ourmission_wrapper hr{
 		margin: 0px auto 20px auto;
 		display: block;
 	}
@@ -3986,10 +3934,6 @@ header .navbar-toggler {
 
 	.personalized_wrapper hr {
 		margin: 0px auto 20px auto !important;
-	}
-
-	.ridenow_wrapper h2 {
-		margin-top: 20px;
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper h3,
@@ -4757,7 +4701,7 @@ header .navbar-toggler {
 	}
 
 	.ourmisservice_wrap h6 {
-		font-size: 12px;
+		font-size: 14px;
 
 	}
 

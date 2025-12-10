@@ -1079,17 +1079,15 @@
 	</div>
 </section>
 <!---------------RIDE NOW--------------------------->
-<section class="ridenow_wrapper" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<img src="assets/images/welimg.jpg" alt="welimg">
+<section class="ourmisservice_wrap" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
+	<div class="container-fluid">
+		<div class="d-flex flex-column flex-md-row col-12">
+			<div class="ourmisservice_wrap_image col-12 col-md-6">
+				<img src="../../../../assets/images/ride_now_later_img.png" />
 			</div>
-			<div class="col-md-8 text-center">
-				<h2>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.title }}</h2>
-				<hr>
-
-				<p>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.subtitle }}</p>
+			<div class="ourmisservice_wrap_content col-12 col-md-6">
+				<h2 style="margin-bottom: 20px;margin-top: 20px;">Ride Now Or <span>Ride Later</span></h2>
+				<h6>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.subtitle }}</h6>
 				<p>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
 			</div>
 		</div>
