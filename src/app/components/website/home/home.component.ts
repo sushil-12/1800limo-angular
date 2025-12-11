@@ -409,7 +409,7 @@ export class HomeComponent implements OnInit {
 					$('.owl-carousel').owlCarousel({
 						loop: true,
 						autoplay: true,
-						autoplayTimeout: 2000000,
+						autoplayTimeout: 2000,
 						autoplayHoverPause: true,
 						margin: 10,
 						responsiveClass: true,
