@@ -908,6 +908,12 @@ header {
 	top: 190.5px !important;
 }
 
+.destinationCarousel .owl-nav button.owl-prev svg,
+.destinationCarousel .owl-nav button.owl-next svg {
+	position: absolute;
+	top: 6px !important;
+}
+
 .destinationCarousel button span {
 	top: -3px !important;
 }
@@ -1257,36 +1263,41 @@ height:280px !important;
 }
 
 
-.personalized_wrapper h3 {
-	text-align: center;
-	font-size: 24px;
-	color: var(--orange-color);
-	font-weight: 500;
+
+.personalized_wrapper .outer_div_pw {
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	/* box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08); */
+	border-radius: 10px;
+	min-height: 430px;
+	max-height: 430px;
 }
 
-.personalized_wrapper p {
-	text-align: center;
-	font-size: 17px;
-	color: #000;
-	font-weight: 400;
+.personalized_wrapper .owl-carousel .owl-item img{
+	border-radius: 10px;
 }
+
 
 .personalized_text {
-	background-color: #000;
+	background-color: #fff;
 	padding: 20px 15px 20px 15px;
-	text-align: center;
 }
 
-@media only screen and (max-width:500px) {
-	.personalized_text {
-		background-color: #000;
-		padding: 20px 15px 0px 15px;
-		text-align: center;
-	}
+.personalized_text h3 {
+	font-weight: 590;
+	font-size: 20px;
+	line-height: 150%;
+	letter-spacing: 0%;
+	color: #000;
+	text-align: left;
+
 }
 
 .personalized_text p {
-	color: white;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 150%;
+	color: #000;
+	text-align: left;
 }
 
 .personalized_wrapper .carousel-indicators {
@@ -1460,15 +1471,15 @@ height:280px !important;
 	min-height: 400px;
 }
 
-.whychoosemidle img{
+.whychoosemidle img {
 	height: 400px;
 	border-radius: 16px;
 	object-fit: cover;
-    width: 100%;
+	width: 100%;
 }
 
 .whychoosemidle .col-12 ul>li {
-    padding: 18px;
+	padding: 18px;
 }
 
 @media only screen and (max-width:767px) {
@@ -3468,7 +3479,7 @@ margin-top: 50px !important;
 		font-size: 14px;
 	}
 
-	.whychoosemidle span{
+	.whychoosemidle span {
 		font-size: 12px;
 	}
 
@@ -3484,13 +3495,13 @@ margin-top: 50px !important;
 } */
 
 .personalized_wrapper .owl-theme .owl-dots .owl-dot span {
-	width: 5px;
-	height: 5px;
-	background: #fff;
+	width: 6px;
+	height: 4px;
+	background: rgba(243, 147, 61, 0.4) !important;
 }
 
 .personalized_wrapper .owl-theme .owl-dots .owl-dot.active span {
-	width: 5px;
+	width: 25px;
 	height: 5px;
 	background: var(--orange-color) !important;
 }
@@ -3964,7 +3975,6 @@ header .navbar-toggler {
 
 	.ourmission_wrapper p,
 	.ourservice_wrapper p,
-	.personalized_wrapper p,
 	.whychoose_wrapper h6 {
 		font-size: 18px;
 		text-align: center !important;
@@ -3989,8 +3999,7 @@ header .navbar-toggler {
 		margin: 0px auto 20px auto !important;
 	}
 
-	.bannerform_wrapper .quoteform_homewrapper h3,
-	.personalized_wrapper h3 {
+	.bannerform_wrapper .quoteform_homewrapper h3 {
 		font-size: 22px;
 	}
 
@@ -4725,7 +4734,7 @@ header .navbar-toggler {
 
 @media only screen and (max-width:440px) {
 
-	.bannerform_wrapper, 
+	.bannerform_wrapper,
 	.personalized_wrapper {
 		margin: 0 !important;
 		border-radius: 0 !important;
@@ -4758,19 +4767,19 @@ header .navbar-toggler {
 	.ourmisservice_wrap h6,
 	.whychoose_wrapper p,
 	.personalized_wrapper h6,
-	.whychoosemidle span{
+	.whychoosemidle span {
 		font-size: 14px;
 	}
 
-	.personalized_wrapper h4{
+	.personalized_wrapper h4 {
 		font-size: 16px;
 	}
-	
-	.whychoosemidle{
+
+	.whychoosemidle {
 		background: linear-gradient(264.04deg, rgba(243, 147, 61, 0.1) 4.98%, rgba(141, 85, 35, 0) 89.26%);
 	}
 
-	
+
 	.whychoosemidle .col-12 ul>li {
 		padding: 12px;
 	}

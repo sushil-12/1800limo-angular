@@ -1006,7 +1006,7 @@
 
 		<div class="owl-carousel owl-theme destinationCarousel"
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
-			<div class="item"
+			<div class="item outer_div_pw"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
 				<img src="{{sliderData?.image}}" alt="a1">
 				<div class="personalized_text">
@@ -1016,7 +1016,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<h4>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.content }}</h4>
 
 		<div class="whychoosemidle"
