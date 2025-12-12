@@ -688,6 +688,10 @@ header {
 	justify-content: center;
 }
 
+.ourmisservice_wrap_image img{
+	width: 100%;
+}
+
 .ourmisservice_wrap_content {
 	background: linear-gradient(264.04deg, rgba(243, 147, 61, 0.1) 4.98%, rgba(141, 85, 35, 0) 89.26%);
 	border-radius: 20px;
@@ -1406,6 +1410,7 @@ height:280px !important;
 }
 
 .whychoose_no img {
+	object-fit: cover;
 	width: 240px;
 	height: 155px;
 	border-radius: 16px;
@@ -4846,6 +4851,14 @@ header .navbar-toggler {
 
 	.copyright_div .inner_div2 {
 		flex-direction: column;
+	}
+
+	.footercontent{
+		text-align: center;
+	}
+
+	.footercontent .content_qr_btn .login_btn{
+		margin-left: 50px;
 	}
 
 	.footercontent p {

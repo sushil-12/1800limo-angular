@@ -15,14 +15,14 @@
 						<button (click)="joinButton()" class="three-d-button">
 							Buy Chauffeur Select Software
 						</button>
-						<div>
+						<!-- <div>
 							<h5 style="margin-top: 50px;">
 								Download our app
 							</h5>
 							<img src="../../../../assets/images/google_play_img.png" height="50px" width="160px"
 								class="mr-3" /> <img src="../../../../assets/images/app_store_img.png" height="50px"
 								width="150px" />
-						</div>
+						</div> -->
 					</div>
 
 					<!-- MOBILE -->
@@ -1004,9 +1004,9 @@
 		<h2>Personalized <span>Destination and Amenities</span></h2>
 		<h6>{{fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
 
-		<div class="owl-carousel owl-theme destinationCarousel"
+		<div class="owl-carousel owl-theme destinationCarousel mb-3"
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
-			<div class="item outer_div_pw"
+			<div class="item outer_div_pw mb-3"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
 				<img src="{{sliderData?.image}}" alt="a1">
 				<div class="personalized_text">
@@ -1024,7 +1024,7 @@
 			<!-- Desktop -->
 			<div class="row col-12">
 				<ul class="row col-12 col-md-8 list-unstyled">
-					<li class="col-6"
+					<li class="col-6 d-flex"
 						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
 						<i class="fa-regular fa-circle-check"></i>
 						<span class="ml-2">{{ list1.list }}</span>
