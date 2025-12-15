@@ -8,21 +8,21 @@
 					<!-- DESKTOP -->
 					<div class="text_desktop">
 						<h2>
-							Go Anywhere with <br> <span>1-800-Limo.Com</span>
+							Go Anywhere with <br> <span>1-800-LIMO.COM</span>
 						</h2>
 						<h4>{{fetchPageData('1-800-limo.com')?.title }} {{fetchPageData('1-800-limo.com')?.subtitle}} {{
 							fetchPageData('1-800-limo.com')?.content}}</h4>
 						<button (click)="joinButton()" class="three-d-button">
 							Buy Chauffeur Select Software
 						</button>
-						<div>
+						<!-- <div>
 							<h5 style="margin-top: 50px;">
 								Download our app
 							</h5>
 							<img src="../../../../assets/images/google_play_img.png" height="50px" width="160px"
 								class="mr-3" /> <img src="../../../../assets/images/app_store_img.png" height="50px"
 								width="150px" />
-						</div>
+						</div> -->
 					</div>
 
 					<!-- MOBILE -->
@@ -997,30 +997,16 @@
 		</div>
 	</div>
 </section>
-<section class="personalized_wrapper" id="section-services">
-	<div class="container">
-		<h2 *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">{{
-			fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.title }}</h2>
-		<hr>
-		<h6 *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">{{
-			fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
+<!-- PERSONALIZED DESTINATIONS -->
+<section class="personalized_wrapper" id="section-services"
+	*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
+	<div class="container-fluid">
+		<h2>Personalized <span>Destination and Amenities</span></h2>
+		<h6>{{fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
 
-		<div class=" whychoosemidle"
+		<div class="owl-carousel owl-theme destinationCarousel mb-3"
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
-			<h6>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.content }}</h6>
-			<!-- Desktop -->
-			<div class="row">
-				<div class="col-6 col-xl-4 rightPart"
-					*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
-					<i class="fa fa-check"></i><span>{{list1.list}}</span>
-				</div>
-			</div>
-		</div>
-
-		<div class="item"></div>
-		<div class="owl-carousel owl-theme destinationCarousel"
-			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
-			<div class="item"
+			<div class="item outer_div_pw mb-3"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
 				<img src="{{sliderData?.image}}" alt="a1">
 				<div class="personalized_text">
@@ -1030,48 +1016,77 @@
 				</div>
 			</div>
 		</div>
+
+		<h4>{{ fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.content }}</h4>
+
+		<div class="whychoosemidle"
+			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
+			<!-- Desktop -->
+			<div class="row col-12">
+				<ul class="row col-12 col-md-8 list-unstyled">
+					<li class="col-6 d-flex"
+						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
+						<i class="fa-regular fa-circle-check"></i>
+						<span class="ml-2">{{ list1.list }}</span>
+					</li>
+				</ul>
+				<div class="col-12 col-md-4">
+					<img src="'../../../../../../assets/images/personalized_img.png" />
+				</div>
+			</div>
+		</div>
+
+		
+
 	</div>
 </section>
+<!-- WHY CHOOOSE US -->
 <section class="whychoose_wrapper" *ngIf="fetchPageData('WHY CHOOSE US')?.section_status == 'enable' ">
-	<div class="container why_container">
-		<h2>{{ fetchPageData('WHY CHOOSE US')?.title }}</h2>
-		<hr>
-		<h6>{{ fetchPageData('WHY CHOOSE US')?.content }}</h6>
+	<div class="container-fluid">
+		<h2>Why <span>Choose Us</span></h2>
+		<p>{{ fetchPageData('WHY CHOOSE US')?.content }}</p>
 		<div class="row text-center">
-			<div class="col-md-6">
-				<div class="row">
+			<div class="col-md-3">
+				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
-						<h3>The Best Drivers and Nicest Vehicles</h3>
+						<img src="../../../../assets/images/why_choose1.png" />
+						<h3>The Best Drivers and Vehicles</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
-							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info</a>
+							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info <i
+								class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
+			<div class="col-md-3">
+				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
-						<h3>Strong Background Checks and Vehicle Inspections</h3>
-						<a data-toggle="modal" name="modalType" (click)="modalSwitch('modal_2')" data-target="#myModal"
-							tabindex="1">More
-							Info</a>
+						<img src="../../../../assets/images/why_choose2.png" />
+						<h3>Strong Background Checks</h3>
+						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
+							(click)="modalSwitch('modal_2')" data-target="#myModal" tabindex="1">More
+							Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12 whychoose_no Qualitymargin">
+			<div class="col-md-3">
+				<div class="row p-2">
+					<div class="col-md-12 whychoose_no">
+						<img src="../../../../assets/images/why_choose3.png" />
 						<h3>The Best Value</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a>
+							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info <i
+								class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12 whychoose_no Qualitymargin">
+			<div class="col-md-3">
+				<div class="row p-2">
+					<div class="col-md-12 whychoose_no">
+						<img src="../../../../assets/images/why_choose4.jpg" />
 						<h3>Consistent Quality Service</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info</a>
+							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info <i
+								class="fa fa-arrow-right" aria-hidden="true"></i></a>
 					</div>
 				</div>
 			</div>
@@ -1079,17 +1094,15 @@
 	</div>
 </section>
 <!---------------RIDE NOW--------------------------->
-<section class="ridenow_wrapper" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<img src="assets/images/welimg.jpg" alt="welimg">
+<section class="ourmisservice_wrap" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
+	<div class="container-fluid">
+		<div class="d-flex flex-column flex-md-row col-12">
+			<div class="ourmisservice_wrap_image col-12 col-md-6">
+				<img src="../../../../assets/images/ride_now_later_img.png" />
 			</div>
-			<div class="col-md-8 text-center">
-				<h2>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.title }}</h2>
-				<hr>
-
-				<p>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.subtitle }}</p>
+			<div class="ourmisservice_wrap_content col-12 col-md-6">
+				<h2 style="margin-bottom: 20px;margin-top: 20px;">Ride Now Or <span>Ride Later</span></h2>
+				<h6>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.subtitle }}</h6>
 				<p>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
 			</div>
 		</div>
@@ -1098,10 +1111,8 @@
 <!----OUR CLIENTS------------->
 <section class="client_wrapper client_wrapper_desktop"
 	*ngIf="fetchPageData('SOME OF OUR CLIENTS')?.section_status == 'enable' ">
-	<div class="container">
-		<h2>{{ fetchPageData('SOME OF OUR CLIENTS')?.title }}
-		</h2>
-		<hr>
+	<div class="container-fluid">
+		<h2>Some of <span>Our Clients</span></h2>
 		<div class="row logo_image justify-content-center">
 			<div class="col-2 col-md-2" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
 				<img src="{{clientLogo?.path}}" alt="client1">
@@ -1112,10 +1123,9 @@
 
 <!-- OUR CLIENTS FOR MOBILE -->
 <section class="client_wrapper client_wrapper_mobile">
-	<div class="container">
-		<h2>SOME OF OUR CLIENTS
-		</h2>
-		<hr>
+	<div class="container-fluid">
+		<h2>Some of <span>Our Clients</span></h2>
+
 		<div class="client_logo owl-carousel owl-theme">
 			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
 				<img src="{{clientLogo?.path}}" alt="client1">

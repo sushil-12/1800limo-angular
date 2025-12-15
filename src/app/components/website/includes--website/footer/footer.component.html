@@ -1,146 +1,77 @@
 <!----FOOTER------------->
 <footer>
-	<div class="container">
+	<div class="container-fluid">
 		<!-- main content -->
 		<div class="footercontent">
-			<!-- Mobile -->
-			<div class="row clearfix align-items-center hide_mobile">
-				<div class="col-6 block">
-					<ul>
-						<li><a routerLink="about-us" tabindex="1">About us</a></li>
-						<li><a routerLink="contact-us" tabindex="1">Contact Us</a></li>
-						<li><a routerLink="blog" tabindex="1">Blog</a></li>
-						<!-- <li><a routerLink="testimonials" tabindex="1">Testimonials </a> </li> -->
-						<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
-						<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
-					</ul>
-				</div>
-				<div class="col-6 block">
-					<ul>
-						<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner / Statistics /
-								FAQs</a></li>
-						<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
-						<li><a routerLink="investors" tabindex="1">Investors</a></li>
-						<!-- <li><a routerLink="suggestions-complaints" tabindex="1">Suggestions / Complaints</a></li> -->
-						<li><a routerLink="insurance-licensing" tabindex="1">Insurance & licensing</a></li>
-					</ul>
-				</div>
-				<div class="col-12 text-center block">
-					<img src="{{QRimage}}" alt="">
-				</div>
-			</div>
-			<div class="row clearfix hide_desktop">
-				<div class="col-md-3 block">
-					<ul>
-						<li><a routerLink="about-us" tabindex="1">About us</a></li>
-						<li><a routerLink="contact-us" tabindex="1">Contact Us</a></li>
-						<li><a routerLink="blog" tabindex="1">Blog</a></li>
-						<!-- <li><a routerLink="testimonials" tabindex="1">Testimonials </a> </li> -->
-					</ul>
-				</div>
-				<div class="col-md-3 block">
-					<ul>
-						<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
-						<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
-						<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner / Statistics /
-								FAQs</a></li>
-
-					</ul>
-				</div>
-				<div class="col-md-3 block">
-					<ul>
-						<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
-						<li><a routerLink="investors" tabindex="1">Investors</a></li>
-						<!-- <li><a routerLink="suggestions-complaints" tabindex="1">Suggestions / Complaints</a></li> -->
-						<li><a routerLink="insurance-licensing" tabindex="1">Insurance & licensing</a></li>
-					</ul>
-				</div>
-				<div class="col-md-3 text-center block">
-					<img src="{{QRimage}}" alt="">
-				</div>
-			</div>
-			<hr>
-			<div class="row clearfix">
-				<div class="col-md-12 block login_btn text-center">
-					<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
-						<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-							style="background-color: #33c658 !important;">LOGIN / CREATE</button>
-						<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
-							<a class="dropdown-item indv-btn font-weight-bolder" (click)="loginButtons('individual')"
-								style="color: #fff !important;opacity: 1;font-size: 21px;">Individual Account</a>
-							<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
-								style="color: #fff !important;opacity: 1;font-size: 21px;"
-								(click)="loginButtons('travel_agent')">Travel
-								Agent Account</a>
-							<!-- <a class="dropdown-item nav-disabled font-weight-bolder" (click)="loginButtons('corporate')"
-								style="font-size: 21px;">Corporate</a> -->
-							<!-- <hr> -->
-							<a class="dropdown-item driver-dropdown font-weight-bolder"
-								style="color: #fff !important;opacity: 1;font-size: 21px;"
-								(click)="loginButtons('driver')">
-								Driver / Chauffeur / Fleet</a>
-							<hr>
-							<a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
-								style="color: #fff !important;opacity: 1;font-size: 21px;"
-								(click)="loginButtons('sub_admin')">
-								Sub Admin</a>
-							<!-- <a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
-								style="color: #fff !important;opacity: 1;font-size: 21px;"
-								(click)="loginButtons('subscriber')">
-								Partner Login</a> -->
+			<div class="row">
+				<div class="col-md-2 col-12 content_qr_btn">
+					<img src="{{QRimage}}" alt="QR">
+					<div class="col-md-12 login_btn">
+						<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
+							<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+								style="background-color: #33c658 !important;">LOGIN / CREATE</button>
+							<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
+								<a class="dropdown-item indv-btn font-weight-bolder"
+									(click)="loginButtons('individual')"
+									style="color: #fff !important;opacity: 1;font-size: 21px;">Individual Account</a>
+								<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('travel_agent')">Travel
+									Agent Account</a>
+								<!-- <a class="dropdown-item nav-disabled font-weight-bolder" (click)="loginButtons('corporate')"
+									style="font-size: 21px;">Corporate</a> -->
+								<!-- <hr> -->
+								<a class="dropdown-item driver-dropdown font-weight-bolder"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('driver')">
+									Driver / Chauffeur / Fleet</a>
+								<hr>
+								<a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('sub_admin')">
+									Sub Admin</a>
+								<!-- <a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('subscriber')">
+									Partner Login</a> -->
+							</div>
 						</div>
-					</div>
-					<ng-template #loggedInUser>
-						<ul class="navbar-nav">
-							<li class="nav-item dropdown no-caret dropdown-user">
-								<button
-									class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
-									style="padding: 0.875rem 2.258rem;background-color: #33c658 !important;"
-									id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									{{currentUser.affiliateCompanyName ?
-									currentUser.affiliateCompanyName : currentUser.name ?
-									currentUser.name : currentUser.FirstName +
-									currentUser.LastName.charAt(0)}}
-								</button>
-								<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-									aria-labelledby="navbarDropdownUserImage">
-									<h6 class="dropdown-header d-flex align-items-center">
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-											<path fill="#000" fill-rule="evenodd"
-												d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
-												clip-rule="evenodd" />
-										</svg>
-										<div class="dropdown-user-details">
-											<div class="dropdown-user-details-name">
-												{{currentUser.affiliateCompanyName ?
-												currentUser.affiliateCompanyName :
-												currentUser.name ?
-												currentUser.name : currentUser.FirstName +
-												currentUser.LastName.charAt(0)}}
-											</div>
-										</div>
-									</h6>
-									<div class="dropdown-divider"></div>
-									<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
-										class="dropdown-item" (click)="dashboard('affiliate')">
-										<div class="dropdown-item-icon settingsvg">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-												stroke-linecap="round" stroke-linejoin="round"
-												class="feather feather-settings">
-												<circle cx="12" cy="12" r="3"></circle>
-												<path
-													d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-												</path>
+						<ng-template #loggedInUser>
+							<ul class="navbar-nav">
+								<li class="nav-item dropdown no-caret dropdown-user">
+									<button
+										class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
+										style="background-color: #33c658 !important;"
+										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										{{currentUser.affiliateCompanyName ?
+										currentUser.affiliateCompanyName : currentUser.name ?
+										currentUser.name : currentUser.FirstName +
+										currentUser.LastName.charAt(0)}}
+									</button>
+									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+										aria-labelledby="navbarDropdownUserImage">
+										<h6 class="dropdown-header d-flex align-items-center">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+												<path fill="#000" fill-rule="evenodd"
+													d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
+													clip-rule="evenodd" />
 											</svg>
-										</div>{{ Value }}
-									</div>
-									<ng-template #adminRole>
-										<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
-											(click)="dashboard('admin')">
-											<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
+											<div class="dropdown-user-details">
+												<div class="dropdown-user-details-name">
+													{{currentUser.affiliateCompanyName ?
+													currentUser.affiliateCompanyName :
+													currentUser.name ?
+													currentUser.name : currentUser.FirstName +
+													currentUser.LastName.charAt(0)}}
+												</div>
+											</div>
+										</h6>
+										<div class="dropdown-divider"></div>
+										<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
+											class="dropdown-item" (click)="dashboard('affiliate')">
+											<div class="dropdown-item-icon settingsvg">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 													viewBox="0 0 24 24" fill="none" stroke="currentColor"
 													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -150,27 +81,46 @@
 														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
 													</path>
 												</svg>
-											</div>Admin Dashboard
+											</div>{{ Value }}
 										</div>
-									</ng-template>
-									<div class="dropdown-item logout-background font-weight-bolder" (click)="logout()">
-										<div class="dropdown-item-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-												stroke-linecap="round" stroke-linejoin="round"
-												class="feather feather-log-out">
-												<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
-												</path>
-												<polyline points="16 17 21 12 16 7"></polyline>
-												<line x1="21" y1="12" x2="9" y2="12"></line>
-											</svg>
+										<ng-template #adminRole>
+											<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
+												(click)="dashboard('admin')">
+												<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+														viewBox="0 0 24 24" fill="none" stroke="currentColor"
+														stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+														class="feather feather-settings">
+														<circle cx="12" cy="12" r="3"></circle>
+														<path
+															d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+														</path>
+													</svg>
+												</div>Admin Dashboard
+											</div>
+										</ng-template>
+										<div class="dropdown-item logout-background font-weight-bolder"
+											(click)="logout()">
+											<div class="dropdown-item-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+													viewBox="0 0 24 24" fill="none" stroke="currentColor"
+													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+													class="feather feather-log-out">
+													<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
+													</path>
+													<polyline points="16 17 21 12 16 7"></polyline>
+													<line x1="21" y1="12" x2="9" y2="12"></line>
+												</svg>
+											</div>
+											Logout
 										</div>
-										Logout
 									</div>
-								</div>
-							</li>
-						</ul>
-					</ng-template>
+								</li>
+							</ul>
+						</ng-template>
+					</div>
+				</div>
+				<div class="col-md-5 col-12">
 					<p style="margin-bottom: 0 !important;">
 						We’re a veteran-owned company dedicated to delivering consistent, quality customer service and
 						value. We strive for perfection and would greatly appreciate your feedback. Please take a moment
@@ -178,15 +128,12 @@
 							style="color: #007fee !important;text-decoration: underline !important;font-size: 20px !important;"
 							href="https://maps.app.goo.gl/4yQ9nNJ1EHCbJr8r5" target="_blank">Google</a>.
 					</p>
+					<a href="mailto:info@1800limo.com"><i class="fa-regular fa-envelope	mr-2"></i>info&#64;1800limo.com</a>
 					<p style="margin-top: 0 !important;">Follow us on social media! We’ll provide you with only the most
 						important
 						information and
 						updates.
 					</p>
-				</div>
-			</div>
-			<div class="row clearfix">
-				<div class="col-md-12 col-12 block text-center">
 					<div class="socials">
 						<a href=" https://www.facebook.com/1800LIMO" target="_blank">
 							<!DOCTYPE svg
@@ -280,20 +227,40 @@
 
 					</div>
 				</div>
-			</div>
-
-			<div class="footer row m-0">
-				<div class="col-md-12">
-					<a href="mailto:info@1800limo.com">info&#64;1800limo.com</a> &nbsp; | &nbsp;
-					<a routerLink="privacy-policy">Privacy Policy</a> &nbsp; | &nbsp;
-					<a routerLink="delivery-membership-terms-condition">Membership Program Terms
-						&amp;
-						Conditions</a> &nbsp; | &nbsp;<a routerLink="client-terms-condition">Policies,
-						Terms and Conditions</a>
+				<div class="col-md-5 col-12 quick_links">
+					<h4>
+						Quick Links
+					</h4>
+					<div class="row">
+					<div class="col-6 block">
+						<ul>
+							<li><a routerLink="about-us" tabindex="1">About us</a></li>
+							<li><a routerLink="contact-us" tabindex="1">Contact Us</a></li>
+							<li><a routerLink="blog" tabindex="1">Blog</a></li>
+							<!-- <li><a routerLink="testimonials" tabindex="1">Testimonials </a> </li> -->
+							<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
+							<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
+						</ul>
+					</div>
+					<div class="col-6 block">
+						<ul>
+							<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner / Statistics /
+									FAQs</a></li>
+							<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
+							<li><a routerLink="investors" tabindex="1">Investors</a></li>
+							<!-- <li><a routerLink="suggestions-complaints" tabindex="1">Suggestions / Complaints</a></li> -->
+							<li><a routerLink="insurance-licensing" tabindex="1">Insurance & licensing</a></li>
+						</ul>
+					</div>
+				</div>
 				</div>
 			</div>
-			<div class="footer row m-0" style="border: none !important;">
-				<div class="col-md-12">Copyright © 2001-{{ copyright_text }}
+			<div class="footer row mt-4 copyright_div">
+				<div class="col-md-4 col-12 inner_div1">Copyright © 2001-{{ copyright_text }}</div>
+				<div class="col-md-8 col-12 inner_div2">
+					<a routerLink="privacy-policy">Privacy Policy</a>
+					<a routerLink="delivery-membership-terms-condition">Membership Program Terms &amp; Conditions</a>
+					<a routerLink="client-terms-condition">Policies, Terms and Conditions</a>
 				</div>
 			</div>
 		</div>
