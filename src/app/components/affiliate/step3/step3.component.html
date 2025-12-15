@@ -216,9 +216,13 @@
 					<div class="selectStyle">
 						<select id="insurance-limits" class="selectInputStyle" (click)="selectDropdownInsurance()"
 							formControlName="insuranceLimits" tabindex="1">
+							<option value="300000">
+								<span class="red-dollar">$</span>
+								300,000 (Min)
+							</option>
 							<option value="500000">
 								<span class="red-dollar">$</span>
-								500,000 (Min)
+								500,000
 							</option>
 							<option value="1000000">
 								<span class="red-dollar">$</span>
