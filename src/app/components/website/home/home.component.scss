@@ -236,9 +236,10 @@ section {
 }
 
 .btnStyle {
-	color: #000 !important;
-	background-color: #f69a40 !important;
-	border-color: #f69a40 !important;
+	color: #fff !important;
+	border-radius: 20px;
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
 	padding: 10px 40px;
 }
 
