@@ -938,11 +938,11 @@
 
 						</div>
 						<ul class="qutedrates">
-							<li>Vehicles/Rates upon availability</li>
-							<li>Mountain rates vary</li>
-							<li>Tolls are extra</li>
+							<li>Vehicle and Rates Are Based On Availability</li>
+							<li>Mountain Rates May Be Higher than Quoted</li>
+							<li>Tolls Are Additional</li>
 						</ul>
-						<a routerLink="/cancellation-policy" class="vichlepolicy" tabindex="-1">Vehicle Choices and
+						<a routerLink="/cancellation-policy" class="vichlepolicy mb-2" tabindex="-1">Vehicle Choices and
 							Cancel
 							Policy</a>
 					</div>
@@ -976,7 +976,7 @@
 				<div class="item" *ngFor="let vehicle of vehicles">
 					<a class="ns-user">
 						<img src="{{vehicle?.vehicle_image}}" alt="semi">
-						<p style="color: #000;">{{vehicle?.vehicle_name}}</p>
+						<!-- <p style="color: #000;">{{vehicle?.vehicle_name}}</p> -->
 					</a>
 				</div>
 			</div>
@@ -992,11 +992,135 @@
 			</div>
 			<div class="ourmisservice_wrap_content col-12 col-md-6">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Our <span>Mission</span></h2>
-				<p>{{ fetchPageData('OUR MISSION')?.content }}</p>
+				<p>At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We recognize
+					that great drivers are hard to find and retain, they strive to provide excellent service while
+					earning a living wage. Our goal is to foster a partnership where drivers and customers support each
+					other.</p>
+				<br>
+				<p>Our drivers are dedicated to ensuring you have a safe and comfortable ride in well-maintained,
+					spacious vehicles. If you're not satisfied with a driver, simply let us know. We’ll find a better
+					match for your next trip. You can rate your driver with a thumbs up for a great experience or thumbs
+					down if there are issues. Minor concerns can be addressed, while significant problems will receive
+					immediate attention.</p>
+				<br>
+				<p>We encourage our drivers to go the extra mile, assisting with luggage, opening doors, and offering
+					local tips on attractions and dining. Regardless of your needs, our drivers will treat you with
+					respect and courtesy. All drivers carry insurance as mandated by local regulations.</p>
 			</div>
 		</div>
 	</div>
 </section>
+
+
+<!-- OUR CLIENTS FOR MOBILE -->
+<section class="client_wrapper">
+	<div class="container-fluid">
+		<h2><span>Our Clients</span></h2>
+
+		<div class="client_logo owl-carousel owl-theme">
+			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
+				<img [src]="clientLogo?.path?.replace('https://1800limoapi.infodevbox.com','https://api.1800limo.com')"
+					alt="client1" />
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- DISCOVER DIFFERENCE -->
+<section class="discover_diff">
+	<div class="container-fluid">
+		<h2>Discover The <span>1-800-LIMO.COM</span> Difference</h2>
+		<div class="row text-center">
+			<div class="col-md-4">
+				<div class="row p-2">
+					<div class="col-md-12 discover_diff_inner_columns">
+						<img src="../../../../assets/images/discover-difference-homepage/Frame 41.png" />
+						<h4>Your Personal Travel Concierge</h4>
+						<p>Our advisors are not just experts—they're your trusted guides and advocates. With genuine care and deep understanding of your preferences, they'll curate a seamless travel experience that exceeds your wildest dreams.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row p-2">
+					<div class="col-md-12 discover_diff_inner_columns">
+						<img src="../../../../assets/images/discover-difference-homepage/Frame 42.png" />
+						<h4>Crafted Just for You</h4>
+						<p>Your 1-800-LIMO.COM Advisor will weave together the perfect tapestry of destinations, accommodations, and activities. From lavish upgrades to hidden gem experiences, every detail will be thoughtfully designed around you.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="row p-2">
+					<div class="col-md-12 discover_diff_inner_columns">
+						<img src="../../../../assets/images/discover-difference-homepage/Frame 42 (1).png" />
+						<h4>Your Partner in Adventure</h4>
+						<p>Your 1-800-LIMO.COM Advisor is by your side every step of the way. With their extensive knowledge, exclusive connections, and dedication to your journey, you can relax knowing you're in the best hands in the business.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		  
+	</div>
+</section>
+
+<!-- HOW WORKS -->
+<section class="how_works_wrapper">
+	<div class="container-fluid">
+		<h2>How <span>1-800-LIMO.COM</span> Works</h2>
+		<div class="row steps-container">
+
+            <div class="steps-line-bg d-none d-md-block"></div> 
+            <div class="steps-line-progress d-none d-md-block" style="top: 55%; width: 15%;"></div>
+
+            <div class="col-md-3 step-item active">
+                <img src="../../../../assets/images/how-1800-works/step1.png" alt="Step 1" class="step-img">
+
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+
+                <div class="step-label">STEP 1</div>
+                <div class="step-sub-desc">Visit www.1800limo.com</div>
+            </div>
+
+            <div class="col-md-3 step-item active">
+                <img src="../../../../assets/images/how-1800-works/step2.png" alt="Step 2" class="step-img">
+
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-car"></i>
+                </div>
+
+                <div class="step-label">STEP 2</div>
+                <div class="step-sub-desc">Select the vehicle that meets your requirements</div>
+            </div>
+
+            <div class="col-md-3 step-item active">
+                <img src="../../../../assets/images/how-1800-works/step3.png" alt="Step 3" class="step-img">
+
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+
+                <div class="step-label">STEP 3</div>
+
+                <div class="step-sub-desc">Check price according to Vehicle</div>
+            </div>
+
+            <div class="col-md-3 step-item active">
+                <img src="../../../../assets/images/how-1800-works/step4.png" alt="Step 4" class="step-img">
+
+                <div class="step-icon-box">
+                    <i class="fa-regular fa-circle-check"></i>
+                </div>
+
+                <div class="step-label">STEP 4</div>
+                <div class="step-sub-desc">Preview details & confirm booking</div>
+            </div>
+
+        </div>
+	</div>
+</section>
+
 <!-- PERSONALIZED DESTINATIONS -->
 <section class="personalized_wrapper" id="section-services"
 	*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
@@ -1008,7 +1132,8 @@
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<div class="item outer_div_pw mb-3"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
-				<img src="{{sliderData?.image}}" alt="a1">
+				<img [src]="sliderData?.image?.replace('https://1800limoapi.infodevbox.com','https://api.1800limo.com')"
+					alt="a1">
 				<div class="personalized_text">
 					<h3>{{sliderData?.title}}</h3>
 					<p class="mb-0">{{sliderData?.content}}
@@ -1036,7 +1161,7 @@
 			</div>
 		</div>
 
-		
+
 
 	</div>
 </section>
@@ -1109,7 +1234,7 @@
 	</div>
 </section>
 <!----OUR CLIENTS------------->
-<section class="client_wrapper client_wrapper_desktop"
+<!-- <section class="client_wrapper client_wrapper_desktop"
 	*ngIf="fetchPageData('SOME OF OUR CLIENTS')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<h2>Some of <span>Our Clients</span></h2>
@@ -1119,20 +1244,8 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
-<!-- OUR CLIENTS FOR MOBILE -->
-<section class="client_wrapper client_wrapper_mobile">
-	<div class="container-fluid">
-		<h2>Some of <span>Our Clients</span></h2>
-
-		<div class="client_logo owl-carousel owl-theme">
-			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
-				<img src="{{clientLogo?.path}}" alt="client1">
-			</div>
-		</div>
-	</div>
-</section>
 <!-------Testimonials ---------->
 <!-- <section class="testimonials_wrapper">
 	<div class="container">

@@ -290,7 +290,7 @@ header a.nav-link.active {
 
 .bannerform_wrapper .bannertext h2 {
 	font-weight: 500;
-	font-size: 2.8vw;
+	font-size: 3.1vw;
 	line-height: 130%;
 	vertical-align: middle;
 	text-transform: capitalize;
@@ -301,7 +301,7 @@ header a.nav-link.active {
 
 .bannerform_wrapper .bannertext h2 span {
 	font-weight: 500;
-	font-size: 2.6vw;
+	font-size: 2.8vw;
 	line-height: 130%;
 	vertical-align: middle;
 	text-transform: capitalize;
@@ -311,7 +311,7 @@ header a.nav-link.active {
 .bannerform_wrapper .bannertext h4 {
 	color: #fff;
 	font-weight: 300;
-	font-size: 1vw;
+	font-size: 1.2vw;
 	line-height: 150%;
 	vertical-align: middle;
 	text-transform: capitalize;
@@ -579,14 +579,18 @@ header {
 .bannerform_wrapper .qutedrates li {
 	list-style-type: disc;
 	color: #fff;
-	font-size: 15px;
+	font-size: 9px;
 	margin: 0 15px 0 15px;
 	padding: 15px 0px 8px 0px;
 }
 
+.bannerform_wrapper .qutedrates li::marker{
+	color: var(--orange-color);
+}
+
 .bannerform_wrapper a.vichlepolicy {
 	color: var(--orange-color);
-	font-size: 15px;
+	font-size: 12px;
 	text-align: center;
 	width: 100%;
 	text-decoration: none;
@@ -608,7 +612,7 @@ header {
 
 .checkourveh_wrapper {
 	margin: 25px 50px;
-	padding: 12px 0px;
+	padding: 15px 50px;
 	background-size: cover;
 	/* background-image: url(../images/textureimg.png); */
 	display: flex;
@@ -660,6 +664,68 @@ header {
 	font-weight: 600;
 }
 
+
+.discover_diff {
+	margin: 25px 50px;
+	padding: 15px 50px;
+	background-size: cover;
+	/* background-image: url(../images/textureimg.png); */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: linear-gradient(359.09deg, rgba(18, 18, 18, 0.05) 6.25%, rgba(161, 161, 161, 0) 99.69%) !important;
+}
+
+.discover_diff h2 {
+	font-weight: 600;
+	font-size: 34px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: #000;
+	margin-bottom: 20px;
+}
+
+.discover_diff h2 span {
+	font-weight: 600;
+	font-size: 34px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: var(--orange-color);
+}
+
+.discover_diff_inner_columns {
+	border-radius: 16px;
+	padding: 32px;
+	border: 1px solid rgba(243, 147, 61, 0.2);
+	box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08);
+	min-height: 340px;
+}
+
+.discover_diff_inner_columns img{
+	margin-bottom: 20px;
+}
+
+.discover_diff_inner_columns h4 {
+	font-weight: 500;
+	font-size: 20px;
+	line-height: 150%;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.discover_diff_inner_columns p {
+	font-weight: 400;
+	font-size: 15px;
+	line-height: 150%;
+	letter-spacing: 2%;
+	text-align: center;
+	vertical-align: middle;
+	text-transform: capitalize;
+}
+
+
 .ourmisservice_wrap {
 	background: linear-gradient(359.09deg, rgba(18, 18, 18, 0.05) 6.25%, rgba(161, 161, 161, 0) 99.69%);
 	padding: 20px;
@@ -688,7 +754,7 @@ header {
 	justify-content: center;
 }
 
-.ourmisservice_wrap_image img{
+.ourmisservice_wrap_image img {
 	width: 100%;
 }
 
@@ -710,7 +776,7 @@ header {
 }
 
 .chk_vehicles.owl-carousel .owl-item img {
-	height: 110px;
+	height: 155px;
 	object-fit: contain;
 }
 
@@ -886,11 +952,11 @@ header {
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev {
-		left: 0px !important;
+		left: -40px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
-		right: 0px !important;
+		right: -40px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -905,6 +971,33 @@ header {
 		width: 900px !important;
 		margin-left: 15px;
 		margin-right: 0px;
+	}
+
+	.discover_diff_inner_columns {
+		min-height: 360px;
+	}
+	
+	.discover_diff_inner_columns img{
+		margin-bottom: 25px;
+	}
+	
+	.discover_diff_inner_columns h4 {
+		font-size: 18px;
+	}
+	
+	.discover_diff_inner_columns p {
+		font-size: 14px;
+	}
+
+	.bannerform_wrapper .qutedrates li{
+		font-size: 8px;
+	}
+	.step-img {
+		height: 150px !important;
+		width: 230px !important;
+	}
+	.steps-line-bg.d-none.d-md-block {
+		top: 65% !important;
 	}
 }
 
@@ -1526,8 +1619,156 @@ height:280px !important;
 }
 
 
+.how_works_wrapper {
+	background-color: transparent !important;
+	padding: 30px !important;
+	margin: 25px 50px;
+	border-radius: 20px;
+}
+
+.how_works_wrapper h2{
+	font-weight: 600;
+	font-size: 34px;
+	line-height: 130%;
+	text-transform: capitalize;
+	color: #000;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.how_works_wrapper h2 span{
+	font-weight: 600;
+	font-size: 34px;
+	line-height: 130%;
+	text-transform: capitalize;
+	color: var(--orange-color);
+}
+
+
+        /* --- Timeline Line styling --- */
+        .steps-container {
+            position: relative;
+        }
+
+        /* The horizontal gray line background */
+        .steps-line-bg {
+            position: absolute;
+            top: 50%; /* Align with the icon center */
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--light-gray);
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        /* The colored orange line (Progress) */
+        /* Adjust width to simulate progress (e.g., 15% for Step 1 active) */
+        .steps-line-progress {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 12%; /* Change this based on active step */
+            height: 4px;
+            background-color: var(--primary-orange);
+            z-index: 1;
+            transform: translateY(-50%);
+            transition: width 0.3s ease;
+        }
+
+        /* --- Individual Step Styling --- */
+        .step-item {
+            position: relative;
+            z-index: 2; /* Keep above the line */
+            text-align: center;
+        }
+
+		.steps-line-bg.d-none.d-md-block {
+			top: 68%;
+			background: var(--orange-color)
+		}
+
+        /* Screenshot Images */
+        .step-img {
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            opacity: 0.6; /* Dim inactive images */
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+			height: 185px;
+        }
+
+        .step-item.active .step-img {
+            opacity: 1;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            border: 1px solid var(--light-gray);
+        }
+
+        /* Icon Circles */
+        .step-icon-box {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            border: 2px solid var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Active Step Icon Styling */
+        .step-item.active .step-icon-box {
+            background-color: var(--orange-color);
+            border-color: var(--orange-color);
+            color: #fff;
+            box-shadow: 0 0 0 5px rgba(246, 139, 31, 0.2); /* Outer glow ring */
+        }
+
+        /* Text Styling */
+        .step-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .step-desc {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .step-sub-desc {
+            font-size: 0.9rem;
+            color: gray;
+            line-height: 1.4;
+        }
+
+        /* Active Background Card Effect (Optional, seen in image on Step 1) */
+        .step-item.active::after {
+            content: '';
+            position: absolute;
+            top: 20%; /* Start below the image */
+            bottom: -20px;
+            left: 10px;
+            right: 10px;
+            /* background-color: #f8f9fa; */
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+
+
 .client_wrapper {
-	background-color: #000 !important;
+	background-color: transparent !important;
 	padding: 30px !important;
 	margin: 25px 50px;
 	border-radius: 20px;
@@ -1557,7 +1798,7 @@ footer {
 }
 
 .footercontent .content_qr_btn button.custom-filled-button {
-	font-size: 0.8rem !important;
+	font-size: 0.6rem !important;
 }
 
 .footercontent a {
@@ -3313,9 +3554,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
-/* .chk_vehicles .owl-dots {
-margin-top: 50px !important;
-} */
+.chk_vehicles .owl-dots {
+	margin-top: 15px !important;
+}
 
 .chk_vehicles.owl-theme .owl-dots .owl-dot span {
 	width: 6px;
@@ -3903,6 +4144,7 @@ header .navbar-toggler {
 
 	.safety_wrapper h2,
 	.checkourveh_wrapper h2,
+	.discover_diff h2,
 	.testimonials_wrapper h2 {
 		font-size: 24px;
 	}
@@ -4064,7 +4306,7 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper .qutedrates li {
-		font-size: 15px
+		font-size: 8px;
 	}
 
 
@@ -4198,12 +4440,12 @@ header .navbar-toggler {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	max-width: 100px;
+	margin: auto;
+	border: 1px solid rgba(243, 147, 61, 0.2);
+	border-radius: 12px;
 }
 
-.client_logo.owl-carousel .owl-item img {
-	max-width: 300px;
-	margin: auto;
-}
 
 .client_logo .item {
 	padding: 5px 0;
@@ -4212,10 +4454,28 @@ header .navbar-toggler {
 
 .client_logo {
 	width: 200px !important;
-	margin-left: 15px;
+	/* margin-left: 15px;
 	margin-right: 0px;
-	margin: 0px 0px 0px 70px;
+	margin: 0px 0px 0px 70px; */
 }
+
+.client_logo.owl-theme .owl-dots .owl-dot span {
+	width: 6px;
+	height: 4px;
+	background: rgba(243, 147, 61, 0.4) !important;
+}
+
+.client_logo.owl-theme .owl-dots .owl-dot.active span {
+	width: 25px;
+	height: 4px;
+	background: var(--orange-color) !important;
+}
+
+.client_logo.no-js .owl-carousel,
+.client_logo.owl-carousel.owl-loaded {
+	display: inline !important;
+}
+
 
 @media (min-width:541px) and (max-width:720px) {
 	.client_logo {
@@ -4798,8 +5058,13 @@ header .navbar-toggler {
 
 	.checkourveh_wrapper,
 	.whychoose_wrapper,
-	.client_wrapper {
+	.client_wrapper,
+	.discover_diff {
 		margin: 25px 25px;
+	}
+
+	.how_works_wrapper {
+		margin: 0 !important;
 	}
 
 	.checkourveh_wrapper h2,
@@ -4853,11 +5118,11 @@ header .navbar-toggler {
 		flex-direction: column;
 	}
 
-	.footercontent{
+	.footercontent {
 		text-align: center;
 	}
 
-	.footercontent .content_qr_btn .login_btn{
+	.footercontent .content_qr_btn .login_btn {
 		margin-left: 50px;
 	}
 
@@ -4865,5 +5130,48 @@ header .navbar-toggler {
 		margin-top: 20px;
 	}
 
+	.client_logo.owl-carousel .owl-nav button.owl-prev,
+	.client_logo.owl-carousel .owl-nav button.owl-next,
+	.client_logo.owl-carousel .owl-dots {
+		display: none;
+	}
+
+	.client_logo .item {
+		height: 70px;
+	}
+
+	.footercontent .content_qr_btn img {
+		height: 130px;
+		width: 130px;
+	}
+
+	.discover_diff h2,
+	.discover_diff h2 span{
+		font-size: 17px;
+	}
+
+	.discover_diff{
+		padding: 15px 10px;
+	}
+
+	.discover_diff_inner_columns h4 {
+		font-size: 18px;
+	}
+	
+	.discover_diff_inner_columns p {
+		font-size: 13px;
+	}
+
+	.how_works_wrapper h2,
+	.how_works_wrapper h2 span {
+		font-size: 18px;
+	}
+
+	.steps-line-bg, .steps-line-progress {
+		display: none;
+	}
+	.step-item {
+		margin-bottom: 40px;
+	}
 
 }
