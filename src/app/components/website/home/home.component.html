@@ -1019,8 +1019,7 @@
 
 		<div class="client_logo owl-carousel owl-theme">
 			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
-				<img [src]="clientLogo?.path?.replace('https://1800limoapi.infodevbox.com','https://api.1800limo.com')"
-					alt="client1" />
+				<img src="{{clientLogo?.path}}" alt="client1">
 			</div>
 		</div>
 	</div>
@@ -1132,8 +1131,7 @@
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<div class="item outer_div_pw mb-3"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
-				<img [src]="sliderData?.image?.replace('https://1800limoapi.infodevbox.com','https://api.1800limo.com')"
-					alt="a1">
+				<img src="{{sliderData?.image}}" alt="a1">
 				<div class="personalized_text">
 					<h3>{{sliderData?.title}}</h3>
 					<p class="mb-0">{{sliderData?.content}}
