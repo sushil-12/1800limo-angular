@@ -4594,7 +4594,6 @@ header .navbar-toggler {
 		content: '';
 		vertical-align: 55%;
 	}
-}
 
 @media only screen and (max-width:767px) {
 	.client_wrapper_desktop {
