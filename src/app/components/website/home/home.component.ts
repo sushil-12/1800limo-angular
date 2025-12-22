@@ -206,6 +206,8 @@ export class HomeComponent implements OnInit {
 					autoplay: true,
 					autoplayTimeout: 3000,
 					autoplayHoverPause: true,
+					items: 3, // Show 3 full items
+					center: true, // This centers the active item
 					responsiveClass: true,
 					navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
 						'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
@@ -311,10 +313,10 @@ export class HomeComponent implements OnInit {
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
 		console.log("in loadf auto complete", input, fieldName)
 		const autocomplete = new google.maps.places.Autocomplete(input, {
-            types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-            fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
-        });
- 
+			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+		});
+
 
 		autocomplete.addListener('place_changed', () => {
 			const place = autocomplete.getPlace();
@@ -406,7 +408,7 @@ export class HomeComponent implements OnInit {
 				this.homePageData = data
 
 				$(document).ready(function () {
-					$('.owl-carousel').owlCarousel({
+					$('.owl-carousels').owlCarousel({
 						loop: true,
 						autoplay: true,
 						autoplayTimeout: 2000,
@@ -435,16 +437,13 @@ export class HomeComponent implements OnInit {
 							}
 						}
 					});
-				})
 
-
-				$(document).ready(function () {
-					$('.client_logo').owlCarousel({
+					$('.destinationCarousel').owlCarousel({
 						loop: true,
-						margin: 10,
 						autoplay: true,
-						autoplayTimeout: 1000,
+						autoplayTimeout: 2000,
 						autoplayHoverPause: true,
+						margin: 10,
 						responsiveClass: true,
 						navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
 							'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
@@ -454,19 +453,86 @@ export class HomeComponent implements OnInit {
 								nav: false,
 								loop: true,
 								dots: false
+							},
+							600: {
+								items: 3,
+								nav: true
+							},
+							1000: {
+								items: 3,
+								nav: true,
+								loop: true,
+								autoplay: true,
+								margin: 20
+							}
+						}
+					});
+					$('.client_logo').owlCarousel({
+						loop: true,
+						margin: 10,
+						autoplay: true,
+						autoplayTimeout: 1000,
+						autoplayHoverPause: true,
+						responsiveClass: true,
+						navText:
+							['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+								'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+						responsive: {
+							0: {
+								items: 1,
+								nav: false,
+								loop: true,
+								dots: false
+							},
+							600: {
+								items: 3,
+								nav: true
+							},
+							1000: {
+								items: 3,
+								nav: true,
+								loop: true,
+								autoplay: true,
+								margin: 20
 							}
 						}
 					});
 
-				});
+					// In your component, update the owl carousel initialization:
+					$('.viewVehicleCarousel').owlCarousel({
+						loop: true,
+						margin: 20,
+						autoplay: true,
+						autoplayTimeout: 3000,
+						autoplayHoverPause: true,
+						responsiveClass: true,
+						center: true, // This centers the active item
+						items: 3, // Show 3 full items
+						navText:
+							['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+								'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+						responsive: {
+							0: {
+								items: 1,
+								nav: false,
+								dots: true,
+								center: false
+							},
+							575: {
+								items: 2,
+								nav: true,
+								center: false
+							},
+							992: {
+								items: 3,
+								nav: true,
+								center: true
+							}
+						}
+					});
+				})
 			})
 	}
-
-
-
-
-
-
 
 	// --------------------------------- 	Quotebot Data 		----------------------------------------------
 

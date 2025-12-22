@@ -69,10 +69,26 @@
 						</ng-template>
 					</div>
 				</div>
+
+				<div class="mobile-app-minimal">
+					<div class="icon-container">
+						<img src="../../../../assets/admin/images/announcement.png" class="announcement-icon" alt="Announcement">
+					</div>
+				
+					<div class="content-container">
+						<div class="release-text">
+							Mobile App Releasing Soon
+						</div>
+						<div class="store-icons">
+							<img src="../../../../assets/images/app_store_img.png" alt="App Store" class="store-img">
+							<img src="../../../../assets/images/google_play_img.png" alt="Google Play" class="store-img">
+						</div>
+					</div>
+				</div>
 			</div>
 
 
-			<div class="col-md-6 col-xl-5 quoteform_homewrapper" appScrollToSection>
+			<div class="col-md-6 col-xl-6 quoteform_homewrapper p-4" appScrollToSection>
 				<div class="g-translator d-flex justify-content-center">
 					<div id="google_translate_element_home_desktop"></div>
 				</div>
@@ -976,7 +992,7 @@
 				<div class="item" *ngFor="let vehicle of vehicles">
 					<a class="ns-user">
 						<img src="{{vehicle?.vehicle_image}}" alt="semi">
-						<!-- <p style="color: #000;">{{vehicle?.vehicle_name}}</p> -->
+						<p style="color: #000;">{{vehicle?.vehicle_name}}</p>
 					</a>
 				</div>
 			</div>

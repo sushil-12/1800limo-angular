@@ -33,7 +33,6 @@ mat-form-field input {
 	box-shadow: inset 0 0 8px #554d3fa8;
 	border-radius: 12px;
 	font-weight: 600 !important;
-	background-color: #d0d8ff !important;
 	color: #1a071a !important;
 	padding-left: 29px;
 	font-size: 15px;
@@ -447,6 +446,21 @@ section {
 	.bannerform_wrapper {
 		background-color: black !important;
 	}
+
+	.bannertext {
+		text-align: center;
+		margin-bottom: 1rem;
+
+		h2 {
+			font-size: 1.8rem !important;
+			margin-bottom: 0.8rem;
+		}
+
+		h4 {
+			font-size: 0.9rem !important;
+			margin-bottom: 1rem;
+		}
+	}
 }
 
 .img-fluid {
@@ -473,6 +487,24 @@ section {
 
 .text_mobile .dropdown-item {
 	text-transform: none;
+}
+
+// Improved typography for banner section
+.bannertext {
+	h2 {
+		font-family: 'Arial', sans-serif;
+		font-weight: 700;
+		line-height: 1.2;
+		margin-bottom: 1rem;
+	}
+
+	h4 {
+		font-weight: 400;
+		line-height: 1.5;
+		opacity: 0.9;
+		margin-bottom: 1.5rem;
+		max-width: 90%;
+	}
 }
 
 a.user-profile::after {
@@ -1096,7 +1128,7 @@ button.custom-filled-button {
 	width: 319px;
 	height: 45px;
 	opacity: 1;
-	border-radius: 20px;
+	border-radius: 6px;
 	background: var(--orange-color);
 	color: #ffffff;
 	font-weight: 600;
@@ -1137,4 +1169,160 @@ button.custom-filled-button {
 	border-radius: 24px;
 	background: rgba(243, 243, 243, 1);
 	padding: 5px 15px 5px 15px
+}
+
+// Extra css added for quotebot form
+.quoteform_homewrapper {
+    background: rgba(12, 20, 39, 0.85); /* Dark blue/black transparency */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    margin-top: 20px;
+}
+
+/* --- Navigation Tabs (One Way / Round Trip / Hourly) --- */
+#myTab {
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+	margin-top: 14px;
+	margin-bottom: 14px;
+    padding: 0;
+
+    .nav-item {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    li a.nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        border: 1px solid #fff;
+        color: #fff;
+        border-radius: 6px;
+        padding: 10px 0;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-transform: capitalize;
+		width: 180px;
+		height: 36px;
+		padding: 4px 12px;
+		border: 0.8px solid #fff !important;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    li a.nav-link.active {
+        background-color: var(--orange-color) !important; /* Orange background */
+        border-color: var(--orange-color) !important;
+        color: #fff !important;
+        font-weight: 600;
+		border: 1px solid var(--orange-color) !important;
+    }
+}
+
+.g-translator.d-flex.justify-content-center {
+    position: absolute;
+    translate: x;
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.g-translator .goog-te-gadget .goog-te-combo {
+    background: white !important;
+}
+
+
+/* --- Main Container (Flex Row) --- */
+.mobile-app-minimal {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: row; /* Puts Image Left, Content Right */
+    align-items: center; /* Vertically centers them */
+    gap: 20px; /* Space between the big icon and the text area */
+    text-align: left;
+}
+
+/* --- Left Side: The Icon --- */
+.announcement-icon {
+    width: 65px; /* Much bigger now */
+    height: auto;
+    filter: brightness(0) invert(1); /* Makes it white */
+    
+    /* Animation */
+    animation: icon-tada 2s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+/* --- Right Side: Content Wrapper --- */
+.content-container {
+    display: flex;
+    flex-direction: column; /* Stacks Text on top of Buttons */
+    gap: 10px;
+}
+
+/* --- The Text --- */
+.release-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Store Icons Row --- */
+.store-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.store-img {
+    height: 38px;
+    width: auto;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.store-icons:hover .store-img {
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: translateY(-2px);
+    cursor: default;
+}
+
+/* --- Animation --- */
+@keyframes icon-tada {
+    0% { transform: scale(1) rotate(0deg); }
+    10% { transform: scale(0.9) rotate(-3deg); }
+    30% { transform: scale(1.1) rotate(3deg); }
+    50% { transform: scale(1.1) rotate(-3deg); }
+    70% { transform: scale(1.1) rotate(3deg); }
+    90% { transform: scale(1.1) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* --- Mobile Styling --- */
+@media (max-width: 767px) {
+    .mobile-app-minimal {
+        margin-top: 35px;
+        justify-content: center; /* Centers the whole block */
+    }
+    
+    /* Optional: On very small screens, stack them? */
+    /* Remove the lines below if you want them side-by-side on mobile too */
+    /* .mobile-app-minimal {
+        flex-direction: column;
+        text-align: center;
+    } */
 }
