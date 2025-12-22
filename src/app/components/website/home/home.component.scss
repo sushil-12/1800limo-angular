@@ -1172,9 +1172,22 @@ button.custom-filled-button {
 	padding: 5px 15px 5px 15px
 }
 
+div#google_translate_element_home_mobile {
+    position: absolute;
+    top: -6px;
+    /* top: -15px; */
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.telephone_mobile{
+    border: none !important;
+}
+ 
+
 // Extra css added for quotebot form
 .quoteform_homewrapper {
-    background: rgba(12, 20, 39, 0.85); /* Dark blue/black transparency */
+    background: #101215d9; /* Dark blue/black transparency */
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     padding: 25px;
@@ -1183,6 +1196,7 @@ button.custom-filled-button {
     -webkit-backdrop-filter: blur(5px);
     margin-top: 20px;
 }
+ 
 
 /* --- Navigation Tabs (One Way / Round Trip / Hourly) --- */
 #myTab {
