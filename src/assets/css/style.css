@@ -4439,8 +4439,9 @@ header .navbar-toggler {
 	opacity: 0.8;
 	transition: opacity 0.3s ease, transform 0.3s ease;
 	border-radius: 8px;
-	padding: 5px;
 	background: rgba(255, 255, 255, 0.05);
+	border-radius: 8px;
+	border: 1px solid #ea710517;
 }
 
 .client_logo.owl-carousel .owl-item:hover img {
@@ -4461,6 +4462,53 @@ header .navbar-toggler {
 	width: 100% !important;
 	max-width: none !important;
 	margin: 0 auto;
+}
+
+/* Client logo carousel navigation arrows */
+.client_logo .owl-nav {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	transform: translateY(-50%);
+	display: flex;
+	justify-content: space-between;
+	pointer-events: none;
+}
+
+.client_logo .owl-nav button {
+	pointer-events: auto;
+	background: rgba(0, 0, 0, 0.7) !important;
+	color: #fff !important;
+	border: 2px solid rgba(243, 147, 61, 0.3) !important;
+	border-radius: 50% !important;
+	width: 40px !important;
+	height: 40px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 16px !important;
+	transition: all 0.3s ease !important;
+	margin: 0 !important;
+	position: relative !important;
+}
+
+.client_logo .owl-nav button:hover {
+	background: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+	transform: scale(1.1);
+}
+
+.client_logo .owl-nav button.owl-prev {
+	left: -50px;
+}
+
+.client_logo .owl-nav button.owl-next {
+	right: -50px;
+}
+
+.client_logo .owl-nav button.disabled {
+	opacity: 0.3;
+	pointer-events: none;
 }
 
 .client_logo.owl-theme .owl-dots {
@@ -4505,6 +4553,28 @@ header .navbar-toggler {
 	.client_logo.owl-carousel .owl-item img {
 		max-height: 60px;
 		max-width: 100px;
+	}
+
+	/* Hide navigation arrows on mobile for cleaner look */
+	.client_logo .owl-nav {
+		display: none;
+	}
+}
+
+@media (max-width: 991px) {
+	/* Adjust arrow positioning on tablets */
+	.client_logo .owl-nav button.owl-prev {
+		left: -30px;
+	}
+
+	.client_logo .owl-nav button.owl-next {
+		right: -30px;
+	}
+
+	.client_logo .owl-nav button {
+		width: 35px !important;
+		height: 35px !important;
+		font-size: 14px !important;
 	}
 }
 

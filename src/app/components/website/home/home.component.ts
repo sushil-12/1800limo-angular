@@ -1605,6 +1605,29 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
+	//conver text to html
+	
+	convertTextToHtml(str: string): string {
+		if (!str) return '';
+	  
+		return str
+		  // temporarily protect <small> tags
+		  .replace(/<small>/gi, '___SMALL_OPEN___')
+		  .replace(/<\/small>/gi, '___SMALL_CLOSE___')
+	  
+		  // escape everything else
+		  .replace(/&/g, '&amp;')
+		  .replace(/</g, '&lt;')
+		  .replace(/>/g, '&gt;')
+		  .replace(/"/g, '&quot;')
+		  .replace(/'/g, '&#039;')
+	  
+		  // restore <small> tags
+		  .replace(/___SMALL_OPEN___/g, '<small>')
+		  .replace(/___SMALL_CLOSE___/g, '</small>');
+	}
+	  
+
 	initClientCarousel() {
 		// Initialize client logo carousel with improved settings
 		const $clientCarousel = $('.client_logo');
@@ -1620,35 +1643,36 @@ export class HomeComponent implements OnInit {
 			// Initialize with optimized settings
 			$clientCarousel.owlCarousel({
 				loop: true,
-				margin: 15,
+				margin: 6,
 				autoplay: true,
 				autoplayTimeout: 2500,
 				autoplayHoverPause: true,
 				smartSpeed: 800,
 				dots: true,
-				nav: false, // Disable nav buttons for cleaner look
+				nav: true, // Enable navigation arrows
 				responsiveClass: true,
+				navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
 				autoHeight: false,
 				animateOut: 'fadeOut',
 				animateIn: 'fadeIn',
 				responsive: {
 					0: {
-						items: 2,
+						items: 1,
 						margin: 10,
 						dots: true
 					},
 					480: {
-						items: 3,
+						items: 1,
 						margin: 15,
 						dots: true
 					},
 					768: {
-						items: 4,
+						items: 6,
 						margin: 20,
 						dots: false
 					},
 					1024: {
-						items: 5,
+						items: 8,
 						margin: 25,
 						dots: false
 					}

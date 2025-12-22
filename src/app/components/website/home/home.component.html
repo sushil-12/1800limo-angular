@@ -1166,7 +1166,7 @@
 					<li class="col-6 d-flex"
 						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
 						<i class="fa-regular fa-circle-check"></i>
-						<span class="ml-2">{{ list1.list }}</span>
+						<span class="ml-2" [innerHTML]="convertTextToHtml(list1.list)"></span>
 					</li>
 				</ul>
 				<div class="col-12 col-md-4">
