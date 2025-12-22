@@ -731,7 +731,7 @@ header {
 	font-weight: 600;
 	font-size: 36px;
 	line-height: 130%;
-	text-align: left;
+	text-align: center;
 	text-transform: capitalize;
 	color: #000;
 }
@@ -1322,7 +1322,7 @@ height:280px !important;
 	font-weight: 600;
 	font-size: 36px;
 	line-height: 130%;
-	text-align: left;
+	text-align: center;
 	text-transform: capitalize;
 	color: #000;
 }
@@ -1331,7 +1331,7 @@ height:280px !important;
 	font-weight: 600;
 	font-size: 36px;
 	line-height: 130%;
-	text-align: left;
+	text-align: center;
 	text-transform: capitalize;
 	color: var(--orange-color);
 }
@@ -1703,8 +1703,8 @@ height:280px !important;
 
         /* Icon Circles */
         .step-icon-box {
-            width: 60px;
-            height: 60px;
+            width: 46px;
+            height: 46px;
             background-color: #fff;
             border: 2px solid var(--light-gray);
             border-radius: 50%;
