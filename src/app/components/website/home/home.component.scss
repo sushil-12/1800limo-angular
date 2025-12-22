@@ -461,6 +461,7 @@ section {
 			margin-bottom: 1rem;
 		}
 	}
+
 }
 
 .img-fluid {
@@ -1211,7 +1212,7 @@ button.custom-filled-button {
         font-weight: 500;
         transition: all 0.3s ease;
         text-transform: capitalize;
-		width: 180px;
+		width: auto !important;
 		height: 36px;
 		padding: 4px 12px;
 		border: 0.8px solid #fff !important;
