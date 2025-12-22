@@ -3545,7 +3545,7 @@ input[type=number]::-webkit-outer-spin-button {
 	/* border: 2px solid rgba(132, 132, 132, 21%); */
 	width: 99%;
 	padding: 5px 0;
-	height: 150px;
+	height: 185px;
 }
 
 
@@ -3755,7 +3755,7 @@ margin-top: 50px !important;
 
 	.owl-carousel {
 		width: 900px !important;
-		margin-left: 16px;
+		margin-left: 32px;
 		margin-right: 0px;
 	}
 
