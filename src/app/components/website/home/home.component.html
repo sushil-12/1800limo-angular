@@ -1091,7 +1091,7 @@
                 <img src="../../../../assets/images/how-1800-works/step1.png" alt="Step 1" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-solid fa-globe"></i>
+                    <i class="fa-solid fa-globe" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 1</div>
@@ -1102,7 +1102,7 @@
                 <img src="../../../../assets/images/how-1800-works/step2.png" alt="Step 2" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-solid fa-car"></i>
+                    <i class="fa-solid fa-car" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 2</div>
@@ -1113,7 +1113,7 @@
                 <img src="../../../../assets/images/how-1800-works/step3.png" alt="Step 3" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-solid fa-dollar-sign"></i>
+                    <i class="fa-solid fa-dollar-sign" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 3</div>
@@ -1125,7 +1125,7 @@
                 <img src="../../../../assets/images/how-1800-works/step4.png" alt="Step 4" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-regular fa-circle-check"></i>
+                    <i class="fa-regular fa-circle-check" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 4</div>
@@ -1166,7 +1166,7 @@
 					<li class="col-6 d-flex"
 						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
 						<i class="fa-regular fa-circle-check"></i>
-						<span class="ml-2">{{ list1.list }}</span>
+						<span class="ml-2" [innerHTML]="convertTextToHtml(list1.list)"></span>
 					</li>
 				</ul>
 				<div class="col-12 col-md-4">

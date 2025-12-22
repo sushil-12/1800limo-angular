@@ -202,12 +202,13 @@ export class HomeComponent implements OnInit {
 			$(document).ready(function () {
 				$('.chk_vehicles').owlCarousel({
 					loop: true,
-					margin: 10,
+					margin: 15,
 					autoplay: true,
-					autoplayTimeout: 3000,
+					autoplayTimeout: 4000,
 					autoplayHoverPause: true,
-					items: 3, // Show 3 full items
-					center: true, // This centers the active item
+					smartSpeed: 800,
+					dots: true,
+					nav: true,
 					responsiveClass: true,
 					navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
 						'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
@@ -234,8 +235,13 @@ export class HomeComponent implements OnInit {
 			})
 		});
 
+		setTimeout(() => {
+			this.initClientCarousel();
+		}, 0);
+
 		this.fetchHomePageData();
 		this.Subscriptions();
+		
 
 		// $('.scrollDownButton').css('left', '3px');
 		// $('.scrollDownButton').css('right', '');
@@ -406,7 +412,9 @@ export class HomeComponent implements OnInit {
 				this.spinner.hide()
 				console.log(data, "gsducgjsdgcfugsdu")
 				this.homePageData = data
-
+				setTimeout(() => {
+					this.initClientCarousel();
+				}, 0);
 				$(document).ready(function () {
 					$('.owl-carousels').owlCarousel({
 						loop: true,
@@ -467,37 +475,6 @@ export class HomeComponent implements OnInit {
 							}
 						}
 					});
-					$('.client_logo').owlCarousel({
-						loop: true,
-						margin: 10,
-						autoplay: true,
-						autoplayTimeout: 1000,
-						autoplayHoverPause: true,
-						responsiveClass: true,
-						navText:
-							['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-								'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-						responsive: {
-							0: {
-								items: 1,
-								nav: false,
-								loop: true,
-								dots: false
-							},
-							600: {
-								items: 3,
-								nav: true
-							},
-							1000: {
-								items: 3,
-								nav: true,
-								loop: true,
-								autoplay: true,
-								margin: 20
-							}
-						}
-					});
-
 					// In your component, update the owl carousel initialization:
 					$('.viewVehicleCarousel').owlCarousel({
 						loop: true,
@@ -532,6 +509,7 @@ export class HomeComponent implements OnInit {
 					});
 				})
 			})
+			
 	}
 
 	// --------------------------------- 	Quotebot Data 		----------------------------------------------
@@ -1626,6 +1604,82 @@ export class HomeComponent implements OnInit {
 			this.router.navigate(['/subscription'])
 		}
 	}
+
+	//conver text to html
+	
+	convertTextToHtml(str: string): string {
+		if (!str) return '';
+	  
+		return str
+		  // temporarily protect <small> tags
+		  .replace(/<small>/gi, '___SMALL_OPEN___')
+		  .replace(/<\/small>/gi, '___SMALL_CLOSE___')
+	  
+		  // escape everything else
+		  .replace(/&/g, '&amp;')
+		  .replace(/</g, '&lt;')
+		  .replace(/>/g, '&gt;')
+		  .replace(/"/g, '&quot;')
+		  .replace(/'/g, '&#039;')
+	  
+		  // restore <small> tags
+		  .replace(/___SMALL_OPEN___/g, '<small>')
+		  .replace(/___SMALL_CLOSE___/g, '</small>');
+	}
+	  
+
+	initClientCarousel() {
+		// Initialize client logo carousel with improved settings
+		const $clientCarousel = $('.client_logo');
+
+		if ($clientCarousel.length > 0) {
+			// Destroy existing carousel if it exists
+			if ($clientCarousel.hasClass('owl-loaded')) {
+				$clientCarousel.trigger('destroy.owl.carousel');
+				$clientCarousel.removeClass('owl-loaded');
+				$clientCarousel.find('.owl-stage-outer').children().unwrap();
+			}
+
+			// Initialize with optimized settings
+			$clientCarousel.owlCarousel({
+				loop: true,
+				margin: 6,
+				autoplay: true,
+				autoplayTimeout: 2500,
+				autoplayHoverPause: true,
+				smartSpeed: 800,
+				dots: true,
+				nav: true, // Enable navigation arrows
+				responsiveClass: true,
+				navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+				autoHeight: false,
+				animateOut: 'fadeOut',
+				animateIn: 'fadeIn',
+				responsive: {
+					0: {
+						items: 1,
+						margin: 10,
+						dots: true
+					},
+					480: {
+						items: 1,
+						margin: 15,
+						dots: true
+					},
+					768: {
+						items: 6,
+						margin: 20,
+						dots: false
+					},
+					1024: {
+						items: 8,
+						margin: 25,
+						dots: false
+					}
+				}
+			});
+		}
+	  }
 }
 
 
