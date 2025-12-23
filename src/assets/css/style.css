@@ -759,11 +759,11 @@ header {
 }
 
 .ourmisservice_wrap_content p {
-	font-weight: 400;
-	font-size: 14px;
+	font-weight: 500;
+	font-size: 15px;
 	line-height: 150%;
 	text-transform: capitalize;
-	color: rgba(18, 18, 18, 0.6);
+	color: #000;
 }
 
 .chk_vehicles_parent {
@@ -1308,7 +1308,7 @@ height:280px !important;
 
 .personalized_wrapper {
 	margin: 25px 50px;
-	padding: 50px;
+	/* padding: 50px; */
 	background-size: cover;
 	/* background-image: url(../images/textureimg.png); */
 	display: flex;
@@ -1340,7 +1340,7 @@ height:280px !important;
 	font-weight: 400;
 	font-size: 16px;
 	line-height: 150%;
-	text-align: left;
+	text-align: center;
 	text-transform: capitalize;
 	color: rgba(18, 18, 18, 1);
 }
@@ -1380,12 +1380,12 @@ height:280px !important;
 	line-height: 150%;
 	letter-spacing: 0%;
 	color: #000;
-	text-align: left;
+	text-align: center;
 
 }
 
 .personalized_text p {
-	font-weight: 400;
+	font-weight: 500;
 	font-size: 16px;
 	line-height: 150%;
 	color: #000;
@@ -1742,9 +1742,10 @@ height:280px !important;
         }
 
         .step-sub-desc {
-            font-size: 0.9rem;
-            color: gray;
+            font-size: 1rem;
+            color: black;
             line-height: 1.4;
+			font-weight: 500;
         }
 
         /* Active Background Card Effect (Optional, seen in image on Step 1) */
@@ -4247,8 +4248,7 @@ header .navbar-toggler {
 		font-size: 16px;
 	}
 
-	.checkourveh_wrapper,
-	.personalized_wrapper {
+	.checkourveh_wrapper {
 		padding: 30px 0;
 	}
 
@@ -4481,8 +4481,8 @@ header .navbar-toggler {
 	color: #fff !important;
 	border: 2px solid rgba(243, 147, 61, 0.3) !important;
 	border-radius: 50% !important;
-	width: 40px !important;
-	height: 40px !important;
+	width: 32px !important;
+	height: 32px !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
@@ -5208,6 +5208,10 @@ header .navbar-toggler {
 
 	.discover_diff{
 		padding: 15px 10px;
+	}
+
+	.discover_diff_inner_columns {
+		min-height: 300px;
 	}
 
 	.discover_diff_inner_columns h4 {
