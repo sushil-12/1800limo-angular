@@ -69,10 +69,26 @@
 						</ng-template>
 					</div>
 				</div>
+
+				<div class="mobile-app-minimal">
+					<div class="icon-container">
+						<img src="../../../../assets/admin/images/announcement.png" class="announcement-icon" alt="Announcement">
+					</div>
+				
+					<div class="content-container">
+						<div class="release-text">
+							Mobile App Releasing Soon
+						</div>
+						<div class="store-icons">
+							<img src="../../../../assets/images/app_store_img.png" alt="App Store" class="store-img">
+							<img src="../../../../assets/images/google_play_img.png" alt="Google Play" class="store-img">
+						</div>
+					</div>
+				</div>
 			</div>
 
 
-			<div class="col-md-6 col-xl-5 quoteform_homewrapper" appScrollToSection>
+			<div class="col-md-6 col-xl-6 quoteform_homewrapper p-4" appScrollToSection>
 				<div class="g-translator d-flex justify-content-center">
 					<div id="google_translate_element_home_desktop"></div>
 				</div>
@@ -976,7 +992,7 @@
 				<div class="item" *ngFor="let vehicle of vehicles">
 					<a class="ns-user">
 						<img src="{{vehicle?.vehicle_image}}" alt="semi">
-						<!-- <p style="color: #000;">{{vehicle?.vehicle_name}}</p> -->
+						<p style="color: #000;">{{vehicle?.vehicle_name}}</p>
 					</a>
 				</div>
 			</div>
@@ -1015,7 +1031,7 @@
 <!-- OUR CLIENTS FOR MOBILE -->
 <section class="client_wrapper">
 	<div class="container-fluid">
-		<h2><span>Our Clients</span></h2>
+		<h2><span>Who Travels With Us</span></h2>
 
 		<div class="client_logo owl-carousel owl-theme">
 			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
@@ -1075,7 +1091,7 @@
                 <img src="../../../../assets/images/how-1800-works/step1.png" alt="Step 1" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-solid fa-globe"></i>
+                    <i class="fa-solid fa-globe" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 1</div>
@@ -1086,7 +1102,7 @@
                 <img src="../../../../assets/images/how-1800-works/step2.png" alt="Step 2" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-solid fa-car"></i>
+                    <i class="fa-solid fa-car" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 2</div>
@@ -1097,7 +1113,7 @@
                 <img src="../../../../assets/images/how-1800-works/step3.png" alt="Step 3" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-solid fa-dollar-sign"></i>
+                    <i class="fa-solid fa-dollar-sign" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 3</div>
@@ -1109,7 +1125,7 @@
                 <img src="../../../../assets/images/how-1800-works/step4.png" alt="Step 4" class="step-img">
 
                 <div class="step-icon-box">
-                    <i class="fa-regular fa-circle-check"></i>
+                    <i class="fa-regular fa-circle-check" style="font-size: 18px;"></i>
                 </div>
 
                 <div class="step-label">STEP 4</div>
@@ -1149,8 +1165,8 @@
 				<ul class="row col-12 col-md-8 list-unstyled">
 					<li class="col-6 d-flex"
 						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
-						<i class="fa-regular fa-circle-check"></i>
-						<span class="ml-2">{{ list1.list }}</span>
+						<i class="fa-regular fa-circle-check" style="font-size: 20px;"></i>
+						<span class="ml-2" [innerHTML]="convertTextToHtml(list1.list)"></span>
 					</li>
 				</ul>
 				<div class="col-12 col-md-4">
@@ -1175,8 +1191,7 @@
 						<img src="../../../../assets/images/why_choose1.png" />
 						<h3>The Best Drivers and Vehicles</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
-							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info <i
-								class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info</a>
 					</div>
 				</div>
 			</div>
@@ -1186,8 +1201,7 @@
 						<img src="../../../../assets/images/why_choose2.png" />
 						<h3>Strong Background Checks</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_2')" data-target="#myModal" tabindex="1">More
-							Info <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_2')" data-target="#myModal" tabindex="1">More Info</a>
 					</div>
 				</div>
 			</div>
@@ -1197,8 +1211,7 @@
 						<img src="../../../../assets/images/why_choose3.png" />
 						<h3>The Best Value</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info <i
-								class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a>
 					</div>
 				</div>
 			</div>
@@ -1208,8 +1221,7 @@
 						<img src="../../../../assets/images/why_choose4.jpg" />
 						<h3>Consistent Quality Service</h3>
 						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info <i
-								class="fa fa-arrow-right" aria-hidden="true"></i></a>
+							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info</a>
 					</div>
 				</div>
 			</div>

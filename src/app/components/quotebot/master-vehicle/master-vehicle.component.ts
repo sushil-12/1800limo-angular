@@ -322,10 +322,12 @@ export class MasterVehicleComponent implements OnInit {
 
 
 	fetchMasterVehicles(): Promise<Array<any> | string> {
+		this.$spinner.show()
 		return new Promise((resolve, reject) => {
 			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
-				catchError(err => throwError(err))
+				catchError(err =>  throwError(err))
 			).subscribe((response: any) => {
+				
 				if (response.data.length == 0) {
 					this.no_vehicle_msg = "No Vehicle Categories Found. "
 					reject('No Master Vehicle Found.')
@@ -335,6 +337,7 @@ export class MasterVehicleComponent implements OnInit {
 				sessionStorage.setItem('currencyData', JSON.stringify(response?.currency))
 				this.currencySymbol = response.currency.symbol
 				resolve(this.master_vehicles)
+				this.$spinner.hide()
 				return
 			})
 		})
