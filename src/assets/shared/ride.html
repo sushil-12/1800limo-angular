@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Ride | 1800 Limo</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjV38fI9kDAaVJKqEq2sdgLAHXQPC3Up4&libraries=geometry"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; overflow: hidden; }
+        #root { height: 100vh; width: 100vw; display: flex; }
+        
+        /* Map Container */
+        .map-container { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; }
+        
+        /* Floating Panel (Premium Design) */
+        .info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            z-index: 10;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 40px);
+            transition: all 0.3s ease;
+        }
+
+        /* Recenter Button - MOVED TO TOP RIGHT to avoid overlapping phone button */
+        .recenter-btn {
+            position: absolute;
+            top: 20px;       /* Changed from bottom to top */
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .recenter-btn:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .recenter-btn:active { transform: scale(0.95); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .info-panel {
+                top: auto;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 16px 16px 0 0;
+                margin: 0;
+                max-height: 60vh;
+                overflow-y: auto;
+                padding-bottom: 20px; /* Add padding for safe area */
+            }
+            /* Button stays Top Right on mobile too */
+            .recenter-btn {
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // ID Decoding Logic
+        const PREFIX = "LXSH";
+        const SUFFIX = "ZXSL";
+
+        function encodeId(userId) {
+            const base36 = Number(userId).toString(36);
+            const reversed = base36.split('').reverse().join('');
+            return `${PREFIX}${reversed}${SUFFIX}`;
+        }
+
+        function decodeId(encoded) {
+            if(!encoded) return null;
+            const core = encoded.slice(PREFIX.length, -SUFFIX.length);
+            const base36 = core.split('').reverse().join('');
+            return parseInt(base36, 36);
+        }
+
+        const { useState, useEffect, useRef } = React;
+
+        // --- Icons ---
+        const PhoneIcon = () => (
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+        );
+
+        const TargetIcon = () => (
+             <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 12H6m12 0a6 6 0 01-6 6m6-6a6 6 0 00-6-6m-6 6a6 6 0 016-6m6 6a6 6 0 00-6 6" /></svg>
+        );
+
+        function App() {
+            const [status, setStatus] = useState('Connecting...');
+            const [rideData, setRideData] = useState(null);
+            const [pathHistory, setPathHistory] = useState([]); 
+            const [error, setError] = useState(null);
+            
+            const mapRef = useRef(null);
+            const googleMapRef = useRef(null);
+            const markersRef = useRef({ driver: null, pickup: null, dropoff: null });
+            const directionsRendererRef = useRef(null);
+            const historyPolylineRef = useRef(null);
+            const socketRef = useRef(null);
+            const lastRouteUpdateRef = useRef(0);
+
+            // 1. Initialize Map
+            useEffect(() => {
+                const defaultCenter = { lat: 40.7128, lng: -74.0060 };
+                
+                googleMapRef.current = new google.maps.Map(mapRef.current, {
+                    zoom: 13,
+                    center: defaultCenter,
+                    disableDefaultUI: true,
+                    zoomControl: false, 
+                    styles: [
+                        { featureType: "poi", stylers: [{ visibility: "off" }] },
+                        { featureType: "transit", stylers: [{ visibility: "off" }] }
+                    ]
+                });
+
+                // Route Line (Black)
+                directionsRendererRef.current = new google.maps.DirectionsRenderer({
+                    map: googleMapRef.current,
+                    suppressMarkers: true,
+                    preserveViewport: true,
+                    polylineOptions: { strokeColor: '#111827', strokeWeight: 5, strokeOpacity: 0.9 }
+                });
+
+                // History Trail (Gray)
+                historyPolylineRef.current = new google.maps.Polyline({
+                    map: googleMapRef.current,
+                    path: [],
+                    geodesic: true,
+                    strokeColor: '#9ca3af',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4
+                });
+            }, []);
+
+            // 2. Socket Logic
+            useEffect(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const encodedUserId = urlParams.get('user_id');
+                const userId = decodeId(encodedUserId);
+                
+                if (!userId) {
+                    setError('Invalid or Missing Link');
+                    return;
+                }
+
+                const socketUrl = 'https://limortservice.infodevbox.com';
+                socketRef.current = io(socketUrl, {
+                    transports: ['polling', 'websocket'],
+                    auth: { userId: userId, userType: 'customer', secret: 'limoapi_notifications_secret_2024_xyz789' }
+                });
+
+                socketRef.current.on('connect', () => setStatus('Connected'));
+                socketRef.current.on('disconnect', () => setStatus('Disconnected'));
+                
+                const handleData = (data, type) => processRideData(data, type);
+
+                socketRef.current.on('active_ride', (d) => handleData(d, 'active_ride'));
+                socketRef.current.on('driver.location.update', (d) => handleData(d, 'driver_loc'));
+                socketRef.current.on('user.notifications', (d) => handleData(d, 'notification'));
+
+                return () => { if (socketRef.current) socketRef.current.disconnect(); };
+            }, []);
+
+            // 3. Process Data
+            const processRideData = (incomingData, type) => {
+                console.log(incomingData, "INCOMING DATA");
+                let lat, lng, bookingId;
+
+                // Extract Driver Location
+                if (type === 'driver_loc') {
+                    lat = parseFloat(incomingData.latitude);
+                    lng = parseFloat(incomingData.longitude);
+                    bookingId = incomingData.bookingId;
+                } else {
+                    const d = incomingData.data || incomingData;
+                    lat = parseFloat(d.driver_latitude || d.driver_lat || d.location?.latitude);
+                    lng = parseFloat(d.driver_longitude || d.driver_lng || d.location?.longitude);
+                    bookingId = d.booking_id || d.bookingId;
+                }
+
+                // Update Path History
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    setPathHistory(prev => {
+                        const last = prev[prev.length - 1];
+                        if (last && Math.abs(last.lat - lat) < 0.0001 && Math.abs(last.lng - lng) < 0.0001) return prev;
+                        return [...prev, { lat, lng }];
+                    });
+                }
+
+                if (type === 'driver_loc') {
+                    setRideData(prev => {
+                        if (!prev || prev.booking_id != bookingId) return prev;
+                        return { ...prev, driver_lat: lat, driver_lng: lng };
+                    });
+                    return;
+                }
+
+                let data = incomingData.data || incomingData;
+                if (type === 'notification') {
+                    if (!['live_ride', 'live_ride_do', 'on_location', 'ended'].includes(incomingData.type)) return;
+                    data = incomingData.data || {};
+                }
+
+                const locations = data.locations || {};
+                const driver = data.driver || {};
+                const vehicle = data.vehicle || driver.vehicle || {};
+
+                setRideData({
+                    booking_id: data.booking_id || data.bookingId,
+                    status: data.status || incomingData.type || 'In Progress',
+                    driver_name: driver.name || `${driver.first_name || ''} ${driver.last_name || ''}`.trim() || 'Assigned Driver',
+                    driver_phone: driver.phone || driver.mobile,
+                    vehicle_info: vehicle.vehicle_type || vehicle.type || data.vehicle_info || 'Vehicle',
+                    vehicle_plate: vehicle.plate_number || vehicle.plate || '',
+                    pickup: {
+                        address: locations.pickup?.address || data.pickup_address,
+                        lat: parseFloat(locations.pickup?.latitude || data.pickup_latitude || data.pickup_lat),
+                        lng: parseFloat(locations.pickup?.longitude || data.pickup_longitude || data.pickup_lng)
+                    },
+                    dropoff: {
+                        address: locations.dropoff?.address || data.dropoff_address,
+                        lat: parseFloat(locations.dropoff?.latitude || data.dropoff_latitude || data.dropoff_lat),
+                        lng: parseFloat(locations.dropoff?.longitude || data.dropoff_longitude || data.dropoff_lng)
+                    },
+                    driver_lat: lat,
+                    driver_lng: lng,
+                    pickup_time: (data.timestamps && data.timestamps.pickup_time) || data.pickup_datetime || data.pickupDateTime
+                });
+            };
+
+            // 4. Update Map Visuals (Fixed Route Logic)
+            useEffect(() => {
+                if (!rideData || !googleMapRef.current) return;
+                const map = googleMapRef.current;
+                
+                // --- Icons ---
+                const carIcon = {
+                    url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+                        `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24"><path fill="#111827" stroke="white" stroke-width="1.5" d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>`
+                    )}`,
+                    scaledSize: new google.maps.Size(44, 44),
+                    anchor: new google.maps.Point(22, 22)
+                };
+
+                const getPin = (color) => ({
+                    url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="${color}" stroke="white" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="white"/></svg>`)}`,
+                    scaledSize: new google.maps.Size(24, 24),
+                    anchor: new google.maps.Point(12, 12)
+                });
+
+                // Update Markers
+                if (rideData.driver_lat && !isNaN(rideData.driver_lat)) {
+                    const pos = { lat: rideData.driver_lat, lng: rideData.driver_lng };
+                    if (!markersRef.current.driver) markersRef.current.driver = new google.maps.Marker({ position: pos, map, icon: carIcon, zIndex: 100 });
+                    else markersRef.current.driver.setPosition(pos);
+                }
+
+                if (rideData.pickup.lat && !markersRef.current.pickup) markersRef.current.pickup = new google.maps.Marker({ position: rideData.pickup, map, icon: getPin('#10b981') });
+                if (rideData.dropoff.lat && !markersRef.current.dropoff) markersRef.current.dropoff = new google.maps.Marker({ position: rideData.dropoff, map, icon: getPin('#111827') });
+
+                // Update Path History
+                if (historyPolylineRef.current) historyPolylineRef.current.setPath(pathHistory);
+
+                // --- NEW ROUTE LOGIC ---
+                const now = Date.now();
+                // We update route if: 
+                // 1. We have a driver location AND it's been 5s (Dynamic Rerouting)
+                // 2. OR we have NO route yet and valid pickup/dropoff (Fallback Route)
+                
+                const shouldUpdate = (now - lastRouteUpdateRef.current > 5000);
+                
+                if (shouldUpdate) {
+                    let origin = null;
+                    let destination = null;
+                    const directionsService = new google.maps.DirectionsService();
+
+                    // Logic: If Driver exists, route Driver -> Dest. If NOT, route Pickup -> Dest (Preview Mode)
+                    const hasDriver = rideData.driver_lat && !isNaN(rideData.driver_lat);
+
+                    if (hasDriver) {
+                        origin = { lat: rideData.driver_lat, lng: rideData.driver_lng };
+                        // Where is he going?
+                        if (rideData.status.includes('pu') || rideData.status === 'en_route') destination = rideData.pickup;
+                        else if (rideData.status === 'on_location') destination = null; // No route needed at pickup
+                        else destination = rideData.dropoff;
+                    } else {
+                        // Fallback: Preview entire route
+                        if (rideData.pickup.lat && rideData.dropoff.lat) {
+                            origin = rideData.pickup;
+                            destination = rideData.dropoff;
+                        }
+                    }
+
+                    if (origin && destination && destination.lat) {
+                        directionsService.route({
+                            origin: origin,
+                            destination: destination,
+                            travelMode: google.maps.TravelMode.DRIVING
+                        }, (response, status) => {
+                            if (status === 'OK') {
+                                directionsRendererRef.current.setDirections(response);
+                                lastRouteUpdateRef.current = now;
+                            }
+                        });
+                    }
+                }
+            }, [rideData, pathHistory]);
+
+            // --- RECENTER LOGIC ---
+            const handleRecenter = () => {
+                if (!googleMapRef.current || !rideData) return;
+                
+                const bounds = new google.maps.LatLngBounds();
+                let hasPoints = false;
+
+                // 1. Add Driver
+                if (rideData.driver_lat && !isNaN(rideData.driver_lat)) {
+                    bounds.extend({ lat: rideData.driver_lat, lng: rideData.driver_lng });
+                    hasPoints = true;
+                }
+
+                // 2. Add Destination Context
+                if (rideData.status.includes('pu') && rideData.pickup.lat) {
+                    bounds.extend(rideData.pickup);
+                    hasPoints = true;
+                } else if (rideData.dropoff.lat) {
+                    bounds.extend(rideData.dropoff);
+                    hasPoints = true;
+                }
+
+                if (hasPoints) {
+                    googleMapRef.current.fitBounds(bounds);
+                } else if (rideData.pickup.lat) {
+                     // Fallback if no driver yet
+                    googleMapRef.current.setCenter(rideData.pickup);
+                    googleMapRef.current.setZoom(15);
+                }
+            };
+
+            const getStatusText = (s) => {
+                const map = { 'en_route_pu': 'Driver Arriving', 'on_location': 'Driver Arrived', 'en_route_do': 'Heading to Destination', 'ended': 'Trip Completed' };
+                return map[s] || s || 'In Progress';
+            };
+
+            return (
+                <div className="w-full h-full relative">
+                    {/* Map */}
+                    <div ref={mapRef} className="map-container"></div>
+                    
+                    {/* Error Bar */}
+                    {error && <div className="absolute top-0 w-full bg-red-500 text-white p-3 text-center z-50">{error}</div>}
+                    
+                    {/* Recenter Button - Top Right */}
+                    {rideData && (
+                        <button
+                            onClick={handleRecenter}
+                            className="recenter-btn text-gray-700 hover:text-black"
+                            title="Focus on Vehicle"
+                        >
+                            <TargetIcon />
+                        </button>
+                    )}
+
+                    {/* Loading State */}
+                    {!rideData && !error && (
+                        <div className="info-panel p-6 flex items-center justify-center min-h-[200px]">
+                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                             <span className="ml-3 text-gray-600 font-medium">Connecting...</span>
+                        </div>
+                    )}
+
+                    {/* Ride Details Panel */}
+                    {rideData && (
+                        <div className="info-panel custom-scroll">
+                            
+                            {/* Header Status */}
+                            <div className="bg-black text-white p-5">
+                                <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Current Status</div>
+                                <h1 className="text-xl font-bold">{getStatusText(rideData.status)}</h1>
+                            </div>
+
+                            {/* Driver Section */}
+                            <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
+                                    </div>
+                                    <div className="ml-4">
+                                        <div className="font-bold text-gray-900">{rideData.driver_name}</div>
+                                        <div className="text-sm text-gray-500 flex items-center gap-1">
+                                            <span>★ 5.0</span> • <span>{rideData.vehicle_info}</span>
+                                        </div>
+                                        {rideData.vehicle_plate && <div className="text-xs text-gray-400 mt-1 bg-gray-100 inline-block px-1 rounded">{rideData.vehicle_plate}</div>}
+                                    </div>
+                                </div>
+                                {rideData.driver_phone && (
+                                    <a href={`tel:${rideData.driver_phone}`} className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition text-white">
+                                        <PhoneIcon />
+                                    </a>
+                                )}
+                            </div>
+
+                            {/* Timeline */}
+                            <div className="p-5 relative">
+                                {/* Vertical Line */}
+                                <div className="absolute left-[39px] top-[45px] bottom-[50px] w-0.5 bg-gray-200"></div>
+
+                                {/* Pickup */}
+                                <div className="flex mb-8 relative">
+                                    <div className="w-10 flex-shrink-0 flex justify-center pt-1">
+                                        <div className="w-3 h-3 bg-green-500 rounded-full border-2 border-white ring-1 ring-green-100"></div>
+                                    </div>
+                                    <div>
+                                        <div className="text-xs text-gray-400 font-semibold uppercase tracking-wide">Pickup</div>
+                                        <div className="text-sm font-medium text-gray-900 mt-1 leading-snug">{rideData.pickup.address || 'Loading address...'}</div>
+                                        <div className="text-xs text-gray-500 mt-1">
+                                            {rideData.pickup_time ? new Date(rideData.pickup_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '--:--'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Dropoff */}
+                                <div className="flex relative">
+                                    <div className="w-10 flex-shrink-0 flex justify-center pt-1">
+                                        <div className="w-3 h-3 bg-black rounded-sm border-2 border-white ring-1 ring-gray-200"></div>
+                                    </div>
+                                    <div>
+                                        <div className="text-xs text-gray-400 font-semibold uppercase tracking-wide">Dropoff</div>
+                                        <div className="text-sm font-medium text-gray-900 mt-1 leading-snug">{rideData.dropoff.address || 'Loading address...'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Footer / Booking ID */}
+                            <div className="p-4 bg-gray-50 border-t border-gray-100 text-center">
+                                <p className="text-xs text-gray-400">Booking ID: <span className="font-mono text-gray-600">{rideData.booking_id}</span></p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
