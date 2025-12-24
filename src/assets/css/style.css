@@ -751,6 +751,7 @@ header {
 
 .ourmisservice_wrap_image img {
 	width: 100%;
+	border-radius: 20px;
 }
 
 .ourmisservice_wrap_content {
