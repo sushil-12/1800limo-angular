@@ -1495,6 +1495,10 @@ height:280px !important;
 	min-height: 300px;
 	max-height: 300px;
 	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .whychoose_no img {
@@ -1522,7 +1526,7 @@ height:280px !important;
 
 .whychoose_no a {
 	display: block;
-	width: 100%;
+	width: 40%;
 	background: rgba(243, 147, 61, 1);
 	font-weight: 400;
 	font-size: 16px;
@@ -1531,7 +1535,7 @@ height:280px !important;
 	color: #fff;
 	border: 1px solid var(--orange);
 	line-height: 17px;
-	padding: 8px 10px;
+	padding: 4px 0px;
 	transition: 0.2s;
 	border-radius: 10px;
 }
@@ -1703,8 +1707,8 @@ height:280px !important;
 
         /* Icon Circles */
         .step-icon-box {
-            width: 46px;
-            height: 46px;
+            width: 40px;
+            height: 40px;
             background-color: #fff;
             border: 2px solid var(--light-gray);
             border-radius: 50%;
