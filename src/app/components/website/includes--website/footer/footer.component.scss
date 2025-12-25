@@ -327,6 +327,12 @@ a.user-profile:active::after {
 //         left: 190px !important;
 //     }
 // }
+
+.footer_text_main{
+	padding-left: 100px;
+}
+
+
 @media only screen and (max-width: 767px) {
 	.btn-top-bottom {
 		display: none !important;
@@ -394,6 +400,7 @@ a.user-profile:active::after {
 }
 
 
+
 @media (min-width: 1200px) {
 
 	.container,
@@ -405,4 +412,11 @@ a.user-profile:active::after {
 		max-width: 1320px !important;
 	}
 
+}
+
+@media screen and (max-width: 480px) {
+	.footer_text_main{
+		padding: 30px !important;
+	}
+	
 }

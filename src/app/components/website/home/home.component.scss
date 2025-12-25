@@ -1198,6 +1198,30 @@ div#google_translate_element_home_mobile {
 }
  
 
+/* home.component.scss */
+
+// Force a grid layout if Owl Carousel hasn't loaded yet (prevents vertical stacking)
+.chk_vehicles:not(.owl-loaded) {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+}
+
+// Constrain images so they never take up the full screen width
+.chk_vehicles .item img {
+    max-width: 100%;
+    height: 180px; /* Fixed height to prevent jumping */
+    object-fit: contain; /* Keeps aspect ratio */
+    width: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+// Ensure the parent container doesn't collapse
+.chk_vehicles_parent {
+    min-height: 220px; 
+    overflow: hidden;
+}
 /* --- Navigation Tabs (One Way / Round Trip / Hourly) --- */
 #myTab {
     border-bottom: none;

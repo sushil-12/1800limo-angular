@@ -952,7 +952,7 @@ header {
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
-		right: -40px !important;
+		right: -20px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -1792,9 +1792,13 @@ footer {
 	padding: 30px 0px 10px 0px;
 }
 
+.footercontent .content_qr_btn{
+	text-align: right;
+}
+
 .footercontent .content_qr_btn img {
-	height: 130px;
-	width: 130px;
+	height: 100px;
+	width: 100px;
 	margin-bottom: 20px;
 }
 
@@ -1832,6 +1836,7 @@ footer {
 	color: var(--orange-color);
 	font-weight: 600;
 	font-size: 18px;
+	text-align: center;
 
 }
 
@@ -4434,8 +4439,8 @@ header .navbar-toggler {
 }
 
 .client_logo.owl-carousel .owl-item img {
-	max-height: 80px;
-	max-width: 120px;
+	max-height: 100px;
+	max-width: 140px;
 	width: auto;
 	height: auto;
 	object-fit: contain;
@@ -4556,8 +4561,8 @@ header .navbar-toggler {
 	}
 
 	.client_logo.owl-carousel .owl-item img {
-		max-height: 60px;
-		max-width: 100px;
+		height: 100%;
+		width:100%;
 	}
 
 	/* Hide navigation arrows on mobile for cleaner look */
@@ -4580,6 +4585,15 @@ header .navbar-toggler {
 		width: 35px !important;
 		height: 35px !important;
 		font-size: 14px !important;
+	}
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 767px) {
+	/* Better mobile spacing for carousels */
+	.chk_vehicles .item,
+	.client_logo .item {
+		padding: 10px 5px;
 	}
 }
 
@@ -4840,6 +4854,11 @@ header .navbar-toggler {
 .borderright .radio-tile {
 	border-right: 0;
 }
+
+.footercontent .content_qr_btn .login_btn {
+	margin-left: 20px;
+}
+
 
 .radio-tile {
 	display: flex;
@@ -5184,7 +5203,7 @@ header .navbar-toggler {
 	}
 
 	.footercontent .content_qr_btn .login_btn {
-		margin-left: 50px;
+		margin-left: 50px !important;
 	}
 
 	.footercontent p {
@@ -5198,12 +5217,13 @@ header .navbar-toggler {
 	}
 
 	.client_logo .item {
-		height: 70px;
+		height: 150px;
+		width: 100%;
 	}
 
 	.footercontent .content_qr_btn img {
-		height: 130px;
-		width: 130px;
+		height: 100px;
+		width: 100px;
 	}
 
 	.discover_diff h2,
@@ -5237,6 +5257,10 @@ header .navbar-toggler {
 	}
 	.step-item {
 		margin-bottom: 40px;
+	}
+
+	.footercontent .content_qr_btn{
+		text-align: center;
 	}
 
 }

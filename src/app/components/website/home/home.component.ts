@@ -196,43 +196,11 @@ export class HomeComponent implements OnInit {
 		this.websiteService.getOurVehicles().then(result => {
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data;
-			// console.log(result);
-			// console.log(this.vehicles);
-			// console.log(JSON.stringify(this.vehicles));
-			$(document).ready(function () {
-				$('.chk_vehicles').owlCarousel({
-					loop: true,
-					margin: 15,
-					autoplay: true,
-					autoplayTimeout: 4000,
-					autoplayHoverPause: true,
-					smartSpeed: 800,
-					dots: true,
-					nav: true,
-					responsiveClass: true,
-					navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-						'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-					responsive: {
-						0: {
-							items: 1,
-							nav: false,
-							loop: true,
-							dots: false
-						},
-						575: {
-							items: 2,
-							nav: true
-						},
-						992: {
-							items: 3,
-							loop: true,
-							nav: true,
-							margin: 20
-						}
-					}
-				});
 
-			})
+			// Initialize vehicle carousel after data is loaded
+			setTimeout(() => {
+				this.initVehicleCarousel();
+			}, 100);
 		});
 
 		setTimeout(() => {
@@ -412,102 +380,11 @@ export class HomeComponent implements OnInit {
 				this.spinner.hide()
 				console.log(data, "gsducgjsdgcfugsdu")
 				this.homePageData = data
+				// Initialize all carousels after data is loaded
 				setTimeout(() => {
 					this.initClientCarousel();
-				}, 0);
-				$(document).ready(function () {
-					$('.owl-carousels').owlCarousel({
-						loop: true,
-						autoplay: true,
-						autoplayTimeout: 2000,
-						autoplayHoverPause: true,
-						margin: 10,
-						responsiveClass: true,
-						navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-							'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-						responsive: {
-							0: {
-								items: 1,
-								nav: false,
-								loop: true,
-								dots: false
-							},
-							600: {
-								items: 3,
-								nav: true
-							},
-							1000: {
-								items: 3,
-								nav: true,
-								loop: true,
-								autoplay: true,
-								margin: 20
-							}
-						}
-					});
-
-					$('.destinationCarousel').owlCarousel({
-						loop: true,
-						autoplay: true,
-						autoplayTimeout: 2000,
-						autoplayHoverPause: true,
-						margin: 10,
-						responsiveClass: true,
-						navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-							'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-						responsive: {
-							0: {
-								items: 1,
-								nav: false,
-								loop: true,
-								dots: false
-							},
-							600: {
-								items: 3,
-								nav: true
-							},
-							1000: {
-								items: 3,
-								nav: true,
-								loop: true,
-								autoplay: true,
-								margin: 20
-							}
-						}
-					});
-					// In your component, update the owl carousel initialization:
-					$('.viewVehicleCarousel').owlCarousel({
-						loop: true,
-						margin: 20,
-						autoplay: true,
-						autoplayTimeout: 3000,
-						autoplayHoverPause: true,
-						responsiveClass: true,
-						center: true, // This centers the active item
-						items: 3, // Show 3 full items
-						navText:
-							['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-								'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-						responsive: {
-							0: {
-								items: 1,
-								nav: false,
-								dots: true,
-								center: false
-							},
-							575: {
-								items: 2,
-								nav: true,
-								center: false
-							},
-							992: {
-								items: 3,
-								nav: true,
-								center: true
-							}
-						}
-					});
-				})
+					this.initOtherCarousels();
+				}, 100);
 			})
 			
 	}
@@ -1643,7 +1520,7 @@ export class HomeComponent implements OnInit {
 			// Initialize with optimized settings
 			$clientCarousel.owlCarousel({
 				loop: true,
-				margin: 6,
+				margin: 10,
 				autoplay: true,
 				autoplayTimeout: 2500,
 				autoplayHoverPause: true,
@@ -1659,27 +1536,192 @@ export class HomeComponent implements OnInit {
 					0: {
 						items: 1,
 						margin: 10,
-						dots: true
+						dots: true,
+						nav: false
 					},
 					480: {
-						items: 1,
+						items: 2,
 						margin: 15,
-						dots: true
+						dots: true,
+						nav: false
 					},
 					768: {
-						items: 6,
+						items: 4,
 						margin: 20,
-						dots: false
+						dots: false,
+						nav: true
 					},
 					1024: {
-						items: 8,
+						items: 7, // Desktop: 7 items (at least 7 as requested)
 						margin: 25,
+						dots: false,
+						nav: true
+					},
+					1200: {
+						items: 8, // Large desktop: 8 items
+						margin: 25,
+						dots: false,
+						nav: true
+					}
+				}
+			});
+		}
+	}
+
+	initVehicleCarousel() {
+		// Initialize vehicle carousel with improved settings
+		const $vehicleCarousel = $('.chk_vehicles');
+
+		if ($vehicleCarousel.length > 0) {
+			// Destroy existing carousel if it exists
+			if ($vehicleCarousel.hasClass('owl-loaded')) {
+				$vehicleCarousel.trigger('destroy.owl.carousel');
+				$vehicleCarousel.removeClass('owl-loaded');
+				$vehicleCarousel.find('.owl-stage-outer').children().unwrap();
+			}
+
+			// Initialize with optimized settings
+			$vehicleCarousel.owlCarousel({
+				loop: true,
+				margin: 15,
+				autoplay: true,
+				autoplayTimeout: 4000,
+				autoplayHoverPause: true,
+				smartSpeed: 800,
+				dots: true,
+				nav: true,
+				responsiveClass: true,
+				navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+					'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1,
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					575: {
+						items: 2,
+						nav: true,
+						dots: true
+					},
+					992: {
+						items: 3, // Desktop: 3 items as requested
+						nav: true,
+						loop: true,
+						margin: 20,
 						dots: false
 					}
 				}
 			});
 		}
-	  }
+	}
+
+	initOtherCarousels() {
+		// Initialize all other carousels with 1 item on mobile
+		setTimeout(() => {
+			// General owl carousels
+			$('.owl-carousels').owlCarousel({
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 2000,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+					'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20
+					}
+				}
+			});
+
+			// Destination carousel
+			$('.destinationCarousel').owlCarousel({
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 2000,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+					'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20
+					}
+				}
+			});
+
+			// View vehicle carousel
+			$('.viewVehicleCarousel').owlCarousel({
+				loop: true,
+				margin: 20,
+				autoplay: true,
+				autoplayTimeout: 3000,
+				autoplayHoverPause: true,
+				responsiveClass: true,
+				center: true,
+				navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+					'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						dots: true,
+						center: false
+					},
+					575: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						dots: true,
+						center: false
+					},
+					768: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						center: false
+					},
+					992: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						center: true
+					}
+				}
+			});
+		}, 200);
+	}
 }
 
 
