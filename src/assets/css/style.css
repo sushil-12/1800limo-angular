@@ -952,7 +952,7 @@ header {
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
-		right: -40px !important;
+		right: -20px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -1792,9 +1792,13 @@ footer {
 	padding: 30px 0px 10px 0px;
 }
 
+.footercontent .content_qr_btn{
+	text-align: right;
+}
+
 .footercontent .content_qr_btn img {
-	height: 130px;
-	width: 130px;
+	height: 100px;
+	width: 100px;
 	margin-bottom: 20px;
 }
 
@@ -1832,6 +1836,7 @@ footer {
 	color: var(--orange-color);
 	font-weight: 600;
 	font-size: 18px;
+	text-align: center;
 
 }
 
@@ -4850,6 +4855,11 @@ header .navbar-toggler {
 	border-right: 0;
 }
 
+.footercontent .content_qr_btn .login_btn {
+	margin-left: 20px;
+}
+
+
 .radio-tile {
 	display: flex;
 	flex-direction: column;
@@ -5193,7 +5203,7 @@ header .navbar-toggler {
 	}
 
 	.footercontent .content_qr_btn .login_btn {
-		margin-left: 50px;
+		margin-left: 50px !important;
 	}
 
 	.footercontent p {
@@ -5212,8 +5222,8 @@ header .navbar-toggler {
 	}
 
 	.footercontent .content_qr_btn img {
-		height: 130px;
-		width: 130px;
+		height: 100px;
+		width: 100px;
 	}
 
 	.discover_diff h2,
@@ -5247,6 +5257,10 @@ header .navbar-toggler {
 	}
 	.step-item {
 		margin-bottom: 40px;
+	}
+
+	.footercontent .content_qr_btn{
+		text-align: center;
 	}
 
 }
