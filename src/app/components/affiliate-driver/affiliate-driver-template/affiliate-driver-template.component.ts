@@ -146,7 +146,7 @@ export class AffiliateDriverTemplateComponent implements OnInit {
 			}
 			function myTimer() {
 				if ($('.goog-te-combo option:first').length) {
-					$('.goog-te-combo option:first').html('Translate');
+					$('.goog-te-combo option:first').html('English');
 					cleartimer();
 				}
 			}
@@ -175,7 +175,7 @@ export class AffiliateDriverTemplateComponent implements OnInit {
 			}
 			function myTimer() {
 				if ($('.goog-te-combo option:first').length) {
-					$('.goog-te-combo option:first').html('Translate');
+					$('.goog-te-combo option:first').html('English');
 					cleartimer();
 				}
 			}

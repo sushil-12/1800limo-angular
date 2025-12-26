@@ -208,25 +208,7 @@ header a.nav-link.active {
 	}
 }
 
-@media only screen and (min-device-width: 640px) and (max-device-width: 997px) and (orientation: landscape) {
-	/* header {
-		height: 85px !important;
-	} */
 
-	.bannerform_wrapper {
-		padding: 110px 15px 50px 15px !important;
-	}
-}
-
-@media only screen and (min-device-width: 640px) and (max-device-width: 997px) {
-	/* header {
-		height: 85px !important;
-	} */
-
-	.bannerform_wrapper {
-		padding: 110px 15px 50px 15px !important;
-	}
-}
 
 .cell-no-header .fas {
 	color: var(--orange-color);
@@ -662,13 +644,11 @@ header {
 
 .discover_diff {
 	margin: 25px 50px;
-	padding: 15px 50px;
 	background-size: cover;
 	/* background-image: url(../images/textureimg.png); */
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background: linear-gradient(359.09deg, rgba(18, 18, 18, 0.05) 6.25%, rgba(161, 161, 161, 0) 99.69%) !important;
 }
 
 .discover_diff h2 {
@@ -722,9 +702,8 @@ header {
 
 
 .ourmisservice_wrap {
-	background: linear-gradient(359.09deg, rgba(18, 18, 18, 0.05) 6.25%, rgba(161, 161, 161, 0) 99.69%);
-	padding: 20px;
 	background-color: transparent !important;
+	margin: 25px 50px; /* Match other sections */
 }
 
 .ourmisservice_wrap h2 {
@@ -768,11 +747,11 @@ header {
 }
 
 .chk_vehicles_parent {
-	min-height: 160px;
+	min-height: 130px; /* Reduced to match smaller vehicle images */
 }
 
 .chk_vehicles.owl-carousel .owl-item img {
-	height: 155px;
+	height: 120px; /* Reduced from 155px */
 	object-fit: contain;
 }
 
@@ -863,7 +842,7 @@ header {
 }
 
 .viewVehicleCarousel .owl-nav button.owl-next {
-	right: -40px !important;
+	right: 0px !important;
 }
 
 .viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -1309,7 +1288,6 @@ height:280px !important;
 
 .personalized_wrapper {
 	margin: 25px 50px;
-	/* padding: 50px; */
 	background-size: cover;
 	/* background-image: url(../images/textureimg.png); */
 	display: flex;
@@ -1432,7 +1410,7 @@ height:280px !important;
 
 .whychoose_wrapper {
 	margin: 25px 50px;
-	padding: 50px;
+	padding: 15px 50px;
 	background-size: cover;
 	/* background-image: url(../images/textureimg.png); */
 	display: flex;
@@ -1504,8 +1482,8 @@ height:280px !important;
 
 .whychoose_no img {
 	object-fit: cover;
-	width: 240px;
-	height: 155px;
+	width: 100%;
+	height: auto;
 	border-radius: 16px;
 	margin-bottom: 30px;
 }
@@ -1527,10 +1505,10 @@ height:280px !important;
 
 .whychoose_no a {
 	display: block;
-	width: 40%;
+	width: 85px;
 	background: rgba(243, 147, 61, 1);
 	font-weight: 400;
-	font-size: 16px;
+	font-size: 15px;
 	line-height: 20px;
 	letter-spacing: -0.23px;
 	color: #fff;
@@ -1570,10 +1548,11 @@ height:280px !important;
 }
 
 .whychoosemidle img {
-	height: 400px;
+	height: 100%;
 	border-radius: 16px;
 	object-fit: cover;
 	width: 100%;
+	background-repeat: no-repeat;
 }
 
 .whychoosemidle .col-12 ul>li {
@@ -1648,6 +1627,13 @@ height:280px !important;
         /* --- Timeline Line styling --- */
         .steps-container {
             position: relative;
+            margin: 0 -15px; /* Compensate for step-item padding */
+        }
+        
+        @media (min-width: 768px) {
+            .steps-container .step-item {
+                padding: 0 20px; /* More spacing on desktop between steps */
+            }
         }
 
         /* The horizontal gray line background */
@@ -1663,17 +1649,20 @@ height:280px !important;
         }
 
         /* The colored orange line (Progress) */
-        /* Adjust width to simulate progress (e.g., 15% for Step 1 active) */
         .steps-line-progress {
             position: absolute;
             top: 50%;
             left: 0;
-            width: 12%; /* Change this based on active step */
+            width: 25%; /* Dynamically updated via Angular binding */
             height: 4px;
-            background-color: var(--primary-orange);
+            background: linear-gradient(90deg, var(--primary-orange) 0%, rgba(243, 147, 61, 0.8) 50%, var(--primary-orange) 100%);
+            background-size: 200% 100%;
             z-index: 1;
             transform: translateY(-50%);
-            transition: width 0.3s ease;
+            transition: width 0.5s ease;
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(243, 147, 61, 0.4);
+            animation: progressFlow 3s ease infinite;
         }
 
         /* --- Individual Step Styling --- */
@@ -1681,6 +1670,7 @@ height:280px !important;
             position: relative;
             z-index: 2; /* Keep above the line */
             text-align: center;
+            padding: 0 15px; /* Add horizontal spacing between steps */
         }
 
 		.steps-line-bg.d-none.d-md-block {
@@ -1690,20 +1680,31 @@ height:280px !important;
 
         /* Screenshot Images */
         .step-img {
-            width: 300px;
+            width: 100%;
+            max-width: 280px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin: 0 auto 25px auto;
             opacity: 0.6; /* Dim inactive images */
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             border: 1px solid #eee;
 			height: 185px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        @media (min-width: 992px) {
+            .step-img {
+                max-width: 300px;
+                margin: 0 auto 30px auto;
+            }
         }
 
         .step-item.active .step-img {
             opacity: 1;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-            border: 1px solid var(--light-gray);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(243, 147, 61, 0.3);
+            border: 2px solid var(--orange-color);
         }
 
         /* Icon Circles */
@@ -1718,8 +1719,8 @@ height:280px !important;
             justify-content: center;
             margin: 0 auto 20px auto;
             color: var(--text-gray);
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            transition: all 0.5s ease;
         }
 
         /* Active Step Icon Styling */
@@ -1727,7 +1728,8 @@ height:280px !important;
             background-color: var(--orange-color);
             border-color: var(--orange-color);
             color: #fff;
-            box-shadow: 0 0 0 5px rgba(246, 139, 31, 0.2); /* Outer glow ring */
+            box-shadow: 0 0 0 8px rgba(246, 139, 31, 0.2);
+            animation: stepPulse 2s ease-in-out infinite;
         }
 
         /* Text Styling */
@@ -1753,17 +1755,43 @@ height:280px !important;
 			font-weight: 500;
         }
 
-        /* Active Background Card Effect (Optional, seen in image on Step 1) */
+        /* Active Background Card Effect - Only around icon and text area */
         .step-item.active::after {
             content: '';
             position: absolute;
-            top: 20%; /* Start below the image */
-            bottom: -20px;
-            left: 10px;
-            right: 10px;
-            /* background-color: #f8f9fa; */
+            top: 150px; /* Start right after image (150px max image height, no gap) */
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            background: rgba(243, 147, 61, 0.12); /* More visible orange background like Figma */
             z-index: -1;
             border-radius: 12px;
+            padding: 15px 10px;
+            box-sizing: border-box;
+        }
+
+        /* Animation Keyframes */
+        @keyframes stepPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 8px rgba(246, 139, 31, 0.2);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 12px rgba(246, 139, 31, 0.15);
+            }
+        }
+
+        @keyframes progressFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
 
@@ -3556,7 +3584,7 @@ input[type=number]::-webkit-outer-spin-button {
 	/* border: 2px solid rgba(132, 132, 132, 21%); */
 	width: 99%;
 	padding: 5px 0;
-	height: 185px;
+	height: auto;
 }
 
 
@@ -3947,7 +3975,7 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper {
-		padding: 150px 15px 50px 15px;
+		padding: 35px 15px 35px 15px;
 	}
 
 	.dropdown.button-signin {
@@ -4004,7 +4032,7 @@ header .navbar-toggler {
 	/* header .nav-item.dropdown.button-signin {display: none;} */
 	.bannerform_wrapper .quoteform_homewrapper input,
 	.bannerform_wrapper .quoteform_homewrapper select {
-		font-size: 20px;
+		font-size: 16px;
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper .tab_innerform {
@@ -4069,6 +4097,8 @@ header .navbar-toggler {
 
 	.chk_vehicles.owl-carousel .owl-item img {
 		max-width: 300px;
+		height: 90px !important; /* Reduced for mobile */
+		object-fit: contain;
 		margin: auto;
 	}
 
@@ -4259,7 +4289,7 @@ header .navbar-toggler {
 	}
 
 	.checkourveh_wrapper {
-		padding: 30px 0;
+		padding: 0px !important;
 	}
 
 	.ourmission_wrapper,
@@ -4345,7 +4375,7 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper {
-		padding: 76px 0px 0px 0px !important;
+		padding: 53px 0px 0px 0px !important
 	}
 
 	.bannerform_wrapper {
@@ -4555,19 +4585,55 @@ header .navbar-toggler {
 
 /* Client logo carousel responsive improvements */
 @media (max-width: 767px) {
+	.client_logo {
+		width: 100% !important;
+		overflow: visible !important;
+	}
+	
 	.client_logo .item {
-		padding: 10px 3px;
-		min-height: 80px;
+		padding: 10px 3px !important;
+		min-height: 80px !important;
+		height: 80px !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		width: auto !important;
 	}
 
+	.client_logo.owl-carousel .owl-item {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+	}
+	
 	.client_logo.owl-carousel .owl-item img {
-		height: 100%;
-		width:100%;
+		max-height: 80px !important;
+		max-width: 120px !important;
+		width: auto !important;
+		height: auto !important;
+		object-fit: contain !important;
+		-webkit-object-fit: contain !important;
+		display: block !important;
+		margin: 0 auto !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+		-webkit-transform: translateZ(0);
+		transform: translateZ(0);
+		position: relative;
+		z-index: 1;
 	}
 
 	/* Hide navigation arrows on mobile for cleaner look */
 	.client_logo .owl-nav {
-		display: none;
+		display: none !important;
+	}
+	
+	/* Ensure owl-carousel is visible */
+	.client_logo.owl-carousel.owl-loaded {
+		display: block !important;
+		opacity: 1 !important;
 	}
 }
 
@@ -4591,10 +4657,7 @@ header .navbar-toggler {
 /* Mobile responsiveness improvements */
 @media (max-width: 767px) {
 	/* Better mobile spacing for carousels */
-	.chk_vehicles .item,
-	.client_logo .item {
-		padding: 10px 5px;
-	}
+	
 }
 
 	.section-reviews__decor {
@@ -4855,9 +4918,7 @@ header .navbar-toggler {
 	border-right: 0;
 }
 
-.footercontent .content_qr_btn .login_btn {
-	margin-left: 20px;
-}
+
 
 
 .radio-tile {
@@ -5136,11 +5197,20 @@ header .navbar-toggler {
 		border-radius: 0 !important;
 	}
 
+	.whychoose_no img{
+		width: 240px !important;
+	}
+
 	.checkourveh_wrapper,
 	.whychoose_wrapper,
 	.client_wrapper,
-	.discover_diff {
-		margin: 25px 25px;
+	.discover_diff,
+	.ourmisservice_wrap {
+		margin: 25px 0px;
+		border-radius: 0 !important;
+	}
+	.ourmisservice_wrap_content{
+		text-align: center !important;
 	}
 
 	.how_works_wrapper {
@@ -5174,10 +5244,17 @@ header .navbar-toggler {
 
 	.personalized_wrapper h4 {
 		font-size: 16px;
+		text-align: center;
 	}
 
 	.whychoosemidle {
 		background: linear-gradient(264.04deg, rgba(243, 147, 61, 0.1) 4.98%, rgba(141, 85, 35, 0) 89.26%);
+		padding: 0px !important;
+		margin-right: -15px !important;
+	}
+
+	.remove_col_padding {
+		padding: 0px !important;
 	}
 
 
@@ -5202,9 +5279,7 @@ header .navbar-toggler {
 		text-align: center;
 	}
 
-	.footercontent .content_qr_btn .login_btn {
-		margin-left: 50px !important;
-	}
+	
 
 	.footercontent p {
 		margin-top: 20px;
@@ -5217,8 +5292,29 @@ header .navbar-toggler {
 	}
 
 	.client_logo .item {
-		height: 150px;
-		width: 100%;
+		height: 80px;
+		min-height: 80px;
+		width: auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 3px;
+	}
+	
+	.client_logo.owl-carousel .owl-item img {
+		max-height: 80px !important;
+		max-width: 120px !important;
+		width: auto !important;
+		height: auto !important;
+		object-fit: contain !important;
+		-webkit-object-fit: contain !important;
+		display: block !important;
+		margin: 0 auto !important;
+		opacity: 1 !important;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+		-webkit-transform: translateZ(0);
+		transform: translateZ(0);
 	}
 
 	.footercontent .content_qr_btn img {
@@ -5247,16 +5343,216 @@ header .navbar-toggler {
 		font-size: 13px;
 	}
 
-	.how_works_wrapper h2,
-	.how_works_wrapper h2 span {
-		font-size: 18px;
+	.how_works_wrapper {
+		padding: 15px 10px !important;
+		margin: 10px 0 !important;
+		border-radius: 12px;
 	}
 
-	.steps-line-bg, .steps-line-progress {
-		display: none;
+	.how_works_wrapper h2,
+	.how_works_wrapper h2 span {
+		font-size: 22px;
+		margin-bottom: 30px;
+		line-height: 1.3;
 	}
+
+	/* Hide desktop progress lines on mobile */
+	.steps-line-bg.d-none.d-md-block,
+	.steps-line-progress.d-none.d-md-block {
+		display: none !important;
+	}
+
+	/* Mobile Progress Line (Vertical) */
+	.steps-line-mobile {
+		position: absolute;
+		left: 20px;
+		top: 0;
+		bottom: 0;
+		width: 3px;
+		background-color: rgba(243, 147, 61, 0.2);
+		z-index: 0;
+		border-radius: 2px;
+	}
+
+	.steps-line-progress-mobile {
+		position: absolute;
+		left: 20px;
+		top: 0;
+		width: 3px;
+		height: 25%; /* Dynamically updated via Angular binding */
+		background: linear-gradient(180deg, var(--primary-orange) 0%, rgba(243, 147, 61, 0.8) 100%);
+		z-index: 1;
+		transition: height 0.5s ease;
+		border-radius: 2px;
+		box-shadow: 0 2px 8px rgba(243, 147, 61, 0.4);
+	}
+
+	.steps-container {
+		padding: 0;
+		position: relative;
+	}
+
 	.step-item {
-		margin-bottom: 40px;
+		margin-bottom: 20px;
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		background: #fff;
+		border-radius: 10px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+		transition: all 0.3s ease;
+		position: relative;
+		z-index: 2;
+	}
+
+	.step-item:last-child {
+		margin-bottom: 0;
+	}
+
+	.step-item:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	}
+
+	.step-item.active {
+		background: linear-gradient(135deg, rgba(243, 147, 61, 0.05) 0%, rgba(243, 147, 61, 0.02) 100%);
+		border: 1px solid rgba(243, 147, 61, 0.2);
+	}
+
+	.step-img {
+		width: 100% !important;
+		max-width: 100%;
+		height: auto !important;
+		min-height: 140px;
+		max-height: 140px;
+		object-fit: cover;
+		border-radius: 8px;
+		margin-bottom: 10px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+		transition: all 0.3s ease;
+	}
+
+	.step-item.active .step-img {
+		box-shadow: 0 4px 12px rgba(243, 147, 61, 0.2);
+		border: 2px solid var(--orange-color);
+		transform: scale(1.01);
+	}
+
+	.step-icon-box {
+		width: 32px !important;
+		height: 32px !important;
+		margin-bottom: 8px !important;
+		border-width: 2px !important;
+		position: relative;
+		z-index: 3;
+		transition: all 0.3s ease;
+	}
+
+	.step-icon-box i {
+		font-size: 14px !important;
+	}
+
+	.step-item.active .step-icon-box {
+		box-shadow: 0 0 0 4px rgba(246, 139, 31, 0.1);
+		transform: scale(1.03);
+		animation: stepPulseMobile 2s ease-in-out infinite;
+	}
+
+	.step-label {
+		font-size: 12px;
+		font-weight: 700;
+		margin-bottom: 4px;
+		color: #333;
+		letter-spacing: 0.3px;
+		text-transform: uppercase;
+		line-height: 1.2;
+	}
+
+	.step-sub-desc {
+		font-size: 12px;
+		line-height: 1.4;
+		color: #555;
+		font-weight: 500;
+		padding: 0;
+		max-width: 100%;
+		margin: 0;
+	}
+
+	.whychoose_no {
+		padding: 0 !important;
+		border: none !important;
+		min-height: auto !important; 
+		max-height: auto !important;
+	}
+
+	/* Mobile pulse animation (reduced intensity) */
+	@keyframes stepPulseMobile {
+		0%, 100% {
+			transform: scale(1.05);
+			box-shadow: 0 0 0 6px rgba(246, 139, 31, 0.12);
+		}
+		50% {
+			transform: scale(1.08);
+			box-shadow: 0 0 0 8px rgba(246, 139, 31, 0.1);
+		}
+	}
+
+	/* Extra small devices (phones, 480px and down) */
+	@media only screen and (max-width: 480px) {
+		.how_works_wrapper {
+			padding: 12px 8px !important;
+			margin: 8px 0 !important;
+		}
+
+		.how_works_wrapper h2,
+		.how_works_wrapper h2 span {
+			font-size: 18px;
+			margin-bottom: 20px;
+			line-height: 1.2;
+		}
+
+		.step-item {
+			padding: 8px;
+			margin-bottom: 16px;
+		}
+
+		.step-img {
+			min-height: 120px;
+			max-height: 120px;
+			margin-bottom: 8px;
+		}
+
+		.step-icon-box {
+			width: 28px !important;
+			height: 28px !important;
+			margin-bottom: 6px !important;
+		}
+
+		.step-icon-box i {
+			font-size: 12px !important;
+		}
+
+		.step-label {
+			font-size: 11px;
+			margin-bottom: 3px;
+		}
+
+		.step-sub-desc {
+			font-size: 11px;
+			line-height: 1.3;
+		}
+
+		.steps-line-mobile {
+			left: 12px;
+			width: 2px;
+		}
+
+		.steps-line-progress-mobile {
+			left: 12px;
+			width: 2px;
+		}
 	}
 
 	.footercontent .content_qr_btn{

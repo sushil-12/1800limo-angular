@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebsiteService } from '../../../services/website.service';
@@ -21,7 +21,7 @@ declare var $: any;
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 	@ViewChild('addressinput') addressinput!: ElementRef;
 	@ViewChild('dropaddressinput') dropaddressinput!: ElementRef;
 	@ViewChild('retaddressinput') retaddressinput!: ElementRef;
@@ -82,6 +82,11 @@ export class HomeComponent implements OnInit {
 
 	vars: Object = {}
 	desktopWidth: any;
+
+	// Step rotation properties for "How Works" section
+	currentActiveStep: number = 1;
+	stepRotationInterval: any;
+	progressWidth: number = 25; // Progress line width percentage
 
 
 	constructor(
@@ -244,7 +249,7 @@ export class HomeComponent implements OnInit {
 			}
 			function myTimer() {
 				if ($('.goog-te-combo option:first').length) {
-					$('.goog-te-combo option:first').html('Translate');
+					$('.goog-te-combo option:first').html('English');
 					cleartimer();
 				}
 			}
@@ -273,7 +278,7 @@ export class HomeComponent implements OnInit {
 			}
 			function myTimer() {
 				if ($('.goog-te-combo option:first').length) {
-					$('.goog-te-combo option:first').html('Translate');
+					$('.goog-te-combo option:first').html('English');
 					cleartimer();
 				}
 			}
@@ -384,6 +389,7 @@ export class HomeComponent implements OnInit {
 				setTimeout(() => {
 					this.initClientCarousel();
 					this.initOtherCarousels();
+					this.initStepRotation(); // Initialize step rotation animation
 				}, 100);
 			})
 			
@@ -1522,6 +1528,7 @@ export class HomeComponent implements OnInit {
 				loop: true,
 				margin: 10,
 				autoplay: true,
+				dotsEach: 3,
 				autoplayTimeout: 2500,
 				autoplayHoverPause: true,
 				smartSpeed: 800,
@@ -1584,6 +1591,7 @@ export class HomeComponent implements OnInit {
 			$vehicleCarousel.owlCarousel({
 				loop: true,
 				margin: 15,
+				dotsEach: 3,
 				autoplay: true,
 				autoplayTimeout: 4000,
 				autoplayHoverPause: true,
@@ -1625,6 +1633,7 @@ export class HomeComponent implements OnInit {
 				loop: true,
 				autoplay: true,
 				autoplayTimeout: 2000,
+				dotsEach: 3,
 				autoplayHoverPause: true,
 				margin: 10,
 				responsiveClass: true,
@@ -1656,6 +1665,7 @@ export class HomeComponent implements OnInit {
 			$('.destinationCarousel').owlCarousel({
 				loop: true,
 				autoplay: true,
+				dotsEach: 3,
 				autoplayTimeout: 2000,
 				autoplayHoverPause: true,
 				margin: 10,
@@ -1689,6 +1699,7 @@ export class HomeComponent implements OnInit {
 				loop: true,
 				margin: 20,
 				autoplay: true,
+				dotsEach: 3,
 				autoplayTimeout: 3000,
 				autoplayHoverPause: true,
 				responsiveClass: true,
@@ -1709,18 +1720,68 @@ export class HomeComponent implements OnInit {
 						center: false
 					},
 					768: {
-						items: 2, // Tablet: 2 items
+						items: 3, // Tablet: 2 items
 						nav: true,
 						center: false
 					},
 					992: {
-						items: 3, // Desktop: 3 items
+						items: 4, // Desktop: 3 items
 						nav: true,
 						center: true
 					}
 				}
 			});
 		}, 200);
+	}
+
+	// Initialize step rotation animation for "How Works" section
+	initStepRotation() {
+		this.startStepRotation();
+	}
+
+	startStepRotation() {
+		// Clear any existing interval
+		if (this.stepRotationInterval) {
+			clearInterval(this.stepRotationInterval);
+		}
+
+		// Start with step 1
+		this.currentActiveStep = 1;
+		this.updateProgress(); // Set initial state
+
+		// Rotate through steps every 3 seconds
+		this.stepRotationInterval = setInterval(() => {
+			this.currentActiveStep++;
+			if (this.currentActiveStep > 4) {
+				this.currentActiveStep = 1; // Loop back to start
+			}
+			this.updateProgress();
+		}, 3000); // 3 seconds per step
+	}
+
+	manualSelectStep(step: number) {
+		// Stop auto-rotation if user interacts
+		if (this.stepRotationInterval) {
+			clearInterval(this.stepRotationInterval);
+		}
+		this.currentActiveStep = step;
+		this.updateProgress();
+	}
+
+	updateProgress() {
+		// Calculate width: 
+		// Step 1 = 0%, Step 2 = 33%, Step 3 = 66%, Step 4 = 100% of the LINE width.
+		// Since there are 3 segments connecting 4 points:
+		const segments = 3;
+		const stepIndex = this.currentActiveStep - 1;
+		this.progressWidth = (stepIndex / segments) * 100;
+	}
+
+	ngOnDestroy(): void {
+		// Clean up step rotation interval
+		if (this.stepRotationInterval) {
+			clearInterval(this.stepRotationInterval);
+		}
 	}
 }
 
