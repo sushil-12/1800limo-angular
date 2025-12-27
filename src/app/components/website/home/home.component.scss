@@ -1,8 +1,10 @@
 /* --- HOW IT WORKS WRAPPER --- */
 .how_works_wrapper {
-	padding: 60px 0;
+	padding: 60px 50px;
 	background: #fff;
 	overflow: hidden;
+	margin: 25px 50px;
+	border-radius: 20px;
 
 	.section-title {
 		text-align: center;
@@ -20,6 +22,14 @@
 		position: relative;
 		max-width: 1400px;
 		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.steps-container .row {
+		display: flex;
+		align-items: stretch;
+		justify-content: center;
+		margin: 0;
 	}
 }
 
@@ -30,7 +40,12 @@
 	z-index: 2; // Above the line
 	cursor: pointer;
 	transition: all 0.3s ease;
-	padding-bottom: 20px;
+	padding: 0 15px 20px 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	height: 100%;
 
 	/* 1. Image Area */
 	.img-wrapper {
@@ -80,24 +95,28 @@
 
 	/* 3. Text Area */
 	.text-wrapper {
-		padding: 0 10px; /* Add padding to prevent text overflow */
+		padding: 0 5px;
 		width: 100%;
 		box-sizing: border-box;
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		.step-label {
 			display: none; /* Hide step labels */
 		}
 
 		.step-desc {
-			font-size: 1rem;
+			font-size: 0.95rem;
 			color: #666;
 			line-height: 1.4;
 			font-weight: 500;
 			text-transform: capitalize;
-			padding-left: 10px;
-			padding-right: 10px;
+			margin: 0;
 			word-wrap: break-word;
 			overflow-wrap: break-word;
+			text-align: center;
 		}
 	}
 
@@ -149,12 +168,13 @@
 /* --- DESKTOP PROGRESS LINE --- */
 .progress-track-desktop {
 	position: absolute;
-	// Calculation: Image Height (150px) + Half Icon Height (12px) = ~162px
-	top: 162px; 
-	left: -1%; // Start at middle of first col (100/4/2)
-	right: -1%; // End at middle of last col
+	// Calculation: Image Height (150px) + Half Icon Height (16px) = ~166px
+	top: 166px; 
+	left: 0;
+	right: 0;
 	height: 6px; /* Thicker line like Figma */
 	z-index: 1; // Behind items
+	margin: 0 20px; /* Match container padding */
 
 	.track-bg {
 		width: 100%;
@@ -170,7 +190,7 @@
 		height: 100%;
 		background: #F3933D;
 		border-radius: 3px;
-		transition: width 0.6s ease-in-out;
+		transition: width 0.15s ease-out;
 	}
 }
 
@@ -184,6 +204,7 @@
 	}
 	.how_works_wrapper {
 		padding: 30px 15px !important;
+		margin: 25px 20px !important;
 		background: #fff;
 	}
 
@@ -196,10 +217,17 @@
 	.steps-container {
 		position: relative;
 		padding: 0 10px;
+		max-width: 100%;
+	}
+
+	.steps-container .row {
+		display: block;
+		margin: 0;
 	}
 
 	.step-item {
-		display: block;
+		display: flex;
+		flex-direction: column;
 		text-align: center;
 		margin-bottom: 35px;
 		padding: 15px 10px;
@@ -209,6 +237,9 @@
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 		z-index: 2 !important; /* Above progress line */
 		isolation: isolate; /* Create new stacking context */
+		align-items: center;
+		justify-content: flex-start;
+		width: 100%;
 
 		/* Show images on mobile - properly sized */
 		.img-wrapper {
@@ -348,7 +379,7 @@
 			width: 100%;
 			background: #F3933D;
 			border-radius: 3px;
-			transition: height 0.6s ease;
+			transition: height 0.15s ease-out;
 		}
 	}
 	
@@ -422,11 +453,18 @@
 		padding: 6px !important;
 	}
 	.how_works_wrapper {
-		padding: 0px !important;
+		padding: 40px 25px !important;
+		margin: 25px 20px !important;
+	}
+
+	.how_works_wrapper .section-title {
+		font-size: 1.8rem !important;
+		margin-bottom: 40px !important;
 	}
 
 	.steps-container {
 		position: relative;
+		padding: 0 10px;
 	}
 
 	/* Hide mobile progress line, show desktop progress line */
@@ -437,17 +475,20 @@
 	.progress-track-desktop {
 		display: block !important;
 		top: 110px; /* Adjusted for smaller images */
-		left: 0;
-		right: 0;
+		left: 10px;
+		right: 10px;
 		height: 4px;
+		margin: 0;
 	}
 
 	.step-item {
-		padding: 15px 8px !important;
+		padding: 0 8px 15px 8px !important;
 		margin-bottom: 0 !important;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
+		align-items: center;
+		justify-content: flex-start;
 
 		.img-wrapper {
 			height: 100px !important; /* Smaller images for iPad */
@@ -471,6 +512,9 @@
 			top: -15px;
 			height: 40px;
 			margin-bottom: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
 			.step-icon {
 				width: 28px;
@@ -480,7 +524,11 @@
 		}
 
 		.text-wrapper {
-			padding: 0 5px;
+			padding: 0 3px;
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
 			.step-label {
 				display: none; /* Hide step labels */
@@ -489,8 +537,8 @@
 			.step-desc {
 				font-size: 0.75rem !important; /* Smaller text */
 				line-height: 1.3;
-				margin-bottom: 0;
-				padding: 0;
+				margin: 0;
+				text-align: center;
 			}
 		}
 
@@ -515,12 +563,15 @@
 	.steps-container .row {
 		display: flex !important;
 		flex-wrap: nowrap !important;
-		gap: 10px !important;
+		align-items: stretch !important;
+		justify-content: space-between !important;
+		gap: 0 !important;
 	}
 
 	.steps-container .row .step-item {
-		flex: 0 0 25% !important;
-		max-width: 25% !important;
+		flex: 0 0 24% !important;
+		max-width: 24% !important;
+		width: 24% !important;
 	}
 }
 

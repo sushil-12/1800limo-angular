@@ -4577,12 +4577,6 @@ header .navbar-toggler {
 	background: var(--orange-color) !important;
 }
 
-.client_logo.no-js .owl-carousel,
-.client_logo.owl-carousel.owl-loaded {
-	display: inline !important;
-}
-
-
 /* Client logo carousel responsive improvements */
 @media (max-width: 767px) {
 	.client_logo {
@@ -4617,12 +4611,15 @@ header .navbar-toggler {
 		margin: 0 auto !important;
 		opacity: 1 !important;
 		visibility: visible !important;
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
-		-webkit-transform: translateZ(0);
-		transform: translateZ(0);
+		-webkit-backface-visibility: hidden !important;
+		backface-visibility: hidden !important;
+		-webkit-transform: translateZ(0) !important;
+		transform: translateZ(0) !important;
+		-webkit-perspective: 1000px !important;
+		perspective: 1000px !important;
 		position: relative;
 		z-index: 1;
+		will-change: transform;
 	}
 
 	/* Hide navigation arrows on mobile for cleaner look */
@@ -4634,6 +4631,22 @@ header .navbar-toggler {
 	.client_logo.owl-carousel.owl-loaded {
 		display: block !important;
 		opacity: 1 !important;
+	}
+
+	/* Safari-specific fixes for resize */
+	.client_logo .owl-stage {
+		-webkit-transform: translate3d(0, 0, 0) !important;
+		transform: translate3d(0, 0, 0) !important;
+		-webkit-backface-visibility: hidden !important;
+		backface-visibility: hidden !important;
+		will-change: transform;
+	}
+
+	.client_logo .owl-item {
+		-webkit-transform: translate3d(0, 0, 0) !important;
+		transform: translate3d(0, 0, 0) !important;
+		-webkit-backface-visibility: hidden !important;
+		backface-visibility: hidden !important;
 	}
 }
 
@@ -5214,7 +5227,8 @@ header .navbar-toggler {
 	}
 
 	.how_works_wrapper {
-		margin: 0 !important;
+		margin: 25px 0 !important;
+		padding: 30px 15px !important;
 	}
 
 	.checkourveh_wrapper h2,
@@ -5559,4 +5573,17 @@ header .navbar-toggler {
 		text-align: center;
 	}
 
+}
+/* CLient carousel css */
+.client_logo .owl-stage,
+.client_logo .owl-item {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.client_logo img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }

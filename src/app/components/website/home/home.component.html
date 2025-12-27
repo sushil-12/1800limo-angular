@@ -1018,10 +1018,8 @@
 		<h2><span>Who Travels With Us</span></h2>
 
 		<div class="client_logo owl-carousel owl-theme">
-			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
-				<img [src]="clientLogo?.path" alt="client1" loading="lazy" 
-					style="display: block !important; max-width: 120px; max-height: 80px; width: auto; height: auto; object-fit: contain; -webkit-object-fit: contain;"
-					onerror="this.style.display='none'">
+			<div class="item" *ngFor="let clientLogo of clientImages">
+				<img [src]="clientLogo?.path" alt="client1" loading="lazy" onerror="this.style.display='none'">
 			</div>
 		</div>
 	</div>
@@ -1243,9 +1241,8 @@
 			<div class="ourmisservice_wrap_image col-12 col-md-6 p-0">
 				<img src="../../../../assets/images/new ride now.png" />
 			</div>
-			<div class="ourmisservice_wrap_content p-0 col-12 col-md-6 remove_col_padding">
+			<div class="ourmisservice_wrap_content col-12 col-md-6 remove_col_padding">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Ride Now Or <span>Ride Later</span></h2>
-				<p>With over 16 vehicle types and various makes and models, we have you covered for immediate rides or future bookings. Since 2001, 1-800-LIMO.COM has led in prearranged rides worldwide. Soon, you can book shared rides to airports and events, saving money while making new friends and promoting efficient driving. Stay tuned for on-demand service for any group size!</p>
 				<p>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
 			</div>
 		</div>

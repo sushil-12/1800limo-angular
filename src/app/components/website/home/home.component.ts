@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebsiteService } from '../../../services/website.service';
@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	homePageData: any;
 	checkdata: any;
+	clientImages: any[] = [];
 
 	time_value_for_phone_only: string
 
@@ -384,7 +385,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 			).subscribe(({ data }: any) => {
 				this.spinner.hide()
 				console.log(data, "gsducgjsdgcfugsdu")
-				this.homePageData = data
+				this.homePageData = data;
+				this.clientImages = this.fetchPageData('SOME OF OUR CLIENTS')?.images || [];
 				// Initialize all carousels after data is loaded
 				setTimeout(() => {
 					this.initClientCarousel();
@@ -1512,66 +1514,61 @@ export class HomeComponent implements OnInit, OnDestroy {
 	  
 
 	initClientCarousel() {
-		// Initialize client logo carousel with improved settings
 		const $clientCarousel = $('.client_logo');
-
 		if ($clientCarousel.length > 0) {
-			// Destroy existing carousel if it exists
+			// 1. Destroy if already exists to prevent duplication glitches
 			if ($clientCarousel.hasClass('owl-loaded')) {
 				$clientCarousel.trigger('destroy.owl.carousel');
 				$clientCarousel.removeClass('owl-loaded');
-				$clientCarousel.find('.owl-stage-outer').children().unwrap();
+				// Safari fix: Clear any transform styles that might cause issues
+				$clientCarousel.find('.owl-stage').css('transform', '');
+				$clientCarousel.find('.owl-item').css('transform', '');
 			}
-
-			// Initialize with optimized settings
+	
+			// 2. Define Nav Icons once (Clean code)
+			const leftIcon = '<i class="fa fa-chevron-left"></i>'; // (Shortened for brevity)
+			const rightIcon = '<i class="fa fa-chevron-right"></i>';
+	
+			// 3. Initialize with fixed breakpoints
 			$clientCarousel.owlCarousel({
 				loop: true,
-				margin: 10,
+				margin: 15,
 				autoplay: true,
-				dotsEach: 3,
-				autoplayTimeout: 2500,
+				autoplayTimeout: 3000,
 				autoplayHoverPause: true,
 				smartSpeed: 800,
-				dots: true,
-				nav: true, // Enable navigation arrows
+				nav: false, // Usually hide arrows on mobile to save space
+				dots: false, // Hide dots on client logos to save vertical space
 				responsiveClass: true,
-				navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-				autoHeight: false,
-				animateOut: 'fadeOut',
-				animateIn: 'fadeIn',
+				navText: [leftIcon, rightIcon],
 				responsive: {
 					0: {
-						items: 1,
-						margin: 10,
-						dots: true,
+						items: 2, // Fix: Show 2 logos on mobile (1 is too big)
 						nav: false
 					},
 					480: {
-						items: 2,
-						margin: 15,
-						dots: true,
+						items: 3, 
 						nav: false
 					},
 					768: {
-						items: 4,
-						margin: 20,
-						dots: false,
+						items: 5, // Tablet
 						nav: true
 					},
-					1024: {
-						items: 7, // Desktop: 7 items (at least 7 as requested)
-						margin: 25,
-						dots: false,
-						nav: true
-					},
-					1200: {
-						items: 8, // Large desktop: 8 items
-						margin: 25,
-						dots: false,
-						nav: true
+					992: {
+						items: 6, // Desktop
+						nav: true,
+						loop: true,
+						margin: 30 
 					}
 				}
 			});
+
+			// Safari fix: Force refresh after initialization
+			setTimeout(() => {
+				if ($clientCarousel.hasClass('owl-loaded')) {
+					$clientCarousel.trigger('refresh.owl.carousel');
+				}
+			}, 100);
 		}
 	}
 
@@ -1731,6 +1728,44 @@ export class HomeComponent implements OnInit, OnDestroy {
 					}
 				}
 			});
+
+			// client_logo
+			$('.client_logo').owlCarousel({
+				loop: true,
+				margin: 20,
+				autoplay: true,
+				dotsEach: 3,
+				autoplayTimeout: 3000,
+				autoplayHoverPause: true,
+				responsiveClass: true,
+				center: true,
+				navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+					'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						dots: true,
+						center: false
+					},
+					575: {
+						items: 3, // Mobile: 1 item
+						nav: false,
+						dots: true,
+						center: false
+					},
+					768: {
+						items: 6, // Tablet: 2 items
+						nav: true,
+						center: false
+					},
+					992: {
+						items: 8, // Desktop: 3 items
+						nav: true,
+						center: true
+					}
+				}
+			});
 		}, 200);
 	}
 
@@ -1749,14 +1784,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.currentActiveStep = 1;
 		this.updateProgress(); // Set initial state
 
-		// Rotate through steps every 3 seconds
+		// Rotate through steps every 2 seconds (faster animation)
 		this.stepRotationInterval = setInterval(() => {
 			this.currentActiveStep++;
 			if (this.currentActiveStep > 4) {
 				this.currentActiveStep = 1; // Loop back to start
 			}
 			this.updateProgress();
-		}, 3000); // 3 seconds per step
+		}, 1000); // 2 seconds per step for faster flow
 	}
 
 	manualSelectStep(step: number) {
@@ -1777,10 +1812,26 @@ export class HomeComponent implements OnInit, OnDestroy {
 		this.progressWidth = (stepIndex / segments) * 100;
 	}
 
+	@HostListener('window:resize', ['$event'])
+	onResize(event: any) {
+		// Safari-specific: Refresh carousel on resize to fix rendering issues
+		if (this.clientImages && this.clientImages.length > 0) {
+			// Use debounce to avoid excessive refreshes
+			clearTimeout((this as any).resizeTimeout);
+			(this as any).resizeTimeout = setTimeout(() => {
+				this.initClientCarousel();
+			}, 250);
+		}
+	}
+
 	ngOnDestroy(): void {
 		// Clean up step rotation interval
 		if (this.stepRotationInterval) {
 			clearInterval(this.stepRotationInterval);
+		}
+		// Clean up resize timeout
+		if ((this as any).resizeTimeout) {
+			clearTimeout((this as any).resizeTimeout);
 		}
 	}
 }
