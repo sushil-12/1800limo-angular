@@ -1615,12 +1615,12 @@ height:280px !important;
 	margin-bottom: 20px;
 }
 
-.how_works_wrapper h2 span{
-	font-weight: 600;
-	font-size: 34px;
-	line-height: 130%;
-	text-transform: capitalize;
-	color: var(--orange-color);
+.how_works_wrapper h2 span {
+    font-weight: 600;
+    font-size: 2.5rem;
+    line-height: 130%;
+    text-transform: capitalize;
+    color: var(--orange-color);
 }
 
 
@@ -5520,9 +5520,8 @@ header .navbar-toggler {
 			margin: 8px 0 !important;
 		}
 
-		.how_works_wrapper h2,
-		.how_works_wrapper h2 span {
-			font-size: 18px;
+		.how_works_wrapper h2, .how_works_wrapper h2 span {
+			font-size: 1.6rem;
 			margin-bottom: 20px;
 			line-height: 1.2;
 		}
