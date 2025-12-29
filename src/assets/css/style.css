@@ -3823,6 +3823,10 @@ margin-top: 50px !important;
 		padding: 20px;
 	}
 
+	.login_btn {
+		margin-left: 10px !important;
+	}
+
 }
 
 
@@ -4097,7 +4101,7 @@ header .navbar-toggler {
 
 	.chk_vehicles.owl-carousel .owl-item img {
 		max-width: 300px;
-		height: 90px !important; /* Reduced for mobile */
+		height: 150px !important; /* Reduced for mobile */
 		object-fit: contain;
 		margin: auto;
 	}
@@ -4271,6 +4275,7 @@ header .navbar-toggler {
 
 	.login_btn {
 		margin-top: 10px !important;
+		margin-left: 0px !important;
 	}
 
 	.whychoosemidle {
@@ -5226,10 +5231,6 @@ header .navbar-toggler {
 		text-align: center !important;
 	}
 
-	.how_works_wrapper {
-		margin: 25px 0 !important;
-		padding: 30px 15px !important;
-	}
 
 	.checkourveh_wrapper h2,
 	.ourmisservice_wrap h2,
@@ -5358,8 +5359,6 @@ header .navbar-toggler {
 	}
 
 	.how_works_wrapper {
-		padding: 15px 10px !important;
-		margin: 10px 0 !important;
 		border-radius: 12px;
 	}
 
@@ -5516,8 +5515,8 @@ header .navbar-toggler {
 	/* Extra small devices (phones, 480px and down) */
 	@media only screen and (max-width: 480px) {
 		.how_works_wrapper {
-			padding: 12px 8px !important;
-			margin: 8px 0 !important;
+			padding: 0px !important;
+			margin: 0px !important;
 		}
 
 		.how_works_wrapper h2, .how_works_wrapper h2 span {
