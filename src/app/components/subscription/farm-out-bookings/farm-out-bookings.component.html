@@ -19,7 +19,7 @@
 							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
 								placeholder="Start Date" id="id_4"
 								(dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
-								[value]="startDate" [max]="endDate" readonly />
+								[value]="startDate" readonly />
 							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						</mat-form-field>
