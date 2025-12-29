@@ -376,7 +376,7 @@
 
 								<!-- PICKUP/DROPOFF AIRPORT/ADDRESS -->
 								<!-- style="background-color:#f5f4fe;;border-radius: 5px;" -->
-								<div class="row m-0 mt-1 justify-content-start">
+								<div class="row m-0 mt-1 justify-content-start" [class]="QBForm?.service_type?.value == 'round_trip' ? 'border-bottom-dropoff' : '' ">
 
 									<!-- <div class="google_map_logos mr-1 mt-3">
 										<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
@@ -516,7 +516,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="height:46px !important;font-size: 19px !important;"
-														placeholder="Drop off Airport Code / Name" id="dropoff_airport"
+														placeholder="Airport Code / Name" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
@@ -616,7 +616,7 @@
 
 
 								<!-- RETURN FIELDS [ROUND TRIP] -->
-								<div class="row mt-1" *ngIf="QBForm?.service_type?.value == 'round_trip'">
+								<div class="row 2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<!-- Return Pickup Date -->
 									<div class="col-6 col-md-6">
 										<!-- <label>Return Pickup Date</label> -->
