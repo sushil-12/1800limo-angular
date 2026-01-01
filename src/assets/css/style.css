@@ -256,7 +256,7 @@ header a.nav-link.active {
 .bannerform_wrapper {
 	margin: 25px 50px;
 	border-radius: 20px;
-	padding: 60px 25px 0px 25px;
+	padding: 25px 25px 0px 25px;
 	background: linear-gradient(279.48deg, rgba(18, 18, 18, 0.5) 4.05%, #1212129c 86.45%), url('../images/banner1.jpg');
 	background-size: cover;
 	background-position: top center;
@@ -267,7 +267,6 @@ header a.nav-link.active {
 
 .bannerform_wrapper .bannertext {
 	width: 550px;
-	padding-top: 48px;
 }
 
 .bannerform_wrapper .bannertext h2 {
@@ -698,6 +697,21 @@ header {
 	text-align: center;
 	vertical-align: middle;
 	text-transform: capitalize;
+}
+
+@media (max-width:991px) {
+	.discover_diff_inner_columns p {
+		font-size: 13px !important;
+	}
+	.discover_diff_inner_columns h4 {
+		font-size: 14px !important;
+	}
+	.whychoosemidle .col-12 ul>li {
+		padding: 8px !important;
+	}
+	.whychoosemidle > .row {
+		padding-right: 0px;
+	}
 }
 
 
@@ -1471,7 +1485,7 @@ height:280px !important;
 	backdrop-filter: blur(20px);
 	border: 1px solid rgba(243, 147, 61, 0.2);
 	background: linear-gradient(180deg, rgba(243, 147, 61, 0.01) 0%, rgba(153, 153, 153, 0) 100%);
-	min-height: 300px;
+	min-height: 253px;
 	max-height: 300px;
 	border-radius: 16px;
 	display: flex;
@@ -1545,6 +1559,7 @@ height:280px !important;
 	background: linear-gradient(264.04deg, rgba(141, 85, 35, 0) 4.98%, rgba(243, 147, 61, 0.1) 89.26%);
 	border-radius: 20px;
 	min-height: 400px;
+	background-repeat: no-repeat;
 }
 
 .whychoosemidle img {
@@ -1821,7 +1836,7 @@ footer {
 }
 
 .footercontent .content_qr_btn{
-	text-align: right;
+	text-align: center;
 }
 
 .footercontent .content_qr_btn img {
@@ -1831,7 +1846,10 @@ footer {
 }
 
 .footercontent .content_qr_btn button.custom-filled-button {
-	font-size: 0.6rem !important;
+	font-size: 0.85rem !important;
+}
+.custom-filled-button {
+	height: auto !important;
 }
 
 .footercontent a {
@@ -3555,7 +3573,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .bannerform_wrapper .row {
 	justify-content: space-between;
-	align-items: start;
+	align-items: center;
 }
 
 .text_desktop {
@@ -3793,14 +3811,13 @@ margin-top: 50px !important;
 	}
 
 	.owl-carousel {
-		width: 900px !important;
-		margin-left: 32px;
-		margin-right: 0px;
+		width: 100% !important;
+		margin-left: 0px !important;
+		margin-right: 0px !important;
 	}
 
 	.whychoose_no {
-		min-height: 320px;
-		max-height: 320px;
+		max-height: 320px !important;
 	}
 
 	.whychoose_no img {
@@ -3975,7 +3992,7 @@ header .navbar-toggler {
 
 	.whychoosemidle {
 		background-size: 210px;
-		padding: 15px;
+		padding: 15px 0px  0px 5px;
 	}
 
 	.bannerform_wrapper {
@@ -4669,6 +4686,12 @@ header .navbar-toggler {
 		width: 35px !important;
 		height: 35px !important;
 		font-size: 14px !important;
+	}
+	.whychoose_no {
+		margin-bottom: 20px;
+		padding: 0px !important;
+		border: 1px solid rgba(243, 147, 61, 0.2);
+		min-height: fit-content;
 	}
 }
 
@@ -5585,3 +5608,107 @@ header .navbar-toggler {
   height: auto;
   display: block;
 }
+
+.return-trip-card {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 18px 0; /* More breathing room */
+	width: 100%;
+  }
+  
+  .return-trip-card .badge {
+	color: #f3933d;
+	width: unset !important;
+	font-size: 13px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	background: #000; /* Matches your dark bg to hide the line behind text */
+	padding: 0 15px;
+	z-index: 2;
+	white-space: nowrap;
+  }
+  
+  /* The Line */
+  .return-trip-card::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 4px;
+	background: linear-gradient(
+	  90deg,
+	  transparent 0%,
+	  rgba(243, 147, 61, 0.5) 20%, /* Orange tint */
+	  rgba(243, 147, 61, 0.5) 80%,
+	  transparent 100%
+	);
+	z-index: 1;
+  }
+
+  .circle-orange-lighter {
+    /* Create the Circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75px;  /* Fixed size for perfect circle */
+    height: 75px;
+    border-radius: 50%;
+    
+    /* The Soft Orange Background */
+    background-color: rgba(243, 147, 61, 0.1); /* 10% opacity orange */
+    margin: 0 auto 24px; /* Center it and push text down */
+    
+    /* Smooth Animation */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Size the image inside so it doesn't touch edges */
+.circle-orange-lighter img {
+    width: 35px;
+    height: 35px;
+	margin-bottom: 0px;
+    object-fit: contain;
+}
+
+/* Hover Effect */
+.circle-orange-lighter:hover {
+    transform: translateY(-5px); /* Floats up slightly */
+    background-color: rgba(243, 147, 61, 0.2); /* Darkens slightly */
+    box-shadow: 0 10px 20px rgba(243, 147, 61, 0.15); /* Soft shadow */
+}
+.mobile-app-minimal {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px;
+	width: 100%;
+  }
+  
+  .content-container {
+	display: flex;
+	flex-direction: column; /* Stacks text above buttons */
+	align-items: center;
+	gap: 15px;
+  }
+  
+  .store-icons {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap; /* Prevents icons from breaking on small screens */
+	justify-content: center;
+  }
+  
+  .store-img {
+	height: 45px; /* Adjust based on your screenshot preference */
+	width: auto;
+	cursor: pointer;
+	transition: transform 0.2s;
+  }
+  
+  .store-img:hover {
+	transform: scale(1.05);
+  }
+
+  

@@ -327,11 +327,9 @@ a.user-profile:active::after {
 //     }
 // }
 
-.footer_text_main{
-	padding-left: 140px;
+.footercontent .quick_links a:hover {
+    color: #be691d !important;
 }
-
-
 @media only screen and (max-width: 767px) {
 	.btn-top-bottom {
 		display: none !important;

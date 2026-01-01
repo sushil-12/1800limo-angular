@@ -376,7 +376,7 @@
 
 								<!-- PICKUP/DROPOFF AIRPORT/ADDRESS -->
 								<!-- style="background-color:#f5f4fe;;border-radius: 5px;" -->
-								<div class="row m-0 mt-1 justify-content-start" [class]="QBForm?.service_type?.value == 'round_trip' ? 'border-bottom-dropoff' : '' ">
+								<div class="row m-0 mt-1 justify-content-start" [class]="QBForm?.service_type?.value == 'round_trip' ? '' : '' ">
 
 									<!-- <div class="google_map_logos mr-1 mt-3">
 										<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
@@ -400,14 +400,14 @@
 										</svg>
 									</div> -->
 									<!-- PICKUP AIRPORT -->
-									<div class="col-10 mr-0 pl-0 ml-0">
+									<div class="col-12 mr-0 p-0 ml-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'"
-											style="height: 52px; max-width: 125% !important;">
+											>
 											<!-- <label for="pickup_address" class="pickup-label">Pickup Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														placeholder="Airport Code / Name" id="pickup_airport"
 														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
@@ -445,14 +445,14 @@
 
 										<!-- PICKUP ADDRESS -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											style="">
 											<!-- <label for="pickup_address" class="pickup-label">Pickup Address</label> -->
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
 												<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
 												<div class="input-box">
 													<input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -460,7 +460,7 @@
 														tabindex="1" class="input-f font-weight-bolder" />
 
 													<!-- <input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -502,7 +502,7 @@
 											<span class="span-term-to">TO</span>
 										</div> -->
 										<div class="d-flex justify-content-center flip_div"
-											style="width: 125% !important;">
+											style="">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 											<span class="text-white ml-3"
@@ -510,12 +510,12 @@
 										</div>
 										<!-- DROPOFF AIRPORT -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value == 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											style="">
 											<!-- <label for="dropoff_address" class="pickup-label">Dropoff Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														placeholder="Airport Code / Name" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
@@ -554,12 +554,12 @@
 
 										<!-- DROPOFF ADDRESS -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value != 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											>
 											<!-- <label for="dropoff_address" class="pickup-label">Dropoff Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -568,7 +568,7 @@
 														class="input-f font-weight-bolder" />
 
 													<!-- <input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'Dropoff Address - City/FBO ': 'Cruise Port Name / Address'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -614,7 +614,10 @@
 									<!-- PICKUP/DROPOFF AIRPORT/ADDRESS ENDS -->
 								</div>
 
-
+								<div class="return-trip-card" *ngIf="QBForm?.service_type?.value === 'round_trip'">
+									<span class="badge">Return Trip</span>
+								</div>
+  
 								<!-- RETURN FIELDS [ROUND TRIP] -->
 								<div class="row mt-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<!-- Return Pickup Date -->
@@ -705,15 +708,15 @@
 									*ngIf="QBForm?.service_type?.value == 'round_trip'">
 
 									<!-- PICKUP AIRPORT -->
-									<div class="col-10 mr-0 pl-0 ml-0">
+									<div class=" col-12 mr-0 p-0 m-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value == 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											>
 											<!-- <label for="return_pickup_address" class="pickup-label">Return Pickup
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														#retairportinput id="return_pickup_airport"
 														class="input-f font-weight-bolder" tabindex="1"
 														(focus)="$event.target.select()"
@@ -752,14 +755,14 @@
 
 										<!-- Return Pickup Address -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value != 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											>
 											<!-- <label for="return_pickup_address" class="pickup-label">Return Pickup
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
 													<input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address"
@@ -769,7 +772,7 @@
 
 
 													<!-- <input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'Return Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														matGoogleMapsAutocomplete tabindex="1"
@@ -821,13 +824,13 @@
 										</div>
 										<!-- RETURN DROPOFF AIRPORT -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											>
 											<!-- <label for="return_dropoff_address" class="pickup-label">Return Dropoff
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														#retdropairportinput id="return_dropoff_airport"
 														class="input-f font-weight-bolder" tabindex="1"
 														(focus)="$event.target.select()"
@@ -860,14 +863,14 @@
 
 										<!-- Return Dropoff Address -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'"
-											style="height: 52px;max-width: 125% !important;">
+											>
 											<!-- <label for="return_dropoff_address" class="pickup-label">Return Dropoff
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
 													<input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address"
@@ -876,7 +879,7 @@
 														class="input-f font-weight-bolder" />
 
 													<!-- <input type="text"
-														style="height:46px !important;font-size: 19px !important;"
+														style="font-size: 19px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'Return Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"
@@ -994,17 +997,15 @@
 <!------------------OUR MISSION------------------------------->
 <section class="ourmisservice_wrap" *ngIf="fetchPageData('OUR MISSION')?.section_status == 'enable' ">
 	<div class="container-fluid">
-		<div class="d-flex flex-column flex-md-row col-12">
+		<div class="d-flex flex-column flex-md-row col-12 remove_col_padding">
 			<div class="ourmisservice_wrap_image col-12 col-md-5">
 				<img src="../../../../assets/images/new mission.png"  />
 			</div>
 			<div class="ourmisservice_wrap_content col-12 col-md-7 m-0">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Our <span>Mission</span></h2>
-				<p>At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
-				<br>
-				<p>Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
-				<br>
-				<p>We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
+				<p class="mb-3">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
+				<p  class="mb-3">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
+				<p  class="mb-3">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
 				</p>
 			</div>
 		</div>
@@ -1017,10 +1018,17 @@
 	<div class="container-fluid">
 		<h2><span>Who Travels With Us</span></h2>
 
-		<div class="client_logo owl-carousel owl-theme">
-			<div class="item" *ngFor="let clientLogo of clientImages">
-				<img [src]="clientLogo?.path" alt="client1" loading="lazy" onerror="this.style.display='none'">
+		<div class="client_logo swiper" #clientLogoContainer>
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" *ngFor="let clientLogo of clientImages">
+					<div class="client-logo-item">
+						<img [src]="clientLogo?.path" alt="client logo" loading="lazy" onerror="this.style.display='none'">
+					</div>
+				</div>
 			</div>
+			<!-- Navigation buttons -->
+			<div class="client-logo-swiper-button-prev"></div>
+			<div class="client-logo-swiper-button-next"></div>
 		</div>
 	</div>
 </section>
@@ -1033,7 +1041,9 @@
 			<div class="col-md-4">
 				<div class="row p-2">
 					<div class="col-md-12 discover_diff_inner_columns">
-						<img src="../../../../assets/images/discover-difference-homepage/Frame 41.png" />
+						<div class="circle-orange-lighter">
+							<img src="../../../../assets/images/discover-difference-homepage/medal.png" class="w-24 h-24" />
+						</div>
 						<h4>Your Personal Travel Concierge</h4>
 						<p>Our advisors are not just experts—they're your trusted guides and advocates. With genuine care and deep understanding of your preferences, they'll curate a seamless travel experience that exceeds your wildest dreams.</p>
 					</div>
@@ -1042,7 +1052,9 @@
 			<div class="col-md-4">
 				<div class="row p-2">
 					<div class="col-md-12 discover_diff_inner_columns">
-						<img src="../../../../assets/images/discover-difference-homepage/Frame 42.png" />
+						<div class="circle-orange-lighter">
+							<img src="../../../../assets/images/discover-difference-homepage/magic-wand.png" class="w-24 h-24" />
+						</div>
 						<h4>Crafted Just for You</h4>
 						<p>Your 1-800-LIMO.COM Advisor will weave together the perfect tapestry of destinations, accommodations, and activities. From lavish upgrades to hidden gem experiences, every detail will be thoughtfully designed around you.</p>
 					</div>
@@ -1051,7 +1063,9 @@
 			<div class="col-md-4">
 				<div class="row p-2">
 					<div class="col-md-12 discover_diff_inner_columns">
-						<img src="../../../../assets/images/discover-difference-homepage/Frame 42 (1).png" />
+						<div class="circle-orange-lighter">
+							<img src="../../../../assets/images/discover-difference-homepage/crown.png"  class="w-24 h-24"/>
+						</div>
 						<h4>Your Partner in Adventure</h4>
 						<p>Your 1-800-LIMO.COM Advisor is by your side every step of the way. With their extensive knowledge, exclusive connections, and dedication to your journey, you can relax knowing you're in the best hands in the business.</p>
 					</div>
@@ -1062,85 +1076,71 @@
 	</div>
 </section>
 
-<!-- HOW WORKS -->
-<section class="how_works_wrapper">
-  <div class="container-fluid">
-    <h2 class="section-title">How <span>1-800-LIMO.COM</span> Works</h2>
-    
-    <div class="steps-container">
-
-      <div class="progress-track-desktop d-none d-lg-block">
-        <div class="track-bg"></div>
-        <div class="track-fill" [style.width.%]="progressWidth"></div>
-      </div>
-
-      <div class="progress-track-mobile d-lg-none">
-        <div class="track-bg-vertical"></div>
-        <div class="track-fill-vertical" [style.height.%]="progressWidth"></div>
-      </div>
-
-      <div class="row m-0">
-        
-        <div class="col-12 col-lg-3 step-item" [class.active]="currentActiveStep >= 1" (click)="manualSelectStep(1)">
-          <div class="img-wrapper">
-             <img src="../../../../assets/images/how-1800-works/step1.png" alt="Visit Website" class="step-img">
-          </div>
-          <div class="icon-wrapper">
-            <div class="step-icon">
-              1
-            </div>
-          </div>
-          <div class="text-wrapper">
-            <p class="step-desc">Select your pickup and dropoff location</p>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-3 step-item" [class.active]="currentActiveStep >= 2" (click)="manualSelectStep(2)">
-          <div class="img-wrapper">
-             <img src="../../../../assets/images/how-1800-works/step2.png" alt="Select Vehicle" class="step-img">
-          </div>
-          <div class="icon-wrapper">
-            <div class="step-icon">
-              2
-            </div>
-          </div>
-          <div class="text-wrapper">
-            <p class="step-desc">Select the vehicle that meets your requirements</p>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-3 step-item" [class.active]="currentActiveStep >= 3" (click)="manualSelectStep(3)">
-          <div class="img-wrapper">
-             <img src="../../../../assets/images/how-1800-works/step3.png" alt="Check Price" class="step-img">
-          </div>
-          <div class="icon-wrapper">
-            <div class="step-icon">
-              3
-            </div>
-          </div>
-          <div class="text-wrapper">
-            <p class="step-desc">Check price according to Vehicle</p>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-3 step-item" [class.active]="currentActiveStep >= 4" (click)="manualSelectStep(4)">
-          <div class="img-wrapper">
-             <img src="../../../../assets/images/how-1800-works/step4.png" alt="Confirm Booking" class="step-img">
-          </div>
-          <div class="icon-wrapper">
-            <div class="step-icon">
-              4
-            </div>
-          </div>
-          <div class="text-wrapper">
-            <p class="step-desc">Preview details & confirm booking</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
+<section class="how-it-works-section">
+	<div class="container-fluid">
+	  <h2 class="section-title text-center mb-5">How <span>1-800-LIMO.COM</span> Works</h2>
+  
+	  <div class="row position-relative">
+		
+		<div class="connector-line d-none d-lg-block"></div>
+  
+		<div class="col-lg-3 col-md-3 mb-4 step-col">
+		  <div class="step-card">
+			<div class="img-box">
+			   <img src="../../../../assets/images/how-1800-works/step36.png" alt="Select Location" class="img-fluid">
+			</div>
+			
+			<div class="step-badge">1</div>
+			
+			<div class="step-content">
+			  <h5 class="fw-bold mt-3 mb-1">Select Location</h5>
+			  <p class="text-muted small mb-0">Select your pickup and dropoff location</p>
+			</div>
+		  </div>
+		</div>
+  
+		<div class="col-lg-3 col-md-3 mb-4 step-col">
+		  <div class="step-card">
+			<div class="img-box">
+			   <img src="../../../../assets/images/how-1800-works/step42.png" alt="Select Vehicle" class="img-fluid">
+			</div>
+			<div class="step-badge">2</div>
+			<div class="step-content">
+			  <h5 class="fw-bold mt-3 mb-1">Choose Vehicle</h5>
+			  <p class="text-muted small mb-0">Select the vehicle that meets your requirements</p>
+			</div>
+		  </div>
+		</div>
+  
+		<div class="col-lg-3 col-md-3 mb-4 step-col">
+		  <div class="step-card">
+			<div class="img-box">
+			   <img src="../../../../assets/images/how-1800-works/step38.png" alt="Check Price" class="img-fluid">
+			</div>
+			<div class="step-badge">3</div>
+			<div class="step-content">
+			  <h5 class="fw-bold mt-3 mb-1">Check Price</h5>
+			  <p class="text-muted small mb-0">Check price according to Vehicle</p>
+			</div>
+		  </div>
+		</div>
+  
+		<div class="col-lg-3 col-md-3 mb-4 step-col">
+		  <div class="step-card">
+			<div class="img-box">
+			   <img src="../../../../assets/images/how-1800-works/step40.png" alt="Confirm Booking" class="img-fluid">
+			</div>
+			<div class="step-badge">4</div>
+			<div class="step-content">
+			  <h5 class="fw-bold mt-3 mb-1">Confirm Booking</h5>
+			  <p class="text-muted small mb-0">Preview details & confirm booking</p>
+			</div>
+		  </div>
+		</div>
+  
+	  </div>
+	</div>
+  </section>
 
 <!-- PERSONALIZED DESTINATIONS -->
 <section class="personalized_wrapper" id="section-services"
@@ -1167,7 +1167,7 @@
 		<div class="whychoosemidle"
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<!-- Desktop -->
-			<div class="col-12 row remove_col_padding">
+			<div class="col-12 row">
 				<ul class="row col-12 col-md-7 list-unstyled m-0 p-0">
 					<li class="col-6 d-flex"
 						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
@@ -1175,7 +1175,7 @@
 						<span class="ml-2" [innerHTML]="convertTextToHtml(list1.list)"></span>
 					</li>
 				</ul>
-				<div class="col-12 col-md-5 ">
+				<div class="col-12 col-md-5 m-0 p-0">
 					<img src="'../../../../../../assets/images/personalized_img.png" />
 				</div>
 			</div>
@@ -1196,8 +1196,8 @@
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new best driver.jpeg" />
 						<h3>The Best Drivers and Vehicles</h3>
-						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
-							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info</a>
+						<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
+							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info</a> -->
 					</div>
 				</div>
 			</div>
@@ -1206,8 +1206,8 @@
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new background check.png" />
 						<h3>Strong Background Checks</h3>
-						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_2')" data-target="#myModal" tabindex="1">More Info</a>
+						<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
+							(click)="modalSwitch('modal_2')" data-target="#myModal" tabindex="1">More Info</a> -->
 					</div>
 				</div>
 			</div>
@@ -1215,9 +1215,9 @@
 				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new best value.png" />
-						<h3>The Best Value</h3>
-						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a>
+						<h3>The Best Value for money</h3>
+						<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
+							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a> -->
 					</div>
 				</div>
 			</div>
@@ -1226,8 +1226,8 @@
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new security.png" />
 						<h3>Consistent Quality Service</h3>
-						<a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
-							(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info</a>
+							<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
+								(click)="modalSwitch('modal_4')" data-target="#myModal" tabindex="1">More Info</a> -->
 					</div>
 				</div>
 			</div>

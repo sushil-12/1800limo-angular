@@ -56,11 +56,11 @@ export class ScrollToTopComponent implements OnInit
 			if (scrolledPX > bodyHeight)
 			{
 				$('.scrollTopButton').css('opacity', '1');
-				$('.scrollTopButton').css('z-index', '0');
+				$('.scrollTopButton').css('z-index', '999');
 			} else
 			{
 				$('.scrollTopButton').css('opacity', '0');
-				$('.scrollTopButton').css('z-index', '-1');
+				$('.scrollTopButton').css('z-index', '999');
 			};
 		});
 		$(window).scroll(function (){
@@ -70,11 +70,11 @@ export class ScrollToTopComponent implements OnInit
 			if (scrolledPX < bodyHeight)
 			{
 				$('.scrollDownButton').css('opacity', '1');
-				$('.scrollDownButton').css('z-index', '0');
+				$('.scrollDownButton').css('z-index', '999');
 			} else
 			{
 				$('.scrollDownButton').css('opacity', '0');
-				$('.scrollDownButton').css('z-index', '-1');
+				$('.scrollDownButton').css('z-index', '999');
 			};
 		});
 	}

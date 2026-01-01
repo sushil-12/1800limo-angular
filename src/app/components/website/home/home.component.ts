@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebsiteService } from '../../../services/website.service';
@@ -13,6 +13,8 @@ import { SharedModule } from '../../../components/shared/shared.module';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
+import { Swiper } from 'swiper';
+import { Navigation, Autoplay } from 'swiper/modules';
 
 declare var $: any;
 
@@ -21,11 +23,14 @@ declare var $: any;
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('addressinput') addressinput!: ElementRef;
 	@ViewChild('dropaddressinput') dropaddressinput!: ElementRef;
 	@ViewChild('retaddressinput') retaddressinput!: ElementRef;
 	@ViewChild('retdropaddressinput') retdropaddressinput!: ElementRef;
+	@ViewChild('clientLogoContainer') clientLogoContainer!: ElementRef;
+
+	clientLogoSwiper: Swiper | null = null;
 
 	vehicles: any;
 	vehiclesRes: any;
@@ -209,10 +214,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 			}, 100);
 		});
 
-		setTimeout(() => {
-			this.initClientCarousel();
-		}, 0);
-
+		// Client carousel will be initialized in fetchHomePageData() after data loads
 		this.fetchHomePageData();
 		this.Subscriptions();
 		
@@ -1514,62 +1516,93 @@ export class HomeComponent implements OnInit, OnDestroy {
 	  
 
 	initClientCarousel() {
-		const $clientCarousel = $('.client_logo');
-		if ($clientCarousel.length > 0) {
-			// 1. Destroy if already exists to prevent duplication glitches
-			if ($clientCarousel.hasClass('owl-loaded')) {
-				$clientCarousel.trigger('destroy.owl.carousel');
-				$clientCarousel.removeClass('owl-loaded');
-				// Safari fix: Clear any transform styles that might cause issues
-				$clientCarousel.find('.owl-stage').css('transform', '');
-				$clientCarousel.find('.owl-item').css('transform', '');
-			}
-	
-			// 2. Define Nav Icons once (Clean code)
-			const leftIcon = '<i class="fa fa-chevron-left"></i>'; // (Shortened for brevity)
-			const rightIcon = '<i class="fa fa-chevron-right"></i>';
-	
-			// 3. Initialize with fixed breakpoints
-			$clientCarousel.owlCarousel({
-				loop: true,
-				margin: 15,
-				autoplay: true,
-				autoplayTimeout: 3000,
-				autoplayHoverPause: true,
-				smartSpeed: 800,
-				nav: false, // Usually hide arrows on mobile to save space
-				dots: false, // Hide dots on client logos to save vertical space
-				responsiveClass: true,
-				navText: [leftIcon, rightIcon],
-				responsive: {
-					0: {
-						items: 2, // Fix: Show 2 logos on mobile (1 is too big)
-						nav: false
-					},
-					480: {
-						items: 3, 
-						nav: false
-					},
-					768: {
-						items: 5, // Tablet
-						nav: true
-					},
-					992: {
-						items: 6, // Desktop
-						nav: true,
-						loop: true,
-						margin: 30 
-					}
+		// Wait for DOM and data to be ready
+		setTimeout(() => {
+			if (this.clientLogoContainer && this.clientLogoContainer.nativeElement && this.clientImages && this.clientImages.length > 0) {
+				// Destroy existing Swiper instance if it exists
+				if (this.clientLogoSwiper) {
+					this.clientLogoSwiper.destroy(true, true);
+					this.clientLogoSwiper = null;
 				}
-			});
 
-			// Safari fix: Force refresh after initialization
-			setTimeout(() => {
-				if ($clientCarousel.hasClass('owl-loaded')) {
-					$clientCarousel.trigger('refresh.owl.carousel');
-				}
-			}, 100);
-		}
+				// Check if navigation should be enabled (desktop only)
+				const isDesktop = window.innerWidth >= 768;
+				const nextButton = this.clientLogoContainer.nativeElement.querySelector('.client-logo-swiper-button-next');
+				const prevButton = this.clientLogoContainer.nativeElement.querySelector('.client-logo-swiper-button-prev');
+				
+				const navButtons = nextButton && prevButton ? {
+					nextEl: nextButton,
+					prevEl: prevButton,
+					disabledClass: 'swiper-button-disabled',
+				} : false;
+
+				// Initialize Swiper
+				this.clientLogoSwiper = new Swiper(this.clientLogoContainer.nativeElement, {
+					modules: [Navigation, Autoplay],
+					slidesPerView: 4,
+					spaceBetween: 8,
+					loop: this.clientImages.length > 2,
+					autoplay: {
+						delay: 3000,
+						disableOnInteraction: false,
+						pauseOnMouseEnter: true,
+					},
+					speed: 800,
+					watchOverflow: true,
+					watchSlidesProgress: true,
+					centeredSlides: false,
+					centeredSlidesBounds: false,
+					preventClicks: true,
+					preventClicksPropagation: true,
+					slideToClickedSlide: false,
+					navigation: navButtons,
+					breakpoints: {
+						0: {
+							slidesPerView: 3,
+							spaceBetween: 12,
+							centeredSlides: false,
+						},
+						375: {
+							slidesPerView: 3,
+							spaceBetween: 12,
+						},
+						480: {
+							slidesPerView: 3,
+							spaceBetween: 12,
+						},
+						640: {
+							slidesPerView: 3,
+							spaceBetween: 12,
+						},
+						768: {
+							slidesPerView: 4,
+							spaceBetween: 18,
+						},
+						992: {
+							slidesPerView: 5,
+							spaceBetween: 20,
+						},
+						1200: {
+							slidesPerView: 6,
+							spaceBetween: 25,
+						}
+					},
+					on: {
+						init: () => {
+							// Force update after initialization
+							if (this.clientLogoSwiper) {
+								setTimeout(() => {
+									this.clientLogoSwiper?.update();
+								}, 100);
+							}
+						}
+					}
+				});
+			} else if (this.clientImages && this.clientImages.length > 0) {
+				// Retry if container not ready yet
+				setTimeout(() => this.initClientCarousel(), 200);
+			}
+		}, 100);
 	}
 
 	initVehicleCarousel() {
@@ -1729,43 +1762,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 				}
 			});
 
-			// client_logo
-			$('.client_logo').owlCarousel({
-				loop: true,
-				margin: 20,
-				autoplay: true,
-				dotsEach: 3,
-				autoplayTimeout: 3000,
-				autoplayHoverPause: true,
-				responsiveClass: true,
-				center: true,
-				navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-					'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-				responsive: {
-					0: {
-						items: 1, // Mobile: 1 item
-						nav: false,
-						dots: true,
-						center: false
-					},
-					575: {
-						items: 3, // Mobile: 1 item
-						nav: false,
-						dots: true,
-						center: false
-					},
-					768: {
-						items: 6, // Tablet: 2 items
-						nav: true,
-						center: false
-					},
-					992: {
-						items: 8, // Desktop: 3 items
-						nav: true,
-						center: true
-					}
-				}
-			});
+			// client_logo carousel is now handled by Swiper in initClientCarousel() method
 		}, 200);
 	}
 
@@ -1814,12 +1811,23 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 	@HostListener('window:resize', ['$event'])
 	onResize(event: any) {
-		// Safari-specific: Refresh carousel on resize to fix rendering issues
-		if (this.clientImages && this.clientImages.length > 0) {
+		// Refresh Swiper on resize to fix rendering issues
+		if (this.clientLogoSwiper && this.clientImages && this.clientImages.length > 0) {
 			// Use debounce to avoid excessive refreshes
 			clearTimeout((this as any).resizeTimeout);
 			(this as any).resizeTimeout = setTimeout(() => {
-				this.initClientCarousel();
+				if (this.clientLogoSwiper) {
+					this.clientLogoSwiper.update();
+					// Reinitialize if navigation state changed (desktop <-> mobile)
+					const isDesktop = window.innerWidth >= 768;
+					const shouldHaveNav = isDesktop;
+					const currentNav = this.clientLogoSwiper.params.navigation;
+					const hasNav = currentNav !== false && currentNav !== null && currentNav !== undefined;
+					
+					if (shouldHaveNav !== hasNav) {
+						this.initClientCarousel();
+					}
+				}
 			}, 250);
 		}
 	}
@@ -1832,6 +1840,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 		// Clean up resize timeout
 		if ((this as any).resizeTimeout) {
 			clearTimeout((this as any).resizeTimeout);
+		}
+		// Clean up Swiper instance
+		if (this.clientLogoSwiper) {
+			this.clientLogoSwiper.destroy(true, true);
+			this.clientLogoSwiper = null;
 		}
 	}
 }
