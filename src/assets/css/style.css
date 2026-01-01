@@ -4459,6 +4459,9 @@ header .navbar-toggler {
 }
 
 @media only screen and (max-width: 480px) {
+	.release-text {
+		text-align: center !important;
+	}
 	.notfound .notfound-404 h1 {
 		font-size: 162px;
 	}
@@ -5679,8 +5682,6 @@ header .navbar-toggler {
 }
 .mobile-app-minimal {
 	display: flex;
-	justify-content: center;
-	align-items: center;
 	padding: 20px;
 	width: 100%;
   }
@@ -5688,7 +5689,6 @@ header .navbar-toggler {
   .content-container {
 	display: flex;
 	flex-direction: column; /* Stacks text above buttons */
-	align-items: center;
 	gap: 15px;
   }
   
@@ -5697,6 +5697,9 @@ header .navbar-toggler {
 	gap: 10px;
 	flex-wrap: wrap; /* Prevents icons from breaking on small screens */
 	justify-content: center;
+  }
+  .release-text {
+	text-align: left !important;
   }
   
   .store-img {

@@ -407,7 +407,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														placeholder="Airport Code / Name" id="pickup_airport"
 														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
@@ -452,7 +452,7 @@
 												<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
 												<div class="input-box">
 													<input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -460,7 +460,7 @@
 														tabindex="1" class="input-f font-weight-bolder" />
 
 													<!-- <input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -515,7 +515,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														placeholder="Airport Code / Name" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
@@ -559,7 +559,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -568,7 +568,7 @@
 														class="input-f font-weight-bolder" />
 
 													<!-- <input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'Dropoff Address - City/FBO ': 'Cruise Port Name / Address'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -716,7 +716,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														#retairportinput id="return_pickup_airport"
 														class="input-f font-weight-bolder" tabindex="1"
 														(focus)="$event.target.select()"
@@ -762,7 +762,7 @@
 												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
 													<input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address"
@@ -772,7 +772,7 @@
 
 
 													<!-- <input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'Return Pickup Address - City/FBO' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														matGoogleMapsAutocomplete tabindex="1"
@@ -830,7 +830,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														#retdropairportinput id="return_dropoff_airport"
 														class="input-f font-weight-bolder" tabindex="1"
 														(focus)="$event.target.select()"
@@ -870,7 +870,7 @@
 												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
 													<input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address"
@@ -879,7 +879,7 @@
 														class="input-f font-weight-bolder" />
 
 													<!-- <input type="text"
-														style="font-size: 19px !important;"
+														style="font-size: 16px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'Return Dropoff Address - City/FBO' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"
