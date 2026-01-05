@@ -8,7 +8,7 @@
 					<!-- DESKTOP -->
 					<div class="text_desktop">
 						<h2>
-							Go Anywhere with <br> <span>1-800-LIMO.COM</span>
+							Go Anywhere with <br> <span style="margin-left: 20px !important;">1-800-LIMO.COM</span>
 						</h2>
 						<!-- <h4>{{fetchPageData('1-800-limo.com')?.title }} {{fetchPageData('1-800-limo.com')?.subtitle}} {{
 							fetchPageData('1-800-limo.com')?.content}}</h4> -->
@@ -506,7 +506,7 @@
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 											<span class="text-white ml-3"
-												style="width: 0 !important;font-size: 18px;font-weight: 500;">(Flip)</span>
+												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
 										</div>
 										<!-- DROPOFF AIRPORT -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value == 'airport'"
@@ -816,11 +816,11 @@
 											<span class="span-term-to">TO</span>
 										</div> -->
 										<div class="d-flex justify-content-center flip_div"
-											style="width: 125% !important;">
+											style="width: 100% !important;">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 											<span class="text-white ml-3"
-												style="width: 0 !important;font-size: 18px;font-weight: 500;">(Flip)</span>
+												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
 										</div>
 										<!-- RETURN DROPOFF AIRPORT -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'"
@@ -942,11 +942,10 @@
 								</div>
 							</div>
 							<span style="margin-bottom: 5px !important;">2 carry on = 1 large bag</span>
-
+							<span style="margin-bottom: 5px !important;"># of luggage = Vehicle size</span>
 							<!-- 
 								Quotebot Form ends
 							 -->
-
 						</div>
 						<ul class="qutedrates">
 							<li>Vehicle and Rates Are Based On Availability</li>

@@ -476,7 +476,7 @@ header {
 	-webkit-appearance: none;
 	appearance: none;
 	height: 30px;
-	font-size: 19px;
+	font-size: 17px;
 	border-radius: 5px;
 	padding: 0px 10px;
 	color: #000;
@@ -858,6 +858,7 @@ header {
 	right: 0px !important;
 }
 
+
 .viewVehicleCarousel .owl-nav button.owl-prev span {
 	left: 10px;
 }
@@ -945,6 +946,7 @@ header {
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		right: -20px !important;
+		display: none !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -5654,8 +5656,8 @@ header .navbar-toggler {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 75px;  /* Fixed size for perfect circle */
-    height: 75px;
+    width: 62px;  /* Fixed size for perfect circle */
+    height: 62px;
     border-radius: 50%;
     
     /* The Soft Orange Background */
@@ -5698,9 +5700,7 @@ header .navbar-toggler {
 	flex-wrap: wrap; /* Prevents icons from breaking on small screens */
 	justify-content: center;
   }
-  .release-text {
-	text-align: left !important;
-  }
+
   
   .store-img {
 	height: 45px; /* Adjust based on your screenshot preference */
