@@ -1556,12 +1556,13 @@ height:280px !important;
 }
 
 .whychoosemidle {
-	padding: 15px;
+	padding: 15px 0 15px 15px;
 	background: linear-gradient(264.04deg, rgba(141, 85, 35, 0) 4.98%, rgba(243, 147, 61, 0.1) 89.26%);
 	border-radius: 20px;
 	min-height: 400px;
 	background-repeat: no-repeat;
 }
+.whychoosemidle row{margin-right:0 !important;}
 
 .whychoosemidle img {
 	height: 100%;

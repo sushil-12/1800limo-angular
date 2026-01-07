@@ -1166,7 +1166,7 @@
 		<div class="whychoosemidle"
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<!-- Desktop -->
-			<div class="col-12 row">
+			<div class="col-12 row whychoosemidle-list">
 				<ul class="row col-12 col-md-7 list-unstyled m-0 p-0">
 					<li class="col-6 d-flex"
 						*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
@@ -1234,15 +1234,15 @@
 	</div>
 </section>
 <!---------------RIDE NOW--------------------------->
-<section class="ourmisservice_wrap my-4" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
+<section class="ourmisservice_wrap my-4 ride-now-container" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<div class="d-flex flex-column flex-md-row col-12">
 			<div class="ourmisservice_wrap_image col-12 col-md-6 p-0">
 				<img src="../../../../assets/images/new ride now.png" />
 			</div>
-			<div class="ourmisservice_wrap_content col-12f col-md-6 remove_col_padding">
+			<div class="ourmisservice_wrap_content col-12f col-md-6 remove_col_padding ride-nw-cl">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Ride Now Or <span>Ride Later</span></h2>
-				<p>{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
+				<p class="ride-now-para">{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
 			</div>
 		</div>
 	</div>

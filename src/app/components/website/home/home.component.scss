@@ -353,7 +353,8 @@ section {
 	scale: 1.4;
 	transform: rotate(90deg);
 }
-
+.ride-now-para{padding-top:60px;}
+.ride-now-container .container-fluid{padding:0 !important;}
 // .swap_btn_roundtrip {
 // 	transform: rotate(90deg);
 // 	/* height: 30px; */
@@ -453,7 +454,7 @@ section {
 	.text_desktop br {
 		display: none;
 	}
-
+	.ride-now-para{padding-top:30px;}
 	.viewVehicleCarousel .owl-nav button.owl-prev,
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		display: none;
@@ -477,6 +478,7 @@ section {
 	.gear-bg-black {
 		color: #000 !important;
 	}
+	.ride-now-para{padding-top:10px;}
 
 	#showCountriesModal .modal-content hr {
 		border: 2px solid #000;
@@ -534,6 +536,7 @@ section {
 		display: block;
 		margin-top: 0;
 	}
+	.ride-now-para{padding-top:10px;}
 
 	#myModal .modal-content hr {
 		border: 2px solid #fff;
@@ -635,6 +638,7 @@ section {
 	.bannerform_wrapper {
 		background-color: black !important;
 	}
+	.whychoosemidle-list{padding-top:20px;}
 
 	.bannertext {
 		text-align: center;
