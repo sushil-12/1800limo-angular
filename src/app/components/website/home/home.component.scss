@@ -353,7 +353,7 @@ section {
 	scale: 1.2;
 	transform: rotate(90deg);
 }
-.ride-now-para{padding-top:60px;}
+.ride-now-para{padding-top:60px; padding-right:15px; padding-left:15px;}
 .ride-now-container .container-fluid{padding:0 !important;}
 // .swap_btn_roundtrip {
 // 	transform: rotate(90deg);
@@ -454,14 +454,15 @@ section {
 	.text_desktop br {
 		display: none;
 	}
-	.ride-now-para{padding-top:30px;}
+	.whychoose_no img{padding:0 10px !important;}
+	.ride-now-para{padding-top:30px; padding-right:15px; padding-left:15px;}
 	.viewVehicleCarousel .owl-nav button.owl-prev,
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		display: none;
 	}
 
 	.font-weight-bolder {
-		font-size: 14.5px !important;
+		font-size: 12.5px !important;
 	}
 }
 
@@ -478,7 +479,7 @@ section {
 	.gear-bg-black {
 		color: #000 !important;
 	}
-	.ride-now-para{padding-top:10px;}
+	.ride-now-para{padding-top:10px; padding-right:10px; padding-left:10px;}
 
 	#showCountriesModal .modal-content hr {
 		border: 2px solid #000;
@@ -536,7 +537,8 @@ section {
 		display: block;
 		margin-top: 0;
 	}
-	.ride-now-para{padding-top:10px;}
+	.whychoose_no img{padding:10px !important;}
+	.ride-now-para{padding-top:10px; padding-right:15px; padding-left:15px;}
 
 	#myModal .modal-content hr {
 		border: 2px solid #fff;
@@ -1142,7 +1144,7 @@ a.user-profile:active::after {
 }
 
 .bannerform_wrapper .quoteform_homewrapper input {
-	border-radius: 5px;
+	// border-radius: 5px;
 	background-color: #f5f4fe !important;
 }
 
@@ -1185,6 +1187,7 @@ a.user-profile:active::after {
 
 .bannerform_wrapper .quoteform_homewrapper .form-group .input-group .input-group-append {
 	height: 40px;
+	margin-top:10px;
 }
 
 [type="time"] {
@@ -2218,6 +2221,8 @@ div#google_translate_element_home_mobile {
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
 	}
+.bannerform_wrapper .quoteform_homewrapper .form-group .input-group .input-group-append {margin-top:10px;}
+.bannerform_wrapper .quoteform_homewrapper input{margin-bottom:0px;}
 	.client_wrapper {
 		.container-fluid {
 			padding-left: 10px;
