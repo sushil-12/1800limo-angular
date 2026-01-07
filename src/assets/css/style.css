@@ -673,7 +673,7 @@ header {
 	padding: 32px;
 	border: 1px solid rgba(243, 147, 61, 0.2);
 	box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08);
-	min-height: 340px;
+	min-height: 322px;
 }
 
 .discover_diff_inner_columns img{
@@ -843,11 +843,11 @@ header {
 }
 
 .viewVehicleCarousel .owl-nav button {
-	top: 70px !important;
+	top: 55px !important;
 }
 
 .viewVehicleCarousel .owl-nav button span {
-	top: -14px !important;
+	top: -6px !important;
 }
 
 .viewVehicleCarousel .owl-nav button.owl-prev {
@@ -871,7 +871,7 @@ header {
 
 	/* view vehicles */
 	.viewVehicleCarousel .owl-nav button {
-		top: 110px !important;
+		top: 55px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button span {
@@ -899,11 +899,11 @@ header {
 
 	/* view vehicles */
 	.viewVehicleCarousel .owl-nav button {
-		top: 110px !important;
+		top: 55px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button span {
-		top: -14px !important;
+		top: -6px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev {
@@ -933,20 +933,20 @@ header {
 
 	/* view vehicles */
 	.viewVehicleCarousel .owl-nav button {
-		top: 110px !important;
+		top: 50px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button span {
-		top: -14px !important;
+		top: -6px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev {
-		left: -40px !important;
+		left: 0px !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
-		right: -20px !important;
-		display: none !important;
+		right: 0px !important;
+		/* display: none !important; */
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -964,7 +964,7 @@ header {
 	}
 
 	.discover_diff_inner_columns {
-		min-height: 360px;
+		min-height: 354px;
 	}
 	
 	.discover_diff_inner_columns img{
@@ -1146,7 +1146,7 @@ header {
 }
 
 .owl-carousel .owl-nav button span {
-	font-size: 40px;
+	font-size: 28px;
 	color: #fff !important;
 	position: absolute;
 	top: -14px;
@@ -5374,7 +5374,7 @@ header .navbar-toggler {
 	}
 
 	.discover_diff_inner_columns {
-		min-height: 300px;
+		min-height: auto;
 	}
 
 	.discover_diff_inner_columns h4 {

@@ -60,7 +60,7 @@ export class ScrollToTopComponent implements OnInit
 			} else
 			{
 				$('.scrollTopButton').css('opacity', '0');
-				$('.scrollTopButton').css('z-index', '999');
+				$('.scrollTopButton').css('z-index', '0');
 			};
 		});
 		$(window).scroll(function (){
@@ -74,7 +74,7 @@ export class ScrollToTopComponent implements OnInit
 			} else
 			{
 				$('.scrollDownButton').css('opacity', '0');
-				$('.scrollDownButton').css('z-index', '999');
+				$('.scrollDownButton').css('z-index', '0');
 			};
 		});
 	}
