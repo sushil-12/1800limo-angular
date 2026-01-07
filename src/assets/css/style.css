@@ -752,11 +752,12 @@ header {
 }
 
 .ourmisservice_wrap_content p {
-	font-weight: 500;
-	font-size: 15px;
-	line-height: 150%;
-	text-transform: capitalize;
-	color: #000;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 150%;
+    text-align: justify;
+    text-transform: capitalize;
+    color: #000;
 }
 
 .chk_vehicles_parent {
