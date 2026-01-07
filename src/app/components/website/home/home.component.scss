@@ -462,7 +462,7 @@ section {
 	}
 
 	.font-weight-bolder {
-		font-size: 14.5px !important;
+		font-size: 12.5px !important;
 	}
 }
 
@@ -1144,7 +1144,7 @@ a.user-profile:active::after {
 }
 
 .bannerform_wrapper .quoteform_homewrapper input {
-	border-radius: 5px;
+	// border-radius: 5px;
 	background-color: #f5f4fe !important;
 }
 
@@ -1187,6 +1187,7 @@ a.user-profile:active::after {
 
 .bannerform_wrapper .quoteform_homewrapper .form-group .input-group .input-group-append {
 	height: 40px;
+	margin-top:10px;
 }
 
 [type="time"] {
@@ -2220,6 +2221,8 @@ div#google_translate_element_home_mobile {
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
 	}
+.bannerform_wrapper .quoteform_homewrapper .form-group .input-group .input-group-append {margin-top:10px;}
+.bannerform_wrapper .quoteform_homewrapper input{margin-bottom:0px;}
 	.client_wrapper {
 		.container-fluid {
 			padding-left: 10px;
