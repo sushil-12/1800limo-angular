@@ -152,7 +152,9 @@ a.user-profile:active::after {
 	top: -300px !important;
 	margin: auto !important;
 }
-
+@media (min-width: 280px) and (max-width: 430px) {
+	.quick-links-footer{justify-content:center !important;}
+}
 @media (min-width: 280px) and (max-width: 311px) {
 
 	// .dropdown-menu {
