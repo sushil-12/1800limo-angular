@@ -15,7 +15,6 @@ import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
 import { Swiper } from 'swiper';
 import { Navigation, Autoplay } from 'swiper/modules';
-import { HttpClient } from '@angular/common/http';
 
 
 declare var $: any;
@@ -109,7 +108,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private quotebotService: QuotebotService,
 		private globalFunctions: SharedModule,
 		private elementRef: ElementRef,
-		private http: HttpClient
 
 	) { }
 
@@ -122,8 +120,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	address: string;
 
 	ngOnInit() {
-
-		this.setCurrentLocationToPickup();
 
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
@@ -365,41 +361,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}, 200)
 		})
 	}
-
-	setCurrentLocationToPickup() {
-		if (!navigator.geolocation) {
-		  return;
-		}
-	  
-		navigator.geolocation.getCurrentPosition(
-		  (position) => {
-			const lat = position.coords.latitude;
-			const lng = position.coords.longitude;
-	  
-			this.reverseGeocodeAndFill(lat, lng);
-		  },
-		  () => {
-			// User denied location – do nothing
-		  },
-		  {
-			enableHighAccuracy: true,
-			timeout: 10000
-		  }
-		);
-	  }
-	  
-	  reverseGeocodeAndFill(lat: number, lng: number) {
-		// FREE OpenStreetMap reverse geocoding
-		const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-	  
-		this.http.get<any>(url).subscribe(res => {
-		  if (res?.display_name) {
-			this.quoteBotForm.patchValue({
-			  pickup_address: res.display_name
-			});
-		  }
-		});
-	  }
 	  
 
 
