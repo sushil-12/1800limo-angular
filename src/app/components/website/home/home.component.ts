@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { Swiper } from 'swiper';
 import { Navigation, Autoplay } from 'swiper/modules';
 
+
 declare var $: any;
 
 @Component({
@@ -119,7 +120,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	address: string;
 
 	ngOnInit() {
-
 
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
@@ -361,6 +361,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}, 200)
 		})
 	}
+	  
 
 
 	fetchPageData(section: string) {

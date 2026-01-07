@@ -562,6 +562,10 @@ export class VehicleRateSettingsComponent implements OnInit {
 
 	submitForm() {
 		this.form.km_mile.value == 'mile' ? this.SetFormValue('kilometer_rate', 0) : this.SetFormValue('milage_rate', 0)
+		let currentUser = JSON.parse(localStorage.getItem('currentUser'))
+		this.VehicleRateSettingsForm.patchValue({
+			acc_id:currentUser.account_id
+		})
 
 
 		let tree = this.$router.parseUrl(this.$router.url);
