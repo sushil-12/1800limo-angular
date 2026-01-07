@@ -408,7 +408,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														placeholder="Airport Code / Name" id="pickup_airport"
+														placeholder="Airport" id="pickup_airport"
 														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
@@ -453,7 +453,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Cruise Port'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
 														formControlName="pickup_address" (focus)="addressinput.select()"
@@ -516,7 +516,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														placeholder="Airport Code / Name" id="dropoff_airport"
+														placeholder="Airport" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
@@ -560,7 +560,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Cruise Port'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
 														formControlName="dropoff_address"
@@ -715,7 +715,7 @@
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Return Airport Code / Name"
+													<input type="text" placeholder="Return Airport"
 														style="font-size: 16px !important;"
 														#retairportinput id="return_pickup_airport"
 														class="input-f font-weight-bolder" tabindex="1"
@@ -763,7 +763,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City (FBO)' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Cruise Port'"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address"
 														[value]="QBForm?.return_pickup_address?.value"
@@ -829,7 +829,7 @@
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Return Airport Code / Name"
+													<input type="text" placeholder="Return Airport"
 														style="font-size: 16px !important;"
 														#retdropairportinput id="return_dropoff_airport"
 														class="input-f font-weight-bolder" tabindex="1"
@@ -871,7 +871,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City (FBO)' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Cruise Port'"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address"
 														[value]="QBForm?.return_dropoff_address?.value"
@@ -1002,9 +1002,9 @@
 			</div>
 			<div class="ourmisservice_wrap_content col-12 col-md-7 m-0">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Our <span>Mission</span></h2>
-				<p class="mb-3">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
-				<p  class="mb-3">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
-				<p  class="mb-3">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
+				<p class="mb-3" style="text-align:justify;">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
+				<p  class="mb-3" style="text-align:justify;">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
+				<p  class="mb-3" style="text-align:justify;">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
 				</p>
 			</div>
 		</div>
