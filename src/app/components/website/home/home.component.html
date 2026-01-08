@@ -8,11 +8,14 @@
 					<!-- DESKTOP -->
 					<div class="text_desktop">
 						<h2>
-							Go Anywhere with <br> <span style="margin-left: 20px !important;">1-800-LIMO.COM</span>
+							Go Anywhere with 
+						</h2>
+						<h2 style="margin-top:-10px;">
+							<span>1-800-LIMO.COM</span>
 						</h2>
 						<!-- <h4>{{fetchPageData('1-800-limo.com')?.title }} {{fetchPageData('1-800-limo.com')?.subtitle}} {{
 							fetchPageData('1-800-limo.com')?.content}}</h4> -->
-						<h4>
+						<h4 style="margin-top: 20px;">
 							1-800-LIMO.COM Delivers The Best Driver / Chauffeur Anywhere Your Essential Travel Takes You. On-Demand Service in Now Available in New York City and close suburbs for city to city, airports and cruise ports.
 						</h4>
 					</div>
@@ -126,7 +129,7 @@
 								<!-- BOOKING HOURS PICKUP/DROPOFF TYPE -->
 								<div class="row mt-2">
 									<!-- Booking Hours -->
-									<div class="col-12 col-md-12"
+									<div class="col-12 col-md-12 mb-3"
 										[hidden]="QBForm?.service_type?.value != 'charter_tour'">
 										<!-- <label>Booking Hours</label> -->
 										<div class="inselect">
@@ -198,7 +201,7 @@
 
 
 								<!-- PICKUP DATE/TIME -->
-								<div class="row mt-2">
+								<div class="row mt-3 mb-3">
 									<!-- Pickup Date -->
 									<div class="col-6 col-md-6">
 										<!-- <label>Pickup Date</label> -->
@@ -258,7 +261,7 @@
 										<div class="form-group">
 											<!-- <label>Pickup Time</label> -->
 											<div class="input-group time" id="timepicker">
-												<input type="time" class="form-control" placeholder="HH:MM"
+												<input type="time" class="form-control" style="height:30px;" placeholder="HH:MM"
 													(change)="changeDetection.pickupTime($event, 'pickup_time')"
 													[value]="QBForm?.pickup_time?.value" class="font-weight-bolder" />
 												<em class="input-group-append input-group-addon">
@@ -376,7 +379,7 @@
 
 								<!-- PICKUP/DROPOFF AIRPORT/ADDRESS -->
 								<!-- style="background-color:#f5f4fe;;border-radius: 5px;" -->
-								<div class="row m-0 mt-1 justify-content-start" [class]="QBForm?.service_type?.value == 'round_trip' ? '' : '' ">
+								<div class="row m-0 justify-content-start" [class]="QBForm?.service_type?.value == 'round_trip' ? '' : '' ">
 
 									<!-- <div class="google_map_logos mr-1 mt-3">
 										<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
@@ -619,7 +622,7 @@
 								</div>
   
 								<!-- RETURN FIELDS [ROUND TRIP] -->
-								<div class="row mt-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
+								<div class="row mt-2 mb-3" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<!-- Return Pickup Date -->
 									<div class="col-6 col-md-6">
 										<!-- <label>Return Pickup Date</label> -->
@@ -682,7 +685,7 @@
 										<div class="form-group">
 											<!-- <label> Return Pickup Time </label> -->
 											<div class="input-group time" id="timepicker">
-												<input type="time" class="form-control" placeholder="HH:MM"
+												<input type="time" style="height: 30px !important;" class="form-control" placeholder="HH:MM"
 													class="font-weight-bolder" tabindex="1"
 													(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
 													[value]="QBForm?.return_pickup_time?.value" />
@@ -936,13 +939,13 @@
 							<div id="search-button-container">
 								<div id="search-button-box">
 									<button type="submit" class="three-d-button" tabindex="1" (click)="fileTheQuote()"
-										(keyup.enter)="fileTheQuote()" style="width: 42%;">
+										(keyup.enter)="fileTheQuote()" style="width: 38%; border-radius:25px !important;">
 										Search Rates
 									</button>
 								</div>
 							</div>
-							<span style="margin-bottom: 5px !important;">2 carry on = 1 large bag</span>
-							<span style="margin-bottom: 5px !important;"># of luggage = Vehicle size</span>
+							<span style="margin-bottom: 5px !important;">2 CARRY ON = 1 LARGE BAG</span>
+							<span style="margin-bottom: 5px !important;"># OF LUGGAGE = VEHICLE SIZE</span>
 							<!-- 
 								Quotebot Form ends
 							 -->
@@ -1194,7 +1197,7 @@
 				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new best driver.jpeg" />
-						<h3>The Best Drivers and Vehicles</h3>
+						<h3>Bringing Back Chauffeur Values</h3>
 						<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType" tabindex="1"
 							(click)="modalSwitch('modal_1')" data-target="#myModal">More Info</a> -->
 					</div>
@@ -1214,7 +1217,7 @@
 				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new best value.png" />
-						<h3>The Best Value for money</h3>
+						<h3>The Best Value</h3>
 						<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
 							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a> -->
 					</div>
@@ -1234,7 +1237,7 @@
 	</div>
 </section>
 <!---------------RIDE NOW--------------------------->
-<section class="ourmisservice_wrap my-4 ride-now-container" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
+<section class="ourmisservice_wrap_ride my-4 ride-now-container" *ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<div class="d-flex flex-column flex-md-row col-12">
 			<div class="ourmisservice_wrap_image col-12 col-md-6 p-0">
