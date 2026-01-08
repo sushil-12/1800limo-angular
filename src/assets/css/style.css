@@ -1455,6 +1455,7 @@ height:280px !important;
 	.rightPart {
 		margin-left: 80px !important;
 	}
+	.whychoose_no{min-height:240px !important;}
 }
 
 @media (min-width:768px) and (max-width:997px) {
@@ -1502,7 +1503,7 @@ height:280px !important;
 
 .whychoose_wrapper p {
 	font-weight: 400;
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 150%;
 	text-align: center;
 	text-transform: capitalize;
@@ -4105,7 +4106,7 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper .tab_innerform {
-		padding: 20px 0px 0px 0px !important;
+		padding: 5px 0px 0px 0px !important;
 	}
 
 	.footer-right,
@@ -4259,7 +4260,7 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper .tab_innerform {
-		padding: 20px 15px 0px 15px;
+		padding: 5px 15px 0px 15px;
 	}
 
 	header {
@@ -4779,7 +4780,6 @@ header .navbar-toggler {
 	.client_wrapper_mobile {
 		display: none;
 	}
-}
 
 .closeButton {
 	/* background   : #fff !important; */
@@ -5165,6 +5165,7 @@ header .navbar-toggler {
 	.outer .owl-nav button {
 		top: 110px !important;
 	}
+	.whychoose_no{min-height:204px !important; justify-content: flex-start;}
 
 	.outer .owl-nav button span {
 		top: -14px !important;

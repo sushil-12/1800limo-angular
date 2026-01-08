@@ -90,11 +90,11 @@
 				<div class="g-translator mt-2">
 					<div id="google_translate_element_home_mobile"></div>
 				</div>
-				<h3>FREE Prearranged Quotes in Over <span data-toggle="modal" id="countriestooltip"
+				<!-- <h3>FREE Prearranged Quotes in Over <span data-toggle="modal" id="countriestooltip"
 						class="showCountries p-0" data-placement="top" title="Click to check list of Countries"
 						data-target="#showCountriesModal" id="quotebot_redirect">40 Countries</span>
-				</h3>
-				<ul class="nav nav-tabs" id="myTab" role="tablist">
+				</h3> -->
+				<ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-top:20px;">
 					<li class="nav-item" role="presentation">
 						<a class="nav-link" [ngClass]="QBForm?.service_type?.value == 'one_way' ? 'active' : ''"
 							(click)="quoteBotSwitch('one_way')" (keyup.enter)="quoteBotSwitch('one_way')" tabindex="1">
@@ -939,7 +939,7 @@
 							<div id="search-button-container">
 								<div id="search-button-box">
 									<button type="submit" class="three-d-button" tabindex="1" (click)="fileTheQuote()"
-										(keyup.enter)="fileTheQuote()" style="width: 38%; border-radius:25px !important;">
+										(keyup.enter)="fileTheQuote()" style="width: 40%; border-radius:25px !important;">
 										Search Rates
 									</button>
 								</div>

@@ -62,7 +62,7 @@
 .step-card:hover .img-box {
     transform: translateY(-5px);
 	scale: 1.05;
-    box-shadow: 0 15px 35px rgba(243, 147, 61, 0.15); /* Orange tinted shadow on hover */
+    box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08); /* Orange tinted shadow on hover */
     border-color: rgba(243, 147, 61, 0.3);
 }
 .step-card:hover .img-box img {
@@ -141,7 +141,7 @@
         text-align: center;
         background: #fff;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08);
 		padding: 10px !important;
 		border: 1px solid #ffa50045 !important;
     }
@@ -1479,7 +1479,7 @@ div#google_translate_element_home_mobile {
     gap: 15px;
 	margin-top: 14px;
 	margin-bottom: 14px;
-    padding: 0;
+    padding: 0 10px;
 
     .nav-item {
         flex: 1;
@@ -2032,6 +2032,7 @@ div#google_translate_element_home_mobile {
 	.store-icons{
 		flex-direction: row !important;
 	}
+	#myTab{padding:0 0px;}
 	.step-item.active[_ngcontent-ng-c743272742]:after {
 		inset: 0 0% 0 !important;
 	}
