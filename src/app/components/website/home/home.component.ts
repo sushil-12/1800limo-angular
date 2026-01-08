@@ -1589,11 +1589,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					spaceBetween: 8,
 					loop: this.clientImages.length > 2,
 					autoplay: {
-						delay: 3000,
+						delay: 2000,
 						disableOnInteraction: false,
 						pauseOnMouseEnter: true,
 					},
-					speed: 800,
+					speed: 300,
 					watchOverflow: true,
 					watchSlidesProgress: true,
 					centeredSlides: false,
@@ -1621,7 +1621,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 							spaceBetween: 0,
 						},
 						768: {
-							slidesPerView: 3,
+							slidesPerView: 4,
 							spaceBetween: 20,
 						},
 						992: {
@@ -1629,7 +1629,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 							spaceBetween: 20,
 						},
 						1200: {
-							slidesPerView: 6,
+							slidesPerView: 5,
 							spaceBetween: 25,
 						}
 					},

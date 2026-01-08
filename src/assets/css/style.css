@@ -196,6 +196,7 @@ header a.nav-link.active {
 	header .nav_top {
 		text-align: right;
 	}
+	input, input::placeholder, input::-webkit-input-placeholder{font-size:0.9rem !important;}
 }
 
 @media only screen and (min-device-width: 640px) and (max-device-width: 997px) and (orientation: landscape) {
@@ -292,7 +293,7 @@ header a.nav-link.active {
 .bannerform_wrapper .bannertext h4 {
     color: #fff;
     font-weight: 400;
-    font-size: clamp(14px, 1.2vw, 20px); 
+    font-size: clamp(15px, 1.2vw, 20px); 
     line-height: 150%;
     vertical-align: middle;
     text-transform: none; 
@@ -331,8 +332,8 @@ header a.nav-link.active {
 .bannerform_wrapper .quoteform_homewrapper h3 span {
 	text-align: center;
 	color: var(--orange-color);
-	font-size: 20px;
-	font-weight: 400;
+	font-size: 22px;
+	font-weight: 500;
 	padding: 10px 0px 10px 0px;
 	border-bottom: 1px solid #514f4f;
 	margin: 0;
@@ -377,7 +378,7 @@ header a.nav-link.active {
 }
 
 .inselect {
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
 	border-radius: 5px;
 	padding: 0;
 	position: relative;
@@ -475,7 +476,7 @@ header {
 	border: 0;
 	-webkit-appearance: none;
 	appearance: none;
-	height: 30px;
+	height: 42px;
 	font-size: 17px;
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
@@ -556,7 +557,7 @@ header {
 .bannerform_wrapper .qutedrates li {
 	list-style-type: disc;
 	color: #fff;
-	font-size: 9px;
+	font-size: 11px;
 	margin: 0 15px 0 15px;
 	padding: 15px 0px 8px 0px;
 }
@@ -653,7 +654,7 @@ header {
 
 .discover_diff h2 {
 	font-weight: 600;
-	font-size: 34px;
+	font-size: 36px;
 	line-height: 130%;
 	text-align: center;
 	text-transform: capitalize;
@@ -717,10 +718,21 @@ header {
 
 .ourmisservice_wrap {
 	background-color: transparent !important;
-	margin: 25px 50px; /* Match other sections */
+	margin: 25px 0px; /* Match other sections */
 }
-
+.ourmisservice_wrap_ride {
+	background-color: transparent !important;
+	margin: 25px 40px; /* Match other sections */
+} 
 .ourmisservice_wrap h2 {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-align: center;
+	text-transform: capitalize;
+	color: #000;
+}
+.ourmisservice_wrap_ride h2 {
 	font-weight: 600;
 	font-size: 36px;
 	line-height: 130%;
@@ -730,6 +742,13 @@ header {
 }
 
 .ourmisservice_wrap h2 span {
+	font-weight: 600;
+	font-size: 36px;
+	line-height: 130%;
+	text-transform: capitalize;
+	color: var(--orange-color);
+}
+.ourmisservice_wrap_ride h2 span {
 	font-weight: 600;
 	font-size: 36px;
 	line-height: 130%;
@@ -875,7 +894,7 @@ header {
 	.viewVehicleCarousel .owl-nav button {
 		top: 55px !important;
 	}
-
+	input, input::placeholder, input::-webkit-input-placeholder{font-size: 0.9rem !important;}
 	.viewVehicleCarousel .owl-nav button span {
 		top: 1px !important;
 	}
@@ -910,10 +929,12 @@ header {
 
 	.viewVehicleCarousel .owl-nav button.owl-prev {
 		left: 0px !important;
+		display:none !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		right: 0px !important;
+		display: none !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -937,6 +958,15 @@ header {
 	.viewVehicleCarousel .owl-nav button {
 		top: 50px !important;
 	}
+	.bannerform_wrapper .bannertext h2, .bannerform_wrapper .bannertext h2 span{font-size:38px !important;}
+	.checkourveh_wrapper h2, .checkourveh_wrapper h2 span{font-size:32px !important;}
+	.ourmisservice_wrap h2, .ourmisservice_wrap h2 span{font-size:32px !important;}
+	.client_wrapper h2, .client_wrapper h2 span{font-size:32px !important;}
+	.discover_diff h2, .discover_diff h2 span{font-size:32px !important;}
+	.how-it-works-section h2, .how-it-works-section h2 span{font-size:32px !important;}
+	.personalized_wrapper h2, .personalized_wrapper h2 span{font-size: 32px !important;}
+	.whychoose_wrapper h2, .whychoose_wrapper h2 span{font-size: 32px !important;}
+	.ourmisservice_wrap_ride h2, .ourmisservice_wrap_ride h2 span{font-size: 32px !important;}
 
 	.viewVehicleCarousel .owl-nav button span {
 		top: -6px !important;
@@ -944,11 +974,12 @@ header {
 
 	.viewVehicleCarousel .owl-nav button.owl-prev {
 		left: 0px !important;
+		display: none !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		right: 0px !important;
-		/* display: none !important; */
+		display: none !important;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev span {
@@ -1012,7 +1043,7 @@ header {
 }
 
 .destinationCarousel .owl-nav button.owl-prev {
-	left: -75px !important;
+	left: -58px !important;
 }
 
 .destinationCarousel .owl-nav button.owl-next span {
@@ -1020,7 +1051,7 @@ header {
 }
 
 .destinationCarousel .owl-nav button.owl-next {
-	right: -75px !important;
+	right: -58px !important;
 }
 
 @media only screen and (max-width:812px) and (orientation: landscape) {
@@ -1067,6 +1098,7 @@ header {
 
 	.destinationCarousel .owl-nav button.owl-prev {
 		left: -45px !important;
+		display: none !important;
 	}
 
 	.destinationCarousel .owl-nav button.owl-next span {
@@ -1075,6 +1107,7 @@ header {
 
 	.destinationCarousel .owl-nav button.owl-next {
 		right: -45px !important;
+		display: none !important;
 	}
 }
 
@@ -1082,7 +1115,16 @@ header {
 	.destinationCarousel button {
 		top: 190.5px !important;
 	}
-
+	.bannerform_wrapper .bannertext h2, .bannerform_wrapper .bannertext h2 span{font-size:28px;}
+	.checkourveh_wrapper h2, .checkourveh_wrapper h2 span{font-size:25px !important;}
+	.ourmisservice_wrap h2, .ourmisservice_wrap h2 span{font-size:25px !important;}
+	.client_wrapper h2, .client_wrapper h2 span{font-size:25px !important;}
+	.discover_diff h2, .discover_diff h2 span{font-size:25px !important;}
+	.how-it-works-section h2, .how-it-works-section h2 span{font-size:25px !important;}
+	.personalized_wrapper h2, .personalized_wrapper h2 span{font-size:25px !important;}
+	.whychoose_wrapper h2, .whychoose_wrapper h2 span{font-size:25px !important;}
+	.ourmisservice_wrap_ride h2, .ourmisservice_wrap_ride h2 span{font-size:25px !important;}
+	
 	.destinationCarousel button span {
 		top: -3px !important;
 	}
@@ -1093,6 +1135,7 @@ header {
 
 	.destinationCarousel .owl-nav button.owl-prev {
 		left: -42px !important;
+		display: none !important;
 	}
 
 	.destinationCarousel .owl-nav button.owl-next span {
@@ -1101,6 +1144,7 @@ header {
 
 	.destinationCarousel .owl-nav button.owl-next {
 		right: -40px !important;
+		display: none !important;
 	}
 
 	/* .owl-carousel {
@@ -1817,8 +1861,8 @@ height:280px !important;
 
 .client_wrapper {
 	background-color: transparent !important;
-	padding: 30px !important;
-	margin: 25px 50px;
+	padding: 20px !important;
+	margin: 0px 50px;
 	border-radius: 20px;
 }
 
@@ -3583,7 +3627,7 @@ input[type=number]::-webkit-outer-spin-button {
 .text_desktop {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	/* gap: 15px; */
 }
 
 @media only screen and (max-width:767px) {
@@ -4025,7 +4069,7 @@ header .navbar-toggler {
 
 	.bannerform_wrapper .quoteform_homewrapper h3,
 	.bannerform_wrapper .quoteform_homewrapper h3 span {
-		font-size: 20px;
+		font-size: 22px;
 		line-height: 32px;
 	}
 
@@ -4188,7 +4232,7 @@ header .navbar-toggler {
 	}
 
 	.client_wrapper {
-		padding: 40px 0px 0px 0px !important;
+		padding: 20px 0px 0px 0px !important;
 	}
 
 	.safety_wrapper {
@@ -5248,12 +5292,15 @@ header .navbar-toggler {
 	.whychoose_no img{
 		width: 240px !important;
 	}
-
+	.client_wrapper{margin:0 !important;}
 	.checkourveh_wrapper,
 	.whychoose_wrapper,
-	.client_wrapper,
 	.discover_diff,
 	.ourmisservice_wrap {
+		margin: 25px 0px;
+		border-radius: 0 !important;
+	}
+	.ourmisservice_wrap_ride {
 		margin: 25px 0px;
 		border-radius: 0 !important;
 	}
@@ -5264,8 +5311,10 @@ header .navbar-toggler {
 
 	.checkourveh_wrapper h2,
 	.ourmisservice_wrap h2,
+	.ourmisservice_wrap_ride h2,
 	.checkourveh_wrapper h2 span,
 	.ourmisservice_wrap h2 span,
+	.ourmisservice_wrap_ride h2 span,
 	.whychoose_wrapper h2,
 	.whychoose_wrapper h2 span,
 	.client_wrapper h2,
@@ -5281,6 +5330,7 @@ header .navbar-toggler {
 	}
 
 	.ourmisservice_wrap h6,
+	.ourmisservice_wrap_ride h6,
 	.whychoose_wrapper p,
 	.personalized_wrapper h6,
 	.whychoosemidle span {
@@ -5369,7 +5419,7 @@ header .navbar-toggler {
 
 	.discover_diff h2,
 	.discover_diff h2 span{
-		font-size: 17px;
+		font-size: 24px;
 	}
 
 	.discover_diff{
@@ -5378,6 +5428,7 @@ header .navbar-toggler {
 
 	.discover_diff_inner_columns {
 		min-height: auto;
+		padding:14px 32px;
 	}
 
 	.discover_diff_inner_columns h4 {
@@ -5687,7 +5738,7 @@ header .navbar-toggler {
 }
 .mobile-app-minimal {
 	display: flex;
-	padding: 20px;
+	padding: 20px 0px;
 	width: 100%;
   }
   
