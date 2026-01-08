@@ -444,8 +444,8 @@
 										<!-- PICKUP AIRPORT ENDS -->
 
 										<!-- PICKUP ADDRESS -->
-										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'"
-											style="">
+										<button (click)="useCurrentPickupLocation()">Use Current Location</button>
+										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<!-- <label for="pickup_address" class="pickup-label">Pickup Address</label> -->
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
