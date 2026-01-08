@@ -521,6 +521,51 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return true
 		}
 	}
+
+	useCurrentPickupLocation() {
+		this.getCurrentLocation('pickup_address');
+	}
+	
+
+	getCurrentLocation(fieldName: string) {
+		navigator.geolocation.getCurrentPosition(
+			(position) => {
+				const lat = position.coords.latitude;
+				const lng = position.coords.longitude;
+	
+				console.log("Current Location:", lat, lng);
+	
+				// Fill the QB form lat/long fields
+				this.SetFormValue(`${fieldName}_lat`, lat);
+				this.SetFormValue(`${fieldName}_long`, lng);
+	
+				// Reverse Geocode to get formatted address
+				this.reverseGeocode(lat, lng, fieldName);
+			},
+			(error) => {
+				console.error("Geolocation Error:", error);
+				alert("Unable to fetch location. Please enable GPS.");
+			}
+		);
+	}
+
+	
+	reverseGeocode(lat: number, lng: number, fieldName: string) {
+		const geocoder = new google.maps.Geocoder();
+		const latlng = { lat: lat, lng: lng };
+	
+		geocoder.geocode({ location: latlng }, (results, status) => {
+			if (status === "OK" && results[0]) {
+				const address = results[0].formatted_address;
+				this.SetFormValue(fieldName, address);
+				console.log("Reverse Geocoded Address:", address);
+			} else {
+				console.warn("Reverse Geocoding failed:", status);
+			}
+		});
+	}
+
+	
 	roundToNearest15(minutes) {
 		const quarterHour = 15;
 		return Math.round(minutes / quarterHour) * quarterHour;
