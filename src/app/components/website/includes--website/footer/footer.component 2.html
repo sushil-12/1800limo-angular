@@ -1,0 +1,269 @@
+<!----FOOTER------------->
+<footer>
+	<div class="container-fluid">
+		<!-- main content -->
+		<div class="footercontent">
+			<div class="row">
+				<div class="col-md-3 col-12 content_qr_btn">
+					<img src="{{QRimage}}" alt="QR">
+					<div class="col-md-12 login_btn">
+						<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
+							<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+								style="background-color: #F3933E !important;color: #fff !important;">Login / Create</button>
+							<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
+								<a class="dropdown-item indv-btn font-weight-bolder"
+									(click)="loginButtons('individual')"
+									style="color: #fff !important;opacity: 1;font-size: 21px;">Individual Account</a>
+								<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('travel_agent')">Travel
+									Agent Account</a>
+								<!-- <a class="dropdown-item nav-disabled font-weight-bolder" (click)="loginButtons('corporate')"
+									style="font-size: 21px;">Corporate</a> -->
+								<!-- <hr> -->
+								<a class="dropdown-item driver-dropdown font-weight-bolder"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('driver')">
+									Driver / Chauffeur / Fleet</a>
+								<hr>
+								<a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('sub_admin')">
+									Sub Admin</a>
+								<!-- <a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
+									style="color: #fff !important;opacity: 1;font-size: 21px;"
+									(click)="loginButtons('subscriber')">
+									Partner Login</a> -->
+							</div>
+						</div>
+						<ng-template #loggedInUser>
+							<ul class="navbar-nav">
+								<li class="nav-item dropdown no-caret dropdown-user">
+									<button
+										class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
+										style="background-color: #33c658 !important;"
+										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										{{currentUser.affiliateCompanyName ?
+										currentUser.affiliateCompanyName : currentUser.name ?
+										currentUser.name : currentUser.FirstName +
+										currentUser.LastName.charAt(0)}}
+									</button>
+									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+										aria-labelledby="navbarDropdownUserImage">
+										<h6 class="dropdown-header d-flex align-items-center">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+												<path fill="#000" fill-rule="evenodd"
+													d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
+													clip-rule="evenodd" />
+											</svg>
+											<div class="dropdown-user-details">
+												<div class="dropdown-user-details-name">
+													{{currentUser.affiliateCompanyName ?
+													currentUser.affiliateCompanyName :
+													currentUser.name ?
+													currentUser.name : currentUser.FirstName +
+													currentUser.LastName.charAt(0)}}
+												</div>
+											</div>
+										</h6>
+										<div class="dropdown-divider"></div>
+										<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
+											class="dropdown-item" (click)="dashboard('affiliate')">
+											<div class="dropdown-item-icon settingsvg">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+													viewBox="0 0 24 24" fill="none" stroke="currentColor"
+													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+													class="feather feather-settings">
+													<circle cx="12" cy="12" r="3"></circle>
+													<path
+														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+													</path>
+												</svg>
+											</div>{{ Value }}
+										</div>
+										<ng-template #adminRole>
+											<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
+												(click)="dashboard('admin')">
+												<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+														viewBox="0 0 24 24" fill="none" stroke="currentColor"
+														stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+														class="feather feather-settings">
+														<circle cx="12" cy="12" r="3"></circle>
+														<path
+															d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+														</path>
+													</svg>
+												</div>Admin Dashboard
+											</div>
+										</ng-template>
+										<div class="dropdown-item logout-background font-weight-bolder"
+											(click)="logout()">
+											<div class="dropdown-item-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+													viewBox="0 0 24 24" fill="none" stroke="currentColor"
+													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+													class="feather feather-log-out">
+													<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
+													</path>
+													<polyline points="16 17 21 12 16 7"></polyline>
+													<line x1="21" y1="12" x2="9" y2="12"></line>
+												</svg>
+											</div>
+											Logout
+										</div>
+									</div>
+								</li>
+							</ul>
+						</ng-template>
+					</div>
+				</div>
+				<div class="col-md-5 col-12 footer_text_main">
+					<p style="margin-bottom: 0 !important;">
+						We’re a veteran-owned company dedicated to delivering consistent, quality customer service and
+						value. We strive for perfection and would greatly appreciate your feedback. Please take a moment
+						and review us on <a
+							style="color: #007fee !important;text-decoration: underline !important;font-size: 20px !important;"
+							href="https://maps.app.goo.gl/4yQ9nNJ1EHCbJr8r5" target="_blank">Google</a>.
+					</p>
+					<a href="mailto:info@1800limo.com"><i class="fa-regular fa-envelope	mr-2"></i>info&#64;1800limo.com</a>
+					<p style="margin-top: 0 !important;">Follow us on social media! We’ll provide you with only the most
+						important
+						information and
+						updates.
+					</p>
+					<div class="socials">
+						<a href=" https://www.facebook.com/1800LIMO" target="_blank">
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
+								viewBox="0 0 128 128" width="128px" xml:space="preserve"
+								xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g>
+									<circle cx="64" cy="64" fill="#3C579E" r="64" />
+								</g>
+								<path
+									d="M56.256,104V67.854H43.355V54.965h12.903V43.069c0-12,7.084-19.069,17.788-19.069  c5.129,0,9.313,0.548,10.598,0.719v13.478l-8.617-0.004c-5.819,0-6.91,2.887-6.91,6.945v9.828h14.916l-2.106,12.888H69.119V104  H56.256z"
+									fill="#FFFFFF" />
+							</svg>
+						</a>
+
+						<a href="https://www.instagram.com/1800LIMO" target="_blank">
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
+								viewBox="0 0 128 128" width="128px" xml:space="preserve"
+								xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g>
+									<linearGradient gradientTransform="matrix(1 0 0 -1 594 633)"
+										gradientUnits="userSpaceOnUse" id="SVGID_1_" x1="-566.7114" x2="-493.2875"
+										y1="516.5693" y2="621.4296">
+										<stop offset="0" style="stop-color:#FFB900" />
+										<stop offset="1" style="stop-color:#9100EB" />
+									</linearGradient>
+									<circle cx="64" cy="64" fill="url(#SVGID_1_)" r="64" />
+								</g>
+								<g>
+									<g>
+										<path
+											d="M82.333,104H45.667C33.72,104,24,94.281,24,82.333V45.667C24,33.719,33.72,24,45.667,24h36.666    C94.281,24,104,33.719,104,45.667v36.667C104,94.281,94.281,104,82.333,104z M45.667,30.667c-8.271,0-15,6.729-15,15v36.667    c0,8.271,6.729,15,15,15h36.666c8.271,0,15-6.729,15-15V45.667c0-8.271-6.729-15-15-15H45.667z"
+											fill="#FFFFFF" />
+									</g>
+									<g>
+										<path
+											d="M64,84c-11.028,0-20-8.973-20-20c0-11.029,8.972-20,20-20s20,8.971,20,20C84,75.027,75.028,84,64,84z     M64,50.667c-7.352,0-13.333,5.981-13.333,13.333c0,7.353,5.981,13.333,13.333,13.333S77.333,71.353,77.333,64    C77.333,56.648,71.353,50.667,64,50.667z"
+											fill="#FFFFFF" />
+									</g>
+									<g>
+										<circle cx="85.25" cy="42.75" fill="#FFFFFF" r="4.583" />
+									</g>
+								</g>
+							</svg>
+						</a>
+
+						<a href="https://twitter.com/1800LIMO" target="_blank">
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+								<circle cx="64" cy="64" r="64" fill="#000000" />
+								<path
+									d="M83.5 32H96L72.6 59.3 101 96H78.2L61.2 73.5 40 96h-12L53.4 66.2 27 32h23.5l15.3 20.2L83.5 32z"
+									fill="#FFFFFF" transform="translate(0, 0)" />
+							</svg>
+						</a>
+
+						<a href="https://www.linkedin.com/company/1800LIMO" target="_blank">
+							<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+								xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 291.319 291.319"
+								style="enable-background:new 0 0 291.319 291.319;" xml:space="preserve">
+								<g>
+									<path style="fill:#0E76A8;" d="M145.659,0c80.45,0,145.66,65.219,145.66,145.66s-65.21,145.659-145.66,145.659S0,226.1,0,145.66
+									S65.21,0,145.659,0z" />
+									<path style="fill:#FFFFFF;"
+										d="M82.079,200.136h27.275v-90.91H82.079V200.136z M188.338,106.077
+									c-13.237,0-25.081,4.834-33.483,15.504v-12.654H127.48v91.21h27.375v-49.324c0-10.424,9.55-20.593,21.512-20.593
+									s14.912,10.169,14.912,20.338v49.57h27.275v-51.6C218.553,112.686,201.584,106.077,188.338,106.077z M95.589,100.141
+									c7.538,0,13.656-6.118,13.656-13.656S103.127,72.83,95.589,72.83s-13.656,6.118-13.656,13.656S88.051,100.141,95.589,100.141z" />
+								</g>
+							</svg>
+						</a>
+
+						<a href="https://www.youtube.com/@josephanselmo3871" target="_blank">
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
+								viewBox="0 0 128 128" width="128px" xml:space="preserve"
+								xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g>
+									<circle cx="64" cy="64" fill="#CC191E" r="64" />
+								</g>
+								<path
+									d="M103.201,48.004c0,0-0.781-5.513-3.18-7.939c-3.043-3.187-6.453-3.203-8.016-3.389  c-11.191-0.81-27.988-0.81-27.988-0.81h-0.036c0,0-16.795,0-27.988,0.81c-1.564,0.186-4.972,0.201-8.015,3.389  c-2.399,2.426-3.18,7.939-3.18,7.939S24,54.478,24,60.953v6.071c0,6.471,0.799,12.947,0.799,12.947s0.781,5.51,3.18,7.938  c3.044,3.189,7.041,3.088,8.82,3.422c6.401,0.615,27.202,0.805,27.202,0.805s16.81-0.025,28.005-0.834  c1.564-0.188,4.975-0.203,8.016-3.391c2.4-2.43,3.182-7.939,3.182-7.939S104,73.496,104,67.023v-6.071  C104,54.478,103.201,48.004,103.201,48.004 M54.729,75.428l-0.003-24.581l23.637,12.332L54.729,75.428z"
+									fill="#FFFFFF" />
+							</svg>
+						</a>
+
+					</div>
+				</div>
+				<div class="col-md-4 col-12 quick_links">
+					<h4>
+						Quick Links
+					</h4>
+					<div class="row">
+					<div class="col-6 block" style="display: flex; text-align: left !important; justify-content: flex-end;">
+						<ul>
+							<li><a routerLink="about-us" tabindex="1">About us</a></li>
+							<li><a routerLink="contact-us" tabindex="1">Contact Us</a></li>
+							<li><a routerLink="blog" tabindex="1">Blog</a></li>
+							<!-- <li><a routerLink="testimonials" tabindex="1">Testimonials </a> </li> -->
+							<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
+							<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
+						</ul>
+					</div>
+					<div class="col-6 block" style="text-align: left;">
+						<ul>
+							<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner</a></li>
+							<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
+							<li><a routerLink="investors" tabindex="1">Investors</a></li>
+							<!-- <li><a routerLink="suggestions-complaints" tabindex="1">Suggestions / Complaints</a></li> -->
+							<li><a routerLink="insurance-licensing" tabindex="1">Insurance & licensing</a></li>
+						</ul>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="footer row mt-4 copyright_div">
+				<div class="col-md-4 col-12 inner_div1">Copyright © 2001-{{ copyright_text }}</div>
+				<div class="col-md-8 col-12 inner_div2">
+					<a routerLink="privacy-policy">Privacy Policy</a>
+					<a routerLink="delivery-membership-terms-condition">Membership Program Terms &amp; Conditions</a>
+					<a routerLink="client-terms-condition">Policies, Terms and Conditions</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<app-scroll-to-top></app-scroll-to-top>
+<app-float-icons></app-float-icons>
