@@ -90,11 +90,11 @@
 				<div class="g-translator mt-2">
 					<div id="google_translate_element_home_mobile"></div>
 				</div>
-				<!-- <h3>FREE Prearranged Quotes in Over <span data-toggle="modal" id="countriestooltip"
+				<h3> Prearranged Quotes <span data-toggle="modal" id="countriestooltip"
 						class="showCountries p-0" data-placement="top" title="Click to check list of Countries"
-						data-target="#showCountriesModal" id="quotebot_redirect">40 Countries</span>
-				</h3> -->
-				<ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-top:20px;">
+						data-target="#showCountriesModal" id="quotebot_redirect"></span>
+				</h3>
+				<ul class="nav nav-tabs" id="myTab" role="tablist" >
 					<li class="nav-item" role="presentation">
 						<a class="nav-link" [ngClass]="QBForm?.service_type?.value == 'one_way' ? 'active' : ''"
 							(click)="quoteBotSwitch('one_way')" (keyup.enter)="quoteBotSwitch('one_way')" tabindex="1">
@@ -411,7 +411,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														placeholder="Airport" id="pickup_airport"
+														placeholder="Pickup Address - Airport" id="pickup_airport"
 														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
@@ -458,7 +458,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Cruise Port'"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Pickup Address - Cruise Port'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
 														formControlName="pickup_address" (focus)="addressinput.select()"
@@ -521,7 +521,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														placeholder="Airport" id="dropoff_airport"
+														placeholder="Dropoff Address - Airport" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
@@ -565,7 +565,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Cruise Port'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Dropoff Address - Cruise Port'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
 														formControlName="dropoff_address"
@@ -720,7 +720,7 @@
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Return Airport"
+													<input type="text" placeholder="Return Pickup Address - Airport"
 														style="font-size: 16px !important;"
 														#retairportinput id="return_pickup_airport"
 														class="input-f font-weight-bolder" tabindex="1"
@@ -768,7 +768,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Cruise Port'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port'"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address"
 														[value]="QBForm?.return_pickup_address?.value"
@@ -834,7 +834,7 @@
 												Address</label> -->
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Return Airport"
+													<input type="text" placeholder="Return Dropoff Address - Airport"
 														style="font-size: 16px !important;"
 														#retdropairportinput id="return_dropoff_airport"
 														class="input-f font-weight-bolder" tabindex="1"
@@ -876,7 +876,7 @@
 												<div class="input-box">
 													<input type="text"
 														style="font-size: 16px !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Cruise Port'"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port'"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address"
 														[value]="QBForm?.return_dropoff_address?.value"
@@ -941,7 +941,7 @@
 							<div id="search-button-container">
 								<div id="search-button-box">
 									<button type="submit" class="three-d-button" tabindex="1" (click)="fileTheQuote()"
-										(keyup.enter)="fileTheQuote()" style="width: 40%; border-radius:25px !important;">
+										(keyup.enter)="fileTheQuote()" style="width: 42%; border-radius:25px !important;">
 										Search Rates
 									</button>
 								</div>
@@ -968,7 +968,7 @@
 					</button> -->
 					<div class="quoteform_homewrapper telephone_mobile"
 						style="border-bottom: none !important; margin: 0 !important;">
-						<a href="tel:+18005466266" class="contact-number" tabindex="1"><i class="fas fa-phone"
+						<a href="tel:+18005466266" class="contact-number" tabindex="1"><i class="fas fa-phone" style="transform: rotate(90deg)"
 								aria-hidden="true"></i>
 							+1-800-5466.266
 						</a>
@@ -982,7 +982,7 @@
 </section>
 
 <!------------------VIEW OUR VEHICLES------------------------------->
-<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
+<!-- <section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<h2 style="margin-bottom: 0;">View <span>Our vehicles</span></h2>
 		<h6 class="mb-0">{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
@@ -997,7 +997,40 @@
 			</div>
 		</div>
 	</div>
+</section> -->
+<section class="checkourveh_wrapper"
+  *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable'">
+
+  <div class="container-fluid">
+    <h2 style="margin-bottom: 0;">View <span>Our vehicles</span></h2>
+    <h6 class="mb-0">{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
+
+    <div class="chk_vehicles_parent">
+
+      <!-- 🔹 SHIMMER LOADER -->
+      <div class="chk_vehicles shimmer-wrapper" *ngIf="isVehicleLoading">
+        <div class="shimmer-card" *ngFor="let i of [1,2,3,4,5]">
+          <div class="shimmer-img shimmer"></div>
+          <div class="shimmer-text shimmer"></div>
+        </div>
+      </div>
+
+      <!-- 🔹 ACTUAL DATA -->
+      <div class="chk_vehicles owl-carousel owl-theme viewVehicleCarousel"
+           *ngIf="!isVehicleLoading">
+
+        <div class="item" *ngFor="let vehicle of vehicles">
+          <a class="ns-user">
+            <img [src]="vehicle?.vehicle_image" alt="vehicle">
+            <p style="color:#000">{{ vehicle?.vehicle_name }}</p>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </section>
+
 <!------------------OUR MISSION------------------------------->
 <section class="ourmisservice_wrap" *ngIf="fetchPageData('OUR MISSION')?.section_status == 'enable' ">
 	<div class="container-fluid">
@@ -1007,9 +1040,9 @@
 			</div>
 			<div class="ourmisservice_wrap_content col-12 col-md-7 m-0">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Our <span>Mission</span></h2>
-				<p class="mb-3" style="text-align:justify;">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
-				<p  class="mb-3" style="text-align:justify;">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
-				<p  class="mb-3" style="text-align:justify;">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
+				<p class="mb-2" style="text-align:justify;">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
+				<p  class="mb-2" style="text-align:justify;">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
+				<p  class="mb-2" style="text-align:justify;">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
 				</p>
 			</div>
 		</div>
@@ -1018,7 +1051,7 @@
 
 
 <!-- OUR CLIENTS FOR MOBILE -->
-<section class="client_wrapper">
+<!-- <section class="client_wrapper">
 	<div class="container-fluid">
 		<h2><span>Who Travels With Us</span></h2>
 
@@ -1030,9 +1063,44 @@
 					</div>
 				</div>
 			</div>
-			<!-- Navigation buttons -->
 			<div class="client-logo-swiper-button-prev"></div>
 			<div class="client-logo-swiper-button-next"></div>
+			<div class="swiper-pagination">
+				<span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+			  </div>
+		</div>
+	</div>
+</section> -->
+
+
+<!-- <section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
+	<div class="container-fluid">
+		<h2 style="margin-bottom: 0;">View <span>Our vehicles</span></h2>
+		<h6 class="mb-0">{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
+		<div class="chk_vehicles_parent">
+			<div class="chk_vehicles owl-carousel owl-theme viewClientLogo">
+				<div class="item" *ngFor="let vehicle of vehicles">
+					<a class="ns-user">
+						<img src="{{vehicle?.vehicle_image}}" alt="semi">
+						<p style="color: #000;">{{vehicle?.vehicle_name}}</p>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>  -->
+
+<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
+	<div class="container-fluid">
+		<h2><span>Who Travels With Us</span></h2>
+		<div class="chk_vehicles_parent">
+			<div class="chk_vehicles owl-carousel owl-theme viewClientLogo">
+				<div class="item" *ngFor="let clientLogo of clientImages">
+					<a class="ns-user">
+						<img [src]="clientLogo?.path" alt="client logo" loading="lazy" onerror="this.style.display='none'">
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
@@ -1082,7 +1150,7 @@
 
 <section class="how-it-works-section">
 	<div class="container-fluid">
-	  <h2 class="section-title text-center mb-5">How <span>1-800-LIMO.COM</span> Works</h2>
+	  <h2 class="section-title text-center mb-4">How <span>1-800-LIMO.COM</span> Works</h2>
   
 	  <div class="row position-relative">
 		
@@ -1150,7 +1218,7 @@
 <section class="personalized_wrapper" id="section-services"
 	*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 	<div class="container-fluid">
-		<h2>Personalized <span>Destination and Amenities</span></h2>
+		<h2> <span>Personalized Destination and Amenities</span></h2>
 		<h6>{{fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle }}</h6>
 
 		<div class="owl-carousel owl-theme destinationCarousel mb-3"
