@@ -1,5 +1,6 @@
 /* --- SECTION WRAPPER --- */
 .how-it-works-section {
+	margin-top:30px;
     padding: 0px 0;
     background-color: #ffffff;
     overflow: hidden; /* Prevents scrollbars if animations slide out */
@@ -10,6 +11,21 @@
 	font-size: 36px;
     color: #000;
 }
+.swiper-pagination {
+	position: relative;
+	margin-top: 20px;
+	text-align: center;
+  }
+  
+  .swiper-pagination-bullet {
+	background: #000;
+	opacity: 0.4;
+  }
+  
+  .swiper-pagination-bullet-active {
+	background: rgb(243, 147, 61) !important;
+	opacity: 1;
+  }
 @media (max-width: 600px) {
 	.section-title {
 		font-size: 24px;
@@ -134,7 +150,7 @@
 		padding:0 8px !important;
 	}
 	.how-it-works-section {
-		padding: 20px 50px;
+		padding: 10px 50px;
 	}
     .step-card {
         align-items: center;
@@ -179,6 +195,7 @@
 		margin-bottom: 8px !important;
 	}
 	.how-it-works-section {
+		margin-top:0px;
 		padding: 20px 15px;
 	}
 }
@@ -353,7 +370,7 @@ section {
 	scale: 1.2;
 	transform: rotate(90deg);
 }
-.ride-now-para{padding-top:60px; padding-right:15px; padding-left:15px;}
+.ride-now-para{padding-top:60px; padding-right:15px; padding-left:15px; text-align: justify !important;font-size:17px;}
 .ride-now-container .container-fluid{padding:0 !important;}
 // .swap_btn_roundtrip {
 // 	transform: rotate(90deg);
@@ -455,10 +472,10 @@ section {
 		display: none;
 	}
 	.owl-carousel .owl-nav button.owl-next{display:none !important;}
-	.whychoose_no img{padding:0 10px !important;}
-	.ride-now-para{padding-top:30px; padding-right:15px; padding-left:15px;}
-	.viewVehicleCarousel .owl-nav button.owl-prev,
-	.viewVehicleCarousel .owl-nav button.owl-next {
+	.whychoose_no img{padding:10px !important;}
+	.ride-now-para{padding-top:30px; padding-right:15px; padding-left:15px; text-align: justify !important;font-size:17px;}
+	.viewVehicleCarousel .owl-nav button.owl-prev,.viewClientLogo .owl-nav button.owl-prev,
+	.viewVehicleCarousel .owl-nav button.owl-next, .viewClientLogo .owl-nav button.owl-next {
 		display: none;
 	}
 
@@ -480,7 +497,7 @@ section {
 	.gear-bg-black {
 		color: #000 !important;
 	}
-	.ride-now-para{padding-top:10px; padding-right:10px; padding-left:10px;}
+	.ride-now-para{padding-top:10px; padding-right:10px; padding-left:10px; text-align: justify !important;font-size:17px;}
 
 	#showCountriesModal .modal-content hr {
 		border: 2px solid #000;
@@ -546,7 +563,7 @@ section {
 		display: none !important;
 	}
 	.whychoose_no img{padding:10px !important;}
-	.ride-now-para{padding-top:10px; padding-right:15px; padding-left:15px;}
+	.ride-now-para{padding-top:10px; padding-right:15px; padding-left:15px; text-align: justify !important; font-size:17px;}
 
 	#myModal .modal-content hr {
 		border: 2px solid #fff;
@@ -1445,7 +1462,7 @@ div#google_translate_element_home_mobile {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
- 
+
 
 /* home.component.scss */
 
@@ -2147,7 +2164,6 @@ div#google_translate_element_home_mobile {
 		&:hover:not(.swiper-button-disabled) {
 			background: var(--orange-color, #f3933d) !important;
 			border-color: var(--orange-color, #f3933d) !important;
-			transform: translateY(-50%) scale(1.1);
 		}
 		
 		&.swiper-button-disabled {
@@ -2347,3 +2363,13 @@ div#google_translate_element_home_mobile {
 		}
 	}
 }	
+
+
+.owl-carousel {
+	opacity: 0;
+	transition: opacity 0.3s ease;
+  }
+  
+  .owl-carousel.owl-loaded {
+	opacity: 1;
+  }

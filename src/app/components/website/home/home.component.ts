@@ -14,7 +14,7 @@ import { SharedModule } from '../../../components/shared/shared.module';
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
 import { Swiper } from 'swiper';
-import { Navigation, Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 
 
 declare var $: any;
@@ -118,9 +118,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	longitude: number;
 	zoom: number;
 	address: string;
+	isVehicleLoading = true;
 
 	ngOnInit() {
-
+		this.isVehicleLoading = true;
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
 
@@ -195,7 +196,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 		this.initialiseQuotebot()  	// initialise Quote Bot
-
 		//Get In Touch Form
 		this.getInTouchForm = this.formBuilder.group({
 			getInTouchName: ['', Validators.required],
@@ -205,13 +205,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		// Load Our vehicles using API
 		this.websiteService.getOurVehicles().then(result => {
+			console.log(this.isVehicleLoading,"consoell")
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data;
-
+			
 			// Initialize vehicle carousel after data is loaded
 			setTimeout(() => {
 				this.initVehicleCarousel();
-			}, 100);
+				this.isVehicleLoading = false;
+			});
 		});
 
 		// Client carousel will be initialized in fetchHomePageData() after data loads
@@ -1584,7 +1586,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 				// Initialize Swiper
 				this.clientLogoSwiper = new Swiper(this.clientLogoContainer.nativeElement, {
-					modules: [Navigation, Autoplay],
+					modules: [Navigation, Autoplay, Pagination],
 					slidesPerView: 4,
 					spaceBetween: 8,
 					loop: this.clientImages.length > 2,
@@ -1593,6 +1595,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						disableOnInteraction: false,
 						pauseOnMouseEnter: true,
 					},
+					pagination: {                // ✅ THIS IS "dots"
+						el: '.swiper-pagination',
+						clickable: true,
+						dynamicBullets: false
+					  },
 					speed: 300,
 					watchOverflow: true,
 					watchSlidesProgress: true,
@@ -1767,7 +1774,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						nav: true,
 						loop: true,
 						autoplay: true,
-						margin: 20,
+						margin: 10,
 						dots:true
 					}
 				}
@@ -1775,6 +1782,42 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 			// View vehicle carousel
 			$('.viewVehicleCarousel').owlCarousel({
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 2000,
+				dotsEach: 3,
+				dots:true,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				items: 3, 
+				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					}
+				}
+			});
+
+			// View vehicle carousel
+			$('.viewClientLogo').owlCarousel({
 				loop: true,
 				autoplay: true,
 				autoplayTimeout: 2000,
@@ -1799,6 +1842,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					},
 					1000: {
 						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					},
+					1199: {
+						items: 5, // Desktop: 3 items
 						nav: true,
 						loop: true,
 						autoplay: true,
