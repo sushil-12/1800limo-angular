@@ -1849,6 +1849,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						dots: true
 					},
 					1199: {
+						items: 4, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					},
+					1380: {
 						items: 5, // Desktop: 3 items
 						nav: true,
 						loop: true,

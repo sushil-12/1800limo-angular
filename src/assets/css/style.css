@@ -858,7 +858,7 @@ header {
 
 .owl-carousel .owl-nav button.owl-next {
 	position: absolute;
-	top: 79px;
+	top: 50px;
 	right: -55px;
 	background: var(--orange-color) !important;
 	width: 32px;
@@ -894,7 +894,7 @@ header {
 
 .owl-carousel .owl-nav button.owl-prev {
 	position: absolute;
-	top: 79px;
+	top: 50px;
 	left: -55px !important;
 	background: var(--orange-color) !important;
 	width: 32px;
@@ -1215,7 +1215,7 @@ header {
 
 	.destinationCarousel .owl-nav button.owl-next {
 		right: -45px !important;
-		display: none;
+		display: none !important;
 	}
 
 	.destinationCarousel .owl-nav button.owl-prev span {
