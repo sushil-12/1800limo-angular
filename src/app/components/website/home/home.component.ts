@@ -524,48 +524,100 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
-	// useCurrentPickupLocation() {
-	// 	this.getCurrentLocation('pickup_address');
-	// }
-	
+	useCurrentPickupLocation(fieldName: string) {
+		this.getCurrentLocation(fieldName);
+	}
 
-	// getCurrentLocation(fieldName: string) {
-	// 	navigator.geolocation.getCurrentPosition(
-	// 		(position) => {
-	// 			const lat = position.coords.latitude;
-	// 			const lng = position.coords.longitude;
-	
-	// 			console.log("Current Location:", lat, lng);
-	
-	// 			// Fill the QB form lat/long fields
-	// 			this.SetFormValue(`${fieldName}_lat`, lat);
-	// 			this.SetFormValue(`${fieldName}_long`, lng);
-	
-	// 			// Reverse Geocode to get formatted address
-	// 			this.reverseGeocode(lat, lng, fieldName);
-	// 		},
-	// 		(error) => {
-	// 			console.error("Geolocation Error:", error);
-	// 			alert("Unable to fetch location. Please enable GPS.");
-	// 		}
-	// 	);
-	// }
+	getCurrentLocation(fieldName: string) {
+		if (!navigator.geolocation) {
+			this.errorDialogService.openDialog({
+				errors: {
+					error: "Geolocation is not supported by this browser."
+				}
+			});
+			return;
+		}
 
-	
-	// reverseGeocode(lat: number, lng: number, fieldName: string) {
-	// 	const geocoder = new google.maps.Geocoder();
-	// 	const latlng = { lat: lat, lng: lng };
-	
-	// 	geocoder.geocode({ location: latlng }, (results, status) => {
-	// 		if (status === "OK" && results[0]) {
-	// 			const address = results[0].formatted_address;
-	// 			this.SetFormValue(fieldName, address);
-	// 			console.log("Reverse Geocoded Address:", address);
-	// 		} else {
-	// 			console.warn("Reverse Geocoding failed:", status);
-	// 		}
-	// 	});
-	// }
+		this.spinner.show();
+		const options = {
+			enableHighAccuracy: true,
+			timeout: 10000,
+			maximumAge: 300000 // 5 minutes
+		};
+
+		navigator.geolocation.getCurrentPosition(
+			(position) => {
+				this.spinner.hide();
+				const lat = position.coords.latitude;
+				const lng = position.coords.longitude;
+
+				console.log("Current Location:", lat, lng);
+
+				// Fill the QB form lat/long fields
+				this.SetFormValue(`${fieldName}_lat`, lat);
+				this.SetFormValue(`${fieldName}_long`, lng);
+
+				// Reverse Geocode to get formatted address
+				this.reverseGeocode(lat, lng, fieldName);
+			},
+			(error) => {
+				this.spinner.hide();
+				console.error("Geolocation Error:", error);
+				let errorMessage = "Unable to fetch your location. ";
+
+				switch(error.code) {
+					case error.PERMISSION_DENIED:
+						errorMessage += "Please enable location access in your browser settings.";
+						break;
+					case error.POSITION_UNAVAILABLE:
+						errorMessage += "Location information is unavailable.";
+						break;
+					case error.TIMEOUT:
+						errorMessage += "Location request timed out. Please try again.";
+						break;
+					default:
+						errorMessage += "Please check your GPS and try again.";
+						break;
+				}
+
+				this.errorDialogService.openDialog({
+					errors: {
+						error: errorMessage
+					}
+				});
+			},
+			options
+		);
+	}
+
+
+	reverseGeocode(lat: number, lng: number, fieldName: string) {
+		if (!google || !google.maps) {
+			console.warn("Google Maps API not loaded");
+			return;
+		}
+
+		const geocoder = new google.maps.Geocoder();
+		const latlng = { lat: lat, lng: lng };
+
+		geocoder.geocode({ location: latlng }, (results, status) => {
+			if (status === "OK" && results[0]) {
+				const address = results[0].formatted_address;
+				this.SetFormValue(fieldName, address);
+				console.log("Reverse Geocoded Address:", address);
+
+				// Fill return details for round trip if this is pickup_address
+				if (this.QBForm?.service_type?.value === 'round_trip' && fieldName === 'pickup_address') {
+					this.fillReturnDetails();
+				}
+			} else {
+				console.warn("Reverse Geocoding failed:", status);
+				// Still set coordinates even if geocoding fails
+				const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+				this.SetFormValue(fieldName, fallbackAddress);
+			}
+		});
+	}
 
 	
 	roundToNearest15(minutes) {
@@ -660,9 +712,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			// $(`#pickupTime option[value=\"${previous_quotebot.pickup_time}\"]`).attr('selected', 'selected')
 		} else {
 			// fill default values
-
-
-
 			this.quoteBotForm.patchValue({
 				service_type: 'one_way',
 				booking_hour: '2',
@@ -677,8 +726,26 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 
 			this.quoteBotSwitch('one_way')
+
+			// Auto-pick location for first time users if pickup_address is empty
+			this.autoPickLocationIfEmpty()
 		}
 	}
+
+	/**
+	 * Auto-pick location if pickup_address is empty on first page load
+	 */
+	autoPickLocationIfEmpty() {
+		// Check if pickup_address is empty after a short delay to ensure form is initialized
+		setTimeout(() => {
+			const pickupAddress = this.QBForm?.pickup_address?.value;
+			if (!pickupAddress || pickupAddress.trim() === '') {
+				console.log('Auto-picking location for first time user...');
+				this.getCurrentLocation('pickup_address');
+			}
+		}, 100);
+	}
+
 	validateTimeHHMMSS(time) {
 		let arr = time.split(':')
 		if (arr.length != 3) return '12:00:00'

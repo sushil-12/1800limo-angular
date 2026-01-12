@@ -2369,7 +2369,12 @@ div#google_translate_element_home_mobile {
 	opacity: 0;
 	transition: opacity 0.3s ease;
   }
-  
+
   .owl-carousel.owl-loaded {
 	opacity: 1;
   }
+.current_loc_button {
+	position: absolute;
+    right: 12px;
+    color: #ffde1fe3 !important;
+}

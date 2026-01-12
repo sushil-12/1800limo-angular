@@ -1,0 +1,256 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">
+            <i class="fas fa-bell me-2"></i>
+            Push Notification Testing Dashboard
+          </h4>
+        </div>
+        <div class="card-body">
+          
+          <!-- Service Status Section -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                  <h6 class="mb-0">Service Status</h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <strong>Service Initialized:</strong>
+                      <span class="badge" [ngClass]="isServiceInitialized ? 'bg-success' : 'bg-danger'">
+                        {{ isServiceInitialized ? 'Yes' : 'No' }}
+                      </span>
+                    </div>
+                    <div class="col-6">
+                      <strong>Permission Status:</strong>
+                      <span class="badge" [ngClass]="getPermissionStatusClass()">
+                        {{ getPermissionStatusText() }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-12">
+                      <strong>User:</strong> {{ getUserRoleDisplay() }}
+                    </div>
+                  </div>
+                  <div class="row mt-2" *ngIf="fcmToken">
+                    <div class="col-12">
+                      <strong>FCM Token:</strong>
+                      <div class="input-group">
+                        <input type="text" class="form-control form-control-sm" [value]="fcmToken" readonly>
+                        <button class="btn btn-outline-secondary btn-sm" type="button" (click)="copyFCMToken()">
+                          <i class="fas fa-copy"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                  <h6 class="mb-0">Topic Subscriptions</h6>
+                </div>
+                <div class="card-body">
+                  <div class="topic-list" *ngIf="currentTopics.length > 0">
+                    <div class="topic-item" *ngFor="let topic of currentTopics">
+                      <i class="fas" [ngClass]="topic.subscribed ? 'fa-check-circle text-success' : 'fa-times-circle text-danger'"></i>
+                      <span class="ms-2">{{ topic.topic }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="currentTopics.length === 0" class="text-muted">
+                    No topics subscribed yet
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Permission Request Section -->
+          <div class="row mb-4" *ngIf="notificationPermission !== 'granted'">
+            <div class="col-12">
+              <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                  <h6 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Notification Permission Required
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <p class="mb-3">
+                    To receive push notifications, you need to grant notification permission to this website.
+                  </p>
+                  <button class="btn btn-warning" (click)="requestPermission()">
+                    <i class="fas fa-bell me-2"></i>
+                    Request Notification Permission
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Form Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card border-secondary">
+                <div class="card-header bg-secondary text-white">
+                  <h6 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>
+                    Test Configuration
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="testMessage" class="form-label">Test Message</label>
+                        <textarea 
+                          id="testMessage" 
+                          class="form-control" 
+                          rows="3" 
+                          [(ngModel)]="testMessage"
+                          placeholder="Enter test message...">
+                        </textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="testTopic" class="form-label">Test Topic</label>
+                        <select id="testTopic" class="form-select" [(ngModel)]="testTopic">
+                          <option value="general_notifications">General Notifications</option>
+                          <option value="system_updates">System Updates</option>
+                          <option value="user_type_customer">Customer Broadcast</option>
+                          <option value="user_type_driver">Driver Broadcast</option>
+                          <option value="user_type_affiliate">Affiliate Broadcast</option>
+                          <option value="user_type_admin">Admin Broadcast</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Buttons Section -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                  <h6 class="mb-0">
+                    <i class="fas fa-play me-2"></i>
+                    Test Notifications
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <!-- User-specific notification -->
+                    <div class="col-md-6 col-lg-3 mb-3">
+                      <div class="d-grid">
+                        <button 
+                          class="btn btn-outline-primary" 
+                          (click)="testUserNotification()"
+                          [disabled]="!isUserLoggedIn() || notificationPermission !== 'granted'">
+                          <i class="fas fa-user me-2"></i>
+                          Test User Notification
+                        </button>
+                        <small class="text-muted mt-1">Sends notification to current user</small>
+                      </div>
+                    </div>
+
+                    <!-- Topic notification -->
+                    <div class="col-md-6 col-lg-3 mb-3">
+                      <div class="d-grid">
+                        <button 
+                          class="btn btn-outline-info" 
+                          (click)="testTopicNotification()"
+                          [disabled]="notificationPermission !== 'granted'">
+                          <i class="fas fa-tag me-2"></i>
+                          Test Topic Notification
+                        </button>
+                        <small class="text-muted mt-1">Sends to selected topic subscribers</small>
+                      </div>
+                    </div>
+
+                    <!-- Customer broadcast -->
+                    <div class="col-md-6 col-lg-3 mb-3">
+                      <div class="d-grid">
+                        <button 
+                          class="btn btn-outline-success" 
+                          (click)="testCustomerNotification()"
+                          [disabled]="notificationPermission !== 'granted'">
+                          <i class="fas fa-users me-2"></i>
+                          Test Customer Broadcast
+                        </button>
+                        <small class="text-muted mt-1">Sends to all customers</small>
+                      </div>
+                    </div>
+
+                    <!-- Driver broadcast -->
+                    <div class="col-md-6 col-lg-3 mb-3">
+                      <div class="d-grid">
+                        <button 
+                          class="btn btn-outline-warning" 
+                          (click)="testDriverNotification()"
+                          [disabled]="notificationPermission !== 'granted'">
+                          <i class="fas fa-car me-2"></i>
+                          Test Driver Broadcast
+                        </button>
+                        <small class="text-muted mt-1">Sends to all drivers</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Instructions Section -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                  <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Testing Instructions
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h6>Foreground Testing:</h6>
+                      <ul>
+                        <li>Keep the browser tab open and active</li>
+                        <li>Notifications will appear as browser notifications</li>
+                        <li>Check browser console for detailed logs</li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <h6>Background Testing:</h6>
+                      <ul>
+                        <li>Minimize the browser or switch to another tab</li>
+                        <li>Send a test notification</li>
+                        <li>Notification should appear as system notification</li>
+                        <li>Click on notification to bring app to foreground</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="alert alert-warning mt-3">
+                    <strong>Note:</strong> Make sure you have granted notification permission and the service is properly initialized before testing.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
