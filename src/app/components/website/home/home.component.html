@@ -178,16 +178,31 @@
 								<div class="row mt-3 mb-3">
 									<div class="col-6 col-md-6">
 										<div class="pickupdate">
-											<mat-form-field appearance="fill">
-												<input matInput [matDatepicker]="picker1" placeholder="Pickup Date" [min]="minDate"
-													formControlName="pickup_date" class="font-weight-bolder" tabindex="1"
+											<!-- <mat-form-field appearance="fill">
+												<input matInput [matDatepicker]="picker1" style="height:30px;" placeholder="Pickup Date" [min]="minDate"
+													formControlName="pickup_date"  class="form-control" class="font-weight-bolder" tabindex="1"
 													(dateChange)="changeDetection.pickupDate($event.target.value)"
 													(click)="picker1.open()" readonly
 													[class.errorValid]="submitted && QBForm?.pickup_date?.errors">
 												<mat-datepicker-toggle matSuffix [for]="picker1">
 												</mat-datepicker-toggle>
 												<mat-datepicker #picker1></mat-datepicker>
-											</mat-form-field>
+											</mat-form-field> -->
+											<mat-form-field appearance="fill" class="date-input">
+												<input
+												  matInput
+												  [matDatepicker]="picker1"
+												  placeholder="Pickup Date"
+												  [min]="minDate"
+												  formControlName="pickup_date"
+												  class="form-control font-weight-bolder"
+												  style="height:30px; background-color: #fff !important;"
+												  (dateChange)="changeDetection.pickupDate($event.target.value)"
+												  (click)="picker1.open()"
+												  readonly>
+												<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+												<mat-datepicker #picker1></mat-datepicker>
+											  </mat-form-field>
 										</div>
 										<div *ngIf="submitted && QBForm?.pickup_date?.errors" class="text-danger">
 											<div *ngIf="QBForm?.pickup_date?.errors?.matDatepickerParse; else pickupDateError">
@@ -638,8 +653,8 @@
 												</div>
 											</div>
 			
-											<div class="d-flex justify-content-end w-100">
-	 current_loc_button											<a href="javascript:void(0)"
+											<div class="d-flex justify-content-end w-100 current_loc_button">
+											<a href="javascript:void(0)"
 													(click)="useCurrentPickupLocation('return_pickup_address')"
 													class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
 													title="Use Current Location" tabindex="1">
@@ -725,8 +740,8 @@
 												</div>
 											</div>
 			
-											<div class="d-flex justify-content-end w-100">
-	 current_loc_button											<a href="javascript:void(0)"
+											<div class="d-flex justify-content-end w-100 current_loc_button">
+	 											<a href="javascript:void(0)"
 													(click)="useCurrentPickupLocation('return_dropoff_address')"
 													class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
 													title="Use Current Location" tabindex="1">
@@ -855,9 +870,9 @@
 			</div>
 			<div class="ourmisservice_wrap_content col-12 col-md-7 m-0">
 				<h2 style="margin-bottom: 20px;margin-top: 20px;">Our <span>Mission</span></h2>
-				<p class="mb-2" style="text-align:justify;">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
-				<p  class="mb-2" style="text-align:justify;">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
-				<p  class="mb-2" style="text-align:justify;">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
+				<p class="mb-4" style="text-align:justify;">At 1-800-LIMO.COM, our mission is to connect exceptional drivers with valued customers. We understand that great drivers are essential for providing excellent service while earning a living wage. Our goal is to create a partnership where both drivers and customers support each other.</p>
+				<p  class="mb-4" style="text-align:justify;">Our dedicated drivers ensure a safe and comfortable ride in well-maintained vehicles. If you're not satisfied with your driver, let us know, and we’ll find a better match for your next trip. You can rate your experience with a thumbs up or down, and we address concerns promptly.</p>
+				<p  class="mb-4" style="text-align:justify;">We encourage our drivers to go the extra mile by assisting with luggage, opening doors, and sharing local tips. Regardless of your needs, our drivers will treat you with respect and courtesy, and all are insured as required by local regulations.
 				</p>
 			</div>
 		</div>
@@ -1040,10 +1055,10 @@
 			*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 			<div class="item outer_div_pw mb-3"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
-				<img src="{{sliderData?.image}}" alt="a1">
+				<img src="{{sliderData?.image}}" alt="a1" class="order-img">
 				<div class="personalized_text">
-					<h3>{{sliderData?.title}}</h3>
-					<p class="mb-0">{{sliderData?.content}}
+					<h3 class="order-two">{{sliderData?.title}}</h3>
+					<p class="mb-0 order-three">{{sliderData?.content}}
 					</p>
 				</div>
 			</div>

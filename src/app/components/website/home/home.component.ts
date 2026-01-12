@@ -1038,17 +1038,45 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	/**
 	 * update values of specific function calls to form
 	 */
+	getNextQuarterHour(time: string): string {
+		const [h, m] = time.split(':').map(Number);
+	
+		let hours = h;
+		let minutes = m;
+	
+		// Round UP to next 15 min
+		minutes = Math.ceil(minutes / 15) * 15;
+	
+		if (minutes === 60) {
+			minutes = 0;
+			hours = (hours + 1) % 24;
+		}
+	
+		return `${hours.toString().padStart(2, '0')}:${minutes
+			.toString()
+			.padStart(2, '0')}:00`;
+	}
 	changeDetection = {
 		pickupDate: (value: any) => {
-			console.log('--->>>>', value.format("YYYY-MM-DD"))
+			console.log('timeeee--->>>>', value.format("YYYY-MM-DD"))
 			this.SetFormValue('pickup_date', value.format("YYYY-MM-DD"))
 		},
-		pickupTime: (event: any = null, form_control: string) => {
-			if (event == null) {
-				return ''
-			}
-			console.log('Pickup Time Event: ', event.target.value)
-			this.SetFormValue(form_control, event.target.value)
+		// pickupTime: (event: any = null, form_control: string) => {
+		// 	if (event == null) {
+		// 		return ''
+		// 	}
+		// 	console.log('Pickup Time Event: ', event.target.value)
+		// 	this.SetFormValue(form_control, event.target.value)
+		// },
+		pickupTime: (event: any, form_control: string) => {
+			if (!event?.target?.value) return;
+		
+			const rawTime = event.target.value; // "03:07"
+			const roundedTime = this.getNextQuarterHour(rawTime);
+		
+			console.log('Rounded Time:', roundedTime);
+		
+			this.SetFormValue(form_control, roundedTime);
 		},
 		return_pickup_date: (value: any) => {
 			console.log('value-- return ', value.format("YYYY-MM-DD"))
@@ -1815,7 +1843,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Destination carousel
 			$('.destinationCarousel').owlCarousel({
 				loop: true,
-				autoplay: true,
+				autoplay: false,
 				dotsEach: 3,
 				dots: true,
 				autoplayTimeout: 2000,
@@ -1840,7 +1868,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						items: 3, // Desktop: 3 items
 						nav: true,
 						loop: true,
-						autoplay: true,
+						autoplay: false,
 						margin: 10,
 						dots:true
 					}
