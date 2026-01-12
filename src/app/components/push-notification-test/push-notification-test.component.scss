@@ -1,0 +1,122 @@
+.topic-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.topic-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  i {
+    font-size: 14px;
+  }
+  
+  span {
+    font-size: 12px;
+    word-break: break-all;
+  }
+}
+
+.card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  
+  .card-header {
+    border-radius: 8px 8px 0 0 !important;
+    font-weight: 600;
+  }
+}
+
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.badge {
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+.form-control, .form-select {
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+  }
+}
+
+.input-group {
+  .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.alert {
+  border-radius: 6px;
+  border: none;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .col-md-6.col-lg-3 {
+    margin-bottom: 1rem;
+  }
+  
+  .topic-list {
+    max-height: 150px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+// Animation for status indicators
+.badge {
+  transition: all 0.3s ease;
+}
+
+.btn {
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+}
+
+// Custom scrollbar for topic list
+.topic-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.topic-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.topic-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+  
+  &:hover {
+    background: #a8a8a8;
+  }
+} 

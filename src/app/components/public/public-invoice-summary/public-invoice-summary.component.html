@@ -1,0 +1,105 @@
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+
+<main *ngIf="invoiceData && !errorMessage" style="background: #f5f4fe;">
+	<div class="row m-2 d-flex justify-content-between" style="padding: 20px 0 0 0;">
+		<div>
+			<button class="custom-btn print-btn my-1" style="height: 40px;width: 130px;font-size: 14px;"
+				(click)="printInvoice()">
+				Print Invoice
+			</button>
+		</div>
+		<div *ngIf="invoiceData.service_type">
+			<button class="custom-btn button2 my-1" style="height: 40px;width: 200px; font-size: 14px; padding: 10px;"
+				(click)="sendInvoiceToCustomer()">
+				Send Invoice to customer
+			</button>
+		</div>
+	</div>
+
+	<section class="invoice" id="print-section">
+		<div class="container p-0">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="d-flex justify-content-between bd-highlight mb-3 invoice-header  p-4">
+						<div class="p-2 bd-highlight ml-2" style="margin: auto 0;">
+							<p class="my-1 invoice-head--text">Paid Invoice {{invoiceData.invoice_number}}</p>
+							<p class="m-0 invoice-text--booking">Booking # {{invoiceData.reservation_id}}</p>
+						</div>
+						<div class="bd-highlight invoice-p m-3">
+							Paid Amount
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12" *ngIf="invoiceData.service_type">
+					<div class="invoice-passenger mx-3">
+						<div class="d-flex bd-highlight invoice-subhead p-4 col-12 mr-2">
+							<div class="mr-auto  col-6 p-2 bd-highlight invoice-status-bar" *ngIf="invoiceData.service_type">
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Service Type: <span class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
+								</p>
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Invoice Status: <span class="invoice-text-bold invoice-status-bar">{{invoiceData?.invoice_status | titlecase}} Invoice</span>
+								</p>
+							</div>
+							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
+								<p class="m-1 invoice-p text-white invoice-status-bar">Date of Service:<span class="invoice-text-bold invoice-status-bar">{{invoiceData.date_of_service}}</span></p>
+								<p class="m-1 invoice-p text-white invoice-status-bar">Invoice Date:<span class="invoice-text-bold invoice-status-bar">{{invoiceData.created_at}}</span></p>
+							</div>
+						</div>
+
+						<div class="invoice-passenger m-3">
+							<div class="invoice-subhead px-3">
+								<div class="mr-auto p-2 bd-highlight">
+									<p class="m-0 text-charges">Charges</p>
+								</div>
+							</div>
+							<div class="div" *ngIf="invoiceData.priceDetail">
+								<div class="col-md-12 p-3 row" *ngFor="let priceObj of invoiceData.priceDetail | keyvalue">
+									<div class="col-5">
+										<p class="invoice-text-charges">{{priceObj.key}}</p>
+									</div>
+									<div class="col-4">
+										<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
+											<li style="margin-bottom: 8px;" class="invoice-charges-textb" *ngFor="let price of priceObj.value">
+												<span *ngIf="price.amount">{{price.rate_label}}</span>
+											</li>
+										</ul>
+									</div>
+									<div class="col-3 d-flex justify-content-end">
+										<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
+											<li style="margin-bottom: 8px; " class="invoice-charges-textb " *ngFor="let price of priceObj.value">
+												<span class="font-weight-bold" *ngIf="price.amount">{{currencySymbol+price.amount}}</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="invoice-subhead px-3">
+									<div class="row d-flex justify-content-between">
+										<p class="m-0 p-1 text-charges">Sub Total</p>
+										<p class="m-0 p-1 text-charges"><span>{{currencySymbol}}</span>{{invoiceData?.sub_total?.toFixed(2)}}</p>
+									</div>
+									<div class="row d-flex justify-content-between">
+										<p class="m-0 p-1 text-charges">Total-Amount</p>
+										<p class="m-0 p-1 text-charges font-weight-bold"><span>{{currencySymbol}}</span>{{invoiceData?.grand_total?.toFixed(2)}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+<section *ngIf="errorMessage" class="p-4">
+	<p class="text-danger">{{errorMessage}}</p>
+</section>
+
+
