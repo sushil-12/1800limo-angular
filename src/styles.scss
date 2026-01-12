@@ -415,6 +415,13 @@ section {
     z-index: auto !important;
 }
 
+.mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled.mdc-text-field--no-label {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+    height: 30px !important;
+}
+
+
 // override mat radio lable css
 .mat-mdc-radio-button .mdc-form-field label{
     margin-bottom: 0;
@@ -445,3 +452,4 @@ div.mat-mdc-autocomplete-panel{
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
+.pac-container .pac-logo{top:450px !important;}

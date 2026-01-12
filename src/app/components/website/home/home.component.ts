@@ -1038,17 +1038,45 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	/**
 	 * update values of specific function calls to form
 	 */
+	getNextQuarterHour(time: string): string {
+		const [h, m] = time.split(':').map(Number);
+	
+		let hours = h;
+		let minutes = m;
+	
+		// Round UP to next 15 min
+		minutes = Math.ceil(minutes / 15) * 15;
+	
+		if (minutes === 60) {
+			minutes = 0;
+			hours = (hours + 1) % 24;
+		}
+	
+		return `${hours.toString().padStart(2, '0')}:${minutes
+			.toString()
+			.padStart(2, '0')}:00`;
+	}
 	changeDetection = {
 		pickupDate: (value: any) => {
-			console.log('--->>>>', value.format("YYYY-MM-DD"))
+			console.log('timeeee--->>>>', value.format("YYYY-MM-DD"))
 			this.SetFormValue('pickup_date', value.format("YYYY-MM-DD"))
 		},
-		pickupTime: (event: any = null, form_control: string) => {
-			if (event == null) {
-				return ''
-			}
-			console.log('Pickup Time Event: ', event.target.value)
-			this.SetFormValue(form_control, event.target.value)
+		// pickupTime: (event: any = null, form_control: string) => {
+		// 	if (event == null) {
+		// 		return ''
+		// 	}
+		// 	console.log('Pickup Time Event: ', event.target.value)
+		// 	this.SetFormValue(form_control, event.target.value)
+		// },
+		pickupTime: (event: any, form_control: string) => {
+			if (!event?.target?.value) return;
+		
+			const rawTime = event.target.value; // "03:07"
+			const roundedTime = this.getNextQuarterHour(rawTime);
+		
+			console.log('Rounded Time:', roundedTime);
+		
+			this.SetFormValue(form_control, roundedTime);
 		},
 		return_pickup_date: (value: any) => {
 			console.log('value-- return ', value.format("YYYY-MM-DD"))
@@ -1815,7 +1843,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Destination carousel
 			$('.destinationCarousel').owlCarousel({
 				loop: true,
-				autoplay: true,
+				autoplay: false,
 				dotsEach: 3,
 				dots: true,
 				autoplayTimeout: 2000,
@@ -1840,7 +1868,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						items: 3, // Desktop: 3 items
 						nav: true,
 						loop: true,
-						autoplay: true,
+						autoplay: false,
 						margin: 10,
 						dots:true
 					}
@@ -1857,7 +1885,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				autoplayHoverPause: true,
 				margin: 10,
 				responsiveClass: true,
-				items: 3, 
 				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
 				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
 				responsive: {

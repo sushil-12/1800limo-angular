@@ -5331,7 +5331,31 @@ header .navbar-toggler {
 
 
 @media only screen and (max-width:440px) {
+	.personalized_wrapper .outer_div_pw {
+        display: flex;
+        flex-direction: column;
+    }
 
+    /* Flatten the text container */
+    .personalized_wrapper .personalized_text {
+        display: contents;
+    }
+
+    /* Order exactly as required */
+    .personalized_wrapper .order-two {   /* heading */
+        order: 1;
+		padding-top:20px !important;
+    }
+
+    .personalized_wrapper .order-img {   /* image */
+        order: 2;
+    }
+
+    .personalized_wrapper .order-three { /* paragraph */
+        order: 3;
+		text-align: center !important;
+		padding: 20px !important;
+    }
 	.bannerform_wrapper,
 	.personalized_wrapper {
 		margin: 0 !important;
@@ -5481,11 +5505,11 @@ header .navbar-toggler {
 	}
 
 	.discover_diff_inner_columns h4 {
-		font-size: 18px;
+		font-size: 18px !important;
 	}
 	
 	.discover_diff_inner_columns p {
-		font-size: 13px;
+		font-size: 15px !important;
 	}
 
 	.how_works_wrapper {
@@ -5815,3 +5839,29 @@ header .navbar-toggler {
   .store-img:hover {
 	transform: scale(1.05);
   }
+  .order-img{max-height: 200px !important; min-height: 200px !important;}
+
+  /* Remove Angular Material background & underline */
+.date-input .mat-form-field-flex {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.date-input .mat-form-field-underline,
+.date-input .mat-form-field-ripple {
+    display: none !important;
+}
+
+/* Match bootstrap input */
+.date-input .mat-input-element {
+    height: 30px !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Remove label spacing */
+.date-input .mat-form-field-wrapper {
+    padding-bottom: 0;
+}
