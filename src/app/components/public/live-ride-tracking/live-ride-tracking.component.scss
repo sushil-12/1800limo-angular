@@ -280,6 +280,30 @@
   color: #9ca3af;
 }
 
+.timeline-eta {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.eta-label {
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eta-distance {
+  color: #9ca3af;
+  font-weight: 400;
+  font-size: 11px;
+}
+
 /* Booking Footer */
 .booking-footer {
   padding: 16px;

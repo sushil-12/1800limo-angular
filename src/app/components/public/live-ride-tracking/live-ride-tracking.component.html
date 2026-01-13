@@ -74,6 +74,11 @@
           <div class="timeline-time">
             {{ rideData.pickup_time ? (rideData.pickup_time | date:'shortTime') : '--:--' }}
           </div>
+          <div *ngIf="estimatedTimeToPickup && (rideData.status.includes('pu') || rideData.status === 'en_route')" 
+               class="timeline-eta">
+            <span class="eta-label">ETA:</span> {{ estimatedTimeToPickup }}
+            <span *ngIf="estimatedDistanceToPickup" class="eta-distance">({{ estimatedDistanceToPickup }})</span>
+          </div>
         </div>
       </div>
 

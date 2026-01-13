@@ -83,6 +83,7 @@ import { DriverDetailsComponent } from './components/subscription/driver-details
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { FarmOutBookingsComponent } from './components/subscription/farm-out-bookings/farm-out-bookings.component';
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
+import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 @NgModule({
@@ -136,6 +137,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 		AddDriverSubscriberComponent,
 		FarmOutBookingsComponent,
 		TutorialsComponent,
+		LiveRideTrackingComponent,
 	],
 	imports: [
 		BrowserModule,

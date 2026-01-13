@@ -136,12 +136,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 
 }
 
-@media (max-width: 500px) {
-    .pac-container.pac-logo {
-        width: 320px !important;
-        top: 620px !important;
-    }
-}
+
 @media (min-width: 501px) and (max-width: 767px) {
     .pac-container.pac-logo {
         width: 320px !important;
@@ -154,12 +149,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         top: 478px !important;
     }
 }
-@media (min-width: 821px) and (max-width: 1180px) {
-    .pac-container.pac-logo {
-        width: 380px !important;
-        top: 450px !important;
-    }
-}
+
 @media only screen and (max-width: 991px) {
     .dropdown-menu.show {
         width: auto;
