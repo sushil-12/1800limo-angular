@@ -365,8 +365,13 @@ export class FarmOutComponent implements OnInit {
 		}
 	}
 	FormatDate(date: string) {
-		return moment(date).format("ll");
+		const m = moment(date);
+		if (m.isSame(moment(), 'day')) {
+			return 'Today';
+		}
+		return m.format("ll");
 	}
+
 	textFormatter(text: string) {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')

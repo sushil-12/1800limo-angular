@@ -850,7 +850,11 @@ export class FarmOutBookingsComponent implements OnInit {
 	}
 
 	FormatDate(date: string) {
-		return moment(date).format("ll");
+		const m = moment(date);
+		if (m.isSame(moment(), 'day')) {
+			return 'Today';
+		}
+		return m.format("ll");
 	}
 
 	FormatTime(time: string) {

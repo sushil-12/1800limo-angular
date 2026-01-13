@@ -173,7 +173,7 @@
         min-width: 30px;
         width: 30px;
         height: 30px;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         margin-right: 10px;
         box-shadow: none;
     }
@@ -371,7 +371,7 @@ section {
 	scale: 1.2;
 	transform: rotate(90deg);
 }
-.ride-now-para{padding-top:60px; padding-right:15px; padding-left:15px; text-align: justify !important;font-size:17px;}
+.ride-now-para{margin:auto; padding-right:15px; padding-left:15px; text-align: justify !important;font-size:17px;}
 .ride-now-container .container-fluid{padding:0 !important;}
 // .swap_btn_roundtrip {
 // 	transform: rotate(90deg);
@@ -474,7 +474,7 @@ section {
 	}
 	.owl-carousel .owl-nav button.owl-next{display:none !important;}
 	.whychoose_no img{padding:10px !important;}
-	.ride-now-para{padding-top:30px; padding-right:15px; padding-left:15px; text-align: justify !important;font-size:17px;}
+	.ride-now-para{margin:auto; padding-right:15px; padding-left:15px; text-align: justify !important;font-size:17px;}
 	.viewVehicleCarousel .owl-nav button.owl-prev,.viewClientLogo .owl-nav button.owl-prev,
 	.viewVehicleCarousel .owl-nav button.owl-next, .viewClientLogo .owl-nav button.owl-next {
 		display: none;
@@ -498,7 +498,7 @@ section {
 	.gear-bg-black {
 		color: #000 !important;
 	}
-	.ride-now-para{padding-top:10px; padding-right:10px; padding-left:10px; text-align: justify !important;font-size:17px;}
+	.ride-now-para{margin:auto; padding-right:10px; padding-left:10px; text-align: justify !important;font-size:17px;}
 
 	#showCountriesModal .modal-content hr {
 		border: 2px solid #000;
@@ -564,7 +564,7 @@ section {
 		display: none !important;
 	}
 	.whychoose_no img{padding:10px !important;}
-	.ride-now-para{padding-top:10px; padding-right:15px; padding-left:15px; text-align: justify !important; font-size:17px;}
+	.ride-now-para{margin:auto; padding-right:15px; padding-left:15px; text-align: justify !important; font-size:17px;}
 
 	#myModal .modal-content hr {
 		border: 2px solid #fff;
