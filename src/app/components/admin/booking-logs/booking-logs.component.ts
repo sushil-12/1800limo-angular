@@ -118,9 +118,14 @@ export class BookingLogsComponent implements OnInit {
       return columnData[columnName]
     }
   }
-  FormatDate(date:any){
-    return moment(date).format('lll');
-  }
+  FormatDate(date: string) {
+    const m = moment(date);
+    if (m.isSame(moment(), 'day')) {
+        return 'Today';
+    }
+    return m.format("ll");
+}
+
   handleKeypressEvents() {
 		clearTimeout(this.timer)
 	}

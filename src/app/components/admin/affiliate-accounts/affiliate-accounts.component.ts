@@ -111,6 +111,11 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 
+	onChangeFilterType(value: string) {
+		console.log('Changing Filter Type: ', value)
+		this.filter_type = value
+		this.loadAffiliateOperators()
+	}
 	affiliateTypeSwitch(_affiliateType: string) {
 		switch (_affiliateType) {
 			case 'black-limo-operator': {
@@ -156,12 +161,6 @@ export class AffiliateAccountsComponent implements OnInit {
 		}
 	}
 
-	onChangeFilterType(value: string) {
-		console.log('Changing Filter Type: ', value)
-		this.filter_type = value
-		this.loadAffiliateOperators()
-	}
-
 	timer: any
 	handleSearchKeyword(text: any) {
 		console.log('on change search text-->>', text)
@@ -193,14 +192,16 @@ export class AffiliateAccountsComponent implements OnInit {
 		console.log(`scrolling to ${id}`, el);
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
-
+	handleSearch() {
+		if (this.searchText && this.searchText.length > 0) {
+			this.filter_type = 'all';
+			console.log('Setting filter_type to all due to search keyword');
+		}
+		this.loadAffiliateOperators();
+	}
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
 		var keyword = this.searchText?.replace(/&/g, '%26')
-		if (keyword.length > 0) {
-			this.filter_type = 'all'
-			console.log('keyword--->>>', keyword, this.filter_type)
-		}
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('affiliates_table')
