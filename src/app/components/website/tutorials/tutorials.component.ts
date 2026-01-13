@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from '../../../services/admin.service';
+import { WebsiteService } from 'src/app/services/website.service';
 declare var $: any;
 
 @Component({
@@ -14,10 +15,239 @@ export class TutorialsComponent implements OnInit {
 
   public fleetContents: any;
   groupedTutorials: any;
+  clientImages: any[] = [];
+  homePageData: any;
+  stepRotationInterval: any;
+	currentActiveStep: number = 1;
+	progressWidth: number = 25; // Progress line width percentage
+  constructor(private adminServices: AdminService, private spinner: NgxSpinnerService, private websiteService: WebsiteService,) { }
+  fetchHomePageData() {
+		this.spinner.show()
 
-  constructor(private adminServices: AdminService, private spinner: NgxSpinnerService) { }
+		this.websiteService.fetchHomePageData()
+			.pipe(
+				catchError(err => {
+					this.spinner.hide()
+					return throwError(err)
+				})
+			).subscribe(({ data }: any) => {
+				this.spinner.hide()
+				console.log(data, "gsducgjsdgcfugsdu")
+				this.homePageData = data;
+				this.clientImages = this.fetchPageData('SOME OF OUR CLIENTS')?.images || [];
+				console.log(this.clientImages,"imagessss")
+				// Initialize all carousels after data is loaded
+				setTimeout(() => {
+					this.initOtherCarousels();
+					this.initStepRotation(); // Initialize step rotation animation
+				}, 100);
+			})
+			
+	}
+  fetchPageData(section: string) {
+		if (section != undefined && this.homePageData != undefined) {
+			if (this.homePageData) {
+				for (let item in this.homePageData) {
+					if (this.homePageData[item].hasOwnProperty('title') && this.homePageData[item]['title'].toLowerCase() == section.toLowerCase()) {
+						return this.homePageData[item]
+					}
+				}
+			}
+		}
+	}
+  initOtherCarousels() {
+    // Initialize all other carousels with 1 item on mobile
+    setTimeout(() => {
+      // General owl carousels
+      $('.owl-carousels').owlCarousel({
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        dotsEach: 3,
+        dots: true,
+        autoplayHoverPause: true,
+        margin: 10,
+        responsiveClass: true,
+        // navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+        // 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+        responsive: {
+          0: {
+            items: 1, // Mobile: 1 item
+            nav: false,
+            loop: true,
+            dots: true
+          },
+          600: {
+            items: 2, // Tablet: 2 items
+            nav: true,
+            dots: true
+          },
+          1000: {
+            items: 3, // Desktop: 3 items
+            nav: true,
+            loop: true,
+            autoplay: true,
+            margin: 20
+          }
+        }
+      });
+  
+      // Destination carousel
+      $('.destinationCarousel').owlCarousel({
+        loop: true,
+        autoplay: false,
+        dotsEach: 3,
+        dots: true,
+        autoplayTimeout: 2000,
+        autoplayHoverPause: true,
+        margin: 10,
+        responsiveClass: true,
+        // navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+        // 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+        responsive: {
+          0: {
+            items: 1, // Mobile: 1 item
+            nav: false,
+            loop: true,
+            dots: true
+          },
+          600: {
+            items: 2, // Tablet: 2 items
+            nav: true,
+            dots: true
+          },
+          1000: {
+            items: 3, // Desktop: 3 items
+            nav: true,
+            loop: true,
+            autoplay: false,
+            margin: 10,
+            dots:true
+          }
+        }
+      });
+  
+      // View vehicle carousel
+      $('.viewVehicleCarousel').owlCarousel({
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        dotsEach: 3,
+        dots:true,
+        autoplayHoverPause: true,
+        margin: 10,
+        responsiveClass: true,
+        // navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+        // 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+        responsive: {
+          0: {
+            items: 1, // Mobile: 1 item
+            nav: false,
+            loop: true,
+            dots: true
+          },
+          600: {
+            items: 2, // Tablet: 2 items
+            nav: true,
+            dots: true
+          },
+          1000: {
+            items: 3, // Desktop: 3 items
+            nav: true,
+            loop: true,
+            autoplay: true,
+            margin: 20,
+            dots: true
+          }
+        }
+      });
+  
+      // View vehicle carousel
+      $('.viewClientLogo').owlCarousel({
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 2000,
+        dotsEach: 3,
+        dots:true,
+        autoplayHoverPause: true,
+        margin: 10,
+        responsiveClass: true,
+        // navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+        // 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+        responsive: {
+          0: {
+            items: 1, // Mobile: 1 item
+            nav: false,
+            loop: true,
+            dots: true
+          },
+          600: {
+            items: 2, // Tablet: 2 items
+            nav: true,
+            dots: true
+          },
+          1000: {
+            items: 3, // Desktop: 3 items
+            nav: true,
+            loop: true,
+            autoplay: true,
+            margin: 20,
+            dots: true
+          },
+          1199: {
+            items: 4, // Desktop: 3 items
+            nav: true,
+            loop: true,
+            autoplay: true,
+            margin: 20,
+            dots: true
+          },
+          1380: {
+            items: 5, // Desktop: 3 items
+            nav: true,
+            loop: true,
+            autoplay: true,
+            margin: 20,
+            dots: true
+          }
+        }
+      });
+  
+      // client_logo carousel is now handled by Swiper in initClientCarousel() method
+    }, 200);
+  }
+  initStepRotation() {
+		this.startStepRotation();
+	}
+  startStepRotation() {
+		// Clear any existing interval
+		if (this.stepRotationInterval) {
+			clearInterval(this.stepRotationInterval);
+		}
 
+		// Start with step 1
+		this.currentActiveStep = 1;
+		this.updateProgress(); // Set initial state
+
+		// Rotate through steps every 2 seconds (faster animation)
+		this.stepRotationInterval = setInterval(() => {
+			this.currentActiveStep++;
+			if (this.currentActiveStep > 4) {
+				this.currentActiveStep = 1; // Loop back to start
+			}
+			this.updateProgress();
+		}, 1000); // 2 seconds per step for faster flow
+	}
+  updateProgress() {
+		// Calculate width: 
+		// Step 1 = 0%, Step 2 = 33%, Step 3 = 66%, Step 4 = 100% of the LINE width.
+		// Since there are 3 segments connecting 4 points:
+		const segments = 3;
+		const stepIndex = this.currentActiveStep - 1;
+		this.progressWidth = (stepIndex / segments) * 100;
+	}
   ngOnInit(): void {
+    this.fetchHomePageData();
     $(document).ready(function () {
       $('.client_logo').owlCarousel({
         loop: true,
