@@ -1,16 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { io, Socket } from 'socket.io-client';
 
 declare var google: any;
-declare var io: any;
 
-interface Socket {
-  on(event: string, callback: Function): void;
-  disconnect(): void;
-  connected: boolean;
-  id: string;
-  io?: any;
-}
 
 @Component({
   selector: 'app-live-ride-tracking',
@@ -24,13 +17,22 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
   rideData: any = null;
   pathHistory: any[] = [];
   error: string | null = null;
+  estimatedTimeToPickup: string | null = null;
+  estimatedDistanceToPickup: string | null = null;
 
   private socket: Socket | null = null;
   private googleMap: any = null;
   private markers: { driver: any; pickup: any; dropoff: any } = { driver: null, pickup: null, dropoff: null };
   private directionsRenderer: any = null;
+  private directionsRendererPickupToDropoff: any = null;
   private historyPolyline: any = null;
   private lastRouteUpdate = 0;
+  private routeCalculated = false;
+  private pickupToDropoffRouteCalculated = false;
+  private currentUserId: number | null = null;
+  private currentBookingId: string | number | null = null;
+  private currentCustomerId: string | number | null = null;
+  private connectionCheckInterval: any = null;
   private readonly SECRET = 'LIMO_LIVE_TRACK_SECRET_2026'; // keep same everywhere
   private readonly TOKEN_LENGTH = 32;
 
@@ -60,8 +62,17 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnDestroy(): void {
+    // Clear connection check interval
+    if (this.connectionCheckInterval) {
+      clearInterval(this.connectionCheckInterval);
+      this.connectionCheckInterval = null;
+    }
+    
+    // Disconnect socket and remove all listeners
     if (this.socket) {
+      this.socket.removeAllListeners();
       this.socket.disconnect();
+      this.socket = null;
     }
   }
 
@@ -79,12 +90,20 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
       ]
     });
 
-    // Route Line (Black)
+    // Route Line (Black) - Driver to destination
     this.directionsRenderer = new google.maps.DirectionsRenderer({
       map: this.googleMap,
       suppressMarkers: true,
       preserveViewport: true,
       polylineOptions: { strokeColor: '#111827', strokeWeight: 5, strokeOpacity: 0.9 }
+    });
+
+    // Route Line (Blue) - Pickup to Dropoff (always visible)
+    this.directionsRendererPickupToDropoff = new google.maps.DirectionsRenderer({
+      map: this.googleMap,
+      suppressMarkers: true,
+      preserveViewport: true,
+      polylineOptions: { strokeColor: '#3b82f6', strokeWeight: 4, strokeOpacity: 0.7 }
     });
 
     // History Trail (Gray)
@@ -98,94 +117,218 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
     });
   }
 
+  /**
+   * Initialize Socket.IO connection with backend
+   * 
+   * BACKEND FLOW (MUST MATCH):
+   * 1. Client connects with auth: { userId, userType: 'customer', secret }
+   * 2. Client MUST emit 'join-room' with { room: customerId } to receive events
+   * 3. Backend emits 'active_ride' on connection
+   * 4. Client extracts bookingId/customerId from active_ride
+   * 5. Client ensures room membership (customerId preferred, bookingId fallback)
+   * 6. Backend emits 'driver.location.update' ONLY to joined rooms
+   * 7. On reconnect, client MUST rejoin all rooms
+   */
   private initializeSocket(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-    const encodedUserId = urlParams.get('tracking_id');
+    // Get tracking_id from route parameter (encoded customerId)
+    const encodedUserId = this.route.snapshot.paramMap.get('tracking_id');
     const userId = this.decodeId(encodedUserId);
 
     console.log('Initializing socket with tracking_id:', encodedUserId, 'decoded userId:', userId);
 
     if (!userId) {
-      this.error = 'Invalid or Missing Link';
+      this.error = 'Invalid or Missing Tracking ID';
       console.error('Invalid tracking_id:', encodedUserId);
       return;
     }
 
+    // Store userId for room joining (this is the customerId)
+    this.currentUserId = userId;
+
     const socketUrl = 'https://limortservice.infodevbox.com';
     console.log('Connecting to socket URL:', socketUrl);
 
-    this.socket = io(socketUrl, {
-      transports: ['polling', 'websocket'],
-      auth: { userId: userId, userType: 'customer', secret: 'limoapi_notifications_secret_2024_xyz789' }
-    });
-
-    this.socket.on('connect', () => {
-      console.log('Socket connected successfully');
-      this.status = 'Connected';
-    });
-
-    this.socket.on('disconnect', (reason: any) => {
-      console.log('Socket disconnected:', reason);
-      this.status = 'Disconnected';
-    });
-
-    this.socket.on('connect_error', (error: any) => {
-      console.error('Socket connection error:', error);
-      this.status = 'Connection Error';
-    });
-    this.attachSocketDebugger(this.socket);
-    // Add periodic connection check
-    setInterval(() => {
-      console.log('Socket status check:', {
-        connected: this.socket?.connected,
-        id: this.socket?.id,
-        transport: (this.socket as any)?.io?.engine?.transport?.name
+    try {
+      // Connect with authentication (backend validates secret & userId)
+      this.socket = io(socketUrl, {
+        transports: ['polling', 'websocket'],
+        auth: { 
+          userId: userId, 
+          userType: 'customer', 
+          secret: 'limoapi_notifications_secret_2024_xyz789' 
+        },
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        timeout: 20000
       });
-    }, 10000); // Check every 10 seconds
 
-    const handleData = (data: any, type: string) => this.processRideData(data, type);
+      // STEP 1: On socket connect, join customerId room (primary room for receiving events)
+      this.socket.on('connect', () => {
+        console.log('Socket connected successfully', {
+          id: this.socket?.id,
+          transport: (this.socket as any)?.io?.engine?.transport?.name
+        });
+        this.status = 'Connected';
+        this.error = null;
+        
+        // Join customerId room immediately on connect (backend requirement)
+        // This ensures we receive driver.location.update events
+        this.joinRoom(this.currentUserId?.toString() || null, 'customerId');
+      });
 
-    this.socket.on('active_ride', (d: any) => {
-      console.log('Received active_ride event:', d);
-      handleData(d, 'active_ride');
-    });
+      this.socket.on('disconnect', (reason: any) => {
+        console.log('Socket disconnected:', reason);
+        this.status = 'Disconnected';
+        if (reason === 'io server disconnect') {
+          // Server disconnected the socket, need to reconnect manually
+          this.socket?.connect();
+        }
+      });
 
-    this.socket.on('chat_message', (d: any) => {
-      console.log('Received chat_message event:', d);
-      handleData(d, 'chat_message');
-    });
+      this.socket.on('connect_error', (error: any) => {
+        console.error('Socket connection error:', error);
+        this.status = 'Connection Error';
+        this.error = `Connection failed: ${error.message || 'Unable to connect to server'}`;
+      });
 
-    this.socket.on('driver_location_update', (d: any) => {
-      console.log('Received driver.location.update event:', d);
-      handleData(d, 'driver_loc');
-    });
+      // STEP 2: On reconnect, rejoin all necessary rooms
+      this.socket.on('reconnect', (attemptNumber: number) => {
+        console.log('Socket reconnected after', attemptNumber, 'attempts');
+        this.status = 'Connected';
+        this.error = null;
+        
+        // Rejoin customerId room (always rejoin on reconnect)
+        this.joinRoom(this.currentUserId?.toString() || null, 'customerId');
+        
+        // Rejoin bookingId room if we have an active booking
+        if (this.currentBookingId) {
+          this.joinRoom(this.currentBookingId.toString(), 'bookingId');
+        }
+      });
 
-    this.socket.on('driver.location.update', (d: any) => {
-      console.log('Received driver.location.update event:', d);
-      handleData(d, 'driver_loc');
-    });
+      this.socket.on('reconnect_attempt', (attemptNumber: number) => {
+        console.log('Reconnection attempt', attemptNumber);
+        this.status = `Reconnecting... (${attemptNumber})`;
+      });
 
-    this.socket.on('user.notifications', (d: any) => {
-      console.log('Received user.notifications event:', d);
-      handleData(d, 'notification');
-    });
+      this.socket.on('reconnect_error', (error: any) => {
+        console.error('Reconnection error:', error);
+        this.status = 'Reconnection Failed';
+      });
+
+      this.socket.on('reconnect_failed', () => {
+        console.error('Reconnection failed after all attempts');
+        this.status = 'Connection Failed';
+        this.error = 'Unable to connect to server. Please refresh the page.';
+      });
+
+      // STEP 3: Setup event handlers for backend events
+      const handleData = (data: any, type: string) => this.processRideData(data, type);
+
+      // STEP 3a: active_ride - Backend sends this on connection to provide ride context
+      // After receiving this, we extract bookingId and customerId, then ensure correct room membership
+      this.socket.on('active_ride', (d: any) => {
+        console.log('Received active_ride event:', d);
+        handleData(d, 'active_ride');
+        
+        // Extract bookingId and customerId from active_ride to ensure room membership
+        const rideData = d.data || d;
+        const bookingId = rideData.booking_id || rideData.bookingId;
+        const customerId = rideData.customer_id || rideData.customerId || 
+                          (rideData.customer?.id) || this.currentUserId?.toString();
+        
+        if (bookingId) {
+          this.currentBookingId = bookingId;
+          // Join bookingId room as fallback (backend uses bookingId room if customerId unavailable)
+          this.joinRoom(bookingId.toString(), 'bookingId');
+        }
+        
+        if (customerId && customerId !== this.currentUserId?.toString()) {
+          this.currentCustomerId = customerId;
+          // Ensure customerId room is joined (preferred room)
+          this.joinRoom(customerId.toString(), 'customerId');
+        }
+      });
+
+      // STEP 3b: driver.location.update - EXACT backend event name (NOT driver_location_update)
+      // Backend emits: io.to(customerId).emit('driver.location.update', payload)
+      // Only process if bookingId matches current active ride
+      this.socket.on('driver.location.update', (d: any) => {
+        // Validate bookingId matches before processing
+        const locationBookingId = d.bookingId || d.booking_id;
+        if (this.currentBookingId && locationBookingId && 
+            locationBookingId.toString() !== this.currentBookingId.toString()) {
+          console.log('Ignoring driver.location.update - bookingId mismatch:', {
+            received: locationBookingId,
+            expected: this.currentBookingId
+          });
+          return;
+        }
+        
+        console.log('Received driver.location.update event:', d);
+        handleData(d, 'driver_loc');
+      });
+
+      // STEP 3c: user.notifications - Backend sends ride status updates
+      this.socket.on('user.notifications', (d: any) => {
+        console.log('Received user.notifications event:', d);
+        handleData(d, 'notification');
+      });
+
+      // STEP 3d: chat_message - Optional chat support
+      this.socket.on('chat_message', (d: any) => {
+        console.log('Received chat_message event:', d);
+        handleData(d, 'chat_message');
+      });
+      
+      // Production-safe connection monitoring (only log warnings, not every status check)
+      this.connectionCheckInterval = setInterval(() => {
+        if (!this.socket?.connected) {
+          console.warn('Socket connection lost - will attempt reconnection');
+        }
+      }, 10000);
+    } catch (error: any) {
+      console.error('Error initializing socket:', error);
+      this.error = `Failed to initialize connection: ${error.message || 'Unknown error'}`;
+      this.status = 'Initialization Error';
+    }
   }
 
   private processRideData(incomingData: any, type: string): void {
     console.log('Processing ride data:', { type, data: incomingData });
     let lat: number, lng: number, bookingId: any;
 
-    // Extract Driver Location
+    // Extract Driver Location from driver.location.update event
+    // Backend payload structure: { latitude, longitude, bookingId, customerId, ... }
     if (type === 'driver_loc') {
       lat = parseFloat(incomingData.latitude);
       lng = parseFloat(incomingData.longitude);
-      bookingId = incomingData.bookingId;
+      bookingId = incomingData.bookingId || incomingData.booking_id;
+      
+      // Additional validation: only process if bookingId matches current ride
+      if (this.currentBookingId && bookingId && 
+          bookingId.toString() !== this.currentBookingId.toString()) {
+        console.log('Skipping driver location - bookingId mismatch');
+        return;
+      }
+      
       console.log('Extracted driver location:', { lat, lng, bookingId, rawData: incomingData });
     } else {
+      // Extract from active_ride or user.notifications payload
       const d = incomingData.data || incomingData;
       lat = parseFloat(d.driver_latitude || d.driver_lat || d.location?.latitude);
       lng = parseFloat(d.driver_longitude || d.driver_lng || d.location?.longitude);
       bookingId = d.booking_id || d.bookingId;
+      
+      // Store bookingId and customerId for room management
+      if (bookingId && !this.currentBookingId) {
+        this.currentBookingId = bookingId;
+      }
+      const customerId = d.customer_id || d.customerId || (d.customer?.id);
+      if (customerId && !this.currentCustomerId) {
+        this.currentCustomerId = customerId;
+      }
     }
 
     // Update Path History
@@ -204,6 +347,8 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
         driver_lat: lat,
         driver_lng: lng
       };
+      // Force route recalculation on driver location update (for ETA updates)
+      this.lastRouteUpdate = 0;
       // Update map after driver location changes
       setTimeout(() => this.updateMapVisuals(), 100);
       return;
@@ -248,13 +393,12 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
   private updateMapVisuals(): void {
     if (!this.rideData || !this.googleMap) return;
 
-    // Car Icon
+    // Car Icon - Using custom car logo image
     const carIcon = {
-      url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24"><path fill="#111827" stroke="white" stroke-width="1.5" d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>`
-      )}`,
-      scaledSize: new google.maps.Size(44, 44),
-      anchor: new google.maps.Point(22, 22)
+      url: 'assets/images/car_logo.png',
+      scaledSize: new google.maps.Size(48, 48),
+      anchor: new google.maps.Point(24, 24),
+      optimized: false // Prevent Google Maps from optimizing the image
     };
 
     const getPin = (color: string) => ({
@@ -263,34 +407,65 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
       anchor: new google.maps.Point(12, 12)
     });
 
-    // Update Markers
-    if (this.rideData.driver_lat && !isNaN(this.rideData.driver_lat)) {
+    // Update Driver Marker (Car Icon) - Always update position if driver location exists
+    if (this.rideData.driver_lat && !isNaN(this.rideData.driver_lat) && 
+        this.rideData.driver_lng && !isNaN(this.rideData.driver_lng)) {
       const pos = { lat: this.rideData.driver_lat, lng: this.rideData.driver_lng };
       if (!this.markers.driver) {
         this.markers.driver = new google.maps.Marker({
           position: pos,
           map: this.googleMap,
           icon: carIcon,
-          zIndex: 100
+          zIndex: 100,
+          title: 'Driver Location'
         });
       } else {
         this.markers.driver.setPosition(pos);
+        this.markers.driver.setVisible(true);
       }
+    } else if (this.markers.driver) {
+      // Hide driver marker if no location
+      this.markers.driver.setVisible(false);
     }
 
-    if (this.rideData.pickup.lat && !this.markers.pickup) {
-      this.markers.pickup = new google.maps.Marker({
-        position: this.rideData.pickup,
-        map: this.googleMap,
-        icon: getPin('#10b981')
-      });
+    // Update Pickup Marker - Always create/update if coordinates exist
+    if (this.rideData.pickup && this.rideData.pickup.lat && !isNaN(this.rideData.pickup.lat) && 
+        this.rideData.pickup.lng && !isNaN(this.rideData.pickup.lng)) {
+      const pickupPos = { lat: this.rideData.pickup.lat, lng: this.rideData.pickup.lng };
+      if (!this.markers.pickup) {
+        this.markers.pickup = new google.maps.Marker({
+          position: pickupPos,
+          map: this.googleMap,
+          icon: getPin('#10b981'),
+          title: 'Pickup Location',
+          zIndex: 50
+        });
+      } else {
+        this.markers.pickup.setPosition(pickupPos);
+        this.markers.pickup.setVisible(true);
+      }
+    } else if (this.markers.pickup) {
+      this.markers.pickup.setVisible(false);
     }
-    if (this.rideData.dropoff.lat && !this.markers.dropoff) {
-      this.markers.dropoff = new google.maps.Marker({
-        position: this.rideData.dropoff,
-        map: this.googleMap,
-        icon: getPin('#111827')
-      });
+
+    // Update Dropoff Marker - Always create/update if coordinates exist
+    if (this.rideData.dropoff && this.rideData.dropoff.lat && !isNaN(this.rideData.dropoff.lat) && 
+        this.rideData.dropoff.lng && !isNaN(this.rideData.dropoff.lng)) {
+      const dropoffPos = { lat: this.rideData.dropoff.lat, lng: this.rideData.dropoff.lng };
+      if (!this.markers.dropoff) {
+        this.markers.dropoff = new google.maps.Marker({
+          position: dropoffPos,
+          map: this.googleMap,
+          icon: getPin('#111827'),
+          title: 'Dropoff Location',
+          zIndex: 50
+        });
+      } else {
+        this.markers.dropoff.setPosition(dropoffPos);
+        this.markers.dropoff.setVisible(true);
+      }
+    } else if (this.markers.dropoff) {
+      this.markers.dropoff.setVisible(false);
     }
 
     // Update Path History
@@ -298,44 +473,117 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
       this.historyPolyline.setPath(this.pathHistory);
     }
 
-    // Route Logic
+    // Route Logic - Calculate routes
     const now = Date.now();
-    const shouldUpdate = (now - this.lastRouteUpdate > 5000);
+    // Update driver route more frequently (every 3 seconds) when driver is moving
+    const shouldUpdateDriverRoute = !this.routeCalculated || (now - this.lastRouteUpdate > 3000);
+    const directionsService = new google.maps.DirectionsService();
+    const hasDriver = this.rideData.driver_lat && !isNaN(this.rideData.driver_lat);
 
-    if (shouldUpdate) {
-      let origin = null;
+    // ALWAYS show pickup to dropoff route if both locations are available
+    // This route is static and only needs to be calculated once when coordinates are available
+    if (this.rideData.pickup && this.rideData.pickup.lat && !isNaN(this.rideData.pickup.lat) && 
+        this.rideData.pickup.lng && !isNaN(this.rideData.pickup.lng) &&
+        this.rideData.dropoff && this.rideData.dropoff.lat && !isNaN(this.rideData.dropoff.lat) && 
+        this.rideData.dropoff.lng && !isNaN(this.rideData.dropoff.lng)) {
+      
+      // Calculate pickup-to-dropoff route if not already calculated
+      if (!this.pickupToDropoffRouteCalculated && this.directionsRendererPickupToDropoff) {
+        directionsService.route({
+          origin: this.rideData.pickup,
+          destination: this.rideData.dropoff,
+          travelMode: google.maps.TravelMode.DRIVING
+        }, (response: any, status: any) => {
+          if (status === 'OK') {
+            this.directionsRendererPickupToDropoff.setDirections(response);
+            this.pickupToDropoffRouteCalculated = true;
+            console.log('Pickup to dropoff route calculated');
+          } else {
+            console.error('Failed to calculate pickup-to-dropoff route:', status);
+          }
+        });
+      }
+    }
+
+    // Calculate driver route (to pickup or dropoff based on status)
+    // This route updates frequently as driver moves
+    if (shouldUpdateDriverRoute && hasDriver) {
+      let origin = { lat: this.rideData.driver_lat, lng: this.rideData.driver_lng };
       let destination = null;
-      const directionsService = new google.maps.DirectionsService();
 
-      const hasDriver = this.rideData.driver_lat && !isNaN(this.rideData.driver_lat);
-
-      if (hasDriver) {
-        origin = { lat: this.rideData.driver_lat, lng: this.rideData.driver_lng };
-        if (this.rideData.status.includes('pu') || this.rideData.status === 'en_route') {
+      // Determine destination based on ride status
+      if (this.rideData.status.includes('pu') || this.rideData.status === 'en_route' || 
+          this.rideData.status === 'en_route_pu') {
+        // Driver heading to pickup
+        if (this.rideData.pickup && this.rideData.pickup.lat && !isNaN(this.rideData.pickup.lat)) {
           destination = this.rideData.pickup;
-        } else if (this.rideData.status === 'on_location') {
-          destination = null;
-        } else {
-          destination = this.rideData.dropoff;
         }
+      } else if (this.rideData.status === 'on_location') {
+        // Driver at pickup, no route needed
+        destination = null;
       } else {
-        if (this.rideData.pickup.lat && this.rideData.dropoff.lat) {
-          origin = this.rideData.pickup;
+        // Driver heading to dropoff
+        if (this.rideData.dropoff && this.rideData.dropoff.lat && !isNaN(this.rideData.dropoff.lat)) {
           destination = this.rideData.dropoff;
         }
       }
 
-      if (origin && destination && destination.lat) {
+      if (destination && destination.lat && !isNaN(destination.lat) && 
+          destination.lng && !isNaN(destination.lng)) {
         directionsService.route({
           origin: origin,
           destination: destination,
           travelMode: google.maps.TravelMode.DRIVING
         }, (response: any, status: any) => {
           if (status === 'OK') {
+            const isFirstCalculation = !this.routeCalculated;
             this.directionsRenderer.setDirections(response);
             this.lastRouteUpdate = now;
+            this.routeCalculated = true;
+            
+            // Extract estimated time and distance for pickup route
+            if (destination === this.rideData.pickup && response.routes && response.routes[0]) {
+              const route = response.routes[0];
+              const leg = route.legs[0];
+              if (leg) {
+                this.estimatedTimeToPickup = leg.duration?.text || null;
+                this.estimatedDistanceToPickup = leg.distance?.text || null;
+              }
+            }
+            
+            // Center map to show the route on first calculation
+            if (isFirstCalculation) {
+              const bounds = new google.maps.LatLngBounds();
+              if (origin) bounds.extend(origin);
+              if (destination) bounds.extend(destination);
+              if (this.rideData.pickup && this.rideData.pickup.lat && !isNaN(this.rideData.pickup.lat)) {
+                bounds.extend(this.rideData.pickup);
+              }
+              if (this.rideData.dropoff && this.rideData.dropoff.lat && !isNaN(this.rideData.dropoff.lat)) {
+                bounds.extend(this.rideData.dropoff);
+              }
+              // Add padding to ensure route is fully visible
+              this.googleMap.fitBounds(bounds, { padding: 50 });
+            }
+          } else {
+            console.error('Directions request failed:', status);
           }
         });
+      }
+    } else if (!this.routeCalculated && !hasDriver) {
+      // If no driver location, center on pickup/dropoff
+      const bounds = new google.maps.LatLngBounds();
+      if (this.rideData.pickup && this.rideData.pickup.lat && !isNaN(this.rideData.pickup.lat)) {
+        bounds.extend(this.rideData.pickup);
+      }
+      if (this.rideData.dropoff && this.rideData.dropoff.lat && !isNaN(this.rideData.dropoff.lat)) {
+        bounds.extend(this.rideData.dropoff);
+      }
+      if (bounds.getNorthEast() && bounds.getSouthWest()) {
+        this.googleMap.fitBounds(bounds, { padding: 50 });
+      } else if (this.rideData.pickup && this.rideData.pickup.lat && !isNaN(this.rideData.pickup.lat)) {
+        this.googleMap.setCenter(this.rideData.pickup);
+        this.googleMap.setZoom(13);
       }
     }
   }
@@ -409,5 +657,40 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
   
     const userId = parseInt(parts[1], 36);
     return isNaN(userId) ? null : userId;
+  }
+
+  /**
+   * Join a specific room (matching backend requirements)
+   * Backend emits events ONLY to rooms that clients have explicitly joined
+   * 
+   * @param roomId - The room identifier (customerId preferred, bookingId as fallback)
+   * @param roomType - Type of room for logging purposes
+   */
+  private joinRoom(roomId: string | null, roomType: 'customerId' | 'bookingId'): void {
+    if (!this.socket || !this.socket.connected) {
+      console.warn(`Cannot join ${roomType} room - socket not connected`);
+      return;
+    }
+
+    if (!roomId) {
+      console.warn(`Cannot join ${roomType} room - room ID is not available`);
+      return;
+    }
+
+    const roomData = {
+      room: roomId
+    };
+
+    console.log(`Joining ${roomType} room:`, roomId);
+    
+    // Emit join-room event (backend requirement)
+    // Backend will add this socket to the specified room
+    this.socket.emit('join-room', roomData, (response: any) => {
+      if (response && response.error) {
+        console.error(`Failed to join ${roomType} room:`, response.error);
+      } else {
+        console.log(`Successfully joined ${roomType} room:`, roomId);
+      }
+    });
   }
 }

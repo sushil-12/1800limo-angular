@@ -48,6 +48,7 @@ import { PaymentDetailsComponent } from './components/subscription/payment-detai
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
+import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
 
 
 const routes: Routes = [
@@ -363,6 +364,13 @@ const routes: Routes = [
 				loadChildren: () => import('./components/individual/individual.module').then(m => m.IndividualModule)
 			}
 		]
+	},
+	{
+		path: 'live-ride-tracking/:tracking_id',
+		component: LiveRideTrackingComponent,
+		data: {
+			title: 'Live Ride Tracking'
+		}
 	},
 	{
 		path: '**',
