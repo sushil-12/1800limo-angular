@@ -12,23 +12,18 @@
 		</div>
 	</section>
 	<!----OUR CLIENTS------------->
-	<!-- OUR CLIENTS FOR MOBILE -->
-<section class="client_wrapper">
-	<div class="container-fluid">
-		<h2><span>Who Travels With Us</span></h2>
-
-		<div class="client_logo swiper" #clientLogoContainer>
-			<div class="swiper-wrapper">
-				<div class="swiper-slide" *ngFor="let clientLogo of clientImages">
-					<div class="client-logo-item">
-						<img [src]="clientLogo?.path" alt="client logo" loading="lazy" onerror="this.style.display='none'">
+	<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
+		<div class="container-fluid">
+			<h2><span>Who Travels With Us</span></h2>
+			<div class="chk_vehicles_parent">
+				<div class="chk_vehicles owl-carousel owl-theme viewClientLogo">
+					<div class="item" *ngFor="let clientLogo of clientImages">
+						<a class="ns-user">
+							<img [src]="clientLogo?.path" alt="client logo" loading="lazy" onerror="this.style.display='none'">
+						</a>
 					</div>
 				</div>
 			</div>
-			<!-- Navigation buttons -->
-			<div class="client-logo-swiper-button-prev"></div>
-			<div class="client-logo-swiper-button-next"></div>
 		</div>
-	</div>
-</section>
+	</section>
 </div>
