@@ -77,7 +77,7 @@
 			<mat-form-field appearance="outline" class="mobileFieldlogin">
 				<mat-label>Phone Number</mat-label>
 				<input matInput #phoneInput placeholder="1234567890" formControlName="phone" class="phoneNumberClass"
-					tabIndex="1" id="phn-input" autofocus />
+					tabIndex="1" id="phn-input" autofocus style="padding-left:80px !important;" />
 			</mat-form-field>
 			<div *ngIf="submitted && f.phone.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.phone.errors.required">The Phone Number is required</div>

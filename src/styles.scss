@@ -453,3 +453,8 @@ div.mat-mdc-autocomplete-panel{
     padding-bottom: 0 !important;
 }
 .pac-container .pac-logo{top:450px !important;}
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";

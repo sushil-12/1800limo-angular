@@ -90,11 +90,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
-import {MatTableModule} from '@angular/material/table';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
@@ -115,6 +115,7 @@ import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 @NgModule({
 	declarations: [
@@ -215,7 +216,7 @@ import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component';
 		MatDialogModule,
 		MatProgressBarModule,
 		MatSlideToggleModule,
-	    GoogleMapsModule,
+		GoogleMapsModule,
 		MatNativeDateModule,
 		MatFormFieldModule,
 		MatInputModule,
@@ -229,8 +230,12 @@ import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component';
 		MatExpansionModule,
 		MatIconModule,
 		ClipboardModule,
-		NgxChartsModule
+		NgxChartsModule,
+		NgxDaterangepickerMd.forRoot({
+			separator: ' - ',
+			applyLabel: 'Okay',
+		}),
 	],
-	exports: [BookingStatusTextReplacePipe,MatIconModule]
+	exports: [BookingStatusTextReplacePipe, MatIconModule]
 })
 export class AdminModule { }
