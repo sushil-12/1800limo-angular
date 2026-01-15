@@ -7,10 +7,10 @@
 		<div class="container">
 			<!-- PAGE HEADER -->
 			<div class="row imageSection">
-				<div class="col-lg-3 col-6 vehicleImage">
+				<div class="col-lg-3 col-md-6 col-12 vehicleImage">
 					<img *ngIf="vehicle_info?.vehicle_image" [src]="vehicle_info?.vehicle_image" alt="vehicle image" />
 				</div>
-				<div class="col-lg-3 col-6">
+				<div class="col-lg-3 col-md-6 col-12">
 					<ul class="vehicleData">
 						<li>
 							<strong> {{ vehicle_info?.vehicleType }}</strong>
@@ -29,7 +29,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col-lg-6 col-md-12 mt-lg-0 mt-4">
+				<div class="col-lg-6 col-md-12 col-12 mt-lg-0 mt-4">
 					<ol class="alert alert-box alert-danger" style="padding-left: 1.8rem !important;">
 						<li>Enter an all-inclusive rate in each rate bucket with your desired gratuity and office fees.
 						</li>
@@ -51,7 +51,7 @@
 
 			<!-- CURRENCY -->
 			<div class="row">
-				<div class="col-md-12 p-0">
+				<div class="col-12 p-0">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>
 							Currency <span class="asterisk">*</span>
@@ -80,8 +80,8 @@
 		<!-- ROW 1 -->
 		<div class="row mt-4">
 			<!-- RADIO BUTTONS -->
-			<div class="col-md-6 mb-4 mb-md-0">
-				<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
+			<div class="col-md-6 col-12 mb-4 mb-md-0">
+				<div id="card-type-container" class="w-100 d-flex flex-wrap justify-content-center">
 					<div id="cd-mile" class="card-type" [ngClass]="form.km_mile.value == 'mile' ? 'active' : ''"
 						(click)="changeDetection.radioButton('km_mile', 'mile')">
 						<label>Mile</label>
@@ -93,7 +93,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 mb-4">
+			<div class="col-md-6 col-12 mb-4">
 				<label class="alert alert-danger mt-2">
 					Select {{currency_symbol}} rate for the first x {{form.km_mile.value == 'mile' ? 'miles' : 'kms'}},
 					and
@@ -105,7 +105,7 @@
 		</div>
 		<div class="row">
 			<!-- RATE BUCKET: MILEAGE RATE -->
-			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
+			<div class="col-md-4 col-12" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
 				<mat-form-field class="mat-form-field-rates " appearance="outline">
 					<mat-label>{{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -172,7 +172,7 @@
 					</div>
 				</div> -->
 			</div>
-			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'">
+			<div class="col-md-4 col-12" *ngIf="form.km_mile.value == 'mile'">
 				<mat-form-field class="mat-form-field-rates " appearance="outline">
 					<mat-label>Upto x miles<span class="asterisk">*</span></mat-label>
 					<mat-select formControlName="upto_miles" tabindex="1" (onSelectionChange)="updateRateRangeObject()">
@@ -220,7 +220,7 @@
 					</div>
 				</div> -->
 			</div>
-			<div class="col-md-4" *ngIf="form.km_mile.value == 'mile'">
+			<div class="col-md-4 col-12" *ngIf="form.km_mile.value == 'mile'">
 				<mat-form-field class="mat-form-field-rates " appearance="outline">
 					<mat-label>Additional {{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -290,7 +290,7 @@
 
 			<!-- RATE BUCKET: KILOMETER RATE -->
 			<ng-template #kilometer_rate>
-				<div class="col-md-4">
+				<div class="col-md-4 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>{{ currency_symbol }} per km
 							<span class="asterisk">*</span>
@@ -359,7 +359,7 @@
 						</div>
 					</div> -->
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Upto x kms<span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="upto_km" tabindex="1"
@@ -409,7 +409,7 @@
 						</div>
 					</div> -->
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-4 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Additional {{ currency_symbol }} per km
 							<span class="asterisk">*</span>
@@ -483,7 +483,7 @@
 
 		<div class="row">
 			<!-- MIN. AIRPORT ARRIVAL RATE -->
-			<div class="col-md-3">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Airport Rate - Arrival
@@ -526,7 +526,7 @@
 			</div>
 
 			<!-- MIN. AIRPORT DEPARTURE RATE -->
-			<div class="col-md-3">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Airport Rate - Departure
@@ -570,7 +570,7 @@
 			</div>
 
 			<!-- MIN. INTRACITY RATE -->
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum City to Intercity rate <span class="asterisk">*</span>
@@ -601,13 +601,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
-
-
 			<!-- MIN. CRUISE PORT ARRIVAL RATE -->
-			<div class="col-md-3">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Cruise Port Rate - Arrival
@@ -650,9 +645,15 @@
 					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="row">
+
+
+
 
 			<!-- MIN. CRUISE PORT DEPARTURE RATE -->
-			<div class="col-md-3">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Cruise Port Rate - Departure
@@ -697,7 +698,7 @@
 				</div>
 			</div>
 			<!-- HOURLY RATE -->
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Hourly Rate <span class="asterisk">*</span>
@@ -724,7 +725,7 @@
 
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Charter Hours
@@ -746,7 +747,7 @@
 			</div>
 
 			<!-- DISCOUNT AFTER 5 HRS -->
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Discount After 5 Hours?
 						<span class="asterisk">*</span>
@@ -776,7 +777,7 @@
 		</div>
 		<div class="row">
 			<!-- HOURS - DAY RATE EXTENSION -->
-			<div class="col-md-3">
+			<div class="col-md-3 col-sm-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						# Hours = Day Rate Extension
@@ -798,7 +799,7 @@
 			<!-- HOURS - DAY RATE EXTENSION -->
 
 			<!-- DAY RATE EXNTENSION -->
-			<div class="col-md-3">
+			<div class="col-md-3 col-sm-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Day Rate Extension
@@ -818,7 +819,7 @@
 			</div>
 
 			<!-- SHARED RIDE RATE -->
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Shared Ride Rate - Per Person </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -874,11 +875,11 @@
 				</div>
 			</div> -->
 
-			<div class="col-md-12 mt-2">
+			<div class="col-12 mt-2">
 				<label class="alert alert-danger" style="font-size: 0.9rem !important;">
 					You may add Early/Late rate between 11 PM and 5.30 AM.</label>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Early AM / Late PM Surge Rate </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -904,7 +905,7 @@
 				</div>
 			</div>
 
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Friday/Saturday Night Surge Rate </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -929,7 +930,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-3 col-sm-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Extra stop - same town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -948,7 +949,7 @@
 					<div *ngIf="form.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-3 col-sm-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Extra stop - different town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -967,11 +968,11 @@
 					<div *ngIf="form.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
 				</div>
 			</div>
-			<div class="col-md-12 mt-2">
+			<div class="col-12 mt-2">
 				<label class="alert alert-danger" style="font-size: 0.9rem !important;">
 					First 15 mins is free. Enter rate for thereafter.</label>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Wait Time Rate - per 15 min <span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{currency_symbol}} &nbsp;</span>
@@ -990,7 +991,7 @@
 		<!-- ROW 6 -->
 		<div class="row" *ngIf="false">
 			<!-- EARLY AM/LATE PM  -->
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Early AM / Late PM
@@ -1016,7 +1017,7 @@
 		<!-- ROW 7 -->
 		<div class="row" *ngIf="false">
 			<!-- FRIDAY/SATURDAY RATE -->
-			<div class="col-md-6">
+			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Friday/Saturday Night
@@ -1056,8 +1057,8 @@
 			<!-- RATE MANAGER: TYPE/SLIDER-->
 			<div id="radio-button" class="row">
 				<!-- TYPE -->
-				<div class="col-md-6">
-					<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
+				<div class="col-md-6 col-12">
+					<div id="card-type-container" class="w-100 d-flex flex-wrap justify-content-center">
 						<div id="cd-percent" class="card-type"
 							[ngClass]="form.rate_range_percent_flat.value == 'percent' ? 'active' : ''"
 							(click)="changeDetection.radioButton('rate_range_percent_flat', 'percent')">
@@ -1072,7 +1073,7 @@
 				</div>
 
 				<!-- SLIDER -->
-				<div id="rate-manager-slider" class="col-md-6 mt-3 p-0">
+				<div id="rate-manager-slider" class="col-md-6 col-12 mt-3 p-0">
 					<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
 						-
 						<i class="bi text-orange" [ngClass]="
@@ -1108,7 +1109,7 @@
 
 		<!-- GRATUITY -->
 		<!-- <div class="row mb-5">
-			<div class="col-md-12">
+			<div class="col-12">
 				<h3 class="my-3">
 					<label class="alert alert-danger"> Surge Protection </label>
 				</h3>
@@ -1137,7 +1138,7 @@
 					bucket)</span>
 			</h2>
 			<div class="row" [formGroup]="AmenitiesRates">
-				<div class="col-md-3" *ngFor="let  amenity of AmenitiesRates.controls | keyvalue"
+				<div class="col-md-3 col-sm-6 col-12" *ngFor="let  amenity of AmenitiesRates.controls | keyvalue"
 					[formGroupName]="amenity.key">
 					<mat-form-field class="mat-form-field-rates amentitiesLabel" appearance="outline">
 						<mat-label class="amenityLabel">
@@ -1169,7 +1170,7 @@
 			<!-- ROW 1 -->
 			<div class="row">
 				<!-- AIRPORT ARRIVAL TAX -->
-				<div class="col-md-3">
+				<div class="col-md-6 col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Arrival Tax </mat-label>
 						<span matPrefix>
@@ -1193,7 +1194,7 @@
 				</div>
 
 				<!-- AIRPORT DEPARTURE TAX -->
-				<div class="col-md-3">
+				<div class="col-md-6 col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Departure Tax </mat-label>
 						<span matPrefix>
@@ -1218,7 +1219,7 @@
 				</div>
 
 				<!-- SEA PORT TAX -->
-				<div class="col-md-3">
+				<div class="col-md-6 col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>
 							Sea Port Tax
@@ -1242,7 +1243,7 @@
 				</div>
 
 				<!-- CITY CONGESSION TAX -->
-				<div class="col-md-3">
+				<div class="col-md-6col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> City Congestion Tax </mat-label>
 						<span matPrefix>
@@ -1271,10 +1272,10 @@
 			<!-- ROW 2 -->
 			<div class="row mt-4">
 				<!-- CITY TAX -->
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<div class="row">
 
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
 								<input type="number" matInput placeholder="City Tax" (focus)="$event.target.select()"
@@ -1291,7 +1292,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+						<div class="col-6 col-lg-4 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test1" name="city_tax_percent_flat"
@@ -1305,7 +1306,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+						<div class="col-6 col-lg-4 pl-0 pr-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test2" name="city_tax_percent_flat"
@@ -1337,10 +1338,10 @@
 				</div>
 
 				<!-- State Tax -->
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<div class="row">
 
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
 								<input type="number" matInput placeholder="State Tax" formControlName="state_tax"
@@ -1357,7 +1358,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+						<div class="col-6 col-lg-4 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test3" name="state_tax_percent_flat"
@@ -1371,7 +1372,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+						<div class="col-6 col-lg-4 pl-0 pr-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test4" name="state_tax_percent_flat"
@@ -1403,10 +1404,10 @@
 				</div>
 
 				<!-- VAT -->
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<div class="row">
 
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
 								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
@@ -1421,7 +1422,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+						<div class="col-6 col-lg-4 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test5" name="vat_percent_flat"
@@ -1434,7 +1435,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+						<div class="col-6 col-lg-4 pl-0 pr-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test6" name="vat_percent_flat"
@@ -1466,10 +1467,10 @@
 				</div>
 
 				<!-- WORKMAN'S COMPENSATION-->
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<div class="row">
 
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
 								<input type="number" matInput placeholder="Workman's Comp"
@@ -1486,7 +1487,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+						<div class="col-6 col-lg-4 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test7" name="workman_comp_percent_flat"
@@ -1500,7 +1501,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+						<div class="col-6 col-lg-4 pl-0 pr-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test8" name="workman_comp_percent_flat"
@@ -1532,10 +1533,10 @@
 				</div>
 
 				<!-- OTHER TRANSPORTATION TAX -->
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<div class="row">
 
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
 								<input type="number" matInput placeholder="Other Transportation Tax"
@@ -1556,7 +1557,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pr-0 borderright mobilePadding">
+						<div class="col-6 col-lg-4 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test9"
@@ -1571,7 +1572,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3 col-lg-3 pl-0 mobilePadding">
+						<div class="col-6 col-lg-4 pl-0 pr-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test10"
@@ -1609,7 +1610,7 @@
 		<!-- APPLICABLE TAXES ENDS -->
 	</section>
 	<div class="container">
-		<div class="col-md-12">
+		<div class="col-12">
 			<div class="billing_inforamtion">
 				<ul class="d-flex justify-content-center">
 					<li>

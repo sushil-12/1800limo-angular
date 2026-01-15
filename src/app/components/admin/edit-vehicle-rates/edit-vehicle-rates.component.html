@@ -91,7 +91,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4" *ngIf="milage_rate_selected; else kilometer_rate">
+				<div class="col-md-4 col-12" *ngIf="milage_rate_selected; else kilometer_rate">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>{{currencySymbol}} per mile<span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -152,7 +152,7 @@
 						<div>Any value required</div>
 					</div>
 				</div>
-				<div class="col-md-4" *ngIf="milage_rate_selected">
+				<div class="col-md-4 col-12" *ngIf="milage_rate_selected">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Upto x miles<span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="upto_miles" tabindex="1"
@@ -193,7 +193,7 @@
 						<div>Any value required</div>
 					</div>
 				</div>
-				<div class="col-md-4" *ngIf="milage_rate_selected">
+				<div class="col-md-4 col-12" *ngIf="milage_rate_selected">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Additional {{currencySymbol}} per mile<span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -256,7 +256,7 @@
 				</div>
 
 				<ng-template #kilometer_rate>
-					<div class="col-md-4">
+					<div class="col-md-4 col-12">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
 							<mat-label>{{currencySymbol}} per km<span class="asterisk">*</span></mat-label>
 							<span matPrefix
@@ -315,7 +315,7 @@
 							<div>Any value required</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4 col-12">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
 							<mat-label>Upto x kms<span class="asterisk">*</span></mat-label>
 							<mat-select formControlName="upto_km" tabindex="1"
@@ -356,7 +356,7 @@
 							<div>Any value required</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4 col-12">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
 							<mat-label>Additional {{currencySymbol}} per km<span class="asterisk">*</span></mat-label>
 							<span matPrefix
@@ -421,7 +421,7 @@
 			</div>
 
 			<div class="row">
-				<div class="col-md-3">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Airport Rate - Departure <span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -453,7 +453,7 @@
 						<div>Any value required</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Airport Rate - Arrival <span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -486,7 +486,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum City to Intercity rate <span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -517,10 +517,7 @@
 						<div>Any value required</div>
 					</div>
 				</div>
-
-			</div>
-			<div class="row">
-				<div class="col-md-3">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Cruise Port Rate - Arrival
 							<!-- <span class="asterisk">*</span> -->
@@ -554,7 +551,11 @@
 							<div >Any value required</div>
 						</div> -->
 				</div>
-				<div class="col-md-3">
+
+			</div>
+			<div class="row">
+
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Cruise Port - Departure
 							<!-- <span class="asterisk">*</span> -->
@@ -588,7 +589,7 @@
 						</div> -->
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Hourly Rate <span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -615,7 +616,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>
 							Minimum Charter Hours
@@ -636,7 +637,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Discount After 5 Hours? <span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -664,7 +665,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label># Hours = Day Rate Extension</mat-label>
 						<span matPrefix># &nbsp;</span>
@@ -681,7 +682,7 @@
 						<div *ngIf="f.hours_day_rate.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Day Rate Extension</mat-label>
 						<span matPrefix
@@ -698,7 +699,7 @@
 						<div *ngIf="f.day_rate.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Shared Ride Rate - Per Person</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
@@ -784,7 +785,7 @@
 						<div *ngIf="f.friday_saturday_charges.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Extra stop - same town</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
@@ -803,7 +804,7 @@
 						<div *ngIf="f.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Extra stop - different town</mat-label>
 						<span matPrefix
@@ -834,7 +835,7 @@
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Wait Time Rate - per 15 min <span class="asterisk">*</span></mat-label>
-							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<input matInput type="number" placeholder="Wait Time Rate - per 15 min"
 							(change)="updateRateRangeObject()" formControlName="wait_time_cost" tabindex="1"
 							(focus)="$event.target.select()" />

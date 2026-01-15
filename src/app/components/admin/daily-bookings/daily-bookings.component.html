@@ -38,19 +38,20 @@
 				<!-- Search Button -->
 				<div class="col-md-7 d-flex align-items-end mt-4">
 					<div class="ml-2">
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
-							Reset
-						</button>
-					</div>
-					<div class="ml-2">
 						<button class="custom-filled-button orange-button"
 							style="color:#fff;padding: 5px 12px !important;"
 							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
 							Search
 						</button>
 					</div>
+					<div class="ml-2">
+						<button class="custom-filled-back-button"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+							Reset
+						</button>
+					</div>
+
 				</div>
 			</div>
 			<div class="row d-flex justify-content-between">

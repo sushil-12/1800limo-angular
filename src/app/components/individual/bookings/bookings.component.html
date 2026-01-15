@@ -23,50 +23,32 @@
         </div>
         <div class="containeredd mt-1 ">
             <div class="row my-2 align-items-center">
-                <!-- Start-Date -->
-                <div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
-                    <mat-form-field appearance="outline" class="m-0">
-                        <mat-label>
-                            Start Date <span class="asterisk"> * </span>
-                        </mat-label>
-                        <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-                            placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-                            (click)="picker1.open()" [value]="startDate" readonly />
-                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                        <mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-                    </mat-form-field>
-                </div>
-
-                <!-- End-Date -->
-                <div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
-                    <mat-form-field appearance="outline" class="m-0 ">
-                        <mat-label>
-                            End Date <span class="asterisk"> * </span>
-                        </mat-label>
-                        <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-                            placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-                            (click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                        <mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+                <!-- Date Range -->
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Date Range</mat-label>
+                        <input matInput ngxDaterangepickerMd [(ngModel)]="selectedDateRange"
+                            [showCustomRangeLabel]="false" [alwaysShowCalendars]="true" [autoApply]="true"
+                            (ngModelChange)="choosedDate($event)" placeholder="Select Date Range"
+                            id="date_range_picker" />
                     </mat-form-field>
                 </div>
 
                 <!-- Search Button -->
-                <div class="align-btn d-flex justify-content-around">
-                    <div class="col-sm-2 ml-n5">
-                        <button class="custom-filled-back-button"
-                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
-                            (click)=" reset();loadBookings()">
-                            Reset
-                        </button>
-                    </div>
-                    <div class="col-sm-2">
+                <div class="col-md-8 d-flex align-items-end mt-4">
+                    <div class="ml-2">
                         <button class="custom-filled-button orange-button"
                             style="color:#fff;padding: 5px 12px !important;"
                             (click)="loadBookings(); saveCookie('indv_startDate', startDate); saveCookie('indv_endDate', endDate);saveCookie('indv_search',searchText)">
                             Search
                         </button>
-
+                    </div>
+                    <div class="ml-2">
+                        <button class="custom-filled-back-button"
+                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+                            (click)="reset();loadBookings()">
+                            Reset
+                        </button>
                     </div>
                 </div>
             </div>
@@ -85,7 +67,8 @@
             </div>
             <div class="row pl-2">
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-                    {{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
+                        {{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see
+                        the next 7 days bookings or search for past bookings.' }}
                     </mat-checkbox>
                 </p>
             </div>
@@ -381,18 +364,18 @@
                         </div>
                     </div>
                     <div class="row preview-dropoff-color align-items-center flex-wrap flex-md-nowrap"
-                    *ngIf="bookingPreview?.cancellation_hours">
-                    <div class="col-6 col-md-4 key">
-                        <span style="font-weight: 550 !important;">
-                            Cancellation Period
-                        </span>
+                        *ngIf="bookingPreview?.cancellation_hours">
+                        <div class="col-6 col-md-4 key">
+                            <span style="font-weight: 550 !important;">
+                                Cancellation Period
+                            </span>
+                        </div>
+                        <div class="col-6 col-md-8 value">
+                            <span class="font-weight-bolder preview-output-field">
+                                {{ getCancellationTime(bookingPreview.cancellation_hours) }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-8 value">
-                        <span class="font-weight-bolder preview-output-field">
-                            {{ getCancellationTime(bookingPreview.cancellation_hours) }}
-                        </span>
-                    </div>
-                </div>
                     <hr>
                     <!-- Booking Information - Ends -->
                     <h4 class="font-weight-bolder m-0">
@@ -418,7 +401,8 @@
                         </div> -->
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-field">
-                                {{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{ bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
+                                {{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{
+                                bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
                             </span>
                         </div>
                     </div>
@@ -484,7 +468,8 @@
                                     </span>
                                 </div>
                                 <div class="col-8 col-md-8 value">
-                                    <span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+                                    <span class="font-weight-bolder preview-output-field"
+                                        style="word-break: break-all;">
                                         {{ textFormatter(bookingPreview?.affiliate_email) }}
                                     </span>
                                 </div>
@@ -546,7 +531,8 @@
                                     </span>
                                 </div>
                                 <div class="col-8 col-md-8 value">
-                                    <span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+                                    <span class="font-weight-bolder preview-output-field"
+                                        style="word-break: break-all;">
                                         {{ textFormatter(bookingPreview?.lose_affiliate_email) }}
                                     </span>
                                 </div>
@@ -1118,13 +1104,8 @@
                     <hr>
                     <br>
                     <div class="google_map">
-						<google-map
-						  height="300px"
-						  width="100%"
-						  [center]="mapCenter"
-						  [zoom]="zoom"
-						></google-map>
-					  </div>
+                        <google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+                    </div>
                     <br>
                     <hr>
                 </div>
@@ -1236,7 +1217,8 @@
 
 
             <div class="modal-footer justify-content-end">
-                <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" style="font-size: 50px !important;">
+                <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+                    style="font-size: 50px !important;">
                     <span aria-hidden="true" class="bi bi-x-circle"></span>
                 </button>
 
@@ -1552,8 +1534,10 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <p style="font-size: 20px; font-weight:600;color: red;">Are you sure, You want to cancel the booking?</p>
-                <p style="font-size: 19px; font-weight:500;">Click Edit / Change to make changes to the booking instead of cancelling</p>
+                <p style="font-size: 20px; font-weight:600;color: red;">Are you sure, You want to cancel the booking?
+                </p>
+                <p style="font-size: 19px; font-weight:500;">Click Edit / Change to make changes to the booking instead
+                    of cancelling</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="custom-btn savebutton" (click)="editActionCancelModal()">Edit / Change
