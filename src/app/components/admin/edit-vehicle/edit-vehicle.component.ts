@@ -45,10 +45,10 @@ export class EditVehicleComponent implements OnInit {
 	public chargableAmenities: object;
 	public nonChargableAmenities: object;
 	public amenitiesFormControl: any;
-	public specialAmenities: any;
-	public specialAmenitiesFormControl: any;
-	public interiors: any;
-	public interiorsFormControl: any;
+	public specialAmenities: any = [];
+	public specialAmenitiesFormControl: any = [];
+	public interiors: any = [];
+	public interiorsFormControl: any = [];
 	public allModels = JSON.parse(sessionStorage.getItem('models'));
 
 	public vehicleImage1: string;
@@ -152,7 +152,6 @@ export class EditVehicleComponent implements OnInit {
 		this.activatedroute.queryParamMap
 			.subscribe((params: any) => {
 				this.paramResponse = { ...params.keys, ...params };
-				console.log('params-->>>1', params['params'], this.paramResponse.params?.new)
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 				this.vehicleId = this.paramResponse.params.vehicleId;
 				this.duplicateVehcile = this.paramResponse.params?.duplicateVehcile
@@ -232,13 +231,15 @@ export class EditVehicleComponent implements OnInit {
 				})
 			).subscribe(result => {
 				this.response = result;
+				
 				this.filteredYear = this.year = this.response.data.years;
 				this.filteredMake = this.make = this.response.data.make;
 				this.filteredModel = this.model = this.response.data.model;
 				this.filteredVehicleTypes = this.vehicleTypes = this.response.data.vehicle_types;
 				this.filteredColor = this.color = this.response.data.color;
-				this.specialAmenities = this.response.data.specialAmenities;
-				this.interiors = this.response.data.vehicleInterior;
+				this.specialAmenities = this.response.data.specialAmenities || [];
+				this.interiors = this.response.data.vehicleInterior || [];
+				
 
 				this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
 				this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
@@ -258,7 +259,6 @@ export class EditVehicleComponent implements OnInit {
 
 
 				sessionStorage.setItem('models', JSON.stringify(this.model));
-
 				this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
 					.pipe(
 						catchError(err => {
@@ -267,6 +267,7 @@ export class EditVehicleComponent implements OnInit {
 						})
 					).subscribe(result2 => {
 						this.response2 = result2;
+						
 						if (this.response2.data.vehicle_image_1) {
 							this.vehicleImage1 = this.response2.data.vehicle_image_1.image;
 							this.vehicleImageId1 = this.response2.data.vehicle_image_1.ID;
@@ -428,10 +429,18 @@ export class EditVehicleComponent implements OnInit {
 						let colorField: any = document.getElementById('colorField');
 						colorField.value = this.response2.data.colorName;
 						//
-						this.changeMake(this.response2.data.make, 'onFirstLoad');//to show selected model
-						this.setAmenities();//show selected amenities
-						this.setSpecialAmenities();//show selected special amenities
-						this.setInteriors();//show selected interiors
+						
+						try {
+							this.changeMake(this.response2.data.make, 'onFirstLoad');//to show selected model
+							this.setAmenities();//show selected amenities
+							
+							this.setSpecialAmenities();//show selected special amenities
+							
+							this.setInteriors();//show selected interiors
+							
+						} catch (error) {
+						}
+						
 
 						this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
 							let numberOfVehiclesCanBeAdded;
@@ -475,7 +484,6 @@ export class EditVehicleComponent implements OnInit {
 	}
 	Subscriptions() {
 		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
-			console.log('change value is--->>', value)
 			let models = this.allModels
 			// this.filteredModel = this.model = models.filter(function (model) {
 			// 	if (model.make_id == value) {
@@ -530,7 +538,6 @@ export class EditVehicleComponent implements OnInit {
 					this.addVehicleForm.patchValue({
 						make: mk.ID,
 					});
-					console.log(1, mk.ID)
 				}
 				return mk.name.toLowerCase().includes(keyword.toLowerCase());
 			})
@@ -581,7 +588,6 @@ export class EditVehicleComponent implements OnInit {
 			this.addVehicleForm.patchValue({
 				model: val,
 			});
-			console.log(2, val)
 		}
 	}
 
@@ -598,7 +604,6 @@ export class EditVehicleComponent implements OnInit {
 					this.addVehicleForm.patchValue({
 						year: yr.ID,
 					});
-					console.log(1, yr.ID)
 				}
 				return yr.name.toLowerCase().includes(keyword.toLowerCase());
 			})
@@ -613,7 +618,6 @@ export class EditVehicleComponent implements OnInit {
 			this.addVehicleForm.patchValue({
 				year: val,
 			});
-			console.log(2, val)
 		}
 	}
 
@@ -630,7 +634,6 @@ export class EditVehicleComponent implements OnInit {
 					this.addVehicleForm.patchValue({
 						color: cl.ID,
 					});
-					console.log(1, cl.ID)
 				}
 				return cl.name.toLowerCase().includes(keyword.toLowerCase());
 			})
@@ -645,7 +648,6 @@ export class EditVehicleComponent implements OnInit {
 			this.addVehicleForm.patchValue({
 				color: val,
 			});
-			console.log(2, val)
 		}
 	}
 	//End of autocomplete search and selection
@@ -656,7 +658,7 @@ export class EditVehicleComponent implements OnInit {
 	setAmenities() {
 		var chargableAmenities = this.chargableAmenities;
 		for (var key in chargableAmenities) {
-			chargableAmenities[key].forEach(chargableAmenity => {
+			Object.values(chargableAmenities[key]).forEach((chargableAmenity: any) => {
 				if (chargableAmenity.isSelected) {
 					this.onAmenitiesCheckboxChange(chargableAmenity.id, true);
 				}
@@ -665,8 +667,7 @@ export class EditVehicleComponent implements OnInit {
 
 		var nonChargableAmenities = this.nonChargableAmenities;
 		for (var key in nonChargableAmenities) {
-			console.log(key, nonChargableAmenities[key]);
-			nonChargableAmenities[key].forEach(nonChargableAmenity => {
+			Object.values(nonChargableAmenities[key]).forEach((nonChargableAmenity: any) => {
 				if (nonChargableAmenity.isSelected) {
 					this.onAmenitiesCheckboxChange(nonChargableAmenity.id, true);
 				}
@@ -676,23 +677,46 @@ export class EditVehicleComponent implements OnInit {
 	setSpecialAmenities() {
 		const specialAmenitiesGet: FormArray = this.addVehicleForm.get('specialAmenitiesGet') as FormArray;
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
-		var i;
+		
+		// Clear existing controls
+		while (specialAmenitiesGet.length !== 0) {
+			specialAmenitiesGet.removeAt(0);
+		}
+		while (specialAmenities.length !== 0) {
+			specialAmenities.removeAt(0);
+		}
+		
+		if (!this.specialAmenities || !Array.isArray(this.specialAmenities) || this.specialAmenities.length === 0) {
+			this.specialAmenitiesFormControl = [];
+			return;
+		}
+		
 		const totalSpecialAmenities = this.specialAmenities;
-		const selectedSpecialAmenities = this.response2.data.specialAmenities;
-		for (i = 0; i < totalSpecialAmenities.length; i++) {
+		// Handle both cases: when response2 exists (edit mode) and when it doesn't (new vehicle)
+		const selectedSpecialAmenities = (this.response2 && this.response2.data && this.response2.data.specialAmenities) 
+			? this.response2.data.specialAmenities 
+			: [];
+		
+		for (let i = 0; i < totalSpecialAmenities.length; i++) {
+			// Convert both to strings for comparison to handle type mismatches
+			const amenityId = String(totalSpecialAmenities[i].id);
 			var checkedSpecialAmenity = selectedSpecialAmenities.findIndex(function (post) {
-				if (post == totalSpecialAmenities[i].id)
-					return true;
+				const postId = String(post);
+				return postId === amenityId;
 			});
+			
 			if (checkedSpecialAmenity >= 0) {
 				var checkBool = true;
 			}
 			else {
 				var checkBool = false;
 			}
+			console.log('[DEBUG] Special amenity', i, '(id:', totalSpecialAmenities[i].id, ') checked:', checkBool);
 			specialAmenitiesGet.push(new FormControl(checkBool));
 		}
-		this.specialAmenitiesFormControl = specialAmenitiesGet.controls;
+		// Create a new array reference for Angular change detection
+		this.specialAmenitiesFormControl = [...specialAmenitiesGet.controls];
+		
 		var j;
 		for (j = 0; j < selectedSpecialAmenities.length; j++) {
 			specialAmenities.push(new FormControl(selectedSpecialAmenities[j]));
@@ -701,27 +725,53 @@ export class EditVehicleComponent implements OnInit {
 	setInteriors() {
 		const interiorsGet: FormArray = this.addVehicleForm.get('vehicleInteriorGet') as FormArray;
 		const interiors: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		var i;
+		
+		// Clear existing controls
+		while (interiorsGet.length !== 0) {
+			interiorsGet.removeAt(0);
+		}
+		while (interiors.length !== 0) {
+			interiors.removeAt(0);
+		}
+		
+		if (!this.interiors || !Array.isArray(this.interiors) || this.interiors.length === 0) {
+			this.interiorsFormControl = [];
+			return;
+		}
+		
 		const totalInterior = this.interiors;
-		const selectedInterior = this.response2.data.vehicleInterior;
-		for (i = 0; i < totalInterior.length; i++) {
+		// Handle both cases: when response2 exists (edit mode) and when it doesn't (new vehicle)
+		const selectedInterior = (this.response2 && this.response2.data && this.response2.data.vehicleInterior) 
+			? this.response2.data.vehicleInterior 
+			: [];
+		
+		console.log('[DEBUG] totalInterior:', totalInterior);
+		console.log('[DEBUG] selectedInterior:', selectedInterior);
+		for (let i = 0; i < totalInterior.length; i++) {
+			// Convert both to strings for comparison to handle type mismatches
+			const interiorId = String(totalInterior[i].id);
 			var checkedInterior = selectedInterior.findIndex(function (post) {
-				if (post == totalInterior[i].id)
-					return true;
+				const postId = String(post);
+				return postId === interiorId;
 			});
+			
 			if (checkedInterior >= 0) {
 				var checkBool = true;
 			}
 			else {
 				var checkBool = false;
 			}
+			console.log('[DEBUG] Interior', i, '(id:', totalInterior[i].id, ') checked:', checkBool);
 			interiorsGet.push(new FormControl(checkBool));
 		}
-		this.interiorsFormControl = interiorsGet.controls;
+		// Create a new array reference for Angular change detection
+		this.interiorsFormControl = [...interiorsGet.controls];
+		
 		var j;
 		for (j = 0; j < selectedInterior.length; j++) {
 			interiors.push(new FormControl(selectedInterior[j]));
 		}
+		console.log('[DEBUG] setInteriors() completed');
 	}
 	handleChangeVehicleType(value) {
 		console.log('Selected Value:', value);
