@@ -307,28 +307,35 @@ export class FleetComponent implements OnInit {
 	getVehicleImage(title: string): string {
 		if (!title) return '';
 		if (!this.vehicleImages || this.vehicleImages.length === 0) {
-			// console.warn('Vehicle images not loaded yet');
 			return '';
 		}
 
-		// Aggressive normalization: remove all non-alphanumeric chars, lower case
-		const normalize = (s: string) => s ? s.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
-		const target = normalize(title);
+		// Tokenize: Remove parens/special chars, lowercase, split by space
+		const tokenize = (s: string) => s ? s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(t => t.length > 2) : [];
 
-		if (!target) return '';
+		const targetTokens = tokenize(title);
+		if (targetTokens.length === 0) return '';
 
-		// Find match
-		const match = this.vehicleImages.find(v => {
-			const vName = normalize(v.vehicle_name);
-			// Check exact match of normalized strings, or if one contains the other
-			return vName === target || vName.includes(target) || target.includes(vName);
+		let bestMatch = null;
+		let bestScore = 0;
+
+		this.vehicleImages.forEach(v => {
+			const vTokens = tokenize(v.vehicle_name);
+			// Calculate overlap
+			const intersection = targetTokens.filter(t => vTokens.some(vt => vt.includes(t) || t.includes(vt))); // Fuzzy overlap
+			const score = intersection.length; // Simple count of matching distinct tokens
+
+			if (score > bestScore) {
+				bestScore = score;
+				bestMatch = v;
+			}
 		});
 
-		if (match) {
-			// console.log(`[MATCH] "${title}" (norm: ${target}) matched with "${match.vehicle_name}"`);
-			return match.vehicle_image;
+		if (bestMatch && bestScore > 0) {
+			// console.log(`[MATCH] "${title}" matched "${bestMatch.vehicle_name}" (Score: ${bestScore})`);
+			return (bestMatch as any).vehicle_image;
 		} else {
-			console.log(`[NO MATCH] "${title}" (norm: ${target}) - Available:`, this.vehicleImages.map(v => normalize(v.vehicle_name)).join(', '));
+			console.log(`[NO MATCH] "${title}" - Best Score: ${bestScore}`);
 			return '';
 		}
 	}

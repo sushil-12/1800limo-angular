@@ -11,13 +11,15 @@
 				[ngClass]="{'flex-row-reverse': i % 2 !== 0}">
 
 				<!-- Text Column -->
-				<div class="col-md-6" *ngIf="fleet?.section_status == true">
+				<div [ngClass]="getVehicleImage(fleet?.vehicle_name || fleet?.title) ? 'col-md-6' : 'col-md-12'"
+					*ngIf="fleet?.section_status == true">
 					<h3>{{fleet?.vehicle_name || fleet?.title}}</h3>
 					<p [innerHTML]="fleet?.content" *ngIf="fleet?.content"></p>
 				</div>
 
 				<!-- Image Column -->
-				<div class="col-md-6 text-center" *ngIf="fleet?.section_status == true">
+				<div class="col-md-6 text-center"
+					*ngIf="fleet?.section_status == true && getVehicleImage(fleet?.vehicle_name || fleet?.title)">
 					<img [src]="getVehicleImage(fleet?.vehicle_name || fleet?.title)"
 						alt="{{fleet?.vehicle_name || fleet?.title}}"
 						*ngIf="getVehicleImage(fleet?.vehicle_name || fleet?.title)"
