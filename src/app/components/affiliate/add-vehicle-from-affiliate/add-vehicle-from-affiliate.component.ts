@@ -258,7 +258,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				this.filteredVehicleTypes = this.vehicleTypes = this.response.data.vehicle_types;
 				this.filteredColor = this.color = this.response.data.color;
 				this.chargableAmenitiesRes = this.response.data.chargableAmenities;
-				this.chargableAmenities = this.chargableAmenitiesRes.group_1;
+				this.chargableAmenities = this.chargableAmenitiesRes;
 				this.nonChargableAmenitiesRes = this.response.data.nonChargableAmenities;
 				this.nonChargableAmenities = this.nonChargableAmenitiesRes;
 				this.specialAmenities = this.response.data.specialAmenities;
@@ -300,6 +300,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 					this.mcId = this.response.data.mc.id;
 				}
 
+				console.log('chargableAmenities', this.chargableAmenities)
 				//get models as per make
 				let models = JSON.parse(sessionStorage.getItem('models'));
 				let selectedMake = this.make[0].ID;

@@ -2,7 +2,7 @@
 	<!-- Main page content-->
 	<section class="user_information affiliateVehicle">
 		<h2 class="headinginfo">
-			Vehicle Settings
+			Vehicle Settings add
 			<span style="color: red;">(Choose Correct Vehicle Type)</span>
 		</h2>
 		<div class="container mt-1">
@@ -511,19 +511,19 @@
 			<span class="spanText">(Choose each chargable amenity you supply or provide)</span>
 		</h2>
 		<div class="container mt-1">
-			<div class="choose_ameniteslist mt-3">
-				<div class="custom-control custom-checkbox" *ngFor="let chargableAmenity of chargableAmenities">
+			<div class="choose_ameniteslist mt-3" *ngFor="let chargableAmenityGroup of chargableAmenities | keyvalue">
+				<div class="custom-control custom-checkbox" *ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue">
 					<!-- {{chargableAmenity.value | json}}<br> -->
-					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.name }}"
-						[value]="chargableAmenity.id" (change)="
+					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.value.name }}"
+						[value]="chargableAmenity.value.id" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked
 							)
 						" tabindex="1" />
-					<label class="custom-control-label" for="amenity_{{ chargableAmenity.name }}">
-						<span *ngIf="chargableAmenity.chargeable === 'yes'" class="amenity-dollar">&nbsp; $</span>
-						{{ chargableAmenity.name }}
+					<label class="custom-control-label" for="amenity_{{ chargableAmenity.value.name }}">
+						<span *ngIf="chargableAmenity.value.chargeable === 'yes'" class="amenity-dollar">&nbsp; $</span>
+						{{ chargableAmenity.value.name }}
 					</label>
 				</div>
 			</div>
