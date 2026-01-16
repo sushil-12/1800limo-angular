@@ -114,8 +114,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.countryChangeObject.getSelectedCountryData();
-			console.log("in country change",countryData)
+			console.log("in country change", countryData)
 			this.onCountryChange(countryData)
+			this.validatePhone();
 		});
 
 		// get login user details
@@ -127,6 +128,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			})
 			this.countryChangeObject.setCountry(loginData.PhoneCountry);
 			this.changeDetectorRef.detectChanges();
+			this.validatePhone(); // Check validation on initial load
 		}
 	}
 
@@ -319,5 +321,47 @@ export class LoginComponent implements OnInit, AfterViewInit {
 					this.router.navigateByUrl('/otp' + `?role=${this.Role}`);
 				}
 			});
+	}
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhone() {
+		if (this.countryChangeObject) {
+			const value = this.loginForm.get('phone').value;
+			if (!value) {
+				// If empty, let required validator handle it. Remove our intl error if present.
+				if (this.f.phone.errors) {
+					const { invalidIntl, ...otherErrors } = this.f.phone.errors;
+					this.f.phone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = this.countryChangeObject.isValidNumber();
+			// If valid, clears this specific error. Note: other validators might still run.
+			// But since we are manually setting errors, we need to be careful not to clear others if we use setErrors(null).
+			// However, setErrors({...}) overwrites.
+			// Better strategy: If invalid, add to errors. If valid, remove from errors.
+
+			if (!isValid) {
+				const errorCode = this.countryChangeObject.getValidationError();
+				// standard 1:1 mapping for intl-tel-input error codes [0-4]
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+
+				const currentErrors = this.f.phone.errors || {};
+				this.f.phone.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				// Remove invalidIntl error if exists
+				if (this.f.phone.errors) {
+					const { invalidIntl, ...otherErrors } = this.f.phone.errors;
+					// If no other errors, set to null
+					this.f.phone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
 	}
 }

@@ -111,7 +111,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	) { }
 
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
 
+	validateInputLimit(event: any) {
+		const value = parseInt(event.target.value);
+		if (value > 100) {
+			event.target.value = 100;
+			this.quoteBotForm.get(event.target.getAttribute('formControlName'))?.setValue(100);
+		}
+	}
 	//google map autocomplete
 	title: string = 'AGM project';
 	latitude: number;
@@ -205,10 +219,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		// Load Our vehicles using API
 		this.websiteService.getOurVehicles().then(result => {
-			console.log(this.isVehicleLoading,"consoell")
+			console.log(this.isVehicleLoading, "consoell")
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data;
-			
+
 			// Initialize vehicle carousel after data is loaded
 			setTimeout(() => {
 				this.initVehicleCarousel();
@@ -219,7 +233,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		// Client carousel will be initialized in fetchHomePageData() after data loads
 		this.fetchHomePageData();
 		this.Subscriptions();
-		
+
 
 		// $('.scrollDownButton').css('left', '3px');
 		// $('.scrollDownButton').css('right', '');
@@ -363,7 +377,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}, 200)
 		})
 	}
-	  
+
 
 
 	fetchPageData(section: string) {
@@ -399,7 +413,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.initStepRotation(); // Initialize step rotation animation
 				}, 100);
 			})
-			
+
 	}
 
 	// --------------------------------- 	Quotebot Data 		----------------------------------------------
@@ -514,8 +528,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return_dropoff_address: ['',],
 			return_dropoff_address_lat: ['',],
 			return_dropoff_address_long: ['',],
-			no_of_passenger: ['',],
-			no_of_luggage: ['',],
+			no_of_passenger: [1,],
+			no_of_luggage: [0,],
 			location_info: this.formBuilder.array([],),
 		});
 
@@ -565,7 +579,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				console.error("Geolocation Error:", error);
 				let errorMessage = "Unable to fetch your location. ";
 
-				switch(error.code) {
+				switch (error.code) {
 					case error.PERMISSION_DENIED:
 						errorMessage += "Please enable location access in your browser settings.";
 						break;
@@ -619,7 +633,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 	}
 
-	
+
 	roundToNearest15(minutes) {
 		const quarterHour = 15;
 		return Math.round(minutes / quarterHour) * quarterHour;
@@ -694,8 +708,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return_dropoff_address: previous_quotebot?.return_dropoff_address ?? previous_quotebot?.pickup_address,
 				return_dropoff_address_lat: Number(previous_quotebot?.return_dropoff_address_lat),
 				return_dropoff_address_long: Number(previous_quotebot?.return_dropoff_address_long),
-				no_of_passenger: previous_quotebot?.no_of_passenger || 1,
-				no_of_luggage: previous_quotebot?.no_of_luggage || 1,
+				no_of_passenger: Math.max(1, previous_quotebot?.no_of_passenger || 1),
+				no_of_luggage: Math.max(0, previous_quotebot?.no_of_luggage || 0),
 				location_info: previous_quotebot?.location_info
 			})
 			this.vars = previous_quotebot.other_details
@@ -1040,18 +1054,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	 */
 	getNextQuarterHour(time: string): string {
 		const [h, m] = time.split(':').map(Number);
-	
+
 		let hours = h;
 		let minutes = m;
-	
+
 		// Round UP to next 15 min
 		minutes = Math.ceil(minutes / 15) * 15;
-	
+
 		if (minutes === 60) {
 			minutes = 0;
 			hours = (hours + 1) % 24;
 		}
-	
+
 		return `${hours.toString().padStart(2, '0')}:${minutes
 			.toString()
 			.padStart(2, '0')}:00`;
@@ -1070,12 +1084,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		// },
 		pickupTime: (event: any, form_control: string) => {
 			if (!event?.target?.value) return;
-		
+
 			const rawTime = event.target.value; // "03:07"
 			const roundedTime = this.getNextQuarterHour(rawTime);
-		
+
 			console.log('Rounded Time:', roundedTime);
-		
+
 			this.SetFormValue(form_control, roundedTime);
 		},
 		return_pickup_date: (value: any) => {
@@ -1513,7 +1527,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	//increment/decrement in ONE WAY form
 	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
-		let max_length = 75
+		let max_length = 100
 		if (fieldName == 'p') {
 			// for passenger
 			$('#no_of_passenger').addClass('highlight-text')
@@ -1636,27 +1650,27 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	//conver text to html
-	
+
 	convertTextToHtml(str: string): string {
 		if (!str) return '';
-	  
+
 		return str
-		  // temporarily protect <small> tags
-		  .replace(/<small>/gi, '___SMALL_OPEN___')
-		  .replace(/<\/small>/gi, '___SMALL_CLOSE___')
-	  
-		  // escape everything else
-		  .replace(/&/g, '&amp;')
-		  .replace(/</g, '&lt;')
-		  .replace(/>/g, '&gt;')
-		  .replace(/"/g, '&quot;')
-		  .replace(/'/g, '&#039;')
-	  
-		  // restore <small> tags
-		  .replace(/___SMALL_OPEN___/g, '<small>')
-		  .replace(/___SMALL_CLOSE___/g, '</small>');
+			// temporarily protect <small> tags
+			.replace(/<small>/gi, '___SMALL_OPEN___')
+			.replace(/<\/small>/gi, '___SMALL_CLOSE___')
+
+			// escape everything else
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;')
+
+			// restore <small> tags
+			.replace(/___SMALL_OPEN___/g, '<small>')
+			.replace(/___SMALL_CLOSE___/g, '</small>');
 	}
-	  
+
 
 	initClientCarousel() {
 		// Wait for DOM and data to be ready
@@ -1672,7 +1686,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				const isDesktop = window.innerWidth >= 768;
 				const nextButton = this.clientLogoContainer.nativeElement.querySelector('.client-logo-swiper-button-next');
 				const prevButton = this.clientLogoContainer.nativeElement.querySelector('.client-logo-swiper-button-prev');
-				
+
 				const navButtons = nextButton && prevButton ? {
 					nextEl: nextButton,
 					prevEl: prevButton,
@@ -1694,7 +1708,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						el: '.swiper-pagination',
 						clickable: true,
 						dynamicBullets: false
-					  },
+					},
 					speed: 300,
 					watchOverflow: true,
 					watchSlidesProgress: true,
@@ -1870,7 +1884,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						loop: true,
 						autoplay: false,
 						margin: 10,
-						dots:true
+						dots: true
 					}
 				}
 			});
@@ -1881,7 +1895,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				autoplay: true,
 				autoplayTimeout: 2000,
 				dotsEach: 3,
-				dots:true,
+				dots: true,
 				autoplayHoverPause: true,
 				margin: 10,
 				responsiveClass: true,
@@ -1916,7 +1930,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				autoplay: true,
 				autoplayTimeout: 2000,
 				dotsEach: 3,
-				dots:true,
+				dots: true,
 				autoplayHoverPause: true,
 				margin: 10,
 				responsiveClass: true,
@@ -2022,7 +2036,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					const shouldHaveNav = isDesktop;
 					const currentNav = this.clientLogoSwiper.params.navigation;
 					const hasNav = currentNav !== false && currentNav !== null && currentNav !== undefined;
-					
+
 					if (shouldHaveNav !== hasNav) {
 						this.initClientCarousel();
 					}

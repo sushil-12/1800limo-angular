@@ -4,6 +4,12 @@
 		<div class="row">
 			<div class="col-md-12">
 				<!-- Vehicle Selected details -->
+				<div class="d-md-none d-flex justify-content-start mt-3 mb-2 w-100">
+					<button type="button" class="btn-bg-green text-white font-weight-bold px-3 py-2"
+						style="display: flex; align-items: center; gap: 8px;" (click)="backButton()">
+						<i class="bi bi-arrow-left"></i> Back to vehicle listing
+					</button>
+				</div>
 				<div class="car-Details row">
 					<!-- OWL CAROUSEL -->
 					<div class="col-md-6 col-xl-4">
@@ -29,10 +35,16 @@
 					<!-- OWL CAROUSEL ENDS -->
 
 					<!-- VEHICLE INFORMATION BLOCK -->
-					<div class="col-md-6 col-lg-auto">
+					<div class="col-md-6 col-lg">
+						<div class="d-none d-md-flex justify-content-end mb-2 w-100">
+							<button type="button" class="btn-bg-green text-white font-weight-bold px-3 py-2"
+								style="display: flex; align-items: center; gap: 8px;" (click)="backButton()">
+								<i class="bi bi-arrow-left"></i> Back to vehicle listing
+							</button>
+						</div>
 						<!-- CONTENT BLOCK -->
-						<div class="cont-Block w-100 pl-lg-4">
-							<h5>
+						<div class="cont-Block pl-lg-4" style="width: fit-content;">
+							<h5 class="mb-2">
 								{{ selected_vehicle.name }}
 							</h5>
 							<div id="icons" class="d-flex mb-2 justify-content-center" style="gap:8px;">
@@ -148,10 +160,10 @@
 							<button type="button" class="custom-btn" data-toggle="modal" data-target="#ModalAmenities">
 								Amenities
 							</button>
-							<!-- <button type="button" class="custom-filled-button text-dark rounded-pill"
+							<button type="button" class="custom-filled-button text-dark rounded-pill"
 								(click)="bookNow()">
 								Book Now
-							</button> -->
+							</button>
 						</div>
 					</div>
 					<!-- ṾEHICLE INFORAMATION BLOCK ENDS -->
@@ -166,14 +178,14 @@
 								<google-map #map height="300px" width="100%" [center]="center" [zoom]="zoom"
 									[options]="mapOptions">
 								</google-map>
-									<div class="row">
-										<h6 class="mx-2">
-											Total Distance: {{convertToMi(distance)}} mi / {{convertToKm(distance)}} km
-										</h6>
-										<h6 class="mx-2">
-											Estimated time: {{convertToMinutes(duration)}}
-										</h6>
-									</div>
+								<div class="row">
+									<h6 class="mx-2">
+										Total Distance: {{convertToMi(distance)}} mi / {{convertToKm(distance)}} km
+									</h6>
+									<h6 class="mx-2">
+										Estimated time: {{convertToMinutes(duration)}}
+									</h6>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -562,14 +574,16 @@
 <div aria-hidden="true" aria-labelledby="ModalVehicleRates" class="modal fade" id="ModalVehicleRates" tab-index="-1">
 	<div class="modal-dialog modal-md modal-dialog-centered">
 		<div class="modal-content p-0">
-			<div class="modal-header" style="flex-direction: column;">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title">
-					Estimated Rate Slip
-				</h4>
-				<h4 class="alert alert-danger"
+			<div class="modal-header d-block">
+				<div class="d-flex align-items-center justify-content-between">
+					<h4 class="modal-title" style="margin: 0 !important;">
+						Estimated Rate Slip
+					</h4>
+					<button type="button" class="close p-0 m-0" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<h4 class="alert alert-danger mt-2"
 					style="padding :0.25rem 1.25rem; color: red !important;font-size: 15px !important;">
 					Gratuity Included (hand tip extra at own discretion)</h4>
 			</div>
@@ -723,7 +737,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer justify-content-end">
+			<div class="modal-footer justify-content-center">
 				<div class="btn-Area">
 					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
 						Close
@@ -738,14 +752,14 @@
 <div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities" tab-index="-1">
 	<div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
 		<div class="modal-content">
-			<!-- <div class="modal-header">
+			<div class="modal-header">
 				<p class="text-org-light font-weight-bolder">
 					Vehicle Amenities
 				</p>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div> -->
+			</div>
 			<div class="modal-body">
 				<div class="row" *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
 					<div class="col-md-12">
@@ -783,7 +797,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer justify-content-end">
+			<div class="modal-footer justify-content-center">
 				<div class="btn-Area">
 					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
 						Close
