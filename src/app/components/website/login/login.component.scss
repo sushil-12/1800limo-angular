@@ -68,7 +68,7 @@ label+input[type=radio]+label {
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 :host ::ng-deep .mat-mdc-text-field-wrapper {
-	border: solid 3px;
+	/* border: solid 3px;  Removed as per user request 'extra border' */
 	border-radius: 8px;
 }
 
@@ -109,10 +109,18 @@ label+input[type=radio]+label {
 
 // override css for label  
 :host ::ng-deep .mobileFieldlogin .mdc-floating-label.mat-mdc-floating-label {
-    padding-left: 90px !important;
+	padding-left: 90px !important;
 }
 
 :host ::ng-deep .mobileFieldlogin .mdc-floating-label.mat-mdc-floating-label.mdc-floating-label--float-above {
-	padding-top: 8px !important;
-    padding-left: 0px !important;
+	/* padding-top: 8px !important; removed to fix outline label position */
+	padding-left: 0px !important;
+}
+
+/* Red border for invalid phone input - using custom class for immediate update */
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__leading,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__notch,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__trailing {
+	border-color: red !important;
+	border-width: 2px !important;
 }

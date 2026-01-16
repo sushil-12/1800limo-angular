@@ -1,4 +1,7 @@
-.safety_wrapper{background: none !important;}
+.safety_wrapper {
+	background: none !important;
+}
+
 @media (min-width: 1200px) {
 
 	.container,
@@ -12,6 +15,13 @@
 
 	.checkourveh_wrapper .container {
 		max-width: 1140px;
+	}
+}
+
+@media (min-width: 1200px) and (max-width: 1350px) {
+	.safety_wrapper .container {
+		padding-left: 50px !important;
+		padding-right: 50px !important;
 	}
 }
 
@@ -68,8 +78,15 @@
 	.text_desktop br {
 		display: none;
 	}
-	.owl-carousel .owl-nav button.owl-next{display:none !important;}
-	.whychoose_no img{padding:0 10px !important;}
+
+	.owl-carousel .owl-nav button.owl-next {
+		display: none !important;
+	}
+
+	.whychoose_no img {
+		padding: 0 10px !important;
+	}
+
 	.viewVehicleCarousel .owl-nav button.owl-prev,
 	.viewVehicleCarousel .owl-nav button.owl-next {
 		display: none;
@@ -128,6 +145,7 @@
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -135,6 +153,7 @@
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -142,6 +161,7 @@
 }
 
 @media only screen and (max-width: 767px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -158,6 +178,7 @@
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -166,6 +187,7 @@
 
 
 @media only screen and (max-width: 1199px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -173,6 +195,7 @@
 }
 
 @media only screen and (max-width: 480px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -181,6 +204,7 @@
 
 
 @media only screen and (max-width:767px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -188,6 +212,7 @@
 }
 
 @media only screen and (max-width: 360px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -195,6 +220,7 @@
 }
 
 @media (min-width: 361px) and (max-width: 381px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -210,6 +236,7 @@
 }
 
 @media (min-width: 439px) and (max-width: 540px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -217,6 +244,7 @@
 }
 
 @media only screen and (max-width:767px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -224,6 +252,7 @@
 }
 
 @media only screen and (min-width:769px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -236,29 +265,32 @@
 
 /* --- Mobile Landscape Mode Optimizations --- */
 @media only screen and (max-width: 767px) and (orientation: landscape) {
+
 	/* Client Wrapper Section */
 	.client_wrapper {
 		padding: 20px 0 !important;
-		overflow: hidden; /* Prevent carousel from overflowing */
+		overflow: hidden;
+		/* Prevent carousel from overflowing */
 		width: 100%;
 		max-width: 100%;
-		
+
 		.container-fluid {
 			overflow: hidden;
 			max-width: 100%;
 			padding-left: 15px;
 			padding-right: 15px;
 		}
-		
+
 		h2 {
 			font-size: 1.4rem !important;
 			margin-bottom: 15px !important;
 		}
 	}
-	
+
 }
 
 @media(max-width: 600px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -270,22 +302,23 @@
 	position: relative;
 	width: 100%;
 	overflow: hidden;
-	padding: 0 25px; /* Add padding for navigation buttons on desktop */
+	padding: 0 25px;
+	/* Add padding for navigation buttons on desktop */
 	max-width: 100%;
 	box-sizing: border-box;
-	
+
 	&.swiper {
 		overflow: hidden;
 		width: 100%;
 		max-width: 100%;
 	}
-	
+
 	.swiper-wrapper {
 		display: flex;
 		align-items: center;
 		width: 100%;
 	}
-	
+
 	.swiper-slide {
 		display: flex;
 		align-items: center;
@@ -296,14 +329,14 @@
 		box-sizing: border-box;
 		max-width: 100%;
 		overflow: hidden;
-		
+
 		// Ensure slides don't exceed container
-		& > * {
+		&>* {
 			max-width: 100%;
 			width: 100%;
 		}
 	}
-	
+
 	.client-logo-item {
 		padding: 15px 5px;
 		text-align: center;
@@ -315,7 +348,7 @@
 		max-width: 100%;
 		box-sizing: border-box;
 		overflow: hidden;
-		
+
 		img {
 			max-height: 100%;
 			max-width: 100%;
@@ -329,13 +362,13 @@
 			border-radius: 8px;
 			border: 1px solid #ffa50073;
 		}
-		
+
 		&:hover img {
 			opacity: 1;
 			transform: scale(1.05);
 		}
 	}
-	
+
 	/* Navigation buttons */
 	.client-logo-swiper-button-prev,
 	.client-logo-swiper-button-next {
@@ -356,43 +389,43 @@
 		transition: all 0.3s ease;
 		margin-top: 0 !important;
 		user-select: none;
-		
+
 		&:after {
 			font-size: 18px;
 			font-weight: bold;
 			color: #fff !important;
 			line-height: 1;
 		}
-		
+
 		&:hover:not(.swiper-button-disabled) {
 			background: var(--orange-color, #f3933d) !important;
 			border-color: var(--orange-color, #f3933d) !important;
 			transform: translateY(-50%) scale(1.1);
 		}
-		
+
 		&.swiper-button-disabled {
 			opacity: 0.3 !important;
 			pointer-events: none;
 			cursor: not-allowed;
 		}
 	}
-	
+
 	.client-logo-swiper-button-prev {
 		left: 0;
-		
+
 		&:after {
 			content: '‹';
-			font-size:25px;
+			font-size: 25px;
 			margin-top: -5px;
 		}
 	}
-	
+
 	.client-logo-swiper-button-next {
 		right: 0;
-		
+
 		&:after {
 			content: '›';
-			font-size:25px;
+			font-size: 25px;
 			margin-top: -5px;
 		}
 	}
@@ -407,44 +440,47 @@
 			max-width: 100%;
 		}
 	}
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
 	}
+
 	.client_logo {
 		padding: 0 15px;
 		max-width: 100%;
 		overflow: hidden;
-		
+
 		&.swiper {
 			overflow: hidden;
 		}
-		
+
 		.swiper-wrapper {
 			overflow: visible;
 		}
-		
+
 		.swiper-slide {
 			max-width: 25%;
 			width: 25%;
 		}
-		
+
 		.client-logo-swiper-button-prev,
 		.client-logo-swiper-button-next {
 			width: 30px;
 			height: 30px;
-			
+
 			&:after {
 				font-size: 14px;
 			}
 		}
-		
+
 		.client-logo-item {
 			padding: 12px 4px;
-			min-height: 100px;;
+			min-height: 100px;
+			;
 			width: 100%;
 			max-width: 100%;
-			
+
 			img {
 				max-height: 100%;
 				max-width: 100%;
@@ -464,27 +500,29 @@
 			overflow: hidden;
 		}
 	}
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
 	}
+
 	.client_logo {
 		padding: 0;
 		overflow: hidden;
 		max-width: 100%;
 		width: 100%;
-		
+
 		&.swiper {
 			overflow: hidden;
 			width: 100%;
 			max-width: 100%;
 		}
-		
+
 		.swiper-wrapper {
 			width: 100%;
 			overflow: visible;
 		}
-		
+
 		.client-logo-item {
 			padding: 10px 5px;
 			min-height: 90px;
@@ -492,7 +530,7 @@
 			width: 100%;
 			max-width: 100%;
 			box-sizing: border-box;
-			
+
 			img {
 				max-height: 100%;
 				max-width: 100%;
@@ -505,10 +543,12 @@
 
 /* Small mobile devices */
 @media (max-width: 480px) {
+
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
 	}
+
 	.client_wrapper {
 		.container-fluid {
 			padding-left: 10px;
@@ -517,35 +557,35 @@
 			overflow: hidden;
 		}
 	}
-	
+
 	.client_logo {
 		padding: 0;
 		width: 100%;
 		max-width: 100%;
 		overflow: hidden;
-		
+
 		&.swiper {
 			overflow: hidden;
 			width: 100%;
 			max-width: 100%;
 		}
-		
+
 		.swiper-wrapper {
 			width: 100%;
 		}
-		
+
 		.client-logo-item {
 			height: 100px;
 			width: 100%;
 			max-width: 100%;
 			box-sizing: border-box;
-			border:none !important;
-			
+			border: none !important;
+
 			img {
 				width: 100%;
 				height: 100%;
-				border:none !important
+				border: none !important
 			}
 		}
 	}
-}	
+}

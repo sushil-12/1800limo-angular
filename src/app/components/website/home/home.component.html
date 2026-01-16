@@ -278,9 +278,12 @@
 															</button>
 														</div>
 														<input type="number" formControlName="no_of_passenger" min="0"
-															max="1000" step="1" inputmode="decimal"
+															max="100" step="1" inputmode="numeric"
 															style="text-align: center" class="form-control"
 															placeholder="" id="no_of_passenger" tabindex="1"
+															(keypress)="numberOnly($event)"
+															(paste)="$event.preventDefault()"
+															(input)="validateInputLimit($event)"
 															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors"
 															(focus)="$event.target.select()">
 														<div class="input-group-append">
@@ -321,9 +324,12 @@
 															</button>
 														</div>
 														<input type="number" formControlName="no_of_luggage" min="0"
-															max="2000" step="1" inputmode="decimal"
+															max="100" step="1" inputmode="numeric"
 															style="text-align: center" class="form-control "
 															placeholder="" id="no_of_luggage" tabindex="1"
+															(keypress)="numberOnly($event)"
+															(paste)="$event.preventDefault()"
+															(input)="validateInputLimit($event)"
 															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors"
 															(focus)="$event.target.select()">
 														<div class="input-group-append">
