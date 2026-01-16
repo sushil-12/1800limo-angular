@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -49,6 +50,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 		MatSlideToggleModule,
 		GoogleMapsModule,
 		MatNativeDateModule,
+		MatDatepickerModule,
 		MatMomentDateModule,
 		MatInputModule,
 		MatSelectModule,

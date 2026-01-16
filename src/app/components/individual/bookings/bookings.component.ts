@@ -238,7 +238,9 @@ export class BookingsComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+		let start = this.startDate instanceof Date ? moment(this.startDate).format('YYYY-MM-DD') : this.startDate;
+		let end = this.endDate instanceof Date ? moment(this.endDate).format('YYYY-MM-DD') : this.endDate;
+		this.individualService.loadBookings(pageUrl, this.searchText, start, end, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
 			this.spinner.hide()
 			let date = new Date();
@@ -311,9 +313,12 @@ export class BookingsComponent implements OnInit {
 
 	reset() {
 		let date = new Date();
-		this.startDate = date.toISOString().substring(0, 10);
-		date.setDate(date.getDate() + 7);
-		this.endDate = date.toISOString().substring(0, 10);
+		this.startDate = date;
+
+		let endDate = new Date();
+		endDate.setDate(date.getDate() + 7);
+		this.endDate = endDate;
+
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
 			endDate: dayjs(this.endDate)
@@ -1014,7 +1019,4 @@ export class BookingsComponent implements OnInit {
 				}
 			});
 
-	}
-
-}
-
+		}	}

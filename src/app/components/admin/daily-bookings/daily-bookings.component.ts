@@ -331,9 +331,13 @@ export class DailyBookingsComponent implements OnInit {
 	 * Configure date as per todays date and the future +7 days
 	 */
 	reset() {
-		this.startDate = null;
-		this.endDate = null;
-		this.selectedDateRange = null;
+		let date = new Date();
+		this.startDate = date;
+
+		let endDate = new Date();
+		endDate.setDate(date.getDate() + 7);
+		this.endDate = endDate;
+
 		this.saveCookie('admin_startDate', '');
 		this.saveCookie('admin_endDate', '');
 		localStorage.removeItem("admin_startDate");
@@ -348,6 +352,8 @@ export class DailyBookingsComponent implements OnInit {
 
 		console.log("Reset Successfully. ");
 	}
+
+
 
 	choosedDate(event) {
 		if (event.startDate && event.endDate) {
@@ -883,7 +889,13 @@ export class DailyBookingsComponent implements OnInit {
 
 	changeDate(dateType, date: Date) { // $event is now Date
 		console.log("---------__>>>>>>", dateType, date);
-		this[dateType] = date;
+		if (dateType == 'startDate') {
+			this.startDate = dayjs(date).toDate();
+			this.saveCookie('admin_startDate', this.startDate);
+		} else {
+			this.endDate = dayjs(date).toDate();
+			this.saveCookie('admin_endDate', this.endDate);
+		}
 	}
 	fomatAffiliateType(type: any) {
 		if (type == "taxi_operator") {

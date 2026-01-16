@@ -85,6 +85,7 @@ import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.co
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -218,6 +219,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 		MatSlideToggleModule,
 		GoogleMapsModule,
 		MatNativeDateModule,
+		MatDatepickerModule,
 		MatFormFieldModule,
 		MatInputModule,
 		MatSelectModule,

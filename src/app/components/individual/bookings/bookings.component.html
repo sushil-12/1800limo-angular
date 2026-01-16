@@ -24,18 +24,33 @@
         <div class="containeredd mt-1 ">
             <div class="row my-2 align-items-center">
                 <!-- Date Range -->
-                <div class="col-md-4">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Date Range</mat-label>
-                        <input matInput ngxDaterangepickerMd [(ngModel)]="selectedDateRange"
-                            [showCustomRangeLabel]="false" [alwaysShowCalendars]="true" [autoApply]="true"
-                            (ngModelChange)="choosedDate($event)" placeholder="Select Date Range"
-                            id="date_range_picker" />
-                    </mat-form-field>
+                <!-- Start Date -->
+                <div class="col-md-9" style="gap: 15px; display: flex;">
+                    <div class="flex-grow-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="picker1" placeholder="Start Date"
+                                (dateChange)="changeDate('startDate', $event.value)" (click)="picker1.open()"
+                                [value]="startDate" readonly />
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <!-- End Date -->
+                    <div class="flex-grow-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="picker2" placeholder="End Date"
+                                (dateChange)="changeDate('endDate', $event.value)" (click)="picker2.open()"
+                                [value]="endDate" [min]="startDate" readonly />
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
                 </div>
 
                 <!-- Search Button -->
-                <div class="col-md-8 d-flex align-items-end mt-4">
+                <div class="col-md-3 d-flex align-items-end mt-4">
                     <div class="ml-2">
                         <button class="custom-filled-button orange-button"
                             style="color:#fff;padding: 5px 12px !important;"
