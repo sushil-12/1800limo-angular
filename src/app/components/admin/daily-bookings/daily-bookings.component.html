@@ -1895,7 +1895,11 @@
 						[routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
 					<button class="custom-filled-button orange-button" data-dismiss="modal"
 						[routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
-					<button class="close x-copy-btn" (click)="copyPreviewText()">
+					<button class="close x-copy-btn" (click)="copyPreviewText()" style="opacity: 1; color: #f57c00;">
+						<span *ngIf="showCopyIcon" style="font-size: 14px; font-weight: bold; margin-right: 5px;">Copied
+							Data</span>
+						<span *ngIf="!showCopyIcon" style="font-size: 14px; font-weight: bold; margin-right: 5px;">Copy
+							details</span>
 						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
 							class="bi bi-check2" viewBox="0 0 16 16" *ngIf="showCopyIcon">
 							<path
