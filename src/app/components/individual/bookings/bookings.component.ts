@@ -4,6 +4,7 @@ import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as dayjs from 'dayjs';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AffiliateService } from 'src/app/services/affiliate.service';
@@ -52,8 +53,9 @@ export class BookingsComponent implements OnInit {
 	public bookingsRes: any;
 	public bookings: any;
 	public bookingStatusColor: string;
-	public startDate: string;
-	public endDate: string;
+	public startDate: any;
+	public endDate: any;
+	public selectedDateRange: any;
 	public date: Date;
 	public changeStatusForm: FormGroup;
 	inviteAgentForm: FormGroup;
@@ -120,6 +122,11 @@ export class BookingsComponent implements OnInit {
 		date.setDate(date.getDate() + 7);
 
 		this.endDate = date.toISOString().substring(0, 10);;
+
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
 
 		this.searchText = this.affiliateService.checkCookie('indv_search') ?
 			this.affiliateService.getCookie('indv_search')
@@ -231,7 +238,9 @@ export class BookingsComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+		let start = this.startDate instanceof Date ? moment(this.startDate).format('YYYY-MM-DD') : this.startDate;
+		let end = this.endDate instanceof Date ? moment(this.endDate).format('YYYY-MM-DD') : this.endDate;
+		this.individualService.loadBookings(pageUrl, this.searchText, start, end, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
 			this.spinner.hide()
 			let date = new Date();
@@ -304,9 +313,16 @@ export class BookingsComponent implements OnInit {
 
 	reset() {
 		let date = new Date();
-		this.startDate = date.toISOString().substring(0, 10);
-		date.setDate(date.getDate() + 7);
-		this.endDate = date.toISOString().substring(0, 10);
+		this.startDate = date;
+
+		let endDate = new Date();
+		endDate.setDate(date.getDate() + 7);
+		this.endDate = endDate;
+
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
 		this.affiliateService.deleteCookie('indv_startDate')
 		this.affiliateService.deleteCookie('indv_endDate')
 		this.affiliateService.deleteCookie('indv_search')
@@ -536,6 +552,12 @@ export class BookingsComponent implements OnInit {
 		else {
 			this.endDate = date;
 		}
+	}
+
+	choosedDate(event) {
+		this.startDate = event.startDate.format('YYYY-MM-DD'); // Convert to string for API
+		this.endDate = event.endDate.format('YYYY-MM-DD'); // Convert to string for API
+		console.log(this.startDate, this.endDate);
 	}
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
@@ -997,7 +1019,4 @@ export class BookingsComponent implements OnInit {
 				}
 			});
 
-	}
-
-}
-
+		}	}

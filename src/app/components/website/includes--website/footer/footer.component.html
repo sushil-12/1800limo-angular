@@ -10,7 +10,8 @@
 						<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
 							<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-								style="background-color: #F3933E !important;color: #fff !important;">Login / Create</button>
+								style="background-color: #F3933E !important;color: #fff !important;">Login /
+								Create</button>
 							<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
 								<a class="dropdown-item indv-btn font-weight-bolder"
 									(click)="loginButtons('individual')"
@@ -42,9 +43,9 @@
 								<li class="nav-item dropdown no-caret dropdown-user">
 									<button
 										class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
-										style="background-color: #33c658 !important;"
-										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										style="background-color: #33c658 !important;" id="navbarDropdownUserImage"
+										href="javascript:void(0);" role="button" data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="false">
 										{{currentUser.affiliateCompanyName ?
 										currentUser.affiliateCompanyName : currentUser.name ?
 										currentUser.name : currentUser.FirstName +
@@ -128,7 +129,8 @@
 							style="color: #007fee !important;text-decoration: underline !important;font-size: 20px !important;"
 							href="https://maps.app.goo.gl/4yQ9nNJ1EHCbJr8r5" target="_blank">Google</a>.
 					</p>
-					<a href="mailto:info@1800limo.com"><i class="fa-regular fa-envelope	mr-2"></i>info&#64;1800limo.com</a>
+					<a href="mailto:info@1800limo.com"><i
+							class="fa-regular fa-envelope	mr-2"></i>info&#64;1800limo.com</a>
 					<p style="margin-top: 0 !important;">Follow us on social media! We’ll provide you with only the most
 						important
 						information and
@@ -232,26 +234,28 @@
 						Quick Links
 					</h4>
 					<div class="row">
-					<div class="col-6 block quick-links-footer" style="display: flex; text-align: left !important; justify-content: flex-end;">
-						<ul>
-							<li><a routerLink="about-us" tabindex="1">About us</a></li>
-							<li><a routerLink="contact-us" tabindex="1">Contact Us</a></li>
-							<li><a routerLink="blog" tabindex="1">Blog</a></li>
-							<!-- <li><a routerLink="testimonials" tabindex="1">Testimonials </a> </li> -->
-							<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
-							<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
-						</ul>
+						<div class="col-6 block quick-links-footer"
+							style="display: flex; text-align: left !important; justify-content: flex-end;">
+							<ul>
+								<li><a routerLink="about-us" tabindex="1">About us</a></li>
+								<li><a routerLink="contact-us" tabindex="1">Contact Us</a></li>
+								<li><a routerLink="blog" tabindex="1">Blog</a></li>
+								<!-- <li><a routerLink="testimonials" tabindex="1">Testimonials </a> </li> -->
+								<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
+								<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
+							</ul>
+						</div>
+						<div class="col-6 block" style="text-align: left;">
+							<ul>
+								<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner</a></li>
+								<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
+								<li><a routerLink="investors" tabindex="1">Investors</a></li>
+								<!-- <li><a routerLink="suggestions-complaints" tabindex="1">Suggestions / Complaints</a></li> -->
+								<li><a routerLink="insurance-licensing" tabindex="1">Insurance & licensing</a></li>
+								<li><a routerLink="tutorials" tabindex="1">Tutorials</a></li>
+							</ul>
+						</div>
 					</div>
-					<div class="col-6 block" style="text-align: left;">
-						<ul>
-							<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner</a></li>
-							<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
-							<li><a routerLink="investors" tabindex="1">Investors</a></li>
-							<!-- <li><a routerLink="suggestions-complaints" tabindex="1">Suggestions / Complaints</a></li> -->
-							<li><a routerLink="insurance-licensing" tabindex="1">Insurance & licensing</a></li>
-						</ul>
-					</div>
-				</div>
 				</div>
 			</div>
 			<div class="footer row mt-4 copyright_div">

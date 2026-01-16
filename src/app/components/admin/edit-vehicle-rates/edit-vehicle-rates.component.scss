@@ -28,6 +28,7 @@
 		margin-bottom: 0px;
 	}
 }
+
 div#rate-manager-slider {
 	width: 100%;
 
@@ -40,36 +41,36 @@ div#rate-manager-slider {
 	}
 
 	&>p {
-		width : 90%;
+		width: 90%;
 		cursor: pointer;
 	}
 
 	#slider {
 		background-color: #908c8c;
-		appearance      : none;
-		outline         : none;
-		border-radius   : 10px;
-		height          : 3px
+		appearance: none;
+		outline: none;
+		border-radius: 10px;
+		height: 3px
 	}
 
 	#slider::-webkit-slider-thumb {
 		-webkit-appearance: none;
-		appearance        : none;
-		width             : 25px;
-		height            : 25px;
-		border-radius     : 50%;
-		background-color  : var(--orange-color);
-		cursor            : pointer;
-		border            : 3px solid var(--orange-color);
+		appearance: none;
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
+		background-color: var(--orange-color);
+		cursor: pointer;
+		border: 3px solid var(--orange-color);
 	}
 
 	#slider::-moz-range-thumb {
-		width           : 25px;
-		height          : 25px;
-		border-radius   : 50%;
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
 		background-color: var(--orange-color);
-		cursor          : pointer;
-		border          : 3px solid var(--orange-color);
+		cursor: pointer;
+		border: 3px solid var(--orange-color);
 	}
 }
 
@@ -152,11 +153,12 @@ div#rate-manager-slider {
 .amenityLabel {
 	font-weight: 600;
 }
-.asterisk{
+
+.asterisk {
 	font-size: 1.45rem;
 }
 
-.border-red{
+.border-red {
 	border: 2px solid red;
 	border-radius: 4px;
 }

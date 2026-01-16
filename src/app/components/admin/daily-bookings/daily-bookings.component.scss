@@ -468,11 +468,11 @@ a.dropdown-item {
 }
 
 
-.text-purple{
+.text-purple {
 	color: #00c;
 }
 
-.text-red{
+.text-red {
 	color: red;
 }
 
@@ -498,15 +498,31 @@ a.dropdown-item {
 }
 
 
-@media (min-width: 992px){
-	.modal-lg{
+@media (min-width: 992px) {
+	.modal-lg {
 		max-width: 600px !important;
 	}
 }
 
 
 @media (min-width: 576px) {
-    .modal-dialog {
-        max-width: 550px;
-    }
+	.modal-dialog {
+		max-width: 550px;
+	}
+}
+
+/* Force the date range picker to be wide enough for side-by-side calendars */
+::ng-deep .md-drppicker {
+	min-width: 500px !important;
+	width: auto !important;
+}
+
+@media (max-width: 768px) {
+	::ng-deep .md-drppicker {
+		min-width: 300px !important;
+	}
+}
+
+#date_range_picker {
+	padding-left: 10px !important;
 }

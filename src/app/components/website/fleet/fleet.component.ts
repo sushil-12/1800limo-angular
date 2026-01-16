@@ -8,14 +8,15 @@ import { Swiper } from 'swiper';
 import { Navigation, Autoplay } from 'swiper/modules';
 declare var $: any;
 @Component({
-  selector: 'app-fleet',
-  templateUrl: './fleet.component.html',
-  styleUrls: ['./fleet.component.scss']
+	selector: 'app-fleet',
+	templateUrl: './fleet.component.html',
+	styleUrls: ['./fleet.component.scss']
 })
 export class FleetComponent implements OnInit {
-  public fleetContents: any;
-  clientLogoSwiper: Swiper | null = null;
+	public fleetContents: any;
+	clientLogoSwiper: Swiper | null = null;
 	clientImages: any[] = [];
+	vehicleImages: any[] = [];
 	homePageData: any;
 	stepRotationInterval: any;
 	currentActiveStep: number = 1;
@@ -23,173 +24,173 @@ export class FleetComponent implements OnInit {
 
 	@ViewChild('clientLogoContainer') clientLogoContainer!: ElementRef;
 
-  constructor(private adminServices: AdminService, private spinner: NgxSpinnerService,private websiteService: WebsiteService, ) { }
-  initOtherCarousels() {
-	// Initialize all other carousels with 1 item on mobile
-	setTimeout(() => {
-		// General owl carousels
-		$('.owl-carousels').owlCarousel({
-			loop: true,
-			autoplay: true,
-			autoplayTimeout: 2000,
-			dotsEach: 3,
-			dots: true,
-			autoplayHoverPause: true,
-			margin: 10,
-			responsiveClass: true,
-			// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-			// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-			responsive: {
-				0: {
-					items: 1, // Mobile: 1 item
-					nav: false,
-					loop: true,
-					dots: true
-				},
-				600: {
-					items: 2, // Tablet: 2 items
-					nav: true,
-					dots: true
-				},
-				1000: {
-					items: 3, // Desktop: 3 items
-					nav: true,
-					loop: true,
-					autoplay: true,
-					margin: 20
+	constructor(private adminServices: AdminService, private spinner: NgxSpinnerService, private websiteService: WebsiteService,) { }
+	initOtherCarousels() {
+		// Initialize all other carousels with 1 item on mobile
+		setTimeout(() => {
+			// General owl carousels
+			$('.owl-carousels').owlCarousel({
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 2000,
+				dotsEach: 3,
+				dots: true,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20
+					}
 				}
-			}
-		});
+			});
 
-		// Destination carousel
-		$('.destinationCarousel').owlCarousel({
-			loop: true,
-			autoplay: false,
-			dotsEach: 3,
-			dots: true,
-			autoplayTimeout: 2000,
-			autoplayHoverPause: true,
-			margin: 10,
-			responsiveClass: true,
-			// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-			// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-			responsive: {
-				0: {
-					items: 1, // Mobile: 1 item
-					nav: false,
-					loop: true,
-					dots: true
-				},
-				600: {
-					items: 2, // Tablet: 2 items
-					nav: true,
-					dots: true
-				},
-				1000: {
-					items: 3, // Desktop: 3 items
-					nav: true,
-					loop: true,
-					autoplay: false,
-					margin: 10,
-					dots:true
+			// Destination carousel
+			$('.destinationCarousel').owlCarousel({
+				loop: true,
+				autoplay: false,
+				dotsEach: 3,
+				dots: true,
+				autoplayTimeout: 2000,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: false,
+						margin: 10,
+						dots: true
+					}
 				}
-			}
-		});
+			});
 
-		// View vehicle carousel
-		$('.viewVehicleCarousel').owlCarousel({
-			loop: true,
-			autoplay: true,
-			autoplayTimeout: 2000,
-			dotsEach: 3,
-			dots:true,
-			autoplayHoverPause: true,
-			margin: 10,
-			responsiveClass: true,
-			// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-			// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-			responsive: {
-				0: {
-					items: 1, // Mobile: 1 item
-					nav: false,
-					loop: true,
-					dots: true
-				},
-				600: {
-					items: 2, // Tablet: 2 items
-					nav: true,
-					dots: true
-				},
-				1000: {
-					items: 3, // Desktop: 3 items
-					nav: true,
-					loop: true,
-					autoplay: true,
-					margin: 20,
-					dots: true
+			// View vehicle carousel
+			$('.viewVehicleCarousel').owlCarousel({
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 2000,
+				dotsEach: 3,
+				dots: true,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					}
 				}
-			}
-		});
+			});
 
-		// View vehicle carousel
-		$('.viewClientLogo').owlCarousel({
-			loop: true,
-			autoplay: true,
-			autoplayTimeout: 2000,
-			dotsEach: 3,
-			dots:true,
-			autoplayHoverPause: true,
-			margin: 10,
-			responsiveClass: true,
-			// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-			// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-			responsive: {
-				0: {
-					items: 1, // Mobile: 1 item
-					nav: false,
-					loop: true,
-					dots: true
-				},
-				600: {
-					items: 2, // Tablet: 2 items
-					nav: true,
-					dots: true
-				},
-				1000: {
-					items: 3, // Desktop: 3 items
-					nav: true,
-					loop: true,
-					autoplay: true,
-					margin: 20,
-					dots: true
-				},
-				1199: {
-					items: 4, // Desktop: 3 items
-					nav: true,
-					loop: true,
-					autoplay: true,
-					margin: 20,
-					dots: true
-				},
-				1380: {
-					items: 5, // Desktop: 3 items
-					nav: true,
-					loop: true,
-					autoplay: true,
-					margin: 20,
-					dots: true
+			// View vehicle carousel
+			$('.viewClientLogo').owlCarousel({
+				loop: true,
+				autoplay: true,
+				autoplayTimeout: 2000,
+				dotsEach: 3,
+				dots: true,
+				autoplayHoverPause: true,
+				margin: 10,
+				responsiveClass: true,
+				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				responsive: {
+					0: {
+						items: 1, // Mobile: 1 item
+						nav: false,
+						loop: true,
+						dots: true
+					},
+					600: {
+						items: 2, // Tablet: 2 items
+						nav: true,
+						dots: true
+					},
+					1000: {
+						items: 3, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					},
+					1199: {
+						items: 4, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					},
+					1380: {
+						items: 5, // Desktop: 3 items
+						nav: true,
+						loop: true,
+						autoplay: true,
+						margin: 20,
+						dots: true
+					}
 				}
-			}
-		});
+			});
 
-		// client_logo carousel is now handled by Swiper in initClientCarousel() method
-	}, 200);
-}
-  	// Initialize step rotation animation for "How Works" section
+			// client_logo carousel is now handled by Swiper in initClientCarousel() method
+		}, 200);
+	}
+	// Initialize step rotation animation for "How Works" section
 	initStepRotation() {
 		this.startStepRotation();
 	}
-  startStepRotation() {
+	startStepRotation() {
 		// Clear any existing interval
 		if (this.stepRotationInterval) {
 			clearInterval(this.stepRotationInterval);
@@ -208,7 +209,7 @@ export class FleetComponent implements OnInit {
 			this.updateProgress();
 		}, 1000); // 2 seconds per step for faster flow
 	}
-  manualSelectStep(step: number) {
+	manualSelectStep(step: number) {
 		// Stop auto-rotation if user interacts
 		if (this.stepRotationInterval) {
 			clearInterval(this.stepRotationInterval);
@@ -216,7 +217,7 @@ export class FleetComponent implements OnInit {
 		this.currentActiveStep = step;
 		this.updateProgress();
 	}
-  updateProgress() {
+	updateProgress() {
 		// Calculate width: 
 		// Step 1 = 0%, Step 2 = 33%, Step 3 = 66%, Step 4 = 100% of the LINE width.
 		// Since there are 3 segments connecting 4 points:
@@ -224,7 +225,7 @@ export class FleetComponent implements OnInit {
 		const stepIndex = this.currentActiveStep - 1;
 		this.progressWidth = (stepIndex / segments) * 100;
 	}
-  fetchHomePageData() {
+	fetchHomePageData() {
 		this.spinner.show()
 
 		this.websiteService.fetchHomePageData()
@@ -238,16 +239,27 @@ export class FleetComponent implements OnInit {
 				console.log(data, "gsducgjsdgcfugsdu")
 				this.homePageData = data;
 				this.clientImages = this.fetchPageData('SOME OF OUR CLIENTS')?.images || [];
-				console.log(this.clientImages,"imagessss")
+				console.log(this.clientImages, "imagessss")
 				// Initialize all carousels after data is loaded
 				setTimeout(() => {
 					this.initOtherCarousels();
 					this.initStepRotation(); // Initialize step rotation animation
 				}, 100);
 			})
-			
+
 	}
-  fetchPageData(section: string) {
+
+	getVehicles() {
+		this.websiteService.getOurVehicles().then((response: any) => {
+			console.log("getVehicles response:", response);
+			if (response && response.data) {
+				this.vehicleImages = response.data;
+			} else if (Array.isArray(response)) {
+				this.vehicleImages = response;
+			}
+		});
+	}
+	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
 			if (this.homePageData) {
 				for (let item in this.homePageData) {
@@ -258,10 +270,11 @@ export class FleetComponent implements OnInit {
 			}
 		}
 	}
-  ngOnInit(): void {
-  	this.fetchHomePageData();
-    this.getFleet();
-  }
+	ngOnInit(): void {
+		this.fetchHomePageData();
+		this.getFleet();
+		this.getVehicles();
+	}
 	ngOnDestroy(): void {
 		// Clean up step rotation interval
 		if (this.stepRotationInterval) {
@@ -277,17 +290,53 @@ export class FleetComponent implements OnInit {
 			this.clientLogoSwiper = null;
 		}
 	}
-  getFleet(){
-    this.spinner.show()
-    this.adminServices.getStepContentData('fleet').pipe(
+	getFleet() {
+		this.spinner.show()
+		this.adminServices.getStepContentData('fleet').pipe(
 			catchError(err => {
-        this.spinner.hide()
-        return throwError(err);
-      })
-    ).subscribe(({ data }: any) => {
-      this.spinner.hide()
-      console.log(data);
-      this.fleetContents = data;
-    })
-  }
+				this.spinner.hide()
+				return throwError(err);
+			})
+		).subscribe(({ data }: any) => {
+			this.spinner.hide()
+			console.log(data);
+			this.fleetContents = data;
+		})
+	}
+
+	getVehicleImage(title: string): string {
+		if (!title) return '';
+		if (!this.vehicleImages || this.vehicleImages.length === 0) {
+			return '';
+		}
+
+		// Tokenize: Remove parens/special chars, lowercase, split by space
+		const tokenize = (s: string) => s ? s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(t => t.length > 2) : [];
+
+		const targetTokens = tokenize(title);
+		if (targetTokens.length === 0) return '';
+
+		let bestMatch = null;
+		let bestScore = 0;
+
+		this.vehicleImages.forEach(v => {
+			const vTokens = tokenize(v.vehicle_name);
+			// Calculate overlap
+			const intersection = targetTokens.filter(t => vTokens.some(vt => vt.includes(t) || t.includes(vt))); // Fuzzy overlap
+			const score = intersection.length; // Simple count of matching distinct tokens
+
+			if (score > bestScore) {
+				bestScore = score;
+				bestMatch = v;
+			}
+		});
+
+		if (bestMatch && bestScore > 0) {
+			// console.log(`[MATCH] "${title}" matched "${bestMatch.vehicle_name}" (Score: ${bestScore})`);
+			return (bestMatch as any).vehicle_image;
+		} else {
+			console.log(`[NO MATCH] "${title}" - Best Score: ${bestScore}`);
+			return '';
+		}
+	}
 }

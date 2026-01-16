@@ -13,21 +13,24 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 declare var $: any;
 import * as moment from "moment";
+import * as dayjs from 'dayjs';
 import { ErrorDialogService } from "../../../services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
-import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
+// import { DatePickerComponent } from "../../shared/date-picker/date-picker.component"; // Remove if custom header is not needed
 import { UploadService } from "../../../services/upload.service";
 import { GoogleMap } from '@angular/google-maps';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker'; // Import for config if needed
 
 @Component({
 	selector: "app-daily-bookings",
 	templateUrl: "./daily-bookings.component.html",
 	styleUrls: ["./daily-bookings.component.scss"],
+	providers: [BsDatepickerConfig] // Optional: Provide config if customizing globally
 })
 export class DailyBookingsComponent implements OnInit {
 	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 
-	exampleHeader = DatePickerComponent;
+	// exampleHeader = DatePickerComponent; // Remove if not using Material
 	@ViewChild("inputmsg", { static: false }) message: ElementRef;
 	@ViewChild('fileInput') fileInput!: ElementRef;
 	@ViewChild("select") select: MatSelect;
@@ -51,8 +54,9 @@ export class DailyBookingsComponent implements OnInit {
 	public bookingsRes: any;
 	public bookings: any = [];
 	public bookingStatusColor: string;
-	public startDate: string;
-	public endDate: string;
+	public startDate: Date | null; // Changed to Date
+	public endDate: Date | null; // Changed to Date
+	public selectedDateRange: any;
 	public orderBy: string = "pickup_date_desc";
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
@@ -103,32 +107,32 @@ export class DailyBookingsComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
 		private uploadService: UploadService,
-	) { }
+		private bsConfig: BsDatepickerConfig // Optional: Inject for custom config
+	) {
+		// Optional: Set global config for datepicker
+		this.bsConfig.dateInputFormat = this.outputDateFormat;
+		this.bsConfig.containerClass = 'theme-default';
+		this.bsConfig.showWeekNumbers = false;
+	}
 
 	ngOnInit(): void {
 		let date = new Date();
 		let timestamp = date.getTime();
-		//     const options:any = {
-		// 		year: 'numeric',
-		// 		month: '2-digit',
-		// 		day: '2-digit',
-		// 	};
-		// const localeDateString = date.toLocaleDateString(undefined, options).
-		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = localStorage.getItem("admin_startDate")
-			? localStorage.getItem("admin_startDate")
-			: moment(timestamp).format("YYYY-MM-DD");
-
-		// this.startDate = moment(timestamp).format("YYYY-MM-DD");
+			? dayjs(localStorage.getItem("admin_startDate")).toDate() // Convert string to Date
+			: dayjs(timestamp).toDate();
 
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
 		this.endDate = localStorage.getItem("admin_endDate")
-			? localStorage.getItem("admin_endDate")
-			: moment(timestamp).format("YYYY-MM-DD");
+			? dayjs(localStorage.getItem("admin_endDate")).toDate() // Convert string to Date
+			: dayjs(timestamp).toDate();
 
-		// this.endDate = moment(timestamp).format("YYYY-MM-DD");
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
 
 		this.searchText = localStorage.getItem("DBSearch")
 			? localStorage.getItem("DBSearch")
@@ -298,11 +302,15 @@ export class DailyBookingsComponent implements OnInit {
 		let date = new Date();
 		date.setDate(date.getDate());
 		let timestamp = date.getTime();
-		this.startDate = moment(timestamp).format("YYYY-MM-DD");
+		this.startDate = dayjs(timestamp).toDate();
 		// let date = new Date();
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
+		this.endDate = dayjs(timestamp).toDate();
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
 	handleCheckboxSort(value: any) {
@@ -324,16 +332,14 @@ export class DailyBookingsComponent implements OnInit {
 	 */
 	reset() {
 		let date = new Date();
-		let timestamp = date.getTime();
-		// const options:any = {
-		// 	year: 'numeric',
-		// 	month: '2-digit',
-		// 	day: '2-digit',
-		// };
-		this.startDate = moment(timestamp).format("YYYY-MM-DD");
-		date.setDate(date.getDate() + 7);
-		timestamp = date.getTime();
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
+		this.startDate = date;
+
+		let endDate = new Date();
+		endDate.setDate(date.getDate() + 7);
+		this.endDate = endDate;
+
+		this.saveCookie('admin_startDate', '');
+		this.saveCookie('admin_endDate', '');
 		localStorage.removeItem("admin_startDate");
 		localStorage.removeItem("admin_endDate");
 		// this.adminService.deleteCookie('search')
@@ -345,6 +351,18 @@ export class DailyBookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log("Reset Successfully. ");
+	}
+
+
+
+	choosedDate(event) {
+		if (event.startDate && event.endDate) {
+			this.startDate = dayjs(event.startDate).hour(12).minute(0).second(0).toDate();
+			this.endDate = dayjs(event.endDate).hour(12).minute(0).second(0).toDate();
+			// this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+			this.saveCookie('admin_startDate', this.startDate);
+			this.saveCookie('admin_endDate', this.endDate);
+		}
 	}
 
 	messageField(format) {
@@ -515,7 +533,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService
 			.adminNotification(obj)
 			.pipe(
-				catchError((err) => { 
+				catchError((err) => {
 					this.spinner.hide();
 					return throwError(err);
 				})
@@ -613,14 +631,18 @@ export class DailyBookingsComponent implements OnInit {
 	noError: boolean = false;
 	loadBookings(
 		pageUrl = null,
-		start_date: string,
-		end_date: string,
+		start_date: Date | null, // Changed to Date
+		end_date: Date | null, // Changed to Date
 		search_value: string = ""
 	) {
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('daily_bookings_table')
 		}
+
+		// Convert Dates back to strings for API if needed (assuming API expects 'YYYY-MM-DD')
+		const startDateStr = start_date ? dayjs(start_date).format('YYYY-MM-DD') : '';
+		const endDateStr = end_date ? dayjs(end_date).format('YYYY-MM-DD') : '';
 
 		search_value == "" && this.spinner.show();
 		this.noError = false;
@@ -630,8 +652,8 @@ export class DailyBookingsComponent implements OnInit {
 			this.adminService
 				.loadBookings(
 					pageUrl,
-					start_date,
-					end_date,
+					startDateStr,
+					endDateStr,
 					this.useDateFilter,
 					search_value ?? "",
 					this.orderBy
@@ -647,7 +669,7 @@ export class DailyBookingsComponent implements OnInit {
 					this.bookingsRes = result;
 					this.bookings = this.bookingsRes?.data?.reservations?.data;
 					if (!this.useDateFilter && !this.searchText) {
-						this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+						this.endDate = this.bookings?.length > 0 ? dayjs(this.bookings[this.bookings?.length - 1]?.pickup_date).toDate() : dayjs(timestamp).toDate()
 					}
 					this.total_amount = this.bookingsRes?.data?.total_amount
 					this.admin_total = this.bookingsRes?.data?.admin_total
@@ -671,8 +693,8 @@ export class DailyBookingsComponent implements OnInit {
 			this.adminService
 				.loadFarmInBookings(
 					pageUrl,
-					start_date,
-					end_date,
+					startDateStr,
+					endDateStr,
 					this.useDateFilter,
 					search_value ?? "",
 					this.orderBy
@@ -688,7 +710,7 @@ export class DailyBookingsComponent implements OnInit {
 					this.bookingsRes = result;
 					this.bookings = this.bookingsRes?.data?.reservations?.data;
 					if (!this.useDateFilter && !this.searchText) {
-						this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+						this.endDate = this.bookings?.length > 0 ? dayjs(this.bookings[this.bookings?.length - 1]?.pickup_date).toDate() : dayjs(timestamp).toDate()
 					}
 					this.totalRecords = this.bookingsRes.data?.reservations?.total;
 					this.total_amount = this.bookingsRes?.data?.total_amount
@@ -714,18 +736,22 @@ export class DailyBookingsComponent implements OnInit {
 
 	handleShowMore(
 		pageUrl = null,
-		start_date: string,
-		end_date: string,
+		start_date: Date | null, // Changed to Date
+		end_date: Date | null, // Changed to Date
 		search_value: string = ""
 	) {
+		// Convert Dates back to strings for API if needed
+		const startDateStr = start_date ? dayjs(start_date).format('YYYY-MM-DD') : '';
+		const endDateStr = end_date ? dayjs(end_date).format('YYYY-MM-DD') : '';
+
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
 		this.adminService
 			.loadBookings(
 				pageUrl,
-				start_date,
-				end_date,
+				startDateStr,
+				endDateStr,
 				this.useDateFilter,
 				search_value ?? "",
 				this.orderBy
@@ -778,35 +804,35 @@ export class DailyBookingsComponent implements OnInit {
 	async copyPreviewText() {
 		// 1) Prepare text: convert <br> to newlines, strip tags (or keep as needed)
 		const plainText = (this.previewCopyData || '')
-		  .replace(/<br\s*\/?>/gi, '\n')   // convert <br> -> newline
-		  .replace(/<\/?b>/gi, '')        // remove <b> tags
-		  .replace(/&nbsp;/gi, ' ');      // optional: handle HTML entities
-	  
+			.replace(/<br\s*\/?>/gi, '\n')   // convert <br> -> newline
+			.replace(/<\/?b>/gi, '')        // remove <b> tags
+			.replace(/&nbsp;/gi, ' ');      // optional: handle HTML entities
+
 		// 2) Try navigator.clipboard first (works on secure contexts and modern browsers)
 		try {
-		  if (navigator.clipboard && navigator.clipboard.writeText) {
-			await navigator.clipboard.writeText(plainText);
-			// this.showCopiedToast(); // or alert('Copied!');
-			this.showCopyIcon = true
-			console.log("in function copy link to clipboard")
-			setTimeout(() => {
-				this.showCopyIcon = false
-			}, 2500)
-			return;
-		  }
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				await navigator.clipboard.writeText(plainText);
+				// this.showCopiedToast(); // or alert('Copied!');
+				this.showCopyIcon = true
+				console.log("in function copy link to clipboard")
+				setTimeout(() => {
+					this.showCopyIcon = false
+				}, 2500)
+				return;
+			}
 		} catch (err) {
-		  // ignore and fallback
-		  console.warn('navigator.clipboard.writeText failed:', err);
+			// ignore and fallback
+			console.warn('navigator.clipboard.writeText failed:', err);
 		}
-	  
-	  }
-	  
-	  
-	  showCopiedToast() {
+
+	}
+
+
+	showCopiedToast() {
 		alert('Copied to clipboard!');
-	  }
-	  
-	  
+	}
+
+
 
 	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
@@ -861,9 +887,15 @@ export class DailyBookingsComponent implements OnInit {
 		return udpArr;
 	}
 
-	changeDate(dateType, date) {
+	changeDate(dateType, date: Date) { // $event is now Date
 		console.log("---------__>>>>>>", dateType, date);
-		this[dateType] = date;
+		if (dateType == 'startDate') {
+			this.startDate = dayjs(date).toDate();
+			this.saveCookie('admin_startDate', this.startDate);
+		} else {
+			this.endDate = dayjs(date).toDate();
+			this.saveCookie('admin_endDate', this.endDate);
+		}
 	}
 	fomatAffiliateType(type: any) {
 		if (type == "taxi_operator") {
@@ -1038,15 +1070,15 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	dateFormat(value: any) {
-		return moment(value, "YYYY-MM-DD").format("ll");
+		return moment(value).format("ll"); // Adjusted for Date input
 	}
 
 	dateFormat2(value: any) {
-		return moment(value, "YYYY-MM-DD").format("L");
+		return moment(value).format("L"); // Adjusted for Date input
 	}
 
 	dateFormatToDay(value: any) {
-		return moment(value, "YYYY-MM-DD").format('dddd');
+		return moment(value).format('dddd'); // Adjusted for Date input
 	}
 
 
@@ -1211,9 +1243,11 @@ export class DailyBookingsComponent implements OnInit {
 		return '0.00';
 	}
 
-	saveCookie(key: string, value: string) {
+	saveCookie(key: string, value: any) { // Adjusted to handle Date
+		// Convert Date to string before saving
+		const valueStr = value instanceof Date ? moment(value).format('YYYY-MM-DD') : value;
 		// this.adminService.setCookie(key, value, 30);
-		localStorage.setItem(key, value);
+		localStorage.setItem(key, valueStr);
 	}
 
 	// changeFilterType(value: string) {

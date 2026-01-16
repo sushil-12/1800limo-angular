@@ -26,6 +26,11 @@ textarea.mat-mdc-input-element.cdk-textarea-autosize {
 	font-weight: bold;
 }
 
+::ng-deep .md-drppicker {
+	min-width: 500px !important;
+	width: auto !important;
+}
+
 .adminbox_shadow.user_information .mat-mdc-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
@@ -177,6 +182,8 @@ hr {
 .invite-agent-modal-header {
 	padding: 0.5rem 1rem 0rem 1rem !important;
 }
+
+
 
 @media (min-width: 576px) {
 	.invite-agent-modal-dialog {
@@ -587,8 +594,8 @@ a.dropdown-item {
 	}
 }
 
-@media (min-width: 992px){
-	.modal-lg{
+@media (min-width: 992px) {
+	.modal-lg {
 		max-width: 600px !important;
 	}
 }
@@ -596,5 +603,5 @@ a.dropdown-item {
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
-    white-space: normal !important;
+	white-space: normal !important;
 }

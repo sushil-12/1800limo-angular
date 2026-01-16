@@ -25,70 +25,58 @@
 			</h3>
 			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
-				<div class="horizontal-scroll-container">
-					<div class="col-6 col-md-4">
-						<mat-form-field appearance="outline" class="text-xl scroll-item">
-							<mat-label>
-								Start Date <span class="asterisk"> * </span>
-							</mat-label>
-							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-								placeholder="Start Date" id="id_4"
-								(dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
-								[value]="startDate" readonly />
-							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>Start date <span class="asterisk"> * </span></mat-label>
-							<input matInput [matDatepicker]="picker3">
-							<mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-							<mat-datepicker #picker3 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						  </mat-form-field> -->
-					</div>
-
-					<!-- End-Date -->
-					<div class="col-6 col-md-4">
-						<mat-form-field appearance="outline" class="text-xl scroll-item">
-							<mat-label>
-								End Date <span class="asterisk"> * </span>
-							</mat-label>
-							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-							<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>End date <span class="asterisk"> * </span></mat-label>
-							<input matInput [matDatepicker]="picker4">
-							<mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-							<mat-datepicker #picker4 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						  </mat-form-field> -->
+				<!-- Date Range -->
+				<div class="col-md-5">
+					<!-- Start Date -->
+					<div class="d-flex" style="gap: 15px;">
+						<div class="flex-grow-1">
+							<mat-form-field appearance="outline" class="w-100">
+								<mat-label>Start Date</mat-label>
+								<input matInput [matDatepicker]="picker1" placeholder="Start Date"
+									(dateChange)="changeDate('startDate', $event.value)" (click)="picker1.open()"
+									[value]="startDate" readonly />
+								<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+								<mat-datepicker #picker1></mat-datepicker>
+							</mat-form-field>
+						</div>
+						<!-- End Date -->
+						<div class="flex-grow-1">
+							<mat-form-field appearance="outline" class="w-100">
+								<mat-label>End Date</mat-label>
+								<input matInput [matDatepicker]="picker2" placeholder="End Date"
+									(dateChange)="changeDate('endDate', $event.value)" (click)="picker2.open()"
+									[value]="endDate" [min]="startDate" readonly />
+								<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+								<mat-datepicker #picker2></mat-datepicker>
+							</mat-form-field>
+						</div>
 					</div>
 				</div>
 				<!-- Search Button -->
-				<div class="align-btn d-flex justify-content-around" style="margin-top: 15px;">
-					<div class="col-sm-2 ml-n5">
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
-							Reset
-						</button>
-					</div>
-					<div class="col-sm-2">
+				<div class="col-md-7 d-flex align-items-end mt-4">
+					<div class="ml-2">
 						<button class="custom-filled-button orange-button"
 							style="color:#fff;padding: 5px 12px !important;"
 							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
 							Search
 						</button>
 					</div>
+					<div class="ml-2">
+						<button class="custom-filled-back-button"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+							Reset
+						</button>
+					</div>
+
 				</div>
 			</div>
 			<div class="row d-flex justify-content-between">
 				<div class="col-md-12 m-0 p-0 pl-2">
 					<p style="margin: 0;">
 						<mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-							{{useDateFilter ? 'Uncheck the box and see all future bookings.' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
+							{{useDateFilter ? 'Uncheck the box and see all future bookings.' : 'Check the box and only
+							see the next 7 days bookings or search for past bookings.' }}
 						</mat-checkbox>
 					</p>
 				</div>
@@ -1000,7 +988,7 @@
 								<span class="font-weight-bolder preview-output-field">
 									{{ dateFormat2(bookingPreview?.pickup_date) }}
 									|
-									{{ dateFormat(bookingPreview?.pickup_date) }} 
+									{{ dateFormat(bookingPreview?.pickup_date) }}
 									|
 									{{dateFormatToDay(bookingPreview?.pickup_date)}}
 								</span>
@@ -1924,14 +1912,18 @@
 						[routerLink]="['/admin/affiliates/all-operators']">Visit Affiliates</button>
 					<button class="custom-filled-button orange-button" data-dismiss="modal"
 						[routerLink]="['/admin/loose-affiliate-accounts']">Visit Loose Affiliates</button>
-					<button  class="close x-copy-btn" (click)="copyPreviewText()">
+					<button class="close x-copy-btn" (click)="copyPreviewText()" style="opacity: 1; color: #f57c00;">
+						<span *ngIf="showCopyIcon" style="font-size: 14px; font-weight: bold; margin-right: 5px;">Copied
+							Data</span>
+						<span *ngIf="!showCopyIcon" style="font-size: 14px; font-weight: bold; margin-right: 5px;">Copy
+							details</span>
 						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-						class="bi bi-check2" viewBox="0 0 16 16" *ngIf="showCopyIcon">
-						<path
-							d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-					</svg>
-					<i class="bi bi-clipboard2-check" data-bs-toggle="tooltip" *ngIf="!showCopyIcon"
-						data-bs-placement="top" title="Copy data"></i>
+							class="bi bi-check2" viewBox="0 0 16 16" *ngIf="showCopyIcon">
+							<path
+								d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+						</svg>
+						<i class="bi bi-clipboard2-check" data-bs-toggle="tooltip" *ngIf="!showCopyIcon"
+							data-bs-placement="top" title="Copy data"></i>
 					</button>
 				</div>
 				<pre

@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -32,22 +33,24 @@ import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.compo
 import { FamilyMembersComponent } from './family-members/family-members.component';
 import { FamilyMemberAccountComponent } from './family-member-account/family-member-account.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 
 
 
 @NgModule({
-  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent, FamilyMemberAccountComponent],
-  imports: [
-    CommonModule,
-    IndividualRoutingModule,
-    NgxSpinnerModule,
+	declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent, FamilyMemberAccountComponent],
+	imports: [
+		CommonModule,
+		IndividualRoutingModule,
+		NgxSpinnerModule,
 		MatProgressBarModule,
 		FormsModule,
 		ReactiveFormsModule,
 		MatSlideToggleModule,
 		GoogleMapsModule,
 		MatNativeDateModule,
+		MatDatepickerModule,
 		MatMomentDateModule,
 		MatInputModule,
 		MatSelectModule,
@@ -60,7 +63,11 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatTableModule,
 		MatExpansionModule,
 		MatIconModule,
-		ClipboardModule
-  ]
+		ClipboardModule,
+		NgxDaterangepickerMd.forRoot({
+			separator: ' - ',
+			applyLabel: 'Okay',
+		}),
+	]
 })
 export class IndividualModule { }

@@ -6,9 +6,27 @@
 		</h2>
 	</div>
 	<section class="safety_wrapper">
-		<div class="container" *ngFor="let fleet of fleetContents">
-			<h3 *ngIf="fleet?.section_status == true">{{fleet?.title}}</h3>
-			<p [innerHTML]="fleet?.content" *ngIf="fleet?.section_status == true"></p>
+		<div class="container py-5">
+			<div class="row align-items-center mb-5" *ngFor="let fleet of fleetContents; let i = index"
+				[ngClass]="{'flex-row-reverse': i % 2 !== 0}">
+
+				<!-- Text Column -->
+				<div [ngClass]="getVehicleImage(fleet?.vehicle_name || fleet?.title) ? 'col-md-6' : 'col-md-12'"
+					*ngIf="fleet?.section_status == true">
+					<h3>{{fleet?.vehicle_name || fleet?.title}}</h3>
+					<p [innerHTML]="fleet?.content" *ngIf="fleet?.content"></p>
+				</div>
+
+				<!-- Image Column -->
+				<div class="col-md-6 text-center"
+					*ngIf="fleet?.section_status == true && getVehicleImage(fleet?.vehicle_name || fleet?.title)">
+					<img [src]="getVehicleImage(fleet?.vehicle_name || fleet?.title)"
+						alt="{{fleet?.vehicle_name || fleet?.title}}"
+						*ngIf="getVehicleImage(fleet?.vehicle_name || fleet?.title)"
+						style="max-height: 300px; object-fit: cover;">
+				</div>
+
+			</div>
 		</div>
 	</section>
 	<!----OUR CLIENTS------------->
@@ -19,7 +37,8 @@
 				<div class="chk_vehicles owl-carousel owl-theme viewClientLogo">
 					<div class="item" *ngFor="let clientLogo of clientImages">
 						<a class="ns-user">
-							<img [src]="clientLogo?.path" alt="client logo" loading="lazy" onerror="this.style.display='none'">
+							<img [src]="clientLogo?.path" alt="client logo" loading="lazy"
+								onerror="this.style.display='none'">
 						</a>
 					</div>
 				</div>

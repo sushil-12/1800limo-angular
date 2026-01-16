@@ -86,6 +86,7 @@ import { TutorialsComponent } from './components/website/tutorials/tutorials.com
 import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -158,7 +159,8 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 		NgOtpInputModule,
 		MatRadioModule,
 		NgSelectModule,
-		NgxChartsModule
+		NgxChartsModule,
+		BsDatepickerModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

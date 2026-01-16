@@ -8,8 +8,8 @@
 
 .vehicleData {
 	list-style-type: none;
-	padding-left   : 0;
-	margin-bottom  : 0;
+	padding-left: 0;
+	margin-bottom: 0;
 }
 
 .input-container {
@@ -17,7 +17,7 @@
 }
 
 .cityTax {
-	margin-top   : 0px;
+	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
@@ -30,11 +30,11 @@
 }
 
 .vehicleImage img {
-	width        : 280px;
-	height       : 200px;
-	max-width    : 100%;
+	width: 280px;
+	height: 200px;
+	max-width: 100%;
 	border-radius: 20px;
-	object-fit   : cover;
+	object-fit: cover;
 }
 
 .taxesStyle .input-container {
@@ -42,10 +42,10 @@
 }
 
 .gratuityLabel {
-	font-size   : 24px;
-	position    : absolute;
-	font-weight : 600;
-	top         : -5px;
+	font-size: 24px;
+	position: absolute;
+	font-weight: 600;
+	top: -5px;
 	padding-left: 10px;
 }
 
@@ -65,104 +65,108 @@ div#rate-manager-slider {
 	}
 
 	&>p {
-		width : 90%;
+		width: 90%;
 		cursor: pointer;
 	}
 
 	#slider {
 		background-color: #908c8c;
-		appearance      : none;
-		outline         : none;
-		border-radius   : 10px;
-		height          : 3px
+		appearance: none;
+		outline: none;
+		border-radius: 10px;
+		height: 3px
 	}
 
 	#slider::-webkit-slider-thumb {
 		-webkit-appearance: none;
-		appearance        : none;
-		width             : 25px;
-		height            : 25px;
-		border-radius     : 50%;
-		background-color  : var(--orange-color);
-		cursor            : pointer;
-		border            : 3px solid var(--orange-color);
+		appearance: none;
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
+		background-color: var(--orange-color);
+		cursor: pointer;
+		border: 3px solid var(--orange-color);
 	}
 
 	#slider::-moz-range-thumb {
-		width           : 25px;
-		height          : 25px;
-		border-radius   : 50%;
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
 		background-color: var(--orange-color);
-		cursor          : pointer;
-		border          : 3px solid var(--orange-color);
+		cursor: pointer;
+		border: 3px solid var(--orange-color);
 	}
 }
 
 .select-currency-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 .select-extension-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 .user_information .rateExtensionStyle {
 	border-bottom: 1px solid #ccc !important;
-	background   : #fff;
-	padding-left : 25px;
-	height       : 60px;
+	background: #fff;
+	padding-left: 25px;
+	height: 60px;
 	border-radius: 5px;
 }
 
 .spanRate {
-	color   : var(--orange-color);
+	color: var(--orange-color);
 	position: absolute;
-	top     : 43px;
-	left    : 25px;
+	top: 43px;
+	left: 25px;
 }
 
 
 
 #card-type-container {
 	.card-type {
-		width        : 48%;
-		padding      : 1rem;
-		text-align   : center;
+		flex: 1 1 45%;
+		/* Use flex basis instead of fixed width */
+		max-width: 48%;
+		/* Keep max width */
+		padding: 1rem;
+		text-align: center;
 		border-radius: 1rem;
-		height       : fit-content;
-		line-height  : 2.7rem;
-		box-shadow   : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-		margin       : 0 3px;
-		cursor       : pointer;
-		transition   : box-shadow 0.25s ease, background-color 0.25s ease;
+		height: fit-content;
+		line-height: 2.7rem;
+		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+		margin: 0 3px;
+		cursor: pointer;
+		transition: box-shadow 0.25s ease, background-color 0.25s ease;
 	}
 
 	.card-type.active {
 		background-color: var(--green-color);
-		box-shadow      : 0px 5px 10px -1px rgb(0 0 0 / 30%);
+		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
 	}
 }
 
 @media only screen and (min-width:768px) {
 	.vehicleData li {
 		margin-bottom: 10px;
-		font-size    : 18px;
-		font-weight  : 600;
+		font-size: 18px;
+		font-weight: 600;
 	}
+
 	.billing_inforamtion ul {
 		justify-content: center;
 		/* Keep buttons centered */
@@ -182,7 +186,7 @@ div#rate-manager-slider {
 		outline: none;
 
 		.radio-button:checked+.radio-tile {
-			color    : #000 !important;
+			color: #000 !important;
 			transform: scale(1, 1);
 
 			.radio-tile-label {
@@ -198,18 +202,18 @@ div#rate-manager-slider {
 
 @media only screen and (max-width:991px) {
 	.vehicleImage img {
-		width : 100%;
+		width: 100%;
 		height: auto;
 	}
 }
 
 @media only screen and (max-width:767px) {
 	.mobilePadding {
-		padding: 0px 15px !important;
+		padding: 0px 0px !important;
 	}
 
 	.cityTax {
-		margin-top   : 10px;
+		margin-top: 10px;
 		margin-bottom: 0px;
 	}
 
@@ -224,8 +228,13 @@ div#rate-manager-slider {
 	.card-type {
 		padding: 0 !important;
 	}
+
 	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-	:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label{transform:translateY(-0.8em) scale(0.85)!important;width:133.3333333333%}
+	:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
+	:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
+		transform: translateY(-0.8em) scale(0.85) !important;
+		width: 133.3333333333%
+	}
 }
 
 @media only screen and (max-width:575px) {
@@ -235,12 +244,25 @@ div#rate-manager-slider {
 
 	.vehicleData li {
 		margin-top: 0px;
-		font-size : 14px;
+		font-size: 14px;
 	}
 
 	.vehicleImage img {
-		width : 100%;
+		width: 100%;
 		height: auto;
+	}
+
+	.card-type {
+		flex: 1 1 100% !important;
+		/* Stack on mobile */
+		max-width: 100% !important;
+		margin: 5px 0 !important;
+		/* Add vertical spacing */
+	}
+
+	#card-type-container {
+		flex-direction: column;
+		/* Ensure container stacks them */
 	}
 }
 
@@ -250,88 +272,117 @@ div#rate-manager-slider {
 
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
 }
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
 }
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label{
-	font-weight: normal!important;
-	font-size: 17px!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
+	font-weight: normal !important;
+	font-size: 17px !important;
 	color: #191919;
 }
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label{top:1.3675em}
+:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
+	top: 1.3675em
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass{font-weight: normal!important;
-	font-size: 14px!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
-top:2.05em}
+	top: 2.05em
+}
+
 :host ::ng-deep .mat-mdc-form-field {
+
 	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 	.mat-form-field-outline {
-	  &-end {
-		border-radius: 0 10px 10px 0 !important;
-	  }
-  
-	  &-start {
-		border-radius: 10px 0 0 10px !important;
-		flex-grow: 1;
-	  }
+		&-end {
+			border-radius: 0 10px 10px 0 !important;
+		}
+
+		&-start {
+			border-radius: 10px 0 0 10px !important;
+			flex-grow: 1;
+		}
 	}
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  :host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper{
-		border-radius: 10px;
-		background-color: rgb(226, 226, 226,1);
-  } 
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+	border-radius: 10px;
+	background-color: rgb(226, 226, 226, 1);
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label{transform:translateY(-0.8em) scale(0.75)!important;width:133.3333333333%}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
+	top: -12px
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
+	transform: translateY(-0.8em) scale(0.75) !important;
+	width: 133.3333333333%
+}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-    border-top-color: #b2b2b2 !important;
+	border-top-color: #b2b2b2 !important;
 }
 
-.mat-mdc-option{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-:host ::ng-deep .ng-option{
-	background-color: rgb(226, 226, 226,1) !important;
+.mat-mdc-option {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .mat-mdc-input-element{
+:host ::ng-deep .ng-option {
+	background-color: rgb(226, 226, 226, 1) !important;
+}
+
+:host ::ng-deep .mat-mdc-input-element {
 	font-weight: 500;
 }
 
@@ -342,12 +393,13 @@ top:2.05em}
 /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
 :host ::ng-deep .mat-select-value-text {
 	font-weight: 500 !important;
-  }
-  .asterisk{
-	font-size: 22px;
-  }
+}
 
-  .border-red{
+.asterisk {
+	font-size: 22px;
+}
+
+.border-red {
 	border: 2px solid red;
 	border-radius: 4px;
 }
@@ -361,4 +413,57 @@ top:2.05em}
 	/* Center align the buttons */
 	gap: 30px;
 	/* Adjust spacing between buttons */
+}
+
+// Fix for overlapping radio buttons. Overrides global sticky styles.
+:host ::ng-deep .assment_radio .input-container {
+	height: auto !important;
+	min-height: 58px;
+	margin-bottom: 30px;
+}
+
+@media only screen and (max-width: 767px) {
+	.col-6.mobilePadding {
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+		padding-bottom: 0 !important; // Remove extra bottom padding if margin handles it
+	}
+}
+
+// Fix for 1024px and 1280px screens where text wraps
+@media only screen and (min-width: 992px) and (max-width: 1400px) {
+	.radio-tile-label {
+		font-size: 13px !important; // Reduce font size to fit
+		white-space: nowrap !important; // Force single line
+		padding: 0 !important;
+	}
+
+	.radio-tile {
+		padding: 2px !important; // Reduce internal padding
+	}
+
+	// Ensure the prefix span is also sized correctly if needed
+	.radio-tile-label .prefix {
+		font-size: 13px !important;
+	}
+}
+
+// Fix for Tablet/Mobile Alignment (820px and below)
+// Removes side padding to ensure full-width alignment on smaller screens only
+@media only screen and (max-width: 820px) {
+	.cityTaxErrorMsg {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+	}
+
+	// Target the first Radio Button (Percent) -> No Left Padding
+	// Assuming structure is Input (1) -> Radio (2) -> Radio (3)
+	.mobilePadding:nth-of-type(2) {
+		padding-left: 0 !important;
+	}
+
+	// Target the second Radio Button (Flat) -> No Right Padding
+	.mobilePadding:nth-of-type(3) {
+		padding-right: 0 !important;
+	}
 }
