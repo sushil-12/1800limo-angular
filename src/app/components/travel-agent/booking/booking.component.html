@@ -52,7 +52,7 @@
 				</h2>
 			</div>
 			<div class="col-md-12" *ngIf="currentUser?.roleName == 'travel_agent'" data-target="#inviteAgentModal"
-			data-toggle="modal">
+				data-toggle="modal">
 				<h3 class="addveh_top d-md-flex mt-2 justify-content-between align-items-center mb-0">
 					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; ">NOTE: To invite
 						agents, Click on Invite agent and then click on upload
@@ -133,7 +133,8 @@
 					</mat-checkbox>
 					<mat-checkbox *ngIf="currentUser?.roleName == 'sub_travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
+						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see
+						the next 7 days bookings or search for past bookings.' }}
 					</mat-checkbox>
 				</p>
 			</div>
@@ -1758,12 +1759,14 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center">
-                <p style="font-size: 20px; font-weight:600;color: red;">Are you sure, You want to cancel the booking?</p>
-                <p style="font-size: 19px; font-weight:500;">Click Edit / Change to make changes to the booking instead of cancelling</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="custom-btn savebutton" (click)="editActionCancelModal()">Edit / Change
-                </button>
+				<p style="font-size: 20px; font-weight:600;color: red;">Are you sure, You want to cancel the booking?
+				</p>
+				<p style="font-size: 19px; font-weight:500;">Click Edit / Change to make changes to the booking instead
+					of cancelling</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="editActionCancelModal()">Edit / Change
+				</button>
 				<button type="button" class="custom-btn savebutton" (click)="cancelBooking()">Yes
 				</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">No</button>
@@ -1835,93 +1838,95 @@
 <!-- invite agent modal -->
 <div class="modal fade" tabindex="-1" id="inviteAgentModal" aria-labelledby="inviteAgentModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
-	  <div class="modal-content">
-		<!-- Modal Header -->
-		<div class="modal-header">
-		  <h5 class="modal-title fw-bold" id="inviteAgentModalLabel">Invite Agents</h5>
-		  <!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" (click)="closeInviteModal()"></button> -->
-		</div>
-		
-		<!-- Modal Body -->
-		<div class="modal-body">
-		  <!-- Instructions -->
-		  <div class="alert alert-warning small mb-3 py-2">
-			<i class="bi bi-info-circle me-1"></i>
-			<strong>Note:</strong> Upload only email addresses, no names or phone numbers
-		  </div>
-		  
-		  <!-- Download Template -->
-		  <div class="d-flex justify-content-between align-items-center mb-3">
-			<span class="small text-muted">Need a template?</span>
-			<a href="../../../../assets/template/invite-template.xlsx" download="invite-template.xlsx" 
-			   class="btn btn-outline-primary btn-sm">
-			  <i class="bi bi-download me-1"></i>Download
-			</a>
-		  </div>
-		  
-		  <form [formGroup]="inviteAgentForm" enctype="multipart/form-data">
-			<!-- File Upload -->
-			<div class="mb-3">
-			  <label class="form-label small fw-semibold">Upload Spreadsheet</label>
-			  <div class="file-upload-area border rounded p-3 text-center" [class.border-success]="emailFileName">
-				<div *ngIf="!emailFileName; else fileUploaded">
-				  <i class="bi bi-cloud-arrow-up fs-4 text-muted d-block mb-2"></i>
-				  <label class="btn btn-light btn-sm mb-1">
-					Choose File
-					<input type="file" (change)="inviteEmailFileChange($event)" tabIndex="-1" 
-						   multiple="false" accept=".xlsx , .xls , .csv" name="xlx_file" hidden>
-				  </label>
-				  <p class="small text-muted mb-0">.xlsx, .xls, .csv</p>
+		<div class="modal-content">
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<h5 class="modal-title fw-bold" id="inviteAgentModalLabel">Invite Agents</h5>
+				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" (click)="closeInviteModal()"></button> -->
+			</div>
+
+			<!-- Modal Body -->
+			<div class="modal-body">
+				<!-- Instructions -->
+				<div class="alert alert-warning small mb-3 py-2">
+					<i class="bi bi-info-circle me-1"></i>
+					<strong>Note:</strong> Upload only email addresses, no names or phone numbers
 				</div>
-				<ng-template #fileUploaded>
-				  <div class="d-flex align-items-center justify-content-center">
-					<i class="bi bi-file-earmark-excel text-success me-2"></i>
-					<span class="small">{{emailFileName}}</span>
-					<button type="button" class="btn-close btn-close-sm ms-2" 
-							(click)="removeFile()" aria-label="Remove file"></button>
-				  </div>
-				</ng-template>
-			  </div>
-			</div>
-			
-			<!-- Divider -->
-			<div class="divider mb-1">
-				<span class="divider-text">OR</span>
-			</div>
-			
-			<!-- Individual Email -->
-			<div class="mb-2">
-				<label for="agentEmail" class="form-label small fw-semibold">Enter Individual Email</label>
-				<input type="email" class="form-control form-control-sm" id="agentEmail" 
-					   formControlName="email_address">
-				
-				<!-- Validation Messages -->
-				<div *ngIf="(submittedForm && f.email_address.errors) || (f.email_address.touched && f.email_address.errors)"
-					 class="text-danger small mt-1">
-				  <div *ngIf="f.email_address.errors?.required">
-					Email is required
-				  </div>
-				  <div *ngIf="f.email_address.errors?.pattern">
-					Please enter a valid email
-				  </div>
+
+				<!-- Download Template -->
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<span class="small text-muted">Need a template?</span>
+					<a href="../../../../assets/template/invite-template.xlsx" download="invite-template.xlsx"
+						class="btn btn-outline-primary btn-sm">
+						<i class="bi bi-download me-1"></i>Download
+					</a>
 				</div>
+
+				<form [formGroup]="inviteAgentForm" enctype="multipart/form-data">
+					<!-- File Upload -->
+					<div class="mb-3">
+						<label class="form-label small fw-semibold">Upload Spreadsheet</label>
+						<div class="file-upload-area border rounded p-3 text-center"
+							[class.border-success]="emailFileName">
+							<div *ngIf="!emailFileName; else fileUploaded">
+								<i class="bi bi-cloud-arrow-up fs-4 text-muted d-block mb-2"></i>
+								<label class="btn btn-light btn-sm mb-1">
+									Choose File
+									<input type="file" (change)="inviteEmailFileChange($event)" tabIndex="-1"
+										multiple="false" accept=".xlsx , .xls , .csv" name="xlx_file" hidden>
+								</label>
+								<p class="small text-muted mb-0">.xlsx, .xls, .csv</p>
+							</div>
+							<ng-template #fileUploaded>
+								<div class="d-flex align-items-center justify-content-center">
+									<i class="bi bi-file-earmark-excel text-success me-2"></i>
+									<span class="small">{{emailFileName}}</span>
+									<button type="button" class="btn-close btn-close-sm ms-2" (click)="removeFile()"
+										aria-label="Remove file"></button>
+								</div>
+							</ng-template>
+						</div>
+					</div>
+
+					<!-- Divider -->
+					<div class="divider mb-1">
+						<span class="divider-text">OR</span>
+					</div>
+
+					<!-- Individual Email -->
+					<div class="mb-2">
+						<label for="agentEmail" class="form-label small fw-semibold">Enter Individual Email</label>
+						<input type="email" class="form-control form-control-sm" id="agentEmail"
+							formControlName="email_address">
+
+						<!-- Validation Messages -->
+						<div *ngIf="(submittedForm && f.email_address.errors) || (f.email_address.touched && f.email_address.errors)"
+							class="text-danger small mt-1">
+							<div *ngIf="f.email_address.errors?.required">
+								Email is required
+							</div>
+							<div *ngIf="f.email_address.errors?.pattern">
+								Please enter a valid email
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
-		  </form>
-		</div>
-		
-		<!-- Modal Footer -->
-		<div class="modal-footer py-3">
-		  <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" (click)="closeInviteModal()">
-			Cancel
-		  </button>
-		  <button type="submit" class="custom-filled-button" (click)="sendInvite()" style="padding: 4px !important;">
+
+			<!-- Modal Footer -->
+			<div class="modal-footer py-3">
+				<button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal"
+					(click)="closeInviteModal()">
+					Cancel
+				</button>
+				<button type="submit" class="custom-filled-button" (click)="sendInvite()"
+					style="padding: 4px !important;">
 					Submit
-		  </button>
-		  <!-- <button type="button" class="btn btn-primary btn-sm" (click)="sendInvite()">
+				</button>
+				<!-- <button type="button" class="btn btn-primary btn-sm" (click)="sendInvite()">
 			Send Invite
 		  </button> -->
+			</div>
 		</div>
-	  </div>
 	</div>
-  </div>
-  
+</div>
