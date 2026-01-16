@@ -258,7 +258,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.spinner.hide()
 							return throwError(err);
 						})
-					).subscribe(result2 => {
+					).subscribe(result2 =>
+					{
 						console.log('response2-------_>>>>>>>>>>>>>>>>>>')
 						this.response2 = result2;
 						if (this.response2?.data?.vehicle_image_1) {
@@ -410,7 +411,6 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 
 						//
-						console.log('onfirstLoad call change make')
 						this.changeMake(this.response2?.data?.make, 'onFirstLoad');//to show selected model
 						// this.handleInteriorsCheckbox(this.response2?.data?.vehicleInterior)
 						this.setAmenities();//show selected amenities
@@ -471,9 +471,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return -1;
 		}
 	}
-	handleChangeVehicleType(value) {
+	handleChangeVehicleType(value){
 		console.log('Selected Value:', value);
-
 		this.isVehicleTypeSelected = value ? true : false
 	}
 	searchVehicleType(keyword) {
@@ -519,7 +518,6 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 					this.addVehicleForm.patchValue({
 						make: mk.ID,
 					});
-					console.log(1, mk.ID)
 				}
 				return mk.name.toLowerCase().includes(keyword.toLowerCase());
 			})
@@ -534,13 +532,12 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			this.addVehicleForm.patchValue({
 				make: val,
 			});
-			console.log(2, val)
 			this.changeMake(val);
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
 		}
 	}
-	handleNonCharterCancelPolicy(event) {
+	handleNonCharterCancelPolicy(event){
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.addVehicleForm.patchValue({
 			charterCancelPolicy: event.target.value
@@ -588,7 +585,6 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			this.addVehicleForm.patchValue({
 				model: val,
 			});
-			console.log(2, val)
 		}
 	}
 
@@ -652,7 +648,6 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			this.addVehicleForm.patchValue({
 				color: val,
 			});
-			console.log(2, val)
 		}
 	}
 	//End of autocomplete search and selection
@@ -660,20 +655,24 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 	setAmenities() {
 		var chargableAmenities = this.chargableAmenities;
-		for (var key in chargableAmenities) {
-			chargableAmenities[key].forEach(chargableAmenity => {
-				if (chargableAmenity?.isSelected) {
+		for (var key in chargableAmenities)
+		{
+			Object.values(chargableAmenities[key]).forEach((chargableAmenity: any) =>
+			{
+				if (chargableAmenity?.isSelected)
+				{
 					this.onAmenitiesCheckboxChange(chargableAmenity?.id, true);
 				}
 			});
 		}
 
 		var nonChargableAmenities = this.nonChargableAmenities;
-		for (var key in nonChargableAmenities) {
-			console.log(key, nonChargableAmenities[key]);
-			nonChargableAmenities[key].forEach(nonChargableAmenity => {
-				console.log('nonChargableAmenity-->>>>>>>>', nonChargableAmenity?.isSelected)
-				if (nonChargableAmenity?.isSelected) {
+		for (var key in nonChargableAmenities)
+		{
+			Object.values(nonChargableAmenities[key]).forEach((nonChargableAmenity: any) =>
+			{
+				if (nonChargableAmenity?.isSelected)
+				{
 					this.onAmenitiesCheckboxChange(nonChargableAmenity?.id, true);
 				}
 			});
@@ -838,8 +837,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
-			console.log(dataUrl); //DataURL
-			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key, id) : this.onFileChange1(dataUrl, key, id);
+			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
 		};
 	}
 	async onFileChange1(dataUrl, imageNumber, imageId) {
@@ -1065,7 +1063,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		return this.addVehicleForm.controls;
 	}
 
-	submitForm() {
+	submitForm()
+	{
 		console.log(this.addVehicleForm);
 
 		this.pushValuesTypeOfService(this.service)
@@ -1150,9 +1149,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.router.navigate(['/affiliate/step5']);
 	}
 
-	changeMake(selectedMake, onFirstLoad = null) {
+	changeMake(selectedMake, onFirstLoad = null)
+	{
 		console.log('------>>>>', onFirstLoad)
-		if (!selectedMake) {
+		if(!selectedMake){
 			this.addVehicleForm.patchValue({
 				model: ''
 			})
@@ -1169,7 +1169,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.addVehicleForm.patchValue({
 			model: this.filteredModel[0]?.ID
 		})
-		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad == 1) {
+		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad==1)
+		{
 			console.log('->>', this.onFirstLoad)
 			this.onFirstLoad = 2
 			this.addVehicleForm.patchValue({
