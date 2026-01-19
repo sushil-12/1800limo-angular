@@ -26,6 +26,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 export const DATE_FORMATS = {
@@ -47,7 +48,18 @@ export const DATE_FORMATS = {
 		CommonModule,
 		MatAutocompleteModule,
 		MatIconModule,
-		MatButtonModule
+		MatButtonModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		MatMomentDateModule,
+		MatInputModule,
+		DragDropModule,
+		NgxMaterialTimepickerModule,
+		MatSliderModule,
+		MatCheckboxModule,
+		MatSlideToggleModule,
+		FormsModule,
+		MatFormFieldModule
 
 	],
 	exports: [
@@ -71,15 +83,15 @@ export const DATE_FORMATS = {
 		MatSlideToggleModule,
 		FormsModule,
 		MatIconModule,
-		MatButtonModule
+		MatButtonModule,
+		MatFormFieldModule
 	],
 	providers: [
 		{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
 		{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
 	]
 })
-export class SharedModule 
-{
+export class SharedModule {
 	/**
 	 * Search a particular object key with the specified value to search
 	 * @params type: String [Required] filter/find
@@ -88,58 +100,44 @@ export class SharedModule
 	 * @params comparison_key: string [Required] key to match with the object in list
 	 * @params return_key: string [Required] key to get the return value
 	 */
-	ListSearch(type: string, list: Array<any>, value_to_search: string | number, comparison_key: string)
-	{
+	ListSearch(type: string, list: Array<any>, value_to_search: string | number, comparison_key: string) {
 		// console.warn(`${type} for ${value_to_search} with comparison key - ${comparison_key} `)
 
-		if (list && value_to_search && comparison_key)
-		{
+		if (list && value_to_search && comparison_key) {
 			let object: any
-			if (type == 'find')
-			{
-				object = list.find((item: any) => 
-				{
-					if (typeof value_to_search == 'number')
-					{
+			if (type == 'find') {
+				object = list.find((item: any) => {
+					if (typeof value_to_search == 'number') {
 						return item[comparison_key] == value_to_search
 					}
 					return item[comparison_key].toLowerCase().includes(value_to_search.toLowerCase())
 				})
 			}
 
-			if (type == 'filter')
-			{
-				object = list.filter((item: any) => 
-				{
-					if (typeof value_to_search == 'number')
-					{
+			if (type == 'filter') {
+				object = list.filter((item: any) => {
+					if (typeof value_to_search == 'number') {
 						return item[comparison_key] == value_to_search
 					}
 					return item[comparison_key].toLowerCase().includes(value_to_search.toLowerCase())
 				})
 			}
 
-			if (object)
-			{
+			if (object) {
 				return object
 			}
-			else
-			{
+			else {
 				return ['No object found. ']
 			}
 		}
-		else
-		{
-			if (list == null)
-			{
+		else {
+			if (list == null) {
 				console.error('Required List parameter. Got NULL')
 			}
-			if (value_to_search == null)
-			{
+			if (value_to_search == null) {
 				console.error('Required value to search parameter. Got NULL')
 			}
-			if (comparison_key == null)
-			{
+			if (comparison_key == null) {
 				console.error('Required comparison key parameter . Got NULL')
 			}
 			return null
@@ -147,17 +145,13 @@ export class SharedModule
 	}
 
 
-	scrollIntoView(element: HTMLElement)
-	{
-		if (element)
-		{
-			setTimeout(() =>
-			{
+	scrollIntoView(element: HTMLElement) {
+		if (element) {
+			setTimeout(() => {
 				console.log('Scrolling ....')
 				element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" })
 			}, 150)
-		} else
-		{
+		} else {
 			console.error('No Element Reference provided. \nConsider giving an element to scroll. ')
 		}
 	}
@@ -168,25 +162,19 @@ export class SharedModule
 	 * @params cookie: string [Required] cookie name
 	 * @returns string | Array<string>
 	 */
-	fetchCookies(cookie: string): string | Array<string>
-	{
+	fetchCookies(cookie: string): string | Array<string> {
 		let name = cookie + '='
 		let all_cookies = decodeURIComponent(document.cookie).split(';')
-		if (cookie = 'all')
-		{
+		if (cookie = 'all') {
 			return all_cookies
 		}
-		if (all_cookies.length > 0)
-		{
-			all_cookies.forEach((item: any) =>
-			{
-				if (item.charAt(0) == ' ')
-				{
+		if (all_cookies.length > 0) {
+			all_cookies.forEach((item: any) => {
+				if (item.charAt(0) == ' ') {
 					item = item.substring(1)
 				}
 				// if cookie is found
-				if (item.indexOf(name) !== -1)
-				{
+				if (item.indexOf(name) !== -1) {
 					// return only the value
 					console.info('Item: ', item)
 					return item.substring(name.length, item.length)
