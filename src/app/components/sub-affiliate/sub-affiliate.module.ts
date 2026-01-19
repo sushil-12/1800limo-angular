@@ -22,15 +22,16 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { ProfileComponent } from './profile/profile.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { AffiliateModule } from '../affiliate/affiliate.module';
 
 
 
 @NgModule({
-  declarations: [SubAffiliateComponentComponent, SubAffiliateTemplateComponent, ProfileComponent],
-  imports: [
-    CommonModule,
-    SubAffiliateRoutingModule,
-    NgxSpinnerModule,
+	declarations: [SubAffiliateComponentComponent, SubAffiliateTemplateComponent, ProfileComponent],
+	imports: [
+		CommonModule,
+		SubAffiliateRoutingModule,
+		NgxSpinnerModule,
 		MatProgressBarModule,
 		FormsModule,
 		ReactiveFormsModule,
@@ -48,7 +49,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatTabsModule,
 		MatTableModule,
 		MatExpansionModule,
-		MatIconModule
-  ]
+		MatIconModule,
+		AffiliateModule
+	]
 })
 export class SubAffiliateModule { }

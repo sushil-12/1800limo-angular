@@ -526,3 +526,27 @@ a.dropdown-item {
 #date_range_picker {
 	padding-left: 10px !important;
 }
+
+.date-fields-wrapper {
+	flex-direction: row;
+	gap: 10px;
+	max-width: 520px; // Increased to prevent overlap
+
+	@media (max-width: 575px) {
+		flex-direction: column;
+		max-width: 100%;
+	}
+}
+
+.search-container-wrapper {
+	gap: 15px;
+	row-gap: 15px; // Ensure spacing when wrapped
+
+	.button-group {
+		margin-top: 10px; // Fallback / Mobile spacing
+
+		@media (min-width: 576px) {
+			margin-top: 6px; // Visual alignment with form field input box on desktop
+		}
+	}
+}

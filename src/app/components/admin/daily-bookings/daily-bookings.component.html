@@ -23,14 +23,13 @@
 					NOTE: {{stripeErroMsg}}
 					<a (click)="addBank()" style="text-decoration: underline !important;">Click Here</a></label>
 			</h3>
-			<div class="row my-2 align-items-center">
-				<!-- Start-Date -->
-				<!-- Date Range -->
-				<div class="col-12 col-xl-6">
-					<!-- Start Date -->
-					<div class="d-flex flex-column flex-xl-row" style="gap: 15px;">
+			<div class="row my-2">
+				<div class="col-12 d-flex flex-wrap align-items-center search-container-wrapper">
+					<!-- Date Fields Wrapper -->
+					<div class="d-flex date-fields-wrapper">
+						<!-- Start Date -->
 						<div class="flex-grow-1">
-							<mat-form-field appearance="outline" class="w-100">
+							<mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
 								<mat-label>Start Date</mat-label>
 								<input matInput [matDatepicker]="picker1" placeholder="Start Date"
 									(dateChange)="changeDate('startDate', $event.value)" (click)="picker1.open()"
@@ -41,7 +40,7 @@
 						</div>
 						<!-- End Date -->
 						<div class="flex-grow-1">
-							<mat-form-field appearance="outline" class="w-100">
+							<mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
 								<mat-label>End Date</mat-label>
 								<input matInput [matDatepicker]="picker2" placeholder="End Date"
 									(dateChange)="changeDate('endDate', $event.value)" (click)="picker2.open()"
@@ -51,24 +50,24 @@
 							</mat-form-field>
 						</div>
 					</div>
-				</div>
-				<!-- Search Button -->
-				<div class="col-12 col-xl-6 d-flex align-items-end mt-2 mt-xl-4">
-					<div class="ml-2">
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
-							Search
-						</button>
-					</div>
-					<div class="ml-2">
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
-							Reset
-						</button>
-					</div>
 
+					<!-- Search & Reset Buttons -->
+					<div class="d-flex align-items-center button-group">
+						<div class="mr-2">
+							<button class="custom-filled-button orange-button"
+								style="color:#fff;padding: 5px 12px !important;"
+								(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
+								Search
+							</button>
+						</div>
+						<div>
+							<button class="custom-filled-back-button"
+								style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+								(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+								Reset
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="row d-flex justify-content-between">

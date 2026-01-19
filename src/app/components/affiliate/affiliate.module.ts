@@ -128,7 +128,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 		MatInputModule,
 		MatIconModule,
 		MatButtonModule,
-		MatCheckboxModule
+		MatCheckboxModule,
+		MyBookingsComponent,
+		FarmOutComponent,
+		CreateNewBookingComponent,
+		NewBookingComponent,
+		AffiliateFinalizeComponent,
+		InvoiceSummaryComponent,
+		ProfileComponent
 	]
 })
 export class AffiliateModule { }

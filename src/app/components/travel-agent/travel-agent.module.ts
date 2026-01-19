@@ -82,6 +82,25 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatExpansionModule,
 		MatIconModule,
 		ClipboardModule
+	],
+	exports: [
+		TravelAgentComponent,
+		BookingComponent,
+		AgentTemplateComponent,
+		ProfileComponent,
+		CreateBookingComponent,
+		CardsComponent,
+		AddCardComponent,
+		InvoiceDashComponent,
+		InvoiceDashSummaryComponent,
+		StripeFormComponent,
+		TravelAgentStepsTemplateComponent,
+		RatesFormTaComponent,
+		TravelClientAccountsComponent,
+		AddClientAccountComponent,
+		SubAgentAccountsComponent,
+		SubAgentAccountDetailsComponent,
+		PayoutsComponent
 	]
 })
 export class TravelAgentModule { }
