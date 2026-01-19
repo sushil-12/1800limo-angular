@@ -394,13 +394,13 @@ input::-webkit-input-placeholder {
 		font-size: 34px;
 	}
 
-	.three-d-button{
+	.three-d-button {
 		font-size: 15px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
 	}
 
-	.btn-add-other-memeber{
+	.btn-add-other-memeber {
 		font-size: 15px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
@@ -480,7 +480,7 @@ input::-webkit-input-placeholder {
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
-    white-space: normal !important;
+	white-space: normal !important;
 }
 
 
@@ -533,38 +533,62 @@ input::-webkit-input-placeholder {
 
 }
 
-@media (min-width: 992px){
-	.modal-lg{
+@media (min-width: 992px) {
+	.modal-lg {
 		max-width: 600px !important;
 	}
 }
 
 .three-d-button {
-    border-radius: 20px;
+	border-radius: 20px;
 	background: linear-gradient(135deg, #1e90ff, #4169e1);
-    color: #ffffff;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
-    transition: all .3s ease;
-    font-size: 20px;
-    padding: 9px;
-    /* display: flex; */
-    /* align-items: center; */
+	color: #ffffff;
+	font-weight: 600;
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+	transition: all .3s ease;
+	font-size: 20px;
+	padding: 9px;
+	/* display: flex; */
+	/* align-items: center; */
 }
 
 .three-d-button:hover {
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-    transform: translateY(-3px);
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+	transform: translateY(-3px);
 }
 
 .three-d-button:active {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);
-    transform: translateY(2px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);
+	transform: translateY(2px);
 }
 
 .three-d-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+}
+
+.date-fields-wrapper {
+	flex-direction: row;
+	gap: 10px;
+	max-width: 520px;
+
+	@media (max-width: 575px) {
+		flex-direction: column;
+		max-width: 100%;
+	}
+}
+
+.search-container-wrapper {
+	gap: 15px;
+	row-gap: 15px; // Ensure spacing when wrapped
+
+	.button-group {
+		margin-top: 10px; // Mobile spacing
+
+		@media (min-width: 576px) {
+			margin-top: 6px; // Visual alignment with form field input box
+		}
+	}
 }

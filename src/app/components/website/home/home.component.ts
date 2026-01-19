@@ -693,7 +693,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				dropoff_address_lat: Number(previous_quotebot?.dropoff_address_lat),
 				dropoff_address_long: Number(previous_quotebot?.dropoff_address_long),
 				return_pickup_date: this.returnValidDate(previous_quotebot?.return_pickup_date),
-				return_pickup_time: previous_quotebot?.return_pickup_time ?? '12:00:00',
+				return_pickup_time: previous_quotebot?.return_pickup_time ?? this.getTimeHHMMSS('', false),
 				return_pickup_airport: previous_quotebot?.return_pickup_airport,
 				return_pickup_airport_name: previous_quotebot?.other_details?.return_pickup_airport_name,
 				return_pickup_airport_lat: Number(previous_quotebot?.return_pickup_airport_lat),
@@ -734,7 +734,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				pickup_date: new Date().toISOString().split('T')[0],
 				pickup_time: this.getTimeHHMMSS('', false),
 				return_pickup_date: new Date().toISOString().split('T')[0],
-				return_pickup_time: '12:00:00',
+				return_pickup_time: this.getTimeHHMMSS('', false),
 				no_of_passenger: 1,
 				no_of_luggage: 0,
 			})
@@ -763,13 +763,34 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	validateTimeHHMMSS(time) {
 		let arr = time.split(':')
 		if (arr.length != 3) return '12:00:00'
-		const hours = arr[0];
-		const minutes = arr[1];
+		let hours = parseInt(arr[0], 10);
+		let minutes = parseInt(arr[1], 10);
 		const seconds = arr[2];
 
-		// Pad single digits with leading zeros
-		const formattedHours = hours.toString();
-		const formattedMinutes = this.roundToNearest15(minutes.toString()).toString().padStart(2, '0');
+		// Round minutes to nearest 15
+		let roundedMinutes = this.roundToNearest15(minutes);
+
+		if (roundedMinutes === 60) {
+			roundedMinutes = 0;
+			hours = (hours + 1) % 24;
+		}
+
+		// Format minutes with leading zero
+		const formattedMinutes = roundedMinutes.toString().padStart(2, '0');
+
+		// Format hours: 
+		// - 0 should vary based on your data.js logic, but typically 00:00:00 or 12:00:00
+		// - 1-9 should generally NOT have leading zero if data.js doesn't use it
+		// Based on data.js provided earlier: 
+		// "00:00:00" for midnight
+		// "1:00:00", "2:00:00" etc for single digits
+
+		let formattedHours;
+		if (hours === 0) {
+			formattedHours = "00";
+		} else {
+			formattedHours = hours.toString(); // No padding for 1-23 based on inspection of data.js
+		}
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
@@ -786,20 +807,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 		// Get the current time components
-		const hours = now.getHours();
-		const minutes = now.getMinutes();
-		const seconds = now.getSeconds();
+		let hours = now.getHours();
+		let minutes = now.getMinutes();
+		// const seconds = now.getSeconds();
 
-		// Pad single digits with leading zeros
-		const formattedHours = hours.toString().padStart(2, '0');
-		const formattedMinutes = this.roundToNearest15(minutes).toString().padStart(2, '0');
+		// Round minutes to nearest 15
+		let roundedMinutes = this.roundToNearest15(minutes);
+
+		if (roundedMinutes === 60) {
+			roundedMinutes = 0;
+			hours = (hours + 1) % 24;
+		}
+
+		// Pad minutes with leading zero
+		const formattedMinutes = roundedMinutes.toString().padStart(2, '0');
+
+		// Format hours based on data.js convention
+		let formattedHours;
+		if (hours === 0) {
+			formattedHours = "00";
+		} else {
+			formattedHours = hours.toString(); // No padding for 1-23 to match data.js "1:00:00", "12:00:00"
+		}
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-		console.log('----------nnnnnnnnnnnnnnnnnt', currentTime)
+		console.log('----------getTimeHHMMSS result', currentTime)
 
-		return currentTime
+		return currentTime; // Removed incorrect bracket that was in original code
 	}
+
+
 
 	/**
 	 * Fetches only Airports Data

@@ -2549,6 +2549,11 @@ div#google_translate_element_home_mobile {
 .current_loc_button {
 	position: absolute;
 	right: 0;
+
+	@media (max-width: 767px) {
+		position: relative;
+		right: auto;
+	}
 }
 
 .current_loc_button a {

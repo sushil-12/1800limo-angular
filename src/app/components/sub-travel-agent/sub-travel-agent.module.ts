@@ -23,13 +23,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { TravelAgentModule } from '../travel-agent/travel-agent.module';
 
 
 @NgModule({
-  declarations: [SubTravelAgentComponent, SubTravelAgentTemplateComponent, ProfileComponent],
-  imports: [
-    CommonModule,
-    SubTravelAgentRoutingModule,
+	declarations: [SubTravelAgentComponent, SubTravelAgentTemplateComponent, ProfileComponent],
+	imports: [
+		CommonModule,
+		SubTravelAgentRoutingModule,
 		NgxSpinnerModule,
 		MatProgressBarModule,
 		FormsModule,
@@ -48,7 +49,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatTabsModule,
 		MatTableModule,
 		MatExpansionModule,
-		MatIconModule
-  ]
+		MatIconModule,
+		TravelAgentModule
+	]
 })
 export class SubTravelAgentModule { }
