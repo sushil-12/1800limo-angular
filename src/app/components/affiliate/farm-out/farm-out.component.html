@@ -5,55 +5,54 @@
 		Farm Out Bookings
 	</h2>
 	<!-- DIVISION: SEARCH PARAMETERS -->
-	<div class="row my-2 align-items-center pl-4 mb-3">
-		<!-- START DATE -->
-		<div class="horizontal-scroll-container">
-			<div class="col-6 col-md-4">
-				<mat-form-field appearance="outline" class="text-xl scroll-item">
-					<mat-label>
-						Start Date <span class="asterisk"> * </span>
-					</mat-label>
-					<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-						placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-						(click)="picker1.open()" [value]="startDate" readonly />
-					<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-					<mat-datepicker #picker1></mat-datepicker>
-				</mat-form-field>
+	<div class="containeredd mt-1 ">
+		<div class="row my-2 align-items-center">
+			<!-- Start-Date -->
+			<div class="horizontal-scroll-container mb-1">
+				<div class="col-6 col-md-4">
+					<mat-form-field appearance="outline" class="text-xl scroll-item">
+						<mat-label>
+							Start Date <span class="asterisk"> * </span>
+						</mat-label>
+						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
+							(click)="picker1.open()" [(ngModel)]="startDateModel" readonly />
+						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+						<mat-datepicker #picker1></mat-datepicker>
+					</mat-form-field>
+				</div>
+
+				<!-- End-Date -->
+				<div class="col-6 col-md-4">
+					<mat-form-field appearance="outline" class="text-xl scroll-item">
+						<mat-label>
+							End Date <span class="asterisk"> * </span>
+						</mat-label>
+						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+							placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+							(click)="picker2.open()" [(ngModel)]="endDateModel" [min]="startDateModel" readonly />
+						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+						<mat-datepicker #picker2></mat-datepicker>
+					</mat-form-field>
+				</div>
 			</div>
 
-			<!-- End-Date -->
-			<div class="col-6 col-md-4">
-				<mat-form-field appearance="outline" class="text-xl scroll-item">
-					<mat-label>
-						End Date <span class="asterisk"> * </span>
-					</mat-label>
-					<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-						placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-						(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-					<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-					<mat-datepicker #picker2></mat-datepicker>
-				</mat-form-field>
-			</div>
-		</div>
+			<!-- Search Button -->
+			<div class="align-btn d-flex justify-content-around">
+				<div class="col-sm-2 ml-n5">
+					<button class="custom-filled-back-button"
+						style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
+						(click)=" reset();loadBookings()">
+						Reset
+					</button>
 
-		<!-- SEARCH FIELD -->
-
-
-		<!-- SEARCH BUTTON -->
-		<div class="align-btn d-flex justify-content-around" style="margin-top: 15px !important;">
-			<div class="col-sm-2" style="margin-left: -3.8rem !important;">
-				<button class="custom-filled-back-button"
-					style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
-					(click)=" reset();loadBookings()">
-					Reset
-				</button>
-
-			</div>
-			<div class="col-sm-2">
-				<button class="custom-filled-button orange-button" style="color:#fff;padding: 5px 12px !important;"
-					(click)="loadBookings();saveCookie('farmout_startDate', startDate); saveCookie('farmout_endDate', endDate);saveCookie('farmout_search',searchText)">
-					Search
-				</button>
+				</div>
+				<div class="col-sm-2">
+					<button class="custom-filled-button orange-button" style="color:#fff;padding: 5px 12px !important;"
+						(click)="loadBookings(); saveCookie('farmout_startDate', startDate); saveCookie('farmout_endDate', endDate);saveCookie('farmout_search',searchText)">
+						Search
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -71,7 +70,8 @@
 	</div>
 	<div class="row pl-4">
 		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-			{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
+				{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7
+				days bookings or search for past bookings.' }}
 			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -1132,7 +1132,7 @@
 					<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 						<div class="col-4 col-md-4">
 							<span style="font-weight: 550 !important;">
-								 Time
+								Time
 							</span>
 						</div>
 						<div class="col-8 col-md-8">
@@ -1317,7 +1317,8 @@
 						</div> -->
 						<div class="col-md-12 value">
 							<span class="font-weight-bolder preview-output-field">
-								{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{ bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
+								{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{
+								bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
 							</span>
 						</div>
 					</div>
@@ -1431,7 +1432,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{isAffiliate ? bookingPreview?.affiliate_email :
 										bookingPreview?.lose_affiliate_email }}
 									</span>

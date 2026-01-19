@@ -12,6 +12,8 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { GoogleMap } from '@angular/google-maps';
 
+
+
 declare var $: any
 
 
@@ -47,6 +49,8 @@ export class FarmOutComponent implements OnInit {
 	public bookingStatusColor: string;
 	public startDate: string;
 	public endDate: string;
+	public startDateModel: moment.Moment;
+	public endDateModel: moment.Moment;
 	public date: Date;
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;
@@ -62,7 +66,7 @@ export class FarmOutComponent implements OnInit {
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
 	audit_Trail: any;
-	OUTPUTDATEFORMAT = 'YYYY-MM-DD'
+	// OUTPUTDATEFORMAT = 'YYYY-MM-DD' // Removed duplicate
 	show: boolean = false;
 	farmout_modal_body: string
 	cancelBookingId: any = null;
@@ -103,21 +107,19 @@ export class FarmOutComponent implements OnInit {
 
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		// this.startDate = this.$affiliateService.checkCookie('farmout_startDate') ?
-		// 	this.$affiliateService.getCookie('farmout_startDate') :
-		// 	date.toISOString().substring(0, 10);
-
-		// date.setDate(date.getDate() + 7);
-		// this.endDate = this.$affiliateService.checkCookie('farmout_endDate') ?
-		// 	this.$affiliateService.getCookie('farmout_endDate') :
-		// 	date.toISOString().substring(0, 10);
-
-		this.startDate = date.toISOString().substring(0, 10);;
+		// logic aligned with my-bookings: string initialization
+		this.startDate = localStorage.getItem('farmout_startDate') ?
+			localStorage.getItem('farmout_startDate') :
+			date.toISOString().substring(0, 10);
 
 		date.setDate(date.getDate() + 7);
+		this.endDate = localStorage.getItem('farmout_endDate') ?
+			localStorage.getItem('farmout_endDate') :
+			date.toISOString().substring(0, 10);
 
-		this.endDate = date.toISOString().substring(0, 10);;
-
+		// Initialize Moment date models for datepicker
+		this.startDateModel = moment(this.startDate, 'YYYY-MM-DD');
+		this.endDateModel = moment(this.endDate, 'YYYY-MM-DD');
 
 		this.searchText = this.$affiliateService.checkCookie('farmout_search') ?
 			this.$affiliateService.getCookie('farmout_search')
@@ -242,7 +244,9 @@ export class FarmOutComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.$affiliateService.loadFarmoutBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+		let start = this.startDate ? moment(this.startDate).format('YYYY-MM-DD') : '';
+		let end = this.endDate ? moment(this.endDate).format('YYYY-MM-DD') : '';
+		this.$affiliateService.loadFarmoutBookings(pageUrl, this.searchText, start, end, this.useDateFilter).then(result => {
 			this.$spinner.hide();//hide spinner
 			console.log('result---->>>', result)
 			let date = new Date();
@@ -251,8 +255,8 @@ export class FarmOutComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if (!this.useDateFilter  && !this.searchText) {
-				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			if (!this.useDateFilter && !this.searchText) {
+				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : new Date(timestamp);
 			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
@@ -359,9 +363,11 @@ export class FarmOutComponent implements OnInit {
 	changeDate(dateType, date) {
 		if (dateType == 'startDate') {
 			this.startDate = date;
+			localStorage.setItem('farmout_startDate', date);
 		}
 		else {
 			this.endDate = date;
+			localStorage.setItem('farmout_endDate', date);
 		}
 	}
 	FormatDate(date: string) {
@@ -473,22 +479,22 @@ export class FarmOutComponent implements OnInit {
 
 	invoiceAction(bookingId) {
 		console.log("in nivoice")
-		if(this.currentUser.roleName == 'sub_affiliate'){
+		if (this.currentUser.roleName == 'sub_affiliate') {
 			this.$router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
-		else{
+		else {
 			this.$router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
 	}
 
 	editAction(bookingId, updateType) {
-		if(this.currentUser.roleName == 'sub_affiliate'){
+		if (this.currentUser.roleName == 'sub_affiliate') {
 			this.$router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'false' } });
 		}
-		else{
+		else {
 			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'false' } });
 		}
-		
+
 	}
 	finalizeAction(bookingId) {
 		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
@@ -712,12 +718,12 @@ export class FarmOutComponent implements OnInit {
 				if (success == true) {
 					this.$spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
-					if(this.currentUser.roleName == 'sub_affiliate'){
+					if (this.currentUser.roleName == 'sub_affiliate') {
 						this.$router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.$router.navigate(['/sub_affiliate/my-bookings']);
 						});
 					}
-					else{
+					else {
 						this.$router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.$router.navigate(['/affiliate/my-bookings']);
 						});

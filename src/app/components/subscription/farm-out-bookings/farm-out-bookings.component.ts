@@ -15,7 +15,6 @@ declare var $: any;
 import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
-import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 import { GoogleMap } from "@angular/google-maps";
 
 
@@ -34,7 +33,6 @@ export class FarmOutBookingsComponent implements OnInit {
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
 	directionsRenderer!: google.maps.DirectionsRenderer;
 
-	exampleHeader = DatePickerComponent;
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;

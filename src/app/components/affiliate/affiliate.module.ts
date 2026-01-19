@@ -5,13 +5,15 @@ import { CommonModule } from '@angular/common';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 
 //
 
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatMomentDateModule, MomentDateAdapter } from "@angular/material-moment-adapter";
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 // import { InvalidControlScrollDirective } from '../../directives/scroll-to-invalid.directive';
 // import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { SharedModule } from '../shared/shared.module';
@@ -51,6 +53,12 @@ import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
 import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 @NgModule({
 	declarations: [
@@ -87,13 +95,9 @@ import { GoogleMapsModule } from '@angular/google-maps';
 	],
 	imports: [
 		CommonModule,
-		AffiliateRoutingModule,
-		NgxSpinnerModule,
-		MatProgressBarModule,
 		FormsModule,
 		ReactiveFormsModule,
 		MatSlideToggleModule,
-		AdminModule,
 		GoogleMapsModule,
 		MatNativeDateModule,
 		MatMomentDateModule,
@@ -101,8 +105,30 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatSelectModule,
 		NgSelectModule,
 		MatRadioModule,
-		// PinchZoomModule,
 		SharedModule,
+		MatDialogModule,
+		MatFormFieldModule,
+		MatIconModule,
+		MatButtonModule,
+		MatDatepickerModule,
+		MatCheckboxModule,
+		MatProgressBarModule,
+		AffiliateRoutingModule,
+		NgxSpinnerModule,
+		AdminModule,
+		NgxDaterangepickerMd.forRoot({
+			separator: ' - ',
+			applyLabel: 'Okay',
+		}),
+	],
+	providers: [],
+	exports: [
+		MatDatepickerModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatIconModule,
+		MatButtonModule,
+		MatCheckboxModule
 	]
 })
 export class AffiliateModule { }

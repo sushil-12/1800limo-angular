@@ -19,16 +19,10 @@
 							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
 								placeholder="Start Date" id="id_4"
 								(dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
-								[value]="startDate" readonly />
+								[value]="startDate" readonly style="cursor: pointer;" />
 							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+							<mat-datepicker #picker1></mat-datepicker>
 						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>Start date <span class="asterisk"> * </span></mat-label>
-							<input matInput [matDatepicker]="picker3">
-							<mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-							<mat-datepicker #picker3 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						  </mat-form-field> -->
 					</div>
 
 					<!-- End-Date -->
@@ -39,16 +33,11 @@
 							</mat-label>
 							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
 								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly
+								style="cursor: pointer;" />
 							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-							<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+							<mat-datepicker #picker2></mat-datepicker>
 						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>End date <span class="asterisk"> * </span></mat-label>
-							<input matInput [matDatepicker]="picker4">
-							<mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-							<mat-datepicker #picker4 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						  </mat-form-field> -->
 					</div>
 				</div>
 				<!-- Search Button -->
@@ -71,8 +60,9 @@
 			</div>
 			<div class="row d-flex justify-content-between pl-2">
 				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-					{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
-				</mat-checkbox></p>
+						{{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see
+						the next 7 days bookings or search for past bookings.' }}
+					</mat-checkbox></p>
 			</div>
 			<div class="row mb-2">
 				<!-- <div class="col-md-3">
@@ -202,11 +192,11 @@
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
-										(click)="openModal(booking, 'Passenger')" id="box">
-										<span [innerHTML]="highlighText(booking?.passenger_name)"></span> |
-										<span class="font-weight-bolder"
-											[innerHTML]="highlighText( booking?.pax_tel)"></span>
-									</p>
+											(click)="openModal(booking, 'Passenger')" id="box">
+											<span [innerHTML]="highlighText(booking?.passenger_name)"></span> |
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText( booking?.pax_tel)"></span>
+										</p>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
 											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
@@ -1204,13 +1194,8 @@
 					<hr>
 					<br>
 					<div class="google_map">
-						<google-map
-						  height="300px"
-						  width="100%"
-						  [center]="mapCenter"
-						  [zoom]="zoom"
-						></google-map>
-					  </div>
+						<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+					</div>
 					<br>
 					<!-- Distance Details -->
 					<hr>
@@ -1369,7 +1354,8 @@
 						</div> -->
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-field">
-								{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{ bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
+								{{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{
+								bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
 							</span>
 						</div>
 					</div>
@@ -1434,7 +1420,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.affiliate_email) }}
 									</span>
 								</div>
@@ -1494,7 +1481,8 @@
 									</span>
 								</div>
 								<div class="col-8 col-md-8 value">
-									<span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+									<span class="font-weight-bolder preview-output-field"
+										style="word-break: break-all;">
 										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
 									</span>
 								</div>
@@ -1852,7 +1840,8 @@
 
 
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" style="font-size: 50px !important;">
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+					style="font-size: 50px !important;">
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
