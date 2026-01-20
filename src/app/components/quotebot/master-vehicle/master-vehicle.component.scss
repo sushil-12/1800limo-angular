@@ -1,5 +1,79 @@
-.card {
-	min-width: 250px;
+/* Responsive Header Typography */
+.select_vehicle_text {
+	font-size: 22px;
+
+	@media (max-width: 767px) {
+		font-size: 1.2rem;
+		line-height: 1.3;
+	}
+}
+
+.select_vehicle_subtext {
+	font-size: 14px;
+
+	@media (max-width: 767px) {
+		font-size: 0.9rem;
+	}
+}
+
+/* Responsive Vehicle Grid Styles */
+#master-vehicle-box-container.vehicle-grid-card {
+	display: grid;
+	grid-template-columns: 1fr;
+	/* 1 column on mobile */
+	gap: 15px;
+
+	@media (min-width: 768px) {
+		grid-template-columns: repeat(2, 1fr);
+		/* 2 columns on tablet */
+	}
+
+	@media (min-width: 1200px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	@media (min-width: 1380px) {
+		grid-template-columns: repeat(4, 1fr);
+		/* 4 columns on large screens */
+	}
+}
+
+#master-vehicle-box.card {
+	min-height: 220px;
+	/* Adjust as needed */
+	height: 100%;
+
+	@media (max-width: 767px) {
+		min-height: auto;
+		flex-direction: row !important;
+		/* Force row layout on mobile */
+		padding: 10px;
+
+		#vehicle-image {
+			height: auto !important;
+			min-height: 80px !important;
+
+			img {
+				// width: 100%;
+				// height: auto;
+				object-fit: contain;
+			}
+		}
+
+		#vehicle-information {
+			padding: 5px 0 0 10px !important;
+
+			.vehicle-name-text {
+				font-size: 1rem;
+				font-weight: 700;
+			}
+
+			button.view-more-circle-button {
+				padding: 5px 15px;
+				font-size: 0.8rem;
+			}
+		}
+	}
 }
 
 
@@ -43,7 +117,7 @@
 
 	}
 
-	.view-more-circle-button{
+	.view-more-circle-button {
 		width: 90px !important;
 		height: 25px !important;
 		font-size: 0.7rem !important;
@@ -892,6 +966,10 @@ button.link {
 	border-radius: 10px;
 	padding: 20px;
 	margin-bottom: 2rem;
+
+	@media (min-width: 992px) {
+		margin-left: 15px;
+	}
 }
 
 // back to home button
@@ -903,21 +981,9 @@ button.link {
 }
 
 //vehcile card design
-.vehicle-grid-card {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	grid-gap: 30px;
-	/* background-color: #2196F3; */
-	padding: 0px !important;
-}
 
+/* Removed legacy vehicle-grid-card styles to prefer the unified grid defined at the top */
 
-.vehicle-grid-card .card {
-	border-radius: 10px;
-	border: 5px solid white;
-	box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.12);
-
-}
 
 .vehicle-name-text {
 	font-size: 23px;
@@ -991,11 +1057,6 @@ button.link {
 	.checkbox-label-text {
 		margin-top: -8px;
 	}
-
-	.vehicle-grid-card {
-		grid-template-columns: 1fr;
-		grid-gap: -10px;
-	}
 }
 
 @media only screen and (max-width:767px) and (orientation : landscape) {
@@ -1006,63 +1067,23 @@ button.link {
 }
 
 @media only screen and (min-width:768px) and (max-width:1024px) and (orientation : landscape) {
-
-	.vehicle-grid-card {
-		grid-template-columns: 1fr 1fr 1fr;
-	}
-
-	.passnger-luggage-div {
-		display: flex;
-		flex-direction: column;
-	}
+	/* Kept empty or remove specific rules */
 }
 
 
-@media only screen and (min-width:997px) and (max-width:1157px) and (orientation : landscape) {
 
-	.vehicle-grid-card {
-		grid-template-columns: 1fr 1fr !important;
-	}
-
-
-	.passnger-luggage-div {
-		display: flex;
-		flex-direction: column;
-		gap: 4px !important;
-	}
-
-}
 
 @media only screen and (min-width:768px) and (max-width:1024px) and (orientation : portrait) {
-
-	.vehicle-grid-card {
-		grid-template-columns: 1fr 1fr 1fr;
-	}
-
 	.hideMobile {
 		display: none;
 	}
-
-	.passnger-luggage-div {
-		display: flex;
-		flex-direction: column;
-	}
-
 }
 
 @media only screen and (min-width:768px) and (max-width:1180px) {
-
-	.vehicle-grid-card {
-		grid-template-columns: 1fr 1fr 1fr;
-	}
-
-	.passnger-luggage-div {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-
+	/* Removed column direction */
 }
+
+
 
 @media only screen and (max-width:767px) {
 	.hideMobile {
@@ -1078,9 +1099,8 @@ button.link {
 	}
 }
 
-@media only screen and (max-width:480px)
-{
-	.hideInMobile{
+@media only screen and (max-width:480px) {
+	.hideInMobile {
 		display: none;
 	}
 
@@ -1089,7 +1109,7 @@ button.link {
 		font-size: 13px;
 		font-weight: 500;
 	}
-	
+
 	.sup-red {
 		color: #F3933D !important;
 		font-size: 14px;
@@ -1099,9 +1119,8 @@ button.link {
 	}
 }
 
-@media only screen and (min-width:480px)
-{
-	.hideInDesktop{
+@media only screen and (min-width:480px) {
+	.hideInDesktop {
 		display: none;
 	}
 }
@@ -1136,32 +1155,32 @@ button.link {
 	margin-bottom: 1.5rem;
 }
 
-.back_button_mobile{
-		padding: 2px 3px;
-		border-radius: 0.295rem;
-		border: 2px solid #33c658;
-		background-color: #33c658;
-		color: #202020;
-		letter-spacing: 1px;
-		font-size: 0.78rem;
-		display: inline-block;
-		font-family: "Roboto", sans-serif;
-		font-weight: 700;
-		appearance: button;
-		-moz-appearance: button;
-		-webkit-appearance: button;
-		transition: box-shadow 0.1s ease-in-out;
-		box-shadow: 0px 5px 20px -6px rgb(0, 0, 0, 0.6);
-		border-color: #33c658;
-		background-color: #33c658;
-	
-		&:active {
-			box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
-		}
+.back_button_mobile {
+	padding: 2px 3px;
+	border-radius: 0.295rem;
+	border: 2px solid #33c658;
+	background-color: #33c658;
+	color: #202020;
+	letter-spacing: 1px;
+	font-size: 0.78rem;
+	display: inline-block;
+	font-family: "Roboto", sans-serif;
+	font-weight: 700;
+	appearance: button;
+	-moz-appearance: button;
+	-webkit-appearance: button;
+	transition: box-shadow 0.1s ease-in-out;
+	box-shadow: 0px 5px 20px -6px rgb(0, 0, 0, 0.6);
+	border-color: #33c658;
+	background-color: #33c658;
+
+	&:active {
+		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+	}
 }
 
 
-.sort_filter_div_mobile{
+.sort_filter_div_mobile {
 	display: flex;
 	justify-content: space-between;
 	padding: 4px;
@@ -1179,23 +1198,24 @@ button.link {
 }
 
 .col-sm-3.imageStyle-mobile {
-    width: 60%;
-    object-fit: contain;
-    padding: 0 !important;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+	width: 60%;
+	object-fit: contain;
+	padding: 0 !important;
+	justify-content: center;
+	align-items: center;
+	display: flex;
 }
 
-.imageStyle-mobile img{
+.imageStyle-mobile img {
 	/* height: 100%; */
-    /* max-width: 110%; */
-    /* width: 100%; */
-    /* height: 100%; */
-    /* max-width: 100px; */
-    /* min-width: 100px; */
-    min-width: 100px;
-    width: 100%;
-    height: auto;
-    object-fit: contain; /* or 'contain', depending on your needs */
+	/* max-width: 110%; */
+	/* width: 100%; */
+	/* height: 100%; */
+	/* max-width: 100px; */
+	/* min-width: 100px; */
+	min-width: 100px;
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+	/* or 'contain', depending on your needs */
 }

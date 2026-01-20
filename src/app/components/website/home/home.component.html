@@ -221,7 +221,7 @@
 										</div>
 									</div>
 
-									<div class="col-6 col-md-6 d-none d-lg-block">
+									<div class="col-6 col-md-6">
 										<div class="inselect pickupTime">
 											<select name="pickupTime" placeholder="Pickup Time" required
 												formControlName="pickup_time" class="font-weight-bolder" tabindex="1"
@@ -237,23 +237,6 @@
 												<path
 													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
 											</svg>
-										</div>
-									</div>
-
-
-
-
-									<div class="col-6 col-md-6 d-lg-none d-block">
-										<div class="form-group">
-											<div class="input-group time" id="timepicker">
-												<input type="time" class="form-control" style="height:30px;"
-													placeholder="HH:MM"
-													(change)="changeDetection.pickupTime($event, 'pickup_time')"
-													[value]="QBForm?.pickup_time?.value" class="font-weight-bolder" />
-												<em class="input-group-append input-group-addon">
-													<em class="input-group-text"></em>
-												</em>
-											</div>
 										</div>
 										<div *ngIf="submitted && QBForm?.pickup_time?.errors" class="text-danger">
 											<div *ngIf="QBForm?.pickup_time?.errors?.required">Pickup Time is required
@@ -413,6 +396,7 @@
 														formControlName="pickup_address" (focus)="addressinput.select()"
 														tabindex="1" class="input-f font-weight-bolder" />
 												</div>
+
 												<div class="cross-svg">
 													<svg *ngIf="addressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
@@ -422,15 +406,6 @@
 															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
 													</svg>
 												</div>
-											</div>
-
-											<div class="d-flex justify-content-end w-100 current_loc_button">
-												<a href="javascript:void(0)"
-													(click)="useCurrentPickupLocation('pickup_address')"
-													class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
-													title="Use Current Location" tabindex="1">
-													<i class="fas fa-location mr-1"></i> Use Current Location
-												</a>
 											</div>
 
 											<div *ngIf="submitted && QBForm?.pickup_address?.errors; else PickupAddressError"
@@ -449,6 +424,15 @@
 													</div>
 												</div>
 											</ng-template>
+										</div>
+										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+											*ngIf="QBForm?.pickup_type?.value != 'airport'">
+											<a href="javascript:void(0)"
+												(click)="useCurrentPickupLocation('pickup_address')"
+												class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
+												title="Use Current Location" tabindex="1">
+												<i class="fas fa-location mr-1"></i> Use Current Location
+											</a>
 										</div>
 
 
@@ -506,6 +490,7 @@
 														(focus)="dropaddressinput.select()" tabindex="1"
 														class="input-f font-weight-bolder" />
 												</div>
+
 												<div class="cross-svg">
 													<svg *ngIf="dropaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
@@ -515,15 +500,6 @@
 															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
 													</svg>
 												</div>
-											</div>
-
-											<div class="d-flex justify-content-end w-100 current_loc_button">
-												<a href="javascript:void(0)"
-													(click)="useCurrentPickupLocation('dropoff_address')"
-													class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
-													title="Use Current Location" tabindex="1">
-													<i class="fas fa-location mr-1"></i> Use Current Location
-												</a>
 											</div>
 
 											<div *ngIf="submitted && QBForm?.dropoff_address?.errors; else DropoffAddressError"
@@ -542,6 +518,16 @@
 													</div>
 												</div>
 											</ng-template>
+										</div>
+
+										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
+											<a href="javascript:void(0)"
+												(click)="useCurrentPickupLocation('dropoff_address')"
+												class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
+												title="Use Current Location" tabindex="1">
+												<i class="fas fa-location mr-1"></i> Use Current Location
+											</a>
 										</div>
 									</div>
 								</div>
@@ -579,7 +565,7 @@
 										</div>
 									</div>
 
-									<div class="col-6 col-md-6 d-none d-lg-block">
+									<div class="col-6 col-md-6">
 										<div class="inselect pickupTime">
 											<select name="returPickupTime" placeholder="Return Pickup Time" required=""
 												formControlName="return_pickup_time" class="font-weight-bolder"
@@ -596,22 +582,6 @@
 												<path
 													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
 											</svg>
-										</div>
-									</div>
-
-
-
-									<div class="col-6 col-md-6 d-lg-none d-block">
-										<div class="form-group">
-											<div class="input-group time" id="timepicker">
-												<input type="time" style="height: 30px !important;" class="form-control"
-													placeholder="HH:MM" class="font-weight-bolder" tabindex="1"
-													(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
-													[value]="QBForm?.return_pickup_time?.value" />
-												<em class="input-group-append input-group-addon">
-													<em class="input-group-text"></em>
-												</em>
-											</div>
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
 											class="text-danger">
@@ -677,6 +647,7 @@
 														(focus)="retaddressinput.select()" tabindex="1"
 														class="input-f font-weight-bolder" />
 												</div>
+
 												<div class="cross-svg">
 													<svg *ngIf="retaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
@@ -686,15 +657,6 @@
 															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
 													</svg>
 												</div>
-											</div>
-
-											<div class="d-flex justify-content-end w-100 current_loc_button">
-												<a href="javascript:void(0)"
-													(click)="useCurrentPickupLocation('return_pickup_address')"
-													class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
-													title="Use Current Location" tabindex="1">
-													<i class="fas fa-location mr-1"></i> Use Current Location
-												</a>
 											</div>
 
 											<div *ngIf="submitted && QBForm?.return_pickup_address?.errors; else DropoffAddressError"
@@ -714,6 +676,15 @@
 														enter valid Return Pickup Address</div>
 												</div>
 											</ng-template>
+										</div>
+										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
+											<a href="javascript:void(0)"
+												(click)="useCurrentPickupLocation('return_pickup_address')"
+												class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
+												title="Use Current Location" tabindex="1">
+												<i class="fas fa-location mr-1"></i> Use Current Location
+											</a>
 										</div>
 
 
@@ -766,6 +737,7 @@
 														(focus)="retdropaddressinput.select()" tabindex="1"
 														class="input-f font-weight-bolder" />
 												</div>
+
 												<div class="cross-svg">
 													<svg *ngIf="retdropaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
@@ -775,15 +747,6 @@
 															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
 													</svg>
 												</div>
-											</div>
-
-											<div class="d-flex justify-content-end w-100 current_loc_button">
-												<a href="javascript:void(0)"
-													(click)="useCurrentPickupLocation('return_dropoff_address')"
-													class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
-													title="Use Current Location" tabindex="1">
-													<i class="fas fa-location mr-1"></i> Use Current Location
-												</a>
 											</div>
 
 											<div *ngIf="submitted && QBForm?.return_dropoff_address?.errors; else DropoffAddressError"
@@ -804,6 +767,15 @@
 														enter valid Return Drop Off Address</div>
 												</div>
 											</ng-template>
+										</div>
+										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+											*ngIf="QBForm?.pickup_type?.value != 'airport'">
+											<a href="javascript:void(0)"
+												(click)="useCurrentPickupLocation('return_dropoff_address')"
+												class="text-decoration-none small font-weight-bold text-primary mt-1 mb-2"
+												title="Use Current Location" tabindex="1">
+												<i class="fas fa-location mr-1"></i> Use Current Location
+											</a>
 										</div>
 
 
@@ -1180,7 +1152,7 @@
 				<div class="row p-2">
 					<div class="col-md-12 whychoose_no">
 						<img src="../../../../assets/images/new best value.png" />
-						<h3>The Best Value</h3>
+						<h3>The Best Value <br /><small>(no urge pricing)</small></h3>
 						<!-- <a href="JavaScript:void(0);" data-toggle="modal" name="modalType"
 							(click)="modalSwitch('modal_3')" data-target="#myModal" tabindex="1">More Info</a> -->
 					</div>
@@ -1213,7 +1185,8 @@
 			<div class="ourmisservice_wrap_content d-flex flex-column col-12f col-md-6 remove_col_padding ride-nw-cl">
 				<h2 style="margin-top: 20px; margin-bottom:0 !important;" class="ride-desktop-heading"> Ride Later Today
 					Or <span>Anytime</span></h2>
-				<p class="ride-now-para">{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
+				<p class="ride-now-para" style="text-transform: none !important;">{{ fetchPageData('RIDE NOW OR RIDE
+					LATER')?.content }}</p>
 			</div>
 		</div>
 	</div>
