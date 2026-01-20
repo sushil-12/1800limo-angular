@@ -468,11 +468,26 @@
 				</div>
 			</div>
 			<p style="font-size: 1rem; font-weight: 500; color: #e63232"
-				*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
+				*ngIf="!isLoading && ((vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0)">
 				{{ no_vehicle_msg }}
 			</p>
-			<div id="master-vehicle-box-container" class="vehicle-grid-card" *ngIf="master_vehicles.length > 0"
-				style="grid-gap: 15px !important;">
+
+			<!-- Skeleton Loader -->
+			<div *ngIf="isLoading" class="skeleton-loader-container mb-3" style="margin-top: 15px;">
+				<div class="skeleton-card" *ngFor="let item of skeletonItems">
+					<div class="skeleton-content">
+						<div class="skeleton-image"></div>
+						<div class="skeleton-details">
+							<div class="skeleton-text"></div>
+							<div class="skeleton-text short"></div>
+							<div class="skeleton-text price"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="master-vehicle-box-container" class="vehicle-grid-card"
+				*ngIf="!isLoading && master_vehicles.length > 0" style="grid-gap: 15px !important;">
 				<div id="master-vehicle-box" class="card mb-1 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 					(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">

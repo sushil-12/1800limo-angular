@@ -217,6 +217,8 @@ export class MasterVehicleComponent implements OnInit {
 	role: number = JSON.parse(localStorage.getItem("currentUser"))?.role
 	openfilters: boolean = false
 	changeText: boolean = false
+	isLoading: boolean = true; // Add loading state
+	skeletonItems = new Array(6); // Skeleton items
 	currencySymbol: any;
 
 
@@ -242,7 +244,8 @@ export class MasterVehicleComponent implements OnInit {
 		// sessionStorage.removeItem('selected_vehicle')
 		sessionStorage.removeItem('filters')
 		console.log('filter removed from session storage')
-		this.$spinner.show()
+		// this.$spinner.show()
+		this.isLoading = true; // Start loading
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
 		if (localStorage.getItem('quotebot_form') == null) {
 			this.$errorDialog.openDialog({
@@ -322,7 +325,8 @@ export class MasterVehicleComponent implements OnInit {
 
 
 	fetchMasterVehicles(): Promise<Array<any> | string> {
-		this.$spinner.show()
+		this.isLoading = true;
+		/* this.$spinner.show() */
 		return new Promise((resolve, reject) => {
 			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
 				catchError(err => throwError(err))
@@ -330,6 +334,7 @@ export class MasterVehicleComponent implements OnInit {
 
 				if (response.data.length == 0) {
 					this.no_vehicle_msg = "No Vehicle Categories Found. "
+					this.isLoading = false;
 					reject('No Master Vehicle Found.')
 					return
 				}
@@ -337,7 +342,8 @@ export class MasterVehicleComponent implements OnInit {
 				sessionStorage.setItem('currencyData', JSON.stringify(response?.currency))
 				this.currencySymbol = response.currency.symbol
 				resolve(this.master_vehicles)
-				this.$spinner.hide()
+				/* this.$spinner.hide() */
+				this.isLoading = false;
 				return
 			})
 		})
