@@ -53,7 +53,7 @@ export class MasterVehicleComponent implements OnInit {
 			dp: 'vehicle-type-preferences',
 			rp: 'vehicle-type'
 		},
-			
+
 		{
 			dp: 'driver-preferences',
 			rp: [
@@ -325,9 +325,9 @@ export class MasterVehicleComponent implements OnInit {
 		this.$spinner.show()
 		return new Promise((resolve, reject) => {
 			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
-				catchError(err =>  throwError(err))
+				catchError(err => throwError(err))
 			).subscribe((response: any) => {
-				
+
 				if (response.data.length == 0) {
 					this.no_vehicle_msg = "No Vehicle Categories Found. "
 					reject('No Master Vehicle Found.')

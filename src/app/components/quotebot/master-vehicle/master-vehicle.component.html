@@ -167,11 +167,12 @@
 														class="custom-filled-button orange-button mr-4">
 														Clear
 													</button>
-													<button type="button" (click)="getVehicleDetails(); openfilters=false"
+													<button type="button"
+														(click)="getVehicleDetails(); openfilters=false"
 														class="custom-filled-button green-button">
 														Apply filter
 													</button>
-						
+
 												</div>
 												<!-- SHOW MORE BUTTON ENDS -->
 											</div>
@@ -271,11 +272,12 @@
 																		class="custom-filled-button orange-button mr-4">
 																		Clear
 																	</button>
-																	<button type="button" (click)="getVehicleDetails(); openfilters=false"
+																	<button type="button"
+																		(click)="getVehicleDetails(); openfilters=false"
 																		class="custom-filled-button green-button">
 																		Apply filter
 																	</button>
-										
+
 																</div>
 																<!-- SHOW MORE BUTTON ENDS -->
 															</div>
@@ -318,15 +320,15 @@
 			<!-- title box -->
 			<div class="select_vehicle_div">
 				<div class="row d-flex justify-content-between align-items-center">
-					<div class="col-md-6">
-						<h5 style="color:#fff;font-size: 22px;">
+					<div class="col-12 col-md-6 mb-3 mb-md-0 text-center text-md-left">
+						<h5 class="select_vehicle_text" style="color:#fff;">
 							Select the vehicle that meets your requirements.
 						</h5>
-						<span style="color:#fff;font-size: 14px;">
+						<span class="select_vehicle_subtext" style="color:#fff;">
 							Use <span style="color:#FEB573;">Filter / Sort</span> to customize your ride.
 						</span>
 					</div>
-					<div class="col-md-6 d-flex justify-content-end">
+					<div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-end">
 						<button type="button" class="custom-filled-button green-button" (click)="backButton()">
 							<i class="bi bi-arrow-left mx-1"></i>
 							Back to Home
@@ -402,7 +404,7 @@
 							</div>
 						</div>
 						<div class="d-flex justify-content-end mt-4"
-							style="position: absolute; bottom: 0;right: 0;margin-bottom: 7px;">
+							style="position: absolute; bottom: 0;right: 15px;margin-bottom: 7px;">
 							<button type="button" class="view-more-circle-button"
 								(click)="selectCategory(vehicle_obj?.name)">
 								View More
@@ -499,13 +501,15 @@
 								</p>
 								<div id="icons" class="d-flex mb-2" style="gap:8px;">
 									<div class="icon-container-mobile">
-										<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;" />
+										<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;"
+											width="16" />
 										<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
 										<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 											vehicle_obj?.passenger }}</span>
 									</div>
 									<div class="icon-container-mobile">
-										<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;" />
+										<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;"
+											width="16" />
 										<span
 											style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
 										<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{

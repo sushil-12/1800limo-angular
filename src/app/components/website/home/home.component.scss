@@ -2547,13 +2547,9 @@ div#google_translate_element_home_mobile {
 }
 
 .current_loc_button {
-	position: absolute;
-	right: 0;
-
-	@media (max-width: 767px) {
-		position: relative;
-		right: auto;
-	}
+	text-align: right;
+	margin-top: 5px;
+	width: 100%;
 }
 
 .current_loc_button a {
