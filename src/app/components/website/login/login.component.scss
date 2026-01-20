@@ -122,5 +122,11 @@ label+input[type=radio]+label {
 :host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__notch,
 :host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__trailing {
 	border-color: red !important;
+	border-color: red !important;
 	border-width: 2px !important;
+}
+
+// Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
+.phoneNumberClass {
+	padding-left: 80px !important;
 }
