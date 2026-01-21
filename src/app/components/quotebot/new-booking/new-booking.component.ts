@@ -342,7 +342,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
 			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
 		});
 
@@ -2366,8 +2366,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		})
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
-			console.log("value in pickup_airport--->",value)
-			if(value == 3283){
+			console.log("value in pickup_airport--->", value)
+			if (value == 3283) {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
 			}
@@ -2425,8 +2425,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 		// Return Pickup Airport
 		this.BookingForm.get('return_pickup_airport').valueChanges.subscribe((value: string) => {
-			console.log("value in pickup_airport--->",value)
-			if(value == '3283'){
+			console.log("value in pickup_airport--->", value)
+			if (value == '3283') {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 			}
@@ -2617,6 +2617,45 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			passenger_cell_isd: loose_customer.get('phone_isd').value,
 			passenger_cell_country: loose_customer.get('phone_country').value
 		})
+	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhoneGeneric(control: any, telInputObject: any) {
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = telInputObject.isValidNumber();
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
+	}
+
+	validateLooseCustomerPhone() {
+		setTimeout(() => {
+			this.validatePhoneGeneric(this.BookingForm.get('loose_customer').get('phone'), this.PaxTelObject);
+		}, 100);
 	}
 
 	LCTelInputObject(event: any) {

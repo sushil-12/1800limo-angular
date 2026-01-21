@@ -46,61 +46,30 @@
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
                             <input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
+                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+                                (keypress)="numberOnly($event)" (input)="validateMobile()" (blur)="validateMobile()"
+                                [class.is-invalid-input]="(submittedForm && f?.mobile?.errors) || (f.mobile?.touched && f?.mobile?.errors)" />
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f?.mobile?.errors || f?.mobile?.touched && f?.mobile?.errors"
+                        <div *ngIf="(submittedForm && f?.mobile?.errors) || (f.mobile?.touched && f?.mobile?.errors)"
                             class="text-danger margin-bottom-thin my-mat-hint">
                             <div *ngIf="f?.mobile?.errors?.required">This field is required</div>
-                        </div>
-                        <div *ngIf="f?.mobile?.errors" class="text-danger margin-bottom-thin my-mat-hint">
-                            <div *ngIf="f?.mobile?.errors?.invalid_Pattern;else plusError">Do not add Dashes
-                                with numbers</div>
-                            <ng-template #plusError>
-                                <div *ngIf="f?.mobile?.errors?.invalidPattern;else allErrors">Do not enter +
-                                    sign</div>
-                                <ng-template #allErrors>
-                                    <div *ngIf="f?.mobile?.errors?.pattern;else numberLength">Enter Numbers Without
-                                        Spaces or Dashes
-                                    </div>
-                                    <ng-template #numberLength>
-                                        <div *ngIf="f?.mobile?.errors?.minlength">Minimum length should be 4</div>
-                                        <div *ngIf="f?.mobile?.errors?.maxlength">Maximum length should be 15</div>
-                                    </ng-template>
-                                </ng-template>
-                            </ng-template>
+                            <div *ngIf="f?.mobile?.errors?.invalidIntl">{{f?.mobile?.errors?.invalidIntl}}</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Work</mat-label>
                             <input matInput #workInput placeholder="Contact" formControlName="work_contact_number"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+                                (keypress)="numberOnly($event)" (input)="validateWorkContact()"
+                                (blur)="validateWorkContact()"
+                                [class.is-invalid-input]="(submittedForm && f?.work_contact_number?.errors) || (f.work_contact_number?.touched && f?.work_contact_number?.errors)" />
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f?.work_contact_number?.errors || f?.work_contact_number?.touched && f?.work_contact_number?.errors"
+                        <div *ngIf="(submittedForm && f?.work_contact_number?.errors) || (f.work_contact_number?.touched && f?.work_contact_number?.errors)"
                             class="text-danger margin-bottom-thin my-mat-hint">
                             <div *ngIf="f?.work_contact_number?.errors?.required">This field is required</div>
-                        </div>
-                        <div *ngIf="f?.work_contact_number?.errors" class="text-danger margin-bottom-thin my-mat-hint">
-                            <div *ngIf="f?.work_contact_number?.errors?.invalid_Pattern;else plusError">Do not add
-                                Dashes
-                                with numbers</div>
-                            <ng-template #plusError>
-                                <div *ngIf="f?.work_contact_number?.errors?.invalidPattern;else allErrors">Do not enter
-                                    +
-                                    sign</div>
-                                <ng-template #allErrors>
-                                    <div *ngIf="f?.work_contact_number?.errors?.pattern;else numberLength">Enter Numbers
-                                        Without
-                                        Spaces or Dashes
-                                    </div>
-                                    <ng-template #numberLength>
-                                        <div *ngIf="f?.work_contact_number?.errors?.minlength">Minimum length should be
-                                            4</div>
-                                        <div *ngIf="f?.work_contact_number?.errors?.maxlength">Maximum length should be
-                                            15</div>
-                                    </ng-template>
-                                </ng-template>
-                            </ng-template>
+                            <div *ngIf="f?.work_contact_number?.errors?.invalidIntl">
+                                {{f?.work_contact_number?.errors?.invalidIntl}}</div>
                         </div>
                     </div>
 

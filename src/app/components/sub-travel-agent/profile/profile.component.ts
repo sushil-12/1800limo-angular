@@ -427,4 +427,45 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   // 	this.router.navigate(['/login/sub_travel_agent']);
   // }
 
+  numberOnly(event: any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  validatePhoneGeneric(control: any, telInputObject: any) {
+    if (telInputObject) {
+      const value = control.value;
+      if (!value) {
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+        return;
+      }
+      const isValid = telInputObject.isValidNumber();
+      if (!isValid) {
+        const errorCode = telInputObject.getValidationError();
+        const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+        const currentErrors = control.errors || {};
+        control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+      } else {
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+      }
+    }
+  }
+
+  validateMobile() {
+    this.validatePhoneGeneric(this.profileForm.get('mobile'), this.MobileObject);
+  }
+
+  validateWorkContact() {
+    this.validatePhoneGeneric(this.profileForm.get('work_contact_number'), this.OfficeObject);
+  }
+
 }
