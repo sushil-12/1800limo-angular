@@ -2869,7 +2869,7 @@ export class CreateBookingComponent implements OnInit {
 			distance: this.distance,
 			return_distance: this.return_distance,
 			no_of_hours: this.number_of_hours,
-			is_master_vehicle: this.is_master_vehicle,
+			is_master_vehicle: this.BookingForm.get('affiliate_type').value == "unassigned" ? true : this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			pickup_time: this.BookingForm.get('pickup_time').value,
