@@ -192,7 +192,7 @@ export class SelectVehicleComponent implements OnInit {
 	// ]
 
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
-	vehicleDetails: any;
+	vehicleDetails: any = [];
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
 	booking_created_from: string = 'admin';
@@ -229,6 +229,7 @@ export class SelectVehicleComponent implements OnInit {
 	bookingId: any = null;
 	quotebotNewData: any;
 	isLoading: boolean = true;
+	skeletonItems = new Array(6).fill(0);
 	show = false;
 	notification_msg: any;
 	passengerDetails: any;
@@ -258,6 +259,9 @@ export class SelectVehicleComponent implements OnInit {
 	 */
 	ngOnInit(): void {
 		window.scrollTo(0, 0)
+		this.isLoading = true; // Ensure skeleton shows on page load
+
+
 		try {
 			console.log('in component select vehicle->>', JSON.parse(sessionStorage.getItem('filters')))
 
@@ -552,6 +556,7 @@ export class SelectVehicleComponent implements OnInit {
 	getVehicleDetails() {
 		console.log('Fetching Vehicle Details. ')
 		sessionStorage.setItem('filters', JSON.stringify(this.filters))
+		this.isLoading = true; // Show skeleton loader
 		let data = {}
 		if (this.quotebot_form != null) {
 			data = this.quotebot_form
@@ -576,7 +581,7 @@ export class SelectVehicleComponent implements OnInit {
 				}
 				return i
 			})
-			console.log('vehicle details-->>>', this.vehicleDetails)
+			console.log('vehicle details-->>', this.vehicleDetails)
 			this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
 			this.isLoading = false;
@@ -584,6 +589,7 @@ export class SelectVehicleComponent implements OnInit {
 	}
 
 	getQuoteDetails(id) {
+		this.isLoading = true; // Show skeleton loader
 		this.$quotebotService.getQuoteData(id).subscribe((response: any) => {
 			try {
 				console.log('in function get quote data', response)
