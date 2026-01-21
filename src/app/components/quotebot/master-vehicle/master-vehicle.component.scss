@@ -998,8 +998,20 @@ button.link {
 }
 
 //vehicle image styles in card
+//vehicle image styles in card
 .imageStyle {
 	width: 100%;
+	height: 150px; // Reduced height as per user request
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain; // Ensures image fits within the box without distortion
+	}
 }
 
 //vehicle card icon 
@@ -1305,4 +1317,27 @@ button.link {
 	100% {
 		transform: translateX(100%);
 	}
+}
+
+// Shimmer Animation for Skeleton Loader
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+.shimmer {
+	background: #f0f0f0 !important;
+	background-image: linear-gradient(to right,
+			#f0f0f0 0%,
+			#e0e0e0 20%,
+			#f0f0f0 40%,
+			#f0f0f0 100%) !important;
+	background-repeat: no-repeat !important;
+	background-size: 200% 100% !important;
+	animation: shimmer 1.5s infinite linear;
 }

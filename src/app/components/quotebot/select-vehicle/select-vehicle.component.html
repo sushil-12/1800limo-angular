@@ -315,7 +315,57 @@
 		<!-- FILTERS SECTION ENDS -->
 
 
-		<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing;else novehicle"></ng-container>
+		<ng-container *ngIf="isLoading; else loadedContent">
+			<!-- SKELETON LOADER -->
+			<section class="hideInMobile col-md-12 col-lg-9 col-xl-10">
+				<div class="select_vehicle_div">
+					<!-- Skeleton Header -->
+					<div class="row mb-4">
+						<div class="col-md-6">
+							<div class="shimmer"
+								style="height: 22px; width: 60%; margin-bottom: 8px; border-radius: 4px;"></div>
+							<div class="shimmer" style="height: 14px; width: 40%; border-radius: 4px;"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="vehicle-grid-card">
+					<!-- Skeleton Cards Loop -->
+					<div class="card vehicle-listing-card" *ngFor="let i of [1,2,3,4]">
+						<div class="modern-vehicle-card-content reference-layout">
+							<!-- Image Skeleton -->
+							<div class="card-image-wrapper shimmer" style="height: 220px; background-color: #f0f0f0;">
+							</div>
+
+							<!-- Content Skeleton -->
+							<div class="card-body-content">
+								<div class="d-flex justify-content-between mb-3">
+									<div class="shimmer" style="height: 24px; width: 120px; border-radius: 4px;"></div>
+									<div class="shimmer" style="height: 20px; width: 80px; border-radius: 4px;"></div>
+								</div>
+								<div class="shimmer"
+									style="height: 16px; width: 200px; margin-bottom: 15px; border-radius: 4px;"></div>
+								<div class="shimmer"
+									style="height: 28px; width: 180px; margin-bottom: 15px; border-radius: 4px;"></div>
+								<div class="d-flex gap-3 mb-3">
+									<div class="shimmer" style="height: 20px; width: 60px; border-radius: 4px;"></div>
+									<div class="shimmer" style="height: 20px; width: 60px; border-radius: 4px;"></div>
+								</div>
+								<!-- Buttons Skeleton -->
+								<div class="d-flex gap-3 mt-3">
+									<div class="shimmer" style="height: 45px; width: 100%; border-radius: 8px;"></div>
+									<div class="shimmer" style="height: 45px; width: 100%; border-radius: 8px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</ng-container>
+
+		<ng-template #loadedContent>
+			<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing;else novehicle"></ng-container>
+		</ng-template>
 		<ng-template #novehicle>
 			<p class="hideInMobile" style="font-size: 20px;color: red;font-weight: 500;"
 				*ngIf="vehicleDetails.length == 0">No Vehicle Found.</p>
@@ -449,180 +499,88 @@
 						<!-- AFFILIATE INFO ENDS -->
 
 						<!-- DIV: VEHICLE DETAILS -->
-						<div id="vehicle-details"
-							class="details d-flex flex-row flex-wrap justify-content-center align-items-center">
-							<!-- VEHICLE: IMAGE -->
-							<div id="vehicle-image_{{ vehinfo_index }}"
-								class="imageStyle bg-white d-flex justify-content-center">
-								<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" class="img-fluid" />
-							</div>
-							<!-- IMAGE ENDS -->
+						<!-- REFERENCE REPLICA LAYOUT (Matches User Image) -->
+						<div class="modern-vehicle-card-content reference-layout">
 
-							<!-- VEHICLE: INFORMATION -->
-							<div id="vehinfo_{{ vehinfo_index }}" class="vehicle-info">
-								<!-- VEHICLE: PRICE -->
-								<div class="d-flex price" *ngIf="vehinfo?.number_of_vehicles <= 1">
-									<div class="col-md-4 p-0" style="min-width: fit-content;">
-										{{ formatter(getKeyName()) | titlecase }} &nbsp;
-									</div>
-									<div class="col-md-4" style="min-width: fit-content;">
-										<span style="font-size: 20px;">
-											{{currencySymbol ? currencySymbol : '$'}}
-											{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
-											vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
+							<!-- 1. IMAGE AREA (Top, Rounded Corners) -->
+							<div class="card-image-wrapper">
+								<img [src]="vehinfo.vehicle_images[0]" class="vehicle-main-image"
+									alt="{{vehinfo?.name}}">
+								<div class="badge-overlay" *ngIf="vehinfo?.is_master_vehicle">Category</div>
+							</div>
+
+							<!-- 2. CARD BODY -->
+							<div class="card-body-content">
+
+								<!-- Price Row: "One Way   $ 68.75" + Amenities -->
+								<div class="price-row d-flex align-items-center justify-content-between mb-2">
+									<div class="d-flex align-items-baseline">
+										<span class="price-label mr-3">One Way</span>
+										<span class="price-amount">
+											{{currencySymbol ? currencySymbol : '$'}} {{ vehinfo['rate_breakdown_' +
+											getKeyName()]?.grand_total != undefined ? vehinfo['rate_breakdown_' +
+											getKeyName()]?.grand_total : '0.00' }}
 										</span>
 									</div>
-								</div>
-								<span class="text-rate">
-									All Inclusive Rate include gratuity<sup class="sup-red">*</sup>
-								</span>
-								<div class="d-flex price">
-									<!-- <div class="col-md-12 p-0" style="min-width: fit-content;">
-										Vehicle Type
-									</div> -->
-									<div class="col-md-12 p-0 mb-4">
-										<span class="font-weight-bold"
-											style="font-size :1.2rem ;">{{vehinfo?.name}}</span>
-									</div>
-								</div>
-								<div class="d-flex price mb-4"
-									*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_one_way)">
-									<div class="col-md-8 p-0" style="min-width: fit-content;">
-										Estimated One-Way
-									</div>
-									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
-											currencySymbol : '$'}}
-											{{vehinfo?.estimated_price_one_way}}</span>
-									</div>
-								</div>
-								<div class="d-flex price mb-4"
-									*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_round_trip)">
-									<div class="col-md-8 p-0" style="min-width: fit-content;">
-										Estimated Round-Trip
-									</div>
-									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
-											currencySymbol : '$'}}
-											{{vehinfo?.estimated_price_round_trip}}</span>
-									</div>
-								</div>
-								<div class="d-flex price mb-4"
-									*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_charter_tour)">
-									<div class="col-md-8 p-0" style="min-width: fit-content;">
-										Estimated Charter Tour
-									</div>
-									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol ?
-											currencySymbol : '$'}}
-											{{vehinfo?.estimated_price_charter_tour}}</span>
-									</div>
-								</div>
-								<!-- <div class="col-md-12 mb-3 p-0">
-									<span class="text-rate">
-										All Inclusive Rate<sup class="sup-red">*</sup>
-									</span>
-								</div> -->
-								<div id="icons" class="passnger-luggage-div" style="margin-top: -20px;">
-									<div>
-										<!-- <img alt="" src="assets/images/select_vehicle/pass.png"
-											style="margin-right: 0.50rem;" /> -->
-										<span>Pax #</span>
-										<span class="font-weight-bolder mx-2">{{ vehinfo?.passenger }}</span>
-									</div>
-									<div>
-										<!-- <img alt="" src="assets/images/select_vehicle/lug.png"
-											style="margin-right: 0.50rem;" /> -->
-										<span>Lug #</span>
-										<span class="font-weight-bolder mx-2">{{ vehinfo?.luggage }}</span>
-									</div>
-								</div>
-								<div>
-									<!-- class="p-3" -->
-									<!-- <div class="d-flex price">
-										<div class="col-md-12 p-0" style="min-width: fit-content;">
-											Vehicle Type
-										</div>
-										<div class="col-md-12 p-0 mb-2">
-											<span class="font-weight-bold"
-												style="font-size :1.2rem ;">{{vehinfo?.name}}</span>
-										</div>
-									</div> -->
-
-									<div class="d-flex price" *ngIf="vehinfo?.number_of_vehicles > 1">
-										<div class="col-md-8 p-0" style="min-width: fit-content;">
-											Number of Vehicles
-										</div>
-										<div class="col-md-4" style="min-width: fit-content;">
-											<span class="font-weight-bold">{{vehinfo?.number_of_vehicles}}</span>
-										</div>
-									</div>
-									<div class="mt-2" *ngIf="!vehinfo?.is_master_vehicle">
-										<div class="d-flex justify-content-between">
-											<p>
-												<span
-													style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
-											</p>
-											<p>
-												<span
-													style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
-											</p>
-											<p>
-												<span
-													style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
-											</p>
-										</div>
-									</div>
-									<!-- <div class="d-flex price"
-										*ngIf="vehinfo?.vehicle_details.year && !vehinfo?.is_master_vehicle">
-										<div class="col-md-8 p-0" style="min-width: fit-content;">Year</div>
-										<div class="col-md-4" style="min-width: fit-content;">
-											<span class="font-weight-bold">
-												{{vehinfo?.vehicle_details.year}}
-											</span>
-										</div>
-									</div>
-									<div class="d-flex price"
-										*ngIf="vehinfo?.vehicle_details.make  && !vehinfo?.is_master_vehicle">
-										<div class="col-md-8 p-0" style="min-width: fit-content;">Make</div>
-										<div class="col-md-4" style="min-width: fit-content;">
-											<span class="font-weight-bold">{{vehinfo?.vehicle_details.make}}</span>
-										</div>
-									</div>
-									<div class="d-flex price"
-										*ngIf="vehinfo?.vehicle_details.model  && !vehinfo?.is_master_vehicle">
-										<div class="col-md-8 p-0" style="min-width: fit-content;">Model</div>
-										<div class="col-md-4" style="min-width: fit-content;">
-											<span class="font-weight-bold">{{vehinfo?.vehicle_details.model}}</span>
-										</div>
-									</div> -->
-								</div>
-								<span class="d-flex cancel-policy mb-3" *ngIf="!vehinfo?.is_master_vehicle">
-									<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-									&nbsp; Cancellation Policy: &nbsp; <span
-										style="font-weight: 500;margin-right: 1rem;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}
-									</span>
-									<p style="text-decoration: underline; color: #007fee;cursor: pointer;"
+									<div class="amenities-link text-primary" (click)="viewAmenities(vehinfo?.id)"
 										data-toggle="modal" data-target="#ModalAmenities"
-										(click)="viewAmenities(vehinfo?.id)">
+										style="cursor: pointer; text-decoration: underline; font-weight: 600;">
 										Amenities
-									</p>
-								</span>
-							</div>
-							<!-- INFORMATION ENDS -->
-						</div>
-						<!-- VEHICLE DETAILS ENDS -->
+									</div>
+								</div>
 
-						<!-- DIV: PREVIEW BUTTON -->
-						<div class="d-flex justify-content-between mb-1 align-items-center card-action-buttons">
-							<button type="button" (click)="viewDetails(vehinfo)"
-								class="custom-filled-button orange-button">
-								Booking Details
-							</button>
-							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button"
-								style="font-size: 1.1rem !important;padding: 0.495rem !important;">
-								Book Now
-							</button>
+								<!-- Promo Text: "All Inclusive..." -->
+								<div class="promo-text mb-2">
+									All Inclusive Rate include gratuity <sup class="text-danger">*</sup>
+								</div>
+
+								<!-- Vehicle Name: "Full-Size Sedan - X" -->
+								<h3 class="vehicle-name mb-2">{{vehinfo?.name}}</h3>
+
+								<!-- Specs: Pax / Lug -->
+								<div class="specs-text mb-2 d-flex align-items-center">
+									<span class="spec-item mr-3">Pax # <strong class="ml-1">{{ vehinfo?.passenger
+											}}</strong></span>
+									<span class="spec-item">Lug # <strong class="ml-1">{{ vehinfo?.luggage
+											}}</strong></span>
+								</div>
+
+								<!-- Details: Year Make Model -->
+								<div class="details-text mb-3">
+									<ng-container *ngIf="!vehinfo?.is_master_vehicle">
+										{{vehinfo?.vehicle_details?.year}} {{vehinfo?.vehicle_details?.make}}
+										{{vehinfo?.vehicle_details?.model}}
+									</ng-container>
+									<ng-container *ngIf="vehinfo?.is_master_vehicle">
+										Vehicle Category
+									</ng-container>
+								</div>
+
+								<!-- Policy Only -->
+								<div class="meta-row d-flex align-items-center mb-3">
+									<div class="policy-info d-flex align-items-center"
+										*ngIf="!vehinfo?.is_master_vehicle">
+										<i class="bi bi-exclamation-circle-fill text-danger mr-1"></i>
+										<div class="policy-text" style="font-size: 0.9rem; line-height: 1.2;">
+											Cancellation Policy:
+											<strong>{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</strong>
+										</div>
+									</div>
+								</div>
+
+								<!-- Actions Buttons (Orange / Green Rounded) -->
+								<div class="actions-row d-flex gap-3 w-100">
+									<button type="button" (click)="viewDetails(vehinfo)"
+										class="btn-reference btn-orange flex-fill mr-2">
+										Booking Details
+									</button>
+									<button type="button" (click)="bookNow(vehinfo)"
+										class="btn-reference btn-green flex-fill">
+										Book Now
+									</button>
+								</div>
+
+							</div>
 						</div>
 						<!-- <div id="vehicle-preview-button" style="display: flex;justify-content: space-around;">
 							<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)"
@@ -748,113 +706,85 @@
 					</div> -->
 					<!-- AFFILIATE INFO ENDS -->
 
-					<div id="vehicle-image_{{ vehinfo_index }}" class="bg-white d-flex mt-2 flex-column">
-						<div class="d-flex mb-2">
-							<div class="col-sm-3 imageStyle-mobile">
-								<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" />
+					<!-- REFERENCE REPLICA LAYOUT (Mobile) -->
+					<div class="modern-vehicle-card-content reference-layout mt-2">
+
+						<!-- 1. IMAGE AREA (Top, Rounded Corners) -->
+						<div class="card-image-wrapper">
+							<img [src]="vehinfo.vehicle_images[0]" class="vehicle-main-image" alt="{{vehinfo?.name}}">
+							<div class="badge-overlay" *ngIf="vehinfo?.is_master_vehicle">Category</div>
+						</div>
+
+						<!-- 2. CARD BODY -->
+						<div class="card-body-content">
+
+							<!-- Price Row: "One Way   $ 68.75" + Amenities -->
+							<div class="price-row d-flex align-items-center justify-content-between mb-2">
+								<div class="d-flex align-items-baseline">
+									<span class="price-label mr-3">One Way</span>
+									<span class="price-amount">
+										{{currencySymbol ? currencySymbol : '$'}} {{ vehinfo['rate_breakdown_' +
+										getKeyName()]?.grand_total != undefined ? vehinfo['rate_breakdown_' +
+										getKeyName()]?.grand_total : '0.00' }}
+									</span>
+								</div>
+								<div class="amenities-link text-primary" (click)="viewAmenities(vehinfo?.id)"
+									data-toggle="modal" data-target="#ModalAmenities"
+									style="cursor: pointer; text-decoration: underline; font-weight: 600;">
+									Amenities
+								</div>
 							</div>
 
-							<div id="vehinfo_{{ vehinfo_index }}" class="col-md-9" style="padding: 0 !important;">
-								<div class="d-flex flex-column">
-									<p id="vehicle-name" class="vehicle-name-text-mobile">
-										{{vehinfo?.name}}
-									</p>
-									<p class="font-weight-bolder mb-1" style="font-size: 0.9rem;"
-										*ngIf="vehinfo?.number_of_vehicles <= 1">
-										<span style="color: #c94505;font-weight: 500;">
-											{{ formatter(getKeyName()) | titlecase }}&nbsp;
-										</span>
-										{{currencySymbol ? currencySymbol : '$'}}
-										{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
-										vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
-									</p>
-									<p class="font-weight-bolder mb-2" style="font-size: 0.8rem;"
-										*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_one_way)">
-										<span style="color: #c94505;font-weight: 500;">
-											Estimated One-Way&nbsp;
-										</span>
-										{{currencySymbol ? currencySymbol : '$'}}
-										{{vehinfo?.estimated_price_one_way}}
-									</p>
-									<p class="font-weight-bolder mb-1" style="font-size: 0.8rem;"
-										*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_round_trip)">
-										<span style="color: #c94505;font-weight: 500;">
-											Estimated Round-Trip
-										</span>
-										{{currencySymbol ? currencySymbol : '$'}}
-										{{vehinfo?.estimated_price_round_trip}}
-									</p>
-									<p class="font-weight-bolder mb-1" style="font-size: 0.8rem;"
-										*ngIf="(vehinfo?.number_of_vehicles > 1 && vehinfo?.estimated_price_charter_tour)">
-										<span style="color: #c94505;font-weight: 500;">
-											Estimated Charter Tour
-										</span>
-										{{currencySymbol ? currencySymbol : '$'}}
-										{{vehinfo?.estimated_price_charter_tour}}
-									</p>
-									<p id="vehicle-name" class="text-rate mb-2">
-										All Inclusive Rate include gratuity<sup class="sup-red">*</sup>
-									</p>
-									<div id="icons" class="d-flex mb-2" style="gap:8px;">
-										<div class="icon-container-mobile">
-											<img alt="" src="assets/images/select_vehicle/pass.png"
-												style="padding: 3px;" />
-											<span
-												style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
-											<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
-												vehinfo?.passenger
-												}}</span>
-										</div>
-										<div class="icon-container-mobile">
-											<img alt="" src="assets/images/select_vehicle/lug.png"
-												style="padding: 3px;" />
-											<span
-												style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
-											<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
-												vehinfo?.luggage
-												}}</span>
-										</div>
+							<!-- Promo Text: "All Inclusive..." -->
+							<div class="promo-text mb-2">
+								All Inclusive Rate include gratuity <sup class="text-danger">*</sup>
+							</div>
+
+							<!-- Vehicle Name: "Full-Size Sedan - X" -->
+							<h3 class="vehicle-name mb-2">{{vehinfo?.name}}</h3>
+
+							<!-- Specs: Pax / Lug -->
+							<div class="specs-text mb-2 d-flex align-items-center">
+								<span class="spec-item mr-3">Pax # <strong class="ml-1">{{ vehinfo?.passenger
+										}}</strong></span>
+								<span class="spec-item">Lug # <strong class="ml-1">{{ vehinfo?.luggage
+										}}</strong></span>
+							</div>
+
+							<!-- Details: Year Make Model -->
+							<div class="details-text mb-3">
+								<ng-container *ngIf="!vehinfo?.is_master_vehicle">
+									{{vehinfo?.vehicle_details?.year}} {{vehinfo?.vehicle_details?.make}}
+									{{vehinfo?.vehicle_details?.model}}
+								</ng-container>
+								<ng-container *ngIf="vehinfo?.is_master_vehicle">
+									Vehicle Category
+								</ng-container>
+							</div>
+
+							<!-- Policy Only -->
+							<div class="meta-row d-flex align-items-center mb-3">
+								<div class="policy-info d-flex align-items-center" *ngIf="!vehinfo?.is_master_vehicle">
+									<i class="bi bi-exclamation-circle-fill text-danger mr-1"></i>
+									<div class="policy-text" style="font-size: 0.9rem; line-height: 1.2;">
+										Cancellation Policy:
+										<strong>{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</strong>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div style="padding: 0px 14px 14px 14px;" *ngIf="!vehinfo?.is_master_vehicle">
-							<div class="vehicle-details-data-mobile">
-								<div class="d-flex justify-content-center" style="max-height: 25px;gap: 10px;">
-									<p>
-										<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
-									</p>
-									<p>
-										<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
-									</p>
-									<p>
-										<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
-									</p>
-								</div>
+
+							<!-- Actions Buttons (Orange / Green Rounded) -->
+							<div class="actions-row d-flex gap-3 w-100">
+								<button type="button" (click)="viewDetails(vehinfo)"
+									class="btn-reference btn-orange flex-fill mr-2">
+									Booking Details
+								</button>
+								<button type="button" (click)="bookNow(vehinfo)"
+									class="btn-reference btn-green flex-fill">
+									Book Now
+								</button>
 							</div>
-						</div>
-						<div class="d-flex justify-content-between align-items-center mb-2"
-							style="max-height: 25px;padding: 2px 16px 2px 16px;" *ngIf="!vehinfo?.is_master_vehicle">
-							<p style="font-size: 0.9rem;">
-								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-								&nbsp; Cancellation Policy: &nbsp;<span
-									style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
-							</p>
-							<p style="text-decoration: underline; color: #007fee;cursor: pointer;" data-toggle="modal"
-								data-target="#ModalAmenities" (click)="viewAmenities(vehinfo?.id)">
-								Amenities
-							</p>
-						</div>
-						<div class="d-flex justify-content-between align-items-center mb-2"
-							style="padding: 2px 16px 2px 16px;">
-							<button type="button" (click)="viewDetails(vehinfo)"
-								class="custom-filled-button orange-button" style="font-size: 0.85rem !important;">
-								Booking Details
-							</button>
-							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button"
-								style="font-size: 0.85rem !important;">
-								Book Now
-							</button>
+
 						</div>
 					</div>
 				</div>
