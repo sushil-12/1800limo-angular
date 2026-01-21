@@ -1,157 +1,192 @@
-
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
-	padding-left    : 0px;
+	padding-left: 0px;
 	background-color: #fff;
-	max-width       : 70px;
-	text-align      : center;
-	left            : -6px;
-	top             : 24px;
+	max-width: 70px;
+	text-align: center;
+	left: -6px;
+	top: 24px;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .phoneLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
-	padding-left    : 0px;
+	padding-left: 0px;
 	background-color: #fff;
-	max-width       : 120px;
-	text-align      : center;
-	left            : -5px;
-	top             : 24px;
+	max-width: 120px;
+	text-align: center;
+	left: -5px;
+	top: 24px;
 }
-.margin-left-minus{
+
+.margin-left-minus {
 	left: -9px !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
 }
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
 }
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label{
-	font-weight: normal!important;
-	font-size: 14px!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
 }
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label{top:1.3675em}
+:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
+	top: 1.3675em
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass{font-weight: normal!important;
-	font-size: 14px!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
-top:2.05em}
+	top: 2.05em
+}
+
 :host ::ng-deep .mat-mdc-form-field {
+
 	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 	.mat-form-field-outline {
-	  &-end {
-		border-radius: 0 10px 10px 0 !important;
-	  }
-  
-	  &-start {
-		border-radius: 10px 0 0 10px !important;
-		flex-grow: 1;
-	  }
+		&-end {
+			border-radius: 0 10px 10px 0 !important;
+		}
+
+		&-start {
+			border-radius: 10px 0 0 10px !important;
+			flex-grow: 1;
+		}
 	}
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  :host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper{
-		border-radius: 10px;
-		background-color: rgb(226, 226, 226,1);
-  } 
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:1px}
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+	border-radius: 10px;
+	background-color: rgb(226, 226, 226, 1);
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label{transform:translateY(-0.8em) scale(0.95)!important;width:133.3333333333%}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
+	top: 1px
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
+	transform: translateY(-0.8em) scale(0.95) !important;
+	width: 133.3333333333%
+}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-    border-top-color: #b2b2b2 !important;
+	border-top-color: #b2b2b2 !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .selectInputStyle,mat-mdc-form-field-label{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .selectInputStyle,
+mat-mdc-form-field-label {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .select-gender-label,.select-year-label{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .select-gender-label,
+.select-year-label {
+	background-color: rgb(226, 226, 226, 1) !important;
 	transform: translateY(0.4em) scale(1) !important;
 }
 
-:host ::ng-deep .select-year-label{
+:host ::ng-deep .select-year-label {
 	transform: translateY(0.4em) translateX(-0.8em) scale(0.9) !important;
-    opacity: 0.8;
-    font-size: 11px !important;
+	opacity: 0.8;
+	font-size: 11px !important;
 }
 
 
-.mat-mdc-option{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-:host ::ng-deep .ng-option{
-	background-color: rgb(226, 226, 226,1) !important;
+.mat-mdc-option {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .select-gender-label{
+:host ::ng-deep .ng-option {
+	background-color: rgb(226, 226, 226, 1) !important;
+}
+
+:host ::ng-deep .select-gender-label {
 	transform: translateY(0.4em) translateX(-0.2em) scale(0.9) !important;
-    opacity: 0.8;
-    font-size: 11px !important;
+	opacity: 0.8;
+	font-size: 11px !important;
 }
-:host ::ng-deep .iti__selected-flag{
+
+:host ::ng-deep .iti__selected-flag {
 	transform: translateY(2px);
 }
 
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
-    text-align: start;
-    padding-left: 8px;
+	text-align: start;
+	padding-left: 8px;
 }
 
-:host ::ng-deep .mat-mdc-input-element{
+:host ::ng-deep .mat-mdc-input-element {
 	font-weight: 500;
 }
 
 :host ::ng-deep .selectStyle select {
 	font-weight: 400;
 }
-.asterisk{
+
+.asterisk {
 	font-size: 1.3rem;
 	margin-left: 2px;
 }
-#Layer_1{
+
+#Layer_1 {
 	height: 30px;
 }
-.phone_icon{
+
+.phone_icon {
 	position: absolute;
 	top: 37px;
 	right: 7%;
@@ -182,3 +217,19 @@ top:2.05em}
 	/* Adjust spacing between buttons */
 }
 
+
+/* Red border for invalid phone input - using custom class for immediate update */
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__leading,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__notch,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__trailing,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-start,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-gap,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-end {
+	border-color: red !important;
+	border-width: 2px !important;
+}
+
+// Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
+.phoneNumberClass {
+	padding-left: 80px !important;
+}

@@ -1,5 +1,5 @@
 .vehtype_extint img {
-	height       : 225px;
+	height: 225px;
 	border-radius: 15px;
 }
 
@@ -25,22 +25,39 @@
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
-	padding-left    : 0px;
+	padding-left: 0px;
 	background-color: #fff;
-	max-width       : 250px;
-	text-align      : center;
-	left            : -6px;
+	max-width: 250px;
+	text-align: center;
+	left: -6px;
 }
 
 .vehtype_extintwrap .row {
 	justify-content: space-between !important;
-	padding        : 0 50px !important;
+	padding: 0 50px !important;
 }
 
-mat-label{
+mat-label {
 	font-weight: normal !important;
 }
-.asterisk{
-    font-size: 1.45rem;
-    margin-left: 6px;
-  }
+
+.asterisk {
+	font-size: 1.45rem;
+	margin-left: 6px;
+}
+
+/* Red border for invalid phone input - using custom class for immediate update */
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__leading,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__notch,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__trailing,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-start,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-gap,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-end {
+	border-color: red !important;
+	border-width: 2px !important;
+}
+
+// Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
+.phoneNumberClass {
+	padding-left: 80px !important;
+}

@@ -1,4 +1,3 @@
-
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 .mat-mdc-checkbox-checked.mat-accent .mat-checkbox-background {
 	background-color: var(--orange);
@@ -272,6 +271,7 @@ ul {
 }
 
 :host ::ng-deep .mat-mdc-form-field {
+
 	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 	.mat-form-field-outline {
 		&-end {
@@ -397,12 +397,27 @@ ul {
 	border-radius: 12px;
 }
 
-@media (min-width: 992px){
-	.modal-lg{
+@media (min-width: 992px) {
+	.modal-lg {
 		max-width: 600px !important;
 	}
 }
 
 .preview-output-field {
 	font-size: 19px;
+}
+
+.is-invalid-input ::ng-deep .mat-form-field-outline {
+	color: red !important;
+}
+
+.phoneNumberClass {
+	padding-left: 90px !important;
+}
+
+/* Fix safari issue */
+_::-webkit-full-page-media,
+_:future,
+:root .phoneNumberClass {
+	padding-left: 90px !important;
 }

@@ -335,6 +335,22 @@ $primary-color: #5dbd8a;
   font-size: 15px !important;
 }
 
-.radio-tile-label{
+.radio-tile-label {
   font-size: 0.7rem !important;
+}
+
+/* Red border for invalid phone input - using custom class for immediate update */
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__leading,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__notch,
+:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__trailing,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-start,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-gap,
+:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-end {
+  border-color: red !important;
+  border-width: 2px !important;
+}
+
+// Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
+.phoneNumberClass {
+  padding-left: 80px !important;
 }
