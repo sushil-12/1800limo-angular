@@ -228,11 +228,12 @@ export class SelectVehicleComponent implements OnInit {
 	changeText: boolean = false
 	bookingId: any = null;
 	quotebotNewData: any;
+	isLoading: boolean = true;
 	show = false;
 	notification_msg: any;
 	passengerDetails: any;
 	currencySymbol: any;
-	vehicleListAmenity:any=[];
+	vehicleListAmenity: any = [];
 
 
 	constructor(
@@ -578,6 +579,7 @@ export class SelectVehicleComponent implements OnInit {
 			console.log('vehicle details-->>>', this.vehicleDetails)
 			this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
+			this.isLoading = false;
 		})
 	}
 
@@ -622,6 +624,7 @@ export class SelectVehicleComponent implements OnInit {
 			console.log('vehicle details-->>>', this.vehicleDetails)
 			// this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
+			this.isLoading = false;
 		})
 	}
 
@@ -1006,9 +1009,9 @@ export class SelectVehicleComponent implements OnInit {
 		this.show = false;
 	}
 
-	viewAmenities(id){
+	viewAmenities(id) {
 		this.vehicleListAmenity = this.vehicleDetails.find(item => item.id === id);
-		console.log("in veh amenity--->",this.vehicleListAmenity,'=====',this.vehicleListAmenity.amenities)
+		console.log("in veh amenity--->", this.vehicleListAmenity, '=====', this.vehicleListAmenity.amenities)
 	}
 
 

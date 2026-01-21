@@ -1295,3 +1295,202 @@ button.link {
 		justify-content: center;
 	}
 }
+
+// ==========================================
+// REFERENCE REPLICA LAYOUT (User Uploaded Image)
+// ==========================================
+.vehicle-listing-card.modern-card,
+.modern-vehicle-card-content.reference-layout {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+
+
+// 1. IMAGE WRAPPER
+.card-image-wrapper {
+	position: relative;
+	width: 100%;
+	// height: 220px; // Ensure sufficient height
+	height: auto;
+	aspect-ratio: 4/3;
+	margin-bottom: 20px;
+	border-radius: 12px;
+	overflow: hidden;
+	background-color: #f7f7f7; // Off-white background for contained image
+
+	.vehicle-main-image {
+		width: 100%;
+		height: 100%;
+		object-fit: contain; // Ensure full image is visible
+		transition: transform 0.4s ease;
+	}
+
+	&:hover .vehicle-main-image {
+		transform: scale(1.04);
+	}
+}
+
+// 2. CARD BODY CONTENT
+.card-body-content {
+	display: flex;
+	flex-direction: column;
+	padding: 0 4px;
+
+	// Price Row: "One Way   $ 68.75"
+	.price-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 6px;
+
+		.price-label {
+			// font-size: 1.1rem;
+			color: #111;
+			font-weight: 500;
+			margin-right: 15px;
+		}
+
+		.price-amount {
+			// font-size: 1.8rem;
+			font-weight: 800; // Extra Bold
+			color: #000;
+			letter-spacing: -0.5px;
+		}
+	}
+
+	// Promo Text: "All Inclusive Rate include gratuity *"
+	.promo-text {
+		// font-size: 0.95rem;
+		color: #ff9f43; // Bright Orange
+		font-weight: 700;
+		margin-bottom: 12px;
+	}
+
+	// Vehicle Name: "Full-Size Sedan - X"
+	.vehicle-name {
+		font-size: 1.2rem; // Reverted to original design size
+		font-weight: 800;
+		color: #000;
+		margin: 0 0 10px 0;
+		line-height: 1.2;
+	}
+
+	// Specs: "Pax # 4   Lug # 2"
+	.specs-text {
+		// font-size: 1.15rem;
+		color: #000;
+		font-weight: 500;
+		margin-bottom: 10px;
+
+		.spec-item strong {
+			font-weight: 900;
+			margin-left: 4px;
+		}
+	}
+
+	// Details: "2020 Lincoln Continental"
+	.details-text {
+		// font-size: 1.15rem;
+		font-weight: 700;
+		color: #000;
+		margin-bottom: 15px;
+	}
+
+	// Meta - Policy/Amenities
+	.meta-row {
+		// font-size: 1rem;
+		margin-bottom: 20px;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+
+		.policy-info {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.policy-text {
+			color: #000;
+			line-height: 1.2;
+			font-weight: 500;
+			display: flex; // Align inline
+			align-items: center;
+			gap: 5px;
+
+			strong {
+				font-weight: 800;
+			}
+		}
+
+		.amenities-link {
+			color: #3498db;
+			font-weight: 600;
+			text-decoration: underline;
+		}
+	}
+
+	// Actions Buttons
+	.actions-row {
+		display: flex;
+		gap: 15px;
+
+		.btn-reference {
+			flex: 1;
+			border: none;
+			padding: 12px 0;
+			border-radius: 8px;
+			font-weight: 700;
+			// font-size: 1.05rem;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			text-transform: capitalize;
+
+			&:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+			}
+
+			&.btn-orange {
+				background-color: #ff9f43; // Matches Promo Text Orange
+				color: #fff; // White text for contrast (or keep black if user prefers, but usually white on deep orange)
+				color: #000; // User image shows black text on orange buttons? Actually usually white. 
+				// The user asked for "All inclusive text color" which is #ff9f43.
+				// Background should be that color. Text color white or black.
+				// Let's stick with Black as per reference replica image usually having contrast.
+			}
+
+			&.btn-green {
+				background-color: #2ecc71; // Vivid Green
+				color: #000; // Black text
+				color: #2c3e50;
+			}
+		}
+	}
+}
+
+// Shimmer Animation for Skeleton Loader
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+.shimmer {
+	background: #f0f0f0 !important;
+	background-image: linear-gradient(to right,
+			#f0f0f0 0%,
+			#e0e0e0 20%,
+			#f0f0f0 40%,
+			#f0f0f0 100%) !important;
+	background-repeat: no-repeat !important;
+	background-size: 200% 100% !important;
+	animation: shimmer 1.5s infinite linear;
+}

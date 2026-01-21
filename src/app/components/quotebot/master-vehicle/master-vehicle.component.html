@@ -367,51 +367,78 @@
 				*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 				{{ no_vehicle_msg }}
 			</p>
-			<div id="master-vehicle-box-container" class="vehicle-grid-card" *ngIf="master_vehicles.length > 0">
-				<div id="master-vehicle-box" class="card mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
-					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
-					(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
-					<div id="vehicle-image" class="imageStyle bg-white d-flex justify-content-center"
-						style="height: 190px !important;">
-						<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
-					</div>
-					<div id="vehicle-information" class="m-0" style="padding:15px;">
-						<p id="vehicle-name" class="vehicle-name-text">
-							{{ vehicle_obj?.name }}
-						</p>
-						<p id="vehicle-price" class="font-weight-bolder mb-4" style="font-size: 1.1rem"
-							*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-							<span style="color: #c94505;font-weight: 600;">
-								From&nbsp;
-							</span>
-							{{currencySymbol ? currencySymbol : '$'}} {{ vehicle_obj['rate_breakdown_' +
-							getKeyName()]?.grand_total !=
-							undefined
-							?
-							vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
-						</p>
-						<div id="icons" class="passnger-luggage-div">
-							<div class="icon-container">
-								<img alt="" src="assets/images/select_vehicle/pass.png"
-									style="margin-right: 0.50rem;" />
-								<span>Passengers</span>
-								<span class="font-weight-bolder mx-2">{{ vehicle_obj?.passenger }}</span>
+			<div id="master-vehicle-box-container" class="vehicle-grid-card">
+				<!-- SKELETON LOADER -->
+				<ng-container *ngIf="isLoading">
+					<div class="card mb-5 d-flex flex-nowrap flex-md-wrap" *ngFor="let item of skeletonItems"
+						style="position: relative !important; cursor: default;">
+						<div class="imageStyle shimmer" style="height: 160px; width: 100%;"></div>
+						<div class="m-0" style="padding:15px;">
+							<div class="shimmer mb-3" style="height: 20px; width: 60%; border-radius: 4px;"></div>
+							<div class="shimmer mb-4" style="height: 18px; width: 40%; border-radius: 4px;"></div>
+							<div class="passnger-luggage-div">
+								<div class="icon-container">
+									<div class="shimmer" style="height: 20px; width: 80px; border-radius: 4px;"></div>
+								</div>
+								<div class="icon-container">
+									<div class="shimmer" style="height: 20px; width: 80px; border-radius: 4px;"></div>
+								</div>
 							</div>
-							<div class="icon-container">
-								<img alt="" src="assets/images/select_vehicle/lug.png" style="margin-right: 0.50rem;" />
-								<span>Luggages</span>
-								<span class="font-weight-bolder mx-2">{{ vehicle_obj?.luggage }}</span>
+							<div class="d-flex justify-content-end mt-4">
+								<div class="shimmer" style="height: 35px; width: 100px; border-radius: 20px;"></div>
 							</div>
 						</div>
-						<div class="d-flex justify-content-end mt-4"
-							style="position: absolute; bottom: 0;right: 15px;margin-bottom: 7px;">
-							<button type="button" class="view-more-circle-button"
-								(click)="selectCategory(vehicle_obj?.name)">
-								View More
-							</button>
+					</div>
+				</ng-container>
+
+				<!-- ACTUAL CONTENT -->
+				<ng-container *ngIf="!isLoading && master_vehicles.length > 0">
+					<div id="master-vehicle-box" class="card mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
+						*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
+						(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
+						<div id="vehicle-image" class="imageStyle bg-white d-flex justify-content-center">
+							<img [src]="vehicle_obj.cat_img" class="img-fluid"
+								[attr.id]="'vehicle_' + vehicle_obj_index" />
+						</div>
+						<div id="vehicle-information" class="m-0" style="padding:15px;">
+							<p id="vehicle-name" class="vehicle-name-text">
+								{{ vehicle_obj?.name }}
+							</p>
+							<p id="vehicle-price" class="font-weight-bolder mb-4" style="font-size: 1.1rem"
+								*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
+								<span style="color: #c94505;font-weight: 600;">
+									From&nbsp;
+								</span>
+								{{currencySymbol ? currencySymbol : '$'}} {{ vehicle_obj['rate_breakdown_' +
+								getKeyName()]?.grand_total !=
+								undefined
+								?
+								vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
+							</p>
+							<div id="icons" class="passnger-luggage-div">
+								<div class="icon-container">
+									<img alt="" src="assets/images/select_vehicle/pass.png"
+										style="margin-right: 0.50rem;" />
+									<span>Passengers</span>
+									<span class="font-weight-bolder mx-2">{{ vehicle_obj?.passenger }}</span>
+								</div>
+								<div class="icon-container">
+									<img alt="" src="assets/images/select_vehicle/lug.png"
+										style="margin-right: 0.50rem;" />
+									<span>Luggages</span>
+									<span class="font-weight-bolder mx-2">{{ vehicle_obj?.luggage }}</span>
+								</div>
+							</div>
+							<div class="d-flex justify-content-end mt-4"
+								style="position: absolute; bottom: 0;right: 15px;margin-bottom: 7px;">
+								<button type="button" class="view-more-circle-button"
+									(click)="selectCategory(vehicle_obj?.name)">
+									View More
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</ng-container>
 			</div>
 		</div>
 		<!-- MASTER VEHICLE TYPES SECTION ENDS -->

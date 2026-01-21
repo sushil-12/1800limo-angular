@@ -1104,9 +1104,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			hours = (hours + 1) % 24;
 		}
 
-		return `${hours.toString().padStart(2, '0')}:${minutes
-			.toString()
-			.padStart(2, '0')}:00`;
+		// Match data.js format: 00 for midnight, but no leading zero for 1-23 (e.g. "9:00:00")
+		const formattedHours = hours === 0 ? "00" : hours.toString();
+
+		return `${formattedHours}:${minutes.toString().padStart(2, '0')}:00`;
 	}
 	changeDetection = {
 		pickupDate: (value: any) => {
