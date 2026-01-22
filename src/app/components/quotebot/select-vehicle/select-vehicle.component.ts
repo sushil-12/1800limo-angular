@@ -478,6 +478,9 @@ export class SelectVehicleComponent implements OnInit {
 		if (value == 'starRating') {
 			value = 'star-rating'
 		}
+		if (value == 'oneway') {
+			return 'One Way'
+		}
 		if (typeof (value) == 'string' && /[a-z]/.test(value.charAt(0))) {
 			value = value.replace(value.charAt(0), value.charAt(0).toUpperCase())
 		}

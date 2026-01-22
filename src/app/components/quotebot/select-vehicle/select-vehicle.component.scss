@@ -106,6 +106,23 @@
 // 	display: none;
 // }
 
+//passnger-luggage-div style for passneger nad  luggaer count
+.passnger-luggage-div {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+//vehicle card icon 
+.icon-container-mobile {
+	padding: 2px 6px;
+	min-width: fit-content;
+	border: 1px solid #D9D9D9;
+	border-radius: 15px;
+	background: #f3f0f0;
+}
+
 section#vehicle-listing-container {
 	&:last-child {
 		margin-bottom: 4rem;
@@ -116,7 +133,7 @@ section#vehicle-listing-container {
 		position: relative;
 		width: 100%;
 		border-radius: 1.3rem;
-		padding: 18px;
+		padding: 6px;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -1494,6 +1511,7 @@ button.link {
 	background-size: 200% 100% !important;
 	animation: shimmer 1.5s infinite linear;
 }
+
 // === SKELETON LOADER STYLES ===
 .skeleton-loader-container {
 	display: grid;
