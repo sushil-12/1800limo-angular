@@ -320,7 +320,7 @@
 			<!-- title box -->
 			<div class="select_vehicle_div">
 				<div class="row d-flex justify-content-between align-items-center">
-					<div class="col-12 col-md-6 mb-3 mb-md-0 text-center text-md-left">
+					<div class="col-12 col-md-6 mb-3 mb-md-0 text-left">
 						<h5 class="select_vehicle_text" style="color:#fff;">
 							Select the vehicle that meets your requirements.
 						</h5>
@@ -371,7 +371,7 @@
 				<!-- SKELETON LOADER -->
 				<ng-container *ngIf="isLoading">
 					<div class="card mb-5 d-flex flex-nowrap flex-md-wrap" *ngFor="let item of skeletonItems"
-						style="position: relative !important; cursor: default;">
+						style="position: relative !important; cursor: default; border-radius: 20px; overflow: hidden;">
 						<div class="imageStyle shimmer" style="height: 160px; width: 100%;"></div>
 						<div class="m-0" style="padding:15px;">
 							<div class="shimmer mb-3" style="height: 20px; width: 60%; border-radius: 4px;"></div>
