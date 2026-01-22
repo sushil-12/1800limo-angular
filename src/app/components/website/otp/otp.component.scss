@@ -1,15 +1,15 @@
 .timerButton {
-    background   : transparent;
+    background: transparent;
     border-radius: 5px;
-    height       : 54px;
-    width        : 212px;
-    border       : 2px solid var(--orange-color);
-    color        : var(--orange-color);
+    height: 54px;
+    width: 212px;
+    border: 2px solid var(--orange-color);
+    color: var(--orange-color);
 }
 
 .resend-otp {
     cursor: pointer;
-    color : var(--orange-color);
+    color: var(--orange-color);
 }
 
 #resendOtpModal h3 {
@@ -26,7 +26,21 @@
 
 @media only screen and (max-width: 767px) {
     .back-svg {
-        top : 10px;
+        top: 10px;
         left: 10px;
+    }
+
+    ::ng-deep .otp-input {
+        font-size: 24px !important;
+        height: 45px !important;
+        width: 40px !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+    ::ng-deep .otp-input {
+        font-size: 30px !important;
+        height: 60px !important;
+        width: 60px !important;
     }
 }

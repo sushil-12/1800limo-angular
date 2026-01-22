@@ -416,21 +416,23 @@
 								vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 							</p>
 							<div id="icons" class="passnger-luggage-div">
-								<div class="icon-container">
-									<img alt="" src="assets/images/select_vehicle/pass.png"
-										style="margin-right: 0.50rem;" />
-									<span>Passengers</span>
-									<span class="font-weight-bolder mx-2">{{ vehicle_obj?.passenger }}</span>
+								<div class="icon-container-mobile">
+									<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;"
+										width="16" />
+									<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
+									<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
+										vehicle_obj?.passenger }}</span>
 								</div>
-								<div class="icon-container">
-									<img alt="" src="assets/images/select_vehicle/lug.png"
-										style="margin-right: 0.50rem;" />
-									<span>Luggages</span>
-									<span class="font-weight-bolder mx-2">{{ vehicle_obj?.luggage }}</span>
+								<div class="icon-container-mobile">
+									<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;"
+										width="16" />
+									<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
+									<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
+										vehicle_obj?.luggage }}</span>
 								</div>
 							</div>
-							<div class="d-flex justify-content-end mt-4"
-								style="position: absolute; bottom: 0;right: 15px;margin-bottom: 7px;">
+							<div class="d-flex justify-content-end"
+								style="position: absolute; bottom: 0;right: 15px;margin-bottom: 15px;">
 								<button type="button" class="view-more-circle-button"
 									(click)="selectCategory(vehicle_obj?.name)">
 									View More
