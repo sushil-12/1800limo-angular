@@ -647,7 +647,7 @@
 			</p>
 			<div class="vehicle-grid-card" style="grid-gap: 15px !important;">
 				<div id="vehicle-listing-card_{{ vehinfo_index }}" class="card vehicle-listing-card"
-					*ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
+					style="padding: 12px;" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
 					(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
