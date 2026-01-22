@@ -24,7 +24,7 @@
 	gap: 15px;
 
 	@media (min-width: 768px) {
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		/* 2 columns on tablet */
 	}
 
@@ -1063,7 +1063,7 @@ button.link {
 	display: flex;
 	flex-direction: row;
 	gap: 10px;
-	margin-bottom: 34px;
+	margin-bottom: 10px;
 }
 
 
@@ -1204,7 +1204,7 @@ button.link {
 
 //vehicle card icon 
 .icon-container-mobile {
-	padding: 0px 2px 0px 2px;
+	padding: 2px 6px;
 	min-width: fit-content;
 	border: 1px solid #D9D9D9;
 	border-radius: 15px;
