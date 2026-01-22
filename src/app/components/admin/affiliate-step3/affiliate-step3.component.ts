@@ -64,6 +64,7 @@ export class AffiliateStep3Component implements OnInit {
 			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
 			console.log("in country change", countryData)
 			this.onCountryChange(countryData, 'AgentTelephone')
+			this.validateAgentTelephone();
 		});
 
 

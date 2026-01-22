@@ -75,10 +75,10 @@
 								<!-- <div *ngIf="f.CellNumber.errors?.pattern;else numberLength">Enter Numbers Without Spaces
 									or Dashes
 								</div> -->
-								<ng-template #numberLength>
+								<!-- <ng-template #numberLength>
 									<div *ngIf="f.CellNumber.errors.minlength">Minimum length should be 4</div>
 									<div *ngIf="f.CellNumber.errors.maxlength">Maximum length should be 15</div>
-								</ng-template>
+								</ng-template> -->
 							</ng-template>
 						</ng-template>
 					</div>
@@ -162,10 +162,10 @@
 							<ng-template #allErrors>
 								<div *ngIf="f.StartDate.errors?.pattern;else numberLength">Enter Numbers Only
 								</div>
-								<ng-template #numberLength>
+								<!-- <ng-template #numberLength>
 									<div *ngIf="f.StartDate.errors.minlength">Minimum length should be 4</div>
 									<div *ngIf="f.StartDate.errors.maxlength">Maximum length should be 4</div>
-								</ng-template>
+								</ng-template> -->
 							</ng-template>
 						</ng-template>
 					</div>

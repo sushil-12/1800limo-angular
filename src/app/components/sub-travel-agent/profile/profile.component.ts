@@ -228,6 +228,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         mobileIsd: '+' + event.dialCode,
         mobileCountry: event.iso2
       });
+      this.profileForm.get('mobile').updateValueAndValidity();
+      this.validateMobile();
     }
     else if (type == 'work_contact_number') {
       console.log("222222")
@@ -235,6 +237,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         workIsd: '+' + event.dialCode,
         workCountry: event.iso2
       });
+      this.profileForm.get('work_contact_number').updateValueAndValidity();
+      this.validateWorkContact();
     }
     // else if (type == 'office_number') {
     //   console.log("333333")

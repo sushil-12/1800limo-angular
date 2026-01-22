@@ -260,6 +260,8 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
         mobileIsd: '+' + event.dialCode,
         mobileCountry: event.iso2
       });
+      this.profileForm.get('mobile').updateValueAndValidity();
+      this.validateMobile();
     }
     else if (type == 'work_contact_number') {
       console.log("222222")
@@ -267,6 +269,8 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
         workIsd: '+' + event.dialCode,
         workCountry: event.iso2
       });
+      this.profileForm.get('work_contact_number').updateValueAndValidity();
+      this.validateWork();
     }
     // else if (type == 'office_number') {
     //   console.log("333333")
@@ -283,6 +287,47 @@ export class SubAgentAccountDetailsComponent implements OnInit, AfterViewInit {
     //   });
     // }
     // console.log(this.countryCode);
+  }
+
+  numberOnly(event: any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  validatePhoneGeneric(control: any, telInputObject: any) {
+    if (telInputObject) {
+      const value = control.value;
+      if (!value) {
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+        return;
+      }
+      const isValid = telInputObject.isValidNumber();
+      if (!isValid) {
+        const errorCode = telInputObject.getValidationError();
+        const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+        const currentErrors = control.errors || {};
+        control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+      } else {
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+      }
+    }
+  }
+
+  validateMobile() {
+    this.validatePhoneGeneric(this.profileForm.get('mobile'), this.MobileObject);
+  }
+
+  validateWork() {
+    this.validatePhoneGeneric(this.profileForm.get('work_contact_number'), this.OfficeObject);
   }
 
   telInputObjectOffice(obj) {

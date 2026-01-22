@@ -285,6 +285,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 				mobileCountry: event.iso2
 			});
 			this.countryCodeName = event.name?.split('(')[0].trim()
+			this.validateMobile();
 		}
 		else if (type == 'office') {
 			console.log("222222")
@@ -292,6 +293,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 				officeIsd: '+' + event.dialCode,
 				officeCountry: event.iso2
 			});
+			this.validateOffice();
 		}
 		else if (type == 'officeNumber') {
 			console.log("333333")
@@ -299,6 +301,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 				isd_office_number: '+' + event.dialCode,
 				office_country_code: event.iso2
 			});
+			this.validateOfficeNumber();
 		}
 		else {
 			console.log("4444444")
@@ -306,6 +309,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 				faxIsd: '+' + event.dialCode,
 				faxCountry: event.iso2
 			});
+			this.validateFax();
 		}
 		// console.log(this.countryCode);
 	}

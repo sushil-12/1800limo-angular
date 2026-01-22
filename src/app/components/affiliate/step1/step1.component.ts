@@ -604,22 +604,72 @@ export class Step1Component implements OnInit, AfterViewInit {
 				CellIsd: "+" + event.dialCode,
 				CellNumberCountry: event.iso2,
 			});
+			// CellNumber is readonly, so maybe no need to validate on user input, but good to have if it becomes editable
 		} else if (type == "CompanyCellNumber") {
 			this.addAffiliateAccountForm.patchValue({
 				CompanyCellIsd: "+" + event.dialCode,
 				CompanyCellNumberCountry: event.iso2,
 			});
+			this.validateCompanyCellPhone();
 		} else if (type == "Dispatch") {
 			this.addAffiliateAccountForm.patchValue({
 				DispatchIsd: "+" + event.dialCode,
 				DispatchCountry: event.iso2,
 			});
+			this.validateDispatchPhone();
 		} else {
 			this.addAffiliateAccountForm.patchValue({
 				FaxIsd: "+" + event.dialCode,
 				FaxCountry: event.iso2,
 			});
+			this.validateFax();
 		}
+	}
+
+	validatePhoneGeneric(control: any, telInputObject: any) {
+		if (control.value) {
+			if (telInputObject.isValidNumber()) {
+				control.setErrors(null);
+			} else {
+				const errorCode = telInputObject.getValidationError();
+				let errorMsg = 'Invalid number';
+				switch (errorCode) {
+					case intlTelInputUtils.validationError.INVALID_COUNTRY_CODE:
+						errorMsg = 'Invalid country code';
+						break;
+					case intlTelInputUtils.validationError.TOO_SHORT:
+						errorMsg = 'Too short';
+						break;
+					case intlTelInputUtils.validationError.TOO_LONG:
+						errorMsg = 'Too long';
+						break;
+					case intlTelInputUtils.validationError.NOT_A_NUMBER:
+						errorMsg = 'Not a number';
+						break;
+				}
+				control.setErrors({ invalidIntl: errorMsg });
+			}
+		}
+	}
+
+	validateDispatchPhone() {
+		this.validatePhoneGeneric(this.addAffiliateAccountForm.get('Dispatch'), this.DispatchObject);
+	}
+
+	validateCompanyCellPhone() {
+		this.validatePhoneGeneric(this.addAffiliateAccountForm.get('CompanyCellNumber'), this.CompanyCellNumberObject);
+	}
+
+	validateFax() {
+		this.validatePhoneGeneric(this.addAffiliateAccountForm.get('Fax'), this.FaxObject);
+	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
 	}
 
 	telInputObjectCell(obj) {

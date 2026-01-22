@@ -1152,7 +1152,8 @@
 						<mat-label>Phone
 						</mat-label>
 						<input matInput #driver_cellInput placeholder="1234567890" formControlName="driver_cell"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(input)="validateDriverCell()" (blur)="validateDriverCell()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -2696,7 +2697,9 @@
 						</mat-label>
 						<input matInput #return_lose_affiliate_phoneInput placeholder="1234567890"
 							formControlName="return_lose_affiliate_phone" class="phoneNumberClass" tabindex="1"
-							(focus)="$event.target.select()" (keyup)="handleLooseAffiliatePhone()" />
+							(focus)="$event.target.select()" (keyup)="handleLooseAffiliatePhone()"
+							(input)="validateReturnLooseAffiliatePhone()"
+							(blur)="validateReturnLooseAffiliatePhone()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -3086,7 +3089,8 @@
 
 						<input matInput #return_driver_cellInput placeholder="1234567890"
 							formControlName="return_driver_cell" class="phoneNumberClass" tabindex="1"
-							(focus)="$event.target.select()" />
+							(focus)="$event.target.select()" (input)="validateReturnDriverCell()"
+							(blur)="validateReturnDriverCell()" />
 
 					</mat-form-field>
 					<div class="error-box">

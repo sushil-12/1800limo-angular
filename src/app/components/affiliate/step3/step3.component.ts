@@ -75,7 +75,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
-			console.log("in country change",countryData)
+			console.log("in country change", countryData)
 			this.onCountryChange(countryData, 'AgentTelephone')
 		});
 
@@ -232,6 +232,42 @@ export class Step3Component implements OnInit, AfterViewInit {
 				AgentTelephoneIsd: "+" + event.dialCode,
 				AgentTelephoneCountry: event.iso2,
 			});
+			this.validatePhone();
+		}
+	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhone() {
+		if (this.AgentTelephoneObject) {
+			const value = this.addInsuranceForm.get('AgentTelephone').value;
+			if (!value) {
+				if (this.f.AgentTelephone.errors) {
+					const { invalidIntl, ...otherErrors } = this.f.AgentTelephone.errors;
+					this.f.AgentTelephone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = this.AgentTelephoneObject.isValidNumber();
+
+			if (!isValid) {
+				const errorCode = this.AgentTelephoneObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+
+				const currentErrors = this.f.AgentTelephone.errors || {};
+				this.f.AgentTelephone.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (this.f.AgentTelephone.errors) {
+					const { invalidIntl, ...otherErrors } = this.f.AgentTelephone.errors;
+					this.f.AgentTelephone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
 		}
 	}
 	telInputObjectAgentTelephone(obj) {

@@ -2608,6 +2608,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
 		console.log("in mobile", event.dialCode, event.iso2)
 		this.BookingForm.updateValueAndValidity()
+		this.validateLooseCustomerPhone();
 	}
 	handleLooseCustomerPhone(event) {
 		console.log('handleLooseCustomerPhone->>', event, event.target.value)

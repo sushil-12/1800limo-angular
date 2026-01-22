@@ -91,7 +91,9 @@ export class NewBookingComponent implements OnInit {
 	LCTelObject: any
 	PaxTelObject: any
 	driverCellTelInput: any
+	returnDriverCellTelInput: any
 	loseAffiliateTelInput: any
+	returnLoseAffiliateTelInput: any
 
 	BookingForm: FormGroup
 	RatesForm: any
@@ -317,6 +319,7 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+				this.validatePassengerPhone();
 			});
 		}
 
@@ -327,6 +330,7 @@ export class NewBookingComponent implements OnInit {
 				console.log("in country chnage", countryData)
 				this.onLCTeleCountryChange(countryData);
 				this.PaxTelObject.setCountry(countryData.iso2)
+				this.validateLooseCustomerPhone();
 			});
 		}
 
@@ -336,15 +340,17 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.driverCellTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+				this.validateDriverCell();
 			});
 		}
 
 		if (this.return_driver_cellInput) {
-			this.driverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
+			this.returnDriverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
 			this.return_driver_cellInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.driverCellTelInput.getSelectedCountryData();
+				const countryData = this.returnDriverCellTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+				this.validateReturnDriverCell();
 			});
 		}
 
@@ -354,17 +360,22 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.handleCountryChangeLA(countryData);
+				this.validateLooseAffiliatePhone();
 			});
 		}
 
 		if (this.return_lose_affiliate_phoneInput) {
-			this.loseAffiliateTelInput = intlTelInput(this.return_lose_affiliate_phoneInput.nativeElement, telOptions);
+			this.returnLoseAffiliateTelInput = intlTelInput(this.return_lose_affiliate_phoneInput.nativeElement, telOptions);
 			this.return_lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+				const countryData = this.returnLoseAffiliateTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('return_lose_affiliate_phone_isd', '+' + countryData.dialCode); this.SetFormValue('return_lose_affiliate_phone_country', countryData.iso2)
 				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
-				this.driverCellTelInput.setCountry(countryData.iso2)
+				// Also update return driver cell country if it exists
+				if (this.returnDriverCellTelInput) {
+					this.returnDriverCellTelInput.setCountry(countryData.iso2)
+				}
+				this.validateReturnLooseAffiliatePhone();
 			});
 		}
 
@@ -417,6 +428,22 @@ export class NewBookingComponent implements OnInit {
 
 	validateLooseAffiliatePhone() {
 		this.validatePhoneGeneric(this.Form.lose_affiliate_phone, this.loseAffiliateTelInput);
+	}
+
+	validateDriverCell() {
+		if (this.Form.affiliate_type.value == 'loose_affiliate') {
+			this.validatePhoneGeneric(this.Form.driver_cell, this.driverCellTelInput);
+		}
+	}
+
+	validateReturnDriverCell() {
+		if (this.Form.return_affiliate_type.value == 'loose_affiliate') {
+			this.validatePhoneGeneric(this.Form.return_driver_cell, this.returnDriverCellTelInput);
+		}
+	}
+
+	validateReturnLooseAffiliatePhone() {
+		this.validatePhoneGeneric(this.Form.return_lose_affiliate_phone, this.returnLoseAffiliateTelInput);
 	}
 
 

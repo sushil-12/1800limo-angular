@@ -310,7 +310,7 @@
 											*ngIf="LooseCustomer.phone.errors?.pattern;else otherError">
 											Only Numbers are Allowed
 										</p>
-										<ng-template #otherError>
+										<!-- <ng-template #otherError>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.phone.errors?.minlength">
 												Minimum length should be 4
@@ -319,7 +319,7 @@
 												*ngIf="LooseCustomer.phone.errors?.maxlength">
 												Maximum length should be 15
 											</p>
-										</ng-template>
+										</ng-template> -->
 										<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
 											This Phone Number is already registered. Please enter
 											any other.

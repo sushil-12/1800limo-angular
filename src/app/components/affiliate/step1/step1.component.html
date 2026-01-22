@@ -200,7 +200,7 @@
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>Cell<span class="asterisk"> *</span> </mat-label>
 						<input matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly/>
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.CellNumber.errors) ||
@@ -231,14 +231,14 @@
 									">
 									Enter Numbers Without Spaces or Dashes
 								</div>
-								<ng-template #numberLength>
+								<!-- <ng-template #numberLength>
 									<div *ngIf="f.CellNumber.errors.minlength">
 										Minimum length should be 4
 									</div>
 									<div *ngIf="f.CellNumber.errors.maxlength">
 										Maximum length should be 15
 									</div>
-								</ng-template>
+								</ng-template> -->
 							</ng-template>
 						</ng-template>
 					</div>
@@ -488,7 +488,9 @@
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>24 Hr Cell Dispatch<span class="asterisk"> *</span></mat-label>
 						<input matInput #dispatchInput placeholder="1234567890" formControlName="Dispatch"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validateDispatchPhone()"
+							(blur)="validateDispatchPhone()" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.Dispatch.errors) ||
@@ -515,16 +517,13 @@
 							<ng-template #allErrors>
 								<div *ngIf="
 										f.Dispatch.errors?.pattern;
-										else numberLength
+										else invalidIntl
 									">
 									Enter Numbers Without Spaces or Dashes
 								</div>
-								<ng-template #numberLength>
-									<div *ngIf="f.Dispatch.errors.minlength">
-										Minimum length should be 4
-									</div>
-									<div *ngIf="f.Dispatch.errors.maxlength">
-										Maximum length should be 15
+								<ng-template #invalidIntl>
+									<div *ngIf="f.Dispatch.errors?.invalidIntl">
+										{{f.Dispatch.errors?.invalidIntl}}
 									</div>
 								</ng-template>
 							</ng-template>
@@ -536,7 +535,8 @@
 						<mat-label>Business Telephone</mat-label>
 						<input matInput #companyCellNumberInput placeholder="1234567890"
 							formControlName="CompanyCellNumber" class="phoneNumberClass" tabindex="1"
-							(focus)="$event.target.select()" />
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCompanyCellPhone()" (blur)="validateCompanyCellPhone()" />
 
 					</mat-form-field>
 					<div *ngIf="
@@ -565,20 +565,13 @@
 							<ng-template #allErrors>
 								<div *ngIf="
 										f.CompanyCellNumber.errors?.pattern;
-										else numberLength
+										else invalidIntl
 									">
 									Enter Numbers Without Spaces or Dashes
 								</div>
-								<ng-template #numberLength>
-									<div *ngIf="
-											f.CompanyCellNumber.errors.minlength
-										">
-										Minimum length should be 4
-									</div>
-									<div *ngIf="
-											f.CompanyCellNumber.errors.maxlength
-										">
-										Maximum length should be 15
+								<ng-template #invalidIntl>
+									<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">
+										{{f.CompanyCellNumber.errors?.invalidIntl}}
 									</div>
 								</ng-template>
 							</ng-template>
@@ -589,7 +582,8 @@
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>FAX </mat-label>
 						<input matInput #FaxInput placeholder="1234567890" formControlName="Fax"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validateFax()" (blur)="validateFax()" />
 					</mat-form-field>
 					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="
@@ -608,16 +602,13 @@
 							<ng-template #allErrors>
 								<div *ngIf="
 										f.Fax.errors?.pattern;
-										else numberLength
+										else invalidIntl
 									">
 									Enter Numbers Without Spaces or Dashes
 								</div>
-								<ng-template #numberLength>
-									<div *ngIf="f.Fax.errors.minlength">
-										Minimum length should be 4
-									</div>
-									<div *ngIf="f.Fax.errors.maxlength">
-										Maximum length should be 15
+								<ng-template #invalidIntl>
+									<div *ngIf="f.Fax.errors?.invalidIntl">
+										{{f.Fax.errors?.invalidIntl}}
 									</div>
 								</ng-template>
 							</ng-template>

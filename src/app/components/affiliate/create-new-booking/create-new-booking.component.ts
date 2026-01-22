@@ -240,6 +240,7 @@ export class CreateNewBookingComponent implements OnInit {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+				this.validatePassengerCell();
 			});
 		}
 
@@ -250,6 +251,7 @@ export class CreateNewBookingComponent implements OnInit {
 				console.log("in country chnage", countryData)
 
 				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+				this.validateDriverCell();
 			});
 		}
 
@@ -2610,6 +2612,7 @@ export class CreateNewBookingComponent implements OnInit {
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
 		this.BookingForm.updateValueAndValidity()
+		this.validateLooseCustomerPhone();
 	}
 
 	LCTelInputObject(event: any) {

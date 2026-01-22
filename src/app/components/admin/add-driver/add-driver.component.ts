@@ -432,6 +432,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 				const countryData = this.CellNumberObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'CellNumber')
+				this.validateCellNumber();
 			});
 		}
 
@@ -451,6 +452,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 				const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'background');
+				this.validateBackgroundCompanyTelNumber();
 			});
 		}
 
@@ -472,6 +474,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 				const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'PoliceForceTelephone');
+				this.validatePoliceForceTelephone();
 			});
 		}
 

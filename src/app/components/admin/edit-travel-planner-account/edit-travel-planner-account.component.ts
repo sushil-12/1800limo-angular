@@ -230,6 +230,7 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				const countryData = this.OfficeObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'office')
+				this.validatePhone('office', this.OfficeObject);
 			});
 		}
 
@@ -241,6 +242,7 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				const countryData = this.MobileObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'mobile');
+				this.validatePhone('mobile', this.MobileObject);
 			});
 		}
 
@@ -252,6 +254,7 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				const countryData = this.FaxObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'fax')
+				this.validatePhone('fax', this.FaxObject);
 			});
 		}
 
@@ -263,10 +266,45 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 				const countryData = this.OfficePhoneObject.getSelectedCountryData();
 				console.log("in change", countryData)
 				this.onCountryChange(countryData, 'officeNumber')
+				this.validatePhone('officeNumber', this.OfficePhoneObject);
 			});
 		}
 
 
+	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhone(controlName: string, telInputObject: any) {
+		const control = this.editTravelPlannerAccountForm.get(controlName);
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = telInputObject.isValidNumber();
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
 	}
 
 	onCountryChange(event, type) {

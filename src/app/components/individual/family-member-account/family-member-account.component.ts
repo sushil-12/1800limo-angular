@@ -127,6 +127,7 @@ export class FamilyMemberAccountComponent implements OnInit {
         const countryData = this.MobileObject.getSelectedCountryData();
         console.log("in country chnage", countryData)
         this.onCountryChange(countryData, 'mobile')
+        this.validatePhoneNumber();
       });
     }
 
