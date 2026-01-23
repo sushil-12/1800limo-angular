@@ -153,7 +153,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched && LooseCustomer.first_name.dirty)">
+										*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched || LooseCustomer.first_name.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.first_name.errors?.required">
 											This field is required
@@ -197,7 +197,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched && LooseCustomer.last_name.dirty)">
+										*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched || LooseCustomer.last_name.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.last_name.errors?.required">
 											This field is required
@@ -237,7 +237,7 @@
 							<!-- Phone -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="mobileField m-0"
-									[class.is-invalid-input]="((submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty) && LooseCustomer.phone.errors?.['invalidIntl'])">
+									[class.is-invalid-input]="((submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched || LooseCustomer.phone.dirty) && LooseCustomer.phone.errors?.['invalidIntl'])">
 									<mat-label>Phone</mat-label>
 									<input matInput #cellInput placeholder="1234567890" formControlName="phone"
 										class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
@@ -247,7 +247,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty)">
+										*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched || LooseCustomer.phone.dirty)">
 										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
 											This field is required
 										</p>
@@ -308,7 +308,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched && LooseCustomer.card_details.controls.name.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched || LooseCustomer.card_details.controls.name.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
 											This field is required
@@ -331,7 +331,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched && LooseCustomer.card_details.controls.card_number.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched || LooseCustomer.card_details.controls.card_number.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
 											This field is required
@@ -368,7 +368,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched || LooseCustomer.card_details.controls.exp_month.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
 											This field is required
@@ -410,7 +410,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched && LooseCustomer.card_details.controls.exp_year.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched || LooseCustomer.card_details.controls.exp_year.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
 											This field is required
@@ -430,7 +430,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched && LooseCustomer.card_details.controls.cvv.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched || LooseCustomer.card_details.controls.cvv.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
 											This field is required
@@ -589,7 +589,7 @@
 					<!-- Passenger Cell -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mobileField m-0"
-							[class.is-invalid-input]="((submitBookingForm && Form.passenger_cell.invalid) || (Form.passenger_cell.touched && Form.passenger_cell.dirty) && Form.passenger_cell.errors?.['invalidIntl'])">
+							[class.is-invalid-input]="((submitBookingForm && Form.passenger_cell.invalid) || (Form.passenger_cell.touched || Form.passenger_cell.dirty) && Form.passenger_cell.errors?.['invalidIntl'])">
 							<mat-label>Passenger Cell<span class="asterisk"> *</span></mat-label>
 							<input matInput #passengercellInput placeholder="1234567890"
 								formControlName="passenger_cell" class="phoneNumberClass" tabindex="1"

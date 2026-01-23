@@ -53,14 +53,14 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline" class="mobileField"
-						[class.is-invalid-input]="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors">
+						[class.is-invalid-input]="submittedForm && f.CellNumber.errors || (f.CellNumber.touched || f.CellNumber.dirty) && f.CellNumber.errors">
 						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
 						<input matInput #cellInput placeholder="Mobile" formControlName="CellNumber"
 							class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
 							(keypress)="numberOnly($event)" (input)="validateCellNumber()"
 							(blur)="validateCellNumber()" />
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
+					<div *ngIf="submittedForm && f.CellNumber.errors || (f.CellNumber.touched || f.CellNumber.dirty) && f.CellNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CellNumber.errors.required">This field is required</div>
 						<div *ngIf="f.CellNumber.errors?.invalidIntl">{{f.CellNumber.errors?.invalidIntl}}</div>
