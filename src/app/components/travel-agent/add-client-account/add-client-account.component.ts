@@ -272,14 +272,59 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
+			this.addIndividualAccountForm.get('mobile').updateValueAndValidity(); // Ensure validity updates
+			this.validateMobile();
 		}
 		else {
 			this.addIndividualAccountForm.patchValue({
 				workIsd: '+' + event.dialCode,
 				workCountry: event.iso2
 			});
+			this.addIndividualAccountForm.get('work').updateValueAndValidity(); // Ensure validity updates
+			this.validateWork();
 		}
 		// console.log(this.countryCode);
+	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhoneGeneric(control: any, telInputObject: any) {
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = telInputObject.isValidNumber();
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
+	}
+
+	validateMobile() {
+		this.validatePhoneGeneric(this.addIndividualAccountForm.get('mobile'), this.MobileObject);
+	}
+
+	validateWork() {
+		this.validatePhoneGeneric(this.addIndividualAccountForm.get('work'), this.WorkObject);
 	}
 	telInputObjectMobile(obj) {
 		this.MobileObject = obj;

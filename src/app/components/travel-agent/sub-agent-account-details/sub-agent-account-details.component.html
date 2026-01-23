@@ -40,7 +40,8 @@
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
                             <input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+                                (keypress)="numberOnly($event)" (input)="validateMobile()" (blur)="validateMobile()" />
 
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.mobile?.errors || f?.mobile?.touched && f?.mobile?.errors"
@@ -48,6 +49,7 @@
                             <div *ngIf="f?.mobile?.errors?.required">This field is required</div>
                         </div>
                         <div *ngIf="f?.mobile?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="f?.mobile?.errors?.invalidIntl">{{f?.mobile?.errors?.invalidIntl}}</div>
                             <div *ngIf="f?.mobile?.errors?.invalid_Pattern;else plusError">Do not add Dashes
                                 with numbers</div>
                             <ng-template #plusError>
@@ -69,7 +71,8 @@
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Work</mat-label>
                             <input matInput #workInput placeholder="Contact" formControlName="work_contact_number"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+                                (keypress)="numberOnly($event)" (input)="validateWork()" (blur)="validateWork()" />
 
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.work_contact_number?.errors || f?.work_contact_number?.touched && f?.work_contact_number?.errors"
@@ -77,6 +80,8 @@
                             <div *ngIf="f?.work_contact_number?.errors?.required">This field is required</div>
                         </div>
                         <div *ngIf="f?.work_contact_number?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="f?.work_contact_number?.errors?.invalidIntl">
+                                {{f?.work_contact_number?.errors?.invalidIntl}}</div>
                             <div *ngIf="f?.work_contact_number?.errors?.invalid_Pattern;else plusError">Do not add
                                 Dashes
                                 with numbers</div>

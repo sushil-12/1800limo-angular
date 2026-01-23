@@ -798,14 +798,64 @@ export class AffiliateStep1Component implements OnInit, AfterViewInit {
 
 	onLanguageChange(val, ischecked) {
 		const languageSpoken: FormArray = this.addAffiliateAccountForm.get('LanguagesSpoken') as FormArray;
-
 		if (ischecked) {
 			languageSpoken.push(new FormControl(val));
 		} else {
-			const index = languageSpoken.controls.findIndex(x => x.value === val);
+			let index = languageSpoken.controls.findIndex(x => x.value == val)
 			languageSpoken.removeAt(index);
 		}
 	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhoneGeneric(control: any, telInputObject: any) {
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = telInputObject.isValidNumber();
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
+	}
+
+	validateCellNumber() {
+		this.validatePhoneGeneric(this.f.CellNumber, this.CellNumberObject);
+	}
+
+	validateDispatch() {
+		this.validatePhoneGeneric(this.f.Dispatch, this.DispatchObject);
+	}
+
+	validateCompanyCellNumber() {
+		this.validatePhoneGeneric(this.f.CompanyCellNumber, this.CompanyCellNumberObject);
+	}
+
+	validateFax() {
+		this.validatePhoneGeneric(this.f.Fax, this.FaxObject);
+	}
+
+
 
 	onAssociationChange(e) {
 		const associations: FormArray = this.addAffiliateAccountForm.get('Associations') as FormArray;

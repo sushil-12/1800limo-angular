@@ -158,20 +158,21 @@
 	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type">
 </app-finalize-rates>
-<div class="row mb-3" id="submitForm">
+<div class="row" id="submitForm">
 	<div class="col-md-12 text-right">
 		<button type="button" class="custom-filled-button ratesButton m-3"
 			[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="submitForm()">
 			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
 	</div>
-		<!-- <p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
+	<!-- <p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
 			<span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span>
 		</p> -->
-		<div class="col-md-12" *ngIf="waiting_time_in_mins">
-			<p class="alert alert-danger" *ngIf="waiting_time_in_mins">Note- Driver waiting time for this booking was:
-				<span class="font-weight-bold">{{waiting_time_in_mins}} minutes</span></p>
-		</div>
+	<div class="col-md-12" *ngIf="waiting_time_in_mins">
+		<p class="alert alert-danger" *ngIf="waiting_time_in_mins">Note- Driver waiting time for this booking was:
+			<span class="font-weight-bold">{{waiting_time_in_mins}} minutes</span>
+		</p>
+	</div>
 </div>
 
 
@@ -210,7 +211,7 @@
 	</table>
 </section>
 <!-- Payment Section -->
-<section class="section-container" style="margin-top: 22px !important;"
+<section class="section-container"
 	*ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
 	<!-- <div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
@@ -476,8 +477,8 @@
 	</div>
 </div>
 
-<div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal" aria-hidden="true" data-bs-backdrop="static" 
-data-bs-keyboard="false">
+<div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModal"
+	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-success">

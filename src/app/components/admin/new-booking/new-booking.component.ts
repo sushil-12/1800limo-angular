@@ -91,7 +91,9 @@ export class NewBookingComponent implements OnInit {
 	LCTelObject: any
 	PaxTelObject: any
 	driverCellTelInput: any
+	returnDriverCellTelInput: any
 	loseAffiliateTelInput: any
+	returnLoseAffiliateTelInput: any
 
 	BookingForm: FormGroup
 	RatesForm: any
@@ -317,6 +319,7 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+				this.validatePassengerPhone();
 			});
 		}
 
@@ -327,6 +330,7 @@ export class NewBookingComponent implements OnInit {
 				console.log("in country chnage", countryData)
 				this.onLCTeleCountryChange(countryData);
 				this.PaxTelObject.setCountry(countryData.iso2)
+				this.validateLooseCustomerPhone();
 			});
 		}
 
@@ -336,15 +340,17 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.driverCellTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('driver_cell_country', countryData.iso2)
+				this.validateDriverCell();
 			});
 		}
 
 		if (this.return_driver_cellInput) {
-			this.driverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
+			this.returnDriverCellTelInput = intlTelInput(this.return_driver_cellInput.nativeElement, telOptions);
 			this.return_driver_cellInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.driverCellTelInput.getSelectedCountryData();
+				const countryData = this.returnDriverCellTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
+				this.validateReturnDriverCell();
 			});
 		}
 
@@ -354,22 +360,92 @@ export class NewBookingComponent implements OnInit {
 				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.handleCountryChangeLA(countryData);
+				this.validateLooseAffiliatePhone();
 			});
 		}
 
 		if (this.return_lose_affiliate_phoneInput) {
-			this.loseAffiliateTelInput = intlTelInput(this.return_lose_affiliate_phoneInput.nativeElement, telOptions);
+			this.returnLoseAffiliateTelInput = intlTelInput(this.return_lose_affiliate_phoneInput.nativeElement, telOptions);
 			this.return_lose_affiliate_phoneInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+				const countryData = this.returnLoseAffiliateTelInput.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('return_lose_affiliate_phone_isd', '+' + countryData.dialCode); this.SetFormValue('return_lose_affiliate_phone_country', countryData.iso2)
 				this.SetFormValue('return_driver_cell_isd', '+' + countryData.dialCode); this.SetFormValue('return_driver_cell_country', countryData.iso2)
-				this.driverCellTelInput.setCountry(countryData.iso2)
+				// Also update return driver cell country if it exists
+				if (this.returnDriverCellTelInput) {
+					this.returnDriverCellTelInput.setCountry(countryData.iso2)
+				}
+				this.validateReturnLooseAffiliatePhone();
 			});
 		}
 
 
 	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhoneGeneric(control: AbstractControl, telInputObject: any) {
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				// If empty, let required validator handle it. Remove our intl error if present.
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = telInputObject.isValidNumber();
+
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				// Remove invalidIntl error if exists
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
+	}
+
+	validateLooseCustomerPhone() {
+		this.validatePhoneGeneric(this.LooseCustomer.phone, this.LCTelObject);
+	}
+
+	validatePassengerPhone() {
+		this.validatePhoneGeneric(this.Form.passenger_cell, this.PaxTelObject);
+	}
+
+	validateLooseAffiliatePhone() {
+		this.validatePhoneGeneric(this.Form.lose_affiliate_phone, this.loseAffiliateTelInput);
+	}
+
+	validateDriverCell() {
+		if (this.Form.affiliate_type.value == 'loose_affiliate') {
+			this.validatePhoneGeneric(this.Form.driver_cell, this.driverCellTelInput);
+		}
+	}
+
+	validateReturnDriverCell() {
+		if (this.Form.return_affiliate_type.value == 'loose_affiliate') {
+			this.validatePhoneGeneric(this.Form.return_driver_cell, this.returnDriverCellTelInput);
+		}
+	}
+
+	validateReturnLooseAffiliatePhone() {
+		this.validatePhoneGeneric(this.Form.return_lose_affiliate_phone, this.returnLoseAffiliateTelInput);
+	}
+
 
 
 
@@ -410,7 +486,7 @@ export class NewBookingComponent implements OnInit {
 
 		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
 			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
 		});
 
@@ -2583,7 +2659,7 @@ export class NewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.RatesForm.amenities)) {
 				base_rate += this.RatesForm.amenities[key].baserate;
 			}
-			if(this.BookingForm.value.number_of_vehicles != 0 ){
+			if (this.BookingForm.value.number_of_vehicles != 0) {
 				base_rate *= this.BookingForm.value.number_of_vehicles
 			}
 			console.log("extra gratutiy", this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount, "min rate", this.BookingForm.value.rateArray?.min_rate_involved)
@@ -2637,7 +2713,7 @@ export class NewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
 				base_rate += this.ReturnRatesForm.amenities[key].baserate;
 			}
-			if(this.BookingForm.value.number_of_vehicles != 0 ){
+			if (this.BookingForm.value.number_of_vehicles != 0) {
 				base_rate *= this.BookingForm.value.number_of_vehicles
 			}
 			let returnGrandTotal = this.BookingForm.value.return_grand_total
@@ -3706,8 +3782,8 @@ export class NewBookingComponent implements OnInit {
 
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
-			console.log("value in pickup_airport--->",value)
-			if(value == 3283){
+			console.log("value in pickup_airport--->", value)
+			if (value == 3283) {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
 			}
@@ -3765,8 +3841,8 @@ export class NewBookingComponent implements OnInit {
 
 		// Return Pickup Airport
 		this.BookingForm.get('return_pickup_airport').valueChanges.subscribe((value: string) => {
-			console.log("value in pickup_airport--->",value)
-			if(value == '3283'){
+			console.log("value in pickup_airport--->", value)
+			if (value == '3283') {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 			}

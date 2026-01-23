@@ -250,6 +250,7 @@ export class CreateBookingComponent implements OnInit {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
 				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode); this.SetFormValue('passenger_cell_country', countryData.iso2)
+				this.validatePassengerCell();
 			});
 		}
 
@@ -2810,6 +2811,7 @@ export class CreateBookingComponent implements OnInit {
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
 		this.BookingForm.updateValueAndValidity()
+		this.validateLooseCustomerPhone();
 	}
 	LCTelInputObject(event: any) {
 		this.LCTelObject = event;
@@ -2973,12 +2975,12 @@ export class CreateBookingComponent implements OnInit {
 				//   this.r_agentShare = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 				this.r_grandtotal = (parseFloat(this.r_subtotal))
 			}
-		// Store current booking_data as previous for next comparison
-		this.previousBookingData = JSON.parse(JSON.stringify(booking_data));
-		console.log('[buildBookingData] Method completed successfully');
-	}, (error: any) => {
-		console.error('[buildBookingData] API error:', error);
-	});
+			// Store current booking_data as previous for next comparison
+			this.previousBookingData = JSON.parse(JSON.stringify(booking_data));
+			console.log('[buildBookingData] Method completed successfully');
+		}, (error: any) => {
+			console.error('[buildBookingData] API error:', error);
+		});
 	}
 
 	/**
@@ -3207,6 +3209,49 @@ export class CreateBookingComponent implements OnInit {
 	navigatetoQuote() {
 		// $("#repeatreturnmodal").modal("hide");
 		this.$router.navigate(['/quotebot_section'])
+	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhoneGeneric(control: any, telInputObject: any) {
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			// setTimeout(() => {
+			const isValid = telInputObject.isValidNumber();
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+			// }, 100);
+		}
+	}
+
+	validateLooseCustomerPhone() {
+		this.validatePhoneGeneric(this.BookingForm.get('loose_customer').get('phone'), this.LCTelObject);
+	}
+
+	validatePassengerCell() {
+		this.validatePhoneGeneric(this.BookingForm.get('passenger_cell'), this.PaxTelObject);
 	}
 
 }

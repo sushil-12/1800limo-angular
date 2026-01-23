@@ -40,13 +40,15 @@
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>Agency / Insurance Telephone #<span class="asterisk"> *</span></mat-label>
 						<input matInput #phoneInput placeholder="1234567890" formControlName="AgentTelephone"
-							class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validatePhone()" (blur)="validatePhone()" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentTelephone.errors || f.AgentTelephone.touched && f.AgentTelephone.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AgentTelephone.errors.required">This field is required</div>
+						<div *ngIf="f.AgentTelephone.errors?.invalidIntl">{{f.AgentTelephone.errors?.invalidIntl}}</div>
 					</div>
-					<div *ngIf="f.AgentTelephone.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<!-- <div *ngIf="f.AgentTelephone.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AgentTelephone.errors?.invalid_Pattern;else plusError">Do not add Dashes
 							with numbers</div>
 						<ng-template #plusError>
@@ -77,7 +79,7 @@
 								</ng-template>
 							</ng-template>
 						</ng-template>
-					</div>
+					</div> -->
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">

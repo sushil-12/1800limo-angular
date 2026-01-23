@@ -62,8 +62,9 @@ export class AffiliateStep3Component implements OnInit {
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
-			console.log("in country change",countryData)
+			console.log("in country change", countryData)
 			this.onCountryChange(countryData, 'AgentTelephone')
+			this.validateAgentTelephone();
 		});
 
 
@@ -71,7 +72,7 @@ export class AffiliateStep3Component implements OnInit {
 		this.AgentTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
 	}
 
-	
+
 	ngOnInit(): void {
 		this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
 		for (let [key, value] of Object.entries(this.stepsObj)) {
@@ -214,6 +215,44 @@ export class AffiliateStep3Component implements OnInit {
 			});
 		}
 	}
+
+	numberOnly(event: any): boolean {
+		const charCode = (event.which) ? event.which : event.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	validatePhoneGeneric(control: any, telInputObject: any) {
+		if (telInputObject) {
+			const value = control.value;
+			if (!value) {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+				return;
+			}
+			const isValid = telInputObject.isValidNumber();
+			if (!isValid) {
+				const errorCode = telInputObject.getValidationError();
+				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const currentErrors = control.errors || {};
+				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+			} else {
+				if (control.errors) {
+					const { invalidIntl, ...otherErrors } = control.errors;
+					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+				}
+			}
+		}
+	}
+
+	validateAgentTelephone() {
+		this.validatePhoneGeneric(this.f.AgentTelephone, this.AgentTelephoneObject);
+	}
+
 	telInputObjectAgentTelephone(obj) {
 		this.AgentTelephoneObject = obj;
 	}

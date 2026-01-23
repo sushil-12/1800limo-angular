@@ -493,19 +493,70 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
         CellIsd: '+' + event.dialCode,
         CellNumberCountry: event.iso2
       });
+      this.addDriverForm.get('CellNumber').updateValueAndValidity();
+      this.validateCellNumber();
     }
     else if (type == 'PoliceForceTelephone') {
       this.addDriverForm.patchValue({
         PoliceForceIsd: '+' + event.dialCode,
         PoliceForceTelephoneCountry: event.iso2
       });
+      this.addDriverForm.get('PoliceForceTelephone').updateValueAndValidity();
+      this.validatePoliceForce();
     }
     else {
       this.addDriverForm.patchValue({
         BackgroundCompanyTelIsd: '+' + event.dialCode,
         BackgroundCompanyTelNumberCountry: event.iso2
       });
+      this.addDriverForm.get('BackgroundCompanyTelNumber').updateValueAndValidity();
+      this.validateBackgroundCompany();
     }
+  }
+
+  numberOnly(event: any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  validatePhoneGeneric(control: any, telInputObject: any) {
+    if (telInputObject) {
+      const value = control.value;
+      if (!value) {
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+        return;
+      }
+      const isValid = telInputObject.isValidNumber();
+      if (!isValid) {
+        const errorCode = telInputObject.getValidationError();
+        const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+        const currentErrors = control.errors || {};
+        control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+      } else {
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+      }
+    }
+  }
+
+  validateCellNumber() {
+    this.validatePhoneGeneric(this.addDriverForm.get('CellNumber'), this.CellNumberObject);
+  }
+
+  validatePoliceForce() {
+    this.validatePhoneGeneric(this.addDriverForm.get('PoliceForceTelephone'), this.PoliceForceTelephoneObject);
+  }
+
+  validateBackgroundCompany() {
+    this.validatePhoneGeneric(this.addDriverForm.get('BackgroundCompanyTelNumber'), this.BackgroundCompanyTelNumberObject);
   }
   telInputObjectCell(obj) {
     this.CellNumberObject = obj;

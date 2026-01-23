@@ -212,17 +212,21 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mobileField">
+					<mat-form-field appearance="outline" class="mobileField"
+						[class.is-invalid-input]="submittedForm && f.CellNumber.errors || (f.CellNumber.touched || f.CellNumber.dirty) && f.CellNumber.errors">
 						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
 						<input matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validateCellNumber()"
+							(blur)="validateCellNumber()" />
 
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
+					<div *ngIf="submittedForm && f.CellNumber.errors || (f.CellNumber.touched || f.CellNumber.dirty) && f.CellNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CellNumber.errors.required">This field is required</div>
+						<div *ngIf="f.CellNumber.errors?.invalidIntl">{{f.CellNumber.errors?.invalidIntl}}</div>
 					</div>
-					<div *ngIf="f.CellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<!-- <div *ngIf="f.CellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CellNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
 							with numbers</div>
 						<ng-template #plusError>
@@ -237,7 +241,7 @@
 								</ng-template>
 							</ng-template>
 						</ng-template>
-					</div>
+					</div> -->
 				</div>
 				<div class="col-md-6" id="emailText">
 					<mat-form-field appearance="outline" [class.read-only]="affiliateEmailReadonly == true">
@@ -460,18 +464,21 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mobileField"
-						[ngClass]="{ 'border-red': f.Dispatch?.value == '' }">
+						[ngClass]="{ 'border-red': f.Dispatch?.value == '' }"
+						[class.is-invalid-input]="submittedForm && f.Dispatch.errors || (f.Dispatch.touched || f.Dispatch.dirty) && f.Dispatch.errors">
 						<mat-label>24 Hr Cell
 							Dispatch<span class="asterisk">*</span></mat-label>
 						<input matInput #dispatchInput placeholder="1234567890" formControlName="Dispatch"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validateDispatch()" (blur)="validateDispatch()" />
 
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.Dispatch.errors || f.Dispatch.touched && f.Dispatch.errors"
+					<div *ngIf="submittedForm && f.Dispatch.errors || (f.Dispatch.touched || f.Dispatch.dirty) && f.Dispatch.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Dispatch.errors.required">This field is required</div>
+						<div *ngIf="f.Dispatch.errors?.invalidIntl">{{f.Dispatch.errors?.invalidIntl}}</div>
 					</div>
-					<div *ngIf="f.Dispatch.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<!-- <div *ngIf="f.Dispatch.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Dispatch.errors?.invalid_Pattern;else plusError">Do not add Dashes
 							with numbers</div>
 						<ng-template #plusError>
@@ -486,22 +493,26 @@
 								</ng-template>
 							</ng-template>
 						</ng-template>
-					</div>
+					</div> -->
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mobileField">
+					<mat-form-field appearance="outline" class="mobileField"
+						[class.is-invalid-input]="submittedForm && f.CompanyCellNumber.errors || (f.CompanyCellNumber.touched || f.CompanyCellNumber.dirty) && f.CompanyCellNumber.errors">
 						<mat-label>Business
 							Telephone</mat-label>
 						<input matInput #companyCellNumberInput placeholder="1234567890"
 							formControlName="CompanyCellNumber" class="phoneNumberClass" tabindex="1"
-							(focus)="$event.target.select()" />
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCompanyCellNumber()" (blur)="validateCompanyCellNumber()" />
 
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CompanyCellNumber.errors || f.CompanyCellNumber.touched && f.CompanyCellNumber.errors"
+					<div *ngIf="submittedForm && f.CompanyCellNumber.errors || (f.CompanyCellNumber.touched || f.CompanyCellNumber.dirty) && f.CompanyCellNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CompanyCellNumber.errors.required">This field is required</div>
+						<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">{{f.CompanyCellNumber.errors?.invalidIntl}}
+						</div>
 					</div>
-					<div *ngIf="f.CompanyCellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<!-- <div *ngIf="f.CompanyCellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CompanyCellNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
 							with numbers</div>
 						<ng-template #plusError>
@@ -516,16 +527,23 @@
 								</ng-template>
 							</ng-template>
 						</ng-template>
-					</div>
+					</div> -->
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mobileField">
+					<mat-form-field appearance="outline" class="mobileField"
+						[class.is-invalid-input]="submittedForm && f.Fax.errors || (f.Fax.touched || f.Fax.dirty) && f.Fax.errors">
 						<mat-label>FAX</mat-label>
 						<input matInput #FaxInput placeholder="1234567890" formControlName="Fax"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validateFax()" (blur)="validateFax()" />
 
 					</mat-form-field>
-					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="submittedForm && f.Fax.errors || (f.Fax.touched || f.Fax.dirty) && f.Fax.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.Fax.errors.required">This field is required</div>
+						<div *ngIf="f.Fax.errors?.invalidIntl">{{f.Fax.errors?.invalidIntl}}</div>
+					</div>
+					<!-- <div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Fax.errors?.invalid_Pattern;else plusError">Do not add Dashes
 							with numbers</div>
 						<ng-template #plusError>
@@ -540,7 +558,7 @@
 								</ng-template>
 							</ng-template>
 						</ng-template>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="col-md-6">

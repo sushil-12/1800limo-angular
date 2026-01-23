@@ -38,13 +38,16 @@
 							<mat-label>Mobile<span class="asterisk">*</span></mat-label>
 							<input matInput #phoneInput placeholder="Mobile" formControlName="mobile"
 								class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
-								[readonly]="subAdminId" />
+								[readonly]="subAdminId" (keypress)="numberOnly($event)"
+								(input)="validatePhone('mobile', MobileObject)"
+								(blur)="validatePhone('mobile', MobileObject)" />
 						</mat-form-field>
 						<div *ngIf="f.mobile.invalid && (f.mobile.touched || f.mobile.dirty)" class="text-danger">
 							<div *ngIf="f.mobile.errors.required">This field is required</div>
 							<div *ngIf="f.mobile.errors.pattern">This field should be a number</div>
 							<div *ngIf="f.mobile.errors.minlength">Minimum length should be 10</div>
 							<div *ngIf="f.mobile.errors.maxlength">Maximum length should be 12</div>
+							<div *ngIf="f.mobile.errors['invalidIntl']">{{ f.mobile.errors['invalidIntl'] }}</div>
 						</div>
 					</div>
 					<div class="col-md-6">

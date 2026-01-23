@@ -36,59 +36,65 @@
 					</div>
 
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="mobileField">
+						<mat-form-field appearance="outline" class="mobileField"
+							[class.is-invalid-input]="submittedForm && f.office.errors || (f.office.touched || f.office.dirty) && f.office.errors">
 							<mat-label>Contact</mat-label>
 							<input matInput #officeInput placeholder="Contact" formControlName="office"
-								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+								(keypress)="numberOnly($event)" (input)="validateOffice()" (blur)="validateOffice()" />
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.office.errors || f.office.touched && f.office.errors"
+						<div *ngIf="submittedForm && f.office.errors || (f.office.touched || f.office.dirty) && f.office.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<!-- <div *ngIf="f.office.errors.required">This field is required</div> -->
+							<div *ngIf="f.office.errors.required">This field is required</div>
+							<div *ngIf="f.office.errors?.invalidIntl">{{f.office.errors?.invalidIntl}}</div>
 						</div>
 						<div *ngIf="f.office.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.office.errors?.invalid_Pattern;else plusError">Do not add Dashes
-								with numbers</div>
+							<!-- <div *ngIf="f.office.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div> -->
 							<ng-template #plusError>
-								<div *ngIf="f.office.errors?.invalidPattern;else allErrors">Do not enter +
-									sign</div>
+								<!-- <div *ngIf="f.office.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div> -->
 								<ng-template #allErrors>
-									<div *ngIf="f.office.errors?.pattern;else numberLength">Enter Numbers Without
+									<!-- <div *ngIf="f.office.errors?.pattern;else numberLength">Enter Numbers Without
 										Spaces or Dashes
-									</div>
-									<ng-template #numberLength>
+									</div> -->
+									<!-- <ng-template #numberLength>
 										<div *ngIf="f.office.errors.minlength">Minimum length should be 4</div>
 										<div *ngIf="f.office.errors.maxlength">Maximum length should be 15</div>
-									</ng-template>
+									</ng-template> -->
 								</ng-template>
 							</ng-template>
 						</div>
 					</div>
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="mobileField">
-							<mat-label >Mobile<span class="asterisk"> *</span></mat-label>
+						<mat-form-field appearance="outline" class="mobileField"
+							[class.is-invalid-input]="submittedForm && f.mobile.errors || (f.mobile.touched || f.mobile.dirty) && f.mobile.errors">
+							<mat-label>Mobile<span class="asterisk"> *</span></mat-label>
 							<input matInput #mobileInput placeholder="mobile" formControlName="mobile"
 								class="phoneNumberClass" tabindex="1" [readonly]="travelPlannerId"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+								(input)="validateMobile()" (blur)="validateMobile()" />
 
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
+						<div *ngIf="submittedForm && f.mobile.errors || (f.mobile.touched || f.mobile.dirty) && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.mobile.errors.required">This field is required</div>
+							<div *ngIf="f.mobile.errors?.invalidIntl">{{f.mobile.errors?.invalidIntl}}</div>
 						</div>
 						<div *ngIf="f.mobile.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.mobile.errors?.invalid_Pattern;else plusError">Do not add Dashes
-								with numbers</div>
+							<!-- <div *ngIf="f.mobile.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div> -->
 							<ng-template #plusError>
-								<div *ngIf="f.mobile.errors?.invalidPattern;else allErrors">Do not enter +
-									sign</div>
+								<!-- <div *ngIf="f.mobile.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div> -->
 								<ng-template #allErrors>
-									<div *ngIf="f.mobile.errors?.pattern;else numberLength">Enter Numbers Without
+									<!-- <div *ngIf="f.mobile.errors?.pattern;else numberLength">Enter Numbers Without
 										Spaces or Dashes
-									</div>
-									<ng-template #numberLength>
+									</div> -->
+									<!-- <ng-template #numberLength>
 										<div *ngIf="f.mobile.errors.minlength">Minimum length should be 4</div>
 										<div *ngIf="f.mobile.errors.maxlength">Maximum length should be 15</div>
-									</ng-template>
+									</ng-template> -->
 								</ng-template>
 							</ng-template>
 						</div>
@@ -170,61 +176,67 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<mat-form-field appearance="outline" class="mobileField">
+						<mat-form-field appearance="outline" class="mobileField"
+							[class.is-invalid-input]="submittedForm && f.fax.errors || (f.fax.touched || f.fax.dirty) && f.fax.errors">
 							<mat-label>Fax</mat-label>
-							<input matInput #faxInput placeholder="fax" formControlName="fax"
-								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" />
+							<input matInput #faxInput placeholder="fax" formControlName="fax" class="phoneNumberClass"
+								tabindex="1" (focus)="$event.target.select()" (keypress)="numberOnly($event)"
+								(input)="validateFax()" (blur)="validateFax()" />
 
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.fax.errors || f.fax.touched && f.fax.errors"
+						<div *ngIf="submittedForm && f.fax.errors || (f.fax.touched || f.fax.dirty) && f.fax.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<!-- <div *ngIf="f.fax.errors.required">This field is required</div> -->
+							<div *ngIf="f.fax.errors.required">This field is required</div>
+							<div *ngIf="f.fax.errors?.invalidIntl">{{f.fax.errors?.invalidIntl}}</div>
 						</div>
 						<div *ngIf="f.fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.fax.errors?.invalid_Pattern;else plusError">Do not add Dashes
-								with numbers</div>
+							<!-- <div *ngIf="f.fax.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div> -->
 							<ng-template #plusError>
-								<div *ngIf="f.fax.errors?.invalidPattern;else allErrors">Do not enter +
-									sign</div>
+								<!-- <div *ngIf="f.fax.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div> -->
 								<ng-template #allErrors>
-									<div *ngIf="f.fax.errors?.pattern;else numberLength">Enter Numbers Without
+									<!-- <div *ngIf="f.fax.errors?.pattern;else numberLength">Enter Numbers Without
 										Spaces or Dashes
-									</div>
-									<ng-template #numberLength>
+									</div> -->
+									<!-- <ng-template #numberLength>
 										<div *ngIf="f.fax.errors.minlength">Minimum length should be 4</div>
 										<div *ngIf="f.fax.errors.maxlength">Maximum length should be 15</div>
-									</ng-template>
+									</ng-template> -->
 								</ng-template>
 							</ng-template>
 						</div>
 					</div>
 					<div class="col-md-6">
-						<mat-form-field appearance="outline" class="mobileField">
+						<mat-form-field appearance="outline" class="mobileField"
+							[class.is-invalid-input]="submittedForm && f.officeNumber.errors || (f.officeNumber.touched || f.officeNumber.dirty) && f.officeNumber.errors">
 							<mat-label>24hr Agent Help Desk <span class="asterisk">*</span></mat-label>
 
 							<input matInput #officeNumberInput placeholder="24hr Agent Help Desk"
 								formControlName="officeNumber" class="phoneNumberClass" tabindex="1"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+								(input)="validateOfficeNumber()" (blur)="validateOfficeNumber()" />
 
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.officeNumber.errors || f.officeNumber.touched && f.officeNumber.errors"
+						<div *ngIf="submittedForm && f.officeNumber.errors || (f.officeNumber.touched || f.officeNumber.dirty) && f.officeNumber.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.officeNumber.errors.required">This field is required</div>
+							<div *ngIf="f.officeNumber.errors?.invalidIntl">{{f.officeNumber.errors?.invalidIntl}}</div>
 						</div>
 						<div *ngIf="f.officeNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.officeNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
-								with numbers</div>
+							<!-- <div *ngIf="f.officeNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div> -->
 							<ng-template #plusError>
-								<div *ngIf="f.officeNumber.errors?.invalidPattern;else allErrors">Do not enter +
-									sign</div>
+								<!-- <div *ngIf="f.officeNumber.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div> -->
 								<ng-template #allErrors>
-									<div *ngIf="f.officeNumber.errors?.pattern;else numberLength">Enter Numbers Without
+									<!-- <div *ngIf="f.officeNumber.errors?.pattern;else numberLength">Enter Numbers Without
 										Spaces or Dashes
-									</div>
-									<ng-template #numberLength>
+									</div> -->
+									<!-- <ng-template #numberLength>
 										<div *ngIf="f.officeNumber.errors.minlength">Minimum length should be 4</div>
 										<div *ngIf="f.officeNumber.errors.maxlength">Maximum length should be 15</div>
-									</ng-template>
+									</ng-template> -->
 								</ng-template>
 							</ng-template>
 						</div>

@@ -30,14 +30,19 @@
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
                             <input matInput #phoneInput placeholder="Mobile" formControlName="phone_number"
                                 class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
-                                [readonly]="clientId" />
+                                [readonly]="clientId" (keypress)="numberOnly($event)" (input)="validatePhoneNumber()"
+                                (blur)="validatePhoneNumber()"
+                                [class.is-invalid-input]="(f.phone_number.touched || f.phone_number.dirty) && f.phone_number.invalid" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.phone_number?.errors || f?.phone_number?.touched && f?.phone_number?.errors"
                             class="text-danger margin-bottom-thin my-mat-hint">
                             <div *ngIf="f?.phone_number?.errors?.required">This field is required</div>
                         </div>
                         <div *ngIf="f?.phone_number?.errors" class="text-danger margin-bottom-thin my-mat-hint">
-                            <div *ngIf="f?.phone_number?.errors?.invalid_Pattern;else plusError">Do not add Dashes
+                            <div *ngIf="f.phone_number.errors?.invalidIntl">
+                                {{f.phone_number.errors?.invalidIntl}}
+                            </div>
+                            <!-- <div *ngIf="f?.phone_number?.errors?.invalid_Pattern;else plusError">Do not add Dashes
                                 with numbers</div>
                             <ng-template #plusError>
                                 <div *ngIf="f?.phone_number?.errors?.invalidPattern;else allErrors">Do not enter +
@@ -53,7 +58,7 @@
                                         </div>
                                     </ng-template>
                                 </ng-template>
-                            </ng-template>
+                            </ng-template> -->
                         </div>
                     </div>
                     <div class="col-md-6">
