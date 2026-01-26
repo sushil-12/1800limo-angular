@@ -238,8 +238,19 @@ export class BookingsComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
+		console.log("this.staert", this.startDate)
 		let start = this.startDate instanceof Date ? moment(this.startDate).format('YYYY-MM-DD') : this.startDate;
 		let end = this.endDate instanceof Date ? moment(this.endDate).format('YYYY-MM-DD') : this.endDate;
+
+		console.log("start.start", start)
+
+		// 🔒 FINAL NORMALIZATION — VERY IMPORTANT
+		start = this.normalizeDate(start);
+		end = this.normalizeDate(end);
+
+		console.log("startstart.staert", start)
+
+
 		this.individualService.loadBookings(pageUrl, this.searchText, start, end, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
 			this.spinner.hide()
@@ -891,6 +902,32 @@ export class BookingsComponent implements OnInit {
 			throw new Error('Error: Location Points Not Specified Properly. ');
 		}
 	}
+
+	normalizeDate(value: any): string {
+		// Moment object
+		if (moment.isMoment(value)) {
+			return value.format('YYYY-MM-DD');
+		}
+
+		// Dayjs object
+		if (dayjs.isDayjs && dayjs.isDayjs(value)) {
+			return value.format('YYYY-MM-DD');
+		}
+
+		// Milliseconds timestamp
+		if (typeof value === 'number' && value.toString().length === 13) {
+			return moment(value).format('YYYY-MM-DD');
+		}
+
+		// Timestamp as string
+		if (typeof value === 'string' && /^\d{13}$/.test(value)) {
+			return moment(Number(value)).format('YYYY-MM-DD');
+		}
+
+		// Already in correct format
+		return value;
+	}
+
 
 	getIndividualCardDetails() {
 		this.spinner.show()
