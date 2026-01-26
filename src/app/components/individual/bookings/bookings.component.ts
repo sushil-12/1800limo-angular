@@ -313,11 +313,11 @@ export class BookingsComponent implements OnInit {
 
 	reset() {
 		let date = new Date();
-		this.startDate = date;
+		this.startDate = date.toISOString().substring(0, 10);
 
 		let endDate = new Date();
 		endDate.setDate(date.getDate() + 7);
-		this.endDate = endDate;
+		this.endDate = endDate.toISOString().substring(0, 10);
 
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
@@ -341,9 +341,19 @@ export class BookingsComponent implements OnInit {
 		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('indvUseDateFilter', value)
 		let date = new Date();
+		this.startDate = date.toISOString().substring(0, 10);
 		date.setDate(date.getDate() + 7);
 		let timestamp = date.getTime();
 		this.endDate = moment(timestamp).format("YYYY-MM-DD");
+
+		// Update selectedDateRange to keep date picker in sync
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
+
+		console.log('this.startDate', this.startDate)
+		console.log('this.endDate', this.endDate)
 		this.loadBookings();
 	}
 
@@ -546,11 +556,14 @@ export class BookingsComponent implements OnInit {
 	}
 
 	changeDate(dateType, date) {
+		// Convert Date object to YYYY-MM-DD string format
+		const formattedDate = date instanceof Date ? date.toISOString().substring(0, 10) : date;
+
 		if (dateType == 'startDate') {
-			this.startDate = date;
+			this.startDate = formattedDate;
 		}
 		else {
-			this.endDate = date;
+			this.endDate = formattedDate;
 		}
 	}
 
@@ -1019,4 +1032,5 @@ export class BookingsComponent implements OnInit {
 				}
 			});
 
-		}	}
+	}
+}
