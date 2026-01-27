@@ -2862,9 +2862,9 @@ export class CreateBookingComponent implements OnInit {
 	}
 
 	buildBookingData() {
-		console.log('rebuild booking data')
+		console.log('rebuild booking data --- Sushil', this.BookingForm.getRawValue())
 		let booking_data = {
-			vehicle_id: this.BookingForm.get('vehicle_id').value,
+			vehicle_id: this.BookingForm.get('affiliate_type').value == "unassigned" ? this.BookingForm.get('vehicle_type').value : this.BookingForm.get('vehicle_id').value,
 			transfer_type: this.BookingForm.get('transfer_type').value,
 			service_type: this.BookingForm.get('service_type').value,
 			numberOfVehicles: 1,
