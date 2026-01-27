@@ -97,15 +97,15 @@
                             <div *ngIf="submittedForm && f.otherPhone.errors" class="text-danger">
                                 <div *ngIf="f.otherPhone.errors.required">This field is required</div>
                                 <div *ngIf="f.otherPhone.errors.pattern">This field should be a number</div>
-                                <div *ngIf="f.otherPhone.errors.minlength">Minimum length should be 10</div>
-                                <div *ngIf="f.otherPhone.errors.maxlength">Maximum length should be 10</div>
+                                <!-- <div *ngIf="f.otherPhone.errors.minlength">Minimum length should be 10</div>
+                                <div *ngIf="f.otherPhone.errors.maxlength">Maximum length should be 10</div> -->
                             </div>
                         </div>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Street Address<span class="asterisk">*</span></mat-label>
-                                <input matInput placeholder="Street Address" formControlName="otherStreetAddress" autocomplete="off"
-                                    #search1>
+                                <input matInput placeholder="Street Address" formControlName="otherStreetAddress"
+                                    autocomplete="off" #search1>
                             </mat-form-field>
                             <div *ngIf="submittedForm && f.otherStreetAddress.errors" class="text-danger">
                                 <div *ngIf="f.otherStreetAddress.errors.required">This field is required</div>
