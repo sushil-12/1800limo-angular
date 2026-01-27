@@ -55,7 +55,7 @@
                             <ng-template #plusError>
                                 <div *ngIf="f?.mobile?.errors?.invalidPattern;else allErrors">Do not enter +
                                     sign</div>
-                                <ng-template #allErrors>
+                                <!-- <ng-template #allErrors>
                                     <div *ngIf="f?.mobile?.errors?.pattern;else numberLength">Enter Numbers Without
                                         Spaces or Dashes
                                     </div>
@@ -63,7 +63,7 @@
                                         <div *ngIf="f?.mobile?.errors?.minlength">Minimum length should be 4</div>
                                         <div *ngIf="f?.mobile?.errors?.maxlength">Maximum length should be 15</div>
                                     </ng-template>
-                                </ng-template>
+                                </ng-template> -->
                             </ng-template>
                         </div>
                     </div>

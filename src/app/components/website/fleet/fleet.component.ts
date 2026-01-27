@@ -291,14 +291,14 @@ export class FleetComponent implements OnInit {
 		}
 	}
 	getFleet() {
-		this.spinner.show()
+		// this.spinner.show()
 		this.adminServices.getStepContentData('fleet').pipe(
 			catchError(err => {
-				this.spinner.hide()
+				// this.spinner.hide()
 				return throwError(err);
 			})
 		).subscribe(({ data }: any) => {
-			this.spinner.hide()
+			// this.spinner.hide()
 			console.log(data);
 			this.fleetContents = data;
 		})

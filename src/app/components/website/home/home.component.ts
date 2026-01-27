@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	homePageData: any;
 	checkdata: any;
 	clientImages: any[] = [];
-
+	isHomePageLoading: boolean = true;
 	time_value_for_phone_only: string
 
 	vars: Object = {}
@@ -110,7 +110,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private elementRef: ElementRef,
 
 	) { }
-
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -377,9 +376,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}, 200)
 		})
 	}
-
-
-
 	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
 			if (this.homePageData) {
@@ -393,16 +389,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	fetchHomePageData() {
-		this.spinner.show()
+		this.isHomePageLoading = true;
+		// this.spinner.show()
 
 		this.websiteService.fetchHomePageData()
 			.pipe(
 				catchError(err => {
-					this.spinner.hide()
+					this.isHomePageLoading = false;
+					// this.spinner.hide()
 					return throwError(err)
 				})
 			).subscribe(({ data }: any) => {
-				this.spinner.hide()
+				this.isHomePageLoading = false;
+				// this.spinner.hide()
 				console.log(data, "gsducgjsdgcfugsdu")
 				this.homePageData = data;
 				this.clientImages = this.fetchPageData('SOME OF OUR CLIENTS')?.images || [];

@@ -2,6 +2,22 @@
 <div class="innerpage_wrapper">
 	<section class="safety_wrapper">
 		<div class="container py-5">
+			<!-- Skeleton Loader -->
+			<div *ngIf="!fleetContents">
+				<div class="row align-items-center mb-5" *ngFor="let i of [1,2,3]; let ind = index"
+					[ngClass]="{'flex-md-row-reverse': ind % 2 !== 0}">
+					<div class="col-md-6">
+						<div class="skeleton-text-header skeleton-loader"></div>
+						<div class="skeleton-text-body skeleton-loader"></div>
+						<div class="skeleton-text-body skeleton-loader"></div>
+						<div class="skeleton-text-body-short skeleton-loader"></div>
+					</div>
+					<div class="col-md-6">
+						<div class="skeleton-image skeleton-loader"></div>
+					</div>
+				</div>
+			</div>
+
 			<div class="row align-items-center mb-5" *ngFor="let fleet of fleetContents; let i = index"
 				[ngClass]="{'flex-md-row-reverse': i % 2 !== 0}">
 

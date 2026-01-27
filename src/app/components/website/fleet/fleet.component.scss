@@ -589,3 +589,47 @@
 		}
 	}
 }
+
+// Skeleton Loader Styles
+.skeleton-loader {
+	animation: shimmer 2s infinite linear;
+	background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+	background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -1000px 0;
+	}
+
+	100% {
+		background-position: 1000px 0;
+	}
+}
+
+.skeleton-text-header {
+	height: 30px;
+	width: 60%;
+	margin-bottom: 20px;
+	border-radius: 4px;
+}
+
+.skeleton-text-body {
+	height: 15px;
+	width: 100%;
+	margin-bottom: 10px;
+	border-radius: 4px;
+}
+
+.skeleton-text-body-short {
+	height: 15px;
+	width: 80%;
+	margin-bottom: 10px;
+	border-radius: 4px;
+}
+
+.skeleton-image {
+	height: 300px;
+	width: 100%;
+	border-radius: 4px;
+}
