@@ -940,6 +940,19 @@
 	</div>
 </section>  -->
 
+<!-- SKELETON: Who Travels With Us -->
+<section class="checkourveh_wrapper" *ngIf="isHomePageLoading">
+	<div class="container-fluid">
+		<h2><span>Who Travels With Us</span></h2>
+		<div class="chk_vehicles_parent shimmer-wrapper" style="white-space: nowrap; overflow: hidden;">
+			<div class="shimmer-card" style="width: 150px; height: 100px; display:inline-block; margin:10px"
+				*ngFor="let i of [1,2,3,4,5,6]">
+				<div class="shimmer" style="width:100%; height:100%; border-radius: 8px;"></div>
+			</div>
+		</div>
+	</div>
+</section>
+
 <section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<h2><span>Who Travels With Us</span></h2>
@@ -1080,6 +1093,23 @@
 </section>
 
 <!-- PERSONALIZED DESTINATIONS -->
+<!-- SKELETON: Personalized Destinations -->
+<section class="personalized_wrapper" *ngIf="isHomePageLoading">
+	<div class="container-fluid">
+		<div class="skeleton-text-header shimmer" style="width: 400px; height: 40px; margin-bottom: 20px;"></div>
+		<div class="skeleton-text-body shimmer" style="width: 200px; margin-bottom: 30px;"></div>
+
+		<div class="shimmer-wrapper" style="white-space: nowrap; overflow: hidden;">
+			<div class="shimmer-card" style="width: 300px; display: inline-block; margin-right: 20px;"
+				*ngFor="let i of [1,2,3]">
+				<div class="shimmer-img shimmer" style="height: 200px;"></div>
+				<div class="shimmer-text shimmer" style="margin-top: 10px;"></div>
+				<div class="shimmer-text shimmer" style="width: 60%; margin-top: 5px;"></div>
+			</div>
+		</div>
+	</div>
+</section>
+
 <section class="personalized_wrapper" id="section-services"
 	*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
 	<div class="container-fluid">
@@ -1123,6 +1153,22 @@
 	</div>
 </section>
 <!-- WHY CHOOOSE US -->
+<!-- SKELETON: Why Choose Us -->
+<section class="whychoose_wrapper" *ngIf="isHomePageLoading">
+	<div class="container-fluid">
+		<div class="skeleton-text-header shimmer"
+			style="width: 300px; height: 40px; margin: 0 auto 20px auto; display:block"></div>
+		<div class="skeleton-text-body shimmer" style="width: 60%; margin: 0 auto 40px auto; display:block"></div>
+		<div class="row text-center">
+			<div class="col-md-3" *ngFor="let i of [1,2,3,4]">
+				<div class="shimmer-img shimmer"
+					style="height: 120px; width: 120px; margin: 0 auto 20px; border-radius: 50%"></div>
+				<div class="shimmer-text shimmer" style="width: 80%; margin: 0 auto 10px"></div>
+			</div>
+		</div>
+	</div>
+</section>
+
 <section class="whychoose_wrapper" *ngIf="fetchPageData('WHY CHOOSE US')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<h2>Why <span>Choose Us</span></h2>

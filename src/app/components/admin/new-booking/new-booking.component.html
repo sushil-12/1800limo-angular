@@ -1156,25 +1156,15 @@
 							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
 							(input)="validateDriverCell()" (blur)="validateDriverCell()" />
 					</mat-form-field>
-					<div class="error-box">
-						<div class="error-message"
-							*ngIf="Form.driver_cell.invalid && (Form.driver_cell.touched || Form.driver_cell.dirty)">
-							<!-- <p class="text-danger text-lg m-0"
-								*ngIf="Form.driver_cell.errors?.pattern;else looseAffError">
-								Only Numbers are Allowed
-							</p> -->
-							<ng-template #looseAffError>
-								<!-- <p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.minlength">
-									Minimum length should be 4
-								</p>
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.maxlength">
-									Maximum length should be 15
-								</p> -->
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.invalidIntl">
-									{{Form.driver_cell.errors?.invalidIntl}}
-								</p>
-							</ng-template>
-						</div>
+					<div class="error-message"
+						*ngIf="Form.driver_cell.invalid && (Form.driver_cell.touched || Form.driver_cell.dirty)">
+						<p class="text-danger text-lg m-0"
+							*ngIf="Form.driver_cell.errors?.pattern && !Form.driver_cell.errors?.invalidIntl">
+							Only Numbers are Allowed
+						</p>
+						<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.invalidIntl">
+							{{Form.driver_cell.errors?.invalidIntl}}
+						</p>
 					</div>
 				</div>
 

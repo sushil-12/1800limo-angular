@@ -638,10 +638,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 						errorMsg = 'Invalid country code';
 						break;
 					case intlTelInputUtils.validationError.TOO_SHORT:
-						errorMsg = 'Too short';
+						errorMsg = 'Phone number seems to be too short';
 						break;
 					case intlTelInputUtils.validationError.TOO_LONG:
-						errorMsg = 'Too long';
+						errorMsg = 'Phone number seems to be too long';
 						break;
 					case intlTelInputUtils.validationError.NOT_A_NUMBER:
 						errorMsg = 'Not a number';

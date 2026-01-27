@@ -335,11 +335,11 @@ section {
 //     position: relative;
 //     height: 62px !important;
 
-    // margin-top: -12px !important;
+// margin-top: -12px !important;
 
-    // .mat-mdc-form-field-infix {
-    //     margin-top: -5px !important;
-    // }
+// .mat-mdc-form-field-infix {
+//     margin-top: -5px !important;
+// }
 // }
 
 
@@ -405,13 +405,14 @@ section {
 .mobileField .mdc-floating-label.mat-mdc-floating-label {
     padding-left: 90px !important;
 }
+
 // for mobile fields with flag move label to left after click
 .mobileField .mdc-floating-label.mat-mdc-floating-label.mdc-floating-label--float-above {
     padding-left: 0px !important;
 }
 
 // override z-index to show flag lists in mobile field
-.mat-mdc-text-field-wrapper{
+.mat-mdc-text-field-wrapper {
     z-index: auto !important;
 }
 
@@ -423,14 +424,14 @@ section {
 
 
 // override mat radio lable css
-.mat-mdc-radio-button .mdc-form-field label{
+.mat-mdc-radio-button .mdc-form-field label {
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 500;
 }
 
 // override mat-checkbox label
-.mat-mdc-checkbox .mdc-form-field label{
+.mat-mdc-checkbox .mdc-form-field label {
     margin-bottom: 0;
     font-size: 1rem;
     font-weight: 500;
@@ -442,19 +443,99 @@ section {
 }
 
 // override css for mat sleects to  remove extra white space from top and bottom
-div.mat-mdc-select-panel{
+div.mat-mdc-select-panel {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
 
 // override css for mat autocomplete-panel to  remove extra white space from top and bottom
-div.mat-mdc-autocomplete-panel{
+div.mat-mdc-autocomplete-panel {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
-.pac-container .pac-logo{top:450px !important;}
+
+.pac-container .pac-logo {
+    top: 450px !important;
+}
+
 /* Importing Bootstrap SCSS file. */
 @import "./node_modules/bootstrap/scss/bootstrap";
 
 /* Importing Datepicker SCSS file. */
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
+
+// Skeleton Loader Styles
+.skeleton-loader {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+    background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.skeleton-text-header {
+    height: 30px;
+    width: 60%;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.skeleton-text-body {
+    height: 15px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.skeleton-text-body-short {
+    height: 15px;
+    width: 80%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.skeleton-image {
+    height: 300px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.shimmer-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.shimmer-card {
+    display: inline-block;
+    width: 300px;
+    margin-right: 20px;
+}
+
+.shimmer-img {
+    width: 100%;
+    height: 200px;
+    background: #eee;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.shimmer-text {
+    width: 80%;
+    height: 20px;
+    background: #eee;
+    border-radius: 5px;
+}
+
+.shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+    background-size: 1000px 100%;
+}
