@@ -66,10 +66,10 @@
                                     <div *ngIf="f.phone.errors?.pattern; else numberLength">Enter Numbers Without
                                         Spaces
                                         or Dashes</div>
-                                    <ng-template #numberLength>
+                                    <!-- <ng-template #numberLength>
                                         <div *ngIf="f.phone.errors.minlength">Minimum length should be 7</div>
                                         <div *ngIf="f.phone.errors.maxlength">Maximum length should be 15</div>
-                                    </ng-template>
+                                    </ng-template> -->
                                 </ng-template>
                             </ng-template>
                         </div>
