@@ -350,7 +350,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			if (!isValid) {
 				const errorCode = this.countryChangeObject.getValidationError();
 				// standard 1:1 mapping for intl-tel-input error codes [0-4]
-				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
 
 				const currentErrors = this.f.phone.errors || {};
 				this.f.phone.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });

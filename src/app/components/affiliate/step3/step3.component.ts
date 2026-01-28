@@ -258,7 +258,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 
 			if (!isValid) {
 				const errorCode = this.AgentTelephoneObject.getValidationError();
-				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
 
 				const currentErrors = this.f.AgentTelephone.errors || {};
 				this.f.AgentTelephone.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });

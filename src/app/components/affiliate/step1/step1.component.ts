@@ -632,19 +632,19 @@ export class Step1Component implements OnInit, AfterViewInit {
 				control.setErrors(null);
 			} else {
 				const errorCode = telInputObject.getValidationError();
-				let errorMsg = 'Invalid number';
+				let errorMsg = 'Invalid phone number';
 				switch (errorCode) {
 					case intlTelInputUtils.validationError.INVALID_COUNTRY_CODE:
 						errorMsg = 'Invalid country code';
 						break;
 					case intlTelInputUtils.validationError.TOO_SHORT:
-						errorMsg = 'Phone number seems to be too short';
+						errorMsg = 'Invalid phone number';
 						break;
 					case intlTelInputUtils.validationError.TOO_LONG:
-						errorMsg = 'Phone number seems to be too long';
+						errorMsg = 'Invalid phone number';
 						break;
 					case intlTelInputUtils.validationError.NOT_A_NUMBER:
-						errorMsg = 'Not a number';
+						errorMsg = 'Invalid phone number';
 						break;
 				}
 				control.setErrors({ invalidIntl: errorMsg });
