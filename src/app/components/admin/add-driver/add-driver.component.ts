@@ -11,7 +11,7 @@ import { ThemePalette } from '@angular/material/core';
 import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from '../../../services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
@@ -29,34 +29,34 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 	globalFunctions = this.globals
 
 	color: ThemePalette = 'accent';
-	public driverId: string;
+	public driverId: string = '';
 	public paramResponse: any;
-	public imageSrc: string;
+	public imageSrc: string = '';
 	public addDriverForm: FormGroup;
-	public submittedForm: boolean;
+	public submittedForm: boolean = false;
 	public disableSubmitButton: boolean = false;
 	public response: any;
 	public response2: any;
-	public affiliateId: string;
+	public affiliateId: string = '';
 	public driverAdded: boolean = false;
-	public DriverImage: string;
-	public DriverLicense: string;
-	public StarRating: string;
-	public VeteranIdCard: string;
-	public DoDImage: string;
-	public FoidCardImage: string;
-	public BackgroundCheckerID: string;
-	public VaccinationCardImage: string;
-	public DriverImageId: string;
-	public DriverLicenseId: string;
-	public StarRatingId: string;
-	public VeteranIdCardId: string;
-	public DoDImageId: string;
-	public schoolBusCertificateImage: string;
-	public schoolBusCertificateImageId: string;
-	public FoidCardImageId: string;
-	public BackgroundCheckerIDId: string;
-	public VaccinationCardImageId: string;
+	public DriverImage: string = '';
+	public DriverLicense: string = '';
+	public StarRating: string = '';
+	public VeteranIdCard: string = '';
+	public DoDImage: string = '';
+	public FoidCardImage: string = '';
+	public BackgroundCheckerID: string = '';
+	public VaccinationCardImage: string = '';
+	public DriverImageId: string = '';
+	public DriverLicenseId: string = '';
+	public StarRatingId: string = '';
+	public VeteranIdCardId: string = '';
+	public DoDImageId: string = '';
+	public schoolBusCertificateImage: string = '';
+	public schoolBusCertificateImageId: string = '';
+	public FoidCardImageId: string = '';
+	public BackgroundCheckerIDId: string = '';
+	public VaccinationCardImageId: string = '';
 	public languages: any;
 	public languagesFormControl: any;
 	public dresses: any;
@@ -75,8 +75,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 	public BackgroundCompanyTelNumber: any;
 	public PoliceForceTelephoneObject: any;
 	public PoliceForceTelephone: any;
-	public currentDate: string;
-	public modalImage: string;
+	public currentDate: string = '';
+	public modalImage: string = '';
 	public countryOptions: any = [];
 	public stateOptions: any = [];
 
@@ -415,13 +415,18 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 
 	initallphonefields() {
+		let countryCode = 'auto';
+		if (this.currentUser && this.currentUser.CellNumberCountry) {
+			countryCode = this.currentUser.CellNumberCountry;
+		}
+
+		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
 		if (this.cellInput) {
 			console.log('onput', this.cellInput, this.cellInput.nativeElement)
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.cellInput.nativeElement);
 			if (existing) existing.destroy();
 
-			const telOptions: any = this.commonServices.getTelInputOptions();
 			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
@@ -439,15 +444,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.backgroundCompanyTelInput.nativeElement);
 			if (existing) existing.destroy();
 
-			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.backgroundCompanyTelInput.nativeElement);
 
@@ -459,22 +456,12 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			});
 		}
 
-
-
 		if (this.policeTelInput) {
 			console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.policeTelInput.nativeElement);
 			if (existing) existing.destroy();
 
-			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.policeTelInput.nativeElement);
 
@@ -487,16 +474,13 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		}
 
 		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
 		this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
 		this.addDriverForm.patchValue({
 			Country: this.currentUser.CellNumberCountry.toUpperCase()
 		});
-
-
-
 	}
 
 	closeButton() {

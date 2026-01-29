@@ -78,7 +78,12 @@ export class ProfileComponent implements OnInit {
 
   ngAfterViewInit() {
     if (this.cellInput) {
-      const telOptions: any = this.commonServices.getTelInputOptions();
+      let countryCode = 'auto';
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (currentUser && (currentUser.phoneCountry || currentUser.country)) {
+        countryCode = currentUser.phoneCountry || currentUser.country;
+      }
+      const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
       this.AffiliatePhoneObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.cellInput.nativeElement);

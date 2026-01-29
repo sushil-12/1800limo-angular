@@ -51,9 +51,13 @@ export class AffiliateStep3Component implements OnInit {
 	) { }
 
 	ngAfterViewInit() {
+		let countryCode = 'auto';
+		if (this.currentUser && this.currentUser.CellNumberCountry) {
+			countryCode = this.currentUser.CellNumberCountry;
+		}
 
 		// init flag
-		const telOptions: any = this.commonServices.getTelInputOptions();
+		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
 
 		this.addCustomCountrySearch(this.phoneInput.nativeElement);
@@ -65,9 +69,8 @@ export class AffiliateStep3Component implements OnInit {
 			this.validateAgentTelephone();
 		});
 
-
 		//set current user country as default in phone number
-		this.AgentTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.AgentTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
 	}
 
 

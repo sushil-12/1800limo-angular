@@ -202,10 +202,14 @@ export class ProfileComponent implements OnInit {
   }
 
   initallphonefields() {
+    let countryCode = 'auto';
+    if (this.defaultCountryCode) {
+      countryCode = this.defaultCountryCode;
+    } else if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+      countryCode = this.currentUser.phoneCountry || this.currentUser.country;
+    }
 
-    const telOptions: any = this.commonServices.getTelInputOptions();
-
-
+    const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
     if (this.cellInput) {
       console.log('onput', this.cellInput, this.cellInput.nativeElement)
@@ -254,13 +258,10 @@ export class ProfileComponent implements OnInit {
         this.onCountryChange(countryData, 'office_number')
       });
     }
-
-    this.MobileObject.setCountry(this.defaultCountryCode)
-    this.OfficeObject.setCountry(this.defaultCountryCode)
-    this.OfficePhoneObject.setCountry(this.defaultCountryCode)
-    this.FaxObject.setCountry(this.defaultCountryCode)
-
-
+    // this.MobileObject.setCountry(this.defaultCountryCode)
+    // this.OfficeObject.setCountry(this.defaultCountryCode)
+    // this.OfficePhoneObject.setCountry(this.defaultCountryCode)
+    // this.FaxObject.setCountry(this.defaultCountryCode)
   }
 
   buildProfileForm() {

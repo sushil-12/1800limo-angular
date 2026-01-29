@@ -9,6 +9,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from '../../../services/common.service';
 
 @Component({
 	selector: 'app-add-travel-planner-account',
@@ -36,6 +37,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 	public countryCodeName: any = "United States";
 	countryOptions: any;
 	stateOptions: any;
+	currentUser: any;
 
 
 	constructor(
@@ -47,7 +49,8 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService,
 		private httpClient: HttpClient,
-		private errors: ErrorDialogService
+		private errors: ErrorDialogService,
+		private commonServices: CommonService
 	) { }
 
 
@@ -101,6 +104,8 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 				this.getTravelAgentData()
 			}
 		})
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
 	}
 
@@ -197,16 +202,8 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 	}
 
 	initallphonefields() {
-
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: true,
-			// autoPlaceholder: 'aggressive',
-			utilsScript:
-				'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-		}
+		const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+		const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
 
 
 
@@ -525,43 +522,43 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 			const container = element.closest('.iti');
 			const dropdown = container?.querySelector('.iti__country-list');
 			if (!dropdown) return;
-			
+
 			// Check if search already exists
 			if (dropdown.querySelector('.iti-search-input')) return;
-			
+
 			// Create search container
 			const searchContainer = document.createElement('div');
 			searchContainer.className = 'iti-search-container';
-			
+
 			// Create search input
 			const searchInput = document.createElement('input');
 			searchInput.type = 'text';
 			searchInput.className = 'iti-search-input';
 			searchInput.placeholder = 'Search country...';
-			
+
 			searchContainer.appendChild(searchInput);
-			
+
 			// Prevent dropdown from closing when interacting with search
 			searchInput.addEventListener('click', (e) => e.stopPropagation());
 			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
-			
+
 			// Insert at top of dropdown
 			dropdown.insertBefore(searchContainer, dropdown.firstChild);
-			
+
 			// Focus on search
 			setTimeout(() => searchInput.focus(), 100);
-			
+
 			// Filter countries on input
 			searchInput.addEventListener('input', (e: any) => {
 				e.stopPropagation();
 				const searchTerm = e.target.value.toLowerCase();
 				const countries = dropdown.querySelectorAll('.iti__country');
 				let hasVisible = false;
-				
+
 				countries.forEach((country: any) => {
 					// Search in the full text (Name + Dial Code)
 					const text = country.textContent?.toLowerCase() || '';
-					
+
 					if (text.includes(searchTerm)) {
 						country.classList.remove('iti__hide');
 						country.style.display = 'block'; // Force show
@@ -571,7 +568,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 						country.style.display = 'none'; // Force hide
 					}
 				});
-				
+
 				// Handle No Results
 				let noResults = dropdown.querySelector('.iti-no-results');
 				if (!noResults) {
@@ -586,7 +583,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 				} else {
 					(noResults as HTMLElement).style.display = 'none';
 				}
-				
+
 				// Show all if search is empty
 				if (!searchTerm) {
 					countries.forEach((country: any) => {

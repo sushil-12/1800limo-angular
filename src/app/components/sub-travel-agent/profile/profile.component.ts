@@ -11,6 +11,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
+import { CommonService } from '../../../services/common.service';
 declare var $: any;
 
 @Component({
@@ -54,7 +55,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private travelAgentService: TravelAgentService,
     private adminService: AdminService,
-    private errors: ErrorDialogService
+    private errors: ErrorDialogService,
+    private commonServices: CommonService
   ) { }
 
   ngOnInit(): void {
@@ -146,18 +148,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   initallphonefields() {
+    const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+    const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
 
     if (this.mobileInput) {
       console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.mobileInput.nativeElement);
 
@@ -170,15 +166,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
     if (this.workInput) {
       console.log('onput', this.workInput, this.workInput.nativeElement)
-      this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.workInput.nativeElement);
 
@@ -188,10 +176,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         this.onCountryChange(countryData, 'work_contact_number');
       });
     }
-
-    this.MobileObject.setCountry(this.defaultCountryCode)
-    this.OfficeObject.setCountry(this.defaultCountryCode)
-
 
   }
 

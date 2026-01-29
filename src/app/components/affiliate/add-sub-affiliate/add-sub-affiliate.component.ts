@@ -139,7 +139,11 @@ export class AddSubAffiliateComponent implements OnInit, AfterViewInit {
   }
 
   initphonefields() {
-    const telOptions: any = this.commonServices.getTelInputOptions();
+    let countryCode = 'auto';
+    if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+      countryCode = this.currentUser.phoneCountry || this.currentUser.country;
+    }
+    const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
     if (this.mobileInput) {
       // Cell Number
@@ -166,7 +170,6 @@ export class AddSubAffiliateComponent implements OnInit, AfterViewInit {
         this.validateWork();
       });
     }
-
   }
 
 

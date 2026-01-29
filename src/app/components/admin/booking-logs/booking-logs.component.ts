@@ -6,7 +6,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { AdminService } from 'src/app/services/admin.service';
+import { AdminService } from '../../../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as moment from 'moment';
@@ -32,7 +32,7 @@ export class BookingLogsComponent implements OnInit {
   totalRecords: any;
   searchText: string = '';
   currentPage: any;
-  firstPage: number;
+  firstPage: any;
   lastPage: any;
   totalPage: any;
   from: any;
@@ -60,7 +60,7 @@ export class BookingLogsComponent implements OnInit {
     'amount_refunded'
     // 'Description',
   ];
-  expandedElement: PeriodicElement | null;
+  expandedElement: PeriodicElement | null = null;
 
   getBookingLogs(pageUrl = null, search_value: string = '') {
     this.spinner.show()
@@ -105,7 +105,7 @@ export class BookingLogsComponent implements OnInit {
     }
   }
 
-  columnData(columnData, columnName) {
+  columnData(columnData: any, columnName: any) {
     console.log('------->>>>>>>>>>', columnData, columnName)
     if (columnName == 'affiliate_id' && columnData.booking_type == 'Affiliate') {
       return `${columnData.affiliate_account_details.first_name} ${columnData.affiliate_account_details.last_name}`

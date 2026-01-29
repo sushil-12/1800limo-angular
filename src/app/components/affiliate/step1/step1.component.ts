@@ -415,8 +415,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 	}
 
 	initallphonefields() {
-
-		const telOptions: any = this.commonServices.getTelInputOptions();
+		const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+		const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
 
 		if (this.cellInput) {
 			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);

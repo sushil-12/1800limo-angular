@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from '../../../services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { environment } from 'src/environments/environment';
 declare var $: any;

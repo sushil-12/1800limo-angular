@@ -191,10 +191,14 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 
 	initallphonefields() {
 		console.log("in init phone", this.mobileInput, this.workInput)
+		let countryCode = 'auto';
+		if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+			countryCode = this.currentUser.phoneCountry || this.currentUser.country;
+		}
 
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-			const telOptions: any = this.commonServices.getTelInputOptions();
+			const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.mobileInput.nativeElement);
@@ -208,7 +212,7 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 
 		if (this.workInput) {
 			console.log('onput', this.workInput, this.workInput.nativeElement)
-			const telOptions: any = this.commonServices.getTelInputOptions();
+			const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 			this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.workInput.nativeElement);
@@ -219,9 +223,6 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 				this.onCountryChange(countryData, 'work');
 			});
 		}
-
-
-
 	}
 
 	buildAddIndividualForm() {

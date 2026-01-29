@@ -305,7 +305,12 @@ export class NewBookingComponent implements OnInit {
 	initphonefield() {
 		console.log("in init phone", this.cellInput, this.passenger_cellInput, this.driver_cellInput, this.lose_affiliate_phoneInput, this.return_driver_cellInput)
 
-		const telOptions: any = this.commonServices.getTelInputOptions();
+		let countryCode = 'auto';
+		if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+			countryCode = this.currentUser.phoneCountry || this.currentUser.country;
+		}
+
+		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
 		if (this.passenger_cellInput) {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.passenger_cellInput.nativeElement);

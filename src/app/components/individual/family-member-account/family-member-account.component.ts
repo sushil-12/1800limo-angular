@@ -115,7 +115,8 @@ export class FamilyMemberAccountComponent implements OnInit {
   initphonefield() {
 
     if (this.phoneInput) {
-      const telOptions: any = this.commonServices.getTelInputOptions();
+      const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+      const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
       this.MobileObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.phoneInput.nativeElement);
@@ -233,6 +234,18 @@ export class FamilyMemberAccountComponent implements OnInit {
         }
         return;
       }
+
+      // Only validate if the number has at least minimum length to avoid premature validation
+      const cleanValue = String(value).replace(/\D/g, ''); // Remove non-digits
+      if (cleanValue.length < 4) {
+        // Too short to validate with intl-tel-input, let Angular validators handle it
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+        return;
+      }
+
       const isValid = telInputObject.isValidNumber();
       if (!isValid) {
         const errorCode = telInputObject.getValidationError();
@@ -270,6 +283,20 @@ export class FamilyMemberAccountComponent implements OnInit {
     return this.addFamilyMemberAccountForm.controls;
   }
 
+  getFormValidationErrors() {
+    const result = [];
+    Object.keys(this.addFamilyMemberAccountForm.controls).forEach(key => {
+      const controlErrors = this.addFamilyMemberAccountForm.get(key)?.errors;
+      if (controlErrors) {
+        result.push({
+          control: key,
+          errors: controlErrors
+        });
+      }
+    });
+    return result;
+  }
+
   // handleChangeCheckbox(event) {
   //   this.uselogin = event
   //   this.addFamilyMemberAccountForm.patchValue({
@@ -278,12 +305,23 @@ export class FamilyMemberAccountComponent implements OnInit {
   // }
 
   submitForm() {
-    console.log(this.addFamilyMemberAccountForm);
-    // console.log(JSON.stringify(this.addVehicleRatesForm.value));
+    console.log('=== SUBMIT FORM CALLED ===');
+    console.log('Form:', this.addFamilyMemberAccountForm);
+    console.log('Form value:', this.addFamilyMemberAccountForm.value);
+    console.log('Form valid:', this.addFamilyMemberAccountForm.valid);
+    console.log('Form errors:', this.addFamilyMemberAccountForm.errors);
+
     this.submittedForm = true;
-    // Sanitize phone_number
+
+    // Sanitize phone_number (remove Country Code if present)
     const phone = this.addFamilyMemberAccountForm.get('phone_number');
     const phoneIsd = this.addFamilyMemberAccountForm.get('phone_isd');
+
+    console.log('Phone control:', phone);
+    console.log('Phone value:', phone?.value);
+    console.log('Phone errors:', phone?.errors);
+    console.log('Phone valid:', phone?.valid);
+
     if (phone && phone.value && phoneIsd && phoneIsd.value) {
       const val = String(phone.value);
       const isd = String(phoneIsd.value);
@@ -292,20 +330,37 @@ export class FamilyMemberAccountComponent implements OnInit {
       }
     }
 
+    // COMPLETELY clear intl-tel-input validation errors before submission
+    // The Angular validators (required, minLength, maxLength, pattern) are sufficient
+    if (phone && phone.errors) {
+      console.log('Clearing phone errors:', phone.errors);
+      const { invalidIntl, ...otherErrors } = phone.errors;
+      phone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+      phone.updateValueAndValidity({ emitEvent: false });
+    }
+
+    console.log('After clearing - Phone errors:', phone?.errors);
+    console.log('After clearing - Form valid:', this.addFamilyMemberAccountForm.valid);
+    console.log('After clearing - Form errors:', this.addFamilyMemberAccountForm.errors);
+
     // stop here if form is invalid
     if (this.addFamilyMemberAccountForm.invalid) {
+      console.log('FORM IS INVALID - RETURNING');
+      console.log('Invalid controls:', this.getFormValidationErrors());
       return;
     }
 
+    console.log('FORM IS VALID - PROCEEDING TO API CALL');
 
-    if (this.addFamilyMemberAccountForm.get('address').value != '' && this.addFamilyMemberAccountForm.get('latitude').value == '') {
-      this.errors.openDialog({
-        errors: {
-          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
-        }
-      })
-      return;
-    }
+    // Address validation commented out because address fields are not in use
+    // if (this.addFamilyMemberAccountForm.get('address').value != '' && this.addFamilyMemberAccountForm.get('latitude').value == '') {
+    //   this.errors.openDialog({
+    //     errors: {
+    //       error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+    //     }
+    //   })
+    //   return;
+    // }
 
     console.log(this.addFamilyMemberAccountForm.value);
     // console.log(JSON.stringify(this.addVehicleRatesForm.value));

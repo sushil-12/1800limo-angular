@@ -528,7 +528,11 @@ export class AddDriverFromAffiliateComponent
 	}
 
 	initallphonefields() {
-		const telOptions: any = this.commonServices.getTelInputOptions();
+		let countryCode = 'auto';
+		if (this.currentUser && this.currentUser.phoneCountry) {
+			countryCode = this.currentUser.phoneCountry;
+		}
+		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
 		if (this.cellInput) {
 			console.log('onput', this.cellInput, this.cellInput.nativeElement)
@@ -574,16 +578,6 @@ export class AddDriverFromAffiliateComponent
 
 		//set current user country as default in phone number
 		if (this.currentUser && this.currentUser.phoneCountry) {
-			if (this.CellNumberObject) {
-				this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
-			}
-			if (this.BackgroundCompanyTelNumberObject) {
-				this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.phoneCountry);
-			}
-			if (this.PoliceForceTelephoneObject) {
-				this.PoliceForceTelephoneObject.setCountry(this.currentUser.phoneCountry);
-			}
-
 			// this.changeCountry(this.currentUser.phoneCountry.toUpperCase());
 			this.addDriverForm.patchValue({
 				Country: this.currentUser.phoneCountry.toUpperCase(),

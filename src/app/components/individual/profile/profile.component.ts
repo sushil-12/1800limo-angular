@@ -162,10 +162,17 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 	}
 
 	initallphonefields() {
+		let countryCode = 'auto';
+		if (this.defaultCountryCode) {
+			countryCode = this.defaultCountryCode;
+		} else if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+			countryCode = this.currentUser.phoneCountry || this.currentUser.country;
+		}
+
+		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-			const telOptions: any = this.commonServices.getTelInputOptions();
 			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.mobileInput.nativeElement);
@@ -180,7 +187,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
 		if (this.workInput) {
 			console.log('onput', this.workInput, this.workInput.nativeElement)
-			const telOptions: any = this.commonServices.getTelInputOptions();
 			this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.workInput.nativeElement);
@@ -193,10 +199,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 			});
 		}
 
-		this.MobileObject.setCountry(this.defaultCountryCode)
-		this.WorkObject.setCountry(this.defaultCountryCode)
-
-
+		// this.MobileObject.setCountry(this.defaultCountryCode)
+		// this.WorkObject.setCountry(this.defaultCountryCode)
 
 	}
 

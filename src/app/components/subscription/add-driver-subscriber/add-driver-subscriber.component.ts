@@ -410,7 +410,11 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
 
 
   initallphonefields() {
-    const telOptions: any = this.commonServices.getTelInputOptions();
+    let countryCode = 'auto';
+    if (this.currentUser && this.currentUser.CellNumberCountry) {
+      countryCode = this.currentUser.CellNumberCountry;
+    }
+    const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
     if (this.cellInput) {
       console.log('onput', this.cellInput, this.cellInput.nativeElement)
@@ -454,9 +458,9 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
     }
 
     //set current user country as default in phone number
-    this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
-    this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
-    this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
+    // this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
+    // this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
+    // this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
     this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
     this.addDriverForm.patchValue({
       Country: this.currentUser.CellNumberCountry.toUpperCase()

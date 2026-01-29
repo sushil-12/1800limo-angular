@@ -234,10 +234,14 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 	initphonefield() {
+		let countryCode = 'auto';
+		if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+			countryCode = this.currentUser.phoneCountry || this.currentUser.country;
+		}
 
 		if (this.cellInput) {
 			console.log("in phone", this.cellInput, this.cellInput.nativeElement)
-			const telOptions: any = this.commonServices.getTelInputOptions();
+			const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
