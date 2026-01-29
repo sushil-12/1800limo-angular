@@ -838,7 +838,8 @@
 		</div>
 	</div>
 </section> -->
-<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable'">
+<section class="checkourveh_wrapper"
+	*ngIf="isVehicleLoading || fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable'">
 
 	<div class="container-fluid">
 		<h2 style="margin-bottom: 0;">View <span>Our vehicles</span></h2>
@@ -870,7 +871,8 @@
 </section>
 
 <!------------------OUR MISSION------------------------------->
-<section class="ourmisservice_wrap" *ngIf="fetchPageData('OUR MISSION')?.section_status == 'enable' ">
+<section class="ourmisservice_wrap"
+	*ngIf="isHomePageLoading || fetchPageData('OUR MISSION')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<div class="d-flex flex-column flex-md-row col-12 remove_col_padding mission-flex-wrapper">
 			<h2 style="margin-bottom: 20px;margin-top: 20px;" class="mission-mobile-heading">Our <span>Mission</span>
