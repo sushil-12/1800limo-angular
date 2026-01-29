@@ -1043,6 +1043,40 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 	submitForm() {
 		this.submittedForm = true;
+
+		// Sync CellNumber Country Data
+		if (this.CellNumberObject) {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addDriverForm.patchValue({
+					CellIsd: '+' + countryData.dialCode,
+					CellNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync BackgroundCompanyTelNumber Country Data
+		if (this.BackgroundCompanyTelNumberObject) {
+			const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addDriverForm.patchValue({
+					BackgroundCompanyTelIsd: '+' + countryData.dialCode,
+					BackgroundCompanyTelNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync PoliceForceTelephone Country Data
+		if (this.PoliceForceTelephoneObject) {
+			const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addDriverForm.patchValue({
+					PoliceForceTelephoneIsd: '+' + countryData.dialCode,
+					PoliceForceTelephoneCountry: countryData.iso2
+				});
+			}
+		}
+
 		// stop here if form is invalid
 		console.log(this.addDriverForm)
 		// Sanitize CellNumber

@@ -261,6 +261,29 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
+
+		// Sync mobile Country Data
+		if (this.MobileObject) {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addIndividualAccountForm.patchValue({
+					mobileIsd: '+' + countryData.dialCode,
+					mobileCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync work Country Data
+		if (this.WorkObject) {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addIndividualAccountForm.patchValue({
+					workIsd: '+' + countryData.dialCode,
+					workCountry: countryData.iso2
+				});
+			}
+		}
+
 		// stop here if form is invalid
 		if (this.addIndividualAccountForm.invalid) {
 			return;

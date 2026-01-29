@@ -436,6 +436,18 @@ export class AffiliateStep3Component implements OnInit {
 		}
 		console.log(this.addInsuranceForm);
 		this.submittedForm = true;
+
+		// Sync AgentTelephone Country Data
+		if (this.AgentTelephoneObject) {
+			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addInsuranceForm.patchValue({
+					AgentTelephoneIsd: '+' + countryData.dialCode,
+					AgentTelephoneCountry: countryData.iso2
+				});
+			}
+		}
+
 		// stop here if form is invalid
 		if (this.addInsuranceForm.invalid) {
 			return;

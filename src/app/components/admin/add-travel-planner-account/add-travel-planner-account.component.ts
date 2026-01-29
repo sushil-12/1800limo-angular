@@ -435,6 +435,51 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		console.log(this.addTravelPlannerAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
+
+		// Sync Mobile Country Data
+		if (this.MobileObject) {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addTravelPlannerAccountForm.patchValue({
+					mobileIsd: '+' + countryData.dialCode,
+					mobileCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Office Country Data
+		if (this.OfficeObject) {
+			const countryData = this.OfficeObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addTravelPlannerAccountForm.patchValue({
+					officeIsd: '+' + countryData.dialCode,
+					officeCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Fax Country Data
+		if (this.FaxObject) {
+			const countryData = this.FaxObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addTravelPlannerAccountForm.patchValue({
+					faxIsd: '+' + countryData.dialCode,
+					faxCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync OfficeNumber Country Data
+		if (this.OfficePhoneObject) {
+			const countryData = this.OfficePhoneObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addTravelPlannerAccountForm.patchValue({
+					isd_office_number: '+' + countryData.dialCode,
+					office_country_code: countryData.iso2
+				});
+			}
+		}
+
 		// stop here if form is invalid
 		if (this.addTravelPlannerAccountForm.invalid) {
 			return;

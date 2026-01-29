@@ -169,7 +169,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     const charCode = (event.which) ? event.which : event.keyCode;
     // Allow: backspace, delete, tab, escape, enter, + symbol (43)
     if (charCode === 43) {
-    	return true;
+      return true;
     }
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
@@ -387,20 +387,43 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
   submitForm() {
     console.log(this.profileForm);
     this.submittedForm = true;
+
+    // Sync Phone Country Data
+    if (this.MobileObject) {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData && countryData.dialCode) {
+        this.profileForm.patchValue({
+          phone_isd: '+' + countryData.dialCode,
+          phone_country: countryData.iso2
+        });
+      }
+    }
+
+    // Sync Work Country Data
+    if (this.OfficeObject) {
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      if (countryData && countryData.dialCode) {
+        this.profileForm.patchValue({
+          work_isd: '+' + countryData.dialCode,
+          work_country: countryData.iso2
+        });
+      }
+    }
+
     // stop here if form is invalid
     if (this.profileForm.invalid) {
       return;
     }
 
-		// Sanitize work (remove Country Code if present)
-		if (this.profileForm.value.work && this.profileForm.value.work_isd && this.profileForm.value.work.startsWith(this.profileForm.value.work_isd)) {
-			this.profileForm.value.work = this.profileForm.value.work.substring(this.profileForm.value.work_isd.length);
-		}
+    // Sanitize work (remove Country Code if present)
+    if (this.profileForm.value.work && this.profileForm.value.work_isd && this.profileForm.value.work.startsWith(this.profileForm.value.work_isd)) {
+      this.profileForm.value.work = this.profileForm.value.work.substring(this.profileForm.value.work_isd.length);
+    }
 
-		// Sanitize phone (remove Country Code if present)
-		if (this.profileForm.value.phone && this.profileForm.value.phone_isd && this.profileForm.value.phone.startsWith(this.profileForm.value.phone_isd)) {
-			this.profileForm.value.phone = this.profileForm.value.phone.substring(this.profileForm.value.phone_isd.length);
-		}
+    // Sanitize phone (remove Country Code if present)
+    if (this.profileForm.value.phone && this.profileForm.value.phone_isd && this.profileForm.value.phone.startsWith(this.profileForm.value.phone_isd)) {
+      this.profileForm.value.phone = this.profileForm.value.phone.substring(this.profileForm.value.phone_isd.length);
+    }
 
     if (this.profileForm.get('badge_city_name').value == '') {
       this.profileForm.patchValue({
@@ -468,82 +491,82 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
   }
 
 
-	private addCustomCountrySearch(element: HTMLElement) {
-		element.addEventListener('open:countrydropdown', () => {
-			const container = element.closest('.iti');
-			const dropdown = container?.querySelector('.iti__country-list');
-			if (!dropdown) return;
-			
-			// Check if search already exists
-			if (dropdown.querySelector('.iti-search-input')) return;
-			
-			// Create search container
-			const searchContainer = document.createElement('div');
-			searchContainer.className = 'iti-search-container';
-			
-			// Create search input
-			const searchInput = document.createElement('input');
-			searchInput.type = 'text';
-			searchInput.className = 'iti-search-input';
-			searchInput.placeholder = 'Search country...';
-			
-			searchContainer.appendChild(searchInput);
-			
-			// Prevent dropdown from closing when interacting with search
-			searchInput.addEventListener('click', (e) => e.stopPropagation());
-			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
-			
-			// Insert at top of dropdown
-			dropdown.insertBefore(searchContainer, dropdown.firstChild);
-			
-			// Focus on search
-			setTimeout(() => searchInput.focus(), 100);
-			
-			// Filter countries on input
-			searchInput.addEventListener('input', (e: any) => {
-				e.stopPropagation();
-				const searchTerm = e.target.value.toLowerCase();
-				const countries = dropdown.querySelectorAll('.iti__country');
-				let hasVisible = false;
-				
-				countries.forEach((country: any) => {
-					// Search in the full text (Name + Dial Code)
-					const text = country.textContent?.toLowerCase() || '';
-					
-					if (text.includes(searchTerm)) {
-						country.classList.remove('iti__hide');
-						country.style.display = 'block'; // Force show
-						hasVisible = true;
-					} else {
-						country.classList.add('iti__hide');
-						country.style.display = 'none'; // Force hide
-					}
-				});
-				
-				// Handle No Results
-				let noResults = dropdown.querySelector('.iti-no-results');
-				if (!noResults) {
-					noResults = document.createElement('div');
-					noResults.className = 'iti-no-results';
-					noResults.textContent = 'No results found';
-					dropdown.appendChild(noResults);
-				}
+  private addCustomCountrySearch(element: HTMLElement) {
+    element.addEventListener('open:countrydropdown', () => {
+      const container = element.closest('.iti');
+      const dropdown = container?.querySelector('.iti__country-list');
+      if (!dropdown) return;
 
-				if (!hasVisible && searchTerm) {
-					(noResults as HTMLElement).style.display = 'block';
-				} else {
-					(noResults as HTMLElement).style.display = 'none';
-				}
-				
-				// Show all if search is empty
-				if (!searchTerm) {
-					countries.forEach((country: any) => {
-						country.classList.remove('iti__hide');
-						country.style.display = 'block';
-					});
-					(noResults as HTMLElement).style.display = 'none';
-				}
-			});
-		});
-	}
+      // Check if search already exists
+      if (dropdown.querySelector('.iti-search-input')) return;
+
+      // Create search container
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'iti-search-container';
+
+      // Create search input
+      const searchInput = document.createElement('input');
+      searchInput.type = 'text';
+      searchInput.className = 'iti-search-input';
+      searchInput.placeholder = 'Search country...';
+
+      searchContainer.appendChild(searchInput);
+
+      // Prevent dropdown from closing when interacting with search
+      searchInput.addEventListener('click', (e) => e.stopPropagation());
+      searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+      // Insert at top of dropdown
+      dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+      // Focus on search
+      setTimeout(() => searchInput.focus(), 100);
+
+      // Filter countries on input
+      searchInput.addEventListener('input', (e: any) => {
+        e.stopPropagation();
+        const searchTerm = e.target.value.toLowerCase();
+        const countries = dropdown.querySelectorAll('.iti__country');
+        let hasVisible = false;
+
+        countries.forEach((country: any) => {
+          // Search in the full text (Name + Dial Code)
+          const text = country.textContent?.toLowerCase() || '';
+
+          if (text.includes(searchTerm)) {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block'; // Force show
+            hasVisible = true;
+          } else {
+            country.classList.add('iti__hide');
+            country.style.display = 'none'; // Force hide
+          }
+        });
+
+        // Handle No Results
+        let noResults = dropdown.querySelector('.iti-no-results');
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'iti-no-results';
+          noResults.textContent = 'No results found';
+          dropdown.appendChild(noResults);
+        }
+
+        if (!hasVisible && searchTerm) {
+          (noResults as HTMLElement).style.display = 'block';
+        } else {
+          (noResults as HTMLElement).style.display = 'none';
+        }
+
+        // Show all if search is empty
+        if (!searchTerm) {
+          countries.forEach((country: any) => {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block';
+          });
+          (noResults as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  }
 }

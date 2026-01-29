@@ -2588,6 +2588,17 @@ export class CreateNewBookingComponent implements OnInit {
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+
+		// Sync Pax Country Data
+		if (this.PaxTelObject) {
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.BookingForm.patchValue({
+					passenger_cell_isd: '+' + countryData.dialCode,
+					passenger_cell_country: countryData.iso2
+				});
+			}
+		}
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status, this.BookingForm.value);
 

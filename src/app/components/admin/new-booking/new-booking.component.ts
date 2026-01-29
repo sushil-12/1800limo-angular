@@ -2836,6 +2836,75 @@ export class NewBookingComponent implements OnInit {
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 
+		// Sync Pax Country Data
+		if (this.PaxTelObject) {
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.BookingForm.patchValue({
+					passenger_cell_isd: '+' + countryData.dialCode,
+					passenger_cell_country: countryData.iso2
+				});
+			}
+		}
+
+		// Sync LC Country Data
+		if (this.LCTelObject) {
+			const countryData = this.LCTelObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				const lcGroup = this.BookingForm.get('loose_customer') as FormGroup;
+				if (lcGroup) {
+					lcGroup.patchValue({
+						phone_isd: '+' + countryData.dialCode,
+						phone_country: countryData.iso2
+					});
+				}
+			}
+		}
+
+		// Sync Driver Cell
+		if (this.driverCellTelInput) {
+			const countryData = this.driverCellTelInput.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.BookingForm.patchValue({
+					driver_cell_isd: '+' + countryData.dialCode,
+					driver_cell_country: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Return Driver Cell
+		if (this.returnDriverCellTelInput) {
+			const countryData = this.returnDriverCellTelInput.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.BookingForm.patchValue({
+					return_driver_cell_isd: '+' + countryData.dialCode,
+					return_driver_cell_country: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Lose Affiliate Phone
+		if (this.loseAffiliateTelInput) {
+			const countryData = this.loseAffiliateTelInput.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.BookingForm.patchValue({
+					lose_affiliate_phone_isd: '+' + countryData.dialCode,
+					lose_affiliate_phone_country: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Return Lose Affiliate Phone
+		if (this.returnLoseAffiliateTelInput) {
+			const countryData = this.returnLoseAffiliateTelInput.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.BookingForm.patchValue({
+					return_lose_affiliate_phone_isd: '+' + countryData.dialCode,
+					return_lose_affiliate_phone_country: countryData.iso2
+				});
+			}
+		}
+
 		// to ensure driver_cell_isd and lose_affiliate_cell_isd be saved with + in code because on edit it is not saving on set form value
 		this.BookingForm.patchValue({
 			driver_cell_isd: this.ensurePlusPrefix(this.BookingForm?.get('driver_cell_isd')?.value),
