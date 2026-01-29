@@ -305,13 +305,7 @@ export class NewBookingComponent implements OnInit {
 	initphonefield() {
 		console.log("in init phone", this.cellInput, this.passenger_cellInput, this.driver_cellInput, this.lose_affiliate_phoneInput, this.return_driver_cellInput)
 
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: true,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-		};
+		const telOptions: any = this.commonServices.getTelInputOptions();
 
 		if (this.passenger_cellInput) {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.passenger_cellInput.nativeElement);

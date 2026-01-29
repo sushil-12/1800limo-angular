@@ -63,15 +63,8 @@ export class Step3Component implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 
 		// init flag
-		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: true,
-			// autoPlaceholder: 'aggressive',
-			utilsScript:
-				'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-		});
+		const telOptions: any = this.commonServices.getTelInputOptions();
+		this.AgentTelephoneObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
 
 		this.addCustomCountrySearch(this.phoneInput.nativeElement);
 

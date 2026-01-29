@@ -410,18 +410,11 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
 
 
   initallphonefields() {
+    const telOptions: any = this.commonServices.getTelInputOptions();
 
     if (this.cellInput) {
       console.log('onput', this.cellInput, this.cellInput.nativeElement)
-      this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.cellInput.nativeElement);
 
@@ -434,15 +427,7 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
 
     if (this.backgroundCompanyTelInput) {
       console.log('onput', this.backgroundCompanyTelInput, this.backgroundCompanyTelInput.nativeElement)
-      this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.backgroundCompanyTelInput.nativeElement);
 
@@ -457,15 +442,7 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
 
     if (this.policeTelInput) {
       console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
-      this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.policeTelInput.nativeElement);
 

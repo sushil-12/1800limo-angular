@@ -24,4 +24,20 @@ export class CommonService {
 			return true
 		}
 	}
+
+	getTelInputOptions() {
+		return {
+			initialCountry: 'auto',
+			geoIpLookup: function (callback: (countryCode: string) => void) {
+				fetch('https://ipapi.co/json')
+					.then(function (res) { return res.json(); })
+					.then(function (data) { callback(data.country_code); })
+					.catch(function () { callback('us'); });
+			},
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: true,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
+		};
+	}
 }

@@ -77,20 +77,12 @@ export class ProfileComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    if (this.cellInput) {
+      const telOptions: any = this.commonServices.getTelInputOptions();
+      this.AffiliatePhoneObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
-    // init flag
-    const telOptions = {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: true,
-      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-    };
-
-    // Cell Number
-    this.AffiliatePhoneObject = intlTelInput(this.cellInput.nativeElement, telOptions);
-
-    this.addCustomCountrySearch(this.cellInput.nativeElement);
+      this.addCustomCountrySearch(this.cellInput.nativeElement);
+    }
   }
 
   telInputObjectCell(obj) {

@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from '../../../services/common.service';
 declare var $: any;
 
 @Component({
@@ -45,7 +46,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService,
 		private individualService: IndividualService,
-		private errors: ErrorDialogService
+		private errors: ErrorDialogService,
+		private commonServices: CommonService
 	) { }
 
 
@@ -163,15 +165,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.mobileInput.nativeElement);
 
@@ -185,15 +180,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
 		if (this.workInput) {
 			console.log('onput', this.workInput, this.workInput.nativeElement)
-			this.WorkObject = intlTelInput(this.workInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.workInput.nativeElement);
 

@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
+import { CommonService } from '../../../services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
@@ -36,7 +37,8 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
 		private ngZone: NgZone,
-		private errors: ErrorDialogService
+		private errors: ErrorDialogService,
+		private commonServices: CommonService
 	) { }
 
 
@@ -196,15 +198,8 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.mobileInput.nativeElement);
 
@@ -218,15 +213,8 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 
 		if (this.workInput) {
 			console.log('onput', this.workInput, this.workInput.nativeElement)
-			this.WorkObject = intlTelInput(this.workInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.workInput.nativeElement);
 
@@ -363,43 +351,43 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 			const container = element.closest('.iti');
 			const dropdown = container?.querySelector('.iti__country-list');
 			if (!dropdown) return;
-			
+
 			// Check if search already exists
 			if (dropdown.querySelector('.iti-search-input')) return;
-			
+
 			// Create search container
 			const searchContainer = document.createElement('div');
 			searchContainer.className = 'iti-search-container';
-			
+
 			// Create search input
 			const searchInput = document.createElement('input');
 			searchInput.type = 'text';
 			searchInput.className = 'iti-search-input';
 			searchInput.placeholder = 'Search country...';
-			
+
 			searchContainer.appendChild(searchInput);
-			
+
 			// Prevent dropdown from closing when interacting with search
 			searchInput.addEventListener('click', (e) => e.stopPropagation());
 			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
-			
+
 			// Insert at top of dropdown
 			dropdown.insertBefore(searchContainer, dropdown.firstChild);
-			
+
 			// Focus on search
 			setTimeout(() => searchInput.focus(), 100);
-			
+
 			// Filter countries on input
 			searchInput.addEventListener('input', (e: any) => {
 				e.stopPropagation();
 				const searchTerm = e.target.value.toLowerCase();
 				const countries = dropdown.querySelectorAll('.iti__country');
 				let hasVisible = false;
-				
+
 				countries.forEach((country: any) => {
 					// Search in the full text (Name + Dial Code)
 					const text = country.textContent?.toLowerCase() || '';
-					
+
 					if (text.includes(searchTerm)) {
 						country.classList.remove('iti__hide');
 						country.style.display = 'block'; // Force show
@@ -409,7 +397,7 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 						country.style.display = 'none'; // Force hide
 					}
 				});
-				
+
 				// Handle No Results
 				let noResults = dropdown.querySelector('.iti-no-results');
 				if (!noResults) {
@@ -424,7 +412,7 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 				} else {
 					(noResults as HTMLElement).style.display = 'none';
 				}
-				
+
 				// Show all if search is empty
 				if (!searchTerm) {
 					countries.forEach((country: any) => {

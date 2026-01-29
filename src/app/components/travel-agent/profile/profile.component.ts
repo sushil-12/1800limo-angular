@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 
 @Component({
@@ -58,6 +59,7 @@ export class ProfileComponent implements OnInit {
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private commonServices: CommonService,
     private route: ActivatedRoute,
     private travelAgentService: TravelAgentService,
     private authService: AuthService,
@@ -201,15 +203,7 @@ export class ProfileComponent implements OnInit {
 
   initallphonefields() {
 
-    const telOptions = {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: true,
-      // autoPlaceholder: 'aggressive',
-      utilsScript:
-        'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-    }
+    const telOptions: any = this.commonServices.getTelInputOptions();
 
 
 

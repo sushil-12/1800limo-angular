@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { AdminService } from '../../../services/admin.service';
 import { AffiliateService } from '../../../services/affiliate.service';
 import * as intlTelInput from 'intl-tel-input';
+import { CommonService } from '../../../services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 declare var $: any;
@@ -48,7 +49,8 @@ export class AddSubAffiliateComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private affiliateService: AffiliateService,
     private adminService: AdminService,
-    private errors: ErrorDialogService
+    private errors: ErrorDialogService,
+    private commonServices: CommonService
   ) { }
 
   ngOnInit(): void {
@@ -137,13 +139,7 @@ export class AddSubAffiliateComponent implements OnInit, AfterViewInit {
   }
 
   initphonefields() {
-    const telOptions = {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: true,
-      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-    };
+    const telOptions: any = this.commonServices.getTelInputOptions();
 
     if (this.mobileInput) {
       // Cell Number

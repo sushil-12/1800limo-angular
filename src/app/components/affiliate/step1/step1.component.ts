@@ -416,13 +416,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 
 	initallphonefields() {
 
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: true,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-		};
+		const telOptions: any = this.commonServices.getTelInputOptions();
 
 		if (this.cellInput) {
 			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);

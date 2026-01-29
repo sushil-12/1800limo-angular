@@ -10,6 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { pluck } from 'rxjs/operators';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
+import { CommonService } from '../../../services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
@@ -166,6 +167,7 @@ export class CreateBookingComponent implements OnInit {
 		private stateManagementService: StateManagementService,
 		private customValidator: CustomvalidationService,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 	) { }
 
 	ngOnInit(): void {
@@ -236,13 +238,7 @@ export class CreateBookingComponent implements OnInit {
 	initphonefield() {
 		console.log("in init phone", this.cellInput, this.passengercellInput)
 
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: true,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-		};
+		const telOptions: any = this.commonServices.getTelInputOptions();
 
 		if (this.passengercellInput) {
 			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);

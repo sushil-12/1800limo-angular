@@ -293,15 +293,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			if (existing) {
 				existing.destroy();
 			}
-			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 

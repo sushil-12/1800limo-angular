@@ -12,6 +12,7 @@ import { IndividualService } from '../../../services/individual.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any
 
 
@@ -161,6 +162,7 @@ export class CreateNewBookingComponent implements OnInit {
 		private individualService: IndividualService,
 		private stateManagementService: StateManagementService,
 		private httpClient: HttpClient,
+		private commonServices: CommonService
 	) { }
 
 	ngOnInit(): void {
@@ -235,15 +237,8 @@ export class CreateNewBookingComponent implements OnInit {
 
 		if (this.cellInput) {
 			console.log("in phone", this.cellInput, this.cellInput.nativeElement)
-			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 

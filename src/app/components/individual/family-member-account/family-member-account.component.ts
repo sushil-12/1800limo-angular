@@ -8,6 +8,7 @@ import { IndividualService } from '../../../services/individual.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from '../../../services/common.service';
 
 @Component({
   selector: 'app-family-member-account',
@@ -36,7 +37,8 @@ export class FamilyMemberAccountComponent implements OnInit {
     private formBuilder: FormBuilder,
     private $routeurl: ActivatedRoute,
     private ngZone: NgZone,
-    private errors: ErrorDialogService
+    private errors: ErrorDialogService,
+    private commonServices: CommonService
   ) { }
 
 
@@ -113,15 +115,8 @@ export class FamilyMemberAccountComponent implements OnInit {
   initphonefield() {
 
     if (this.phoneInput) {
-      this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      const telOptions: any = this.commonServices.getTelInputOptions();
+      this.MobileObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.phoneInput.nativeElement);
 

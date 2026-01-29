@@ -9,6 +9,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 // import { ReCaptchaService } from '../../../services/re-captcha.service';
 
 import { environment } from 'src/environments/environment';
+import { CommonService } from 'src/app/services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 
 @Component({
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		private changeDetectorRef: ChangeDetectorRef,
 		private errorDialogService: ErrorDialogService,
 		private customValidator: CustomvalidationService,
+		private commonServices: CommonService,
 		private route: ActivatedRoute) {
 		if (this.authService.currentUserValue) {
 			switch (this.authService.currentUserValue.roleName) {
@@ -104,15 +106,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		if (this.countryChangeObject) {
 			this.countryChangeObject.destroy();
 		}
-		this.countryChangeObject = intlTelInput(this.phoneInput.nativeElement, {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: true,
-			// autoPlaceholder: 'aggressive',
-			utilsScript:
-				'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-		});
+		if (this.phoneInput) {
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.countryChangeObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
+		}
 
 
 		this.addCustomCountrySearch(this.phoneInput.nativeElement);

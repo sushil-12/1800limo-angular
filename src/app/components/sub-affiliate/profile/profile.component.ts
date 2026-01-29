@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 
 
 @Component({
@@ -48,7 +49,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private affiliateService: AffiliateService,
     private adminService: AdminService,
-    private errors: ErrorDialogService
+    private errors: ErrorDialogService,
+    private commonServices: CommonService
   ) { }
 
   ngOnInit(): void {
@@ -140,15 +142,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
     if (this.mobileInput) {
       console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      const telOptions: any = this.commonServices.getTelInputOptions();
+      this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.mobileInput.nativeElement);
 
@@ -161,15 +156,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
     if (this.workInput) {
       console.log('onput', this.workInput, this.workInput.nativeElement)
-      this.OfficeObject = intlTelInput(this.workInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: true,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-      });
+      const telOptions: any = this.commonServices.getTelInputOptions();
+      this.OfficeObject = intlTelInput(this.workInput.nativeElement, telOptions);
 
       this.addCustomCountrySearch(this.workInput.nativeElement);
 

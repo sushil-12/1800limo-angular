@@ -421,15 +421,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.cellInput.nativeElement);
 			if (existing) existing.destroy();
 
-			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: true,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions();
+			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 

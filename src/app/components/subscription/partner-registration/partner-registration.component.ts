@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { environment } from 'src/environments/environment';
 declare var $: any;
@@ -41,7 +42,8 @@ export class PartnerRegistrationComponent implements OnInit {
     private authService: AuthService,
     private errorDialog: ErrorDialogService,
     private spinner: NgxSpinnerService,
-    private router: Router
+    private router: Router,
+    private commonServices: CommonService
 
   ) { }
 
@@ -69,15 +71,8 @@ export class PartnerRegistrationComponent implements OnInit {
   ngAfterViewInit() {
 
     //init flag
-    this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: true,
-      // autoPlaceholder: 'aggressive',
-      utilsScript:
-        'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
-    });
+    const telOptions: any = this.commonServices.getTelInputOptions();
+    this.MobileObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
 
     this.addCustomCountrySearch(this.phoneInput.nativeElement);
 
