@@ -234,15 +234,24 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 	initphonefield() {
-		let countryCode = 'auto';
-		if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
-			countryCode = this.currentUser.phoneCountry || this.currentUser.country;
-		}
+		const getInitCountry = (group: string, controlName: string) => {
+			let val;
+			if (group) {
+				val = (<FormGroup>this.BookingForm.get(group)).get(controlName)?.value;
+			} else {
+				val = this.BookingForm.get(controlName)?.value;
+			}
+			if (val) return val;
+			return this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+		};
 
 		if (this.cellInput) {
 			console.log("in phone", this.cellInput, this.cellInput.nativeElement)
-			const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
-			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.cellInput.nativeElement);
+			if (existing) existing.destroy();
+			const paxCountry = getInitCountry(null, 'passenger_cell_country');
+			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, this.commonServices.getTelInputOptions(paxCountry));
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 
@@ -254,7 +263,6 @@ export class CreateNewBookingComponent implements OnInit {
 			});
 
 		}
-
 
 	}
 

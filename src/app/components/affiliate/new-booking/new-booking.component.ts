@@ -215,17 +215,24 @@ export class NewBookingComponent implements OnInit {
 
 
 	initphonefield() {
-		console.log("in init phone", this.cellInput, this.passengercellInput, this.drivercellInput)
+		console.log("in init phone", this.cellInput, this.passengercellInput, this.drivercellInput);
 
-		let countryCode = 'auto';
-		if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
-			countryCode = this.currentUser.phoneCountry || this.currentUser.country;
-		}
-
-		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
+		const getInitCountry = (group: string, controlName: string) => {
+			let val;
+			if (group) {
+				val = (<FormGroup>this.BookingForm.get(group)).get(controlName)?.value;
+			} else {
+				val = this.BookingForm.get(controlName)?.value;
+			}
+			if (val) return val;
+			return this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+		};
 
 		if (this.cellInput) {
-			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.cellInput.nativeElement);
+			if (existing) existing.destroy();
+			const lcCountry = getInitCountry('loose_customer', 'phone_country');
+			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, this.commonServices.getTelInputOptions(lcCountry));
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 			this.cellInput.nativeElement.addEventListener('countrychange', () => {
@@ -237,7 +244,10 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		if (this.passengercellInput) {
-			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.passengercellInput.nativeElement);
+			if (existing) existing.destroy();
+			const paxCountry = getInitCountry(null, 'passenger_cell_country');
+			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, this.commonServices.getTelInputOptions(paxCountry));
 
 			this.addCustomCountrySearch(this.passengercellInput.nativeElement);
 			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
@@ -249,7 +259,10 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		if (this.drivercellInput) {
-			this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, telOptions);
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.drivercellInput.nativeElement);
+			if (existing) existing.destroy();
+			const drvCountry = getInitCountry(null, 'driver_cell_country');
+			this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, this.commonServices.getTelInputOptions(drvCountry));
 
 			this.addCustomCountrySearch(this.drivercellInput.nativeElement);
 			this.drivercellInput.nativeElement.addEventListener('countrychange', () => {
@@ -1116,9 +1129,7 @@ export class NewBookingComponent implements OnInit {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-				if (!this.Form.reservation_id.value) {
-					this.autofillData('passenger', this.chosen_user);
-				}
+				this.autofillData('passenger', this.chosen_user);
 			}
 			this.$spinner.hide();
 		})
@@ -1462,6 +1473,9 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 			this.SetFormValue('pickup_flight', data.pickup_flight)
 			this.SetFormValue('dropoff_flight', data.dropoff_flight)
+			if (this.PaxTelObject) {
+				this.PaxTelObject.setCountry(data.mobileCountry);
+			}
 		}
 
 		if (filling_for === 'cruise') {
