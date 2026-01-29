@@ -873,6 +873,11 @@ export class CreateNewBookingComponent implements OnInit {
 				this.SetFormValue('passenger_cell', data?.mobile)
 				this.SetFormValue('passenger_cell_isd', data?.mobileIsd)
 				this.SetFormValue('passenger_cell_country', data?.mobileCountry)
+
+				if (this.PaxTelObject && data?.mobileCountry) {
+					this.PaxTelObject.setCountry(data.mobileCountry);
+				}
+
 				this.SetFormValue('origin_airport_city', data?.origin_airport_city ? data?.origin_airport_city : data?.departing_airport_city)
 				this.SetFormValue('pickup_flight', data?.pickup_flight)
 				this.SetFormValue('dropoff_flight', data?.dropoff_flight)
@@ -3119,6 +3124,10 @@ export class CreateNewBookingComponent implements OnInit {
 
 		for (const k of possibleKeys) {
 			if (this.chosen_user && this.chosen_user[k] !== undefined) {
+				if ((lowerKey === 'mobile' || lowerKey === 'phone')) {
+					if (this.chosen_user['phone_isd']) return this.chosen_user['phone_isd'] + ' ' + this.chosen_user[k];
+					if (this.chosen_user['mobileIsd']) return this.chosen_user['mobileIsd'] + ' ' + this.chosen_user[k];
+				}
 				return this.chosen_user[k];
 			}
 		}

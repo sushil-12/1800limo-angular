@@ -330,14 +330,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       }
     }
 
-    // COMPLETELY clear intl-tel-input validation errors before submission
-    // The Angular validators (required, minLength, maxLength, pattern) are sufficient
-    if (phone && phone.errors) {
-      console.log('Clearing phone errors:', phone.errors);
-      const { invalidIntl, ...otherErrors } = phone.errors;
-      phone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
-      phone.updateValueAndValidity({ emitEvent: false });
-    }
+
 
     console.log('After clearing - Phone errors:', phone?.errors);
     console.log('After clearing - Form valid:', this.addFamilyMemberAccountForm.valid);
