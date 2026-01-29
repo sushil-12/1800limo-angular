@@ -202,6 +202,5 @@ export class AmenitiesInteriorComponent implements OnInit {
 			// console.log(response.data)
 		})
 	}
-
 }
 

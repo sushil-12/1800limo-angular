@@ -198,5 +198,4 @@ export class SubAffiliateAccountsComponent implements OnInit {
   editSubAff(id){
     this.router.navigate(['/affiliate/edit-sub-affiliate'],{ queryParams: { id:id }});
   }
-
 }

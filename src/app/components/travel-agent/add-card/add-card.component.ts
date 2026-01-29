@@ -60,7 +60,7 @@ export class AddCardComponent implements OnInit
 			id: [''],
 			card_type: ['personal', Validators.required],
 			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.maxLength(20), Validators.minLength(14),this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(5), Validators.minLength(3),this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			cvc: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.maxLength(5), Validators.minLength(3),this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
@@ -148,5 +148,4 @@ export class AddCardComponent implements OnInit
 	{
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 	}
-
 }

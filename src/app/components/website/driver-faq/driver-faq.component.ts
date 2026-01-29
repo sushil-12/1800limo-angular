@@ -11,5 +11,4 @@ export class DriverFaqComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

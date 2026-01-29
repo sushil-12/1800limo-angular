@@ -250,5 +250,4 @@ export class SubAgentAccountsComponent implements OnInit {
   editSubAgentAccount(id){
     this.router.navigate(['/travel_agent/sub-agent-account-details'],{ queryParams: { id:id }});
   }
-
 }

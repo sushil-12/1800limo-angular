@@ -11,5 +11,4 @@ export class TravelPlannerReportComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

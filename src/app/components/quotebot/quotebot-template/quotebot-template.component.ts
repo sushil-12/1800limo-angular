@@ -12,5 +12,4 @@ export class QuotebotTemplateComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

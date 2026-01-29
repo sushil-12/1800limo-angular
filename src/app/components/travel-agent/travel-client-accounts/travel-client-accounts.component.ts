@@ -177,5 +177,4 @@ export class TravelClientAccountsComponent implements OnInit {
     }
     return udpArr;
   }
-
 }

@@ -11,5 +11,4 @@ export class ClientEmailConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

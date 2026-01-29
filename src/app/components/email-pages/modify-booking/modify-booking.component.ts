@@ -54,5 +54,4 @@ export class ModifyBookingComponent implements OnInit {
       this.router.navigate(['/home']);
 		})
   }
-
 }

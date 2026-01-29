@@ -25,5 +25,4 @@ export class WebsiteTemplateComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

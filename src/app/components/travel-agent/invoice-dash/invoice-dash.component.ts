@@ -252,5 +252,4 @@ export class InvoiceDashComponent implements OnInit {
 				// $("#AuditTrailModal").modal("hide");
 			});
 	}
-
 }

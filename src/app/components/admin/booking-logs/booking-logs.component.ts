@@ -28,7 +28,7 @@ import * as moment from 'moment';
 })
 export class BookingLogsComponent implements OnInit {
 
-  dataSource : PeriodicElement[] = []
+  dataSource: PeriodicElement[] = []
   totalRecords: any;
   searchText: string = '';
   currentPage: any;
@@ -42,8 +42,8 @@ export class BookingLogsComponent implements OnInit {
   nextPageUrl: any;
   constructor(
     private $api: AdminService,
-		private $route: ActivatedRoute,
-		private $router: Router,
+    private $route: ActivatedRoute,
+    private $router: Router,
     private spinner: NgxSpinnerService
   ) { }
 
@@ -62,97 +62,96 @@ export class BookingLogsComponent implements OnInit {
   ];
   expandedElement: PeriodicElement | null;
 
-  getBookingLogs(pageUrl = null, search_value: string = ''){
+  getBookingLogs(pageUrl = null, search_value: string = '') {
     this.spinner.show()
-    this.$api.getBookingLogs(pageUrl,search_value).subscribe((response: any) =>
-		{
+    this.$api.getBookingLogs(pageUrl, search_value).subscribe((response: any) => {
       this.dataSource = response?.data?.data
       // this.dataSource = this.dataSource.map(i=> {
       //   return 
       // })
-      
+
       this.totalRecords = response?.data?.total;
-			this.firstPage = 1;
-			this.lastPage = response?.data?.last_page;
-			this.totalPage = response?.data?.last_page;
-			this.currentPage = response?.data?.current_page;
-			this.from = response?.data?.from;
-			this.to = response?.data?.to;
-			this.path = response?.data?.path;
-			this.firstPage = response?.data?.first_page_url;
-			this.lastPage = response?.data?.last_page_url;
-			this.prevPageUrl = response?.data?.prev_page_url;
-			this.nextPageUrl = response?.data?.next_page_url;
-      console.log('response-->>' , this.dataSource)
+      this.firstPage = 1;
+      this.lastPage = response?.data?.last_page;
+      this.totalPage = response?.data?.last_page;
+      this.currentPage = response?.data?.current_page;
+      this.from = response?.data?.from;
+      this.to = response?.data?.to;
+      this.path = response?.data?.path;
+      this.firstPage = response?.data?.first_page_url;
+      this.lastPage = response?.data?.last_page_url;
+      this.prevPageUrl = response?.data?.prev_page_url;
+      this.nextPageUrl = response?.data?.next_page_url;
+      console.log('response-->>', this.dataSource)
       this.spinner.hide()
-		})
+    })
   }
 
-	timer: any
+  timer: any
   searchInBookingslogs(search_value: string) {
-		this.searchText = search_value
-		console.log('--->>>>>', search_value)
-		clearTimeout(this.timer);
-		this.timer = setTimeout(() => {
-			this.getBookingLogs(null, search_value)
-		}, 700)
-	}
-  formatText(text:any){
-    if(text == 'affiliate_id'){
+    this.searchText = search_value
+    console.log('--->>>>>', search_value)
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.getBookingLogs(null, search_value)
+    }, 700)
+  }
+  formatText(text: any) {
+    if (text == 'affiliate_id') {
       return 'Affiliate Name'
     }
-    else{
+    else {
       return text.replace(/_/g, " ");
     }
   }
 
-  columnData(columnData, columnName){
-    console.log('------->>>>>>>>>>' , columnData,columnName)
-    if(columnName=='affiliate_id' && columnData.booking_type == 'Affiliate'){
+  columnData(columnData, columnName) {
+    console.log('------->>>>>>>>>>', columnData, columnName)
+    if (columnName == 'affiliate_id' && columnData.booking_type == 'Affiliate') {
       return `${columnData.affiliate_account_details.first_name} ${columnData.affiliate_account_details.last_name}`
     }
-    else if(columnName=='affiliate_id' && columnData.booking_type == "Loose Affiliate"){
+    else if (columnName == 'affiliate_id' && columnData.booking_type == "Loose Affiliate") {
       return `${columnData.lose_affiliate_details.name}`
     }
-    else{
+    else {
       return columnData[columnName]
     }
   }
   FormatDate(date: string) {
     const m = moment(date);
     if (m.isSame(moment(), 'day')) {
-        return 'Today';
+      return 'Today';
     }
     return m.format("ll");
-}
+  }
 
   handleKeypressEvents() {
-		clearTimeout(this.timer)
-	}
+    clearTimeout(this.timer)
+  }
   counter() {
-		var currentPage;
-		var startFrom;
-		var endTo;
+    var currentPage;
+    var startFrom;
+    var endTo;
 
-		if (this.currentPage as number < 5) {
-			startFrom = 0;
-			endTo = this.totalPage;
-		} else if (this.currentPage < this.totalPage) {
-			currentPage = this.currentPage;
-			endTo = currentPage + 1;
-			startFrom = endTo - 5;
-		} else {
-			endTo = this.totalPage;
-			startFrom = endTo - 5;
-		}
+    if (this.currentPage as number < 5) {
+      startFrom = 0;
+      endTo = this.totalPage;
+    } else if (this.currentPage < this.totalPage) {
+      currentPage = this.currentPage;
+      endTo = currentPage + 1;
+      startFrom = endTo - 5;
+    } else {
+      endTo = this.totalPage;
+      startFrom = endTo - 5;
+    }
 
-		var i;
-		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++) {
-			udpArr.push(i + 1);
-		}
-		return udpArr;
-	}
+    var i;
+    var udpArr = new Array();
+    for (i = startFrom; i < endTo; i++) {
+      udpArr.push(i + 1);
+    }
+    return udpArr;
+  }
 
 }
 
@@ -164,5 +163,6 @@ export interface PeriodicElement {
   // description: string;
   charges: Array<any>;
   payment_details: Object;
+
 }
 

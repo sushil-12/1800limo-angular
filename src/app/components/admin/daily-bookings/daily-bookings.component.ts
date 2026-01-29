@@ -1581,5 +1581,4 @@ export class DailyBookingsComponent implements OnInit {
 			this.router.navigate(['/admin/new-booking'], { queryParams: { bookingId: booking_id, updateType: 'edit' } });
 		}
 	}
-
 }

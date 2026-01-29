@@ -11,5 +11,4 @@ export class TourGuideComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

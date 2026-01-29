@@ -106,5 +106,4 @@ export class ReportsAdminComponent implements OnInit {
       this.bookingCount = response?.data?.totalBookings
 		});
   }
-
 }

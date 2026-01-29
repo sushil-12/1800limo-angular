@@ -56,5 +56,4 @@ export class FleetComponent implements OnInit {
 		})
 		//$("#statusEnabledisabledModal").modal();
 	}
-
 }

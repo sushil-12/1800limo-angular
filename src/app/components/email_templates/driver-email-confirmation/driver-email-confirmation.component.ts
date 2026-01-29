@@ -11,5 +11,4 @@ export class DriverEmailConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

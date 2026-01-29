@@ -40,7 +40,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
-                            <input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
+                            <input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="Mobile" formControlName="mobile"
                                 class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
                                 (keypress)="numberOnly($event)" (input)="validateMobile()" (blur)="validateMobile()" />
                         </mat-form-field>
@@ -57,7 +57,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Work</mat-label>
-                            <input matInput #workInput placeholder="Contact" formControlName="work_contact_number"
+                            <input pattern="[0-9+]*" maxlength="16" matInput #workInput placeholder="Contact" formControlName="work_contact_number"
                                 class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
                                 (keypress)="numberOnly($event)" (input)="validateWork()" (blur)="validateWork()" />
                         </mat-form-field>

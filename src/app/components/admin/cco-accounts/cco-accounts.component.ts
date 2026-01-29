@@ -486,5 +486,4 @@ export class CcoAccountsComponent {
 
     $("#sendEmailModal").modal("hide");
   }
-
 }

@@ -150,6 +150,4 @@ export class InvoiceSummaryComponent implements OnInit {
 		}
 		return symbol
 	}
-
-
 }

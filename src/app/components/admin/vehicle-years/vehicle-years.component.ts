@@ -54,13 +54,13 @@ export class VehicleYearsComponent implements OnInit {
 
         //add year type form validation
         this.addYearsForm = this.formBuilder.group({
-          name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern("^[0-9]*$") ]]
+          name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern("^[0-9+]*$") ]]
         });
 
         //edit year type form validation
         this.editYearsForm = this.formBuilder.group({
           id: ['', Validators.required],
-          name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern("^[0-9]*$") ]]
+          name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern("^[0-9+]*$") ]]
         });
   }
 
@@ -184,6 +184,5 @@ export class VehicleYearsComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
-
 }
 

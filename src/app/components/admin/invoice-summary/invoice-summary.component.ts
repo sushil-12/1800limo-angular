@@ -278,6 +278,4 @@ export class InvoiceSummaryComponent implements OnInit {
 			this.str_email = event.target.value
 		}
 	}
-	
-
 }

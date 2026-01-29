@@ -182,6 +182,5 @@ export class DriverDressComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
-
 }
 

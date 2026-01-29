@@ -11,5 +11,4 @@ export class PageUnderConstructionComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

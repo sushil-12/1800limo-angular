@@ -153,7 +153,7 @@ export class MasterVehicleFareComponent implements OnInit {
 		this.VehicleRateSettingsForm = this.$form.group({
 			id: [''],
 			acc_id: [''],
-			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hourly_rate_after_five_hours: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -180,7 +180,7 @@ export class MasterVehicleFareComponent implements OnInit {
 			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			charter_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			rate_range: ['0'],
-			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			is_gratuity: ['yes', Validators.required],
 			amenities_rates: new FormGroup({}),
 			airport_arrival_tax_per_us: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -563,5 +563,4 @@ export class MasterVehicleFareComponent implements OnInit {
 
 		console.log(this.VehicleRateSettingsForm.value)
 	}
-
 }

@@ -869,5 +869,4 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		}
 		// console.log(this.total, this.r_total);
 	}
-
 }

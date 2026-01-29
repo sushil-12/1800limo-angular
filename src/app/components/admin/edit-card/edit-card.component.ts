@@ -101,11 +101,11 @@ export class EditCardComponent implements OnInit, AfterViewInit {
       secondaryMMYY: [''],
       secondaryFirstName: ['', Validators.required],
       secondaryLastName: ['', Validators.required],
-      secondaryPhone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      secondaryPhone: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(10), Validators.maxLength(10)]],
       secondaryStreetAddress: ['', Validators.required],
       secondaryCity: ['', Validators.required],
       secondaryState: ['', Validators.required],
-      secondaryZip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      secondaryZip: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
     });
   }
 
@@ -218,5 +218,4 @@ export class EditCardComponent implements OnInit, AfterViewInit {
   backButton() {
     this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
   }
-
 }

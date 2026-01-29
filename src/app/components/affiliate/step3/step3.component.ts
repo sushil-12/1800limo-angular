@@ -67,11 +67,13 @@ export class Step3Component implements OnInit, AfterViewInit {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
 			separateDialCode: true,
-			nationalMode: false,
+			nationalMode: true,
 			// autoPlaceholder: 'aggressive',
 			utilsScript:
-				'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+				'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
 		});
+
+		this.addCustomCountrySearch(this.phoneInput.nativeElement);
 
 		this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 			const countryData = this.AgentTelephoneObject.getSelectedCountryData();
@@ -127,7 +129,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 			acc_id: [this.affiliateId, Validators.required],//affiliate account id
 			CompanyName: ['', Validators.required],
 			AgentName: [''],
-			AgentTelephone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			AgentTelephone: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			AgentTelephoneIsd: ['+1', Validators.required],
 			AgentTelephoneCountry: ['us', Validators.required],
 			policyNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
@@ -238,6 +240,10 @@ export class Step3Component implements OnInit, AfterViewInit {
 
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
+		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
+		if (charCode === 43) {
+			return true;
+		}
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
 			return false;
 		}
@@ -462,6 +468,11 @@ export class Step3Component implements OnInit, AfterViewInit {
 			return;
 		}
 
+		// Sanitize AgentTelephone (remove Country Code if present)
+		if (this.addInsuranceForm.value.AgentTelephone && this.addInsuranceForm.value.AgentTelephoneIsd && this.addInsuranceForm.value.AgentTelephone.startsWith(this.addInsuranceForm.value.AgentTelephoneIsd)) {
+			this.addInsuranceForm.value.AgentTelephone = this.addInsuranceForm.value.AgentTelephone.substring(this.addInsuranceForm.value.AgentTelephoneIsd.length);
+		}
+
 		this.addInsuranceForm.value.stepCompleted =
 			this.affiliateService.getUpdatedStepsLocal("3");
 
@@ -533,5 +544,84 @@ export class Step3Component implements OnInit, AfterViewInit {
 		$(".selectInsuranceLabel")
 			.removeClass("selectInsuranceLabel ")
 			.addClass("select-insurance-label");
+	}
+
+	private addCustomCountrySearch(element: HTMLElement) {
+		element.addEventListener('open:countrydropdown', () => {
+			const container = element.closest('.iti');
+			const dropdown = container?.querySelector('.iti__country-list');
+			if (!dropdown) return;
+
+			// Check if search already exists
+			if (dropdown.querySelector('.iti-search-input')) return;
+
+			// Create search container
+			const searchContainer = document.createElement('div');
+			searchContainer.className = 'iti-search-container';
+
+			// Create search input
+			const searchInput = document.createElement('input');
+			searchInput.type = 'text';
+			searchInput.className = 'iti-search-input';
+			searchInput.placeholder = 'Search country...';
+
+			searchContainer.appendChild(searchInput);
+
+			// Prevent dropdown from closing when interacting with search
+			searchInput.addEventListener('click', (e) => e.stopPropagation());
+			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+			// Insert at top of dropdown
+			dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+			// Focus on search
+			setTimeout(() => searchInput.focus(), 100);
+
+			// Filter countries on input
+			searchInput.addEventListener('input', (e: any) => {
+				e.stopPropagation();
+				const searchTerm = e.target.value.toLowerCase();
+				const countries = dropdown.querySelectorAll('.iti__country');
+				let hasVisible = false;
+
+				countries.forEach((country: any) => {
+					// Search in the full text (Name + Dial Code)
+					const text = country.textContent?.toLowerCase() || '';
+
+					if (text.includes(searchTerm)) {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block'; // Force show
+						hasVisible = true;
+					} else {
+						country.classList.add('iti__hide');
+						country.style.display = 'none'; // Force hide
+					}
+				});
+
+				// Handle No Results
+				let noResults = dropdown.querySelector('.iti-no-results');
+				if (!noResults) {
+					noResults = document.createElement('div');
+					noResults.className = 'iti-no-results';
+					noResults.textContent = 'No results found';
+					dropdown.appendChild(noResults);
+				}
+
+				if (!hasVisible && searchTerm) {
+					(noResults as HTMLElement).style.display = 'block';
+				} else {
+					(noResults as HTMLElement).style.display = 'none';
+				}
+
+				// Show all if search is empty
+				if (!searchTerm) {
+					countries.forEach((country: any) => {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block';
+					});
+					(noResults as HTMLElement).style.display = 'none';
+				}
+			});
+		});
 	}
 }

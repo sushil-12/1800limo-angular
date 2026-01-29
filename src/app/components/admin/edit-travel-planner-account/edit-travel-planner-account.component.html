@@ -35,7 +35,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mobileField">
 							<mat-label>Contact<span class="asterisk"> *</span></mat-label>
-							<input matInput #officeInput placeholder="Contact" formControlName="office"
+							<input pattern="[0-9+]*" maxlength="16" matInput #officeInput placeholder="Contact" formControlName="office"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
 								(keypress)="numberOnly($event)" (input)="validatePhone('office', OfficeObject)"
 								(blur)="validatePhone('office', OfficeObject)" />
@@ -66,7 +66,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="read-only mobileField">
 							<mat-label>Mobile<span class="asterisk"> *</span></mat-label>
-							<input matInput #mobileInput placeholder="mobile" formControlName="mobile"
+							<input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="mobile" formControlName="mobile"
 								class="phoneNumberClass" tabindex="1" [readonly]="travelPlannerId"
 								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 								(input)="validatePhone('mobile', MobileObject)"
@@ -143,7 +143,7 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="mobileField">
 							<mat-label>Fax</mat-label>
-							<input matInput #faxInput placeholder="fax" formControlName="fax" class="phoneNumberClass"
+							<input pattern="[0-9+]*" maxlength="16" matInput #faxInput placeholder="fax" formControlName="fax" class="phoneNumberClass"
 								tabindex="1" (focus)="$event.target.select()" (keypress)="numberOnly($event)"
 								(input)="validatePhone('fax', FaxObject)" (blur)="validatePhone('fax', FaxObject)" />
 						</mat-form-field>
@@ -173,7 +173,7 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="mobileField">
 							<mat-label>Office Phone<span class="asterisk"> *</span></mat-label>
-							<input matInput #officeNumberInput placeholder="24hr Agent Help Desk"
+							<input pattern="[0-9+]*" maxlength="16" matInput #officeNumberInput placeholder="24hr Agent Help Desk"
 								formControlName="officeNumber" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 								(input)="validatePhone('officeNumber', OfficePhoneObject)"

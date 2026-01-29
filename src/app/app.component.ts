@@ -72,5 +72,4 @@ export class AppComponent implements OnInit
 			document.cookie = `lastroute=${route};expires=${exdays};path=${path}`.trim()
 		}
 	}
-
 }

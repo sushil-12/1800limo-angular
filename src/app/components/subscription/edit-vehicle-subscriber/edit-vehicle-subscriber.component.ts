@@ -191,8 +191,8 @@ export class EditVehicleSubscriberComponent implements OnInit {
       color: ['', Validators.required],
       licensePlate: [''],
       numberOfVehicles: [],
-      seats: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-      luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      seats: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
+      luggage: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
       charterCancelPolicy: ['24', Validators.required],
       nonCharterCancelPolicy: ['24', Validators.required],
       typeOfService: this.formBuilder.array([]),
@@ -440,15 +440,15 @@ export class EditVehicleSubscriberComponent implements OnInit {
             // this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
             //   let numberOfVehiclesCanBeAdded;
             //   if (this.affiliateType == 'fleet_operator') {
-            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$")]);
             //   }
             //   else if (this.affiliateType == 'black_limo_operator') {
             //     numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - this.response2.data.numberOfVehicles);
-            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
             //   }
             //   else {
             //     numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - this.response2.data.numberOfVehicles);
-            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
             //   }
             //   this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
             // });
@@ -1237,5 +1237,4 @@ export class EditVehicleSubscriberComponent implements OnInit {
       this.service.splice(index, 1);
     }
   }
-
 }

@@ -218,10 +218,10 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileField m-0">
                             <mat-label>Passenger Cell <span class="asterisk">*</span></mat-label>
-                            <input matInput #cellInput placeholder="1234567890" formControlName="passenger_cell"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-                                (keypress)="numberOnly($event)" (input)="validatePassengerCell()"
-                                (blur)="validatePassengerCell()"
+                            <input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890"
+                                formControlName="passenger_cell" class="phoneNumberClass" tabindex="1"
+                                (focus)="$event.target.select()" (keypress)="numberOnly($event)"
+                                (input)="validatePassengerCell()" (blur)="validatePassengerCell()"
                                 [class.is-invalid-input]="(Form.passenger_cell.touched || Form.passenger_cell.dirty) && Form.passenger_cell.invalid" />
 
                         </mat-form-field>

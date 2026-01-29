@@ -502,7 +502,5 @@ export class SubscribersListComponent implements OnInit {
 		// 	console.log("file", this.fileName, this.fileType)
 		// }
 	}
-
-
 }
 

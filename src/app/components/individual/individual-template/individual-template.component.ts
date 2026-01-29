@@ -194,7 +194,4 @@ export class IndividualTemplateComponent implements OnInit {
 
 
 	}
-
-
-
 }

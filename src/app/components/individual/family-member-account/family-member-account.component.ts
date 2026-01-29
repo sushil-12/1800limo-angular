@@ -117,11 +117,13 @@ export class FamilyMemberAccountComponent implements OnInit {
         initialCountry: 'us',
         preferredCountries: ['us', 'ca', 'mx', 'gb'],
         separateDialCode: true,
-        nationalMode: false,
+        nationalMode: true,
         // autoPlaceholder: 'aggressive',
         utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+          'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
       });
+
+      this.addCustomCountrySearch(this.phoneInput.nativeElement);
 
       this.phoneInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.MobileObject.getSelectedCountryData();
@@ -194,7 +196,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       id: [''],
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      phone_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       mobileCountry: ['us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
@@ -206,7 +208,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       // latitude: [''],
       // longitude: [''],
       // use_for_login: [false],
-      // age: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      // age: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
       // relationship: ['', Validators.required]
     });
   }
@@ -216,6 +218,10 @@ export class FamilyMemberAccountComponent implements OnInit {
 
   numberOnly(event: any): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
+    // Allow: backspace, delete, tab, escape, enter, + symbol (43)
+    if (charCode === 43) {
+      return true;
+    }
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }
@@ -280,6 +286,17 @@ export class FamilyMemberAccountComponent implements OnInit {
     console.log(this.addFamilyMemberAccountForm);
     // console.log(JSON.stringify(this.addVehicleRatesForm.value));
     this.submittedForm = true;
+    // Sanitize phone_number
+    const phone = this.addFamilyMemberAccountForm.get('phone_number');
+    const phoneIsd = this.addFamilyMemberAccountForm.get('phone_isd');
+    if (phone && phone.value && phoneIsd && phoneIsd.value) {
+      const val = String(phone.value);
+      const isd = String(phoneIsd.value);
+      if (val.startsWith(isd)) {
+        phone.setValue(val.substring(isd.length));
+      }
+    }
+
     // stop here if form is invalid
     if (this.addFamilyMemberAccountForm.invalid) {
       return;
@@ -336,5 +353,84 @@ export class FamilyMemberAccountComponent implements OnInit {
   }
   backButton() {
     this.router.navigate([`/individual/family-members`]);
+  }
+
+  private addCustomCountrySearch(element: HTMLElement) {
+    element.addEventListener('open:countrydropdown', () => {
+      const container = element.closest('.iti');
+      const dropdown = container?.querySelector('.iti__country-list');
+      if (!dropdown) return;
+
+      // Check if search already exists
+      if (dropdown.querySelector('.iti-search-input')) return;
+
+      // Create search container
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'iti-search-container';
+
+      // Create search input
+      const searchInput = document.createElement('input');
+      searchInput.type = 'text';
+      searchInput.className = 'iti-search-input';
+      searchInput.placeholder = 'Search country...';
+
+      searchContainer.appendChild(searchInput);
+
+      // Prevent dropdown from closing when interacting with search
+      searchInput.addEventListener('click', (e) => e.stopPropagation());
+      searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+      // Insert at top of dropdown
+      dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+      // Focus on search
+      setTimeout(() => searchInput.focus(), 100);
+
+      // Filter countries on input
+      searchInput.addEventListener('input', (e: any) => {
+        e.stopPropagation();
+        const searchTerm = e.target.value.toLowerCase();
+        const countries = dropdown.querySelectorAll('.iti__country');
+        let hasVisible = false;
+
+        countries.forEach((country: any) => {
+          // Search in the full text (Name + Dial Code)
+          const text = country.textContent?.toLowerCase() || '';
+
+          if (text.includes(searchTerm)) {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block'; // Force show
+            hasVisible = true;
+          } else {
+            country.classList.add('iti__hide');
+            country.style.display = 'none'; // Force hide
+          }
+        });
+
+        // Handle No Results
+        let noResults = dropdown.querySelector('.iti-no-results');
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'iti-no-results';
+          noResults.textContent = 'No results found';
+          dropdown.appendChild(noResults);
+        }
+
+        if (!hasVisible && searchTerm) {
+          (noResults as HTMLElement).style.display = 'block';
+        } else {
+          (noResults as HTMLElement).style.display = 'none';
+        }
+
+        // Show all if search is empty
+        if (!searchTerm) {
+          countries.forEach((country: any) => {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block';
+          });
+          (noResults as HTMLElement).style.display = 'none';
+        }
+      });
+    });
   }
 }

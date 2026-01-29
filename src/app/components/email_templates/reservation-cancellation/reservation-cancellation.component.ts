@@ -11,5 +11,4 @@ export class ReservationCancellationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

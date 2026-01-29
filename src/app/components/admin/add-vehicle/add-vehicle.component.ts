@@ -183,8 +183,8 @@ export class AddVehicleComponent implements OnInit {
 			color: ['', Validators.required],
 			licensePlate: [''],
 			numberOfVehicles: [1],
-			seats: [4, [Validators.required, Validators.pattern("^[0-9]*$")]],
-			luggage: [2, [Validators.required, Validators.pattern("^[0-9]*$")]],
+			seats: [4, [Validators.required, Validators.pattern("^[0-9+]*$")]],
+			luggage: [2, [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			charterCancelPolicy: ['24', Validators.required],
 			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
@@ -225,15 +225,15 @@ export class AddVehicleComponent implements OnInit {
 		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
 			let numberOfVehiclesCanBeAdded;
 			if (this.affiliateType == 'fleet_operator') {
-				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$")]);
 			}
 			else if (this.affiliateType == 'black_limo_operator') {
 				numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
-				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
 			else {
 				numberOfVehiclesCanBeAdded = 1 - numberOfVehicles;
-				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
 			this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
 		});
@@ -1032,6 +1032,4 @@ export class AddVehicleComponent implements OnInit {
 			charterCancelPolicy : event.value
 		})
 	}
-
-
 }

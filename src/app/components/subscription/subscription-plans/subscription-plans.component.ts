@@ -128,5 +128,4 @@ export class SubscriptionPlansComponent implements OnInit {
     if (!value) return value;
     return value.replace(/_/g, ' '); // Replace underscores with spaces
   }
-
 }

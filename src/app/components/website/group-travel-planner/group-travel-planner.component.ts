@@ -11,5 +11,4 @@ export class GroupTravelPlannerComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

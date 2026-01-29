@@ -203,8 +203,8 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 			zipCode: [''],
 			unit: [''],
 			primaryCardType: ['personal'],
-			// primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			// primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCardNumber: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCSC: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryMM: [''],
 			primaryYY: [''],
 			primaryCardHolderName: ['']
@@ -822,6 +822,4 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 
 	}
-
-
 }

@@ -68,6 +68,4 @@ export class ReportsAdminVehicleAverageComponent implements OnInit {
       this.bookingsResult = response?.data
 		});
   }
-  
-
 }

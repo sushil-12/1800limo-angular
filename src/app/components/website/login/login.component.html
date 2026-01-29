@@ -77,7 +77,7 @@
 			<mat-form-field appearance="outline" class="mobileFieldlogin"
 				[class.is-invalid-input]="f.phone.errors && (f.phone.touched || f.phone.dirty || submitted)">
 				<mat-label>Phone Number</mat-label>
-				<input matInput #phoneInput placeholder="1234567890" formControlName="phone" class="phoneNumberClass"
+				<input pattern="[0-9+]*" maxlength="16" matInput #phoneInput placeholder="1234567890" formControlName="phone" class="phoneNumberClass"
 					tabIndex="1" id="phn-input" autofocus style="text-indent: 0; font-size: 18px !important;"
 					(keypress)="numberOnly($event)" (input)="validatePhone()" (blur)="validatePhone()" />
 			</mat-form-field>
@@ -93,7 +93,7 @@
 						<label class="mat-mdc-form-field-label mat-empty mat-form-field-empty"
 							style="margin-top: -18px;">Referral
 							Code</label>
-						<input matInput placeholder="Referral Code" formControlName="invite_code"
+						<input pattern="[0-9+]*" maxlength="16" matInput placeholder="Referral Code" formControlName="invite_code"
 							class="phoneNumberClass" tabIndex="1" style="font-size: 18px;" />
 					</mat-form-field>
 				</div>

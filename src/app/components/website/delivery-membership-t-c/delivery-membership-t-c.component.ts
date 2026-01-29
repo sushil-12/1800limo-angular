@@ -11,5 +11,4 @@ export class DeliveryMembershipTCComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

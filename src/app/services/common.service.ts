@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { ErrorDialogService } from './error-dialog/errordialog.service';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class CommonService {
 
-  constructor(private errorModal :ErrorDialogService,) { }
-  handleFile(event) {
-    console.log("in function handle file", event)
+	constructor(private errorModal: ErrorDialogService,) { }
+	handleFile(event) {
+		console.log("in function handle file", event)
 		const [file] = event.target.files
 		const fileType = file.type // image/jpeg
 		console.log("fileType", fileType)

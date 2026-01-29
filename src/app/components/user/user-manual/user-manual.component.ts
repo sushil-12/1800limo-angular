@@ -11,5 +11,4 @@ export class UserManualComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

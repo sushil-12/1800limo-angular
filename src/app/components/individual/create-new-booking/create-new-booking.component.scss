@@ -436,8 +436,7 @@ ul {
 }
 
 .is-invalid-input {
-	border: 1px solid red !important;
-	border-radius: 5px !important;
+	// Border removed - validation errors shown below field
 }
 
 .phoneNumberClass {

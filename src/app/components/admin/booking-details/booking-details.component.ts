@@ -42,5 +42,4 @@ export class BookingDetailsComponent implements OnInit
 			console.log(response)
 		})
 	}
-
 }

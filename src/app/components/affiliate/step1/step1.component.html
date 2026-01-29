@@ -199,7 +199,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>Cell<span class="asterisk"> *</span> </mat-label>
-						<input matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
+						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
 							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly />
 					</mat-form-field>
 					<div *ngIf="
@@ -391,7 +391,7 @@
 						<mat-label>24 Hr Dispatch E-mail
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
+						<input pattern="[0-9+]*" maxlength="16" matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
 							tabIndex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -415,7 +415,7 @@
 							<mat-label>24 Hr Dispatch E-mail
 								<span class="asterisk">*</span>
 							</mat-label>
-							<input [class.errorColor]="dispatchEmailStatus == 'no'" matInput
+							<input pattern="[0-9+]*" maxlength="16" [class.errorColor]="dispatchEmailStatus == 'no'" matInput
 								placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
 								[readonly]="dispatchEmailReadonly" tabIndex="1" />
 							<svg *ngIf="dispatchEmailStatus == 'yes'" xmlns="http://www.w3.org/2000/svg"
@@ -487,7 +487,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>24 Hr Cell Dispatch<span class="asterisk"> *</span></mat-label>
-						<input matInput #dispatchInput placeholder="1234567890" formControlName="Dispatch"
+						<input pattern="[0-9+]*" maxlength="16" matInput #dispatchInput placeholder="1234567890" formControlName="Dispatch"
 							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
 							(keypress)="numberOnly($event)" (input)="validateDispatchPhone()"
 							(blur)="validateDispatchPhone()" />
@@ -533,7 +533,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>Business Telephone</mat-label>
-						<input matInput #companyCellNumberInput placeholder="1234567890"
+						<input pattern="[0-9+]*" maxlength="16" matInput #companyCellNumberInput placeholder="1234567890"
 							formControlName="CompanyCellNumber" class="phoneNumberClass" tabindex="1"
 							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 							(input)="validateCompanyCellPhone()" (blur)="validateCompanyCellPhone()" />
@@ -581,7 +581,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>FAX </mat-label>
-						<input matInput #FaxInput placeholder="1234567890" formControlName="Fax"
+						<input pattern="[0-9+]*" maxlength="16" matInput #FaxInput placeholder="1234567890" formControlName="Fax"
 							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
 							(keypress)="numberOnly($event)" (input)="validateFax()" (blur)="validateFax()" />
 					</mat-form-field>
@@ -1160,7 +1160,7 @@
 										.CellNumber
 										}}*
 									</mat-label>
-									<input matInput formControlName="phoneOtp" id="phoneOtp" />
+									<input pattern="[0-9+]*" maxlength="16" matInput formControlName="phoneOtp" id="phoneOtp" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedAffiliateEmailForm &&
@@ -1366,7 +1366,7 @@
 			.CellNumber
 			}}*
 		</mat-label>
-		<input matInput formControlName="phoneOtp" id="phoneOtp" />
+		<input pattern="[0-9+]*" maxlength="16" matInput formControlName="phoneOtp" id="phoneOtp" />
 	</mat-form-field>
 	<div *ngIf="
 			(submittedDispatchEmailForm &&

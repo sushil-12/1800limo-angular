@@ -183,6 +183,5 @@ export class VehicleMakeComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
-
 }
 

@@ -11,5 +11,4 @@ export class SubTravelAgentComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

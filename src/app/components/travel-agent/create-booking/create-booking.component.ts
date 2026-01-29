@@ -240,12 +240,14 @@ export class CreateBookingComponent implements OnInit {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
 			separateDialCode: true,
-			nationalMode: false,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+			nationalMode: true,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
 		};
 
 		if (this.passengercellInput) {
 			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.passengercellInput.nativeElement);
 			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
@@ -256,6 +258,8 @@ export class CreateBookingComponent implements OnInit {
 
 		if (this.cellInput) {
 			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.cellInput.nativeElement);
 			this.cellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.LCTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
@@ -366,7 +370,7 @@ export class CreateBookingComponent implements OnInit {
 			}),
 			passenger_name: ['', [Validators.required, this.customValidator.whitespace()]],
 			passenger_email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
-			passenger_cell: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			passenger_cell: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
 			total_passengers: [1],
@@ -392,11 +396,11 @@ export class CreateBookingComponent implements OnInit {
 			vehicle_color: [''],
 			vehicle_color_name: [''],
 			vehicle_license_plate: ['', this.customValidator.whitespace()],
-			vehicle_seats: ['4', Validators.pattern("^[0-9]*$")],
+			vehicle_seats: ['4', Validators.pattern("^[0-9+]*$")],
 			driver_id: [''],
 			driver_name: ['', this.customValidator.whitespace()],
 			driver_gender: [''],
-			driver_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			driver_cell: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
 			driver_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
@@ -606,7 +610,7 @@ export class CreateBookingComponent implements OnInit {
 			this.fillDriverInfo(editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
-				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
+				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses') || item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
 				}
 				if (item == "passenger_cell_isd") {
@@ -2097,11 +2101,11 @@ export class CreateBookingComponent implements OnInit {
 		// 			}
 		// 		}
 
-		// 		(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
+		// 		(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
 		// 		(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
-		// 		(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+		// 		(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9+]*$")]);
 		// 		loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
-		// 		loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+		// 		loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 		// 		loose_customer.get('first_name').setValidators([Validators.required])
 		// 		// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
 		// 		loose_customer.get('last_name').setValidators([Validators.required])
@@ -2141,7 +2145,7 @@ export class CreateBookingComponent implements OnInit {
 		// 	if (value == 'loose_affiliate') {
 		// 		this.toggleDropdown(null)
 		// 		this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
-		// 		this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+		// 		this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 		// 		this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
 		// 		this.BookingForm.updateValueAndValidity()
 		// 		this.init_rates = true
@@ -2228,11 +2232,11 @@ export class CreateBookingComponent implements OnInit {
 					}
 				}
 
-				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(14), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), , Validators.minLength(14), Validators.maxLength(20),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
-				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9+]*$")]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
-				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
 				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
 				loose_customer.get('last_name').setValidators([Validators.required])
@@ -2706,6 +2710,63 @@ export class CreateBookingComponent implements OnInit {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
+
+
+		// Sanitize loose_customer.phone
+		const lcPhone = this.BookingForm.get('loose_customer.phone');
+		const lcIsd = this.BookingForm.get('loose_customer.phone_isd');
+		if (lcPhone && lcPhone.value && lcIsd && lcIsd.value) {
+			const val = String(lcPhone.value);
+			const isd = String(lcIsd.value);
+			if (val.startsWith(isd)) {
+				lcPhone.setValue(val.substring(isd.length));
+			}
+		}
+
+		// Sanitize lose_affiliate_phone
+		const laPhone = this.BookingForm.get('lose_affiliate_phone');
+		const laIsd = this.BookingForm.get('lose_affiliate_phone_isd');
+		if (laPhone && laPhone.value && laIsd && laIsd.value) {
+			const val = String(laPhone.value);
+			const isd = String(laIsd.value);
+			if (val.startsWith(isd)) {
+				laPhone.setValue(val.substring(isd.length));
+			}
+		}
+
+		// Sanitize phone
+		const phone = this.BookingForm.get('phone');
+		const phoneIsd = this.BookingForm.get('phone_isd');
+		if (phone && phone.value && phoneIsd && phoneIsd.value) {
+			const val = String(phone.value);
+			const isd = String(phoneIsd.value);
+			if (val.startsWith(isd)) {
+				phone.setValue(val.substring(isd.length));
+			}
+		}
+
+		// Sanitize passenger_cell
+		const pCell = this.BookingForm.get('passenger_cell');
+		const pIsd = this.BookingForm.get('passenger_cell_isd');
+		if (pCell && pCell.value && pIsd && pIsd.value) {
+			const val = String(pCell.value);
+			const isd = String(pIsd.value);
+			if (val.startsWith(isd)) {
+				pCell.setValue(val.substring(isd.length));
+			}
+		}
+
+		// Sanitize driver_cell
+		const dCell = this.BookingForm.get('driver_cell');
+		const dIsd = this.BookingForm.get('driver_cell_isd');
+		if (dCell && dCell.value && dIsd && dIsd.value) {
+			const val = String(dCell.value);
+			const isd = String(dIsd.value);
+			if (val.startsWith(isd)) {
+				dCell.setValue(val.substring(isd.length));
+			}
+		}
+
 		if (this.BookingForm.invalid) {
 			return;
 		}
@@ -3213,6 +3274,10 @@ export class CreateBookingComponent implements OnInit {
 
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
+		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
+		if (charCode === 43) {
+			return true;
+		}
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
 			return false;
 		}
@@ -3254,4 +3319,83 @@ export class CreateBookingComponent implements OnInit {
 		this.validatePhoneGeneric(this.BookingForm.get('passenger_cell'), this.PaxTelObject);
 	}
 
+
+	private addCustomCountrySearch(element: HTMLElement) {
+		element.addEventListener('open:countrydropdown', () => {
+			const container = element.closest('.iti');
+			const dropdown = container?.querySelector('.iti__country-list');
+			if (!dropdown) return;
+
+			// Check if search already exists
+			if (dropdown.querySelector('.iti-search-input')) return;
+
+			// Create search container
+			const searchContainer = document.createElement('div');
+			searchContainer.className = 'iti-search-container';
+
+			// Create search input
+			const searchInput = document.createElement('input');
+			searchInput.type = 'text';
+			searchInput.className = 'iti-search-input';
+			searchInput.placeholder = 'Search country...';
+
+			searchContainer.appendChild(searchInput);
+
+			// Prevent dropdown from closing when interacting with search
+			searchInput.addEventListener('click', (e) => e.stopPropagation());
+			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+			// Insert at top of dropdown
+			dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+			// Focus on search
+			setTimeout(() => searchInput.focus(), 100);
+
+			// Filter countries on input
+			searchInput.addEventListener('input', (e: any) => {
+				e.stopPropagation();
+				const searchTerm = e.target.value.toLowerCase();
+				const countries = dropdown.querySelectorAll('.iti__country');
+				let hasVisible = false;
+
+				countries.forEach((country: any) => {
+					// Search in the full text (Name + Dial Code)
+					const text = country.textContent?.toLowerCase() || '';
+
+					if (text.includes(searchTerm)) {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block'; // Force show
+						hasVisible = true;
+					} else {
+						country.classList.add('iti__hide');
+						country.style.display = 'none'; // Force hide
+					}
+				});
+
+				// Handle No Results
+				let noResults = dropdown.querySelector('.iti-no-results');
+				if (!noResults) {
+					noResults = document.createElement('div');
+					noResults.className = 'iti-no-results';
+					noResults.textContent = 'No results found';
+					dropdown.appendChild(noResults);
+				}
+
+				if (!hasVisible && searchTerm) {
+					(noResults as HTMLElement).style.display = 'block';
+				} else {
+					(noResults as HTMLElement).style.display = 'none';
+				}
+
+				// Show all if search is empty
+				if (!searchTerm) {
+					countries.forEach((country: any) => {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block';
+					});
+					(noResults as HTMLElement).style.display = 'none';
+				}
+			});
+		});
+	}
 }

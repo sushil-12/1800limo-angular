@@ -158,8 +158,8 @@ export class StripeFormComponent implements OnInit {
 			zipCode: [''],
 			unit: [''],
 			primaryCardType: ['personal'],
-			// primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(14), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			// primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCardNumber: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(14), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCSC: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryMM: [''],
 			primaryYY: [''],
 			primaryCardHolderName: ['']
@@ -853,5 +853,4 @@ export class StripeFormComponent implements OnInit {
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}
-
 }

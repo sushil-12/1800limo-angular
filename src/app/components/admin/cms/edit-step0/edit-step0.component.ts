@@ -382,7 +382,4 @@ export class EditStep0Component implements OnInit
 	{
 		this.router.navigate(['/admin/cms/step0']);
 	}
-
-
-
 }

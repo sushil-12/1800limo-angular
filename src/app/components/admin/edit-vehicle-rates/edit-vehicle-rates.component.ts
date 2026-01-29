@@ -231,7 +231,7 @@ export class EditVehicleRatesComponent implements OnInit {
 			id: [''],
 			acc_id: [''],
 			affiliate_type: [''],
-			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_charter_hours: [2, [Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -256,7 +256,7 @@ export class EditVehicleRatesComponent implements OnInit {
 			outside_town_extra_stop: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			is_gratuity: ['yes', Validators.required],
 			amenites_rates: new FormGroup({}),
 			airport_arrival_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -625,6 +625,4 @@ export class EditVehicleRatesComponent implements OnInit {
 	// 	this.addVehicleRatesForm.get(form_control).setValue(value)
 	// 	this.addVehicleRatesForm.updateValueAndValidity()
 	// }
-
-
 }

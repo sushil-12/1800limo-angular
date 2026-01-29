@@ -11,5 +11,4 @@ export class InsuranceLicensingComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

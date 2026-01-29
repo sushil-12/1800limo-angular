@@ -200,5 +200,4 @@ export class SubTravelPlannerAccountComponent implements OnInit {
       });
     }
   }
-
 }

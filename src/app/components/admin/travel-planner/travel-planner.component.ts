@@ -525,5 +525,4 @@ export class TravelPlannerComponent implements OnInit {
     //   console.log("file", this.fileName, this.fileType)
     // }
   }
-
 }

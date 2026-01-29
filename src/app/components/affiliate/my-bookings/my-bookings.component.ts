@@ -1020,5 +1020,4 @@ export class MyBookingsComponent implements OnInit {
 		// 	console.log("file", this.fileName, this.fileType)
 		// }
 	}
-
 }

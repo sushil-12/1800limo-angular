@@ -178,5 +178,4 @@ export class FamilyMembersComponent implements OnInit {
   addFamilyMember() {
     this.router.navigate(['/individual/add-family-member']);
   }
-
 }

@@ -805,6 +805,4 @@ export class MasterVehicleComponent implements OnInit {
 			return i;
 		})
 	}
-
-
 }

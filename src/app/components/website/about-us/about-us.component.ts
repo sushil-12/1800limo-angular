@@ -148,6 +148,4 @@ export class AboutUsComponent implements OnInit
 			this.timeLineData = data;
 		})
 	}
-
-
 }

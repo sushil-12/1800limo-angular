@@ -19,5 +19,4 @@ export class ImageModalComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.modalImage)
   }
-
 }

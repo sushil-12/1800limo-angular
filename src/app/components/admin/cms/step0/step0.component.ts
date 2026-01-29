@@ -72,5 +72,4 @@ export class Step0Component implements OnInit
 		})
 		//$("#statusEnabledisabledModal").modal();
 	}
-
 }

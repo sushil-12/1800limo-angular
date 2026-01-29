@@ -56,6 +56,4 @@ export class ReportsAdminVehiclesComponent implements OnInit {
       this.bookingsResult = response?.data
 		});
   }
-  
-
 }

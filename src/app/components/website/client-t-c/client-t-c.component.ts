@@ -11,5 +11,4 @@ export class ClientTCComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

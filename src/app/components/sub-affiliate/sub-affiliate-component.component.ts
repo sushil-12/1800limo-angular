@@ -11,5 +11,4 @@ export class SubAffiliateComponentComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

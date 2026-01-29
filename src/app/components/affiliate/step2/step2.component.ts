@@ -173,8 +173,8 @@ export class Step2Component implements OnInit, AfterViewInit {
 			zipCode: ['', Validators.required],
 			unit: [''],
 			primaryCardType: ['personal'],
-			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			primaryCardNumber: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			primaryCSC: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryMM: [''],
 			primaryYY: [''],
 			primaryCardHolderName: ['']
@@ -224,7 +224,7 @@ export class Step2Component implements OnInit, AfterViewInit {
 			requestCity: ['', Validators.required],
 			requestState: ['', Validators.required],
 			requestCountry: ['', Validators.required],
-			requestZipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			requestZipCode: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			requestUnit: [''],
 		});
 		this.spinner.show(); //show spinner

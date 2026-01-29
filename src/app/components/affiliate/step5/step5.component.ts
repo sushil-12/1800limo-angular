@@ -160,9 +160,5 @@ export class Step5Component implements OnInit, AfterViewChecked {
 			});
 
 	}
-
-
-
-
 }
 

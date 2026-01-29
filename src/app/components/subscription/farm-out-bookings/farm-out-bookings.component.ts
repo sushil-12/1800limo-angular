@@ -1315,7 +1315,5 @@ export class FarmOutBookingsComponent implements OnInit {
 	refundAction(url) {
 		window.open(url, '_blank'); // Opens the search in a new tab
 	}
-
-
 }
 

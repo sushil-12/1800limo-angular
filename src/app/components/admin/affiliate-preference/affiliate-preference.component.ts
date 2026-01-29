@@ -183,6 +183,5 @@ export class AffiliatePreferenceComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
-
 }
 
