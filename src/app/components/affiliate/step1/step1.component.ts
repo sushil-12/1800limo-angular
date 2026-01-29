@@ -1256,10 +1256,56 @@ export class Step1Component implements OnInit, AfterViewInit {
 	submitForm() {
 		console.log(this.addAffiliateAccountForm);
 		this.submittedForm = true;
+
+		// Sync CellNumber Country Data
+		if (this.CellNumberObject) {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					CellIsd: '+' + countryData.dialCode,
+					CellNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Dispatch Country Data
+		if (this.DispatchObject) {
+			const countryData = this.DispatchObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					DispatchIsd: '+' + countryData.dialCode,
+					DispatchCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync CompanyCellNumber Country Data
+		if (this.CompanyCellNumberObject) {
+			const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					CompanyCellIsd: '+' + countryData.dialCode,
+					CompanyCellNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Fax Country Data
+		if (this.FaxObject) {
+			const countryData = this.FaxObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					FaxIsd: '+' + countryData.dialCode,
+					FaxCountry: countryData.iso2
+				});
+			}
+		}
 		// stop here if form is invalid
 		if (this.addAffiliateAccountForm.invalid) {
 			return;
 		}
+
+
 
 		// Sanitize Fax (remove Country Code if present)
 		if (this.addAffiliateAccountForm.value.Fax && this.addAffiliateAccountForm.value.FaxIsd && this.addAffiliateAccountForm.value.Fax.startsWith(this.addAffiliateAccountForm.value.FaxIsd)) {

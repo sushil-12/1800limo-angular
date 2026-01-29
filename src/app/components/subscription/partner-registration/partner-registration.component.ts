@@ -245,6 +245,18 @@ export class PartnerRegistrationComponent implements OnInit {
 
   sendOtp() {
     this.spinner.show()
+
+    // Sync country code
+    if (this.MobileObject) {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData && countryData.dialCode) {
+        this.registrationForm.patchValue({
+          countryCode: '+' + countryData.dialCode,
+          phoneCountry: countryData.iso2
+        });
+      }
+    }
+
     let data = {
       phone: this.registrationForm.get('phone').value,
       countryCode: this.registrationForm.get('countryCode').value
@@ -327,6 +339,17 @@ export class PartnerRegistrationComponent implements OnInit {
   submitForm() {
 
     this.submittedForm = true
+
+    // Sync country code
+    if (this.MobileObject) {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData && countryData.dialCode) {
+        this.registrationForm.patchValue({
+          countryCode: '+' + countryData.dialCode,
+          phoneCountry: countryData.iso2
+        });
+      }
+    }
 
     if (this.registrationForm.invalid) {
       return;
