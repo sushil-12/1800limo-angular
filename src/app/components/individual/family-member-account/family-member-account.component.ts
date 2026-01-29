@@ -313,6 +313,17 @@ export class FamilyMemberAccountComponent implements OnInit {
 
     this.submittedForm = true;
 
+    // Sync Phone Country Data
+    if (this.MobileObject) {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData && countryData.dialCode) {
+        this.addFamilyMemberAccountForm.patchValue({
+          phone_isd: '+' + countryData.dialCode,
+          mobileCountry: countryData.iso2
+        });
+      }
+    }
+
     // Sanitize phone_number (remove Country Code if present)
     const phone = this.addFamilyMemberAccountForm.get('phone_number');
     const phoneIsd = this.addFamilyMemberAccountForm.get('phone_isd');
