@@ -221,7 +221,6 @@ export class CreateNewBookingComponent implements OnInit {
 
 		// Check currentUser
 		const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-		console.log('initphonefield: found currentUser:', currentUser);
 		if (currentUser) {
 			countryCode = currentUser.phoneCountry || currentUser.phone_country || currentUser.country || currentUser.country_code || currentUser.Country || currentUser.CountryCode || currentUser.mobileCountry || currentUser.mobile_country || currentUser.PhoneCountry || 'auto';
 
@@ -229,7 +228,6 @@ export class CreateNewBookingComponent implements OnInit {
 			if (countryCode === 'auto') {
 				const phone = currentUser.phone || currentUser.mobile || currentUser.cell || currentUser.telephone;
 				if (phone) {
-					console.log('initphonefield: found phone in currentUser:', phone);
 					// Remove non-numeric characters except +
 					const customCleanPhone = phone.toString().replace(/[^0-9+]/g, '');
 					if (customCleanPhone.startsWith('+') || customCleanPhone.startsWith('00')) {
@@ -255,7 +253,6 @@ export class CreateNewBookingComponent implements OnInit {
 		if (countryCode === 'auto') {
 			const userData = JSON.parse(localStorage.getItem('userData'));
 			if (userData) {
-				console.log('initphonefield: found userData:', userData);
 				countryCode = userData.PhoneCountry || userData.phoneCountry || userData.phone_country || userData.country || userData.country_code || userData.Country || 'auto';
 			}
 		}
@@ -265,12 +262,10 @@ export class CreateNewBookingComponent implements OnInit {
 			let cleanCode = countryCode.toString().replace('+', '');
 			if (!isNaN(Number(cleanCode))) {
 				// It's a number/dial code
-				console.log('Detected dial code:', cleanCode);
 				try {
 					const allCountries = (window as any).intlTelInputGlobals.getCountryData();
 					const foundCountry = allCountries.find(c => c.dialCode == cleanCode);
 					if (foundCountry) {
-						console.log('Mapped dial code to ISO:', foundCountry.iso2);
 						countryCode = foundCountry.iso2;
 					}
 				} catch (e) {
@@ -287,25 +282,18 @@ export class CreateNewBookingComponent implements OnInit {
 		console.log('Final Choice for countryCode:', countryCode);
 
 		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
-		// If we have a specific country, disable initial auto lookup to prevent overrides?
-		// But getTelInputOptions handles that by checking if initialCountry === 'auto'
 
 		if (this.phoneInput) {
 			if (this.LCTelObject) {
 				this.LCTelObject.destroy();
 			}
 			this.LCTelObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
-			// Force set country if not auto
-			if (countryCode !== 'auto') {
-				console.log('Forcing LCTelObject country to:', countryCode);
-				this.LCTelObject.setCountry(countryCode);
-				// Double force after a tick incase plugin does something async
-				setTimeout(() => this.LCTelObject.setCountry(countryCode), 100);
-			}
 
 			const lcCountry = this.BookingForm.get('loose_customer.phone_country')?.value;
 			if (lcCountry) {
 				this.LCTelObject.setCountry(lcCountry);
+			} else if (countryCode !== 'auto') {
+				this.LCTelObject.setCountry(countryCode);
 			}
 
 			this.addCustomCountrySearch(this.phoneInput.nativeElement);
@@ -321,16 +309,20 @@ export class CreateNewBookingComponent implements OnInit {
 				this.PaxTelObject.destroy();
 			}
 			this.PaxTelObject = intlTelInput(this.passenger_cellInput.nativeElement, telOptions);
-			// Force set country if not auto
-			if (countryCode !== 'auto') {
-				console.log('Forcing PaxTelObject country to:', countryCode);
-				this.PaxTelObject.setCountry(countryCode);
-				setTimeout(() => this.PaxTelObject.setCountry(countryCode), 100);
-			}
 
 			const paxCountry = this.BookingForm.get('passenger_cell_country')?.value;
+			const paxIsd = this.BookingForm.get('passenger_cell_isd')?.value;
+
 			if (paxCountry) {
 				this.PaxTelObject.setCountry(paxCountry);
+			} else if (paxIsd) {
+				// No country but ISD exists, try to deduce? 
+				// For now let's just not overwrite with auto/default if ISD is present, 
+				// but since we just init'd with default options, it might already be wrong.
+				// Best to rely on prefill logic to fix this, or try:
+				// this.PaxTelObject.setNumber(paxIsd); // This might clear the input text though
+			} else if (countryCode !== 'auto') {
+				this.PaxTelObject.setCountry(countryCode);
 			}
 
 			this.addCustomCountrySearch(this.passenger_cellInput.nativeElement);
@@ -347,16 +339,13 @@ export class CreateNewBookingComponent implements OnInit {
 				this.DrvTelObject.destroy();
 			}
 			this.DrvTelObject = intlTelInput(this.driver_cellInput.nativeElement, telOptions);
-			// Force set country if not auto
-			if (countryCode !== 'auto') {
-				console.log('Forcing DrvTelObject country to:', countryCode);
-				this.DrvTelObject.setCountry(countryCode);
-				setTimeout(() => this.DrvTelObject.setCountry(countryCode), 100);
-			}
 
 			const drvCountry = this.BookingForm.get('driver_cell_country')?.value;
+
 			if (drvCountry) {
 				this.DrvTelObject.setCountry(drvCountry);
+			} else if (countryCode !== 'auto') {
+				this.DrvTelObject.setCountry(countryCode);
 			}
 
 			this.addCustomCountrySearch(this.driver_cellInput.nativeElement);
@@ -883,11 +872,30 @@ export class CreateNewBookingComponent implements OnInit {
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
-				if (this.BookingForm.get('passenger_cell_country').value) {
-					this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
+				// Update Passenger Cell Flag
+				if (this.PaxTelObject) {
+					if (editing_data.passenger_cell_country) {
+						this.PaxTelObject.setCountry(String(editing_data.passenger_cell_country).toLowerCase());
+					} else if (editing_data.passenger_cell_isd && editing_data.passenger_cell) {
+						let isd = String(editing_data.passenger_cell_isd).startsWith('+') ? editing_data.passenger_cell_isd : '+' + editing_data.passenger_cell_isd;
+						this.PaxTelObject.setNumber(isd + editing_data.passenger_cell);
+						this.SetFormValue('passenger_cell', editing_data.passenger_cell);
+					}
 				}
-				if (this.BookingForm.get('loose_customer.phone_country').value) {
-					this.LCTelObject.setCountry(this.BookingForm.get('loose_customer.phone_country').value);
+
+				// Update Driver Cell Flag
+				if (this.DrvTelObject) {
+					if (editing_data.driver_cell_country) {
+						this.DrvTelObject.setCountry(String(editing_data.driver_cell_country).toLowerCase());
+					} else if (editing_data.driver_cell_isd && editing_data.driver_cell) {
+						let isd = String(editing_data.driver_cell_isd).startsWith('+') ? editing_data.driver_cell_isd : '+' + editing_data.driver_cell_isd;
+						this.DrvTelObject.setNumber(isd + editing_data.driver_cell);
+						this.SetFormValue('driver_cell', editing_data.driver_cell);
+					}
+				}
+
+				if (this.BookingForm.get('loose_customer.phone_country')?.value && this.LCTelObject) {
+					this.LCTelObject.setCountry(this.BookingForm.get('loose_customer.phone_country')?.value);
 				}
 			} catch (e) {
 				console.error('Set Country Error:', e)

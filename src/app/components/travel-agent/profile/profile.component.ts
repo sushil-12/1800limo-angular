@@ -221,6 +221,12 @@ export class ProfileComponent implements OnInit {
       console.log('onput', this.cellInput, this.cellInput.nativeElement)
       this.OfficeObject = intlTelInput(this.cellInput.nativeElement, telOptions);
 
+      // Check if form has value, set it
+      const existingCountry = this.profileForm.get('workCountry')?.value;
+      if (existingCountry) {
+        this.OfficeObject.setCountry(existingCountry);
+      }
+
       this.addCustomCountrySearch(this.cellInput.nativeElement);
       this.cellInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.OfficeObject.getSelectedCountryData();
@@ -232,6 +238,11 @@ export class ProfileComponent implements OnInit {
     if (this.mobileInput) {
       console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
       this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+
+      const existingCountry = this.profileForm.get('mobileCountry')?.value;
+      if (existingCountry) {
+        this.MobileObject.setCountry(existingCountry);
+      }
 
       this.addCustomCountrySearch(this.mobileInput.nativeElement);
       this.mobileInput.nativeElement.addEventListener('countrychange', () => {
@@ -245,10 +256,18 @@ export class ProfileComponent implements OnInit {
       console.log('onput', this.faxInput, this.faxInput.nativeElement)
       this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
 
-      // Sync ISD immediately with initialized country
-      const countryData = this.FaxObject.getSelectedCountryData();
-      if (countryData?.dialCode) {
-        this.profileForm.patchValue({ faxIsd: '+' + countryData.dialCode });
+      // Check if form has value for faxCountry
+      const existingCountry = this.profileForm.get('faxCountry')?.value;
+      const existingIsd = this.profileForm.get('faxIsd')?.value;
+
+      if (existingCountry) {
+        this.FaxObject.setCountry(existingCountry);
+      } else if (!existingIsd) {
+        // Only if NO country AND NO ISD, sync default
+        const countryData = this.FaxObject.getSelectedCountryData();
+        if (countryData?.dialCode) {
+          this.profileForm.patchValue({ faxIsd: '+' + countryData.dialCode });
+        }
       }
 
       this.addCustomCountrySearch(this.faxInput.nativeElement);
@@ -263,10 +282,18 @@ export class ProfileComponent implements OnInit {
       console.log('onput', this.officeNumberInput, this.officeNumberInput.nativeElement)
       this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
 
-      // Sync ISD immediately with initialized country
-      const countryData = this.OfficePhoneObject.getSelectedCountryData();
-      if (countryData?.dialCode) {
-        this.profileForm.patchValue({ isd_office_number: '+' + countryData.dialCode });
+      // Check if form has value for office_country_code
+      const existingCountry = this.profileForm.get('office_country_code')?.value;
+      const existingIsd = this.profileForm.get('isd_office_number')?.value;
+
+      if (existingCountry) {
+        this.OfficePhoneObject.setCountry(existingCountry);
+      } else if (!existingIsd) {
+        // Only if NO country AND NO ISD, sync default
+        const countryData = this.OfficePhoneObject.getSelectedCountryData();
+        if (countryData?.dialCode) {
+          this.profileForm.patchValue({ isd_office_number: '+' + countryData.dialCode });
+        }
       }
 
       this.addCustomCountrySearch(this.officeNumberInput.nativeElement);
@@ -276,10 +303,6 @@ export class ProfileComponent implements OnInit {
         this.onCountryChange(countryData, 'office_number')
       });
     }
-    // this.MobileObject.setCountry(this.defaultCountryCode)
-    // this.OfficeObject.setCountry(this.defaultCountryCode)
-    // this.OfficePhoneObject.setCountry(this.defaultCountryCode)
-    // this.FaxObject.setCountry(this.defaultCountryCode)
   }
 
   buildProfileForm() {
@@ -366,10 +389,41 @@ export class ProfileComponent implements OnInit {
           longitude: data?.longitude,
         })
         console.log('profile data-->>>>', data)
-        this.MobileObject.setCountry(data?.mobileCountry)
-        this.OfficeObject.setCountry(data?.workCountry);
-        this.FaxObject.setCountry(data?.faxCountry);
-        this.OfficePhoneObject.setCountry(data?.office_country_code);
+        if (this.MobileObject) {
+          if (data?.mobileCountry) {
+            this.MobileObject.setCountry(data.mobileCountry)
+          } else if (data?.mobileIsd && data?.mobile) {
+            this.MobileObject.setNumber(data.mobileIsd + data.mobile);
+            // setNumber might update the input val to full Int format, reset to just number
+            this.profileForm.patchValue({ mobile: data.mobile });
+          }
+        }
+        if (this.OfficeObject) {
+          if (data?.workCountry) {
+            this.OfficeObject.setCountry(data.workCountry);
+          } else if (data?.workIsd && data?.work_contact_number) {
+            this.OfficeObject.setNumber(data.workIsd + data.work_contact_number);
+            this.profileForm.patchValue({ work_contact_number: data.work_contact_number });
+          }
+        }
+        if (this.FaxObject) {
+          if (data?.faxCountry) {
+            this.FaxObject.setCountry(data.faxCountry);
+          } else if (data?.faxIsd && data?.fax) {
+            // Deduce flag from ISD+Number
+            this.FaxObject.setNumber(data.faxIsd + data.fax);
+            // Reset input to just number (National format typically desired in form control)
+            this.profileForm.patchValue({ fax: data.fax });
+          }
+        }
+        if (this.OfficePhoneObject) {
+          if (data?.office_country_code) {
+            this.OfficePhoneObject.setCountry(data.office_country_code);
+          } else if (data?.isd_office_number && data?.office_number) {
+            this.OfficePhoneObject.setNumber(data.isd_office_number + data.office_number);
+            this.profileForm.patchValue({ office_number: data.office_number });
+          }
+        }
       });
   }
   onCountryChange(event, type) {
