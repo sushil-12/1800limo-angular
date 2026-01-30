@@ -416,7 +416,7 @@
 							<mat-label>24 Hr Dispatch E-mail
 								<span class="asterisk">*</span>
 							</mat-label>
-							<input pattern="[0-9+]*" maxlength="16" [class.errorColor]="dispatchEmailStatus == 'no'"
+							<input [class.errorColor]="dispatchEmailStatus == 'no'"
 								matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
 								[readonly]="dispatchEmailReadonly" tabIndex="1" />
 							<svg *ngIf="dispatchEmailStatus == 'yes'" xmlns="http://www.w3.org/2000/svg"
