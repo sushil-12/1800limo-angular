@@ -11,5 +11,4 @@ export class CustomerFaqComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

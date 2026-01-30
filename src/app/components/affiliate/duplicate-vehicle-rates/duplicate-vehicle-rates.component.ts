@@ -215,7 +215,7 @@ export class DuplicateVehicleRatesComponent implements OnInit
 		//add amenity form validation
 		this.addVehicleRatesForm = this.formBuilder.group({
 			acc_id: [''],
-			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -587,5 +587,4 @@ export class DuplicateVehicleRatesComponent implements OnInit
 	// backButton() {
 	//   this.router.navigate(['/affiliate/step5']);
 	// }
-
 }

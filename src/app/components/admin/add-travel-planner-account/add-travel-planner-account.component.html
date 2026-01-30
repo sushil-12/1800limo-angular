@@ -39,7 +39,7 @@
 						<mat-form-field appearance="outline" class="mobileField"
 							[class.is-invalid-input]="submittedForm && f.office.errors || (f.office.touched || f.office.dirty) && f.office.errors">
 							<mat-label>Contact</mat-label>
-							<input matInput #officeInput placeholder="Contact" formControlName="office"
+							<input pattern="[0-9+]*" maxlength="16" matInput #officeInput placeholder="Contact" formControlName="office"
 								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
 								(keypress)="numberOnly($event)" (input)="validateOffice()" (blur)="validateOffice()" />
 						</mat-form-field>
@@ -70,7 +70,7 @@
 						<mat-form-field appearance="outline" class="mobileField"
 							[class.is-invalid-input]="submittedForm && f.mobile.errors || (f.mobile.touched || f.mobile.dirty) && f.mobile.errors">
 							<mat-label>Mobile<span class="asterisk"> *</span></mat-label>
-							<input matInput #mobileInput placeholder="mobile" formControlName="mobile"
+							<input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="mobile" formControlName="mobile"
 								class="phoneNumberClass" tabindex="1" [readonly]="travelPlannerId"
 								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 								(input)="validateMobile()" (blur)="validateMobile()" />
@@ -179,7 +179,7 @@
 						<mat-form-field appearance="outline" class="mobileField"
 							[class.is-invalid-input]="submittedForm && f.fax.errors || (f.fax.touched || f.fax.dirty) && f.fax.errors">
 							<mat-label>Fax</mat-label>
-							<input matInput #faxInput placeholder="fax" formControlName="fax" class="phoneNumberClass"
+							<input pattern="[0-9+]*" maxlength="16" matInput #faxInput placeholder="fax" formControlName="fax" class="phoneNumberClass"
 								tabindex="1" (focus)="$event.target.select()" (keypress)="numberOnly($event)"
 								(input)="validateFax()" (blur)="validateFax()" />
 
@@ -212,7 +212,7 @@
 							[class.is-invalid-input]="submittedForm && f.officeNumber.errors || (f.officeNumber.touched || f.officeNumber.dirty) && f.officeNumber.errors">
 							<mat-label>24hr Agent Help Desk <span class="asterisk">*</span></mat-label>
 
-							<input matInput #officeNumberInput placeholder="24hr Agent Help Desk"
+							<input pattern="[0-9+]*" maxlength="16" matInput #officeNumberInput placeholder="24hr Agent Help Desk"
 								formControlName="officeNumber" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 								(input)="validateOfficeNumber()" (blur)="validateOfficeNumber()" />

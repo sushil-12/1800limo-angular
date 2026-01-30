@@ -366,5 +366,4 @@ export class RecoverAccountsComponent implements OnInit {
     //   console.log("file", this.fileName, this.fileType)
     // }
   }
-
 }

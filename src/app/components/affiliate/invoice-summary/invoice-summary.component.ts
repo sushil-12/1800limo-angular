@@ -123,5 +123,4 @@ export class InvoiceSummaryComponent implements OnInit {
 			})
 		}
 	}
-
 }

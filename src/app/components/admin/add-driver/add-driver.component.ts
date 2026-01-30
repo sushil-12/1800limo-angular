@@ -11,7 +11,7 @@ import { ThemePalette } from '@angular/material/core';
 import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
-import { CommonService } from 'src/app/services/common.service';
+import { CommonService } from '../../../services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
@@ -29,34 +29,34 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 	globalFunctions = this.globals
 
 	color: ThemePalette = 'accent';
-	public driverId: string;
+	public driverId: string = '';
 	public paramResponse: any;
-	public imageSrc: string;
+	public imageSrc: string = '';
 	public addDriverForm: FormGroup;
-	public submittedForm: boolean;
+	public submittedForm: boolean = false;
 	public disableSubmitButton: boolean = false;
 	public response: any;
 	public response2: any;
-	public affiliateId: string;
+	public affiliateId: string = '';
 	public driverAdded: boolean = false;
-	public DriverImage: string;
-	public DriverLicense: string;
-	public StarRating: string;
-	public VeteranIdCard: string;
-	public DoDImage: string;
-	public FoidCardImage: string;
-	public BackgroundCheckerID: string;
-	public VaccinationCardImage: string;
-	public DriverImageId: string;
-	public DriverLicenseId: string;
-	public StarRatingId: string;
-	public VeteranIdCardId: string;
-	public DoDImageId: string;
-	public schoolBusCertificateImage: string;
-	public schoolBusCertificateImageId: string;
-	public FoidCardImageId: string;
-	public BackgroundCheckerIDId: string;
-	public VaccinationCardImageId: string;
+	public DriverImage: string = '';
+	public DriverLicense: string = '';
+	public StarRating: string = '';
+	public VeteranIdCard: string = '';
+	public DoDImage: string = '';
+	public FoidCardImage: string = '';
+	public BackgroundCheckerID: string = '';
+	public VaccinationCardImage: string = '';
+	public DriverImageId: string = '';
+	public DriverLicenseId: string = '';
+	public StarRatingId: string = '';
+	public VeteranIdCardId: string = '';
+	public DoDImageId: string = '';
+	public schoolBusCertificateImage: string = '';
+	public schoolBusCertificateImageId: string = '';
+	public FoidCardImageId: string = '';
+	public BackgroundCheckerIDId: string = '';
+	public VaccinationCardImageId: string = '';
 	public languages: any;
 	public languagesFormControl: any;
 	public dresses: any;
@@ -75,8 +75,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 	public BackgroundCompanyTelNumber: any;
 	public PoliceForceTelephoneObject: any;
 	public PoliceForceTelephone: any;
-	public currentDate: string;
-	public modalImage: string;
+	public currentDate: string = '';
+	public modalImage: string = '';
 	public countryOptions: any = [];
 	public stateOptions: any = [];
 
@@ -116,7 +116,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 		//add driver form validation
 		// start date validations before 
-		// [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]
+		// [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]
 		this.addDriverForm = this.formBuilder.group({
 			id: [''],//driver id for edit purpose
 			acc_id: [this.affiliateId, Validators.required],//affiliate account id
@@ -124,7 +124,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			MiddleName: [''],
 			LastName: ['', Validators.required],
 			Gender: ['male', Validators.required],
-			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			CellIsd: ['+1', Validators.required],
 			CellNumberCountry: ['us', Validators.required],
 			Email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
@@ -153,7 +153,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			BackgroundCompanyTelNumberCountry: ['us'],
 			VaccinationCardImage: [''],
 			schoolBusCertificateImage: [''],
-			PoliceForceTelephone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			PoliceForceTelephone: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			PoliceForceTelephoneIsd: ['+1'],
 			PoliceForceTelephoneCountry: ['us'],
 			LastPoliceDepartment: [''],
@@ -415,18 +415,21 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 
 	initallphonefields() {
+		let countryCode = 'auto';
+		if (this.currentUser && this.currentUser.CellNumberCountry) {
+			countryCode = this.currentUser.CellNumberCountry;
+		}
+
+		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
 		if (this.cellInput) {
 			console.log('onput', this.cellInput, this.cellInput.nativeElement)
-			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: false,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-			});
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.cellInput.nativeElement);
+			if (existing) existing.destroy();
+
+			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.cellInput.nativeElement);
 
 			this.cellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.CellNumberObject.getSelectedCountryData();
@@ -438,15 +441,12 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 		if (this.backgroundCompanyTelInput) {
 			console.log('onput', this.backgroundCompanyTelInput, this.backgroundCompanyTelInput.nativeElement)
-			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: false,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-			});
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.backgroundCompanyTelInput.nativeElement);
+			if (existing) existing.destroy();
+
+			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.backgroundCompanyTelInput.nativeElement);
 
 			this.backgroundCompanyTelInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
@@ -456,19 +456,14 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			});
 		}
 
-
-
 		if (this.policeTelInput) {
 			console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
-			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: false,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-			});
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.policeTelInput.nativeElement);
+			if (existing) existing.destroy();
+
+			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.policeTelInput.nativeElement);
 
 			this.policeTelInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
@@ -479,16 +474,13 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		}
 
 		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
+		// this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
 		this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
 		this.addDriverForm.patchValue({
 			Country: this.currentUser.CellNumberCountry.toUpperCase()
 		});
-
-
-
 	}
 
 	closeButton() {
@@ -518,6 +510,10 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
+		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
+		if (charCode === 43) {
+			return true;
+		}
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
 			return false;
 		}
@@ -537,7 +533,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			const isValid = telInputObject.isValidNumber();
 			if (!isValid) {
 				const errorCode = telInputObject.getValidationError();
-				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
 				const currentErrors = control.errors || {};
 				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
 			} else {
@@ -961,7 +957,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 					BackgroundCertified: 'yes'
 				});
 				this.BackgroundCertificateCheck = true;
-				this.addDriverForm.controls['BackgroundCompanyTelNumber'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+				this.addDriverForm.controls['BackgroundCompanyTelNumber'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 				this.addDriverForm.controls['BackgroundCompanyTelNumberCountry'].setValidators([Validators.required]);
 				this.addDriverForm.controls['BackgroundCompanyTelIsd'].setValidators([Validators.required]);
 				this.addDriverForm.controls['CheckerID'].setValidators([Validators.required]);
@@ -1047,8 +1043,75 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 
 	submitForm() {
 		this.submittedForm = true;
+
+		// Sync CellNumber Country Data
+		if (this.CellNumberObject) {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addDriverForm.patchValue({
+					CellIsd: '+' + countryData.dialCode,
+					CellNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync BackgroundCompanyTelNumber Country Data
+		if (this.BackgroundCompanyTelNumberObject) {
+			const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addDriverForm.patchValue({
+					BackgroundCompanyTelIsd: '+' + countryData.dialCode,
+					BackgroundCompanyTelNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync PoliceForceTelephone Country Data
+		if (this.PoliceForceTelephoneObject) {
+			const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addDriverForm.patchValue({
+					PoliceForceTelephoneIsd: '+' + countryData.dialCode,
+					PoliceForceTelephoneCountry: countryData.iso2
+				});
+			}
+		}
+
 		// stop here if form is invalid
 		console.log(this.addDriverForm)
+		// Sanitize CellNumber
+		const cell = this.addDriverForm.get('CellNumber');
+		const cellIsd = this.addDriverForm.get('CellIsd');
+		if (cell && cell.value && cellIsd && cellIsd.value) {
+			const val = String(cell.value);
+			const isd = String(cellIsd.value);
+			if (val.startsWith(isd)) {
+				cell.setValue(val.substring(isd.length));
+			}
+		}
+
+		// Sanitize BackgroundCompanyTelNumber
+		const bgTel = this.addDriverForm.get('BackgroundCompanyTelNumber');
+		const bgIsd = this.addDriverForm.get('BackgroundCompanyTelIsd');
+		if (bgTel && bgTel.value && bgIsd && bgIsd.value) {
+			const val = String(bgTel.value);
+			const isd = String(bgIsd.value);
+			if (val.startsWith(isd)) {
+				bgTel.setValue(val.substring(isd.length));
+			}
+		}
+
+		// Sanitize PoliceForceTelephone
+		const polTel = this.addDriverForm.get('PoliceForceTelephone');
+		const polIsd = this.addDriverForm.get('PoliceForceTelephoneIsd');
+		if (polTel && polTel.value && polIsd && polIsd.value) {
+			const val = String(polTel.value);
+			const isd = String(polIsd.value);
+			if (val.startsWith(isd)) {
+				polTel.setValue(val.substring(isd.length));
+			}
+		}
+
 		if (this.addDriverForm.invalid) {
 			return;
 		}
@@ -1136,4 +1199,83 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		this.router.navigate(['/admin/affiliate/step4']);
 	}
 
+
+	private addCustomCountrySearch(element: HTMLElement) {
+		element.addEventListener('open:countrydropdown', () => {
+			const container = element.closest('.iti');
+			const dropdown = container?.querySelector('.iti__country-list');
+			if (!dropdown) return;
+
+			// Check if search already exists
+			if (dropdown.querySelector('.iti-search-input')) return;
+
+			// Create search container
+			const searchContainer = document.createElement('div');
+			searchContainer.className = 'iti-search-container';
+
+			// Create search input
+			const searchInput = document.createElement('input');
+			searchInput.type = 'text';
+			searchInput.className = 'iti-search-input';
+			searchInput.placeholder = 'Search country...';
+
+			searchContainer.appendChild(searchInput);
+
+			// Prevent dropdown from closing when interacting with search
+			searchInput.addEventListener('click', (e) => e.stopPropagation());
+			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+			// Insert at top of dropdown
+			dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+			// Focus on search
+			setTimeout(() => searchInput.focus(), 100);
+
+			// Filter countries on input
+			searchInput.addEventListener('input', (e: any) => {
+				e.stopPropagation();
+				const searchTerm = e.target.value.toLowerCase();
+				const countries = dropdown.querySelectorAll('.iti__country');
+				let hasVisible = false;
+
+				countries.forEach((country: any) => {
+					// Search in the full text (Name + Dial Code)
+					const text = country.textContent?.toLowerCase() || '';
+
+					if (text.includes(searchTerm)) {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block'; // Force show
+						hasVisible = true;
+					} else {
+						country.classList.add('iti__hide');
+						country.style.display = 'none'; // Force hide
+					}
+				});
+
+				// Handle No Results
+				let noResults = dropdown.querySelector('.iti-no-results');
+				if (!noResults) {
+					noResults = document.createElement('div');
+					noResults.className = 'iti-no-results';
+					noResults.textContent = 'No results found';
+					dropdown.appendChild(noResults);
+				}
+
+				if (!hasVisible && searchTerm) {
+					(noResults as HTMLElement).style.display = 'block';
+				} else {
+					(noResults as HTMLElement).style.display = 'none';
+				}
+
+				// Show all if search is empty
+				if (!searchTerm) {
+					countries.forEach((country: any) => {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block';
+					});
+					(noResults as HTMLElement).style.display = 'none';
+				}
+			});
+		});
+	}
 }

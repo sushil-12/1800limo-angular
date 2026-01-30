@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { ErrorDialogService } from './error-dialog/errordialog.service';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class CommonService {
 
-  constructor(private errorModal :ErrorDialogService,) { }
-  handleFile(event) {
-    console.log("in function handle file", event)
+	constructor(private errorModal: ErrorDialogService,) { }
+	handleFile(event) {
+		console.log("in function handle file", event)
 		const [file] = event.target.files
 		const fileType = file.type // image/jpeg
 		console.log("fileType", fileType)
@@ -23,5 +23,26 @@ export class CommonService {
 		} else {
 			return true
 		}
+	}
+
+	getTelInputOptions(initialCountry?: string) {
+		const options: any = {
+			initialCountry: initialCountry || 'auto',
+			preferredCountries: ['us', 'ca', 'mx', 'gb'],
+			separateDialCode: true,
+			nationalMode: true,
+			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js'
+		};
+
+		if (options.initialCountry === 'auto') {
+			options.geoIpLookup = function (callback: (countryCode: string) => void) {
+				fetch('https://ipapi.co/json')
+					.then(function (res) { return res.json(); })
+					.then(function (data) { callback(data.country_code); })
+					.catch(function () { callback('us'); });
+			};
+		}
+
+		return options;
 	}
 }

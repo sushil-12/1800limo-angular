@@ -763,6 +763,4 @@ export class FarmOutComponent implements OnInit {
 			return `${cancellationHours} hours`;
 		}
 	}
-
-
 }

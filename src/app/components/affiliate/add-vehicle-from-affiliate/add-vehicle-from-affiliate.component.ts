@@ -1043,6 +1043,4 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		// 	}
 		// }
 	}
-
-
 }

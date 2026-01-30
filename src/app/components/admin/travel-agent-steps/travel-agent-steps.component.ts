@@ -128,5 +128,4 @@ export class TravelAgentStepsComponent implements OnInit {
 		// this.getAffiliateName();
 
 	}
-
 }

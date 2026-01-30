@@ -1278,5 +1278,4 @@ export class EditVehicleComponent implements OnInit {
 			charterCancelPolicy : event.value
 		})
 	}
-
 }

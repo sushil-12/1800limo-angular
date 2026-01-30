@@ -471,6 +471,4 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     this.searchText = ""
     localStorage.removeItem('looseAffiliateSearch')
   }
-
-
 }

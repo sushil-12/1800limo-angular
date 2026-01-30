@@ -376,7 +376,4 @@ export class FleetPageEditComponent implements OnInit {
 	{
 		this.router.navigate(['/admin/cms/fleet']);
 	}
-
-
-
 }

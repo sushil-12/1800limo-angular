@@ -54,10 +54,10 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline" class="mobileField">
 						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
-						<input matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-							(keypress)="numberOnly($event)" (input)="validateCellNumber()"
-							(blur)="validateCellNumber()" />
+						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890"
+							formControlName="CellNumber" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCellNumber()" (blur)="validateCellNumber()" />
 
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
@@ -950,8 +950,8 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Background Comapny Name <span class="asterisk">*</span></mat-label>
-								<input matInput placeholder="Background Comapny Name" formControlName="CheckerID"
-									tabindex="1" (focus)="$event.target.select()">
+								<input  matInput placeholder="Background Comapny Name"
+									formControlName="CheckerID" tabindex="1" (focus)="$event.target.select()">
 							</mat-form-field>
 							<div *ngIf="submittedForm && f.CheckerID.errors || f.CheckerID.touched && f.CheckerID.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -962,7 +962,8 @@
 							<mat-form-field appearance="outline" class="mobileField">
 								<mat-label>Background company Telephone # <span class="asterisk">*</span></mat-label>
 
-								<input matInput #backgroundCompanyTelInput placeholder="Background company Telephone #"
+								<input pattern="[0-9+]*" maxlength="16" matInput #backgroundCompanyTelInput
+									placeholder="Background company Telephone #"
 									formControlName="BackgroundCompanyTelNumber" class="phoneNumberClass" tabindex="1"
 									(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 									(input)="validateBackgroundCompany()" (blur)="validateBackgroundCompany()" />
@@ -1104,8 +1105,9 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Name of Department <span class="asterisk">*</span></mat-label>
-								<input matInput placeholder="Name of Department" formControlName="LastPoliceDepartment"
-									tabindex="1" (focus)="$event.target.select()">
+								<input matInput placeholder="Name of Department"
+									formControlName="LastPoliceDepartment" tabindex="1"
+									(focus)="$event.target.select()">
 							</mat-form-field>
 							<div *ngIf="submittedForm && f.LastPoliceDepartment.errors || f.LastPoliceDepartment.touched && f.LastPoliceDepartment.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -1115,10 +1117,11 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline" class="mobileField">
 								<mat-label>Police Depart. Tel #</mat-label>
-								<input matInput #policeTelInput placeholder="Police Depart. Tel #"
-									formControlName="PoliceForceTelephone" class="phoneNumberClass" tabindex="1"
-									(focus)="$event.target.select()" (keypress)="numberOnly($event)"
-									(input)="validatePoliceForce()" (blur)="validatePoliceForce()" />
+								<input pattern="[0-9+]*" maxlength="16" matInput #policeTelInput
+									placeholder="Police Depart. Tel #" formControlName="PoliceForceTelephone"
+									class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+									(keypress)="numberOnly($event)" (input)="validatePoliceForce()"
+									(blur)="validatePoliceForce()" />
 
 							</mat-form-field>
 							<div *ngIf="f.PoliceForceTelephone.errors"

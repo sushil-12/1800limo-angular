@@ -11,5 +11,4 @@ export class PhotoInstructionsComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

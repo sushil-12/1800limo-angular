@@ -9,6 +9,8 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
+import { CommonService } from '../../../services/common.service';
+
 
 @Component({
 	selector: 'app-add-individual-account',
@@ -36,7 +38,8 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		private activatedroute: ActivatedRoute,
 		private ngZone: NgZone,
 		private customValidator: CustomvalidationService,
-		private errors: ErrorDialogService
+		private errors: ErrorDialogService,
+		private commonServices: CommonService
 	) { }
 
 
@@ -83,6 +86,10 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
+		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
+		if (charCode === 43) {
+			return true;
+		}
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
 			return false;
 		}
@@ -103,7 +110,7 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 			const isValid = telInputObject.isValidNumber();
 			if (!isValid) {
 				const errorCode = telInputObject.getValidationError();
-				const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+				const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
 				const currentErrors = control.errors || {};
 				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
 			} else {
@@ -119,15 +126,10 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 
 		if (this.mobileInput) {
 			console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
-			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: false,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions('us');
+			this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.mobileInput.nativeElement);
 
 			this.mobileInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.MobileObject.getSelectedCountryData();
@@ -139,15 +141,10 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 
 		if (this.workInput) {
 			console.log('onput', this.workInput, this.workInput.nativeElement)
-			this.WorkObject = intlTelInput(this.workInput.nativeElement, {
-				initialCountry: 'us',
-				preferredCountries: ['us', 'ca', 'mx', 'gb'],
-				separateDialCode: true,
-				nationalMode: false,
-				// autoPlaceholder: 'aggressive',
-				utilsScript:
-					'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-			});
+			const telOptions: any = this.commonServices.getTelInputOptions('us');
+			this.WorkObject = intlTelInput(this.workInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.workInput.nativeElement);
 
 			this.workInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.WorkObject.getSelectedCountryData();
@@ -156,9 +153,6 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 				this.validatePhone('work', this.WorkObject);
 			});
 		}
-
-
-
 	}
 
 	initGoogleAutocomplete(): void {
@@ -211,7 +205,7 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 			firstName: ['', Validators.required],
 			middleName: [''],
 			lastName: ['', Validators.required],
-			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			mobile: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			mobileIsd: ['+1', Validators.required],
 			mobileCountry: ['us'],
 			work: [''],
@@ -267,9 +261,42 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
+
+		// Sync mobile Country Data
+		if (this.MobileObject) {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addIndividualAccountForm.patchValue({
+					mobileIsd: '+' + countryData.dialCode,
+					mobileCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync work Country Data
+		if (this.WorkObject) {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addIndividualAccountForm.patchValue({
+					workIsd: '+' + countryData.dialCode,
+					workCountry: countryData.iso2
+				});
+			}
+		}
+
 		// stop here if form is invalid
 		if (this.addIndividualAccountForm.invalid) {
 			return;
+		}
+
+		// Sanitize work (remove Country Code if present)
+		if (this.addIndividualAccountForm.value.work && this.addIndividualAccountForm.value.workIsd && this.addIndividualAccountForm.value.work.startsWith(this.addIndividualAccountForm.value.workIsd)) {
+			this.addIndividualAccountForm.value.work = this.addIndividualAccountForm.value.work.substring(this.addIndividualAccountForm.value.workIsd.length);
+		}
+
+		// Sanitize mobile (remove Country Code if present)
+		if (this.addIndividualAccountForm.value.mobile && this.addIndividualAccountForm.value.mobileIsd && this.addIndividualAccountForm.value.mobile.startsWith(this.addIndividualAccountForm.value.mobileIsd)) {
+			this.addIndividualAccountForm.value.mobile = this.addIndividualAccountForm.value.mobile.substring(this.addIndividualAccountForm.value.mobileIsd.length);
 		}
 
 		if (this.addIndividualAccountForm.get('address').value != '' && this.addIndividualAccountForm.get('latitude').value == '') {
@@ -310,4 +337,83 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 		this.router.navigate(['/admin/individual-account-admin']);
 	}
 
+
+	private addCustomCountrySearch(element: HTMLElement) {
+		element.addEventListener('open:countrydropdown', () => {
+			const container = element.closest('.iti');
+			const dropdown = container?.querySelector('.iti__country-list');
+			if (!dropdown) return;
+
+			// Check if search already exists
+			if (dropdown.querySelector('.iti-search-input')) return;
+
+			// Create search container
+			const searchContainer = document.createElement('div');
+			searchContainer.className = 'iti-search-container';
+
+			// Create search input
+			const searchInput = document.createElement('input');
+			searchInput.type = 'text';
+			searchInput.className = 'iti-search-input';
+			searchInput.placeholder = 'Search country...';
+
+			searchContainer.appendChild(searchInput);
+
+			// Prevent dropdown from closing when interacting with search
+			searchInput.addEventListener('click', (e) => e.stopPropagation());
+			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+			// Insert at top of dropdown
+			dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+			// Focus on search
+			setTimeout(() => searchInput.focus(), 100);
+
+			// Filter countries on input
+			searchInput.addEventListener('input', (e: any) => {
+				e.stopPropagation();
+				const searchTerm = e.target.value.toLowerCase();
+				const countries = dropdown.querySelectorAll('.iti__country');
+				let hasVisible = false;
+
+				countries.forEach((country: any) => {
+					// Search in the full text (Name + Dial Code)
+					const text = country.textContent?.toLowerCase() || '';
+
+					if (text.includes(searchTerm)) {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block'; // Force show
+						hasVisible = true;
+					} else {
+						country.classList.add('iti__hide');
+						country.style.display = 'none'; // Force hide
+					}
+				});
+
+				// Handle No Results
+				let noResults = dropdown.querySelector('.iti-no-results');
+				if (!noResults) {
+					noResults = document.createElement('div');
+					noResults.className = 'iti-no-results';
+					noResults.textContent = 'No results found';
+					dropdown.appendChild(noResults);
+				}
+
+				if (!hasVisible && searchTerm) {
+					(noResults as HTMLElement).style.display = 'block';
+				} else {
+					(noResults as HTMLElement).style.display = 'none';
+				}
+
+				// Show all if search is empty
+				if (!searchTerm) {
+					countries.forEach((country: any) => {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block';
+					});
+					(noResults as HTMLElement).style.display = 'none';
+				}
+			});
+		});
+	}
 }

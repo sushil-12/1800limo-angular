@@ -11,5 +11,4 @@ export class FailedQuoteRequestConfirmationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

@@ -27,7 +27,7 @@
 						[class.is-invalid-input]="submittedForm && f.AgentTelephone.errors || (f.AgentTelephone.touched || f.AgentTelephone.dirty) && f.AgentTelephone.errors">
 						<mat-label>Agency / Insurance
 							Telephone #<span class="asterisk"> *</span></mat-label>
-						<input matInput #phoneInput placeholder="1234567890" class="font-weight-bold"
+						<input pattern="[0-9+]*" maxlength="16" matInput #phoneInput placeholder="1234567890" class="font-weight-bold"
 							formControlName="AgentTelephone" class="phoneNumberClass" tabIndex="1"
 							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
 							(input)="validateAgentTelephone()" (blur)="validateAgentTelephone()" />

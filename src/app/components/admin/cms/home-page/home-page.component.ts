@@ -67,5 +67,4 @@ export class HomePageComponent implements OnInit
 		})
 		// $("#statusEnabledisabledModal").modal('show');
 	}
-
 }

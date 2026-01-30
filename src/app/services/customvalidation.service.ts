@@ -21,13 +21,7 @@ export class CustomvalidationService {
 
   plusValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
-      if (!control.value) {
-        return null;
-      }
-      const regex = control.value;
-      if (regex.match(/[+]/)) {
-        return { 'invalidPattern': true };
-      }
+      // Allow + symbol now
       return null;
     };
   }

@@ -88,10 +88,10 @@
 					<mat-form-field appearance="outline" class="mobileField"
 						[class.is-invalid-input]="(submittedForm && f?.CellNumber?.errors) || ((f?.CellNumber?.touched || f?.CellNumber?.dirty) && f?.CellNumber?.errors)">
 						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
-						<input matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-							(keypress)="numberOnly($event)" (input)="validateCellNumber()"
-							(blur)="validateCellNumber()" />
+						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890"
+							formControlName="CellNumber" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCellNumber()" (blur)="validateCellNumber()" />
 
 					</mat-form-field>
 					<div *ngIf="
@@ -1093,10 +1093,10 @@
 							<mat-form-field appearance="outline" class="mobileField"
 								[class.is-invalid-input]="(submittedForm && f.BackgroundCompanyTelNumber.errors) || ((f.BackgroundCompanyTelNumber.touched || f.BackgroundCompanyTelNumber.dirty) && f.BackgroundCompanyTelNumber.errors)">
 								<mat-label>Background company Telephone # <span class="asterisk">*</span></mat-label>
-								<input matInput #backgroundCompanyTelInput placeholder="1234567890"
-									formControlName="BackgroundCompanyTelNumber" class="phoneNumberClass" tabindex="1"
-									(focus)="$event.target.select()" (keypress)="numberOnly($event)"
-									(input)="validateBackgroundCompanyTelNumber()"
+								<input pattern="[0-9+]*" maxlength="16" matInput #backgroundCompanyTelInput
+									placeholder="1234567890" formControlName="BackgroundCompanyTelNumber"
+									class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+									(keypress)="numberOnly($event)" (input)="validateBackgroundCompanyTelNumber()"
 									(blur)="validateBackgroundCompanyTelNumber()" />
 							</mat-form-field>
 							<div *ngIf="
@@ -1304,10 +1304,11 @@
 							<mat-form-field appearance="outline" class="mobileField"
 								[class.is-invalid-input]="(submittedForm && f.PoliceForceTelephone.errors) || (f.PoliceForceTelephone.touched && f.PoliceForceTelephone.errors)">
 								<mat-label>Police Depart. Tel #</mat-label>
-								<input matInput #policeTelInput placeholder="1234567890"
-									formControlName="PoliceForceTelephone" class="phoneNumberClass" tabindex="1"
-									(focus)="$event.target.select()" (keypress)="numberOnly($event)"
-									(input)="validatePoliceForceTelephone()" (blur)="validatePoliceForceTelephone()" />
+								<input pattern="[0-9+]*" maxlength="16" matInput #policeTelInput
+									placeholder="1234567890" formControlName="PoliceForceTelephone"
+									class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+									(keypress)="numberOnly($event)" (input)="validatePoliceForceTelephone()"
+									(blur)="validatePoliceForceTelephone()" />
 							</mat-form-field>
 							<div *ngIf="f.PoliceForceTelephone.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">

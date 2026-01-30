@@ -85,7 +85,7 @@ export class AddVehicleRatesComponent implements OnInit {
 		this.addVehicleRatesForm = this.formBuilder.group({
 			acc_id: [''],
 			affiliate_type: [''],
-			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_charter_hours: [2, [Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -128,7 +128,7 @@ export class AddVehicleRatesComponent implements OnInit {
 			state_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			vat: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			other_transportation_tax: ['', [Validators.pattern("^[0-9]*$")]],
+			other_transportation_tax: ['', [Validators.pattern("^[0-9+]*$")]],
 			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 
 			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -618,5 +618,4 @@ export class AddVehicleRatesComponent implements OnInit {
 	resetForm() {
 		this.addVehicleRatesForm.reset();
 	}
-
 }

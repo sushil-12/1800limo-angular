@@ -120,7 +120,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		});
 
 		this.finalizeDataForm = this.$form.group({
-			waiting_time_in_mins: [0, [Validators.pattern("^[0-9]*$")]],
+			waiting_time_in_mins: [0, [Validators.pattern("^[0-9+]*$")]],
 		})
 
 		//save currency symbol
@@ -443,10 +443,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 	buildingCardForm() {
 		this.cardForm = this.$form.group({
 			name: ['', [Validators.required]],
-			card_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(12), Validators.maxLength(20)]],
+			card_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(12), Validators.maxLength(20)]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
-			cvv: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			cvv: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			save_card_detail: [false]
 		})
 	}
@@ -596,7 +596,4 @@ export class AffiliateFinalizeComponent implements OnInit {
 		// })
 		// $('#warnDeleteCard').modal('hide')		
 	}
-
-
-
 }

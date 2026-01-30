@@ -195,5 +195,4 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 
 
 	}
-
 }

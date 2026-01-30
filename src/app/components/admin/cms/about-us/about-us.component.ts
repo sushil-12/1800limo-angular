@@ -59,6 +59,4 @@ export class AboutUsComponent implements OnInit {
 		})
 		//$("#statusEnabledisabledModal").modal();
 	}
-
-
 }

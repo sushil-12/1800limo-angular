@@ -70,7 +70,7 @@ export class EditVehicleRatesFromAffiliateComponent implements OnInit
 		this.addVehicleRatesForm = this.formBuilder.group({
 			id: [''],
 			acc_id: [''],
-			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -91,7 +91,7 @@ export class EditVehicleRatesFromAffiliateComponent implements OnInit
 			friday_saturday_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			rate_range: ['0'],
-			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9+]*$")]],
 			is_gratuity: ['yes', Validators.required],
 			amenities_rates: new FormGroup({}),
 			airport_arrival_tax_per_us: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],

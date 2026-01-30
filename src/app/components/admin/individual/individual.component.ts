@@ -474,5 +474,4 @@ export class IndividualComponent implements OnInit {
 		// 	console.log("file", this.fileName, this.fileType)
 		// }
 	}
-
 }

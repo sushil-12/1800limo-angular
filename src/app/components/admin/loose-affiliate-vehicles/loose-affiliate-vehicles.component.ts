@@ -136,7 +136,6 @@ export class LooseAffiliateVehiclesComponent implements OnInit {
       this.vehicleToDelete = id;
       this.alertMessage = "Are you sure you want to delete this Vehicle?"
     }
-  
-  }
+}
   
   

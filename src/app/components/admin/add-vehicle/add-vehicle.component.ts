@@ -1032,6 +1032,4 @@ export class AddVehicleComponent implements OnInit {
 			charterCancelPolicy : event.value
 		})
 	}
-
-
 }

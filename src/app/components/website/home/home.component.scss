@@ -2619,3 +2619,52 @@ div#google_translate_element_home_mobile {
 		margin-bottom: 20px;
 	}
 }
+
+// SKELETON STYLES
+.shimmer-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+	flex-wrap: wrap; // Allow wrapping on smaller screens
+}
+
+.shimmer-card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+	padding: 10px;
+	width: 300px; // Default width
+}
+
+.shimmer {
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+.shimmer-img {
+	height: 180px;
+	width: 100%;
+	border-radius: 8px;
+	background-color: #eee;
+}
+
+.shimmer-text {
+	height: 20px;
+	margin-top: 10px;
+	border-radius: 4px;
+	background-color: #eee;
+	width: 80%;
+}

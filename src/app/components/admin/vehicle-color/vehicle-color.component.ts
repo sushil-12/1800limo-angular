@@ -185,6 +185,5 @@ export class VehicleColorComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
-
 }
 

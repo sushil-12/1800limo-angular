@@ -11,5 +11,4 @@ export class QuotebotComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

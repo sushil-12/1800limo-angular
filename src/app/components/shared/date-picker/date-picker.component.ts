@@ -51,7 +51,6 @@ export class DatePickerComponent<D> implements OnDestroy {
         this._dateAdapter.addCalendarMonths(this._calendar.activeDate, 1) :
         this._dateAdapter.addCalendarYears(this._calendar.activeDate, 1);
   }
-
 }
 
 

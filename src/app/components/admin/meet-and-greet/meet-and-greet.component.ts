@@ -219,6 +219,5 @@ export class MeetAndGreetComponent implements OnInit
 				this.spinner.hide();//hide spinner
 			});
 	}
-
 }
 

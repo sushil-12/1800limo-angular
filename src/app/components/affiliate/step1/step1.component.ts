@@ -359,7 +359,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 						// 	"",
 						// 	[
 						// 		Validators.required,
-						// 		Validators.pattern("^[0-9]*$"),
+						// 		Validators.pattern("^[0-9+]*$"),
 						// 		Validators.minLength(6),
 						// 		Validators.maxLength(6),
 						// 	],
@@ -368,7 +368,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 							"",
 							[
 								Validators.required,
-								Validators.pattern("^[0-9]*$"),
+								Validators.pattern("^[0-9+]*$"),
 								Validators.minLength(6),
 								Validators.maxLength(6),
 							],
@@ -380,7 +380,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 						// 	"",
 						// 	[
 						// 		Validators.required,
-						// 		Validators.pattern("^[0-9]*$"),
+						// 		Validators.pattern("^[0-9+]*$"),
 						// 		Validators.minLength(6),
 						// 		Validators.maxLength(6),
 						// 	],
@@ -389,7 +389,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 							"",
 							[
 								Validators.required,
-								Validators.pattern("^[0-9]*$"),
+								Validators.pattern("^[0-9+]*$"),
 								Validators.minLength(6),
 								Validators.maxLength(6),
 							],
@@ -415,17 +415,13 @@ export class Step1Component implements OnInit, AfterViewInit {
 	}
 
 	initallphonefields() {
-
-		const telOptions = {
-			initialCountry: 'us',
-			preferredCountries: ['us', 'ca', 'mx', 'gb'],
-			separateDialCode: true,
-			nationalMode: false,
-			utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-		};
+		const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+		const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
 
 		if (this.cellInput) {
 			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.cellInput.nativeElement);
 			this.cellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.CellNumberObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
@@ -435,6 +431,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 
 		if (this.dispatchInput) {
 			this.DispatchObject = intlTelInput(this.dispatchInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.dispatchInput.nativeElement);
 			this.dispatchInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.DispatchObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
@@ -444,6 +442,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 
 		if (this.FaxInput) {
 			this.FaxObject = intlTelInput(this.FaxInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.FaxInput.nativeElement);
 			this.FaxInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.FaxObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
@@ -452,6 +452,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 		if (this.companyCellNumberInput) {
 			this.CompanyCellNumberObject = intlTelInput(this.companyCellNumberInput.nativeElement, telOptions);
+
+			this.addCustomCountrySearch(this.companyCellNumberInput.nativeElement);
 			this.companyCellNumberInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
@@ -481,7 +483,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 				this.currentUser.phone,
 				[
 					Validators.required,
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -503,7 +505,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			Dispatch: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -523,7 +525,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			CompanyCellNumber: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -535,7 +537,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			Fax: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -632,19 +634,19 @@ export class Step1Component implements OnInit, AfterViewInit {
 				control.setErrors(null);
 			} else {
 				const errorCode = telInputObject.getValidationError();
-				let errorMsg = 'Invalid number';
+				let errorMsg = 'Invalid phone number';
 				switch (errorCode) {
 					case intlTelInputUtils.validationError.INVALID_COUNTRY_CODE:
 						errorMsg = 'Invalid country code';
 						break;
 					case intlTelInputUtils.validationError.TOO_SHORT:
-						errorMsg = 'Phone number seems to be too short';
+						errorMsg = 'Invalid phone number';
 						break;
 					case intlTelInputUtils.validationError.TOO_LONG:
-						errorMsg = 'Phone number seems to be too long';
+						errorMsg = 'Invalid phone number';
 						break;
 					case intlTelInputUtils.validationError.NOT_A_NUMBER:
-						errorMsg = 'Not a number';
+						errorMsg = 'Invalid phone number';
 						break;
 				}
 				control.setErrors({ invalidIntl: errorMsg });
@@ -666,6 +668,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
+		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
+		if (charCode === 43) {
+			return true;
+		}
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
 			return false;
 		}
@@ -922,7 +928,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls["Dispatch"].setValidators([
 				Validators.required,
-				Validators.pattern("^[0-9]*$"),
+				Validators.pattern("^[0-9+]*$"),
 				Validators.minLength(4),
 				Validators.maxLength(15),
 				this.customValidator.dashValidator(),
@@ -1250,9 +1256,75 @@ export class Step1Component implements OnInit, AfterViewInit {
 	submitForm() {
 		console.log(this.addAffiliateAccountForm);
 		this.submittedForm = true;
+
+		// Sync CellNumber Country Data
+		if (this.CellNumberObject) {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					CellIsd: '+' + countryData.dialCode,
+					CellNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Dispatch Country Data
+		if (this.DispatchObject) {
+			const countryData = this.DispatchObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					DispatchIsd: '+' + countryData.dialCode,
+					DispatchCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync CompanyCellNumber Country Data
+		if (this.CompanyCellNumberObject) {
+			const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					CompanyCellIsd: '+' + countryData.dialCode,
+					CompanyCellNumberCountry: countryData.iso2
+				});
+			}
+		}
+
+		// Sync Fax Country Data
+		if (this.FaxObject) {
+			const countryData = this.FaxObject.getSelectedCountryData();
+			if (countryData && countryData.dialCode) {
+				this.addAffiliateAccountForm.patchValue({
+					FaxIsd: '+' + countryData.dialCode,
+					FaxCountry: countryData.iso2
+				});
+			}
+		}
 		// stop here if form is invalid
 		if (this.addAffiliateAccountForm.invalid) {
 			return;
+		}
+
+
+
+		// Sanitize Fax (remove Country Code if present)
+		if (this.addAffiliateAccountForm.value.Fax && this.addAffiliateAccountForm.value.FaxIsd && this.addAffiliateAccountForm.value.Fax.startsWith(this.addAffiliateAccountForm.value.FaxIsd)) {
+			this.addAffiliateAccountForm.value.Fax = this.addAffiliateAccountForm.value.Fax.substring(this.addAffiliateAccountForm.value.FaxIsd.length);
+		}
+
+		// Sanitize CompanyCell (remove Country Code if present)
+		if (this.addAffiliateAccountForm.value.CompanyCell && this.addAffiliateAccountForm.value.CompanyCellIsd && this.addAffiliateAccountForm.value.CompanyCell.startsWith(this.addAffiliateAccountForm.value.CompanyCellIsd)) {
+			this.addAffiliateAccountForm.value.CompanyCell = this.addAffiliateAccountForm.value.CompanyCell.substring(this.addAffiliateAccountForm.value.CompanyCellIsd.length);
+		}
+
+		// Sanitize Dispatch (remove Country Code if present)
+		if (this.addAffiliateAccountForm.value.Dispatch && this.addAffiliateAccountForm.value.DispatchIsd && this.addAffiliateAccountForm.value.Dispatch.startsWith(this.addAffiliateAccountForm.value.DispatchIsd)) {
+			this.addAffiliateAccountForm.value.Dispatch = this.addAffiliateAccountForm.value.Dispatch.substring(this.addAffiliateAccountForm.value.DispatchIsd.length);
+		}
+
+		// Sanitize Cell (remove Country Code if present)
+		if (this.addAffiliateAccountForm.value.Cell && this.addAffiliateAccountForm.value.CellIsd && this.addAffiliateAccountForm.value.Cell.startsWith(this.addAffiliateAccountForm.value.CellIsd)) {
+			this.addAffiliateAccountForm.value.Cell = this.addAffiliateAccountForm.value.Cell.substring(this.addAffiliateAccountForm.value.CellIsd.length);
 		}
 		this.addAffiliateAccountForm.value.stepCompleted =
 			this.affiliateService.getUpdatedStepsLocal("1");
@@ -1452,7 +1524,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 				this.currentUser.phone,
 				[
 					Validators.required,
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -1474,7 +1546,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			Dispatch: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					Validators.required,
@@ -1495,7 +1567,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			CompanyCellNumber: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -1507,7 +1579,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 			Fax: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
+					Validators.pattern("^[0-9+]*$"),
 					Validators.minLength(4),
 					Validators.maxLength(15),
 					this.customValidator.dashValidator(),
@@ -1544,5 +1616,84 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 		this.addAffiliateAccountForm.updateValueAndValidity()
 		this.scroll('owner_info')
+	}
+
+	private addCustomCountrySearch(element: HTMLElement) {
+		element.addEventListener('open:countrydropdown', () => {
+			const container = element.closest('.iti');
+			const dropdown = container?.querySelector('.iti__country-list');
+			if (!dropdown) return;
+
+			// Check if search already exists
+			if (dropdown.querySelector('.iti-search-input')) return;
+
+			// Create search container
+			const searchContainer = document.createElement('div');
+			searchContainer.className = 'iti-search-container';
+
+			// Create search input
+			const searchInput = document.createElement('input');
+			searchInput.type = 'text';
+			searchInput.className = 'iti-search-input';
+			searchInput.placeholder = 'Search country...';
+
+			searchContainer.appendChild(searchInput);
+
+			// Prevent dropdown from closing when interacting with search
+			searchInput.addEventListener('click', (e) => e.stopPropagation());
+			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+			// Insert at top of dropdown
+			dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+			// Focus on search
+			setTimeout(() => searchInput.focus(), 100);
+
+			// Filter countries on input
+			searchInput.addEventListener('input', (e: any) => {
+				e.stopPropagation();
+				const searchTerm = e.target.value.toLowerCase();
+				const countries = dropdown.querySelectorAll('.iti__country');
+				let hasVisible = false;
+
+				countries.forEach((country: any) => {
+					// Search in the full text (Name + Dial Code)
+					const text = country.textContent?.toLowerCase() || '';
+
+					if (text.includes(searchTerm)) {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block'; // Force show
+						hasVisible = true;
+					} else {
+						country.classList.add('iti__hide');
+						country.style.display = 'none'; // Force hide
+					}
+				});
+
+				// Handle No Results
+				let noResults = dropdown.querySelector('.iti-no-results');
+				if (!noResults) {
+					noResults = document.createElement('div');
+					noResults.className = 'iti-no-results';
+					noResults.textContent = 'No results found';
+					dropdown.appendChild(noResults);
+				}
+
+				if (!hasVisible && searchTerm) {
+					(noResults as HTMLElement).style.display = 'block';
+				} else {
+					(noResults as HTMLElement).style.display = 'none';
+				}
+
+				// Show all if search is empty
+				if (!searchTerm) {
+					countries.forEach((country: any) => {
+						country.classList.remove('iti__hide');
+						country.style.display = 'block';
+					});
+					(noResults as HTMLElement).style.display = 'none';
+				}
+			});
+		});
 	}
 }

@@ -71,5 +71,4 @@ export class IndividualConfirmationComponent implements OnInit {
       this.router.navigate(['/home']);
 		})
   }
-
 }

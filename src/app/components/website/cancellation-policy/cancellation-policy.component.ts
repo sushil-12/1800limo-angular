@@ -11,5 +11,4 @@ export class CancellationPolicyComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

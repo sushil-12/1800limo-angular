@@ -1001,5 +1001,4 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 		}
 		// console.log(this.total, this.r_total);
 	}
-
 }

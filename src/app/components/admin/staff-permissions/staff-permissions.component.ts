@@ -74,5 +74,4 @@ export class StaffPermissionsComponent implements OnInit {
   //   let temp = group_name.value.map(i=> i.is_permitted = checked)
   //   this.group_data[group_name.name] = temp
   // }
-
 }

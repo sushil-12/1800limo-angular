@@ -37,10 +37,10 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
-                            <input matInput #mobileInput placeholder="Mobile" formControlName="mobile"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-                                [readonly]="is_family_member" (keypress)="numberOnly($event)" (input)="validateMobile()"
-                                (blur)="validateMobile()" />
+                            <input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="Mobile"
+                                formControlName="mobile" class="phoneNumberClass" tabindex="1"
+                                (focus)="$event.target.select()" [readonly]="is_family_member"
+                                (keypress)="numberOnly($event)" (input)="validateMobile()" (blur)="validateMobile()" />
 
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
@@ -54,15 +54,12 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <mat-form-field appearance="outline" class="mobileLabelClass">
-                            <label
-                                class="mat-mdc-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
-                                    class="asterisk">
-                                </span></label>
-                            <input matInput #workInput placeholder="work" formControlName="work"
-                                class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-                                [readonly]="is_family_member" (keypress)="numberOnly($event)" (input)="validateWork()"
-                                (blur)="validateWork()" />
+                        <mat-form-field appearance="outline" class="mobileField">
+                            <mat-label>Work/Home<span class="asterisk"> *</span></mat-label>
+                            <input pattern="[0-9+]*" maxlength="16" matInput #workInput placeholder="Work/Home"
+                                formControlName="work" class="phoneNumberClass" tabindex="1"
+                                (focus)="$event.target.select()" [readonly]="is_family_member"
+                                (keypress)="numberOnly($event)" (input)="validateWork()" (blur)="validateWork()" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
                             class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">

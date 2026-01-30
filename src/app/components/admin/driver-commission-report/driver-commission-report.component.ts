@@ -11,5 +11,4 @@ export class DriverCommissionReportComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

@@ -41,17 +41,17 @@ export class CreateDebitCcCardComponent implements OnInit {
     //add card form validation
     this.createCCDebitCardForm = this.formBuilder.group({
       reservation_id: [this.accountId, [Validators.required, Validators.pattern("^[0-9].*$")]],
-      cc_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(14), Validators.maxLength(20)]],
+      cc_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(14), Validators.maxLength(20)]],
       otherCountryOfRegionResidence: ['', Validators.required],
       cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3)]],
       otherMMYY: ['', [Validators.required, Validators.pattern("(0|1)[0-9]\/[0-9]{2}")]],
       otherFirstName: ['', Validators.required],
       otherLastName: ['', Validators.required],
-      otherPhone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+      otherPhone: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(10), Validators.maxLength(10)]],
       otherStreetAddress: ['', Validators.required],
       otherCity: ['', Validators.required],
       otherState: ['', Validators.required],
-      otherZip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      otherZip: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
     });
   }
 
@@ -158,6 +158,5 @@ export class CreateDebitCcCardComponent implements OnInit {
   resetForm() {
     this.createCCDebitCardForm.reset();
   }
-
 }
 

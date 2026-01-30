@@ -202,6 +202,5 @@ export class AmenitiesSpecialComponent implements OnInit {
 			// console.log(response.data)
 		})
 	}
-
 }
 

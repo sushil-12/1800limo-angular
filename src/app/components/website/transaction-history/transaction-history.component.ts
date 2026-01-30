@@ -109,5 +109,4 @@ export class TransactionHistoryComponent implements OnInit {
 			return moment(timestamp*1000).format('MMMM Do YYYY, h:mm:ss a')
 		}
 	}
-
 }

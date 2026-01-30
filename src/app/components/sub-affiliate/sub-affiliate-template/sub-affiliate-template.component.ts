@@ -204,6 +204,4 @@ export class SubAffiliateTemplateComponent implements OnInit {
 	toggleChevron() {
 		this.chevron_up = !this.chevron_up
 	}
-
-
 }

@@ -303,5 +303,4 @@ export class AdminTemplateComponent implements OnInit {
 		this.router.navigateByUrl('/home');
 
 	}
-
 }

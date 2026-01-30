@@ -235,5 +235,4 @@ export class AmenitiesComponent implements OnInit {
 			// console.log(response.data)
 		})
 	}
-
 }

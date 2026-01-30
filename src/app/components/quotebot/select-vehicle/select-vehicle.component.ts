@@ -1022,7 +1022,4 @@ export class SelectVehicleComponent implements OnInit {
 		this.vehicleListAmenity = this.vehicleDetails.find(item => item.id === id);
 		console.log("in veh amenity--->", this.vehicleListAmenity, '=====', this.vehicleListAmenity.amenities)
 	}
-
-
-
 }

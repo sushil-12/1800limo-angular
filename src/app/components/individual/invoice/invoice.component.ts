@@ -253,5 +253,4 @@ export class InvoiceComponent implements OnInit {
 				// $("#AuditTrailModal").modal("hide");
 			});
 	}
-
 }

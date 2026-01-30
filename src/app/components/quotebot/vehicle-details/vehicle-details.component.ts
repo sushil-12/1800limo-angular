@@ -461,5 +461,4 @@ export class VehicleDetailsComponent implements OnInit {
 			queryParamsHandling: 'preserve'
 		})
 	}
-
 }

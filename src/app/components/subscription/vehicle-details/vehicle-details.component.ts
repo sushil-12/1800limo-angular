@@ -174,6 +174,5 @@ export class VehicleDetailsComponent implements OnInit {
 			// console.log(response.data)
 		})
 	}
-
 }
 

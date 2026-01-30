@@ -11,5 +11,4 @@ export class CreateBookingComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

@@ -238,5 +238,4 @@ export class CustomInvoiceComponent implements OnInit {
       this.str_email = event.target.value
     }
   }
-
 }

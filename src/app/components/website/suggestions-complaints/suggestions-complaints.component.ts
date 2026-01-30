@@ -11,5 +11,4 @@ export class SuggestionsComplaintsComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

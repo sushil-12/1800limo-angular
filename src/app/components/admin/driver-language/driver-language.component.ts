@@ -183,6 +183,5 @@ export class DriverLanguageComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
-
 }
 

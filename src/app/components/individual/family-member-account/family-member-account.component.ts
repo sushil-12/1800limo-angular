@@ -8,6 +8,7 @@ import { IndividualService } from '../../../services/individual.service';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from '../../../services/common.service';
 
 @Component({
   selector: 'app-family-member-account',
@@ -36,7 +37,8 @@ export class FamilyMemberAccountComponent implements OnInit {
     private formBuilder: FormBuilder,
     private $routeurl: ActivatedRoute,
     private ngZone: NgZone,
-    private errors: ErrorDialogService
+    private errors: ErrorDialogService,
+    private commonServices: CommonService
   ) { }
 
 
@@ -113,15 +115,11 @@ export class FamilyMemberAccountComponent implements OnInit {
   initphonefield() {
 
     if (this.phoneInput) {
-      this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
-        initialCountry: 'us',
-        preferredCountries: ['us', 'ca', 'mx', 'gb'],
-        separateDialCode: true,
-        nationalMode: false,
-        // autoPlaceholder: 'aggressive',
-        utilsScript:
-          'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
-      });
+      const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
+      const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
+      this.MobileObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
+
+      this.addCustomCountrySearch(this.phoneInput.nativeElement);
 
       this.phoneInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.MobileObject.getSelectedCountryData();
@@ -194,7 +192,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       id: [''],
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      phone_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       mobileCountry: ['us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
@@ -206,7 +204,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       // latitude: [''],
       // longitude: [''],
       // use_for_login: [false],
-      // age: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      // age: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
       // relationship: ['', Validators.required]
     });
   }
@@ -216,6 +214,10 @@ export class FamilyMemberAccountComponent implements OnInit {
 
   numberOnly(event: any): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
+    // Allow: backspace, delete, tab, escape, enter, + symbol (43)
+    if (charCode === 43) {
+      return true;
+    }
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }
@@ -232,10 +234,22 @@ export class FamilyMemberAccountComponent implements OnInit {
         }
         return;
       }
+
+      // Only validate if the number has at least minimum length to avoid premature validation
+      const cleanValue = String(value).replace(/\D/g, ''); // Remove non-digits
+      if (cleanValue.length < 4) {
+        // Too short to validate with intl-tel-input, let Angular validators handle it
+        if (control.errors) {
+          const { invalidIntl, ...otherErrors } = control.errors;
+          control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+        return;
+      }
+
       const isValid = telInputObject.isValidNumber();
       if (!isValid) {
         const errorCode = telInputObject.getValidationError();
-        const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+        const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
         const currentErrors = control.errors || {};
         control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
       } else {
@@ -269,6 +283,20 @@ export class FamilyMemberAccountComponent implements OnInit {
     return this.addFamilyMemberAccountForm.controls;
   }
 
+  getFormValidationErrors() {
+    const result = [];
+    Object.keys(this.addFamilyMemberAccountForm.controls).forEach(key => {
+      const controlErrors = this.addFamilyMemberAccountForm.get(key)?.errors;
+      if (controlErrors) {
+        result.push({
+          control: key,
+          errors: controlErrors
+        });
+      }
+    });
+    return result;
+  }
+
   // handleChangeCheckbox(event) {
   //   this.uselogin = event
   //   this.addFamilyMemberAccountForm.patchValue({
@@ -277,23 +305,66 @@ export class FamilyMemberAccountComponent implements OnInit {
   // }
 
   submitForm() {
-    console.log(this.addFamilyMemberAccountForm);
-    // console.log(JSON.stringify(this.addVehicleRatesForm.value));
+    console.log('=== SUBMIT FORM CALLED ===');
+    console.log('Form:', this.addFamilyMemberAccountForm);
+    console.log('Form value:', this.addFamilyMemberAccountForm.value);
+    console.log('Form valid:', this.addFamilyMemberAccountForm.valid);
+    console.log('Form errors:', this.addFamilyMemberAccountForm.errors);
+
     this.submittedForm = true;
+
+    // Sync Phone Country Data
+    if (this.MobileObject) {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData && countryData.dialCode) {
+        this.addFamilyMemberAccountForm.patchValue({
+          phone_isd: '+' + countryData.dialCode,
+          mobileCountry: countryData.iso2
+        });
+      }
+    }
+
+    // Sanitize phone_number (remove Country Code if present)
+    const phone = this.addFamilyMemberAccountForm.get('phone_number');
+    const phoneIsd = this.addFamilyMemberAccountForm.get('phone_isd');
+
+    console.log('Phone control:', phone);
+    console.log('Phone value:', phone?.value);
+    console.log('Phone errors:', phone?.errors);
+    console.log('Phone valid:', phone?.valid);
+
+    if (phone && phone.value && phoneIsd && phoneIsd.value) {
+      const val = String(phone.value);
+      const isd = String(phoneIsd.value);
+      if (val.startsWith(isd)) {
+        phone.setValue(val.substring(isd.length));
+      }
+    }
+
+
+
+    console.log('After clearing - Phone errors:', phone?.errors);
+    console.log('After clearing - Form valid:', this.addFamilyMemberAccountForm.valid);
+    console.log('After clearing - Form errors:', this.addFamilyMemberAccountForm.errors);
+
     // stop here if form is invalid
     if (this.addFamilyMemberAccountForm.invalid) {
+      console.log('FORM IS INVALID - RETURNING');
+      console.log('Invalid controls:', this.getFormValidationErrors());
       return;
     }
 
+    console.log('FORM IS VALID - PROCEEDING TO API CALL');
 
-    if (this.addFamilyMemberAccountForm.get('address').value != '' && this.addFamilyMemberAccountForm.get('latitude').value == '') {
-      this.errors.openDialog({
-        errors: {
-          error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
-        }
-      })
-      return;
-    }
+    // Address validation commented out because address fields are not in use
+    // if (this.addFamilyMemberAccountForm.get('address').value != '' && this.addFamilyMemberAccountForm.get('latitude').value == '') {
+    //   this.errors.openDialog({
+    //     errors: {
+    //       error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
+    //     }
+    //   })
+    //   return;
+    // }
 
     console.log(this.addFamilyMemberAccountForm.value);
     // console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -336,5 +407,84 @@ export class FamilyMemberAccountComponent implements OnInit {
   }
   backButton() {
     this.router.navigate([`/individual/family-members`]);
+  }
+
+  private addCustomCountrySearch(element: HTMLElement) {
+    element.addEventListener('open:countrydropdown', () => {
+      const container = element.closest('.iti');
+      const dropdown = container?.querySelector('.iti__country-list');
+      if (!dropdown) return;
+
+      // Check if search already exists
+      if (dropdown.querySelector('.iti-search-input')) return;
+
+      // Create search container
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'iti-search-container';
+
+      // Create search input
+      const searchInput = document.createElement('input');
+      searchInput.type = 'text';
+      searchInput.className = 'iti-search-input';
+      searchInput.placeholder = 'Search country...';
+
+      searchContainer.appendChild(searchInput);
+
+      // Prevent dropdown from closing when interacting with search
+      searchInput.addEventListener('click', (e) => e.stopPropagation());
+      searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+      // Insert at top of dropdown
+      dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+      // Focus on search
+      setTimeout(() => searchInput.focus(), 100);
+
+      // Filter countries on input
+      searchInput.addEventListener('input', (e: any) => {
+        e.stopPropagation();
+        const searchTerm = e.target.value.toLowerCase();
+        const countries = dropdown.querySelectorAll('.iti__country');
+        let hasVisible = false;
+
+        countries.forEach((country: any) => {
+          // Search in the full text (Name + Dial Code)
+          const text = country.textContent?.toLowerCase() || '';
+
+          if (text.includes(searchTerm)) {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block'; // Force show
+            hasVisible = true;
+          } else {
+            country.classList.add('iti__hide');
+            country.style.display = 'none'; // Force hide
+          }
+        });
+
+        // Handle No Results
+        let noResults = dropdown.querySelector('.iti-no-results');
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'iti-no-results';
+          noResults.textContent = 'No results found';
+          dropdown.appendChild(noResults);
+        }
+
+        if (!hasVisible && searchTerm) {
+          (noResults as HTMLElement).style.display = 'block';
+        } else {
+          (noResults as HTMLElement).style.display = 'none';
+        }
+
+        // Show all if search is empty
+        if (!searchTerm) {
+          countries.forEach((country: any) => {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block';
+          });
+          (noResults as HTMLElement).style.display = 'none';
+        }
+      });
+    });
   }
 }

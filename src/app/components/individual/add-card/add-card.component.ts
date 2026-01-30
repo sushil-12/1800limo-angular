@@ -11,9 +11,9 @@ import { IndividualService } from '../../../services/individual.service';
 
 
 @Component({
-  selector: 'app-add-card',
-  templateUrl: './add-card.component.html',
-  styleUrls: ['./add-card.component.scss']
+	selector: 'app-add-card',
+	templateUrl: './add-card.component.html',
+	styleUrls: ['./add-card.component.scss']
 })
 export class AddCardComponent implements OnInit {
 
@@ -30,7 +30,7 @@ export class AddCardComponent implements OnInit {
 
 	constructor(
 		private adminService: AdminService,
-    private individualService: IndividualService,
+		private individualService: IndividualService,
 		private router: Router,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
@@ -40,64 +40,54 @@ export class AddCardComponent implements OnInit {
 		private customValidator: CustomvalidationService
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		const currentYear = (new Date()).getFullYear();
-		for (let i = 0; i < 40; i++)
-		{
+		for (let i = 0; i < 40; i++) {
 			this.yearOptions.push(currentYear + i);
 		}
 
 		//add card form validation
 		this.addCardForm = this.formBuilder.group({
 			card_type: ['personal', Validators.required],
-			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(14),Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(3), Validators.maxLength(5), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(5), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
 		});
 
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
+		$('#card-number').on('copy cut paste', function () {
+			setTimeout(function () {
 				$('#card-number').trigger("change");
 			});
 		});
 	}
 
 
-	onCountryChange(event, type)
-	{
-		if (type == 'mobile')
-		{
+	onCountryChange(event, type) {
+		if (type == 'mobile') {
 			this.addCardForm.patchValue({
 				mobileIsd: '+' + event.dialCode
 			});
 		}
-		else
-		{
+		else {
 			this.addCardForm.patchValue({
 				workIsd: '+' + event.dialCode
 			});
 		}
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addCardForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addCardForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addCardForm.invalid)
-		{
+		if (this.addCardForm.invalid) {
 			return;
 		}
 
@@ -108,30 +98,25 @@ export class AddCardComponent implements OnInit {
 
 		this.individualService.addIndividualCreditCard(this.addCardForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();
 				this.disableSubmitButton = false; //enable submit button
-					this.router.navigate(['/individual/profile'])
-				
+				this.router.navigate(['/individual/profile'])
+
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addCardForm.reset();
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/individual/profile']);
 	}
-
 }

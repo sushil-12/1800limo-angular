@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 
 @Component({
@@ -58,6 +59,7 @@ export class ProfileComponent implements OnInit {
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private commonServices: CommonService,
     private route: ActivatedRoute,
     private travelAgentService: TravelAgentService,
     private authService: AuthService,
@@ -120,7 +122,7 @@ export class ProfileComponent implements OnInit {
       // this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
       // this.profileForm.get('exp_month')?.setValidators([Validators.required]);
       // this.profileForm.get('exp_year')?.setValidators([Validators.required]);
-      // this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      // this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 
       // this.profileForm.get('name')?.updateValueAndValidity();
       // this.profileForm.get('number')?.updateValueAndValidity();
@@ -130,7 +132,13 @@ export class ProfileComponent implements OnInit {
       this.profileForm.patchValue({
         mobile: this.currentUser?.phone,
         mobileIsd: this.currentUser?.isd,
-        mobileCountry: this.currentUser?.phoneCountry
+        mobileCountry: this.currentUser?.phoneCountry,
+        workIsd: this.currentUser?.isd,
+        workCountry: this.currentUser?.phoneCountry,
+        faxIsd: this.currentUser?.isd,
+        faxCountry: this.currentUser?.phoneCountry,
+        isd_office_number: this.currentUser?.isd,
+        office_country_code: this.currentUser?.phoneCountry
       })
       this.defaultCountryCode = this.currentUser?.phoneCountry;
     }
@@ -200,22 +208,20 @@ export class ProfileComponent implements OnInit {
   }
 
   initallphonefields() {
-
-    const telOptions = {
-      initialCountry: 'us',
-      preferredCountries: ['us', 'ca', 'mx', 'gb'],
-      separateDialCode: true,
-      nationalMode: false,
-      // autoPlaceholder: 'aggressive',
-      utilsScript:
-        'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/js/utils.js'
+    let countryCode = 'auto';
+    if (this.defaultCountryCode) {
+      countryCode = this.defaultCountryCode;
+    } else if (this.currentUser && (this.currentUser.phoneCountry || this.currentUser.country)) {
+      countryCode = this.currentUser.phoneCountry || this.currentUser.country;
     }
 
-
+    const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
     if (this.cellInput) {
       console.log('onput', this.cellInput, this.cellInput.nativeElement)
       this.OfficeObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+
+      this.addCustomCountrySearch(this.cellInput.nativeElement);
       this.cellInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.OfficeObject.getSelectedCountryData();
         console.log("in change", countryData)
@@ -226,6 +232,8 @@ export class ProfileComponent implements OnInit {
     if (this.mobileInput) {
       console.log('onput', this.mobileInput, this.mobileInput.nativeElement)
       this.MobileObject = intlTelInput(this.mobileInput.nativeElement, telOptions);
+
+      this.addCustomCountrySearch(this.mobileInput.nativeElement);
       this.mobileInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.MobileObject.getSelectedCountryData();
         console.log("in change", countryData)
@@ -236,6 +244,14 @@ export class ProfileComponent implements OnInit {
     if (this.faxInput) {
       console.log('onput', this.faxInput, this.faxInput.nativeElement)
       this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
+
+      // Sync ISD immediately with initialized country
+      const countryData = this.FaxObject.getSelectedCountryData();
+      if (countryData?.dialCode) {
+        this.profileForm.patchValue({ faxIsd: '+' + countryData.dialCode });
+      }
+
+      this.addCustomCountrySearch(this.faxInput.nativeElement);
       this.faxInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.FaxObject.getSelectedCountryData();
         console.log("in change", countryData)
@@ -246,19 +262,24 @@ export class ProfileComponent implements OnInit {
     if (this.officeNumberInput) {
       console.log('onput', this.officeNumberInput, this.officeNumberInput.nativeElement)
       this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
+
+      // Sync ISD immediately with initialized country
+      const countryData = this.OfficePhoneObject.getSelectedCountryData();
+      if (countryData?.dialCode) {
+        this.profileForm.patchValue({ isd_office_number: '+' + countryData.dialCode });
+      }
+
+      this.addCustomCountrySearch(this.officeNumberInput.nativeElement);
       this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.OfficePhoneObject.getSelectedCountryData();
         console.log("in change", countryData)
         this.onCountryChange(countryData, 'office_number')
       });
     }
-
-    this.MobileObject.setCountry(this.defaultCountryCode)
-    this.OfficeObject.setCountry(this.defaultCountryCode)
-    this.OfficePhoneObject.setCountry(this.defaultCountryCode)
-    this.FaxObject.setCountry(this.defaultCountryCode)
-
-
+    // this.MobileObject.setCountry(this.defaultCountryCode)
+    // this.OfficeObject.setCountry(this.defaultCountryCode)
+    // this.OfficePhoneObject.setCountry(this.defaultCountryCode)
+    // this.FaxObject.setCountry(this.defaultCountryCode)
   }
 
   buildProfileForm() {
@@ -269,11 +290,11 @@ export class ProfileComponent implements OnInit {
       middleName: [''],
       lastName: ['', Validators.required],
       work_contact_number: [''],
-      workIsd: ['+1', Validators.required],
-      workCountry: ['us'],
-      mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      mobileIsd: ['+1', Validators.required],
-      mobileCountry: ['us'],
+      workIsd: [this.currentUser?.isd || '+1', Validators.required],
+      workCountry: [this.currentUser?.phoneCountry || 'us'],
+      mobile: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      mobileIsd: [this.currentUser?.isd || '+1', Validators.required],
+      mobileCountry: [this.currentUser?.phoneCountry || 'us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       address: ['', Validators.required],
       city: [''],
@@ -283,12 +304,12 @@ export class ProfileComponent implements OnInit {
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
-      fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      faxIsd: ['+1', Validators.required],
-      faxCountry: ['us'],
-      office_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      isd_office_number: ['+1', Validators.required],
-      office_country_code: ['us'],
+      fax: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      faxIsd: [this.currentUser?.isd || '+1', Validators.required],
+      faxCountry: [this.currentUser?.phoneCountry || 'us'],
+      office_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      isd_office_number: [this.currentUser?.isd || '+1', Validators.required],
+      office_country_code: [this.currentUser?.phoneCountry || 'us'],
       latitude: [''],
       longitude: [''],
       card_type: ['personal', Validators.required],
@@ -321,11 +342,11 @@ export class ProfileComponent implements OnInit {
           middleName: data?.middle_name,
           lastName: data?.last_name,
           work_contact_number: data?.work_contact_number,
-          workIsd: data?.workIsd || '+1',
-          workCountry: data?.workCountry || 'us',
+          workIsd: data?.workIsd || this.currentUser?.isd || '+1',
+          workCountry: data?.workCountry || this.currentUser?.phoneCountry || 'us',
           mobile: data?.mobile,
-          mobileIsd: data?.mobileIsd || '+1',
-          mobileCountry: data?.mobileCountry || 'us',
+          mobileIsd: data?.mobileIsd || this.currentUser?.isd || '+1',
+          mobileCountry: data?.mobileCountry || this.currentUser?.phoneCountry || 'us',
           email: data?.email,
           address: data?.address,
           city: data?.city,
@@ -336,11 +357,11 @@ export class ProfileComponent implements OnInit {
           payee: data?.payee,
           iata: data?.iata,
           fax: data?.fax,
-          faxIsd: data?.faxIsd || '+1',
-          faxCountry: data?.faxCountry || 'us',
+          faxIsd: data?.faxIsd || this.currentUser?.isd || '+1',
+          faxCountry: data?.faxCountry || this.currentUser?.phoneCountry || 'us',
           office_number: data?.office_number,
-          isd_office_number: data?.isd_office_number || '+1',
-          office_country_code: data?.office_country_code || 'us',
+          isd_office_number: data?.isd_office_number || this.currentUser?.isd || '+1',
+          office_country_code: data?.office_country_code || this.currentUser?.phoneCountry || 'us',
           latitude: data?.latitude,
           longitude: data?.longitude,
         })
@@ -391,6 +412,10 @@ export class ProfileComponent implements OnInit {
 
   numberOnly(event: any): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
+    // Allow: backspace, delete, tab, escape, enter, + symbol (43)
+    if (charCode === 43) {
+      return true;
+    }
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }
@@ -410,7 +435,7 @@ export class ProfileComponent implements OnInit {
       const isValid = telInputObject.isValidNumber();
       if (!isValid) {
         const errorCode = telInputObject.getValidationError();
-        const errorMsg = ["Invalid number", "Invalid country code", "Phone number seems to be too short", "Phone number seems to be too long", "Invalid number"][errorCode] || "Invalid number";
+        const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
         const currentErrors = control.errors || {};
         control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
       } else {
@@ -507,6 +532,46 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
+    // Sanitize fax (remove Country Code if present)
+    // Force sync from visual widgets to ensure payload matches UI
+    if (this.FaxObject) {
+      const countryData = this.FaxObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.faxIsd = '+' + countryData.dialCode;
+        this.profileForm.value.faxCountry = countryData.iso2;
+      }
+    }
+    if (this.OfficeObject) { // work_contact_number
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.workIsd = '+' + countryData.dialCode;
+        this.profileForm.value.workCountry = countryData.iso2;
+      }
+    }
+    if (this.OfficePhoneObject) { // office_number
+      const countryData = this.OfficePhoneObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.isd_office_number = '+' + countryData.dialCode;
+        this.profileForm.value.office_country_code = countryData.iso2;
+      }
+    }
+    if (this.MobileObject) { // mobile
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.mobileIsd = '+' + countryData.dialCode;
+        this.profileForm.value.mobileCountry = countryData.iso2;
+      }
+    }
+
+    if (this.profileForm.value.fax && this.profileForm.value.faxIsd && this.profileForm.value.fax.startsWith(this.profileForm.value.faxIsd)) {
+      this.profileForm.value.fax = this.profileForm.value.fax.substring(this.profileForm.value.faxIsd.length);
+    }
+
+    // Sanitize mobile (remove Country Code if present)
+    if (this.profileForm.value.mobile && this.profileForm.value.mobileIsd && this.profileForm.value.mobile.startsWith(this.profileForm.value.mobileIsd)) {
+      this.profileForm.value.mobile = this.profileForm.value.mobile.substring(this.profileForm.value.mobileIsd.length);
+    }
+
 
     if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
       this.errorDialog.openDialog({
@@ -552,4 +617,83 @@ export class ProfileComponent implements OnInit {
   }
 
 
+
+  private addCustomCountrySearch(element: HTMLElement) {
+    element.addEventListener('open:countrydropdown', () => {
+      const container = element.closest('.iti');
+      const dropdown = container?.querySelector('.iti__country-list');
+      if (!dropdown) return;
+
+      // Check if search already exists
+      if (dropdown.querySelector('.iti-search-input')) return;
+
+      // Create search container
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'iti-search-container';
+
+      // Create search input
+      const searchInput = document.createElement('input');
+      searchInput.type = 'text';
+      searchInput.className = 'iti-search-input';
+      searchInput.placeholder = 'Search country...';
+
+      searchContainer.appendChild(searchInput);
+
+      // Prevent dropdown from closing when interacting with search
+      searchInput.addEventListener('click', (e) => e.stopPropagation());
+      searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+
+      // Insert at top of dropdown
+      dropdown.insertBefore(searchContainer, dropdown.firstChild);
+
+      // Focus on search
+      setTimeout(() => searchInput.focus(), 100);
+
+      // Filter countries on input
+      searchInput.addEventListener('input', (e: any) => {
+        e.stopPropagation();
+        const searchTerm = e.target.value.toLowerCase();
+        const countries = dropdown.querySelectorAll('.iti__country');
+        let hasVisible = false;
+
+        countries.forEach((country: any) => {
+          // Search in the full text (Name + Dial Code)
+          const text = country.textContent?.toLowerCase() || '';
+
+          if (text.includes(searchTerm)) {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block'; // Force show
+            hasVisible = true;
+          } else {
+            country.classList.add('iti__hide');
+            country.style.display = 'none'; // Force hide
+          }
+        });
+
+        // Handle No Results
+        let noResults = dropdown.querySelector('.iti-no-results');
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'iti-no-results';
+          noResults.textContent = 'No results found';
+          dropdown.appendChild(noResults);
+        }
+
+        if (!hasVisible && searchTerm) {
+          (noResults as HTMLElement).style.display = 'block';
+        } else {
+          (noResults as HTMLElement).style.display = 'none';
+        }
+
+        // Show all if search is empty
+        if (!searchTerm) {
+          countries.forEach((country: any) => {
+            country.classList.remove('iti__hide');
+            country.style.display = 'block';
+          });
+          (noResults as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  }
 }

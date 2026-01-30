@@ -86,7 +86,4 @@ export class Step6Component implements OnInit
 			'admin/cms/step6/edit/' + section_id.toString()
 		])
 	}
-
-
-
 }

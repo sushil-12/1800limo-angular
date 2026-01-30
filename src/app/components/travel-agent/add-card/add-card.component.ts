@@ -13,8 +13,7 @@ import { TravelAgentService } from 'src/app/services/travel-agent.service';
 	templateUrl: './add-card.component.html',
 	styleUrls: ['./add-card.component.scss']
 })
-export class AddCardComponent implements OnInit
-{
+export class AddCardComponent implements OnInit {
 
 	public addCardForm: FormGroup;
 	public submittedForm: boolean;
@@ -24,7 +23,7 @@ export class AddCardComponent implements OnInit
 	public accountId: string;
 	public accountType: string;
 	public yearOptions: any = [];
-	currentUser:any;
+	currentUser: any;
 
 
 	constructor(
@@ -38,20 +37,17 @@ export class AddCardComponent implements OnInit
 		private customValidator: CustomvalidationService
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 			}
 			);
 
 		const currentYear = (new Date()).getFullYear();
-		for (let i = 0; i < 40; i++)
-		{
+		for (let i = 0; i < 40; i++) {
 			this.yearOptions.push(currentYear + i);
 		}
 
@@ -59,8 +55,8 @@ export class AddCardComponent implements OnInit
 		this.addCardForm = this.formBuilder.group({
 			id: [''],
 			card_type: ['personal', Validators.required],
-			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.maxLength(20), Validators.minLength(14),this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(5), Validators.minLength(3),this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.maxLength(20), Validators.minLength(14), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(5), Validators.minLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
@@ -75,44 +71,36 @@ export class AddCardComponent implements OnInit
 		// 	});
 		// });
 
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
+		$('#card-number').on('copy cut paste', function () {
+			setTimeout(function () {
 				$('#card-number').trigger("change");
 			});
 		});
 	}
-	onCountryChange(event, type)
-	{
-		if (type == 'mobile')
-		{
+	onCountryChange(event, type) {
+		if (type == 'mobile') {
 			this.addCardForm.patchValue({
 				mobileIsd: '+' + event.dialCode
 			});
 		}
-		else
-		{
+		else {
 			this.addCardForm.patchValue({
 				workIsd: '+' + event.dialCode
 			});
 		}
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addCardForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addCardForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		this.addCardForm.value.acc_id = this.accountId
 		// stop here if form is invalid
-		if (this.addCardForm.invalid)
-		{
+		if (this.addCardForm.invalid) {
 			return;
 		}
 
@@ -123,15 +111,13 @@ export class AddCardComponent implements OnInit
 
 		this.TravelService.addCard(this.addCardForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();
 				this.disableSubmitButton = false; //enable submit button
@@ -140,13 +126,10 @@ export class AddCardComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addCardForm.reset();
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 	}
-
 }

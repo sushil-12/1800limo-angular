@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-md-8 mb-3">
                     <mat-form-field appearance="outline">
-                        <input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
+                        <input  type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
                             (focus)="$event.target.select()" [value]="searchText"
                             placeholder="Search by name, email, cell phone" id="keyword" tabindex="-1">
                     </mat-form-field>

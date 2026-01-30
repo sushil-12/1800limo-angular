@@ -1255,12 +1255,4 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		// 	}
 		// }
 	}
-
-
-
-
-
-
-
-
 }

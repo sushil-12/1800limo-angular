@@ -149,5 +149,4 @@ export class BadgeCitiesComponent implements OnInit {
 			this.spinner.hide()
 		})
   }
-
 }

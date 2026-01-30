@@ -216,6 +216,4 @@ export class AgentTemplateComponent implements OnInit {
 
 
 	}
-
-
 }

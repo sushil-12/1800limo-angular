@@ -112,6 +112,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	) { }
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
+		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
+		if (charCode === 43) {
+			return true;
+		}
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
 			return false;
 		}

@@ -146,5 +146,4 @@ export class ReportsAdminUsersComponent implements OnInit {
         console.log("err in user based report",err)
 			});
 	}
-
 }

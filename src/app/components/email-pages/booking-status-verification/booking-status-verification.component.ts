@@ -76,5 +76,4 @@ export class BookingStatusVerificationComponent implements OnInit {
 
 		this.router.navigate(['/affiliate/step2']);
 	}
-
 }

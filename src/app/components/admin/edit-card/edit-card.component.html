@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Phone Number*</label>
-                                    <input type="text" placeholder="Phone Number" formControlName="secondaryPhone">
+                                    <input pattern="[0-9+]*" maxlength="16" type="text" placeholder="Phone Number" formControlName="secondaryPhone">
                                     <div *ngIf="submittedForm && f.secondaryPhone.errors" class="text-danger">
                                         <div *ngIf="f.secondaryPhone.errors.required">This field is required</div>
                                         <div *ngIf="f.secondaryPhone.errors.pattern">This field should be a number</div>

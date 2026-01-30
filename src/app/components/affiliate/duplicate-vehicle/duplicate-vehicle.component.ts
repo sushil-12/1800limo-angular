@@ -925,5 +925,5 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 			this.service.splice(index, 1);
 		}
 		}
-	}
+}
 

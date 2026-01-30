@@ -457,5 +457,4 @@ export class TutorialsComponent implements OnInit {
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }
-
 }

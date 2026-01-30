@@ -18,5 +18,4 @@ export class DeleteConfirmationComponent implements OnInit {
   delete() {
     this.deleteRecord.emit();
   }
-
 }

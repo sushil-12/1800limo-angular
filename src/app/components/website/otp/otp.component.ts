@@ -104,7 +104,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.otpForm = this.formBuilder.group({
-			otp: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")]],
+			otp: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9+]*$")]],
 		});
 
 		this.review_referral_url = localStorage.getItem('review_referral_url')

@@ -759,5 +759,4 @@ export class AffiliateAccountsComponent implements OnInit {
 
 		$("#sendsmsModal").modal("hide");
 	}
-
 }

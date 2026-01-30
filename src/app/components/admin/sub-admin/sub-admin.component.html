@@ -30,10 +30,9 @@
 					</mat-form-field>
 				</div>
 				<div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">
-                    <div>
+					<div>
 						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadSubAdmin()" tabindex="-1">
+							style="color:#fff;padding: 5px 12px !important;" (click)="loadSubAdmin()" tabindex="-1">
 							Search
 						</button>
 					</div>
@@ -44,7 +43,7 @@
 							Reset
 						</button>
 					</div>
-					
+
 				</div>
 				<!-- <div class="col-md-2 mb-3">
 					<button class="custom-btn button2 btnclass btn-shadow" (click)="loadSubAdmin()">SEARCH</button>
@@ -78,7 +77,8 @@
 									<td>
 										<a class="user-profileded btn btn-icon btn-transparent-dark "
 											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="clickEditSubAdmin(subAdmin.id)">
+											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+											(click)="clickEditSubAdmin(subAdmin.id)">
 											<span>View</span>
 										</a>
 										<!-- <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -93,7 +93,8 @@
 										'}} {{subAdmin.last_name}}</td>
 									<td class="clickable" (dblclick)="sendMessage('email', subAdmin)"
 										data-messagetype="email">{{subAdmin.email}}</td>
-									<td class="clickable" (dblclick)="sendMessage('sms', subAdmin)" data-messagetype="sms">
+									<td class="clickable" (dblclick)="sendMessage('sms', subAdmin)"
+										data-messagetype="sms">
 										{{subAdmin.mobileIsd+subAdmin.mobile}}</td>
 									<td>{{subAdmin.address}}</td>
 									<td>{{subAdmin.city}}</td>

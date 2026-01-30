@@ -838,7 +838,8 @@
 		</div>
 	</div>
 </section> -->
-<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable'">
+<section class="checkourveh_wrapper"
+	*ngIf="isVehicleLoading || fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable'">
 
 	<div class="container-fluid">
 		<h2 style="margin-bottom: 0;">View <span>Our vehicles</span></h2>
@@ -848,9 +849,8 @@
 
 			<!-- 🔹 SHIMMER LOADER -->
 			<div class="chk_vehicles shimmer-wrapper" *ngIf="isVehicleLoading">
-				<div class="shimmer-card" *ngFor="let i of [1,2,3,4,5]">
-					<div class="shimmer-img shimmer"></div>
-					<div class="shimmer-text shimmer"></div>
+				<div class="shimmer-card" style="width: 200px; height: 100px; margin:10px" *ngFor="let i of [1,2,3]">
+					<div class="shimmer-img shimmer" style="height: 100%; border-radius: 8px;"></div>
 				</div>
 			</div>
 
@@ -870,7 +870,8 @@
 </section>
 
 <!------------------OUR MISSION------------------------------->
-<section class="ourmisservice_wrap" *ngIf="fetchPageData('OUR MISSION')?.section_status == 'enable' ">
+<section class="ourmisservice_wrap"
+	*ngIf="isHomePageLoading || fetchPageData('OUR MISSION')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<div class="d-flex flex-column flex-md-row col-12 remove_col_padding mission-flex-wrapper">
 			<h2 style="margin-bottom: 20px;margin-top: 20px;" class="mission-mobile-heading">Our <span>Mission</span>
@@ -944,9 +945,8 @@
 <section class="checkourveh_wrapper" *ngIf="isHomePageLoading">
 	<div class="container-fluid">
 		<h2><span>Who Travels With Us</span></h2>
-		<div class="chk_vehicles_parent shimmer-wrapper" style="white-space: nowrap; overflow: hidden;">
-			<div class="shimmer-card" style="width: 150px; height: 100px; display:inline-block; margin:10px"
-				*ngFor="let i of [1,2,3,4,5,6]">
+		<div class="chk_vehicles_parent shimmer-wrapper">
+			<div class="shimmer-card" style="width: 150px; height: 100px; margin:10px" *ngFor="let i of [1,2,3,4,5,6]">
 				<div class="shimmer" style="width:100%; height:100%; border-radius: 8px;"></div>
 			</div>
 		</div>
@@ -1099,9 +1099,8 @@
 		<div class="skeleton-text-header shimmer" style="width: 400px; height: 40px; margin-bottom: 20px;"></div>
 		<div class="skeleton-text-body shimmer" style="width: 200px; margin-bottom: 30px;"></div>
 
-		<div class="shimmer-wrapper" style="white-space: nowrap; overflow: hidden;">
-			<div class="shimmer-card" style="width: 300px; display: inline-block; margin-right: 20px;"
-				*ngFor="let i of [1,2,3]">
+		<div class="shimmer-wrapper">
+			<div class="shimmer-card" *ngFor="let i of [1,2,3]">
 				<div class="shimmer-img shimmer" style="height: 200px;"></div>
 				<div class="shimmer-text shimmer" style="margin-top: 10px;"></div>
 				<div class="shimmer-text shimmer" style="width: 60%; margin-top: 5px;"></div>
