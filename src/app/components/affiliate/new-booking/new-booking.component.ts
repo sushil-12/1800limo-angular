@@ -217,21 +217,45 @@ export class NewBookingComponent implements OnInit {
 	initphonefield() {
 		console.log("in init phone", this.cellInput, this.passengercellInput, this.drivercellInput);
 
-		const getInitCountry = (group: string, controlName: string) => {
+		const getInitCountry = (group: string, controlName: string, isdControlName?: string) => {
 			let val;
+			let isd;
 			if (group) {
-				val = (<FormGroup>this.BookingForm.get(group)).get(controlName)?.value;
+				const grp = (<FormGroup>this.BookingForm.get(group));
+				val = grp.get(controlName)?.value;
+				if (isdControlName) isd = grp.get(isdControlName)?.value;
 			} else {
 				val = this.BookingForm.get(controlName)?.value;
+				if (isdControlName) isd = this.BookingForm.get(isdControlName)?.value;
 			}
+
 			if (val) return val;
+			// If no country but we have an ISD, don't force default 'auto' just yet, or maybe 'auto' handles it?
+			// But 'auto' usually does IP lookup.
+			// Best to return null/undefined so we can handle it specifically, or stick to 'auto' but let called logic know?
+			// For now, let's just stick to logic: if ISD exists, we might default to US temporarily but prefill should fix it.
+			// BUT if this runs AFTER prefill, we must NOT return default if ISD is present.
+
+			if (isd) {
+				// We have ISD but no country. Try to map simple ones or return 'auto' but avoid currentUser override if possible?
+				// Actually, if we return 'auto' here, intlTelInput will do lookup.
+				// If we return currentUser, it forces US.
+				// Let's return 'auto' if ISD is present, so at least it doesn't force US.
+				// Or even better: try to deduce country from ISD here?
+				// Simple heuristic:
+				if (String(isd).includes('44')) return 'gb';
+				if (String(isd).includes('1')) return 'us';
+				if (String(isd).includes('52')) return 'mx';
+				return 'auto';
+			}
+
 			return this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
 		};
 
 		if (this.cellInput) {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.cellInput.nativeElement);
 			if (existing) existing.destroy();
-			const lcCountry = getInitCountry('loose_customer', 'phone_country');
+			const lcCountry = getInitCountry('loose_customer', 'phone_country', 'phone_isd');
 			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, this.commonServices.getTelInputOptions(lcCountry));
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
@@ -246,8 +270,18 @@ export class NewBookingComponent implements OnInit {
 		if (this.passengercellInput) {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.passengercellInput.nativeElement);
 			if (existing) existing.destroy();
-			const paxCountry = getInitCountry(null, 'passenger_cell_country');
+			const paxCountry = getInitCountry(null, 'passenger_cell_country', 'passenger_cell_isd');
+
+			// If we have ISD but getInitCountry returned 'auto' or something, we might want to setNumber?
 			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, this.commonServices.getTelInputOptions(paxCountry));
+
+			const paxIsd = this.BookingForm.get('passenger_cell_isd')?.value;
+			if (!this.BookingForm.get('passenger_cell_country')?.value && paxIsd) {
+				// No country but have ISD. 
+				// prefill might have set number.
+				// Ensure flag is correct.
+				// this.PaxTelObject.setNumber(paxIsd); // This might affect input value.
+			}
 
 			this.addCustomCountrySearch(this.passengercellInput.nativeElement);
 			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
@@ -261,7 +295,7 @@ export class NewBookingComponent implements OnInit {
 		if (this.drivercellInput) {
 			const existing = (window as any).intlTelInputGlobals?.getInstance(this.drivercellInput.nativeElement);
 			if (existing) existing.destroy();
-			const drvCountry = getInitCountry(null, 'driver_cell_country');
+			const drvCountry = getInitCountry(null, 'driver_cell_country', 'driver_cell_isd');
 			this.DrvTelObject = intlTelInput(this.drivercellInput.nativeElement, this.commonServices.getTelInputOptions(drvCountry));
 
 			this.addCustomCountrySearch(this.drivercellInput.nativeElement);
@@ -811,10 +845,50 @@ export class NewBookingComponent implements OnInit {
 			// }
 			this.booking_id = this.Form?.reservation_id?.value;
 			// this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''\
+			// Update Passenger Cell Flag
+			// Update Passenger Cell Flag (Wrapped in local variables for closure safety)
+			const pCountry = editing_data.passenger_cell_country;
+			const pISD = editing_data.passenger_cell_isd;
+			const pCell = editing_data.passenger_cell;
+
+			const dCountry = editing_data.driver_cell_country;
+			const dISD = editing_data.driver_cell_isd;
+			const dCell = editing_data.driver_cell;
+
 			setTimeout(() => {
-				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-				this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
-			}, 2000)
+				if (this.PaxTelObject) {
+					// 1. Set Number first (might default flag to US for +1)
+					if (pISD && pCell) {
+						let isd = String(pISD).startsWith('+') ? pISD : '+' + pISD;
+						this.PaxTelObject.setNumber(isd + pCell);
+						this.SetFormValue('passenger_cell_isd', isd);
+					}
+					this.SetFormValue('passenger_cell', pCell);
+
+					// 2. FORCE backend country preference LAST to override any setNumber inference
+					if (pCountry) {
+						this.PaxTelObject.setCountry(String(pCountry).toLowerCase());
+						this.SetFormValue('passenger_cell_country', String(pCountry).toLowerCase());
+					}
+				}
+
+				// Update Driver Cell Flag
+				if (this.DrvTelObject) {
+					// 1. Set Number first
+					if (dISD && dCell) {
+						let isd = String(dISD).startsWith('+') ? dISD : '+' + dISD;
+						this.DrvTelObject.setNumber(isd + dCell);
+						this.SetFormValue('driver_cell_isd', isd);
+					}
+					this.SetFormValue('driver_cell', dCell);
+
+					// 2. FORCE backend country preference LAST
+					if (dCountry) {
+						this.DrvTelObject.setCountry(String(dCountry).toLowerCase());
+						this.SetFormValue('driver_cell_country', String(dCountry).toLowerCase());
+					}
+				}
+			}, 1000);
 
 			this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
 			this.$spinner.hide('normalspinner')
