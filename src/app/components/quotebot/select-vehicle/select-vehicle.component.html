@@ -342,7 +342,7 @@
 				*ngIf="!isLoading && vehicleDetails.length == 0">No Vehicle Found.</p>
 
 			<!-- Skeleton Loader -->
-			<div *ngIf="!isLoading" class="vehicle-grid-card mb-3" style="margin-top: 15px;">
+			<div *ngIf="isLoading" class="vehicle-grid-card mb-3" style="margin-top: 15px;">
 				<div class="card vehicle-listing-card" *ngFor="let item of skeletonItems">
 					<div class="modern-vehicle-card-content reference-layout">
 						<!-- Image Area -->
