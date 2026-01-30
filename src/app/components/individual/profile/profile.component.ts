@@ -345,6 +345,21 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 	}
 
 	submitForm() {
+		if (this.MobileObject) {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			this.addIndividualAccountForm.patchValue({
+				mobileIsd: '+' + countryData.dialCode,
+				mobileCountry: countryData.iso2
+			});
+		}
+		if (this.WorkObject) {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			this.addIndividualAccountForm.patchValue({
+				workIsd: '+' + countryData.dialCode,
+				workCountry: countryData.iso2
+			});
+		}
+
 		if (this.response?.data?.cards?.length > 0) {
 			console.log("in check if cards list to clear validators")
 			this.addIndividualAccountForm.controls['card_type'].clearValidators();

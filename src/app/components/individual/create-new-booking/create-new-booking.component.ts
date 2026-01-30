@@ -372,7 +372,7 @@ export class CreateNewBookingComponent implements OnInit {
 			vehicle_color: [''],
 			vehicle_color_name: [''],
 			vehicle_license_plate: ['', this.customValidator.whitespace()],
-			vehicle_seats: ['4', Validators.pattern("^[0-9+]*$")],
+			vehicle_seats: ['4', Validators.pattern("^[0-9]*$")],
 			driver_id: [''],
 			driver_name: ['', this.customValidator.whitespace()],
 			driver_gender: [''],
