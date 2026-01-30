@@ -43,7 +43,7 @@ export class CreateDebitCcCardComponent implements OnInit {
       reservation_id: [this.accountId, [Validators.required, Validators.pattern("^[0-9].*$")]],
       cc_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(14), Validators.maxLength(20)]],
       otherCountryOfRegionResidence: ['', Validators.required],
-      cvc: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(3)]],
+      cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3)]],
       otherMMYY: ['', [Validators.required, Validators.pattern("(0|1)[0-9]\/[0-9]{2}")]],
       otherFirstName: ['', Validators.required],
       otherLastName: ['', Validators.required],

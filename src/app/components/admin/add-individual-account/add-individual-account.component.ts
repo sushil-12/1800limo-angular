@@ -221,7 +221,7 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 			longitude: [''],
 			card_type: ['personal', Validators.required],
 			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.maxLength(5), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(5), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],

@@ -142,7 +142,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 			longitude: [''],
 			card_type: ['personal', Validators.required],
 			number: ['', [Validators.pattern("^[0-9\\s]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			cvc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: [''],
 			exp_year: [''],
 			name: [''],
