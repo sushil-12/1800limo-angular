@@ -255,6 +255,13 @@ export class CreateBookingComponent implements OnInit {
 			const paxCountry = getInitCountry(null, 'passenger_cell_country');
 			this.PaxTelObject = intlTelInput(this.passengercellInput.nativeElement, this.commonServices.getTelInputOptions(paxCountry));
 
+			// Immediate sync for Passenger Cell
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			if (countryData?.dialCode) {
+				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode);
+				this.SetFormValue('passenger_cell_country', countryData.iso2);
+			}
+
 			this.addCustomCountrySearch(this.passengercellInput.nativeElement);
 			this.passengercellInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.PaxTelObject.getSelectedCountryData();
@@ -269,6 +276,16 @@ export class CreateBookingComponent implements OnInit {
 			if (existing) existing.destroy();
 			const lcCountry = getInitCountry('loose_customer', 'phone_country');
 			this.LCTelObject = intlTelInput(this.cellInput.nativeElement, this.commonServices.getTelInputOptions(lcCountry));
+
+			// Immediate sync for Personal Info (Loose Customer)
+			const countryData = this.LCTelObject.getSelectedCountryData();
+			if (countryData?.dialCode) {
+				const lcGroup = this.BookingForm.get('loose_customer') as FormGroup;
+				lcGroup.patchValue({
+					phone_isd: '+' + countryData.dialCode,
+					phone_country: countryData.iso2
+				});
+			}
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 			this.cellInput.nativeElement.addEventListener('countrychange', () => {
@@ -363,8 +380,8 @@ export class CreateBookingComponent implements OnInit {
 				middle_name: [''],
 				last_name: [''],
 				phone: [''],
-				phone_isd: ['+1'],
-				phone_country: ['us'],
+				phone_isd: [this.currentUser?.isd || '+1'],
+				phone_country: [this.currentUser?.phoneCountry || 'us'],
 				email: [''],
 				address: [''],
 				country: [''],
@@ -382,8 +399,8 @@ export class CreateBookingComponent implements OnInit {
 			passenger_name: ['', [Validators.required, this.customValidator.whitespace()]],
 			passenger_email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			passenger_cell: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-			passenger_cell_isd: ['+1'],
-			passenger_cell_country: ['us'],
+			passenger_cell_isd: [this.currentUser?.isd || '+1'],
+			passenger_cell_country: [this.currentUser?.phoneCountry || 'us'],
 			total_passengers: [1],
 			luggage_count: [0],
 			booking_instructions: [''],
@@ -412,8 +429,8 @@ export class CreateBookingComponent implements OnInit {
 			driver_name: ['', this.customValidator.whitespace()],
 			driver_gender: [''],
 			driver_cell: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-			driver_cell_isd: ['+1'],
-			driver_cell_country: ['us'],
+			driver_cell_isd: [this.currentUser?.isd || '+1'],
+			driver_cell_country: [this.currentUser?.phoneCountry || 'us'],
 			driver_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			driver_phone_type: [''],
 			driver_image_id: [''],
@@ -894,7 +911,12 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
 			this.SetFormValue('driver_gender', info?.Gender)
 			this.SetFormValue('driver_cell', info?.CellNumber)
-			this.SetFormValue('driver_cell_isd', info?.CellIsd)
+			let cellIsd = info?.CellIsd || '';
+			let strCellIsd = String(cellIsd);
+			if (strCellIsd && !strCellIsd.startsWith('+')) {
+				strCellIsd = '+' + strCellIsd;
+			}
+			this.SetFormValue('driver_cell_isd', strCellIsd)
 			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
 			this.SetFormValue('driver_email', info?.Email)
 			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
@@ -906,13 +928,23 @@ export class CreateBookingComponent implements OnInit {
 		this.SetFormValue('driver_name', `${data?.driver_name}`)
 		this.SetFormValue('driver_gender', data?.driver_gender)
 		this.SetFormValue('driver_cell', data?.driver_cell)
-		this.SetFormValue('driver_cell_isd', data?.driver_cell_isd)
+		let dIsd = data?.driver_cell_isd || '';
+		let strDIsd = String(dIsd);
+		if (strDIsd && !strDIsd.startsWith('+')) {
+			strDIsd = '+' + strDIsd;
+		}
+		this.SetFormValue('driver_cell_isd', strDIsd)
 		this.SetFormValue('driver_cell_country', data?.driver_cell_country)
 		this.SetFormValue('driver_email', data?.driver_email)
 		this.SetFormValue('driver_phone_type', data?.driver_phone_type ?? '');
 		try {
 			this.driver_info['name'] = data?.driver_name
-			this.driver_info["phone"] = data?.driver_cell_isd + data?.driver_cell
+			let infoPhoneIsd = data?.driver_cell_isd || '';
+			let strInfoPhoneIsd = String(infoPhoneIsd);
+			if (strInfoPhoneIsd && !strInfoPhoneIsd.startsWith('+')) {
+				strInfoPhoneIsd = '+' + strInfoPhoneIsd;
+			}
+			this.driver_info["phone"] = strInfoPhoneIsd + data?.driver_cell
 			this.driver_info["gender"] = data?.driver_gender
 			this.driver_info["type"] = data?.vehicle_type_name
 			this.driver_info["make"] = data?.vehicle_make_name
@@ -2578,8 +2610,8 @@ export class CreateBookingComponent implements OnInit {
 				this.BookingForm.get(item).reset();
 				this.BookingForm.updateValueAndValidity();
 			})
-			this.SetFormValue('driver_cell_isd', '+1');
-			this.SetFormValue('driver_cell_country', 'us');
+			this.SetFormValue('driver_cell_isd', this.currentUser?.isd || '+1');
+			this.SetFormValue('driver_cell_country', this.currentUser?.phoneCountry || 'us');
 		}
 	}
 
@@ -2719,6 +2751,44 @@ export class CreateBookingComponent implements OnInit {
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
 
+		// Force sync from visual widgets to ensure payload matches UI
+		if (this.PaxTelObject) {
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			if (countryData?.dialCode) {
+				this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode);
+				this.SetFormValue('passenger_cell_country', countryData.iso2);
+			}
+		}
+
+		if (this.LCTelObject) {
+			const countryData = this.LCTelObject.getSelectedCountryData();
+			if (countryData?.dialCode) {
+				const lcGroup = this.BookingForm.get('loose_customer') as FormGroup;
+				if (lcGroup) {
+					lcGroup.patchValue({
+						phone_isd: '+' + countryData.dialCode,
+						phone_country: countryData.iso2
+					});
+				}
+			}
+		}
+
+		if (this.DrvTelObject) {
+			const countryData = this.DrvTelObject.getSelectedCountryData();
+			if (countryData?.dialCode) {
+				this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode);
+				this.SetFormValue('driver_cell_country', countryData.iso2);
+			}
+		} else {
+			// Fallback if no widget exists (e.g. read-only driver cell)
+			const dIsdCtrl = this.BookingForm.get('driver_cell_isd');
+			if (dIsdCtrl && dIsdCtrl.value) {
+				let val = String(dIsdCtrl.value);
+				if (!val.startsWith('+')) {
+					dIsdCtrl.setValue('+' + val);
+				}
+			}
+		}
 
 		// Sanitize loose_customer.phone
 		const lcPhone = this.BookingForm.get('loose_customer.phone');
@@ -2894,6 +2964,12 @@ export class CreateBookingComponent implements OnInit {
 	}
 	DrvTelInputObject(event: any) {
 		this.DrvTelObject = event;
+		// Immediate sync for Driver Cell
+		const countryData = this.DrvTelObject.getSelectedCountryData();
+		if (countryData?.dialCode) {
+			this.SetFormValue('driver_cell_isd', '+' + countryData.dialCode);
+			this.SetFormValue('driver_cell_country', countryData.iso2);
+		}
 	}
 	iOS() {
 		return [
@@ -3226,7 +3302,12 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('driver_name', selected_vehicle?.driverInformation?.name)
 			this.SetFormValue('driver_email', selected_vehicle?.driverInformation?.email)
 			this.SetFormValue('driver_cell', selected_vehicle?.driverInformation?.cell_number)
-			this.SetFormValue('driver_cell_isd', selected_vehicle?.driverInformation?.cell_isd)
+			let dIsd = selected_vehicle?.driverInformation?.cell_isd || '';
+			let strDIsd = String(dIsd);
+			if (strDIsd && !strDIsd.startsWith('+')) {
+				strDIsd = '+' + strDIsd;
+			}
+			this.SetFormValue('driver_cell_isd', strDIsd)
 			this.SetFormValue('driver_gender', selected_vehicle?.driverInformation?.gender)
 			this.SetFormValue('vehicle_id', selected_vehicle?.id)
 
@@ -3244,6 +3325,12 @@ export class CreateBookingComponent implements OnInit {
 			this.driverImgUrl = selected_vehicle?.driverInformation?.imageUrl || "../../../../assets/images/driverImg.jpg"
 			this.vehicleImgUrl = selected_vehicle?.vehicle_images[0] || ""
 			this.driver_info = selected_vehicle?.driverInformation || {}
+			if (this.driver_info.cell_isd) {
+				let val = String(this.driver_info.cell_isd);
+				if (!val.startsWith('+')) {
+					this.driver_info.cell_isd = '+' + val;
+				}
+			}
 			this.driver_info['type'] = selected_vehicle?.name || ""
 			this.driver_info['make'] = selected_vehicle?.vehicle_details?.make || ""
 			this.driver_info['model'] = selected_vehicle?.vehicle_details?.model || ""

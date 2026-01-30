@@ -162,6 +162,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         console.log("in change", countryData)
         this.onCountryChange(countryData, 'mobile')
       });
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.patchValue({
+          mobileIsd: "+" + countryData.dialCode,
+          mobileCountry: countryData.iso2
+        });
+      }
     }
 
     if (this.workInput) {
@@ -175,6 +182,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         console.log("in change", countryData)
         this.onCountryChange(countryData, 'work_contact_number');
       });
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.patchValue({
+          workIsd: "+" + countryData.dialCode,
+          workCountry: countryData.iso2
+        });
+      }
     }
 
   }
@@ -186,11 +200,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       middleName: [''],
       lastName: ['', Validators.required],
       work_contact_number: [''],
-      workIsd: ['+1', Validators.required],
-      workCountry: ['us'],
+      workIsd: [this.currentUser?.isd || '+1', Validators.required],
+      workCountry: [this.currentUser?.phoneCountry || 'us'],
       mobile: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      mobileIsd: ['+1', Validators.required],
-      mobileCountry: ['us'],
+      mobileIsd: [this.currentUser?.isd || '+1', Validators.required],
+      mobileCountry: [this.currentUser?.phoneCountry || 'us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       address: ['', Validators.required],
       city: [''],
@@ -308,6 +322,26 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     // stop here if form is invalid
     if (this.profileForm.invalid) {
       return;
+    }
+
+    if (this.MobileObject) {
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.patchValue({
+          mobileIsd: "+" + countryData.dialCode,
+          mobileCountry: countryData.iso2
+        });
+      }
+    }
+
+    if (this.OfficeObject) {
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.patchValue({
+          workIsd: "+" + countryData.dialCode,
+          workCountry: countryData.iso2
+        });
+      }
     }
 
     // Sanitize mobile (remove Country Code if present)

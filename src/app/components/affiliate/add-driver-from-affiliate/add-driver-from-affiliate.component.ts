@@ -1209,6 +1209,28 @@ export class AddDriverFromAffiliateComponent
 	}
 
 	submitForm() {
+		if (this.CellNumberObject) {
+			const countryData = this.CellNumberObject.getSelectedCountryData();
+			this.addDriverForm.patchValue({
+				CellIsd: "+" + countryData.dialCode,
+				CellNumberCountry: countryData.iso2,
+			});
+		}
+		if (this.BackgroundCompanyTelNumberObject) {
+			const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
+			this.addDriverForm.patchValue({
+				BackgroundCompanyTelIsd: "+" + countryData.dialCode,
+				BackgroundCompanyTelNumberCountry: countryData.iso2,
+			});
+		}
+		if (this.PoliceForceTelephoneObject) {
+			const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
+			this.addDriverForm.patchValue({
+				PoliceForceIsd: "+" + countryData.dialCode,
+				PoliceForceTelephoneCountry: countryData.iso2,
+			});
+		}
+
 		console.log(this.addDriverForm);
 		this.submittedForm = true;
 		// stop here if form is invalid

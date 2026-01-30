@@ -132,7 +132,13 @@ export class ProfileComponent implements OnInit {
       this.profileForm.patchValue({
         mobile: this.currentUser?.phone,
         mobileIsd: this.currentUser?.isd,
-        mobileCountry: this.currentUser?.phoneCountry
+        mobileCountry: this.currentUser?.phoneCountry,
+        workIsd: this.currentUser?.isd,
+        workCountry: this.currentUser?.phoneCountry,
+        faxIsd: this.currentUser?.isd,
+        faxCountry: this.currentUser?.phoneCountry,
+        isd_office_number: this.currentUser?.isd,
+        office_country_code: this.currentUser?.phoneCountry
       })
       this.defaultCountryCode = this.currentUser?.phoneCountry;
     }
@@ -239,6 +245,12 @@ export class ProfileComponent implements OnInit {
       console.log('onput', this.faxInput, this.faxInput.nativeElement)
       this.FaxObject = intlTelInput(this.faxInput.nativeElement, telOptions);
 
+      // Sync ISD immediately with initialized country
+      const countryData = this.FaxObject.getSelectedCountryData();
+      if (countryData?.dialCode) {
+        this.profileForm.patchValue({ faxIsd: '+' + countryData.dialCode });
+      }
+
       this.addCustomCountrySearch(this.faxInput.nativeElement);
       this.faxInput.nativeElement.addEventListener('countrychange', () => {
         const countryData = this.FaxObject.getSelectedCountryData();
@@ -250,6 +262,12 @@ export class ProfileComponent implements OnInit {
     if (this.officeNumberInput) {
       console.log('onput', this.officeNumberInput, this.officeNumberInput.nativeElement)
       this.OfficePhoneObject = intlTelInput(this.officeNumberInput.nativeElement, telOptions);
+
+      // Sync ISD immediately with initialized country
+      const countryData = this.OfficePhoneObject.getSelectedCountryData();
+      if (countryData?.dialCode) {
+        this.profileForm.patchValue({ isd_office_number: '+' + countryData.dialCode });
+      }
 
       this.addCustomCountrySearch(this.officeNumberInput.nativeElement);
       this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
@@ -272,11 +290,11 @@ export class ProfileComponent implements OnInit {
       middleName: [''],
       lastName: ['', Validators.required],
       work_contact_number: [''],
-      workIsd: ['+1', Validators.required],
-      workCountry: ['us'],
+      workIsd: [this.currentUser?.isd || '+1', Validators.required],
+      workCountry: [this.currentUser?.phoneCountry || 'us'],
       mobile: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      mobileIsd: ['+1', Validators.required],
-      mobileCountry: ['us'],
+      mobileIsd: [this.currentUser?.isd || '+1', Validators.required],
+      mobileCountry: [this.currentUser?.phoneCountry || 'us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       address: ['', Validators.required],
       city: [''],
@@ -287,11 +305,11 @@ export class ProfileComponent implements OnInit {
       payee: ['', Validators.required],
       iata: ['', Validators.required],
       fax: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      faxIsd: ['+1', Validators.required],
-      faxCountry: ['us'],
+      faxIsd: [this.currentUser?.isd || '+1', Validators.required],
+      faxCountry: [this.currentUser?.phoneCountry || 'us'],
       office_number: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-      isd_office_number: ['+1', Validators.required],
-      office_country_code: ['us'],
+      isd_office_number: [this.currentUser?.isd || '+1', Validators.required],
+      office_country_code: [this.currentUser?.phoneCountry || 'us'],
       latitude: [''],
       longitude: [''],
       card_type: ['personal', Validators.required],
@@ -324,11 +342,11 @@ export class ProfileComponent implements OnInit {
           middleName: data?.middle_name,
           lastName: data?.last_name,
           work_contact_number: data?.work_contact_number,
-          workIsd: data?.workIsd || '+1',
-          workCountry: data?.workCountry || 'us',
+          workIsd: data?.workIsd || this.currentUser?.isd || '+1',
+          workCountry: data?.workCountry || this.currentUser?.phoneCountry || 'us',
           mobile: data?.mobile,
-          mobileIsd: data?.mobileIsd || '+1',
-          mobileCountry: data?.mobileCountry || 'us',
+          mobileIsd: data?.mobileIsd || this.currentUser?.isd || '+1',
+          mobileCountry: data?.mobileCountry || this.currentUser?.phoneCountry || 'us',
           email: data?.email,
           address: data?.address,
           city: data?.city,
@@ -339,11 +357,11 @@ export class ProfileComponent implements OnInit {
           payee: data?.payee,
           iata: data?.iata,
           fax: data?.fax,
-          faxIsd: data?.faxIsd || '+1',
-          faxCountry: data?.faxCountry || 'us',
+          faxIsd: data?.faxIsd || this.currentUser?.isd || '+1',
+          faxCountry: data?.faxCountry || this.currentUser?.phoneCountry || 'us',
           office_number: data?.office_number,
-          isd_office_number: data?.isd_office_number || '+1',
-          office_country_code: data?.office_country_code || 'us',
+          isd_office_number: data?.isd_office_number || this.currentUser?.isd || '+1',
+          office_country_code: data?.office_country_code || this.currentUser?.phoneCountry || 'us',
           latitude: data?.latitude,
           longitude: data?.longitude,
         })
@@ -515,6 +533,36 @@ export class ProfileComponent implements OnInit {
     }
 
     // Sanitize fax (remove Country Code if present)
+    // Force sync from visual widgets to ensure payload matches UI
+    if (this.FaxObject) {
+      const countryData = this.FaxObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.faxIsd = '+' + countryData.dialCode;
+        this.profileForm.value.faxCountry = countryData.iso2;
+      }
+    }
+    if (this.OfficeObject) { // work_contact_number
+      const countryData = this.OfficeObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.workIsd = '+' + countryData.dialCode;
+        this.profileForm.value.workCountry = countryData.iso2;
+      }
+    }
+    if (this.OfficePhoneObject) { // office_number
+      const countryData = this.OfficePhoneObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.isd_office_number = '+' + countryData.dialCode;
+        this.profileForm.value.office_country_code = countryData.iso2;
+      }
+    }
+    if (this.MobileObject) { // mobile
+      const countryData = this.MobileObject.getSelectedCountryData();
+      if (countryData.dialCode) {
+        this.profileForm.value.mobileIsd = '+' + countryData.dialCode;
+        this.profileForm.value.mobileCountry = countryData.iso2;
+      }
+    }
+
     if (this.profileForm.value.fax && this.profileForm.value.faxIsd && this.profileForm.value.fax.startsWith(this.profileForm.value.faxIsd)) {
       this.profileForm.value.fax = this.profileForm.value.fax.substring(this.profileForm.value.faxIsd.length);
     }

@@ -1727,7 +1727,7 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder">
-                                    ({{ Form.driver_cell_isd.value }}) {{
+                                    (+{{ Form.driver_cell_isd.value.toString().replace('+','') }}) {{
                                     Form.driver_cell.value }}
                                 </span>
                             </div>
@@ -1784,7 +1784,7 @@
                                 </div>
                                 <div class="col-md-8 value">
                                     <span class="font-weight-bolder">
-                                        ({{ LooseCustomer.phone_isd.value }})
+                                        (+{{ LooseCustomer.phone_isd.value.toString().replace('+','') }})
                                         {{ textFormatter(LooseCustomer.phone.value) }}
                                     </span>
                                 </div>
@@ -1833,7 +1833,7 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder">
-                                    ({{ Form.passenger_cell_isd.value }})
+                                    (+{{ Form.passenger_cell_isd.value.toString().replace('+','') }})
                                     {{ textFormatter(Form.passenger_cell.value) }}
                                 </span>
                             </div>

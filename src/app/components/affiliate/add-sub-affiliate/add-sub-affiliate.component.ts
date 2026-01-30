@@ -315,6 +315,26 @@ export class AddSubAffiliateComponent implements OnInit, AfterViewInit {
 
   submitForm() {
     console.log(this.profileForm);
+    // Synchronize intl-tel-input data before submission
+    if (this.MobileObject) {
+      const mobileData = this.MobileObject.getSelectedCountryData();
+      if (mobileData) {
+        this.profileForm.patchValue({
+          mobileIsd: '+' + mobileData.dialCode,
+          mobileCountry: mobileData.iso2
+        });
+      }
+    }
+    if (this.OfficeObject) {
+      const officeData = this.OfficeObject.getSelectedCountryData();
+      if (officeData) {
+        this.profileForm.patchValue({
+          workIsd: '+' + officeData.dialCode,
+          workCountry: officeData.iso2
+        });
+      }
+    }
+
     // Sanitize mobile
     const mobile = this.profileForm.get('mobile');
     const mobileIsd = this.profileForm.get('mobileIsd');

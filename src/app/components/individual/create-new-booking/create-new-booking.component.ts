@@ -918,7 +918,11 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
 			this.SetFormValue('driver_gender', info?.Gender)
 			this.SetFormValue('driver_cell', info?.CellNumber)
-			this.SetFormValue('driver_cell_isd', info?.CellIsd)
+
+			let d_isd = info?.CellIsd;
+			if (d_isd && !String(d_isd).startsWith('+')) d_isd = '+' + d_isd;
+			this.SetFormValue('driver_cell_isd', d_isd)
+
 			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
 			this.SetFormValue('driver_email', info?.Email)
 			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
@@ -930,7 +934,11 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('driver_name', `${data?.driver_name}`)
 		this.SetFormValue('driver_gender', data?.driver_gender)
 		this.SetFormValue('driver_cell', data?.driver_cell)
-		this.SetFormValue('driver_cell_isd', data?.driver_cell_isd)
+
+		let d_isd = data?.driver_cell_isd;
+		if (d_isd && !String(d_isd).startsWith('+')) d_isd = '+' + d_isd;
+		this.SetFormValue('driver_cell_isd', d_isd)
+
 		this.SetFormValue('driver_cell_country', data?.driver_cell_country)
 		this.SetFormValue('driver_email', data?.driver_email)
 		this.SetFormValue('driver_phone_type', data?.driver_phone_type ?? '');
@@ -2640,6 +2648,20 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+
+		// Final enforcement of + prefix for driver ISD in payload
+		if (value['driver_cell_isd'] && !String(value['driver_cell_isd']).startsWith('+')) {
+			value['driver_cell_isd'] = '+' + value['driver_cell_isd'];
+		}
+
+		// Final enforcement of country code based on ISD (Fix for +44 -> gb)
+		const cleanIsd = String(value['driver_cell_isd']);
+		if (cleanIsd === '+44') {
+			value['driver_cell_country'] = 'gb';
+		} else if (cleanIsd === '+1' && !value['driver_cell_country']) {
+			value['driver_cell_country'] = 'us';
+		}
+
 		if (this.currentUser?.created_by_role == 'subscriber') {
 			value["booking_created_from"] = 'subscriber'
 		}
@@ -3063,7 +3085,15 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('driver_name', selected_vehicle?.driverInformation?.name)
 			this.SetFormValue('driver_email', selected_vehicle?.driverInformation?.email)
 			this.SetFormValue('driver_cell', selected_vehicle?.driverInformation?.cell_number)
-			this.SetFormValue('driver_cell_isd', selected_vehicle?.driverInformation?.cell_isd)
+
+			// Ensure ISD has + prefix as seen in Preview logic
+			let d_isd = selected_vehicle?.driverInformation?.cell_isd;
+			if (d_isd && !String(d_isd).startsWith('+')) {
+				d_isd = '+' + d_isd;
+			}
+			this.SetFormValue('driver_cell_isd', d_isd || '+1')
+
+			this.SetFormValue('driver_cell_country', selected_vehicle?.driverInformation?.cell_country || 'us')
 			this.SetFormValue('driver_gender', selected_vehicle?.driverInformation?.gender)
 			this.SetFormValue('vehicle_id', selected_vehicle?.id)
 
