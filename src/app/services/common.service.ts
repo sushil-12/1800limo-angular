@@ -36,10 +36,37 @@ export class CommonService {
 
 		if (options.initialCountry === 'auto') {
 			options.geoIpLookup = function (callback: (countryCode: string) => void) {
-				fetch('https://ipapi.co/json')
-					.then(function (res) { return res.json(); })
-					.then(function (data) { callback(data.country_code); })
-					.catch(function () { callback('us'); });
+				// 1. Try GeoJS (Permissive, no key)
+				fetch('https://get.geojs.io/v1/ip/country.json')
+					.then(res => res.json())
+					.then(data => {
+						console.log('Country detection (GeoJS):', data.country);
+						callback(data.country ? data.country.toLowerCase() : 'us');
+					})
+					.catch(err1 => {
+						console.warn('GeoJS lookup failed, trying ipinfo...', err1);
+						// 2. Fallback to ipinfo.io
+						fetch('https://ipinfo.io/json')
+							.then(res => res.json())
+							.then(data => {
+								console.log('Country detection (ipinfo):', data.country);
+								callback(data.country ? data.country.toLowerCase() : 'us');
+							})
+							.catch(err2 => {
+								console.warn('ipinfo lookup failed, trying ipapi...', err2);
+								// 3. Fallback to ipapi.co
+								fetch('https://ipapi.co/json')
+									.then(res => res.json())
+									.then(data => {
+										console.log('Country detection (ipapi):', data.country_code);
+										callback(data.country_code ? data.country_code.toLowerCase() : 'us');
+									})
+									.catch(err3 => {
+										console.error('All IP lookups failed. Defaulting to US.', err3);
+										callback('us');
+									});
+							});
+					});
 			};
 		}
 
