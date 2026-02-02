@@ -74,7 +74,29 @@ export class Step3Component implements OnInit, AfterViewInit {
 			this.onCountryChange(countryData, 'AgentTelephone')
 		});
 
-		this.AgentTelephoneObject.setCountry(this.currentUser.phoneCountry);
+		// 1. Robust Country Detection
+		let countryCode = 'us';
+		if (this.currentUser) {
+			countryCode = this.currentUser.CellNumberCountry ||
+				this.currentUser.phoneCountry ||
+				this.currentUser.country ||
+				this.currentUser.Country ||
+				'us';
+		}
+		if (countryCode.toLowerCase() === 'auto') countryCode = 'us';
+
+		// 2. Set Plugin Country
+		this.AgentTelephoneObject.setCountry(countryCode.toLowerCase());
+
+		// 3. Force Patch Form (Ensure payload is correct immediately)
+		const countryData = this.AgentTelephoneObject.getSelectedCountryData();
+		if (countryData) {
+			this.addInsuranceForm.patchValue({
+				AgentTelephoneIsd: '+' + countryData.dialCode,
+				AgentTelephoneCountry: countryData.iso2
+			});
+			this.validatePhone();
+		}
 
 	}
 

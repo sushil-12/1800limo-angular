@@ -512,13 +512,15 @@
 		</h2>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist mt-3" *ngFor="let chargableAmenityGroup of chargableAmenities | keyvalue">
-				<div class="custom-control custom-checkbox" *ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue">
+				<div class="custom-control custom-checkbox"
+					*ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue">
 					<!-- {{chargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.value.name }}"
 						[value]="chargableAmenity.value.id" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
-								$event.target.checked
+								$event.target.checked,
+								'chargable'
 							)
 						" tabindex="1" />
 					<label class="custom-control-label" for="amenity_{{ chargableAmenity.value.name }}">
@@ -527,8 +529,9 @@
 					</label>
 				</div>
 			</div>
-			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f.amenities.errors.required">
+			<div *ngIf="submittedForm && f.chargableAmenitiesArray.errors"
+				class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f.chargableAmenitiesArray.errors.required">
 					Please select atleast one Chargable Amenity.
 				</div>
 			</div>
@@ -553,7 +556,8 @@
 						(change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
-								$event.target.checked
+								$event.target.checked,
+								'nonChargable'
 							)
 						" tabindex="1" />
 					<label class="custom-control-label" for="amenity_{{ nonChargableAmenity.value.name }}">{{
@@ -562,8 +566,9 @@
 						$</label>
 				</div>
 			</div>
-			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f.amenities.errors.required">
+			<div *ngIf="submittedForm && f.nonChargableAmenitiesArray.errors"
+				class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f.nonChargableAmenitiesArray.errors.required">
 					Please select atleast one Non Chargable Amenity.
 				</div>
 			</div>

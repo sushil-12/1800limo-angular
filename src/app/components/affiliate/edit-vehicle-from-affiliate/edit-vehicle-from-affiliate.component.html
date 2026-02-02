@@ -557,7 +557,8 @@
 						[value]="chargableAmenity?.value?.id" [checked]="chargableAmenity?.value?.isSelected" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
-								$event.target.checked
+								$event.target.checked,
+								'chargable'
 							)
 						" tabindex="1" />
 					<label class="custom-control-label" for="amenity_{{ chargableAmenity?.value?.name }}">
@@ -566,8 +567,9 @@
 					</label>
 				</div>
 			</div>
-			<div *ngIf="submittedForm && f?.amenities?.errors" class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f?.amenities?.errors?.required">
+			<div *ngIf="submittedForm && f?.chargableAmenitiesArray?.errors"
+				class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f?.chargableAmenitiesArray?.errors?.required">
 					Please select atleast one Chargable Amenity.
 				</div>
 			</div>
@@ -592,7 +594,8 @@
 						[checked]="nonChargableAmenity?.value?.isSelected" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
-								$event.target.checked
+								$event.target.checked,
+								'nonChargable'
 							)
 						" tabindex="1" />
 					<label class="custom-control-label" for="amenity_{{ nonChargableAmenity?.value?.name }}">{{
@@ -601,8 +604,9 @@
 						$</label>
 				</div>
 			</div>
-			<div *ngIf="submittedForm && f?.amenities?.errors" class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f?.amenities?.errors?.required">
+			<div *ngIf="submittedForm && f?.nonChargableAmenitiesArray?.errors"
+				class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f?.nonChargableAmenitiesArray?.errors?.required">
 					Please select atleast one Non Chargable Amenity.
 				</div>
 			</div>

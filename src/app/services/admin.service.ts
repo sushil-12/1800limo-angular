@@ -5,6 +5,8 @@ import { AuthService } from './auth.service';
 import * as moment from 'moment';
 
 
+import { BehaviorSubject } from 'rxjs';
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -12,17 +14,35 @@ import * as moment from 'moment';
 
 export class AdminService {
 	big_data_list: any = undefined;
+	public bigData$ = new BehaviorSubject<any>(null);
 	current_date: any;
 	current_time: any;
 
 
 	private serverUrl = environment.serverUrl;
 	constructor(private httpClient: HttpClient, private authService: AuthService) {
-		if (this.big_data_list == undefined) {
-			this.createBookingGetData().subscribe((response: any) => {
-				this.big_data_list = response.data
-			})
-		}
+		this.createBookingGetData().subscribe((response: any) => {
+			if (response && response.data) {
+				const data = response.data;
+				// format the name of each airports/airlines data as 'code - name, city, country'
+				if (data.airportsData) {
+					data.airportsData.map((item: any) => {
+						if (item.id === 3283) {
+							item['formatted_name'] = `${item.code} - ${item.name}`;
+						} else {
+							item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`;
+						}
+						return item;
+					});
+				}
+				if (data.airlinesData) {
+					data.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
+				}
+
+				this.big_data_list = data
+				this.bigData$.next(data);
+			}
+		})
 
 		let date = new Date();
 		let timestamp = date.getTime();
@@ -33,6 +53,10 @@ export class AdminService {
 
 		this.current_date = moment(timestamp).format("YYYY-MM-DD");
 		this.current_time = `${hours}:${minutes}:${seconds}`;
+	}
+
+	getBigDataSubject() {
+		return this.bigData$.asObservable();
 	}
 
 	getAirportsAndBigData() {

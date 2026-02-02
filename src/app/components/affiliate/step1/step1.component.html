@@ -226,12 +226,12 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<div *ngIf="
+								<!-- <div *ngIf="
 										f.CellNumber.errors?.pattern;
 										else numberLength
 									">
 									Enter Numbers Without Spaces or Dashes
-								</div>
+								</div> -->
 								<!-- <ng-template #numberLength>
 									<div *ngIf="f.CellNumber.errors.minlength">
 										Minimum length should be 4
@@ -416,8 +416,8 @@
 							<mat-label>24 Hr Dispatch E-mail
 								<span class="asterisk">*</span>
 							</mat-label>
-							<input [class.errorColor]="dispatchEmailStatus == 'no'"
-								matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
+							<input [class.errorColor]="dispatchEmailStatus == 'no'" matInput
+								placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
 								[readonly]="dispatchEmailReadonly" tabIndex="1" />
 							<svg *ngIf="dispatchEmailStatus == 'yes'" xmlns="http://www.w3.org/2000/svg"
 								class="email-verified" viewBox="0 0 48 48">
@@ -516,12 +516,12 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<div *ngIf="
+								<!-- <div *ngIf="
 										f.Dispatch.errors?.pattern;
 										else invalidIntl
 									">
 									Enter Numbers Without Spaces or Dashes
-								</div>
+								</div> -->
 								<ng-template #invalidIntl>
 									<div *ngIf="f.Dispatch.errors?.invalidIntl">
 										{{f.Dispatch.errors?.invalidIntl}}
@@ -564,12 +564,12 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<div *ngIf="
+								<!-- <div *ngIf="
 										f.CompanyCellNumber.errors?.pattern;
 										else invalidIntl
 									">
 									Enter Numbers Without Spaces or Dashes
-								</div>
+								</div> -->
 								<ng-template #invalidIntl>
 									<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">
 										{{f.CompanyCellNumber.errors?.invalidIntl}}
@@ -601,12 +601,12 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<div *ngIf="
+								<!-- <div *ngIf="
 										f.Fax.errors?.pattern;
 										else invalidIntl
 									">
 									Enter Numbers Without Spaces or Dashes
-								</div>
+								</div> -->
 								<ng-template #invalidIntl>
 									<div *ngIf="f.Fax.errors?.invalidIntl">
 										{{f.Fax.errors?.invalidIntl}}
@@ -636,11 +636,11 @@
 								">
 								Do not enter + sign
 							</div>
-							<ng-template #allErrors>
+							<!-- <ng-template #allErrors>
 								<div *ngIf="f.cpcn_tpc.errors?.pattern">
 									Enter Numbers Without Spaces or Dashes
 								</div>
-							</ng-template>
+							</ng-template> -->
 						</ng-template>
 					</div>
 				</div>

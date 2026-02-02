@@ -219,39 +219,48 @@ export class CreateNewBookingComponent implements OnInit {
 
 		let countryCode = 'auto';
 
-		// Check currentUser
-		const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-		if (currentUser) {
-			countryCode = currentUser.phoneCountry || currentUser.phone_country || currentUser.country || currentUser.country_code || currentUser.Country || currentUser.CountryCode || currentUser.mobileCountry || currentUser.mobile_country || currentUser.PhoneCountry || 'auto';
 
-			// If still auto, try to extract from phone number
-			if (countryCode === 'auto') {
-				const phone = currentUser.phone || currentUser.mobile || currentUser.cell || currentUser.telephone;
-				if (phone) {
-					// Remove non-numeric characters except +
-					const customCleanPhone = phone.toString().replace(/[^0-9+]/g, '');
-					if (customCleanPhone.startsWith('+') || customCleanPhone.startsWith('00')) {
-						try {
-							// Simple heuristic: check if it starts with known codes
-							// Check for +44 (UK)
-							if (customCleanPhone.startsWith('+44') || customCleanPhone.startsWith('0044')) countryCode = 'gb';
-							// Check for +1 (US/Canada) - Default to US as fallback if unclear
-							else if (customCleanPhone.startsWith('+1') || customCleanPhone.startsWith('001')) countryCode = 'us';
-							// Add more checks if needed or use a library if available
-						} catch (e) {
-							console.error('Error in phone parsing fallback', e);
-						}
-					} else {
-						// Handle case where phone might be like "44708..." but without +
-						if (customCleanPhone.startsWith('447')) countryCode = 'gb';
+		// Check currentUser
+		const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+		// Check for CellNumberCountry first (most reliable)
+		if (currentUser && currentUser.CellNumberCountry) {
+			countryCode = currentUser.CellNumberCountry;
+		} else if (currentUser) {
+			countryCode = currentUser.phoneCountry || currentUser.phone_country || currentUser.country || currentUser.country_code || currentUser.Country || currentUser.CountryCode || currentUser.mobileCountry || currentUser.mobile_country || currentUser.PhoneCountry || 'auto';
+		}
+
+		// If still auto, try to extract from phone number
+		if (countryCode === 'auto' && currentUser) {
+			const phone = currentUser.CellNumber || currentUser.phone || currentUser.mobile || currentUser.cell || currentUser.telephone;
+			if (phone) {
+				// Remove non-numeric characters except +
+				const customCleanPhone = phone.toString().replace(/[^0-9+]/g, '');
+				if (customCleanPhone.startsWith('+') || customCleanPhone.startsWith('00')) {
+					try {
+						// Simple heuristic: check if it starts with known codes
+						// Check for +44 (UK)
+						if (customCleanPhone.startsWith('+44') || customCleanPhone.startsWith('0044')) countryCode = 'gb';
+						// Check for +1 (US/Canada) - Default to US as fallback if unclear
+						else if (customCleanPhone.startsWith('+1') || customCleanPhone.startsWith('001')) countryCode = 'us';
+						// Add more checks if needed or use a library if available
+					} catch (e) {
+						console.error('Error in phone parsing fallback', e);
 					}
+				} else {
+					// Handle case where phone might be like "44708..." but without +
+					if (customCleanPhone.startsWith('447')) countryCode = 'gb';
 				}
 			}
 		}
 
+
 		// Fallback to userData if still auto
+		console.log('RE-INIT PHONE FIELD. Current User:', currentUser ? 'Found' : 'Not Found');
+		console.log('Initial Country Code:', countryCode);
+
 		if (countryCode === 'auto') {
-			const userData = JSON.parse(localStorage.getItem('userData'));
+			const userData = JSON.parse(localStorage.getItem('userData') || 'null');
 			if (userData) {
 				countryCode = userData.PhoneCountry || userData.phoneCountry || userData.phone_country || userData.country || userData.country_code || userData.Country || 'auto';
 			}
@@ -279,6 +288,11 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 		}
 
+		// Final fallback to US if we really can't find anything
+		if (countryCode === 'auto') {
+			countryCode = 'us';
+		}
+
 		console.log('Final Choice for countryCode:', countryCode);
 
 		const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
@@ -294,12 +308,25 @@ export class CreateNewBookingComponent implements OnInit {
 				this.LCTelObject.setCountry(lcCountry);
 			} else if (countryCode !== 'auto') {
 				this.LCTelObject.setCountry(countryCode);
+
+				// Force patch the form for loose customer
+				const countryData = this.LCTelObject.getSelectedCountryData();
+				if (countryData) {
+					this.BookingForm.get('loose_customer').patchValue({
+						phone_isd: '+' + countryData.dialCode,
+						phone_country: countryData.iso2
+					}, { emitEvent: false });
+				}
 			}
 
 			this.addCustomCountrySearch(this.phoneInput.nativeElement);
 			this.phoneInput.nativeElement.addEventListener('countrychange', () => {
 				const countryData = this.LCTelObject.getSelectedCountryData();
 				console.log("in country chnage", countryData)
+				this.BookingForm.get('loose_customer').patchValue({
+					phone_isd: '+' + countryData.dialCode,
+					phone_country: countryData.iso2
+				}, { emitEvent: false });
 				this.onLCTeleCountryChange(countryData)
 			});
 		}
@@ -313,16 +340,22 @@ export class CreateNewBookingComponent implements OnInit {
 			const paxCountry = this.BookingForm.get('passenger_cell_country')?.value;
 			const paxIsd = this.BookingForm.get('passenger_cell_isd')?.value;
 
+			console.log('Pax Country from Form:', paxCountry);
+			console.log('Pax ISD from Form:', paxIsd);
+
 			if (paxCountry) {
 				this.PaxTelObject.setCountry(paxCountry);
 			} else if (paxIsd) {
-				// No country but ISD exists, try to deduce? 
-				// For now let's just not overwrite with auto/default if ISD is present, 
-				// but since we just init'd with default options, it might already be wrong.
-				// Best to rely on prefill logic to fix this, or try:
-				// this.PaxTelObject.setNumber(paxIsd); // This might clear the input text though
+				// No country but ISD exists
 			} else if (countryCode !== 'auto') {
 				this.PaxTelObject.setCountry(countryCode);
+
+				// Force patch the form with the detected default
+				const countryData = this.PaxTelObject.getSelectedCountryData();
+				if (countryData) {
+					this.SetFormValue('passenger_cell_isd', '+' + countryData.dialCode);
+					this.SetFormValue('passenger_cell_country', countryData.iso2);
+				}
 			}
 
 			this.addCustomCountrySearch(this.passenger_cellInput.nativeElement);
@@ -555,8 +588,8 @@ export class CreateNewBookingComponent implements OnInit {
 				middle_name: [''],
 				last_name: [''],
 				phone: [''],
-				phone_isd: ['+1'],
-				phone_country: ['us'],
+				phone_isd: [''],
+				phone_country: [''],
 				email: [''],
 				address: [''],
 				country: [''],
@@ -574,8 +607,8 @@ export class CreateNewBookingComponent implements OnInit {
 			passenger_name: ['', this.customValidator.whitespace()],
 			passenger_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			passenger_cell: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-			passenger_cell_isd: ['+1'],
-			passenger_cell_country: ['us'],
+			passenger_cell_isd: [''],
+			passenger_cell_country: [''],
 			total_passengers: [1],
 			luggage_count: [0],
 			booking_instructions: [''],
@@ -2437,6 +2470,25 @@ export class CreateNewBookingComponent implements OnInit {
 				}
 
 				this.fetchClientAccounts(value)
+				setTimeout(() => {
+					// Explicitly revert to logged-in user's country
+					let countryCode = 'us'; // default
+					if (this.currentUser) {
+						countryCode = this.currentUser.CellNumberCountry ||
+							this.currentUser.phoneCountry ||
+							this.currentUser.country ||
+							this.currentUser.Country ||
+							'us';
+					}
+
+					// Normalize country code
+					if (countryCode.toLowerCase() === 'auto') countryCode = 'us';
+
+					this.SetFormValue('passenger_cell_country', countryCode.toLowerCase());
+					// We don't set ISD here, let initphonefield/plugin handle it based on country
+
+					this.initphonefield()
+				}, 200)
 			}
 		})
 

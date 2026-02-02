@@ -37,9 +37,10 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="read-only mobileField">
 							<mat-label>Mobile<span class="asterisk"> *</span></mat-label>
-							<input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="Mobile" formControlName="mobile"
-								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()" readonly
-								(keypress)="numberOnly($event)" (input)="validatePhone('mobile', MobileObject)"
+							<input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="Mobile"
+								formControlName="mobile" class="phoneNumberClass" tabindex="1"
+								(focus)="$event.target.select()" readonly (keypress)="numberOnly($event)"
+								(input)="validatePhone('mobile', MobileObject)"
 								(blur)="validatePhone('mobile', MobileObject)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors || f.mobile.dirty && f.mobile.errors"
@@ -56,10 +57,10 @@
 									enter +
 									sign</div>
 								<ng-template #allErrors>
-									<div *ngIf="f.mobile.errors?.pattern;else numberLength">Enter
+									<!-- <div *ngIf="f.mobile.errors?.pattern;else numberLength">Enter
 										Numbers Without
 										Spaces or Dashes
-									</div>
+									</div> -->
 									<!-- <ng-template #numberLength>
 										<div *ngIf="f.mobile.errors.minlength">Minimum length should
 											be 4</div>
@@ -73,9 +74,10 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mobileField">
 							<mat-label>Work/Home</mat-label>
-							<input pattern="[0-9+]*" maxlength="16" matInput #workInput placeholder="Contact" formControlName="work"
-								class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-								(keypress)="numberOnly($event)" (input)="validatePhone('work', WorkObject)"
+							<input pattern="[0-9+]*" maxlength="16" matInput #workInput placeholder="Contact"
+								formControlName="work" class="phoneNumberClass" tabindex="1"
+								(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+								(input)="validatePhone('work', WorkObject)"
 								(blur)="validatePhone('work', WorkObject)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors || f.work.dirty && f.work.errors"
@@ -92,10 +94,10 @@
 									enter +
 									sign</div>
 								<ng-template #allErrors>
-									<div *ngIf="f.work.errors?.pattern;else numberLength">Enter
+									<!-- <div *ngIf="f.work.errors?.pattern;else numberLength">Enter
 										Numbers Without
 										Spaces or Dashes
-									</div>
+									</div> -->
 									<!-- <ng-template #numberLength>
 										<div *ngIf="f.work.errors.minlength">Minimum length should
 											be 4</div>
