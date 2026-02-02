@@ -314,13 +314,12 @@
 				)</span></h2>
 		<div class="container">
 			<div class="choose_ameniteslist">
-				<div class="custom-control custom-checkbox"
-					*ngFor="let specialAmenityObj of specialAmenitiesFormControl; let i=index;">
-					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{specialAmenities[i].name}}"
-						[value]="specialAmenities[i].id" (change)="onSpecialAmenitiesCheckboxChange($event)"
-						[formControl]="specialAmenityObj" tabindex="1">
+				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
+					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{specialAmenity.name}}"
+						[value]="specialAmenity.id" [checked]="isSpecialAmenityChecked(specialAmenity.id)"
+						(change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1">
 					<label class="custom-control-label"
-						for="specialAmenity_{{specialAmenities[i].name}}">{{specialAmenities[i].name}}</label>
+						for="specialAmenity_{{specialAmenity.name}}">{{specialAmenity.name}}</label>
 				</div>
 			</div>
 			<div *ngIf="submittedForm && f.specialAmenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
@@ -333,13 +332,11 @@
 				for this vehicle )</span></h2>
 		<div class="container">
 			<div class="choose_ameniteslist">
-				<div class="custom-control custom-checkbox"
-					*ngFor="let interiorObj of interiorsFormControl; let i=index;">
-					<input type="checkbox" class="custom-control-input" id="interior_{{interiors[i].name}}"
-						[value]="interiors[i].id" (change)="onInteriorsCheckboxChange($event)"
-						[formControl]="interiorObj" tabindex="1">
-					<label class="custom-control-label"
-						for="interior_{{interiors[i].name}}">{{interiors[i].name}}</label>
+				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
+					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
+						[value]="interior.id" [checked]="isInteriorChecked(interior.id)"
+						(change)="onInteriorsCheckboxChange($event)" tabindex="1">
+					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
 			</div>
 			<div *ngIf="submittedForm && f.vehicleInterior.errors" class="text-danger margin-bottom-thin my-mat-hint">

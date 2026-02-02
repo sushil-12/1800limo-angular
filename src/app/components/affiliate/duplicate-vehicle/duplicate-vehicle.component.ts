@@ -478,7 +478,7 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.addVehicleForm.patchValue({
-			charterCancelPolicy : event.target.value
+			charterCancelPolicy: event.target.value
 		})
 		this.changeNonCharterCancelPolicy = true
 	}
@@ -622,6 +622,20 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 		for (j = 0; j < selectedInterior.length; j++) {
 			interiors.push(new FormControl(selectedInterior[j]));
 		}
+	}
+
+	isSpecialAmenityChecked(id) {
+		if (this.response2 && this.response2.data && this.response2.data.specialAmenities) {
+			return this.response2.data.specialAmenities.includes(id);
+		}
+		return false;
+	}
+
+	isInteriorChecked(id) {
+		if (this.response2 && this.response2.data && this.response2.data.vehicleInterior) {
+			return this.response2.data.vehicleInterior.includes(id);
+		}
+		return false;
 	}
 
 	onAmenitiesCheckboxChange(val, ischecked) {
@@ -924,6 +938,6 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 			// If the service type is already selected, remove it from the array
 			this.service.splice(index, 1);
 		}
-		}
+	}
 }
 
