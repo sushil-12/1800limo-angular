@@ -1,6 +1,6 @@
 <form [formGroup]="addAffiliateAccountForm" class="step_form_wrapper" appInvalidControlScroll>
 	<section class="user_information">
-		<h2 class="headinginfo" id="owner_info">Owner Information</h2>
+		<h2 class="headinginfo" id="owner_info">Owner Informationss</h2>
 		<div class="container">
 			<!-- RADIO TILES HEADING -->
 			<div class="row">
@@ -516,17 +516,9 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<!-- <div *ngIf="
-										f.Dispatch.errors?.pattern;
-										else invalidIntl
-									">
-									Enter Numbers Without Spaces or Dashes
-								</div> -->
-								<ng-template #invalidIntl>
-									<div *ngIf="f.Dispatch.errors?.invalidIntl">
-										{{f.Dispatch.errors?.invalidIntl}}
-									</div>
-								</ng-template>
+								<div *ngIf="f.Dispatch.errors?.invalidIntl">
+									{{f.Dispatch.errors?.invalidIntl}}
+								</div>
 							</ng-template>
 						</ng-template>
 					</div>
@@ -564,17 +556,9 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<!-- <div *ngIf="
-										f.CompanyCellNumber.errors?.pattern;
-										else invalidIntl
-									">
-									Enter Numbers Without Spaces or Dashes
-								</div> -->
-								<ng-template #invalidIntl>
-									<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">
-										{{f.CompanyCellNumber.errors?.invalidIntl}}
-									</div>
-								</ng-template>
+								<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">
+									{{f.CompanyCellNumber.errors?.invalidIntl}}
+								</div>
 							</ng-template>
 						</ng-template>
 					</div>
@@ -601,17 +585,9 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<!-- <div *ngIf="
-										f.Fax.errors?.pattern;
-										else invalidIntl
-									">
-									Enter Numbers Without Spaces or Dashes
-								</div> -->
-								<ng-template #invalidIntl>
-									<div *ngIf="f.Fax.errors?.invalidIntl">
-										{{f.Fax.errors?.invalidIntl}}
-									</div>
-								</ng-template>
+								<div *ngIf="f.Fax.errors?.invalidIntl">
+									{{f.Fax.errors?.invalidIntl}}
+								</div>
 							</ng-template>
 						</ng-template>
 					</div>
