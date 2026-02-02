@@ -215,10 +215,10 @@
 					<mat-form-field appearance="outline" class="mobileField"
 						[class.is-invalid-input]="submittedForm && f.CellNumber.errors || (f.CellNumber.touched || f.CellNumber.dirty) && f.CellNumber.errors">
 						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890" formControlName="CellNumber"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-							(keypress)="numberOnly($event)" (input)="validateCellNumber()"
-							(blur)="validateCellNumber()" />
+						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890"
+							formControlName="CellNumber" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCellNumber()" (blur)="validateCellNumber()" />
 
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CellNumber.errors || (f.CellNumber.touched || f.CellNumber.dirty) && f.CellNumber.errors"
@@ -468,9 +468,10 @@
 						[class.is-invalid-input]="submittedForm && f.Dispatch.errors || (f.Dispatch.touched || f.Dispatch.dirty) && f.Dispatch.errors">
 						<mat-label>24 Hr Cell
 							Dispatch<span class="asterisk">*</span></mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #dispatchInput placeholder="1234567890" formControlName="Dispatch"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-							(keypress)="numberOnly($event)" (input)="validateDispatch()" (blur)="validateDispatch()" />
+						<input pattern="[0-9+]*" maxlength="16" matInput #dispatchInput placeholder="1234567890"
+							formControlName="Dispatch" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateDispatch()" (blur)="validateDispatch()" />
 
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Dispatch.errors || (f.Dispatch.touched || f.Dispatch.dirty) && f.Dispatch.errors"
@@ -500,9 +501,9 @@
 						[class.is-invalid-input]="submittedForm && f.CompanyCellNumber.errors || (f.CompanyCellNumber.touched || f.CompanyCellNumber.dirty) && f.CompanyCellNumber.errors">
 						<mat-label>Business
 							Telephone</mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #companyCellNumberInput placeholder="1234567890"
-							formControlName="CompanyCellNumber" class="phoneNumberClass" tabindex="1"
-							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+						<input pattern="[0-9+]*" maxlength="16" matInput #companyCellNumberInput
+							placeholder="1234567890" formControlName="CompanyCellNumber" class="phoneNumberClass"
+							tabindex="1" (focus)="$event.target.select()" (keypress)="numberOnly($event)"
 							(input)="validateCompanyCellNumber()" (blur)="validateCompanyCellNumber()" />
 
 					</mat-form-field>
@@ -533,8 +534,8 @@
 					<mat-form-field appearance="outline" class="mobileField"
 						[class.is-invalid-input]="submittedForm && f.Fax.errors || (f.Fax.touched || f.Fax.dirty) && f.Fax.errors">
 						<mat-label>FAX</mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #FaxInput placeholder="1234567890" formControlName="Fax"
-							class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+						<input pattern="[0-9+]*" maxlength="16" matInput #FaxInput placeholder="1234567890"
+							formControlName="Fax" class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
 							(keypress)="numberOnly($event)" (input)="validateFax()" (blur)="validateFax()" />
 
 					</mat-form-field>

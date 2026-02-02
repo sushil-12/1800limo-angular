@@ -187,7 +187,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			charterCancelPolicy: ['24', Validators.required],
 			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
-			amenities: this.formBuilder.array([], [Validators.required]),
+			chargableAmenitiesArray: this.formBuilder.array([], [Validators.required]),
+			nonChargableAmenitiesArray: this.formBuilder.array([], [Validators.required]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInterior: this.formBuilder.array([], [Validators.required]),
 			vehicle_image_1: ['', Validators.required],
@@ -528,8 +529,14 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 
 
-	onAmenitiesCheckboxChange(val, ischecked) {
-		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+	onAmenitiesCheckboxChange(val, ischecked, type) {
+		let amenities: FormArray;
+		if (type === 'chargable') {
+			amenities = this.addVehicleForm.get('chargableAmenitiesArray') as FormArray;
+		} else {
+			amenities = this.addVehicleForm.get('nonChargableAmenitiesArray') as FormArray;
+		}
+
 		if (ischecked) {
 			amenities.push(new FormControl(val));
 		} else {
@@ -549,7 +556,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.addVehicleForm.patchValue({
-			charterCancelPolicy : event.target.value
+			charterCancelPolicy: event.target.value
 		})
 		this.changeNonCharterCancelPolicy = true
 	}
@@ -902,7 +909,13 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.spinner.show(); // show spinner
 		this.disableSubmitButton = true; //disable submit button
 
-		this.affiliateService.submitVehicle(this.addVehicleForm.value)
+		// Merge amenities for payload
+		const formValue = this.addVehicleForm.value;
+		const amenities = [...(formValue.chargableAmenitiesArray || []), ...(formValue.nonChargableAmenitiesArray || [])];
+
+		const payload = { ...formValue, amenities: amenities };
+
+		this.affiliateService.submitVehicle(payload)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide(); // hide spinner

@@ -3038,7 +3038,7 @@ table #navbarDropdownUserImage {
     width: 100% !important;
     /* height: 303px !important; */
 }
-
+.timepicker-dial__control{font-size:50px !important;}
 .timepicker__header {
     padding: 15px 64px;
     width: 100%;

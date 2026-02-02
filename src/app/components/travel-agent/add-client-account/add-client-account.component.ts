@@ -334,6 +334,25 @@ export class AddClientAccountComponent implements OnInit, AfterViewInit {
 	}
 
 	submitForm() {
+		if (this.MobileObject) {
+			const countryData = this.MobileObject.getSelectedCountryData();
+			if (countryData) {
+				this.addIndividualAccountForm.patchValue({
+					mobileIsd: '+' + countryData.dialCode,
+					mobileCountry: countryData.iso2
+				});
+			}
+		}
+
+		if (this.WorkObject) {
+			const countryData = this.WorkObject.getSelectedCountryData();
+			if (countryData) {
+				this.addIndividualAccountForm.patchValue({
+					workIsd: '+' + countryData.dialCode,
+					workCountry: countryData.iso2
+				});
+			}
+		}
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;

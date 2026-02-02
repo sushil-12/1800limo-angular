@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { pluck } from 'rxjs/operators';
+import { pluck, distinctUntilChanged } from 'rxjs/operators';
 
 import { AdminService } from '../../../services/admin.service';
 import { SharedModule } from '../../shared/shared.module'
@@ -9,7 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { param } from 'jquery';
 import { CommonService } from '../../../services/common.service';
@@ -26,7 +26,7 @@ declare var $: any
 	templateUrl: './new-booking.component.html',
 	styleUrls: ['./new-booking.component.scss']
 })
-export class NewBookingComponent implements OnInit {
+export class NewBookingComponent implements OnInit, OnDestroy {
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
 	@ViewChild('lose_aff_name_input') lose_aff_name_input: ElementRef;
 
@@ -179,6 +179,7 @@ export class NewBookingComponent implements OnInit {
 	veh_created_by: any;
 	minDate = new Date();
 	waiting_time_in_mins: any = 0;
+	bigDataSubscription: Subscription;
 
 	constructor(
 		private $form: FormBuilder,
@@ -254,6 +255,12 @@ export class NewBookingComponent implements OnInit {
 			this.booking_created_from = 'subscriber'
 		}
 
+	}
+
+	ngOnDestroy(): void {
+		if (this.bigDataSubscription) {
+			this.bigDataSubscription.unsubscribe();
+		}
 	}
 
 	change2() {
@@ -1137,7 +1144,7 @@ export class NewBookingComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
-	SetFormValue(form_control: string, value: any) {
+	SetFormValue(form_control: string, value: any, emitEvent: boolean = true) {
 		if (!value || !form_control) {
 			console.info(`No Value to set for ${form_control}. Returning ...`)
 			return
@@ -1145,8 +1152,10 @@ export class NewBookingComponent implements OnInit {
 		console.log('Setting Form Value for ', form_control, ' : ', value);
 		try {
 
-			this.BookingForm.get(form_control).setValue(value)
-			this.BookingForm.updateValueAndValidity()
+			this.BookingForm.get(form_control).setValue(value, { emitEvent: emitEvent })
+			if (emitEvent) {
+				this.BookingForm.updateValueAndValidity()
+			}
 		}
 		catch (err) {
 			console.error('NFC Error: ')
@@ -1195,7 +1204,24 @@ export class NewBookingComponent implements OnInit {
 
 	// MapController.ts
 
+	mapDebounceTimer: any;
+	returnMapDebounceTimer: any;
+
 	async MapController(is_return: boolean = false) {
+		if (is_return) {
+			if (this.returnMapDebounceTimer) clearTimeout(this.returnMapDebounceTimer);
+			this.returnMapDebounceTimer = setTimeout(async () => {
+				await this._MapController(true);
+			}, 300);
+		} else {
+			if (this.mapDebounceTimer) clearTimeout(this.mapDebounceTimer);
+			this.mapDebounceTimer = setTimeout(async () => {
+				await this._MapController(false);
+			}, 300);
+		}
+	}
+
+	async _MapController(is_return: boolean = false) {
 		try {
 			let waypoints = []
 			let origin: google.maps.LatLng
@@ -1412,40 +1438,20 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	fetchAirportsAndBigData(): void {
-		let s = setInterval(() => {
-			if (this.$api.getAirportsAndBigData()) {
+		this.bigDataSubscription = this.$api.bigData$.subscribe((data: any) => {
+			if (data) {
 				this.$spinner.hide('fetchspinner');
-				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
+				this.BigData = data;
+				// Deep copy needed only if form mutates it independently (safeguard)
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
-				// format the name of each airports/airlines data as 'code - name, city, country'
-				this.BigData.airportsData.map((item: any) => {
-					if (item.id === 3283) {
-						item['formatted_name'] = `${item.code} - ${item.name}`;
-					} else {
-						item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`;
-					}
-					return item;
-				});
-				this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
-				this.BigData_COPY.airportsData.map((item: any) => {
-					if (item.id === 3283) {
-						item['formatted_name'] = `${item.code} - ${item.name}`;
-					} else {
-						item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`;
-					}
-					return item;
-				});
-				this.BigData_COPY.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 
 				this.MapController();
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
 				this.newBooking ? this.setValueByBookNow() : "";
-				clearInterval(s);
-			}
-			else {
+			} else {
 				this.$spinner.show('fetchspinner');
 			}
-		}, 2000);
+		});
 	}
 
 
@@ -3358,7 +3364,7 @@ export class NewBookingComponent implements OnInit {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
 			}
-			this.SetFormValue('return_transfer_type', reverseStringChars(value))
+			this.SetFormValue('return_transfer_type', reverseStringChars(value), false)
 			this.return_transfer_type = reverseStringChars(value)
 
 		})
@@ -3438,7 +3444,7 @@ export class NewBookingComponent implements OnInit {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
 			}
-			this.SetFormValue('transfer_type', reverseStringChars(value))
+			this.SetFormValue('transfer_type', reverseStringChars(value), false)
 			this.transfer_type = reverseStringChars(value)
 		})
 
@@ -3709,7 +3715,7 @@ export class NewBookingComponent implements OnInit {
 			}
 		})
 
-		this.BookingForm.get('affiliate_id').valueChanges.subscribe((value: number) => {
+		this.BookingForm.get('affiliate_id').valueChanges.pipe(distinctUntilChanged()).subscribe((value: number) => {
 			console.log("in affiliate info", this.booking_created_from)
 			if (value && this.booking_created_from == 'admin') {
 				console.log("in affiliate info")
@@ -3743,7 +3749,7 @@ export class NewBookingComponent implements OnInit {
 			}
 		})
 
-		this.BookingForm.get('return_affiliate_id').valueChanges.subscribe((value: number) => {
+		this.BookingForm.get('return_affiliate_id').valueChanges.pipe(distinctUntilChanged()).subscribe((value: number) => {
 			if (value && this.booking_created_from == 'admin') {
 				this.chooseReturnAffiliate()
 				this.fetchReturnAffiliateInformation(value)
@@ -4604,7 +4610,11 @@ export class NewBookingComponent implements OnInit {
 		console.log("term", term, "item", item)
 		// return item.bindNameAffiliate.toLowerCase().startsWith(term.toLowerCase())
 
-		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_name.toLowerCase().startsWith(term.toLowerCase()) || item.phone.startsWith(term)
+		return item.name.toLowerCase().includes(term.toLowerCase())
+			|| item.driver_name.toLowerCase().includes(term.toLowerCase())
+			|| item.phone.includes(term)
+			|| (item?.last_name && item.last_name.toLowerCase().includes(term.toLowerCase()))
+			|| (item?.LastName && item.LastName.toLowerCase().includes(term.toLowerCase()))
 
 		//   console.log("in search",event)
 		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))
@@ -4612,7 +4622,7 @@ export class NewBookingComponent implements OnInit {
 
 	onSearchLooseAffiliateId(term, item) {
 		console.log("term", term, "item", item)
-		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.toString().startsWith(term)
+		return item.name.toLowerCase().includes(term.toLowerCase()) || item.driver_phone.toString().includes(term)
 	}
 
 	onSearchCancellation(term, item) {

@@ -192,7 +192,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			charterCancelPolicy: ['24', Validators.required],
 			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([]),
-			amenities: this.formBuilder.array([], [Validators.required]),
+			chargableAmenitiesArray: this.formBuilder.array([], [Validators.required]),
+			nonChargableAmenitiesArray: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInteriorGet: this.formBuilder.array([], [Validators.required]),
@@ -258,8 +259,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.spinner.hide()
 							return throwError(err);
 						})
-					).subscribe(result2 =>
-					{
+					).subscribe(result2 => {
 						console.log('response2-------_>>>>>>>>>>>>>>>>>>')
 						this.response2 = result2;
 						if (this.response2?.data?.vehicle_image_1) {
@@ -471,7 +471,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return -1;
 		}
 	}
-	handleChangeVehicleType(value){
+	handleChangeVehicleType(value) {
 		console.log('Selected Value:', value);
 		this.isVehicleTypeSelected = value ? true : false
 	}
@@ -537,7 +537,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			modelField.value = '';
 		}
 	}
-	handleNonCharterCancelPolicy(event){
+	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.addVehicleForm.patchValue({
 			charterCancelPolicy: event.target.value
@@ -655,25 +655,19 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 	setAmenities() {
 		var chargableAmenities = this.chargableAmenities;
-		for (var key in chargableAmenities)
-		{
-			Object.values(chargableAmenities[key]).forEach((chargableAmenity: any) =>
-			{
-				if (chargableAmenity?.isSelected)
-				{
-					this.onAmenitiesCheckboxChange(chargableAmenity?.id, true);
+		for (var key in chargableAmenities) {
+			Object.values(chargableAmenities[key]).forEach((chargableAmenity: any) => {
+				if (chargableAmenity?.isSelected) {
+					this.onAmenitiesCheckboxChange(chargableAmenity?.id, true, 'chargable');
 				}
 			});
 		}
 
 		var nonChargableAmenities = this.nonChargableAmenities;
-		for (var key in nonChargableAmenities)
-		{
-			Object.values(nonChargableAmenities[key]).forEach((nonChargableAmenity: any) =>
-			{
-				if (nonChargableAmenity?.isSelected)
-				{
-					this.onAmenitiesCheckboxChange(nonChargableAmenity?.id, true);
+		for (var key in nonChargableAmenities) {
+			Object.values(nonChargableAmenities[key]).forEach((nonChargableAmenity: any) => {
+				if (nonChargableAmenity?.isSelected) {
+					this.onAmenitiesCheckboxChange(nonChargableAmenity?.id, true, 'nonChargable');
 				}
 			});
 		}
@@ -730,8 +724,14 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		}
 	}
 
-	onAmenitiesCheckboxChange(val, ischecked) {
-		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+	onAmenitiesCheckboxChange(val, ischecked, type) {
+		let amenities: FormArray;
+		if (type === 'chargable') {
+			amenities = this.addVehicleForm.get('chargableAmenitiesArray') as FormArray;
+		} else {
+			amenities = this.addVehicleForm.get('nonChargableAmenitiesArray') as FormArray;
+		}
+
 		if (ischecked) {
 			amenities.push(new FormControl(val));
 		} else {
@@ -837,7 +837,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
-			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
+			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key, id) : this.onFileChange1(dataUrl, key, id);
 		};
 	}
 	async onFileChange1(dataUrl, imageNumber, imageId) {
@@ -1063,8 +1063,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		return this.addVehicleForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addVehicleForm);
 
 		this.pushValuesTypeOfService(this.service)
@@ -1077,7 +1076,20 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.spinner.show(); // show spinner
 		this.disableSubmitButton = true; //disable submit button
 
-		this.affiliateService.editVehicle(this.addVehicleForm.value)
+
+		// Merge amenities for payload
+		const formValue = this.addVehicleForm.value;
+		const amenities = [...(formValue.chargableAmenitiesArray || []), ...(formValue.nonChargableAmenitiesArray || [])];
+		// Re-read strictly from form controls to be safe if value is partial? value is usually full.
+		// Actually let's just use the arrays directly.
+		const chargable = this.addVehicleForm.get('chargableAmenitiesArray').value || [];
+		const nonChargable = this.addVehicleForm.get('nonChargableAmenitiesArray').value || [];
+		const finalAmenities = [...chargable, ...nonChargable];
+
+		const payload = { ...formValue, amenities: finalAmenities };
+		// clean up temp arrays if needed, but extra fields are generally okay.
+
+		this.affiliateService.editVehicle(payload)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide(); // hide spinner 
@@ -1149,10 +1161,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.router.navigate(['/affiliate/step5']);
 	}
 
-	changeMake(selectedMake, onFirstLoad = null)
-	{
+	changeMake(selectedMake, onFirstLoad = null) {
 		console.log('------>>>>', onFirstLoad)
-		if(!selectedMake){
+		if (!selectedMake) {
 			this.addVehicleForm.patchValue({
 				model: ''
 			})
@@ -1169,8 +1180,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.addVehicleForm.patchValue({
 			model: this.filteredModel[0]?.ID
 		})
-		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad==1)
-		{
+		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad == 1) {
 			console.log('->>', this.onFirstLoad)
 			this.onFirstLoad = 2
 			this.addVehicleForm.patchValue({
