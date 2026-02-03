@@ -105,10 +105,11 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
   }
 
   ngAfterViewInit(): void {
-    // Focus on the input field when the component has fully initialized
-    if (this.nameInput) {
-      this.nameInput.nativeElement.focus();
-    }
+    setTimeout(() => {
+      if (this.nameInput) {
+        this.nameInput.nativeElement.focus();
+      }
+    }, 500);
 
     this.selectedLanguages = [1]
     this.profileForm.patchValue({ language: this.selectedLanguages });
@@ -257,12 +258,12 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     this.profileForm = this.formBuilder.group({
       name: [''],
       operator_name: [''],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(7), Validators.maxLength(15)]],
+      phone: ['', [Validators.required]],
       phone_isd: ['+1', Validators.required],
       phone_country: ['us'],
       email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       address: [''],
-      work: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      work: [''],
       work_isd: ['+1'],
       work_country: ['us'],
       // city: [''],
@@ -412,27 +413,56 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
 
     // stop here if form is invalid
     if (this.profileForm.invalid) {
+      console.log("Trace: Form Invalid");
+      console.log("Form is invalid:");
+      Object.keys(this.profileForm.controls).forEach(key => {
+        const controlErrors = this.profileForm.get(key).errors;
+        if (controlErrors != null) {
+          console.log(`Key control: ${key}, Errors:`, controlErrors);
+        }
+      });
       return;
     }
 
-    // Sanitize work (remove Country Code if present)
-    if (this.profileForm.value.work && this.profileForm.value.work_isd && this.profileForm.value.work.startsWith(this.profileForm.value.work_isd)) {
-      this.profileForm.value.work = this.profileForm.value.work.substring(this.profileForm.value.work_isd.length);
+    console.log("Trace: Form Valid, preparing payload");
+
+    // Create a payload object, don't modify form value directly
+    const payload = { ...this.profileForm.value };
+
+    // Sanitize work (remove spaces, dashes, brackets etc)
+    if (payload.work) {
+      // Remove all non-numeric characters except +
+      let cleanWork = payload.work.toString().replace(/[^0-9+]/g, '');
+
+      // Handle ISD prefix removal
+      if (payload.work_isd && cleanWork.startsWith(payload.work_isd)) {
+        cleanWork = cleanWork.substring(payload.work_isd.length);
+      }
+      payload.work = cleanWork;
     }
 
-    // Sanitize phone (remove Country Code if present)
-    if (this.profileForm.value.phone && this.profileForm.value.phone_isd && this.profileForm.value.phone.startsWith(this.profileForm.value.phone_isd)) {
-      this.profileForm.value.phone = this.profileForm.value.phone.substring(this.profileForm.value.phone_isd.length);
+    // Sanitize phone (remove spaces, dashes, brackets etc)
+    if (payload.phone) {
+      // Remove all non-numeric characters except +
+      let cleanPhone = payload.phone.toString().replace(/[^0-9+]/g, '');
+
+      // Handle ISD prefix removal
+      if (payload.phone_isd && cleanPhone.startsWith(payload.phone_isd)) {
+        cleanPhone = cleanPhone.substring(payload.phone_isd.length);
+      }
+      payload.phone = cleanPhone;
     }
 
     if (this.profileForm.get('badge_city_name').value == '') {
       this.profileForm.patchValue({
         badge_city: ''
-      })
+      });
+      payload.badge_city = '';
     }
 
 
     if (this.profileForm.get('address').value != '' && this.profileForm.get('latitude').value == '') {
+      console.log("Trace: Address Check Failed");
       this.errors.openDialog({
         errors: {
           error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
@@ -441,10 +471,10 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
       return;
     }
 
-    console.log(this.profileForm.value);
+    console.log("Trace: Submitting payload", payload);
     this.spinner.show();
 
-    this.adminService.createLooseAffAcc(this.profileForm.value, this.userId)
+    this.adminService.createLooseAffAcc(payload, this.userId)
       .pipe(
         catchError(err => {
           this.spinner.hide();//hide spinner
@@ -484,6 +514,11 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     this.profileForm.controls.phone_isd.patchValue(keepValues[2]);
     this.profileForm.controls.phone_country.patchValue(keepValues[3]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      if (this.nameInput) {
+        this.nameInput.nativeElement.focus();
+      }
+    }, 500);
   }
 
   backButton() {

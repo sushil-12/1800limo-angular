@@ -1614,7 +1614,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (affiliate_type == 'loose_affiliate') {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.LooseAffiliateAccounts = response?.data
+				if (response?.data) {
+					this.LooseAffiliateAccounts = response.data.map(item => {
+						item.bindName = [item.name, item.operator_name].filter(Boolean).join(' / ');
+						return item;
+					});
+				} else {
+					this.LooseAffiliateAccounts = [];
+				}
 				this.$spinner.hide()
 			})
 		}
@@ -1624,7 +1631,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
+						item.bindNameAffiliate = [item.name, item.driver_name].filter(Boolean).join(' / ');
 						return item
 					})
 					console.log('affiliate accounts', this.AffiliateAccounts)
@@ -1647,6 +1654,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (return_affiliate_type == 'loose_affiliate') {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
+				if (response?.data) {
+					this.Return_LooseAffiliateAccounts = response.data.map(item => {
+						item.bindName = [item.name, item.operator_name].filter(Boolean).join(' / ');
+						return item;
+					});
+				} else {
+					this.Return_LooseAffiliateAccounts = [];
+				}
 				this.Return_LooseAffiliateAccounts = response?.data
 				this.$spinner.hide()
 			})
@@ -1657,7 +1672,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.Return_AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
+						item.bindNameAffiliate = [item.name, item.driver_name].filter(Boolean).join(' / ');
 						return item
 					})
 					console.log('affiliate accounts', this.Return_AffiliateAccounts)
@@ -4622,7 +4637,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	onSearchLooseAffiliateId(term, item) {
 		console.log("term", term, "item", item)
-		return item.name.toLowerCase().includes(term.toLowerCase()) || item.driver_phone.toString().includes(term)
+		return item.name.toLowerCase().includes(term.toLowerCase())
+			|| item.driver_phone.toString().includes(term)
+			|| (item.operator_name && item.operator_name.toLowerCase().includes(term.toLowerCase()));
 	}
 
 	onSearchCancellation(term, item) {

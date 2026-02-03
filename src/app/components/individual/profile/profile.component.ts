@@ -10,12 +10,36 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
+import * as moment from "moment";
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
 declare var $: any;
+
+export const MY_FORMATS = {
+	parse: {
+		dateInput: 'MM/YYYY',
+	},
+	display: {
+		dateInput: 'MM/YYYY',
+		monthYearLabel: 'MMM YYYY',
+		dateA11yLabel: 'LL',
+		monthYearA11yLabel: 'MMMM YYYY',
+	},
+};
 
 @Component({
 	selector: 'app-profile',
 	templateUrl: './profile.component.html',
-	styleUrls: ['./profile.component.scss']
+	styleUrls: ['./profile.component.scss'],
+	providers: [
+		{
+			provide: DateAdapter,
+			useClass: MomentDateAdapter,
+			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+		},
+		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+	],
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
 	@ViewChild('search1') search1!: ElementRef;
@@ -565,5 +589,36 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 				}
 			});
 		});
+	}
+
+	// Month-Year Picker Logic
+	expiryDateControl = new FormControl(moment());
+
+	chosenYearHandler(normalizedYear: moment.Moment) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.year(normalizedYear.year());
+		this.expiryDateControl.setValue(ctrlValue);
+	}
+
+	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.month(normalizedMonth.month());
+		ctrlValue.year(normalizedMonth.year());
+		this.expiryDateControl.setValue(ctrlValue);
+
+		// Patch Form Values
+		const monthStr = (normalizedMonth.month() + 1).toString().padStart(2, '0');
+		const yearStr = normalizedMonth.year();
+
+		this.addIndividualAccountForm.patchValue({
+			exp_month: monthStr,
+			exp_year: yearStr
+		});
+
+		// Mark as dirty/touched for validation display
+		this.addIndividualAccountForm.get('exp_month').markAsDirty();
+		this.addIndividualAccountForm.get('exp_year').markAsDirty();
+
+		datepicker.close();
 	}
 }

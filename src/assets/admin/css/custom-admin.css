@@ -2336,7 +2336,7 @@ button:focus {
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.mat-mdc-form-field-icon-prefix{
+.mat-mdc-form-field-icon-prefix {
     top: 1px !important;
     left: 10px !important;
     font-weight: 500 !important;
@@ -3038,7 +3038,11 @@ table #navbarDropdownUserImage {
     width: 100% !important;
     /* height: 303px !important; */
 }
-.timepicker-dial__control{font-size:50px !important;}
+
+.timepicker-dial__control {
+    font-size: 50px !important;
+}
+
 .timepicker__header {
     padding: 15px 64px;
     width: 100%;
@@ -3186,7 +3190,7 @@ table #navbarDropdownUserImage {
 }
 
 .mat-calendar-body-cell-content.mat-focus-indicator {
-    font-weight: 600 !important;
+    font-weight: 400 !important;
 }
 
 .mat-calendar-body-disabled .mat-calendar-body-cell-content.mat-focus-indicator {

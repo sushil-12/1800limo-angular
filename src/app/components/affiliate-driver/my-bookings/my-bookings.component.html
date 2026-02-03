@@ -76,7 +76,7 @@
                 <div class="col-md-12">
                     <div id="search-field-my-booking">
                         <mat-form-field appearance="outline" class="m-0">
-                            <input  matInput type="text" (keypress)="handleKeypressEvents()"
+                            <input matInput type="text" (keypress)="handleKeypressEvents()"
                                 (focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
                                 [value]="searchText"
                                 placeholder="Search by booking number, status, name, cell phone, vehicle type"
@@ -87,7 +87,8 @@
             </div>
             <div class="row pl-2">
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-                    {{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see the next 7 days bookings or search for past bookings.' }}
+                        {{useDateFilter ? 'Uncheck the box and see all future bookings' : 'Check the box and only see
+                        the next 7 days bookings or search for past bookings.' }}
                     </mat-checkbox></p>
             </div>
         </div>
@@ -339,10 +340,15 @@
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content user_information bottom-container">
-            <div class="modal-header pb-0">
+            <div class="modal-header pb-0 d-flex justify-content-between align-items-center">
                 <h3 class="modal-title mb-0">Audit Trial</h3>
+                <button type="button" class="x-close-btn x-cross-btn" data-dismiss="modal" aria-label="Close"
+                    style="background:none;">
+                    <span aria-hidden="true" class="bi bi-x-circle"></span>
+                </button>
             </div>
             <div class="modal-body">
+                <!-- {{invoiceData.audit_trail | json}} -->
                 <table id="audittrail" class="table table-striped">
                     <thead style="background-color: white;">
                         <tr>
@@ -352,19 +358,27 @@
                         </tr>
                     </thead>
                     <tbody>
+
+                        <!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
                         <tr *ngFor="let record of audit_Trail; let i=index">
                             <th scope="row">{{i+1}}</th>
-                            <td style="word-wrap: break-word;">{{record?.message}}</td>
-                            <td>{{record?.created_at}}</td>
+                            <td style="word-wrap: break-word;">{{record.message}}</td>
+                            <td>{{record.created_at}}</td>
                         </tr>
+
+                        <!-- </ng-container> -->
+                        <!-- <ng-template #not_found>
+							<tr>
+								<td colspan = "3">No Record Found!</td>
+							</tr>	
+						</ng-template> -->
+
+
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer justify-content-end">
-                <button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="bi bi-x-circle"></span>
-                </button>
-
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -388,13 +402,13 @@
             <div class="text-center iconStyle">
                 <div class="row">
                     <div class="col-md-12">
-                  	<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Driver'">
-							Connect with '{{ passengerDetails?.driver_first_name + ' ' +
+                        <h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Driver'">
+                            Connect with '{{ passengerDetails?.driver_first_name + ' ' +
                             passengerDetails?.driver_last_name}}' (Driver) Via</h5>
-						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
-							Connect with '{{ passengerDetails?.passenger_name }}' (Passenger) Via</h5>
-						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
-							Connect with '{{ passengerDetails?.loose_affiliate_name }}' (Loose Affiliate) Via</h5>
+                        <h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
+                            Connect with '{{ passengerDetails?.passenger_name }}' (Passenger) Via</h5>
+                        <h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
+                            Connect with '{{ passengerDetails?.loose_affiliate_name }}' (Loose Affiliate) Via</h5>
                     </div>
                     <div class="d-flex" style=" width: -webkit-fill-available;">
                         <div class="col-md-4" (click)="messageField('Phone')">
@@ -690,18 +704,18 @@
                         </div>
                     </div>
                     <div class="row preview-dropoff-color align-items-center flex-wrap flex-md-nowrap"
-                    *ngIf="bookingPreview?.cancellation_hours">
-                    <div class="col-6 col-md-4 key">
-                        <span style="font-weight: 550 !important;">
-                            Cancellation Period
-                        </span>
+                        *ngIf="bookingPreview?.cancellation_hours">
+                        <div class="col-6 col-md-4 key">
+                            <span style="font-weight: 550 !important;">
+                                Cancellation Period
+                            </span>
+                        </div>
+                        <div class="col-6 col-md-8 value">
+                            <span class="font-weight-bolder preview-output-field">
+                                {{ getCancellationTime(bookingPreview.cancellation_hours) }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-8 value">
-                        <span class="font-weight-bolder preview-output-field">
-                            {{ getCancellationTime(bookingPreview.cancellation_hours) }}
-                        </span>
-                    </div>
-                </div>
                     <hr>
                     <!-- Travel Information -->
                     <!-- <h4 class="font-weight m-0 mt-3">
@@ -1095,13 +1109,8 @@
                     <hr>
                     <br>
                     <div class="google_map">
-						<google-map
-						  height="300px"
-						  width="100%"
-						  [center]="mapCenter"
-						  [zoom]="zoom"
-						></google-map>
-					  </div>
+                        <google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+                    </div>
                     <br>
                     <hr>
                     <!-- Passenger Information -->
@@ -1262,7 +1271,8 @@
                         </div> -->
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-field">
-                                {{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{ bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
+                                {{ bookingPreview?.vehicle_make}} | {{ bookingPreview?.vehicle_model}} | {{
+                                bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
                             </span>
                         </div>
                     </div>
@@ -1331,7 +1341,8 @@
                                     </span>
                                 </div>
                                 <div class="col-8 col-md-8 value">
-                                    <span class="font-weight-bolder preview-output-field" style="word-break: break-all;">
+                                    <span class="font-weight-bolder preview-output-field"
+                                        style="word-break: break-all;">
                                         {{isAffiliate ? bookingPreview?.affiliate_email :
                                         bookingPreview?.lose_affiliate_email }}
                                     </span>
@@ -1436,7 +1447,8 @@
 
 
                     <!-- *ngIf="bookingPreview?.payment_status=='unpaid'" -->
-                    <div class="distribution_rate" *ngIf="(bookingPreview?.payment_status != 'paid' && bookingPreview?.payment_status != 'transfer_failed')">
+                    <div class="distribution_rate"
+                        *ngIf="(bookingPreview?.payment_status != 'paid' && bookingPreview?.payment_status != 'transfer_failed')">
                         <h4 class="font-weight-bolder m-0 my-3">
                             Rates Distribution
                         </h4>
@@ -1549,7 +1561,8 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-end">
-                <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" style="font-size: 50px !important;">
+                <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+                    style="font-size: 50px !important;">
                     <span aria-hidden="true" class="bi bi-x-circle"></span>
                 </button>
 
