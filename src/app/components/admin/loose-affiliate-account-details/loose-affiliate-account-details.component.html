@@ -8,7 +8,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Business Name</mat-label>
                             <input #nameInput formControlName="name" type="text" matInput placeholder="Name"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" tabindex="1">
                         </mat-form-field>
                         <!-- <div *ngIf="submittedForm && f.name.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.name.errors.required">This field is required</div>
@@ -18,7 +18,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Owner / Operator Name </mat-label>
                             <input formControlName="operator_name" type="text" matInput
-                                placeholder="Owner / Operator Name" (focus)="$event.target.select()">
+                                placeholder="Owner / Operator Name" (focus)="$event.target.select()" tabindex="1">
                         </mat-form-field>
                         <!-- <div *ngIf="submittedForm && f.name.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.name.errors.required">This field is required</div>
@@ -28,7 +28,7 @@
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
                             <div class="input-with-icon">
-                                <input pattern="[0-9+]*" maxlength="16" matInput #phoneInput placeholder="Mobile" formControlName="phone"
+                                <input matInput #phoneInput placeholder="Mobile" formControlName="phone"
                                     class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
                                     (keypress)="numberOnly($event)" (input)="validatePhone('phone', MobileObject)"
                                     (blur)="validatePhone('phone', MobileObject)" />
@@ -63,9 +63,9 @@
                                 <div *ngIf="f.phone.errors?.invalidPattern; else allErrors">Do not enter + sign
                                 </div>
                                 <ng-template #allErrors>
-                                    <div *ngIf="f.phone.errors?.pattern; else numberLength">Enter Numbers Without
+                                    <!-- <div *ngIf="f.phone.errors?.pattern; else numberLength">Enter Numbers Without
                                         Spaces
-                                        or Dashes</div>
+                                        or Dashes</div> -->
                                     <!-- <ng-template #numberLength>
                                         <div *ngIf="f.phone.errors.minlength">Minimum length should be 7</div>
                                         <div *ngIf="f.phone.errors.maxlength">Maximum length should be 15</div>
@@ -78,7 +78,7 @@
                     <div class="col-md-6">
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Work</mat-label>
-                            <input pattern="[0-9+]*" maxlength="16" matInput #workInput placeholder="Work" formControlName="work"
+                            <input matInput #workInput placeholder="Work" formControlName="work"
                                 class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
                                 (keypress)="numberOnly($event)" (input)="validatePhone('work', OfficeObject)"
                                 (blur)="validatePhone('work', OfficeObject)" />
@@ -97,10 +97,10 @@
                                     enter +
                                     sign</div>
                                 <ng-template #allErrors>
-                                    <div *ngIf="f.work.errors?.pattern;else numberLength">Enter
+                                    <!-- <div *ngIf="f.work.errors?.pattern;else numberLength">Enter
                                         Numbers Without
                                         Spaces or Dashes
-                                    </div>
+                                    </div> -->
                                     <ng-template #numberLength>
                                         <div *ngIf="f.work.errors.minlength">Minimum length should
                                             be 4</div>
@@ -115,7 +115,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>E-mail </mat-label>
                             <input formControlName="email" type="text" matInput placeholder="E-mail"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" tabindex="1">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.email?.errors || f?.email?.touched && f?.email?.errors"
                             class="text-danger">
@@ -138,7 +138,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Address </mat-label>
                             <input formControlName="address" type="text" matInput placeholder="Address" #search1
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" tabindex="1">
                         </mat-form-field>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
                         <div *ngIf="submittedForm && f?.address?.errors || f?.address?.touced && f?.address?.errors"
@@ -156,7 +156,7 @@
                             <input type="text" placeholder="Enter Largest Major City You Service" aria-label="Number"
                                 matInput formControlName="badge_city_name" [matAutocomplete]="auto"
                                 (keyup)="handleBadgeCity($event.target.value)" (focus)="$event.target.select()"
-                                [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">
+                                [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' " tabindex="1">
                             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                                 <mat-option *ngFor="let option of filteredOptions"
                                     (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)"

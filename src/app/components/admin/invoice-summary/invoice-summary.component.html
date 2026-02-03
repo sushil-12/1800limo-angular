@@ -769,16 +769,16 @@
 <!-- <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content user_information">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<div class="modal-header pb-0">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0 d-flex justify-content-between align-items-center">
 				<h3 class="modal-title mb-0">Audit Trial</h3>
+				<button type="button" class="x-close-btn x-cross-btn" data-dismiss="modal" aria-label="Close"
+					style="background:none;">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
 			</div>
-			<div class="modal-body"> -->
-<!-- {{invoiceData.audit_trail | json}} -->
-<!-- <table class="table table-striped dataTable dt-responsive">
+			<div class="modal-body">
+				<table class="table table-striped dataTable dt-responsive">
 					<thead style="background-color: white;">
 						<tr>
 							<th scope="col">#</th>
@@ -801,7 +801,8 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

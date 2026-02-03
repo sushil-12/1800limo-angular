@@ -7,12 +7,35 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { CustomvalidationService } from "src/app/services/customvalidation.service";
 import { HttpClient } from "@angular/common/http";
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
 declare var $: any;
+
+export const MY_FORMATS = {
+	parse: {
+		dateInput: 'MM/YYYY',
+	},
+	display: {
+		dateInput: 'MM/YYYY',
+		monthYearLabel: 'MMM YYYY',
+		dateA11yLabel: 'LL',
+		monthYearA11yLabel: 'MMMM YYYY',
+	},
+};
 
 @Component({
 	selector: "app-finalize-booking",
 	templateUrl: "./finalize-booking.component.html",
 	styleUrls: ["./finalize-booking.component.scss"],
+	providers: [
+		{
+			provide: DateAdapter,
+			useClass: MomentDateAdapter,
+			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+		},
+		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+	],
 })
 export class FinalizeBookingComponent implements OnInit {
 
@@ -312,7 +335,7 @@ export class FinalizeBookingComponent implements OnInit {
 			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
 			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
 			// }
-			if(this.finalize_params.number_of_vehicles != 0 ){
+			if (this.finalize_params.number_of_vehicles != 0) {
 				base_rate *= this.finalize_params.number_of_vehicles
 			}
 			let grandTotal = this.edit_rates_value.grand_total
@@ -612,5 +635,36 @@ export class FinalizeBookingComponent implements OnInit {
 
 	backButton() {
 		this.$router.navigate(['/admin/daily-bookings-admin']);
+	}
+
+	// Month-Year Picker Logic
+	expiryDateControl = new FormControl(moment());
+
+	chosenYearHandler(normalizedYear: moment.Moment) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.year(normalizedYear.year());
+		this.expiryDateControl.setValue(ctrlValue);
+	}
+
+	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.month(normalizedMonth.month());
+		ctrlValue.year(normalizedMonth.year());
+		this.expiryDateControl.setValue(ctrlValue);
+
+		// Patch Form Values
+		const monthStr = (normalizedMonth.month() + 1).toString().padStart(2, '0');
+		const yearStr = normalizedMonth.year();
+
+		this.cardForm.patchValue({
+			exp_month: monthStr,
+			exp_year: yearStr
+		});
+
+		// Mark as dirty/touched for validation display
+		this.cardForm.get('exp_month').markAsDirty();
+		this.cardForm.get('exp_year').markAsDirty();
+
+		datepicker.close();
 	}
 }

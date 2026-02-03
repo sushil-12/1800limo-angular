@@ -263,45 +263,23 @@
 							</ng-template>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Expiry Month*</mat-label>
-							<mat-select formControlName="exp_month">
-								<mat-option value="">Choose Expiry Month</mat-option>
-								<mat-option value='01'>01</mat-option>
-								<mat-option value='02'>02</mat-option>
-								<mat-option value='03'>03</mat-option>
-								<mat-option value='04'>04</mat-option>
-								<mat-option value='05'>05</mat-option>
-								<mat-option value='06'>06</mat-option>
-								<mat-option value='07'>07</mat-option>
-								<mat-option value='08'>08</mat-option>
-								<mat-option value='09'>09</mat-option>
-								<mat-option value='10'>10</mat-option>
-								<mat-option value='11'>11</mat-option>
-								<mat-option value='12'>12</mat-option>
-							</mat-select>
+							<mat-label>Expiry Date</mat-label>
+							<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl" placeholder="MM/YYYY"
+								(click)="dp.open()" readonly>
+							<mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+							<mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+								(monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+							</mat-datepicker>
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
+						<div *ngIf="submittedForm && (f.exp_month.errors || f.exp_year.errors) || (f.exp_month.touched && (f.exp_month.errors || f.exp_year.errors))"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.exp_month.errors.required">This field is required</div>
+							<div *ngIf="f.exp_month.errors?.required || f.exp_year.errors?.required">Expiry Date is
+								required</div>
 						</div>
 					</div>
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>Expiry Year*</mat-label>
-							<mat-select formControlName="exp_year">
-								<mat-option value="">Choose Expiry Year</mat-option>
-								<mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-						<div *ngIf="submittedForm && f.exp_year.errors || f.exp_year.touched && f.exp_year.errors"
-							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.exp_year.errors.required">This field is required</div>
-						</div>
-					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>CVV (3-4 digit code)*</mat-label>
 							<input matInput placeholder="CVV (3-4 digit code)" formControlName="cvc">

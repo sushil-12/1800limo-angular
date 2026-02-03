@@ -1,17 +1,42 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import * as moment from "moment";
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
+declare var $: any;
+
+export const MY_FORMATS = {
+	parse: {
+		dateInput: 'MM/YYYY',
+	},
+	display: {
+		dateInput: 'MM/YYYY',
+		monthYearLabel: 'MMM YYYY',
+		dateA11yLabel: 'LL',
+		monthYearA11yLabel: 'MMMM YYYY',
+	},
+};
 
 @Component({
 	selector: 'app-add-card',
 	templateUrl: './add-card.component.html',
-	styleUrls: ['./add-card.component.scss']
+	styleUrls: ['./add-card.component.scss'],
+	providers: [
+		{
+			provide: DateAdapter,
+			useClass: MomentDateAdapter,
+			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+		},
+		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+	],
 })
 export class AddCardComponent implements OnInit {
 
@@ -168,5 +193,35 @@ export class AddCardComponent implements OnInit {
 	}
 	backButton() {
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
+	}
+	// Month-Year Picker Logic
+	expiryDateControl = new FormControl(moment());
+
+	chosenYearHandler(normalizedYear: moment.Moment) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.year(normalizedYear.year());
+		this.expiryDateControl.setValue(ctrlValue);
+	}
+
+	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.month(normalizedMonth.month());
+		ctrlValue.year(normalizedMonth.year());
+		this.expiryDateControl.setValue(ctrlValue);
+
+		// Patch Form Values
+		const monthStr = (normalizedMonth.month() + 1).toString().padStart(2, '0');
+		const yearStr = normalizedMonth.year();
+
+		this.addCardForm.patchValue({
+			exp_month: monthStr,
+			exp_year: yearStr
+		});
+
+		// Mark as dirty/touched for validation display
+		this.addCardForm.get('exp_month').markAsDirty();
+		this.addCardForm.get('exp_year').markAsDirty();
+
+		datepicker.close();
 	}
 }

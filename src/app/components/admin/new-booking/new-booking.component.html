@@ -738,7 +738,7 @@
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
 					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffiliateId"
-						[items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
+						[items]="LooseAffiliateAccounts" bindLabel="bindName" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="loose_affiliate_id"
 						(change)="handleLooseAffiliateChange($event)">
@@ -2660,7 +2660,7 @@
 			<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
 					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffiliateId"
-						[items]="Return_LooseAffiliateAccounts" bindLabel="name" bindValue="id"
+						[items]="Return_LooseAffiliateAccounts" bindLabel="bindName" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_loose_affiliate_id"
 						(change)="handleReturnLooseAffiliateChange($event)">
