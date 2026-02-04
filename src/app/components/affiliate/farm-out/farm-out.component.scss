@@ -456,7 +456,7 @@ a.dropdown-item {
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
-    white-space: normal !important;
+	white-space: normal !important;
 }
 
 
@@ -507,4 +507,28 @@ a.dropdown-item {
 		gap: 20px;
 	}
 
+}
+
+.date-fields-wrapper {
+	flex-direction: row;
+	gap: 10px;
+	max-width: 520px;
+
+	@media (max-width: 575px) {
+		flex-direction: column;
+		max-width: 100%;
+	}
+}
+
+.search-container-wrapper {
+	gap: 15px;
+	row-gap: 15px; // Ensure spacing when wrapped
+
+	.button-group {
+		margin-top: 10px; // Mobile spacing
+
+		@media (min-width: 576px) {
+			margin-top: 6px; // Visual alignment with form field input box
+		}
+	}
 }

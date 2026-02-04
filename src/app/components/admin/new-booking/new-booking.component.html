@@ -945,7 +945,10 @@
 				<!-- Vehicle Type -->
 				<div id="vehicle-type" [ngClass]="Form.vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline"
+						[items]="(vehicleType_arr && vehicleType_arr.length > 0) ? vehicleType_arr : BigData?.vehicleCategories"
+						[bindLabel]="(vehicleType_arr && vehicleType_arr.length > 0) ? 'formatted_name' : 'name'"
+						[bindValue]="(vehicleType_arr && vehicleType_arr.length > 0) ? 'vehicleType_id' : 'id'"
 						placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="vehicle_type"
 						[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
@@ -2873,9 +2876,13 @@
 				<!-- Vehicle Type -->
 				<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline"
+						[items]="(return_vehicleType_arr && return_vehicleType_arr.length > 0) ? return_vehicleType_arr : BigData?.vehicleCategories"
+						[bindLabel]="(return_vehicleType_arr && return_vehicleType_arr.length > 0) ? 'formatted_name' : 'name'"
+						[bindValue]="(return_vehicleType_arr && return_vehicleType_arr.length > 0) ? 'vehicleType_id' : 'id'"
 						placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_vehicle_type"
+						(change)="handleReturnChangeVehicleType($event)"
 						[ngClass]="{ 'border-red': (submitBookingForm && Form.return_vehicle_type.invalid) }"
 						style="height:66px;">
 					</ng-select>
