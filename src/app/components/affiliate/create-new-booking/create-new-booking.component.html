@@ -59,7 +59,6 @@
 								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
 								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
 								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
-								<!-- <mat-option value="cruise_to_city">Cruise Port To Cruise Port ?</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -85,7 +84,6 @@
 								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
 								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
 								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
-								<!-- <mat-option value="cruise_to_city">Cruise Port To Cruise Port ?</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -863,7 +861,6 @@
 								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
 								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
 								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
-								<!-- <mat-option value="cruise_to_city">Cruise Port To Cruise Port ?</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -889,7 +886,6 @@
 								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
 								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
 								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
-								<!-- <mat-option value="cruise_to_city">Cruise Port To Cruise Port ?</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -2405,7 +2401,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder">
-										(+{{ AffiliateInformation.CellIsd.toString().replace('+','') }})
+										{{ AffiliateInformation.CellIsd ? '(+' +
+										AffiliateInformation.CellIsd.toString().replace('+', '') + ')' : '' }}
 										{{ textFormatter(AffiliateInformation.CellNumber) }}
 									</span>
 								</div>

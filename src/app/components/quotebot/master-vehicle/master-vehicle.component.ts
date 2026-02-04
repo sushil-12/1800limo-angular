@@ -218,7 +218,7 @@ export class MasterVehicleComponent implements OnInit {
 	openfilters: boolean = false
 	changeText: boolean = false
 	isLoading: boolean = true; // Add loading state
-	skeletonItems = new Array(6); // Skeleton items
+	skeletonItems = new Array(8); // Skeleton items
 	currencySymbol: any;
 
 

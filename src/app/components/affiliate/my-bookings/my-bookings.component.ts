@@ -379,6 +379,17 @@ export class MyBookingsComponent implements OnInit {
 				this.spinner.hide()
 				console.log('audit trail --->>>>>>>>', response)
 				this.audit_Trail = response.data
+				setTimeout(() => {
+					const modalBody = document.querySelector('#AuditTrailModal .modal-body');
+					if (modalBody) {
+						modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
+					}
+					// Also try the modal container itself if the body isn't the scroller
+					const modal = document.querySelector('#AuditTrailModal');
+					if (modal) {
+						modal.scrollTo({ top: modal.scrollHeight, behavior: 'smooth' });
+					}
+				}, 500);
 				// $("#AuditTrailModal").modal("hide");
 			});
 	}
@@ -508,7 +519,7 @@ export class MyBookingsComponent implements OnInit {
 				});
 			}
 		}
-		
+
 		let obj = {
 			bookingId: this.passengerDetails.booking_id,
 			reciptentName: this.reciptentName,
@@ -607,7 +618,7 @@ export class MyBookingsComponent implements OnInit {
 	dateFormatToDay(value: any) {
 		return moment(value, "YYYY-MM-DD").format('dddd');
 	}
-	
+
 	FormatTime(time: string) {
 		return moment(time, "HH:mm:ss").format("LT");
 	}
