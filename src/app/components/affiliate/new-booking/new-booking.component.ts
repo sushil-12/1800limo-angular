@@ -851,9 +851,9 @@ export class NewBookingComponent implements OnInit {
 			const pISD = editing_data.passenger_cell_isd;
 			const pCell = editing_data.passenger_cell;
 
-			const dCountry = editing_data.driver_cell_country;
-			const dISD = editing_data.driver_cell_isd;
-			const dCell = editing_data.driver_cell;
+			const dCountry = editing_data.driver_cell_country || editing_data.driver?.CellNumberCountry || editing_data.driver?.cell_number_country;
+			const dISD = editing_data.driver_cell_isd || editing_data.driver?.cell_isd || editing_data.driver?.CellIsd;
+			const dCell = editing_data.driver_cell || editing_data.driver?.cell_number || editing_data.driver?.CellNumber;
 
 			setTimeout(() => {
 				if (this.PaxTelObject) {
@@ -891,6 +891,7 @@ export class NewBookingComponent implements OnInit {
 			}, 1000);
 
 			this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
+			this.initphonefield()
 			this.$spinner.hide('normalspinner')
 			this.scroll('booking_detail')
 		})
@@ -1392,7 +1393,7 @@ export class NewBookingComponent implements OnInit {
 		console.log('rebuild booking data')
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
-			transfer_type: this.transfer_type,
+			transfer_type: this.BookingForm.get('transfer_type').value,
 			service_type: this.BookingForm.get('service_type').value,
 			numberOfVehicles: 1,
 			distance: this.distance,
@@ -1599,11 +1600,13 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
 			this.SetFormValue('driver_gender', info?.Gender)
 			this.SetFormValue('driver_cell', info?.CellNumber)
-			this.SetFormValue('driver_cell_isd', info?.CellIsd)
-			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
-			this.SetFormValue('driver_email', info?.Email)
-			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
-			this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+			this.SetFormValue('driver_cell_isd', info?.CellIsd || info?.cell_isd)
+			this.SetFormValue('driver_cell_country', (info?.CellNumberCountry || info?.cell_number_country)?.toLowerCase())
+			this.SetFormValue('driver_email', info?.Email || info?.email)
+			this.SetFormValue('driver_phone_type', info?.PhoneType ?? info?.phone_type ?? '');
+			if (this.DrvTelObject) {
+				this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+			}
 		}
 	}
 
@@ -2279,6 +2282,7 @@ export class NewBookingComponent implements OnInit {
 
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
+			this.transfer_type = value;
 			this.initAllAutocompletes()
 			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");

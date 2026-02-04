@@ -180,7 +180,7 @@ button {
 
 @media (min-width: 576px) {
 	.invite-agent-modal-dialog {
-		max-width: 500px !important;
+		max-width: 600px !important;
 		// margin: 1.75rem auto;
 	}
 }
@@ -617,8 +617,8 @@ a.dropdown-item {
 	}
 }
 
-@media (min-width: 992px){
-	.modal-lg{
+@media (min-width: 992px) {
+	.modal-lg {
 		max-width: 600px !important;
 	}
 }
