@@ -303,14 +303,23 @@ export class FarmOutComponent implements OnInit {
 		this.startDate = date.toISOString().substring(0, 10);
 		date.setDate(date.getDate() + 7);
 		this.endDate = date.toISOString().substring(0, 10);
+
+		// Reset models for datepickers
+		this.startDateModel = moment(this.startDate, 'YYYY-MM-DD');
+		this.endDateModel = moment(this.endDate, 'YYYY-MM-DD');
+
+		// Clear Cookies
 		this.$affiliateService.deleteCookie('farmout_startDate')
 		this.$affiliateService.deleteCookie('farmout_endDate')
 		this.$affiliateService.deleteCookie('farmout_search')
-		// this.affiliateService.deleteCookie('filtertype')
+
+		// Clear localStorage
+		localStorage.removeItem('farmout_startDate')
+		localStorage.removeItem('farmout_endDate')
+		localStorage.removeItem('farmOutuseDateFilter')
+
 		this.searchText = "";
-		localStorage.removeItem('farmInuseDateFilter')
 		this.useDateFilter = false
-		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
 	}
