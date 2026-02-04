@@ -18,9 +18,9 @@ import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 
 @Component({
-  selector: 'app-affiliate-booking',
-  templateUrl: './affiliate-booking.component.html',
-  styleUrls: ['./affiliate-booking.component.scss']
+	selector: 'app-affiliate-booking',
+	templateUrl: './affiliate-booking.component.html',
+	styleUrls: ['./affiliate-booking.component.scss']
 })
 export class AffiliateBookingComponent implements OnInit {
 
@@ -44,7 +44,7 @@ export class AffiliateBookingComponent implements OnInit {
 	public nextPageUrl: string;
 	public sendMessageField: boolean = null;
 	public bookingsRes: any;
-	public bookings: any =[];
+	public bookings: any = [];
 	public bookingStatusColor: string;
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
@@ -52,9 +52,9 @@ export class AffiliateBookingComponent implements OnInit {
 	public submitted: boolean = false;
 	searchText: string = "";
 	filtertype: string = "";
-  type :boolean= null;
-  isAffiliate:boolean = null
-  userName:string = ''
+	type: boolean = null;
+	isAffiliate: boolean = null
+	userName: string = ''
 
 	passengerDetails: any;
 	senderValue: string;
@@ -65,10 +65,10 @@ export class AffiliateBookingComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
-	useDateFilter:boolean=true;
+	useDateFilter: boolean = true;
 	rates_preview: any;
-  accountID: string;
-	bookingType: string ;
+	accountID: string;
+	bookingType: string;
 
 	constructor(
 		private adminService: AdminService,
@@ -82,14 +82,14 @@ export class AffiliateBookingComponent implements OnInit {
 	ngOnInit(): void {
 
 		this.$routeurl.queryParams.subscribe((params: any) => {
-			console.log('-_>>>>>>>' , params)
-      if(params){
-        this.accountID = params?.id,
-		this.bookingType = params?.type
-        this.type = params?.type == 'past' ? true : false
-        this.isAffiliate = params?.isAffiliate == 'true' ? true : false
-		this.userName = params?.for
-      }
+			console.log('-_>>>>>>>', params)
+			if (params) {
+				this.accountID = params?.id,
+					this.bookingType = params?.type
+				this.type = params?.type == 'past' ? true : false
+				this.isAffiliate = params?.isAffiliate == 'true' ? true : false
+				this.userName = params?.for
+			}
 		})
 
 		this.adminService.getStatusList()
@@ -105,7 +105,7 @@ export class AffiliateBookingComponent implements OnInit {
 
 
 
-		this.loadBookings(null,this.accountID, this.type,this.isAffiliate,this.searchText);
+		this.loadBookings(null, this.accountID, this.type, this.isAffiliate, this.searchText);
 
 
 		//change status booking form validation
@@ -126,25 +126,25 @@ export class AffiliateBookingComponent implements OnInit {
 		// $('#layoutSidenav_content').addClass("layout_shadow")
 		this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
 	}
-	handleChangeCheckbox(value:any){
-		console.log('event---->> ' ,value)
+	handleChangeCheckbox(value: any) {
+		console.log('event---->> ', value)
 		this.useDateFilter = value
-		this.saveCookie('useDateFilter',value)
-		this.loadBookings(null,this.accountID, this.type,this.isAffiliate,this.searchText);
+		this.saveCookie('useDateFilter', value)
+		this.loadBookings(null, this.accountID, this.type, this.isAffiliate, this.searchText);
 	}
 	/**
 	 * Configure date as per todays date and the future +7 days
 	 */
 	reset() {
-	
+
 		this.searchText = "";
 		console.log('Reset Successfully. ');
 	}
 
 	messageField(format) {
-		setTimeout(()=>{
+		setTimeout(() => {
 			this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
-		},1000)
+		}, 1000)
 		this.show = true;
 		switch (format) {
 			case "Phone": {
@@ -215,6 +215,17 @@ export class AffiliateBookingComponent implements OnInit {
 				this.spinner.hide()
 				console.log('audit trail --->>>>>>>>', response)
 				this.audit_Trail = response.data
+				setTimeout(() => {
+					const modalBody = document.querySelector('#AuditTrailModal .modal-body');
+					if (modalBody) {
+						modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
+					}
+					// Also try the modal container itself if the body isn't the scroller
+					const modal = document.querySelector('#AuditTrailModal');
+					if (modal) {
+						modal.scrollTo({ top: modal.scrollHeight, behavior: 'smooth' });
+					}
+				}, 500);
 				// $("#AuditTrailModal").modal("hide");
 			});
 	}
@@ -270,7 +281,7 @@ export class AffiliateBookingComponent implements OnInit {
 		$("#closeModal1").click(() => {
 			$("#notificationModal").modal("hide");
 		});
-		$('#sendEmailModal').modal('hide')		
+		$('#sendEmailModal').modal('hide')
 		this.message.nativeElement.value = ""
 		this.show = false
 	}
@@ -285,11 +296,11 @@ export class AffiliateBookingComponent implements OnInit {
 	}
 
 	noError: boolean = false
-	loadBookings(pageUrl = null,accountID:string,type:boolean,isAffiliate:boolean ,search_value: string = '') {
+	loadBookings(pageUrl = null, accountID: string, type: boolean, isAffiliate: boolean, search_value: string = '') {
 		search_value == '' && this.spinner.show();
 		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadPastFutureBookings(pageUrl, accountID,type, isAffiliate,search_value ?? '').then((result: any) => {
+		this.adminService.loadPastFutureBookings(pageUrl, accountID, type, isAffiliate, search_value ?? '').then((result: any) => {
 			if (result?.data?.data == 0) {
 				this.noError = true
 			}
@@ -314,42 +325,42 @@ export class AffiliateBookingComponent implements OnInit {
 		})
 	}
 
-	handleShowMore(pageUrl = null, type: string, isAffiliate: boolean, search_value: string = ''){
-			search_value == '' && this.spinner.show();
-			this.noError = false
-			// Load Our bookings using API
-			this.adminService.loadPastFutureBookings(pageUrl, type,isAffiliate,search_value ?? '').then((result: any) => {
-				if (result?.data?.data == 0) {
-					this.noError = true
-				}
-				this.bookingsRes = result;
-				this.bookings = this.bookings.concat(this.bookingsRes.data.data);
-				this.totalRecords = this.bookingsRes.data.total;
-				this.firstPage = 1;
-				this.lastPage = this.bookingsRes.data.last_page;
-				this.totalPage = this.bookingsRes.data.last_page;
-				this.currentPage = this.bookingsRes.data.current_page;
-				this.from = this.bookingsRes.data.from;
-				this.to = this.bookingsRes.data.to;
-				this.path = this.bookingsRes.data.path;
-				this.firstPageUrl = this.bookingsRes.data.first_page_url;
-				this.lastPageUrl = this.bookingsRes.data.last_page_url;
-				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-				this.nextPageUrl = this.bookingsRes.data.next_page_url;
-				this.spinner.hide();
-			})
+	handleShowMore(pageUrl = null, type: string, isAffiliate: boolean, search_value: string = '') {
+		search_value == '' && this.spinner.show();
+		this.noError = false
+		// Load Our bookings using API
+		this.adminService.loadPastFutureBookings(pageUrl, type, isAffiliate, search_value ?? '').then((result: any) => {
+			if (result?.data?.data == 0) {
+				this.noError = true
+			}
+			this.bookingsRes = result;
+			this.bookings = this.bookings.concat(this.bookingsRes.data.data);
+			this.totalRecords = this.bookingsRes.data.total;
+			this.firstPage = 1;
+			this.lastPage = this.bookingsRes.data.last_page;
+			this.totalPage = this.bookingsRes.data.last_page;
+			this.currentPage = this.bookingsRes.data.current_page;
+			this.from = this.bookingsRes.data.from;
+			this.to = this.bookingsRes.data.to;
+			this.path = this.bookingsRes.data.path;
+			this.firstPageUrl = this.bookingsRes.data.first_page_url;
+			this.lastPageUrl = this.bookingsRes.data.last_page_url;
+			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
+			this.nextPageUrl = this.bookingsRes.data.next_page_url;
+			this.spinner.hide();
+		})
 	}
 
 	show = false;
 	openModal(booking: any, selection_button: string) {
 		try {
-			setTimeout(()=>{
+			setTimeout(() => {
 				// $('textarea').attr('autofocus', 'autofocus');
 				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
-			},1000)
+			}, 1000)
 		} catch (error) {
-		console.log('----------error------->>>>>> ' ,error )
-			
+			console.log('----------error------->>>>>> ', error)
+
 		}
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
@@ -455,7 +466,7 @@ export class AffiliateBookingComponent implements OnInit {
 			.subscribe(({ data, success, message }: any) => {
 				if (success == true) {
 					$("#change_status_booking_Modal").modal("hide");
-					this.loadBookings(null,this.accountID,this.type,this.isAffiliate,this.searchText)
+					this.loadBookings(null, this.accountID, this.type, this.isAffiliate, this.searchText)
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
 					// 		skipLocationChange: true,
@@ -558,8 +569,7 @@ export class AffiliateBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -570,8 +580,8 @@ export class AffiliateBookingComponent implements OnInit {
 		return ph;
 
 	}
-	formatText(text){
-		return text.replaceAll('_' , ' ')
+	formatText(text) {
+		return text.replaceAll('_', ' ')
 	}
 
 	bookingPreview: any
@@ -580,7 +590,7 @@ export class AffiliateBookingComponent implements OnInit {
 		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
-			if(this.bookingPreview?.payment_status=='unpaid'){
+			if (this.bookingPreview?.payment_status == 'unpaid') {
 				this.rates_preview = this.bookingPreview?.rates_preview
 			}
 			// for(let i in this.bookingPreview?.rates_preview){
@@ -599,7 +609,7 @@ export class AffiliateBookingComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			this.saveCookie("search", this.searchText);
-			this.loadBookings(null,this.accountID,this.type,this.isAffiliate,search_value)
+			this.loadBookings(null, this.accountID, this.type, this.isAffiliate, search_value)
 		}, 700)
 	}
 
@@ -688,27 +698,27 @@ export class AffiliateBookingComponent implements OnInit {
 		})
 	}
 
-	showLocationPointOnMapByAddress(address:any) {
+	showLocationPointOnMapByAddress(address: any) {
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
-			if(address){
-				let googleDirectionUrl;
-				let iosDirectionUrl;
-					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-						encodeURIComponent(address) + '&travelmode=driving'
-					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(address)
-				if (this.iOS()) {
-					setTimeout(() => {
-						window.location.href = iosDirectionUrl;
-					})
-				}
-				else {
-					window.open(googleDirectionUrl, '_blank');
-				}
-			} else {
-				throw new Error('Error: Location Points Not Specified Properly. ');
+		if (address) {
+			let googleDirectionUrl;
+			let iosDirectionUrl;
+			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+				encodeURIComponent(address) + '&travelmode=driving'
+			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+				encodeURIComponent(address)
+			if (this.iOS()) {
+				setTimeout(() => {
+					window.location.href = iosDirectionUrl;
+				})
 			}
+			else {
+				window.open(googleDirectionUrl, '_blank');
+			}
+		} else {
+			throw new Error('Error: Location Points Not Specified Properly. ');
+		}
 	}
 }
 

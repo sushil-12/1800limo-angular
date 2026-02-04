@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import {ThemePalette} from '@angular/material/core';
+import { ThemePalette } from '@angular/material/core';
 import * as moment from 'moment';
 
 @Component({
@@ -18,146 +18,144 @@ export class InvoiceComponent implements OnInit {
   checked = false;
   disabled = false;
 
-  public paramResponse:any;
-  public invoiceId:string;
-  public invoiceRes:any;
-  public invoices:any;
+  public paramResponse: any;
+  public invoiceId: string;
+  public invoiceRes: any;
+  public invoices: any;
 
-  public firstPage:Number;
-  public lastPage:Number;
-  public totalPage:Number;
-  public currentPage:any;
-  public from:Number;
-  public to:Number;
-  public path:string;
-  public firstPageUrl:string;
-  public lastPageUrl:string;
-  public prevPageUrl:string;
-  public nextPageUrl:string;
+  public firstPage: Number;
+  public lastPage: Number;
+  public totalPage: Number;
+  public currentPage: any;
+  public from: Number;
+  public to: Number;
+  public path: string;
+  public firstPageUrl: string;
+  public lastPageUrl: string;
+  public prevPageUrl: string;
+  public nextPageUrl: string;
   public startDate: string;
-	public endDate: string;
-	outputDateFormat = "YYYY-MM-DD";
-  searchText:any='';
-	useDateFilter:boolean=true;
+  public endDate: string;
+  outputDateFormat = "YYYY-MM-DD";
+  searchText: any = '';
+  useDateFilter: boolean = true;
   audit_Trail: any;
 
 
   constructor(
-    private adminService:AdminService,
+    private adminService: AdminService,
     private router: Router,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
 
     let date = new Date();
-		let timestamp = date.getTime()
-		this.startDate = this.adminService.checkCookie('startDate_invoice') ?
-			this.adminService.getCookie('startDate_invoice') :
-			moment(timestamp).format('YYYY-MM-DD')
+    let timestamp = date.getTime()
+    this.startDate = this.adminService.checkCookie('startDate_invoice') ?
+      this.adminService.getCookie('startDate_invoice') :
+      moment(timestamp).format('YYYY-MM-DD')
 
-		date.setDate(date.getDate() + 7);
-		timestamp = date.getTime()
-		this.endDate = this.adminService.checkCookie('endDate_invoice') ?
-			this.adminService.getCookie('endDate_invoice') :
-			moment(timestamp).format('YYYY-MM-DD')
-		
-		this.useDateFilter = this.adminService.checkCookie('use_date_filter_invoice') ?
-		(this.adminService.getCookie('use_date_filter_invoice')=='true' ? true : false)
-		: true;
+    date.setDate(date.getDate() + 7);
+    timestamp = date.getTime()
+    this.endDate = this.adminService.checkCookie('endDate_invoice') ?
+      this.adminService.getCookie('endDate_invoice') :
+      moment(timestamp).format('YYYY-MM-DD')
+
+    this.useDateFilter = this.adminService.checkCookie('use_date_filter_invoice') ?
+      (this.adminService.getCookie('use_date_filter_invoice') == 'true' ? true : false)
+      : true;
     this.searchText = this.adminService.checkCookie('search_invoice') ?
-    this.adminService.getCookie('search_invoice')
-    : "";
+      this.adminService.getCookie('search_invoice')
+      : "";
     this.spinner.show();
-      this.loadInvoice();//load invoices
+    this.loadInvoice();//load invoices
   }
   timer: any
-	searchInBookings(search_value: string) {
-		this.searchText = search_value
-		console.log('--->>>>>', search_value)
-		clearTimeout(this.timer);
-		this.timer = setTimeout(() => {
-			this.saveCookie("search_invoice", this.searchText);
-			this.loadInvoice()
-		}, 700)
-	}
+  searchInBookings(search_value: string) {
+    this.searchText = search_value
+    console.log('--->>>>>', search_value)
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.saveCookie("search_invoice", this.searchText);
+      this.loadInvoice()
+    }, 700)
+  }
   handleKeypressEvents() {
-		clearTimeout(this.timer)
-	}
+    clearTimeout(this.timer)
+  }
   scroll(id) {
-		// let el = document.getElementById(id);
-		// let elementRect = el.getBoundingClientRect();
-		// let absoluteElementTop = elementRect.top + window.pageYOffset;
-		// let topElement = absoluteElementTop - 200;
+    // let el = document.getElementById(id);
+    // let elementRect = el.getBoundingClientRect();
+    // let absoluteElementTop = elementRect.top + window.pageYOffset;
+    // let topElement = absoluteElementTop - 200;
 
-		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
-		// window.scrollTo({
-		// 	top: topElement,
-		// 	behavior: 'smooth'
-		// });
+    // console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+    // window.scrollTo({
+    // 	top: topElement,
+    // 	behavior: 'smooth'
+    // });
 
-		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView({ behavior: 'smooth' });
-	}
+    let el = document.getElementById(id);
+    console.log(`scrolling to ${id}`, el);
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
 
-  loadInvoice(pageUrl=null)
-  {
-      /** spinner starts on init */
-      if(pageUrl){
-        this.scroll("invoice_admin")
-      }
-      this.spinner.show()
-      console.log('--->>> searchText--->>' , this.searchText)
-      var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
-      // console.log(keyword);
-      // Load Our invoices using API
-      this.adminService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,this.searchText).then(result=>{
-        this.spinner.hide()
-        this.invoiceRes=result;
-        this.invoices=this.invoiceRes.data.data;
+  loadInvoice(pageUrl = null) {
+    /** spinner starts on init */
+    if (pageUrl) {
+      this.scroll("invoice_admin")
+    }
+    this.spinner.show()
+    console.log('--->>> searchText--->>', this.searchText)
+    var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
+    // console.log(keyword);
+    // Load Our invoices using API
+    this.adminService.invoiceList(pageUrl, this.startDate, this.endDate, this.useDateFilter, this.searchText).then(result => {
+      this.spinner.hide()
+      this.invoiceRes = result;
+      this.invoices = this.invoiceRes.data.data;
 
-        this.firstPage=1;
-        this.lastPage=this.invoiceRes.data.last_page;
-        this.totalPage=this.invoiceRes.data.last_page;
-        this.currentPage=this.invoiceRes.data.current_page;
-        this.from=this.invoiceRes.data.from;
-        this.to=this.invoiceRes.data.to;
-        this.path=this.invoiceRes.data.path;
-        this.firstPageUrl=this.invoiceRes.data.first_page_url;
-        this.lastPageUrl=this.invoiceRes.data.last_page_url;
-        this.prevPageUrl=this.invoiceRes.data.prev_page_url;
-        this.nextPageUrl=this.invoiceRes.data.next_page_url;
-        // sessionStorage.setItem('invoice',JSON.stringify(this.invoice));
-        this.spinner.hide();//hide spinner
-      })
-      .catch(err=>{
+      this.firstPage = 1;
+      this.lastPage = this.invoiceRes.data.last_page;
+      this.totalPage = this.invoiceRes.data.last_page;
+      this.currentPage = this.invoiceRes.data.current_page;
+      this.from = this.invoiceRes.data.from;
+      this.to = this.invoiceRes.data.to;
+      this.path = this.invoiceRes.data.path;
+      this.firstPageUrl = this.invoiceRes.data.first_page_url;
+      this.lastPageUrl = this.invoiceRes.data.last_page_url;
+      this.prevPageUrl = this.invoiceRes.data.prev_page_url;
+      this.nextPageUrl = this.invoiceRes.data.next_page_url;
+      // sessionStorage.setItem('invoice',JSON.stringify(this.invoice));
+      this.spinner.hide();//hide spinner
+    })
+      .catch(err => {
         this.spinner.hide();//hide spinner
       });
   }
   saveCookie(key: string, value: string) {
-		this.adminService.setCookie(key, value, 30);
-	}
+    this.adminService.setCookie(key, value, 30);
+  }
 
-  clicViewInvoice(bookingId)
-  {
-    this.router.navigate(['/admin/invoice-summary'],{queryParams:{bookingId:bookingId}});
+  clicViewInvoice(bookingId) {
+    this.router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: bookingId } });
   }
 
   highlighText(args: string) {
     let searchText = ((document.getElementById("keyword2") as HTMLInputElement).value);
-       
-		if (!searchText) { return args; }
-		if (args) {
-			args = args.toString()
-			var re = new RegExp(searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
-		}
-	}
+
+    if (!searchText) { return args; }
+    if (args) {
+      args = args.toString()
+      var re = new RegExp(searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+      return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+    }
+  }
 
   changeDate(dateType, date) {
-		console.log('---------__>>>>>>', dateType, date)
-		this[dateType] = date
-	}
+    console.log('---------__>>>>>>', dateType, date)
+    this[dateType] = date
+  }
 
   //for pagination
   counter() {
@@ -165,66 +163,75 @@ export class InvoiceComponent implements OnInit {
     var startFrom;
     var endTo;
 
-    if (this.currentPage as number < 5)
-    {
-      startFrom=0;
-      endTo=this.totalPage;
+    if (this.currentPage as number < 5) {
+      startFrom = 0;
+      endTo = this.totalPage;
     }
-    else if(this.currentPage<this.totalPage){
-      currentPage=this.currentPage
-      endTo=currentPage+1;
-      startFrom=endTo-5;
+    else if (this.currentPage < this.totalPage) {
+      currentPage = this.currentPage
+      endTo = currentPage + 1;
+      startFrom = endTo - 5;
     }
-    else{
-      endTo=this.totalPage;
-      startFrom=endTo-5;
+    else {
+      endTo = this.totalPage;
+      startFrom = endTo - 5;
     }
 
     var i;
-    var udpArr=new Array();
-    for(i=startFrom;i<endTo;i++)
-    {
-      udpArr.push(i+1);
+    var udpArr = new Array();
+    for (i = startFrom; i < endTo; i++) {
+      udpArr.push(i + 1);
     }
     return udpArr;
   }
-  handleChangeCheckbox(value:any){
-		console.log('event---->> ' ,value)
-		this.useDateFilter = value
-		this.saveCookie('use_date_filter_invoice',value)
-		this.loadInvoice();
-	}
+  handleChangeCheckbox(value: any) {
+    console.log('event---->> ', value)
+    this.useDateFilter = value
+    this.saveCookie('use_date_filter_invoice', value)
+    this.loadInvoice();
+  }
   reset() {
-		let date = new Date();
-		let timestamp = date.getTime()
-		this.startDate = moment(timestamp).format('YYYY-MM-DD')
-		date.setDate(date.getDate() + 7);
-		timestamp = date.getTime()
-		this.endDate = moment(timestamp).format('YYYY-MM-DD')
-		this.adminService.deleteCookie('startDate_invoice')
-		this.adminService.deleteCookie('endDate_invoice')
-		this.adminService.deleteCookie('search_invoice')
-		this.adminService.deleteCookie('use_date_filter_invoice')
-		this.useDateFilter = true
-		this.searchText = "";
+    let date = new Date();
+    let timestamp = date.getTime()
+    this.startDate = moment(timestamp).format('YYYY-MM-DD')
+    date.setDate(date.getDate() + 7);
+    timestamp = date.getTime()
+    this.endDate = moment(timestamp).format('YYYY-MM-DD')
+    this.adminService.deleteCookie('startDate_invoice')
+    this.adminService.deleteCookie('endDate_invoice')
+    this.adminService.deleteCookie('search_invoice')
+    this.adminService.deleteCookie('use_date_filter_invoice')
+    this.useDateFilter = true
+    this.searchText = "";
 
-		console.log('Reset Successfully. ');
-	}
+    console.log('Reset Successfully. ');
+  }
 
   auditTrail(bookingId: any) {
-		console.log('In function audit trail', bookingId)
-		this.spinner.show()
-		this.adminService.auditTrailInfoInvoice(bookingId)
-			.pipe(
-				catchError((err) => {
-					return throwError(err);
-				})
-			)
-			.subscribe((response: any) => {
-				this.spinner.hide()
-				console.log('audit trail --->>>>>>>>', response)
-				this.audit_Trail = response.data
-				// $("#AuditTrailModal").modal("hide");
-			});
-	}
+    console.log('In function audit trail', bookingId)
+    this.spinner.show()
+    this.adminService.auditTrailInfoInvoice(bookingId)
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      )
+      .subscribe((response: any) => {
+        this.spinner.hide()
+        console.log('audit trail --->>>>>>>>', response)
+        this.audit_Trail = response.data
+        setTimeout(() => {
+          const modalBody = document.querySelector('#AuditTrailModal .modal-body');
+          if (modalBody) {
+            modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
+          }
+          // Also try the modal container itself if the body isn't the scroller
+          const modal = document.querySelector('#AuditTrailModal');
+          if (modal) {
+            modal.scrollTo({ top: modal.scrollHeight, behavior: 'smooth' });
+          }
+        }, 500);
+        // $("#AuditTrailModal").modal("hide");
+      });
+  }
 }
