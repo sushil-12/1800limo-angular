@@ -129,6 +129,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleModal_arr: any;
 	return_vehicleYear_arr: any;
 	return_vehicleColor_arr: any;
+
+	loose_vehicleMakes: any[] = [];
+	loose_vehicleModels: any[] = [];
+	loose_vehicleYears: any[] = [];
+	loose_vehicleColors: any[] = [];
+	return_loose_vehicleMakes: any[] = [];
+	return_loose_vehicleModels: any[] = [];
+	return_loose_vehicleYears: any[] = [];
+	return_loose_vehicleColors: any[] = [];
 	firstLoadVehicleId: any;
 	proceed: boolean = true
 	chosen_user: Record<string, any>
@@ -227,7 +236,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
-			this.Subscriptions()
+			this.initSubscriptions()
 			this.fetchClientAccounts('individual')
 			this.fetchAffiliates('affiliate')
 			this.fetchReturnAffiliates('affiliate')
@@ -1107,6 +1116,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}, 2000)
 			}
 
+			this.init_rates = true;
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
 			if (this.updateType == 'edit') {
@@ -1145,11 +1155,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	SetFormValue(form_control: string, value: any, emitEvent: boolean = true) {
-		if (!value || !form_control) {
+		if (!form_control) {
+			console.info(`No form_control provided. Returning ...`)
+			return
+		}
+		if (value === undefined) {
 			console.info(`No Value to set for ${form_control}. Returning ...`)
 			return
 		}
-		console.log('Setting Form Value for ', form_control, ' : ', value);
+		console.log('SetFormValue calling setValue for ', form_control, ' : ', value, ' emitEvent:', emitEvent);
 		try {
 
 			this.BookingForm.get(form_control).setValue(value, { emitEvent: emitEvent })
@@ -1869,34 +1883,52 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 	handleSelectVehicleType(selectedVehicle: any) {
 		this.selectedVehicle = selectedVehicle
-		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
-		this.SetFormValue('vehicle_id', selectedVehicle.ID);
-		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
-		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
-		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
-		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
-		this.SetFormValue('vehicle_model_name', selectedVehicle.model);
-		this.SetFormValue('vehicle_year', selectedVehicle.year_id);
-		this.SetFormValue('vehicle_year_name', selectedVehicle.year);
-		this.SetFormValue('vehicle_color', selectedVehicle.color_id);
-		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
-		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
-		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+
+		this.SetFormValue('vehicle_id', selectedVehicle.ID || selectedVehicle.id || '');
+		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType || selectedVehicle.vehicle_type_name || '');
+		this.SetFormValue('vehicle_make', selectedVehicle.make_id || '');
+		this.SetFormValue('vehicle_make_name', selectedVehicle.make || selectedVehicle.Make || '');
+		this.SetFormValue('vehicle_model', selectedVehicle.model_id || '');
+		this.SetFormValue('vehicle_model_name', selectedVehicle.model || selectedVehicle.Model || '');
+		this.SetFormValue('vehicle_year', selectedVehicle.year_id || '');
+		this.SetFormValue('vehicle_year_name', selectedVehicle.year || selectedVehicle.Year || '');
+		this.SetFormValue('vehicle_color', selectedVehicle.color_id || '');
+		this.SetFormValue('vehicle_color_name', selectedVehicle.color || selectedVehicle.Color || '');
+		this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate || selectedVehicle.license_plate || '');
+		this.SetFormValue('vehicle_seats', selectedVehicle.seats || selectedVehicle.Seats || '')
 
 		// Auto-sync to return if round trip
-		if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('return_vehicle_type').value != selectedVehicle.vehicleType_id) {
-			this.SetFormValue('return_vehicle_type', selectedVehicle.vehicleType_id);
+		if (this.BookingForm.get('service_type').value == 'round_trip') {
+			console.log('DEBUG: Auto-syncing return vehicle details...');
 			this.SetFormValue('return_vehicle_id', selectedVehicle.ID);
+			this.SetFormValue('return_vehicle_type', selectedVehicle.vehicleType_id, false);
 			this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType)
-			this.SetFormValue('return_vehicle_make', selectedVehicle.make_id);
-			this.SetFormValue('return_vehicle_make_name', selectedVehicle.make);
-			this.SetFormValue('return_vehicle_model', selectedVehicle.model_id);
-			this.SetFormValue('return_vehicle_model_name', selectedVehicle.model);
-			this.SetFormValue('return_vehicle_year', selectedVehicle.year_id);
-			this.SetFormValue('return_vehicle_year_name', selectedVehicle.year);
-			this.SetFormValue('return_vehicle_color', selectedVehicle.color_id);
-			this.SetFormValue('return_vehicle_color_name', selectedVehicle.color);
-			this.SetFormValue('return_vehicle_seats', selectedVehicle.seats)
+			this.SetFormValue('return_vehicle_make', selectedVehicle.make_id, false);
+			this.SetFormValue('return_vehicle_make_name', selectedVehicle.make || selectedVehicle.Make || '');
+			this.SetFormValue('return_vehicle_model', selectedVehicle.model_id, false);
+			this.SetFormValue('return_vehicle_model_name', selectedVehicle.model || selectedVehicle.Model || '');
+			this.SetFormValue('return_vehicle_year', selectedVehicle.year_id, false);
+			let yearVal = selectedVehicle.year || selectedVehicle.Year || '';
+			// Fallback: Lookup year name from BigData if missing
+			if (!yearVal && selectedVehicle.year_id && this.BigData?.vehicleYears) {
+				const yObj = this.BigData.vehicleYears.find(y => y.id == selectedVehicle.year_id);
+				if (yObj) yearVal = yObj.name;
+			}
+			console.log('DEBUG: Setting return_vehicle_year_name to:', yearVal);
+			this.SetFormValue('return_vehicle_year_name', yearVal);
+
+			this.SetFormValue('return_vehicle_color', selectedVehicle.color_id, false);
+			let colorVal = selectedVehicle.color || selectedVehicle.Color || '';
+			// Fallback: Lookup color name from BigData if missing
+			if (!colorVal && selectedVehicle.color_id && this.BigData?.vehicleColors) {
+				const cObj = this.BigData.vehicleColors.find(c => c.id == selectedVehicle.color_id);
+				if (cObj) colorVal = cObj.name;
+			}
+			this.SetFormValue('return_vehicle_color_name', colorVal);
+
+			const licensePlateVal = this.BookingForm.get('vehicle_license_plate').value;
+			this.SetFormValue('return_vehicle_license_plate', licensePlateVal);
+			this.SetFormValue('return_vehicle_seats', selectedVehicle.seats || selectedVehicle.Seats || '')
 		}
 
 		//set cancellation period
@@ -1929,19 +1961,19 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	handleReturnSelectVehicleType(selectedVehicle: any) {
 		this.return_selectedVehicle = selectedVehicle
-		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
-		this.SetFormValue('return_vehicle_id', selectedVehicle.ID);
-		this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType)
-		this.SetFormValue('return_vehicle_make', selectedVehicle.make_id);
-		this.SetFormValue('return_vehicle_make_name', selectedVehicle.make);
-		this.SetFormValue('return_vehicle_model', selectedVehicle.model_id);
-		this.SetFormValue('return_vehicle_model_name', selectedVehicle.model);
-		this.SetFormValue('return_vehicle_year', selectedVehicle.year_id);
-		this.SetFormValue('return_vehicle_year_name', selectedVehicle.year);
-		this.SetFormValue('return_vehicle_color', selectedVehicle.color_id);
-		this.SetFormValue('return_vehicle_color_name', selectedVehicle.color);
-		selectedVehicle.licensePlate === null ? this.BookingForm.get('return_vehicle_license_plate').setValue('') : this.SetFormValue('return_vehicle_license_plate', selectedVehicle.licensePlate)
-		this.SetFormValue('return_vehicle_seats', selectedVehicle.seats)
+		console.log('return selected vehicle-->>>>', selectedVehicle)
+		this.SetFormValue('return_vehicle_id', selectedVehicle.ID || selectedVehicle.id || '');
+		this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType || selectedVehicle.vehicle_type_name || '');
+		this.SetFormValue('return_vehicle_make', selectedVehicle.make_id || '');
+		this.SetFormValue('return_vehicle_make_name', selectedVehicle.make || selectedVehicle.Make || '');
+		this.SetFormValue('return_vehicle_model', selectedVehicle.model_id || '');
+		this.SetFormValue('return_vehicle_model_name', selectedVehicle.model || selectedVehicle.Model || '');
+		this.SetFormValue('return_vehicle_year', selectedVehicle.year_id || '');
+		this.SetFormValue('return_vehicle_year_name', selectedVehicle.year || selectedVehicle.Year || '');
+		this.SetFormValue('return_vehicle_color', selectedVehicle.color_id || '');
+		this.SetFormValue('return_vehicle_color_name', selectedVehicle.color || selectedVehicle.Color || '');
+		this.SetFormValue('return_vehicle_license_plate', selectedVehicle.licensePlate || selectedVehicle.license_plate || '');
+		this.SetFormValue('return_vehicle_seats', selectedVehicle.seats || selectedVehicle.Seats || '')
 
 		// Auto-sync back to primary if round trip and currently empty/different
 		if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('vehicle_type').value != selectedVehicle.vehicleType_id) {
@@ -1955,8 +1987,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('vehicle_year', selectedVehicle.year_id);
 			this.SetFormValue('vehicle_year_name', selectedVehicle.year);
 			this.SetFormValue('vehicle_color', selectedVehicle.color_id);
-			this.SetFormValue('vehicle_color_name', selectedVehicle.color);
-			this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+			this.SetFormValue('vehicle_color_name', selectedVehicle.color || selectedVehicle.Color || '');
+			this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate || selectedVehicle.license_plate || '');
+			this.SetFormValue('vehicle_seats', selectedVehicle.seats || selectedVehicle.Seats || '')
 		}
 
 		//set cancellation period
@@ -2000,7 +2033,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 				// autofill data if isRatesCompleted:true
-				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				this.vehicleType_arr = [...new Map(this.VehicleList.map(item => [item['vehicleType_id'], item])).values()];
+				this.vehicleMake_arr = [];
+				this.vehicleModal_arr = [];
+				this.vehicleYear_arr = [];
+				this.vehicleColor_arr = [];
+
 				for (let i = 0; i < this.VehicleList.length; i++) {
 					if (this.VehicleList[i].isRatesCompleted) {
 						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
@@ -2060,7 +2098,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 				// autofill data if isRatesCompleted:true
-				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				this.vehicleType_arr = [...new Map(this.VehicleList.map(item => [item['vehicleType_id'], item])).values()];
+				this.vehicleMake_arr = [];
+				this.vehicleModal_arr = [];
+				this.vehicleYear_arr = [];
+				this.vehicleColor_arr = [];
+
 
 				let selectedMatch = false;
 				const currentVehicleType = this.BookingForm.get('vehicle_type').value;
@@ -2134,16 +2177,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				// add a key with formatted name to every value
 				this.return_VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 				// autofill data if isRatesCompleted:true
-				this.return_vehicleType_arr = this.return_VehicleList = this.return_vehicleMake_arr = this.return_VehicleList = this.return_vehicleModal_arr = this.return_VehicleList = this.return_vehicleYear_arr = this.return_VehicleList = this.return_vehicleColor_arr = this.return_VehicleList
+				this.return_vehicleType_arr = [...new Map(this.return_VehicleList.map(item => [item['vehicleType_id'], item])).values()];
+				this.return_vehicleMake_arr = [];
+				this.return_vehicleModal_arr = [];
+				this.return_vehicleYear_arr = [];
+				this.return_vehicleColor_arr = [];
+
 				for (let i = 0; i < this.return_VehicleList.length; i++) {
 					if (this.return_VehicleList[i].isRatesCompleted) {
 						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.return_VehicleList[i].vehicleType)['id']
 						if (return_affiliate_id == this.firstLoadAffiliateId) {
 							if (this.return_VehicleList[i].ID == this.firstLoadVehicleId) {
 								console.log('selected vehicle on first load---------------------------------->>>>>', this.return_VehicleList[i])
-								this.SetFormValue('return_vehicle_id', this.return_VehicleList[i].ID);
-								this.SetFormValue('return_vehicle_type', this.return_VehicleList[i].vehicleType_id)
-								this.SetFormValue('return_vehicle_type_name', this.return_VehicleList[i].vehicleType)
 								this.return_unique_key = this.return_VehicleList[i].unique_key
 								this.handleReturnSelectVehicleType(this.return_VehicleList[i])
 								// this.autofillData('vehicle', this.return_VehicleList[i]);
@@ -2151,16 +2196,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 							}
 						}
 						else {
-							console.log('new affiliate seleted')
-							this.SetFormValue('return_vehicle_id', this.return_VehicleList[i].ID);
-							this.SetFormValue('return_vehicle_type', this.return_VehicleList[i].vehicleType_id)
-							this.SetFormValue('return_vehicle_type_name', this.return_VehicleList[i].vehicleType)
+							console.log('new affiliate selected')
 							this.return_unique_key = this.return_VehicleList[i].unique_key
 							this.handleReturnSelectVehicleType(this.return_VehicleList[i])
 							// this.autofillData('vehicle', this.VehicleList[i]);
 							break;
 						}
-
 					}
 				}
 				// if (this.VehicleList.length == 1) {
@@ -2194,7 +2235,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				// add a key with formatted name to every value
 				this.return_VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 				// autofill data if isRatesCompleted:true
-				this.return_vehicleType_arr = this.return_VehicleList = this.return_vehicleMake_arr = this.return_VehicleList = this.return_vehicleModal_arr = this.return_VehicleList = this.return_vehicleYear_arr = this.return_VehicleList = this.return_vehicleColor_arr = this.return_VehicleList
+				this.return_vehicleType_arr = [...new Map(this.return_VehicleList.map(item => [item['vehicleType_id'], item])).values()];
+				this.return_vehicleMake_arr = [];
+				this.return_vehicleModal_arr = [];
+				this.return_vehicleYear_arr = [];
+				this.return_vehicleColor_arr = [];
 
 				let selectedMatch = false;
 				const currentVehicleType = this.BookingForm.get('vehicle_type').value;
@@ -2268,7 +2313,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data if isRatesCompleted:true
-				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				this.vehicleType_arr = [...new Map(this.VehicleList.map(item => [item['vehicleType_id'], item])).values()];
+				this.vehicleMake_arr = [];
+				this.vehicleModal_arr = [];
+				this.vehicleYear_arr = [];
+				this.vehicleColor_arr = [];
+
 				for (let i = 0; i < this.VehicleList.length; i++) {
 					if (this.VehicleList[i].isRatesCompleted) {
 						if (this.QB_vehicle_id) {
@@ -2917,6 +2967,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+		this.BookingForm.markAllAsTouched();
 
 		// Safety sync for return vehicle type in round trips
 		if (this.Form.service_type.value == 'round_trip' && !this.Form.return_vehicle_type.value && this.Form.vehicle_type.value) {
@@ -3283,14 +3334,31 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 	}
 
+	handleReturnChangeVehicle(event) {
+		console.log('handleReturnChangeVehicle', event)
+		if (event) {
+			this.return_VehicleList.map(i => (i.ID == event) ? this.handleReturnSelectVehicleType(i) : '')
+		}
+	}
+	handleChangeVehicle(event) {
+		console.log('handleChangeVehicle', event)
+		if (event) {
+			this.VehicleList.map(i => (i.ID == event) ? this.handleSelectVehicleType(i) : '')
+		}
+	}
 
 	toggleDropdown(type: string) {
 		// console.log('Toggle Dropdown ', type)
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
 	handleChangeVehicleType(event) {
-		console.log('in function handle change vehicle type', event.unique_key)
-		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
+		console.log('in function handle change vehicle type', event)
+		if (event) {
+			const selected = this.VehicleList.find(i => i.vehicleType_id == event);
+			if (selected) {
+				this.handleSelectVehicleType(selected);
+			}
+		}
 	}
 	handleReturnChangeVehicleType(event) {
 		console.log('in function handle change vehicle type', event, this.Form.return_affiliate_type.value)
@@ -3307,12 +3375,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 		} else {
 			if (event) {
-				this.return_VehicleList.map(i => (i.vehicleType_id == event) ? this.handleReturnSelectVehicleType(i) : '')
+				const selected = this.return_VehicleList.find(i => i.vehicleType_id == event);
+				if (selected) {
+					this.handleReturnSelectVehicleType(selected);
+				}
 			}
 		}
 	}
 
-	Subscriptions() {
+	initSubscriptions() {
 		//pickup time change 
 		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
 			this.buildBookingData()
@@ -3323,6 +3394,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
+			this.service_type = value;
+			this.buildBookingData();
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				setTimeout(() => {
@@ -3889,7 +3962,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
 			if (this.Form.service_type.value == 'round_trip') {
-				this.BookingForm.get('return_affiliate_type').setValue(value, { emitEvent: false });
+				this.BookingForm.get('return_affiliate_type').setValue(value);
 			}
 			if (value == 'loose_affiliate' && this.currentUser?.created_by_role == 'subscriber') {
 				this.isFarmoutBooking = false
@@ -4093,6 +4166,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (this.Form.affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate vehicle_type', value)
 				if (value) {
+					// Populate Makes for this Type
+					this.vehicleMake_arr = [...new Map(this.VehicleList.filter(i => i.vehicleType_id == value).map(item => [item['make_id'], item])).values()];
 					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
 				}
 				else {
@@ -4115,7 +4190,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					if (item) {
 						const name = item.formatted_name || item.name || item.vehicleType;
 						this.SetFormValue('vehicle_type_name', name);
+
+						// Sync to return if round trip
+						if (this.Form.service_type.value == 'round_trip') {
+							this.SetFormValue('return_vehicle_type', value);
+							this.SetFormValue('return_vehicle_type_name', name);
+						}
 					}
+
+					// Initialize loose affiliate dropdowns
+					this.loose_vehicleMakes = this.BigData_COPY?.vehicleMakes || [];
+					this.loose_vehicleModels = this.BigData_COPY?.vehicleModels || [];
+					this.loose_vehicleYears = this.BigData_COPY?.vehicleYears || [];
+					this.loose_vehicleColors = this.BigData_COPY?.vehicleColors || [];
+
 					this.BookingForm.get('vehicle_make').setValue('')
 					this.BookingForm.get('vehicle_make_name').setValue('')
 					this.BookingForm.get('vehicle_model').setValue('')
@@ -4137,9 +4225,21 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.BookingForm.get('return_vehicle_type').valueChanges.subscribe((value: string) => {
 			console.log('on change of vehicle type-->>> value', value, 'affiliate_type:', this.Form.return_affiliate_type.value, 'BigData:', !!this.BigData)
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
-				console.log('in function change value for affilliate vehicle_type', value)
+				console.log('DEBUG: return_vehicle_type subscription fired. Value:', value);
 				if (value) {
-					this.return_VehicleList.map(i => (i.vehicleType_id == value) ? this.handleReturnSelectVehicleType(i) : '')
+					// Populate Makes for this Type
+					this.return_vehicleMake_arr = [...new Map(this.return_VehicleList.filter(i => i.vehicleType_id == value).map(item => [item['make_id'], item])).values()];
+					const returnId = this.BookingForm.get('return_vehicle_id').value;
+					let selected = null;
+					if (returnId) {
+						selected = this.return_VehicleList.find(i => i.vehicleType_id == value && (i.ID == returnId || i.id == returnId));
+					}
+					if (!selected) {
+						selected = this.return_VehicleList.find(i => i.vehicleType_id == value);
+					}
+					if (selected) {
+						this.handleReturnSelectVehicleType(selected);
+					}
 				}
 				else {
 					this.SetFormValue('return_vehicle_type_name', '');
@@ -4162,28 +4262,64 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 						const name = item.formatted_name || item.name || item.vehicleType;
 						this.SetFormValue('return_vehicle_type_name', name);
 					}
-					this.BookingForm.get('return_vehicle_make').setValue('')
-					this.BookingForm.get('return_vehicle_make_name').setValue('')
-					this.BookingForm.get('return_vehicle_model').setValue('')
-					this.BookingForm.get('return_vehicle_model_name').setValue('')
-					this.BookingForm.get('return_vehicle_year').setValue('')
-					this.BookingForm.get('return_vehicle_year_name').setValue('')
-					this.BookingForm.get('return_vehicle_color').setValue('')
-					this.BookingForm.get('return_vehicle_color_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
+
+					// Initialize return loose affiliate dropdowns
+					this.return_loose_vehicleMakes = this.BigData_COPY?.vehicleMakes || [];
+					this.return_loose_vehicleModels = this.BigData_COPY?.vehicleModels || [];
+					this.return_loose_vehicleYears = this.BigData_COPY?.vehicleYears || [];
+					this.return_loose_vehicleColors = this.BigData_COPY?.vehicleColors || [];
+
+					// FIX: Do not clear return vehicle details if this is a sync operation (Round Trip)
+					// If Outbound Make is set, we preserve/re-sync instead of clearing
+					if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('vehicle_make').value) {
+						console.log('DEBUG: Auto-sync active. Preserving return vehicle details.');
+						// Optional: Could forcefully re-set here to be safe, but just NOT clearing is the key.
+					} else {
+						this.BookingForm.get('return_vehicle_make').setValue('')
+						this.BookingForm.get('return_vehicle_make_name').setValue('')
+						this.BookingForm.get('return_vehicle_model').setValue('')
+						this.BookingForm.get('return_vehicle_model_name').setValue('')
+						this.BookingForm.get('return_vehicle_year').setValue('')
+						this.BookingForm.get('return_vehicle_year_name').setValue('')
+						this.BookingForm.get('return_vehicle_color').setValue('')
+						this.BookingForm.get('return_vehicle_color_name').setValue('')
+						this.BookingForm.updateValueAndValidity();
+					}
 				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) => {
+			console.log('DEBUG: OUTBOUND vehicle_make subscription fired. Value:', value);
 			if (this.Form.affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate  vehicle_make')
+				if (value) {
+					if (this.VehicleList) {
+						this.vehicleModal_arr = this.VehicleList.filter(item => item.make_id == value);
+						let item = this.VehicleList.find(i => i.make_id == value);
+						if (item) {
+							this.SetFormValue('vehicle_make_name', item.make);
+						}
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
-					this.SetFormValue('vehicle_make_name', name)
+					this.loose_vehicleModels = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+					let makeObj = this.BigData_COPY?.vehicleMakes.find(item => item.id == value);
+					if (makeObj) {
+						this.SetFormValue('vehicle_make_name', makeObj.name);
+
+						// Sync to return if round trip
+						if (this.Form.service_type.value == 'round_trip') {
+							this.SetFormValue('return_vehicle_make', value);
+							this.SetFormValue('return_vehicle_make_name', makeObj.name);
+						}
+					}
+					if (this.loose_vehicleModels && this.loose_vehicleModels.length > 0) {
+						this.SetFormValue('vehicle_model', this.loose_vehicleModels[0]['id'])
+					} else {
+						this.SetFormValue('vehicle_model', '');
+					}
 				}
 				else {
 					this.BookingForm.get('vehicle_make_name').setValue('')
@@ -4193,14 +4329,36 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('return_vehicle_make').valueChanges.subscribe((value: string) => {
+			console.log('DEBUG: return_vehicle_make subscription fired. Value:', value);
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate  vehicle_make')
+				if (value) {
+					if (this.return_VehicleList) {
+						this.return_vehicleModal_arr = this.return_VehicleList.filter(item => item.make_id == value);
+						let item = this.return_VehicleList.find(i => i.make_id == value);
+						if (item) {
+							this.SetFormValue('return_vehicle_make_name', item.make);
+						}
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_model', this.BigData?.vehicleModels[0]['id'])
-					this.SetFormValue('return_vehicle_make_name', name)
+					this.return_loose_vehicleModels = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+					let makeObj = this.BigData_COPY?.vehicleMakes.find(item => item.id == value);
+					if (makeObj) {
+						this.SetFormValue('return_vehicle_make_name', makeObj.name);
+					}
+					if (this.return_loose_vehicleModels && this.return_loose_vehicleModels.length > 0) {
+						this.SetFormValue('return_vehicle_model', this.return_loose_vehicleModels[0]['id'])
+						this.SetFormValue('return_vehicle_model', this.return_loose_vehicleModels[0]['id'])
+					} else {
+						// FIX: Do not clear if this is a sync operation (Round Trip)
+						if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('vehicle_make').value) {
+							console.log('DEBUG: Auto-sync active (Make). Preserving return vehicle model.');
+						} else {
+							this.SetFormValue('return_vehicle_model', '');
+						}
+					}
 				}
 				else {
 					this.BookingForm.get('return_vehicle_make_name').setValue('')
@@ -4210,63 +4368,132 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) => {
+			console.log('DEBUG: OUTBOUND vehicle_model subscription fired. Value:', value);
 			if (this.Form.affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate vehicle_model')
+				if (value && this.VehicleList) {
+					this.vehicleYear_arr = [...new Map(this.VehicleList.filter(i => i.model_id == value).map(item => [item['year_id'], item])).values()];
+					let item = this.VehicleList.find(i => i.model_id == value);
+					if (item) {
+						this.SetFormValue('vehicle_model_name', item.model);
 
+						// Sync to return if round trip
+						if (this.Form.service_type.value == 'round_trip') {
+							this.SetFormValue('return_vehicle_model', value);
+							this.SetFormValue('return_vehicle_model_name', item.model);
+						}
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_model_name', name)
+					let modelObj = this.BigData_COPY?.vehicleModels.find(item => item.id == value);
+					if (modelObj) {
+						this.SetFormValue('vehicle_model_name', modelObj.name);
+					}
 				}
 				else {
 					this.BookingForm.get('vehicle_model_name').setValue('')
 					this.BookingForm.updateValueAndValidity();
 				}
 			}
+			// Sync to return if Round Trip
+			if (this.BookingForm.get('service_type')?.value == 'round_trip' && this.BookingForm.get('vehicle_model_name')?.value) {
+				this.SetFormValue('return_vehicle_model_name', this.BookingForm.get('vehicle_model_name')?.value);
+			}
 		})
 
 		this.BookingForm.get('return_vehicle_model').valueChanges.subscribe((value: string) => {
+			console.log('DEBUG: return_vehicle_model subscription fired. Value:', value);
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate return_vehicle_model')
-
+				if (value && this.return_VehicleList) {
+					this.return_vehicleYear_arr = [...new Map(this.return_VehicleList.filter(i => i.model_id == value).map(item => [item['year_id'], item])).values()];
+					let item = this.return_VehicleList.find(i => i.model_id == value);
+					if (item) {
+						this.SetFormValue('return_vehicle_model_name', item.model);
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_model_name', name)
+					let modelObj = this.BigData_COPY?.vehicleModels.find(item => item.id == value);
+					if (modelObj) {
+						this.SetFormValue('return_vehicle_model_name', modelObj.name);
+					}
 				}
 				else {
-					this.BookingForm.get('return_vehicle_model_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
+					// FIX: Do not clear if this is a sync operation (Round Trip)
+					if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('vehicle_model').value) {
+						console.log('DEBUG: Auto-sync active (Model). Preserving return vehicle year/color.');
+					} else {
+						this.BookingForm.get('return_vehicle_model_name').setValue('')
+						this.BookingForm.updateValueAndValidity();
+					}
 				}
 			}
+			// Sync to return if Round Trip and Auto-Sync is desirable
+
 		})
 
 		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate vehicle_year')
+				if (value && this.VehicleList) {
+					this.vehicleColor_arr = [...new Map(this.VehicleList.filter(i => i.year_id == value).map(item => [item['color_id'], item])).values()];
+					let item = this.VehicleList.find(i => i.year_id == value);
+					if (item) {
+						this.SetFormValue('vehicle_year_name', item.year);
+
+						// Sync to return if round trip
+						if (this.Form.service_type.value == 'round_trip') {
+							this.SetFormValue('return_vehicle_year', value);
+							this.SetFormValue('return_vehicle_year_name', item.year);
+						}
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_year_name', name)
+					let yearObj = this.BigData_COPY?.vehicleYears.find(item => item.id == value);
+					if (yearObj) {
+						this.SetFormValue('vehicle_year_name', yearObj.name);
+					}
 				}
 				else {
 					this.BookingForm.get('vehicle_year_name').setValue('')
 					this.BookingForm.updateValueAndValidity();
 				}
 			}
+			// Sync to return if Round Trip
+			if (this.BookingForm.get('service_type')?.value == 'round_trip' && this.BookingForm.get('vehicle_year_name')?.value) {
+				this.SetFormValue('return_vehicle_year_name', this.BookingForm.get('vehicle_year_name')?.value);
+			}
 		})
 
 		this.BookingForm.get('return_vehicle_year').valueChanges.subscribe((value: string) => {
+
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate return_vehicle_year')
+				if (value && this.return_VehicleList) {
+					this.return_vehicleColor_arr = [...new Map(this.return_VehicleList.filter(i => i.year_id == value).map(item => [item['color_id'], item])).values()];
+					let item = this.return_VehicleList.find(i => i.year_id == value);
+					if (item) {
+						this.SetFormValue('return_vehicle_year_name', item.year);
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_year_name', name)
+					let yearObj = this.BigData_COPY?.vehicleYears.find(item => item.id == value);
+					if (yearObj) {
+						this.SetFormValue('return_vehicle_year_name', yearObj.name);
+					}
 				}
 				else {
-					this.BookingForm.get('return_vehicle_year_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
+					// FIX: Do not clear if this is a sync operation (Round Trip)
+					if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('vehicle_year').value) {
+
+					} else {
+						this.BookingForm.get('return_vehicle_year_name').setValue('')
+						this.BookingForm.updateValueAndValidity();
+					}
 				}
 			}
 		})
@@ -4274,33 +4501,67 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate vehicle_color')
+				if (value && this.VehicleList) {
+					let item = this.VehicleList.find(i => i.color_id == value);
+					if (item) {
+						this.SetFormValue('vehicle_color_name', item.color);
 
+
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_color_name', name)
+					let colorObj = this.BigData_COPY?.vehicleColors.find(item => item.id == value);
+					if (colorObj) {
+						this.SetFormValue('vehicle_color_name', colorObj.name);
+					}
 				}
 				else {
 					this.BookingForm.get('vehicle_color_name').setValue('')
 					this.BookingForm.updateValueAndValidity();
+				}
+			}
 
+			// Sync to return if Round Trip
+			if (this.BookingForm.get('service_type')?.value == 'round_trip') {
+				if (value) this.SetFormValue('return_vehicle_color', value);
+				if (this.BookingForm.get('vehicle_color_name')?.value) {
+					this.SetFormValue('return_vehicle_color_name', this.BookingForm.get('vehicle_color_name')?.value);
 				}
 			}
 		})
 
+		this.BookingForm.get('vehicle_license_plate').valueChanges.subscribe((value: string) => {
+			if (this.BookingForm.get('service_type')?.value == 'round_trip') {
+				this.SetFormValue('return_vehicle_license_plate', value);
+			}
+		})
+
 		this.BookingForm.get('return_vehicle_color').valueChanges.subscribe((value: string) => {
+
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate return_vehicle_color')
-
+				if (value && this.return_VehicleList) {
+					let item = this.return_VehicleList.find(i => i.color_id == value);
+					if (item) {
+						this.SetFormValue('return_vehicle_color_name', item.color);
+					}
+				}
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_color_name', name)
+					let colorObj = this.BigData_COPY?.vehicleColors.find((item: any) => item.id == value);
+					if (colorObj) {
+						this.SetFormValue('return_vehicle_color_name', colorObj.name);
+					}
 				}
 				else {
-					this.BookingForm.get('return_vehicle_color_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
+					// FIX: Do not clear if this is a sync operation (Round Trip)
+					if (this.BookingForm.get('service_type').value == 'round_trip' && this.BookingForm.get('vehicle_color').value) {
 
+					} else {
+						this.BookingForm.get('return_vehicle_color_name').setValue('')
+						this.BookingForm.updateValueAndValidity();
+					}
 				}
 			}
 		})
@@ -4469,6 +4730,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			})
 			this.SetFormValue('driver_cell_isd', '+1');
 			this.SetFormValue('driver_cell_country', 'us');
+
+			// Clear vehicle arrays to fallback to BigData categories
+			this.vehicleType_arr = [];
+			this.VehicleList = [];
+			this.vehicleMake_arr = [];
+			this.vehicleModal_arr = [];
+			this.vehicleYear_arr = [];
+			this.vehicleColor_arr = [];
+
+			// Initialize localized arrays from BigData
+			this.loose_vehicleMakes = this.BigData_COPY?.vehicleMakes || [];
+			this.loose_vehicleModels = this.BigData_COPY?.vehicleModels || [];
+			this.loose_vehicleYears = this.BigData_COPY?.vehicleYears || [];
+			this.loose_vehicleColors = this.BigData_COPY?.vehicleColors || [];
 		}
 	}
 
@@ -4480,6 +4755,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			})
 			this.SetFormValue('return_driver_cell_isd', '+1');
 			this.SetFormValue('return_driver_cell_country', 'us');
+
+			// Clear return vehicle arrays
+			this.return_vehicleType_arr = [];
+			this.return_VehicleList = [];
+			this.return_vehicleMake_arr = [];
+			this.return_vehicleModal_arr = [];
+			this.return_vehicleYear_arr = [];
+			this.return_vehicleColor_arr = [];
+
+			// Initialize return localized arrays from BigData
+			this.return_loose_vehicleMakes = this.BigData_COPY?.vehicleMakes || [];
+			this.return_loose_vehicleModels = this.BigData_COPY?.vehicleModels || [];
+			this.return_loose_vehicleYears = this.BigData_COPY?.vehicleYears || [];
+			this.return_loose_vehicleColors = this.BigData_COPY?.vehicleColors || [];
 		}
 	}
 
@@ -4533,20 +4822,22 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('Addresss-->>>', place);
 
 		const looseCustomerGroup = <FormGroup>this.BookingForm.get('loose_customer');
-		looseCustomerGroup.get('address').setValue(place.formatted_address);
+		if (looseCustomerGroup) {
+			looseCustomerGroup.get('address')?.setValue(place.formatted_address);
 
-		place.address_components.forEach(component => {
-			const types = component.types;
-			if (types.includes('postal_code')) {
-				looseCustomerGroup.get('zipCode').setValue(component.long_name);
-			} else if (types.includes('locality')) {
-				looseCustomerGroup.get('city').setValue(component.long_name);
-			} else if (types.includes('administrative_area_level_1')) {
-				looseCustomerGroup.get('state').setValue(component.long_name);
-			} else if (types.includes('country')) {
-				looseCustomerGroup.get('country').setValue(component.long_name);
-			}
-		});
+			place.address_components.forEach((component: any) => {
+				const types = component.types;
+				if (types.includes('postal_code')) {
+					looseCustomerGroup.get('zipCode')?.setValue(component.long_name);
+				} else if (types.includes('locality')) {
+					looseCustomerGroup.get('city')?.setValue(component.long_name);
+				} else if (types.includes('administrative_area_level_1')) {
+					looseCustomerGroup.get('state')?.setValue(component.long_name);
+				} else if (types.includes('country')) {
+					looseCustomerGroup.get('country')?.setValue(component.long_name);
+				}
+			});
+		}
 
 		looseCustomerGroup.updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
@@ -4555,8 +4846,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	onLCTeleCountryChange(event: any) {
 
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
+		(<FormGroup>this.BookingForm.get('loose_customer'))?.get('phone_country')?.setValue(event.iso2);
+		(<FormGroup>this.BookingForm.get('loose_customer'))?.get('phone_isd')?.setValue('+' + event.dialCode);
 		console.log("in mobile", event.dialCode, event.iso2)
 		this.BookingForm.updateValueAndValidity()
 	}
