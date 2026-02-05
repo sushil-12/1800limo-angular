@@ -140,6 +140,10 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.returnratesform =
 			changes.init_r_rates?.currentValue ?? this.returnratesform;
 
+		if (changes.init_r_rates?.currentValue) {
+			this.initReturnRates();
+		}
+
 		// if(changes?.distance.currentValue){
 		// 	console.log('<><><>><><><><><><><><><><><><><><>' ,changes?.distance.currentValue , changes?.book_data?.currentValue)
 		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
@@ -210,13 +214,13 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		if (changes.isTravelShare) {
 			this.initRates();
 			if (this.ReturnRatesForm) {
-				this.initReturnRates
+				this.initReturnRates();
 			}
 		}
 		// if(changes.affiliate_type?.currentValue){
 		// 	this.initRates();
 		// 	if (this.ReturnRatesForm) {
-		// 		this.initReturnRates
+		// 		this.initReturnRates();
 		// 	}
 		// }
 
@@ -398,6 +402,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	async initReturnRates() {
 		console.log("Init Return Rates");
+		this.returnratesform = true;
 
 		this.ReturnRatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
@@ -493,11 +498,17 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 				this.initRates();
+
+				if (response.data.retrunRateArray) {
+					this.returnRatesdata.next({})
+					this.returnRatesdata.next(response.data.retrunRateArray);
+					this.initReturnRates();
+				}
 			}
 		});
 	}
 
-	fillReturnRateForm(data) {
+	fillReturnRateForm(data: any) {
 		this.returnRatesdata.next({})
 		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
@@ -505,7 +516,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.initReturnRates()
 		});
 	}
-	fetchRatesArrayByAffiliateVehicle(data) {
+	fetchRatesArrayByAffiliateVehicle(data: any) {
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>', data,
 			data.vehicle_id, this.master_vehicle_id)
 
