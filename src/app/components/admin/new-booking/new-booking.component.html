@@ -3163,8 +3163,7 @@
 			[hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
 			[service_type]="service_type" [currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
-			[bookingType]="updateType" (returnformvalue)="ReturnRateFormValue($event)"
-			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
 
