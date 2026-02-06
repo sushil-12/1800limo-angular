@@ -3311,7 +3311,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-
 			// this.initAllAutocompletes()
 			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
@@ -3344,7 +3343,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
 				this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
 				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
-
 			} else {
 				console.log("setting value of dropoff flight not mandatory")
 				// this.BookingForm.get('dropoff_flight').clearValidators();
