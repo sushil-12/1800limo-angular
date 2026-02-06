@@ -3311,6 +3311,143 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
+
+			// Store old value for comparison
+			const oldValue = this.transfer_type;
+			const newValue = value;
+
+			// Flip addresses for round trip when changing between complementary transfer types
+			if (this.BookingForm.get('service_type').value == 'round_trip') {
+				if ((oldValue == 'city_to_airport' && newValue == 'airport_to_city') ||
+					(oldValue == 'airport_to_city' && newValue == 'city_to_airport') ||
+					(oldValue == 'city_to_cruise' && newValue == 'cruise_to_city') ||
+					(oldValue == 'cruise_to_city' && newValue == 'city_to_cruise')) {
+
+					console.log('Flipping outbound addresses for complementary transfer type change');
+
+					// Capture outbound pickup values
+					const pickup = this.Form.pickup.value;
+					const pickupLat = this.Form.pickup_latitude.value;
+					const pickupLng = this.Form.pickup_longitude.value;
+					const pickupAirport = this.Form.pickup_airport.value;
+					const pickupAirportOpt = this.BookingForm.get('pickup_airport_option').value;
+					const pickupAirportName = this.Form.pickup_airport_name.value;
+					const pickupAirportLat = this.Form.pickup_airport_latitude.value;
+					const pickupAirportLng = this.Form.pickup_airport_longitude.value;
+					const pickupAirline = this.Form.pickup_airline.value;
+					const pickupAirlineOpt = this.BookingForm.get('pickup_airline_option').value;
+					const pickupAirlineName = this.Form.pickup_airline_name.value;
+					const pickupFlight = this.Form.pickup_flight.value;
+					const originAirportCity = this.Form.origin_airport_city.value;
+
+					// Capture outbound dropoff values
+					const dropoff = this.Form.dropoff.value;
+					const dropoffLat = this.Form.dropoff_latitude.value;
+					const dropoffLng = this.Form.dropoff_longitude.value;
+					const dropoffAirport = this.Form.dropoff_airport.value;
+					const dropoffAirportOpt = this.BookingForm.get('dropoff_airport_option').value;
+					const dropoffAirportName = this.Form.dropoff_airport_name.value;
+					const dropoffAirportLat = this.Form.dropoff_airport_latitude.value;
+					const dropoffAirportLng = this.Form.dropoff_airport_longitude.value;
+					const dropoffAirline = this.Form.dropoff_airline.value;
+					const dropoffAirlineOpt = this.BookingForm.get('dropoff_airline_option').value;
+					const dropoffAirlineName = this.Form.dropoff_airline_name.value;
+					const dropoffFlight = this.Form.dropoff_flight.value;
+
+					// Swap outbound addresses
+					this.SetFormValue('pickup', dropoff);
+					this.SetFormValue('pickup_latitude', dropoffLat);
+					this.SetFormValue('pickup_longitude', dropoffLng);
+					this.SetFormValue('pickup_airport', dropoffAirport);
+					this.SetFormValue('pickup_airport_option', dropoffAirportOpt);
+					this.SetFormValue('pickup_airport_name', dropoffAirportName);
+					this.SetFormValue('pickup_airport_latitude', dropoffAirportLat);
+					this.SetFormValue('pickup_airport_longitude', dropoffAirportLng);
+					this.SetFormValue('pickup_airline', dropoffAirline);
+					this.SetFormValue('pickup_airline_option', dropoffAirlineOpt);
+					this.SetFormValue('pickup_airline_name', dropoffAirlineName);
+					this.SetFormValue('pickup_flight', dropoffFlight);
+
+					this.SetFormValue('dropoff', pickup);
+					this.SetFormValue('dropoff_latitude', pickupLat);
+					this.SetFormValue('dropoff_longitude', pickupLng);
+					this.SetFormValue('dropoff_airport', pickupAirport);
+					this.SetFormValue('dropoff_airport_option', pickupAirportOpt);
+					this.SetFormValue('dropoff_airport_name', pickupAirportName);
+					this.SetFormValue('dropoff_airport_latitude', pickupAirportLat);
+					this.SetFormValue('dropoff_airport_longitude', pickupAirportLng);
+					this.SetFormValue('dropoff_airline', pickupAirline);
+					this.SetFormValue('dropoff_airline_option', pickupAirlineOpt);
+					this.SetFormValue('dropoff_airline_name', pickupAirlineName);
+					this.SetFormValue('dropoff_flight', pickupFlight);
+
+					// Also flip return leg addresses
+					const r_pickup = this.Form.return_pickup.value;
+					const r_pickupLat = this.Form.return_pickup_latitude.value;
+					const r_pickupLng = this.Form.return_pickup_longitude.value;
+					const r_pickupAirport = this.Form.return_pickup_airport.value;
+					const r_pickupAirportOpt = this.BookingForm.get('return_pickup_airport_option').value;
+					const r_pickupAirportName = this.Form.return_pickup_airport_name.value;
+					const r_pickupAirportLat = this.Form.return_pickup_airport_latitude.value;
+					const r_pickupAirportLng = this.Form.return_pickup_airport_longitude.value;
+					const r_pickupAirline = this.Form.return_pickup_airline.value;
+					const r_pickupAirlineOpt = this.BookingForm.get('return_pickup_airline_option').value;
+					const r_pickupAirlineName = this.Form.return_pickup_airline_name.value;
+					const r_pickupFlight = this.Form.return_pickup_flight.value;
+					const departingAirportCity = this.Form.departing_airport_city.value;
+
+					const r_dropoff = this.Form.return_dropoff.value;
+					const r_dropoffLat = this.Form.return_dropoff_latitude.value;
+					const r_dropoffLng = this.Form.return_dropoff_longitude.value;
+					const r_dropoffAirport = this.Form.return_dropoff_airport.value;
+					const r_dropoffAirportOpt = this.BookingForm.get('return_dropoff_airport_option').value;
+					const r_dropoffAirportName = this.Form.return_dropoff_airport_name.value;
+					const r_dropoffAirportLat = this.Form.return_dropoff_airport_latitude.value;
+					const r_dropoffAirportLng = this.Form.return_dropoff_airport_longitude.value;
+					const r_dropoffAirline = this.Form.return_dropoff_airline.value;
+					const r_dropoffAirlineOpt = this.BookingForm.get('return_dropoff_airline_option').value;
+					const r_dropoffAirlineName = this.Form.return_dropoff_airline_name.value;
+					const r_dropoffFlight = this.Form.return_dropoff_flight.value;
+
+					// Swap return addresses
+					this.SetFormValue('return_pickup', r_dropoff);
+					this.SetFormValue('return_pickup_latitude', r_dropoffLat);
+					this.SetFormValue('return_pickup_longitude', r_dropoffLng);
+					this.SetFormValue('return_pickup_airport', r_dropoffAirport);
+					this.SetFormValue('return_pickup_airport_option', r_dropoffAirportOpt);
+					this.SetFormValue('return_pickup_airport_name', r_dropoffAirportName);
+					this.SetFormValue('return_pickup_airport_latitude', r_dropoffAirportLat);
+					this.SetFormValue('return_pickup_airport_longitude', r_dropoffAirportLng);
+					this.SetFormValue('return_pickup_airline', r_dropoffAirline);
+					this.SetFormValue('return_pickup_airline_option', r_dropoffAirlineOpt);
+					this.SetFormValue('return_pickup_airline_name', r_dropoffAirlineName);
+					this.SetFormValue('return_pickup_flight', r_dropoffFlight);
+
+					this.SetFormValue('return_dropoff', r_pickup);
+					this.SetFormValue('return_dropoff_latitude', r_pickupLat);
+					this.SetFormValue('return_dropoff_longitude', r_pickupLng);
+					this.SetFormValue('return_dropoff_airport', r_pickupAirport);
+					this.SetFormValue('return_dropoff_airport_option', r_pickupAirportOpt);
+					this.SetFormValue('return_dropoff_airport_name', r_pickupAirportName);
+					this.SetFormValue('return_dropoff_airport_latitude', r_pickupAirportLat);
+					this.SetFormValue('return_dropoff_airport_longitude', r_pickupAirportLng);
+					this.SetFormValue('return_dropoff_airline', r_pickupAirline);
+					this.SetFormValue('return_dropoff_airline_option', r_pickupAirlineOpt);
+					this.SetFormValue('return_dropoff_airline_name', r_pickupAirlineName);
+					this.SetFormValue('return_dropoff_flight', r_pickupFlight);
+
+					// Swap airport city fields
+					this.SetFormValue('origin_airport_city', departingAirportCity);
+					this.SetFormValue('departing_airport_city', originAirportCity);
+
+					// Trigger map update
+					setTimeout(() => this.MapController(true), 1000);
+				}
+			}
+
+			// Update transfer_type property
+			this.transfer_type = value;
+
 			// this.initAllAutocompletes()
 			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
@@ -3343,6 +3480,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
 				this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
 				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
+
 			} else {
 				console.log("setting value of dropoff flight not mandatory")
 				// this.BookingForm.get('dropoff_flight').clearValidators();
