@@ -2927,6 +2927,24 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				return_lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_lose_affiliate_phone_isd')?.value)
 			});
 
+			// Map vehicle details from outbound to return when both are loose affiliates
+			if (this.Form.affiliate_type.value === 'loose_affiliate' && this.Form.return_affiliate_type.value === 'loose_affiliate') {
+				this.BookingForm.patchValue({
+					return_vehicle_type: this.Form.vehicle_type.value,
+					return_vehicle_type_name: this.Form.vehicle_type_name.value,
+					return_vehicle_make: this.Form.vehicle_make.value,
+					return_vehicle_make_name: this.Form.vehicle_make_name.value,
+					return_vehicle_model: this.Form.vehicle_model.value,
+					return_vehicle_model_name: this.Form.vehicle_model_name.value,
+					return_vehicle_year: this.Form.vehicle_year.value,
+					return_vehicle_year_name: this.Form.vehicle_year_name.value,
+					return_vehicle_color: this.Form.vehicle_color.value,
+					return_vehicle_color_name: this.Form.vehicle_color_name.value,
+					return_vehicle_license_plate: this.Form.vehicle_license_plate.value,
+					return_vehicle_seats: this.Form.vehicle_seats.value
+				});
+			}
+
 		}
 		else {
 			this.BookingForm.get('return_vehicle_type').clearValidators()
