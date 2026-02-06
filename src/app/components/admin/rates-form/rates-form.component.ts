@@ -28,7 +28,6 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("service_type") service_type: string = "";
 	@Input("currencyObject") currencyObject: any;
 	@Input("booking_created_from") booking_created_from: any;
-	@Input("bookingType") bookingTypeInput: any;
 
 
 	// Throw Events.
@@ -140,10 +139,6 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		// changes.init_rates?.currentValue ?? this.ratesform
 		this.returnratesform =
 			changes.init_r_rates?.currentValue ?? this.returnratesform;
-
-		if (changes.bookingTypeInput && changes.bookingTypeInput.currentValue) {
-			this.bookingType = changes.bookingTypeInput.currentValue;
-		}
 
 		if (changes.init_r_rates?.currentValue) {
 			this.initReturnRates();
