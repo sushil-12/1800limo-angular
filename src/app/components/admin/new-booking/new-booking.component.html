@@ -723,12 +723,11 @@
 			</div>
 
 			<!-- Vehicle ID --- FALSE-->
-			<div class="row px-4" *ngIf="Form.vehicle_type.value && Form.affiliate_type.value == 'affiliate'">
-				<div id="vehicle_id" class="col-md-12">
+			<div class="row" *ngIf="false">
+				<div id="vehicle_id" class="col-md-12" *ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
 					<ng-select appearance="outline" [items]="VehicleList" *ngIf="VehicleList.length > 1"
 						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true" bindLabel="formatted_name"
-						bindValue="ID" placeholder="Select Specific Vehicle" formControlName="vehicle_id"
-						(change)="handleChangeVehicle($event)">
+						bindValue="ID" placeholder="Select Vehicle" formControlName="vehicle_id">
 					</ng-select>
 				</div>
 			</div>
@@ -739,7 +738,7 @@
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
 					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffiliateId"
-						[items]="LooseAffiliateAccounts" bindLabel="bindName" bindValue="id"
+						[items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="loose_affiliate_id"
 						(change)="handleLooseAffiliateChange($event)">
@@ -946,10 +945,7 @@
 				<!-- Vehicle Type -->
 				<div id="vehicle-type" [ngClass]="Form.vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline"
-						[items]="(vehicleType_arr && vehicleType_arr.length > 0) ? vehicleType_arr : BigData?.vehicleCategories"
-						[bindLabel]="(vehicleType_arr && vehicleType_arr.length > 0) ? 'formatted_name' : 'name'"
-						[bindValue]="(vehicleType_arr && vehicleType_arr.length > 0) ? 'vehicleType_id' : 'id'"
+					<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
 						placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="vehicle_type"
 						[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
@@ -964,16 +960,16 @@
 				<!-- Make -->
 				<div id="make" *ngIf="Form.vehicle_type.value" class="col-md-4">
 					<!-- Make - Ng-Select -->
-					<ng-select appearance="outline" [items]="loose_vehicleMakes" bindLabel="name" bindValue="id"
-						placeholder="Select Make" dropdownPosition="bottom" [markFirst]="true"
-						formControlName="vehicle_make">
+					<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
+						[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
+						placeholder="Select Make" formControlName="vehicle_make">
 					</ng-select>
 				</div>
 
 				<!-- Model -->
 				<div id="model" class="col-md-4" *ngIf="Form.vehicle_type.value">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="loose_vehicleModels" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 						placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="vehicle_model">
 					</ng-select>
@@ -982,7 +978,7 @@
 				<!-- Year -->
 				<div id="year" class="col-md-3">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="loose_vehicleYears" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 						placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="vehicle_year">
 					</ng-select>
@@ -991,7 +987,7 @@
 				<!-- Color -->
 				<div id="color" class="col-md-3">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="loose_vehicleColors" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 						placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="vehicle_color">
 					</ng-select>
@@ -2430,14 +2426,14 @@
 								Flight / Tail #
 							</mat-label>
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-								formControlName="dropoff_flight" (focus)="$event.target.select()" />
+								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box"
-							*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)">
+							*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)">
 							<div class="error-message"
-								*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
+								*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
 								style="margin-top:-15px">
-								<p class="text-danger text-lg m-0" *ngIf="Form.dropoff_flight.errors?.required">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_dropoff_flight.errors?.required">
 									This field is required
 								</p>
 							</div>
@@ -2462,8 +2458,7 @@
 						<div class="error-box"
 							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
 							<div class="error-message"
-								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
-								style="margin-top:-15px">
+								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
 								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required"
 									style="margin-top:-15px">
 									This field is required
@@ -2649,13 +2644,12 @@
 			</div>
 
 			<!-- Vehicle ID ---FALSE -->
-			<div class="row px-4"
-				*ngIf="Form.return_vehicle_type.value && Form.return_affiliate_type.value == 'affiliate'">
-				<div id="vehicle_id" class="col-md-12">
+			<div class="row" *ngIf="false">
+				<div id="vehicle_id" class="col-md-12" *ngIf="Form.return_affiliate_type.value !== 'loose_affiliate'">
+					<!-- Ng-Select - Vehicle ID -->
 					<ng-select appearance="outline" [items]="return_VehicleList" *ngIf="return_VehicleList.length > 1"
 						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true" bindLabel="formatted_name"
-						bindValue="ID" placeholder="Select Specific Vehicle" formControlName="return_vehicle_id"
-						(change)="handleReturnChangeVehicle($event)">
+						bindValue="ID" placeholder="Select Vehicle" formControlName="return_vehicle_id">
 					</ng-select>
 				</div>
 			</div>
@@ -2666,7 +2660,7 @@
 			<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
 					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffiliateId"
-						[items]="Return_LooseAffiliateAccounts" bindLabel="bindName" bindValue="id"
+						[items]="Return_LooseAffiliateAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_loose_affiliate_id"
 						(change)="handleReturnLooseAffiliateChange($event)">
@@ -2879,13 +2873,9 @@
 				<!-- Vehicle Type -->
 				<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline"
-						[items]="(return_vehicleType_arr && return_vehicleType_arr.length > 0) ? return_vehicleType_arr : BigData?.vehicleCategories"
-						[bindLabel]="(return_vehicleType_arr && return_vehicleType_arr.length > 0) ? 'formatted_name' : 'name'"
-						[bindValue]="(return_vehicleType_arr && return_vehicleType_arr.length > 0) ? 'vehicleType_id' : 'id'"
+					<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
 						placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_vehicle_type"
-						(change)="handleReturnChangeVehicleType($event)"
 						[ngClass]="{ 'border-red': (submitBookingForm && Form.return_vehicle_type.invalid) }"
 						style="height:66px;">
 					</ng-select>
@@ -2898,16 +2888,16 @@
 				<!-- Make -->
 				<div id="make" *ngIf="Form.return_vehicle_type.value" class="col-md-4">
 					<!-- Make - Ng-Select -->
-					<ng-select appearance="outline" [items]="return_loose_vehicleMakes" bindLabel="name" bindValue="id"
-						placeholder="Select Make" dropdownPosition="bottom" [markFirst]="true"
-						formControlName="return_vehicle_make">
+					<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
+						[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
+						placeholder="Select Make" formControlName="return_vehicle_make">
 					</ng-select>
 				</div>
 
 				<!-- Model -->
 				<div id="model" class="col-md-4" *ngIf="Form.return_vehicle_type.value">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="return_loose_vehicleModels" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 						placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="return_vehicle_model">
 					</ng-select>
@@ -2916,7 +2906,7 @@
 				<!-- Year -->
 				<div id="year" class="col-md-3">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="return_loose_vehicleYears" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 						placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="return_vehicle_year">
 					</ng-select>
@@ -2925,7 +2915,7 @@
 				<!-- Color -->
 				<div id="color" class="col-md-3">
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="return_loose_vehicleColors" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 						placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="return_vehicle_color">
 					</ng-select>
@@ -3158,9 +3148,9 @@
 
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [isTravelShare]="isTravelShare"
-			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id"
-			[hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
+			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
+			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
 			[service_type]="service_type" [currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
@@ -4261,97 +4251,6 @@
 				</div>
 
 				<hr>
-
-				<div *ngIf="service_type == 'round_trip'">
-					<h4 class="font-weight-bolder m-0">
-						Return Vehicle Preferences
-					</h4>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Type
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_type_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Make
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_make_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Model
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_model_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Year
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_year_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Color
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_color_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Licence plate
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_license_plate.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								No. of seats
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.return_vehicle_seats.value}}
-							</span>
-						</div>
-					</div>
-					<hr>
-				</div>
 				<!-- Affiliate Information -->
 				<ng-container
 					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' then affiliateUser">
