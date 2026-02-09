@@ -111,6 +111,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	AffiliateInformation: Record<string, any> = {}
 	ReturnAffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
+	ClientAccounts_Original: Array<Record<string, any>> = []
+	travelStaffAccounts: Array<any> = []
+	travelStaffAccounts_Original: Array<any> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
@@ -135,7 +138,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
 	proceed: boolean = true
-	chosen_user: Record<string, any>
+	chosen_user: Record<string, any> = {}
 
 	distance: number = 0
 	return_distance: number = 0
@@ -167,7 +170,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare: boolean = false
-	travelStaffAccounts: any;
+
 	manual_change_aff_veh: boolean = false;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
@@ -1477,9 +1480,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.ClientAccounts = response.data;
+					this.ClientAccounts_Original = [...this.ClientAccounts];
 				}
 				else {
-					this.ClientAccounts = []
+					this.ClientAccounts = [];
+					this.ClientAccounts_Original = [];
 				}
 				console.log("client acc", this.ClientAccounts)
 				this.$spinner.hide()
@@ -1528,6 +1533,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.$api.getTravelClientAccount(id).subscribe((response: any) => {
 			console.log("accounts->>>>>>>>>>", response)
 			this.travelStaffAccounts = response?.data
+			this.travelStaffAccounts_Original = [...this.travelStaffAccounts]
 		})
 	}
 	handleClientAccChange(selectedAcc) {
@@ -4863,6 +4869,42 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.Return_AffiliateAccounts = [...this.Return_AffiliateAccounts_Original].sort((a, b) => {
 			const aName = a.bindNameAffiliate.toLowerCase();
 			const bName = b.bindNameAffiliate.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	handleClientSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.ClientAccounts = [...this.ClientAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.ClientAccounts = [...this.ClientAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	handleTravelStaffSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.travelStaffAccounts = [...this.travelStaffAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.travelStaffAccounts = [...this.travelStaffAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
 			const aStarts = aName.startsWith(lowerTerm);
 			const bStarts = bName.startsWith(lowerTerm);
 			if (aStarts && !bStarts) return -1;
