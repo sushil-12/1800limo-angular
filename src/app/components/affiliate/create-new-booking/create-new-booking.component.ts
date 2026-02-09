@@ -91,7 +91,9 @@ export class CreateNewBookingComponent implements OnInit {
 	BigData_COPY: any
 	AffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
+	ClientAccounts_Original: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
+	AffiliateAccounts_Original: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
 	vehicleType_arr: any;
@@ -1250,6 +1252,11 @@ export class CreateNewBookingComponent implements OnInit {
 			this.affiliateService.getAccountBytype(legend[account_type]).subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.ClientAccounts = response.data;
+					this.ClientAccounts_Original = [...this.ClientAccounts];
+				}
+				else {
+					this.ClientAccounts = [];
+					this.ClientAccounts_Original = [];
 				}
 				this.$spinner.hide()
 			})
@@ -1324,7 +1331,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.affiliateService.getAccountBytype('driver').subscribe((response: any) => {
 			if (response.success && response.data.length > 0) {
 				this.AffiliateAccounts = response.data
-
+				this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
 				//lose all affiliate vehicle and driver data on change of affiliate type
 				// for (let key in this.Form)
 				// {
@@ -3378,62 +3385,71 @@ export class CreateNewBookingComponent implements OnInit {
 			searchInput.placeholder = 'Search country...';
 
 			searchContainer.appendChild(searchInput);
-
-			// Prevent dropdown from closing when interacting with search
-			searchInput.addEventListener('click', (e) => e.stopPropagation());
-			searchInput.addEventListener('keydown', (e) => e.stopPropagation());
-
-			// Insert at top of dropdown
 			dropdown.insertBefore(searchContainer, dropdown.firstChild);
 
-			// Focus on search
-			setTimeout(() => searchInput.focus(), 100);
+			// Focus input
+			setTimeout(() => searchInput.focus(), 0);
 
-			// Filter countries on input
-			searchInput.addEventListener('input', (e: any) => {
-				e.stopPropagation();
-				const searchTerm = e.target.value.toLowerCase();
+			// Search logic
+			searchInput.addEventListener('input', (e) => {
+				const term = (e.target as HTMLInputElement).value.toLowerCase();
 				const countries = dropdown.querySelectorAll('.iti__country');
-				let hasVisible = false;
 
-				countries.forEach((country: any) => {
-					// Search in the full text (Name + Dial Code)
-					const text = country.textContent?.toLowerCase() || '';
+				countries.forEach((country: HTMLElement) => {
+					const name = country.querySelector('.iti__country-name')?.textContent?.toLowerCase() || '';
+					const dialCode = country.querySelector('.iti__dial-code')?.textContent?.toLowerCase() || '';
 
-					if (text.includes(searchTerm)) {
-						country.classList.remove('iti__hide');
-						country.style.display = 'block'; // Force show
-						hasVisible = true;
+					if (name.includes(term) || dialCode.includes(term)) {
+						country.style.display = '';
 					} else {
-						country.classList.add('iti__hide');
-						country.style.display = 'none'; // Force hide
+						country.style.display = 'none';
 					}
 				});
-
-				// Handle No Results
-				let noResults = dropdown.querySelector('.iti-no-results');
-				if (!noResults) {
-					noResults = document.createElement('div');
-					noResults.className = 'iti-no-results';
-					noResults.textContent = 'No results found';
-					dropdown.appendChild(noResults);
-				}
-
-				if (!hasVisible && searchTerm) {
-					(noResults as HTMLElement).style.display = 'block';
-				} else {
-					(noResults as HTMLElement).style.display = 'none';
-				}
-
-				// Show all if search is empty
-				if (!searchTerm) {
-					countries.forEach((country: any) => {
-						country.classList.remove('iti__hide');
-						country.style.display = 'block';
-					});
-					(noResults as HTMLElement).style.display = 'none';
-				}
 			});
+
+			// Prevent dropdown close on search click
+			searchContainer.addEventListener('click', (e) => e.stopPropagation());
+		});
+	}
+
+	handleClientSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.ClientAccounts = [...this.ClientAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.ClientAccounts = [...this.ClientAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	onSearchAffiliateId(term, item) {
+		term = term.toLowerCase();
+		return item.name.toLowerCase().indexOf(term) > -1 || (item?.mobile && item.mobile.toString().includes(term));
+	}
+
+	handleAffiliateSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.AffiliateAccounts = [...this.AffiliateAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
 		});
 	}
 }
