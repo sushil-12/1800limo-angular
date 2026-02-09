@@ -71,6 +71,8 @@ export class DailyBookingsComponent implements OnInit {
 	reciptentName: any;
 	notification_msg: any;
 	status_list: any = [];
+	selectedStatus: any = null;
+	bookings_Original: any = [];
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem("currentUser")) || "";
 	subModules: any = localStorage.getItem("sub_modules") || "";
@@ -145,7 +147,7 @@ export class DailyBookingsComponent implements OnInit {
 			(localStorage.getItem('useDateFilter') == 'true' ? true : false)
 			: false;
 		console.log("useDateFilter-->", this.useDateFilter);
-		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_desc"
+		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_asc"
 		this.use_created_at = localStorage.getItem("orderByCreatedAt") ? true : false
 
 
@@ -161,7 +163,9 @@ export class DailyBookingsComponent implements OnInit {
 				this.status_list = data;
 			});
 
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+		this.selectedStatus = localStorage.getItem("DBS_Status") ? localStorage.getItem("DBS_Status") : null;
+
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -311,7 +315,7 @@ export class DailyBookingsComponent implements OnInit {
 			startDate: dayjs(this.startDate),
 			endDate: dayjs(this.endDate)
 		};
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
 	}
 	handleCheckboxSort(value: any) {
 		if (value) {
@@ -319,13 +323,59 @@ export class DailyBookingsComponent implements OnInit {
 			localStorage.setItem('orderByCreatedAt', 'created_at_desc')
 		}
 		else {
-			this.orderBy = "pickup_date_desc";
+			this.orderBy = "pickup_date_asc";
 			localStorage.removeItem('orderByCreatedAt')
 		}
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
-		// this.useDateFilter = value
-		// this.saveCookie('useDateFilter',value)
-		// this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
+	}
+
+	handleSort(field: string) {
+		if (this.orderBy.startsWith(field)) {
+			if (this.orderBy.endsWith('_asc')) {
+				this.orderBy = field + '_desc';
+			} else {
+				this.orderBy = field + '_asc';
+			}
+		} else {
+			this.orderBy = field + '_asc';
+		}
+
+		if (field === 'created_at') {
+			localStorage.setItem('orderByCreatedAt', this.orderBy);
+			this.use_created_at = true;
+		} else {
+			localStorage.removeItem('orderByCreatedAt');
+			this.use_created_at = false;
+		}
+
+		this.sortBookings();
+		this.filterBookingsByStatus();
+	}
+
+	sortBookings() {
+		if (!this.bookings_Original || this.bookings_Original.length === 0) return;
+
+		const [field, direction] = this.orderBy.split('_asc').length > 1 ? [this.orderBy.replace('_asc', ''), 'asc'] : [this.orderBy.replace('_desc', ''), 'desc'];
+
+		this.bookings_Original.sort((a: any, b: any) => {
+			let valA = a[field];
+			let valB = b[field];
+
+			// Specialized handling for booking_id (numeric)
+			if (field === 'booking_id') {
+				valA = parseInt(valA);
+				valB = parseInt(valB);
+			}
+			// Specialized handling for pickup_date (date comparison)
+			else if (field === 'pickup_date') {
+				valA = new Date(valA).getTime();
+				valB = new Date(valB).getTime();
+			}
+
+			if (valA < valB) return direction === 'asc' ? -1 : 1;
+			if (valA > valB) return direction === 'asc' ? 1 : -1;
+			return 0;
+		});
 	}
 	/**
 	 * Configure date as per todays date and the future +7 days
@@ -342,15 +392,35 @@ export class DailyBookingsComponent implements OnInit {
 		this.saveCookie('admin_endDate', '');
 		localStorage.removeItem("admin_startDate");
 		localStorage.removeItem("admin_endDate");
-		// this.adminService.deleteCookie('search')
 		localStorage.removeItem("DBSearch");
 		localStorage.removeItem("useDateFilter");
+		localStorage.removeItem("DBS_Status");
 		this.useDateFilter = false;
-		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
-		// this.filtertype = 'bookingid';
+		this.selectedStatus = null;
 
 		console.log("Reset Successfully. ");
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
+	}
+
+	applyStatusFilter(status: any) {
+		this.selectedStatus = status;
+		if (status) {
+			localStorage.setItem("DBS_Status", status);
+		} else {
+			localStorage.removeItem("DBS_Status");
+		}
+		this.filterBookingsByStatus();
+	}
+
+	filterBookingsByStatus() {
+		if (this.selectedStatus && this.selectedStatus != "") {
+			this.bookings = this.bookings_Original.filter((booking: any) => {
+				return booking.booking_status == this.selectedStatus;
+			});
+		} else {
+			this.bookings = [...this.bookings_Original];
+		}
 	}
 
 
@@ -644,7 +714,8 @@ export class DailyBookingsComponent implements OnInit {
 		pageUrl = null,
 		start_date: Date | null, // Changed to Date
 		end_date: Date | null, // Changed to Date
-		search_value: string = ""
+		search_value: string = "",
+		status: any = null
 	) {
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
@@ -667,7 +738,8 @@ export class DailyBookingsComponent implements OnInit {
 					endDateStr,
 					this.useDateFilter,
 					search_value ?? "",
-					this.orderBy
+					this.orderBy,
+					"" // Don't pass status to backend
 				)
 				.then((result: any) => {
 					if (result?.data?.reservations?.data == 0) {
@@ -678,7 +750,9 @@ export class DailyBookingsComponent implements OnInit {
 					date.setDate(date.getDate() + 7);
 					timestamp = date.getTime();
 					this.bookingsRes = result;
-					this.bookings = this.bookingsRes?.data?.reservations?.data;
+					this.bookings_Original = this.bookingsRes?.data?.reservations?.data || [];
+					this.sortBookings();
+					this.filterBookingsByStatus();
 					if (!this.useDateFilter && !this.searchText) {
 						this.endDate = this.bookings?.length > 0 ? dayjs(this.bookings[this.bookings?.length - 1]?.pickup_date).toDate() : dayjs(timestamp).toDate()
 					}
@@ -708,7 +782,8 @@ export class DailyBookingsComponent implements OnInit {
 					endDateStr,
 					this.useDateFilter,
 					search_value ?? "",
-					this.orderBy
+					this.orderBy,
+					"" // Don't pass status to backend
 				)
 				.then((result: any) => {
 					if (result?.data?.reservations?.data == 0) {
@@ -719,7 +794,9 @@ export class DailyBookingsComponent implements OnInit {
 					date.setDate(date.getDate() + 7);
 					timestamp = date.getTime();
 					this.bookingsRes = result;
-					this.bookings = this.bookingsRes?.data?.reservations?.data;
+					this.bookings_Original = this.bookingsRes?.data?.reservations?.data || [];
+					this.sortBookings();
+					this.filterBookingsByStatus();
 					if (!this.useDateFilter && !this.searchText) {
 						this.endDate = this.bookings?.length > 0 ? dayjs(this.bookings[this.bookings?.length - 1]?.pickup_date).toDate() : dayjs(timestamp).toDate()
 					}
@@ -749,7 +826,8 @@ export class DailyBookingsComponent implements OnInit {
 		pageUrl = null,
 		start_date: Date | null, // Changed to Date
 		end_date: Date | null, // Changed to Date
-		search_value: string = ""
+		search_value: string = "",
+		status: any = null
 	) {
 		// Convert Dates back to strings for API if needed
 		const startDateStr = start_date ? dayjs(start_date).format('YYYY-MM-DD') : '';
@@ -765,16 +843,19 @@ export class DailyBookingsComponent implements OnInit {
 				endDateStr,
 				this.useDateFilter,
 				search_value ?? "",
-				this.orderBy
+				this.orderBy,
+				"" // Don't pass status to backend
 			)
 			.then((result: any) => {
 				if (result?.data?.reservations?.data == 0) {
 					this.noError = true;
 				}
 				this.bookingsRes = result;
-				this.bookings = this.bookings.concat(
-					this.bookingsRes.data?.reservations?.data
+				this.bookings_Original = this.bookings_Original.concat(
+					this.bookingsRes.data?.reservations?.data || []
 				);
+				this.sortBookings();
+				this.filterBookingsByStatus();
 				this.total_amount = this.bookingsRes?.data?.total_amount
 				this.admin_total = this.bookingsRes?.data?.admin_total
 				this.totalRecords = this.bookingsRes.data?.reservations?.total;
@@ -983,7 +1064,8 @@ export class DailyBookingsComponent implements OnInit {
 						null,
 						this.startDate,
 						this.endDate,
-						this.searchText
+						this.searchText,
+						this.selectedStatus
 					);
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
@@ -1233,7 +1315,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.timer = setTimeout(() => {
 			// this.saveCookie("search", this.searchText);
 			localStorage.setItem("DBSearch", this.searchText);
-			this.loadBookings(null, this.startDate, this.endDate, search_value?.replace(/&/g, '%26'));
+			this.loadBookings(null, this.startDate, this.endDate, search_value?.replace(/&/g, '%26'), this.selectedStatus);
 		}, 700);
 	}
 
