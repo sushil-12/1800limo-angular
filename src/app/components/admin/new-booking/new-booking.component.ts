@@ -3483,7 +3483,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
 				this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
 				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
-
 			} else {
 				console.log("setting value of dropoff flight not mandatory")
 				// this.BookingForm.get('dropoff_flight').clearValidators();
