@@ -114,7 +114,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
+	AffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_AffiliateAccounts: Array<Record<string, any>> = []
+	Return_AffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
@@ -1632,6 +1634,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					})
 					console.log('affiliate accounts', this.AffiliateAccounts)
 					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
+					this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
 					// {
@@ -1666,6 +1669,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					})
 					console.log('affiliate accounts', this.Return_AffiliateAccounts)
 					this.AffiliateAccounts_copy = [...this.Return_AffiliateAccounts]
+					this.Return_AffiliateAccounts_Original = [...this.Return_AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
 					// {
@@ -4827,6 +4831,44 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSearchLooseAffId(term, item) {
 		console.log("term", term, "item", item)
 		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.startsWith(term)
+	}
+
+
+
+	handleAffiliateSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.AffiliateAccounts = [...this.AffiliateAccounts_Original].sort((a, b) => {
+			const aName = a.bindNameAffiliate.toLowerCase();
+			const bName = b.bindNameAffiliate.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	handleReturnAffiliateSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.Return_AffiliateAccounts = [...this.Return_AffiliateAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.Return_AffiliateAccounts = [...this.Return_AffiliateAccounts_Original].sort((a, b) => {
+			const aName = a.bindNameAffiliate.toLowerCase();
+			const bName = b.bindNameAffiliate.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
 	}
 
 

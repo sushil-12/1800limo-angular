@@ -716,7 +716,7 @@
 					<ng-select [searchable]="true" appearance="outline" [searchFn]="onSearchAffiliateId"
 						[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
 						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)"
+						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)" (search)="handleAffiliateSearch($event)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
@@ -2637,7 +2637,7 @@
 						[searchFn]="onSearchAffiliateId" [items]="Return_AffiliateAccounts"
 						bindLabel="bindNameAffiliate" bindValue="id" placeholder="Select Affiliate"
 						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-						formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)"
+						formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)" (search)="handleReturnAffiliateSearch($event)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
