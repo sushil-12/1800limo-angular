@@ -111,15 +111,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	AffiliateInformation: Record<string, any> = {}
 	ReturnAffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
-	ClientAccounts_Original: Array<Record<string, any>> = []
-	travelStaffAccounts: Array<any> = []
-	travelStaffAccounts_Original: Array<any> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
-	AffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_AffiliateAccounts: Array<Record<string, any>> = []
-	Return_AffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
@@ -138,7 +133,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
 	proceed: boolean = true
-	chosen_user: Record<string, any> = {}
+	chosen_user: Record<string, any> | null;
 
 	distance: number = 0
 	return_distance: number = 0
@@ -170,7 +165,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare: boolean = false
-
+	travelStaffAccounts: any;
 	manual_change_aff_veh: boolean = false;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
@@ -1000,6 +995,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
+			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
+				this.chooseUser(response.data.acc_id);
+			}
+
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
 			if (response?.data?.account_type == 'travel_planner') {
@@ -1480,11 +1479,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.ClientAccounts = response.data;
-					this.ClientAccounts_Original = [...this.ClientAccounts];
 				}
 				else {
-					this.ClientAccounts = [];
-					this.ClientAccounts_Original = [];
+					this.ClientAccounts = []
 				}
 				console.log("client acc", this.ClientAccounts)
 				this.$spinner.hide()
@@ -1533,7 +1530,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.$api.getTravelClientAccount(id).subscribe((response: any) => {
 			console.log("accounts->>>>>>>>>>", response)
 			this.travelStaffAccounts = response?.data
-			this.travelStaffAccounts_Original = [...this.travelStaffAccounts]
 		})
 	}
 	handleClientAccChange(selectedAcc) {
@@ -1558,15 +1554,21 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	handleClientAccount(value: any) {
-		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
-		this.chooseUser(value.id)
+		console.log('---------------------->>>>>>>>>>>>>> client acc value', value)
+		if (!value) {
+			this.chosen_user = null;
+			return;
+		}
+
+		const id = (typeof value === 'object') ? value?.id : value;
+
+		this.chooseUser(id)
 		if (this.BookingForm.get('account_type').value == 'travel_planner') {
 			this.BookingForm.patchValue({
 				travel_client_id: ''
 			})
-			this.getTravelClientAccounts(value.id)
+			this.getTravelClientAccounts(id)
 		}
-
 	}
 
 	handleChangeTravelAccounts(selectedAcc) {
@@ -1640,7 +1642,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					})
 					console.log('affiliate accounts', this.AffiliateAccounts)
 					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-					this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
 					// {
@@ -1675,7 +1676,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					})
 					console.log('affiliate accounts', this.Return_AffiliateAccounts)
 					this.AffiliateAccounts_copy = [...this.Return_AffiliateAccounts]
-					this.Return_AffiliateAccounts_Original = [...this.Return_AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
 					// {
@@ -4837,80 +4837,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSearchLooseAffId(term, item) {
 		console.log("term", term, "item", item)
 		return item.name.toLowerCase().startsWith(term.toLowerCase()) || item.driver_phone.startsWith(term)
-	}
-
-
-
-	handleAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.AffiliateAccounts = [...this.AffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.bindNameAffiliate.toLowerCase();
-			const bName = b.bindNameAffiliate.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
-
-	handleReturnAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.Return_AffiliateAccounts = [...this.Return_AffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.Return_AffiliateAccounts = [...this.Return_AffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.bindNameAffiliate.toLowerCase();
-			const bName = b.bindNameAffiliate.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
-
-	handleClientSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.ClientAccounts = [...this.ClientAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.ClientAccounts = [...this.ClientAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
-
-	handleTravelStaffSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.travelStaffAccounts = [...this.travelStaffAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.travelStaffAccounts = [...this.travelStaffAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
 	}
 
 
