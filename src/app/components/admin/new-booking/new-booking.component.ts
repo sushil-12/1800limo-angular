@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck, distinctUntilChanged } from 'rxjs/operators';
@@ -32,6 +32,232 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
+	// TimepickerUI
+	pickupTimePicker: any;
+	returnPickupTimePicker: any;
+	cruiseTimePicker: any;
+	returnCruiseTimePicker: any;
+
+	@ViewChild('pickupTimeInput') set pickupTimeInput(element: ElementRef) {
+		console.warn('[SETTER DEBUG] pickupTimeInput setter called!', element ? 'Element exists' : 'Element is null');
+		if (element) {
+			const init = () => {
+				console.log("Initializing Pickup Timepicker (v3)");
+				const options: any = {
+					clockType: '12h',
+					theme: 'basic',
+					mobile: false,
+				};
+
+				if (this.pickupTimePicker) {
+					this.pickupTimePicker.destroy();
+				}
+
+				if ((window as any).TimepickerUI) {
+					this.pickupTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.pickupTimePicker.create();
+
+					// v3.2.0 uses event listener for confirmation
+					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
+						this.ngZone.run(() => {
+							const { hour, minutes, type } = e.detail;
+							const period = type ? type.toUpperCase() : 'AM';
+							const timeStr = `${hour}:${minutes} ${period}`;
+							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+							console.log("Pickup time selected:", formattedTime);
+
+							// CRITICAL FIX: Directly update form control FIRST
+							this.BookingForm.get('pickup_time')?.patchValue(formattedTime, { emitEvent: true });
+							element.nativeElement.value = formattedTime;
+							this.handleChangePickupTime(formattedTime);
+
+							// Wait for Angular change detection
+							setTimeout(() => {
+								console.warn('[CONFIRM] pickup_time:', this.BookingForm.get('pickup_time')?.value);
+								this.buildBookingData();
+							}, 100);
+						});
+					});
+
+				} else {
+					console.error("TimepickerUI not found despite Ready event");
+				}
+			};
+
+			if ((window as any).TimepickerUI) {
+				init();
+			} else {
+				console.log("Waiting for TimepickerUI...");
+				window.addEventListener('TimepickerUIReady', init, { once: true });
+			}
+		} else {
+			if (this.pickupTimePicker) {
+				this.pickupTimePicker.destroy();
+				this.pickupTimePicker = null;
+			}
+		}
+	}
+
+	@ViewChild('returnPickupTimeInput') set returnPickupTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				console.log("Initializing Return Pickup Timepicker (v3)");
+				const options: any = {
+					clockType: '12h',
+					theme: 'basic',
+					mobile: false,
+				};
+
+				if (this.returnPickupTimePicker) {
+					this.returnPickupTimePicker.destroy();
+				}
+
+				if ((window as any).TimepickerUI) {
+					this.returnPickupTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.returnPickupTimePicker.create();
+
+					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
+						this.ngZone.run(() => {
+							const { hour, minutes, type } = e.detail;
+							const period = type ? type.toUpperCase() : 'AM';
+							const timeStr = `${hour}:${minutes} ${period}`;
+							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+							console.log("Return pickup time selected:", formattedTime);
+
+							// CRITICAL FIX: Directly update form control FIRST
+							this.BookingForm.get('return_pickup_time')?.patchValue(formattedTime, { emitEvent: true });
+							element.nativeElement.value = formattedTime;
+							this.handleChangeReturnPickupTime(formattedTime);
+
+							// Wait for Angular change detection
+							setTimeout(() => {
+								console.warn('[CONFIRM] return_pickup_time:', this.BookingForm.get('return_pickup_time')?.value);
+								this.buildBookingData();
+							}, 100);
+						});
+					});
+				} else {
+					console.error("TimepickerUI not found despite Ready event");
+				}
+			};
+
+			if ((window as any).TimepickerUI) {
+				init();
+			} else {
+				console.log("Waiting for TimepickerUI...");
+				window.addEventListener('TimepickerUIReady', init, { once: true });
+			}
+		} else {
+			if (this.returnPickupTimePicker) {
+				this.returnPickupTimePicker.destroy();
+				this.returnPickupTimePicker = null;
+			}
+		}
+	}
+
+	@ViewChild('cruiseTimeInput') set cruiseTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				console.log("Initializing Cruise Timepicker (v3)");
+				const options: any = {
+					clockType: '12h',
+					theme: 'basic',
+					mobile: false,
+				};
+
+				if (this.cruiseTimePicker) {
+					this.cruiseTimePicker.destroy();
+				}
+
+				if ((window as any).TimepickerUI) {
+					this.cruiseTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.cruiseTimePicker.create();
+
+					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
+						this.ngZone.run(() => {
+							const { hour, minutes, type } = e.detail;
+							const period = type ? type.toUpperCase() : 'AM';
+							const timeStr = `${hour}:${minutes} ${period}`;
+							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+
+							// CRITICAL FIX: Manually update the input element and trigger events
+							element.nativeElement.value = formattedTime;
+							element.nativeElement.dispatchEvent(new Event('input', { bubbles: true }));
+							element.nativeElement.dispatchEvent(new Event('change', { bubbles: true }));
+
+							this.SetFormValue('cruise_time', formattedTime);
+							// FIX: Use setTimeout to ensure form value updates before buildBookingData reads it
+							setTimeout(() => this.buildBookingData(), 0);
+						});
+					});
+				}
+			};
+
+			if ((window as any).TimepickerUI) {
+				init();
+			} else {
+				window.addEventListener('TimepickerUIReady', init, { once: true });
+			}
+		} else {
+			if (this.cruiseTimePicker) {
+				this.cruiseTimePicker.destroy();
+				this.cruiseTimePicker = null;
+			}
+		}
+	}
+
+	@ViewChild('returnCruiseTimeInput') set returnCruiseTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				console.log("Initializing Return Cruise Timepicker (v3)");
+				const options: any = {
+					clockType: '12h',
+					theme: 'basic',
+					mobile: false,
+				};
+
+				if (this.returnCruiseTimePicker) {
+					this.returnCruiseTimePicker.destroy();
+				}
+
+				if ((window as any).TimepickerUI) {
+					this.returnCruiseTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.returnCruiseTimePicker.create();
+
+					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
+						this.ngZone.run(() => {
+							const { hour, minutes, type } = e.detail;
+							const period = type ? type.toUpperCase() : 'AM';
+							const timeStr = `${hour}:${minutes} ${period}`;
+							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+
+							// CRITICAL FIX: Manually update the input element and trigger events
+							element.nativeElement.value = formattedTime;
+							element.nativeElement.dispatchEvent(new Event('input', { bubbles: true }));
+							element.nativeElement.dispatchEvent(new Event('change', { bubbles: true }));
+
+							this.SetFormValue('return_cruise_time', formattedTime);
+							// FIX: Use setTimeout to ensure form value updates before buildBookingData reads it
+							setTimeout(() => this.buildBookingData(), 0);
+						});
+					});
+				}
+			};
+
+			if ((window as any).TimepickerUI) {
+				init();
+			} else {
+				window.addEventListener('TimepickerUIReady', init, { once: true });
+			}
+		} else {
+			if (this.returnCruiseTimePicker) {
+				this.returnCruiseTimePicker.destroy();
+				this.returnCruiseTimePicker = null;
+			}
+		}
+	}
+
+
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
 	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
 	@ViewChild('return_dropoffInput') return_dropoffInput!: ElementRef;
@@ -160,6 +386,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	number_of_hours: any = '2';
 	confirmMsg: any;
 	booking_data: any;
+	force_refresh_counter: number = 0;
 	extraStops_rate: any = 0
 	selectedVehicle: any;
 	return_selectedVehicle: any;
@@ -195,6 +422,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		private customValidator: CustomvalidationService,
 		private el: ElementRef,
 		private httpClient: HttpClient,
+		private ngZone: NgZone
 	) { }
 
 	ngOnInit(): void {
@@ -270,27 +498,82 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	buildBookingData() {
-		console.log('rebuild booking data')
+		console.warn('[NewBookingComponent] buildBookingData() called. Current Time:', this.BookingForm.get('pickup_time')?.value);
+
+		const formatForAPI = (time: string) => {
+			if (!time) return time;
+			const m = moment(time, ['h:mm a', 'h:mm A', 'HH:mm:ss', 'HH:mm']);
+			return m.isValid() ? m.format('h:mm A') : time;
+		};
+
+		// Increment force refresh counter to ensure RatesFormComponent ALWAYS reacts
+		this.force_refresh_counter++;
+
 		this.booking_data = {
-			vehicle_id: this.BookingForm.get('vehicle_id').value,
-			return_vehicle_id: this.BookingForm.get('return_vehicle_id').value,
+			vehicle_id: this.BookingForm.get('vehicle_id')?.value,
+			return_vehicle_id: this.BookingForm.get('return_vehicle_id')?.value,
 			transfer_type: this.transfer_type,
 			service_type: this.service_type,
-			numberOfVehicles: 1,
-			distance: this.distance,
-			return_distance: this.return_distance,
-			no_of_hours: this.number_of_hours,
+			numberOfVehicles: this.BookingForm.get('number_of_vehicles')?.value || 1,
+			distance: this.BookingForm.get('journeyDistance')?.value || this.distance,
+			return_distance: this.BookingForm.get('returnJourneyDistance')?.value || this.return_distance,
+			no_of_hours: this.BookingForm.get('number_of_hours')?.value || this.number_of_hours,
 			is_master_vehicle: this.is_master_vehicle,
-			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
+			affiliate_id: this.BookingForm.get('affiliate_id')?.value,
+			return_affiliate_id: this.BookingForm.get('return_affiliate_id')?.value,
+			extra_stops: this.BookingForm.get('extra_stops')?.value,
+			return_extra_stops: this.BookingForm.get('return_extra_stops')?.value,
 			manual_change_aff_veh: this.manual_change_aff_veh,
-			pickup_time: this.BookingForm.get('pickup_time').value,
-			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
-			affiliate_type: this.BookingForm.get('affiliate_type').value,
-			return_affiliate_type: this.BookingForm.get('return_affiliate_type').value
+			pickup_time: formatForAPI(this.BookingForm.get('pickup_time')?.value),
+			return_pickup_time: formatForAPI(this.BookingForm.get('return_pickup_time')?.value),
+			cruise_time: formatForAPI(this.BookingForm.get('cruise_time')?.value),
+			return_cruise_time: formatForAPI(this.BookingForm.get('return_cruise_time')?.value),
+			pickup_date: this.BookingForm.get('pickup_date')?.value,
+			return_pickup_date: this.BookingForm.get('return_pickup_date')?.value,
+			affiliate_type: this.BookingForm.get('affiliate_type')?.value,
+			return_affiliate_type: this.BookingForm.get('return_affiliate_type')?.value
 		}
+		console.log('[NewBookingComponent] FINAL PAYLOAD PREPARED for RatesFormComponent:', {
+			pickup_time: this.booking_data.pickup_time,
+			cruise_time: this.booking_data.cruise_time,
+			forceRefresh: this.force_refresh_counter,
+			data: this.booking_data
+		});
 	}
 	ngAfterViewInit(): void {
+		// Global sync for TimepickerUI to handle cases where component events might be blocked or failing
+		document.addEventListener('click', (e: any) => {
+			if (e.target && e.target.classList && (e.target.classList.contains('timepicker-ui-ok-btn') || e.target.closest('.timepicker-ui-ok-btn'))) {
+				// Optimization: Defer sync logic to allow UI to close immediately
+				this.ngZone.runOutsideAngular(() => {
+					setTimeout(() => {
+						this.ngZone.run(() => {
+							try {
+								['pickup_time', 'return_pickup_time', 'cruise_time', 'return_cruise_time'].forEach(name => {
+									const el = document.querySelector(`[formControlName="${name}"]`) as HTMLInputElement;
+									if (el && el.value) {
+										const formatted = moment(el.value, ['h:mm A', 'HH:mm:ss', 'h:mm a']).format('h:mm A');
+										const current = this.BookingForm.get(name)?.value;
+
+										// Only patch if different or empty to avoid loops, though emitEvent: true is needed for change detection
+										if (current !== formatted) {
+											console.log(`[Global Sync] Updating ${name}: ${current} -> ${formatted}`);
+											this.BookingForm.get(name)?.patchValue(formatted, { emitEvent: true });
+										}
+									}
+								});
+
+								// Trigger payload rebuild with fresh data
+								this.buildBookingData();
+							} catch (err) {
+								console.error('Timepicker Sync Error:', err);
+							}
+						});
+					}, 300);
+				});
+			}
+		});
+
 
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
@@ -591,7 +874,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	timeFormat2(value: string) {
-		return moment(value, 'HH:mm a').format('h:mm a');
+		const m = moment(value, ['HH:mm', 'HH:mm:ss', 'h:mm a', 'h:mm A']);
+		return m.isValid() ? m.format('h:mm A') : value;
 	}
 
 	textFormatter(text: string) {
@@ -770,7 +1054,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			number_of_vehicles: [''],
 			pickup_date: [''],
-			pickup_time: ['12:00 am'],
+			pickup_time: ['12:00 AM'],
 			extra_stops: this.$form.array([]),
 			pickup: [''],
 			pickup_latitude: [''],
@@ -788,7 +1072,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			departing_airport_city: [''],
 			cruise_port: [''],
 			cruise_name: [''],
-			cruise_time: ['12:00 am'],
+			cruise_time: ['12:00 AM'],
 			dropoff: [''],
 			dropoff_latitude: [''],
 			dropoff_longitude: [''],
@@ -804,7 +1088,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return_meet_greet_choices: [2],
 			return_meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			return_pickup_date: [''],
-			return_pickup_time: ['12:00 pm'],
+			return_pickup_time: ['12:00 AM'],
 			return_extra_stops: this.$form.array([]),
 			return_pickup: [''],
 			return_pickup_latitude: [''],
@@ -820,7 +1104,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return_pickup_flight: [''],
 			return_cruise_port: [''],
 			return_cruise_name: [''],
-			return_cruise_time: ['12:00 pm'],
+			return_cruise_time: ['12:00 AM'],
 			return_dropoff: [''],
 			return_dropoff_latitude: [''],
 			return_dropoff_longitude: [''],
@@ -951,11 +1235,32 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	handleChangePickupTime(event) {
-		console.log("in pickupt time", event)
-		this.BookingForm.patchValue({
-			pickup_time: event.value
-		})
+	handleChangePickupTime(event: any) {
+		console.log("in handle change pickupt time", event)
+		const val = event && event.value ? event.value : event; // Handle object or string
+		// Ensure time is in h:mm A format (uppercase AM/PM)
+		const formattedVal = moment(val, ['h:mm A', 'h:mm a']).format('h:mm A');
+
+		console.warn('[handleChangePickupTime] BEFORE SetFormValue - Current form value:', this.BookingForm.get('pickup_time')?.value);
+		console.warn('[handleChangePickupTime] Setting new value:', formattedVal);
+
+		this.SetFormValue('pickup_time', formattedVal);
+
+		// Verify the value was actually set
+		const actualValue = this.BookingForm.get('pickup_time')?.value;
+		console.warn('[handleChangePickupTime] AFTER SetFormValue - Actual form value:', actualValue);
+
+		if (actualValue !== formattedVal) {
+			console.error('[handleChangePickupTime] VALUE MISMATCH! Expected:', formattedVal, 'Got:', actualValue);
+		}
+	}
+
+	handleChangeReturnPickupTime(event: any) {
+		console.log("in handle change return pickupt time", event)
+		const val = event && event.value ? event.value : event; // Handle object or string
+		// Ensure time is in h:mm A format (uppercase AM/PM)
+		const formattedVal = moment(val, ['h:mm A', 'h:mm a']).format('h:mm A');
+		this.SetFormValue('return_pickup_time', formattedVal);
 	}
 
 	handleNoOfHours(value) {
@@ -991,6 +1296,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
+			this.distance = response?.data?.distance || this.distance;
+			this.return_distance = response?.data?.return_distance || this.return_distance;
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
@@ -1156,11 +1463,19 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return
 		}
 		console.log('Setting Form Value for ', form_control, ' : ', value);
+		// Add special logging for time fields
+		if (form_control.includes('time')) {
+			console.warn(`[TIME DEBUG] Setting ${form_control} to:`, value);
+		}
 		try {
-
 			this.BookingForm.get(form_control).setValue(value, { emitEvent: emitEvent })
 			if (emitEvent) {
 				this.BookingForm.updateValueAndValidity()
+			}
+			// Verify the value was actually set
+			if (form_control.includes('time')) {
+				const actualValue = this.BookingForm.get(form_control).value;
+				console.warn(`[TIME DEBUG] After setting ${form_control}, actual value is:`, actualValue);
 			}
 		}
 		catch (err) {
@@ -3066,6 +3381,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 
 		let value = this.BookingForm.value
+		// Add debug logging for time fields
+		console.warn('[PAYLOAD DEBUG] Time values in BookingForm.value:', {
+			pickup_time: value.pickup_time,
+			return_pickup_time: value.return_pickup_time,
+			cruise_time: value.cruise_time,
+			return_cruise_time: value.return_cruise_time
+		});
 		console.log("in reservation type", this.isFarmoutBooking, this.booking_created_from == 'admin', this.currentUser?.created_by_role == 'subscriber')
 		if (this.isFarmoutBooking && this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber') {
 			console.log("in reservation type")
@@ -3245,9 +3567,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	Subscriptions() {
 		//pickup time change 
 		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
+			console.log("[Subscription] pickup_time changed:", value);
 			this.buildBookingData()
 		})
 		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
+			console.log("[Subscription] return_pickup_time changed:", value);
 			this.buildBookingData()
 		})
 
@@ -3285,7 +3609,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					})
 				}
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
-				this.SetFormValue('return_pickup_time', '12:00 pm')
+				this.SetFormValue('return_pickup_time', '12:00 AM')
 
 			}
 			if (value != 'charter_tour') {
@@ -4524,7 +4848,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		event && this.SetFormValue(form_control, event.id);
 	}
 	FormatTime(time: string) {
-		return moment(time, "HH:mm:ss").format("LT");
+		const m = moment(time, ['HH:mm', 'HH:mm:ss']);
+		return m.isValid() ? m.format('h:mm A') : time;
 	}
 
 	setValueByBookNow() {

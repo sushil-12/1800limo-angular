@@ -4,6 +4,7 @@ import { AdminService } from "src/app/services/admin.service";
 
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
+import * as moment from 'moment';
 
 @Component({
 	selector: "app-rates-form",
@@ -23,6 +24,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input('reset') reset: boolean = false;
 	@Input('isTravelShare') isTravelShare: boolean = false;
 	@Input('book_data') book_data: any = {};
+	@Input('forceRefresh') forceRefresh: number = 0;
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	@Input("service_type") service_type: string = "";
@@ -145,8 +147,15 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		// }
 		if (changes?.book_data?.currentValue) {
-
+			console.warn('[RatesFormComponent] ngOnChanges: book_data change detected!', changes.book_data.currentValue);
 			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+		}
+
+		if (changes?.forceRefresh) {
+			console.warn('[RatesFormComponent] Force refresh triggered via input counter:', this.forceRefresh);
+			if (this.book_data) {
+				this.fetchRatesArrayByAffiliateVehicle(this.book_data, true);
+			}
 		}
 		// if (changes?.QB_vehicle_id?.currentValue) {
 		// 		console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
@@ -505,39 +514,30 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.initReturnRates()
 		});
 	}
-	fetchRatesArrayByAffiliateVehicle(data) {
-		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>', data,
-			data.vehicle_id, this.master_vehicle_id)
-
-		// Check if booking_data has changed
-		const bookingDataChanged = this.hasBookingDataChanged(data);
-		const isFirstTime = this.previousBookingData === null;
+	fetchRatesArrayByAffiliateVehicle(data, force = false) {
+		// Check if data is complete enough for an API hit
 		const isDataComplete = this.isBookingDataComplete(data);
-
-
-		// On first time load: Only store data if it's complete, otherwise skip
-		if (isFirstTime && (this.bookingType == 'edit' || this.bookingType == 'repeat')) {
-			if (isDataComplete) {
-				console.log('[buildBookingData] First time load with complete data - storing booking_data but NOT calculating rates');
-				this.previousBookingData = JSON.parse(JSON.stringify(data));
-			} else {
-				console.log('[buildBookingData] First time load with incomplete data - skipping (waiting for complete data)');
-			}
+		if (!isDataComplete && !force) {
+			console.warn('[RatesFormComponent] Data is incomplete for rates (e.g. no vehicle or distance). Waiting...');
 			return;
 		}
 
-		// If no changes detected (and not first time), skip processing
-		if (!bookingDataChanged) {
-			console.log('[buildBookingData] No changes detected in booking_data. Skipping rate calculation.');
+		// Check if booking_data has changed from our previous successful/initial hit
+		const bookingDataChanged = this.hasBookingDataChanged(data);
+
+		if (!bookingDataChanged && !force) {
+			console.log('[RatesFormComponent] Data is identical to previous hit. Skipping API.');
 			return;
 		}
 
+		console.warn(`[RatesFormComponent] Hit API proceeding (Force: ${force})...`);
 
-		let vehicle_id = ''
-		if (data.vehicle_id) {
-			vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
-			data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
-		}
+		console.warn('[RatesFormComponent] TRACE SUCCESS: Hit API proceeding...');
+
+
+		let vehicle_id = (data.vehicle_id && data.vehicle_id.toString().length > 0) ? data.vehicle_id : this.master_vehicle_id;
+		data['is_master_vehicle'] = (data.vehicle_id && data.vehicle_id.toString().length > 0) ? false : true;
+		console.error('[RatesFormComponent] TRACE: FINAL API CALL INITIATED with vehicle_id:', vehicle_id, 'and payload:', data);
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			// && this.affiliate_type != 'loose_affiliate'
 			console.log("in this.$api.fetchRatesByAffiliateVeh", response)
@@ -590,6 +590,13 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			'return_extra_stops',
 			'pickup_time',
 			'return_pickup_time',
+			'cruise_time',
+			'return_cruise_time',
+			'pickup_date',
+			'return_pickup_date',
+			'affiliate_id',
+			'return_affiliate_id',
+			'affiliate_type',
 			'return_vehicle_id',
 			'return_affiliate_type'
 		];
@@ -601,22 +608,45 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			// Deep comparison for arrays/objects (extra_stops, return_extra_stops)
 			if (Array.isArray(previousValue) && Array.isArray(currentValue)) {
 				if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
-					console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+					console.warn(`[hasBookingDataChanged] CHANGE DETECTED in ${key} (Array):`, {
 						previous: previousValue,
 						current: currentValue
 					});
 					return true;
 				}
 			} else if (previousValue !== currentValue) {
-				console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+				// Special handling for time strings: semantic comparison using moment
+				const isTimeField = key.toLowerCase().includes('time');
+				if (isTimeField && previousValue && currentValue) {
+					// Use moment to parse and compare, covering multiple common formats
+					const m1 = moment(previousValue, ['h:mm a', 'h:mm A', 'HH:mm:ss', 'HH:mm'], true);
+					const m2 = moment(currentValue, ['h:mm a', 'h:mm A', 'HH:mm:ss', 'HH:mm'], true);
+
+					if (m1.isValid() && m2.isValid() && m1.isSame(m2)) {
+						console.log(`[hasBookingDataChanged] Semantic match in ${key} (${previousValue} vs ${currentValue}). Skipping.`);
+						continue;
+					}
+
+					// Fallback to case-insensitive if moment fails to parse one of them
+					if (previousValue.toString().toLowerCase() === currentValue.toString().toLowerCase()) {
+						console.log(`[hasBookingDataChanged] Casing-only diff in ${key} (${previousValue} vs ${currentValue}). Skipping.`);
+						continue;
+					}
+				}
+
+				console.warn(`[hasBookingDataChanged] CHANGE DETECTED in ${key}:`, {
 					previous: previousValue,
 					current: currentValue
 				});
 				return true;
+			} else {
+				// Values are identical
+				// Only log for important fields to avoid console spam, or log for all if debugging
+				// console.log(`[hasBookingDataChanged] Key ${key} is unchanged.`);
 			}
 		}
 
-		console.log('[hasBookingDataChanged] No changes detected');
+		console.log('[hasBookingDataChanged] Final verdict: NO CHANGES detected across all keys.');
 		return false;
 	}
 
@@ -632,22 +662,27 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			bookingData.vehicle_id !== null &&
 			bookingData.vehicle_id !== undefined;
 
-		// Check if distance is set (greater than 0) - this indicates actual route calculation
-		const hasDistance = bookingData?.distance !== undefined &&
+		// Check if distance is set (greater than 0) 
+		// For charter_tour, distance might be 0, so we check no_of_hours instead
+		const isCharter = bookingData?.service_type === 'charter_tour';
+		const hasDistance = isCharter ? true : (bookingData?.distance !== undefined &&
 			bookingData?.distance !== null &&
-			bookingData?.distance > 0;
+			Number(bookingData.distance) > 0);
+
+		const hasHours = isCharter ? (Number(bookingData?.no_of_hours) > 0) : true;
 
 		// Check if service_type is valid (not empty or initial state)
 		const hasServiceType = bookingData?.service_type &&
 			bookingData.service_type !== '' &&
 			bookingData.service_type !== null;
 
-		const isComplete = hasVehicleId && hasDistance && hasServiceType;
+		const isComplete = hasVehicleId && hasDistance && hasHours && hasServiceType;
 
 		console.log('[isBookingDataComplete] Checking data completeness:', {
 			hasVehicleId,
 			hasDistance,
-			hasDistanceValue: bookingData?.distance,
+			isCharter,
+			hasHours,
 			hasServiceType,
 			isComplete
 		});
