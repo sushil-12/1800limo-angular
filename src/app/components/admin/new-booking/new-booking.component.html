@@ -160,7 +160,8 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="acc_id" (change)="handleClientAccount($event)">
+							[virtualScroll]="true" formControlName="acc_id" (change)="handleClientAccount($event)"
+							(search)="handleClientSearch($event)">
 						</ng-select>
 					</div>
 				</div>
@@ -235,7 +236,7 @@
 							<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name"
 								bindValue="id" placeholder="Select Account" dropdownPosition="bottom" [markFirst]="true"
 								[virtualScroll]="true" formControlName="travel_client_id"
-								(change)="handleTravelStaffAccounts($event)"
+								(change)="handleTravelStaffAccounts($event)" (search)="handleTravelStaffSearch($event)"
 								[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }"
 								style="height:66px;">
 							</ng-select>
@@ -717,7 +718,7 @@
 						[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
 						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)"
-						*ngIf="currentUser?.created_by_role != 'subscriber' ">
+						(search)="handleAffiliateSearch($event)" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
 			</div>
@@ -2638,6 +2639,7 @@
 						bindLabel="bindNameAffiliate" bindValue="id" placeholder="Select Affiliate"
 						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)"
+						(search)="handleReturnAffiliateSearch($event)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>

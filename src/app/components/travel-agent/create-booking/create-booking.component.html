@@ -136,7 +136,8 @@
 					<ng-select appearance="outline" [items]="subAgentAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Sub Advisor Account" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="sub_account_id"
-						(change)="handleSubAgentAccounts($event)" style="padding-bottom: 0px;"
+						(change)="handleSubAgentAccounts($event)" (search)="handleSubAgentSearch($event)"
+						style="padding-bottom: 0px;"
 						[ngClass]="{ 'border-red': (submitBookingForm && Form.sub_account_id.invalid) }">
 					</ng-select>
 					<div *ngIf="(submitBookingForm && Form.sub_account_id.invalid) "
@@ -166,7 +167,8 @@
 						<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="travel_client_id"
-							(change)="handleTravelStaffAccounts($event)" style="padding-bottom: 0px;"
+							(change)="handleTravelStaffAccounts($event)" (search)="handleTravelStaffSearch($event)"
+							style="padding-bottom: 0px;"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }">
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "

@@ -144,7 +144,9 @@ export class CreateBookingComponent implements OnInit {
 	returnRateArray: any;
 	rateArray: any;
 	travelStaffAccounts: any;
+	travelStaffAccounts_Original: any;
 	subAgentAccounts: any;
+	subAgentAccounts_Original: any;
 	isCreatedByAdmin: boolean = false;
 	shareArray: any;
 	r_shareArray: any;
@@ -2847,6 +2849,7 @@ export class CreateBookingComponent implements OnInit {
 				this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
 					console.log("accounts->>>>>>>>>>", result)
 					this.subAgentAccounts = result?.data
+					this.subAgentAccounts_Original = result?.data ? [...result.data] : []
 					console.log('in if sub ta----->', this.BookingForm?.get('sub_account_id').value == '')
 					if (this.BookingForm?.get('sub_account_id').value == '') {
 						this.BookingForm.patchValue({
@@ -2869,6 +2872,7 @@ export class CreateBookingComponent implements OnInit {
 					this.TravelAgentService.getAllTravelClientAccountList('individual', value).then((result: any) => {
 						console.log("accounts->>>>>>>>>>", result)
 						this.travelStaffAccounts = result?.data
+						this.travelStaffAccounts_Original = result?.data ? [...result.data] : []
 					})
 						.catch(err => {
 							this.$spinner.hide();//hide spinner
@@ -2893,6 +2897,7 @@ export class CreateBookingComponent implements OnInit {
 		this.TravelAgentService.getAllTravelClientAccountList('individual').then((result: any) => {
 			console.log("accounts->>>>>>>>>>", result)
 			this.travelStaffAccounts = result?.data
+			this.travelStaffAccounts_Original = result?.data ? [...result.data] : []
 		})
 			.catch(err => {
 				this.$spinner.hide();//hide spinner
@@ -3786,6 +3791,42 @@ export class CreateBookingComponent implements OnInit {
 					(noResults as HTMLElement).style.display = 'none';
 				}
 			});
+		});
+	}
+
+	handleSubAgentSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.subAgentAccounts = [...this.subAgentAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.subAgentAccounts = [...this.subAgentAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	handleTravelStaffSearch(event) {
+		const term = event.term;
+		if (!term) {
+			this.travelStaffAccounts = [...this.travelStaffAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.travelStaffAccounts = [...this.travelStaffAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
 		});
 	}
 }

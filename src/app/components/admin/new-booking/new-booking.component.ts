@@ -133,7 +133,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
 	proceed: boolean = true
-	chosen_user: Record<string, any>
+	chosen_user: Record<string, any> | null;
 
 	distance: number = 0
 	return_distance: number = 0
@@ -995,6 +995,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
+			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
+				this.chooseUser(response.data.acc_id);
+			}
+
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
 			if (response?.data?.account_type == 'travel_planner') {
@@ -1550,15 +1554,21 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	handleClientAccount(value: any) {
-		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
-		this.chooseUser(value.id)
+		console.log('---------------------->>>>>>>>>>>>>> client acc value', value)
+		if (!value) {
+			this.chosen_user = null;
+			return;
+		}
+
+		const id = (typeof value === 'object') ? value?.id : value;
+
+		this.chooseUser(id)
 		if (this.BookingForm.get('account_type').value == 'travel_planner') {
 			this.BookingForm.patchValue({
 				travel_client_id: ''
 			})
-			this.getTravelClientAccounts(value.id)
+			this.getTravelClientAccounts(id)
 		}
-
 	}
 
 	handleChangeTravelAccounts(selectedAcc) {
