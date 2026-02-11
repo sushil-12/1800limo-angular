@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, NgZone } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck, distinctUntilChanged } from 'rxjs/operators';
@@ -32,232 +32,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
-	// TimepickerUI
-	pickupTimePicker: any;
-	returnPickupTimePicker: any;
-	cruiseTimePicker: any;
-	returnCruiseTimePicker: any;
-
-	@ViewChild('pickupTimeInput') set pickupTimeInput(element: ElementRef) {
-		console.warn('[SETTER DEBUG] pickupTimeInput setter called!', element ? 'Element exists' : 'Element is null');
-		if (element) {
-			const init = () => {
-				console.log("Initializing Pickup Timepicker (v3)");
-				const options: any = {
-					clockType: '12h',
-					theme: 'basic',
-					mobile: false,
-				};
-
-				if (this.pickupTimePicker) {
-					this.pickupTimePicker.destroy();
-				}
-
-				if ((window as any).TimepickerUI) {
-					this.pickupTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
-					this.pickupTimePicker.create();
-
-					// v3.2.0 uses event listener for confirmation
-					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
-						this.ngZone.run(() => {
-							const { hour, minutes, type } = e.detail;
-							const period = type ? type.toUpperCase() : 'AM';
-							const timeStr = `${hour}:${minutes} ${period}`;
-							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
-							console.log("Pickup time selected:", formattedTime);
-
-							// CRITICAL FIX: Directly update form control FIRST
-							this.BookingForm.get('pickup_time')?.patchValue(formattedTime, { emitEvent: true });
-							element.nativeElement.value = formattedTime;
-							this.handleChangePickupTime(formattedTime);
-
-							// Wait for Angular change detection
-							setTimeout(() => {
-								console.warn('[CONFIRM] pickup_time:', this.BookingForm.get('pickup_time')?.value);
-								this.buildBookingData();
-							}, 100);
-						});
-					});
-
-				} else {
-					console.error("TimepickerUI not found despite Ready event");
-				}
-			};
-
-			if ((window as any).TimepickerUI) {
-				init();
-			} else {
-				console.log("Waiting for TimepickerUI...");
-				window.addEventListener('TimepickerUIReady', init, { once: true });
-			}
-		} else {
-			if (this.pickupTimePicker) {
-				this.pickupTimePicker.destroy();
-				this.pickupTimePicker = null;
-			}
-		}
-	}
-
-	@ViewChild('returnPickupTimeInput') set returnPickupTimeInput(element: ElementRef) {
-		if (element) {
-			const init = () => {
-				console.log("Initializing Return Pickup Timepicker (v3)");
-				const options: any = {
-					clockType: '12h',
-					theme: 'basic',
-					mobile: false,
-				};
-
-				if (this.returnPickupTimePicker) {
-					this.returnPickupTimePicker.destroy();
-				}
-
-				if ((window as any).TimepickerUI) {
-					this.returnPickupTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
-					this.returnPickupTimePicker.create();
-
-					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
-						this.ngZone.run(() => {
-							const { hour, minutes, type } = e.detail;
-							const period = type ? type.toUpperCase() : 'AM';
-							const timeStr = `${hour}:${minutes} ${period}`;
-							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
-							console.log("Return pickup time selected:", formattedTime);
-
-							// CRITICAL FIX: Directly update form control FIRST
-							this.BookingForm.get('return_pickup_time')?.patchValue(formattedTime, { emitEvent: true });
-							element.nativeElement.value = formattedTime;
-							this.handleChangeReturnPickupTime(formattedTime);
-
-							// Wait for Angular change detection
-							setTimeout(() => {
-								console.warn('[CONFIRM] return_pickup_time:', this.BookingForm.get('return_pickup_time')?.value);
-								this.buildBookingData();
-							}, 100);
-						});
-					});
-				} else {
-					console.error("TimepickerUI not found despite Ready event");
-				}
-			};
-
-			if ((window as any).TimepickerUI) {
-				init();
-			} else {
-				console.log("Waiting for TimepickerUI...");
-				window.addEventListener('TimepickerUIReady', init, { once: true });
-			}
-		} else {
-			if (this.returnPickupTimePicker) {
-				this.returnPickupTimePicker.destroy();
-				this.returnPickupTimePicker = null;
-			}
-		}
-	}
-
-	@ViewChild('cruiseTimeInput') set cruiseTimeInput(element: ElementRef) {
-		if (element) {
-			const init = () => {
-				console.log("Initializing Cruise Timepicker (v3)");
-				const options: any = {
-					clockType: '12h',
-					theme: 'basic',
-					mobile: false,
-				};
-
-				if (this.cruiseTimePicker) {
-					this.cruiseTimePicker.destroy();
-				}
-
-				if ((window as any).TimepickerUI) {
-					this.cruiseTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
-					this.cruiseTimePicker.create();
-
-					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
-						this.ngZone.run(() => {
-							const { hour, minutes, type } = e.detail;
-							const period = type ? type.toUpperCase() : 'AM';
-							const timeStr = `${hour}:${minutes} ${period}`;
-							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
-
-							// CRITICAL FIX: Manually update the input element and trigger events
-							element.nativeElement.value = formattedTime;
-							element.nativeElement.dispatchEvent(new Event('input', { bubbles: true }));
-							element.nativeElement.dispatchEvent(new Event('change', { bubbles: true }));
-
-							this.SetFormValue('cruise_time', formattedTime);
-							// FIX: Use setTimeout to ensure form value updates before buildBookingData reads it
-							setTimeout(() => this.buildBookingData(), 0);
-						});
-					});
-				}
-			};
-
-			if ((window as any).TimepickerUI) {
-				init();
-			} else {
-				window.addEventListener('TimepickerUIReady', init, { once: true });
-			}
-		} else {
-			if (this.cruiseTimePicker) {
-				this.cruiseTimePicker.destroy();
-				this.cruiseTimePicker = null;
-			}
-		}
-	}
-
-	@ViewChild('returnCruiseTimeInput') set returnCruiseTimeInput(element: ElementRef) {
-		if (element) {
-			const init = () => {
-				console.log("Initializing Return Cruise Timepicker (v3)");
-				const options: any = {
-					clockType: '12h',
-					theme: 'basic',
-					mobile: false,
-				};
-
-				if (this.returnCruiseTimePicker) {
-					this.returnCruiseTimePicker.destroy();
-				}
-
-				if ((window as any).TimepickerUI) {
-					this.returnCruiseTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
-					this.returnCruiseTimePicker.create();
-
-					element.nativeElement.addEventListener('timepicker:confirm', (e: any) => {
-						this.ngZone.run(() => {
-							const { hour, minutes, type } = e.detail;
-							const period = type ? type.toUpperCase() : 'AM';
-							const timeStr = `${hour}:${minutes} ${period}`;
-							const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
-
-							// CRITICAL FIX: Manually update the input element and trigger events
-							element.nativeElement.value = formattedTime;
-							element.nativeElement.dispatchEvent(new Event('input', { bubbles: true }));
-							element.nativeElement.dispatchEvent(new Event('change', { bubbles: true }));
-
-							this.SetFormValue('return_cruise_time', formattedTime);
-							// FIX: Use setTimeout to ensure form value updates before buildBookingData reads it
-							setTimeout(() => this.buildBookingData(), 0);
-						});
-					});
-				}
-			};
-
-			if ((window as any).TimepickerUI) {
-				init();
-			} else {
-				window.addEventListener('TimepickerUIReady', init, { once: true });
-			}
-		} else {
-			if (this.returnCruiseTimePicker) {
-				this.returnCruiseTimePicker.destroy();
-				this.returnCruiseTimePicker = null;
-			}
-		}
-	}
-
-
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
 	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
 	@ViewChild('return_dropoffInput') return_dropoffInput!: ElementRef;
@@ -273,6 +47,166 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	@ViewChild('return_lose_affiliate_phoneInput') return_lose_affiliate_phoneInput!: ElementRef;
 	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
 	@ViewChild('return_loose_driver_cellInput') return_loose_driver_cellInput!: ElementRef;
+
+	// TimepickerUI
+	pickupTimePicker: any;
+	returnPickupTimePicker: any;
+	cruiseTimePicker: any;
+	returnCruiseTimePicker: any;
+
+	activeTimePickerControlName: string | null = null;
+
+	@ViewChild('pickupTimeInput') set pickupTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				const options: any = { clockType: '12h', theme: 'basic', mobile: false };
+				if (this.pickupTimePicker) this.pickupTimePicker.destroy();
+
+				if ((window as any).TimepickerUI) {
+					this.pickupTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.pickupTimePicker.create();
+
+					const handler = (e: any) => {
+						console.log('Timepicker Event:', e.type, e.detail);
+						const { hour, minutes, type } = e.detail || {};
+						const period = type ? type.toUpperCase() : 'AM';
+						const timeStr = hour ? `${hour}:${minutes} ${period}` : element.nativeElement.value;
+						const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+
+						this.BookingForm.get('pickup_time')?.setValue(formattedTime, { emitEvent: false })
+						this.buildBookingData(true);
+					};
+
+					element.nativeElement.addEventListener('timepicker:confirm', handler);
+					element.nativeElement.addEventListener('accept', handler);
+					element.nativeElement.addEventListener('timepicker:open', () => {
+						this.activeTimePickerControlName = 'pickup_time';
+					});
+					element.nativeElement.addEventListener('focus', () => {
+						this.activeTimePickerControlName = 'pickup_time';
+					});
+					element.nativeElement.addEventListener('click', () => {
+						this.activeTimePickerControlName = 'pickup_time';
+					});
+				}
+			};
+			(window as any).TimepickerUI ? init() : window.addEventListener('TimepickerUIReady', init, { once: true });
+		}
+	}
+
+	@ViewChild('returnPickupTimeInput') set returnPickupTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				const options: any = { clockType: '12h', theme: 'basic', mobile: false };
+				if (this.returnPickupTimePicker) this.returnPickupTimePicker.destroy();
+
+				if ((window as any).TimepickerUI) {
+					this.returnPickupTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.returnPickupTimePicker.create();
+
+					const handler = (e: any) => {
+						console.log('Timepicker Event:', e.type, e.detail);
+						const { hour, minutes, type } = e.detail || {};
+						const period = type ? type.toUpperCase() : 'AM';
+						const timeStr = hour ? `${hour}:${minutes} ${period}` : element.nativeElement.value;
+						const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+
+						this.BookingForm.get('return_pickup_time')?.setValue(formattedTime, { emitEvent: false });
+						this.buildBookingData(true);
+					};
+
+					element.nativeElement.addEventListener('timepicker:confirm', handler);
+					element.nativeElement.addEventListener('accept', handler);
+					element.nativeElement.addEventListener('timepicker:open', () => {
+						this.activeTimePickerControlName = 'return_pickup_time';
+					});
+					element.nativeElement.addEventListener('focus', () => {
+						this.activeTimePickerControlName = 'return_pickup_time';
+					});
+					element.nativeElement.addEventListener('click', () => {
+						this.activeTimePickerControlName = 'return_pickup_time';
+					});
+				}
+			};
+			(window as any).TimepickerUI ? init() : window.addEventListener('TimepickerUIReady', init, { once: true });
+		}
+	}
+
+	@ViewChild('cruiseTimeInput') set cruiseTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				const options: any = { clockType: '12h', theme: 'basic', mobile: false };
+				if (this.cruiseTimePicker) this.cruiseTimePicker.destroy();
+
+				if ((window as any).TimepickerUI) {
+					this.cruiseTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.cruiseTimePicker.create();
+
+					const handler = (e: any) => {
+						console.log('Timepicker Event:', e.type, e.detail);
+						const { hour, minutes, type } = e.detail || {};
+						const period = type ? type.toUpperCase() : 'AM';
+						const timeStr = hour ? `${hour}:${minutes} ${period}` : element.nativeElement.value;
+						const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+
+						this.BookingForm.get('cruise_time')?.setValue(formattedTime, { emitEvent: false });
+						this.buildBookingData(true);
+					};
+
+					element.nativeElement.addEventListener('timepicker:confirm', handler);
+					element.nativeElement.addEventListener('accept', handler);
+					element.nativeElement.addEventListener('timepicker:open', () => {
+						this.activeTimePickerControlName = 'cruise_time';
+					});
+					element.nativeElement.addEventListener('focus', () => {
+						this.activeTimePickerControlName = 'cruise_time';
+					});
+					element.nativeElement.addEventListener('click', () => {
+						this.activeTimePickerControlName = 'cruise_time';
+					});
+				}
+			};
+			(window as any).TimepickerUI ? init() : window.addEventListener('TimepickerUIReady', init, { once: true });
+		}
+	}
+
+	@ViewChild('returnCruiseTimeInput') set returnCruiseTimeInput(element: ElementRef) {
+		if (element) {
+			const init = () => {
+				const options: any = { clockType: '12h', theme: 'basic', mobile: false };
+				if (this.returnCruiseTimePicker) this.returnCruiseTimePicker.destroy();
+
+				if ((window as any).TimepickerUI) {
+					this.returnCruiseTimePicker = new (window as any).TimepickerUI(element.nativeElement, options);
+					this.returnCruiseTimePicker.create();
+
+					const handler = (e: any) => {
+						console.log('Timepicker Event:', e.type, e.detail);
+						const { hour, minutes, type } = e.detail || {};
+						const period = type ? type.toUpperCase() : 'AM';
+						const timeStr = hour ? `${hour}:${minutes} ${period}` : element.nativeElement.value;
+						const formattedTime = moment(timeStr, 'h:mm A').format('h:mm A');
+
+						this.BookingForm.get('return_cruise_time')?.setValue(formattedTime, { emitEvent: false });
+						this.buildBookingData(true);
+					};
+
+					element.nativeElement.addEventListener('timepicker:confirm', handler);
+					element.nativeElement.addEventListener('accept', handler);
+					element.nativeElement.addEventListener('timepicker:open', () => {
+						this.activeTimePickerControlName = 'return_cruise_time';
+					});
+					element.nativeElement.addEventListener('focus', () => {
+						this.activeTimePickerControlName = 'return_cruise_time';
+					});
+					element.nativeElement.addEventListener('click', () => {
+						this.activeTimePickerControlName = 'return_cruise_time';
+					});
+				}
+			};
+			(window as any).TimepickerUI ? init() : window.addEventListener('TimepickerUIReady', init, { once: true });
+		}
+	}
 
 
 	todays_date: string = moment().format('YYYY-MM-DD');
@@ -339,10 +273,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	ClientAccounts: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
-	LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_AffiliateAccounts: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts: Array<Record<string, any>> = []
-	Return_LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
 	vehicleType_arr: any;
@@ -359,7 +291,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
 	proceed: boolean = true
-	chosen_user: Record<string, any> | null;
+	chosen_user: Record<string, any>
 
 	distance: number = 0
 	return_distance: number = 0
@@ -372,6 +304,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	is_booking_edit_case: boolean = false
 	reset_button: boolean = false
 	submitBookingForm: boolean;
+	isInitializing: boolean = true;
 	affiliate_id: any;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
@@ -386,7 +319,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	number_of_hours: any = '2';
 	confirmMsg: any;
 	booking_data: any;
-	force_refresh_counter: number = 0;
 	extraStops_rate: any = 0
 	selectedVehicle: any;
 	return_selectedVehicle: any;
@@ -422,7 +354,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		private customValidator: CustomvalidationService,
 		private el: ElementRef,
 		private httpClient: HttpClient,
-		private ngZone: NgZone
 	) { }
 
 	ngOnInit(): void {
@@ -497,83 +428,70 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log("im heere")
 	}
 
-	buildBookingData() {
-		console.warn('[NewBookingComponent] buildBookingData() called. Current Time:', this.BookingForm.get('pickup_time')?.value);
+	buildBookingData(isManual: boolean = false) {
+		if (this.isInitializing && !isManual) {
+			console.log('Skipping buildBookingData during init');
+			return;
+		}
 
-		const formatForAPI = (time: string) => {
-			if (!time) return time;
-			const m = moment(time, ['h:mm a', 'h:mm A', 'HH:mm:ss', 'HH:mm']);
-			return m.isValid() ? m.format('h:mm A') : time;
-		};
-
-		// Increment force refresh counter to ensure RatesFormComponent ALWAYS reacts
-		this.force_refresh_counter++;
-
-		this.booking_data = {
+		const newData = {
 			vehicle_id: this.BookingForm.get('vehicle_id')?.value,
 			return_vehicle_id: this.BookingForm.get('return_vehicle_id')?.value,
 			transfer_type: this.transfer_type,
 			service_type: this.service_type,
-			numberOfVehicles: this.BookingForm.get('number_of_vehicles')?.value || 1,
-			distance: this.BookingForm.get('journeyDistance')?.value || this.distance,
-			return_distance: this.BookingForm.get('returnJourneyDistance')?.value || this.return_distance,
-			no_of_hours: this.BookingForm.get('number_of_hours')?.value || this.number_of_hours,
+			numberOfVehicles: 1,
+			distance: this.distance,
+			return_distance: this.return_distance,
+			no_of_hours: this.number_of_hours,
 			is_master_vehicle: this.is_master_vehicle,
-			affiliate_id: this.BookingForm.get('affiliate_id')?.value,
-			return_affiliate_id: this.BookingForm.get('return_affiliate_id')?.value,
 			extra_stops: this.BookingForm.get('extra_stops')?.value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops')?.value,
 			manual_change_aff_veh: this.manual_change_aff_veh,
-			pickup_time: formatForAPI(this.BookingForm.get('pickup_time')?.value),
-			return_pickup_time: formatForAPI(this.BookingForm.get('return_pickup_time')?.value),
-			cruise_time: formatForAPI(this.BookingForm.get('cruise_time')?.value),
-			return_cruise_time: formatForAPI(this.BookingForm.get('return_cruise_time')?.value),
-			pickup_date: this.BookingForm.get('pickup_date')?.value,
-			return_pickup_date: this.BookingForm.get('return_pickup_date')?.value,
+			pickup_time: this.BookingForm.get('pickup_time')?.value,
+			return_pickup_time: this.BookingForm.get('return_pickup_time')?.value,
 			affiliate_type: this.BookingForm.get('affiliate_type')?.value,
-			return_affiliate_type: this.BookingForm.get('return_affiliate_type')?.value
+			return_affiliate_type: this.BookingForm.get('return_affiliate_type')?.value,
+			is_manual: isManual
+		};
+
+		if (JSON.stringify(this.booking_data) === JSON.stringify(newData)) {
+			console.log('Booking data unchanged. Skipping refresh.');
+			return;
 		}
-		console.log('[NewBookingComponent] FINAL PAYLOAD PREPARED for RatesFormComponent:', {
-			pickup_time: this.booking_data.pickup_time,
-			cruise_time: this.booking_data.cruise_time,
-			forceRefresh: this.force_refresh_counter,
-			data: this.booking_data
-		});
+
+		console.log('rebuild booking data', newData);
+		this.booking_data = newData;
 	}
 	ngAfterViewInit(): void {
-		// Global sync for TimepickerUI to handle cases where component events might be blocked or failing
-		document.addEventListener('click', (e: any) => {
-			if (e.target && e.target.classList && (e.target.classList.contains('timepicker-ui-ok-btn') || e.target.closest('.timepicker-ui-ok-btn'))) {
-				// Optimization: Defer sync logic to allow UI to close immediately
-				this.ngZone.runOutsideAngular(() => {
+
+		// Robust Global Click Delegation for Timepicker OK button
+		document.addEventListener('click', (event: any) => {
+			const okBtn = event.target.closest('.timepicker-ui-ok-btn');
+			if (okBtn) {
+				console.log('Detected click on Timepicker OK button. Active control:', this.activeTimePickerControlName);
+
+				if (this.activeTimePickerControlName) {
+					const controlName = this.activeTimePickerControlName;
+					// Wait 100ms for the library to finish updating the DOM input
 					setTimeout(() => {
-						this.ngZone.run(() => {
-							try {
-								['pickup_time', 'return_pickup_time', 'cruise_time', 'return_cruise_time'].forEach(name => {
-									const el = document.querySelector(`[formControlName="${name}"]`) as HTMLInputElement;
-									if (el && el.value) {
-										const formatted = moment(el.value, ['h:mm A', 'HH:mm:ss', 'h:mm a']).format('h:mm A');
-										const current = this.BookingForm.get(name)?.value;
+						let element: any = null;
+						if (controlName === 'pickup_time') element = document.querySelector('input[formcontrolname="pickup_time"]');
+						else if (controlName === 'return_pickup_time') element = document.querySelector('input[formcontrolname="return_pickup_time"]');
+						else if (controlName === 'cruise_time') element = document.querySelector('input[formcontrolname="cruise_time"]');
+						else if (controlName === 'return_cruise_time') element = document.querySelector('input[formcontrolname="return_cruise_time"]');
 
-										// Only patch if different or empty to avoid loops, though emitEvent: true is needed for change detection
-										if (current !== formatted) {
-											console.log(`[Global Sync] Updating ${name}: ${current} -> ${formatted}`);
-											this.BookingForm.get(name)?.patchValue(formatted, { emitEvent: true });
-										}
-									}
-								});
-
-								// Trigger payload rebuild with fresh data
-								this.buildBookingData();
-							} catch (err) {
-								console.error('Timepicker Sync Error:', err);
-							}
-						});
-					}, 300);
-				});
+						if (element) {
+							const formattedTime = moment(element.value, 'h:mm A').format('h:mm A');
+							console.log(`Manually syncing ${controlName} from DOM:`, formattedTime);
+							this.BookingForm.get(controlName)?.setValue(formattedTime, { emitEvent: false });
+							this.buildBookingData(true);
+						}
+						// Reset active picker after handling
+						this.activeTimePickerControlName = null;
+					}, 150);
+				}
 			}
 		});
-
 
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
@@ -594,8 +512,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 		this.initphonefield()
 
-	}
+		// If not prefilling (fresh layout), reset initializing flag
+		if (!this.Form.reservation_id.value && !this.newBooking) {
+			setTimeout(() => {
+				this.isInitializing = false;
+				console.log('Initialization complete (fresh): isInitializing = false');
+			}, 1500);
+		}
 
+	}
 	initphonefield() {
 		console.log("in init phone", this.cellInput, this.passenger_cellInput, this.driver_cellInput, this.lose_affiliate_phoneInput, this.return_driver_cellInput)
 
@@ -874,8 +799,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	timeFormat2(value: string) {
-		const m = moment(value, ['HH:mm', 'HH:mm:ss', 'h:mm a', 'h:mm A']);
-		return m.isValid() ? m.format('h:mm A') : value;
+		return moment(value, 'HH:mm a').format('h:mm a');
 	}
 
 	textFormatter(text: string) {
@@ -1235,32 +1159,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	handleChangePickupTime(event: any) {
-		console.log("in handle change pickupt time", event)
-		const val = event && event.value ? event.value : event; // Handle object or string
-		// Ensure time is in h:mm A format (uppercase AM/PM)
-		const formattedVal = moment(val, ['h:mm A', 'h:mm a']).format('h:mm A');
-
-		console.warn('[handleChangePickupTime] BEFORE SetFormValue - Current form value:', this.BookingForm.get('pickup_time')?.value);
-		console.warn('[handleChangePickupTime] Setting new value:', formattedVal);
-
-		this.SetFormValue('pickup_time', formattedVal);
-
-		// Verify the value was actually set
-		const actualValue = this.BookingForm.get('pickup_time')?.value;
-		console.warn('[handleChangePickupTime] AFTER SetFormValue - Actual form value:', actualValue);
-
-		if (actualValue !== formattedVal) {
-			console.error('[handleChangePickupTime] VALUE MISMATCH! Expected:', formattedVal, 'Got:', actualValue);
-		}
-	}
-
-	handleChangeReturnPickupTime(event: any) {
-		console.log("in handle change return pickupt time", event)
-		const val = event && event.value ? event.value : event; // Handle object or string
-		// Ensure time is in h:mm A format (uppercase AM/PM)
-		const formattedVal = moment(val, ['h:mm A', 'h:mm a']).format('h:mm A');
-		this.SetFormValue('return_pickup_time', formattedVal);
+	handleChangePickupTime(event) {
+		console.log("in pickupt time", event)
+		this.BookingForm.patchValue({
+			pickup_time: event.value
+		})
 	}
 
 	handleNoOfHours(value) {
@@ -1296,15 +1199,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
-			this.distance = response?.data?.distance || this.distance;
-			this.return_distance = response?.data?.return_distance || this.return_distance;
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
-
-			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
-				this.chooseUser(response.data.acc_id);
-			}
 
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
@@ -1437,6 +1334,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 			}
 
+			// Reset initialization flag after a delay to allow all async logic to settle
+			setTimeout(() => {
+				this.isInitializing = false;
+				console.log('Initialization complete: isInitializing = false');
+			}, 1500);
+
 		})
 
 	}
@@ -1463,19 +1366,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return
 		}
 		console.log('Setting Form Value for ', form_control, ' : ', value);
-		// Add special logging for time fields
-		if (form_control.includes('time')) {
-			console.warn(`[TIME DEBUG] Setting ${form_control} to:`, value);
-		}
 		try {
+
 			this.BookingForm.get(form_control).setValue(value, { emitEvent: emitEvent })
 			if (emitEvent) {
 				this.BookingForm.updateValueAndValidity()
-			}
-			// Verify the value was actually set
-			if (form_control.includes('time')) {
-				const actualValue = this.BookingForm.get(form_control).value;
-				console.warn(`[TIME DEBUG] After setting ${form_control}, actual value is:`, actualValue);
 			}
 		}
 		catch (err) {
@@ -1869,21 +1764,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	handleClientAccount(value: any) {
-		console.log('---------------------->>>>>>>>>>>>>> client acc value', value)
-		if (!value) {
-			this.chosen_user = null;
-			return;
-		}
-
-		const id = (typeof value === 'object') ? value?.id : value;
-
-		this.chooseUser(id)
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+		this.chooseUser(value.id)
 		if (this.BookingForm.get('account_type').value == 'travel_planner') {
 			this.BookingForm.patchValue({
 				travel_client_id: ''
 			})
-			this.getTravelClientAccounts(id)
+			this.getTravelClientAccounts(value.id)
 		}
+
 	}
 
 	handleChangeTravelAccounts(selectedAcc) {
@@ -1942,7 +1831,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.LooseAffiliateAccounts = response?.data
-				this.LooseAffiliateAccounts_Original = [...this.LooseAffiliateAccounts]
 				this.$spinner.hide()
 			})
 		}
@@ -1976,7 +1864,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.Return_LooseAffiliateAccounts = response?.data
-				this.Return_LooseAffiliateAccounts_Original = [...this.Return_LooseAffiliateAccounts]
 				this.$spinner.hide()
 			})
 		}
@@ -3256,24 +3143,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				return_lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_lose_affiliate_phone_isd')?.value)
 			});
 
-			// Map vehicle details from outbound to return when both are loose affiliates
-			if (this.Form.affiliate_type.value === 'loose_affiliate' && this.Form.return_affiliate_type.value === 'loose_affiliate') {
-				this.BookingForm.patchValue({
-					return_vehicle_type: this.Form.vehicle_type.value,
-					return_vehicle_type_name: this.Form.vehicle_type_name.value,
-					return_vehicle_make: this.Form.vehicle_make.value,
-					return_vehicle_make_name: this.Form.vehicle_make_name.value,
-					return_vehicle_model: this.Form.vehicle_model.value,
-					return_vehicle_model_name: this.Form.vehicle_model_name.value,
-					return_vehicle_year: this.Form.vehicle_year.value,
-					return_vehicle_year_name: this.Form.vehicle_year_name.value,
-					return_vehicle_color: this.Form.vehicle_color.value,
-					return_vehicle_color_name: this.Form.vehicle_color_name.value,
-					return_vehicle_license_plate: this.Form.vehicle_license_plate.value,
-					return_vehicle_seats: this.Form.vehicle_seats.value
-				});
-			}
-
 		}
 		else {
 			this.BookingForm.get('return_vehicle_type').clearValidators()
@@ -3381,13 +3250,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 
 		let value = this.BookingForm.value
-		// Add debug logging for time fields
-		console.warn('[PAYLOAD DEBUG] Time values in BookingForm.value:', {
-			pickup_time: value.pickup_time,
-			return_pickup_time: value.return_pickup_time,
-			cruise_time: value.cruise_time,
-			return_cruise_time: value.return_cruise_time
-		});
 		console.log("in reservation type", this.isFarmoutBooking, this.booking_created_from == 'admin', this.currentUser?.created_by_role == 'subscriber')
 		if (this.isFarmoutBooking && this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber') {
 			console.log("in reservation type")
@@ -3566,14 +3428,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	Subscriptions() {
 		//pickup time change 
-		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
-			console.log("[Subscription] pickup_time changed:", value);
-			this.buildBookingData()
-		})
-		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
-			console.log("[Subscription] return_pickup_time changed:", value);
-			this.buildBookingData()
-		})
+		// this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
+		// 	this.buildBookingData()
+		// })
+		// this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
+		// 	this.buildBookingData()
+		// })
 
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
@@ -3609,7 +3469,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					})
 				}
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
-				this.SetFormValue('return_pickup_time', '12:00 AM')
+				this.SetFormValue('return_pickup_time', '12:00 pm')
 
 			}
 			if (value != 'charter_tour') {
@@ -3649,142 +3509,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-
-			// Store old value for comparison
-			const oldValue = this.transfer_type;
-			const newValue = value;
-
-			// Flip addresses for round trip when changing between complementary transfer types
-			if (this.BookingForm.get('service_type').value == 'round_trip') {
-				if ((oldValue == 'city_to_airport' && newValue == 'airport_to_city') ||
-					(oldValue == 'airport_to_city' && newValue == 'city_to_airport') ||
-					(oldValue == 'city_to_cruise' && newValue == 'cruise_to_city') ||
-					(oldValue == 'cruise_to_city' && newValue == 'city_to_cruise')) {
-
-					console.log('Flipping outbound addresses for complementary transfer type change');
-
-					// Capture outbound pickup values
-					const pickup = this.Form.pickup.value;
-					const pickupLat = this.Form.pickup_latitude.value;
-					const pickupLng = this.Form.pickup_longitude.value;
-					const pickupAirport = this.Form.pickup_airport.value;
-					const pickupAirportOpt = this.BookingForm.get('pickup_airport_option').value;
-					const pickupAirportName = this.Form.pickup_airport_name.value;
-					const pickupAirportLat = this.Form.pickup_airport_latitude.value;
-					const pickupAirportLng = this.Form.pickup_airport_longitude.value;
-					const pickupAirline = this.Form.pickup_airline.value;
-					const pickupAirlineOpt = this.BookingForm.get('pickup_airline_option').value;
-					const pickupAirlineName = this.Form.pickup_airline_name.value;
-					const pickupFlight = this.Form.pickup_flight.value;
-					const originAirportCity = this.Form.origin_airport_city.value;
-
-					// Capture outbound dropoff values
-					const dropoff = this.Form.dropoff.value;
-					const dropoffLat = this.Form.dropoff_latitude.value;
-					const dropoffLng = this.Form.dropoff_longitude.value;
-					const dropoffAirport = this.Form.dropoff_airport.value;
-					const dropoffAirportOpt = this.BookingForm.get('dropoff_airport_option').value;
-					const dropoffAirportName = this.Form.dropoff_airport_name.value;
-					const dropoffAirportLat = this.Form.dropoff_airport_latitude.value;
-					const dropoffAirportLng = this.Form.dropoff_airport_longitude.value;
-					const dropoffAirline = this.Form.dropoff_airline.value;
-					const dropoffAirlineOpt = this.BookingForm.get('dropoff_airline_option').value;
-					const dropoffAirlineName = this.Form.dropoff_airline_name.value;
-					const dropoffFlight = this.Form.dropoff_flight.value;
-
-					// Swap outbound addresses
-					this.SetFormValue('pickup', dropoff);
-					this.SetFormValue('pickup_latitude', dropoffLat);
-					this.SetFormValue('pickup_longitude', dropoffLng);
-					this.SetFormValue('pickup_airport', dropoffAirport);
-					this.SetFormValue('pickup_airport_option', dropoffAirportOpt);
-					this.SetFormValue('pickup_airport_name', dropoffAirportName);
-					this.SetFormValue('pickup_airport_latitude', dropoffAirportLat);
-					this.SetFormValue('pickup_airport_longitude', dropoffAirportLng);
-					this.SetFormValue('pickup_airline', dropoffAirline);
-					this.SetFormValue('pickup_airline_option', dropoffAirlineOpt);
-					this.SetFormValue('pickup_airline_name', dropoffAirlineName);
-					this.SetFormValue('pickup_flight', dropoffFlight);
-
-					this.SetFormValue('dropoff', pickup);
-					this.SetFormValue('dropoff_latitude', pickupLat);
-					this.SetFormValue('dropoff_longitude', pickupLng);
-					this.SetFormValue('dropoff_airport', pickupAirport);
-					this.SetFormValue('dropoff_airport_option', pickupAirportOpt);
-					this.SetFormValue('dropoff_airport_name', pickupAirportName);
-					this.SetFormValue('dropoff_airport_latitude', pickupAirportLat);
-					this.SetFormValue('dropoff_airport_longitude', pickupAirportLng);
-					this.SetFormValue('dropoff_airline', pickupAirline);
-					this.SetFormValue('dropoff_airline_option', pickupAirlineOpt);
-					this.SetFormValue('dropoff_airline_name', pickupAirlineName);
-					this.SetFormValue('dropoff_flight', pickupFlight);
-
-					// Also flip return leg addresses
-					const r_pickup = this.Form.return_pickup.value;
-					const r_pickupLat = this.Form.return_pickup_latitude.value;
-					const r_pickupLng = this.Form.return_pickup_longitude.value;
-					const r_pickupAirport = this.Form.return_pickup_airport.value;
-					const r_pickupAirportOpt = this.BookingForm.get('return_pickup_airport_option').value;
-					const r_pickupAirportName = this.Form.return_pickup_airport_name.value;
-					const r_pickupAirportLat = this.Form.return_pickup_airport_latitude.value;
-					const r_pickupAirportLng = this.Form.return_pickup_airport_longitude.value;
-					const r_pickupAirline = this.Form.return_pickup_airline.value;
-					const r_pickupAirlineOpt = this.BookingForm.get('return_pickup_airline_option').value;
-					const r_pickupAirlineName = this.Form.return_pickup_airline_name.value;
-					const r_pickupFlight = this.Form.return_pickup_flight.value;
-					const departingAirportCity = this.Form.departing_airport_city.value;
-
-					const r_dropoff = this.Form.return_dropoff.value;
-					const r_dropoffLat = this.Form.return_dropoff_latitude.value;
-					const r_dropoffLng = this.Form.return_dropoff_longitude.value;
-					const r_dropoffAirport = this.Form.return_dropoff_airport.value;
-					const r_dropoffAirportOpt = this.BookingForm.get('return_dropoff_airport_option').value;
-					const r_dropoffAirportName = this.Form.return_dropoff_airport_name.value;
-					const r_dropoffAirportLat = this.Form.return_dropoff_airport_latitude.value;
-					const r_dropoffAirportLng = this.Form.return_dropoff_airport_longitude.value;
-					const r_dropoffAirline = this.Form.return_dropoff_airline.value;
-					const r_dropoffAirlineOpt = this.BookingForm.get('return_dropoff_airline_option').value;
-					const r_dropoffAirlineName = this.Form.return_dropoff_airline_name.value;
-					const r_dropoffFlight = this.Form.return_dropoff_flight.value;
-
-					// Swap return addresses
-					this.SetFormValue('return_pickup', r_dropoff);
-					this.SetFormValue('return_pickup_latitude', r_dropoffLat);
-					this.SetFormValue('return_pickup_longitude', r_dropoffLng);
-					this.SetFormValue('return_pickup_airport', r_dropoffAirport);
-					this.SetFormValue('return_pickup_airport_option', r_dropoffAirportOpt);
-					this.SetFormValue('return_pickup_airport_name', r_dropoffAirportName);
-					this.SetFormValue('return_pickup_airport_latitude', r_dropoffAirportLat);
-					this.SetFormValue('return_pickup_airport_longitude', r_dropoffAirportLng);
-					this.SetFormValue('return_pickup_airline', r_dropoffAirline);
-					this.SetFormValue('return_pickup_airline_option', r_dropoffAirlineOpt);
-					this.SetFormValue('return_pickup_airline_name', r_dropoffAirlineName);
-					this.SetFormValue('return_pickup_flight', r_dropoffFlight);
-
-					this.SetFormValue('return_dropoff', r_pickup);
-					this.SetFormValue('return_dropoff_latitude', r_pickupLat);
-					this.SetFormValue('return_dropoff_longitude', r_pickupLng);
-					this.SetFormValue('return_dropoff_airport', r_pickupAirport);
-					this.SetFormValue('return_dropoff_airport_option', r_pickupAirportOpt);
-					this.SetFormValue('return_dropoff_airport_name', r_pickupAirportName);
-					this.SetFormValue('return_dropoff_airport_latitude', r_pickupAirportLat);
-					this.SetFormValue('return_dropoff_airport_longitude', r_pickupAirportLng);
-					this.SetFormValue('return_dropoff_airline', r_pickupAirline);
-					this.SetFormValue('return_dropoff_airline_option', r_pickupAirlineOpt);
-					this.SetFormValue('return_dropoff_airline_name', r_pickupAirlineName);
-					this.SetFormValue('return_dropoff_flight', r_pickupFlight);
-
-					// Swap airport city fields
-					this.SetFormValue('origin_airport_city', departingAirportCity);
-					this.SetFormValue('departing_airport_city', originAirportCity);
-
-					// Trigger map update
-					setTimeout(() => this.MapController(true), 1000);
-				}
-			}
-
-			// Update transfer_type property
-			this.transfer_type = value;
 			// this.initAllAutocompletes()
 			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
@@ -4492,7 +4216,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.MapController();
 				if (this.Form.service_type.value == 'round_trip') {
 					setTimeout(() => {
-						this.MapController(true);
+						this.MapController(true)
 					}, 2000);
 				}
 			}
@@ -4848,8 +4572,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		event && this.SetFormValue(form_control, event.id);
 	}
 	FormatTime(time: string) {
-		const m = moment(time, ['HH:mm', 'HH:mm:ss']);
-		return m.isValid() ? m.format('h:mm A') : time;
+		return moment(time, "HH:mm:ss").format("LT");
 	}
 
 	setValueByBookNow() {
@@ -4946,6 +4669,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 						this.SetFormValue('pickup_date', editing_data?.pickup_date)
 					}
 				}
+
+				// Reset initialization flag for reaffiliate flow
+				setTimeout(() => {
+					this.isInitializing = false;
+					console.log('Initialization complete (reaffiliate): isInitializing = false');
+				}, 1500);
 			})
 		}
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
@@ -5069,6 +4798,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
 			this.fetchAffiliateDrivers(this.affiliate_id)
 		}, 5000)
+
+		// Reset initialization flag for QuoteBot flow
+		setTimeout(() => {
+			this.isInitializing = false;
+			console.log('Initialization complete (QuoteBot): isInitializing = false');
+		}, 6500); // 6.5s to cover the 5s timeout above
 	}
 
 	// numbers in red and seperated to next line
@@ -5116,42 +4851,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSearchLooseAffiliateId(term, item) {
 		console.log("term", term, "item", item)
 		return item.name.toLowerCase().includes(term.toLowerCase()) || item.driver_phone.toString().includes(term)
-	}
-
-	handleLooseAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.LooseAffiliateAccounts = [...this.LooseAffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.LooseAffiliateAccounts = [...this.LooseAffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
-
-	handleReturnLooseAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.Return_LooseAffiliateAccounts = [...this.Return_LooseAffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.Return_LooseAffiliateAccounts = [...this.Return_LooseAffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
 	}
 
 	onSearchCancellation(term, item) {
