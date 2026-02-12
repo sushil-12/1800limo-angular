@@ -1,3 +1,4 @@
+import { MapUtils } from '../../../utils/map-utils';
 import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -113,10 +114,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	ClientAccounts: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
-	LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_AffiliateAccounts: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts: Array<Record<string, any>> = []
-	Return_LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
 	vehicleType_arr: any;
@@ -133,7 +132,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
 	proceed: boolean = true
-	chosen_user: Record<string, any> | null;
+	chosen_user: Record<string, any>
 
 	distance: number = 0
 	return_distance: number = 0
@@ -209,6 +208,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				this.checkAndPrefill();
 			}
 			else if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
@@ -220,6 +220,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.newBooking = true
 				console.log("in reaffiliate update type book id", params?.reaffiliate_book_id)
 				this.SetFormValue('reservation_id', params.reaffiliate_book_id)
+				this.checkAndPrefill();
 			}
 			else {
 				this.resetFields()
@@ -605,6 +606,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	// for showing details when client account is chosen
 	getUserValue(key: string): string {
+		if (!this.chosen_user) {
+			return '';
+		}
 		const lowerKey = key.toLowerCase();
 
 		// Create a mapping of normalized keys to possible variations
@@ -620,7 +624,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		const possibleKeys = variations[lowerKey] || [key];
 
 		for (const k of possibleKeys) {
-			if (this.chosen_user && this.chosen_user[k] !== undefined) {
+			if (this.chosen_user[k] !== undefined && this.chosen_user[k] !== null) {
 				return this.chosen_user[k];
 			}
 		}
@@ -996,7 +1000,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
 			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
-				this.chooseUser(response.data.acc_id);
+				this.chooseUser(response.data.acc_id, false, response.data.account_type);
 			}
 
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
@@ -1212,6 +1216,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	mapDebounceTimer: any;
 	returnMapDebounceTimer: any;
+	pickupMarkers: google.maps.Marker[] = [];
+	returnMarkers: google.maps.Marker[] = [];
+	pickupDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
+	returnDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
 
 	async MapController(is_return: boolean = false) {
 		if (is_return) {
@@ -1322,7 +1330,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				origin,
 				destination,
 				waypoints,
-				optimizeWaypoints: true,
+				optimizeWaypoints: false,
 				travelMode: google.maps.TravelMode.DRIVING
 			};
 
@@ -1335,6 +1343,90 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 
 
+	// ... inside class ...
+
+	private renderCustomMarkers(
+		map: google.maps.Map,
+		response: google.maps.DirectionsResult,
+		is_return: boolean = false
+	) {
+		// Clear existing markers for this specific map
+		if (is_return) {
+			if (this.returnMarkers) {
+				this.returnMarkers.forEach(marker => marker.setMap(null));
+			}
+			this.returnMarkers = [];
+		} else {
+			if (this.pickupMarkers) {
+				this.pickupMarkers.forEach(marker => marker.setMap(null));
+			}
+			this.pickupMarkers = [];
+		}
+
+		const locations: google.maps.LatLngLiteral[] = [];
+		const route = response.routes[0];
+
+		if (!route || !route.legs) return;
+
+		const legs = route.legs;
+
+		// Pickup (Start of first leg)
+		locations.push(legs[0].start_location.toJSON());
+
+		// Waypoints (End of all legs except the last one)
+		for (let i = 0; i < legs.length - 1; i++) {
+			locations.push(legs[i].end_location.toJSON());
+		}
+
+		// Dropoff (End of last leg)
+		locations.push(legs[legs.length - 1].end_location.toJSON());
+
+
+		// Use Utility to offset overlapping points
+		// Returns { position, pixelOffset } for pixel-based offsetting
+		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
+
+		console.log(is_return ? 'Return Original Locations:' : 'Original Locations:', locations);
+		console.log(is_return ? 'Return Adjusted Markers:' : 'Adjusted Markers:', adjusted);
+
+		// Labels: A, B, C, D...
+		adjusted.forEach((item, index) => {
+			// ASCII 65 = 'A'
+			const labelChar = String.fromCharCode(65 + index);
+
+			const marker = new google.maps.Marker({
+				position: item.position,
+				map: map,
+				zIndex: 1000 + index, // Ensure sequence stacking (later stops on top)
+				title: `Stop ${labelChar}`,
+				icon: {
+					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+					fillColor: "#EA4335", // Standard Google Red
+					fillOpacity: 1,
+					strokeColor: "#B31412", // Darker red border
+					strokeWeight: 1,
+					scale: 1.5,
+					// Shift the anchor horizontally based on pixelOffset.
+					// Path center is 12, bottom tip is 22.
+					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.5), 22),
+					labelOrigin: new google.maps.Point(12, 9)
+				},
+				label: {
+					text: labelChar,
+					color: 'white',
+					fontSize: '14px',
+					fontWeight: 'bold'
+				}
+			});
+
+			if (is_return) {
+				this.returnMarkers.push(marker);
+			} else {
+				this.pickupMarkers.push(marker);
+			}
+		});
+	}
+
 	// drawMap.ts
 
 	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
@@ -1343,13 +1435,32 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		const directionsRenderer = new google.maps.DirectionsRenderer();
+		// Clean up previous renderer for this specific journey
+		if (is_return) {
+			if (this.returnDirectionsRenderer) {
+				this.returnDirectionsRenderer.setMap(null);
+				this.returnDirectionsRenderer = null;
+			}
+			this.returnDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.returnDirectionsRenderer.setMap(map);
+		} else {
+			if (this.pickupDirectionsRenderer) {
+				this.pickupDirectionsRenderer.setMap(null);
+				this.pickupDirectionsRenderer = null;
+			}
+			this.pickupDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.pickupDirectionsRenderer.setMap(map);
+		}
+
 		const directionsService = new google.maps.DirectionsService();
-		directionsRenderer.setMap(map);
 
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK) {
-				directionsRenderer.setDirections(response);
+				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
+				if (renderer) {
+					renderer.setDirections(response);
+				}
+				this.renderCustomMarkers(map, response, is_return);
 
 				this.fetchDistanceAndTime(response).then((res: { distance: number; time: number }) => {
 					if (is_return) {
@@ -1452,12 +1563,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 
 				this.MapController();
-				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
+				this.checkAndPrefill();
 				this.newBooking ? this.setValueByBookNow() : "";
 			} else {
 				this.$spinner.show('fetchspinner');
 			}
 		});
+	}
+
+	checkAndPrefill() {
+		if (this.BigData && this.Form.reservation_id.value) {
+			this.prefillViaBookingID(this.Form.reservation_id.value);
+		}
 	}
 
 
@@ -1501,15 +1618,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.initAllAutocompletes()
 	}
 
-	chooseUser(account_id: number) {
+	chooseUser(account_id: number, autofill: boolean = true, account_type: string = '') {
 		console.log("in affiliate info")
 		this.$spinner.show()
 		this.chosen_user = {}
-		this.$api.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
+		let accType = account_type ? account_type : this.Form.account_type.value;
+		this.$api.chooseUser(account_id, accType).subscribe((response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-				this.autofillData('passenger', this.chosen_user);
+				if (autofill) {
+					this.autofillData('passenger', this.chosen_user);
+				}
 				// this.fillLCDetails(this.chosen_user)
 				if (!this.Form.reservation_id.value) {
 					// this.autofillData('passenger', this.chosen_user);
@@ -1554,21 +1674,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	handleClientAccount(value: any) {
-		console.log('---------------------->>>>>>>>>>>>>> client acc value', value)
-		if (!value) {
-			this.chosen_user = null;
-			return;
-		}
-
-		const id = (typeof value === 'object') ? value?.id : value;
-
-		this.chooseUser(id)
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+		this.chooseUser(value.id)
 		if (this.BookingForm.get('account_type').value == 'travel_planner') {
 			this.BookingForm.patchValue({
 				travel_client_id: ''
 			})
-			this.getTravelClientAccounts(id)
+			this.getTravelClientAccounts(value.id)
 		}
+
 	}
 
 	handleChangeTravelAccounts(selectedAcc) {
@@ -1627,7 +1741,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.LooseAffiliateAccounts = response?.data
-				this.LooseAffiliateAccounts_Original = [...this.LooseAffiliateAccounts]
 				this.$spinner.hide()
 			})
 		}
@@ -1661,7 +1774,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.Return_LooseAffiliateAccounts = response?.data
-				this.Return_LooseAffiliateAccounts_Original = [...this.Return_LooseAffiliateAccounts]
 				this.$spinner.hide()
 			})
 		}
@@ -2941,24 +3053,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				return_lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_lose_affiliate_phone_isd')?.value)
 			});
 
-			// Map vehicle details from outbound to return when both are loose affiliates
-			if (this.Form.affiliate_type.value === 'loose_affiliate' && this.Form.return_affiliate_type.value === 'loose_affiliate') {
-				this.BookingForm.patchValue({
-					return_vehicle_type: this.Form.vehicle_type.value,
-					return_vehicle_type_name: this.Form.vehicle_type_name.value,
-					return_vehicle_make: this.Form.vehicle_make.value,
-					return_vehicle_make_name: this.Form.vehicle_make_name.value,
-					return_vehicle_model: this.Form.vehicle_model.value,
-					return_vehicle_model_name: this.Form.vehicle_model_name.value,
-					return_vehicle_year: this.Form.vehicle_year.value,
-					return_vehicle_year_name: this.Form.vehicle_year_name.value,
-					return_vehicle_color: this.Form.vehicle_color.value,
-					return_vehicle_color_name: this.Form.vehicle_color_name.value,
-					return_vehicle_license_plate: this.Form.vehicle_license_plate.value,
-					return_vehicle_seats: this.Form.vehicle_seats.value
-				});
-			}
-
 		}
 		else {
 			this.BookingForm.get('return_vehicle_type').clearValidators()
@@ -3325,7 +3419,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-
 			// Store old value for comparison
 			const oldValue = this.transfer_type;
 			const newValue = value;
@@ -4791,42 +4884,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSearchLooseAffiliateId(term, item) {
 		console.log("term", term, "item", item)
 		return item.name.toLowerCase().includes(term.toLowerCase()) || item.driver_phone.toString().includes(term)
-	}
-
-	handleLooseAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.LooseAffiliateAccounts = [...this.LooseAffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.LooseAffiliateAccounts = [...this.LooseAffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
-
-	handleReturnLooseAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.Return_LooseAffiliateAccounts = [...this.Return_LooseAffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.Return_LooseAffiliateAccounts = [...this.Return_LooseAffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
 	}
 
 	onSearchCancellation(term, item) {
