@@ -207,6 +207,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				this.checkAndPrefill();
 			}
 			else if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
@@ -218,6 +219,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.newBooking = true
 				console.log("in reaffiliate update type book id", params?.reaffiliate_book_id)
 				this.SetFormValue('reservation_id', params.reaffiliate_book_id)
+				this.checkAndPrefill();
 			}
 			else {
 				this.resetFields()
@@ -603,6 +605,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	// for showing details when client account is chosen
 	getUserValue(key: string): string {
+		if (!this.chosen_user) {
+			return '';
+		}
 		const lowerKey = key.toLowerCase();
 
 		// Create a mapping of normalized keys to possible variations
@@ -618,7 +623,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		const possibleKeys = variations[lowerKey] || [key];
 
 		for (const k of possibleKeys) {
-			if (this.chosen_user && this.chosen_user[k] !== undefined) {
+			if (this.chosen_user[k] !== undefined && this.chosen_user[k] !== null) {
 				return this.chosen_user[k];
 			}
 		}
@@ -992,6 +997,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
+
+			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
+				this.chooseUser(response.data.acc_id, false, response.data.account_type);
+			}
 
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
@@ -1446,12 +1455,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 
 				this.MapController();
-				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
+				this.checkAndPrefill();
 				this.newBooking ? this.setValueByBookNow() : "";
 			} else {
 				this.$spinner.show('fetchspinner');
 			}
 		});
+	}
+
+	checkAndPrefill() {
+		if (this.BigData && this.Form.reservation_id.value) {
+			this.prefillViaBookingID(this.Form.reservation_id.value);
+		}
 	}
 
 
@@ -1495,15 +1510,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.initAllAutocompletes()
 	}
 
-	chooseUser(account_id: number) {
+	chooseUser(account_id: number, autofill: boolean = true, account_type: string = '') {
 		console.log("in affiliate info")
 		this.$spinner.show()
 		this.chosen_user = {}
-		this.$api.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
+		let accType = account_type ? account_type : this.Form.account_type.value;
+		this.$api.chooseUser(account_id, accType).subscribe((response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-				this.autofillData('passenger', this.chosen_user);
+				if (autofill) {
+					this.autofillData('passenger', this.chosen_user);
+				}
 				// this.fillLCDetails(this.chosen_user)
 				if (!this.Form.reservation_id.value) {
 					// this.autofillData('passenger', this.chosen_user);
