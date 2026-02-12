@@ -70,8 +70,12 @@
                                         class="btn btn-primary-custom btn-lg font-weight-bold px-4 mr-3 mb-2 hvr-grow featured-btn">Watch
                                         Now</a>
                                     <button (click)="downloadVideo(featuredTutorial.link, featuredTutorial.title)"
-                                        class="btn btn-outline-light-custom btn-lg font-weight-bold px-4 mb-2 hvr-grow featured-btn">
+                                        class="btn btn-outline-light-custom btn-lg font-weight-bold px-4 mb-2 mr-3 hvr-grow featured-btn">
                                         <i class="bi bi-download mr-2"></i> Download
+                                    </button>
+                                    <button (click)="copyLink(featuredTutorial.link)"
+                                        class="btn btn-outline-light-custom btn-lg font-weight-bold px-4 mb-2 hvr-grow featured-btn">
+                                        <i class="bi bi-clipboard mr-2"></i> Copy Link
                                     </button>
                                 </div>
                             </div>
@@ -158,8 +162,9 @@
                                     <span><i class="bi bi-star-fill text-warning mr-1"></i>
                                         {{tutorial.rating}}</span>
                                 </div>
-                                <button class="btn btn-link p-0 share-btn hvr-grow">
-                                    <i class="bi bi-share"></i>
+                                <button (click)="copyLink(tutorial.link)" class="btn btn-link p-0 share-btn hvr-grow"
+                                    title="Copy Link">
+                                    <i class="bi bi-clipboard" style="font-size: 1.2rem; color: #DF6A00;"></i>
                                 </button>
                             </div>
                         </div>
@@ -258,5 +263,9 @@
                 </div>
             </div>
         </section>
+    </div>
+    <div *ngIf="showCopyMessage" class="copy-toast">
+        <i class="bi bi-check-circle"></i>
+        <span>Link copied to clipboard!</span>
     </div>
 </div>

@@ -21,6 +21,7 @@ export class TutorialsComponent implements OnInit {
   filteredTutorials: any[] = [];
   featuredTutorial: any;
   categories: any[] = [];
+  showCopyMessage: boolean = false;
 
   homePageData: any;
   clientImages: any[] = [];
@@ -419,5 +420,34 @@ export class TutorialsComponent implements OnInit {
         window.URL.revokeObjectURL(link.href);
       })
       .catch(console.error);
+  }
+
+  copyLink(url: string) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        this.showCopyMessage = true;
+        setTimeout(() => {
+          this.showCopyMessage = false;
+        }, 3000);
+      }).catch(err => {
+        console.error('Could not copy text: ', err);
+      });
+    } else {
+      // Fallback
+      const textArea = document.createElement("textarea");
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        this.showCopyMessage = true;
+        setTimeout(() => {
+          this.showCopyMessage = false;
+        }, 3000);
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+      document.body.removeChild(textArea);
+    }
   }
 }
