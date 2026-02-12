@@ -113,10 +113,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	ClientAccounts: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
-	LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	Return_AffiliateAccounts: Array<Record<string, any>> = []
 	Return_LooseAffiliateAccounts: Array<Record<string, any>> = []
-	Return_LooseAffiliateAccounts_Original: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
 	vehicleType_arr: any;
@@ -133,7 +131,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
 	proceed: boolean = true
-	chosen_user: Record<string, any> | null;
+	chosen_user: Record<string, any>
 
 	distance: number = 0
 	return_distance: number = 0
@@ -995,10 +993,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
-			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
-				this.chooseUser(response.data.acc_id);
-			}
-
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
 			if (response?.data?.account_type == 'travel_planner') {
@@ -1554,21 +1548,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	handleClientAccount(value: any) {
-		console.log('---------------------->>>>>>>>>>>>>> client acc value', value)
-		if (!value) {
-			this.chosen_user = null;
-			return;
-		}
-
-		const id = (typeof value === 'object') ? value?.id : value;
-
-		this.chooseUser(id)
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+		this.chooseUser(value.id)
 		if (this.BookingForm.get('account_type').value == 'travel_planner') {
 			this.BookingForm.patchValue({
 				travel_client_id: ''
 			})
-			this.getTravelClientAccounts(id)
+			this.getTravelClientAccounts(value.id)
 		}
+
 	}
 
 	handleChangeTravelAccounts(selectedAcc) {
@@ -1627,7 +1615,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.LooseAffiliateAccounts = response?.data
-				this.LooseAffiliateAccounts_Original = [...this.LooseAffiliateAccounts]
 				this.$spinner.hide()
 			})
 		}
@@ -1661,7 +1648,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.Return_LooseAffiliateAccounts = response?.data
-				this.Return_LooseAffiliateAccounts_Original = [...this.Return_LooseAffiliateAccounts]
 				this.$spinner.hide()
 			})
 		}
@@ -2941,24 +2927,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				return_lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_lose_affiliate_phone_isd')?.value)
 			});
 
-			// Map vehicle details from outbound to return when both are loose affiliates
-			if (this.Form.affiliate_type.value === 'loose_affiliate' && this.Form.return_affiliate_type.value === 'loose_affiliate') {
-				this.BookingForm.patchValue({
-					return_vehicle_type: this.Form.vehicle_type.value,
-					return_vehicle_type_name: this.Form.vehicle_type_name.value,
-					return_vehicle_make: this.Form.vehicle_make.value,
-					return_vehicle_make_name: this.Form.vehicle_make_name.value,
-					return_vehicle_model: this.Form.vehicle_model.value,
-					return_vehicle_model_name: this.Form.vehicle_model_name.value,
-					return_vehicle_year: this.Form.vehicle_year.value,
-					return_vehicle_year_name: this.Form.vehicle_year_name.value,
-					return_vehicle_color: this.Form.vehicle_color.value,
-					return_vehicle_color_name: this.Form.vehicle_color_name.value,
-					return_vehicle_license_plate: this.Form.vehicle_license_plate.value,
-					return_vehicle_seats: this.Form.vehicle_seats.value
-				});
-			}
-
 		}
 		else {
 			this.BookingForm.get('return_vehicle_type').clearValidators()
@@ -3325,7 +3293,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-
 			// Store old value for comparison
 			const oldValue = this.transfer_type;
 			const newValue = value;
@@ -4791,42 +4758,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSearchLooseAffiliateId(term, item) {
 		console.log("term", term, "item", item)
 		return item.name.toLowerCase().includes(term.toLowerCase()) || item.driver_phone.toString().includes(term)
-	}
-
-	handleLooseAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.LooseAffiliateAccounts = [...this.LooseAffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.LooseAffiliateAccounts = [...this.LooseAffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
-
-	handleReturnLooseAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.Return_LooseAffiliateAccounts = [...this.Return_LooseAffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.Return_LooseAffiliateAccounts = [...this.Return_LooseAffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
 	}
 
 	onSearchCancellation(term, item) {
