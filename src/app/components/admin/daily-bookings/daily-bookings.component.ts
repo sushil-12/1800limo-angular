@@ -20,6 +20,7 @@ import { MatSelect } from "@angular/material/select";
 import { UploadService } from "../../../services/upload.service";
 import { GoogleMap } from '@angular/google-maps';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker'; // Import for config if needed
+import { MapUtils } from '../../../utils/map-utils';
 
 @Component({
 	selector: "app-daily-bookings",
@@ -98,6 +99,7 @@ export class DailyBookingsComponent implements OnInit {
 	zoom = 7;
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
 	directionsRenderer!: google.maps.DirectionsRenderer;
+	markers: google.maps.Marker[] = [];
 	showCopyIcon: boolean = false
 
 	constructor(
@@ -243,28 +245,41 @@ export class DailyBookingsComponent implements OnInit {
 			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
 		}
 
-		// if (this.bookingPreview?.extra_stops?.length > 0) {
-		// 	console.log("in extra stop",this.bookingPreview.extra_stops)
-		// 	for (let i = 0; i < this.bookingPreview?.extra_stops.length; i++) {
-		// 		const stop = (this.bookingPreview?.extra_stops.at(i));
-		// 		console.log("in extra stop",stop)
-		// 		waypoints.push({
-		// 			location: new google.maps.LatLng(
-		// 				stop.get('latitude').value,
-		// 				stop.get('longitude').value
-		// 			),
-		// 			stopover: true
-		// 		});
-		// 	}
-		// }
+		// Handle Extra Stops
+		if (this.bookingPreview?.extra_stops?.length > 0) {
+			console.log("Processing extra stops", this.bookingPreview.extra_stops);
+			for (let i = 0; i < this.bookingPreview.extra_stops.length; i++) {
+				const stop = this.bookingPreview.extra_stops[i];
+				if (stop.latitude && stop.longitude) {
+					console.log("Adding waypoint:", stop);
+					waypoints.push({
+						location: new google.maps.LatLng(
+							Number(stop.latitude),
+							Number(stop.longitude)
+						),
+						stopover: true
+					});
+				}
+			}
+		}
 
+		// Clear previous markers
+		if (this.markers) {
+			this.markers.forEach(m => m.setMap(null));
+		}
+		this.markers = [];
+
+		// Clear previous renderer
+		if (this.directionsRenderer) {
+			this.directionsRenderer.setMap(null);
+		}
 
 		setTimeout(() => {
 			this.drawMap({
 				origin,
 				destination,
 				waypoints,
-				optimizeWaypoints: true,
+				optimizeWaypoints: false, // DO NOT optimize so order is preserved for A,B,C labels
 				travelMode: google.maps.TravelMode.DRIVING
 			})
 		}, 100)
@@ -274,7 +289,7 @@ export class DailyBookingsComponent implements OnInit {
 
 	drawMap(request: google.maps.DirectionsRequest) {
 		const directionsService = new google.maps.DirectionsService();
-		this.directionsRenderer = new google.maps.DirectionsRenderer();
+		this.directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
 
 		const mapInstance = this.map.googleMap;
 		if (!mapInstance) {
@@ -288,9 +303,65 @@ export class DailyBookingsComponent implements OnInit {
 			if (status === google.maps.DirectionsStatus.OK) {
 				console.log('Directions loaded:', response);
 				this.directionsRenderer.setDirections(response);
+				this.renderCustomMarkers(mapInstance, response);
 			} else {
 				console.error('Directions request failed due to ' + status);
 			}
+		});
+	}
+
+	private renderCustomMarkers(
+		map: google.maps.Map,
+		response: google.maps.DirectionsResult
+	) {
+		const locations: google.maps.LatLngLiteral[] = [];
+		const route = response.routes[0];
+
+		if (!route || !route.legs) return;
+
+		const legs = route.legs;
+
+		// Pickup (Start of first leg)
+		locations.push(legs[0].start_location.toJSON());
+
+		// Waypoints (End of all legs except the last one)
+		for (let i = 0; i < legs.length - 1; i++) {
+			locations.push(legs[i].end_location.toJSON());
+		}
+
+		// Dropoff (End of last leg)
+		locations.push(legs[legs.length - 1].end_location.toJSON());
+
+		// Use Utility to offset overlapping points
+		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
+
+		// Labels: A, B, C, D...
+		adjusted.forEach((item, index) => {
+			const labelChar = String.fromCharCode(65 + index);
+
+			const marker = new google.maps.Marker({
+				position: item.position,
+				map: map,
+				zIndex: 1000 + index,
+				title: `Stop ${labelChar}`,
+				icon: {
+					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+					fillColor: "#EA4335",
+					fillOpacity: 1,
+					strokeColor: "#B31412",
+					strokeWeight: 1,
+					scale: 1.5,
+					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.5), 22),
+					labelOrigin: new google.maps.Point(12, 9)
+				},
+				label: {
+					text: labelChar,
+					color: 'white',
+					fontSize: '14px',
+					fontWeight: 'bold'
+				}
+			});
+			this.markers.push(marker);
 		});
 	}
 
