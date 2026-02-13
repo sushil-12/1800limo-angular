@@ -56,14 +56,14 @@
 						<div class="mr-2">
 							<button class="custom-filled-button orange-button"
 								style="color:#fff;padding: 5px 12px !important;"
-								(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
+								(click)="loadBookings(null, startDate, endDate, searchText, selectedStatus); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
 								Search
 							</button>
 						</div>
 						<div>
 							<button class="custom-filled-back-button"
 								style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-								(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+								(click)="reset()">
 								Reset
 							</button>
 						</div>
@@ -106,9 +106,22 @@
 							</mat-form-field>
 						</div>
 					</div> -->
-				<div class="col-md-12">
+				<div class="col-md-4 col-lg-3 mb-2 mb-md-0">
+					<div id="status-filter">
+						<mat-form-field appearance="outline" class="m-0 w-100">
+							<mat-label>Filter by Status</mat-label>
+							<mat-select [value]="selectedStatus" (selectionChange)="applyStatusFilter($event.value)">
+								<mat-option [value]="null">All Statuses</mat-option>
+								<mat-option *ngFor="let item of status_list" [value]="item.value">
+									{{item.status}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-md-8 col-lg-9">
 					<div id="search-field">
-						<mat-form-field appearance="outline" class="m-0">
+						<mat-form-field appearance="outline" class="m-0 w-100">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
 								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
 								[value]="searchText"
@@ -128,8 +141,16 @@
 							<thead>
 								<tr role="row">
 									<th>Actions</th>
-									<th>Date</th>
-									<th>Booking</th>
+									<th (click)="handleSort('pickup_date')" style="cursor: pointer;">
+										Date
+										<i class="fa" style="font-size: 20px;"
+											[ngClass]="{'fa-sort-up': orderBy === 'pickup_date_asc', 'fa-sort-down': orderBy === 'pickup_date_desc', 'fa-sort': !orderBy.startsWith('pickup_date')}"></i>
+									</th>
+									<th (click)="handleSort('booking_id')" style="cursor: pointer;">
+										Booking
+										<i class="fa" style="font-size: 20px;"
+											[ngClass]="{'fa-sort-up': orderBy === 'booking_id_asc', 'fa-sort-down': orderBy === 'booking_id_desc', 'fa-sort': !orderBy.startsWith('booking_id')}"></i>
+									</th>
 									<th>Total</th>
 									<th>Status</th>
 									<th>Pax</th>
@@ -336,7 +357,22 @@
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
 											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 										<span class="text-underline cursor-pointer">
-											<span [innerHTML]="highlighText(booking.pickup_address)"></span>
+											<span
+												*ngIf="!booking.isPickupExpanded && booking.pickup_address?.length > 20; else fullPickup">
+												<span
+													[innerHTML]="highlighText(booking.pickup_address | slice:0:20)"></span>...
+												<a href="javascript:void(0);"
+													(click)="booking.isPickupExpanded = true; $event.stopPropagation()"
+													style="text-decoration: none; font-size: 12px;">Read More</a>
+											</span>
+											<ng-template #fullPickup>
+												<span [innerHTML]="highlighText(booking.pickup_address)"></span>
+												<a *ngIf="booking.pickup_address?.length > 20"
+													href="javascript:void(0);"
+													(click)="booking.isPickupExpanded = false; $event.stopPropagation()"
+													style="text-decoration: none; font-size: 12px; margin-left: 5px;">Read
+													Less</a>
+											</ng-template>
 										</span>
 
 									</td>
@@ -385,14 +421,29 @@
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
 											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 										<span class="text-underline cursor-pointer">
-											<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
+											<span
+												*ngIf="!booking.isDropoffExpanded && booking.dropoff_address?.length > 20; else fullDropoff">
+												<span
+													[innerHTML]="highlighText(booking.dropoff_address | slice:0:20)"></span>...
+												<a href="javascript:void(0);"
+													(click)="booking.isDropoffExpanded = true; $event.stopPropagation()"
+													style="text-decoration: none; font-size: 12px;">Read More</a>
+											</span>
+											<ng-template #fullDropoff>
+												<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
+												<a *ngIf="booking.dropoff_address?.length > 20"
+													href="javascript:void(0);"
+													(click)="booking.isDropoffExpanded = false; $event.stopPropagation()"
+													style="text-decoration: none; font-size: 12px; margin-left: 5px;">Read
+													Less</a>
+											</ng-template>
 										</span>
 
 									</td>
 									<td>
 										<p style="white-space: pre" (click)="openModal(booking, 'created_by')" id="box"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
-											<span [innerHTML]="highlighText(booking.created_by_name)"></span> |
+											<span [innerHTML]="highlighText(booking.created_by_name)"></span> <br />
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.created_by_phone)"></span>
 										</p>
@@ -400,7 +451,7 @@
 									<td>
 										<span>
 											{{ textFormatter(booking?.service_type) | titlecase }}
-											/
+											<br />
 											{{ textFormatter(booking?.transfer_type) | titlecase }}
 										</span>
 									</td>
@@ -461,7 +512,7 @@
 								<a class="page-link">Last</a>
 							</li> -->
 						<li class="page-item disabled" *ngIf="nextPageUrl"
-							(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText)">
+							(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText, selectedStatus)">
 							<a class="page-link">Show more</a>
 						</li>
 					</ul>
