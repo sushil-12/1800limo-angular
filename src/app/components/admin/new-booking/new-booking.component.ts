@@ -1,3 +1,4 @@
+import { MapUtils } from '../../../utils/map-utils';
 import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -368,6 +369,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				this.checkAndPrefill();
 			}
 			else if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
@@ -379,6 +381,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.newBooking = true
 				console.log("in reaffiliate update type book id", params?.reaffiliate_book_id)
 				this.SetFormValue('reservation_id', params.reaffiliate_book_id)
+				this.checkAndPrefill();
 			}
 			else {
 				this.resetFields()
@@ -813,6 +816,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	// for showing details when client account is chosen
 	getUserValue(key: string): string {
+		if (!this.chosen_user) {
+			return '';
+		}
 		const lowerKey = key.toLowerCase();
 
 		// Create a mapping of normalized keys to possible variations
@@ -828,7 +834,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		const possibleKeys = variations[lowerKey] || [key];
 
 		for (const k of possibleKeys) {
-			if (this.chosen_user && this.chosen_user[k] !== undefined) {
+			if (this.chosen_user[k] !== undefined && this.chosen_user[k] !== null) {
 				return this.chosen_user[k];
 			}
 		}
@@ -1203,6 +1209,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
+			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
+				this.chooseUser(response.data.acc_id, false, response.data.account_type);
+			}
+
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
 			if (response?.data?.account_type == 'travel_planner') {
@@ -1422,6 +1432,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	mapDebounceTimer: any;
 	returnMapDebounceTimer: any;
+	pickupMarkers: google.maps.Marker[] = [];
+	returnMarkers: google.maps.Marker[] = [];
+	pickupDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
+	returnDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
 
 	async MapController(is_return: boolean = false) {
 		if (is_return) {
@@ -1532,7 +1546,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				origin,
 				destination,
 				waypoints,
-				optimizeWaypoints: true,
+				optimizeWaypoints: false,
 				travelMode: google.maps.TravelMode.DRIVING
 			};
 
@@ -1545,6 +1559,90 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 
 
+	// ... inside class ...
+
+	private renderCustomMarkers(
+		map: google.maps.Map,
+		response: google.maps.DirectionsResult,
+		is_return: boolean = false
+	) {
+		// Clear existing markers for this specific map
+		if (is_return) {
+			if (this.returnMarkers) {
+				this.returnMarkers.forEach(marker => marker.setMap(null));
+			}
+			this.returnMarkers = [];
+		} else {
+			if (this.pickupMarkers) {
+				this.pickupMarkers.forEach(marker => marker.setMap(null));
+			}
+			this.pickupMarkers = [];
+		}
+
+		const locations: google.maps.LatLngLiteral[] = [];
+		const route = response.routes[0];
+
+		if (!route || !route.legs) return;
+
+		const legs = route.legs;
+
+		// Pickup (Start of first leg)
+		locations.push(legs[0].start_location.toJSON());
+
+		// Waypoints (End of all legs except the last one)
+		for (let i = 0; i < legs.length - 1; i++) {
+			locations.push(legs[i].end_location.toJSON());
+		}
+
+		// Dropoff (End of last leg)
+		locations.push(legs[legs.length - 1].end_location.toJSON());
+
+
+		// Use Utility to offset overlapping points
+		// Returns { position, pixelOffset } for pixel-based offsetting
+		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
+
+		console.log(is_return ? 'Return Original Locations:' : 'Original Locations:', locations);
+		console.log(is_return ? 'Return Adjusted Markers:' : 'Adjusted Markers:', adjusted);
+
+		// Labels: A, B, C, D...
+		adjusted.forEach((item, index) => {
+			// ASCII 65 = 'A'
+			const labelChar = String.fromCharCode(65 + index);
+
+			const marker = new google.maps.Marker({
+				position: item.position,
+				map: map,
+				zIndex: 1000 + index, // Ensure sequence stacking (later stops on top)
+				title: `Stop ${labelChar}`,
+				icon: {
+					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+					fillColor: "#EA4335", // Standard Google Red
+					fillOpacity: 1,
+					strokeColor: "#B31412", // Darker red border
+					strokeWeight: 1,
+					scale: 1.5,
+					// Shift the anchor horizontally based on pixelOffset.
+					// Path center is 12, bottom tip is 22.
+					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.5), 22),
+					labelOrigin: new google.maps.Point(12, 9)
+				},
+				label: {
+					text: labelChar,
+					color: 'white',
+					fontSize: '14px',
+					fontWeight: 'bold'
+				}
+			});
+
+			if (is_return) {
+				this.returnMarkers.push(marker);
+			} else {
+				this.pickupMarkers.push(marker);
+			}
+		});
+	}
+
 	// drawMap.ts
 
 	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
@@ -1553,13 +1651,32 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		const directionsRenderer = new google.maps.DirectionsRenderer();
+		// Clean up previous renderer for this specific journey
+		if (is_return) {
+			if (this.returnDirectionsRenderer) {
+				this.returnDirectionsRenderer.setMap(null);
+				this.returnDirectionsRenderer = null;
+			}
+			this.returnDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.returnDirectionsRenderer.setMap(map);
+		} else {
+			if (this.pickupDirectionsRenderer) {
+				this.pickupDirectionsRenderer.setMap(null);
+				this.pickupDirectionsRenderer = null;
+			}
+			this.pickupDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.pickupDirectionsRenderer.setMap(map);
+		}
+
 		const directionsService = new google.maps.DirectionsService();
-		directionsRenderer.setMap(map);
 
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK) {
-				directionsRenderer.setDirections(response);
+				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
+				if (renderer) {
+					renderer.setDirections(response);
+				}
+				this.renderCustomMarkers(map, response, is_return);
 
 				this.fetchDistanceAndTime(response).then((res: { distance: number; time: number }) => {
 					if (is_return) {
@@ -1662,12 +1779,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 
 				this.MapController();
-				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
+				this.checkAndPrefill();
 				this.newBooking ? this.setValueByBookNow() : "";
 			} else {
 				this.$spinner.show('fetchspinner');
 			}
 		});
+	}
+
+	checkAndPrefill() {
+		if (this.BigData && this.Form.reservation_id.value) {
+			this.prefillViaBookingID(this.Form.reservation_id.value);
+		}
 	}
 
 
@@ -1711,15 +1834,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.initAllAutocompletes()
 	}
 
-	chooseUser(account_id: number) {
+	chooseUser(account_id: number, autofill: boolean = true, account_type: string = '') {
 		console.log("in affiliate info")
 		this.$spinner.show()
 		this.chosen_user = {}
-		this.$api.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
+		let accType = account_type ? account_type : this.Form.account_type.value;
+		this.$api.chooseUser(account_id, accType).subscribe((response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-				this.autofillData('passenger', this.chosen_user);
+				if (autofill) {
+					this.autofillData('passenger', this.chosen_user);
+				}
 				// this.fillLCDetails(this.chosen_user)
 				if (!this.Form.reservation_id.value) {
 					// this.autofillData('passenger', this.chosen_user);
@@ -3509,6 +3635,141 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
+			// Store old value for comparison
+			const oldValue = this.transfer_type;
+			const newValue = value;
+
+			// Flip addresses for round trip when changing between complementary transfer types
+			if (this.BookingForm.get('service_type').value == 'round_trip') {
+				if ((oldValue == 'city_to_airport' && newValue == 'airport_to_city') ||
+					(oldValue == 'airport_to_city' && newValue == 'city_to_airport') ||
+					(oldValue == 'city_to_cruise' && newValue == 'cruise_to_city') ||
+					(oldValue == 'cruise_to_city' && newValue == 'city_to_cruise')) {
+
+					console.log('Flipping outbound addresses for complementary transfer type change');
+
+					// Capture outbound pickup values
+					const pickup = this.Form.pickup.value;
+					const pickupLat = this.Form.pickup_latitude.value;
+					const pickupLng = this.Form.pickup_longitude.value;
+					const pickupAirport = this.Form.pickup_airport.value;
+					const pickupAirportOpt = this.BookingForm.get('pickup_airport_option').value;
+					const pickupAirportName = this.Form.pickup_airport_name.value;
+					const pickupAirportLat = this.Form.pickup_airport_latitude.value;
+					const pickupAirportLng = this.Form.pickup_airport_longitude.value;
+					const pickupAirline = this.Form.pickup_airline.value;
+					const pickupAirlineOpt = this.BookingForm.get('pickup_airline_option').value;
+					const pickupAirlineName = this.Form.pickup_airline_name.value;
+					const pickupFlight = this.Form.pickup_flight.value;
+					const originAirportCity = this.Form.origin_airport_city.value;
+
+					// Capture outbound dropoff values
+					const dropoff = this.Form.dropoff.value;
+					const dropoffLat = this.Form.dropoff_latitude.value;
+					const dropoffLng = this.Form.dropoff_longitude.value;
+					const dropoffAirport = this.Form.dropoff_airport.value;
+					const dropoffAirportOpt = this.BookingForm.get('dropoff_airport_option').value;
+					const dropoffAirportName = this.Form.dropoff_airport_name.value;
+					const dropoffAirportLat = this.Form.dropoff_airport_latitude.value;
+					const dropoffAirportLng = this.Form.dropoff_airport_longitude.value;
+					const dropoffAirline = this.Form.dropoff_airline.value;
+					const dropoffAirlineOpt = this.BookingForm.get('dropoff_airline_option').value;
+					const dropoffAirlineName = this.Form.dropoff_airline_name.value;
+					const dropoffFlight = this.Form.dropoff_flight.value;
+
+					// Swap outbound addresses
+					this.SetFormValue('pickup', dropoff);
+					this.SetFormValue('pickup_latitude', dropoffLat);
+					this.SetFormValue('pickup_longitude', dropoffLng);
+					this.SetFormValue('pickup_airport', dropoffAirport);
+					this.SetFormValue('pickup_airport_option', dropoffAirportOpt);
+					this.SetFormValue('pickup_airport_name', dropoffAirportName);
+					this.SetFormValue('pickup_airport_latitude', dropoffAirportLat);
+					this.SetFormValue('pickup_airport_longitude', dropoffAirportLng);
+					this.SetFormValue('pickup_airline', dropoffAirline);
+					this.SetFormValue('pickup_airline_option', dropoffAirlineOpt);
+					this.SetFormValue('pickup_airline_name', dropoffAirlineName);
+					this.SetFormValue('pickup_flight', dropoffFlight);
+
+					this.SetFormValue('dropoff', pickup);
+					this.SetFormValue('dropoff_latitude', pickupLat);
+					this.SetFormValue('dropoff_longitude', pickupLng);
+					this.SetFormValue('dropoff_airport', pickupAirport);
+					this.SetFormValue('dropoff_airport_option', pickupAirportOpt);
+					this.SetFormValue('dropoff_airport_name', pickupAirportName);
+					this.SetFormValue('dropoff_airport_latitude', pickupAirportLat);
+					this.SetFormValue('dropoff_airport_longitude', pickupAirportLng);
+					this.SetFormValue('dropoff_airline', pickupAirline);
+					this.SetFormValue('dropoff_airline_option', pickupAirlineOpt);
+					this.SetFormValue('dropoff_airline_name', pickupAirlineName);
+					this.SetFormValue('dropoff_flight', pickupFlight);
+
+					// Also flip return leg addresses
+					const r_pickup = this.Form.return_pickup.value;
+					const r_pickupLat = this.Form.return_pickup_latitude.value;
+					const r_pickupLng = this.Form.return_pickup_longitude.value;
+					const r_pickupAirport = this.Form.return_pickup_airport.value;
+					const r_pickupAirportOpt = this.BookingForm.get('return_pickup_airport_option').value;
+					const r_pickupAirportName = this.Form.return_pickup_airport_name.value;
+					const r_pickupAirportLat = this.Form.return_pickup_airport_latitude.value;
+					const r_pickupAirportLng = this.Form.return_pickup_airport_longitude.value;
+					const r_pickupAirline = this.Form.return_pickup_airline.value;
+					const r_pickupAirlineOpt = this.BookingForm.get('return_pickup_airline_option').value;
+					const r_pickupAirlineName = this.Form.return_pickup_airline_name.value;
+					const r_pickupFlight = this.Form.return_pickup_flight.value;
+					const departingAirportCity = this.Form.departing_airport_city.value;
+
+					const r_dropoff = this.Form.return_dropoff.value;
+					const r_dropoffLat = this.Form.return_dropoff_latitude.value;
+					const r_dropoffLng = this.Form.return_dropoff_longitude.value;
+					const r_dropoffAirport = this.Form.return_dropoff_airport.value;
+					const r_dropoffAirportOpt = this.BookingForm.get('return_dropoff_airport_option').value;
+					const r_dropoffAirportName = this.Form.return_dropoff_airport_name.value;
+					const r_dropoffAirportLat = this.Form.return_dropoff_airport_latitude.value;
+					const r_dropoffAirportLng = this.Form.return_dropoff_airport_longitude.value;
+					const r_dropoffAirline = this.Form.return_dropoff_airline.value;
+					const r_dropoffAirlineOpt = this.BookingForm.get('return_dropoff_airline_option').value;
+					const r_dropoffAirlineName = this.Form.return_dropoff_airline_name.value;
+					const r_dropoffFlight = this.Form.return_dropoff_flight.value;
+
+					// Swap return addresses
+					this.SetFormValue('return_pickup', r_dropoff);
+					this.SetFormValue('return_pickup_latitude', r_dropoffLat);
+					this.SetFormValue('return_pickup_longitude', r_dropoffLng);
+					this.SetFormValue('return_pickup_airport', r_dropoffAirport);
+					this.SetFormValue('return_pickup_airport_option', r_dropoffAirportOpt);
+					this.SetFormValue('return_pickup_airport_name', r_dropoffAirportName);
+					this.SetFormValue('return_pickup_airport_latitude', r_dropoffAirportLat);
+					this.SetFormValue('return_pickup_airport_longitude', r_dropoffAirportLng);
+					this.SetFormValue('return_pickup_airline', r_dropoffAirline);
+					this.SetFormValue('return_pickup_airline_option', r_dropoffAirlineOpt);
+					this.SetFormValue('return_pickup_airline_name', r_dropoffAirlineName);
+					this.SetFormValue('return_pickup_flight', r_dropoffFlight);
+
+					this.SetFormValue('return_dropoff', r_pickup);
+					this.SetFormValue('return_dropoff_latitude', r_pickupLat);
+					this.SetFormValue('return_dropoff_longitude', r_pickupLng);
+					this.SetFormValue('return_dropoff_airport', r_pickupAirport);
+					this.SetFormValue('return_dropoff_airport_option', r_pickupAirportOpt);
+					this.SetFormValue('return_dropoff_airport_name', r_pickupAirportName);
+					this.SetFormValue('return_dropoff_airport_latitude', r_pickupAirportLat);
+					this.SetFormValue('return_dropoff_airport_longitude', r_pickupAirportLng);
+					this.SetFormValue('return_dropoff_airline', r_pickupAirline);
+					this.SetFormValue('return_dropoff_airline_option', r_pickupAirlineOpt);
+					this.SetFormValue('return_dropoff_airline_name', r_pickupAirlineName);
+					this.SetFormValue('return_dropoff_flight', r_pickupFlight);
+
+					// Swap airport city fields
+					this.SetFormValue('origin_airport_city', departingAirportCity);
+					this.SetFormValue('departing_airport_city', originAirportCity);
+
+					// Trigger map update
+					setTimeout(() => this.MapController(true), 1000);
+				}
+			}
+
+			// Update transfer_type property
+			this.transfer_type = value;
 			// this.initAllAutocompletes()
 			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
