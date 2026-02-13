@@ -516,7 +516,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 
 		// On first time load: Only store data if it's complete, otherwise skip
-		if (isFirstTime && (this.bookingType == 'edit' || this.bookingType == 'repeat') && !data.is_manual) {
+		if (isFirstTime && (this.bookingType == 'edit' || this.bookingType == 'repeat')) {
 			if (isDataComplete) {
 				console.log('[buildBookingData] First time load with complete data - storing booking_data but NOT calculating rates');
 				this.previousBookingData = JSON.parse(JSON.stringify(data));
