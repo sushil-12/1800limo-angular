@@ -307,7 +307,7 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		align-items: center;
 
 		i {
-			font-size: 16px;
+			font-size: 14px;
 		}
 
 		&:hover {
@@ -357,7 +357,7 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		font-weight: 700 !important;
 	}
 }
-.new-limo-section{padding-left: 14rem; padding-right:14rem;}
+
 .tutorial-card {
 	border-radius: $border-radius-lg;
 	overflow: hidden;
@@ -454,7 +454,7 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 		}
-		i{font-size:14px;}
+
 		.card-title {
 			font-size: 1.3rem;
 			color: #1a1a1a;
@@ -561,7 +561,7 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 			color: #121212;
 			font-size: 1rem;
 			font-weight: 600 !important;
-			padding: 12px 24px !important;
+			padding: 12px 32px;
 			transition: $transition-smooth;
 
 			&:hover {
@@ -684,12 +684,7 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 .tracking-wider {
 	letter-spacing: 0.05em;
 }
-@media (max-width:1700px){
-	.new-limo-section{padding-left: 3rem; padding-right:3rem;}
-	}
-@media (max-width:1025px){
-.new-limo-section{padding-left: 2rem; padding-right:2rem;}
-}
+
 @media (max-width: 991px) {
 	.tutorials-hero h1 {
 		font-size: 2rem;
@@ -710,8 +705,6 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	.featured-title {
 		font-size: 1.7rem !important;
 	}
-.new-limo-section{padding-left: 2rem; padding-right:2rem;}
-
 }
 
 .copy-toast {
@@ -776,6 +769,4 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	.featured-title {
 		font-size: 1.5rem !important;
 	}
-.new-limo-section{padding-left: 1rem; padding-right:1rem;}
-
 }
