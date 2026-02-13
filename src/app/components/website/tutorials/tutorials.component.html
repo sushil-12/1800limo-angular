@@ -1,59 +1,271 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-<div class="innerpage_wrapper">
-    <div class="innerpage_topbanner">
-        <h2>
-            Watch Our Tutorials
-        </h2>
-    </div>
-    <section class="safety_wrapper">
+
+<div class="tutorials-page-wrapper">
+    <!-- Hero Section -->
+    <header class="tutorials-hero">
+        <div class="container text-center py-3 py-md-4 py-lg-5">
+            <span class="hero-badge">
+                <i class="bi bi-camera-video mr-1"></i> Video Tutorials
+            </span>
+            <h1 class="font-weight-bold mb-3">Learn At Your Own Pace</h1>
+            <p class="lead mx-auto">Master the 1800 LIMO.COM platform with our
+                comprehensive video tutorials and guides</p>
+
+            <div class="search-container mt-4">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search tutorials...">
+                </div>
+            </div>
+        </div>
+        <!-- Featured Section Container -->
         <div class="container">
-            <div class="row">
-                <!-- Loop through groupedTutorials categories -->
-                <div *ngFor="let category of objectKeys(groupedTutorials)">
+            <!-- Skeleton Loader -->
+            <ng-template #skeletonTemplate>
+                <div class="skeleton-featured mb-5"></div>
+            </ng-template>
 
-                    <!-- Display category header -->
-                    <div class="col-12">
-                        <h2 class="category-title">{{ category }}</h2>
-                    </div>
+            <!-- Main Content -->
+            <div *ngIf="!isLoading; else skeletonTemplate">
+                <!-- Featured Tutorial -->
+                <div class="featured-tutorial mb-5" *ngIf="featuredTutorial">
+                    <div class="card featured-card overflow-hidden border-0 shadow-lg d-flex flex-column flex-lg-row">
+                        <div class="featured-image-side col-lg-6 p-0 position-relative overflow-hidden">
+                            <img [src]="featuredTutorial.image" class="featured-img" [alt]="featuredTutorial.title">
+                            <div class="play-overlay">
+                                <a [href]="featuredTutorial.link" target="_blank" class="play-btn">
+                                    <i class="bi bi-play-fill text-white"></i>
+                                </a>
+                            </div>
+                            <span class="duration-badge-featured">{{featuredTutorial.duration}}</span>
+                        </div>
+                        <div class="featured-content-bg col-lg-6">
+                            <div class="card-body h-100 d-flex flex-column justify-content-center text-white">
+                                <div class="mb-3">
+                                    <span class="featured-badge-overlay">
+                                        <i class="bi bi-star-fill mr-1"></i> Featured Tutorial
+                                    </span>
+                                </div>
+                                <h2 class="card-title font-weight-bold mb-3 featured-title">{{featuredTutorial.title}}
+                                </h2>
+                                <p class="card-text mb-4 lead-card opacity-75">{{featuredTutorial.content}}</p>
 
-                    <!-- Loop through tutorials in the current category -->
-                    <div class="row">
-                        <!-- Loop through the tutorials for each category -->
-                        <div *ngFor="let tip of groupedTutorials[category]" class="col-sm-12 col-md-6 col-lg-6"
-                            style="margin-bottom: 15px;">
-                            <a [href]="tip.link" target="_blank" class="card">
-                                <div class="d-flex flex-direction-column div_content">
-                                    <img src="{{ tip.image }}" alt="{{ tip.title }}">
-                                    <div class="card-content">
-                                        <p class="title">{{ tip.title }}</p>
-                                        <p class="content">{{ tip.content }}</p>
+                                <div class="featured-meta-row d-flex align-items-center mb-4 flex-wrap">
+                                    <div class="d-flex align-items-center mr-4 mb-2">
+                                        <i class="bi bi-eye mr-2 text-red"></i>
+                                        <span class="meta-text">{{featuredTutorial.views}} views</span>
                                     </div>
-                                    <div class="arrow-container">
-                                        <i class="fas fa-chevron-right"></i>
+                                    <div class="d-flex align-items-center mr-4 mb-2">
+                                        <i class="bi bi-star-fill mr-2 text-warning"></i>
+                                        <span class="meta-text">{{featuredTutorial.rating}} rating</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-journal-text mr-2 text-red"></i>
+                                        <span class="meta-text">{{featuredTutorial.level}}</span>
                                     </div>
                                 </div>
-                            </a>
+
+                                <div class="featured-actions d-flex flex-wrap">
+                                    <a [href]="featuredTutorial.link" target="_blank"
+                                        class="btn btn-primary-custom btn-lg font-weight-bold px-4 mr-3 mb-2 hvr-grow featured-btn">Watch
+                                        Now</a>
+                                    <button (click)="downloadVideo(featuredTutorial.link, featuredTutorial.title)"
+                                        class="btn btn-outline-light-custom btn-lg font-weight-bold px-4 mb-2 mr-3 hvr-grow featured-btn">
+                                        <i class="bi bi-download mr-2"></i> Download
+                                    </button>
+                                    <button (click)="copyLink(featuredTutorial.link)"
+                                        class="btn btn-outline-light-custom btn-lg font-weight-bold px-4 mb-2 hvr-grow featured-btn">
+                                        <i class="bi bi-clipboard mr-2"></i> Copy Link
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div> <!-- End row for tutorials -->
-
-                </div> <!-- End category -->
-            </div> <!-- End main row -->
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </header>
 
-     	<!----OUR CLIENTS------------->
-	<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
-		<div class="container-fluid">
-			<h2><span>Who Travels With Us</span></h2>
-			<div class="chk_vehicles_parent">
-				<div class="chk_vehicles owl-carousel owl-theme viewClientLogo">
-					<div class="item" *ngFor="let clientLogo of clientImages">
-						<a class="ns-user">
-							<img [src]="clientLogo?.path" alt="client logo" loading="lazy" onerror="this.style.display='none'">
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+
+
+    <!-- Filters and Grid Section -->
+    <div class="tutorials-grid-section">
+        <!-- Category Filters Bar -->
+        <div class="category-filters-container">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-center flex-wrap"
+                    *ngIf="!isLoading; else filtersSkeleton">
+                    <span class="filter-label mr-3 d-none d-md-inline-block">
+                        <i class="bi bi-funnel mr-1"></i> Filter:
+                    </span>
+                    <button *ngFor="let cat of categories" class="filter-pill"
+                        [class.active]="selectedCategory === cat.name" (click)="setCategory(cat.name)">
+                        <i [class]="cat.icon + ' mr-2'"></i> {{cat.name}}
+                    </button>
+                </div>
+                <ng-template #filtersSkeleton>
+                    <div class="d-flex align-items-center justify-content-center flex-wrap">
+                        <div class="skeleton-pill mx-2" *ngFor="let i of [1,2,3,4,5]"></div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <!-- Filter Results Header Bar -->
+        <div class="tutorials-section">
+            <div class="container">
+                <div class="section-header d-flex justify-content-between align-items-center"
+                    *ngIf="!isLoading; else headerSkeleton">
+                    <h2 class="m-0 font-weight-bold section-title grid-section-title">{{selectedCategory === 'All
+                        Tutorials' ? 'All Tutorials' : selectedCategory}}</h2>
+                    <span class="results-count text-muted">{{getFilteredTutorials().length}} tutorials</span>
+                </div>
+                <ng-template #headerSkeleton>
+                    <div class="section-header d-flex justify-content-between align-items-center">
+                        <div class="skeleton-header"></div>
+                        <div class="skeleton-header" style="width: 100px;"></div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <div class="container ">
+            <!-- Tutorials Grid -->
+            <div class="row" *ngIf="!isLoading; else gridSkeleton">
+                <div class="col-md-6 col-lg-4 mb-4" *ngFor="let tutorial of getFilteredTutorials()">
+                    <div class="card tutorial-card h-100 shadow-sm border-0">
+                        <div class="card-img-wrapper position-relative overflow-hidden">
+                            <img [src]="tutorial.image" class="card-img-top" [alt]="tutorial.title">
+                            <a [href]="tutorial.link" target="_blank" class="play-overlay-small">
+                                <div class="play-btn-small">
+                                    <i class="bi bi-play-fill"></i>
+                                </div>
+                            </a>
+                            <span class="duration-badge"><i class="bi bi-clock mr-1"></i>
+                                {{tutorial.duration}}</span>
+                            <span class="level-badge"
+                                [class.advanced]="tutorial.level === 'Advanced'">{{tutorial.level}}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-category mb-2">
+                                <i class="bi bi-camera-video mr-1"></i> {{tutorial.category}}
+                            </div>
+                            <h5 class="card-title font-weight-bold mb-2">{{tutorial.title}}</h5>
+                            <p class="card-text text-muted small">{{tutorial.content}}</p>
+                            <div class="card-divider mt-4 mb-2"></div>
+                        </div>
+                        <div class="card-footer bg-white border-0 pt-0 pb-4">
+                            <div
+                                class="d-flex justify-content-between align-items-center text-muted small font-weight-medium">
+                                <div class="d-flex align-items-center meta-info">
+                                    <span class="mr-3"><i class="bi bi-eye mr-1"></i> {{tutorial.views}}</span>
+                                    <span><i class="bi bi-star-fill text-warning mr-1"></i>
+                                        {{tutorial.rating}}</span>
+                                </div>
+                                <button (click)="copyLink(tutorial.link)" class="btn btn-link p-0 share-btn hvr-grow"
+                                    title="Copy Link">
+                                    <i class="bi bi-clipboard" style="font-size: 1.2rem; color: #DF6A00;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #gridSkeleton>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let i of [1,2,3,4,5,6]">
+                        <div class="skeleton-card"></div>
+                    </div>
+                </div>
+            </ng-template>
+
+            <div *ngIf="!isLoading && getFilteredTutorials().length === 0"
+                class="text-center py-5 bg-light rounded shadow-sm border">
+                <i class="bi bi-search m-0" style="font-size: 3.5rem; color: #dee2e6;"></i>
+                <h4 class="mt-3 font-weight-bold">No tutorials found</h4>
+                <p class="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
+                <button class="btn btn-outline-primary-custom mt-2 px-4 rounded-pill"
+                    (click)="searchText = ''; selectedCategory = 'All Tutorials'; onSearch()">Clear All
+                    Filters</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container pb-4">
+        <section class="tutorial-cta-refined rounded-xl mt-3 mt-md-4 mt-lg-5">
+            <div class="cta-inner-refined rounded-xl p-4 p-md-5 text-white shadow-lg overflow-hidden">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-5 mb-lg-0">
+                        <h3 class="font-weight-bold display-5 mb-3 cta-title-refined">New to 1800 LIMO.COM?</h3>
+                        <p class="mb-4 lead-cta">Start with our beginner tutorials to get up and running quickly.
+                            Learn how to book your first ride, manage payments, and make the most of our platform.
+                        </p>
+
+                        <ul class="cta-checklist list-unstyled mb-5">
+                            <li class="mb-3 d-flex align-items-center">
+                                <div class="check-icon mr-3"><i class="bi bi-check-circle"></i></div>
+                                <span>Create your account in minutes</span>
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <div class="check-icon mr-3"><i class="bi bi-check-circle"></i></div>
+                                <span>Book your first ride with ease</span>
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <div class="check-icon mr-3"><i class="bi bi-check-circle"></i></div>
+                                <span>Manage payments securely</span>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <div class="check-icon mr-3"><i class="bi bi-check-circle"></i></div>
+                                <span>Access 24/7 customer support</span>
+                            </li>
+                        </ul>
+
+                        <button style="background: #fff;"
+                            class="btn btn-light-cta btn-lg px-5 font-weight-bold rounded-pill hvr-grow">
+                            Get Started Now
+                        </button>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-sm-6 mb-4">
+                                <div class="stat-card-refined p-4 rounded-lg">
+                                    <div class="stat-icon mb-3"><i class="bi bi-graph-up-arrow"></i></div>
+                                    <h4 class="font-weight-bold m-0">30+ Years</h4>
+                                    <p class="small text-white-50 m-0">Industry Experience</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 mb-4">
+                                <div class="stat-card-refined p-4 rounded-lg">
+                                    <div class="stat-icon mb-3"><i class="bi bi-people"></i></div>
+                                    <h4 class="font-weight-bold m-0">100K+</h4>
+                                    <p class="small text-white-50 m-0">Happy Customers</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 mb-4 mb-sm-0">
+                                <div class="stat-card-refined p-4 rounded-lg">
+                                    <div class="stat-icon mb-3"><i class="bi bi-camera-video"></i></div>
+                                    <h4 class="font-weight-bold m-0">50+</h4>
+                                    <p class="small text-white-50 m-0">Video Tutorials</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="stat-card-refined p-4 rounded-lg">
+                                    <div class="stat-icon mb-3"><i class="bi bi-headset"></i></div>
+                                    <h4 class="font-weight-bold m-0">24/7</h4>
+                                    <p class="small text-white-50 m-0">Support Available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div *ngIf="showCopyMessage" class="copy-toast">
+        <i class="bi bi-check-circle"></i>
+        <span>Link copied to clipboard!</span>
+    </div>
 </div>
