@@ -958,7 +958,6 @@ header {
 	.viewVehicleCarousel .owl-nav button {
 		top: 55px !important;
 	}
-
 	input,
 	input::placeholder,
 	input::-webkit-input-placeholder {
@@ -2071,8 +2070,8 @@ footer {
 }
 
 .footercontent .content_qr_btn img {
-	height: 100px;
-	width: 100px;
+	height: 150px;
+	width: 150px;
 	margin-bottom: 20px;
 }
 
@@ -2212,7 +2211,7 @@ footer {
 }
 
 .footer {
-	padding: 15px 0;
+	padding: 20px 20px 20px 0px;
 	border-top: 1px solid #fff;
 	color: #fff;
 	font-size: 15px;
@@ -5640,8 +5639,8 @@ header .navbar-toggler {
 	}
 
 	.footercontent .content_qr_btn img {
-		height: 100px;
-		width: 100px;
+		height: 150px;
+		width: 150px;
 	}
 
 	.discover_diff h2,
@@ -6040,3 +6039,17 @@ header .navbar-toggler {
 .date-input .mat-form-field-wrapper {
 	padding-bottom: 0;
 }
+
+/* timepicker */
+.timepicker-ui-hour.active, .timepicker-ui-hour.mobile.active, .timepicker-ui-minutes.active, .timepicker-ui-minutes.mobile.active{background: #f2d0b369 !important;}
+.timepicker-ui-hour.mobile:hover, .timepicker-ui-hour:hover, .timepicker-ui-minutes.mobile:hover, .timepicker-ui-minutes:hover{background: #f2d0b369 !important;}
+.timepicker-ui-hour.mobile:focus-visible, .timepicker-ui-hour:focus-visible, .timepicker-ui-minutes.mobile:focus-visible, .timepicker-ui-minutes:focus-visible{border: #f3933d !important;}
+.timepicker-ui-circle-hand, .timepicker-ui-clock-hand{background: #f3933d !important;}
+.timepicker-ui-dot{background: #f3933d !important;}
+.timepicker-ui-cancel-btn, .timepicker-ui-cancel-btn.mobile, .timepicker-ui-ok-btn, .timepicker-ui-ok.btn-mobile{color:#f3933d !important; font-size:20px !important;}
+.timepicker-ui-am.active, .timepicker-ui-am.mobile.active, .timepicker-ui-pm.active, .timepicker-ui-pm.mobile.active {background: #f2d0b369 !important;}
+.timepicker-ui-am.mobile:hover, .timepicker-ui-am:hover, .timepicker-ui-pm.mobile:hover, .timepicker-ui-pm:hover{background: #f2d0b369 !important;}
+.timepicker-ui-footer, .timepicker-ui-footer-mobile {padding: 24px 24px 0 !important;}
+.timepicker-ui-header, .timepicker-ui-header.mobile{padding-top:20px !important;}
+.timepicker-ui-select-time, .timepicker-ui-select-time.mobile{display: none !important;}
+.timepicker-ui-hour, .timepicker-ui-hour.mobile, .timepicker-ui-minutes, .timepicker-ui-minutes.mobile{font-size:50px !important;}
