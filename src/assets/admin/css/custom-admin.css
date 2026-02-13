@@ -3018,7 +3018,7 @@ table #navbarDropdownUserImage {
 }
 
 .timepicker__header {
-    background-color: var(--orange-color) !important;
+    background-color: #fff !important;
 }
 
 /* @media (min-width : 570px) and (max-width: 1023px) {
@@ -3028,26 +3028,70 @@ table #navbarDropdownUserImage {
 } */
 .timepicker-dial__container {
     flex-direction: row !important;
+    justify-content: center !important;
     gap: 17px !important;
 }
 
 .timepicker {
     display: flex !important;
     flex-direction: column;
+    justify-content: center !important;
     align-items: center !important;
     width: 100% !important;
+    border-radius: 10px !important;
     /* height: 303px !important; */
 }
 
 .timepicker-dial__control {
     font-size: 50px !important;
+    color: #000 !important;
+    background: #f0f0f0 !important;
+    padding: 12px !important;
+    width: 80px !important;
+    border-radius: 10px !important;
+}
+
+.timepicker-dial__time {
+    color: #000 !important;
+    gap: 6px !important;
+}
+
+.timepicker-period__btn {
+    color: #000 !important;
+    border: #000 1px solid !important;
+    background: #f0f0f0 !important;
+    padding: 4px 12px !important;
+}
+
+.timepicker-period {
+    gap: 2px !important;
+}
+
+.timepicker-button span {
+    font-size: 18px !important;
+    color: #f3933d !important
+}
+
+.timepicker-dial__item_active {
+    background: #f2d0b369 !important;
+}
+
+.timepicker__body {
+    padding: 20px !important;
 }
 
 .timepicker__header {
     padding: 15px 64px;
     width: 100%;
     text-align: center;
-    background-color: #00bfff;
+    background-color: #fff;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.timepicker__actions {
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
 }
 
 .clock-face__number>span.active {
