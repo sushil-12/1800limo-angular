@@ -54,7 +54,7 @@ export class TutorialsComponent implements OnInit {
             "type": "user_tutorials",
             "title": "How to Book Your First Ride",
             "category": "Manage Bookings",
-            "duration": "5:30",
+            "duration": "1:06",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+use+the+search+for+vehicles%2C+and+rates+in+the+search+engine%2C+Quote-bot+screen+and+filters).mp4",
             "content": "Learn the step-by-step process of booking your first limousine service with our easy-to-use platform."
@@ -63,7 +63,7 @@ export class TutorialsComponent implements OnInit {
             "type": "user_tutorials",
             "title": "How to edit a booking",
             "category": "Manage Bookings",
-            "duration": "7:20",
+            "duration": "3:22",
             "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4",
             "content": "A guide on how to edit a booking from one-way to round trip or charter tour from the booking dashboard."
@@ -72,7 +72,7 @@ export class TutorialsComponent implements OnInit {
             "type": "user_tutorials",
             "title": "How to create a repeat booking",
             "category": "Manage Bookings",
-            "duration": "4:10",
+            "duration": "00:56",
             "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Repeat+a+booking.mp4",
             "content": "A guide on how to create a repeat booking."
@@ -81,7 +81,7 @@ export class TutorialsComponent implements OnInit {
             "type": "user_tutorials",
             "title": "How to create a return booking",
             "category": "Manage Bookings",
-            "duration": "4:05",
+            "duration": "1:04",
             "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Return+a+booking.mp4",
             "content": "A guide on how to create a return booking."
@@ -90,7 +90,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to register as an affiliate Operator",
             "category": "Registration",
-            "duration": "6:15",
+            "duration": "2:37",
             "image": "assets/images/images_tutorial/updated-images/loginasaffiliate.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Register+Affiliate+and+step+0.mp4",
             "content": "A step-by-step guide on how to sign up and register for an affiliate program."
@@ -99,7 +99,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to complete step 1 as an affiliate",
             "category": "Registration",
-            "duration": "3:40",
+            "duration": "1:27",
             "image": "assets/images/images_tutorial/updated-images/step-1.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 1 for registering as an affiliate."
@@ -108,7 +108,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to complete step 2 as an affiliate",
             "category": "Registration",
-            "duration": "3:50",
+            "duration": "1:50",
             "image": "assets/images/images_tutorial/updated-images/step-2.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 2 for registering as an affiliate."
@@ -117,7 +117,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to complete step 3 as an affiliate",
             "category": "Registration",
-            "duration": "4:00",
+            "duration": "00:56",
             "image": "assets/images/images_tutorial/updated-images/step-3.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 3 for registering as an affiliate."
@@ -126,7 +126,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to complete step 4 as an affiliate",
             "category": "Registration",
-            "duration": "4:10",
+            "duration": "1:15",
             "image": "assets/images/images_tutorial/updated-images/step-4.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 4 for registering as an affiliate."
@@ -135,7 +135,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to complete step 5 as an affiliate",
             "category": "Registration",
-            "duration": "4:30",
+            "duration": "4:06",
             "image": "assets/images/images_tutorial/updated-images/step-5.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 5 for registering as an affiliate."
@@ -144,7 +144,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to create a farmout booking",
             "category": "Manage Bookings",
-            "duration": "6:20",
+            "duration": "2:59",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Farmout+booking.mp4",
             "content": "A guide on how to create a farmout booking and earn 10% commission."
@@ -153,7 +153,7 @@ export class TutorialsComponent implements OnInit {
             "type": "travel_agent_tutorials",
             "title": "How to register as a Travel Advisor",
             "category": "Registration",
-            "duration": "5:45",
+            "duration": "2:02",
             "image": "assets/images/images_tutorial/updated-images/registerasagent.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+register+as+Travel+Agent+-+Step+1+and+2.mp4",
             "content": "A step-by-step guide on how to sign up and register for a Travel Advisor."
@@ -162,7 +162,7 @@ export class TutorialsComponent implements OnInit {
             "type": "travel_agent_tutorials",
             "title": "How to create a booking as a Travel Advisor",
             "category": "Manage Bookings",
-            "duration": "6:10",
+            "duration": "2:35",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Booking+on+Travel+Agent+Account.mp4",
             "content": "A guide on how to create a booking as a travel advisor and earn 10% commission."
@@ -172,7 +172,7 @@ export class TutorialsComponent implements OnInit {
             "type": "user_tutorials",
             "title": "How to register as Individual/Customer",
             "category": "Registration",
-            "duration": "4:00",
+            "duration": "2:00",
             "image": "assets/images/images_tutorial/updated-images/registerasindv.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Individual+Signup.mp4",
             "content": "A step-by-step guide on how to sign up and register for an Individual account."
@@ -181,7 +181,7 @@ export class TutorialsComponent implements OnInit {
             "type": "user_tutorials",
             "title": "How to add a family member in Individual account",
             "category": "Registration",
-            "duration": "3:25",
+            "duration": "1:13",
             "image": "assets/images/images_tutorial/updated-images/familymember.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Adding+family+members+other+members+to+the+Individual+account.mp4",
             "content": "A guide on how to add a family member to your individual account."
@@ -190,7 +190,7 @@ export class TutorialsComponent implements OnInit {
             "type": "common_tutorials",
             "title": "How to choose correct account to Register",
             "category": "Registration",
-            "duration": "3:50",
+            "duration": "1:22",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+choose+correct+account+to+register.mp4",
             "content": "A guide on how to choose correct account to register on the platform."
@@ -199,7 +199,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to advertise your fleet for free",
             "category": "Subscription",
-            "duration": "4:45",
+            "duration": "1:18",
             "image": "assets/images/images_tutorial/updated-images/freeplan.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Free+subscription+Plan.mp4",
             "content": "A step-by-step guide on how to subscribe to the free Chauffer Select software plan."
@@ -208,7 +208,7 @@ export class TutorialsComponent implements OnInit {
             "type": "subscriber_tutorials",
             "title": "How to buy basic plan with Chauffer Select software",
             "category": "Subscription",
-            "duration": "5:10",
+            "duration": "1:37",
             "image": "assets/images/images_tutorial/updated-images/basic.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Basic+Subscription+Plan.mp4",
             "content": "A step-by-step guide on how to buy the basic plan of the Chauffer Select software."
@@ -217,7 +217,7 @@ export class TutorialsComponent implements OnInit {
             "type": "subscriber_tutorials",
             "title": "How to buy fleet plan with Chauffer Select software",
             "category": "Subscription",
-            "duration": "5:50",
+            "duration": "1:42",
             "image": "assets/images/images_tutorial/updated-images/fleet.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Fleet+Subscription+Plan.mp4",
             "content": "A step-by-step guide on how to buy the fleet operator plan of the Chauffer Select software."
@@ -226,7 +226,7 @@ export class TutorialsComponent implements OnInit {
             "type": "subscriber_tutorials",
             "title": "How to add bank details as new customer",
             "category": "Subscription",
-            "duration": "4:15",
+            "duration": "00:36",
             "image": "assets/images/images_tutorial/updated-images/addbank.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Bank+Details.mp4",
             "content": "A guide on how to add bank details for Stripe as a new customer."
@@ -235,7 +235,7 @@ export class TutorialsComponent implements OnInit {
             "type": "subscriber_tutorials",
             "title": "How to invite drivers to your account",
             "category": "Subscription",
-            "duration": "3:55",
+            "duration": "00:18",
             "image": "assets/images/images_tutorial/updated-images/invitedriver.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Invite+Driver.mp4",
             "content": "A guide on how to invite drivers under your company."
@@ -244,7 +244,7 @@ export class TutorialsComponent implements OnInit {
             "type": "common_tutorials",
             "title": "How to do search on daily booking frame",
             "category": "All Tutorials",
-            "duration": "4:40",
+            "duration": "1:13",
             "image": "assets/images/images_tutorial/updated-images/searchondailybooking.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Search+bookings+on+daily+booking+frame.mp4",
             "content": "A guide on how to search bookings using booking number, phone number, or name."
@@ -253,7 +253,7 @@ export class TutorialsComponent implements OnInit {
             "type": "driver_tutorials",
             "title": "How to add sub admin",
             "category": "Registration",
-            "duration": "3:35",
+            "duration": "00:28",
             "image": "assets/images/images_tutorial/updated-images/addsubadmin.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Add+Sub+Admin.mp4",
             "content": "A guide on how to add a sub admin."
