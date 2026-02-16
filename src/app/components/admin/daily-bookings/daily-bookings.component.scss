@@ -150,6 +150,8 @@ button {
 
 .loc-logo {
 	font-size: 18px;
+	vertical-align: middle;
+	display: inline-block;
 }
 
 
@@ -547,6 +549,61 @@ a.dropdown-item {
 
 		@media (min-width: 576px) {
 			margin-top: 6px; // Visual alignment with form field input box on desktop
+		}
+	}
+}
+
+.address-layout {
+	display: block;
+	max-width: 250px;
+
+	.address-main-row {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.address-content {
+		display: block;
+		white-space: normal;
+		word-break: break-word;
+		line-height: 1.4;
+		font-size: 14px;
+		flex: 1;
+	}
+
+	.toggle-link {
+		display: inline-block;
+		font-size: 12px;
+		color: #f3933d;
+		text-decoration: none;
+		font-weight: 600;
+		cursor: pointer;
+		white-space: nowrap;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+// Ensure table cells allow for vertical expansion and wrapping
+.custom_table {
+	table.table {
+		td {
+			vertical-align: top !important;
+			white-space: normal !important;
+
+			&.date-column {
+				white-space: nowrap !important;
+				vertical-align: middle !important;
+
+				p {
+					font-weight: 600 !important;
+					margin: 0;
+					font-size: 14px;
+				}
+			}
 		}
 	}
 }

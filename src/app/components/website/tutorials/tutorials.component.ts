@@ -4,6 +4,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from '../../../services/admin.service';
 import { WebsiteService } from 'src/app/services/website.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
@@ -12,9 +13,6 @@ declare var $: any;
   styleUrls: ['./tutorials.component.scss']
 })
 export class TutorialsComponent implements OnInit {
-  currentActiveStep: number = 1;
-  progressWidth: number = 25; // Progress line width percentage
-
   isLoading: boolean = true;
   searchText: string = '';
   selectedCategory: string = 'All Tutorials';
@@ -23,334 +21,259 @@ export class TutorialsComponent implements OnInit {
   categories: any[] = [];
   showCopyMessage: boolean = false;
 
-  homePageData: any;
-  clientImages: any[] = [];
   fleetContents: any[] = [];
-  stepRotationInterval: any;
 
-  constructor(private adminServices: AdminService, private spinner: NgxSpinnerService, private websiteService: WebsiteService,) { }
+  // Video playback
+  selectedVideo: any = null;
+  safeVideoUrl: SafeResourceUrl | null = null;
+
+  constructor(
+    private adminServices: AdminService,
+    private spinner: NgxSpinnerService,
+    private websiteService: WebsiteService,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit(): void {
-    this.fetchHomePageData();
     this.initTutorialData();
 
     // Simulate initial loading for skeleton demo
     setTimeout(() => {
       this.isLoading = false;
     }, 1500);
-
-    $(document).ready(function () {
-      $('.client_logo').owlCarousel({
-        loop: true,
-        margin: 10,
-        autoplay: true,
-        autoplayTimeout: 1000,
-        autoplayHoverPause: true,
-        responsiveClass: true,
-        navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-          '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff">  <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
-        responsive: {
-          0: {
-            items: 1,
-            nav: false,
-            loop: true,
-            dots: false
-          }
-        }
-      });
-    });
   }
 
-  fetchHomePageData() {
-    this.spinner.show()
-
-    this.websiteService.fetchHomePageData()
-      .pipe(
-        catchError(err => {
-          this.spinner.hide()
-          return throwError(err)
-        })
-      ).subscribe(({ data }: any) => {
-        this.spinner.hide()
-        this.homePageData = data;
-        this.clientImages = this.fetchPageData('SOME OF OUR CLIENTS')?.images || [];
-        // Initialize all carousels after data is loaded
-        setTimeout(() => {
-          this.initOtherCarousels();
-          this.initStepRotation(); // Initialize step rotation animation
-        }, 100);
-      })
-  }
-
-  fetchPageData(section: string) {
-    if (section != undefined && this.homePageData != undefined) {
-      if (this.homePageData) {
-        for (let item in this.homePageData) {
-          if (this.homePageData[item].hasOwnProperty('title') && this.homePageData[item]['title'].toLowerCase() == section.toLowerCase()) {
-            return this.homePageData[item]
-          }
-        }
-      }
-    }
-  }
-
-  initOtherCarousels() {
-    // Initialize all other carousels with 1 item on mobile
-    setTimeout(() => {
-      // General owl carousels
-      $('.owl-carousels').owlCarousel({
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 2000,
-        dotsEach: 3,
-        dots: true,
-        autoplayHoverPause: true,
-        margin: 10,
-        responsiveClass: true,
-        responsive: {
-          0: {
-            items: 1, // Mobile: 1 item
-            nav: false,
-            loop: true,
-            dots: true
-          },
-          600: {
-            items: 2, // Tablet: 2 items
-            nav: true,
-            dots: true
-          },
-          1000: {
-            items: 3, // Desktop: 3 items
-            nav: true,
-            loop: true,
-            autoplay: true,
-            margin: 20
-          }
-        }
-      });
-
-      // Destination carousel
-      $('.destinationCarousel').owlCarousel({
-        loop: true,
-        autoplay: false,
-        dotsEach: 3,
-        dots: true,
-        autoplayTimeout: 2000,
-        autoplayHoverPause: true,
-        margin: 10,
-        responsiveClass: true,
-        responsive: {
-          0: {
-            items: 1, // Mobile: 1 item
-            nav: false,
-            loop: true,
-            dots: true
-          },
-          600: {
-            items: 2, // Tablet: 2 items
-            nav: true,
-            dots: true
-          },
-          1000: {
-            items: 3, // Desktop: 3 items
-            nav: true,
-            loop: true,
-            autoplay: false,
-            margin: 10,
-            dots: true
-          }
-        }
-      });
-
-      // View vehicle carousel
-      $('.viewVehicleCarousel').owlCarousel({
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 2000,
-        dotsEach: 3,
-        dots: true,
-        autoplayHoverPause: true,
-        margin: 10,
-        responsiveClass: true,
-        responsive: {
-          0: {
-            items: 1, // Mobile: 1 item
-            nav: false,
-            loop: true,
-            dots: true
-          },
-          600: {
-            items: 2, // Tablet: 2 items
-            nav: true,
-            dots: true
-          },
-          1000: {
-            items: 3, // Desktop: 3 items
-            nav: true,
-            loop: true,
-            autoplay: true,
-            margin: 20,
-            dots: true
-          }
-        }
-      });
-
-      // View vehicle carousel
-      $('.viewClientLogo').owlCarousel({
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 2000,
-        dotsEach: 3,
-        dots: true,
-        autoplayHoverPause: true,
-        margin: 10,
-        responsiveClass: true,
-        responsive: {
-          0: {
-            items: 1, // Mobile: 1 item
-            nav: false,
-            loop: true,
-            dots: true
-          },
-          600: {
-            items: 2, // Tablet: 2 items
-            nav: true,
-            dots: true
-          },
-          1000: {
-            items: 3, // Desktop: 3 items
-            nav: true,
-            loop: true,
-            autoplay: true,
-            margin: 20,
-            dots: true
-          },
-          1199: {
-            items: 4, // Desktop: 3 items
-            nav: true,
-            loop: true,
-            autoplay: true,
-            margin: 20,
-            dots: true
-          },
-          1380: {
-            items: 5, // Desktop: 3 items
-            nav: true,
-            loop: true,
-            autoplay: true,
-            margin: 20,
-            dots: true
-          }
-        }
-      });
-    }, 200);
-  }
-
-  initStepRotation() {
-    this.startStepRotation();
-  }
-
-  startStepRotation() {
-    if (this.stepRotationInterval) {
-      clearInterval(this.stepRotationInterval);
-    }
-    this.currentActiveStep = 1;
-    this.updateProgress();
-    this.stepRotationInterval = setInterval(() => {
-      this.currentActiveStep++;
-      if (this.currentActiveStep > 4) {
-        this.currentActiveStep = 1;
-      }
-      this.updateProgress();
-    }, 2000);
-  }
-
-  updateProgress() {
-    const segments = 3;
-    const stepIndex = this.currentActiveStep - 1;
-    this.progressWidth = (stepIndex / segments) * 100;
-  }
 
   initTutorialData() {
     this.fleetContents = [
       {
-        "title": "How to Book Your First Ride",
-        "category": "Booking",
-        "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+use+the+search+for+vehicles%2C+and+rates+in+the+search+engine%2C+Quote-bot+screen+and+filters).mp4',
-        "content": "Learn the step-by-step process of booking your first limousine service with our easy-to-use platform.",
-        "duration": "5:30",
-        "views": "12.5K",
-        "rating": "4.8",
-        "level": "Beginner",
-        "isFeatured": true
-      },
-      {
-        "title": "Advanced Booking: Scheduling Recurring Rides",
-        "category": "Booking",
-        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4',
-        "content": "Set up automated recurring bookings for your regular transportation needs.",
-        "duration": "7:20",
-        "views": "5.3K",
-        "rating": "4.8",
-        "level": "Advanced"
-      },
-      {
-        "title": "Managing Your Reservations Efficiently",
-        "category": "Booking",
-        "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4',
-        "content": "A comprehensive guide to managing, editing, and cancelling your rides with ease.",
-        "duration": "7:20",
-        "views": "5.3K",
-        "rating": "4.8",
-        "level": "Advanced"
-      },
-      {
-        "title": "Payment Guide: Secure & Fast Transactions",
-        "category": "Payments",
-        "image": "assets/images/images_tutorial/updated-images/addbank.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Bank+Details.mp4',
-        "content": "Everything you need to know about secure payment methods on 1800 LIMO.COM.",
-        "duration": "4:15",
-        "views": "3.2K",
-        "rating": "4.9",
-        "level": "Beginner"
-      },
-      {
-        "title": "Mobile App: Features & Benefits",
-        "category": "Mobile App",
-        "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+use+the+search+for+vehicles%2C+and+rates+in+the+search+engine%2C+Quote-bot+screen+and+filters).mp4',
-        "content": "Maximize your travel experience with the 1800 LIMO.COM mobile application.",
-        "duration": "6:45",
-        "views": "8.1K",
-        "rating": "4.7",
-        "level": "Intermediate"
-      },
-      {
-        "title": "Account Setup & Profile Management",
-        "category": "Account Setup",
-        "image": "assets/images/images_tutorial/updated-images/loginasaffiliate.png",
-        "link": 'https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Individual+Signup.mp4',
-        "content": "Set up your account and manage your preferences for a personalized service.",
-        "duration": "3:50",
-        "views": "15.2K",
-        "rating": "4.6",
-        "level": "Beginner"
+        "type": "fleet_tutorials",
+        "version": "1.0",
+        "contents": [
+          {
+            "type": "user_tutorials",
+            "title": "How to Book Your First Ride",
+            "category": "Manage Bookings",
+            "duration": "5:30",
+            "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+use+the+search+for+vehicles%2C+and+rates+in+the+search+engine%2C+Quote-bot+screen+and+filters).mp4%22",
+            "content": "Learn the step-by-step process of booking your first limousine service with our easy-to-use platform."
+          },
+          {
+            "type": "user_tutorials",
+            "title": "How to edit a booking",
+            "category": "Manage Bookings",
+            "duration": "7:20",
+            "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4%22",
+            "content": "A guide on how to edit a booking from one-way to round trip or charter tour from the booking dashboard."
+          },
+          {
+            "type": "user_tutorials",
+            "title": "How to create a repeat booking",
+            "category": "Manage Bookings",
+            "duration": "4:10",
+            "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Repeat+a+booking.mp4",
+            "content": "A guide on how to create a repeat booking."
+          },
+          {
+            "type": "user_tutorials",
+            "title": "How to create a return booking",
+            "category": "Manage Bookings",
+            "duration": "4:05",
+            "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Return+a+booking.mp4",
+            "content": "A guide on how to create a return booking."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to register as an affiliate Operator",
+            "category": "Registration",
+            "duration": "6:15",
+            "image": "assets/images/images_tutorial/updated-images/loginasaffiliate.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Register+Affiliate+and+step+0.mp4",
+            "content": "A step-by-step guide on how to sign up and register for an affiliate program."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to complete step 1 as an affiliate",
+            "category": "Registration",
+            "duration": "3:40",
+            "image": "assets/images/images_tutorial/updated-images/step-1.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4%22",
+            "content": "A guide on how to complete step 1 for registering as an affiliate."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to complete step 2 as an affiliate",
+            "category": "Registration",
+            "duration": "3:50",
+            "image": "assets/images/images_tutorial/updated-images/step-2.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4%22",
+            "content": "A guide on how to complete step 2 for registering as an affiliate."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to complete step 3 as an affiliate",
+            "category": "Registration",
+            "duration": "4:00",
+            "image": "assets/images/images_tutorial/updated-images/step-3.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4%22",
+            "content": "A guide on how to complete step 3 for registering as an affiliate."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to complete step 4 as an affiliate",
+            "category": "Registration",
+            "duration": "4:10",
+            "image": "assets/images/images_tutorial/updated-images/step-4.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4%22",
+            "content": "A guide on how to complete step 4 for registering as an affiliate."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to complete step 5 as an affiliate",
+            "category": "Registration",
+            "duration": "4:30",
+            "image": "assets/images/images_tutorial/updated-images/step-5.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4%22",
+            "content": "A guide on how to complete step 5 for registering as an affiliate."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to create a farmout booking",
+            "category": "Manage Bookings",
+            "duration": "6:20",
+            "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Farmout+booking.mp4",
+            "content": "A guide on how to create a farmout booking and earn 10% commission."
+          },
+          {
+            "type": "travel_agent_tutorials",
+            "title": "How to register as a Travel Advisor",
+            "category": "Registration",
+            "duration": "5:45",
+            "image": "assets/images/images_tutorial/updated-images/registerasagent.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+register+as+Travel+Agent+-+Step+1+and+2.mp4%22",
+            "content": "A step-by-step guide on how to sign up and register for a Travel Advisor."
+          },
+          {
+            "type": "travel_agent_tutorials",
+            "title": "How to create a booking as a Travel Advisor",
+            "category": "Manage Bookings",
+            "duration": "6:10",
+            "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Booking+on+Travel+Agent+Account.mp4%22",
+            "content": "A guide on how to create a booking as a travel advisor and earn 10% commission."
+          },
+
+          {
+            "type": "user_tutorials",
+            "title": "How to register as Individual/Customer",
+            "category": "Registration",
+            "duration": "4:00",
+            "image": "assets/images/images_tutorial/updated-images/registerasindv.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Individual+Signup.mp4",
+            "content": "A step-by-step guide on how to sign up and register for an Individual account."
+          },
+          {
+            "type": "user_tutorials",
+            "title": "How to add a family member in Individual account",
+            "category": "Registration",
+            "duration": "3:25",
+            "image": "assets/images/images_tutorial/updated-images/familymember.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Adding+family+members+other+members+to+the+Individual+account.mp4%22",
+            "content": "A guide on how to add a family member to your individual account."
+          },
+          {
+            "type": "common_tutorials",
+            "title": "How to choose correct account to Register",
+            "category": "Registration",
+            "duration": "3:50",
+            "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+choose+correct+account+to+register.mp4",
+            "content": "A guide on how to choose correct account to register on the platform."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to advertise your fleet for free",
+            "category": "Subscription",
+            "duration": "4:45",
+            "image": "assets/images/images_tutorial/updated-images/freeplan.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Free+subscription+Plan.mp4",
+            "content": "A step-by-step guide on how to subscribe to the free Chauffer Select software plan."
+          },
+          {
+            "type": "subscriber_tutorials",
+            "title": "How to buy basic plan with Chauffer Select software",
+            "category": "Subscription",
+            "duration": "5:10",
+            "image": "assets/images/images_tutorial/updated-images/basic.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Basic+Subscription+Plan.mp4",
+            "content": "A step-by-step guide on how to buy the basic plan of the Chauffer Select software."
+          },
+          {
+            "type": "subscriber_tutorials",
+            "title": "How to buy fleet plan with Chauffer Select software",
+            "category": "Subscription",
+            "duration": "5:50",
+            "image": "assets/images/images_tutorial/updated-images/fleet.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Subscribe+to+the+Fleet+Subscription+Plan.mp4",
+            "content": "A step-by-step guide on how to buy the fleet operator plan of the Chauffer Select software."
+          },
+          {
+            "type": "subscriber_tutorials",
+            "title": "How to add bank details as new customer",
+            "category": "Subscription",
+            "duration": "4:15",
+            "image": "assets/images/images_tutorial/updated-images/addbank.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Bank+Details.mp4",
+            "content": "A guide on how to add bank details for Stripe as a new customer."
+          },
+          {
+            "type": "subscriber_tutorials",
+            "title": "How to invite drivers to your account",
+            "category": "Subscription",
+            "duration": "3:55",
+            "image": "assets/images/images_tutorial/updated-images/invitedriver.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Invite+Driver.mp4",
+            "content": "A guide on how to invite drivers under your company."
+          },
+          {
+            "type": "common_tutorials",
+            "title": "How to do search on daily booking frame",
+            "category": "All Tutorials",
+            "duration": "4:40",
+            "image": "assets/images/images_tutorial/updated-images/searchondailybooking.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Search+bookings+on+daily+booking+frame.mp4",
+            "content": "A guide on how to search bookings using booking number, phone number, or name."
+          },
+          {
+            "type": "driver_tutorials",
+            "title": "How to add sub admin",
+            "category": "Registration",
+            "duration": "3:35",
+            "image": "assets/images/images_tutorial/updated-images/addsubadmin.png",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Add+Sub+Admin.mp4",
+            "content": "A guide on how to add a sub admin."
+          }
+        ]
       }
+
     ];
+
+    this.fleetContents = this.fleetContents[0]?.contents || [];
 
     const iconMap: any = {
       'All Tutorials': 'bi bi-book',
-      'Booking': 'bi bi-calendar4',
-      'Payments': 'bi-credit-card',
-      'Mobile App': 'bi-phone',
-      'Account Setup': 'bi bi-people'
+      'Manage Bookings': 'bi bi-calendar4',
+      'Registration': 'bi bi-person-badge',
+      'Subscription': 'bi bi-cart-check',
     };
 
-    const uniqueCats = Array.from(new Set(this.fleetContents.map(t => t.category)));
+    const uniqueCats = Array.from(new Set(this.fleetContents.map(t => t.category)))
+      .filter(cat => cat !== 'All Tutorials');
     this.categories = [
       { name: 'All Tutorials', icon: iconMap['All Tutorials'] },
       ...uniqueCats.map(cat => ({
@@ -361,6 +284,21 @@ export class TutorialsComponent implements OnInit {
 
     this.featuredTutorial = this.fleetContents.find(t => t.isFeatured) || this.fleetContents[0];
     this.applyFilter();
+  }
+
+  formatTutorialType(type: string): string {
+    const typeMap: { [key: string]: string } = {
+      'user_tutorials': 'Individual',
+      'driver_tutorials': 'Affiliate',
+      'travel_agent_tutorials': 'Advisor',
+      'subscriber_tutorials': 'Subscriber',
+      'common_tutorials': 'General'
+    };
+    return typeMap[type] || 'Tutorial';
+  }
+
+  isFilterActive(category: string): boolean {
+    return this.selectedCategory === category;
   }
 
   setCategory(cat: string) {
@@ -381,28 +319,23 @@ export class TutorialsComponent implements OnInit {
     });
   }
 
+  openVideo(tutorial: any) {
+    this.selectedVideo = tutorial;
+    this.safeVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(tutorial.link);
+    // Prevent scrolling when video is open
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeVideo() {
+    this.selectedVideo = null;
+    this.safeVideoUrl = null;
+    document.body.style.overflow = 'auto';
+  }
+
   getFilteredTutorials() {
     return this.filteredTutorials;
   }
 
-  getTutorialsByCategory() {
-    const grouped: any = {};
-    if (this.selectedCategory !== 'All Tutorials') {
-      grouped[this.selectedCategory] = this.filteredTutorials;
-    } else {
-      this.filteredTutorials.forEach(tutorial => {
-        if (!grouped[tutorial.category]) {
-          grouped[tutorial.category] = [];
-        }
-        grouped[tutorial.category].push(tutorial);
-      });
-    }
-    return grouped;
-  }
-
-  objectKeys(obj: any): string[] {
-    return Object.keys(obj);
-  }
 
   downloadVideo(url: string, filename: string) {
     if (!url) return;

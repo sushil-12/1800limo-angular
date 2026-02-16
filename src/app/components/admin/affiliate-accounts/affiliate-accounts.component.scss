@@ -88,10 +88,10 @@
 }
 
 a.dropdown-item {
-   	padding: 0.6rem 1.6rem !important;
-	font-size: 16px;
-	font-weight: 500 !important;
-	font-family: "Roboto", sans-serif !important;
+    padding: 0.6rem 1.6rem !important;
+    font-size: 16px;
+    font-weight: 500 !important;
+    font-family: "Roboto", sans-serif !important;
 }
 
 .x-circle-btn {
@@ -111,35 +111,43 @@ a.dropdown-item {
     margin-left: 2px;
 }
 
-.headingStatus {
+.status-badge {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 500;
     display: flex;
-    gap: 20px;
-    margin-left: 4px;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    cursor: default;
+    border: none; // Removed border as per screenshot
+
+    strong {
+        margin-left: 6px;
+        font-weight: 700;
+        font-size: 18px !important;
+    }
+
+    &:hover {
+        transform: scale(1.02);
+    }
 }
 
-.headingAccepted {
-    font-size: 18px;
-    color: #00bd1f;
+.badge-accepted,
+.badge-in-progress,
+.badge-rejected,
+.badge-stripe,
+.badge-step1 {
+    background-color: #fff4e6; // Soft cream/peach background
+    color: #f28524; // Vibrant orange text
 }
 
-.headingInProgress {
-    font-size: 18px;
-    color: #0474fc;
-}
-
-.headingRejected {
-    font-size: 18px;
-    color: #fc0404;
-}
-
-.headingStripe {
-    font-size: 18px;
-    color: #ff69b4;
-}
-
-.headingStep1 {
-    font-size: 18px;
-    color: #636567;
+.headings_count {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .accpet_reject_div {
@@ -181,12 +189,12 @@ a.dropdown-item {
     background-color: #a2a3a2 !important;
 }
 
-.headings_count{
+.headings_count {
     gap: 10px;
 }
 
 @media screen and (max-width:767px) {
-    .headings_count{
+    .headings_count {
         flex-direction: column;
         gap: 0px;
     }

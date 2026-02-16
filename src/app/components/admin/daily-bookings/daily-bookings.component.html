@@ -310,13 +310,14 @@
 
 									<td class="sorting_1"
 										(click)="editAction(booking?.booking_id,booking?.booking_status)">
-										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date)
-											}}
-										</p>
-										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time)
+										<p style="font-weight: 600 !important; white-space: nowrap !important;">{{
+											FormatDate(booking.pickup_date)
 											}}
 										</p>
 										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
+										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time)
+											}}
+										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
 										data-target="#previewBookingOnID"
@@ -353,31 +354,36 @@
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
-										<span class="loc-logo"
-											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
-										<span class="text-underline cursor-pointer">
-											<span
-												*ngIf="!booking.isPickupExpanded && booking.pickup_address?.length > 20; else fullPickup">
-												<span
-													[innerHTML]="highlighText(booking.pickup_address | slice:0:20)"></span>...
-												<a href="javascript:void(0);"
-													(click)="booking.isPickupExpanded = true; $event.stopPropagation()"
-													style="text-decoration: none; font-size: 12px;">Read More</a>
-											</span>
-											<ng-template #fullPickup>
-												<span [innerHTML]="highlighText(booking.pickup_address)"></span>
-												<a *ngIf="booking.pickup_address?.length > 20"
-													href="javascript:void(0);"
-													(click)="booking.isPickupExpanded = false; $event.stopPropagation()"
-													style="text-decoration: none; font-size: 12px; margin-left: 5px;">Read
-													Less</a>
-											</ng-template>
-										</span>
+										<div class="address-layout">
+											<div class="address-main-row d-flex align-items-center">
+												<span class="loc-logo"
+													(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+													<i class="bi bi-geo-alt-fill pin-icon-preview"></i>
+												</span>
+												<div class="address-content ">
+													<span
+														*ngIf="!booking.isPickupExpanded && booking.pickup_address?.length > 16; else fullPickup"
+														[innerHTML]="highlighText(booking.pickup_address | slice:0:16) + '...'">
+													</span>
+													<a *ngIf="!booking.isPickupExpanded && booking.pickup_address?.length > 16"
+														href="javascript:void(0);"
+														(click)="booking.isPickupExpanded = true; $event.stopPropagation()"
+														class="toggle-link inline-link">Read More</a>
+
+													<ng-template #fullPickup>
+														<span [innerHTML]="highlighText(booking.pickup_address)"></span>
+														<a *ngIf="booking.pickup_address?.length > 16"
+															href="javascript:void(0);"
+															(click)="booking.isPickupExpanded = false; $event.stopPropagation()"
+															class="toggle-link inline-link ml-1">Read Less</a>
+													</ng-template>
+												</div>
+											</div>
+										</div>
 
 									</td>
 									<td>
-										<p (click)="openModal(booking, 'Loose_Affiliate')"
+										<p style="white-space: pre" (click)="openModal(booking, 'Loose_Affiliate')"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span
@@ -391,13 +397,9 @@
 											<p (click)="openModal(booking, 'Affiliate')"
 												[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												<span class="text-capitalize"
-													[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
-
-												<!-- <span class="font-weight-bolder"
-														[innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
-												<span>({{fomatAffiliateType(booking.affiliate_type)}})</span>
-												|
+												<span
+													[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>
+												<span>({{fomatAffiliateType(booking.affiliate_type)}})</span> |
 												<span class="font-weight-bolder"
 													[innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
 												<span class="font-weight-bolder"
@@ -406,10 +408,9 @@
 											<ng-template #gigOperator>
 												<p [ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(click)="openModal(booking, 'Affiliate')">
-													<span class="text-capitalize"
-														[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
-													<!-- <span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
-													<span>({{fomatAffiliateType(booking.affiliate_type)}})</span>|
+													<span
+														[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>
+													<span>({{fomatAffiliateType(booking.affiliate_type)}})</span> |
 													<span class="font-weight-bolder"
 														[innerHTML]="highlighText(booking.gig_cell_isd)"></span>
 													<span class="font-weight-bolder"
@@ -417,27 +418,33 @@
 												</p>
 											</ng-template>
 										</ng-template>
-										<span class="loc-logo"
-											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
-										<span class="text-underline cursor-pointer">
-											<span
-												*ngIf="!booking.isDropoffExpanded && booking.dropoff_address?.length > 20; else fullDropoff">
-												<span
-													[innerHTML]="highlighText(booking.dropoff_address | slice:0:20)"></span>...
-												<a href="javascript:void(0);"
-													(click)="booking.isDropoffExpanded = true; $event.stopPropagation()"
-													style="text-decoration: none; font-size: 12px;">Read More</a>
-											</span>
-											<ng-template #fullDropoff>
-												<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
-												<a *ngIf="booking.dropoff_address?.length > 20"
-													href="javascript:void(0);"
-													(click)="booking.isDropoffExpanded = false; $event.stopPropagation()"
-													style="text-decoration: none; font-size: 12px; margin-left: 5px;">Read
-													Less</a>
-											</ng-template>
-										</span>
+										<div class="address-layout">
+											<div class="address-main-row d-flex align-items-center">
+												<span class="loc-logo"
+													(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+													<i class="bi bi-geo-alt-fill pin-icon-preview"></i>
+												</span>
+												<div class="address-content ">
+													<span
+														*ngIf="!booking.isDropoffExpanded && booking.dropoff_address?.length > 16; else fullDropoff"
+														[innerHTML]="highlighText(booking.dropoff_address | slice:0:16) + '...'">
+													</span>
+													<a *ngIf="!booking.isDropoffExpanded && booking.dropoff_address?.length > 16"
+														href="javascript:void(0);"
+														(click)="booking.isDropoffExpanded = true; $event.stopPropagation()"
+														class="toggle-link inline-link">Read More</a>
+
+													<ng-template #fullDropoff>
+														<span
+															[innerHTML]="highlighText(booking.dropoff_address)"></span>
+														<a *ngIf="booking.dropoff_address?.length > 16"
+															href="javascript:void(0);"
+															(click)="booking.isDropoffExpanded = false; $event.stopPropagation()"
+															class="toggle-link inline-link ml-1">Read Less</a>
+													</ng-template>
+												</div>
+											</div>
+										</div>
 
 									</td>
 									<td>

@@ -1,25 +1,32 @@
-.headingAccepted {
-  font-size: 20px;
-  color: #00bd1f;
-  cursor: pointer;
+.status-badge {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+  background-color: #fff4e6; // Soft cream/peach background
+  color: #f28524; // Vibrant orange text
+  border: none;
+
+  strong {
+    margin-left: 6px;
+    font-weight: 700;
+    font-size: 18px !important;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
-.headingInProgress {
-  font-size: 20px;
-  color: #0474fc;
-  cursor: pointer;
-}
-
-.headingRejected {
-  font-size: 20px;
-  color: #fc0404;
-  cursor: pointer;
-}
-
-.headingStripe {
-  font-size: 20px;
-  color: #ff69b4;
-  cursor: pointer;
+.wrap-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .clickable {
@@ -28,18 +35,18 @@
   transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
   transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
 
-  &:hover {
-    text-decoration: underline;
-    color: var(--blue);
-  }
+  // &:hover {
+  //   text-decoration: none;
+  //   color: #000;
+  // }
 }
 
-.mb-search{
+.mb-search {
   margin-bottom: -1rem;
 }
 
 @media only screen and (max-width: 767px) {
-  .mb-search{
+  .mb-search {
     margin-bottom: .5rem;
   }
 }

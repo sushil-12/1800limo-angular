@@ -85,12 +85,17 @@
 						Send Sms
 					</button>
 				</div>
-				<div class="col-md-6 d-flex justify-content-end headings_count">
-					<h3 class="headingAccepted">Accepted: {{affiliate_count?.accepted}}</h3>
-					<h3 class="headingInProgress">In Progress: {{affiliate_count?.in_progress}}</h3>
-					<h3 class="headingRejected">Rejected: {{affiliate_count?.rejected}}</h3>
-					<h3 class="headingStripe">Stripe Error: {{affiliate_count?.stripe_error}}</h3>
-					<h3 class="headingStep1">Step 1: {{affiliate_count?.step1_count}}</h3>
+				<div class="col-md-6 d-flex justify-content-end headings_count wrap-badges">
+					<span class="status-badge badge-accepted">Accepted:
+						<strong>{{affiliate_count?.accepted}}</strong></span>
+					<span class="status-badge badge-in-progress">In Progress:
+						<strong>{{affiliate_count?.in_progress}}</strong></span>
+					<span class="status-badge badge-rejected">Rejected:
+						<strong>{{affiliate_count?.rejected}}</strong></span>
+					<span class="status-badge badge-stripe">Stripe Error:
+						<strong>{{affiliate_count?.stripe_error}}</strong></span>
+					<span class="status-badge badge-step1">Step 1:
+						<strong>{{affiliate_count?.step1_count}}</strong></span>
 				</div>
 				<!-- <div class="col-md-6 d-flex justify-content-end">
 					<button class="custom-btn add-button" data-toggle="modal" data-target="#sendEmailModal"

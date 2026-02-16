@@ -7,9 +7,9 @@
             <span class="hero-badge">
                 <i class="bi bi-camera-video mr-1"></i> Video Tutorials
             </span>
-            <h1 class="font-weight-bold mb-3">Learn At Your Own Pace</h1>
-            <p class="lead mx-auto">Master the 1800 LIMO.COM platform with our
-                comprehensive video tutorials and guides</p>
+            <h1 class="font-weight-bold mb-3">Everything You Need to Get Started</h1>
+            <p class="lead mx-auto">Learn how to use the 1800LIMO.com platform with easy video tutorials and
+                step-by-step guides</p>
 
             <div class="search-container mt-4">
                 <div class="search-box">
@@ -33,7 +33,7 @@
                         <div class="featured-image-side col-lg-6 p-0 position-relative overflow-hidden">
                             <img [src]="featuredTutorial.image" class="featured-img" [alt]="featuredTutorial.title">
                             <div class="play-overlay">
-                                <a [href]="featuredTutorial.link" target="_blank" class="play-btn">
+                                <a href="javascript:void(0)" (click)="openVideo(featuredTutorial)" class="play-btn">
                                     <i class="bi bi-play-fill text-white"></i>
                                 </a>
                             </div>
@@ -43,30 +43,16 @@
                             <div class="card-body h-100 d-flex flex-column justify-content-center text-white">
                                 <div class="mb-3">
                                     <span class="featured-badge-overlay">
-                                        <i class="bi bi-star-fill mr-1"></i> Featured Tutorial
+                                        <i class="bi bi-star-fill mr-1"></i> Create Booking
                                     </span>
                                 </div>
                                 <h2 class="card-title font-weight-bold mb-3 featured-title">{{featuredTutorial.title}}
                                 </h2>
                                 <p class="card-text mb-4 lead-card opacity-75">{{featuredTutorial.content}}</p>
 
-                                <div class="featured-meta-row d-flex align-items-center mb-4 flex-wrap">
-                                    <div class="d-flex align-items-center mr-4 mb-2">
-                                        <i class="bi bi-eye mr-2 text-red"></i>
-                                        <span class="meta-text">{{featuredTutorial.views}} views</span>
-                                    </div>
-                                    <div class="d-flex align-items-center mr-4 mb-2">
-                                        <i class="bi bi-star-fill mr-2 text-warning"></i>
-                                        <span class="meta-text">{{featuredTutorial.rating}} rating</span>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="bi bi-journal-text mr-2 text-red"></i>
-                                        <span class="meta-text">{{featuredTutorial.level}}</span>
-                                    </div>
-                                </div>
 
                                 <div class="featured-actions d-flex flex-wrap">
-                                    <a [href]="featuredTutorial.link" target="_blank"
+                                    <a href="javascript:void(0)" (click)="openVideo(featuredTutorial)"
                                         class="btn btn-primary-custom btn-lg font-weight-bold px-4 mr-3 mb-2 hvr-grow featured-btn">Watch
                                         Now</a>
                                     <button (click)="downloadVideo(featuredTutorial.link, featuredTutorial.title)"
@@ -136,37 +122,25 @@
                     <div class="card tutorial-card h-100 shadow-sm border-0">
                         <div class="card-img-wrapper position-relative overflow-hidden">
                             <img [src]="tutorial.image" class="card-img-top" [alt]="tutorial.title">
-                            <a [href]="tutorial.link" target="_blank" class="play-overlay-small">
+                            <a href="javascript:void(0)" (click)="openVideo(tutorial)" class="play-overlay-small">
                                 <div class="play-btn-small">
                                     <i class="bi bi-play-fill"></i>
                                 </div>
                             </a>
                             <span class="duration-badge"><i class="bi bi-clock mr-1"></i>
                                 {{tutorial.duration}}</span>
-                            <span class="level-badge"
-                                [class.advanced]="tutorial.level === 'Advanced'">{{tutorial.level}}</span>
+                            <span class="tutorial-type-badge">{{formatTutorialType(tutorial.type)}}</span>
                         </div>
                         <div class="card-body">
-                            <div class="card-category mb-2">
-                                <i class="bi bi-camera-video mr-1"></i> {{tutorial.category}}
+                            <div class="card-category mb-2 d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-camera-video mr-1"></i> {{tutorial.category}}</span>
+                                <button (click)="copyLink(tutorial.link)" class="btn btn-link p-0 share-btn hvr-grow"
+                                    title="Copy Link">
+                                    <i class="bi bi-clipboard" style="font-size: 1rem; color: #DF6A00;"></i>
+                                </button>
                             </div>
                             <h5 class="card-title font-weight-bold mb-2">{{tutorial.title}}</h5>
                             <p class="card-text text-muted small">{{tutorial.content}}</p>
-                            <div class="card-divider mt-4 mb-2"></div>
-                        </div>
-                        <div class="card-footer bg-white border-0 pt-0 pb-4">
-                            <div
-                                class="d-flex justify-content-between align-items-center text-muted small font-weight-medium">
-                                <div class="d-flex align-items-center meta-info">
-                                    <span class="mr-3"><i class="bi bi-eye mr-1"></i> {{tutorial.views}}</span>
-                                    <span><i class="bi bi-star-fill text-warning mr-1"></i>
-                                        {{tutorial.rating}}</span>
-                                </div>
-                                <button (click)="copyLink(tutorial.link)" class="btn btn-link p-0 share-btn hvr-grow"
-                                    title="Copy Link">
-                                    <i class="bi bi-clipboard" style="font-size: 1.2rem; color: #DF6A00;"></i>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -222,7 +196,7 @@
                             </li>
                         </ul>
 
-                        <button style="background: #fff;"
+                        <button style="background: #fff;" routerLink="/"
                             class="btn btn-light-cta btn-lg px-5 font-weight-bold rounded-pill hvr-grow">
                             Get Started Now
                         </button>
@@ -267,5 +241,22 @@
     <div *ngIf="showCopyMessage" class="copy-toast">
         <i class="bi bi-check-circle"></i>
         <span>Link copied to clipboard!</span>
+    </div>
+
+    <!-- Video Overlay Player -->
+    <div class="video-overlay" *ngIf="selectedVideo" (click)="closeVideo()">
+        <div class="video-container" (click)="$event.stopPropagation()">
+            <button class="close-video" (click)="closeVideo()" aria-label="Close video">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="video-wrapper">
+                <iframe *ngIf="safeVideoUrl" [src]="safeVideoUrl" frameborder="0" allowfullscreen
+                    allow="autoplay"></iframe>
+            </div>
+            <div class="video-info p-3 text-white">
+                <h4 class="mb-2">{{selectedVideo.title}}</h4>
+                <p class="m-0 opacity-75">{{selectedVideo.content}}</p>
+            </div>
+        </div>
     </div>
 </div>

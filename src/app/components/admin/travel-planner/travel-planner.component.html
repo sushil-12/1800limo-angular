@@ -24,13 +24,15 @@
 					</button>
 				</div>
 			</div>
-			<div class="row" style="margin-bottom: -15px;">
-				<div class="col-md-12 d-flex headings_count" style="gap: 10px;">
-					<h3 class="headingAccepted">Accepted: {{travelAccountCount?.accepted}}</h3>
-					<h3 class="headingInProgress">Pending: {{travelAccountCount?.pending_count}}</h3>
-					<h3 class="headingRejected">Rejected: {{travelAccountCount?.rejected}}</h3>
-					<h3 class="headingStripe">Waiting for approval: {{travelAccountCount?.waiting_for_approval}}</h3>
-					<h3 class="headingUnregistered">Unregistered: {{travelAccountCount?.unregistered}}</h3>
+			<div class="row" style="margin-bottom: 5px;">
+				<div class="col-md-12 d-flex headings_count wrap-badges" style="gap: 12px;">
+					<span class="status-badge">Accepted: <strong>{{travelAccountCount?.accepted}}</strong></span>
+					<span class="status-badge">Pending: <strong>{{travelAccountCount?.pending_count}}</strong></span>
+					<span class="status-badge">Rejected: <strong>{{travelAccountCount?.rejected}}</strong></span>
+					<span class="status-badge">Waiting for approval:
+						<strong>{{travelAccountCount?.waiting_for_approval}}</strong></span>
+					<span class="status-badge">Unregistered:
+						<strong>{{travelAccountCount?.unregistered}}</strong></span>
 				</div>
 			</div>
 

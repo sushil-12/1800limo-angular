@@ -164,34 +164,41 @@ a:hover {
   color: #fff;
 }
 
-.headingAccepted {
-  font-size: 20px;
-  color: #00bd1f;
+.status-badge {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+  cursor: default;
+  background-color: #fff4e6; // Soft cream/peach background
+  color: #f28524; // Vibrant orange text
+  border: none;
+
+  strong {
+    margin-left: 6px;
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
-.headingInProgress {
-  font-size: 20px;
-  color: #0474fc;
-}
-
-.headingRejected {
-  font-size: 20px;
-  color: #fc0404;
-}
-
-.headingStripe {
-  font-size: 20px;
-  color: #ff69b4;
-}
-
-.headingUnregistered{
-  font-size: 20px;
-  color: #636567;
+.headings_count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 @media screen and (max-width:767px) {
-  .headings_count{
-      flex-direction: column;
-      gap: 0px;
+  .headings_count {
+    flex-direction: column;
+    gap: 0px;
   }
 }

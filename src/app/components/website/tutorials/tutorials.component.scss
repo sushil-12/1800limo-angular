@@ -163,7 +163,6 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 				width: 90px;
 				height: 90px;
 				background: $primary-color;
-				border: 10px solid rgba(255, 255, 255, 0.15);
 				border-radius: 50%;
 				display: flex;
 				align-items: center;
@@ -218,20 +217,6 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		color: #D1D5DC;
 	}
 
-	.featured-meta-row {
-		font-size: 0.95rem;
-		font-weight: 600;
-
-		.meta-text {
-			font-size: 16px;
-			font-weight: 400;
-			color: #99A1AF;
-		}
-
-		i {
-			font-size: 1.1rem;
-		}
-	}
 
 	.btn-primary-custom {
 		background: $primary-color;
@@ -436,21 +421,22 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		font-weight: 700;
 	}
 
-	.level-badge {
+	.tutorial-type-badge {
 		position: absolute;
-		top: 12px;
-		left: 12px;
-		background: $primary-color;
-		color: #fff;
-		padding: 5px 12px;
-		border-radius: 4px;
-		font-size: 0.7rem;
-		font-weight: 600;
-		box-shadow: none;
+		top: 15px;
+		left: 15px;
+		background: #f7941d;
+		color: white;
+		padding: 4px 12px;
+		border-radius: 20px;
+		font-size: 0.75rem;
+		font-weight: 700;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	}
 
+
 	.card-body {
-		padding: 20px 20px 0 20px;
+		padding: 20px 20px 20px 20px;
 
 		.card-category {
 			font-size: 0.7rem;
@@ -488,11 +474,6 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	.card-footer {
 		padding: 0 20px 20px 20px;
 
-		.meta-info {
-			color: #6A7282;
-			font-weight: 400;
-			font-size: 16px;
-		}
 
 		.share-btn {
 			color: #DF6A00;
@@ -804,4 +785,101 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		padding-right: 1rem;
 	}
 
+}
+
+// Video Overlay Styles
+.video-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.9);
+	z-index: 10000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	backdrop-filter: blur(10px);
+	animation: fadeInPlayer 0.3s ease;
+
+	.video-container {
+		width: 100%;
+		max-width: 1000px;
+		position: relative;
+		background: #000;
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+	}
+
+	.close-video {
+		position: absolute;
+		top: -40px;
+		right: 0;
+		background: transparent;
+		border: none;
+		color: white;
+		font-size: 1.5rem;
+		cursor: pointer;
+		z-index: 10;
+		transition: transform 0.2s;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+
+		@media (max-width: 768px) {
+			top: 10px;
+			right: 10px;
+			background: rgba(0, 0, 0, 0.5);
+			width: 35px;
+			height: 35px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	.video-wrapper {
+		position: relative;
+		padding-bottom: 56.25%; // 16:9
+		height: 0;
+
+		iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.video-info {
+		padding: 1.5rem;
+		background: #111;
+
+		h4 {
+			color: $primary-color;
+			font-weight: 700;
+			margin-bottom: 0.5rem;
+		}
+
+		p {
+			color: #ccc;
+			margin: 0;
+			line-height: 1.5;
+		}
+	}
+}
+
+@keyframes fadeInPlayer {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
 }
