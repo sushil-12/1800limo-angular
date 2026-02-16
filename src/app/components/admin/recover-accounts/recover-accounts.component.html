@@ -75,21 +75,24 @@
         </div>
 
         <div class="row m-2">
-            <div class="col-md-4 col-sm-12 custom-control custom-checkbox">
+            <div class="col-12 custom-control custom-checkbox mb-3">
                 <mat-slide-toggle id="deleted_accounts" class="example-margin" [color]="color" [checked]="isDeletedAcc"
                     (change)="handleChangeToggle();loadAccounts()" tabindex="1">
                 </mat-slide-toggle>
                 <label class="ml-3" for="deleted_accounts">Show Deleted accounts</label>
             </div>
-            <div class="col-md-8 col-sm-12 d-flex justify-content-end" style="gap: 15px;" *ngIf="showActionColumn">
-                <h3 class="headingAccepted" routerLink="/admin/individual-account-admin">Individual:
-                    {{accounts_count?.individual_count}}</h3>
-                <h3 class="headingInProgress" routerLink="/admin/affiliates/all-operators">Driver:
-                    {{accounts_count?.driver_count}}</h3>
-                <h3 class="headingRejected" routerLink="/admin/travel-planner-account-admin">Travel Advisor:
-                    {{accounts_count?.tarvel_agent_count}}</h3>
-                <h3 class="headingStripe" routerLink="/admin/sub-admins">Sub Admin: {{accounts_count?.subadmin_count}}
-                </h3>
+        </div>
+        <div class="row m-2" *ngIf="showActionColumn">
+            <div class="col-12 d-flex flex-wrap wrap-badges" style="gap: 15px;">
+                <span class="status-badge clickable" routerLink="/admin/individual-account-admin">Individual:
+                    <strong>{{accounts_count?.individual_count}}</strong></span>
+                <span class="status-badge clickable" routerLink="/admin/affiliates/all-operators">Driver:
+                    <strong>{{accounts_count?.driver_count}}</strong></span>
+                <span class="status-badge clickable" routerLink="/admin/travel-planner-account-admin">Travel Advisor:
+                    <strong>{{accounts_count?.tarvel_agent_count}}</strong></span>
+                <span class="status-badge clickable" routerLink="/admin/sub-admins">Sub Admin:
+                    <strong>{{accounts_count?.subadmin_count}}</strong>
+                </span>
             </div>
         </div>
         <div class="containeredd driverside_table">
@@ -285,17 +288,17 @@
     </div>
 </div>
 
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true" data-bs-backdrop="static" 
-data-bs-keyboard="false">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header pb-0 d-flex justify-content-center text-success">
-				<h4 class="mb-1" style="font-weight: 600;font-size: 23px;">{{successMessage}}!</h4>
-			</div>
-			<!-- <div class="modal-footer">
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-0 d-flex justify-content-center text-success">
+                <h4 class="mb-1" style="font-weight: 600;font-size: 23px;">{{successMessage}}!</h4>
+            </div>
+            <!-- <div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="redirecttodailybooking()">
 					Okay</button>
 			</div> -->
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
