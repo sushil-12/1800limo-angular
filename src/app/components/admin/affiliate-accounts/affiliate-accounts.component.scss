@@ -193,6 +193,11 @@ a.dropdown-item {
     gap: 10px;
 }
 
+.send-buttons-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
 @media screen and (max-width:767px) {
     .headings_count {
         justify-content: center;
@@ -200,7 +205,7 @@ a.dropdown-item {
     }
 
     .status-badge {
-        font-size: 14px;
+        font-size: 15px;
         padding: 6px 12px;
 
         strong {
@@ -212,5 +217,17 @@ a.dropdown-item {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
+    }
+
+    .send-buttons-wrapper {
+        width: 100%;
+        display: flex;
+        gap: 15px !important;
+        margin-bottom: 10px;
+
+        .custom-btn {
+            width: calc(50% - 7.5px);
+            margin-bottom: 0;
+        }
     }
 }

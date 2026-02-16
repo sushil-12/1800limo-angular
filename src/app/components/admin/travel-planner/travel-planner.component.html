@@ -5,7 +5,7 @@
 		<h2 class="headinginfo"> Travel Advisor Accounts </h2>
 		<div class="containeredd">
 			<div class="row">
-				<div class="col-12 d-flex flex-wrap mb-2" style="gap: 15px;">
+				<div class="col-12 d-flex flex-wrap mb-2 action_btns" style="gap: 15px;">
 					<button class="custom-btn add-button" (click)="addTravelPlannerClick(travelPlannerId)">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 							viewBox="0 0 16 16">
@@ -14,14 +14,16 @@
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg> Add Travel Advisor
 					</button>
-					<button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendEmailModal"
-						(click)="buildSendEmailForm();">
-						Send Email
-					</button>
-					<button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendsmsModal"
-						(click)="buildSendEmailForm();">
-						Send Sms
-					</button>
+					<div class="d-flex flex-wrap action-group">
+						<button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendEmailModal"
+							(click)="buildSendEmailForm();">
+							Send Email
+						</button>
+						<button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendsmsModal"
+							(click)="buildSendEmailForm();">
+							Send Sms
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="row">

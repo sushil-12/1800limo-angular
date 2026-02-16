@@ -3,7 +3,7 @@
     <!-- Main page content-->
     <form [formGroup]="addFamilyMemberAccountForm" appInvalidControlScroll>
         <section class="user_information">
-            <h2 class="headinginfo adminbox_shadow">{{clientId ? "Edit" : "Add"}} Other Member/User Account</h2>
+            <h2 class="headinginfo adminbox_shadow">{{clientId ? "Edit" : "Add"}} Member/User Account</h2>
 
             <div class="container-fluid mt-1 ">
                 <div class="row ">
@@ -28,10 +28,10 @@
                     <div class="col-md-6">
                         <mat-form-field appearance="outline" class="mobileField">
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
-                            <input pattern="[0-9+]*" maxlength="16" matInput #phoneInput placeholder="Mobile" formControlName="phone_number"
-                                class="phoneNumberClass" tabIndex="1" (focus)="$event.target.select()"
-                                [readonly]="clientId" (keypress)="numberOnly($event)" (input)="validatePhoneNumber()"
-                                (blur)="validatePhoneNumber()"
+                            <input pattern="[0-9+]*" maxlength="16" matInput #phoneInput placeholder="Mobile"
+                                formControlName="phone_number" class="phoneNumberClass" tabIndex="1"
+                                (focus)="$event.target.select()" [readonly]="clientId" (keypress)="numberOnly($event)"
+                                (input)="validatePhoneNumber()" (blur)="validatePhoneNumber()"
                                 [class.is-invalid-input]="(f.phone_number.touched || f.phone_number.dirty) && f.phone_number.invalid" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.phone_number?.errors || f?.phone_number?.touched && f?.phone_number?.errors"

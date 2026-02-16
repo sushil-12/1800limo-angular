@@ -5,7 +5,7 @@
         <div class="containeredd">
             <div class="row">
                 <div class="col-md-7">
-                    <h2 class="headinginfo d-flex align-items-center">Other Members / Users List</h2>
+                    <h2 class="headinginfo d-flex align-items-center">Members / Users List</h2>
                 </div>
                 <div class="col-md-5 add-member-div">
                     <button class="custom-btn btn-add-other-memeber" (click)="addFamilyMember()"
@@ -15,14 +15,14 @@
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                             <path
                                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg> Add Other Members / Users
+                        </svg> Add Members/Users
                     </button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 mt-3 mb-3">
                     <mat-form-field appearance="outline">
-                        <input  type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
+                        <input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
                             [value]="searchText" placeholder="Search by name, phone number" id="keyword">
                     </mat-form-field>
                 </div>
