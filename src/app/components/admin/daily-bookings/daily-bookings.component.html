@@ -455,14 +455,14 @@
 												[innerHTML]="highlighText( booking.created_by_phone)"></span>
 										</p>
 									</td>
-									<td>
+									<td style="white-space: nowrap !important;">
 										<span>
 											{{ textFormatter(booking?.service_type) | titlecase }}
 											<br />
 											{{ textFormatter(booking?.transfer_type) | titlecase }}
 										</span>
 									</td>
-									<td>
+									<td style="white-space: nowrap !important;">
 										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
 									</td>
 									<!-- <td>
