@@ -56,7 +56,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Manage Bookings",
             "duration": "5:30",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+use+the+search+for+vehicles%2C+and+rates+in+the+search+engine%2C+Quote-bot+screen+and+filters).mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+use+the+search+for+vehicles%2C+and+rates+in+the+search+engine%2C+Quote-bot+screen+and+filters).mp4",
             "content": "Learn the step-by-step process of booking your first limousine service with our easy-to-use platform."
           },
           {
@@ -65,7 +65,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Manage Bookings",
             "duration": "7:20",
             "image": "assets/images/images_tutorial/updated-images/editrepeatretrun.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+edit+a+booking+from+one-way+to+round+trip+or+charter+Tour+from+the+booking+dashboard..mp4",
             "content": "A guide on how to edit a booking from one-way to round trip or charter tour from the booking dashboard."
           },
           {
@@ -101,7 +101,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "3:40",
             "image": "assets/images/images_tutorial/updated-images/step-1.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 1 for registering as an affiliate."
           },
           {
@@ -110,7 +110,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "3:50",
             "image": "assets/images/images_tutorial/updated-images/step-2.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 2 for registering as an affiliate."
           },
           {
@@ -119,7 +119,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "4:00",
             "image": "assets/images/images_tutorial/updated-images/step-3.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 3 for registering as an affiliate."
           },
           {
@@ -128,7 +128,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "4:10",
             "image": "assets/images/images_tutorial/updated-images/step-4.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 4 for registering as an affiliate."
           },
           {
@@ -137,7 +137,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "4:30",
             "image": "assets/images/images_tutorial/updated-images/step-5.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4",
             "content": "A guide on how to complete step 5 for registering as an affiliate."
           },
           {
@@ -155,7 +155,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "5:45",
             "image": "assets/images/images_tutorial/updated-images/registerasagent.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+register+as+Travel+Agent+-+Step+1+and+2.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+register+as+Travel+Agent+-+Step+1+and+2.mp4",
             "content": "A step-by-step guide on how to sign up and register for a Travel Advisor."
           },
           {
@@ -164,7 +164,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Manage Bookings",
             "duration": "6:10",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Booking+on+Travel+Agent+Account.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Booking+on+Travel+Agent+Account.mp4",
             "content": "A guide on how to create a booking as a travel advisor and earn 10% commission."
           },
 
@@ -183,7 +183,7 @@ export class TutorialsComponent implements OnInit {
             "category": "Registration",
             "duration": "3:25",
             "image": "assets/images/images_tutorial/updated-images/familymember.png",
-            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Adding+family+members+other+members+to+the+Individual+account.mp4%22",
+            "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Adding+family+members+other+members+to+the+Individual+account.mp4",
             "content": "A guide on how to add a family member to your individual account."
           },
           {
