@@ -607,3 +607,14 @@ a.dropdown-item {
 		}
 	}
 }
+
+// Prevent wrapping for Booking Type and Vehicle columns in daily bookings table
+.custom_table table.table {
+
+	td:nth-child(9),
+	// Booking Type column  
+	td:nth-child(10) {
+		// Vehicle column
+		white-space: nowrap !important;
+	}
+}
