@@ -195,7 +195,22 @@ a.dropdown-item {
 
 @media screen and (max-width:767px) {
     .headings_count {
-        flex-direction: column;
-        gap: 0px;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .status-badge {
+        font-size: 14px;
+        padding: 6px 12px;
+
+        strong {
+            font-size: 14px !important;
+        }
+    }
+
+    .custom-btn {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
     }
 }

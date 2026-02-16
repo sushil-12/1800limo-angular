@@ -16,6 +16,15 @@
     margin-left: 6px;
     font-weight: 700;
     font-size: 18px !important;
+
+    @media screen and (max-width: 767px) {
+      font-size: 14px !important;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+    padding: 6px 12px;
   }
 
   &:hover {
@@ -27,6 +36,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+
+  @media screen and (max-width: 767px) {
+    justify-content: center;
+    gap: 10px;
+  }
 }
 
 .clickable {

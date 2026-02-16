@@ -179,14 +179,35 @@ a:hover {
   color: #f28524; // Vibrant orange text
   border: none;
 
+  @media screen and (max-width: 767px) {
+    font-size: 13px;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    flex: 1 1 calc(50% - 15px);
+    justify-content: center;
+    text-align: center;
+  }
+
   strong {
     margin-left: 6px;
     font-weight: 700;
     font-size: 18px;
+
+    @media screen and (max-width: 767px) {
+      font-size: 13px !important;
+    }
   }
 
   &:hover {
     transform: scale(1.02);
+  }
+}
+
+.custom-btn {
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 5px;
   }
 }
 
@@ -196,9 +217,26 @@ a:hover {
   gap: 12px;
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
   .headings_count {
-    flex-direction: column;
-    gap: 0px;
+    justify-content: center;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .status-badge {
+    flex: 0 1 calc(50% - 10px);
+    min-width: 140px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    padding: 8px 12px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    strong {
+        font-size: 13px !important;
+    }
   }
 }

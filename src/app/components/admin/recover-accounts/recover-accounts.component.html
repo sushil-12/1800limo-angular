@@ -75,14 +75,15 @@
         </div>
 
         <div class="row m-2">
-            <div class="col-md-4 col-sm-12 custom-control custom-checkbox">
+            <div class="col-12 custom-control custom-checkbox mb-3">
                 <mat-slide-toggle id="deleted_accounts" class="example-margin" [color]="color" [checked]="isDeletedAcc"
                     (change)="handleChangeToggle();loadAccounts()" tabindex="1">
                 </mat-slide-toggle>
                 <label class="ml-3" for="deleted_accounts">Show Deleted accounts</label>
             </div>
-            <div class="col-md-8 col-sm-12 d-flex justify-content-end wrap-badges" style="gap: 15px;"
-                *ngIf="showActionColumn">
+        </div>
+        <div class="row m-2" *ngIf="showActionColumn">
+            <div class="col-12 d-flex flex-wrap wrap-badges" style="gap: 15px;">
                 <span class="status-badge clickable" routerLink="/admin/individual-account-admin">Individual:
                     <strong>{{accounts_count?.individual_count}}</strong></span>
                 <span class="status-badge clickable" routerLink="/admin/affiliates/all-operators">Driver:
