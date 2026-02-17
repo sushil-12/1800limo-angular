@@ -598,3 +598,145 @@ input::-webkit-input-placeholder {
 		min-width: 600px !important;
 	}
 }
+
+.address-layout {
+	display: block;
+	max-width: 250px;
+
+	.address-main-row {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.address-content {
+		display: block;
+		white-space: normal;
+		word-break: break-word;
+		line-height: 1.4;
+		font-size: 14px;
+		flex: 1;
+	}
+
+	.toggle-link {
+		display: inline-block;
+		font-size: 12px;
+		color: #f3933d;
+		text-decoration: none;
+		font-weight: 600;
+		cursor: pointer;
+		white-space: nowrap;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+// Ensure table cells allow for vertical expansion and wrapping
+.custom_table {
+	overflow-x: auto; // Enable horizontal scroll when content is too wide
+
+	table.table {
+		table-layout: auto; // Allow columns to auto-size based on content
+		width: auto !important; // Allow table to grow beyond 100%
+		min-width: 100%;
+
+		td {
+			vertical-align: top !important;
+			white-space: normal !important;
+
+			&.date-column {
+				text-wrap: nowrap !important;
+				vertical-align: middle !important;
+
+				p {
+					font-weight: 600 !important;
+					margin: 0;
+					font-size: 14px;
+				}
+			}
+		}
+	}
+}
+
+// Prevent wrapping for Booking Type and Vehicle columns in daily bookings table
+.custom_table table.table {
+
+	td:nth-child(9),
+	// Created By column  
+	td:nth-child(10) {
+		// Vehicle column
+		white-space: nowrap !important;
+	}
+}
+
+// Trip Route column styling - auto width based on content
+.custom_table table.table {
+
+	// Trip Route column (column 8)
+	td:nth-child(8) {
+		width: auto !important; // Allow cell to adapt to content width
+		white-space: normal !important;
+
+		.address-content {
+			width: 30ch !important; // Strictly set width to approx 20 characters
+			max-width: 30ch !important;
+			white-space: normal !important;
+			word-wrap: break-word !important;
+			word-break: break-word !important;
+			overflow-wrap: break-word !important;
+			line-height: 1.4;
+			display: block; // Ensure width is respected
+		}
+	}
+}
+
+// Trip Route icon styling with connecting line
+.trip-route-container {
+	display: block;
+	width: auto; // Allow container to shrink to fit content width (20ch)
+
+	.route-icon-wrapper {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-right: 8px;
+
+		.connecting-line {
+			width: 2px;
+			// height: 30px; // Dynamic height handled in HTML
+			background-color: #FF8C00;
+			margin: -2px 0;
+		}
+
+		.loc-logo {
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			line-height: 1;
+
+			i {
+				display: block;
+				line-height: 1;
+			}
+		}
+	}
+
+	.address-content-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.address-main-row {
+		gap: 0;
+		margin-bottom: 0px;
+	}
+
+	.address-content {
+		white-space: nowrap; // Keep addresses on one line
+		overflow: visible;
+	}
+}

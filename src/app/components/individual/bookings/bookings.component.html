@@ -103,6 +103,7 @@
                                     <th>Date</th>
                                     <th>Pax</th>
                                     <th>Driver</th>
+                                    <th>Trip Route</th>
                                     <th>Vehicle</th>
                                 </tr>
                             </thead>
@@ -195,17 +196,10 @@
                                     <td>
                                         <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
                                             (click)="openModal(booking, 'Passenger')" id="box">
-                                            <span [innerHTML]="highlighText(booking?.passenger_name)"></span> |
+                                            <span [innerHTML]="highlighText(booking?.passenger_name)"></span> <br />
                                             <span class="font-weight-bolder"
                                                 [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_isd + booking?.pax_tel))"></span>
                                         </p>
-                                        <span class="loc-logo"
-                                            (click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-                                            <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
-                                        <span class="text-underline cursor-pointer">
-                                            <span [innerHTML]="highlighText(booking?.pickup_address)"></span>
-                                        </span>
-
                                     </td>
                                     <td>
                                         <p data-target="#sendEmailModal" data-toggle="modal"
@@ -216,7 +210,7 @@
 
                                             <span *ngIf="booking?.driver_name"
                                                 [innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
-                                            |
+                                            <br />
                                             <span class="font-weight-bolder" *ngIf="booking?.driver_cell_isd"
                                                 [innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_cell_number)"></span>
                                             <span class="font-weight-bolder" *ngIf="booking?.loose_affiliate_phone"
@@ -225,17 +219,46 @@
                                                 *ngIf="!booking?.loose_affiliate_phone && !booking?.driver_cell_isd"
                                                 [innerHTML]="highlighText('+18005466266')"></span>
                                         </p>
-                                        <span class="loc-logo"
-                                            (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-                                            <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
-                                        <span class="text-underline cursor-pointer">
-                                            <span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
-                                        </span>
-
+                                    </td>
+                                    <td>
+                                        <div class="trip-route-container">
+                                            <div class="address-layout">
+                                                <div class="address-main-row d-flex align-items-start">
+                                                    <div class="route-icon-wrapper">
+                                                        <span class="loc-logo"
+                                                            (click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+                                                            <i class="bi bi-circle-fill"
+                                                                style="color: #FF8C00; font-size: 14px;"></i>
+                                                        </span>
+                                                        <div class="connecting-line"
+                                                            [style.height]="calculateConnectorHeight(booking.pickup_address)">
+                                                        </div>
+                                                        <span class="loc-logo"
+                                                            (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+                                                            <i class="bi bi-square-fill"
+                                                                style="color: #FF8C00; font-size: 12px;"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="address-content-wrapper">
+                                                        <div class="address-content">
+                                                            <span style="cursor: pointer; text-decoration: underline;"
+                                                                (click)="showLocationPointOnMap(booking.booking_id, 'pickup')"
+                                                                [innerHTML]="highlighText(booking.pickup_address)"></span>
+                                                        </div>
+                                                        <div class="address-content">
+                                                            <span style="cursor: pointer; text-decoration: underline;"
+                                                                (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')"
+                                                                [innerHTML]="highlighText(booking.dropoff_address)"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
                                         <span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
                                     </td>
+
                                 </tr>
                             </tbody>
                         </table>

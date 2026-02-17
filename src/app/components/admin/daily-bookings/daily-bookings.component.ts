@@ -165,9 +165,9 @@ export class DailyBookingsComponent implements OnInit {
 				this.status_list = data;
 			});
 
-			this.selectedStatus = localStorage.getItem("DBS_Status") ? localStorage.getItem("DBS_Status") : null;
+		this.selectedStatus = localStorage.getItem("DBS_Status") ? localStorage.getItem("DBS_Status") : null;
 
-			this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -1748,5 +1748,15 @@ export class DailyBookingsComponent implements OnInit {
 		if (booking_status != 'paid' && booking_status != 'paid_cash') {
 			this.router.navigate(['/admin/new-booking'], { queryParams: { bookingId: booking_id, updateType: 'edit' } });
 		}
+	}
+	calculateConnectorHeight(address: string) {
+		if (!address) return '30px';
+		const len = address.length;
+		if (len <= 30) return '30px'; // 1 line (aligned with 30ch width)
+		if (len <= 60) return '50px'; // 2 lines
+		if (len <= 90) return '72px'; // 3 lines
+		if (len <= 120) return '94px'; // 4 lines
+		if (len <= 150) return '116px'; // 5 lines
+		return '138px'; // > 5 lines
 	}
 }
