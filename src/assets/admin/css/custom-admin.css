@@ -3046,8 +3046,8 @@ table #navbarDropdownUserImage {
     font-size: 49px !important;
     color: #000 !important;
     background: #f0f0f0 !important;
-    padding: 10px !important;
-    width: 80px !important;
+    padding: 14px 10px !important;
+    width: 82px !important;
     border-radius: 10px !important;
 }
 
@@ -3064,7 +3064,8 @@ table #navbarDropdownUserImage {
 }
 
 .timepicker-period {
-    gap: 2px !important;
+    gap: 14px !important;
+    margin-top:10px;
 }
 
 .timepicker-button span {
