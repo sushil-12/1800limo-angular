@@ -264,8 +264,12 @@ table {
 		font-weight: 600;
 	}
 
-	tbody td>p {
-		margin: 0;
+	tbody td {
+		vertical-align: top !important;
+
+		>p {
+			margin: 0;
+		}
 	}
 }
 

@@ -1512,6 +1512,7 @@ h2.headinginfo .orangeHeading {
     font-size: 16px;
     margin: auto 0 auto 20px;
     cursor: pointer;
+    font-weight: 500;
 }
 
 .sidenav-menu .nav-item a:hover {
@@ -3065,7 +3066,7 @@ table #navbarDropdownUserImage {
 
 .timepicker-period {
     gap: 14px !important;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
 .timepicker-button span {
