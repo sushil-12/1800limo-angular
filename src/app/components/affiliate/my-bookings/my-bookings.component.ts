@@ -1019,6 +1019,16 @@ export class MyBookingsComponent implements OnInit {
 		}
 	}
 
+	calculateConnectorHeight(address: string) {
+		if (!address) return '30px';
+		const len = address.length;
+		if (len <= 30) return '30px'; // 1 line (aligned with 30ch width)
+		if (len <= 60) return '50px'; // 2 lines
+		if (len <= 90) return '72px'; // 3 lines
+		if (len <= 120) return '94px'; // 4 lines
+		if (len <= 150) return '116px'; // 5 lines
+		return '138px'; // > 5 lines
+	}
 
 	myUploader(event) {
 		// this.loader = true;

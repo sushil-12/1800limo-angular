@@ -414,11 +414,13 @@
 													</div>
 													<div class="address-content-wrapper">
 														<div class="address-content">
-															<span
+															<span style="cursor: pointer; text-decoration: underline;"
+																(click)="showLocationPointOnMap(booking.booking_id, 'pickup')"
 																[innerHTML]="highlighText(booking.pickup_address)"></span>
 														</div>
 														<div class="address-content">
-															<span
+															<span style="cursor: pointer; text-decoration: underline;"
+																(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')"
 																[innerHTML]="highlighText(booking.dropoff_address)"></span>
 														</div>
 													</div>

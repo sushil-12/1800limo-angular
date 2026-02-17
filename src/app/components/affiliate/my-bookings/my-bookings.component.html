@@ -113,6 +113,7 @@
 									<th>Status</th>
 									<th>Pax</th>
 									<th>Driver</th>
+									<th>Trip Route</th>
 									<th>Created By</th>
 									<th>Vehicle</th>
 									<!-- <th>Status</th> -->
@@ -231,44 +232,66 @@
 										</div>
 									</td>
 
+									<!-- Pax Column -->
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')" id="box">
-											<span [innerHTML]="highlighText(booking?.passenger_name)"></span> |
+											<span [innerHTML]="highlighText(booking?.passenger_name)"></span> <br />
 											<span class="font-weight-bolder"
-												[innerHTML]="highlighText( formatPhoneNumber(booking?.pax_tel))"></span>
+												[innerHTML]="highlighText(formatPhoneNumber(booking?.pax_tel))"></span>
 										</p>
-										<span class="loc-logo"
-											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
-										<span class="text-underline cursor-pointer">
-											<span [innerHTML]="highlighText(booking?.pickup_address)"></span>
-										</span>
-
 									</td>
+									<!-- Driver Column -->
 									<td>
-
-										<!-- class="disabled-btn" -->
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Driver')">
 											<span class="text-capitalize"
-												[innerHTML]="highlighText(booking?.driver_name.split(' ')[0] + ' ' + booking?.driver_name.split(' ')[1].slice(0,1))"></span>&nbsp;
-											|
+												[innerHTML]="highlighText(booking?.driver_name.split(' ')[0] + ' ' + booking?.driver_name.split(' ')[1].slice(0,1))"></span>
+											<br />
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_tel)"></span>
 										</p>
-										<span class="loc-logo"
-											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
-										<span class="text-underline cursor-pointer">
-											<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
-										</span>
-
+									</td>
+									<!-- Trip Route Column -->
+									<td>
+										<div class="trip-route-container">
+											<div class="address-layout">
+												<div class="address-main-row d-flex align-items-start">
+													<div class="route-icon-wrapper">
+														<span class="loc-logo"
+															(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+															<i class="bi bi-circle-fill"
+																style="color: #FF8C00; font-size: 14px;"></i>
+														</span>
+														<div class="connecting-line"
+															[style.height]="calculateConnectorHeight(booking.pickup_address)">
+														</div>
+														<span class="loc-logo"
+															(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+															<i class="bi bi-square-fill"
+																style="color: #FF8C00; font-size: 12px;"></i>
+														</span>
+													</div>
+													<div class="address-content-wrapper">
+														<div class="address-content">
+															<span style="cursor: pointer; text-decoration: underline;"
+																(click)="showLocationPointOnMap(booking.booking_id, 'pickup')"
+																[innerHTML]="highlighText(booking.pickup_address)"></span>
+														</div>
+														<div class="address-content">
+															<span style="cursor: pointer; text-decoration: underline;"
+																(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')"
+																[innerHTML]="highlighText(booking.dropoff_address)"></span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal" style="white-space: pre"
 											(click)="openModal(booking, 'created_by')" id="box">
-											<span [innerHTML]="highlighText(booking.created_by_name)"></span> |
+											<span [innerHTML]="highlighText(booking.created_by_name)"></span><br />
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.created_by_phone)"></span>
 										</p>
