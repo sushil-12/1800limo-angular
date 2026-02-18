@@ -1,45 +1,196 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <div class="innerpage_wrapper">
-	<section class="safety_wrapper">
-		<div class="container py-5">
-			<!-- Skeleton Loader -->
-			<div *ngIf="!fleetContents">
-				<div class="row align-items-center mb-5" *ngFor="let i of [1,2,3]; let ind = index"
-					[ngClass]="{'flex-md-row-reverse': ind % 2 !== 0}">
-					<div class="col-md-6">
-						<div class="skeleton-text-header skeleton-loader"></div>
-						<div class="skeleton-text-body skeleton-loader"></div>
-						<div class="skeleton-text-body skeleton-loader"></div>
-						<div class="skeleton-text-body-short skeleton-loader"></div>
+
+	<!-- Hero Section (Matching Tutorials Pattern) -->
+	<header class="fleet-hero">
+		<div class="container text-center py-3 py-md-4 py-lg-5">
+			<span class="hero-badge">
+				<i class="fas fa-car me-2"></i> Our Premium Fleet
+			</span>
+			<h1 class="font-weight-bold mb-3">Luxury Vehicles</h1>
+			<p class="lead mx-auto">Choose the Best Vehicle for Transfers, Events, or Group Charters/Tours</p>
+		</div>
+
+		<!-- Stats Row -->
+		<div class="container">
+			<div class="row justify-content-center g-4 stats-grid mb-4">
+				<!-- Stat 1 -->
+				<div class="col-6 col-md-3">
+					<div class="stat-card p-3 text-start">
+						<div class="icon-wrapper text-orange">
+							<i class="fas fa-car"></i>
+						</div>
+						<h3>50+</h3>
+						<p style="margin: 0 !important;">Premium Vehicles</p>
 					</div>
-					<div class="col-md-6">
-						<div class="skeleton-image skeleton-loader"></div>
+				</div>
+				<!-- Stat 2 -->
+				<div class="col-6 col-md-3">
+					<div class="stat-card p-3 text-start">
+						<div class="icon-wrapper text-orange">
+							<i class="fas fa-user-friends"></i>
+						</div>
+						<h3>100K+</h3>
+						<p style="margin: 0 !important;">Happy Clients</p>
 					</div>
 				</div>
-			</div>
-
-			<div class="row align-items-center mb-5" *ngFor="let fleet of fleetContents; let i = index"
-				[ngClass]="{'flex-md-row-reverse': i % 2 !== 0}">
-
-				<!-- Text Column -->
-				<div [ngClass]="getVehicleImage(fleet?.vehicle_name || fleet?.title) ? 'col-md-6' : 'col-md-12'"
-					*ngIf="fleet?.section_status == true">
-					<h3>{{fleet?.vehicle_name || fleet?.title}}</h3>
-					<p [innerHTML]="fleet?.content" *ngIf="fleet?.content"></p>
+				<!-- Stat 3 -->
+				<div class="col-6 col-md-3">
+					<div class="stat-card p-3 text-start">
+						<div class="icon-wrapper text-orange">
+							<i class="fas fa-shield-alt"></i>
+						</div>
+						<h3>30+</h3>
+						<p style="margin: 0 !important;">Years Experience</p>
+					</div>
 				</div>
-
-				<!-- Image Column -->
-				<div class="col-md-6 text-center"
-					*ngIf="fleet?.section_status == true && getVehicleImage(fleet?.vehicle_name || fleet?.title)">
-					<img [src]="getVehicleImage(fleet?.vehicle_name || fleet?.title)" class="img-fluid w-100"
-						alt="{{fleet?.vehicle_name || fleet?.title}}"
-						*ngIf="getVehicleImage(fleet?.vehicle_name || fleet?.title)"
-						style="max-height: 300px; object-fit: cover;">
+				<!-- Stat 4 -->
+				<div class="col-6 col-md-3">
+					<div class="stat-card p-3 text-start">
+						<div class="icon-wrapper text-orange">
+							<i class="fas fa-medal"></i>
+						</div>
+						<h3>24/7</h3>
+						<p style="margin: 0 !important;">Available Support</p>
+					</div>
 				</div>
-
 			</div>
 		</div>
+	</header>
+
+	<!-- Filter Section -->
+	<div class="filter-container">
+		<div class="container">
+			<div class="d-flex align-items-center flex-wrap justify-content-center">
+				<span class="filter-label mr-3">
+					<i class="bi bi-funnel mr-1"></i> Filter:
+				</span>
+				<button class="btn rounded-pill btn-filter" *ngFor="let cat of categories"
+					[class.btn-orange]="filterCategory === cat" [class.btn-light-grey]="filterCategory !== cat"
+					(click)="setFilter(cat)">
+					{{ cat }}
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<section class="fleet-section py-5">
+		<div class="container">
+
+			<!-- Section Header with Count -->
+			<div class="row align-items-center mb-4">
+				<div class="col">
+					<h2 class="section-title mb-0">All Vehicles</h2>
+				</div>
+				<div class="col-auto">
+					<span class="vehicle-count">{{ filteredVehicles.length }} vehicles</span>
+				</div>
+			</div>
+
+			<!-- Vehicle List -->
+			<div class="vehicle-list" *ngIf="fleetData; else loading">
+				<div class="row g-5">
+					<div class="col-lg-4 col-md-6 d-flex align-items-stretch"
+						*ngFor="let vehicle of filteredVehicles; let i = index">
+						<div class="vehicle-card h-100 w-100">
+							<!-- Badge -->
+							<span class="vehicle-badge" *ngIf="vehicle.badge">{{ vehicle.badge }}</span>
+
+							<!-- Image Area -->
+							<div class="vehicle-image-area">
+								<div class="swiper vehicle-swiper" [class.no-nav]="vehicle.images.length <= 1">
+									<div class="swiper-wrapper">
+										<div class="swiper-slide" *ngFor="let img of vehicle.images">
+											<img [src]="img" [alt]="vehicle.name" class="vehicle-img">
+										</div>
+									</div>
+									<div class="swiper-pagination swiper-pagination-{{i}}"></div>
+								</div>
+							</div>
+
+							<!-- Card Body -->
+							<div class="vehicle-body">
+								<!-- Title -->
+								<h5 class="vehicle-name">{{ vehicle.name }}</h5>
+
+								<!-- Description -->
+								<p style="padding-bottom: 10px !important;" class="vehicle-description">{{
+									vehicle.description }}
+								</p>
+
+								<!-- Specs: Passengers & Luggage -->
+								<div class="vehicle-specs">
+									<div class="spec-item">
+										<span class="spec-label">Passengers</span>
+										<div class="spec-value">
+											<i class="bi bi-people"></i>
+											<strong>{{ vehicle.specifications.passengers }}</strong>
+										</div>
+									</div>
+									<div class="spec-item">
+										<span class="spec-label">Luggage</span>
+										<div class="spec-value">
+											<i class="fas fa-suitcase"></i>
+											<strong>{{ vehicle.specifications.luggage }}</strong>
+										</div>
+									</div>
+								</div>
+
+								<!-- Features -->
+								<div class="vehicle-features">
+									<span class="features-label">FEATURES</span>
+									<div class="feature-tags">
+										<span class="feature-tag" *ngFor="let feature of vehicle.features">{{ feature
+											}}</span>
+									</div>
+								</div>
+
+								<!-- Actions -->
+								<div
+									class="vehicle-actions-wrapper d-flex justify-content-between align-items-end mt-auto pt-3 border-top">
+									<div class="price-section" *ngIf="vehicle.price">
+										<span class="d-block text-uppercase fw-bold small text-muted mb-1"
+											style="font-size: 10px; letter-spacing: 0.5px;">PRICE STARTS FROM</span>
+										<div class="price-value fw-bold text-orange"
+											style="font-size: 1.2rem; color: #f7941d;">{{ vehicle.price }}</div>
+									</div>
+									<button class="btn btn-quote d-flex align-items-center gap-2"
+										routerLink="/home">Request Quote <i class="fas fa-arrow-right"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="cancel-policy">
+						Cancel policy can vary from 2 hours to 30 days, depending on the operator, vehicle type, your
+						unique instructions, or special events.
+					</div>
+				</div>
+			</div>
+
+			<!-- Skeleton Loading State -->
+			<ng-template #loading>
+				<div class="row align-items-center mb-5" *ngFor="let i of [1,2,3]">
+					<div class="col-md-6">
+						<div class="skeleton-image" style="height: 300px; background: #eee;"></div>
+					</div>
+					<div class="col-md-6">
+						<div class="skeleton-text"
+							style="height: 30px; width: 60%; background: #eee; margin-bottom: 20px;"></div>
+						<div class="skeleton-text"
+							style="height: 100px; width: 100%; background: #eee; margin-bottom: 20px;"></div>
+						<div class="skeleton-text" style="height: 50px; width: 80%; background: #eee;"></div>
+					</div>
+				</div>
+			</ng-template>
+
+		</div>
 	</section>
+
 	<!----OUR CLIENTS------------->
 	<section class="checkourveh_wrapper" *ngIf="fetchPageData('VIEW OUR VEHICLES')?.section_status == 'enable' ">
 		<div class="container-fluid">
