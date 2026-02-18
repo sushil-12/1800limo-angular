@@ -26,6 +26,7 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 	chevron: boolean = false;
 	chevron1: boolean = false;
 	bkpData: any = '';
+	showLogoutModal: boolean = false;
 
 	constructor(
 		private router: Router,
@@ -159,6 +160,14 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 	}
 	toggleChevron() {
 		this.chevron_up = !this.chevron_up
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 
 	logout() {

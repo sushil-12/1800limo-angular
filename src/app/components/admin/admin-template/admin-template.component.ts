@@ -29,7 +29,8 @@ export class AdminTemplateComponent implements OnInit {
 	chevron2: boolean = false;
 	chevron3: boolean = false;
 	chevron4: boolean = false;
-	bkpData:any='';
+	bkpData: any = '';
+	showLogoutModal: boolean = false;
 
 	modules: any = localStorage.getItem('modules') || ''
 	subModules: any = localStorage.getItem('sub_modules') || ''
@@ -260,6 +261,14 @@ export class AdminTemplateComponent implements OnInit {
 		// 		this.showSidebar = false;
 		// 	}
 		// }
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 
 	logout() {

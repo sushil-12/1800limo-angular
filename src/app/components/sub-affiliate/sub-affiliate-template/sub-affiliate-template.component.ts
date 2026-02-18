@@ -13,12 +13,12 @@ import { SharedModule } from 'src/app/components/shared/shared.module';
 declare var $: any;
 
 @Component({
-  selector: 'app-sub-affiliate-template',
-  templateUrl: './sub-affiliate-template.component.html',
-  styleUrls: ['./sub-affiliate-template.component.scss']
+	selector: 'app-sub-affiliate-template',
+	templateUrl: './sub-affiliate-template.component.html',
+	styleUrls: ['./sub-affiliate-template.component.scss']
 })
 export class SubAffiliateTemplateComponent implements OnInit {
-  public userImage: string = 'assets/images/user.png';
+	public userImage: string = 'assets/images/user.png';
 	public showSidebar: boolean = true;
 	public currentUser: any;
 	public stepCompleted: any;
@@ -38,6 +38,7 @@ export class SubAffiliateTemplateComponent implements OnInit {
 	public currentYear: number = new Date().getFullYear();
 	public progressBar: boolean;
 	chevron_up: boolean = true;
+	showLogoutModal: boolean = false;
 
 
 	@Input() router1: any;
@@ -55,7 +56,7 @@ export class SubAffiliateTemplateComponent implements OnInit {
 		public errorDialogService: ErrorDialogService,
 		private elementRef: ElementRef,
 		private $shared: SharedModule
-	) {}
+	) { }
 
 
 	ngOnInit(): void {
@@ -203,5 +204,13 @@ export class SubAffiliateTemplateComponent implements OnInit {
 
 	toggleChevron() {
 		this.chevron_up = !this.chevron_up
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 }
