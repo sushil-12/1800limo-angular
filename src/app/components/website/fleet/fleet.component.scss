@@ -81,9 +81,13 @@
 		letter-spacing: 0.5px;
 		border: none;
 
-		i {
-			font-size: 18px;
-			margin-right: 8px; // Ensure spacing between icon and text
+		img {
+			height: 18px;
+			margin-right: 8px;
+			margin-bottom: 3px;
+			width: auto;
+			filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+			object-fit: contain;
 		}
 	}
 
@@ -135,7 +139,7 @@
 			height: 40px;
 			display: flex;
 			align-items: center;
-			margin-bottom: 10px !important;
+			margin-bottom: 5px !important;
 
 			i {
 				font-size: 32px;

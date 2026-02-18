@@ -24,6 +24,7 @@ export class FooterComponent implements OnInit {
 	public steps: string = "";
 	public accountStatus: string = "";
 	splitSteps: any;
+	showLogoutModal: boolean = false;
 
 	QRimage = "assets/images/QRimage.jpg";
 	constructor(
@@ -106,6 +107,14 @@ export class FooterComponent implements OnInit {
 		}
 	}
 
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
+	}
+
 	logout() {
 		this.spinner.show();//show spinner
 		this.authService.logout()
@@ -118,9 +127,12 @@ export class FooterComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 				if (success == true) {
 					this.stateManagementService.removeUser();
+					localStorage.removeItem('modules')
+					localStorage.removeItem('sub_modules')
+					this.router.navigate(['/home']);
+					location.reload()
 					console.log("Logout Successfully");
 				}
-				this.router.navigate(['/']);
 			});
 	}
 }

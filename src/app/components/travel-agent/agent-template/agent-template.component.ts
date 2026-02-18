@@ -30,6 +30,7 @@ export class AgentTemplateComponent implements OnInit {
 	showCopyIcon: boolean;
 	accountStatus: any;
 	bkpData: any = '';
+	showLogoutModal: boolean = false;
 
 	constructor(
 		private router: Router,
@@ -176,6 +177,14 @@ export class AgentTemplateComponent implements OnInit {
 	}
 	toggleChevron() {
 		this.chevron_up = !this.chevron_up
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 
 	logout() {

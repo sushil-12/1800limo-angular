@@ -26,6 +26,7 @@ export class IndividualTemplateComponent implements OnInit {
 	chevron: boolean = false;
 	chevron1: boolean = false;
 	bkpData: any = '';
+	showLogoutModal: boolean = false;
 	is_family_member: any = false;
 	family_member_name: any = '';
 
@@ -158,6 +159,14 @@ export class IndividualTemplateComponent implements OnInit {
 	}
 	toggleChevron() {
 		this.chevron_up = !this.chevron_up
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 
 	logout() {

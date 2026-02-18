@@ -40,6 +40,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit {
 	public progressBar: boolean;
 	chevron_up: boolean = true;
 	bkpData: any = '';
+	showLogoutModal: boolean = false;
 
 
 	@Input() router1: any;
@@ -383,6 +384,14 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit {
 			let stepNumber = key.slice(-1);
 			this['step_' + stepNumber + '_class'] = 'collapse-item ' + value + (this.currentStep == stepNumber ? ' active' : '');
 		}
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 
 	logout() {

@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
 	desktopWidth: any;
 	routeForSubscriptionProcess: any;
 	excludedRoutes: string[] = ['/subscription', '/partner-registration', '/payment-details', '/quotebot/master-vehicle', '/quotebot/select-vehicle', '/quotebot/vehicle-details']
+	showLogoutModal: boolean = false;
 
 	constructor(
 		private router: Router,
@@ -170,6 +171,14 @@ export class HeaderComponent implements OnInit {
 		this.router.navigateByUrl('/login/' + role).then(() => {
 			window.location.reload()
 		});
+	}
+
+	openLogoutModal() {
+		this.showLogoutModal = true;
+	}
+
+	closeLogoutModal() {
+		this.showLogoutModal = false;
 	}
 
 	logout() {
