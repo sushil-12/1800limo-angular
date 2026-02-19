@@ -309,20 +309,19 @@ const routes: Routes = [
 			}
 		]
 	},
-	{
-		path: 'affiliate_driver',
-		component: AffiliateDriverTemplateComponent,
-		// canActivate: [AdminGuardGuard],
-		data: {
-			title: 'affiliatedriver'
-		},
-		children: [
-			{
-				path: '',
-				loadChildren: () => import('./components/affiliate-driver/affiliate-driver.module').then(m => m.AffiliateDriverModule)
-			}
-		]
-	},
+	// {
+	// 	path: 'affiliate_driver',
+	// 	component: AffiliateDriverTemplateComponent,
+	// 	data: {
+	// 		title: 'affiliatedriver'
+	// 	},
+	// 	children: [
+	// 		{
+	// 			path: '',
+	// 			loadChildren: () => import('./components/affiliate-driver/affiliate-driver.module').then(m => m.AffiliateDriverModule)
+	// 		}
+	// 	]
+	// },
 	{
 		path: 'travel_agent',
 		component: AgentTemplateComponent,
