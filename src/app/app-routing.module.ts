@@ -46,7 +46,7 @@ import { PartnerRegistrationComponent } from './components/subscription/partner-
 import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
 import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
-import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
+// import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
 
