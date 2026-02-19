@@ -6,6 +6,8 @@ import { ErrorDialogService } from '../../../../services/error-dialog/errordialo
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
+import { AdminService } from 'src/app/services/admin.service';
+
 
 @Component({
 	selector: 'app-footer',
@@ -30,45 +32,59 @@ export class FooterComponent implements OnInit {
 	constructor(
 		private authService: AuthService,
 		private spinner: NgxSpinnerService,
+		private adminService: AdminService,
 		private stateManagementService: StateManagementService,
 		private router: Router,
 		private errorDialogService: ErrorDialogService
 	) { }
 
-	ngOnInit() {
-		try {
-			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
+	ngOnInit(): void {
+		// header scroll
+		// this.headerScroll();
 
-			// Add event listeners for focus and blur events to each element
-			console.log('home-- elementsWithTabIndex-->', elementsWithTabIndex)
-			elementsWithTabIndex?.forEach((element) => {
-				element.addEventListener('focus', () => {
-					element.classList.add('focus-border'); // Add the focus-border class on focus
-					setTimeout(() => {
-						element.classList.remove('focus-border');
-					}, 1500)
-				});
-
-				element.addEventListener('blur', () => {
-					element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
-				});
-			});
-		} catch (error) {
-			console.log(error)
-		}
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
-		this.steps = localStorage.getItem("stepCompleted");
-		this.accountStatus = localStorage.getItem("account_approval");
+		if (this.currentUser) {
+			this.getPermissions()
+		}
+		// Get Steps
+		this.steps = localStorage.getItem("stepCompleted") || "";
+		this.accountStatus = localStorage.getItem("account_approval") || "";
 
-		if (this.accountStatus == "completed") {
+		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
 			this.Value = "Manage Bookings";
 		}
 		else {
 			this.Value = "Continue Affiliate Set-Up";
 		}
+
+		// For Select Box Dropdown
+		$(window).on('load', function () {
+			$(".goog-te-combo").css({
+				'-webkit-appearance': 'none',
+				'-moz-appearance': 'none',
+				'background': 'transparent url("data:image/svg+xml;utf8,<svg fill=\'black\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/><path d=\'M0 0h24v24H0z\' fill=\'none\'/></svg>") no-repeat 100% 5px',
+				'border': '1px solid #dfdfdf',
+				'border-radius': '2px',
+				'margin-right': '2rem'
+			});
+		})
+
 	}
 
+	getPermissions() {
+		this.adminService.getMyPermissions()
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe((response: any) => {
+				this.spinner.hide();//hide spinner
+				localStorage.setItem('modules', response?.data?.modules)
+				localStorage.setItem('sub_modules', response?.data?.sub_modules)
+			});
+	}
 	scrollToTop() {
 		(function smoothscroll() {
 			var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;

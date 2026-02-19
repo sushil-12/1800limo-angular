@@ -1,16 +1,16 @@
 import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { TravelAgentService } from '../../../services/travel-agent.service';
-import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AffiliateService } from 'src/app/services/affiliate.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { CommonService } from 'src/app/services/common.service';
+import { AffiliateService } from '../../../services/affiliate.service';
+import { AuthService } from '../../../services/auth.service';
+import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
+import { CommonService } from '../../../services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -175,59 +175,66 @@ export class ProfileComponent implements OnInit {
 
   ngAfterViewInit() {
 
-    this.initallphonefields()
-
-    //google map autocomplete
-    this.geoCoder = new google.maps.Geocoder();
-
-    const autocomplete = new google.maps.places.Autocomplete(
-      this.search1.nativeElement,
-      {
-        types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
-      }
-    );
-
-    autocomplete.addListener("place_changed", () => {
-      this.ngZone.run(() => {
-        //get the place result
-        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-        if (!place.geometry || !place.geometry.location) return;
-
-        this.profileForm.patchValue({
-          address: place.formatted_address,
-          latitude: place.geometry.location.lat(),
-          longitude: place.geometry.location.lng()
-        });
+    this.ngZone.runOutsideAngular(() => {
+      setTimeout(() => {
+        this.initallphonefields()
+        this.geoCoder = new google.maps.Geocoder();
 
 
-        // Extract address components
-        place.address_components?.forEach(component => {
-          const types = component.types;
-          if (types.includes('country')) {
-            this.profileForm.patchValue({
-              country: component.long_name
+
+        if (this.search1 && this.search1.nativeElement) {
+
+          const autocomplete = new google.maps.places.Autocomplete(
+            this.search1.nativeElement,
+            {
+              types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
+              fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+            }
+          );
+
+          autocomplete.addListener("place_changed", () => {
+            this.ngZone.run(() => {
+              //get the place result
+              const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+              if (!place.geometry || !place.geometry.location) return;
+
+              this.profileForm.patchValue({
+                address: place.formatted_address,
+                latitude: place.geometry.location.lat(),
+                longitude: place.geometry.location.lng()
+              });
+
+
+              // Extract address components
+              place.address_components?.forEach(component => {
+                const types = component.types;
+                if (types.includes('country')) {
+                  this.profileForm.patchValue({
+                    country: component.long_name
+                  });
+                } else if (types.includes('administrative_area_level_1')) {
+                  this.profileForm.patchValue({
+                    state: component.long_name
+                  });
+                } else if (types.includes('administrative_area_level_3')) {
+                  this.profileForm.patchValue({
+                    city: component.long_name
+                  });
+                } else if (types.includes('postal_code')) {
+                  this.profileForm.patchValue({
+                    zipCode: component.long_name
+                  });
+                }
+                // else if (types.includes('street_number')) {
+                // 	this.profileForm.patchValue({
+                // 		address: component.long_name
+                // 	});
+                // }
+              });
             });
-          } else if (types.includes('administrative_area_level_1')) {
-            this.profileForm.patchValue({
-              state: component.long_name
-            });
-          } else if (types.includes('administrative_area_level_3')) {
-            this.profileForm.patchValue({
-              city: component.long_name
-            });
-          } else if (types.includes('postal_code')) {
-            this.profileForm.patchValue({
-              zipCode: component.long_name
-            });
-          }
-          // else if (types.includes('street_number')) {
-          // 	this.profileForm.patchValue({
-          // 		address: component.long_name
-          // 	});
-          // }
-        });
-      });
+          });
+        }
+      }, 500);
     });
 
 
@@ -241,6 +248,7 @@ export class ProfileComponent implements OnInit {
       countryCode = this.currentUser.phoneCountry || this.currentUser.country;
     }
 
+    console.log('---initallphonefields running outside angular---');
     const telOptions: any = this.commonServices.getTelInputOptions(countryCode);
 
     if (this.cellInput) {
@@ -255,9 +263,11 @@ export class ProfileComponent implements OnInit {
 
       this.addCustomCountrySearch(this.cellInput.nativeElement);
       this.cellInput.nativeElement.addEventListener('countrychange', () => {
-        const countryData = this.OfficeObject.getSelectedCountryData();
-        console.log("in change", countryData)
-        this.onCountryChange(countryData, 'work_contact_number')
+        this.ngZone.run(() => {
+          const countryData = this.OfficeObject.getSelectedCountryData();
+          console.log("in change", countryData)
+          this.onCountryChange(countryData, 'work_contact_number')
+        });
       });
     }
 
@@ -272,9 +282,11 @@ export class ProfileComponent implements OnInit {
 
       this.addCustomCountrySearch(this.mobileInput.nativeElement);
       this.mobileInput.nativeElement.addEventListener('countrychange', () => {
-        const countryData = this.MobileObject.getSelectedCountryData();
-        console.log("in change", countryData)
-        this.onCountryChange(countryData, 'mobile');
+        this.ngZone.run(() => {
+          const countryData = this.MobileObject.getSelectedCountryData();
+          console.log("in change", countryData)
+          this.onCountryChange(countryData, 'mobile');
+        });
       });
     }
 
@@ -298,9 +310,11 @@ export class ProfileComponent implements OnInit {
 
       this.addCustomCountrySearch(this.faxInput.nativeElement);
       this.faxInput.nativeElement.addEventListener('countrychange', () => {
-        const countryData = this.FaxObject.getSelectedCountryData();
-        console.log("in change", countryData)
-        this.onCountryChange(countryData, 'fax')
+        this.ngZone.run(() => {
+          const countryData = this.FaxObject.getSelectedCountryData();
+          console.log("in change", countryData)
+          this.onCountryChange(countryData, 'fax')
+        });
       });
     }
 
@@ -324,9 +338,11 @@ export class ProfileComponent implements OnInit {
 
       this.addCustomCountrySearch(this.officeNumberInput.nativeElement);
       this.officeNumberInput.nativeElement.addEventListener('countrychange', () => {
-        const countryData = this.OfficePhoneObject.getSelectedCountryData();
-        console.log("in change", countryData)
-        this.onCountryChange(countryData, 'office_number')
+        this.ngZone.run(() => {
+          const countryData = this.OfficePhoneObject.getSelectedCountryData();
+          console.log("in change", countryData)
+          this.onCountryChange(countryData, 'office_number')
+        });
       });
     }
   }
@@ -699,80 +715,82 @@ export class ProfileComponent implements OnInit {
 
 
   private addCustomCountrySearch(element: HTMLElement) {
-    element.addEventListener('open:countrydropdown', () => {
-      const container = element.closest('.iti');
-      const dropdown = container?.querySelector('.iti__country-list');
-      if (!dropdown) return;
+    this.ngZone.runOutsideAngular(() => {
+      element.addEventListener('open:countrydropdown', () => {
+        const container = element.closest('.iti');
+        const dropdown = container?.querySelector('.iti__country-list');
+        if (!dropdown) return;
 
-      // Check if search already exists
-      if (dropdown.querySelector('.iti-search-input')) return;
+        // Check if search already exists
+        if (dropdown.querySelector('.iti-search-input')) return;
 
-      // Create search container
-      const searchContainer = document.createElement('div');
-      searchContainer.className = 'iti-search-container';
+        // Create search container
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'iti-search-container';
 
-      // Create search input
-      const searchInput = document.createElement('input');
-      searchInput.type = 'text';
-      searchInput.className = 'iti-search-input';
-      searchInput.placeholder = 'Search country...';
+        // Create search input
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.className = 'iti-search-input';
+        searchInput.placeholder = 'Search country...';
 
-      searchContainer.appendChild(searchInput);
+        searchContainer.appendChild(searchInput);
 
-      // Prevent dropdown from closing when interacting with search
-      searchInput.addEventListener('click', (e) => e.stopPropagation());
-      searchInput.addEventListener('keydown', (e) => e.stopPropagation());
+        // Prevent dropdown from closing when interacting with search
+        searchInput.addEventListener('click', (e) => e.stopPropagation());
+        searchInput.addEventListener('keydown', (e) => e.stopPropagation());
 
-      // Insert at top of dropdown
-      dropdown.insertBefore(searchContainer, dropdown.firstChild);
+        // Insert at top of dropdown
+        dropdown.insertBefore(searchContainer, dropdown.firstChild);
 
-      // Focus on search
-      setTimeout(() => searchInput.focus(), 100);
+        // Focus on search
+        setTimeout(() => searchInput.focus(), 100);
 
-      // Filter countries on input
-      searchInput.addEventListener('input', (e: any) => {
-        e.stopPropagation();
-        const searchTerm = e.target.value.toLowerCase();
-        const countries = dropdown.querySelectorAll('.iti__country');
-        let hasVisible = false;
+        // Filter countries on input
+        searchInput.addEventListener('input', (e: any) => {
+          e.stopPropagation();
+          const searchTerm = e.target.value.toLowerCase();
+          const countries = dropdown.querySelectorAll('.iti__country');
+          let hasVisible = false;
 
-        countries.forEach((country: any) => {
-          // Search in the full text (Name + Dial Code)
-          const text = country.textContent?.toLowerCase() || '';
+          countries.forEach((country: any) => {
+            // Search in the full text (Name + Dial Code)
+            const text = country.textContent?.toLowerCase() || '';
 
-          if (text.includes(searchTerm)) {
-            country.classList.remove('iti__hide');
-            country.style.display = 'block'; // Force show
-            hasVisible = true;
+            if (text.includes(searchTerm)) {
+              country.classList.remove('iti__hide');
+              country.style.display = 'block'; // Force show
+              hasVisible = true;
+            } else {
+              country.classList.add('iti__hide');
+              country.style.display = 'none'; // Force hide
+            }
+          });
+
+          // Handle No Results
+          let noResults = dropdown.querySelector('.iti-no-results');
+          if (!noResults) {
+            noResults = document.createElement('div');
+            noResults.className = 'iti-no-results';
+            noResults.textContent = 'No results found';
+            dropdown.appendChild(noResults);
+          }
+
+          if (!hasVisible && searchTerm) {
+            (noResults as HTMLElement).style.display = 'block';
           } else {
-            country.classList.add('iti__hide');
-            country.style.display = 'none'; // Force hide
+            (noResults as HTMLElement).style.display = 'none';
+          }
+
+          // Show all if search is empty
+          if (!searchTerm) {
+            countries.forEach((country: any) => {
+              country.classList.remove('iti__hide');
+              country.style.display = 'block';
+            });
+            (noResults as HTMLElement).style.display = 'none';
           }
         });
-
-        // Handle No Results
-        let noResults = dropdown.querySelector('.iti-no-results');
-        if (!noResults) {
-          noResults = document.createElement('div');
-          noResults.className = 'iti-no-results';
-          noResults.textContent = 'No results found';
-          dropdown.appendChild(noResults);
-        }
-
-        if (!hasVisible && searchTerm) {
-          (noResults as HTMLElement).style.display = 'block';
-        } else {
-          (noResults as HTMLElement).style.display = 'none';
-        }
-
-        // Show all if search is empty
-        if (!searchTerm) {
-          countries.forEach((country: any) => {
-            country.classList.remove('iti__hide');
-            country.style.display = 'block';
-          });
-          (noResults as HTMLElement).style.display = 'none';
-        }
       });
     });
   }
