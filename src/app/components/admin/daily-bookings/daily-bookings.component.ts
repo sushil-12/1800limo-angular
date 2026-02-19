@@ -639,6 +639,13 @@ export class DailyBookingsComponent implements OnInit {
 			});
 	}
 
+	navigateToAffiliates(companyName: string) {
+		if (companyName) {
+			localStorage.setItem('affiliateSearch', companyName);
+			this.router.navigate(['/admin/affiliates/all-operators']);
+		}
+	}
+
 
 	async submit(message, format) {
 		console.log("format", format)

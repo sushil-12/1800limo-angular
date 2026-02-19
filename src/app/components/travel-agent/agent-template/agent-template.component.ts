@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
@@ -38,6 +38,7 @@ export class AgentTemplateComponent implements OnInit {
 		private authService: AuthService,
 		private elementRef: ElementRef,
 		private spinner: NgxSpinnerService,
+		private cdr: ChangeDetectorRef,
 	) {
 
 	}
@@ -61,7 +62,8 @@ export class AgentTemplateComponent implements OnInit {
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
 		this.accountStatus = localStorage.getItem('agentAccountStatus')
-		console.log(this.currentUser?.is_profile_complete, "is profile")
+		console.log(this.currentUser, "is profile")
+		this.cdr.detectChanges();
 
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {
@@ -181,10 +183,12 @@ export class AgentTemplateComponent implements OnInit {
 
 	openLogoutModal() {
 		this.showLogoutModal = true;
+		this.cdr.detectChanges();
 	}
 
 	closeLogoutModal() {
 		this.showLogoutModal = false;
+		this.cdr.detectChanges();
 	}
 
 	logout() {

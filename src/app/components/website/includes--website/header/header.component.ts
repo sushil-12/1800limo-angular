@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { StateManagementService } from '../../../../services/statemanagement.service';
 import { NavigationEnd, Router, Scroll } from '@angular/router';
@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit {
 	public steps: string = "";
 	public accountStatus: string = "";
 	public userImage: string = 'assets/images/user.png';
-	public Value: any;
 	total_count: any;
 	splitSteps: any;
 	desktopWidth: any;
@@ -38,6 +37,7 @@ export class HeaderComponent implements OnInit {
 		private stateManagementService: StateManagementService,
 		private errorDialogService: ErrorDialogService,
 		private elementRef: ElementRef,
+		private cdr: ChangeDetectorRef,
 
 	) {
 		this.router.events.pipe(filter(e => e instanceof Scroll)).subscribe((e: any) => {
@@ -59,25 +59,71 @@ export class HeaderComponent implements OnInit {
 		return this.excludedRoutes.includes(this.routeForSubscriptionProcess);
 	}
 
+	get userDisplayName(): string {
+		const user = this.currentUser;
+		if (!user) return '';
+
+		const lastName = user.LastName || '';
+		const lastNameInitial = lastName ? lastName.charAt(0) : '';
+		const firstName = user.FirstName || '';
+
+		if (user.roleName === 'driver') {
+			if (user.affiliate_company) {
+				return user.affiliate_company;
+			}
+			if (firstName) {
+				return firstName + lastNameInitial;
+			}
+			return user.roleName || '';
+		}
+
+		if (user.name) {
+			return user.name;
+		}
+
+		if (user.FirstName) {
+			return firstName + lastNameInitial;
+		}
+
+		return user.roleName || '';
+	}
+
+	get Value(): string {
+		const user = this.currentUser;
+		const status = this.accountStatus;
+
+		if (user?.roleName === 'individual') {
+			if (user.is_profile_complete === 0 || user.is_profile_complete === '0') {
+				return "Continue Set-Up";
+			} else {
+				return "Manage Bookings";
+			}
+		}
+
+		if (status === "completed" || status === "accepted") {
+			return "Manage Bookings";
+		}
+
+		return "Continue Set-Up";
+	}
+
 	ngOnInit(): void {
 		// header scroll
 		// this.headerScroll();
 
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
+		console.log('NGINIT HEADER - Current User:', this.currentUser);
 		if (this.currentUser) {
 			this.getPermissions()
 		}
 		// Get Steps
-		this.steps = localStorage.getItem("stepCompleted");
-		this.accountStatus = localStorage.getItem("account_approval");
+		this.steps = localStorage.getItem("stepCompleted") || "";
+		this.accountStatus = localStorage.getItem("account_approval") || "";
 
-		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
-			this.Value = "Manage Bookings";
-		}
-		else {
-			this.Value = "Continue Affiliate Set-Up";
-		}
+		console.log('NGINIT HEADER - Value (Getter):', this.Value);
+
+		this.cdr.detectChanges();
 
 		// For Select Box Dropdown
 		$(window).on('load', function () {
@@ -90,7 +136,6 @@ export class HeaderComponent implements OnInit {
 				'margin-right': '2rem'
 			});
 		})
-
 	}
 
 
@@ -174,14 +219,19 @@ export class HeaderComponent implements OnInit {
 	}
 
 	openLogoutModal() {
+		console.log('Open Logout Modal Clicked');
 		this.showLogoutModal = true;
+		this.cdr.detectChanges();
 	}
 
 	closeLogoutModal() {
+		console.log('Close Logout Modal Clicked');
 		this.showLogoutModal = false;
+		this.cdr.detectChanges();
 	}
 
 	logout() {
+		console.log('Logout Confirmed');
 		this.spinner.show()
 		this.authService.logout()
 			.pipe(
@@ -226,6 +276,20 @@ export class HeaderComponent implements OnInit {
 		else if (role == 'subscriber') {
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 		}
+		else if (role == 'travel_agent') {
+			let stepsObj: any = {};
+			try {
+				stepsObj = JSON.parse(sessionStorage.getItem('stepCompleted') || "{}");
+			} catch (e) {
+				console.error('Error parsing step_completed_obj', e);
+			}
+
+			if (stepsObj && stepsObj.step1 === 'completed') {
+				this.router.navigateByUrl('/travel_agent/profile/step2');
+			} else {
+				this.router.navigateByUrl('/travel_agent/profile/step1');
+			}
+		}
 		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
@@ -244,6 +308,20 @@ export class HeaderComponent implements OnInit {
 			else {
 				this.router.navigateByUrl('/affiliate');
 				console.log("step 0  dashboard")
+			}
+		}
+		else if (role == 'travel_agent') {
+			let stepsObj: any = {};
+			try {
+				stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj') || "{}");
+			} catch (e) {
+				console.error('Error parsing step_completed_obj', e);
+			}
+
+			if (stepsObj && stepsObj.step1 === 'completed') {
+				this.router.navigateByUrl('/travel_agent/profile/step2');
+			} else {
+				this.router.navigateByUrl('/travel_agent/profile/step1');
 			}
 		}
 		else {

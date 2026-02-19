@@ -368,16 +368,36 @@
 												[innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
 										</p>
 										<ng-template #otherAffiliate>
-											<p (click)="openModal(booking, 'Affiliate')"
-												[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+											<p [ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												<span
+												<span (click)="openModal(booking, 'Affiliate')"
 													[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>
-												<span>({{fomatAffiliateType(booking.affiliate_type)}})</span> <br />
-												<span class="font-weight-bolder"
+												<span
+													(click)="openModal(booking, 'Affiliate')">({{fomatAffiliateType(booking.affiliate_type)}})</span><br />
+												<span (click)="openModal(booking, 'Affiliate')"
+													class="font-weight-bolder"
 													[innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
-												<span class="font-weight-bolder"
+												<span (click)="openModal(booking, 'Affiliate')"
+													class="font-weight-bolder"
 													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
+												<br
+													*ngIf="booking?.affiliate_id && booking?.affiliate_id != 0 && booking?.company_name" />
+												<span
+													*ngIf="booking?.affiliate_id && booking?.affiliate_id != 0 && booking?.company_name"
+													(click)="navigateToAffiliates(booking?.company_name); $event.stopPropagation()"
+													style="cursor: pointer; text-decoration: underline; white-space: nowrap;">
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+														fill="#f3933d" class="bi bi-buildings" viewBox="0 0 16 16">
+														<path
+															d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022M6 8.694 1 10.36V15h5zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5z" />
+														<path
+															d="M2 11h1v1H2zm2 0h1v1H4zm-2 2h1v1H2zm2 0h1v1H4zm4-4h1v1H8zm2 0h1v1h-1zm-2 2h1v1H8zm2 0h1v1h-1zm2-2h1v1h-1zm0 2h1v1h-1zM8 7h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zM8 5h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zm0-2h1v1h-1z" />
+													</svg>
+													<span class="font-weight-bolder" style="margin-left:5px;"
+														[innerHTML]="highlighText(booking?.company_name)"></span>
+												</span>
+												<br />
+
 											</p>
 											<ng-template #gigOperator>
 												<p [ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"

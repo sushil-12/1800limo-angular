@@ -69,7 +69,7 @@
                     <span class="font-weight-bold">
                         {{ currentUser?.affiliate_company ? currentUser?.affiliate_company : is_family_member ?
                         family_member_name :
-                        currentUser?.name }}
+                        currentUser?.name ? currentUser?.name : currentUser?.roleName }}
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -88,7 +88,7 @@
                             <div class="dropdown-user-details-name font-weight-bold">
                                 {{ currentUser?.affiliate_company ? currentUser?.affiliate_company : is_family_member ?
                                 family_member_name :
-                                currentUser?.name }}
+                                currentUser?.name ? currentUser?.name : currentUser?.roleName}}
                             </div>
                         </div>
                     </h6>
