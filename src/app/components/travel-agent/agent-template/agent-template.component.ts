@@ -46,9 +46,13 @@ export class AgentTemplateComponent implements OnInit {
 	ngOnInit(): void {
 		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ? JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
 		this.invite_link = localStorage.getItem('invite_link')
-		var referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
-		this.referral_code = atob(referralCode);
-		console.log("decodedReferralCode", this.referral_code);
+		if (this.invite_link) {
+			var referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
+			if (referralCode) {
+				this.referral_code = atob(referralCode);
+				console.log("decodedReferralCode", this.referral_code);
+			}
+		}
 
 
 		$(".collapsed").click(function () {

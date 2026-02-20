@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { StateManagementService } from '../../../../services/statemanagement.service';
@@ -22,7 +22,6 @@ export class FooterComponent implements OnInit {
 	// }
 	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM All rights reserved.'
 	public currentUser;
-	public Value: any;
 	public steps: string = "";
 	public accountStatus: string = "";
 	splitSteps: any;
@@ -35,8 +34,60 @@ export class FooterComponent implements OnInit {
 		private adminService: AdminService,
 		private stateManagementService: StateManagementService,
 		private router: Router,
-		private errorDialogService: ErrorDialogService
+		private errorDialogService: ErrorDialogService,
+		private cdr: ChangeDetectorRef,
+
 	) { }
+
+
+	get userDisplayName(): string {
+		const user = this.currentUser;
+		if (!user) return '';
+
+		const lastName = user.LastName || '';
+		const lastNameInitial = lastName ? lastName.charAt(0) : '';
+		const firstName = user.FirstName || '';
+
+		if (user.roleName === 'driver') {
+			if (user.affiliate_company) {
+				return user.affiliate_company;
+			}
+			if (firstName) {
+				return firstName + lastNameInitial;
+			}
+			return user.roleName || '';
+		}
+
+		if (user.name) {
+			return user.name;
+		}
+
+		if (user.FirstName) {
+			return firstName + lastNameInitial;
+		}
+
+		return user.roleName || '';
+	}
+
+	get Value(): string {
+		const user = this.currentUser;
+		const status = this.accountStatus;
+		console.log(user, "useruseruser")
+
+		if (user?.roleName == 'individual' || user?.roleName == 'travel_agent') {
+			if (user.is_profile_complete === 0 || user.is_profile_complete === '0') {
+				return "Continue Set-Up";
+			} else {
+				return "Manage Bookings";
+			}
+		}
+
+		if (status === "completed" || status === "accepted") {
+			return "Manage Bookings";
+		}
+
+		return "Continue Set-Up";
+	}
 
 	ngOnInit(): void {
 		// header scroll
@@ -50,13 +101,13 @@ export class FooterComponent implements OnInit {
 		// Get Steps
 		this.steps = localStorage.getItem("stepCompleted") || "";
 		this.accountStatus = localStorage.getItem("account_approval") || "";
-
-		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
-			this.Value = "Manage Bookings";
-		}
-		else {
-			this.Value = "Continue Affiliate Set-Up";
-		}
+		this.cdr.detectChanges();
+		// if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
+		// 	this.Value = "Manage Bookings";
+		// }
+		// else {
+		// 	this.Value = "Continue Affiliate Set-Up";
+		// }
 
 		// For Select Box Dropdown
 		$(window).on('load', function () {
@@ -125,10 +176,12 @@ export class FooterComponent implements OnInit {
 
 	openLogoutModal() {
 		this.showLogoutModal = true;
+		this.cdr.detectChanges();
 	}
 
 	closeLogoutModal() {
 		this.showLogoutModal = false;
+		this.cdr.detectChanges();
 	}
 
 	logout() {
