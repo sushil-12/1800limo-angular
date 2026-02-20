@@ -141,7 +141,7 @@
 									</ng-template>
 
 									<ng-template #otherRole>
-										<div *ngIf="(currentUser?.roleName === 'travel_agent' || currentUser?.roleName === 'individual' ? Value === 'Manage Bookings' : currentUser?.is_profile_complete); else completeProfile"
+										<div *ngIf="(currentUser?.roleName === 'travel_agent' || currentUser?.roleName === 'individual' || currentUser?.roleName === 'sub_travel_agent' || currentUser?.roleName === 'sub_affiliate' ? Value === 'Manage Bookings' : currentUser?.is_profile_complete); else completeProfile"
 											class="dropdown-item" (click)="dashboard(currentUser?.roleName)">
 											<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -329,7 +329,7 @@
 								</div>
 							</ng-template>
 							<ng-template #otherRole>
-								<div *ngIf="(currentUser?.roleName === 'travel_agent' || currentUser?.roleName === 'individual' ? Value === 'Manage Bookings' : currentUser?.is_profile_complete==true); else completeProfile"
+								<div *ngIf="(currentUser?.roleName === 'travel_agent' || currentUser?.roleName === 'individual' || currentUser?.roleName === 'sub_travel_agent' || currentUser?.roleName === 'sub_affiliate' ? Value === 'Manage Bookings' : currentUser?.is_profile_complete==true); else completeProfile"
 									class="dropdown-item" (click)="dashboard(currentUser?.roleName)">
 									<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"

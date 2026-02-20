@@ -116,6 +116,18 @@ export class HeaderComponent implements OnInit {
 			}
 		}
 
+		if (user?.roleName == 'sub_travel_agent') {
+			if (user.is_profile_complete === 0 || user.is_profile_complete === '0' || user.is_profile_complete === null || user.is_profile_complete === undefined) {
+				return "Continue Set-Up";
+			} else {
+				return "Manage Bookings";
+			}
+		}
+
+		if (user?.roleName == 'sub_affiliate') {
+			return "Manage Bookings";
+		}
+
 		if (status === "completed" || status === "accepted") {
 			return "Manage Bookings";
 		}
