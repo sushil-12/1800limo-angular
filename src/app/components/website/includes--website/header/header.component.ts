@@ -91,8 +91,9 @@ export class HeaderComponent implements OnInit {
 	get Value(): string {
 		const user = this.currentUser;
 		const status = this.accountStatus;
+		console.log(user, "useruseruser")
 
-		if (user?.roleName === 'individual') {
+		if (user?.roleName == 'individual' || user?.roleName == 'travel_agent') {
 			if (user.is_profile_complete === 0 || user.is_profile_complete === '0') {
 				return "Continue Set-Up";
 			} else {

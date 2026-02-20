@@ -88,7 +88,7 @@
 					<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url"
 						style="object-fit: contain;">
 					<span class="font-weight-bold">
-						{{ currentUser?.affiliate_company || currentUser?.name }}
+						{{ currentUser?.affiliate_company ? currentUser?.affiliate_company : currentUser?.name }}
 
 					</span>
 				</a>
@@ -106,7 +106,8 @@
 
 						<div class="dropdown-user-details">
 							<div class="dropdown-user-details-name font-weight-bold">
-								{{ currentUser?.affiliate_company || currentUser?.name }}
+								{{ currentUser?.affiliate_company ? currentUser?.affiliate_company : currentUser?.name
+								}}
 
 							</div>
 						</div>

@@ -15,7 +15,7 @@
 							<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
 								<a class="dropdown-item indv-btn font-weight-bolder"
 									(click)="loginButtons('individual')"
-									style="color: #fff !important;opacity: 1;font-size: 21px;">Individual Account</a>
+									style="color: #fff !important;opacity: 1;font-size: 21px;">Individual/Corp Accts</a>
 								<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
 									style="color: #fff !important;opacity: 1;font-size: 21px;"
 									(click)="loginButtons('travel_agent')">Travel
@@ -26,7 +26,7 @@
 								<a class="dropdown-item driver-dropdown font-weight-bolder"
 									style="color: #fff !important;opacity: 1;font-size: 21px;"
 									(click)="loginButtons('driver')">
-									Driver / Chauffeur / Fleet</a>
+									Chauffeur/Driver/Fleet Ops</a>
 								<hr>
 								<a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
 									style="color: #fff !important;opacity: 1;font-size: 21px;"
@@ -46,10 +46,7 @@
 										style="background-color: #33c658 !important;" id="navbarDropdownUserImage"
 										href="javascript:void(0);" role="button" data-toggle="dropdown"
 										aria-haspopup="true" aria-expanded="false">
-										{{currentUser.affiliateCompanyName ?
-										currentUser.affiliateCompanyName : currentUser.name ?
-										currentUser.name : currentUser.FirstName +
-										currentUser.LastName.charAt(0)}}
+										{{ userDisplayName }}
 									</button>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
@@ -61,11 +58,7 @@
 											</svg>
 											<div class="dropdown-user-details">
 												<div class="dropdown-user-details-name">
-													{{currentUser.affiliateCompanyName ?
-													currentUser.affiliateCompanyName :
-													currentUser.name ?
-													currentUser.name : currentUser.FirstName +
-													currentUser.LastName.charAt(0)}}
+													{{ userDisplayName }}
 												</div>
 											</div>
 										</h6>
