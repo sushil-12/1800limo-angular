@@ -93,7 +93,22 @@ export class HeaderComponent implements OnInit {
 		const status = this.accountStatus;
 		console.log(user, "useruseruser")
 
-		if (user?.roleName == 'individual' || user?.roleName == 'travel_agent') {
+		if (user?.roleName == 'travel_agent') {
+			let stepsObj: any = {};
+			try {
+				stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj') || "{}");
+			} catch (e) {
+				console.error('Error parsing step_completed_obj', e);
+			}
+
+			if (stepsObj && stepsObj.step1 === 'completed' && stepsObj.step2 === 'completed') {
+				return "Manage Bookings";
+			} else {
+				return "Continue Set-Up";
+			}
+		}
+
+		if (user?.roleName == 'individual') {
 			if (user.is_profile_complete === 0 || user.is_profile_complete === '0') {
 				return "Continue Set-Up";
 			} else {
@@ -277,20 +292,20 @@ export class HeaderComponent implements OnInit {
 		else if (role == 'subscriber') {
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 		}
-		else if (role == 'travel_agent') {
-			let stepsObj: any = {};
-			try {
-				stepsObj = JSON.parse(sessionStorage.getItem('stepCompleted') || "{}");
-			} catch (e) {
-				console.error('Error parsing step_completed_obj', e);
-			}
+		// else if (role == 'travel_agent') {
+		// 	let stepsObj: any = {};
+		// 	try {
+		// 		stepsObj = JSON.parse(sessionStorage.getItem('stepCompleted') || "{}");
+		// 	} catch (e) {
+		// 		console.error('Error parsing step_completed_obj', e);
+		// 	}
 
-			if (stepsObj && stepsObj.step1 === 'completed') {
-				this.router.navigateByUrl('/travel_agent/profile/step2');
-			} else {
-				this.router.navigateByUrl('/travel_agent/profile/step1');
-			}
-		}
+		// 	if (stepsObj && stepsObj.step1 === 'completed') {
+		// 		this.router.navigateByUrl('/travel_agent/profile/step2');
+		// 	} else {
+		// 		this.router.navigateByUrl('/travel_agent/profile/step1');
+		// 	}
+		// }
 		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
