@@ -43,39 +43,53 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
-		this.affiliateId = sessionStorage.getItem('affiliateId');
-		if (this.affiliateId) {
-			this.adminService.getStepsCompleted(this.affiliateId)
-				.pipe(
-					catchError(err => {
-						return throwError(err);
-					})
-				).subscribe(({ data }: any) => {
-					if (data) {
-						const stepCompleted = data.step_completed;
-						const stepCompletedObj = data.step_completed_obj;
-						this.affiliateAccountStatus = data.account_approval;
-						if (stepCompleted) {
-							this.stepCompleted = stepCompleted;
-							this.stepCompletedObj = stepCompletedObj;
-							this.adminService.updateStepsArrayLocal(stepCompleted);
-							this.adminService.updateStepsCompletedObj(stepCompletedObj);
-							this.stepCompletionTick();
+		this.activatedRoute.queryParams.subscribe(params => {
+			this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
+
+			if (params['affiliate']) {
+				this.affiliateId = params['affiliate'];
+				sessionStorage.setItem('affiliateId', this.affiliateId);
+			} else {
+				this.affiliateId = sessionStorage.getItem('affiliateId');
+			}
+
+			if (this.affiliateId) {
+				this.adminService.getStepsCompleted(this.affiliateId)
+					.pipe(
+						catchError(err => {
+							return throwError(err);
+						})
+					).subscribe(({ data }: any) => {
+						if (data) {
+							const stepCompleted = data.step_completed;
+							const stepCompletedObj = data.step_completed_obj;
+							this.affiliateAccountStatus = data.account_approval;
+							if (stepCompleted) {
+								this.stepCompleted = stepCompleted;
+								this.stepCompletedObj = stepCompletedObj;
+								this.adminService.updateStepsArrayLocal(stepCompleted);
+								this.adminService.updateStepsCompletedObj(stepCompletedObj);
+								this.stepCompletionTick();
+							}
+						}
+					});
+			}
+			if (!this.affiliateId) {
+				const stepsObjStr = sessionStorage.getItem('step_completed_obj');
+				if (stepsObjStr) {
+					this.stepsObj = JSON.parse(stepsObjStr);
+					if (this.stepsObj) {
+						for (let [key, value] of Object.entries(this.stepsObj)) {
+							if (key == 'step0' && value == 'completed') {
+								this['step0'] = 'md-step ' + 'completed'
+							}
 						}
 					}
-				});
-		}
-		if (!this.affiliateId) {
-			this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
-			for (let [key, value] of Object.entries(this.stepsObj)) {
-				if (key == 'step0' && value == 'completed') {
-					this['step0'] = 'md-step ' + 'completed'
 				}
 			}
-		}
+		});
 	}
-	getAffiliateName(){
+	getAffiliateName() {
 		this.affiliateName = sessionStorage.getItem('affiliateName') || ""
 
 	}
@@ -93,12 +107,17 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 		let steps_completed_obj = JSON.parse(sessionStorage.getItem('step_completed_obj'))
 		let first_incomplete_step = Object.keys(steps_completed_obj)[Object.values(steps_completed_obj).indexOf('uncompleted')]
 		let first_step_error = Object.keys(steps_completed_obj)[Object.values(steps_completed_obj).indexOf('error')] || first_incomplete_step
-		console.log(Object.values(steps_completed_obj).indexOf('error'),Object.values(steps_completed_obj).indexOf('uncompleted'))
+		console.log(Object.values(steps_completed_obj).indexOf('error'), Object.values(steps_completed_obj).indexOf('uncompleted'))
 		let nav_step = (Object.values(steps_completed_obj).indexOf('error') < Object.values(steps_completed_obj).indexOf('uncompleted'))
 			? first_step_error :
 			first_incomplete_step;
+		let navigationExtras: any = {};
+		if (this.affiliateId && this.affiliateId !== 'null' && this.affiliateId !== 'undefined') {
+			navigationExtras = { queryParams: { affiliate: this.affiliateId.replace(/['"]+/g, '') } };
+		}
+
 		if (step == 0) {
-			this.router.navigate(['/admin/affiliate/step0']);
+			this.router.navigate(['/admin/affiliate/step0'], navigationExtras);
 			return
 		}
 
@@ -106,7 +125,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 
 
 		if (step >= 1 && steps_completed != null && steps_completed.includes((step - 1) + '')) {
-			this.router.navigate(['/admin/affiliate/step' + step]);
+			this.router.navigate(['/admin/affiliate/step' + step], navigationExtras);
 
 		} else {
 			console.log('Inside else')
@@ -115,8 +134,8 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 					error: `Please complete previous steps first.`
 				}
 			})
-			console.log('nav------step' , nav_step)
-			this.router.navigate(['/admin/affiliate/' + (nav_step)])
+			console.log('nav------step', nav_step)
+			this.router.navigate(['/admin/affiliate/' + (nav_step)], navigationExtras)
 		}
 		this.getAffiliateName();
 

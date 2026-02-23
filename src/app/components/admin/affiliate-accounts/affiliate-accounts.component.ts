@@ -256,7 +256,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		sessionStorage.setItem("affiliateType", affiliate_type);
 		sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
 		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-			this.router.navigate(['/admin/affiliate/step1']);
+			this.router.navigate(['/admin/affiliate/step1'], { queryParams: { affiliate: affiliate_id } });
 		});
 
 	}
@@ -267,7 +267,7 @@ export class AffiliateAccountsComponent implements OnInit {
 			sessionStorage.setItem("affiliateType", affiliate_type);
 			sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
 			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-				this.router.navigate(['/admin/affiliate/step0']);
+				this.router.navigate(['/admin/affiliate/step0'], { queryParams: { affiliate: affiliate_id } });
 			});
 		}
 	}
