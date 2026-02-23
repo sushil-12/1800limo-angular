@@ -361,7 +361,7 @@ export class SelectVehicleComponent implements OnInit {
 		// 	this.$router.navigate(['/admin/affiliate/step0']);
 		// });
 		const url = this.$router.serializeUrl(
-			this.$router.createUrlTree(['/admin/affiliate/step0'])
+			this.$router.createUrlTree(['/admin/affiliate/step0'], { queryParams: { affiliate: vehInfo.affiliate_id } })
 		);
 
 		window.open(url, '_blank');

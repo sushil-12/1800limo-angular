@@ -1,75 +1,69 @@
 <main>
 	<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-	<div class="row d-flex justify-content-center md-stepper-horizontal orange" md-stepper-step *ngIf="affiliateName?.length>0">
+	<div class="row d-flex justify-content-center md-stepper-horizontal orange" md-stepper-step
+		*ngIf="affiliateName?.length>0">
 		<span class="affiliate-name">Operator - {{affiliateName}}</span>
 	</div>
 	<div class="md-stepper-horizontal orange" tabindex="-1">
 		<div>
-			<a class="md-step active" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[className]="step0" [routerLinkActive]="['active']" (click)="stepClicked(0)"
-			routerLink="/admin/affiliate/step0">
-			<div class="md-step-circle"><span>0</span></div>
-			<div class="md-step-title">Step 0</div>
-			<div class="md-step-optional">Agreement</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
-		<a class="md-step" [className]="step1" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[routerLinkActive]="['active']" (click)="stepClicked(1)"
-			routerLink="/admin/affiliate/step1">
-			<div class="md-step-circle"><span>1</span></div>
-			<div class="md-step-title">Step 1</div>
-			<div class="md-step-optional">Affiliate Settings</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
-		<a class="md-step" [className]="step2" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[routerLinkActive]="['active']" (click)="stepClicked(2)"
-			routerLink="/admin/affiliate/step2">
-			<div class="md-step-circle"><span>2</span></div>
-			<div class="md-step-title">Step 2</div>
-			<div class="md-step-optional">Stripe Banking / Map Fix</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
-		<a class="md-step" [className]="step3" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[routerLinkActive]="['active']" (click)="stepClicked(3)"
-			routerLink="/admin/affiliate/step3">
-			<div class="md-step-circle"><span>3</span></div>
-			<div class="md-step-title">Step 3</div>
-			<div class="md-step-optional">Insurance Settings</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
-		<a class="md-step" [className]="step4" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[routerLinkActive]="['active']" (click)="stepClicked(4)"
-			routerLink="/admin/affiliate/step4">
-			<div class="md-step-circle"><span>4</span></div>
-			<div class="md-step-title">Step 4</div>
-			<div class="md-step-optional">Driver Settings</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
-		<a class="md-step" [className]="step5" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[routerLinkActive]="['active']" (click)="stepClicked(5)"
-			routerLink="/admin/affiliate/step5">
-			<div class="md-step-circle"><span>5</span></div>
-			<div class="md-step-title">Step 5</div>
-			<div class="md-step-optional">Vehicle Settings / Rates</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
-		<a class="md-step" [className]="step6" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
-			[routerLinkActive]="['active']" (click)="stepClicked(6)"
-			routerLink="/admin/affiliate/step6">
-			<div class="md-step-circle"><span>6</span></div>
-			<div class="md-step-title">Step 6</div>
-			<div class="md-step-optional">Terms & Condition</div>
-			<div class="md-step-bar-left"></div>
-			<div class="md-step-bar-right"></div>
-		</a>
+			<a class="md-step active" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'" [className]="step0"
+				(click)="stepClicked(0)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>0</span></div>
+				<div class="md-step-title">Step 0</div>
+				<div class="md-step-optional">Agreement</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
+			<a class="md-step" [className]="step1" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
+				(click)="stepClicked(1)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>1</span></div>
+				<div class="md-step-title">Step 1</div>
+				<div class="md-step-optional">Affiliate Settings</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
+			<a class="md-step" [className]="step2" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
+				(click)="stepClicked(2)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>2</span></div>
+				<div class="md-step-title">Step 2</div>
+				<div class="md-step-optional">Stripe Banking / Map Fix</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
+			<a class="md-step" [className]="step3" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
+				(click)="stepClicked(3)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>3</span></div>
+				<div class="md-step-title">Step 3</div>
+				<div class="md-step-optional">Insurance Settings</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
+			<a class="md-step" [className]="step4" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
+				(click)="stepClicked(4)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>4</span></div>
+				<div class="md-step-title">Step 4</div>
+				<div class="md-step-optional">Driver Settings</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
+			<a class="md-step" [className]="step5" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
+				(click)="stepClicked(5)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>5</span></div>
+				<div class="md-step-title">Step 5</div>
+				<div class="md-step-optional">Vehicle Settings / Rates</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
+			<a class="md-step" [className]="step6" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
+				(click)="stepClicked(6)" style="cursor: pointer;">
+				<div class="md-step-circle"><span>6</span></div>
+				<div class="md-step-title">Step 6</div>
+				<div class="md-step-optional">Terms & Condition</div>
+				<div class="md-step-bar-left"></div>
+				<div class="md-step-bar-right"></div>
+			</a>
 		</div>
-		
+
 	</div>
 	<router-outlet></router-outlet>
 </main>
