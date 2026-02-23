@@ -21,6 +21,10 @@ export class TutorialsComponent implements OnInit {
   categories: any[] = [];
   showCopyMessage: boolean = false;
 
+  suggestions: string[] = [];
+  searchChips: string[] = [];
+  showSuggestions: boolean = false;
+
   fleetContents: any[] = [];
 
   // Video playback
@@ -307,7 +311,48 @@ export class TutorialsComponent implements OnInit {
   }
 
   onSearch() {
+    this.onSearchInput();
+  }
+
+  onSearchInput() {
+    if (!this.searchText.trim()) {
+      this.suggestions = [];
+      this.showSuggestions = false;
+      this.applyFilter();
+      return;
+    }
+
+    const query = this.searchText.toLowerCase().trim();
+    const matchingTitles = this.fleetContents
+      .filter(t => t.title.toLowerCase().includes(query) || t.content.toLowerCase().includes(query))
+      .map(t => t.title);
+
+    this.suggestions = Array.from(new Set(matchingTitles)).slice(0, 5);
+    this.showSuggestions = this.suggestions.length > 0;
     this.applyFilter();
+  }
+
+  selectSuggestion(suggestion: string) {
+    this.searchText = suggestion;
+    this.showSuggestions = false;
+    this.executeSearch();
+  }
+
+  executeSearch() {
+    const trimmedStr = this.searchText.trim();
+    if (trimmedStr && !this.searchChips.includes(trimmedStr)) {
+      this.searchChips.push(trimmedStr);
+    }
+    this.showSuggestions = false;
+    this.applyFilter();
+  }
+
+  removeChip(chip: string) {
+    this.searchChips = this.searchChips.filter(c => c !== chip);
+    if (this.searchText.trim() === chip) {
+      this.searchText = '';
+      this.applyFilter();
+    }
   }
 
   applyFilter() {

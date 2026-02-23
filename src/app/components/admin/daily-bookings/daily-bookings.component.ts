@@ -641,8 +641,20 @@ export class DailyBookingsComponent implements OnInit {
 
 	navigateToAffiliates(companyName: string) {
 		if (companyName) {
+			$('#previewBookingOnID').modal('hide');
+			$('#sendEmailModal').modal('hide');
 			localStorage.setItem('affiliateSearch', companyName);
 			this.router.navigate(['/admin/affiliates/all-operators']);
+		}
+	}
+
+	navigateToIndividualAccounts(passengerName: string) {
+		if (this.currentUser?.roleName !== 'admin') return;
+		if (passengerName) {
+			$('#previewBookingOnID').modal('hide');
+			$('#sendEmailModal').modal('hide');
+			localStorage.setItem('individualSearch', passengerName);
+			this.router.navigate(['/admin/individual-account-admin']);
 		}
 	}
 

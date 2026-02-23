@@ -55,6 +55,7 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 .search-container {
 	max-width: 600px;
 	margin: 0 auto;
+	position: relative;
 
 	.search-box {
 		position: relative;
@@ -93,6 +94,68 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 		&:focus-within {
 			box-shadow: 0 10px 40px rgba($primary-color, 0.15);
 			border-color: rgba($primary-color, 0.3);
+		}
+	}
+
+	.suggestions-dropdown {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+		margin-top: 8px;
+		z-index: 100;
+		overflow: hidden;
+		border: 1px solid #eee;
+
+		.suggestion-item {
+			padding: 12px 20px;
+			cursor: pointer;
+			text-align: left;
+			font-size: 1rem;
+			color: #333;
+			transition: background 0.2s;
+
+			&:hover {
+				background: #f8f9fa;
+			}
+
+			&:not(:last-child) {
+				border-bottom: 1px solid #f1f1f1;
+			}
+		}
+	}
+
+
+}
+
+.search-chips {
+	gap: 8px;
+
+	.search-chip {
+		background: #F3F4F6;
+		border: 1px solid #e0e0e0;
+		color: #495057;
+		padding: 6px 14px;
+		border-radius: 50px;
+		font-size: 0.9rem;
+		display: flex;
+		align-items: center;
+		box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+
+		i {
+			cursor: pointer;
+			font-size: 1.1rem;
+			line-height: 1;
+			margin-left: 6px;
+			color: #99A1AF;
+			transition: color 0.2s;
+
+			&:hover {
+				color: #dc3545;
+			}
 		}
 	}
 }

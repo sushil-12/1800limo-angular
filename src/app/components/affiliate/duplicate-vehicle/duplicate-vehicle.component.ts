@@ -190,7 +190,7 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 			charterCancelPolicy: ['24', Validators.required],
 			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
-			amenities: this.formBuilder.array([], [Validators.required]),
+			amenities: this.formBuilder.array([]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInteriorGet: this.formBuilder.array([], [Validators.required]),
