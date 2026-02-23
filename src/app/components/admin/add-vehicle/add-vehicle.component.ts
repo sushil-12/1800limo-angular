@@ -188,7 +188,7 @@ export class AddVehicleComponent implements OnInit {
 			charterCancelPolicy: ['24', Validators.required],
 			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
-			amenities: this.formBuilder.array([], [Validators.required]),
+			amenities: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInterior: this.formBuilder.array([], [Validators.required]),
 			vehicle_image_1: ['', Validators.required],
@@ -1026,10 +1026,10 @@ export class AddVehicleComponent implements OnInit {
 		// }
 	}
 
-	handleNonCharterCancelPolicy(event){
+	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.addVehicleForm.patchValue({
-			charterCancelPolicy : event.value
+			charterCancelPolicy: event.value
 		})
 	}
 }
