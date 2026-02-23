@@ -14,8 +14,19 @@
             <div class="search-container mt-4">
                 <div class="search-box">
                     <i class="bi bi-search"></i>
-                    <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search tutorials...">
+                    <input type="text" [(ngModel)]="searchText" (input)="onSearchInput()"
+                        (keyup.enter)="executeSearch()" placeholder="Search tutorials...">
                 </div>
+
+                <!-- Suggestions Dropdown -->
+                <div class="suggestions-dropdown" *ngIf="showSuggestions && suggestions.length > 0">
+                    <div class="suggestion-item" *ngFor="let suggestion of suggestions"
+                        (click)="selectSuggestion(suggestion)">
+                        <i class="bi bi-search mr-2 text-muted"></i> {{suggestion}}
+                    </div>
+                </div>
+
+
             </div>
         </div>
         <!-- Featured Section Container -->
@@ -112,6 +123,15 @@
                         <div class="skeleton-header" style="width: 100px;"></div>
                     </div>
                 </ng-template>
+            </div>
+            <!-- Search Chips -->
+            <div class="container">
+                <div class="search-chips mt-3 d-flex flex-wrap" *ngIf="searchChips.length > 0">
+                    <span class="search-chip" *ngFor="let chip of searchChips">
+                        {{chip}}
+                        <i class="bi bi-x" (click)="removeChip(chip)"></i>
+                    </span>
+                </div>
             </div>
         </div>
 
