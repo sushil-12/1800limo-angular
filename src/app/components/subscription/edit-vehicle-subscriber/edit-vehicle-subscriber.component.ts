@@ -101,7 +101,7 @@ export class EditVehicleSubscriberComponent implements OnInit {
   errorMsg3: boolean;
   errorMsg4: boolean;
   duplicateVehcile: any;
-  looseAffId:any
+  looseAffId: any
 
   constructor(
     private adminService: AdminService,
@@ -196,7 +196,7 @@ export class EditVehicleSubscriberComponent implements OnInit {
       charterCancelPolicy: ['24', Validators.required],
       nonCharterCancelPolicy: ['24', Validators.required],
       typeOfService: this.formBuilder.array([]),
-      amenities: this.formBuilder.array([], [Validators.required]),
+      amenities: this.formBuilder.array([]),
       specialAmenitiesGet: this.formBuilder.array([]),
       specialAmenities: this.formBuilder.array([]),
       vehicleInteriorGet: this.formBuilder.array([], [Validators.required]),
@@ -1107,14 +1107,14 @@ export class EditVehicleSubscriberComponent implements OnInit {
           this.disableSubmitButton = true; //enable submit button
 
           this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
-          
-          if(this.looseAffId){
-          this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { looseAffId : this.looseAffId,  vehicleId: this.response.data.id, relativeVehicleId: this.addVehicleForm.get('relative_vehicle_id').value } });
+
+          if (this.looseAffId) {
+            this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { looseAffId: this.looseAffId, vehicleId: this.response.data.id, relativeVehicleId: this.addVehicleForm.get('relative_vehicle_id').value } });
           }
-          else{
+          else {
             this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id, relativeVehicleId: this.addVehicleForm.get('relative_vehicle_id').value } });
           }
-          
+
         });
     } else {
 
@@ -1133,10 +1133,10 @@ export class EditVehicleSubscriberComponent implements OnInit {
 
           this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles - this.response2.data.numberOfVehicles);
 
-          if(this.looseAffId){
-            this.router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+          if (this.looseAffId) {
+            this.router.navigate(['admin/loose-affliate-vehicles'], { queryParams: { looseAffId: this.looseAffId } })
           }
-          else{
+          else {
             this.router.navigate(['admin/vehicle-details']);
           }
         });
@@ -1175,12 +1175,12 @@ export class EditVehicleSubscriberComponent implements OnInit {
   }
 
   backButton() {
-    if(this.looseAffId){
-			this.router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
-		}
-		else{
-			this.router.navigate(['admin/vehicle-details']);
-		}
+    if (this.looseAffId) {
+      this.router.navigate(['admin/loose-affliate-vehicles'], { queryParams: { looseAffId: this.looseAffId } })
+    }
+    else {
+      this.router.navigate(['admin/vehicle-details']);
+    }
   }
 
   changeMake(selectedMake, onFirstLoad = null) {

@@ -12,13 +12,13 @@ import { CommonService } from 'src/app/services/common.service';
 
 declare var $: any;
 @Component({
-  selector: 'app-add-vehicle-subscriber',
-  templateUrl: './add-vehicle-subscriber.component.html',
-  styleUrls: ['./add-vehicle-subscriber.component.scss']
+	selector: 'app-add-vehicle-subscriber',
+	templateUrl: './add-vehicle-subscriber.component.html',
+	styleUrls: ['./add-vehicle-subscriber.component.scss']
 })
 export class AddVehicleSubscriberComponent implements OnInit {
-  
-  public tree: any;
+
+	public tree: any;
 	public affiliateId: string;
 	public affiliateType: string;
 	public paramResponse: any;
@@ -90,7 +90,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
 	isVehicleTypeSelected: boolean = false
-	looseAffId:any;
+	looseAffId: any;
 
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -190,7 +190,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 			charterCancelPolicy: ['24', Validators.required],
 			nonCharterCancelPolicy: ['24', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
-			amenities: this.formBuilder.array([], [Validators.required]),
+			amenities: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInterior: this.formBuilder.array([], [Validators.required]),
 			vehicle_image_1: ['', Validators.required],
@@ -207,7 +207,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 			windowPermit2Image: [''],
 			usdotPermitImage: [''],
 			mcImage: [''],
-			loose_affiliate_id:['']
+			loose_affiliate_id: ['']
 		});
 		//Put Black color value by default in Color
 		let colorField: any = document.getElementById('colorField');
@@ -913,12 +913,12 @@ export class AddVehicleSubscriberComponent implements OnInit {
 		}
 		this.spinner.show(); // show spinner
 		this.disableSubmitButton = true; //disable submit button
-		
-		if(this.looseAffId){
+
+		if (this.looseAffId) {
 			console.log("in if loose aff id")
 			this.addVehicleForm.patchValue({
-				acc_id : null,
-				loose_affiliate_id : this.looseAffId
+				acc_id: null,
+				loose_affiliate_id: this.looseAffId
 			})
 		}
 
@@ -937,20 +937,20 @@ export class AddVehicleSubscriberComponent implements OnInit {
 
 				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
 
-				if(this.looseAffId){
-					this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id ,looseAffId : this.looseAffId} });
+				if (this.looseAffId) {
+					this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id, looseAffId: this.looseAffId } });
 
 				}
-				else{
+				else {
 					this.router.navigate(['admin/add-vehicle-rates-subscriber'], { queryParams: { vehicleId: this.response.data.id } });
 				}
 			});
 	}
 	backButton() {
-		if(this.looseAffId){
-			this.router.navigate(['admin/loose-affliate-vehicles'],{queryParams : {looseAffId : this.looseAffId}})
+		if (this.looseAffId) {
+			this.router.navigate(['admin/loose-affliate-vehicles'], { queryParams: { looseAffId: this.looseAffId } })
 		}
-		else{
+		else {
 			this.router.navigate(['admin/vehicle-details']);
 		}
 	}
