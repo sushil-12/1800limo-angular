@@ -658,6 +658,15 @@ export class DailyBookingsComponent implements OnInit {
 		}
 	}
 
+	navigateToLooseAffiliates(companyName: string) {
+		if (companyName) {
+			$('#previewBookingOnID').modal('hide');
+			$('#sendEmailModal').modal('hide');
+			localStorage.setItem('looseAffiliateSearch', companyName);
+			this.router.navigate(['/admin/loose-affiliate-accounts']);
+		}
+	}
+
 
 	async submit(message, format) {
 		console.log("format", format)

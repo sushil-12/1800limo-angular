@@ -343,22 +343,34 @@ export class TutorialsComponent implements OnInit {
     if (trimmedStr && !this.searchChips.includes(trimmedStr)) {
       this.searchChips.push(trimmedStr);
     }
+    this.searchText = '';
     this.showSuggestions = false;
     this.applyFilter();
   }
 
   removeChip(chip: string) {
     this.searchChips = this.searchChips.filter(c => c !== chip);
-    if (this.searchText.trim() === chip) {
-      this.searchText = '';
-      this.applyFilter();
-    }
+    this.applyFilter();
   }
 
   applyFilter() {
     this.filteredTutorials = this.fleetContents.filter(tutorial => {
-      const matchesSearch = tutorial.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        tutorial.content.toLowerCase().includes(this.searchText.toLowerCase());
+      let matchesSearch = true;
+      const currentSearch = this.searchText.trim().toLowerCase();
+      const chips = this.searchChips.map(c => c.toLowerCase());
+
+      const searchTerms = [...chips];
+      if (currentSearch) {
+        searchTerms.push(currentSearch);
+      }
+
+      if (searchTerms.length > 0) {
+        matchesSearch = searchTerms.some(term =>
+          tutorial.title.toLowerCase().includes(term) ||
+          tutorial.content.toLowerCase().includes(term)
+        );
+      }
+
       const matchesCategory = this.selectedCategory === 'All Tutorials' || tutorial.category === this.selectedCategory;
       return matchesSearch && matchesCategory;
     });

@@ -803,7 +803,7 @@
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
 							Connect with '<span
 								[ngStyle]="{'cursor': currentUser?.roleName == 'admin' && passengerDetails?.booking_status != 'driver_unassigned' ? 'pointer' : 'default', 'text-decoration': currentUser?.roleName == 'admin' && passengerDetails?.booking_status != 'driver_unassigned' ? 'underline' : 'none'}"
-								(click)="currentUser?.roleName == 'admin' && passengerDetails?.booking_status != 'driver_unassigned' ? navigateToAffiliates(passengerDetails?.loose_affiliate_name || passengerDetails?.loose_aff_driver_name) : null; $event.stopPropagation()">{{
+								(click)="currentUser?.roleName == 'admin' && passengerDetails?.booking_status != 'driver_unassigned' ? navigateToLooseAffiliates(passengerDetails?.loose_affiliate_name || passengerDetails?.loose_aff_driver_name) : null; $event.stopPropagation()">{{
 								passengerDetails?.loose_affiliate_name || passengerDetails?.loose_aff_driver_name
 								}}</span>' (Loose Affiliate) Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'created_by'">
