@@ -35,8 +35,8 @@
 				<div class="col-md-8 mb-3">
 					<mat-form-field appearance="outline">
 						<input type="text" matInput placeholder="Search by name, email, cell phone, address, country"
-							(focus)="$event.target.select()" (keyup)="handleSearchKeyword($event.target.value)"
-							[value]="searchText" id="keyword" autofocus>
+							(focus)="$event.target.select()" (ngModelChange)="handleSearchKeyword($event)"
+							[(ngModel)]="searchText" id="keyword" autofocus>
 					</mat-form-field>
 				</div>
 				<div class="col-md-4 align-items-center d-flex justify-content-start mb-search" style="gap: 10px;">

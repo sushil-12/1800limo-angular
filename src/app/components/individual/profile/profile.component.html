@@ -39,8 +39,8 @@
                             <mat-label>Mobile<span class="asterisk"> *</span></mat-label>
                             <input pattern="[0-9+]*" maxlength="16" matInput #mobileInput placeholder="Mobile"
                                 formControlName="mobile" class="phoneNumberClass" tabindex="1"
-                                (focus)="$event.target.select()" [readonly]="is_family_member"
-                                (keypress)="numberOnly($event)" (input)="validateMobile()" (blur)="validateMobile()" />
+                                (focus)="$event.target.select()" readonly (keypress)="numberOnly($event)"
+                                (input)="validateMobile()" (blur)="validateMobile()" />
 
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
