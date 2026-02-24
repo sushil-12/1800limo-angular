@@ -202,6 +202,8 @@ export class AffiliateAccountsComponent implements OnInit {
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
 		var keyword = this.searchText?.replace(/&/g, '%26')
+		localStorage.setItem('affiliateSearch', this.searchText || '');
+
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('affiliates_table')

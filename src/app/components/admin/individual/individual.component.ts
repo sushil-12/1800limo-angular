@@ -114,6 +114,8 @@ export class IndividualComponent implements OnInit {
 	loadIndividuals(pageUrl = null) {
 		/** spinner starts on init */
 		this.spinner.show();
+		localStorage.setItem('individualSearch', this.searchText || '');
+
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('individual_table')

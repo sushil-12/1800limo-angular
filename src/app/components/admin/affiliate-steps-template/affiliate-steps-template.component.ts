@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
@@ -43,6 +43,15 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
+		this.router.events.subscribe((event) => {
+			if (event instanceof NavigationEnd) {
+				this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
+				if (this.stepCompletedObj) {
+					this.stepCompletionTick();
+				}
+			}
+		});
+
 		this.activatedRoute.queryParams.subscribe(params => {
 			this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
 
