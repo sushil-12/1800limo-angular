@@ -1,9 +1,382 @@
-.details svg {
-	height: auto;
-	width : 40px;
-	margin: 0 15px 20px 0;
+/* Base variables */
+$orange: #f7941d;
+$light-orange: #fff4ea;
+
+.contact-page {
+	font-family: 'Outfit', 'Inter', sans-serif;
+	background-color: #fafbfc;
+	margin: 0 !important;
 }
 
-.fas {
-	font-weight: 600 !important;
+/* Badge */
+.contact-hero {
+	background: radial-gradient(72.5% 192.1% at 70% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+
+	h1 {
+		font-size: 40px;
+		font-weight: 400 !important;
+		color: #000000 !important;
+	}
+
+	p.lead {
+		color: #4A5565 !important;
+		font-size: 20px !important;
+		font-weight: 400 !important;
+	}
+}
+
+.contact-badge {
+	background-color: $light-orange;
+	color: #F54900;
+	padding: 8px 16px;
+	border-radius: 20px;
+	font-weight: 600;
+	font-size: 14px;
+	display: inline-flex;
+	align-items: center;
+
+	i {
+		font-size: 18px;
+	}
+}
+
+/* Info Cards */
+.contact-info-card {
+	background-color: #fff;
+	border-radius: 12px;
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	box-shadow: 0px 4px 6px -4px #0000001A;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+	&:hover {
+		transform: translateY(-5px);
+		box-shadow: 0px 10px 15px -3px #0000001A;
+	}
+
+	.icon-box {
+		width: 45px;
+		height: 45px;
+		background-color: #F3933D;
+		border-radius: 8px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		i {
+			font-size: 1.25rem;
+		}
+	}
+
+	h6 {
+		font-size: 20px !important;
+		font-weight: 700 !important;
+	}
+
+	h5 {
+		font-size: 20px !important;
+		font-weight: 700 !important;
+		color: #101828 !important;
+	}
+
+	p {
+		font-size: 14px !important;
+		font-weight: 400 !important;
+		color: #4A5565 !important;
+	}
+}
+
+/* Text Colors */
+.text-white {
+	color: #ffff !important;
+}
+
+.text-orange {
+	color: $orange !important;
+}
+
+/* Conversation Section */
+.conversation-section {
+	background-color: #fff !important;
+
+	h2 {
+		color: #101828 !important;
+		font-weight: 700 !important;
+		font-size: 36px;
+		margin-bottom: 12px;
+		letter-spacing: -0.5px;
+	}
+
+	p.text-muted {
+		color: #4A5565 !important;
+		font-size: 18px !important;
+		font-weight: 400 !important;
+		line-height: 1.6;
+	}
+
+	.image-wrapper img {
+		border-radius: 16px;
+	}
+}
+
+/* Right side Form Card */
+.contact-form-card {
+	background-color: #fff;
+	border-radius: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.015);
+	box-shadow: 0 4px 60px rgba(0, 0, 0, 0.04);
+	padding: 40px;
+
+	h4 {
+		color: #101828 !important;
+		font-weight: 700 !important;
+		font-size: 24px;
+		margin-bottom: 24px !important;
+		letter-spacing: -0.3px;
+	}
+
+	.privacy-text {
+		color: #4A5565 !important;
+		font-size: 14px !important;
+		font-weight: 400 !important;
+	}
+
+	.custom-input {
+		background-color: #f8fafc;
+		background-image: none !important;
+		appearance: none;
+		border: 1px solid #f1f5f9;
+		border-radius: 8px;
+		padding: 14px 20px;
+		height: auto;
+		font-size: 14px;
+		transition: all 0.3s ease;
+		color: #334155;
+		box-shadow: none;
+
+		&:focus {
+			background-color: #fff;
+			border-color: $orange;
+			box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15);
+			outline: none;
+		}
+
+		&::placeholder {
+			color: #6A7282;
+			font-weight: 400;
+			font-size: 16px;
+		}
+	}
+
+	textarea.custom-input {
+		min-height: 140px;
+		resize: none;
+	}
+
+	.btn-orange {
+		background-color: #f89622;
+		color: #fff;
+		border: none;
+		border-radius: 8px !important;
+		/* The image shows pill or highly rounded? Wait, looking closely at the image, the button IS pill-shaped! Fully rounded. */
+		border-radius: 50px !important;
+		font-weight: 600 !important;
+		font-size: 16px !important;
+		padding: 14px;
+		box-shadow: 0 4px 14px rgba(247, 148, 29, 0.4);
+		transition: all 0.3s ease;
+
+		&:hover {
+			background-color: darken($orange, 5%);
+			box-shadow: 0 6px 16px rgba(247, 148, 29, 0.5);
+			transform: translateY(-1px);
+		}
+
+		&:disabled {
+			opacity: 0.7;
+			cursor: not-allowed;
+			box-shadow: none;
+		}
+
+		svg {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
+	.bottom-text {
+		font-size: 12px !important;
+		color: #64748b !important;
+		margin-top: 24px !important;
+	}
+}
+
+/* Dark Stats Footer */
+.stats-section-wrapper {
+	padding-left: 3rem;
+	padding-right: 3rem;
+	background-color: #fff !important;
+}
+
+.dark-stats-section {
+	background: linear-gradient(135deg, #2f2010 0%, #1a1a1a 30%, #111111 100%);
+	border-radius: 12px;
+	position: relative;
+	overflow: hidden;
+
+	h2 {
+		color: #F3933D !important;
+		font-size: 36px !important;
+		font-weight: 700 !important;
+		letter-spacing: -0.2px;
+	}
+
+	p.text-light {
+		color: #FFEDD4 !important;
+		font-size: 20px !important;
+		font-weight: 400 !important;
+	}
+
+	.dark-stat-card {
+		background-color: #2b2b2b;
+		border-radius: 12px;
+		border: none;
+		transition: transform 0.3s ease;
+
+		i {
+			font-size: 32px !important;
+			color: #f7941d !important;
+		}
+
+		h3 {
+			color: #FFFFFF !important;
+			font-size: 30px !important;
+			font-weight: 700 !important;
+			margin-top: 16px;
+			margin-bottom: 8px !important;
+			letter-spacing: -0.2px;
+		}
+
+		p {
+			color: #FFEDD4 !important;
+			font-size: 16px !important;
+			font-weight: 400 !important;
+			opacity: 1 !important;
+		}
+
+		&:hover {
+			transform: translateY(-5px);
+			background-color: #333333;
+		}
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	letter-spacing: -0.2px;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1025px) {
+	.contact-info-card h5 {
+		font-size: 17px !important;
+	}
+
+	.conversation-section h2 {
+		font-size: 34px !important;
+	}
+}
+
+@media (max-width: 991px) {
+	.stats-section-wrapper {
+		padding-left: 1rem !important;
+		padding-right: 1rem !important;
+	}
+
+	.conversation-section {
+		h2 {
+			font-size: 28px;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.contact-hero {
+		h1 {
+			font-size: 28px !important;
+		}
+
+		p.lead {
+			font-size: 16px !important;
+		}
+	}
+
+	.contact-info-card {
+
+		h6,
+		h5 {
+			font-size: 16px !important;
+		}
+
+		p {
+			font-size: 13px !important;
+		}
+	}
+
+	.conversation-section {
+		h2 {
+			font-size: 24px !important;
+		}
+
+		p.text-muted {
+			font-size: 14px !important;
+			max-width: 100% !important;
+		}
+	}
+
+	.contact-form-card {
+		padding: 25px 20px;
+		border-radius: 16px;
+
+		h4 {
+			font-size: 20px !important;
+			margin-bottom: 20px !important;
+		}
+
+		.custom-input {
+			padding: 12px 16px;
+			font-size: 13px;
+		}
+
+		::placeholder {
+			font-size: 14px !important;
+		}
+	}
+
+	.dark-stats-section {
+		h2 {
+			font-size: 24px !important;
+		}
+
+		p.text-light {
+			font-size: 16px !important;
+		}
+
+		.dark-stat-card {
+			h3 {
+				font-size: 22px !important;
+			}
+
+			p {
+				font-size: 14px !important;
+			}
+
+			i {
+				font-size: 24px !important;
+			}
+		}
+	}
 }
