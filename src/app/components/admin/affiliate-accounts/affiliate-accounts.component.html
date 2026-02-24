@@ -57,11 +57,11 @@
 				<div class="col-md-4 py-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<input type="text" matInput [(ngModel)]="searchText" (focus)="$event.target.select()"
-							placeholder="Search" id="keyword1" autofocus>
+							(ngModelChange)="handleSearchKeyword($event)" placeholder="Search" id="keyword1" autofocus>
 					</mat-form-field>
 				</div>
 				<div class="col-md-2 py-2">
-					<button class="custom-filled-button m-0" (click)="loadAffiliateOperators()">SEARCH</button>
+					<button class="custom-filled-button m-0" (click)="handleSearch()">SEARCH</button>
 				</div>
 			</div>
 			<!-- <h3 class="headinginfoH3" style="margin-top: 10px !important;">{{heading}}</h3> -->
