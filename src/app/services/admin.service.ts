@@ -296,6 +296,10 @@ export class AdminService {
 	uploadVehicleImage(image) {
 		return this.httpClient.post(this.serverUrl + 'add-single-image', { 'image': image });
 	}
+
+	uploadMultipleImages(data: FormData) {
+		return this.httpClient.post(this.serverUrl + 'add-multiple-images', data);
+	}
 	deleteImage(id) {
 		return this.httpClient.delete(this.serverUrl + 'delete-image/' + id);
 	}

@@ -65,7 +65,7 @@
 							<tr *ngFor="let vehicle of vehicles; index as vehicle_index"
 								[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd">
 								<td>
-									<img src="{{vehicle.vehicle_image}}" />
+									<img src="{{vehicle.vehicle_homepage_img}}" />
 								</td>
 								<td>
 									<p>{{vehicle.vehicle_name}}</p>
@@ -124,15 +124,89 @@
 							<div *ngIf="f.vehicleType.errors.required">The Vehicle Type is required</div>
 						</div>
 					</div>
-					<div class="form-group mt-3">
-						<mat-label>Vehicel Image</mat-label>
+					<!-- <div class="form-group mt-3">
+						<mat-label>Vehicle Image (Thumbnail)</mat-label>
 						<br>
-						<input multiple type="file" formControlName="vehicleImageInput"
-							(change)="onFileChange($event)" />
+						<input type="file" formControlName="vehicleImageInput" (change)="onFileChange($event)" />
 						<div *ngIf="submitted && f.vehicleImageInput.errors" class="text-danger">
 							<div *ngIf="f.vehicleImageInput.errors.required">The Vehicle Image is required</div>
 						</div>
-						<img src="{{imageSrc}}" height="100px" style="padding-left: 35px;">
+						<img src="{{imageSrc}}" height="100px" style="padding-left: 35px;" *ngIf="imageSrc">
+					</div> -->
+
+					<div class="form-group mt-3">
+						<mat-label>Vehicle Homepage Image</mat-label>
+						<br>
+						<input type="file" formControlName="vehicleHomepageImageInput"
+							(change)="onHomepageImgChange($event)" />
+						<img src="{{homepageImageSrc}}" height="100px" style="padding-left: 35px;"
+							*ngIf="homepageImageSrc">
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-label>Gallery Images</mat-label>
+						<br>
+						<input multiple type="file" formControlName="galleryImagesInput"
+							(change)="onGalleryChange($event)" />
+
+						<div class="d-flex flex-wrap mt-2" *ngIf="galleryImagesArr.length > 0">
+							<div *ngFor="let img of galleryImagesArr; let i=index" class="mr-2 mb-2"
+								style="position: relative;">
+								<img [src]="img" height="60px" style="padding-left: 5px; border-radius: 4px;">
+								<button type="button" class="btn btn-sm btn-danger p-0"
+									style="position: absolute; top: 0; right: 0; width: 20px; height: 20px;"
+									(click)="removeGalleryImage(i, false)">x</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Tagline</mat-label>
+							<input type="text" matInput placeholder="e.g. Premium comfort for your journey"
+								formControlName="tagline">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Badge Text</mat-label>
+							<input type="text" matInput placeholder="e.g. Popular" formControlName="badge_text">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Features (Comma Separated)</mat-label>
+							<input type="text" matInput placeholder="e.g. WiFi, Leather Seats, Climate Control"
+								formControlName="features">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Description</mat-label>
+							<textarea matInput rows="3" placeholder="Enter Vehicle Description"
+								formControlName="descriptions"></textarea>
+						</mat-form-field>
+					</div>
+
+					<div class="row mt-3">
+						<div class="col-6">
+							<mat-form-field appearance="outline">
+								<mat-label>Status</mat-label>
+								<mat-select formControlName="status">
+									<mat-option value="enable">Enable</mat-option>
+									<mat-option value="disable">Disable</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="col-6">
+							<mat-form-field appearance="outline">
+								<mat-label>Sort Order</mat-label>
+								<input type="number" matInput formControlName="sort_order">
+							</mat-form-field>
+						</div>
 					</div>
 					<div class="row mt-3">
 						<!-- Number of Passengers -->
@@ -254,12 +328,87 @@
 							<div *ngIf="fEdit.vehicleType.errors.required">The Vehicle Type is required</div>
 						</div>
 					</div>
-					<div class="form-group mt-3">
-						<mat-label>Vehicel Image</mat-label>
+					<!-- <div class="form-group mt-3">
+						<mat-label>Vehicle Image (Thumbnail)</mat-label>
 						<br>
-						<input multiple type="file" formControlName="vehicleImageInput"
-							(change)="onFileUpdate($event)" />
-						<img src="{{imageSrc || editVehiclePic}}" height="100px">
+						<input type="file" formControlName="vehicleImageInput" (change)="onFileUpdate($event)" />
+						<img src="{{imageSrc || editVehiclePic}}" height="100px" style="padding-left: 35px;"
+							*ngIf="imageSrc || editVehiclePic">
+					</div> -->
+
+					<div class="form-group mt-3">
+						<mat-label>Vehicle Homepage Image</mat-label>
+						<br>
+						<input type="file" formControlName="vehicleHomepageImageInput"
+							(change)="onHomepageImgUpdate($event)" />
+						<img src="{{homepageImageSrcEdit}}" height="100px" style="padding-left: 35px;"
+							*ngIf="homepageImageSrcEdit">
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-label>Gallery Images</mat-label>
+						<br>
+						<input multiple type="file" formControlName="galleryImagesInput"
+							(change)="onGalleryUpdate($event)" />
+
+						<div class="d-flex flex-wrap mt-2" *ngIf="galleryImagesArrEdit.length > 0">
+							<div *ngFor="let img of galleryImagesArrEdit; let i=index" class="mr-2 mb-2"
+								style="position: relative;">
+								<img [src]="img" height="60px" style="padding-left: 5px; border-radius: 4px;">
+								<button type="button" class="btn btn-sm btn-danger p-0"
+									style="position: absolute; top: 0; right: 0; width: 20px; height: 20px;"
+									(click)="removeGalleryImage(i, true)">x</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Tagline</mat-label>
+							<input type="text" matInput placeholder="e.g. Premium comfort for your journey"
+								formControlName="tagline">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Badge Text</mat-label>
+							<input type="text" matInput placeholder="e.g. Popular" formControlName="badge_text">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Features (Comma Separated)</mat-label>
+							<input type="text" matInput placeholder="e.g. WiFi, Leather Seats, Climate Control"
+								formControlName="features">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Description</mat-label>
+							<textarea matInput rows="3" placeholder="Enter Vehicle Description"
+								formControlName="descriptions"></textarea>
+						</mat-form-field>
+					</div>
+
+					<div class="row mt-3">
+						<div class="col-6">
+							<mat-form-field appearance="outline">
+								<mat-label>Status</mat-label>
+								<mat-select formControlName="status">
+									<mat-option value="enable">Enable</mat-option>
+									<mat-option value="disable">Disable</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="col-6">
+							<mat-form-field appearance="outline">
+								<mat-label>Sort Order</mat-label>
+								<input type="number" matInput formControlName="sort_order">
+							</mat-form-field>
+						</div>
 					</div>
 					<div class="row mt-3">
 						<!-- Number of Passengers -->
