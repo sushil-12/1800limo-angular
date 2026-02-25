@@ -5536,6 +5536,9 @@ header .navbar-toggler {
 		text-align: center !important;
 	}
 
+	.checkourveh_wrapper h2 {
+		padding-top: 15px !important;
+	}
 
 	.checkourveh_wrapper h2,
 	.ourmisservice_wrap h2,
@@ -6133,4 +6136,7 @@ header .navbar-toggler {
 .ngx-material-timepicker-container .timepicker-button {
 	color: #f3933d !important;
 }
-.timepicker-backdrop-overlay{background: none !important;}
+
+.timepicker-backdrop-overlay {
+	background: none !important;
+}

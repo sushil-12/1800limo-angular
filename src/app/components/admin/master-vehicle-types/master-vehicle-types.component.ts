@@ -437,11 +437,11 @@ export class MasterVehicleTypesComponent implements OnInit {
 					.subscribe((response: any) => {
 						let ids = [];
 						if (Array.isArray(response.data)) {
-							ids = response.data.map((item: any) => item.id ? item.id : item);
-						} else if (response.data && response.data.id) {
-							ids = [response.data.id];
+							ids = response.data.map((item: any) => item.imagepath ? item.imagepath : item);
+						} else if (response.data && response.data.imagepath) {
+							ids = [response.data.imagepath];
 						} else if (Array.isArray(response)) {
-							ids = response.map((item: any) => item.id ? item.id : item);
+							ids = response.map((item: any) => item.imagepath ? item.imagepath : item);
 						}
 
 						this.galleryImagesArrEdit.push(...ids);
