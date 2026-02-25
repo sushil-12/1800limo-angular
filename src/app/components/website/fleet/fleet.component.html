@@ -92,13 +92,14 @@
 				<div class="row g-5">
 					<div class="col-lg-4 col-md-6 d-flex align-items-stretch"
 						*ngFor="let vehicle of filteredVehicles; let i = index">
-						<div class="vehicle-card h-100 w-100">
+						<div class="vehicle-card h-100 w-100" (mouseenter)="startAutoplay(i)"
+							(mouseleave)="stopAutoplay(i)">
 							<!-- Badge -->
 							<span class="vehicle-badge" *ngIf="vehicle.badge">{{ vehicle.badge }}</span>
 
 							<!-- Image Area -->
 							<div class="vehicle-image-area">
-								<div class="swiper vehicle-swiper" [class.no-nav]="vehicle.images.length <= 1">
+								<div class="swiper vehicle-swiper" [class.no-nav]="vehicle.images?.length <= 1">
 									<div class="swiper-wrapper">
 										<div class="swiper-slide" *ngFor="let img of vehicle.images">
 											<img [src]="img" [alt]="vehicle.name" class="vehicle-img">
@@ -124,14 +125,14 @@
 										<span class="spec-label">Passengers</span>
 										<div class="spec-value">
 											<i class="bi bi-people"></i>
-											<strong>{{ vehicle.specifications.passengers }}</strong>
+											<strong>{{ vehicle.specifications?.passengers }}</strong>
 										</div>
 									</div>
 									<div class="spec-item">
 										<span class="spec-label">Luggage</span>
 										<div class="spec-value">
 											<i class="fas fa-suitcase"></i>
-											<strong>{{ vehicle.specifications.luggage }}</strong>
+											<strong>{{ vehicle.specifications?.luggage }}</strong>
 										</div>
 									</div>
 								</div>
@@ -148,11 +149,12 @@
 								<!-- Actions -->
 								<div
 									class="vehicle-actions-wrapper d-flex justify-content-between align-items-end mt-auto pt-3 border-top">
-									<div class="price-section" *ngIf="vehicle.price">
+									<div class="price-section" *ngIf="vehicle.price?.hourly_rate">
 										<span class="d-block text-uppercase fw-bold small text-muted mb-1"
 											style="font-size: 10px; letter-spacing: 0.5px;">PRICE STARTS FROM</span>
 										<div class="price-value fw-bold text-orange"
-											style="font-size: 1.2rem; color: #f7941d;">{{ vehicle.price }}</div>
+											style="font-size: 1.2rem; color: #f7941d;">${{ vehicle.price.milage_rate
+											}}/hr</div>
 									</div>
 									<button class="btn btn-quote d-flex align-items-center gap-2"
 										routerLink="/home">Request Quote <i class="fas fa-arrow-right"></i></button>

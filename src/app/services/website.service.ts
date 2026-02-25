@@ -6,29 +6,27 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
 	providedIn: 'root'
 })
-export class WebsiteService
-{
+export class WebsiteService {
 
 	private serverUrl = environment.serverUrl;
 	constructor(private httpClient: HttpClient) { }
 
-	async getOurVehicles()
-	{
+	async getOurVehicles() {
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-types').toPromise();
 		return result;
 	}
-	affiliateEmailVerification(email: any, hash: any, is_dispatch: boolean)
-	{
-		if (is_dispatch)
-		{
+	async getFleetVehicles() {
+		const result = await this.httpClient.get(this.serverUrl + 'vehicle-types-formatted').toPromise();
+		return result;
+	}
+	affiliateEmailVerification(email: any, hash: any, is_dispatch: boolean) {
+		if (is_dispatch) {
 			return this.httpClient.get(this.serverUrl + 'affiliate/dispatcher-email-verification/' + email + '/' + hash);
-		} else
-		{
+		} else {
 			return this.httpClient.get(this.serverUrl + 'affiliate/email-verification/' + email + '/' + hash);
 		}
 	}
-	contactFormData(data)
-	{
+	contactFormData(data) {
 		return this.httpClient.post(this.serverUrl + 'contact-form', data);
 	}
 
@@ -44,8 +42,7 @@ export class WebsiteService
 
 
 
-	fetchHomePageData()
-	{
+	fetchHomePageData() {
 		return this.httpClient.get(this.serverUrl + 'cms/homepage');
 	}
 }
