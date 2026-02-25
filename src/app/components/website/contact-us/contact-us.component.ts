@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { WebsiteService } from 'src/app/services/website.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CommonService } from 'src/app/services/common.service';
+import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
 @Component({
@@ -12,17 +14,23 @@ declare var $: any;
   templateUrl: './contact-us.component.html',
   styleUrls: ['./contact-us.component.scss']
 })
-export class ContactUsComponent implements OnInit {
+export class ContactUsComponent implements OnInit, AfterViewInit {
+  @ViewChild('phoneInput') phoneInput!: ElementRef;
+
+  public countryCode = "+1";
+  public phoneCountry = "us";
+  countryChangeObject: any;
 
   getInTouchForm: FormGroup;
   submitted = false;
   public disableSubmitButton: boolean = false;
-  public modalAlertMessage : string;
+  public modalAlertMessage: string;
   response: any;
   constructor(private formBuilder: FormBuilder,
     private websiteService: WebsiteService,
-    private router:Router,    
-    private spinner: NgxSpinnerService) { }
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private commonServices: CommonService) { }
 
   ngOnInit(): void {
     //Get In Touch FORM
@@ -30,14 +38,72 @@ export class ContactUsComponent implements OnInit {
     this.getInTouchForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
-      phone:['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9+]*$")]],
       message: ['', Validators.required]
     });
   }
 
-  get fGetInTouch() { 
+  ngAfterViewInit() {
+    if (this.countryChangeObject) {
+      this.countryChangeObject.destroy();
+    }
+    if (this.phoneInput) {
+      const telOptions: any = this.commonServices.getTelInputOptions();
+      this.countryChangeObject = intlTelInput(this.phoneInput.nativeElement, telOptions);
+      this.phoneInput.nativeElement.addEventListener('countrychange', () => {
+        const countryData = this.countryChangeObject.getSelectedCountryData();
+        this.onCountryChange(countryData);
+        this.validatePhone();
+      });
+    }
+  }
+
+  onCountryChange(event) {
+    this.countryCode = '+' + event.dialCode;
+    this.phoneCountry = event.iso2;
+  }
+
+  numberOnly(event: any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode === 43) {
+      return true;
+    }
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  validatePhone() {
+    if (this.countryChangeObject) {
+      const value = this.getInTouchForm.get('phone').value;
+      if (!value) {
+        if (this.fGetInTouch.phone.errors) {
+          const { invalidIntl, ...otherErrors } = this.fGetInTouch.phone.errors;
+          this.fGetInTouch.phone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+        return;
+      }
+      const isValid = this.countryChangeObject.isValidNumber();
+
+      if (!isValid) {
+        const errorCode = this.countryChangeObject.getValidationError();
+        const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
+
+        const currentErrors = this.fGetInTouch.phone.errors || {};
+        this.fGetInTouch.phone.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
+      } else {
+        if (this.fGetInTouch.phone.errors) {
+          const { invalidIntl, ...otherErrors } = this.fGetInTouch.phone.errors;
+          this.fGetInTouch.phone.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
+        }
+      }
+    }
+  }
+
+  get fGetInTouch() {
     return this.getInTouchForm.controls;
-   }
+  }
   onSubmitGetInTouch() {
     console.log(this.getInTouchForm);
     this.submitted = true;
@@ -45,24 +111,31 @@ export class ContactUsComponent implements OnInit {
       return;
     }
     this.spinner.show();
-    this.websiteService.contactFormData(this.getInTouchForm.value)
-    .pipe(
-      catchError(err => {
+
+    let submitData = { ...this.getInTouchForm.value };
+    // Prefix country code to phone number before submitting if not present
+    if (submitData.phone && this.countryCode && !submitData.phone.startsWith('+')) {
+      submitData.phone = this.countryCode + submitData.phone;
+    }
+
+    this.websiteService.contactFormData(submitData)
+      .pipe(
+        catchError(err => {
+          this.spinner.hide();//hide spinner
+          this.disableSubmitButton = false; //enable submit button
+          return throwError(err);
+        })
+      )
+      .subscribe(({ success, message }: any) => {
         this.spinner.hide();//hide spinner
-        this.disableSubmitButton = false; //enable submit button
-        return throwError(err);
-      })
-    )
-    .subscribe(({ success,message }: any) => {   
-      this.spinner.hide();//hide spinner
-      this.modalAlertMessage = message;
-      this.disableSubmitButton = true; //enable submit button
-      if(success == true){
-        $('#successfullyMessageModal').modal('show');
-      }     
-    });
+        this.modalAlertMessage = message;
+        this.disableSubmitButton = true; //enable submit button
+        if (success == true) {
+          $('#successfullyMessageModal').modal('show');
+        }
+      });
   }
-  refreshForm(){   
-     location.reload();
+  refreshForm() {
+    location.reload();
   }
 }
