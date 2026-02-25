@@ -24,6 +24,11 @@ export class MasterVehicleTypesComponent implements OnInit {
 	public addVehicleTypeForm: FormGroup;
 	public editVehicleTypeForm: FormGroup;
 
+	public galleryImagesArr: string[] = [];
+	public galleryImagesArrEdit: string[] = [];
+	public homepageImageSrc: string = '';
+	public homepageImageSrcEdit: string = '';
+
 	public submitted = false;
 	public submittedEditForm = false;
 	public file: any;
@@ -35,10 +40,10 @@ export class MasterVehicleTypesComponent implements OnInit {
 	public showProgressBarEdit: boolean = false;
 	public editVehiclePic: string;
 	vehicleId: any;
-	currentUser:any;
+	currentUser: any;
 	color: ThemePalette = 'accent';
 	disabled = false;
-	convertCurrenyResp:any
+	convertCurrenyResp: any
 
 	constructor(
 		private adminService: AdminService,
@@ -66,13 +71,23 @@ export class MasterVehicleTypesComponent implements OnInit {
 
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser") || '{}');
 
-		this.convertCurrenyResp = this.currentUser.convert_currency == 0 ? false : true 
+		this.convertCurrenyResp = this.currentUser.convert_currency == 0 ? false : true
 
 		//add vehicle type form validation
 		this.addVehicleTypeForm = this.formBuilder.group({
 			vehicleType: ['', Validators.required],
-			vehicleImage: ['', Validators.required],
-			vehicleImageInput: ['', Validators.required],
+			vehicleImage: [''],
+			vehicleImageInput: [''],
+			vehicle_homepage_img: [''],
+			vehicleHomepageImageInput: [''],
+			gallery_images: [[]],
+			galleryImagesInput: [''],
+			tagline: [''],
+			badge_text: [''],
+			features: [''],
+			descriptions: [''],
+			status: ['enable'],
+			sort_order: [1],
 			seats: [1, Validators.required],
 			luggage: [0, Validators.required]
 		});
@@ -83,6 +98,16 @@ export class MasterVehicleTypesComponent implements OnInit {
 			vehicleType: ['', Validators.required],
 			vehicleImageInput: '',
 			vehicleImage: '',
+			vehicle_homepage_img: [''],
+			vehicleHomepageImageInput: [''],
+			gallery_images: [[]],
+			galleryImagesInput: [''],
+			tagline: [''],
+			badge_text: [''],
+			features: [''],
+			descriptions: [''],
+			status: ['enable'],
+			sort_order: [1],
 			seats: [1, Validators.required],
 			luggage: [0, Validators.required]
 		});
@@ -103,14 +128,14 @@ export class MasterVehicleTypesComponent implements OnInit {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe((result:any) => {
+			).subscribe((result: any) => {
 				this.spinner.hide(); // Hide spinner when successful
-				this.convertCurrenyResp = result.data.convert_currency == 0 ? false : true 
-				  this.currentUser.convert_currency = result.data.convert_currency;
-				  localStorage.setItem("currentUser", JSON.stringify(this.currentUser));
-	          
+				this.convertCurrenyResp = result.data.convert_currency == 0 ? false : true
+				this.currentUser.convert_currency = result.data.convert_currency;
+				localStorage.setItem("currentUser", JSON.stringify(this.currentUser));
+
 			});
-				
+
 	}
 
 	drop(event: CdkDragDrop<string[]>) {
@@ -145,22 +170,53 @@ export class MasterVehicleTypesComponent implements OnInit {
 		return this.addVehicleTypeForm.controls;
 	}
 
-	async onFileChange(event) {
+	// async onFileChange(event) {
+	// 	if (!await this.commonServices.handleFile(event)) {
+	// 		return;
+	// 	}
+
+	// 	const reader = new FileReader();
+
+	// 	if (event.target.files && event.target.files.length) {
+	// 		const [file] = event.target.files;
+	// 		reader.readAsDataURL(file);
+
+	// 		reader.onload = () => {
+	// 			this.imageSrc = reader.result as string;
+	// 			this.spinner.show();
+
+	// 			this.adminService.uploadVehicleImage(this.imageSrc)
+	// 				.pipe(
+	// 					catchError(err => {
+	// 						this.spinner.hide();
+	// 						return throwError(err);
+	// 					})
+	// 				)
+	// 				.subscribe((response: any) => {
+	// 					this.addVehicleTypeForm.patchValue({
+	// 						vehicleImage: response.data.id
+	// 					});
+	// 					this.spinner.hide();
+	// 				});
+	// 		};
+	// 	}
+	// }
+
+	async onHomepageImgChange(event) {
 		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 
 		const reader = new FileReader();
-
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
 
 			reader.onload = () => {
-				this.imageSrc = reader.result as string;
+				this.homepageImageSrc = reader.result as string;
 				this.spinner.show();
-				
-				this.adminService.uploadVehicleImage(this.imageSrc)
+
+				this.adminService.uploadVehicleImage(this.homepageImageSrc)
 					.pipe(
 						catchError(err => {
 							this.spinner.hide();
@@ -169,18 +225,54 @@ export class MasterVehicleTypesComponent implements OnInit {
 					)
 					.subscribe((response: any) => {
 						this.addVehicleTypeForm.patchValue({
-							vehicleImage: response.data.id
+							vehicle_homepage_img: response.data.image,
+							vehicleImage: response.data.image,
 						});
 						this.spinner.hide();
 					});
 			};
 		}
 	}
+
+	async onGalleryChange(event) {
+		if (event.target.files && event.target.files.length) {
+			this.spinner.show();
+			const files = Array.from(event.target.files);
+
+			try {
+				const formData = new FormData();
+				files.forEach((file: any) => {
+					formData.append('images[]', file, file.name);
+				});
+
+				this.adminService.uploadMultipleImages(formData)
+					.subscribe((response: any) => {
+						let ids = [];
+						if (Array.isArray(response.data)) {
+							ids = response.data.map((item: any) => item.imagepath ? item.imagepath : item?.imagepath);
+						} else if (response.data && response.data.imagepath) {
+							ids = [response.data.imagepath];
+						} else if (Array.isArray(response)) {
+							ids = response.map((item: any) => item.imagepath ? item.imagepath : item?.imagepath);
+						}
+
+						this.galleryImagesArr.push(...ids);
+						this.addVehicleTypeForm.patchValue({ gallery_images: this.galleryImagesArr });
+						this.spinner.hide();
+					}, err => {
+						this.spinner.hide();
+					});
+			} catch (err) {
+				this.spinner.hide();
+			}
+		}
+	}
+
 	openAddModal() {
 		this.imageSrc = '';
-		this.addVehicleTypeForm.reset();
-		this.addVehicleTypeForm.patchValue({ seats: 1, luggage: 0 });
-
+		this.homepageImageSrc = '';
+		this.galleryImagesArr = [];
+		this.addVehicleTypeForm.reset({ seats: 1, luggage: 0, status: 'enable', sort_order: 1, gallery_images: [] });
 
 		$('#addVehicleTypeModal').modal('show');
 	}
@@ -188,14 +280,28 @@ export class MasterVehicleTypesComponent implements OnInit {
 		this.submitted = true;
 		// stop here if form is invalid
 		if (this.addVehicleTypeForm.invalid) {
+			console.log('Form is invalid!', this.addVehicleTypeForm.value);
+			Object.keys(this.addVehicleTypeForm.controls).forEach(key => {
+				const controlErrors = this.addVehicleTypeForm.get(key).errors;
+				if (controlErrors != null) {
+					console.log('Key control: ' + key + ', key errors: ', controlErrors);
+				}
+			});
 			return;
+		}
+
+		let payload = { ...this.addVehicleTypeForm.value };
+		if (payload.features && typeof payload.features === 'string') {
+			payload.features = payload.features.split(',').map(f => f.trim()).filter(f => f.length > 0);
+		} else if (!payload.features) {
+			payload.features = [];
 		}
 
 		this.spinner.show();
 		this.disableAddButton = true; //disable submit button
 		// this.showProgressBar=true; //show progressbar
 
-		this.adminService.addVehicleType(this.addVehicleTypeForm.value)
+		this.adminService.addVehicleType(payload)
 			.pipe(
 				catchError(err => {
 					$('#addVehicleTypeModal').modal('hide');
@@ -231,10 +337,22 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.editVehicleTypeForm.patchValue({
 					vehicleId: this.response.data.id,
 					vehicleType: this.response.data.vehicle_cat_name,
+					tagline: this.response.data.tagline || '',
+					badge_text: this.response.data.badge_text || '',
+					features: this.response.data.features ? this.response.data.features.join(', ') : '',
+					descriptions: this.response.data.descriptions || '',
+					sort_order: this.response.data.sort_order !== undefined && this.response.data.sort_order !== null ? this.response.data.sort_order : 1,
+					status: this.response.data.status || 'enable',
+					vehicle_homepage_img: this.response.data.vehicle_homepage_img || '',
+					gallery_images: this.response.data.gallery_images || [],
 					seats: this.response.data.seats,
 					luggage: this.response.data.luggage
 				});
+
 				this.editVehiclePic = this.response.data.vehicle_cat_image;
+				this.homepageImageSrcEdit = this.response.data.vehicle_homepage_img || '';
+				this.galleryImagesArrEdit = this.response.data.gallery_images ? [...this.response.data.gallery_images] : [];
+
 				$('#editVehicleTypeModal').modal('show');
 				this.spinner.hide();//hide spinner
 			});
@@ -254,7 +372,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.spinner.show();
-				
+
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
@@ -269,6 +387,82 @@ export class MasterVehicleTypesComponent implements OnInit {
 						this.spinner.hide();
 					});
 			};
+		}
+	}
+
+	async onHomepageImgUpdate(event) {
+		if (!await this.commonServices.handleFile(event)) {
+			return;
+		}
+
+		const reader = new FileReader();
+		if (event.target.files && event.target.files.length) {
+			const [file] = event.target.files;
+			reader.readAsDataURL(file);
+
+			reader.onload = () => {
+				this.homepageImageSrcEdit = reader.result as string;
+				this.spinner.show();
+
+				this.adminService.uploadVehicleImage(this.homepageImageSrcEdit)
+					.pipe(
+						catchError(err => {
+							this.spinner.hide();
+							return throwError(err);
+						})
+					)
+					.subscribe((response: any) => {
+						this.editVehicleTypeForm.patchValue({
+							vehicle_homepage_img: response.data.image,
+							vehicleImage: response.data.image,
+						});
+						this.spinner.hide();
+					});
+			};
+		}
+	}
+
+	async onGalleryUpdate(event) {
+		if (event.target.files && event.target.files.length) {
+			this.spinner.show();
+			const files = Array.from(event.target.files);
+
+			try {
+				const formData = new FormData();
+				files.forEach((file: any) => {
+					formData.append('images[]', file, file.name);
+				});
+
+				this.adminService.uploadMultipleImages(formData)
+					.subscribe((response: any) => {
+						let ids = [];
+						if (Array.isArray(response.data)) {
+							ids = response.data.map((item: any) => item.id ? item.id : item);
+						} else if (response.data && response.data.id) {
+							ids = [response.data.id];
+						} else if (Array.isArray(response)) {
+							ids = response.map((item: any) => item.id ? item.id : item);
+						}
+
+						this.galleryImagesArrEdit.push(...ids);
+						this.editVehicleTypeForm.patchValue({ gallery_images: this.galleryImagesArrEdit });
+						this.spinner.hide();
+					}, err => {
+						this.spinner.hide();
+					});
+			} catch (err) {
+				this.spinner.hide();
+			}
+		}
+	}
+
+	removeGalleryImage(index: number, isEdit: boolean) {
+		if (isEdit) {
+			this.galleryImagesArrEdit.splice(index, 1);
+			this.editVehicleTypeForm.patchValue({ gallery_images: this.galleryImagesArrEdit });
+		} else {
+			this.galleryImagesArr.splice(index, 1);
+			this.addVehicleTypeForm.patchValue({ gallery_images: this.galleryImagesArr });
 		}
 	}
 
@@ -321,14 +515,28 @@ export class MasterVehicleTypesComponent implements OnInit {
 		this.submitted = true;
 		// stop here if form is invalid
 		if (this.editVehicleTypeForm.invalid) {
+			console.log('Edit Form is invalid!', this.editVehicleTypeForm.value);
+			Object.keys(this.editVehicleTypeForm.controls).forEach(key => {
+				const controlErrors = this.editVehicleTypeForm.get(key).errors;
+				if (controlErrors != null) {
+					console.log('Key control: ' + key + ', key errors: ', controlErrors);
+				}
+			});
 			return;
+		}
+
+		let payload = { ...this.editVehicleTypeForm.value };
+		if (payload.features && typeof payload.features === 'string') {
+			payload.features = payload.features.split(',').map(f => f.trim()).filter(f => f.length > 0);
+		} else if (!payload.features) {
+			payload.features = [];
 		}
 
 		this.spinner.show();
 		// this.showProgressBarEdit=true; //show progressbar
 		this.disableEditButton = true; //disable submit button
 
-		this.adminService.updateVehicleType(this.editVehicleTypeForm.value)
+		this.adminService.updateVehicleType(payload)
 			.pipe(
 				catchError(err => {
 					$('#editVehicleTypeModal').modal('hide');
@@ -374,9 +582,13 @@ export class MasterVehicleTypesComponent implements OnInit {
 
 	}
 	resetForm() {
-		this.addVehicleTypeForm.reset();
-		this.addVehicleTypeForm.patchValue({ seats: 1, luggage: 0 });
-		this.editVehicleTypeForm.reset();
-		this.editVehicleTypeForm.patchValue({ seats: 1, luggage: 0 })
+		this.imageSrc = '';
+		this.homepageImageSrc = '';
+		this.galleryImagesArr = [];
+		this.homepageImageSrcEdit = '';
+		this.galleryImagesArrEdit = [];
+
+		this.addVehicleTypeForm.reset({ seats: 1, luggage: 0, status: 'enable', sort_order: 1, gallery_images: [] });
+		this.editVehicleTypeForm.reset({ seats: 1, luggage: 0, status: 'enable', sort_order: 1, gallery_images: [] });
 	}
 }
