@@ -33,26 +33,22 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 			request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
 		}
 
-		if (!request.headers.has('Content-Type')) {
+		if (!request.headers.has('Content-Type') && !(request.body instanceof FormData)) {
 			request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
 		}
 
 		request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
 
 		return next.handle(request).pipe(
-			map((event: HttpEvent<any>) =>
-			{
-				if (event instanceof HttpResponse)
-				{
+			map((event: HttpEvent<any>) => {
+				if (event instanceof HttpResponse) {
 					console.log('\n\nevent--->>>', event, '\n\n');
 				}
 				return event;
 			}),
-			catchError((errorData: HttpErrorResponse) =>
-			{
+			catchError((errorData: HttpErrorResponse) => {
 				this.spinner.hide()
-				if (errorData.status == 401)
-				{
+				if (errorData.status == 401) {
 					this.errors = {
 						errors: {
 							error: 'Session Expired. Please reload the screen.'
@@ -61,8 +57,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 					localStorage.clear()
 					sessionStorage.clear()
 				}
-				else if (errorData.status == 440)
-				{
+				else if (errorData.status == 440) {
 					this.errors = {
 						errors: {
 							'error': 'Session Expired. Please re-login to continue. You will be navigated to homepage after 1 second.'
@@ -70,44 +65,37 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 					};
 					localStorage.clear();
 					sessionStorage.clear();
-					setTimeout(() =>
-					{
+					setTimeout(() => {
 						location.reload()
 					}, 2800)
 				}
-				else if (errorData.status == 488)
-				{
+				else if (errorData.status == 488) {
 					this.errors = {
 						errors: {
 							'error': "You are not authorized to access this resource"
 						}
 					};
-					setTimeout(() =>
-					{
+					setTimeout(() => {
 						this.router.navigate(['/home'])
 					}, 2800)
 				}
-				else if (errorData.status == 500)
-				{
+				else if (errorData.status == 500) {
 					this.errors = {
 						errors: {
 							error: "Server Error"
 						}
 					}
 				}
-				else if (errorData.status == 404)
-				{
+				else if (errorData.status == 404) {
 					this.errors = {
 						errors: {
 							error: 'Server Error. Request Not Found. '
 						}
 					}
 				}
-				else
-				{
+				else {
 					this.errors = { errors: { error: Object.values(errorData.error.data.errors).join('\n') } };
-					if (this.errors.errors.error.includes('account not found'))
-					{
+					if (this.errors.errors.error.includes('account not found')) {
 						localStorage.clear()
 						sessionStorage.clear()
 						location.reload()

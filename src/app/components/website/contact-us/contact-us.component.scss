@@ -4,17 +4,18 @@ $light-orange: #fff4ea;
 
 .contact-page {
 	font-family: 'Outfit', 'Inter', sans-serif;
-	background-color: #fafbfc;
+	background-color: #fff;
 	margin: 0 !important;
 }
 
 /* Badge */
 .contact-hero {
 	background: radial-gradient(72.5% 192.1% at 70% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+	padding: 40px;
 
 	h1 {
 		font-size: 40px;
-		font-weight: 400 !important;
+		font-weight: 700 !important;
 		color: #000000 !important;
 	}
 
@@ -26,7 +27,7 @@ $light-orange: #fff4ea;
 }
 
 .contact-badge {
-	background-color: $light-orange;
+	background-color: #FFEDD4;
 	color: #F54900;
 	padding: 8px 16px;
 	border-radius: 20px;
@@ -42,10 +43,11 @@ $light-orange: #fff4ea;
 
 /* Info Cards */
 .contact-info-card {
+	padding: 24px;
 	background-color: #fff;
 	border-radius: 12px;
 	border: 1px solid rgba(0, 0, 0, 0.03);
-	box-shadow: 0px 4px 6px -4px #0000001A;
+	box-shadow: 0px 4px 4px 4px #0000001A;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 
 	&:hover {
@@ -54,8 +56,8 @@ $light-orange: #fff4ea;
 	}
 
 	.icon-box {
-		width: 45px;
-		height: 45px;
+		width: 60px;
+		height: 60px;
 		background-color: #F3933D;
 		border-radius: 8px;
 		display: inline-flex;
@@ -63,12 +65,12 @@ $light-orange: #fff4ea;
 		justify-content: center;
 
 		i {
-			font-size: 1.25rem;
+			font-size: 1.75rem;
 		}
 	}
 
 	h6 {
-		font-size: 20px !important;
+		font-size: 14px !important;
 		font-weight: 700 !important;
 	}
 
@@ -145,7 +147,7 @@ $light-orange: #fff4ea;
 		background-image: none !important;
 		appearance: none;
 		border: 1px solid #f1f5f9;
-		border-radius: 8px;
+		border-radius: 10px;
 		padding: 14px 20px;
 		height: auto;
 		font-size: 14px;
@@ -162,7 +164,7 @@ $light-orange: #fff4ea;
 
 		&::placeholder {
 			color: #6A7282;
-			font-weight: 400;
+			font-weight: 400 !important;
 			font-size: 16px;
 		}
 	}
@@ -212,8 +214,8 @@ $light-orange: #fff4ea;
 
 /* Dark Stats Footer */
 .stats-section-wrapper {
-	padding-left: 3rem;
-	padding-right: 3rem;
+	padding-left: 9rem;
+	padding-right: 9rem;
 	background-color: #fff !important;
 }
 
@@ -280,9 +282,23 @@ h6 {
 }
 
 /* Responsive Media Queries */
+@media (max-width: 1366px) {
+	.stats-section-wrapper {
+		padding-left: 3rem;
+		padding-right: 3em;
+		background-color: #fff !important;
+	}
+}
+
 @media (max-width: 1025px) {
 	.contact-info-card h5 {
 		font-size: 17px !important;
+	}
+
+	.stats-section-wrapper {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		background-color: #fff !important;
 	}
 
 	.conversation-section h2 {
@@ -305,6 +321,8 @@ h6 {
 
 @media (max-width: 767px) {
 	.contact-hero {
+		padding: 0px !important;
+
 		h1 {
 			font-size: 28px !important;
 		}
@@ -315,14 +333,18 @@ h6 {
 	}
 
 	.contact-info-card {
+		padding: 16px !important;
+	}
+
+	.contact-info-card {
 
 		h6,
 		h5 {
-			font-size: 16px !important;
+			font-size: 14px !important;
 		}
 
 		p {
-			font-size: 13px !important;
+			font-size: 12px !important;
 		}
 	}
 

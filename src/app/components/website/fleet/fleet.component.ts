@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { WebsiteService } from 'src/app/services/website.service';
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { environment } from '../../../../environments/environment';
 
 declare var $: any;
 
@@ -28,12 +29,12 @@ interface Vehicle {
 }
 
 interface FleetData {
-	meta: {
+	meta?: {
 		title: string;
 		description: string;
 		keywords: string;
 	};
-	vehicles: Vehicle[];
+	vehicles: any[]; // Using any[] to map the API response directly
 }
 
 @Component({
@@ -53,12 +54,23 @@ export class FleetComponent implements OnInit, AfterViewInit, OnDestroy {
 	public filterCategory: string = 'All Vehicles';
 	public categories: string[] = ['All Vehicles', 'Sedans', 'SUVs', 'Limousines', 'Vans & Sprinters', 'Buses'];
 
-	get filteredVehicles(): Vehicle[] {
+	get filteredVehicles(): any[] {
 		if (!this.fleetData || !this.fleetData.vehicles) return [];
 		if (this.filterCategory === 'All Vehicles') {
 			return this.fleetData.vehicles;
 		}
-		return this.fleetData.vehicles.filter(v => v.category === this.filterCategory);
+		// Assuming the API doesn't provide a broad 'category' like Sedans/SUVs easily, 
+		// or if we need to map vehicle_name to these categories. Let's filter by name or actual category if available.
+		// For now, we'll try to guess based on name or just return all if no category field exists.
+		return this.fleetData.vehicles.filter((v: any) => {
+			const name = v.name ? v.name.toLowerCase() : '';
+			if (this.filterCategory === 'Sedans') return name.includes('sedan');
+			if (this.filterCategory === 'SUVs') return name.includes('suv');
+			if (this.filterCategory === 'Limousines') return name.includes('limo');
+			if (this.filterCategory === 'Vans & Sprinters') return name.includes('van') || name.includes('sprinter');
+			if (this.filterCategory === 'Buses') return name.includes('bus') || name.includes('coach');
+			return true;
+		});
 	}
 
 	setFilter(category: string) {
@@ -94,20 +106,34 @@ export class FleetComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	loadFleetData() {
-		this.http.get<FleetData>('assets/data/fleet.json').pipe(
-			catchError(err => {
-				console.error('Failed to load fleet data', err);
-				return throwError(err);
-			})
-		).subscribe(data => {
-			this.fleetData = data;
-			this.setSeoMeta();
-			this.spinner.hide();
+		this.websiteService.getFleetVehicles().then((response: any) => {
+			if (response && response.success) {
+				let sortedVehicles = response.data.vehicles || []; // Assuming chronological order from API or sort if necessary
+				this.fleetData = {
+					meta: response.data.metadata,
+					vehicles: sortedVehicles
+				};
+				console.log(this.fleetData, "responseresponseresponseresponseresponse")
+				if (this.fleetData.meta) {
+					this.titleService.setTitle(this.fleetData.meta.title);
+					this.metaService.updateTag({ name: 'description', content: this.fleetData.meta.description });
+					this.metaService.updateTag({ name: 'keywords', content: this.fleetData.meta.keywords });
+				} else {
+					this.titleService.setTitle('Fleet | 1800 Limo');
+				}
 
-			// Initialize carousels after data is rendered
-			setTimeout(() => {
-				this.initVehicleCarousels();
-			}, 100);
+				this.spinner.hide();
+
+				// Initialize carousels after data is rendered
+				setTimeout(() => {
+					this.initVehicleCarousels();
+				}, 100);
+			} else {
+				this.spinner.hide();
+			}
+		}).catch(err => {
+			console.error('Failed to load fleet data API', err);
+			this.spinner.hide();
 		});
 	}
 
@@ -117,6 +143,13 @@ export class FleetComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.metaService.updateTag({ name: 'description', content: this.fleetData.meta.description });
 			this.metaService.updateTag({ name: 'keywords', content: this.fleetData.meta.keywords });
 		}
+	}
+
+	getImageUrl(img: string): string {
+		if (!img) return '';
+		if (img.startsWith('http') || img.startsWith('assets/')) return img;
+		const baseUrl = environment.serverUrl.replace('api/', 'storage/images/');
+		return baseUrl + img.trim();
 	}
 
 	initVehicleCarousels() {
@@ -153,8 +186,29 @@ export class FleetComponent implements OnInit, AfterViewInit, OnDestroy {
 				allowTouchMove: hasNavigation
 			});
 
+			// Stop autoplay initially so it only runs on hover
+			if (hasNavigation && swiper.autoplay) {
+				swiper.autoplay.stop();
+			}
+
 			this.vehicleSwipers.push(swiper);
 		});
+	}
+
+	startAutoplay(index: number) {
+		const swiper = this.vehicleSwipers[index];
+		if (swiper && swiper.autoplay && !swiper.autoplay.running) {
+			swiper.autoplay.start();
+		}
+	}
+
+	stopAutoplay(index: number) {
+		const swiper = this.vehicleSwipers[index];
+		if (swiper && swiper.autoplay && swiper.autoplay.running) {
+			swiper.autoplay.stop();
+			// Optional: Reset to first slide when hover ends
+			// swiper.slideTo(0);
+		}
 	}
 
 	initClientCarousel() {
