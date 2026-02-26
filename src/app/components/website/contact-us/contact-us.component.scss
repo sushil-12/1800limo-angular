@@ -47,7 +47,7 @@ $light-orange: #fff4ea;
 	background-color: #fff;
 	border-radius: 12px;
 	border: 1px solid rgba(0, 0, 0, 0.03);
-	box-shadow: 0px 4px 4px 4px #0000001A;
+	box-shadow: 0px 4px 4px 2px #0000001A;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 
 	&:hover {
@@ -220,7 +220,8 @@ $light-orange: #fff4ea;
 }
 
 .dark-stats-section {
-	background: linear-gradient(135deg, #2f2010 0%, #1a1a1a 30%, #111111 100%);
+	background: linear-gradient(0deg, #121212, #121212),
+		linear-gradient(280.43deg, rgba(0, 0, 0, 0) 12.37%, rgba(243, 147, 61, 0.2) 97.66%);
 	border-radius: 12px;
 	position: relative;
 	overflow: hidden;
@@ -393,7 +394,7 @@ h6 {
 			}
 
 			p {
-				font-size: 14px !important;
+				font-size: 13px !important;
 			}
 
 			i {
