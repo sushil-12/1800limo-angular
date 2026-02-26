@@ -168,7 +168,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem('affiliateSearch', text)
-			this.loadAffiliateOperators()
+			// this.loadAffiliateOperators()
 			// this.getEmailList()
 		}, 700)
 	}

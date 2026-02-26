@@ -10,6 +10,7 @@ export const environment = {
 	secretAccessKey: "AmBpoE5qSR1tgdxC0AQBj19yxOPsnDas8XxziJvU",
 	// recaptchaKey:"6Lcf2MYqAAAAAMPwdv97BZ_LBwX-1e9y2NcFsoIn",
 	serverUrl: "https://1800limoapi.infodevbox.com/api/"
+	// serverUrl: "http://10.20.20.251:8000/api/"
 	// serverUrl: "https://api.1800limo.com/api/"
 
 };
