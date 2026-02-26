@@ -1,263 +1,343 @@
 <div class="innerpage_wrapper">
-	<!--------Aboutus video----------------->
-	<div class="innerpage_topbanner">
-		<h2>
-			About us
-			<hr>
-		</h2>
-	</div>
-	<!--------About us ----------------->
-	<section class="abouthistory_wraper">
-		<div class="container">
-			<!-- <div class="innpage_video">
-                <iframe width="100%" height="500px" src="https://www.youtube.com/embed/cShk_hqvoa0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div> -->
-			<div class="innpage_video">
-				<!-- <iframe width="100%" height="500px" src="https://www.youtube.com/embed/cShk_hqvoa0" title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe> -->
-				<!-- <a href="assets/images/registerhere.jpg">
-                    <div class="thumbnail">
-                        <iframe width="100%" height="500px" src="https://www.youtube.com/embed/cShk_hqvoa0"
-                            title="YouTube video player" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                    </div>
-                </a> -->
-				<video controls poster="assets/images/registerhere.jpg">
+	<!-- Hero Section -->
+	<header class="about-hero">
+		<div class="container text-center py-3 py-md-4 py-lg-5">
+			<span class="hero-badge">
+				<img src="assets/images/estimate-pic.png" alt="Established Icon"> Established Since 1994
+			</span>
+			<h1 class="font-weight-bold mb-3">About Us</h1>
+			<p class="lead mx-auto text-desc-max">Three decades of excellence in luxury transportation.
+				Pioneering innovation, delivering exceptional service, and creating unforgettable experiences.</p>
+
+			<div class="custom-video-wrapper mt-5">
+				<video #aboutVideo class="about-video" controls poster="assets/images/registerhere.jpg">
 					<source src="assets/images/Investor Video-1800LIMO.COM.mp4" type="video/mp4">
 				</video>
 			</div>
 		</div>
-	</section>
-	<section class="aboutnw_slider">
-		<div class="container">
-			<!-- for desktop -->
-			<div class="loopd owl-carousel owl-theme">
-				<div class="item" data-hash="first">
-					<div class="custom-radio">
-						<input class="radio-button" type="radio" id="1994" value="1994" name="carouselType" checked
-							(click)="carouselSwitch('1994')" tabIndex="1" />
-						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
-							<h3>1994</h3>
-							<p>The First Wireless Communication Vision For The Limo Industry</p>
-						</div>
-					</div>
-				</div>
-				<div class="item" data-hash="second">
-					<div class="custom-radio">
-						<input class="radio-button" type="radio" id="1995" value="1995" name="carouselType"
-							(click)="carouselSwitch('1995')" tabIndex="1" />
-						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
-							<h3>1995</h3>
-							<p>Proposed Partnership with In-Flight Phone Corp and Boston Coach</p>
-						</div>
-					</div>
-				</div>
-				<div class="item" data-hash="third">
-					<div class="custom-radio">
-						<input class="radio-button" type="radio" id="2001" value="2001" name="carouselType"
-							(click)="carouselSwitch('2001')" tabIndex="1" />
-						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
-							<h3>2001</h3>
-							<p>Chicago Sun-Times Article 1-800-LIMO.COM Comes To Market</p>
-						</div>
-					</div>
-				</div>
-				<div class="item" data-hash="four">
-					<div class="custom-radio">
-						<input class="radio-button" type="radio" id="2007" value="2007" name="carouselType"
-							(click)="carouselSwitch('2007')" tabIndex="1" />
-						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
-							<h3>2007</h3>
-							<p>2007 – iPhone Comes To Market</p>
-						</div>
-					</div>
-				</div>
-				<div class="item" data-hash="five">
-					<div class="custom-radio">
-						<input class="radio-button" type="radio" id="2008" value="2008" name="carouselType"
-							(click)="carouselSwitch('2008')" tabIndex="1" />
-						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
-							<h3>2008</h3>
-							<p>March 2009 – Uber Technologies Starts funded by Google Ventures and others.</p>
-						</div>
-					</div>
-				</div>
-				<div class="item" data-hash="six">
-					<div class="custom-radio">
-						<input class="radio-button" type="radio" id="2010" value="2010" name="carouselType"
-							(click)="carouselSwitch('2010')" tabIndex="1" />
-						<div class="aboutnw_slideriner text-center" name="carouselType" data-target="#myCarousel">
-							<h3>2010</h3>
-							<p>June 2012 – Lyft, Inc Starts and funded by numerous Silicon Venture firms and others.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="d-sm-flex d-none justify-content-center">
-				<a class="clr-Fil btn-primary active mt-4 mx-2 url" href="about-us#first">First</a>
-				<a class="clr-Fil btn-primary mt-4 mx-2 url" href="about-us#six">Last</a>
-			</div>
-
-			<!-- carousal for mobile -->
-			<div class="d-sm-none d-flex flex-sm-nowrap flex-wrap justify-content-center">
-				<a class="clr-Fil btn-primary active mt-4 mx-2 url" (click)="carouselSwitch('1994')"
-					href="about-us#first">1994</a>
-				<a class="clr-Fil btn-primary mt-4 mx-2 url" (click)="carouselSwitch('1995')"
-					href="about-us#second">1995</a>
-				<a class="clr-Fil btn-primary mt-4 mx-2 url" (click)="carouselSwitch('2001')"
-					href="about-us#third">2001</a>
-				<a class="clr-Fil btn-primary mt-4 mx-2 url" (click)="carouselSwitch('2007')"
-					href="about-us#four">2007</a>
-				<a class="clr-Fil btn-primary mt-4 mx-2 url" (click)="carouselSwitch('2008')"
-					href="about-us#five">2008</a>
-				<a class="clr-Fil btn-primary mt-4 mx-2 url" (click)="carouselSwitch('2010')"
-					href="about-us#six">2010</a>
-			</div>
-
-			<!----slider content---->
-			<div class="aboutnw_sliderdesc carousel" id="myCarousel">
-				<h3>{{carouselLabel}}</h3>
-				<h4>{{carouselHeading}}</h4>
-				<div *ngIf="selectedCarousel === '2001'">
-					<img src="assets/images/about-us-img.jpg">
-					<h4 class="mt-4">{{carouselHeading2}}</h4>
-					<img src="assets/images/about-us-img-2001-2.jpg">
-				</div>
-				<div *ngIf="selectedCarousel !== '2001'">
-					<div *ngIf="selectedCarousel === '1995'">
-						<div class="row img_1995">
-							<div class="col-md-4"> <img src="assets/images/skylimo.png"></div>
-							<div class="col-md-4"><img src="assets/images/people.png"></div>
-							<div class="col-md-4"><img src="assets/images/black.png"></div>
-						</div>
-					</div>
-					<div *ngIf="selectedCarousel !== '1995'">
-						<div *ngIf="selectedCarousel === '2007'">
-							<img src="assets/images/about-2007.png">
-						</div>
-						<div *ngIf="selectedCarousel !== '2007'" h>
-							<p [innerHTML]="carouselInstructions"></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+	</header>
 </div>
-<!----OUR HISTORY------------->
-<section class="aboutnw_history">
+<!----ABOUT SECTIONS (Who We Are & History) ------------->
+<section class="about-content-sections py-3">
 	<div class="container">
-		<h2>Our History</h2>
-		<p [innerHTML]="aboutUsSecionsData[0]?.content" *ngIf="aboutUsSecionsData[0]?.section_status ==true"></p>
-		<div class="row mt-3">
-			<div class="col-lg-6">
-				<img src="assets/images/abtnwhistory.jpg" alt="abtnwhistory">
+
+		<!-- Block 1: Who We Are -->
+		<div class="row align-items-center mb-5 pb-1">
+			<!-- Image Column (Left) -->
+			<div class="col-lg-6 mb-4 mb-lg-0 pr-lg-5">
+				<div class="about-image-wrapper">
+					<img [src]="pageData.whoWeAre.image"
+						alt="Interior of luxury vehicle showing folding tables and screens"
+						class="img-fluid rounded-custom shadow-sm">
+				</div>
 			</div>
-			<div class="col-lg-6">
-				<div class="aboutnw_historyiner">
-					<h3><span>1-800-LIMO.COM </span> Who we are</h3>
-					<p>We are the value proposition in safe and reliable ground transportation around locally and the
-						world. Our
-						web-based digital sales platform matches quality-minded travelers with friendly and professional
-						drivers.
-						Travel in clean, comfortable
-						and well-maintained vehicles at the most competitive available rate.</p>
+
+			<!-- Content Column (Right) -->
+			<div class="col-lg-6 pl-lg-4">
+				<div class="section-badge mb-3">
+					<img src="assets/images/who-we-are-bdge-icon.png" alt="Who We Are Icon"> {{ pageData.whoWeAre.badge
+					}}
 				</div>
-				<div class="aboutnw_historyiner">
-					<h3>What we do Best</h3>
-					<p>We only want to do "One Thing" and do it better than anyone else. We want to match you with
-						discriminating
-						clients with professional drivers and chauffures around the world.</p>
-				</div>
-				<div class="aboutnw_historyiner">
-					<h3>Budget to value</h3>
-					<p>Our Mission 1-800-LIMO.COM is a web-based digital sales plafrom that matches value and quality
-						minded
-						luxury travelers with friendly and attentive drivers with safe, reliable, on-time ground
-						transportation
-						anywhere around the world;
-						in clean, comfortable, and well maintained non-autonomous vehicles, at the lowest available
-						rates.</p>
+				<h2 class="section-heading mb-0">{{ pageData.whoWeAre.title }}</h2>
+
+				<p class="text-muted mb-2 section-desc">{{ pageData.whoWeAre.description
+					}}</p>
+
+				<!-- Sub-features mapped from JSON -->
+				<div class="feature-item mb-2 mt-2" *ngFor="let feature of pageData.whoWeAre.features; let i = index">
+					<div class="feature-pill d-inline-flex align-items-center mb-3 mt-2 py-2 px-3 feature-pill-custom">
+						<span class="d-inline-flex justify-content-center align-items-center me-3 feature-check-circle">
+							<i class="bi-check2-circle"></i>
+						</span>
+						<h6 class="mb-0 font-weight-bold feature-title">{{ feature.title }}
+						</h6>
+					</div>
+					<p class="text-muted mb-0 mt-0 feature-desc">{{ feature.description }}</p>
 				</div>
 			</div>
 		</div>
-		<h2 class="mt-3 mb-3">Prearranged bookings and maximizing efficiencies</h2>
-		<p [innerHTML]="aboutUsSecionsData[1]?.content" *ngIf="aboutUsSecionsData[1]?.section_status ==true"></p>
+
+		<!-- Block 2: Our History (Reversed) -->
+		<div class="row pt-0 mt-3">
+			<!-- Content Column (Left) -->
+			<div class="col-lg-6 order-2 order-lg-1 pr-lg-5 mt-2 mt-lg-0">
+				<div class="section-badge mb-3">
+					<img src="assets/images/who-we-are-bdge-icon.png" alt="Who We Are Icon"> {{
+					pageData.ourHistory.badge }}
+				</div>
+
+				<div class="history-content text-muted history-desc">
+					<p class="mb-4" *ngFor="let paragraph of pageData.ourHistory.content">{{ paragraph }}</p>
+				</div>
+
+				<button class="btn btn-orange btn-learn-more mt-3">{{
+					pageData.ourHistory.buttonText }}</button>
+			</div>
+
+			<!-- Image Column (Right) -->
+			<div class="col-lg-6 order-1 order-lg-2 pl-lg-4">
+				<div class="about-image-wrapper position-relative text-center">
+					<img [src]="pageData.ourHistory.image"
+						alt="Interior of luxury vehicle showing folding tables and screens"
+						class="img-fluid rounded-custom shadow-sm">
+					<!-- Years of Excellence Badge -->
+					<div class="years-badge rounded text-center">
+						<span class="d-block font-weight-bold mb-0 display-4-custom">{{
+							pageData.ourHistory.yearsBadge.number }}</span>
+						<span class="small font-weight-bold text-uppercase d-block mt-1 display-small-custom">{{
+							pageData.ourHistory.yearsBadge.text
+							}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </section>
-<!----We specialize ------------->
-<section class="wespecial_wrap">
+<!-- BLOCK 3: Milestones & Innovation (Accordion) -->
+<section class="milestones-section py-3 bg-light-orange">
 	<div class="container">
-		<h2 class="">We specialize in</h2>
-		<p *ngIf="aboutUsSecionsData[2]?.section_status ==true">
-			{{aboutUsSecionsData[2]?.content}}
+		<div class="text-center mb-5">
+			<div class="section-badge mb-3 mx-auto">
+				<svg style="margin-right:6px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+					fill="currentColor" class="bi bi-rocket-takeoff" viewBox="0 0 16 16">
+					<path
+						d="M9.752 6.193c.599.6 1.73.437 2.528-.362s.96-1.932.362-2.531c-.599-.6-1.73-.438-2.528.361-.798.8-.96 1.933-.362 2.532" />
+					<path
+						d="M15.811 3.312c-.363 1.534-1.334 3.626-3.64 6.218l-.24 2.408a2.56 2.56 0 0 1-.732 1.526L8.817 15.85a.51.51 0 0 1-.867-.434l.27-1.899c.04-.28-.013-.593-.131-.956a9 9 0 0 0-.249-.657l-.082-.202c-.815-.197-1.578-.662-2.191-1.277-.614-.615-1.079-1.379-1.275-2.195l-.203-.083a10 10 0 0 0-.655-.248c-.363-.119-.675-.172-.955-.132l-1.896.27A.51.51 0 0 1 .15 7.17l2.382-2.386c.41-.41.947-.67 1.524-.734h.006l2.4-.238C9.005 1.55 11.087.582 12.623.208c.89-.217 1.59-.232 2.08-.188.244.023.435.06.57.093q.1.026.16.045c.184.06.279.13.351.295l.029.073a3.5 3.5 0 0 1 .157.721c.055.485.051 1.178-.159 2.065m-4.828 7.475.04-.04-.107 1.081a1.54 1.54 0 0 1-.44.913l-1.298 1.3.054-.38c.072-.506-.034-.993-.172-1.418a9 9 0 0 0-.164-.45c.738-.065 1.462-.38 2.087-1.006M5.205 5c-.625.626-.94 1.351-1.004 2.09a9 9 0 0 0-.45-.164c-.424-.138-.91-.244-1.416-.172l-.38.054 1.3-1.3c.245-.246.566-.401.91-.44l1.08-.107zm9.406-3.961c-.38-.034-.967-.027-1.746.163-1.558.38-3.917 1.496-6.937 4.521-.62.62-.799 1.34-.687 2.051.107.676.483 1.362 1.048 1.928.564.565 1.25.941 1.924 1.049.71.112 1.429-.067 2.048-.688 3.079-3.083 4.192-5.444 4.556-6.987.183-.771.18-1.345.138-1.713a3 3 0 0 0-.045-.283 3 3 0 0 0-.3-.041Z" />
+					<path
+						d="M7.009 12.139a7.6 7.6 0 0 1-1.804-1.352A7.6 7.6 0 0 1 3.794 8.86c-1.102.992-1.965 5.054-1.839 5.18.125.126 3.936-.896 5.054-1.902Z" />
+				</svg> {{ pageData.milestones.badge }}
+			</div>
+			<h2 class="section-heading">{{ pageData.milestones.title }}</h2>
+			<p class="text-muted">{{ pageData.milestones.subtitle }}</p>
+		</div>
+
+		<div class="row justify-content-center">
+			<div class="col-lg-10">
+				<!-- Timeline Container -->
+				<div class="timeline-container position-relative" id="milestoneAccordion">
+
+					<!-- Loop through milestones -->
+					<div class="timeline-item position-relative mb-4"
+						*ngFor="let event of pageData.milestones.events; let i = index">
+
+						<!-- Timeline Year Marker -->
+						<div class="timeline-marker">
+							<div class="year-bubble">{{ event.year }}</div>
+						</div>
+
+						<!-- Milestone Card Accordion -->
+						<div class="timeline-content">
+							<div class="card border-0 shadow-sm overflow-hidden milestone-card">
+								<div class="card-body bg-white p-4 cursor-pointer" data-toggle="collapse"
+									[attr.data-target]="'#collapseMilestone' + i" aria-expanded="false"
+									[attr.aria-controls]="'collapseMilestone' + i">
+									<!-- Mockup Layout: Icon Top Left, Chevron Top Right -->
+									<div class="d-flex justify-content-between align-items-center mb-3">
+										<div class="milestone-icon-box">
+											<i class="bi bi-lightning-charge-fill"></i>
+										</div>
+										<i class="bi bi-chevron-down text-muted chevron-icon"></i>
+									</div>
+									<!-- Title Below Icon Row -->
+									<h4 class="milestone-title-text mb-2" [innerHTML]="event.title"></h4>
+									<!-- Decorative Orange Underline -->
+									<div class="milestone-orange-line"></div>
+								</div>
+
+								<!-- Accordion Content -->
+								<div [id]="'collapseMilestone' + i" class="collapse"
+									[attr.data-parent]="'#milestoneAccordion'">
+									<div class="card-body pt-0 pb-4 px-4">
+										<div class="text-muted milestone-desc" *ngIf="event.description"
+											[innerHTML]="event.description"></div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- End Loop -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Milestones Section -->
+<!-- BLOCK 4: Efficiency Stats -->
+<section class="efficiencies-section">
+	<div class="container">
+		<div class="row align-items-center">
+
+			<!-- Image Column (Left) -->
+			<div class="col-lg-5 mb-4 mb-lg-0 pr-lg-5">
+				<div class="about-image-wrapper">
+					<img [src]="pageData.efficiencies.image" alt="Prearranged bookings and maximizing efficiencies"
+						class="img-fluid shadow-sm efficiencies-img">
+				</div>
+			</div>
+
+			<!-- Content Column (Right) -->
+			<div class="col-lg-7 pl-lg-4">
+				<h2 class="section-heading mb-4 text-dark efficiencies-title">
+					{{ pageData.efficiencies.title }}
+				</h2>
+				<p class="mb-0 text-dark efficiencies-desc">
+					{{ pageData.efficiencies.description }}
+				</p>
+			</div>
+
+		</div>
+	</div>
+</section>
+<!-- End Efficiency Section -->
+
+<!-- BLOCK 4.5: The Advantage -->
+<section class="advantage-section py-5 position-relative advantage-bg">
+	<div class="container position-relative z-index-1">
+		<div class="text-center mb-5">
+			<div class="section-badge mb-3 mx-auto">
+				<i class="bi bi-bullseye"></i> {{ pageData.advantage.badge }}
+			</div>
+			<h2 class="section-heading advantage-title">{{ pageData.advantage.title }}</h2>
+			<p class="text-muted advantage-subtitle">{{ pageData.advantage.subtitle }}</p>
+		</div>
+
+		<div class="row pb-4">
+			<div class="col-lg-4 col-md-6 mb-4" *ngFor="let item of pageData.advantage.items">
+				<div class="advantage-card card border-0 shadow-sm h-100 p-4">
+					<div class="d-flex align-items-center">
+						<div class="advantage-icon-box mr-3">
+							<img *ngIf="item.iconImage" [src]="item.iconImage" [alt]="item.title"
+								class="custom-icon-img">
+							<i *ngIf="!item.iconImage" [class]="'bi ' + item.icon"></i>
+						</div>
+						<div class="advantage-content">
+							<h4 class="advantage-card-title mb-1">{{ item.title }}</h4>
+							<p class="advantage-card-desc mb-0">{{ item.description }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Advantage Section -->
+
+<!-- BLOCK 5: Services We Specialize In -->
+<section class="services-section py-0 bg-white">
+	<div class="container position-relative z-index-1">
+		<div class="text-center mb-5">
+			<div class="section-badge mb-3 mx-auto">
+				<i class="bi bi-lightning-charge-fill"></i> {{ pageData.services.badge }}
+			</div>
+			<h2 class="section-heading services-title">{{ pageData.services.title }}</h2>
+			<p class="text-muted services-subtitle">{{ pageData.services.subtitle }}</p>
+		</div>
+
+		<div class="services-list-container shadow-sm">
+			<div class="row row-cols-1 row-cols-md-2 g-4">
+				<div class="col" *ngFor="let service of pageData.services.list">
+					<div class="service-item d-flex align-items-center">
+						<i class="bi-check2-circle service-check-icon mr-3"></i>
+						<span class="service-text">{{ service }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Services Section -->
+
+<!-- BLOCK 6: Our USP (Image Left, Text Right) -->
+<section class="usp-section py-0">
+	<div class="container">
+		<div class="row align-items-center">
+
+			<div class="col-lg-6 mb-4 mb-lg-0 pr-lg-5">
+				<div class="usp-image-wrapper">
+					<img [src]="pageData.usp.image" alt="Luxury Transportation USP" class="img-fluid usp-img">
+				</div>
+			</div>
+
+			<div class="col-lg-6 pl-lg-4 mb-4 mb-lg-0">
+				<div class="section-badge mb-3">
+					<img src="assets/images/who-we-are-bdge-icon.png" alt="USP Icon"> {{ pageData.usp.badge }}
+				</div>
+				<h2 class="section-heading mb-4 section-heading-lg">{{ pageData.usp.title }}</h2>
+
+				<div class="text-muted mb-4 content-text">
+					<p *ngFor="let paragraph of pageData.usp.content" class="mb-3">{{ paragraph }}</p>
+				</div>
+
+				<button class="btn btn-orange btn-learn-more mt-2">{{ pageData.usp.buttonText }}</button>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+<!-- BLOCK 7: Your Personal Driver (Text Left, Image Right) -->
+<section class="personal-driver-section py-0 mb-0">
+	<div class="container">
+		<div class="row align-items-center">
+
+			<div class="col-lg-6 pr-lg-5 mb-4 mb-lg-0 order-2 order-lg-1">
+				<div class="section-badge mb-3">
+					<img src="assets/images/who-we-are-bdge-icon.png" alt="Who We Are Icon"> {{
+					pageData.personalDriver.badge }}
+				</div>
+				<h2 class="section-heading mb-4 section-heading-lg">{{ pageData.personalDriver.title }}</h2>
+
+				<div class="text-muted mb-4 content-text">
+					<p *ngFor="let paragraph of pageData.personalDriver.content" class="mb-3">{{ paragraph }}</p>
+				</div>
+
+				<button class="btn btn-orange btn-learn-more mt-2">{{ pageData.personalDriver.buttonText }}</button>
+			</div>
+
+			<div class="col-lg-6 pl-lg-4 mb-4 mb-lg-0 order-1 order-lg-2">
+				<div class="driver-image-wrapper">
+					<img [src]="pageData.personalDriver.image" onerror="this.src='assets/images/wespecial_img.jpg'"
+						alt="Personal Driver Service" class="img-fluid driver-img">
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+<!-- End of container from top block if left dangling, though we should wrap these in containers if needed -->
+
+<!-- BLOCK 8: Call to Action Banner -->
+<section class="cta-banner-section py-5 mt-0">
+	<div class="container text-center text-white pb-4 cta-container">
+		<h2 class="mb-3 font-weight-bold cta-h2">
+			Ready to Experience<br>the Difference?
+		</h2>
+		<p class="mb-2 mx-auto cta-subtitle">
+			{{ pageData.ctaSection.subtitle }}
 		</p>
-		<h2 class="mt-3">Our “UNIQUE SELLING PROPOSITION” (USP)</h2>
-		<p [innerHTML]="aboutUsSecionsData[3]?.content" *ngIf="aboutUsSecionsData[3]?.section_status ==true"></p>
-	</div>
-</section>
-<!---PERSONAL DRIVER ------------->
-<section class="personaldr_wrap">
-	<div class="container">
-		<div class="row ">
-			<div class="col-lg-6">
-				<h2 class="">“Your personal driver everywhere.”</h2>
-				<p [innerHTML]="aboutUsSecionsData[4]?.content" *ngIf="aboutUsSecionsData[4]?.section_status ==true">
-				</p>
+
+		<div class="d-flex justify-content-center align-items-center mb-2 flex-wrap">
+			<button class="btn btn-cta-primary mx-2 my-2">
+				<i class="bi bi-calendar-check mr-2"></i> {{ pageData.ctaSection.buttonText }}
+			</button>
+			<a [href]="'tel:' + pageData.ctaSection.phone" class="btn btn-cta-secondary mx-2 my-2">
+				<i class="bi bi-telephone mr-2"></i> {{ pageData.ctaSection.phone }}
+			</a>
+		</div>
+
+		<div class="row pt-4 justify-content-center">
+			<div class="col-md-3 col-sm-4 col-12 mb-4 mb-md-0 d-flex flex-column align-items-center"
+				*ngFor="let feat of pageData.ctaSection.features">
+				<div class="cta-icon-circle d-flex justify-content-center align-items-center mb-3">
+					<!-- <img *ngIf="feat.icon" [src]="feat.icon" [alt]="feat.text" class="cta-custom-icon"> -->
+					<i *ngIf="feat.icon" [class]="'bi ' + feat.icon"></i>
+				</div>
+				<span class="cta-feature-text">{{ feat.text }}</span>
 			</div>
-			<div class="col-lg-6">
-				<img src="assets/images/wespecial_img.jpg" alt="wespecial_img">
-			</div>
-			<!-- <div class="col-md-12 mt-3">
-				<p>My vision is to take the on-demand business model and create an environment that combines convenience
-					with
-					reliability, no matter the vehicle you choose or the rate you pay. It’s all about consistent
-					personalized
-					service and trusted partnerships.
-					1-800-LIMO.COM is a global dispatch company and not a TNC (Technology Network Company like U/L.
-					Personalized
-					service is our specialty.</p>
-				<p> We are not simply a middle man, we own the reservation, the client, and take full responsibility for
-					the
-					booking and your safety. We request all our affiliate partners to enter their lowest rates to keep
-					their
-					vehicles and Fleet/Coachs busy
-					and operating efficiently. Our drivers automatically can add up-to a 20% gratuity on each booking to
-					insure
-					our drivers earn a living wage, properly maintain their vehicles, and keep the best drivers working
-					with us
-					and for you.</p>
-				<p>
-					We are the most transparent company of our kind. The rate you see is that the driver sees. We do not
-					mark up
-					our drivers all-inclusive rates and we only earn a low 25% commission on each transaction. You have
-					you access
-					to your account and report information
-					24/7.
-				</p>
-				<p>
-					1-800-LIMO.COM does not allow illegal or uninsured operators or with uninspected vehicles to become
-					an
-					affiliate partner. All our USA drivers will be requested to apply for a FOID card. We do not promote
-					gun
-					ownership, but state certification is the most
-					extensive personal reference check in the industry. If the State approves our drivers credentials,
-					you can be
-					assured you will be safe and secure in their vehicle. Admittedly, no background check comes with a
-					100%
-					guarantee however;
-					no other transportation company has a more extensive background check policy. You will also have the
-					ability
-					to rate and review your driver and their vehicle to help us maintain the highest performance
-					standards. Our
-					mobile App is
-					coming soon and we’ll offer a 30% Shared Ride discount when traveling in the same direction. We’ll
-					provide
-					newer Minivans and SUVs for more leg room, comfort, and luggage space.</p>
-			</div> -->
 		</div>
 	</div>
 </section>

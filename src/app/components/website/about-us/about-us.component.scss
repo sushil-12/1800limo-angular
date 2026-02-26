@@ -1,20 +1,939 @@
 $primary-color: var(--orange-color);
-.radio-button+.aboutnw_slideriner {
-    border: 2px solid $primary-color;
-    border-radius: 10px;
+
+/* --- New About Us Hero Section Styles --- */
+// About Us Hero Section (Matching Fleet Pattern)
+.about-hero {
+    background: radial-gradient(72.5% 192.1% at 70% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+    padding: 0 0 40px 0;
+
+    .hero-badge {
+        background: #FFEDD4;
+        color: #F54900;
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: inline-flex;
+
+        @media (max-width: 576px) {
+            padding: 6px 14px;
+            font-size: 13px;
+            margin-bottom: 20px;
+
+            img {
+                height: 16px;
+                margin-right: 6px;
+            }
+        }
+
+        @media (max-width: 1028px) {
+            margin-bottom: 20px;
+        }
+    }
+
+    h1 {
+        font-weight: 700;
+        font-size: 40px;
+        color: #000000;
+        margin-bottom: 15px;
+
+        @media (max-width: 768px) {
+            font-size: 32px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 28px;
+        }
+    }
+
+    p.lead {
+        color: #4A5565;
+        font-size: 20px;
+        font-weight: 400;
+        margin: 0 auto;
+        opacity: 0.8;
+
+        @media (max-width: 768px) {
+            font-size: 16px;
+        }
+    }
 }
 
-.innpage_video {
-    padding-top: 10px;
+.custom-video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    background-color: #000;
+    z-index: 2;
 }
-.innpage_video video{
-    width:100%;
-    height: 580px;
-    max-height: 100%;
+
+.about-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 16/9;
     object-fit: cover;
 }
-.aboutnw_sliderdesc p {
-    font-weight: 400 !important;
+
+
+.hero-bg-gradient {
+    width: 100vw;
+    height: 100vw;
+    right: 0;
+    top: 30%;
+}
+
+.custom-video-wrapper {
+    border-radius: 12px;
+}
+
+
+/* --- End New Hero Section Styles --- */
+
+/* --- About Us Content Sections (Who We Are & History) --- */
+.about-content-sections {
+    background-color: #fff !important;
+    overflow: hidden;
+    padding: 40px 0 0 0 !important;
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        color: #101828 !important; // Dark text from design
+        background-color: #FFEDD4 !important; // Light peach background
+        padding: 8px 18px !important;
+        border-radius: 50px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.7px;
+        text-transform: capitalize;
+        border: none !important;
+
+        i,
+        img {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            object-fit: contain;
+
+            @media (max-width: 576px) {
+                width: 16px;
+                height: 16px;
+                margin-right: 8px;
+            }
+        }
+    }
+
+    .section-heading {
+        font-size: 36px;
+        font-weight: 700;
+        color: #101828;
+        line-height: 1.25;
+
+        @media (max-width: 991px) {
+            font-size: 32px;
+        }
+
+        @media (max-width: 767px) {
+            font-size: 28px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 24px;
+        }
+    }
+
+    p.text-muted {
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.7;
+        color: #4A5565 !important;
+
+        @media (max-width: 767px) {
+            font-size: 16px;
+        }
+    }
+
+    .history-content {
+        p {
+            font-size: 18px;
+            line-height: 1.75;
+            color: #666;
+        }
+    }
+
+    .about-image-wrapper {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 600px;
+            /* Fixed height to match mockup's tall portrait style */
+            object-fit: cover;
+            border-radius: 20px;
+
+            @media (max-width: 991px) {
+                height: 400px;
+            }
+        }
+
+        .years-badge {
+            position: absolute;
+            bottom: 0px;
+            right: 0;
+            background-color: #f7941d;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px 8px 0px 8px !important;
+            text-align: center;
+            z-index: 99;
+
+            span.display-4-custom {
+                font-size: 36px !important;
+                line-height: 1;
+                font-weight: 700 !important;
+                margin-bottom: 0px;
+            }
+
+            span.small {
+                font-size: 14px;
+                letter-spacing: 0.7px;
+                font-weight: 600;
+                margin-top: 2px;
+                display: block;
+                text-transform: capitalize !important;
+            }
+
+            @media (max-width: 767px) {
+                bottom: 0px;
+                right: 0px;
+                padding: 15px 20px;
+                border-radius: 12px 0 20px 0;
+
+                span.display-4 {
+                    font-size: 28px;
+                }
+
+                span.small {
+                    font-size: 9px;
+                }
+            }
+        }
+    }
+
+    .feature-item {
+        .feature-pill-custom {
+            background-color: #FFF7ED !important;
+            border-radius: 50px !important;
+            padding: 8px 20px !important;
+            border: none !important;
+
+            .feature-check-circle {
+                color: #F54900;
+                margin-right: 12px;
+                flex-shrink: 0;
+
+                i {
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+            }
+
+            .feature-title {
+                color: #101828 !important;
+                font-weight: 600 !important;
+                font-size: 16px !important;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        .text-orange {
+            color: #f55b1f;
+            font-size: 18px;
+        }
+
+        p.text-muted {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+    }
+}
+
+/* --- Reusable Components (Buttons, etc.) --- */
+.btn-orange.btn-learn-more {
+    background-color: #F48E2F !important; // More vibrant mockup orange
+    color: #fff !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 12px 38px !important; // Taller and wider for parity
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    letter-spacing: 0.7px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 14px 0 rgba(244, 142, 47, 0.39) !important;
+    display: inline-block;
+
+    &:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(244, 142, 47, 0.45) !important;
+        background-color: #e67e1a !important;
+        text-decoration: none !important;
+    }
+}
+
+/* --- Milestones Section --- */
+.milestones-section {
+    background: radial-gradient(circle at center, rgba(247, 148, 29, 0.05) 0%, transparent 70%) !important;
+    position: relative;
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        color: #EF921F !important;
+        background-color: #FFEDD4 !important;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.7px;
+        text-transform: capitalize;
+
+        i {
+            margin-right: 6px;
+            font-size: 14px;
+        }
+    }
+
+    .section-heading {
+        font-size: 48px !important;
+        font-weight: 700 !important;
+        color: #101828 !important;
+        line-height: 1.25;
+        margin-bottom: 20px;
+
+        @media (max-width: 767px) {
+            font-size: 32px !important;
+        }
+    }
+
+    p.text-muted {
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        color: #4A5565 !important;
+        margin-bottom: 40px;
+    }
+
+    /* Timeline Tree Structure */
+    .timeline-container {
+        padding-left: 0;
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 21px;
+            width: 1px;
+            background: #e6d3c0;
+            z-index: 1;
+        }
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 50px;
+        display: flex;
+        align-items: flex-start;
+
+        .timeline-marker {
+            position: relative;
+            z-index: 3;
+            width: 64px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            top: 0px; // Align with top of card
+            left: -11px;
+
+            // The Small Yellow Indicator Dot
+            &::after {
+                content: '';
+                position: absolute;
+                top: -5px; // Above the bubble on the line
+                left: 50%;
+                transform: translateX(-50%);
+                width: 16px;
+                height: 16px;
+                background-color: #f7941d;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                box-shadow: 0 0 5px rgba(247, 148, 29, 0.4);
+                z-index: 999;
+            }
+
+            .year-bubble {
+                width: 64px;
+                height: 64px;
+                background-color: #f7941d;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #FFFFFF !important;
+                font-size: 13px !important;
+                font-weight: 700 !important;
+                box-shadow: 0 4px 15px rgba(247, 148, 29, 0.35);
+                position: relative;
+                z-index: 6;
+
+                @media (max-width: 576px) {
+                    width: 50px;
+                    height: 50px;
+                    font-size: 11px !important;
+                }
+            }
+        }
+
+        .timeline-content {
+            margin-left: 0px;
+            flex-grow: 1;
+
+            @media (min-width: 992px) {
+                margin-left: 0px;
+            }
+        }
+
+        .milestone-card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05) !important;
+            background: #fff;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+            }
+
+            .milestone-icon-box {
+                width: 42px;
+                height: 42px;
+                background-color: #f7941d;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 18px;
+                box-shadow: 0 4px 12px rgba(247, 148, 29, 0.2);
+            }
+
+            .chevron-icon {
+                font-size: 14px;
+                color: #222929;
+                opacity: 0.6;
+            }
+
+            .milestone-title-text {
+                font-size: 24px !important;
+                font-weight: 500 !important;
+                color: #222929 !important;
+                line-height: 1.4;
+                margin-top: 5px;
+
+                @media (max-width: 576px) {
+                    font-size: 20px !important;
+                }
+            }
+
+            .milestone-orange-line {
+                width: 100%;
+                height: 2.5px;
+                background-color: #f7941d;
+                border-radius: 10px;
+                margin-top: 15px;
+                opacity: 0.7;
+            }
+
+            .milestone-desc {
+                font-size: 16px !important;
+                font-weight: 400 !important;
+                color: #4A5565 !important;
+                line-height: 1.8;
+                background-color: #fff;
+
+                p {
+                    font-size: 16px !important;
+                    font-weight: 400 !important;
+                    color: #4A5565 !important;
+                    margin-bottom: 12px;
+                }
+            }
+
+            .card-body {
+                padding: 20px !important;
+
+                &[data-toggle="collapse"] {
+                    &[aria-expanded="true"] {
+                        .bi-chevron-down {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* --- Section Utilities --- */
+.text-orange {
+    color: #f7941d !important;
+}
+
+/* --- Advantage Section --- */
+.advantage-section {
+    background: radial-gradient(69.78% 71.68% at 50% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 70%) !important;
+    position: relative;
+    padding: 30px 0 !important;
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        color: #F54900 !important;
+        background-color: #FFEDD4 !important; // Softer peach background
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.7px;
+        text-transform: capitalize;
+        border: none !important;
+
+        i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+    }
+
+    .section-heading {
+        font-size: 36px !important;
+        font-weight: 700 !important;
+        color: #101828 !important;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        letter-spacing: 0.8px;
+
+        @media (max-width: 767px) {
+            font-size: 28px !important;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 24px !important;
+        }
+    }
+
+    .advantage-subtitle {
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        color: #4A5565 !important;
+        max-width: 600px;
+        margin: 0 auto 60px auto;
+        opacity: 0.85;
+
+        @media (max-width: 767px) {
+            font-size: 16px !important;
+            margin-bottom: 40px;
+        }
+    }
+
+    .advantage-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 20px; // More rounded for high-end feel
+        background: #fff;
+        border: none;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05) !important;
+        padding: 35px !important; // Slightly more padding for pixel parity
+
+        @media (max-width: 576px) {
+            padding: 25px !important;
+        }
+
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .advantage-icon-box {
+            width: 48px;
+            height: 48px;
+            background-color: #F3933D;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            flex-shrink: 0;
+            margin-right: 25px !important; // Precise spacing
+
+            .custom-icon-img {
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+            }
+        }
+
+        .advantage-content {
+            .advantage-card-title {
+                font-size: 18px !important;
+                font-weight: 700 !important;
+                color: #101828 !important;
+                margin-bottom: 6px;
+                line-height: 1.2;
+            }
+
+            .advantage-card-desc {
+                font-size: 14px !important;
+                color: #4A5565 !important;
+                line-height: 1.6;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+/* --- Services Section --- */
+.services-section {
+    background-color: #fff !important;
+    position: relative;
+    padding: 40px 0 !important;
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        color: #F54900 !important;
+        background-color: #FFEDD4 !important; // Vibrant peach background
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.7px;
+        text-transform: capitalize;
+        border: none !important;
+
+        i {
+            margin-right: 8px;
+            font-size: 15px;
+        }
+    }
+
+    h2 {
+        font-size: 36px !important;
+        font-weight: 700 !important;
+        color: #101828 !important;
+    }
+
+    p {
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        color: #4A5565 !important;
+    }
+
+    .services-list-container {
+        background: linear-gradient(135deg, #FFF7ED 0%, #FFFFFF 100%) !important;
+        border-radius: 36px; // High-end rounded corners
+        padding: 65px 85px;
+        max-width: 1100px;
+        margin: 0 auto;
+        border: 1px solid rgba(243, 147, 61, 0.04);
+        box-shadow: 0px 8px 10px -6px #0000001A !important;
+
+        @media (max-width: 991px) {
+            padding: 40px 30px;
+        }
+
+        @media (max-width: 576px) {
+            padding: 30px 20px;
+            border-radius: 24px;
+        }
+
+        .service-item {
+            padding-bottom: 8px;
+
+            .service-check-icon {
+                color: #fff;
+                font-size: 14px;
+                flex-shrink: 0;
+                background-color: #F19520;
+                box-shadow: 0px 2px 4px -2px #0000001A;
+                border-radius: 50%;
+                padding: 3px 6px;
+
+            }
+
+            .service-text {
+                font-size: 16px; // Pixel-perfect weight
+                font-weight: 500;
+                color: #364153;
+                line-height: 1.6;
+                letter-spacing: 0.7px;
+            }
+        }
+    }
+}
+
+/* --- USP & Personal Driver & Efficiencies --- */
+.usp-section,
+.efficiencies-section,
+.personal-driver-section {
+    background-color: #fff !important;
+    padding: 40px 0 !important;
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        color: #101828 !important;
+        background-color: #FFEDD4 !important;
+        padding: 8px 18px !important;
+        border-radius: 50px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.7px;
+        text-transform: capitalize;
+        border: none !important;
+
+        i,
+        img {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            object-fit: contain;
+        }
+    }
+
+    .efficiencies-title {
+        font-size: 40px !important;
+        font-weight: 700 !important;
+        color: #101828 !important;
+
+        @media (max-width: 767px) {
+            font-size: 30px !important;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 26px !important;
+        }
+    }
+
+    .efficiencies-desc {
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        color: #4A5565 !important;
+        opacity: 1 !important; // Ensure color isn't washed out
+    }
+
+    .usp-img,
+    .driver-img,
+    .efficiencies-img {
+        border-radius: 40px; // Large rounded corners from mockup
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12) !important; // Deep soft shadow
+        width: 100%;
+        height: auto;
+        min-height: 500px;
+        object-fit: cover;
+
+        @media (max-width: 767px) {
+            min-height: 350px;
+            border-radius: 24px;
+        }
+
+        @media (max-width: 480px) {
+            min-height: 280px;
+        }
+    }
+}
+
+/* --- CTA Banner --- */
+.cta-banner-section {
+    background-color: #212529 !important;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(247, 148, 29, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 85% 60%, rgba(247, 148, 29, 0.10) 0%, transparent 60%);
+    // padding: 100px 0 !important;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, rgba(31, 35, 41, 0) 0%, #1a1d21 100%);
+        pointer-events: none;
+    }
+
+    .cta-container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .cta-h2 {
+        font-size: 60px !important;
+        font-weight: 700 !important;
+        color: #FFFFFF;
+        line-height: 1.1;
+        letter-spacing: 1px;
+        margin-bottom: 25px !important;
+
+        @media (max-width: 991px) {
+            font-size: 48px !important;
+        }
+
+        @media (max-width: 767px) {
+            font-size: 36px !important;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 32px !important;
+        }
+    }
+
+    .cta-subtitle {
+        font-size: 20px !important;
+        max-width: 650px;
+        color: #FFEDD4 !important;
+        font-weight: 400;
+        opacity: 0.8;
+        line-height: 1.6;
+        margin-bottom: 40px !important;
+
+        @media (max-width: 767px) {
+            font-size: 16px !important;
+            margin-bottom: 30px !important;
+        }
+    }
+
+    // Primary Button (White)
+    .btn-cta-primary {
+        background-color: #fff !important;
+        color: #F3933D !important;
+        border: none !important;
+        border-radius: 50px !important;
+        padding: 14px 35px !important;
+        font-weight: 700 !important;
+        font-size: 18px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+        display: inline-flex;
+        align-items: center;
+
+        i {
+            color: #F3933D;
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        &:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
+        }
+    }
+
+    // Secondary Button (Transparent)
+    .btn-cta-secondary {
+        background-color: transparent !important;
+        color: #fff !important;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border-radius: 50px !important;
+        padding: 14px 35px !important;
+        font-weight: 700 !important;
+        font-size: 18px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        display: inline-flex;
+        align-items: center;
+
+        i {
+            margin-right: 12px;
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border-color: #fff !important;
+            transform: translateY(-3px) !important;
+        }
+    }
+
+    .cta-icon-circle {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(255, 255, 255, 0.08); // Semi-transparent grey circle
+        border-radius: 50%;
+        color: #fff;
+        font-size: 28px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+
+        @media (max-width: 576px) {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        .cta-custom-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+
+            @media (max-width: 576px) {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+    }
+
+    .cta-feature-text {
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 0.7px;
+        opacity: 0.9;
+    }
+}
+
+/* --- Old / Other Utility Classes --- */
+.innpage_video video {
+    width: 100%;
+    height: 580px;
+    object-fit: cover;
+}
+
+@media only screen and (max-width: 991px) {
+    .innpage_video video {
+        height: auto;
+    }
 }
 
 .radio-button {
@@ -28,48 +947,46 @@ $primary-color: var(--orange-color);
     cursor: pointer;
 }
 
-.aboutnw_slideriner p {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+
+/* --- Desktop/Laptop Responsiveness Overrides (1024px to 1366px) --- */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .services-section {
+        padding: 20px 0 !important;
+    }
 }
 
-.owl-item:active {
-    width: 200px;
+/* --- Tablet Responsiveness Overrides (768px to 991px) --- */
+@media (min-width: 768px) and (max-width: 991px) {
+    .services-section {
+        padding: 0 0 !important;
+    }
 }
 
-.clr-Fil.btn-primary {
-    background-color: transparent;
-    border-width: 1px;
-    border-style: solid;
-    color: #000;
-    text-decoration: none;
-    border-radius: 50px;
-    border-color: #000;
-    cursor: pointer;
-    padding: 6px 20px;
-}
+/* --- Mobile Responsiveness Overrides --- */
+@media (max-width: 767px) {
+    .about-hero-title {
+        font-size: 32px;
+    }
 
-.clr-Fil.btn-primary.active {
-    background-color: rgb(243, 147, 61);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 50px;
-    border-color: rgb(243, 147, 61);
-    cursor: pointer;
-    padding: 6px 20px;
-}
-@media only screen and (max-width: 991px) {
-.innpage_video video{
-    height:auto
-}
-}
+    .efficiencies-section {
+        padding: 0px 0 !important;
+    }
 
-@media only screen and (max-width: 575px) {
-    .radio-button:checked+.aboutnw_slideriner {
-        border: 2px solid transparent;
-        border-radius: 10px;
+    .about-hero-subtitle {
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    .services-section {
+        padding: 0px 0 !important;
+    }
+
+    .usp-section {
+        padding: 10px 0 !important;
+    }
+
+    .personal-driver-section {
+        padding: 10px 0 !important;
     }
 }
