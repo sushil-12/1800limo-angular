@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -7,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CommonService } from 'src/app/services/common.service';
 import * as intlTelInput from 'intl-tel-input';
+import { contactUsData } from './contact-us-data';
 declare var $: any;
 
 @Component({
@@ -30,9 +32,16 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     private websiteService: WebsiteService,
     private router: Router,
     private spinner: NgxSpinnerService,
+    private titleService: Title,
+    private metaService: Meta,
     private commonServices: CommonService) { }
 
   ngOnInit(): void {
+    // Set SEO Metadata
+    this.titleService.setTitle(contactUsData.meta.title);
+    this.metaService.updateTag({ name: 'description', content: contactUsData.meta.description });
+    this.metaService.updateTag({ name: 'keywords', content: contactUsData.meta.keywords });
+
     //Get In Touch FORM
     //validations
     this.getInTouchForm = this.formBuilder.group({

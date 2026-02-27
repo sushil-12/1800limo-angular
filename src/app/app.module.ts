@@ -17,6 +17,7 @@ import { FleetComponent } from './components/website/fleet/fleet.component';
 import { SafetyComponent } from './components/website/safety/safety.component';
 import { CustomerFaqComponent } from './components/website/customer-faq/customer-faq.component';
 import { DriverFaqComponent } from './components/website/driver-faq/driver-faq.component';
+import { GroupTravelPlannerComponent } from './components/website/group-travel-planner/group-travel-planner.component';
 import { CancellationPolicyComponent } from './components/website/cancellation-policy/cancellation-policy.component';
 import { PageNotFoundComponent } from './components/website/includes--website/page-not-found/page-not-found.component';
 // import { HeaderComponent as QuotebotHeaderComponent } from './components/quotebot/includes--quotebot/header/header.component';
@@ -99,6 +100,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 		SafetyComponent,
 		CustomerFaqComponent,
 		DriverFaqComponent,
+		GroupTravelPlannerComponent,
 		CancellationPolicyComponent,
 		PageNotFoundComponent,
 		WebsiteTemplateComponent,

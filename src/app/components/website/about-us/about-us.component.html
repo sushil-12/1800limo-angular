@@ -3,7 +3,8 @@
 	<header class="about-hero">
 		<div class="container text-center py-3 py-md-4 py-lg-5">
 			<span class="hero-badge">
-				<img src="assets/images/estimate-pic.png" alt="Established Icon"> Established Since 1994
+				<img src="assets/images/estimate-pic.png" alt="Established Icon" style="width: 18px; height: 18px;">
+				Established Since 1994
 			</span>
 			<h1 class="font-weight-bold mb-3">About Us</h1>
 			<p class="lead mx-auto text-desc-max">Three decades of excellence in luxury transportation.
@@ -22,7 +23,7 @@
 	<div class="container">
 
 		<!-- Block 1: Who We Are -->
-		<div class="row align-items-center mb-5 pb-1">
+		<div class="row align-items-center pb-1" style="margin-bottom: 70px;">
 			<!-- Image Column (Left) -->
 			<div class="col-lg-6 mb-4 mb-lg-0 pr-lg-5">
 				<div class="about-image-wrapper">
@@ -60,7 +61,7 @@
 		<!-- Block 2: Our History (Reversed) -->
 		<div class="row pt-0 mt-3">
 			<!-- Content Column (Left) -->
-			<div class="col-lg-6 order-2 order-lg-1 pr-lg-5 mt-2 mt-lg-0">
+			<div class="col-lg-6 order-2 order-lg-1 pr-lg-5 mt-3 mt-lg-0">
 				<div class="section-badge mb-3">
 					<img src="assets/images/who-we-are-bdge-icon.png" alt="Who We Are Icon"> {{
 					pageData.ourHistory.badge }}
@@ -70,8 +71,7 @@
 					<p class="mb-4" *ngFor="let paragraph of pageData.ourHistory.content">{{ paragraph }}</p>
 				</div>
 
-				<button class="btn btn-orange btn-learn-more mt-3">{{
-					pageData.ourHistory.buttonText }}</button>
+
 			</div>
 
 			<!-- Image Column (Right) -->
@@ -95,7 +95,7 @@
 	</div>
 </section>
 <!-- BLOCK 3: Milestones & Innovation (Accordion) -->
-<section class="milestones-section py-3 bg-light-orange">
+<section class="milestones-section bg-light-orange">
 	<div class="container">
 		<div class="text-center mb-5">
 			<div class="section-badge mb-3 mx-auto">
@@ -136,9 +136,10 @@
 									<!-- Mockup Layout: Icon Top Left, Chevron Top Right -->
 									<div class="d-flex justify-content-between align-items-center mb-3">
 										<div class="milestone-icon-box">
-											<i class="bi bi-lightning-charge-fill"></i>
+											<i class="bi bi-lightning-charge"></i>
 										</div>
-										<i class="bi bi-chevron-down text-muted chevron-icon"></i>
+										<i class="bi bi-chevron-down text-muted chevron-icon"
+											*ngIf="event.description"></i>
 									</div>
 									<!-- Title Below Icon Row -->
 									<h4 class="milestone-title-text mb-2" [innerHTML]="event.title"></h4>
@@ -208,7 +209,7 @@
 		<div class="row pb-4">
 			<div class="col-lg-4 col-md-6 mb-4" *ngFor="let item of pageData.advantage.items">
 				<div class="advantage-card card border-0 shadow-sm h-100 p-4">
-					<div class="d-flex align-items-center">
+					<div class="d-flex align-items-start">
 						<div class="advantage-icon-box mr-3">
 							<img *ngIf="item.iconImage" [src]="item.iconImage" [alt]="item.title"
 								class="custom-icon-img">
@@ -231,7 +232,7 @@
 	<div class="container position-relative z-index-1">
 		<div class="text-center mb-5">
 			<div class="section-badge mb-3 mx-auto">
-				<i class="bi bi-lightning-charge-fill"></i> {{ pageData.services.badge }}
+				<i class="bi bi-lightning-charge"></i> {{ pageData.services.badge }}
 			</div>
 			<h2 class="section-heading services-title">{{ pageData.services.title }}</h2>
 			<p class="text-muted services-subtitle">{{ pageData.services.subtitle }}</p>
@@ -240,7 +241,7 @@
 		<div class="services-list-container shadow-sm">
 			<div class="row row-cols-1 row-cols-md-2 g-4">
 				<div class="col" *ngFor="let service of pageData.services.list">
-					<div class="service-item d-flex align-items-center">
+					<div class="service-item d-flex align-items-start">
 						<i class="bi-check2-circle service-check-icon mr-3"></i>
 						<span class="service-text">{{ service }}</span>
 					</div>
@@ -272,7 +273,7 @@
 					<p *ngFor="let paragraph of pageData.usp.content" class="mb-3">{{ paragraph }}</p>
 				</div>
 
-				<button class="btn btn-orange btn-learn-more mt-2">{{ pageData.usp.buttonText }}</button>
+
 			</div>
 
 		</div>
@@ -285,17 +286,13 @@
 		<div class="row align-items-center">
 
 			<div class="col-lg-6 pr-lg-5 mb-4 mb-lg-0 order-2 order-lg-1">
-				<div class="section-badge mb-3">
-					<img src="assets/images/who-we-are-bdge-icon.png" alt="Who We Are Icon"> {{
-					pageData.personalDriver.badge }}
-				</div>
 				<h2 class="section-heading mb-4 section-heading-lg">{{ pageData.personalDriver.title }}</h2>
 
 				<div class="text-muted mb-4 content-text">
 					<p *ngFor="let paragraph of pageData.personalDriver.content" class="mb-3">{{ paragraph }}</p>
 				</div>
 
-				<button class="btn btn-orange btn-learn-more mt-2">{{ pageData.personalDriver.buttonText }}</button>
+
 			</div>
 
 			<div class="col-lg-6 pl-lg-4 mb-4 mb-lg-0 order-1 order-lg-2">
@@ -321,15 +318,15 @@
 		</p>
 
 		<div class="d-flex justify-content-center align-items-center mb-2 flex-wrap">
-			<button class="btn btn-cta-primary mx-2 my-2">
-				<i class="bi bi-calendar-check mr-2"></i> {{ pageData.ctaSection.buttonText }}
+			<button class="btn btn-cta-primary mx-2 my-2" routerLink="/">
+				<i class="bi bi-calendar mr-2"></i> {{ pageData.ctaSection.buttonText }}
 			</button>
-			<a [href]="'tel:' + pageData.ctaSection.phone" class="btn btn-cta-secondary mx-2 my-2">
+			<a href="tel:+18005466266" class="btn btn-cta-secondary mx-2 my-2">
 				<i class="bi bi-telephone mr-2"></i> {{ pageData.ctaSection.phone }}
 			</a>
 		</div>
 
-		<div class="row pt-4 justify-content-center">
+		<div class="row pt-5 justify-content-center">
 			<div class="col-md-3 col-sm-4 col-12 mb-4 mb-md-0 d-flex flex-column align-items-center"
 				*ngFor="let feat of pageData.ctaSection.features">
 				<div class="cta-icon-circle d-flex justify-content-center align-items-center mb-3">

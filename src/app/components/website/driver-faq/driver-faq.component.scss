@@ -1,0 +1,671 @@
+.faq-page-wrapper {
+    background-color: #fff !important;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    // Hero Section (Matching visual reference exactly)
+    .faq-hero {
+        background: radial-gradient(72.5% 192.1% at 72.5% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+        padding: 0 0 40px 0; // Matching Fleet page padding exactly
+
+
+        // Ensure max height isn't forcing content weirdly
+        min-height: auto;
+
+        .hero-badge {
+            background: #FFEDD4;
+            color: #F54900;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 500; // Adjusted from 600 to match softer look in image
+            font-size: 14px; // Adjusted from 16px
+            display: inline-flex; // Ensure icon and text align perfectly
+            align-items: center;
+            margin-bottom: 20px;
+            letter-spacing: 0.3px; // Subtler tracking
+            border: none;
+
+            i {
+                font-size: 18px; // Slightly smaller icon
+            }
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2.5rem; // Slightly larger for emphasis based on photo
+            letter-spacing: -0.5px; // Tighter kerning for modern feel
+            color: #000000;
+            margin-bottom: 12px;
+
+            @media (max-width: 768px) {
+                font-size: 2rem;
+            }
+
+            @media (max-width: 576px) {
+                font-size: 1.75rem;
+            }
+        }
+
+        p.lead {
+            color: #4A5565;
+            font-size: 1.25rem; // Scaled down from 1.6rem to match photo proportions
+            font-weight: 400;
+            max-width: 600px; // Constraint width based on photo
+            margin: 0 auto;
+            opacity: 0.9;
+            line-height: 1.5;
+
+            @media (max-width: 768px) {
+                font-size: 1.1rem;
+            }
+
+            @media (max-width: 576px) {
+                font-size: 0.95rem;
+                padding: 0 15px; // Add some side breathing room on small devices
+            }
+        }
+
+        // Search Section 
+        .search-container {
+            max-width: 650px; // Match width from photo
+            margin: 25px auto 0; // specific top margin
+            position: relative;
+
+            .search-box {
+                position: relative;
+                background: white;
+                border-radius: 50px;
+                padding: 4px 6px; // Tighter padding
+                box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                border: 1px solid #E5E7EB; // Softer standard border
+
+                i {
+                    margin-left: 15px;
+                    color: #9ca3af; // Lighter gray for icon
+                    font-size: 1.1rem;
+                    font-weight: 400 !important;
+                }
+
+                input {
+                    border: none;
+                    padding: 12px 15px; // Adjusted input padding
+                    width: 100%;
+                    border-radius: 50px;
+                    outline: none;
+                    font-size: 1rem;
+                    font-weight: 400 !important;
+                    color: #333;
+
+                    &::placeholder {
+                        color: #9ca3af;
+                    }
+                }
+
+                &:focus-within {
+                    box-shadow: 0 10px 30px rgba(247, 148, 29, 0.15);
+                    border-color: rgba(247, 148, 29, 0.3);
+                }
+            }
+
+            // Suggestions Dropdown
+            .suggestions-dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                margin-top: 8px;
+                z-index: 100;
+                overflow: hidden;
+                border: 1px solid #eee;
+
+                .suggestion-item {
+                    padding: 12px 20px;
+                    cursor: pointer;
+                    text-align: left;
+                    font-size: 1rem;
+                    color: #333;
+                    transition: background 0.2s;
+
+                    &:hover {
+                        background: #f8f9fa;
+                    }
+
+                    &:not(:last-child) {
+                        border-bottom: 1px solid #f1f1f1;
+                    }
+                }
+            }
+        }
+    }
+
+    // Search Chips
+    .search-chips {
+        gap: 8px;
+        max-width: 800px;
+        margin: 0 auto;
+
+        .search-chip {
+            background: #F3F4F6;
+            border: 1px solid #e0e0e0;
+            color: #495057;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+
+            i {
+                cursor: pointer;
+                font-size: 1.1rem;
+                line-height: 1;
+                margin-left: 6px;
+                color: #99A1AF;
+                transition: color 0.2s;
+
+                &:hover {
+                    color: #dc3545;
+                }
+            }
+        }
+    }
+
+    // Filters and Grid Section (Matching Tutorials Pattern)
+    .tutorials-grid-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    // Category Filters Bar
+    .category-filters-container {
+        width: 100% !important;
+        background: #FFFFFF !important;
+        border-bottom: 1px solid #E5E7EB !important;
+        box-shadow: 0px 1px 2px -1px #0000001A, 0px 1px 3px 0px #0000001A !important;
+        padding: 20px 0 !important;
+        margin-bottom: 0 !important;
+        position: relative;
+
+        .filter-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .filter-pill {
+            background: #F3F4F6;
+            border: none;
+            padding: 8px 20px;
+            margin: 5px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #495057;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            i {
+                font-size: 18px;
+            }
+
+            @media (max-width: 576px) {
+                padding: 6px 14px;
+                font-size: 13px;
+
+                i {
+                    font-size: 16px;
+                }
+            }
+
+            &:hover {
+                border-color: #f7941d;
+                color: #f7941d;
+            }
+
+            &.active {
+                background: #f7941d !important;
+                color: white !important;
+                border-color: #f7941d !important;
+                box-shadow: 0 4px 10px rgba(247, 148, 29, 0.25);
+            }
+        }
+    }
+
+    // FAQ Results Header Bar 
+    .tutorials-section {
+        width: 100% !important;
+        background: #FFFFFF !important;
+        padding: 25px 0 !important;
+        position: relative;
+        z-index: 10;
+
+        .section-header {
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+
+            .section-title {
+                font-size: 2rem;
+                color: #1a1a1a;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .results-count {
+                font-size: 14px;
+                color: #4A5565;
+                font-weight: 400;
+            }
+        }
+
+        .grid-section-title {
+            font-size: 24px !important;
+            font-weight: 700 !important;
+
+            @media (max-width: 991px) {
+                font-size: 22px !important;
+            }
+
+            @media (max-width: 576px) {
+                font-size: 20px !important;
+            }
+        }
+    }
+
+    // Main Content container adjustments
+    .faq-list-container {
+        max-width: 800px;
+        margin-top: 1rem;
+
+        // Accordion
+        .faq-accordion {
+            .faq-item {
+                background: #fff;
+                border-radius: 12px; // Rounded corners matching image
+                border: 1px solid #E5E7EB; // Subtle border
+                transition: all 0.3s ease;
+                overflow: hidden;
+
+                &.open {
+                    border-color: #f7941d;
+                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+
+                    .toggle-icon {
+                        transform: rotate(180deg);
+                    }
+                }
+
+                .faq-question-header {
+                    user-select: none;
+                    padding: 20px 24px !important; // Add exact paddings per image
+
+                    &:hover {
+                        background-color: #fcfcfc;
+                    }
+
+                    .icon-circle {
+                        width: 38px;
+                        height: 38px;
+                        background: #f7941d; // Always orange based on the image design
+                        color: #ffffff;
+                        border-radius: 50%; // Match exact circle design
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px; // Adjust icon size within circle
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 10px rgba(247, 148, 29, 0.25); // Add shadow as prominent in mockup
+                    }
+
+                    .faq-question-text {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: #101828; // Always dark text
+                        line-height: 1.4;
+                        transition: color 0.3s ease;
+
+                        @media (max-width: 576px) {
+                            font-size: 15px;
+                        }
+                    }
+
+                    .toggle-icon {
+                        font-size: 18px;
+                        color: #f7941d; // Always orange chevron
+                        transition: transform 0.3s ease, color 0.3s ease;
+                        // Making the chevron stroke match the thinness in image if needed, bootstrap default is typically okay
+                        -webkit-text-stroke: 0.3px #f7941d;
+                    }
+                }
+
+                .faq-answer-wrapper {
+                    max-height: 0;
+                    overflow: hidden;
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    opacity: 0;
+                    visibility: hidden;
+
+                    &.show {
+                        max-height: 800px;
+                        opacity: 1;
+                        visibility: visible;
+                    }
+
+                    .faq-answer {
+                        padding: 0 24px 24px 24px !important; // Align with header padding
+                    }
+
+                    .answer-text {
+                        font-size: 18px;
+                        line-height: 1.7;
+                        color: #4A5565;
+                        font-weight: 400;
+
+                        @media (max-width: 768px) {
+                            font-size: 16px;
+                        }
+
+                        @media (max-width: 576px) {
+                            font-size: 15px;
+                        }
+
+                        hr {
+                            border-color: #eaecf0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Empty State
+        .empty-state {
+            .empty-icon-circle {
+                width: 80px;
+                height: 80px;
+                background: #f2f4f7;
+                color: #98a2b3;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 32px;
+                margin: 0 auto;
+            }
+
+            h3 {
+                font-weight: 700;
+                color: #101828;
+            }
+
+            .btn-orange {
+                background: #F3933D;
+                color: #fff;
+                font-weight: 600;
+                border: none;
+                box-shadow: 0 4px 12px rgba(243, 147, 61, 0.2);
+
+                &:hover {
+                    background: #e67e22;
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 16px rgba(243, 147, 61, 0.3);
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+// Driver CTA Section (Dark Mode)
+.driver-cta-section {
+    background-color: #000000 !important;
+    padding: 80px 0;
+
+    .hero-badge {
+        background: #1a1a1a;
+        color: #FFFFFF;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid #333;
+
+        i {
+            font-size: 18px;
+        }
+    }
+
+    h2 {
+        font-size: 48px;
+        font-weight: 700;
+
+        @media (max-width: 768px) {
+            font-size: 30px;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 24px;
+        }
+    }
+
+    .cta-subtitle {
+        color: #F3933D;
+        font-size: 20px;
+        font-weight: 400;
+
+        @media (max-width: 768px) {
+            font-size: 18px;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 16px;
+        }
+    }
+
+    .cta-cards-row {
+        max-width: 1000px;
+    }
+
+    .cta-card {
+        background-color: #191919;
+        border-radius: 12px;
+        padding: 40px 20px;
+        height: 100%;
+        transition: transform 0.3s ease;
+
+        @media (max-width: 576px) {
+            padding: 30px 15px;
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            color: #F3933D;
+            font-size: 32px;
+            margin-bottom: 20px;
+            display: block;
+
+            @media (max-width: 576px) {
+                font-size: 28px;
+            }
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 700;
+
+            @media (max-width: 576px) {
+                font-size: 16px;
+            }
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: #F3933D;
+            font-weight: 400;
+            opacity: 0.9;
+
+            @media (max-width: 576px) {
+                font-size: 13px;
+            }
+        }
+    }
+
+    .action-buttons {
+        margin-top: 40px;
+
+        .btn {
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+
+            @media (max-width: 576px) {
+                font-size: 16px;
+                padding: 12px 24px !important;
+                margin-right: 0 !important;
+                margin-bottom: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .btn-orange {
+            background-color: #f7941d;
+            border-color: #f7941d;
+            color: white;
+
+            &:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(247, 148, 29, 0.4);
+            }
+        }
+
+        .btn-outline-light {
+            border-color: #333;
+            color: #fff;
+            background: transparent;
+
+            &:hover {
+                background: #1a1a1a;
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+// Driver FAQ Contact Section (Light Theme)
+.faq-contact-section.light-theme {
+    background-color: #ffffff !important;
+    padding: 80px 0;
+
+    .faq-contact-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #101828;
+
+        @media (max-width: 768px) {
+            font-size: 30px;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 24px;
+        }
+    }
+
+    .faq-contact-subtitle {
+        font-size: 20px;
+        font-weight: 400;
+        color: #4A5565;
+
+        @media (max-width: 768px) {
+            font-size: 18px;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 16px;
+        }
+    }
+
+    .contact-cards-row {
+        max-width: 1000px;
+    }
+
+    .faq-contact-card.light-card {
+        background-color: #ffffff;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        padding: 40px 20px;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0px 2px 4px -2px #0000001A;
+
+        @media (max-width: 576px) {
+            padding: 30px 15px;
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-color: rgba(247, 148, 29, 0.3);
+        }
+
+        i {
+            font-size: 32px;
+            margin-bottom: 20px;
+            display: block;
+
+            @media (max-width: 576px) {
+                font-size: 28px;
+            }
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #101828;
+
+            @media (max-width: 576px) {
+                font-size: 16px;
+            }
+        }
+
+        p {
+            font-size: 14px;
+            color: #4A5565 !important; // Darker gray for light theme
+            font-weight: 400;
+
+            @media (max-width: 576px) {
+                font-size: 13px;
+            }
+        }
+    }
+}

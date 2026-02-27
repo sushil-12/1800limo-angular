@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from '../../../services/admin.service';
 import { WebsiteService } from 'src/app/services/website.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { tutorialsData } from './tutorials-data';
 declare var $: any;
 
 @Component({
@@ -35,10 +37,17 @@ export class TutorialsComponent implements OnInit {
     private adminServices: AdminService,
     private spinner: NgxSpinnerService,
     private websiteService: WebsiteService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private titleService: Title,
+    private metaService: Meta
   ) { }
 
   ngOnInit(): void {
+    // Set SEO Metadata
+    this.titleService.setTitle(tutorialsData.meta.title);
+    this.metaService.updateTag({ name: 'description', content: tutorialsData.meta.description });
+    this.metaService.updateTag({ name: 'keywords', content: tutorialsData.meta.keywords });
+
     this.initTutorialData();
 
     // Simulate initial loading for skeleton demo

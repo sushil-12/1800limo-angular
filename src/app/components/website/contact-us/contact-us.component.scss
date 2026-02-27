@@ -8,10 +8,14 @@ $light-orange: #fff4ea;
 	margin: 0 !important;
 }
 
+.text-danger {
+	text-align: left;
+}
+
 /* Badge */
 .contact-hero {
-	background: radial-gradient(72.5% 192.1% at 70% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
-	padding: 40px;
+	background: radial-gradient(72.5% 192.1% at 70% 50%, rgba(249, 115, 22, 0.05) 0%, rgba(0, 0, 0, 0) 50%);
+	padding: 40px 40px 80px 40px !important;
 
 	h1 {
 		font-size: 40px;
@@ -23,6 +27,7 @@ $light-orange: #fff4ea;
 		color: #4A5565 !important;
 		font-size: 20px !important;
 		font-weight: 400 !important;
+		margin-bottom: 40px;
 	}
 }
 
@@ -41,51 +46,7 @@ $light-orange: #fff4ea;
 	}
 }
 
-/* Info Cards */
-.contact-info-card {
-	padding: 24px;
-	background-color: #fff;
-	border-radius: 12px;
-	border: 1px solid rgba(0, 0, 0, 0.03);
-	box-shadow: 0px 4px 4px 2px #0000001A;
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-	&:hover {
-		transform: translateY(-5px);
-		box-shadow: 0px 10px 15px -3px #0000001A;
-	}
-
-	.icon-box {
-		width: 60px;
-		height: 60px;
-		background-color: #F3933D;
-		border-radius: 8px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-
-		i {
-			font-size: 1.75rem;
-		}
-	}
-
-	h6 {
-		font-size: 14px !important;
-		font-weight: 700 !important;
-	}
-
-	h5 {
-		font-size: 20px !important;
-		font-weight: 700 !important;
-		color: #101828 !important;
-	}
-
-	p {
-		font-size: 14px !important;
-		font-weight: 400 !important;
-		color: #4A5565 !important;
-	}
-}
+/* Removed Old Info Cards CSS */
 
 /* Text Colors */
 .text-white {
@@ -97,15 +58,17 @@ $light-orange: #fff4ea;
 }
 
 /* Conversation Section */
-.conversation-section {
-	background-color: #fff !important;
+.intro-content {
+	text-align: left;
+	margin-bottom: 30px;
 
 	h2 {
 		color: #101828 !important;
 		font-weight: 700 !important;
 		font-size: 36px;
-		margin-bottom: 12px;
-		letter-spacing: -0.5px;
+		margin-bottom: 15px;
+		letter-spacing: -1.2px;
+		line-height: 1.1;
 	}
 
 	p.text-muted {
@@ -113,41 +76,113 @@ $light-orange: #fff4ea;
 		font-size: 18px !important;
 		font-weight: 400 !important;
 		line-height: 1.6;
+		max-width: 480px;
+		margin-bottom: 0;
 	}
+}
 
-	.image-wrapper img {
-		border-radius: 16px;
+
+.left-contact-cards-wrapper {
+	background: #fff;
+	border-radius: 24px;
+	padding: 56px 35px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+	border: 1px solid rgba(0, 0, 0, 0.02);
+
+	.left-contact-card {
+		display: grid;
+		grid-template-columns: 60px 1fr;
+		align-items: center;
+		gap: 24px;
+		margin-bottom: 48px;
+
+		&:last-child {
+			margin-bottom: 0 !important;
+		}
+
+		.card-icon-box {
+			width: 60px;
+			height: 60px;
+			background-color: #F3933D;
+			border-radius: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			font-size: 28px;
+			flex-shrink: 0;
+
+			i {
+				line-height: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+
+		.card-text-content {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: left;
+
+			h6 {
+				font-size: 14px !important;
+				letter-spacing: 0.8px;
+				font-weight: 700 !important;
+				color: #F3933D !important;
+				margin-bottom: 5px !important;
+				text-transform: uppercase;
+				line-height: 1 !important;
+			}
+
+			h5 {
+				font-size: 20px !important;
+				color: #101828 !important;
+				font-weight: 700 !important;
+				margin-bottom: 4px !important;
+				letter-spacing: -0.3px;
+				line-height: 1.1 !important;
+			}
+
+			p {
+				font-size: 14px !important;
+				color: #4A5565 !important;
+				margin-bottom: 0;
+				line-height: 1.1 !important;
+			}
+		}
 	}
 }
 
 /* Right side Form Card */
 .contact-form-card {
 	background-color: #fff;
-	border-radius: 20px;
-	border: 1px solid rgba(0, 0, 0, 0.015);
-	box-shadow: 0 4px 60px rgba(0, 0, 0, 0.04);
-	padding: 40px;
+	border-radius: 16px;
+	border: 1px solid rgba(0, 0, 0, 0.03);
+	box-shadow: 0 4px 50px rgba(0, 0, 0, 0.06);
+	padding: 40px 50px;
 
 	h4 {
 		color: #101828 !important;
-		font-weight: 700 !important;
+		font-weight: 800 !important;
 		font-size: 24px;
 		margin-bottom: 24px !important;
 		letter-spacing: -0.3px;
 	}
 
 	.privacy-text {
-		color: #4A5565 !important;
+		color: #8c98a8 !important;
 		font-size: 14px !important;
 		font-weight: 400 !important;
 	}
 
 	.custom-input {
-		background-color: #f8fafc;
+		background-color: #fafbfc;
 		background-image: none !important;
 		appearance: none;
-		border: 1px solid #f1f5f9;
-		border-radius: 10px;
+		border: 1px solid #ebf0f5;
+		border-radius: 8px;
 		padding: 14px 20px;
 		height: auto;
 		font-size: 14px;
@@ -163,9 +198,9 @@ $light-orange: #fff4ea;
 		}
 
 		&::placeholder {
-			color: #6A7282;
+			color: #8c98a8;
 			font-weight: 400 !important;
-			font-size: 16px;
+			font-size: 14px;
 		}
 	}
 
@@ -178,13 +213,12 @@ $light-orange: #fff4ea;
 		background-color: #f89622;
 		color: #fff;
 		border: none;
-		border-radius: 8px !important;
-		/* The image shows pill or highly rounded? Wait, looking closely at the image, the button IS pill-shaped! Fully rounded. */
 		border-radius: 50px !important;
 		font-weight: 600 !important;
-		font-size: 16px !important;
+		font-size: 14px !important;
+		letter-spacing: 0.5px;
 		padding: 14px;
-		box-shadow: 0 4px 14px rgba(247, 148, 29, 0.4);
+		box-shadow: 0 4px 14px rgba(247, 148, 29, 0.25);
 		transition: all 0.3s ease;
 
 		&:hover {
@@ -199,9 +233,8 @@ $light-orange: #fff4ea;
 			box-shadow: none;
 		}
 
-		svg {
-			width: 20px;
-			height: 20px;
+		i.fa-paper-plane {
+			font-size: 16px;
 		}
 	}
 
@@ -216,6 +249,7 @@ $light-orange: #fff4ea;
 .stats-section-wrapper {
 	padding-left: 9rem;
 	padding-right: 9rem;
+	padding-top: 2.5rem;
 	background-color: #fff !important;
 }
 
@@ -283,27 +317,37 @@ h6 {
 }
 
 /* Responsive Media Queries */
-@media (max-width: 1366px) {
-	.stats-section-wrapper {
-		padding-left: 3rem;
-		padding-right: 3em;
-		background-color: #fff !important;
+@media (max-width: 1200px) {
+	.contact-hero {
+		h1 {
+			font-size: 34px;
+		}
+
+		p.lead {
+			font-size: 18px !important;
+		}
+	}
+
+	.intro-content {
+		h2 {
+			font-size: 32px;
+		}
+
+		p.text-muted {
+			font-size: 16px !important;
+		}
+	}
+
+	.dark-stats-section h2 {
+		font-size: 32px !important;
 	}
 }
 
 @media (max-width: 1025px) {
-	.contact-info-card h5 {
-		font-size: 17px !important;
-	}
-
 	.stats-section-wrapper {
 		padding-left: 1rem;
 		padding-right: 1rem;
 		background-color: #fff !important;
-	}
-
-	.conversation-section h2 {
-		font-size: 34px !important;
 	}
 }
 
@@ -313,16 +357,26 @@ h6 {
 		padding-right: 1rem !important;
 	}
 
-	.conversation-section {
+	.contact-hero {
+		h1 {
+			font-size: 32px;
+		}
+	}
+
+	.intro-content {
 		h2 {
 			font-size: 28px;
 		}
+	}
+
+	.left-contact-cards-wrapper {
+		padding: 40px 25px;
 	}
 }
 
 @media (max-width: 767px) {
 	.contact-hero {
-		padding: 0px !important;
+		padding: 30px 20px 60px 20px !important;
 
 		h1 {
 			font-size: 28px !important;
@@ -330,52 +384,61 @@ h6 {
 
 		p.lead {
 			font-size: 16px !important;
+			margin-bottom: 25px;
 		}
 	}
 
-	.contact-info-card {
-		padding: 16px !important;
-	}
-
-	.contact-info-card {
-
-		h6,
-		h5 {
-			font-size: 14px !important;
-		}
-
-		p {
-			font-size: 12px !important;
-		}
-	}
-
-	.conversation-section {
+	.intro-content {
 		h2 {
-			font-size: 24px !important;
+			font-size: 26px;
+			letter-spacing: -0.8px;
 		}
 
 		p.text-muted {
-			font-size: 14px !important;
-			max-width: 100% !important;
+			font-size: 15px !important;
+		}
+	}
+
+	.left-contact-cards-wrapper {
+		padding: 30px 20px;
+
+		.left-contact-card {
+			grid-template-columns: 50px 1fr;
+			gap: 15px;
+			margin-bottom: 35px;
+
+			.card-icon-box {
+				width: 50px;
+				height: 50px;
+				font-size: 20px;
+			}
+
+			.card-text-content {
+				h5 {
+					font-size: 17px !important;
+				}
+
+				h6 {
+					font-size: 12px !important;
+				}
+
+				p {
+					font-size: 13px !important;
+				}
+			}
 		}
 	}
 
 	.contact-form-card {
-		padding: 25px 20px;
-		border-radius: 16px;
+		padding: 30px 25px;
 
 		h4 {
-			font-size: 20px !important;
+			font-size: 22px !important;
 			margin-bottom: 20px !important;
 		}
 
-		.custom-input {
-			padding: 12px 16px;
-			font-size: 13px;
-		}
-
-		::placeholder {
-			font-size: 14px !important;
+		.privacy-text {
+			font-size: 12px !important;
 		}
 	}
 
@@ -398,8 +461,16 @@ h6 {
 			}
 
 			i {
-				font-size: 24px !important;
+				font-size: 26px !important;
 			}
 		}
+	}
+}
+
+@media (max-width: 1366px) {
+	.stats-section-wrapper {
+		padding-left: 3rem;
+		padding-right: 3em;
+		background-color: #fff !important;
 	}
 }
