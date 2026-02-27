@@ -1,6 +1,6 @@
 <div class="innerpage_wrapper contact-page">
 	<!-- Hero Header -->
-	<header class="contact-hero text-center py-4">
+	<header class="contact-hero text-center">
 		<div class="container py-3">
 			<span class="contact-badge mb-3 d-inline-block">
 				<i class="bi bi-chat-left mr-2"></i> We're Here to Help
@@ -10,79 +10,56 @@
 				Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
 			</p>
 		</div>
-		<!-- Contact Info Cards -->
-		<div class="container mb-5 mt-2">
-			<div class="row pt-2 g-4 justify-content-center">
-
-				<div class="col-lg-3 col-md-6 col-6 mb-4">
-					<div class="contact-info-card text-left h-100">
-						<div class="icon-box mb-3">
-							<i class="far fa-envelope text-white"></i>
-						</div>
-						<h6 class="text-uppercase text-orange font-weight-bold mb-1">Email
-						</h6>
-						<h5 class="text-dark font-weight-bold mb-1">info&#64;1800limo.com
-						</h5>
-						<p class="mb-0">Send us an email anytime</p>
-					</div>
-				</div>
-
-				<div class="col-lg-3 col-md-6 col-6 mb-4">
-					<div class="contact-info-card text-left h-100">
-						<div class="icon-box mb-3">
-							<i class="bi bi-telephone text-white"></i>
-						</div>
-						<h6 class="text-uppercase text-orange font-weight-bold mb-1">Contact
-						</h6>
-						<h5 class="text-dark font-weight-bold mb-1">+1-800-5466-266</h5>
-						<p class="mb-0">24/7 customer support</p>
-					</div>
-				</div>
-
-				<div class="col-lg-3 col-md-6 col-6 mb-4">
-					<div class="contact-info-card text-left h-100">
-						<div class="icon-box mb-3">
-							<i class="bi bi-geo-alt text-white"></i>
-						</div>
-						<h6 class="text-uppercase text-orange font-weight-bold mb-1">
-							Location
-						</h6>
-						<h5 class="text-dark font-weight-bold mb-1">Serving Nationwide</h5>
-						<p class="mb-0">Local expertise everywhere</p>
-					</div>
-				</div>
-
-				<div class="col-lg-3 col-md-6 col-6 mb-4">
-					<div class="contact-info-card text-left h-100">
-						<div class="icon-box mb-3">
-							<i class="far fa-clock text-white"></i>
-						</div>
-						<h6 class="text-uppercase text-orange font-weight-bold mb-1">Hours
-						</h6>
-						<h5 class="text-dark font-weight-bold mb-1">24/7 Available</h5>
-						<p class="mb-0">Always ready to serve</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</header>
-
-
-
-	<!-- Conversation Section -->
-	<section class="conversation-section pt-4 pb-5">
+		<!-- Conversation Section -->
 		<div class="container">
 			<div class="row align-items-stretch">
-				<!-- Left Text & Image -->
-				<div class="col-lg-6 mb-4 mb-lg-0 pr-lg-5 d-flex flex-column">
-					<h2 class="mb-3">Let's Start a Conversation</h2>
-					<p class="text-muted mb-4 pb-2" style="max-width: 90%;">
-						Whether you need a ride today or have questions about our services, our team is ready to assist
-						you 24/7.
-					</p>
-					<div class="image-wrapper rounded shadow-sm overflow-hidden flex-grow-1" style="min-height: 400px;">
-						<img src="../../../../assets/images/SUV.jpg" alt="Luxury SUV" class="img-fluid w-100 h-100"
-							style="object-fit: cover; border-radius: 16px;">
+
+				<!-- Left Column: Contact Cards Stack -->
+				<div class="col-lg-6 mb-4 mb-lg-0 pr-lg-4 d-flex flex-column">
+					<div class="intro-content">
+						<h2>Let's Start a Conversation</h2>
+						<p class="text-muted">
+							Whether you need a ride today or have questions about our services, our team is ready to
+							assist you 24/7.
+						</p>
+					</div>
+
+					<div class="left-contact-cards-wrapper flex-grow-1">
+						<!-- Email Card -->
+						<div class="left-contact-card d-flex align-items-center">
+							<div class="card-icon-box flex-shrink-0">
+								<i class="far fa-envelope"></i>
+							</div>
+							<div class="card-text-content">
+								<h6 class="text-uppercase mb-1">EMAIL</h6>
+								<h5 class="mb-1">info&#64;1800limo.com</h5>
+								<p class="mb-0 text-muted">Send us an email anytime</p>
+							</div>
+						</div>
+
+						<!-- Mobile Card -->
+						<div class="left-contact-card d-flex align-items-center">
+							<div class="card-icon-box flex-shrink-0">
+								<i class="far fa-envelope"></i>
+							</div>
+							<div class="card-text-content">
+								<h6 class="text-uppercase mb-1">MOBILE</h6>
+								<h5 class="mb-1">+1 (800) 555-LIMO</h5>
+								<p class="mb-0 text-muted">Call us anytime</p>
+							</div>
+						</div>
+
+						<!-- Work Address Card -->
+						<div class="left-contact-card d-flex align-items-center">
+							<div class="card-icon-box flex-shrink-0">
+								<i class="far fa-envelope"></i>
+							</div>
+							<div class="card-text-content">
+								<h6 class="text-uppercase mb-1">WORK ADDRESS</h6>
+								<h5 class="mb-1">4317, Oak avenue brookfield, IL, USA</h5>
+								<p class="mb-0 text-muted">Find us here</p>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -107,7 +84,8 @@
 									placeholder="Enter Your Email" formControlName="email">
 								<div *ngIf="submitted && fGetInTouch.email.errors" class="text-danger mt-1 small">
 									<div *ngIf="fGetInTouch.email.errors.required">Email is required</div>
-									<div *ngIf="fGetInTouch.email.errors.pattern">Email must be a valid email address
+									<div *ngIf="fGetInTouch.email.errors.pattern">Email must be a valid email
+										address
 									</div>
 								</div>
 							</div>
@@ -139,15 +117,11 @@
 								</div>
 							</div>
 
-							<div class="form-group mt-4 mb-3">
+							<div class="form-group mb-4">
 								<button type="submit"
 									class="btn btn-orange btn-block d-flex align-items-center justify-content-center"
 									[disabled]="disableSubmitButton">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-send mr-2"
-										viewBox="0 0 16 16">
-										<path
-											d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
-									</svg>
+									<i class="far fa-paper-plane mr-2"></i>
 									SEND MESSAGE
 								</button>
 							</div>
@@ -160,7 +134,11 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</header>
+
+
+
+
 
 	<!-- Footer Stats Section -->
 	<div class="stats-section-wrapper">

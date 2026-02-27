@@ -1,4 +1,9 @@
 export const aboutUsData = {
+    meta: {
+        title: "About Us | 1-800-LIMO.COM",
+        description: "Three decades of excellence in luxury transportation. Discover the story, values, and people behind 1-800-LIMO.COM's commitment to delivering unparalleled comfort and reliability.",
+        keywords: "luxury transportation, limo service, corporate travel, chauffeur, 1-800-LIMO.COM, reliable ground transportation"
+    },
     hero: {
         badge: "Established Since 1994",
         title: "About Us",
@@ -25,10 +30,11 @@ export const aboutUsData = {
     ourHistory: {
         badge: "Our History",
         content: [
-            "1-800-LIMO.COM was founded over 20 years ago by Joseph Anselmo, a limo driver dedicated to enhancing customer service and expanding business opportunities. Joseph recognized the challenges travelers faced in finding reliable taxi and livery services at competitive rates, regardless of location. With a military background in wireless telephony repair from the early 1970s, he understood the transformative power of the internet.",
-            "In the late 1990s, he envisioned it as more than just a catalog of information; it was a revolutionary tool that would reshape communication and logistics. In the early 1990s, Joseph launched SKLYIMO with a single vehicle and has since expanded his network to include over 900 global affiliates. His current mission is to grow this network to more than 500,000 top-tier drivers and fleet/coach operators worldwide. Creating a driver or customer account is essential to realizing this vision. With your personal profile readily accessible, you can enjoy a seamless experience—no signatures or paperwork required at the end of your ride."
+            "1-800-LIMO.COM was founded over 20 years ago by Joseph Anselmo, a limo driver committed to improving customer service and expanding opportunities. He recognized the difficulty travelers faced in finding reliable, competitively priced taxi and livery services anywhere. With a military background in wireless telephony repair in the early 1970s, he understood the internet’s transformative potential.",
+            "In the late 1990s, he envisioned it as more than just a catalog of information; it was a revolutionary tool that would reshape communication and logistics.Joseph launched SKLYIMO in the early 1990s with one vehicle and grew it into a global network of more than 900 affiliates.",
+            "His mission is to grow that network to over 500,000 top-tier drivers and fleet/coach operators worldwide. Creating a driver or customer account makes booking seamless and paperless, with quick phone reservations in minutes. With a 24/7 help desk, support is always available for last-minute changes, delays, weather disruptions, missed flights, and cancellations. Online tools make booking and issue resolution fast and easy, ensuring the best available rates. At 1-800-LIMO.COM, With easy online booking and dependable service, 1-800-LIMO.COM ensures safe, timely transportation every step of the way."
         ],
-        image: "assets/images/abtnwhistory.jpg",
+        image: "assets/images/history-jo.png",
         yearsBadge: {
             number: "20+",
             text: "Years of Excellence"
@@ -62,11 +68,11 @@ export const aboutUsData = {
                             <img src="assets/images/skylimo.png" class="img-fluid w-100 border rounded" alt="SKYLIMO USAir">
                         </div>
                         <div class="col-md-6">
-                            <img src="assets/images/about-us-img.jpg" class="img-fluid w-100 border rounded" alt="In-Flight Plane Cabin">
+                            <img src="assets/images/black-aboutus.png" class="img-fluid w-100 border rounded" alt="In-Flight Plane Cabin">
                         </div>
                     </div>
                     <div class="text-center mt-3">
-                        <img src="assets/images/classic-antiq.jpg" class="img-fluid w-75 rounded" alt="Black & White News Bulletin">
+                        <img src="assets/images/people-aboutus.png" class="img-fluid w-75 rounded" alt="Black & White News Bulletin">
                     </div>
                 `
             },
@@ -109,7 +115,7 @@ export const aboutUsData = {
         badge: "",
         title: "Prearranged bookings and maximizing efficiencies",
         description: "This website was designed with only one criteria in mind: prearranged bookings allows us to better match great clients with great service providers, and allow drivers 1-800-LIMO.COM allows drivers and Fleet/Coach operators to sell their personal services to potential customers around the world and for all operators to work more efficiently to offer you the best value. Our goal is to deliver consistent quality service: with safe and reliable transportation in any size vehicle, to seat any number of passengers, in any city with free-market competitive rates. Secondly, as a driver/provider; I made it easy for operators to upload their personal data, every vehicle type, rate, amenity, and driver profile with pictures. We will also offer ON-DEMAND service in the near future.",
-        image: "assets/images/abtnwhistory.jpg"
+        image: "assets/images/prearranged-about.png"
     },
     advantage: {
         badge: "Why Choose Us",
@@ -177,17 +183,17 @@ export const aboutUsData = {
         badge: "USP",
         title: "Our “UNIQUE SELLING PROPOSITION” (USP)",
         content: [
-            "1-800-LIMO.COM allows drivers and Fleet/Coach operators to sell their personal services to potential customers around the world at the lowest available rates. After 30 years of livery experience and having personally driven over 1M customer miles, along with a website internet presence for over 17 years; 1-800-LIMO.COM is separate and unique from all other global networks and TNCs. We presently have over 800 global affiliates while actively recruiting more of the best drivers and equipment from around the world. Travelers can now search more easily and book quality transportation in any city, with any type of vehicle, and for any number of passengers and luggage.",
-            "My vision is to take the on-demand business model and create an environment that combines convenience with reliability, no matter the vehicle you choose or the rate you pay. It's all about consistent personalized service and trusted partnerships. 1-800-LIMO.COM is a global dispatch company and not a TNC (Technology Network Company like U/L)."
+            "1-800-LIMO.COM enables drivers and Fleet/Coach operators to offer their services worldwide at the lowest available rates. Backed by over 30 years of livery experience, more than 1 million driven miles, and 17+ years online, we are a global dispatch company not a Technology Network Company, focused on personalized, accountable service. With over 900 affiliates and growing, travelers can easily search and book quality transportation in any city, for any vehicle type or group size.",
+            "We own each reservation and take full responsibility for every booking and your safety. Affiliates provide their lowest rates to stay competitive, while drivers can add up to 20% gratuity to ensure fair earnings and well-maintained vehicles. We do not mark up rates and earn only a 25% commission, offering full pricing transparency and 24/7 account access. We prohibit illegal, uninsured, or uninspected operators and maintain one of the industry’s most extensive background check policies. Customers can rate and review drivers to uphold high standards. Our mobile app is coming soon, along with a 30% shared-ride discount and newer minivans and SUVs for added comfort and space. "
         ],
-        image: "assets/images/abtnwhistory.jpg",
+        image: "assets/images/prearranged-about.png",
         buttonText: "Learn More"
     },
     personalDriver: {
-        badge: "Our History",
-        title: "Your personal driver everywhere.”",
+        title: "“Your personal driver everywhere.”",
         content: [
-            "My vision is to take the on-demand business model and create an environment that combines convenience with reliability, no matter the vehicle you choose or the rate you pay. We are not simply a middle man. We are responsible for the reservation and our client and take full responsibility for the booking and your safety. We request all our affiliate partners to enter their lowest rates to keep their vehicles and fleets busy and operating efficiently. Our drivers automatically add up to a 20% gratuity on each booking to ensure they earn a living wage, properly maintain their vehicles, and keep the best drivers working with us and for you."
+            "Our vision is to combine on-demand convenience with true reliability,no matter the vehicle or rate. We’re not a middleman; we take full responsibility for every reservation, client, and your safety. Affiliates submit their lowest rates to keep fleets operating efficiently, and drivers may add up to 20% gratuity to ensure fair earnings and well-maintained vehicles.",
+            "We offer full transparency: the rate you see is the rate the driver sees. We do not mark up all-inclusive rates and earn only a 25% commission. Customers have 24/7 access to their accounts and reports. We prohibit illegal or uninsured operators and uninspected vehicles, and we maintain one of the industry’s most extensive background check standards, including state certification. Riders can rate and review drivers to uphold top performance. Our mobile app is coming soon, featuring a 30% shared-ride discount and newer minivans and SUVs for added comfort and luggage space."
         ],
         image: "assets/images/personal_driver.jpg",
         buttonText: "Learn More"

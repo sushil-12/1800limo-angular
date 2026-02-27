@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
@@ -15,9 +16,16 @@ export class AboutUsComponent implements OnInit {
 
     constructor(
         private adminService: AdminService,
+        private titleService: Title,
+        private metaService: Meta
     ) { }
 
     ngOnInit(): void {
+        // Set SEO Metadata
+        this.titleService.setTitle(this.pageData.meta.title);
+        this.metaService.updateTag({ name: 'description', content: this.pageData.meta.description });
+        this.metaService.updateTag({ name: 'keywords', content: this.pageData.meta.keywords });
+
         this.getAboutPageContent();
     }
 
