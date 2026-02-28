@@ -7,6 +7,7 @@ import { SuggestionsComplaintsComponent } from './components/website/suggestions
 import { TestimonialsComponent } from './components/website/testimonials/testimonials.component';
 import { ContactUsComponent } from './components/website/contact-us/contact-us.component';
 import { BlogComponent } from './components/website/blog/blog.component';
+import { BlogDetailComponent } from './components/website/blog-detail/blog-detail.component';
 import { InvestorsComponent } from './components/website/investors/investors.component';
 import { GroupTravelPlannerComponent } from './components/website/group-travel-planner/group-travel-planner.component';
 import { PageNotFoundComponent } from './components/website/includes--website/page-not-found/page-not-found.component';
@@ -120,6 +121,10 @@ const routes: Routes = [
 			{
 				path: 'blog',
 				component: BlogComponent
+			},
+			{
+				path: 'blog/:id',
+				component: BlogDetailComponent
 			},
 			{
 				path: 'contact-us',

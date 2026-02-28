@@ -1,75 +1,46 @@
-<div class="innerpage_wrapper">
-	<div class="innerpage_topbanner">
-		<h2>Insurance &amp; Licensing
-			<hr>
-		</h2>
-	</div>
-	<section class="safety_wrapper">
+<div class="innerpage_wrapper privacy-page">
+	<!-- Hero Section -->
+	<header class="privacy-hero text-center py-5">
 		<div class="container">
-			<h3>Insurance &amp; Licensing</h3>
-			<p><i>For Passenger Carriers in the U.S. and Canada</i>
-			</p>
-			<p>All charter bus operators that are 1-800-LIMO.COM affiliate will be able to provide appropriate licensing
-				and insurance information upon request. The documents can be a .PDF or fax.</p>
-			<h3>IMPORTANT:</h3>
-			<p>USA INTERSTATE operators can cross state lines; USA INTRASTATE operators cannot leave the state. Canadian
-				operators have different guidelines.</p>
-			<h3>USA Interstate Operators</h3>
-
-			<p>Passenger carrier operating authority and licensing and insurance requirements in the United States are
-				authorized by the Federal Motor Carrier Safety Administration (FMCSA). Each operator must register a
-				USDOT number and obtain a minimum of $5 million insurance. Limo, Taxi and Gig drivers are required to
-				have a minimum $300,000 policy. 1-800-LIMO.COM will offer an additional $1 Million rider policy while
-				the client is being transported by one or those drivers. The Operating Authority Guide (accessible by
-				clicking the image above) includes an overview of licensing and insurance requirements, including safety
-				results and other aspects of the FMCSA’s SAFER Company Snapshot.</p>
-			<h3>USA Intrastate Operators</h3>
-
-			<p>Intrastate operators may not require a USDOT registration. The FMCSA provides information state which
-				states are exempt from a USDOT registration.</p>
-			<h3>Canada Passenger Operators</h3>
-
-			<p>Each Canadian Province or Territory regulates licensing and insurance for each passenger carrier.
-				Depending on provincial regulations, some Canadian operators are only permitted to pick up groups to and
-				from specific areas where permits allow.</p>
-			<p>A Carrier Abstract can be requested from the operator or governing department of operator regarding the
-				safety record of that Canadian company. The below links will state each province and territories
-				transportation departments statistics.</p>
-			<h3>Province and Territory Transportation Links</h3>
-
-			<a href="http://www.transportation.alberta.ca/" target="_blank">Alberta Transportation</a>
-
-			<a href="http://www.gov.bc.ca/tran/" target="_blank">British Columbia Ministry of Transportation and
-				Infrastructure</a>
-
-			<a href="http://www.gov.mb.ca/mit/" target="_blank">Manitoba Infrastructure and Transportation</a>
-
-			<a href="http://www2.gnb.ca/content/gnb/en/departments/dti.html" target="_blank">New Brunswick
-				Transportation and Infrastructure</a>
-
-			<a href="http://www.tw.gov.nl.ca/" target="_blank">Newfoundland Department of Transportation and Works</a>
-
-			<a href="http://novascotia.ca/tran/" target="_blank">Nova Scotia Transportation and Infrastructure</a>
-
-			<a href="http://www.edt.gov.nu.ca/" target="_blank">Nunavut Department of Economic Development and
-				Transportation</a>
-
-			<a href="http://www.mto.gov.on.ca/" target="_blank">Ontario Ministry of Transportation</a>
-
-			<a href="http://www.gov.pe.ca/tir/" target="_blank">Prince Edward Island Transportation and
-				Infrastructure</a>
-
-			<a href="http://www.sgi.sk.ca/" target="_blank">Saskatchewan SGI</a>
-
-			<a href="http://www.hpw.gov.yk.ca/trans/transportservices/index.html" target="_blank">Yukon Highways and
-				Public Works</a>
-
-
-			<p>Call or click If you have any other questions regarding licensing, insurance or operating authority.</p>
-			<p>Contact 1-800-LIMO.COM at +1-800-546.266 or info&#64;1800limo.com</p>
-
+			<span class="hero-badge">
+				<i [class]="insuranceData.badge.iconClass"></i> {{ insuranceData.badge.text }}
+			</span>
+			<h1 class="font-weight-bold mb-2">{{ insuranceData.title }}</h1>
+			<p class="text-muted update-text mb-4" *ngIf="insuranceData.lastUpdated">Last Updated: {{
+				insuranceData.lastUpdated }}</p>
+			<p class="lead mx-auto description-text">{{ insuranceData.description }}</p>
 		</div>
+	</header>
 
+	<!-- Content Section -->
+	<section class="privacy-content pb-5">
+		<div class="container">
+			<div class="privacy-card">
+				<div class="privacy-section" *ngFor="let section of safeSections">
+					<div class="section-header d-flex align-items-center">
+						<div class="icon-wrapper mr-3">
+							<i [class]="section.iconClass"></i>
+						</div>
+						<h3 class="mb-0">{{ section.title }}</h3>
+					</div>
+
+					<!-- Standard Content -->
+					<div class="section-body mt-3" *ngIf="!section.isLinksSection" [innerHTML]="section.safeContent">
+					</div>
+
+					<!-- Links Section -->
+					<div class="section-body mt-3" *ngIf="section.isLinksSection">
+						<div class="links-grid">
+							<a *ngFor="let link of section.links" [href]="link.url" target="_blank"
+								class="link-card d-flex justify-content-between align-items-center mb-3">
+								<span class="link-title">{{ link.title }}</span>
+								<i class="bi bi-chevron-right arrow-icon"></i>
+							</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
 	</section>
-
 </div>

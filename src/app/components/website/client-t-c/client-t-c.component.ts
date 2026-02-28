@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title, Meta, DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-client-t-c',
@@ -7,8 +8,574 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientTCComponent implements OnInit {
 
-  constructor() { }
+  clientTCData = {
+    meta: {
+      title: 'Client Terms & Conditions | 1-800-LIMO.COM',
+      description: 'Client Terms & Conditions for 1-800-LIMO.COM',
+      keywords: 'client terms, conditions, 1800 limo'
+    },
+    badge: {
+      iconClass: 'bi bi-file-earmark-ruled',
+      text: 'Terms & Conditions'
+    },
+    title: 'Client Terms & Conditions',
+    lastUpdated: 'May 19, 2018',
+    description: 'These Client Terms & Conditions govern the access or use by you of applications, Websites, content, products, and services made available by 1-800-LIMO.COM.',
+    sections: [
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'CONTRACTUAL RELATIONSHIP',
+        content: `
+            <p>These Client Terms &amp; Conditions ("Terms") govern the access or use by you, an individual, from within
+               the United States and its territories and possessions of applications, Websites, content, products, and
+               services (the "Services") made available in the United States and globally by 1-800-LIMO.COM and its
+               subsidiaries and affiliates (collectively, "1-800-LIMO.COM"). PLEASE READ THESE TERMS CAREFULLY BEFORE
+               ACCESSING OR USING THE SERVICES. In these Terms, the words "including" and "include" mean "including, but
+               not limited to."</p>
+            <p>Your access and use of the Services constitutes your agreement to be bound by these Terms, which
+               establishes a contractual relationship between you and 1-800-LIMO.COM. If you do not agree to these
+               Terms, you may not access or use the Services. These Terms expressly supersede prior agreements or
+               arrangements with you. 1-800-LIMO.COM may immediately terminate these Terms or any Services with respect
+               to you, or generally cease offering or deny access to the Services or any portion thereof, at any time
+               for any reason.</p>
+            <p>Supplemental terms may apply to certain Services, including policies for an event, activity or promotion,
+               and such supplemental terms will be disclosed to you in connection with the applicable Service(s).
+               Supplemental terms are in addition to, and shall be deemed a part of, the Terms for the purposes of the
+               applicable Service(s). Supplemental terms shall prevail over these Terms in the event of a conflict with
+               respect to the applicable Services.</p>
+            <p>Your use of the 1-800-LIMO.COM Technology Platform (the “Platform or "Website") is governed by these
+               Terms &amp; Conditions. 1-800-LIMO.COM may amend the Terms related to the Services from time to time.
+               Amendments will be effective on 1-800-LIMO.COM's posting of such updated Terms at this location or the
+               amended policies or supplemental terms on the applicable Service(s). Your continued access or use of the
+               Services after such posting constitutes your consent to be bound by the Terms, as amended. If you do not
+               agree to these terms, please do not use this Platform.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'TRADEMARKS',
+        content: `
+            <p>"1-800-LIMO.COM" and other 1-800-LIMO.COM graphics, logos, and service names are trademarks of
+               1-800-LIMO.COM.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'COPYRIGHT',
+        content: `
+            <p>All content included on this Website, such as text, graphics, logos, button icons, images, audio clips,
+               and software, is the sole and exclusive property of 1-800-LIMO.COM or its suppliers and protected by U.S.
+               and international copyright laws. The compilation (meaning the collection, arrangement, and assembly) of
+               all content on this Website, and all software used on or accessible from this Website, are owned by
+               1-800-LIMO.COM or its software suppliers and protected by U.S. and international copyright laws. PLEASE
+               NOTE that any contributions you provide to the Website for posting or other display become the property
+               of 1-800-LIMO.COM, and you agree to assign to 1-800-LIMO.COM all your right title and interest in those
+               submissions.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'THE SERVICES',
+        content: `
+            <p>The Services constitute a Platform that enables users of 1-800-LIMO.COM's applications or Websites
+               provided as part of the Services (each, an "Application") to arrange and schedule transportation and/or
+               logistics services with third party providers of such services, including independent third-party
+               transportation providers and third-party logistics providers under agreement with 1-800-LIMO.COM or
+               certain of 1-800-LIMO.COM's affiliates ("Third Party Providers"). Unless otherwise agreed by
+               1-800-LIMO.COM in a separate written agreement with you, the Services are made available solely for your
+               personal, noncommercial use.</p>
+            <p>You acknowledge that 1-800-LIMO.COM does not provide transportation or logistics services or function as
+               a transportation carrier. It is up to the driver to decide whether to offer a ride to a rider contacted
+               through the 1-800-LIMO.COM services, and it is up to the rider to decide whether to accept a ride from
+               any driver contacted through 1-800-LIMO.COM. Any decision by a user to offer or accept services once such
+               user is matched through 1-800-LIMO.COM is a decision made in such user’s sole discretion. Each
+               transportation service provided by a driver to a rider shall constitute a separate agreement between
+               these parties.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'LICENSE',
+        content: `
+            <p>Subject to your compliance with these Terms, 1-800-LIMO.COM grants you a limited, non-exclusive,
+               non-sublicensable, revocable, non-transferrable license to: (i) access and use the Applications on your
+               personal device solely in connection with your use of the Services; and (ii) access and use any content,
+               information and related materials that may be made available through the Services, in each case solely
+               for your personal, noncommercial use. Any rights not expressly granted herein are reserved by
+               1-800-LIMO.COM and 1-800-LIMO.COM's licensors.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'RESTRICTIONS',
+        content: `
+            <p>You may not: (i) remove any copyright, trademark or other proprietary notices from any portion of the
+               Services; (ii) reproduce, modify, prepare derivative works based upon, distribute, license, lease, sell,
+               resell, transfer, publicly display, publicly perform, transmit, stream, broadcast or otherwise exploit
+               the Services except as expressly permitted by 1-800-LIMO.COM; (iii) decompile, reverse engineer or
+               disassemble the Services except as may be permitted by applicable law; (iv) link to, mirror or frame any
+               portion of the Services; (v) cause or launch any programs or scripts for the purpose of scraping,
+               indexing, surveying, or otherwise data mining any portion of the Services or unduly burdening or
+               hindering the operation and/or functionality of any aspect of the Services; or (vi) attempt to gain
+               unauthorized access to or impair any aspect of the Services or its related systems or networks.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'THIRD PARTY SERVICES AND CONTENT',
+        content: `
+            <p>The Services may be made available or accessed in connection with third party services and content
+               (including advertising) that 1-800-LIMO.COM does not control. You acknowledge that different terms of use
+               and privacy policies may apply to your use of such third-party services and content. 1-800-LIMO.COM does
+               not endorse such third-party services and content and in no event shall 1-800-LIMO.COM be responsible or
+               liable for any products or services of such third-party providers. Additionally, Apple Inc., Google,
+               Inc., Microsoft Corporation or BlackBerry Limited will be a third-party beneficiary to this contract if
+               you access the Services using Applications developed for Apple iOS, Android, Microsoft Windows, or
+               Blackberry-powered mobile devices, respectively. These third-party beneficiaries are not parties to this
+               contract and are not responsible for the provision or support of the Services in any manner. Your access
+               to the Services using these devices is subject to terms set forth in the applicable third-party
+               beneficiary's terms of service.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'OWNERSHIP',
+        content: `
+            <p>The Services and all rights therein are and shall remain 1-800-LIMO.COM's property or the property of
+               1-800-LIMO.COM's licensors. Neither these Terms nor your use of the Services convey or grant to you any
+               rights: (i) in or related to the Services except for the limited license granted above; or (ii) to use or
+               reference in any manner 1-800-LIMO.COM's company names, logos, product and service names, trademarks or
+               services marks or those of 1-800-LIMO.COM's licensors.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'USER ACCOUNTS',
+        content: `
+            <p>To use most aspects of the Services, you must register for and maintain an active personal user Services
+               account ("Account"). 1-800-LIMO.COM requires all Users under the age of 18 to obtain parent, or guardian,
+               authorization to create an Account and to use 1-800-LIMO.COM Services. Account registration requires you
+               to submit to 1-800-LIMO.COM certain personal information, such as your name, address, mobile phone number
+               and age, as well as at least one valid payment method (either a credit card or accepted payment partner).
+               You agree to maintain accurate, complete, and up-to-date information in your Account. Your failure to
+               maintain accurate, complete, and up-to-date Account information, including having an invalid or expired
+               payment method on file, may result in your inability to access and use the Services or 1-800-LIMO.COM's
+               termination of this Agreement with you. You are responsible for all activity that occurs under your
+               Account, and you agree to maintain the security and secrecy of your Account username and password always.
+               Unless otherwise permitted by 1-800-LIMO.COM in writing, you may only possess one Account.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'USER REQUIREMENTS AND CONDUCT',
+        content: `
+            <p>You may not assign or otherwise transfer your Account to any other person or entity. You agree to comply
+               with all applicable laws when using the Services, and you may only use the Services for lawful purposes
+               (e.g., no transport of unlawful or hazardous materials). You will not in your use of the Services cause
+               nuisance, annoyance, inconvenience, or property damage, whether to the Third-Party Provider or any other
+               party. In certain instances, you may be asked to provide proof of identity to access or use the Services,
+               and you agree that you may be denied access to or use of the Services if you refuse to provide proof of
+               identity.</p>
+            <p>In addition to the actions stated in the prior section, with respect to your use of your Account and your
+               participation in the 1-800-LIMO.COM Services, you agree that you will not (the list of activities is not
+               exclusive):</p>
+            <ol>
+               <li>stalk, threaten, or otherwise harass any person, or carry any weapons;</li>
+               <li>violate any law, statute, ordinance or regulation;</li>
+               <li>interfere with or disrupt the Services or the 1-800-LIMO.COM Platform or the servers or networks
+                  connected to 1-800-LIMO.COM services;</li>
+               <li>forge headers or otherwise manipulate identifiers to disguise the origin of any information
+                  transmitted through 1-800-LIMO.COM;</li>
+               <li>“frame” or “mirror” any part of 1-800-LIMO.COM, without our prior written authorization or use meta
+                  tags or code or other devices containing any reference to us to direct any person to any other web
+                  Website for any purpose;</li>
+               <li>rent, lease, lend, sell, redistribute, license or sublicense the 1-800-LIMO.COM Platform or access to
+                  any portion of the 1-800-LIMO.COM Platform;</li>
+               <li>create liability for us or cause us to become subject to regulation as a transportation carrier or
+                  provider of taxi service; or</li>
+               <li>cause any third party to engage in the restricted activities above.</li>
+            </ol>
+            <p>We reserve the right, but we have no obligation, to suspend or deactivate your Account if you do not
+               comply with these prohibitions.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'PROMOTIONAL CODES',
+        content: `
+            <p>1-800-LIMO.COM may, in 1-800-LIMO.COM's sole discretion, create promotional codes that may be redeemed
+               for Account credit, or other features or benefits related to the Services and/or a Third-Party Provider's
+               services, subject to any additional terms that 1-800-LIMO.COM establishes on a per promotional code basis
+               ("Promo Codes"). You agree that Promo Codes: (i) must be used for the intended audience and purpose, and
+               in a lawful manner; (ii) may not be duplicated, sold or transferred in any manner, or made available to
+               the general public (whether posted to a public form or otherwise), unless expressly permitted by
+               1-800-LIMO.COM; (iii) may be disabled by 1-800-LIMO.COM at any time for any reason without liability to
+               1-800-LIMO.COM; (iv) may only be used pursuant to the specific terms that 1-800-LIMO.COM establishes for
+               such Promo Code; (v) are not valid for cash; and (vi) may expire prior to your use. 1-800-LIMO.COM
+               reserves the right to withhold or deduct credits or other features or benefits obtained using Promo Codes
+               by you or any other user if 1-800-LIMO.COM determines or believes that the use or redemption of the Promo
+               Code was in error, fraudulent, illegal, or in violation of the applicable Promo Code terms or these
+               Terms.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'USER PROVIDED CONTENT',
+        content: `
+            <p>1-800-LIMO.COM may, in 1-800-LIMO.COM's sole discretion, permit you from time to time to submit, upload,
+               publish or otherwise make available to 1-800-LIMO.COM through the Services textual, audio, and/or visual
+               content and information, including commentary and feedback related to the Services, initiation of support
+               requests, and submission of entries for competitions and promotions ("User Content"). Any User Content
+               provided by you remains your property. However, by providing User Content to 1-800-LIMO.COM, you grant
+               1-800-LIMO.COM a worldwide, perpetual, irrevocable, transferrable, royalty-free license, with the right
+               to sublicense, to use, copy, modify, create derivative works of, distribute, publicly display, publicly
+               perform, and otherwise exploit in any manner such User Content in all formats and distribution channels
+               now known or hereafter devised (including in connection with the Services and 1-800-LIMO.COM's business
+               and on third-party Websites and services), without further notice to or consent from you, and without the
+               requirement of payment to you or any other person or entity.</p>
+            <p>You represent and warrant that: (i) you either are the sole and exclusive owner of all User Content or
+               you have all rights, licenses, consents and releases necessary to grant 1-800-LIMO.COM the license to the
+               User Content as set forth above; and (ii) neither the User Content nor your submission, uploading,
+               publishing or otherwise making available of such User Content nor 1-800-LIMO.COM's use of the User
+               Content as permitted herein will infringe, misappropriate or violate a third party's intellectual
+               property or proprietary rights, or rights of publicity or privacy, or result in the violation of any
+               applicable law or regulation.</p>
+            <p>You agree to not provide User Content that is defamatory, libelous, hateful, violent, obscene,
+               pornographic, unlawful, or otherwise offensive, as determined by 1-800-LIMO.COM in its sole discretion,
+               whether such material may be protected by law. 1-800-LIMO.COM may, but shall not be obligated to, review,
+               monitor, or remove User Content, at 1-800-LIMO.COM's sole discretion and at any time and for any reason,
+               without notice to you.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'PAYMENT',
+        content: `
+            <p>You understand that use of the Services may result in monetary charges to you for the services or goods
+               you receive from a Third-Party Provider ("Charges"). After you have received services or goods obtained
+               through your use of the Service, 1-800-LIMO.COM will facilitate your payment of the applicable Charges on
+               behalf of the Third-Party Provider, as such Third-Party Provider's limited payment collection agent.
+               Payment of the Charges in such manner shall be considered the same as payment made directly by you to the
+               Third-Party Provider. Charges will be inclusive of applicable taxes where required by law. Charges paid
+               by you are final and non-refundable, unless otherwise determined by 1-800-LIMO.COM.</p>
+            <p>All Charges are due immediately and payment will be facilitated by 1-800-LIMO.COM using the preferred
+               payment method designated in your Account, after which 1-800-LIMO.COM will send you a receipt by text,
+               email, or in the user account. If your primary Account payment method is determined to be expired,
+               invalid or otherwise not able to be charged, you agree that 1-800-LIMO.COM may, as the Third-Party
+               Provider's limited payment collection agent, use a secondary payment method in your Account, if
+               available.</p>
+            <p>As between you and 1-800-LIMO.COM, 1-800-LIMO.COM reserves the right to establish, remove and/or revise
+               Charges for any or all services or goods obtained using the Services at any time in 1-800-LIMO.COM's sole
+               discretion. Further, you acknowledge you will be responsible for Charges incurred under your Account
+               regardless of your awareness of such Charges or the amounts thereof. 1-800-LIMO.COM may from time to time
+               provide certain users with promotional offers and discounts that may result in different amounts charged
+               for the same or similar services or goods obtained through the use of the Services, and you agree that
+               such promotional offers and discounts, unless also made available to you, shall have no bearing on your
+               use of the Services or the Charges applied to you. You may elect to cancel your request for services or
+               goods from a Third-Party Provider at any time prior to such Third-Party Provider's arrival, in which case
+               you may be charged a cancellation fee.</p>
+            <p>This payment structure is intended to fully compensate the Third-Party Provider for the services or goods
+               provided. 1-800-LIMO.COM does not designate any portion of your payment as a tip or gratuity to the
+               Third-Party Provider. Any representation by 1-800-LIMO.COM (on 1-800-LIMO.COM's Website, in the
+               Application, or in 1-800-LIMO.COM's marketing materials) to the effect that tipping is "voluntary," "not
+               required," and/or "included" in the payments you make for services or goods provided is not intended to
+               suggest that 1-800-LIMO.COM provides any additional amounts, beyond those described above, to the
+               Third-Party Provider. You understand and agree that, while you are free to provide additional payment as
+               a gratuity to any Third-Party Provider who provides you with services or goods obtained through the
+               Service, you are under no obligation to do so. Gratuities are voluntary. After you have received services
+               or goods obtained through the Service, you will have the opportunity to rate your experience and leave
+               additional feedback about your Third-Party Provider.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'DISCLAIMER',
+        content: `
+            <p>THIS WEBSITE IS PROVIDED TO YOU BY 1-800-LIMO.COM ON AN "AS IS" BASIS. 1-800-LIMO.COM MAKES NO
+               REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE WEBSITE OR THE
+               INFORMATION, CONTENT, MATERIALS, OR SERVICES INCLUDED ON THIS WEBSITE. 1-800-LIMO.COM DISCLAIMS ALL
+               WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND
+               FITNESS FOR A PARTICULAR PURPOSE.</p>
+            <p>YOU UNDERSTAND AND EXPRESSLY AGREE THAT USE OF THE WEBSITE IS AT YOUR SOLE RISK, THAT ANY MATERIAL AND/OR
+               DATA DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE WEBSITE IS AT YOUR OWN DISCRETION AND RISK
+               AND THAT YOU WILL BE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR LOSS OF DATA THAT
+               RESULTS FROM THE DOWNLOAD OF SUCH MATERIAL AND/OR DATA.</p>
+            <p>1-800-LIMO.COM WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR
+               PUNITIVE DAMAGES OF ANY KIND RESULTING FROM THE USE OF OR THE INABILITY TO USE THE WEBSITE RESULTING FROM
+               ANY GOODS OR SERVICES PURCHASED OR OBTAINED OR MESSAGES RECEIVED OR TRANSACTIONS ENTERED INTO THROUGH THE
+               WEBSITE, RESULTING FROM LOSS OF, UNAUTHORIZED ACCESS TO OR ALTERATION OF A USER'S TRANSMISSIONS OR DATA
+               OR FOR THE COST OF PROCUREMENT OF SUBSTITUTE GOODS AND SERVICES, INCLUDING BUT NOT LIMITED TO DAMAGES FOR
+               LOSS OF PROFITS, USE, DATA OR OTHER INTANGIBLES, EVEN IF 1-800-LIMO.COM HAD BEEN ADVISED OF THE
+               POSSIBILITY OF SUCH DAMAGES.</p>
+            <p>THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE." 1-800-LIMO.COM DISCLAIMS ALL REPRESENTATIONS AND
+               WARRANTIES, EXPRESS, IMPLIED, OR STATUTORY, NOT EXPRESSLY SET OUT IN THESE TERMS, INCLUDING THE IMPLIED
+               WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN ADDITION,
+               1-800-LIMO.COM MAKES NO REPRESENTATION, WARRANTY, OR GUARANTEE REGARDING THE RELIABILITY, TIMELINESS,
+               QUALITY, SUITABILITY, OR AVAILABILITY OF THE SERVICES OR ANY SERVICES OR GOODS REQUESTED THROUGH THE USE
+               OF THE SERVICES, OR THAT THE SERVICES WILL BE UNINTERRUPTED OR ERROR-FREE. 1-800-LIMO.COM DOES NOT
+               GUARANTEE THE QUALITY, SUITABILITY, SAFETY OR ABILITY OF THIRD PARTY PROVIDERS. YOU AGREE THAT THE ENTIRE
+               RISK ARISING OUT OF YOUR USE OF THE SERVICES, AND ANY SERVICE OR GOOD REQUESTED IN CONNECTION THEREWITH,
+               REMAINS SOLELY WITH YOU, TO THE MAXIMUM EXTENT PERMITTED UNDER APPLICABLE LAW.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'LIMITATION OF LIABILITY',
+        content: `
+            <p>1-800-LIMO.COM SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR
+               CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, LOST DATA, PERSONAL INJURY, OR PROPERTY DAMAGE RELATED TO,
+               IN CONNECTION WITH, OR OTHERWISE RESULTING FROM ANY USE OF THE SERVICES, EVEN IF 1-800-LIMO.COM HAS BEEN
+               ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 1-800-LIMO.COM SHALL NOT BE LIABLE FOR ANY DAMAGES, LIABILITY
+               OR LOSSES ARISING OUT OF: (i) YOUR USE OF OR RELIANCE ON THE SERVICES OR YOUR INABILITY TO ACCESS OR USE
+               THE SERVICES; OR (ii) ANY TRANSACTION OR RELATIONSHIP BETWEEN YOU AND ANY THIRD-PARTY PROVIDER, EVEN IF
+               1-800-LIMO.COM HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 1-800-LIMO.COM SHALL NOT BE LIABLE
+               FOR DELAY OR FAILURE IN PERFORMANCE RESULTING FROM CAUSES BEYOND 1-800-LIMO.COM'S REASONABLE CONTROL. YOU
+               ACKNOWLEDGE THAT THIRD PARTY TRANSPORTATION PROVIDERS PROVIDING TRANSPORTATION SERVICES REQUESTED THROUGH
+               SOME REQUEST BRANDS MAY OFFER RIDESHARING OR PEER-TO-PEER TRANSPORTATION SERVICES AND MAY NOT BE
+               PROFESSIONALLY LICENSED OR PERMITTED. IN NO EVENT SHALL 1-800-LIMO.COM'S TOTAL LIABILITY TO YOU IN
+               CONNECTION WITH THE SERVICES FOR ALL DAMAGES, LOSSES AND CAUSES OF ACTION EXCEED FIVE HUNDRED U.S.
+               DOLLARS (US $500).</p>
+            <p>1-800-LIMO.COM'S SERVICES MAY BE USED BY YOU TO REQUEST AND SCHEDULE TRANSPORTATION, GOODS, OR LOGISTICS
+               SERVICES WITH THIRD PARTY PROVIDERS, BUT YOU AGREE THAT 1-800-LIMO.COM HAS NO RESPONSIBILITY OR LIABILITY
+               TO YOU RELATED TO ANY TRANSPORTATION, GOODS OR LOGISTICS SERVICES PROVIDED TO YOU BY THIRD PARTY
+               PROVIDERS OTHER THAN AS EXPRESSLY SET FORTH IN THESE TERMS. THE LIMITATIONS AND DISCLAIMER IN THIS
+               SECTION 5 DO NOT PURPORT TO LIMIT LIABILITY OR ALTER YOUR RIGHTS AS A CONSUMER THAT CANNOT BE EXCLUDED
+               UNDER APPLICABLE LAW.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'INDEMNITY',
+        content: `
+            <p>You agree to indemnify and hold 1-800-LIMO.COM and its officers, directors, employees, and agents
+               harmless from any and all claims, demands, losses, liabilities, and expenses (including attorneys' fees),
+               arising out of or in connection with: (i) your use of the Services or services or goods obtained through
+               your use of the Services; (ii) your breach or violation of any of these Terms; (iii) 1-800-LIMO.COM's use
+               of your User Content; or (iv) your violation of the rights of any third party, including Third Party
+               Providers.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'RELEASE',
+        content: `
+            <p>In the event that you have a dispute with one or more Users, you agree to release 1-800-LIMO.COM
+               (including our affiliates and each of our respective officers, directors, employees, agents, and
+               suppliers) from claims, demands and damages of every kind and nature, known and unknown, suspected and
+               unsuspected, disclosed and undisclosed, arising out of or in any way connected to such disputes with
+               other Users or to your use of the 1-800-LIMO.COM Platform or participation in the Services. Furthermore,
+               you expressly waive any rights you may have under California Civil Code Section 1542 (or analogous laws
+               of other states), which says: “A general release does not extend to claims which the creditor does not
+               know or suspect to exist in his favor at the time of executing the release, which, if known by him must
+               have materially affected his settlement with the debtor.” We reserve the right, but have no obligation,
+               to monitor disputes between you and other Users.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'APPLICABLE LAW AND STATE AND LOCAL DISCLOSURES',
+        content: `
+            <p>This Website is created and controlled by 1-800-LIMO.COM in the State of Illinois USA. The laws of the
+               State of Illinois govern these disclaimers, terms, and conditions, without giving effect to any
+               principles of conflicts of laws. We reserve the right to make changes to our Website and these
+               disclaimers, terms, and conditions at any time While operating on the digital network or software
+               application of the commercial transportation services provider, your private passenger automobile
+               insurance policy might not afford liability, underinsured motorist, personal injury protection,
+               comprehensive, or collision coverage, depending on the terms of the policy. If the vehicle that you plan
+               to use to provide commercial transportation services for 1-800-LIMO.COM has a lien against it, you must
+               notify the lienholder that you will be using the vehicle for commercial transportation services that may
+               violate the terms of your contract with the lienholder.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'ARBITRATION',
+        content: `
+            <p>You and We agree that any legal disputes or claims arising out of or related to the Agreement (including
+               but not limited to the use of 1-800-LIMO.COM and/or the Services, or the interpretation, enforceability,
+               revocability, or validity of the Agreement, or the arbitrability of any dispute), that cannot be resolved
+               informally shall be submitted to binding arbitration in the state in which the Agreement was performed.
+               The arbitration shall be conducted by the American Arbitration Association under its Commercial
+               Arbitration Rules, or as otherwise mutually agreed by you and us. Any judgment on the award rendered by
+               the arbitrator may be entered in any court having jurisdiction thereof. Claims shall be brought within
+               the time required by applicable law. You and we agree that any claim, action or proceeding arising out of
+               or related to the Agreement must be brought in your individual capacity, and not as a plaintiff or class
+               member in any purported class, collective, or representative proceeding. The arbitrator may not
+               consolidate more than one person's claims and may not otherwise preside over any form of a
+               representative, collective, or class proceeding.</p>
+            <p>YOU ACKNOWLEDGE AND AGREE THAT YOU AND 1-800-LIMO.COM ARE EACH WAIVING THE RIGHT TO A TRIAL BY JURY OR TO
+               PARTICIPATE AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS ACTION OR REPRESENTATIVE PROCEEDING.
+            </p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'CHANGES',
+        content: `
+            <p>Notwithstanding the provisions of the modification-related provisions above, if 1-800-LIMO.COM changes
+               this "Dispute Resolution" section after the date you first accepted these Terms (or accepted any
+               subsequent changes to these Terms), you may reject any such change by providing 1-800-LIMO.COM written
+               notice of such rejection by mail or hand delivery to: 1-800-LIMO.COM, 4217 S Oak, Brookfield, IL 60513,,
+               or by email from the email address associated with your Account to: info&#64;1-800-LIMO.COM.com, within 30
+               days of the date such change became effective, as indicated in the "Last update" date above. To be
+               effective, the notice must include your full name and clearly indicate your intent to reject changes to
+               this "Dispute Resolution" section. By rejecting changes, you are agreeing that you will arbitrate any
+               Dispute between you and 1-800-LIMO.COM in accordance with the provisions of this "Dispute Resolution"
+               section as of the date you first accepted these Terms (or accepted any subsequent changes to these
+               Terms).</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'PROPRIETARY RIGHTS AND TRADEMARK LICENSE',
+        content: `
+            <p>All intellectual property rights of 1-800-LIMO.COM shall be owned by us absolutely and in their entirety.
+               These rights include and are not limited to database rights, copyright, design rights (whether registered
+               or unregistered), trademarks (whether registered or unregistered) and other similar rights wherever
+               existing in the world together with the right to apply for protection of the same. All other trademarks,
+               logos, service marks, company or product names set forth by 1-800-LIMO.COM are the property of their
+               respective owners. You acknowledge and agree that any questions, comments, suggestions, ideas, feedback
+               or other information (“Submissions”) provided by you to us are non-confidential and shall become the sole
+               property of 1-800-LIMO.COM. 1-800-LIMO.COM shall own exclusive rights, including all intellectual
+               property rights, and shall be entitled to the unrestricted use and dissemination of these Submissions for
+               any purpose, commercial or otherwise, without acknowledgment or compensation to you.</p>
+            <p>1-800-LIMO.COM, and other 1-800-LIMO.COM logos, designs, graphics, icons, scripts and service names are
+               registered trademarks, trademarks or trade dress of 1-800-LIMO.COM in the United States and/or other
+               countries (collectively, the “1-800-LIMO.COM Marks”). If you provide Services as a Driver, 1-800-LIMO.COM
+               grants to you, during the term of this Agreement, and subject to your compliance with the terms and
+               conditions of this Agreement, a limited, revocable, non-exclusive license to display and use the
+               1-800-LIMO.COM Marks solely in connection with providing the Services through the 1-800-LIMO.COM Platform
+               (“License”). The License is non-transferable and non-assignable, and you shall not grant to any third
+               party any right, permission, license or sublicense with respect to any of the rights granted hereunder
+               without 1-800-LIMO.COM’s prior written permission, which it may withhold in its sole discretion. The
+               1-800-LIMO.COM Marks may not be used in any manner that is likely to cause confusion.</p>
+            <p>You acknowledge that 1-800-LIMO.COM is the owner and licensor of the 1-800-LIMO.COM Marks, and that your
+               use of the 1-800-LIMO.COM Marks will confer no additional interest in or ownership of the 1-800-LIMO.COM
+               Marks in you but rather used on your behalf to the benefit of 1-800-LIMO.COM. You agree to use the
+               1-800-LIMO.COM Marks strictly in accordance with 1-800-LIMO.COM’s Trademark Usage Guidelines, as may be
+               provided to you and revised from time to time, and to immediately cease any use that 1-800-LIMO.COM
+               determines to nonconforming or otherwise unacceptable.</p>
+            <p>You agree that you will not:</p>
+            <ol>
+               <li>create any materials that incorporate the 1-800-LIMO.COM Marks or any derivatives of the
+                  1-800-LIMO.COM Marks other than as expressly approved by 1-800-LIMO.COM in writing;</li>
+               <li>use the 1-800-LIMO.COM Marks in any way that tends to impair their validity as proprietary
+                  trademarks, service marks, trade names or trade dress, or use the 1-800-LIMO.COM Marks other than in
+                  accordance with the terms, conditions and restrictions herein;</li>
+               <li>take any other action that would jeopardize or impair 1-800-LIMO.COM’s rights as owner of the
+                  1-800-LIMO.COM Marks or the legality and/or enforceability of the 1-800-LIMO.COM Marks, including,
+                  without limitation, challenging or opposing 1-800-LIMO.COM’s ownership in the 1-800-LIMO.COM Marks;
+               </li>
+               <li>apply for trademark registration or renewal of trademark registration of any of the 1-800-LIMO.COM
+                  Marks, any derivative of the 1-800-LIMO.COM Marks, any combination of the 1-800-LIMO.COM Marks and any
+                  other name, or any trademark, service mark, trade name, symbol or word which is like the
+                  1-800-LIMO.COM Marks; or</li>
+               <li>“frame” or “mirror” any part of 1-800-LIMO.COM, without our prior written authorization or use meta
+                  tags or code or other devices containing any reference to us to direct any person to any other web
+                  Website for any purpose;</li>
+               <li>use the 1-800-LIMO.COM Marks on or in connection with any product, service or activity that is in
+                  violation of any law, statute, government regulation or standard.</li>
+            </ol>
+            <p>Violation of any provision of this License may result in immediate termination of the License, in
+               1-800-LIMO.COM’s sole discretion. If you create any materials bearing the 1-800-LIMO.COM Marks (in
+               violation of this Agreement or otherwise), you agree that upon their creation 1-800-LIMO.COM exclusively
+               owns all right, title and interest in and to such materials, including without limitation any
+               modifications to the 1-800-LIMO.COM Marks or derivative works based on the 1-800-LIMO.COM Marks. You
+               further agree to assign any interest or right you may have in such materials to 1-800-LIMO.COM, and to
+               provide information and execute any documents as reasonably requested by 1-800-LIMO.COM to enable
+               1-800-LIMO.COM to formalize such assignment.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'PRIVACY',
+        content: `
+            <p>You are responsible for maintaining the confidentiality of your account number and/or password. You are
+               responsible for all uses of your account, whether or expressly authorized by you. You may access
+               1-800-LIMO.COM's Privacy Policy by clicking here.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'OTHER TERMS',
+        content: `
+            <p>We may modify or discontinue our services or your account with us, with or without notice, without
+               liability to you, any other user or any third party. We reserve the right to terminate your use of this
+               Website if we learn that you have provided us with false or misleading registration information,
+               interfered with other users or the administration of 1-800-LIMO.COM's services, or violated these Terms
+               and Conditions.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'NOTICE',
+        content: `
+            <p>1-800-LIMO.COM may give notice by means of a general notice on the Services, electronic mail to your
+               email address in your Account, or by written communication sent by first class mail or pre-paid post to
+               your address in your Account. Such notice shall be deemed to have been given upon the Expiry of 48
+               hours after mailing or posting (if sent by first class mail or pre-paid post) or 12 hours after sending
+               (if sent by email). You may give notice to 1-800-LIMO.COM, with such notice deemed given when received by
+               1-800-LIMO.COM, at any time by first class mail or pre-paid post to 1-800-LIMO.COM, 4217 S. Oak,
+               Brookfield, IL 60513.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'COMPLETE AGREEMENT',
+        content: `
+            <p>These Terms of Service constitute the entire agreement between the parties with respect to the subject
+               matter hereof and supersedes and replaces all prior or contemporaneous understandings or agreements,
+               written or oral, regarding such subject matter. Any waiver of any provision of the Terms &amp; Conditions
+               will be effective only if in writing and signed by 1-800-LIMO.COM.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'YOUR AGREEMENT',
+        content: `
+            <p>Your use of this Website is subject to these terms of use. If you do not agree to these terms of use,
+               please leave this Website.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'GENERAL',
+        content: `
+            <p>You may not assign these Terms without 1-800-LIMO.COM's prior written approval. 1-800-LIMO.COM may assign
+               these Terms without your consent to: (i) a subsidiary or affiliate; (ii) an acquirer of 1-800-LIMO.COM 's
+               equity, business or assets; or (iii) a successor by merger. Any purported assignment in violation of this
+               section shall be void. No joint venture, partnership, employment, or agency relationship exists between
+               you, 1-800-LIMO.COM or any Third-Party Provider because of this Agreement or use of the Services. If any
+               provision of these Terms is held to be invalid or unenforceable, such provision shall be struck and the
+               remaining provisions shall be enforced fully under law. 1-800-LIMO.COM's failure to enforce any right or
+               provision in these Terms shall not constitute a waiver of such right or provision unless acknowledged and
+               agreed to by 1-800-LIMO.COM in writing.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'CONTACTING 1-800-LIMO.COM',
+        content: `
+            <p>If you have any questions regarding this Privacy Policy or the practices of
+               this Website, please contact us by sending an email to info&#64;1800limo.com.</p>
+        `
+      }
+    ]
+  };
+
+  safeSections: any[] = [];
+
+  constructor(private titleService: Title, private metaService: Meta, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle(this.clientTCData.meta.title);
+    this.metaService.updateTag({ name: 'description', content: this.clientTCData.meta.description });
+    this.metaService.updateTag({ name: 'keywords', content: this.clientTCData.meta.keywords });
+
+    // Sanitize the HTML content
+    this.safeSections = this.clientTCData.sections.map(section => ({
+      ...section,
+      safeContent: this.sanitizer.bypassSecurityTrustHtml(section.content)
+    }));
   }
 }
