@@ -1,0 +1,182 @@
+<div class="blog-detail-page bg-white pb-5" *ngIf="post">
+    <!-- Header Section -->
+    <header class="detail-hero pt-5 pb-4 bg-white">
+        <div class="container max-w-content">
+            <a routerLink="/blog"
+                class="back-link mb-4 d-inline-block text-decoration-none text-warning font-weight-bold">
+                <i class="bi bi-arrow-left mr-1"></i> Back to Blog
+            </a>
+
+            <div class="mb-4">
+                <span class="category-badge">{{post.category}}</span>
+            </div>
+
+            <h1 class="article-title font-weight-bold mb-4">{{post.title}}</h1>
+
+            <p class="article-subtitle text-muted mb-5">
+                <!-- Using excerpt as subtitle to match design -->
+                {{getExcerpt(post.content)}}
+            </p>
+
+            <div class="author-meta-row d-flex flex-wrap align-items-center mb-4">
+                <div class="author-info d-flex align-items-center mr-auto mb-2 mb-md-0">
+                    <div class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold shadow-sm"
+                        *ngIf="post.author.initials">
+                        {{post.author.initials}}
+                    </div>
+                    <img *ngIf="post.author.image" [src]="post.author.image" [alt]="post.author.name"
+                        class="author-avatar-img mr-3 shadow-sm"
+                        onerror="this.src='assets/images/user.png'; this.onerror=null;">
+
+                    <div class="d-flex flex-column justify-content-center">
+                        <div class="author-name text-dark font-weight-bold mb-1" style="line-height: 1;">
+                            {{post.author.name}}</div>
+                        <div class="text-muted small">1-800-LIMO.COM Contributor</div>
+                    </div>
+                </div>
+
+                <div class="meta-right d-flex align-items-center text-muted small">
+                    <span class="mr-3"><i class="bi bi-calendar3 mr-1 text-muted"></i> {{post.date}}</span>
+                    <span class="mr-3"><i class="bi bi-clock mr-1 text-muted"></i> {{post.readTime}}</span>
+
+                    <div class="engagement-stats d-flex align-items-center mx-3 pl-3 border-left">
+                        <span class="mr-3 d-flex align-items-center"><i class="bi bi-heart mr-2 text-muted"></i>
+                            {{post.likes}}</span>
+                        <span class="d-flex align-items-center"><i class="bi bi-chat-dots mr-2 text-muted"></i>
+                            {{post.commentsCount}}</span>
+                    </div>
+
+                    <div class="share-actions d-flex gap-3 ml-3 pl-3 border-left">
+                        <a href="javascript:void(0)" class="text-muted share-icon"><i class="bi bi-link-45deg"></i></a>
+                        <a href="javascript:void(0)" class="text-muted share-icon"><i class="bi bi-share"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-5">
+
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="article-body bg-white">
+        <div class="container max-w-content">
+
+            <div class="featured-image-wrapper mb-5">
+                <img [src]="post.image" [alt]="post.title" class="featured-img rounded w-100"
+                    onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+            </div>
+
+            <!-- The actual blog content securely rendered -->
+            <div class="content-text" [innerHTML]="safeContent"></div>
+
+            <!-- Tags Section -->
+            <div class="tags-section mt-5 py-4 d-flex align-items-center flex-wrap">
+                <span class="text-muted mr-3 mb-2 small font-weight-bold">Tags:</span>
+                <span class="tag-pill mb-2 mr-2" *ngFor="let tag of post.tags">{{tag}}</span>
+            </div>
+
+            <!-- Share Bottom Section -->
+            <div class="share-bottom text-center mb-5 p-4 rounded bg-light">
+                <p class="font-weight-bold mb-3 small text-dark">Share this Article</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="javascript:void(0)" class="social-share-btn facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="javascript:void(0)" class="social-share-btn twitter-x"><i class="bi bi-twitter-x"></i></a>
+                    <a href="javascript:void(0)" class="social-share-btn linkedin"><i class="bi bi-linkedin"></i></a>
+                    <a href="javascript:void(0)" class="social-share-btn link"><i class="bi bi-link-45deg"></i></a>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section mt-5 mb-5 pt-3">
+                <h4 class="font-weight-bold mb-4">Comments ({{post.commentsCount}})</h4>
+
+                <div class="leave-comment-box bg-white rounded p-4 mb-4 border">
+                    <h6 class="font-weight-bold mb-3">Leave a Comment</h6>
+                    <textarea class="form-control bg-light border-0 mb-3 p-3 rounded" rows="3"
+                        placeholder="Share your thoughts..."></textarea>
+                    <button
+                        class="btn btn-warning text-white rounded-pill px-4 py-2 font-weight-bold small shadow-sm">Post
+                        Comment</button>
+                </div>
+
+                <!-- Mock Comment 1 -->
+                <div class="comment-item p-4 border rounded bg-white mb-3 shadow-sm">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex align-items-center">
+                            <div
+                                class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
+                                JS</div>
+                            <div>
+                                <div class="font-weight-bold" style="font-size: 15px;">Jennifer Smith</div>
+                                <div class="text-muted" style="font-size: 12px;">Feb 22, 2026</div>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0)"
+                            class="text-muted small d-flex align-items-center group-hover-warning text-decoration-none">
+                            <i class="bi bi-hand-thumbs-up mr-2"></i> 12
+                        </a>
+                    </div>
+                    <p class="text-muted mb-0 mt-3" style="font-size: 15px; margin-left: 55px; line-height: 1.6;">This
+                        is incredibly helpful! We're planning a corporate retreat next month and this guide answers all
+                        my questions. Thank you!</p>
+                </div>
+
+                <!-- Mock Comment 2 -->
+                <div class="comment-item p-4 border rounded bg-white mb-3 shadow-sm">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex align-items-center">
+                            <div
+                                class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
+                                MR</div>
+                            <div>
+                                <div class="font-weight-bold" style="font-size: 15px;">Michael Rodriguez</div>
+                                <div class="text-muted" style="font-size: 12px;">Feb 18, 2026</div>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0)"
+                            class="text-muted small d-flex align-items-center group-hover-warning text-decoration-none">
+                            <i class="bi bi-hand-thumbs-up mr-2"></i> 4
+                        </a>
+                    </div>
+                    <p class="text-muted mb-0 mt-3" style="font-size: 15px; margin-left: 55px; line-height: 1.6;">Great
+                        article! The tips about communication are spot on. We followed this advice for our last
+                        conference and everything went smoothly.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Related Articles Footer -->
+    <section class="related-articles py-5 bg-white border-top">
+        <div class="container max-w-content">
+            <h4 class="font-weight-bold mb-4">Related Articles</h4>
+            <div class="row">
+                <div class="col-md-4 mb-4" *ngFor="let rel of relatedArticles">
+                    <div class="article-card d-flex flex-column h-100 bg-light border-0 rounded">
+                        <div class="card-image-wrapper">
+                            <img [src]="rel.image" [alt]="rel.title" class="card-img"
+                                onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+                        </div>
+                        <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
+                            <div class="article-meta mb-2 text-muted" style="font-size: 11px;">
+                                <span class="category-badge-small mr-2">{{rel.category}}</span>
+                                <span><i class="bi bi-clock mr-1 text-muted"></i> {{rel.readTime}}</span>
+                            </div>
+                            <a [routerLink]="['/blog', rel.id]" class="text-decoration-none text-dark">
+                                <h6 class="article-title font-weight-bold mb-0 mt-2"
+                                    style="line-height: 1.4; font-size: 15px;">{{rel.title}}</h6>
+                            </a>
+                            <a [routerLink]="['/blog', rel.id]"
+                                class="mt-auto pt-3 text-warning font-weight-bold text-decoration-none"
+                                style="font-size: 13px;">
+                                Read More <i class="bi bi-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

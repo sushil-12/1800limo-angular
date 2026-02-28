@@ -1,51 +1,137 @@
-.innerpage_topbanner {
-    height    : 135px !important;
-    object-fit: cover;
-    position  : relative;
-    overflow  : hidden;
-    margin-top: -10px;
-    z-index   : 9;
+.privacy-page {
+    // background: #000000 !important;
+    margin: 0 !important;
+    min-height: 100vh;
 }
 
-.innerpage_topbanner img {
-    width: 100%;
-}
+.privacy-hero {
+    background: radial-gradient(72.5% 192.1% at 70% 50%, rgba(249, 115, 22, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+    padding: 60px 0 0px 0;
 
-.innerpage_topbanner h2 {
-    position      : absolute;
-    top           : 10px !important;
-    color         : #000;
-    font-size     : 36px !important;
-    text-transform: uppercase;
-    text-align    : center;
-    left          : 0;
-    right         : 0;
-    margin        : auto;
-    font-weight   : bold;
-    padding       : 30px 0px 0px 0px !important;
-}
+    .hero-badge {
+        background: #FFEDD4;
+        color: #F54900;
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 25px;
+        letter-spacing: 0.5px;
+        border: none;
 
-.innerpage_topbanner hr {
-    border: 2px solid var(--orange-color);
-    width : 100px;
-    margin: 0px auto 30px auto;
-}
-
-.innerpage_topbanner img {
-    width     : 100%;
-    height    : 100%;
-    object-fit: cover;
-}
-
-@media (min-width:280px) and (max-width:991px) {
-    .innerpage_topbanner h2 {
-        top      : 20%;
-        font-size: 24px !important;
-        height   : 115px !important;
-        padding  : 15px 0px 0px 0px !important;
+        i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
     }
 
-    .innerpage_topbanner {
-        height: 125px !important;
+    h1 {
+        font-weight: 700;
+        font-size: 40px;
+        color: #000000;
+        margin-bottom: 15px;
+
+        @media (max-width: 768px) {
+            font-size: 32px;
+        }
+    }
+
+    .update-text {
+        font-size: 20px;
+        font-weight: 400;
+        color: #4A5565 !important; // Updated hex for grey
+    }
+
+    .description-text {
+        color: #4A5565;
+        font-size: 20px; // From Fleet page lead
+        font-weight: 400;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.5;
+        margin-top: 15px;
+    }
+}
+
+.privacy-content {
+    padding-top: 50px;
+    padding-bottom: 80px;
+    background: #ffffff !important;
+
+    .privacy-card {
+        background: #ffffff !important; // Very light grey / off-white as in Figma
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0px 4px 6px -4px #0000001A;
+        border: 2px solid #E5E7EB;
+        max-width: 800px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            padding: 24px;
+        }
+    }
+
+    .privacy-section {
+        margin-bottom: 35px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            margin-bottom: 15px;
+
+            .icon-wrapper {
+                width: 48px;
+                height: 48px;
+                background: #F3933D;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+            }
+
+            h3 {
+                font-size: 30px;
+                font-weight: 700;
+                color: #101828; // Dark text on the light card
+            }
+        }
+
+        .section-body {
+            color: #364153; // Darker grey for body text
+            font-size: 16px;
+            line-height: 1.6;
+            font-weight: 400;
+
+            ::ng-deep p {
+                margin-bottom: 16px;
+                text-align: justify;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            ::ng-deep ol,
+            ::ng-deep ul {
+                margin-bottom: 16px;
+                padding-left: 20px;
+
+                li {
+                    margin-bottom: 8px;
+                }
+            }
+
+            ::ng-deep strong {
+                color: #101828;
+                font-size: 16px;
+            }
+        }
     }
 }

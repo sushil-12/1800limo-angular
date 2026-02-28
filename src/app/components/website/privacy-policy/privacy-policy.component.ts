@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title, Meta, DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-privacy-policy',
@@ -7,8 +8,132 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PrivacyPolicyComponent implements OnInit {
 
-  constructor() { }
+  privacyPolicyData = {
+    meta: {
+      title: 'Privacy Policy | 1-800-LIMO.COM',
+      description: 'Privacy Policy and data protection terms for 1-800-LIMO.COM',
+      keywords: 'privacy policy, terms, data protection, 1800 limo'
+    },
+    badge: {
+      iconClass: 'bi bi-shield',
+      text: 'Your Privacy Matters'
+    },
+    title: 'Privacy Policy',
+    lastUpdated: 'February 27, 2026',
+    description: 'At 1800 LIMO.COM, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your data.',
+    sections: [
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'OVERVIEW',
+        content: `
+          <p>1-800-LIMO.COM is committed to maintaining the privacy of its Users (“Users”) of the 1-800- LIMO.COM Platform (the "Platform" or “Website”) and its customers. We are dedicated to protecting your personal information and informing you about how we use it. This Privacy Policy applies to transactions and activities and data gathered through the 1- 800-LIMO.COM Platform. Please review this Privacy Policy periodically as 1-800-LIMO.COM may revise it without notice.</p>
+          <p>This Privacy Policy is revised periodically. The date of the last revision is provided at the end of this policy. Each time you use your Account, use the 1-800-LIMO.COM Services, or provide 1-800-LIMO.COM with information, by doing so you are accepting the practices described in this Privacy Policy at that time.</p>
+          <p>No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'DATA WE COLLECT FROM YOU',
+        content: `
+          <p>To operate 1-800-LIMO.COM and provide you with information about products and/or services that may be of interest to you, 1-800-LIMO.COM may collect “personal information” (i.e. information that could be used to contact you directly (without using the 1-800- LIMO.COM services) such as full name, postal address, phone number, credit/debit card information, or email address) or “demographic information” (i.e. information that you submit, or that we collect, that is not personal information; this may include, but is not limited to, zip code, hometown, gender, username, age/birth date, browsing history information, searching history information, and registration history information). 1-800-LIMO.COM will also collect the contact information of your friends, if you choose to connect your contacts and address book information with 1-800-LIMO.COM and your login credentials to your social network accounts, such as Facebook and Twitter, if you choose to connect those accounts with your 1-800-LIMO.COM account. You represent and warrant that you have the authority to provide 1-800-LIMO.COM with any such contact information. No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties</p>
+          <p>Demographic information is divided into two categories:</p>
+          <ol>
+             <li>“Public Information”, which consists of all other demographic information,</li>
+             <li>“Non-Public Information”, which consists of ride transaction information and one-on- one communications between you and other Users of 1-800-LIMO.COM.</li>
+          </ol>
+          <p><strong>Public Information</strong></p>
+          <p>You can visit the public sections of the Website without telling us who you are or revealing any information about yourself. While your IP address, which is the Internet address of your computer, may be logged to track your session, we do not link IP addresses to anything personally identifiable. This process means that even if your session is tracked, you will remain anonymous. We track IP addresses to better understand which parts of the Website users are visiting and the duration of their visits to diagnose problems with our servers and for system maintenance.</p>
+          <p><strong>Non-Public Information</strong></p>
+          <p>To use the non-public sections of the Website and to order ground transportation or other services ("Services"), you first must complete a registration form. During registration, you are required to give us information about yourself, including your name, e-mail address, home and/or work address and telephone numbers, company name and travel plans. Throughout this Privacy Policy, we refer to all information you provide to us which could be used to identify you as an individual, including your name, e-mail address, addresses, telephone numbers, employer and travel plans, as your "Personal Information."</p>
+          <p><strong>Debit/Credit Card and Bank Account Data</strong></p>
+          <p>We accept, but do not store/retain, Client debit/credit card data. We only use the Client debit/credit card data to charge fees for services rendered. We accept, and store and retain, bank account data of Members of our Delivery Membership Program. We will delete all bank account data on receipt of a written request from the appropriate Member.</p>
+          <p><strong>Cookies</strong></p>
+          <p>“Cookies" are small elements of data that are stored on your computer's hard drive. We use cookies so that you can customize the Website to suit your tastes, and to deliver content specific to your interests. Most Web browsers automatically accept cookies, but if you prefer, you can edit your browser options to block them in the future. We do not use cookies to correlate your activities with your Personal Information, and we do not provide any information regarding your cookies to any third party.</p>
+          <p><strong>Minors</strong></p>
+          <p>Please note that 1-800-LIMO.COM never collects, keeps, or maintains personal information from children under the age of 18, as 1-800-LIMO.COM require that all users represent to us that they are at least 18 years old.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'HOW WE USE PERSONAL INFORMATION',
+        content: `
+          <p>We use your email address and your other personal information to help us efficiently operate 1-800-LIMO.COM, to contact you in connection with your transactions and other activities provided by 1-800-LIMO.COM including, but not limited to, confirmation emails, or important news that could affect your relationship with 1-800-LIMO.COM, to forward trip information to you from other Users, to forward trip information from you to other Users, and to contact you and others to suggest potential matches. We use your contact information to find and connect with your friends (when instructed by you). These types of communications are known as “Operational Communications.” In some cases, Operational Communications may also contain commercial messages, such as banner ads and special offers.</p>
+          <p>To operate 1-800-LIMO.COM, including processing your transactions and supporting your activities on the 1-800-LIMO.COM Platform, we may share your personal information with our agents, representatives, contractors and service providers so they can provide us with support services such as email origination, receipt or support services, customer relationship management services, and order fulfillment. We require these entities not to use your information for any other purpose.</p>
+          <p>By purchasing, or registering or making reservations for, products or services offered or sponsored by third parties of 1-800-LIMO.COM, or electing to receive communications (such as emails or material by mail) or electing to participate in contests, sweepstakes or other programs (such as discount or rewards programs), offered or sponsored by third parties on 1-800-LIMO.COM, you consent to our providing your personal information to those third parties. Those third parties may use your personal information in accordance with their own privacy policies. You will need to contact those third parties to instruct them directly regarding your preferences for the use of your personal information by them. Additionally, you agree that we may use and disclose all such information so submitted to such third parties in the same manner that we are entitled to use and disclose any other information you submit to us. Any third party with whom we can share your personal information is authorized to use your personal information in accordance with our contractual arrangements with such third parties and in accordance with their own privacy policies, over which we have no control, and you agree that we are not responsible or liable for any of their actions or omissions. Those who contact you will need to be instructed directly by you regarding your preferences for the use of your personal information by them.</p>
+          <p>No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'HOW WE USE DEMOGRAPHIC DATA',
+        content: `
+          <p>We may review all demographic data. We may use public information to enable other users to search your profile, to determine whether your trip details fit other user's requirements, and to communicate with you. We may use demographic information to tailor 1-800-LIMO.COM and communications to your interests. We may also share demographic information with advertisers on an anonymous and aggregated basis (i.e., without telling the advertisers your identity). One of the reasons we may do this is to increase the likelihood that our advertisers' goods and services will appeal to you as a user of 1-800-LIMO.COM. Our sharing of demographic information with advertisers is anonymous. We do not tell advertisers which 1- 800-LIMO.COM Users are members of which demographic groups, subject to the rest of this Privacy Policy. When you respond to an advertisement, however, we ask you to remember that if that ad that is targeted to a demographic group and you decide to give the advertiser your personal information, then the advertiser may be able to identify you as being a member of that demographic group.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'HOW TO EDIT YOUR INFORMATION',
+        content: `
+          <p>1-800-LIMO.COM provides you with the ability to access and edit your personal information. To update your personal info, click Settings in the 1-800-LIMO.COM menu. There you can view, update and correct your account information.</p>
+          <p>To protect the integrity of sensitive data, certain elements of data exist, such as your age, that you cannot alter yourself.</p>
+          <p>Our databases automatically update any personal information you edit in your profile, or that you request we edit. Information transmitted through boards, chats, polls or through any other means remains in our databases and become the property of 1-800-LIMO.COM on submission. Keep this in mind if you decide to communicate personal information through any of these applications.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'INFORMATION RETENTION',
+        content: `
+          <p>To preserve the integrity of our databases, standard procedure calls for 1-800-LIMO.COM to retain information submitted by members for an indefinite length of time. 1-800-LIMO.COM understands your submissions as consent to store all your information in one place for this indefinite length of time, if we so wish. If required by law, as is the case to comply with the Children's Online Privacy Protection Act (COPPA), 1-800-LIMO.COM will nullify member information by permanently erasing it from our database. 1-800-LIMO.COM will also respond to written member requests to nullify account information. Also, by using 1-800-LIMO.COM, you do hereby represent and warrant that you understand and agree that all information submitted by you through 1-800-LIMO.COM or otherwise to 1-800-LIMO.COM becomes the property of 1-800-LIMO.COM and may be used in the sole discretion of 1-800-LIMO.COM in accordance with this Privacy Policy and the Terms of Use.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'CHOICE/OPT-OUT',
+        content: `
+          <p>1-800-LIMO.COM provides Users the opportunity to opt-out of receiving communications from 1-800-LIMO.COM and our partners at the point where we request information about the visitor. 1-800-LIMO.COM gives users the option to remove their information from our database, to not receive future communications or no longer receive our service.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'SPECIAL CASES IN WHICH WE SHARE PERSONAL INFORMATION',
+        content: `
+          <p>Your personal information may be passed on to a third party in the event of a transfer of ownership or assets, or a bankruptcy. 1-800-LIMO.COM may also disclose personal information when we determine that such disclosure is necessary to comply with applicable law, to cooperate with law enforcement or to protect the interests or safety of 1-800- LIMO.COM or other visitors to 1-800-LIMO.COM. 1-800-LIMO.COM also may disclose your personal information to any subsidiary and parent companies and businesses, and other affiliated legal entities and businesses with whom 1-800-LIMO.COM is under common corporate control. Whenever personal information is disclosed under this paragraph, we may also disclose your demographic information along with it on a non-anonymous basis. All our parent, subsidiary and affiliated legal entities and businesses that receive your personal information or non-anonymous demographic information from 1-800-LIMO.COM will comply with the terms of this Privacy Policy with respect to their use and disclosure of such information. No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'HOW WE PROTECT INFORMATION',
+        content: `
+          <p>We implement security measures designed to protect your information from unauthorized access. Your account is protected by your account password and we urge you to take steps to keep your personal information safe by not disclosing your password and by logging out of your account after each use. We further protect your information from potential security breaches by implementing certain technological security measures including encryption, firewalls and secure socket layer technology. However, these measures do not guarantee that your information will not be accessed, disclosed, altered or destroyed by breach of such firewalls and secure server software. By using our Service, you acknowledge that you understand and agree to assume these risks. No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties</p>
+          <p>1-800-LIMO.COM may contain links to other web websites. 1-800-LIMO.COM is not responsible for the privacy practices of other web websites. 1-800-LIMO.COM encourages Users to be aware when they leave the 1-800-LIMO.COM Account to read the privacy statements of every web website that collects personally identifiable information. This Privacy Policy applies solely to information collected by the 1-800-LIMO.COM Platform.</p>
+        `
+      },
+      {
+        iconClass: 'bi bi-file-earmark-text',
+        title: 'CHANGING OUR PRIVACY POLICY FOR PREVIOUSLY GATHERED INFORMATION',
+        content: `
+          <p>If at any point 1-800-LIMO.COM decides to use personally identifiable information in a manner materially different from that stated at the time it was collected, 1-800-LIMO.COM will notify Users by way of an email or by providing a 30-day notice on the 1-800-LIMO.COM Platform. We also encourage you to review this Privacy Policy periodically. By using 1-800- LIMO.COM, you do hereby represent and warrant that you have read, understand and agree to all terms of Agreement. Each time you use 1-800-LIMO.COM, you agree to all terms set forth in this Agreement and any other policies published by 1-800-LIMO.COM on the 1-800- LIMO.COM Platform. Please note that 1-800-LIMO.COM will continue to have the right to change its Privacy Policy and privacy practices, and the use of your personally identifiable information, without notice, as described in herein, provided that such changes shall only apply to information gathered on or after the date of the change.</p>
+          <p>CONTACTING 1-800-LIMO.COM: If you have any questions regarding this Privacy Policy or the practices of this Website, please contact us by sending an email to info@1-800-LIMO.COM.</p>
+        `
+      }
+    ]
+  };
+
+  safeSections: any[] = [];
+
+  constructor(private titleService: Title, private metaService: Meta, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle(this.privacyPolicyData.meta.title);
+    this.metaService.updateTag({ name: 'description', content: this.privacyPolicyData.meta.description });
+    this.metaService.updateTag({ name: 'keywords', content: this.privacyPolicyData.meta.keywords });
+
+    // Sanitize the HTML content
+    this.safeSections = this.privacyPolicyData.sections.map(section => ({
+      ...section,
+      safeContent: this.sanitizer.bypassSecurityTrustHtml(section.content)
+    }));
   }
 }
+
+
