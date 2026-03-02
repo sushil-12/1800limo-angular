@@ -19,7 +19,7 @@ export class CancellationPolicyComponent implements OnInit {
       text: 'Cancellation Policies'
     },
     title: 'Cancellation Policies',
-    lastUpdated: 'February 27, 2026',
+    lastUpdated: 'June 5, 2018',
     description: 'Guidelines and policies regarding vehicle cancellation, designed to respect everyone\'s time and set clear expectations.',
     sections: [
       {

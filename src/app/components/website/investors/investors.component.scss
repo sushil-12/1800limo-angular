@@ -89,6 +89,17 @@
             }
         }
 
+        .title-text {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 20px;
+
+            @media (max-width: 768px) {
+                font-size: 24px;
+            }
+        }
+
         .founder-text {
             color: #364153;
             font-size: 16px;

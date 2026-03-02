@@ -41,6 +41,10 @@
 		font-size: 20px;
 		font-weight: 400;
 		color: #4A5565 !important;
+
+		@media (max-width: 768px) {
+			font-size: 16px;
+		}
 	}
 
 	.description-text {
@@ -51,6 +55,10 @@
 		margin: 0 auto;
 		line-height: 1.5;
 		margin-top: 15px;
+
+		@media (max-width: 768px) {
+			font-size: 16px;
+		}
 	}
 }
 
@@ -93,12 +101,23 @@
 				align-items: center;
 				justify-content: center;
 				font-size: 24px;
+
+				@media (max-width: 768px) {
+					width: 32px;
+					height: 32px;
+					font-size: 18px;
+				}
 			}
 
 			h3 {
-				font-size: 30px;
+				font-size: 32px;
 				font-weight: 700;
-				color: #101828;
+				color: #1A1A1A;
+				margin-bottom: 20px;
+
+				@media (max-width: 768px) {
+					font-size: 24px;
+				}
 			}
 		}
 

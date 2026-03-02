@@ -93,7 +93,7 @@ export class InsuranceLicensingComponent implements OnInit {
         title: 'Contact Us',
         content: `
           <p>Call or click If you have any other questions regarding licensing, insurance or operating authority.</p>
-          <p>Contact 1-800-LIMO.COM at +1-800-546.266 or info&#64;1800limo.com</p>
+          <p>Contact 1-800-LIMO.COM at +1-800-546.266 or <a href="mailto:info@1800limo.com" style="text-decoration:none; color:inherit;">info@1800limo.com</a></p>
         `
       }
     ]

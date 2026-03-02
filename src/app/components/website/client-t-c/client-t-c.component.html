@@ -16,8 +16,8 @@
       <div class="container">
          <div class="privacy-card">
             <div class="privacy-section" *ngFor="let section of safeSections">
-               <div class="section-header d-flex align-items-center">
-                  <div class="icon-wrapper mr-3">
+               <div class="section-header d-flex align-items-start">
+                  <div class="icon-wrapper mr-3 flex-shrink-0">
                      <i [class]="section.iconClass"></i>
                   </div>
                   <h3 class="mb-0">{{ section.title }}</h3>

@@ -23,14 +23,14 @@ export class DeliveryMembershipTCComponent implements OnInit {
     description: 'These Delivery Membership Program Terms & Conditions contain the complete terms and conditions that apply to your participation in the 1-800-LIMO.COM Delivery Membership Program.',
     sections: [
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-briefcase',
         title: 'CONTRACTUAL RELATIONSHIP',
         content: `
          <p>These Delivery Membership Program Terms &amp; Conditions ("Terms" or “Agreement”) contains the complete
             terms and conditions that apply to your participation in the 1-800-LIMO.COM (“1-800-LIMO.COM” or “we”)
             Delivery Membership Program described in this Agreement and the 1-800-LIMO.COM Delivery Membership Program
             Policy and Procedure Manual (“Delivery Membership Program Manual”). You may be referred to in this Agreement
-            as “you,” “Affiliate,” Driver,” “Participant,” and you and 1-800-LIMO.COM may be referred to collectively as
+            as “you,” “Affiliate,” “Driver,” “Participant,” and you and 1-800-LIMO.COM may be referred to collectively as
             “us” or “the Parties.”</p>
          <p>These Terms govern the access or use by you, an individual, from within the United States and globally,
             websites, content, products, and delivery of services (the "Services") made available in the United States
@@ -57,7 +57,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-calendar-check',
         title: 'AGREEMENT TERM',
         content: `
          <p>This Agreement will commence on 1-800-LIMO.COM’s acceptance of this Agreement and will continue until either
@@ -65,7 +65,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-gear',
         title: 'SERVICES',
         content: `
          <p>To commence the process of enrolling as a Participant in the Delivery Membership Program, you must complete
@@ -84,7 +84,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-shield-check',
         title: 'DELIVERY MEMBERSHIP PROGRAM PARTICIPANT REPRESENTATIONS AND WARRANTIES',
         content: `
          <p>By providing Services as a Participant for 1-800-LIMO.COM in our Delivery Membership Program, you represent,
@@ -133,7 +133,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-car-front',
         title: 'DISTRACTED DRIVER POLICY',
         content: `
          <p>In addition to the terms and conditions outlined above. You are also bound by our Distracted Driving Policy
@@ -149,19 +149,19 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-people',
         title: 'REFERRALS',
         content: `
          <p>You may from time to time refer to 1-800-LIMO.COM a prospective client for Services that does not have an
             established account with 1-800-LIMO.COM (each, a “Referral”) in accordance with the then current Delivery
             Membership Program Manual.</p>
-         <p>1-800-LIMO.COM.com will pay you a Referral Commission (“Referral Commission”) for referrals that you provide
+         <p>1-800-LIMO.COM will pay you a Referral Commission (“Referral Commission”) for referrals that you provide
             in accordance with the Delivery Membership Program Manual. 1-800-LIMO.COM will publish and periodically
             update the Referral Commissions in the Delivery Membership Program Manual.</p>
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-bank',
         title: 'LEGAL COMPLIANCE',
         content: `
          <p>You will provide all Services in compliance with all applicable laws, codes, licensing requirements and
@@ -177,7 +177,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-megaphone',
         title: '1-800-LIMO.COM PROMOTION',
         content: `
          <p>Participant shall not create, publish, distribute, or permit any written material that names or references
@@ -186,7 +186,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-lock',
         title: 'CONFIDENTIALITY',
         content: `
          <p>In performing the Services contained in this Agreement, either or both 1-800-LIMO-COM and Participant,
@@ -209,7 +209,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-shield-slash',
         title: 'LIABILITY',
         content: `
          <p>1-800-LIMO.COM’S AGGREGATE LIABILITY TO YOU FOR ANY CLAIM ARISING IN CONNECTION WITH THIS AGREEMENT (WHETHER
@@ -221,7 +221,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-shield-check',
         title: 'INDEMNIFICATION',
         content: `
          <p>You shall indemnify, defend and hold harmless 1-800-LIMO.COM, its affiliates, successors and assigns and
@@ -234,7 +234,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-diagram-2',
         title: 'INDEPENDENT PARTIES',
         content: `
          <p>You and 1-800-LIMO.COM are independent contractors with respect to each other in connection with this
@@ -244,7 +244,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-link-45deg',
         title: 'BINDING EFFECT',
         content: `
          <p>This Agreement shall inure to the benefit of and be binding on the Parties hereto and their respective
@@ -254,7 +254,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-scissors',
         title: 'SEVERABILITY',
         content: `
          <p>If any provision of this Agreement shall be declared by any court of competent jurisdiction to be illegal,
@@ -263,16 +263,16 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-envelope',
         title: 'NOTICES',
         content: `
          <p>Any notices required or permitted under this Agreement shall be sent in accordance with the information
-            provided by you within your Registration, or to 1-800-LIMO.COM at info&#64;1800limo.com and shall be deemed duly
+            provided by you within your Registration, or to 1-800-LIMO.COM at <a href="mailto:info@1800limo.com" style="text-decoration:none; color:inherit;">info@1800limo.com</a> and shall be deemed duly
             made and received when sent, provided the sender requests and can provide an electronic return receipt.</p>
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-check2-all',
         title: 'ENTIRE AGREEMENT',
         content: `
          <p>This Agreement and the Delivery Membership Program Manual constitutes (a) the binding agreement between the
@@ -284,7 +284,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-journal-text',
         title: 'GOVERNING LAW',
         content: `
          <p>This Agreement shall be governed by and construed in accordance with the internal laws of the State of
@@ -292,7 +292,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-hammer',
         title: 'ARBITRATION',
         content: `
          <p>Each Party hereby agrees to submit to binding arbitration, all disputes or controversies arising out of or
@@ -305,7 +305,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-exclamation-triangle',
         title: 'NO WARRANTIES',
         content: `
          <p>1-800-LIMO.COM MAKES NO EXPRESS OR IMPLIED WARRANTIES IN CONNECTION WITH THIS AGREEMENT, INCLUDING, WITHOUT
@@ -318,7 +318,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-heart-pulse',
         title: 'SURVIVAL',
         content: `
          <p>The following sections of this Agreement shall survive the termination or Expiry of this Agreement:</p>
@@ -335,7 +335,7 @@ export class DeliveryMembershipTCComponent implements OnInit {
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-info-circle',
         title: 'ADDITIONAL DISCLOSURES',
         content: `
          <p>You understand and agree that 1-800-LIMO.COM may at any time, directly or indirectly, solicit client
@@ -349,18 +349,18 @@ export class DeliveryMembershipTCComponent implements OnInit {
          <p>IN ADDITION TO THE TERMS SPECIFIED ABOVE, YOU ALSO AGREE THAT WHILE OPERATING ON THE DIGITAL NETWORK OR
             SOFTWARE APPLICATION OF THE COMMERCIAL TRANSPORTATION SERVICES PROVIDER, YOUR PRIVATE PASSENGER AUTOMOBILE
             INSURANCE POLICY MIGHT NOT AFFORD LIABILITY, UNDERINSURED MOTORIST, PERSONAL INJURY PROTECTION,
-            COMPEREHENSIVE, OR COLLISION COVERAGE, DEPENDING ON THE TERMS OF THE POLICY.</p>
-         <p>IF THE VEHICLE THAT YOU PLAN TO USE TO PROVIDE COMMERICIAL TRANSPORTATION SERVICES FOR 1-800-LIMO.COM HAS A
+            COMPREHENSIVE, OR COLLISION COVERAGE, DEPENDING ON THE TERMS OF THE POLICY.</p>
+         <p>IF THE VEHICLE THAT YOU PLAN TO USE TO PROVIDE COMMERCIAL TRANSPORTATION SERVICES FOR 1-800-LIMO.COM HAS A
             LIEN AGAINST IT, YOU MUST NOTIFY THE LIENHOLDER THAT YOU WILL BE USING THE VEHICLE FOR COMMERCIAL
             TRANSPORTATION SERVICES WHICH MAY VIOLATE THE TERMS OF YOUR CONTRACT WITH THE LIENHOLDER.</p>
         `
       },
       {
-        iconClass: 'bi bi-file-earmark-text',
+        iconClass: 'bi bi-headset',
         title: 'CONTACTING 1-800-LIMO.COM',
         content: `
          <p>If you have any questions regarding this Delivery Membership Program Terms &amp; Conditions or the practices
-            of this website, please contact us by sending an email to info&#64;1800limo.com.</p>
+            of this website, please contact us by sending an email to <a href="mailto:info@1800limo.com" style="text-decoration:none; color:inherit;">info@1800limo.com</a>.</p>
         `
       }
     ]
