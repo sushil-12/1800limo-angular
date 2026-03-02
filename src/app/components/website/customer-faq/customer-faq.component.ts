@@ -22,7 +22,7 @@ export class CustomerFaqComponent implements OnInit {
     { id: 'all', label: 'All Questions', icon: 'bi bi-question-circle' },
     { id: 'booking', label: 'Booking & Reservations', icon: 'bi-calendar-check' },
     { id: 'payment', label: 'Payment & Pricing', icon: 'bi-credit-card' },
-    { id: 'fleet', label: 'Service & Fleet', icon: 'bi-truck' },
+    { id: 'fleet', label: 'Service & Fleet', icon: 'bi-car-front' },
     { id: 'policies', label: 'Policies', icon: 'bi-shield-lock' }
   ];
 

@@ -301,6 +301,10 @@ $primary-color: var(--orange-color);
     position: relative;
     padding: 45px 20px !important;
 
+    @media (max-width: 576px) {
+        padding: 40px 10px !important; // Reduce horizontal space to widen cards
+    }
+
     .section-badge {
         display: inline-flex;
         align-items: center;
@@ -418,6 +422,10 @@ $primary-color: var(--orange-color);
             @media (max-width: 992px) {
                 margin-left: 20px !important;
             }
+
+            @media (max-width: 576px) {
+                margin-left: 10px !important; // Give cards more width
+            }
         }
 
         .milestone-card {
@@ -459,7 +467,7 @@ $primary-color: var(--orange-color);
                 margin-top: 5px;
 
                 @media (max-width: 576px) {
-                    font-size: 20px !important;
+                    font-size: 18px !important;
                 }
             }
 
@@ -485,11 +493,20 @@ $primary-color: var(--orange-color);
                     color: #4A5565 !important;
                     margin-bottom: 12px;
                     text-align: justify;
+
+                    @media (max-width: 576px) {
+                        font-size: 14px !important;
+                        line-height: 1.5;
+                    }
                 }
             }
 
             .card-body {
                 padding: 20px !important;
+
+                @media (max-width: 576px) {
+                    padding: 15px 12px !important;
+                }
 
                 &[data-toggle="collapse"] {
                     &[aria-expanded="true"] {
@@ -815,7 +832,7 @@ $primary-color: var(--orange-color);
     }
 
     .cta-h2 {
-        font-size: 60px !important;
+        font-size: 48px !important;
         font-weight: 700 !important;
         color: #FFFFFF;
         line-height: 1.1;
@@ -879,7 +896,7 @@ $primary-color: var(--orange-color);
     .btn-cta-secondary {
         background-color: transparent !important;
         color: #fff !important;
-        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border: 2px solid #fff !important;
         border-radius: 50px !important;
         padding: 14px 35px !important;
         font-weight: 700 !important;
