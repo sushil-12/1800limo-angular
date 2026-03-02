@@ -145,6 +145,9 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
       });
   }
   refreshForm() {
-    location.reload();
+    $('#successfullyMessageModal').modal('hide');
+    this.getInTouchForm.reset();
+    this.submitted = false;
+    this.disableSubmitButton = false;
   }
 }

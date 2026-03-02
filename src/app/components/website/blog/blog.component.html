@@ -1,87 +1,116 @@
-<div class="blog-page">
+<div class="blog-page-wrapper">
    <!-- Hero Section -->
-   <header class="blog-hero text-center">
-      <div class="container">
+   <header class="blog-hero">
+      <div class="container text-center py-3 py-md-4 py-lg-5">
          <span class="hero-badge">
-            <i class="bi bi-graph-up-arrow"></i> Latest Insights & Stories
+            <i class="bi bi-graph-up-arrow mr-1"></i> Latest Insights & Stories
          </span>
          <h1 class="font-weight-bold mb-3">Blog</h1>
-         <p class="text-muted mx-auto description-text mb-4">
-            Expert tips, industry news, and inspiring stories from the world of<br>luxury transportation
-         </p>
+         <p class="lead mx-auto">Expert tips, industry news, and inspiring stories from the world of<br>luxury
+            transportation</p>
 
-         <div class="search-container mx-auto">
-            <i class="bi bi-search search-icon"></i>
-            <input type="text" class="form-control search-input" placeholder="Search articles, tips, stories...">
+         <div class="search-container mt-4">
+            <div class="search-box">
+               <i class="bi bi-search"></i>
+               <input type="text" placeholder="Search articles, tips, stories...">
+            </div>
          </div>
       </div>
    </header>
 
-   <!-- Categories Section -->
-   <section class="categories-section border-bottom py-3">
+   <!-- Filters Section -->
+   <div class="category-filters-container">
       <div class="container">
-         <div class="category-pills d-flex justify-content-center flex-wrap gap-2">
-            <button *ngFor="let cat of categories" class="btn category-btn" [class.active]="cat.active">
-               {{cat.name}} <span class="badge">{{cat.count}}</span>
+         <div class="d-flex align-items-center justify-content-center flex-wrap">
+            <button *ngFor="let cat of categories" class="filter-pill" [class.active]="cat.active">
+               {{cat.name}} <span class="badge ml-2" *ngIf="cat.count">{{cat.count}}</span>
             </button>
          </div>
       </div>
-   </section>
+   </div>
 
    <!-- Featured Articles -->
    <section class="featured-section py-5">
       <div class="container">
-         <h4 class="section-title mb-4 font-weight-bold">
-            <i class="bi bi-graph-up-arrow text-warning mr-2"></i> Featured Articles
-         </h4>
+         <div class="row justify-content-center">
+            <div class="col-lg-12 col-xl-12">
+               <h4 class="section-title mb-4 font-weight-bold d-flex align-items-center">
+                  <i class="bi bi-graph-up-arrow text-warning mr-2" style="font-size: 1.2rem;"></i> Featured Articles
+               </h4>
 
-         <div class="row">
-            <div class="col-lg-6 mb-4" *ngFor="let article of featuredArticles">
-               <div class="article-card featured-card d-flex flex-column h-100 bg-white">
-                  <div class="card-image-wrapper">
-                     <span class="category-tag">{{article.category}}</span>
-                     <!-- Assuming images exist, fallback if broken in CSS -->
-                     <img [src]="article.image" [alt]="article.title" class="card-img"
-                        onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
-                  </div>
-                  <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
-                     <div class="article-meta mb-3 text-muted small font-weight-bold">
-                        <span><i class="bi bi-calendar3 mr-1"></i> {{article.date}}</span>
-                        <span class="mx-2">•</span>
-                        <span><i class="bi bi-clock mr-1"></i> {{article.readTime}}</span>
-                     </div>
-                     <!-- Navigate to Blog Detail (id) -->
-                     <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
-                        <h3 class="article-title text-dark mb-3">{{article.title}}</h3>
-                     </a>
-                     <p class="article-excerpt text-muted mb-4 flex-grow-1">
-                        {{getExcerpt(article.content)}}
-                     </p>
+               <div class="featured-list">
+                  <div class="article-card featured-horizontal-card shadow-sm mb-4"
+                     *ngFor="let article of featuredArticles">
+                     <div class="row no-gutters h-100">
 
-                     <div class="article-footer d-flex justify-content-between align-items-center mt-auto pb-2">
-                        <div class="author-info d-flex align-items-center">
-                           <div
-                              class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold"
-                              *ngIf="article.author.initials">
-                              {{article.author.initials}}
+                        <!-- Left Image Side -->
+                        <div class="col-md-5 col-lg-6 position-relative image-side">
+                           <span class="category-pill-overlay">{{article.category}}</span>
+                           <img [src]="article.image" [alt]="article.title" class="featured-img-cover"
+                              onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+                        </div>
+
+                        <!-- Right Content Side -->
+                        <div class="col-md-7 col-lg-6 d-flex flex-column bg-white content-side">
+                           <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+
+                              <div class="article-meta text-muted mb-3 d-flex align-items-center">
+                                 <span class="d-flex align-items-center mr-3"><i class="bi bi-calendar3 mr-2"></i>
+                                    {{article.date}}</span>
+                                 <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
+                                    {{article.readTime}}</span>
+                              </div>
+
+                              <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
+                                 <h2 class="card-title font-weight-bold text-dark mb-3 article-title-hd">
+                                    {{article.title}}</h2>
+                              </a>
+
+                              <p class="card-text text-muted mb-4 article-excerpt-hd flex-grow-1">
+                                 {{getExcerpt(article.content)}}
+                              </p>
+
+                              <!-- Mock tags based on mockup -->
+                              <div class="hash-tags mb-4 d-flex flex-wrap gap-2">
+                                 <span class="hash-tag">#Corporate</span>
+                                 <span class="hash-tag">#Event Planning</span>
+                                 <span class="hash-tag">#Tips</span>
+                              </div>
+
+                              <div
+                                 class="article-footer d-flex justify-content-between align-items-center py-3 border-top border-bottom border-light mb-4">
+                                 <div class="author-info d-flex align-items-center">
+                                    <div
+                                       class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small shadow-sm"
+                                       *ngIf="article.author.initials">
+                                       {{article.author.initials}}
+                                    </div>
+                                    <img *ngIf="article.author.image" [src]="article.author.image"
+                                       [alt]="article.author.name" class="author-avatar-img mr-2 shadow-sm"
+                                       onerror="this.src='assets/images/user.png'; this.onerror=null;">
+                                    <span
+                                       class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
+                                 </div>
+                                 <div class="engagement-stats text-muted d-flex align-items-center">
+                                    <span class="mr-3 d-flex align-items-center"><i class="bi bi-heart mr-1"></i>
+                                       {{article.likes}}</span>
+                                    <span class="d-flex align-items-center"><i class="bi bi-chat-dots mr-1"></i>
+                                       {{article.commentsCount}}</span>
+                                 </div>
+                              </div>
+
+                              <a [routerLink]="['/blog', article.id]"
+                                 class="read-more-link text-warning font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
+                                 Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
+                              </a>
+
                            </div>
-                           <img *ngIf="article.author.image" [src]="article.author.image" [alt]="article.author.name"
-                              class="author-avatar-img mr-2"
-                              onerror="this.src='assets/images/user.png'; this.onerror=null;">
-                           <span class="author-name text-dark font-weight-medium">{{article.author.name}}</span>
                         </div>
-                        <div class="engagement-stats text-muted small">
-                           <span class="mr-3"><i class="bi bi-heart mr-1"></i> {{article.likes}}</span>
-                           <span><i class="bi bi-chat-dots mr-1"></i> {{article.commentsCount}}</span>
-                        </div>
-                     </div>
 
-                     <a [routerLink]="['/blog', article.id]"
-                        class="read-article-link mt-3 font-weight-bold text-decoration-none">
-                        Read Article <i class="bi bi-arrow-right ml-1"></i>
-                     </a>
+                     </div>
                   </div>
                </div>
+
             </div>
          </div>
       </div>
@@ -97,45 +126,55 @@
 
          <div class="row">
             <div class="col-lg-4 col-md-6 mb-4" *ngFor="let article of latestArticles">
-               <div class="article-card latest-card d-flex flex-column h-100 bg-white">
-                  <div class="card-image-wrapper">
-                     <span class="category-tag">{{article.category}}</span>
+               <div class="article-card latest-card d-flex flex-column h-100 bg-white shadow-sm border-0">
+                  <div class="card-image-wrapper position-relative">
+                     <span class="category-pill-overlay">{{article.category}}</span>
+                     <!-- Assuming images exist, fallback if broken in CSS -->
                      <img [src]="article.image" [alt]="article.title" class="card-img"
                         onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
                   </div>
                   <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
-                     <div class="article-meta mb-2 text-muted small font-weight-bold">
-                        <span><i class="bi bi-calendar3 mr-1"></i> {{article.date}}</span>
-                        <span class="mx-2">•</span>
-                        <span><i class="bi bi-clock mr-1"></i> {{article.readTime}}</span>
+                     <div class="article-meta text-muted mb-3 d-flex align-items-center">
+                        <span class="d-flex align-items-center mr-3"><i class="bi bi-calendar3 mr-2"></i>
+                           {{article.date}}</span>
+                        <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
+                           {{article.readTime}}</span>
                      </div>
                      <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
-                        <h5 class="article-title text-dark mb-3">{{article.title}}</h5>
+                        <h4 class="card-title font-weight-bold text-dark mb-3 latest-title">{{article.title}}</h4>
                      </a>
-                     <p class="article-excerpt text-muted mb-4 small flex-grow-1">
+                     <p class="card-text text-muted mb-4 latest-excerpt flex-grow-1">
                         {{getExcerpt(article.content)}}
                      </p>
 
-                     <div class="article-footer d-flex justify-content-between align-items-center mt-auto pb-2">
+                     <!-- Mock tags based on mockup -->
+                     <div class="hash-tags mb-4 d-flex flex-wrap gap-2">
+                        <span class="hash-tag">#Insights</span>
+                        <span class="hash-tag">#News</span>
+                     </div>
+
+                     <div class="article-footer d-flex justify-content-between align-items-center mb-4">
                         <div class="author-info d-flex align-items-center">
                            <div
-                              class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small"
+                              class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small shadow-sm"
                               *ngIf="article.author.initials">
                               {{article.author.initials}}
                            </div>
                            <img *ngIf="article.author.image" [src]="article.author.image" [alt]="article.author.name"
-                              class="author-avatar-img mr-2"
+                              class="author-avatar-img mr-2 shadow-sm"
                               onerror="this.src='assets/images/user.png'; this.onerror=null;">
-                           <span class="author-name text-dark font-weight-medium small">{{article.author.name}}</span>
+                           <span class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
                         </div>
-                        <div class="engagement-stats text-muted small">
-                           <span class="mr-3"><i class="bi bi-heart mr-1"></i> {{article.likes}}</span>
-                           <span><i class="bi bi-chat-dots mr-1"></i> {{article.commentsCount}}</span>
+                        <div class="engagement-stats text-muted d-flex align-items-center">
+                           <span class="mr-3 d-flex align-items-center"><i class="bi bi-heart mr-1"></i>
+                              {{article.likes}}</span>
+                           <span class="d-flex align-items-center"><i class="bi bi-chat-dots mr-1"></i>
+                              {{article.commentsCount}}</span>
                         </div>
                      </div>
                      <a [routerLink]="['/blog', article.id]"
-                        class="read-article-link mt-3 font-weight-bold text-decoration-none small">
-                        Read Article <i class="bi bi-arrow-right ml-1"></i>
+                        class="read-more-link text-warning font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
+                        Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
                      </a>
                   </div>
                </div>
