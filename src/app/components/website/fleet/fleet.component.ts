@@ -6,7 +6,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { WebsiteService } from 'src/app/services/website.service';
 import Swiper from 'swiper';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import { environment } from '../../../../environments/environment';
 
 declare var $: any;
@@ -167,7 +167,11 @@ export class FleetComponent implements OnInit, AfterViewInit, OnDestroy {
 			const hasNavigation = slides.length > 1;
 
 			const swiper = new Swiper(container, {
-				modules: [Navigation, Pagination, Autoplay],
+				modules: [Navigation, Pagination, Autoplay, EffectFade],
+				effect: 'fade',
+				fadeEffect: {
+					crossFade: true
+				},
 				slidesPerView: 1,
 				spaceBetween: 0,
 				loop: hasNavigation, // Only loop if more than 1 image
