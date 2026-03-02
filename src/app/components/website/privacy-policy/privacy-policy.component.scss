@@ -36,12 +36,20 @@
         @media (max-width: 768px) {
             font-size: 32px;
         }
+
+        @media (max-width: 576px) {
+            font-size: 28px;
+        }
     }
 
     .update-text {
         font-size: 20px;
         font-weight: 400;
         color: #4A5565 !important; // Updated hex for grey
+
+        @media (max-width: 768px) {
+            font-size: 16px;
+        }
     }
 
     .description-text {
@@ -52,6 +60,10 @@
         margin: 0 auto;
         line-height: 1.5;
         margin-top: 15px;
+
+        @media (max-width: 768px) {
+            font-size: 16px;
+        }
     }
 }
 
@@ -94,12 +106,22 @@
                 align-items: center;
                 justify-content: center;
                 font-size: 24px;
+
+                @media (max-width: 768px) {
+                    width: 32px;
+                    height: 32px;
+                    font-size: 18px;
+                }
             }
 
             h3 {
                 font-size: 30px;
                 font-weight: 700;
                 color: #101828; // Dark text on the light card
+
+                @media (max-width: 768px) {
+                    font-size: 24px;
+                }
             }
         }
 
