@@ -128,6 +128,17 @@ export class PrivacyPolicyComponent implements OnInit {
     this.metaService.updateTag({ name: 'description', content: this.privacyPolicyData.meta.description });
     this.metaService.updateTag({ name: 'keywords', content: this.privacyPolicyData.meta.keywords });
 
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: this.privacyPolicyData.meta.title });
+    this.metaService.updateTag({ property: 'og:description', content: this.privacyPolicyData.meta.description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: this.privacyPolicyData.meta.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: this.privacyPolicyData.meta.description });
+
     // Sanitize the HTML content
     this.safeSections = this.privacyPolicyData.sections.map(section => ({
       ...section,
