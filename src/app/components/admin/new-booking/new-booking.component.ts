@@ -2968,6 +2968,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 
+		if (this.Form.service_type.value == 'charter_tour' && (this.number_of_hours == 0 || this.number_of_hours == null || this.number_of_hours == '')) {
+			const element = document.getElementById('number_of_hours');
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+			return;
+		}
+
 		// Sync Pax Country Data
 		if (this.PaxTelObject) {
 			const countryData = this.PaxTelObject.getSelectedCountryData();

@@ -617,9 +617,9 @@ a.dropdown-item {
 // Prevent wrapping for Booking Type and Vehicle columns in daily bookings table
 .custom_table table.table {
 
-	td:nth-child(9),
+	td:nth-child(8),
 	// Booking Type column  
-	td:nth-child(10) {
+	td:nth-child(9) {
 		// Vehicle column
 		white-space: nowrap !important;
 	}
@@ -629,7 +629,7 @@ a.dropdown-item {
 .custom_table table.table {
 
 	// Trip Route column (column 8)
-	td:nth-child(8) {
+	td:nth-child(7) {
 		width: auto !important; // Allow cell to adapt to content width
 		white-space: normal !important;
 

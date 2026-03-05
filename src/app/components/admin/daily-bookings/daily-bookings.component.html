@@ -151,7 +151,6 @@
 										<i class="fa" style="font-size: 20px;"
 											[ngClass]="{'fa-sort-up': orderBy === 'booking_id_asc', 'fa-sort-down': orderBy === 'booking_id_desc', 'fa-sort': !orderBy.startsWith('booking_id')}"></i>
 									</th>
-									<th>Total</th>
 									<th>Status</th>
 									<th>Pax</th>
 									<th>Driver</th>
@@ -320,23 +319,21 @@
 											}}
 										</p>
 									</td>
-									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
-										data-target="#previewBookingOnID"
-										(click)="showBookingPreviewModal(booking?.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer">
+									<td class="text-center font-weight-bolder " >
+										<p  data-toggle="modal" data-target="#previewBookingOnID" (click)="showBookingPreviewModal(booking?.booking_id)"
+										 class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"
 												style="font-weight: 600;"></span>
 											<span
 												style="text-decoration: none;">&nbsp;{{showAccountType(booking?.account_type)}}</span>
 										</p>
-									</td>
-									<td class="text-center font-weight-bolder cursor-pointer">
-										<p
+										<p class="text-left font-weight-bolder"
 											[ngClass]="(booking?.charged_amount != null && booking?.booking_status !== 'paid' && booking?.booking_status !== 'paid_cash') ? 'booking-id-font font-weight-bolder cursor-pointer text-purple' : (booking?.payment_status== 'transfer_failed') ? 'booking-id-font font-weight-bolder cursor-pointer text-red' : 'booking-id-font font-weight-bolder cursor-pointer' ">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? (booking.grand_total).toFixed(2) : 0 )"></span>
 										</p>
 									</td>
+								
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
 											data-target="#change_status_booking_Modal"

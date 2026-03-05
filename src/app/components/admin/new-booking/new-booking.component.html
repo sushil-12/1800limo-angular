@@ -1275,7 +1275,8 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
+				<div id="number_of_hours" class="flex-grow-1 ml-2 mr-2"
+					*ngIf="Form.service_type.value == 'charter_tour'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label>
@@ -1283,9 +1284,14 @@
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
 								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()"
+								[ngClass]="{ 'border-red': (submitBookingForm && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '')) }" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
+						<div *ngIf="(submitBookingForm && (number_of_hours == 0 || number_of_hours == null || number_of_hours == ''))"
+							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 20px;">
+							<div>Number of hours should not be 0.</div>
+						</div>
 					</div>
 				</div>
 			</div>
