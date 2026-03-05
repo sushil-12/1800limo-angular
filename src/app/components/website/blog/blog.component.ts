@@ -25,8 +25,22 @@ export class BlogComponent implements OnInit {
   constructor(private titleService: Title, private metaService: Meta) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Blog | 1-800-LIMO.COM');
-    this.metaService.updateTag({ name: 'description', content: 'Expert tips, industry news, and inspiring stories from the world of luxury transportation' });
+    const title = 'Blog | 1-800-LIMO.COM';
+    const description = 'Expert tips, industry news, and inspiring stories from the world of luxury transportation';
+
+    this.titleService.setTitle(title);
+    this.metaService.updateTag({ name: 'description', content: description });
+
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: title });
+    this.metaService.updateTag({ property: 'og:description', content: description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: title });
+    this.metaService.updateTag({ name: 'twitter:description', content: description });
 
     // Based on the mockup, set the second and third items as featured
     this.featuredArticles = [this.allPosts[1], this.allPosts[2]];

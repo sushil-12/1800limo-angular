@@ -30,6 +30,17 @@ export class GroupTravelPlannerComponent implements OnInit {
     this.metaService.updateTag({ name: 'description', content: groupTravelMetaData.description });
     this.metaService.updateTag({ name: 'keywords', content: groupTravelMetaData.keywords });
 
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: groupTravelMetaData.title });
+    this.metaService.updateTag({ property: 'og:description', content: groupTravelMetaData.description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: groupTravelMetaData.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: groupTravelMetaData.description });
+
     this.faqs = groupTravelFaqData.map((faq: GroupTravelFAQ) => ({ ...faq, isOpen: false }));
     this.applyFilters();
   }
