@@ -43,6 +43,17 @@ export class InvestorsComponent implements OnInit {
     this.metaService.updateTag({ name: 'description', content: this.investorsData.meta.description });
     this.metaService.updateTag({ name: 'keywords', content: this.investorsData.meta.keywords });
 
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: this.investorsData.meta.title });
+    this.metaService.updateTag({ property: 'og:description', content: this.investorsData.meta.description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: this.investorsData.meta.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: this.investorsData.meta.description });
+
     // Sanitize the YouTube URL
     this.safeVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.investorsData.videoUrl);
   }

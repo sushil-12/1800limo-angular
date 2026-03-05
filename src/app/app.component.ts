@@ -6,27 +6,26 @@ import { environment } from 'src/environments/environment';
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit
-{
+export class AppComponent implements OnInit {
 	title = 'limo1800';
 	errors: any;
 
 	constructor(
 		public stateManagementService: StateManagementService) { }
 
-	ngOnInit(): void
-	{
-		try
-		{
+	ngOnInit(): void {
+		try {
 			console.info("Environment: ", environment['environmentName']);
 			console.info('ServerURL: ', environment['serverUrl']);
-		} catch
-		{
+
+			if (environment['environmentName'] === 'Production') {
+				this.loadGTM();
+			}
+		} catch {
 			console.error('Error while parsing Environments file. Current Env file is ...');
 			console.error(environment);
 		}
-		this.stateManagementService.getError().subscribe(data =>
-		{
+		this.stateManagementService.getError().subscribe(data => {
 			this.errors = data;
 		});
 
@@ -36,7 +35,7 @@ export class AppComponent implements OnInit
 
 	loadClarity() {
 		// const clarityId = environment.production ? 's8h568cke2' : 's4gfuspb5j';
-	
+
 		// const clarityScriptContent = `
 		//   (function(c,l,a,r,i,t,y){
 		// 	c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -44,24 +43,37 @@ export class AppComponent implements OnInit
 		// 	y=l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t,y);
 		//   })(window, document, "clarity", "script", "s4gfuspb5j");
 		// `;
-	
+
 		// const script = document.createElement('script');
 		// script.type = 'text/javascript';
 		// script.text = clarityScriptContent;
 		// document.head.appendChild(script);
-	  }
+	}
 
-	storeLastRoute(event: any)
-	{
+	loadGTM() {
+		const script1 = document.createElement('script');
+		script1.async = true;
+		script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-RHE4W9VD6D';
+		document.head.appendChild(script1);
+
+		const script2 = document.createElement('script');
+		script2.innerHTML = `
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-RHE4W9VD6D');
+		`;
+		document.head.appendChild(script2);
+	}
+
+	storeLastRoute(event: any) {
 		// should save cookies of these routes
 		let inclusive_array = ['admin', 'affiliate', 'individual', 'corporate', 'travel', 'agent']
-		if (event.router == undefined)
-		{
+		if (event.router == undefined) {
 			return
 		}
 		console.info(inclusive_array.includes(event.router.url.split('/')[0].toLowerCase()))
-		if (inclusive_array.includes(event.router.url.split('/')[0].toLowerCase()))
-		{
+		if (inclusive_array.includes(event.router.url.split('/')[0].toLowerCase())) {
 			console.warn('\n----------------\n')
 			console.warn(event.router.url, 'Registering a cookie')
 			// set a cookie to store the last route the user navigates to

@@ -36,6 +36,17 @@ export class CustomerFaqComponent implements OnInit {
     this.metaService.updateTag({ name: 'description', content: customerFaqMetaData.description });
     this.metaService.updateTag({ name: 'keywords', content: customerFaqMetaData.keywords });
 
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: customerFaqMetaData.title });
+    this.metaService.updateTag({ property: 'og:description', content: customerFaqMetaData.description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: customerFaqMetaData.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: customerFaqMetaData.description });
+
     this.faqs = customerFaqData.map(faq => ({ ...faq, isOpen: false }));
     this.applyFilters();
   }

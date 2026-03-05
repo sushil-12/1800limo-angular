@@ -42,6 +42,17 @@ export class ContactUsComponent implements OnInit, AfterViewInit {
     this.metaService.updateTag({ name: 'description', content: contactUsData.meta.description });
     this.metaService.updateTag({ name: 'keywords', content: contactUsData.meta.keywords });
 
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: contactUsData.meta.title });
+    this.metaService.updateTag({ property: 'og:description', content: contactUsData.meta.description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: contactUsData.meta.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: contactUsData.meta.description });
+
     //Get In Touch FORM
     //validations
     this.getInTouchForm = this.formBuilder.group({

@@ -108,6 +108,17 @@ export class InsuranceLicensingComponent implements OnInit {
     this.metaService.updateTag({ name: 'description', content: this.insuranceData.meta.description });
     this.metaService.updateTag({ name: 'keywords', content: this.insuranceData.meta.keywords });
 
+    // Open Graph
+    this.metaService.updateTag({ property: 'og:title', content: this.insuranceData.meta.title });
+    this.metaService.updateTag({ property: 'og:description', content: this.insuranceData.meta.description });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+    this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
+
+    // Twitter Card
+    this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.metaService.updateTag({ name: 'twitter:title', content: this.insuranceData.meta.title });
+    this.metaService.updateTag({ name: 'twitter:description', content: this.insuranceData.meta.description });
+
     // Sanitize the HTML content
     this.safeSections = this.insuranceData.sections.map((section: any) => ({
       ...section,
