@@ -66,59 +66,24 @@
 						<div *ngIf="f.AgentEmail.errors.pattern">Email format should be valid</div>
 					</div>
 				</div>
-				<div class="col-md-2 col-4 policyMonth">
-					<mat-form-field appearance="outline">
-						<mat-label>Policy Expire Month <span class="asterisk">*</span></mat-label>
-						<mat-select class="font-weight-bold" formControlName="policyExpiredMonth" tabIndex="1">
-							<mat-option value="">Month</mat-option>
-							<mat-option value='01'>01</mat-option>
-							<mat-option value='02'>02</mat-option>
-							<mat-option value='03'>03</mat-option>
-							<mat-option value='04'>04</mat-option>
-							<mat-option value='05'>05</mat-option>
-							<mat-option value='06'>06</mat-option>
-							<mat-option value='07'>07</mat-option>
-							<mat-option value='08'>08</mat-option>
-							<mat-option value='09'>09</mat-option>
-							<mat-option value='10'>10</mat-option>
-							<mat-option value='11'>11</mat-option>
-							<mat-option value='12'>12</mat-option>
-						</mat-select>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline"
+						[class.is-invalid-input]="submittedForm && f.policyExpiredDate.errors?.pastDate || f.policyExpiredDate.touched && f.policyExpiredDate.errors?.pastDate">
+						<mat-label>Policy Expire Date <span class="asterisk">*</span></mat-label>
+						<input matInput [matDatepicker]="policyExpiredDatePicker" formControlName="policyExpiredDate"
+							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()" readonly>
+						<mat-datepicker-toggle matSuffix [for]="policyExpiredDatePicker"></mat-datepicker-toggle>
+						<mat-datepicker #policyExpiredDatePicker></mat-datepicker>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.policyExpiredMonth.errors || f.policyExpiredMonth.touched && f.policyExpiredMonth.errors"
+					<div *ngIf="submittedForm && f.policyExpiredDate.errors || f.policyExpiredDate.touched && f.policyExpiredDate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredMonth.errors.required">This field is required</div>
+						<div *ngIf="f.policyExpiredDate.errors.required">This field is required</div>
+						<div *ngIf="f.policyExpiredDate.errors.pastDate">Your policy expired.</div>
 					</div>
 					<!-- <span [hidden]="!addInsuranceForm.hasError('policyError')"
 						class="text-danger margin-bottom-thin my-mat-hint">Please enter future date.</span>
 					<span [hidden]="!addInsuranceForm.hasError('InvalidDate')"
 						class="text-danger margin-bottom-thin my-mat-hint">Invalid Date</span> -->
-				</div>
-				<div class="col-md-2 col-4 policyDay">
-					<mat-form-field appearance="outline">
-						<mat-label>Policy Expire Day <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="policyExpiredDay" tabIndex="1">
-							<mat-option value="">Day</mat-option>
-							<mat-option *ngFor="let day of policyExpiredDay" value="{{day}}">{{day}}</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.policyExpiredDay.errors || f.policyExpiredDay.touched && f.policyExpiredDay.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredDay.errors.required">This field is required</div>
-					</div>
-				</div>
-				<div class="col-md-2 col-4 policyYear">
-					<mat-form-field appearance="outline">
-						<mat-label>Policy Expire Year <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="policyExpiredYear" tabIndex="1">
-							<mat-option value="">Year</mat-option>
-							<mat-option *ngFor="let year of policyExpiredYear" value="{{year}}">{{year}}</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.policyExpiredYear.errors || f.policyExpiredYear.touched && f.policyExpiredYear.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredYear.errors.required">This field is required</div>
-					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">

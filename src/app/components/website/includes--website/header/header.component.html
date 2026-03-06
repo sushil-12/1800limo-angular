@@ -33,7 +33,8 @@
 						<a class="nav-link" [routerLinkActive]="['active']" routerLink="/fleet" tabindex="1">Fleet</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/contact-us']" tabindex="1">Contact us</a>
+						<a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['/contact-us']"
+							tabindex="1">Contact us</a>
 					</li>
 					<div class="nav-buttons">
 						<li class="nav-item">
@@ -109,8 +110,11 @@
 									<div class="dropdown-divider"></div>
 
 									<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
-										class="dropdown-item" (click)="dashboard('affiliate')">
-										<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
+										class="dropdown-item"
+										[class.sub-admin-btn]="Value === 'Manage Bookings' || Value === 'Continue Set-Up'"
+										(click)="dashboard('affiliate')">
+										<div class="d-inline dropdown-item-icon settingsvg"
+											[class.gear-bg-black]="Value !== 'Manage Bookings' && Value !== 'Continue Set-Up'">
 											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 												stroke-linecap="round" stroke-linejoin="round"
@@ -120,13 +124,15 @@
 													d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
 												</path>
 											</svg>
-										</div><span class="dropdown-item-value">{{ Value }}</span>
+										</div><span style="font-size: 16px; font-weight: 500;"
+											[class.dropdown-item-value]="Value !== 'Manage Bookings' && Value !== 'Continue Set-Up'">{{
+											Value }}</span>
 									</div>
 
 									<ng-template #adminRole>
 										<div *ngIf="currentUser.roleName=='admin' || currentUser.roleName=='sub_admin';else otherRole"
 											class="dropdown-item sub-admin-btn" (click)="dashboard('admin')">
-											<div class="d-inline dropdown-item-icon gear-bg-black settingsvg ">
+											<div class="d-inline dropdown-item-icon settingsvg ">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 													viewBox="0 0 24 24" fill="none" stroke="currentColor"
 													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -136,14 +142,18 @@
 														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
 													</path>
 												</svg>
-											</div><span class="dropdown-item-value">Admin Dashboard</span>
+											</div><span style="font-size: 16px; font-weight: 500;">Admin
+												Dashboard</span>
 										</div>
 									</ng-template>
 
 									<ng-template #otherRole>
 										<div *ngIf="(currentUser?.roleName === 'travel_agent' || currentUser?.roleName === 'individual' || currentUser?.roleName === 'sub_travel_agent' || currentUser?.roleName === 'sub_affiliate' ? Value === 'Manage Bookings' : currentUser?.is_profile_complete); else completeProfile"
-											class="dropdown-item" (click)="dashboard(currentUser?.roleName)">
-											<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
+											class="dropdown-item"
+											[class.sub-admin-btn]="Value === 'Manage Bookings' || Value === 'Continue Set-Up'"
+											(click)="dashboard(currentUser?.roleName)">
+											<div class="d-inline dropdown-item-icon settingsvg"
+												[class.gear-bg-black]="Value !== 'Manage Bookings' && Value !== 'Continue Set-Up'">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 													viewBox="0 0 24 24" fill="none" stroke="currentColor"
 													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -153,14 +163,19 @@
 														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
 													</path>
 												</svg>
-											</div><span class="dropdown-item-value">{{ Value }}</span>
+											</div><span style="font-size: 16px; font-weight: 500;"
+												[class.dropdown-item-value]="Value !== 'Manage Bookings' && Value !== 'Continue Set-Up'">{{
+												Value
+												}}</span>
 										</div>
 									</ng-template>
 
 									<ng-template #completeProfile>
 										<div class="dropdown-item"
+											[class.sub-admin-btn]="Value === 'Manage Bookings' || Value === 'Continue Set-Up'"
 											(click)="redirectCompleteProfile(currentUser?.roleName)">
-											<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
+											<div class="d-inline dropdown-item-icon settingsvg"
+												[class.gear-bg-black]="Value !== 'Manage Bookings' && Value !== 'Continue Set-Up'">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 													viewBox="0 0 24 24" fill="none" stroke="currentColor"
 													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -170,7 +185,10 @@
 														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
 													</path>
 												</svg>
-											</div><span class="dropdown-item-value">{{ Value }}</span>
+											</div><span style="font-size: 16px; font-weight: 500;"
+												[class.dropdown-item-value]="Value !== 'Manage Bookings' && Value !== 'Continue Set-Up'">{{
+												Value
+												}}</span>
 										</div>
 									</ng-template>
 

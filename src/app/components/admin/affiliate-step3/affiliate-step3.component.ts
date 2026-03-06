@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { CommonService } from '../../../services/common.service';
@@ -11,6 +11,19 @@ import { formatDate } from '@angular/common';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
+
+export function pastDateValidator(): ValidatorFn {
+	return (control: AbstractControl): { [key: string]: any } | null => {
+		if (!control.value) {
+			return null; // Return null if the date is not provided
+		}
+
+		const selectedDate = new Date(control.value).setHours(0, 0, 0, 0);
+		const currentDate = new Date().setHours(0, 0, 0, 0);
+
+		return selectedDate < currentDate ? { pastDate: true } : null;
+	};
+}
 
 @Component({
 	selector: 'app-affiliate-step3',
@@ -121,9 +134,10 @@ export class AffiliateStep3Component implements OnInit {
 			AgentTelephoneIsd: ['+1', Validators.required],
 			AgentTelephoneCountry: ['us', Validators.required],
 			policyNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			policyExpiredDay: ['', Validators.required],
-			policyExpiredMonth: ['', Validators.required],
-			policyExpiredYear: ['', Validators.required],
+			policyExpiredDate: ['', [Validators.required, pastDateValidator()]],
+			policyExpiredDay: [''],
+			policyExpiredMonth: [''],
+			policyExpiredYear: [''],
 			insuranceLimits: ['', Validators.required],
 			AgentEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			insCertificate: ['', Validators.required],
@@ -158,6 +172,7 @@ export class AffiliateStep3Component implements OnInit {
 							AgentTelephone: data.AgentTelephone,
 							AgentTelephoneIsd: data.AgentTelephoneIsd,
 							policyNumber: data.policyNumber,
+							policyExpiredDate: new Date(Number(data.policyExpiredYear), Number(data.policyExpiredMonth) - 1, Number(data.policyExpiredDay)),
 							policyExpiredDay: data.policyExpiredDay,
 							policyExpiredMonth: data.policyExpiredMonth,
 							policyExpiredYear: data.policyExpiredYear,
@@ -174,6 +189,7 @@ export class AffiliateStep3Component implements OnInit {
 				var year = dateobj.getFullYear();
 				console.log(month, day, year);
 				this.addInsuranceForm.patchValue({
+					policyExpiredDate: new Date(year, 11, 31),
 					policyExpiredDay: '31',
 					policyExpiredMonth: '12',
 					policyExpiredYear: year.toString()
@@ -453,16 +469,26 @@ export class AffiliateStep3Component implements OnInit {
 			return;
 		}
 
+		let payload = { ...this.addInsuranceForm.value };
+
 		// Sanitize AgentTelephone (remove Country Code if present)
-		if (this.addInsuranceForm.value.AgentTelephone && this.addInsuranceForm.value.AgentTelephoneIsd && this.addInsuranceForm.value.AgentTelephone.startsWith(this.addInsuranceForm.value.AgentTelephoneIsd)) {
-			this.addInsuranceForm.value.AgentTelephone = this.addInsuranceForm.value.AgentTelephone.substring(this.addInsuranceForm.value.AgentTelephoneIsd.length);
+		if (payload.AgentTelephone && payload.AgentTelephoneIsd && payload.AgentTelephone.startsWith(payload.AgentTelephoneIsd)) {
+			payload.AgentTelephone = payload.AgentTelephone.substring(payload.AgentTelephoneIsd.length);
 		}
-		this.addInsuranceForm.value.stepCompleted =
-			this.adminService.getUpdatedStepsLocal("3");
+		let expireDate = payload.policyExpiredDate;
+		if (expireDate) {
+			let d = new Date(expireDate);
+			payload.policyExpiredYear = d.getFullYear().toString();
+			payload.policyExpiredMonth = (d.getMonth() + 1).toString().padStart(2, '0');
+			payload.policyExpiredDay = d.getDate().toString().padStart(2, '0');
+		}
+		delete payload.policyExpiredDate;
+
+		payload.stepCompleted = this.adminService.getUpdatedStepsLocal("3");
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
 
-		this.adminService.addInsuranceDetail(this.addInsuranceForm.value)
+		this.adminService.addInsuranceDetail(payload)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner
@@ -492,6 +518,7 @@ export class AffiliateStep3Component implements OnInit {
 			AgentName: '',
 			AgentTelephone: '',
 			policyNumber: '',
+			policyExpiredDate: '',
 			policyExpiredDay: '',
 			policyExpiredMonth: '',
 			policyExpiredYear: '',

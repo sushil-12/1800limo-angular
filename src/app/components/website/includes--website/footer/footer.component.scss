@@ -152,9 +152,13 @@ a.user-profile:active::after {
 	top: -300px !important;
 	margin: auto !important;
 }
+
 @media (min-width: 280px) and (max-width: 430px) {
-	.quick-links-footer{justify-content:center !important;}
+	.quick-links-footer {
+		justify-content: center !important;
+	}
 }
+
 @media (min-width: 280px) and (max-width: 311px) {
 
 	// .dropdown-menu {
@@ -330,8 +334,9 @@ a.user-profile:active::after {
 // }
 
 .footercontent .quick_links a:hover {
-    color: #be691d !important;
+	color: #be691d !important;
 }
+
 @media only screen and (max-width: 767px) {
 	.btn-top-bottom {
 		display: none !important;
@@ -364,6 +369,24 @@ a.user-profile:active::after {
 
 		&:hover:not(.dropdown-item.nav-disabled) {
 			background-color: #be691d;
+		}
+	}
+
+	.sub-admin-btn {
+		background-color: var(--green) !important;
+		color: #fff !important;
+
+		svg {
+			stroke: #fff;
+		}
+
+		&:hover {
+			background-color: transparent !important;
+			color: #000 !important;
+
+			svg {
+				stroke: #000;
+			}
 		}
 	}
 
@@ -414,7 +437,7 @@ a.user-profile:active::after {
 }
 
 @media screen and (max-width: 480px) {
-	.footer_text_main{
+	.footer_text_main {
 		padding: 0px 30px !important;
 	}
 }

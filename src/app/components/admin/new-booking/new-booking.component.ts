@@ -52,6 +52,47 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 	time_values: Array<any> = constant_data.time_values
+	hour_values: Array<any> = [
+		{ return_value: 2, display_value: '2 Hours Minimum' },
+		{ return_value: 3, display_value: '3 Hours' },
+		{ return_value: 4, display_value: '4 Hours' },
+		{ return_value: 5, display_value: '5 Hours' },
+		{ return_value: 6, display_value: '6 Hours' },
+		{ return_value: 7, display_value: '7 Hours' },
+		{ return_value: 8, display_value: '8 Hours' },
+		{ return_value: 9, display_value: '9 Hours' },
+		{ return_value: 24, display_value: '1 Day' },
+		{ return_value: 48, display_value: '2 Days' },
+		{ return_value: 72, display_value: '3 Days' },
+		{ return_value: 96, display_value: '4 Days' },
+		{ return_value: 120, display_value: '5 Days' },
+		{ return_value: 144, display_value: '6 Days' },
+		{ return_value: 168, display_value: '7 Days' },
+		{ return_value: 192, display_value: '8 Days' },
+		{ return_value: 216, display_value: '9 Days' },
+		{ return_value: 240, display_value: '10 Days' },
+		{ return_value: 264, display_value: '11 Days' },
+		{ return_value: 288, display_value: '12 Days' },
+		{ return_value: 312, display_value: '13 Days' },
+		{ return_value: 336, display_value: '14 Days' },
+		{ return_value: 360, display_value: '15 Days' },
+		{ return_value: 384, display_value: '16 Days' },
+		{ return_value: 408, display_value: '17 Days' },
+		{ return_value: 432, display_value: '18 Days' },
+		{ return_value: 456, display_value: '19 Days' },
+		{ return_value: 480, display_value: '20 Days' },
+		{ return_value: 504, display_value: '21 Days' },
+		{ return_value: 528, display_value: '22 Days' },
+		{ return_value: 552, display_value: '23 Days' },
+		{ return_value: 576, display_value: '24 Days' },
+		{ return_value: 600, display_value: '25 Days' },
+		{ return_value: 624, display_value: '26 Days' },
+		{ return_value: 648, display_value: '27 Days' },
+		{ return_value: 672, display_value: '28 Days' },
+		{ return_value: 696, display_value: '29 Days' },
+		{ return_value: 720, display_value: '30 Days' },
+		{ return_value: 744, display_value: '31 Days' }
+	];
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
@@ -2967,6 +3008,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+
+		if (this.Form.service_type.value == 'charter_tour' && (this.number_of_hours == 0 || this.number_of_hours == null || this.number_of_hours == '')) {
+			const element = document.getElementById('number_of_hours');
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+			return;
+		}
 
 		// Sync Pax Country Data
 		if (this.PaxTelObject) {

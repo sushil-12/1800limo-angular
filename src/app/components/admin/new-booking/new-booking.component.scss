@@ -1,4 +1,3 @@
-
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 .mat-mdc-checkbox-checked.mat-accent .mat-checkbox-background {
 	background-color: var(--orange);
@@ -148,7 +147,8 @@ ul {
 .preview-extra-stop-color {
 	color: #000000;
 }
-.preview-output-field{
+
+.preview-output-field {
 	font-size: 19px;
 }
 
@@ -211,6 +211,11 @@ ul {
 
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
+	min-height: 56px !important;
+}
+
+:host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline {
+	min-height: 56px !important;
 }
 
 ::ng-deep .col-md-3.margin-mat-field {
@@ -285,6 +290,7 @@ ul {
 }
 
 :host ::ng-deep .mat-mdc-form-field {
+
 	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 	.mat-form-field-outline {
 		&-end {
@@ -356,6 +362,7 @@ ul {
 :host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
 	border-radius: 10px;
+	min-height: 56px !important;
 }
 
 .mat-mdc-option {
@@ -424,8 +431,8 @@ ul {
 	}
 }
 
-@media (min-width: 992px){
-	.modal-lg{
+@media (min-width: 992px) {
+	.modal-lg {
 		max-width: 600px !important;
 	}
 }

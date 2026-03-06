@@ -31,22 +31,22 @@ header {
 	padding-right: 15px !important
 }
 
-.contact-number{
+.contact-number {
 	color: #000 !important;
 	border-radius: 24px;
 	background: rgba(243, 243, 243, 1);
 }
 
-.login-button{
+.login-button {
 	background: rgba(243, 147, 61, 1);
 	border-radius: 24px;
 }
 
-.login-button:hover{
+.login-button:hover {
 	color: #000 !important;
 }
 
-.nav-buttons{
+.nav-buttons {
 	display: flex;
 	gap: 20px;
 	position: absolute;
@@ -92,12 +92,12 @@ header a.nav-link.active {
 
 	}
 
-	.dropdown-item:hover{
+	.dropdown-item:hover {
 		background-color: transparent !important;
 		color: #000 !important;
 	}
 
-	.dropdown-item-value{
+	.dropdown-item-value {
 		color: #000;
 		font-size: 16px;
 		font-weight: 500;
@@ -107,17 +107,30 @@ header a.nav-link.active {
 		background-color: #f44336;
 	}
 
-	
+
 	.ta-btn {
 		background-color: #0766cc;
 	}
-	
-	.driver-btn{
+
+	.driver-btn {
 		background-color: var(--green);
 	}
 
-	.sub-admin-btn{
-		background-color: var(--orange-color);
+	.sub-admin-btn {
+		background-color: var(--green);
+		color: #fff !important;
+
+		svg {
+			stroke: #fff;
+		}
+
+		&:hover {
+			color: #000 !important;
+
+			svg {
+				stroke: #000;
+			}
+		}
 	}
 
 	.dropdown-item:not(.dropdown-item.nav-disabled) {
@@ -131,7 +144,7 @@ header a.nav-link.active {
 	.logout-btn {
 		background: #8080805c;
 	}
-	
+
 }
 
 // redesigning css ends
@@ -287,9 +300,9 @@ ul {
 	}
 
 	.navbar .collapse {
-        padding-top: 0px !important;
-    }
-	
+		padding-top: 0px !important;
+	}
+
 }
 
 @media only screen and (max-width: 820px) {
@@ -299,27 +312,27 @@ ul {
 		width: 227px;
 	}
 
-	.dropdown-item{
+	.dropdown-item {
 		font-size: 14px !important;
 	}
-	
+
 }
 
 @media only screen and (max-width:440px) {
 
-	header{
+	header {
 		margin: 0 !important;
 		border-radius: 0 !important;
 	}
 
-	.nav-buttons{
+	.nav-buttons {
 		position: relative;
 		flex-direction: column;
 		left: 15px;
 		top: 10px;
 		margin-bottom: 10px;
 	}
-	
+
 }
 
 // redesigning css ends

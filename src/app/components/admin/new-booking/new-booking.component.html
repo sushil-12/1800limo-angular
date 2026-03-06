@@ -23,7 +23,7 @@
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
-				<div class="flex-grow-1 ml-2 mr-2">
+				<div class="col-12 col-md px-2 mb-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -41,7 +41,7 @@
 				</div>
 
 				<!-- Transfer Type -->
-				<div class="flex-grow-1 ml-2 mr-2">
+				<div class="col-12 col-md px-2 mb-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -69,7 +69,7 @@
 				</div>
 
 				<!-- Return Transfer Type -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -92,17 +92,20 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div>
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Number of Hours
-							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(focus)="$event.target.select()" />
-							<span matSuffix>Hrs.</span>
-						</mat-form-field>
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'charter_tour'"
+					id="number_of_hours">
+					<div class="booking-dropdown-container" style="margin: 1rem 0;">
+						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
+							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="number_of_hours"
+							[(ngModel)]="number_of_hours" (change)="handleNoOfHours($event?.return_value)"
+							[ngClass]="{ 'is-invalid-input': (submitBookingForm || Form.number_of_hours.touched || Form.number_of_hours.dirty) && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '') }">
+						</ng-select>
+						<div style="padding-bottom: 10px; margin-top: 5px;"
+							*ngIf="(submitBookingForm || Form.number_of_hours.touched || Form.number_of_hours.dirty) && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '')"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div>Number of hours should not be 0</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1229,7 +1232,7 @@
 				</div>
 
 				<!-- Transfer Type -->
-				<div class="flex-grow-1 ml-2 mr-2">
+				<div class="col-12 col-md px-2 mb-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -1252,7 +1255,7 @@
 				</div>
 
 				<!-- Return Transfer Type -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -1275,17 +1278,19 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div>
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Number of Hours
-							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(focus)="$event.target.select()" />
-							<span matSuffix>Hrs.</span>
-						</mat-form-field>
+				<div id="number_of_hours" class="col-12 col-md px-2 mb-2"
+					*ngIf="(transfer_type == 'city_to_city' && isTravelShare) || (transfer_type == 'city_to_city' && Form.service_type.value != 'one_way')">
+					<div class="booking-dropdown-container" style="margin: 1rem 0;">
+						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
+							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="number_of_hours"
+							[(ngModel)]="number_of_hours" (change)="handleNoOfHours($event?.return_value)"
+							[ngClass]="{ 'is-invalid-input': (submitBookingForm && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '')) }">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && (number_of_hours == 0 || number_of_hours == null || number_of_hours == ''))"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div>Number of hours is required</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -2044,7 +2049,7 @@
 				</div>
 
 				<!-- Transfer Type -->
-				<div class="flex-grow-1 ml-2 mr-2">
+				<div class="col-12 col-md px-2 mb-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -2068,7 +2073,7 @@
 				</div>
 
 				<!-- Return Transfer Type -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -2091,19 +2096,16 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div>
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Number of Hours
-							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(focus)="$event.target.select()" />
-							<span matSuffix>Hrs.</span>
-						</mat-form-field>
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.return_service_type.value == 'charter_tour'">
+					<div class="booking-dropdown-container" style="margin: 1rem 0;">
+						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
+							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="number_of_hours"
+							[(ngModel)]="number_of_hours" (change)="handleNoOfHours($event?.return_value)">
+						</ng-select>
 					</div>
 				</div>
+				<!-- Hours Ends -->
 			</div>
 			<div class="row px-3">
 				<!-- Meet Greet Choices -->
