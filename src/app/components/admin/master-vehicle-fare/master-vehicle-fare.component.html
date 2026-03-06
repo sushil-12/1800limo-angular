@@ -744,7 +744,7 @@
 							<mat-option [value]="5">5</mat-option>
 						</mat-select>
 					</mat-form-field>
-					<div *ngIf="submittedForm && form.minimum_charter_hours.errors || form.minimum_charter_hours.touched && form.minimum_charter_hours.errors"
+					<div *ngIf="is_form_submitted && form.minimum_charter_hours.errors || form.minimum_charter_hours.touched && form.minimum_charter_hours.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.minimum_charter_hours.errors.pattern">Enter Numbers only</div>
 					</div>
