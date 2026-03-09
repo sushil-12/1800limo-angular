@@ -94,6 +94,48 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	currentUser: any;
 	previousBookingData: any = null;
 
+	hour_values: Array<any> = [
+		{ return_value: 2, display_value: '2 Hours Minimum' },
+		{ return_value: 3, display_value: '3 Hours' },
+		{ return_value: 4, display_value: '4 Hours' },
+		{ return_value: 5, display_value: '5 Hours' },
+		{ return_value: 6, display_value: '6 Hours' },
+		{ return_value: 7, display_value: '7 Hours' },
+		{ return_value: 8, display_value: '8 Hours' },
+		{ return_value: 9, display_value: '9 Hours' },
+		{ return_value: 24, display_value: '1 Day' },
+		{ return_value: 48, display_value: '2 Days' },
+		{ return_value: 72, display_value: '3 Days' },
+		{ return_value: 96, display_value: '4 Days' },
+		{ return_value: 120, display_value: '5 Days' },
+		{ return_value: 144, display_value: '6 Days' },
+		{ return_value: 168, display_value: '7 Days' },
+		{ return_value: 192, display_value: '8 Days' },
+		{ return_value: 216, display_value: '9 Days' },
+		{ return_value: 240, display_value: '10 Days' },
+		{ return_value: 264, display_value: '11 Days' },
+		{ return_value: 288, display_value: '12 Days' },
+		{ return_value: 312, display_value: '13 Days' },
+		{ return_value: 336, display_value: '14 Days' },
+		{ return_value: 360, display_value: '15 Days' },
+		{ return_value: 384, display_value: '16 Days' },
+		{ return_value: 408, display_value: '17 Days' },
+		{ return_value: 432, display_value: '18 Days' },
+		{ return_value: 456, display_value: '19 Days' },
+		{ return_value: 480, display_value: '20 Days' },
+		{ return_value: 504, display_value: '21 Days' },
+		{ return_value: 528, display_value: '22 Days' },
+		{ return_value: 552, display_value: '23 Days' },
+		{ return_value: 576, display_value: '24 Days' },
+		{ return_value: 600, display_value: '25 Days' },
+		{ return_value: 624, display_value: '26 Days' },
+		{ return_value: 648, display_value: '27 Days' },
+		{ return_value: 672, display_value: '28 Days' },
+		{ return_value: 696, display_value: '29 Days' },
+		{ return_value: 720, display_value: '30 Days' },
+		{ return_value: 744, display_value: '31 Days' }
+	];
+
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -668,6 +710,16 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.returnNumberOfHr.emit(n_hr)
 		}
 		this.returnNumberOfHr.emit(event.target.value)
+	}
+
+	handleHourChangeSelect(value: any) {
+		console.log('------->>>>>>> handleHourChangeSelect:', value)
+		if (!value || value == '') {
+			let n_hr: any = 1
+			this.returnNumberOfHr.emit(n_hr)
+		} else {
+			this.returnNumberOfHr.emit(value)
+		}
 	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
