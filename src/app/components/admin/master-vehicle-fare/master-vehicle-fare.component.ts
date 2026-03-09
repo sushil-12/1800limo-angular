@@ -146,6 +146,10 @@ export class MasterVehicleFareComponent implements OnInit {
 		}
 	}
 
+	km_mile_switch(value: string) {
+		this.changeDetection.radioButton(value, 'km_mile');
+	}
+
 	/**
 	 * Build the form and applies the validations
 	 */

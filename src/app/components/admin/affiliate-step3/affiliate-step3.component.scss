@@ -46,15 +46,53 @@ mat-label {
 	margin-left: 6px;
 }
 
-/* Red border for invalid phone input - using custom class for immediate update */
-:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__leading,
-:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__notch,
-:host ::ng-deep .mat-form-field.is-invalid-input .mdc-notched-outline__trailing,
-:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-start,
-:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-gap,
-:host ::ng-deep .mat-form-field.is-invalid-input .mat-form-field-outline-end {
+/* Red border for invalid fields - using custom class for immediate update */
+:host ::ng-deep .is-invalid-input .mdc-notched-outline,
+:host ::ng-deep .is-invalid-input .mdc-notched-outline *,
+:host ::ng-deep .is-invalid-input .mat-mdc-text-field-wrapper,
+:host ::ng-deep .is-invalid-input .mat-mdc-form-field-flex,
+:host ::ng-deep .is-invalid-input .mat-form-field-outline {
 	border-color: red !important;
-	border-width: 2px !important;
+	border-width: 3px !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__leading,
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__notch,
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__trailing {
+	border-color: red !important;
+	border-top: 3px solid red !important;
+	border-bottom: 3px solid red !important;
+	border-left: 0px none !important;
+	/* Start with clean slate for segments */
+	border-right: 0px none !important;
+}
+
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__leading {
+	border-left: 3px solid red !important;
+}
+
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__trailing {
+	border-right: 3px solid red !important;
+}
+
+:host ::ng-deep .is-invalid-input .mat-mdc-form-field-label,
+:host ::ng-deep .is-invalid-input .mat-form-field-label,
+:host ::ng-deep .is-invalid-input .mat-mdc-floating-label,
+:host ::ng-deep .is-invalid-input .asterisk {
+	color: red !important;
+}
+
+/* Ensure the red border remains even on hover/focus */
+:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__leading,
+:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__notch,
+:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__trailing,
+:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__notch,
+:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__trailing {
+	border-color: red !important;
+	border-width: 3px !important;
 }
 
 // Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
