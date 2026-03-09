@@ -96,17 +96,18 @@
 
 				<div class="col-md-6">
 					<mat-form-field appearance="outline"
-						[class.is-invalid-input]="submittedForm && f.policyExpiredDate.errors?.pastDate || f.policyExpiredDate.touched && f.policyExpiredDate.errors?.pastDate">
+						[class.is-invalid-input]="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required)">
 						<mat-label>Policy Expire Date <span class="asterisk">*</span></mat-label>
 						<input matInput [matDatepicker]="policyExpiredDatePicker" formControlName="policyExpiredDate"
 							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()" readonly>
 						<mat-datepicker-toggle matSuffix [for]="policyExpiredDatePicker"></mat-datepicker-toggle>
 						<mat-datepicker #policyExpiredDatePicker></mat-datepicker>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.policyExpiredDate.errors || f.policyExpiredDate.touched && f.policyExpiredDate.errors"
+					<div *ngIf="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required) || (f.policyExpiredDate.touched && f.policyExpiredDate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredDate.errors.required">This field is required</div>
-						<div *ngIf="f.policyExpiredDate.errors.pastDate">Your policy expired.</div>
+						<div *ngIf="f.policyExpiredDate.errors?.required">This field is required</div>
+						<div *ngIf="f.policyExpiredDate.errors?.pastDate">Selected policy date is in the past or
+							expired.</div>
 					</div>
 				</div>
 				<div class="col-md-6">
