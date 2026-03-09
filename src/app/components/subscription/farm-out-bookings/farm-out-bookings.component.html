@@ -106,7 +106,6 @@
 								<tr role="row">
 									<th>Actions</th>
 									<th>Booking</th>
-									<th>Total</th>
 									<th>Status</th>
 									<th>Date</th>
 									<th>Pax</th>
@@ -162,17 +161,15 @@
 
 										</div>
 									</td>
-									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
-										data-target="#previewBookingOnID"
-										(click)="showBookingPreviewModal(booking?.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer">
+									<td class="text-left font-weight-bolder">
+										<p data-toggle="modal" data-target="#previewBookingOnID"
+											(click)="showBookingPreviewModal(booking?.booking_id)"
+											class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="text-underline"
 												[innerHTML]="highlighText(booking?.booking_id )"
 												style="font-weight: 600;"></span>
 										</p>
-									</td>
-									<td class="text-center font-weight-bolder cursor-pointer">
-										<p class="booking-id-font font-weight-bolder cursor-pointer">
+										<p class="booking-id-font font-weight-bolder">
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? (booking.grand_total).toFixed(2) : 0 )"></span>
 										</p>
@@ -184,11 +181,12 @@
 										</div>
 									</td>
 									<td class="sorting_1">
-										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
-										</p>
-										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
+										<p style="font-weight: 600 !important; white-space: nowrap !important;">{{
+											FormatDate(booking.pickup_date) }}
 										</p>
 										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
+										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
+										</p>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"

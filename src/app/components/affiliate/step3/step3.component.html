@@ -94,120 +94,19 @@
 					</div>
 				</div>
 
-				<div class="col-md-2 col-4 policyMonth">
-					<label class="select-ex-month-label">Policy Expire Month
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownExMonth()"
-							formControlName="policyExpiredMonth" tabindex="1" placeholder="Month">
-							<option value="">Month</option>
-							<option value="01">01</option>
-							<option value="02">02</option>
-							<option value="03">03</option>
-							<option value="04">04</option>
-							<option value="05">05</option>
-							<option value="06">06</option>
-							<option value="07">07</option>
-							<option value="08">08</option>
-							<option value="09">09</option>
-							<option value="10">10</option>
-							<option value="11">11</option>
-							<option value="12">12</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
-					<div *ngIf="
-							(submittedForm && f.policyExpiredMonth.errors) ||
-							(f.policyExpiredMonth.touched &&
-								f.policyExpiredMonth.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredMonth.errors.required">
-							This field is required
-						</div>
-					</div>
-					<!-- <span [hidden]="!addInsuranceForm.hasError('policyError')"
-						class="text-danger margin-bottom-thin my-mat-hint">Please enter future date.</span> -->
-				</div>
-				<div class="col-md-2 col-4 policyDay">
-					<label class="select-ex-day-label">Policy Expire Day
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownExDay()"
-							formControlName="policyExpiredDay" tabindex="1" placeholder="Day">
-							<option value="">Day</option>
-							<option *ngFor="let day of policyExpiredDay" value="{{ day }}">
-								{{ day }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
-					<div *ngIf="
-							(submittedForm && f.policyExpiredDay.errors) ||
-							(f.policyExpiredDay.touched &&
-								f.policyExpiredDay.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredDay.errors.required">
-							This field is required
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2 col-4 policyYear">
-					<label class="select-ex-year-label">Policy Expire Year
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownExYear()"
-							formControlName="policyExpiredYear" tabindex="1" placeholder="Year">
-							<option value="">Year</option>
-							<option *ngFor="let year of policyExpiredYear" value="{{ year }}">
-								{{ year }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
-					<div *ngIf="
-							(submittedForm && f.policyExpiredYear.errors) ||
-							(f.policyExpiredYear.touched &&
-								f.policyExpiredYear.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.policyExpiredYear.errors.required">
-							This field is required
-						</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline"
+						[class.is-invalid-input]="submittedForm && f.policyExpiredDate.errors?.pastDate || f.policyExpiredDate.touched && f.policyExpiredDate.errors?.pastDate">
+						<mat-label>Policy Expire Date <span class="asterisk">*</span></mat-label>
+						<input matInput [matDatepicker]="policyExpiredDatePicker" formControlName="policyExpiredDate"
+							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()" readonly>
+						<mat-datepicker-toggle matSuffix [for]="policyExpiredDatePicker"></mat-datepicker-toggle>
+						<mat-datepicker #policyExpiredDatePicker></mat-datepicker>
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.policyExpiredDate.errors || f.policyExpiredDate.touched && f.policyExpiredDate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.policyExpiredDate.errors.required">This field is required</div>
+						<div *ngIf="f.policyExpiredDate.errors.pastDate">Your policy expired.</div>
 					</div>
 				</div>
 				<div class="col-md-6">
