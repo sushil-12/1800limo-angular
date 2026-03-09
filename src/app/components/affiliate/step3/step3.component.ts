@@ -21,6 +21,17 @@ import { CommonService } from "src/app/services/common.service";
 import * as intlTelInput from 'intl-tel-input';
 declare var $: any;
 
+export function pastDateValidator(): any {
+	return (control: any): { [key: string]: any } | null => {
+		if (!control.value) {
+			return null;
+		}
+		const selectedDate = new Date(control.value).setHours(0, 0, 0, 0);
+		const currentDate = new Date().setHours(0, 0, 0, 0);
+		return selectedDate < currentDate ? { pastDate: true } : null;
+	};
+}
+
 @Component({
 	selector: "app-step3",
 	templateUrl: "./step3.component.html",
@@ -46,6 +57,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 	public affiliate_type: any;
 	public policyExpiredDay: Array<number> = [];
 	public policyExpiredYear: Array<number> = [];
+	public minDate: Date = new Date();
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
@@ -151,6 +163,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 			policyExpiredDay: ['', Validators.required],
 			policyExpiredMonth: ['', Validators.required],
 			policyExpiredYear: ['', Validators.required],
+			policyExpiredDate: ['', [Validators.required, pastDateValidator()]],
 			insuranceLimits: ['500000', Validators.required],
 			AgentEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			insCertificate: ['', Validators.required],
@@ -189,6 +202,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 							policyExpiredDay: data.policyExpiredDay,
 							policyExpiredMonth: data.policyExpiredMonth,
 							policyExpiredYear: data.policyExpiredYear,
+							policyExpiredDate: data.policyExpiredYear && data.policyExpiredMonth && data.policyExpiredDay ? new Date(`${data.policyExpiredYear}-${data.policyExpiredMonth}-${data.policyExpiredDay}`) : '',
 							insuranceLimits: data.insuranceLimits,
 							AgentEmail: data.AgentEmail,
 						});
@@ -206,8 +220,24 @@ export class Step3Component implements OnInit, AfterViewInit {
 					policyExpiredDay: "31",
 					policyExpiredMonth: "12",
 					policyExpiredYear: year.toString(),
+					policyExpiredDate: new Date(`${year}-12-31`)
 				});
 			}
+		}
+
+		// Sync policyExpiredDate with legacy fields
+		const policyDateControl = this.addInsuranceForm.get('policyExpiredDate');
+		if (policyDateControl) {
+			policyDateControl.valueChanges.subscribe((date: Date) => {
+				if (date) {
+					const d = new Date(date);
+					this.addInsuranceForm.patchValue({
+						policyExpiredDay: d.getDate().toString().padStart(2, '0'),
+						policyExpiredMonth: (d.getMonth() + 1).toString().padStart(2, '0'),
+						policyExpiredYear: d.getFullYear().toString()
+					}, { emitEvent: false });
+				}
+			});
 		}
 	}
 
@@ -334,18 +364,18 @@ export class Step3Component implements OnInit, AfterViewInit {
 				}
 			})
 	}
-	blobToDataURL(blob: Blob, key, id) {
+	blobToDataURL(blob: Blob, key: any, id: any) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
-			let dataUrl = reader.result;
+			let dataUrl = reader.result as string;
 			console.log(dataUrl); //DataURL
 			this.vehicleOfficialImagesChange1(dataUrl, key, id);
 		};
 	}
 
 
-	async vehicleOfficialImagesChange1(imageUrl, imageType, imageId) {
+	async vehicleOfficialImagesChange1(imageUrl: string, imageType: any, imageId: any) {
 		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
@@ -455,7 +485,7 @@ export class Step3Component implements OnInit, AfterViewInit {
 		}
 	}
 
-	showImageInModal(imageUrl) {
+	showImageInModal(imageUrl: string) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
@@ -483,19 +513,29 @@ export class Step3Component implements OnInit, AfterViewInit {
 			return;
 		}
 
+		let payload = { ...this.addInsuranceForm.value };
+
 		// Sanitize AgentTelephone (remove Country Code if present)
-		if (this.addInsuranceForm.value.AgentTelephone && this.addInsuranceForm.value.AgentTelephoneIsd && this.addInsuranceForm.value.AgentTelephone.startsWith(this.addInsuranceForm.value.AgentTelephoneIsd)) {
-			this.addInsuranceForm.value.AgentTelephone = this.addInsuranceForm.value.AgentTelephone.substring(this.addInsuranceForm.value.AgentTelephoneIsd.length);
+		if (payload.AgentTelephone && payload.AgentTelephoneIsd && payload.AgentTelephone.startsWith(payload.AgentTelephoneIsd)) {
+			payload.AgentTelephone = payload.AgentTelephone.substring(payload.AgentTelephoneIsd.length);
 		}
 
-		this.addInsuranceForm.value.stepCompleted =
-			this.affiliateService.getUpdatedStepsLocal("3");
+		let expireDate = payload.policyExpiredDate;
+		if (expireDate) {
+			let d = new Date(expireDate);
+			payload.policyExpiredYear = d.getFullYear().toString();
+			payload.policyExpiredMonth = (d.getMonth() + 1).toString().padStart(2, '0');
+			payload.policyExpiredDay = d.getDate().toString().padStart(2, '0');
+		}
+		delete payload.policyExpiredDate;
+
+		payload.stepCompleted = this.affiliateService.getUpdatedStepsLocal("3");
 
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
 
 		this.affiliateService
-			.addInsuranceDetail(this.addInsuranceForm.value)
+			.addInsuranceDetail(payload)
 			.pipe(
 				catchError((err) => {
 					this.spinner.hide(); //hide spinner
@@ -539,21 +579,6 @@ export class Step3Component implements OnInit, AfterViewInit {
 		this.submittedForm = true
 		this.insCertificateImage = "";
 		this.insuranceCardImage = "";
-	}
-	selectDropdownExMonth() {
-		$(".selectExMonthLabel")
-			.removeClass("selectExMonthLabel ")
-			.addClass("select-ex-month-label");
-	}
-	selectDropdownExDay() {
-		$(".selectExDayLabel")
-			.removeClass("selectExDayLabel ")
-			.addClass("select-ex-day-label");
-	}
-	selectDropdownExYear() {
-		$(".selectExYearLabel")
-			.removeClass("selectExYearLabel ")
-			.addClass("select-ex-year-label");
 	}
 	selectDropdownInsurance() {
 		$(".selectInsuranceLabel")

@@ -1371,12 +1371,13 @@
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #pickupInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
-							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
-								(onAutocompleteSelected)="fillAddress('pickup', $event)"
-								(onLocationSelected)="fillLocationPoints('pickup', $event)" /> -->
+								[ngClass]="{ 'border-red': submitBookingForm && (!Form.pickup_latitude.value || !Form.pickup_longitude.value) }" />
 						</mat-form-field>
+						<div *ngIf="submitBookingForm && (!Form.pickup_latitude.value || !Form.pickup_longitude.value)"
+							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
+							<div>pickup drofff adress reequired</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1561,20 +1562,20 @@
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-3">
-					<div class="col-md-12">
+					<div class="col-md-12" id="dropoff_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
-							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
-								(onAutocompleteSelected)="fillAddress('dropoff', $event)"
-								(onLocationSelected)="fillLocationPoints('dropoff', $event)" /> -->
+								[ngClass]="{ 'border-red': submitBookingForm && (!Form.dropoff_latitude.value || !Form.dropoff_longitude.value) }" />
 						</mat-form-field>
+						<div *ngIf="submitBookingForm && (!Form.dropoff_latitude.value || !Form.dropoff_longitude.value)"
+							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
+							<div>pickup drofff adress reequired</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 
 			<!-- Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
@@ -2168,20 +2169,20 @@
 			<!-- Return Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-3">
-					<div class="col-md-12">
+					<div class="col-md-12" id="return_pickup_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
-							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
-								(onAutocompleteSelected)="fillAddress('return_pickup', $event)"
-								(onLocationSelected)="fillLocationPoints('return_pickup', $event)" /> -->
+								[ngClass]="{ 'border-red': submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_pickup_latitude.value || !Form.return_pickup_longitude.value) }" />
 						</mat-form-field>
+						<div *ngIf="submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_pickup_latitude.value || !Form.return_pickup_longitude.value)"
+							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
+							<div>pickup drofff adress reequired</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 
 			<!-- Return Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
@@ -2365,20 +2366,20 @@
 			<!-- Return Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-3">
-					<div class="col-md-12">
+					<div class="col-md-12" id="return_dropoff_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
-							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()"
-								(onAutocompleteSelected)="fillAddress('return_dropoff', $event)"
-								(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" /> -->
+								[ngClass]="{ 'border-red': submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_dropoff_latitude.value || !Form.return_dropoff_longitude.value) }" />
 						</mat-form-field>
+						<div *ngIf="submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_dropoff_latitude.value || !Form.return_dropoff_longitude.value)"
+							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
+							<div>pickup drofff adress reequired</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 
 			<!-- Return Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">

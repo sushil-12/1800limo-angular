@@ -319,9 +319,10 @@
 											}}
 										</p>
 									</td>
-									<td class="text-center font-weight-bolder " >
-										<p  data-toggle="modal" data-target="#previewBookingOnID" (click)="showBookingPreviewModal(booking?.booking_id)"
-										 class="booking-id-font font-weight-bolder cursor-pointer">
+									<td class="text-left font-weight-bolder ">
+										<p data-toggle="modal" data-target="#previewBookingOnID"
+											(click)="showBookingPreviewModal(booking?.booking_id)"
+											class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"
 												style="font-weight: 600;"></span>
 											<span
@@ -333,7 +334,7 @@
 												[innerHTML]="highlighText(booking.grand_total ? (booking.grand_total).toFixed(2) : 0 )"></span>
 										</p>
 									</td>
-								
+
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
 											data-target="#change_status_booking_Modal"

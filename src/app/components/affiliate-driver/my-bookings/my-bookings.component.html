@@ -101,7 +101,6 @@
                             <thead>
                                 <tr role="row">
                                     <th>Booking</th>
-                                    <th>Total</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                     <th>Pax</th>
@@ -111,15 +110,13 @@
                             </thead>
                             <tbody>
                                 <tr role="row" class="odd" *ngFor="let booking of bookings">
-                                    <td class="text-center font-weight-bolder cursor-pointer text-underline"
-                                        (click)="showBookingPreviewModal(booking?.booking_id)">
-                                        <p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
+                                    <td class="text-left font-weight-bolder">
+                                        <p (click)="showBookingPreviewModal(booking?.booking_id)"
+                                            class="booking-id-font font-weight-bolder cursor-pointer text-underline">
                                             <span [innerHTML]="highlighText(booking?.booking_id )"
                                                 style="font-weight: 600;"></span>
                                         </p>
-                                    </td>
-                                    <td class="text-center font-weight-bolder cursor-pointer">
-                                        <p class="booking-id-font font-weight-bolder cursor-pointer">
+                                        <p class="booking-id-font font-weight-bolder">
                                             <span>{{currencySymbol}}</span>
                                             <span [innerHTML]="highlighText(booking?.grand_total)"></span>
                                         </p>
@@ -132,11 +129,12 @@
                                         </div>
                                     </td>
                                     <td class="sorting_1">
-                                        <p style="font-weight: 600 !important;">{{ FormatDate(booking?.pickup_date) }}
-                                        </p>
-                                        <p style="font-weight: 600 !important;">{{ FormatTime(booking?.pickup_time) }}
+                                        <p style="font-weight: 600 !important; white-space: nowrap !important;">{{
+                                            FormatDate(booking?.pickup_date) }}
                                         </p>
                                         <p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
+                                        <p style="font-weight: 600 !important;">{{ FormatTime(booking?.pickup_time) }}
+                                        </p>
                                     </td>
                                     <td>
                                         <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
