@@ -39,7 +39,7 @@
 							<mat-select formControlName="currency"
 								(selectionChange)="changeCurrencySymbol($event.value)" tabindex="1">
 								<mat-option value="">Choose Currency</mat-option>
-								<mat-option *ngFor="let currencyOption of currencyOptions | keyvalue"
+								<mat-option *ngFor="let currencyOption of currency_options | keyvalue"
 									value="{{currencyOption.key}}">{{currencyOption.value.countryName}} -
 									{{currencyOption.value.symbol}}
 								</mat-option>

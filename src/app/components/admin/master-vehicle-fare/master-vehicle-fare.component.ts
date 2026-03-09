@@ -146,6 +146,10 @@ export class MasterVehicleFareComponent implements OnInit {
 		}
 	}
 
+	changeCurrencySymbol(value: any) {
+		this.changeDetection.currencySymbol(value)
+	}
+
 	km_mile_switch(value: string) {
 		this.changeDetection.radioButton(value, 'km_mile');
 	}
