@@ -3017,6 +3017,52 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 
+		// Validate Pickup Address
+		if (!this.searchSubstring(this.Form.transfer_type.value, 'airport_')) {
+			if (!this.Form.pickup_latitude.value || !this.Form.pickup_longitude.value) {
+				const element = document.getElementById('pickup_address');
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+				return;
+			}
+		}
+
+		// Validate Dropoff Address (not needed for charter_tour)
+		if (this.Form.service_type.value != 'charter_tour' && !this.searchSubstring(this.Form.transfer_type.value, '_airport')) {
+			if (!this.Form.dropoff_latitude.value || !this.Form.dropoff_longitude.value) {
+				const element = document.getElementById('dropoff_address');
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+				return;
+			}
+		}
+
+		// Validate Return Pickup Address
+		if (this.Form.service_type.value == 'round_trip') {
+			if (!this.searchSubstring(this.return_transfer_type, 'airport_')) {
+				if (!this.Form.return_pickup_latitude.value || !this.Form.return_pickup_longitude.value) {
+					const element = document.getElementById('return_pickup_address');
+					if (element) {
+						element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					}
+					return;
+				}
+			}
+
+			// Validate Return Dropoff Address
+			if (this.Form.return_service_type?.value != 'charter_tour' && !this.searchSubstring(this.return_transfer_type, '_airport')) {
+				if (!this.Form.return_dropoff_latitude.value || !this.Form.return_dropoff_longitude.value) {
+					const element = document.getElementById('return_dropoff_address');
+					if (element) {
+						element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					}
+					return;
+				}
+			}
+		}
+
 		// Sync Pax Country Data
 		if (this.PaxTelObject) {
 			const countryData = this.PaxTelObject.getSelectedCountryData();
