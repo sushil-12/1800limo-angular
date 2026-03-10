@@ -149,7 +149,7 @@
 										</a> -->
 
 										<a class="dropdown-item" (click)="invoiceAction(booking?.booking_id)"
-											*ngIf="booking?.payment_status=='paid' || booking?.payment_status == 'paid_cash' || booking?.payment_status == 'transfer_failed' ">
+											*ngIf="booking?.payment_status=='paid' || booking.payment_status=='rejection_requested' || booking?.payment_status == 'paid_cash' || booking?.payment_status == 'transfer_failed' ">
 											<div class="dropdown-item-icon"></div>
 											Invoice
 										</a>

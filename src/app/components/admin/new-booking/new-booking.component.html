@@ -92,8 +92,7 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'charter_tour'"
-					id="number_of_hours">
+				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
 					<div class="booking-dropdown-container" style="margin: 1rem 0;">
 						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
 							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
@@ -1278,8 +1277,7 @@
 				</div>
 
 				<!-- Hours -->
-				<div id="number_of_hours" class="col-12 col-md px-2 mb-2"
-					*ngIf="(transfer_type == 'city_to_city' && isTravelShare) || (transfer_type == 'city_to_city' && Form.service_type.value != 'one_way')">
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'charter_tour'">
 					<div class="booking-dropdown-container" style="margin: 1rem 0;">
 						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
 							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
@@ -1562,7 +1560,7 @@
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-3">
-					<div class="col-md-12" id="dropoff_address">
+					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
@@ -1576,6 +1574,7 @@
 					</div>
 				</div>
 			</div>
+
 
 			<!-- Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
@@ -2097,7 +2096,7 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.return_service_type.value == 'charter_tour'">
+				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'charter_tour'">
 					<div class="booking-dropdown-container" style="margin: 1rem 0;">
 						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
 							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
@@ -2106,7 +2105,6 @@
 						</ng-select>
 					</div>
 				</div>
-				<!-- Hours Ends -->
 			</div>
 			<div class="row px-3">
 				<!-- Meet Greet Choices -->
@@ -2169,7 +2167,7 @@
 			<!-- Return Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-3">
-					<div class="col-md-12" id="return_pickup_address">
+					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
@@ -2183,6 +2181,7 @@
 					</div>
 				</div>
 			</div>
+
 
 			<!-- Return Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
@@ -2366,7 +2365,7 @@
 			<!-- Return Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-3">
-					<div class="col-md-12" id="return_dropoff_address">
+					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
@@ -2380,6 +2379,7 @@
 					</div>
 				</div>
 			</div>
+
 
 			<!-- Return Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">

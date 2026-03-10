@@ -240,7 +240,7 @@
 
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid' || booking.payment_status=='transfer_failed') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
+												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='rejection_requested' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid' || booking.payment_status=='transfer_failed') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>

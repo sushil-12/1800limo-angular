@@ -2752,159 +2752,123 @@ div#google_translate_element_home_mobile {
 
 // App Store Popup Styles
 .app-store-modal {
-	background-color: #0b0b0b !important;
-	border: 1px solid #f69a4033;
-	border-radius: 20px !important;
-
-	.modal-header h3 {
-		color: #f69a40 !important;
-		font-weight: 700;
-		letter-spacing: 1px;
-	}
-
-	.app-store-header {
-		position: relative;
-		padding: 20px 20px 0 20px !important;
-		display: block !important;
-		text-align: center;
-	}
+	background-color: #2e2e2e !important;
+	border: none !important;
+	border-radius: 24px !important;
+	overflow: hidden;
+	position: relative;
+	box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
 
 	.app-store-close {
 		position: absolute;
-		right: 15px;
+		right: 18px;
 		top: 15px;
-		color: #f44336 !important;
-		opacity: 1 !important;
-		font-size: 28px !important;
+		z-index: 10;
 		background: transparent !important;
 		border: none !important;
-		height: auto !important;
-		width: auto !important;
-		padding: 0 !important;
-		line-height: 1 !important;
-		margin: 0 !important;
-		text-shadow: none !important;
+		color: rgba(255, 255, 255, 0.6) !important;
+		font-size: 28px;
+		line-height: 1;
+		cursor: pointer;
+		padding: 0;
+		transition: color 0.2s ease;
 
 		&:hover {
-			color: #d32f2f !important;
-			transform: scale(1.1);
+			color: #fff !important;
 		}
 	}
 
-	.modal-divider {
-		border: 1px solid #f69a40 !important;
-		width: 60px !important;
-		align-self: center;
-		margin: 10px auto 20px auto !important;
+	.app-store-body {
+		padding: 40px 30px !important;
+		text-align: center;
 	}
 
-	@media (max-width: 600px) {
-		.modal-header h3 {
-			font-size: 1.25rem !important;
-			padding-right: 30px;
-			padding-left: 10px;
-			text-align: center !important;
-			width: 100%;
-		}
+	.app-store-title {
+		color: #fff;
+		font-weight: 600;
+		font-size: 1.8rem;
+		text-align: center;
+		margin-bottom: 35px;
+		letter-spacing: 0.5px;
+	}
 
-		.app-store-close {
-			right: 10px;
-			top: 10px;
-			font-size: 24px !important;
-		}
+	.app-cards-row {
+		display: flex;
+		gap: 30px;
+		justify-content: center;
+		padding: 0 10px;
 
-		.modal-divider {
-			margin: 8px auto 15px auto !important;
-		}
-
-		.modal-body {
-			padding: 2rem 0.5rem !important;
-		}
-
-		.modal-header h3 {
-			font-size: 1.1rem !important;
-			padding-right: 25px;
-			padding-left: 10px;
-		}
-
-		.app-logo {
-			width: 80px;
-			height: 80px;
-		}
-
-		.app-link-btn {
-			padding: 10px 12px !important;
-			font-size: 0.85rem !important;
-
-			i {
-				font-size: 16px !important;
-			}
+		@media (max-width: 576px) {
+			flex-direction: column;
+			gap: 20px;
+			align-items: center;
 		}
 	}
 
-	.modal-body {
-		padding: 2.5rem 1.5rem !important;
-	}
-
-	.app-logo {
-		width: 100px;
-		height: 100px;
-		object-fit: contain;
+	.app-card {
+		flex: 0 1 210px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background: transparent;
+		border: 1px solid rgba(255, 255, 255, 0.4);
 		border-radius: 20px;
-		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-		background: #1a1a1a;
-		padding: 5px;
-		transition: transform 0.3s ease;
+		padding: 24px 20px 24px;
+		gap: 20px;
+		transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
 		&:hover {
-			transform: translateY(-5px);
+			transform: scale(1.02);
+			border-color: rgba(255, 255, 255, 0.6);
+		}
+
+		@media (max-width: 576px) {
+			width: 100%;
+			max-width: 210px;
 		}
 	}
 
-	.border-right {
-		border-right: 1px solid rgba(246, 154, 64, 0.2) !important;
-	}
-}
+	.app-icon-wrap {
+		position: relative;
+		width: 135px;
+		height: 135px;
+		border-radius: 20px;
+		overflow: hidden;
+		background-color: #f3933d; // Orange background base if image has transparency
 
-#appStorePopup {
-	.modal-dialog {
-		@media (max-width: 600px) {
-			width: 85% !important;
-			margin: 1.75rem auto !important;
-			max-width: none !important;
-		}
-	}
-}
-
-.app-link-btn {
-	width: 100%;
-	padding: 12px 18px;
-	border-radius: 10px;
-	font-weight: 600;
-	font-size: 0.95rem;
-	transition: all 0.3s ease;
-	display: block;
-	text-decoration: none !important;
-
-	&.driver-app-btn {
-		background-color: #33c658;
-		color: #fff !important;
-
-		&:hover {
-			background-color: #28a745;
-			transform: translateY(-3px);
-			box-shadow: 0 5px 15px rgba(51, 198, 88, 0.4);
+		.app-card-img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			object-fit: cover;
 		}
 	}
 
-	&.user-app-btn {
-		background-color: #f3933d;
-		color: #fff !important;
+	.app-download-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		width: 100%;
+		background: #fff;
+		color: #111 !important;
+		font-weight: 800;
+		font-size: 0.85rem;
+		letter-spacing: 0.02em;
+		padding: 12px 10px;
+		border-radius: 12px;
+		text-decoration: none !important;
+		transition: all 0.2s ease;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+		i {
+			font-size: 20px;
+		}
 
 		&:hover {
-			background-color: #e67e22;
-			transform: translateY(-3px);
-			box-shadow: 0 5px 15px rgba(243, 147, 61, 0.4);
+			background: #f8f8f8;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 		}
 	}
 }
