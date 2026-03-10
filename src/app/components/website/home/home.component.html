@@ -74,11 +74,13 @@
 
 					<div class="content-container">
 						<div class="release-text">
-							Mobile App Coming Soon
+							iOS Apps Now Live | Android Version Coming Soon
 						</div>
 						<div class="store-icons">
-							<img src="../../../../assets/images/appstore.png" alt="App Store" class="store-img">
-							<img src="../../../../assets/images/googleplay.png" alt="Google Play" class="store-img">
+							<img src="../../../../assets/images/appstore.png" alt="App Store" class="store-img"
+								style="cursor: pointer;" data-toggle="modal" data-target="#appStorePopup">
+							<img style="filter: grayscale(1);" src="../../../../assets/images/googleplay.png"
+								alt="Google Play" class="store-img">
 						</div>
 					</div>
 				</div>
@@ -1309,6 +1311,50 @@
 						</div>
 					</div>
 				</ng-template>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- App Store Popup -->
+<div class="modal fade" id="appStorePopup" role="dialog" tabindex="-1" aria-labelledby="appStorePopupLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered app-store-dialog" role="document">
+		<div class="modal-content app-store-modal">
+			<!-- Close Button -->
+			<button type="button" class="app-store-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+
+			<div class="modal-body app-store-body">
+				<h3 class="app-store-title">Download Our App Now</h3>
+
+				<div class="app-cards-row">
+					<!-- User App Card -->
+					<div class="app-card">
+						<div class="app-icon-wrap">
+							<img src="../../../../assets/images/User logo.png" alt="User App" class="app-card-img">
+						</div>
+						<a href="https://apps.apple.com/in/app/1800limo/id6751568791" target="_blank"
+							class="app-download-btn">
+							<i class="fab fa-apple"></i>
+							<span>USER APP</span>
+						</a>
+					</div>
+
+					<!-- Chauffeur App Card -->
+					<div class="app-card">
+						<div class="app-icon-wrap">
+							<img src="../../../../assets/images/Driver logo.png" alt="Chauffeur App"
+								class="app-card-img">
+						</div>
+						<a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445" target="_blank"
+							class="app-download-btn">
+							<i class="fab fa-apple"></i>
+							<span>CHAUFFEUR APP</span>
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

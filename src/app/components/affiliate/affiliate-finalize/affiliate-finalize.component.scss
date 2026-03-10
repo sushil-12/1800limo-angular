@@ -34,13 +34,18 @@ p {
 
 @keyframes blink-animation {
     0% {
-        background-color: var(--green-color); /* Green */
+        background-color: var(--green-color);
+        /* Green */
     }
+
     50% {
-        background-color: red; /* Red */
+        background-color: red;
+        /* Red */
     }
+
     100% {
-        background-color: var(--green-color); /* Green */
+        background-color: var(--green-color);
+        /* Green */
     }
 }
 
@@ -563,10 +568,14 @@ tbody {
 .accpt_reject_div {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 40px;
+    padding-right: 5rem;
 
 }
 
+.custom-filled-button {
+    color: #fff !important
+}
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
@@ -634,6 +643,7 @@ tbody {
 }
 
 :host ::ng-deep .mat-mdc-form-field {
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-outline {
         &-end {

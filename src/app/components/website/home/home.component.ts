@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	public innerWidth: any;
 	oneWayAddress: boolean = false;
 	roundTripAddress: boolean = false;
+	showAppStorePopup: boolean = false;
 
 	countriesList: Array<String> = constant_data.countries
 	PersonalilzedList: Array<String> = constant_data.personallist
@@ -2120,6 +2121,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.clientLogoSwiper.destroy(true, true);
 			this.clientLogoSwiper = null;
 		}
+	}
+
+	toggleAppStorePopup() {
+		this.showAppStorePopup = !this.showAppStorePopup;
 	}
 }
 

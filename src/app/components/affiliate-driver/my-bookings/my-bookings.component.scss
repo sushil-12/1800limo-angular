@@ -78,6 +78,10 @@ hr {
 	background-color: #FF69B4;
 }
 
+.rejection_requested {
+	background-color: #dc3545;
+}
+
 .paid_cash {
 	background-color: #D1B000;
 }
@@ -468,5 +472,5 @@ input::-webkit-input-placeholder {
 /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
-    white-space: normal !important;
+	white-space: normal !important;
 }

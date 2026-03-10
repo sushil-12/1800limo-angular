@@ -265,22 +265,19 @@ export class AffiliateFinalizeComponent implements OnInit {
 					})
 				)
 				.subscribe(({ data, success, message }: any) => {
+					this.spinner.hide();//hide spinner
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='${success ? 'text-success' : 'text-danger'}'>${message}</span>`
+						}
+					});
 					if (success == true) {
-						this.spinner.hide();//hide spinner
 						if (this.currentUser.roleName == 'sub_affiliate') {
 							this.router.navigate(['/sub_affiliate/my-bookings']);
 						}
 						else {
 							this.router.navigate(['/affiliate/my-bookings']);
 						}
-
-						// this.loadBookings()
-						// $('#cancelBooking').modal('hide');
-						// this.$errors.openDialog({
-						// 	errors: {
-						// 		error: `<span class='text-success'>${message}</span>`
-						// 	}
-						// })
 					}
 				});
 
@@ -298,22 +295,14 @@ export class AffiliateFinalizeComponent implements OnInit {
 					})
 				)
 				.subscribe(({ data, success, message }: any) => {
+					this.spinner.hide();//hide spinner
 					if (success == true) {
-						this.spinner.hide();//hide spinner
 						if (this.currentUser.roleName == 'sub_affiliate') {
 							this.router.navigate(['/sub_affiliate/my-bookings']);
 						}
 						else {
 							this.router.navigate(['/affiliate/my-bookings']);
 						}
-
-						// this.loadBookings()
-						// $('#acceptBooking').modal('hide');
-						// this.$errors.openDialog({
-						// 	errors: {
-						// 		error: `<span class='text-success'>${message}</span>`
-						// 	}
-						// })
 					}
 				});
 		}
@@ -340,10 +329,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
 			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
 			// }
-			if(this.finalize_params.number_of_vehicles != 0 ){
+			if (this.finalize_params.number_of_vehicles != 0) {
 				base_rate *= this.finalize_params.number_of_vehicles
 			}
-			
+
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
