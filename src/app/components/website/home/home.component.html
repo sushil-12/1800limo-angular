@@ -74,11 +74,13 @@
 
 					<div class="content-container">
 						<div class="release-text">
-							Mobile App Coming Soon
+							iOS Apps Now Live | Android Version Coming Soon
 						</div>
 						<div class="store-icons">
-							<img src="../../../../assets/images/appstore.png" alt="App Store" class="store-img">
-							<img src="../../../../assets/images/googleplay.png" alt="Google Play" class="store-img">
+							<img src="../../../../assets/images/appstore.png" alt="App Store" class="store-img"
+								style="cursor: pointer;" data-toggle="modal" data-target="#appStorePopup">
+							<img style="filter: grayscale(1);" src="../../../../assets/images/googleplay.png"
+								alt="Google Play" class="store-img">
 						</div>
 					</div>
 				</div>
@@ -1309,6 +1311,57 @@
 						</div>
 					</div>
 				</ng-template>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- App Store Popup -->
+<div class="modal fade" id="appStorePopup" role="dialog" tabindex="-1" aria-labelledby="appStorePopupLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content app-store-modal">
+			<div class="modal-header pb-0 border-0 app-store-header">
+				<h3 class="modal-title mb-0">DOWNLOAD OUR APPS NOW</h3>
+				<button type="button" class="close app-store-close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<hr class="modal-divider">
+			<div class="modal-body text-center">
+				<div class="row no-gutters">
+					<!-- Driver App Column -->
+					<div class="col-6 pr-2 border-right">
+						<div class="d-flex flex-column align-items-center">
+							<img src="../../../../assets/images/Driver logo.png" alt="Driver App Logo"
+								class="app-logo mb-3">
+							<a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445" target="_blank"
+								class="btn app-link-btn  user-app-btn">
+								<div class="d-flex align-items-center justify-content-center">
+									<i class="fab fa-apple mr-2" style="font-size: 20px;"></i>
+									<span>Chauffeur App</span>
+								</div>
+							</a>
+						</div>
+					</div>
+					<!-- User App Column -->
+					<div class="col-6 pl-2">
+						<div class="d-flex flex-column align-items-center">
+							<img src="../../../../assets/images/User logo.png" alt="User App Logo"
+								class="app-logo mb-3">
+							<a href="https://apps.apple.com/in/app/1800limo/id6751568791" target="_blank"
+								class="btn app-link-btn user-app-btn">
+								<div class="d-flex align-items-center justify-content-center">
+									<i class="fab fa-apple mr-2" style="font-size: 20px;"></i>
+									<span>User App</span>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer justify-content-center border-0">
+				<button type="button" data-dismiss="modal" class="btn btnStyle">Close</button>
 			</div>
 		</div>
 	</div>
