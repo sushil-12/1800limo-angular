@@ -133,6 +133,23 @@ header a.nav-link.active {
 		}
 	}
 
+	.btn-sub-admin {
+		background-color: rgba(243, 147, 61, 1) !important;
+		color: #fff !important;
+
+		svg {
+			stroke: #fff;
+		}
+
+		&:hover {
+			color: #000 !important;
+
+			svg {
+				stroke: #000;
+			}
+		}
+	}
+
 	.dropdown-item:not(.dropdown-item.nav-disabled) {
 		box-shadow: 0 3px 10px -6px rgba(0, 0, 0, 0.6);
 	}

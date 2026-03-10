@@ -197,7 +197,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
-	number_of_hours: any = '2';
+	number_of_hours: any = 2;
 	confirmMsg: any;
 	booking_data: any;
 	extraStops_rate: any = 0
@@ -711,7 +711,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			service_type: ['one_way', Validators.required],
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
-			number_of_hours: ['0'],
+			number_of_hours: [2],
 			acc_id: [''],
 			account_type: ['individual'],
 			travel_client_id: [''],
@@ -3485,6 +3485,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours.toString(),
 					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours.toString()
 				})
+			} else {
+				if (this.BookingForm.get('number_of_hours').value == 0) {
+					this.BookingForm.get('number_of_hours').setValue(2);
+					this.number_of_hours = 2;
+				}
 			}
 			if (value == 'one_way') {
 				console.log("setting value of return cruise port and name not mandatory")
