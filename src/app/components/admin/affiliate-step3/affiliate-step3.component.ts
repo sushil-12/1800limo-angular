@@ -10,7 +10,24 @@ import { throwError } from 'rxjs';
 import { formatDate } from '@angular/common';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import * as intlTelInput from 'intl-tel-input';
+import * as moment from "moment";
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import * as _moment from 'moment';
+
 declare var $: any;
+
+export const MY_FORMATS = {
+	parse: {
+		dateInput: 'MM/DD/YYYY',
+	},
+	display: {
+		dateInput: 'MM/DD/YYYY',
+		monthYearLabel: 'MMM YYYY',
+		dateA11yLabel: 'LL',
+		monthYearA11yLabel: 'MMMM YYYY',
+	},
+};
 
 export function pastDateValidator(): ValidatorFn {
 	return (control: AbstractControl): { [key: string]: any } | null => {
@@ -28,7 +45,15 @@ export function pastDateValidator(): ValidatorFn {
 @Component({
 	selector: 'app-affiliate-step3',
 	templateUrl: './affiliate-step3.component.html',
-	styleUrls: ['./affiliate-step3.component.scss']
+	styleUrls: ['./affiliate-step3.component.scss'],
+	providers: [
+		{
+			provide: DateAdapter,
+			useClass: MomentDateAdapter,
+			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+		},
+		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+	],
 })
 export class AffiliateStep3Component implements OnInit {
 	@ViewChild('phoneInput') phoneInput!: ElementRef;
@@ -143,6 +168,21 @@ export class AffiliateStep3Component implements OnInit {
 			insCertificate: ['', Validators.required],
 			insuranceCard: [''],
 		});
+
+		// Sync policyExpiredDate with legacy fields
+		const policyDateControl = this.addInsuranceForm.get('policyExpiredDate');
+		if (policyDateControl) {
+			policyDateControl.valueChanges.subscribe((date: any) => {
+				if (date) {
+					const d = new Date(date);
+					this.addInsuranceForm.patchValue({
+						policyExpiredDay: d.getDate().toString().padStart(2, '0'),
+						policyExpiredMonth: (d.getMonth() + 1).toString().padStart(2, '0'),
+						policyExpiredYear: d.getFullYear().toString()
+					}, { emitEvent: false });
+				}
+			});
+		}
 		// , { validator: this.customValidationFunction }
 
 		if (this.affiliateId) {
@@ -179,6 +219,8 @@ export class AffiliateStep3Component implements OnInit {
 							insuranceLimits: data.insuranceLimits,
 							AgentEmail: data.AgentEmail,
 						});
+						this.addInsuranceForm.get('policyExpiredDate').markAsTouched();
+						this.addInsuranceForm.get('policyExpiredDate').updateValueAndValidity();
 						this.AgentTelephoneObject.setCountry(data.AgentTelephoneCountry);
 					});
 			}
@@ -606,5 +648,21 @@ export class AffiliateStep3Component implements OnInit {
 				}
 			});
 		});
+	}
+
+	chosenYearHandler(normalizedYear: moment.Moment) {
+		const ctrlValue = this.addInsuranceForm.get('policyExpiredDate').value ? moment(this.addInsuranceForm.get('policyExpiredDate').value) : moment();
+		ctrlValue.year(normalizedYear.year());
+		this.addInsuranceForm.get('policyExpiredDate').setValue(ctrlValue.toDate());
+	}
+
+	chosenMonthHandler(normalizedMonth: moment.Moment) {
+		const ctrlValue = this.addInsuranceForm.get('policyExpiredDate').value ? moment(this.addInsuranceForm.get('policyExpiredDate').value) : moment();
+		ctrlValue.month(normalizedMonth.month());
+		this.addInsuranceForm.get('policyExpiredDate').setValue(ctrlValue.toDate());
+	}
+
+	chosenDateHandler() {
+		// Final date selection handler
 	}
 }
