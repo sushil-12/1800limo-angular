@@ -211,11 +211,6 @@ ul {
 
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
-	min-height: 56px !important;
-}
-
-:host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline {
-	min-height: 56px !important;
 }
 
 ::ng-deep .col-md-3.margin-mat-field {
@@ -362,7 +357,6 @@ ul {
 :host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
 	border-radius: 10px;
-	min-height: 56px !important;
 }
 
 .mat-mdc-option {
@@ -434,5 +428,12 @@ ul {
 @media (min-width: 992px) {
 	.modal-lg {
 		max-width: 600px !important;
+	}
+}
+
+.error-field {
+	::ng-deep .mat-mdc-text-field-wrapper {
+		outline: 3px solid red !important;
+		border-radius: 10px !important;
 	}
 }
