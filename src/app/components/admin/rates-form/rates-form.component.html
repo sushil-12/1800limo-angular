@@ -84,7 +84,7 @@
 			</div>
 
 			<!-- Hours -->
-			<div class="col-auto num-hours" *ngIf="hours != 0 && sub_item.key === 'Base_Rate'">
+			<div class="col-auto num-hours" *ngIf="service_type == 'charter_tour' && sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -92,6 +92,7 @@
 						</mat-label>
 						<input type="number" matInput placeholder="0" [value]="hours" [readonly]="is_readonly_min_rate"
 							class="font-weight-bolder rate-input-field text-right" (change)="handleHourChange($event)"
+							(input)="handleHourChange($event)" (keyup)="handleHourChange($event)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
