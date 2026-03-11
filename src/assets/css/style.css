@@ -6011,8 +6011,18 @@ header .navbar-toggler {
 	transition: transform 0.2s;
 }
 
+.store-img-android {
+	height: 45px;
+	width: auto;
+	transform: none;
+}
+
 .store-img:hover {
 	transform: scale(1.05);
+}
+
+.store-img-android:hover {
+	transform: none;
 }
 
 .order-img {

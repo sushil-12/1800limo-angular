@@ -1795,10 +1795,23 @@ div#google_translate_element_home_mobile {
 	transition: all 0.3s ease;
 }
 
-.store-icons:hover .store-img {
+.store-img-android {
+	height: 46px;
+	width: auto;
+	transform: none;
+}
+
+.store-img:hover {
+	opacity: 1;
+	// filter: grayscale(0%);
+	transform: translateY(-2px);
+	cursor: default;
+}
+
+.store-img-android:hover {
 	opacity: 1;
 	filter: grayscale(0%);
-	transform: translateY(-2px);
+	transform: none;
 	cursor: default;
 }
 
@@ -2070,6 +2083,10 @@ div#google_translate_element_home_mobile {
 	}
 
 	.store-img {
+		height: 36px !important;
+	}
+
+	.store-img-android {
 		height: 36px !important;
 	}
 
