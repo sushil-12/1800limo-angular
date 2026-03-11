@@ -536,9 +536,7 @@
 								<!-- </ng-template> -->
 								<input matInput placeholder="Minimum Airport Rate - Arrival"
 									(focus)="$event.target.select()" formControlName="minimum_airport_arrival_rate"
-									type="number"
-									(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
-									tabindex="1" />
+									type="number" (change)="updateRateRangeObject()" tabindex="1" />
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.minimum_airport_arrival_rate.errors || form.minimum_airport_arrival_rate.touched && form.minimum_airport_arrival_rate.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -602,7 +600,8 @@
 								<!-- </ng-template> -->
 								<input matInput placeholder="Minimum Cruise Port Rate - Arrival"
 									(focus)="$event.target.select()" formControlName="minimum_cruise_port_arrival_rate"
-									type="number" tabindex="1" (change)="updateRateRangeObject()" />
+									(keyup)="handleChangeMCPAR($event.target.value)" type="number" tabindex="1"
+									(change)="updateRateRangeObject()" />
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.minimum_cruise_port_arrival_rate.errors || form.minimum_cruise_port_arrival_rate.touched && form.minimum_cruise_port_arrival_rate.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">

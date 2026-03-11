@@ -19,7 +19,23 @@ import { CustomvalidationService } from "../../../services/customvalidation.serv
 import { AdminService } from "src/app/services/admin.service";
 import { CommonService } from "src/app/services/common.service";
 import * as intlTelInput from 'intl-tel-input';
+import * as moment from "moment";
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import * as _moment from 'moment';
 declare var $: any;
+
+export const MY_FORMATS = {
+	parse: {
+		dateInput: 'MM/DD/YYYY',
+	},
+	display: {
+		dateInput: 'MM/DD/YYYY',
+		monthYearLabel: 'MMM YYYY',
+		dateA11yLabel: 'LL',
+		monthYearA11yLabel: 'MMMM YYYY',
+	},
+};
 
 export function pastDateValidator(): any {
 	return (control: any): { [key: string]: any } | null => {
@@ -36,6 +52,14 @@ export function pastDateValidator(): any {
 	selector: "app-step3",
 	templateUrl: "./step3.component.html",
 	styleUrls: ["./step3.component.scss"],
+	providers: [
+		{
+			provide: DateAdapter,
+			useClass: MomentDateAdapter,
+			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+		},
+		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+	],
 })
 export class Step3Component implements OnInit, AfterViewInit {
 	@ViewChild('phoneInput') phoneInput!: ElementRef;
@@ -584,6 +608,23 @@ export class Step3Component implements OnInit, AfterViewInit {
 		$(".selectInsuranceLabel")
 			.removeClass("selectInsuranceLabel ")
 			.addClass("select-insurance-label");
+	}
+
+	chosenYearHandler(normalizedYear: moment.Moment) {
+		const ctrlValue = this.addInsuranceForm.get('policyExpiredDate').value ? moment(this.addInsuranceForm.get('policyExpiredDate').value) : moment();
+		ctrlValue.year(normalizedYear.year());
+		this.addInsuranceForm.get('policyExpiredDate').setValue(ctrlValue.toDate());
+	}
+
+	chosenMonthHandler(normalizedMonth: moment.Moment) {
+		const ctrlValue = this.addInsuranceForm.get('policyExpiredDate').value ? moment(this.addInsuranceForm.get('policyExpiredDate').value) : moment();
+		ctrlValue.month(normalizedMonth.month());
+		this.addInsuranceForm.get('policyExpiredDate').setValue(ctrlValue.toDate());
+	}
+
+	chosenDateHandler() {
+		// Final date selection handler (triggered by dateChange)
+		console.log("Full date selected:", this.addInsuranceForm.get('policyExpiredDate').value);
 	}
 
 	private addCustomCountrySearch(element: HTMLElement) {

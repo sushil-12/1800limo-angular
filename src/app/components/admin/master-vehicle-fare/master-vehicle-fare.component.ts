@@ -221,6 +221,14 @@ export class MasterVehicleFareComponent implements OnInit {
 	}
 
 	prefillTheForm(current_selected_vehicle: number = 0) {
+		this.VehicleRateSettingsForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
+			value => {
+				this.VehicleRateSettingsForm.patchValue({ minimum_airport_arrival_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_city_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_arrival_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_departure_rate: value });
+			}
+		);
 		this.VehicleRateSettingsForm.get('hourly_rate').valueChanges.subscribe(
 			value => {
 				this.VehicleRateSettingsForm.patchValue({ hourly_rate_after_five_hours: value });
@@ -437,6 +445,12 @@ export class MasterVehicleFareComponent implements OnInit {
 	cloneValue(form_control_source: string, form_control_target: string) {
 		console.log('Cloning.')
 		this.SetFormValue(form_control_target, this.VehicleRateSettingsForm.get(form_control_source).value)
+	}
+
+	handleChangeMCPAR(value: any) {
+		this.VehicleRateSettingsForm.patchValue({
+			minimum_cruise_port_departure_rate: value ? value : null
+		})
 	}
 
 
