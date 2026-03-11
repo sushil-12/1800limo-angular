@@ -1,0 +1,17 @@
+<div class="ai-rate-score-dialog">
+	<div class="dialog-header">
+		<h2 mat-dialog-title>
+			<i class="bi bi-cpu"></i>
+			AI Rate Score
+		</h2>
+		<button type="button" class="btn-close-dialog" (click)="close()" aria-label="Close">
+			<i class="bi bi-x-lg"></i>
+		</button>
+	</div>
+	<mat-dialog-content>
+		<app-ai-rate-score-calculator
+			[ratesData]="data.ratesData"
+			[vehicleContext]="data.vehicleContext"
+		></app-ai-rate-score-calculator>
+	</mat-dialog-content>
+</div>

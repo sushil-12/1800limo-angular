@@ -696,6 +696,9 @@
 						Enter Numbers only
 					</div>
 				</div>
+				<div *ngIf="is_form_submitted && bothCruisePortRatesZero()" class="text-danger margin-bottom-thin my-mat-hint">
+					<div>Both Arrival and Departure cannot be 0. Enter at least one rate.</div>
+				</div>
 			</div>
 			<!-- HOURLY RATE -->
 			<div class="col-md-6 col-12">
@@ -1637,4 +1640,14 @@
 		</div>
 	</div>
 
+	<button
+		type="button"
+		class="ai-rate-score-fab"
+		(click)="openAiRateScoreDialog()"
+		title="See how your rates compare to market standards"
+		aria-label="Open AI Rate Score — Compare your rates to market"
+	>
+		<i class="bi bi-cpu"></i>
+		<span class="fab-label">AI Score (BETA)</span>
+	</button>
 </form>

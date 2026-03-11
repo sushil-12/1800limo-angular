@@ -31,6 +31,8 @@ import { TourGuideReportComponent } from './tour-guide-report/tour-guide-report.
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { AmenitiesComponent } from './amenities/amenities.component';
 import { AddVehicleRatesComponent } from './add-vehicle-rates/add-vehicle-rates.component';
+import { AiRateScoreCalculatorComponent } from './ai-rate-score-calculator/ai-rate-score-calculator.component';
+import { AiRateScoreDialogComponent } from './ai-rate-score-calculator/ai-rate-score-dialog.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { VehicleYearsComponent } from './vehicle-years/vehicle-years.component';
 import { VehicleColorComponent } from './vehicle-color/vehicle-color.component';
@@ -137,6 +139,8 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 		AddVehicleComponent,
 		AmenitiesComponent,
 		AddVehicleRatesComponent,
+		AiRateScoreCalculatorComponent,
+		AiRateScoreDialogComponent,
 		VehiclesComponent,
 		VehicleYearsComponent,
 		VehicleColorComponent,
@@ -238,6 +242,6 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 			applyLabel: 'Okay',
 		}),
 	],
-	exports: [BookingStatusTextReplacePipe, MatIconModule]
+	exports: [BookingStatusTextReplacePipe, MatIconModule, AiRateScoreDialogComponent]
 })
 export class AdminModule { }

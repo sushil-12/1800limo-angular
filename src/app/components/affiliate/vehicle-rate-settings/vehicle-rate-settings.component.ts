@@ -6,6 +6,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { AiRateScoreDialogComponent, AiRateScoreDialogData } from '../../admin/ai-rate-score-calculator/ai-rate-score-dialog.component';
 
 declare var $: any;
 
@@ -37,7 +39,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 		private $router: Router,
 		private $form: FormBuilder,
 		private $route: ActivatedRoute,
-		private $spinner: NgxSpinnerService
+		private $spinner: NgxSpinnerService,
+		private dialog: MatDialog
 	) { }
 
 	ngOnInit(): void {
@@ -80,6 +83,37 @@ export class VehicleRateSettingsComponent implements OnInit {
 
 	get form() {
 		return this.VehicleRateSettingsForm.controls
+	}
+
+	/** Both cruise port rates cannot be 0 — at least one must have a value > 0 */
+	bothCruisePortRatesZero(): boolean {
+		const arrival = this.VehicleRateSettingsForm?.get('minimum_cruise_port_arrival_rate')?.value;
+		const departure = this.VehicleRateSettingsForm?.get('minimum_cruise_port_departure_rate')?.value;
+		const a = parseFloat(arrival);
+		const d = parseFloat(departure);
+		return (isNaN(a) || a === 0) && (isNaN(d) || d === 0);
+	}
+
+	openAiRateScoreDialog(): void {
+		if (!this.VehicleRateSettingsForm) return;
+		const kmMile = this.VehicleRateSettingsForm.get('km_mile')?.value;
+		const unit = kmMile === 'kilometer' ? 'kilometer' : 'mile';
+		const data: AiRateScoreDialogData = {
+			ratesData: this.VehicleRateSettingsForm.value,
+			vehicleContext: {
+				vehicleType: this.vehicle_info?.vehicleType || 'Vehicle',
+				currency: this.VehicleRateSettingsForm.get('currency')?.value || 'USD',
+				currencySymbol: this.currency_symbol || '$',
+				unit,
+			},
+		};
+		this.dialog.open(AiRateScoreDialogComponent, {
+			width: 'min(560px, calc(100vw - 2rem))',
+			maxWidth: '95vw',
+			maxHeight: '95vh',
+			data,
+			panelClass: 'ai-rate-score-dialog-panel',
+		});
 	}
 
 	/**
@@ -594,6 +628,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 		// stop here if form is invalid
 		if (this.VehicleRateSettingsForm.invalid) {
 			this.is_form_submitted = false
+			return;
+		}
+		if (this.bothCruisePortRatesZero()) {
 			return;
 		}
 
