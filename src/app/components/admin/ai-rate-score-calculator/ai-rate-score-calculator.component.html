@@ -1,0 +1,188 @@
+<div class="ai-rate-score-calculator">
+	<div class="calculator-header">
+		<h3 class="heading">
+			<i class="bi bi-cpu"></i>
+			AI Rate Score
+		</h3>
+		<p class="subheading">Get an AI-powered competitiveness assessment of your rates.</p>
+	</div>
+
+	<!-- Shimmer + rotating messages when loading -->
+	<div *ngIf="loading" class="loading-shimmer">
+		<div class="shimmer-content">
+			<div class="shimmer-spinner">
+				<i class="bi bi-cpu-fill"></i>
+			</div>
+			<p class="loading-message">{{ loadingMessages[currentLoadingMessageIndex] }}</p>
+			<p class="loading-hint">Usually takes 10–15 seconds</p>
+			<div class="shimmer-skeleton">
+				<div class="skeleton-line skeleton-line-1"></div>
+				<div class="skeleton-line skeleton-line-2"></div>
+				<div class="skeleton-line skeleton-line-3"></div>
+				<div class="skeleton-line skeleton-line-4"></div>
+				<div class="skeleton-line skeleton-line-5"></div>
+				<div class="skeleton-circle"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Recalculate (when we have result or API/other error) -->
+	<button
+		*ngIf="!loading && (result || (errorMessage && !isNoRatesError))"
+		type="button"
+		class="btn-recalculate"
+		(click)="calculate()"
+	>
+		<i class="bi bi-arrow-clockwise"></i>
+		Recalculate
+	</button>
+
+	<!-- Try Again (only when no rates entered) -->
+	<button
+		*ngIf="!loading && !result && isNoRatesError"
+		type="button"
+		class="btn-calculate"
+		(click)="calculate()"
+	>
+		<i class="bi bi-calculator"></i>
+		Try Again
+	</button>
+
+	<div *ngIf="errorMessage && !loading" class="alert alert-danger" role="alert">
+		<i class="bi bi-exclamation-triangle-fill"></i>
+		{{ errorMessage }}
+	</div>
+
+	<div *ngIf="result && !loading" class="result-panel">
+		<!-- Score card with progress ring + animated count-up -->
+		<div class="score-card" [ngClass]="getScoreColor(result.score)">
+			<div class="score-ring-wrap">
+				<svg class="score-ring" viewBox="0 0 100 100">
+					<circle class="score-ring-bg" cx="50" cy="50" r="45" />
+					<circle
+						class="score-ring-fill"
+						cx="50"
+						cy="50"
+						r="45"
+						[style.stroke-dasharray]="283"
+						[style.stroke-dashoffset]="283 - (283 * displayScore) / 100"
+					/>
+				</svg>
+				<div class="score-ring-value">
+					<span class="score-value">{{ displayScore }}</span>
+					<span class="score-max">/100</span>
+				</div>
+			</div>
+			<span
+				class="score-label"
+				[attr.title]="getScoreTooltip(result.score)"
+				tabindex="0"
+			>
+				{{ getScoreLabel(result.score) }}
+			</span>
+			<!-- Before/after when recalculating -->
+			<div *ngIf="previousScore != null && previousScore !== result.score" class="score-delta">
+				<span class="delta-badge" [ngClass]="result.score > previousScore ? 'improved' : 'changed'">
+					<i [ngClass]="result.score > previousScore ? 'bi bi-arrow-up' : 'bi bi-arrow-right'"></i>
+					Was {{ previousScore }}, now {{ result.score }}
+				</span>
+			</div>
+		</div>
+
+		<p *ngIf="result.summary" class="summary">{{ result.summary }}</p>
+
+		<div *ngIf="getYourRatesDisplay().length" class="your-rates">
+			<h4><i class="bi bi-clipboard-data"></i> Your Entered Rates</h4>
+			<div class="rates-table">
+				<div *ngFor="let r of getYourRatesDisplay()" class="rate-row">
+					<span class="rate-label">{{ r.label }}</span>
+					<span class="rate-value">{{ r.value }}</span>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="result.breakdown?.length" class="breakdown">
+			<h4><i class="bi bi-bar-chart"></i> Your Rates vs Market</h4>
+			<div class="breakdown-list">
+				<div
+					*ngFor="let item of result.breakdown; let i = index"
+					class="breakdown-item"
+					[ngClass]="[getScoreColor(item.score), isBreakdownExpanded(i) ? 'expanded' : '']"
+					(click)="toggleBreakdownExpand(i)"
+					[attr.aria-expanded]="isBreakdownExpanded(i)"
+					tabindex="0"
+					(keydown.enter)="toggleBreakdownExpand(i)"
+				>
+					<div class="breakdown-header">
+						<span class="category">{{ item.category }}</span>
+						<span class="mini-score">{{ item.score }}/100</span>
+						<button
+							type="button"
+							class="btn-expand"
+							(click)="toggleBreakdownExpand(i); $event.stopPropagation()"
+							[attr.aria-label]="isBreakdownExpanded(i) ? 'Collapse details' : 'Expand for more details'"
+						>
+							<i [ngClass]="isBreakdownExpanded(i) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
+						</button>
+					</div>
+					<!-- Progress bar for category score -->
+					<div class="breakdown-progress">
+						<div
+							class="breakdown-progress-fill"
+							[ngClass]="getScoreColor(item.score)"
+							[style.width.%]="item.score"
+						></div>
+					</div>
+					<div *ngIf="item.yourRate || (item.marketRange && item.marketRange.toLowerCase() !== 'unknown')" class="rate-comparison">
+						<div *ngIf="item.yourRate" class="comparison-row">
+							<span class="comparison-label">Your rate:</span>
+							<span class="comparison-value your">{{ item.yourRate }}</span>
+						</div>
+						<div *ngIf="item.marketRange && item.marketRange.toLowerCase() !== 'unknown'" class="comparison-row">
+							<span class="comparison-label">Market range:</span>
+							<span class="comparison-value market">{{ item.marketRange }}</span>
+						</div>
+					</div>
+					<p class="assessment">{{ item.assessment }}</p>
+					<div *ngIf="isBreakdownExpanded(i) && item.rationale" class="rationale">
+						<strong>Why this score:</strong> {{ item.rationale }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="result.suggestions?.length" class="suggestions">
+			<h4><i class="bi bi-lightbulb"></i> Suggestions</h4>
+			<p class="suggestions-intro">Prioritized tips to improve your rates:</p>
+			<ol class="suggestions-list">
+				<li *ngFor="let s of result.suggestions; let i = index" class="suggestion-item">
+					<span class="suggestion-number">{{ i + 1 }}</span>
+					<span class="suggestion-text">{{ s }}</span>
+				</li>
+			</ol>
+		</div>
+
+		<!-- Was this helpful? -->
+		<div class="feedback-section">
+			<p class="feedback-question">Was this analysis helpful?</p>
+			<div class="feedback-buttons" *ngIf="feedbackSubmitted === null">
+				<button type="button" class="btn-feedback btn-yes" (click)="submitFeedback(true)">
+					<i class="bi bi-hand-thumbs-up-fill"></i>
+					Yes
+				</button>
+				<button type="button" class="btn-feedback btn-no" (click)="submitFeedback(false)">
+					<i class="bi bi-hand-thumbs-down-fill"></i>
+					No
+				</button>
+			</div>
+			<p *ngIf="feedbackSubmitted === true" class="feedback-thanks">
+				<i class="bi bi-check-circle-fill"></i>
+				Thanks for your feedback!
+			</p>
+			<p *ngIf="feedbackSubmitted === false" class="feedback-thanks">
+				<i class="bi bi-chat-dots"></i>
+				We’ll keep improving. Thanks for letting us know.
+			</p>
+		</div>
+	</div>
+</div>

@@ -7,6 +7,9 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { AiRateScoreDialogComponent, AiRateScoreDialogData } from '../ai-rate-score-calculator/ai-rate-score-dialog.component';
+
 declare var $: any;
 
 @Component({
@@ -49,7 +52,9 @@ export class EditVehicleRatesComponent implements OnInit {
 		private stateManagementService: StateManagementService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private httpClient: HttpClient) { }
+		private httpClient: HttpClient,
+		private dialog: MatDialog
+	) { }
 
 	ngOnInit(): void {
 		//add amenity form validation
@@ -313,6 +318,16 @@ export class EditVehicleRatesComponent implements OnInit {
 		}
 		return false;
 	}
+
+	/** Both cruise port rates cannot be 0 — at least one must have a value > 0 */
+	bothCruisePortRatesZero(): boolean {
+		const arrival = this.addVehicleRatesForm?.get('minimum_cruise_port_arrival_rate')?.value;
+		const departure = this.addVehicleRatesForm?.get('minimum_cruise_port_departure_rate')?.value;
+		const a = parseFloat(arrival);
+		const d = parseFloat(departure);
+		return (isNaN(a) || a === 0) && (isNaN(d) || d === 0);
+	}
+
 	handleChangeMCPAR(value) {
 
 		this.addVehicleRatesForm.patchValue({
@@ -568,6 +583,9 @@ export class EditVehicleRatesComponent implements OnInit {
 		if (this.addVehicleRatesForm.invalid) {
 			return;
 		}
+		if (this.bothCruisePortRatesZero()) {
+			return;
+		}
 		this.addVehicleRatesForm.value.affiliate_type = sessionStorage.getItem('affiliateType');
 		this.addVehicleRatesForm.value.acc_id = sessionStorage.getItem('affiliateId');
 		console.log(this.addVehicleRatesForm);;
@@ -593,6 +611,26 @@ export class EditVehicleRatesComponent implements OnInit {
 					this.router.navigate(['/admin/affiliate/step5'])
 				);
 			});
+	}
+
+	openAiRateScoreDialog(): void {
+		if (!this.addVehicleRatesForm) return;
+		const data: AiRateScoreDialogData = {
+			ratesData: this.addVehicleRatesForm.value,
+			vehicleContext: {
+				vehicleType: this.vehicleType || 'Vehicle',
+				currency: this.addVehicleRatesForm.get('currency')?.value || 'USD',
+				currencySymbol: this.currencySymbol || '$',
+				unit: this.milage_rate_selected ? 'mile' : 'kilometer',
+			},
+		};
+		this.dialog.open(AiRateScoreDialogComponent, {
+			width: 'min(560px, calc(100vw - 2rem))',
+			maxWidth: '95vw',
+			maxHeight: '95vh',
+			data,
+			panelClass: 'ai-rate-score-dialog-panel',
+		});
 	}
 
 	resetForm() {

@@ -548,10 +548,6 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.minimum_cruise_port_arrival_rate.errors.pattern">Enter Numbers only</div>
 					</div>
-					<div *ngIf="IsZeroValidator(f.minimum_cruise_port_arrival_rate.value, 'minimum_cruise_port_arrival_rate')"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div>Any value required</div>
-					</div>
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
@@ -582,9 +578,9 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.minimum_cruise_port_departure_rate.errors.pattern">Enter Numbers only</div>
 					</div>
-					<!-- <div *ngIf="IsZeroValidator(f.minimum_cruise_port_departure_rate.value, 'minimum_cruise_port_departure_rate')" class="text-danger margin-bottom-thin my-mat-hint">
-							<div >Any value required</div>
-						</div> -->
+					<div *ngIf="submittedForm && bothCruisePortRatesZero()" class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Both Arrival and Departure cannot be 0. Enter at least one rate.</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
@@ -942,6 +938,7 @@
 						</div> -->
 				</div>
 			</div>
+
 			<!-- <div class="col-md-12 mt-4">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center">
 						<label class="alert alert-danger">Surge Protection</label>
@@ -1301,4 +1298,14 @@
 		</div>
 	</div>
 
+	<button
+		type="button"
+		class="ai-rate-score-fab"
+		(click)="openAiRateScoreDialog()"
+		title="See how your rates compare to market standards"
+		aria-label="Open AI Rate Score — Compare your rates to market"
+	>
+		<i class="bi bi-cpu"></i>
+		<span class="fab-label">AI Score (BETA)</span>
+	</button>
 </form>
