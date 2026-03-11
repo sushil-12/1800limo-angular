@@ -235,6 +235,7 @@ export class SelectVehicleComponent implements OnInit {
 	passengerDetails: any;
 	currencySymbol: any;
 	vehicleListAmenity: any = [];
+	selectedAffiliate: any;
 
 
 	constructor(
@@ -940,6 +941,11 @@ export class SelectVehicleComponent implements OnInit {
 		})
 	}
 
+	openAffiliateDetailsModal(vehinfo: any) {
+		this.passengerDetails = vehinfo;
+		$('#sendEmailModal').modal('show');
+	}
+
 	openModal(vehinfo) {
 		try {
 			setTimeout(() => {
@@ -990,7 +996,7 @@ export class SelectVehicleComponent implements OnInit {
 			reciptentName: this.passengerDetails?.affiliate_name,
 			sendTo: 'Affiliate',
 			sendThrough: "Phone",
-			sendValue: this.passengerDetails?.affiliate_phone,
+			sendValue: this.passengerDetails?.affiliate_phone || this.passengerDetails?.phone,
 			sendContent: message,
 		};
 		console.log("in submit obj---->", obj)

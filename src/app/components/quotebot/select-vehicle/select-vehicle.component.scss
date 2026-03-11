@@ -32,7 +32,7 @@
 
 .show {
 	overflow: visible;
-	height: auto;
+	height: 90%;
 }
 
 .cancel-policy {
@@ -941,13 +941,21 @@ button.link {
 
 .saveButtonModal {
 	color: #fff !important;
-	background-color: #5dbd8a;
-	border-color: #5dbd8a;
-	padding: 10px 40px;
-	bottom: -60px;
-	left: 15px;
-	transition: box-shadow 0.1s ease-in-out;
-	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+	background-color: #27ae60;
+	border-color: #27ae60;
+	padding: 8px 30px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	border-radius: 30px !important;
+	transition: all 0.2s ease;
+	box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
+	border: none;
+
+	&:hover {
+		background-color: #219150;
+		transform: translateY(-1px);
+		box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
+	}
 }
 
 .box-special-instruction {
@@ -1596,5 +1604,146 @@ button.link {
 @keyframes shimmer-skeleton {
 	100% {
 		transform: translateX(100%);
+	}
+}
+
+// AFFILIATE INFO UNIT STYLES
+.affiliate-info-unit {
+	cursor: pointer;
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 12px;
+	background-color: #f8f9fa;
+	border: 1px solid #e9ecef;
+	transition: all 0.3s ease;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	&:hover {
+		background-color: #f1f3f5;
+		border-color: #dee2e6;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+	}
+
+	.affiliate-text {
+		color: #007fee;
+		font-weight: 500;
+		font-size: 0.9rem;
+		line-height: 1.4;
+	}
+
+	.affiliate-phone {
+		color: #495057;
+		font-weight: 400;
+		font-size: 0.85rem;
+		margin-top: 4px;
+	}
+}
+
+// STYLES FOR REUSED EMAIL/SMS/CALL MODAL
+#sendEmailModal {
+	.modal-content {
+		border-radius: 16px;
+		border: none;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	}
+
+	.company-name {
+		letter-spacing: -0.5px;
+		line-height: 1.2;
+		color: #f39c12 !important;
+		font-size: 1.4rem;
+		text-transform: uppercase;
+		margin-bottom: 0.75rem !important;
+	}
+
+	.affiliate-details-info {
+		background: #f8f9fa;
+		padding: 12px 20px;
+		border-radius: 12px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		min-width: 260px;
+		max-width: 85%;
+		border: 1px solid rgba(0, 0, 0, 0.04);
+		margin-bottom: 1rem !important;
+
+		p {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1rem;
+			color: #34495e !important;
+			margin-bottom: 4px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			i {
+				width: 20px;
+				text-align: center;
+				font-size: 1rem;
+				opacity: 0.8;
+			}
+		}
+	}
+
+	.font-weight-500 {
+		font-weight: 500;
+	}
+
+	.btn-warning {
+		background-color: #f3933d;
+		border-color: #f3933d;
+		color: #ffffff !important;
+		box-shadow: 0 2px 6px rgba(243, 147, 61, 0.2);
+		padding: 8px 24px;
+		font-size: 0.9rem;
+		text-transform: none;
+		border-radius: 30px !important;
+		transition: all 0.2s ease;
+
+		&:hover {
+			background-color: #e67e22;
+			border-color: #e67e22;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 10px rgba(243, 147, 61, 0.3);
+		}
+	}
+
+	hr {
+		margin-top: 1rem !important;
+		margin-bottom: 0.75rem !important;
+		opacity: 0.1;
+	}
+
+	.headingStyle {
+		font-size: 0.9rem;
+		margin-top: 8px;
+		margin-bottom: 4px;
+		font-weight: 600;
+	}
+
+}
+
+@media only screen and (max-width: 767px) {
+	.affiliate-info-unit {
+		padding: 8px;
+		margin: 8px 0;
+
+		.affiliate-text {
+			font-size: 0.8rem;
+		}
+
+		.affiliate-phone {
+			font-size: 0.75rem;
+		}
 	}
 }
