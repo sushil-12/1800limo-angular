@@ -30,12 +30,12 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	@Input('currencyObject') currencyObject: any;
 	@Input('vehicle_created_by') vehicle_created_by: any;
-	@Input('booking_created_from') booking_created_from:any;
+	@Input('booking_created_from') booking_created_from: any;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
-	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -87,6 +87,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	r_farmoutShare: any = 0;
 	currencySymbol: any;
 	currentUser: any;
+	hoursError: string = '';
 
 	constructor(
 		private $form: FormBuilder,
@@ -193,13 +194,36 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		}
 	}
 
+	// Live update while typing (only when value is already 2 or more)
 	handleHourChange(event: any) {
-		console.log('------->>>>>>>', event.target.value)
-		if (event.target.value == '') {
-			let n_hr: any = 1
-			this.returnNumberOfHr.emit(n_hr)
+		const value = Number(event.target.value);
+
+		// Only update if it's 2 or more (allows typing 10, 12, 15 etc.)
+		if (!isNaN(value) && value >= 2) {
+			this.returnNumberOfHr.emit(value);
+			this.changeInHours(value);
 		}
-		this.returnNumberOfHr.emit(event.target.value)
+	}
+
+	// Force minimum 2 when user clicks away (blur)
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+
+		// If 0, 1, empty or negative → make it 2
+		if (isNaN(value) || value < 2) {
+			value = 2;
+			event.target.value = 2;
+		}
+
+		this.returnNumberOfHr.emit(value);
+		this.changeInHours(value);
+	}
+
+	// Block negative sign while typing
+	blockNegative(event: KeyboardEvent) {
+		if (event.key === '-') {
+			event.preventDefault();
+		}
 	}
 
 	scroll(id) {

@@ -33,8 +33,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
-	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
-
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -661,13 +660,33 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	getRatesData() {
 		return this.ratesdata.asObservable();
 	}
+	// Live update while typing (allows 10, 11, 12, 15 etc.)
 	handleHourChange(event: any) {
-		console.log('------->>>>>>>', event.target.value)
-		if (event.target.value == '') {
-			let n_hr: any = 1
-			this.returnNumberOfHr.emit(n_hr)
+		const value = Number(event.target.value);
+
+		// Only emit when value is already valid (>= 2)
+		if (!isNaN(value) && value >= 2) {
+			this.returnNumberOfHr.emit(value);
 		}
-		this.returnNumberOfHr.emit(event.target.value)
+	}
+
+	// Force minimum 2 when user clicks away (perfect for 0, 1, empty)
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+
+		if (isNaN(value) || value < 2) {
+			value = 2;
+			event.target.value = 2;   // show 2 in the box
+		}
+
+		this.returnNumberOfHr.emit(value);
+	}
+
+	// Block negative sign while typing
+	blockNegative(event: KeyboardEvent) {
+		if (event.key === '-') {
+			event.preventDefault();
+		}
 	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
