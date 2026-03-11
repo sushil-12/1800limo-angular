@@ -430,3 +430,10 @@ ul {
 		max-width: 600px !important;
 	}
 }
+
+.error-field {
+	::ng-deep .mat-mdc-text-field-wrapper {
+		outline: 3px solid red !important;
+		border-radius: 10px !important;
+	}
+}

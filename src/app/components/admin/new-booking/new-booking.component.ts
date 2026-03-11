@@ -32,6 +32,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	@ViewChild('lose_aff_name_input') lose_aff_name_input: ElementRef;
 
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
+	@ViewChild('pickupAddress', { static: false }) pickupAddress!: ElementRef;
+	@ViewChildren('hourField') hourFields!: QueryList<ElementRef>;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
 	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
@@ -145,6 +147,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	is_booking_edit_case: boolean = false
 	reset_button: boolean = false
 	submitBookingForm: boolean;
+	numberOfHoursError: boolean = false;
 	affiliate_id: any;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
@@ -965,8 +968,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	handleNoOfHours(value) {
 		this.number_of_hours = value
 		console.log('in function handle no of hours->', value, value > 0)
-		this.number_of_hours > 0 ? this.buildBookingData() : ''
-
+		const hoursNum = Number(value);
+		if (this.service_type === 'charter_tour') {
+			this.numberOfHoursError = hoursNum < 2;
+		} else {
+			this.numberOfHoursError = false;
+		}
+		if (hoursNum > 0) {
+			this.buildBookingData();
+		}
 	}
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
@@ -3145,6 +3155,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.BookingForm.get('loose_customer.phone').setValue(this.BookingForm.get('loose_customer.phone').value.substring(this.BookingForm.get('loose_customer.phone_isd').value.length));
 		}
 		if (this.BookingForm.invalid) {
+			return;
+		}
+
+		// Validate minimum number of hours for charter_tour
+		if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
+			this.numberOfHoursError = true;
+			if (this.hourFields && this.hourFields.length > 0) {
+				const activeField = this.hourFields.find(field => field.nativeElement.offsetParent !== null);
+				if (activeField) {
+					activeField.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				} else {
+					this.hourFields.first.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+			}
 			return;
 		}
 
