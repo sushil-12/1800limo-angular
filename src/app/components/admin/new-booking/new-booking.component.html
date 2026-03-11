@@ -23,7 +23,7 @@
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
-				<div class="col-12 col-md px-2 mb-2">
+				<div class="flex-grow-1 ml-2 mr-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -41,7 +41,7 @@
 				</div>
 
 				<!-- Transfer Type -->
-				<div class="col-12 col-md px-2 mb-2">
+				<div class="flex-grow-1 ml-2 mr-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -69,7 +69,7 @@
 				</div>
 
 				<!-- Return Transfer Type -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -93,18 +93,16 @@
 
 				<!-- Hours -->
 				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div class="booking-dropdown-container" style="margin: 1rem 0;">
-						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
-							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="number_of_hours"
-							[(ngModel)]="number_of_hours" (change)="handleNoOfHours($event?.return_value)"
-							[ngClass]="{ 'is-invalid-input': (submitBookingForm || Form.number_of_hours.touched || Form.number_of_hours.dirty) && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '') }">
-						</ng-select>
-						<div style="padding-bottom: 10px; margin-top: 5px;"
-							*ngIf="(submitBookingForm || Form.number_of_hours.touched || Form.number_of_hours.dirty) && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '')"
-							class="text-danger margin-bottom-thin my-mat-hint">
-							<div>Number of hours should not be 0</div>
-						</div>
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Number of Hours
+							</mat-label>
+							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								(focus)="$event.target.select()" />
+							<span matSuffix>Hrs.</span>
+						</mat-form-field>
 					</div>
 				</div>
 			</div>
@@ -1231,7 +1229,7 @@
 				</div>
 
 				<!-- Transfer Type -->
-				<div class="col-12 col-md px-2 mb-2">
+				<div class="flex-grow-1 ml-2 mr-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -1254,7 +1252,7 @@
 				</div>
 
 				<!-- Return Transfer Type -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -1277,18 +1275,17 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div class="booking-dropdown-container" style="margin: 1rem 0;">
-						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
-							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="number_of_hours"
-							[(ngModel)]="number_of_hours" (change)="handleNoOfHours($event?.return_value)"
-							[ngClass]="{ 'is-invalid-input': (submitBookingForm && (number_of_hours == 0 || number_of_hours == null || number_of_hours == '')) }">
-						</ng-select>
-						<div *ngIf="(submitBookingForm && (number_of_hours == 0 || number_of_hours == null || number_of_hours == ''))"
-							class="text-danger margin-bottom-thin my-mat-hint">
-							<div>Number of hours is required</div>
-						</div>
+				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Number of Hours
+							</mat-label>
+							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								(focus)="$event.target.select()" />
+							<span matSuffix>Hrs.</span>
+						</mat-form-field>
 					</div>
 				</div>
 			</div>
@@ -1369,13 +1366,12 @@
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
-								[ngClass]="{ 'border-red': submitBookingForm && (!Form.pickup_latitude.value || !Form.pickup_longitude.value) }" />
+								(onAutocompleteSelected)="fillAddress('pickup', $event)"
+								(onLocationSelected)="fillLocationPoints('pickup', $event)" /> -->
 						</mat-form-field>
-						<div *ngIf="submitBookingForm && (!Form.pickup_latitude.value || !Form.pickup_longitude.value)"
-							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
-							<div>pickup drofff adress reequired</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -1564,13 +1560,12 @@
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
-								[ngClass]="{ 'border-red': submitBookingForm && (!Form.dropoff_latitude.value || !Form.dropoff_longitude.value) }" />
+								(onAutocompleteSelected)="fillAddress('dropoff', $event)"
+								(onLocationSelected)="fillLocationPoints('dropoff', $event)" /> -->
 						</mat-form-field>
-						<div *ngIf="submitBookingForm && (!Form.dropoff_latitude.value || !Form.dropoff_longitude.value)"
-							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
-							<div>pickup drofff adress reequired</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -2049,7 +2044,7 @@
 				</div>
 
 				<!-- Transfer Type -->
-				<div class="col-12 col-md px-2 mb-2">
+				<div class="flex-grow-1 ml-2 mr-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -2073,7 +2068,7 @@
 				</div>
 
 				<!-- Return Transfer Type -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
@@ -2096,13 +2091,17 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="col-12 col-md px-2 mb-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div class="booking-dropdown-container" style="margin: 1rem 0;">
-						<ng-select appearance="outline" [items]="hour_values" bindLabel="display_value"
-							bindValue="return_value" placeholder="Number of Hours *" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="number_of_hours"
-							[(ngModel)]="number_of_hours" (change)="handleNoOfHours($event?.return_value)">
-						</ng-select>
+				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Number of Hours
+							</mat-label>
+							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								(focus)="$event.target.select()" />
+							<span matSuffix>Hrs.</span>
+						</mat-form-field>
 					</div>
 				</div>
 			</div>
@@ -2171,13 +2170,12 @@
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
-								[ngClass]="{ 'border-red': submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_pickup_latitude.value || !Form.return_pickup_longitude.value) }" />
+								(onAutocompleteSelected)="fillAddress('return_pickup', $event)"
+								(onLocationSelected)="fillLocationPoints('return_pickup', $event)" /> -->
 						</mat-form-field>
-						<div *ngIf="submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_pickup_latitude.value || !Form.return_pickup_longitude.value)"
-							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
-							<div>pickup drofff adress reequired</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -2369,13 +2367,12 @@
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
+							<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()"
-								[ngClass]="{ 'border-red': submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_dropoff_latitude.value || !Form.return_dropoff_longitude.value) }" />
+								(onAutocompleteSelected)="fillAddress('return_dropoff', $event)"
+								(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" /> -->
 						</mat-form-field>
-						<div *ngIf="submitBookingForm && Form.service_type.value == 'round_trip' && (!Form.return_dropoff_latitude.value || !Form.return_dropoff_longitude.value)"
-							class="text-danger my-mat-hint" style="margin-top: -15px; margin-bottom: 10px;">
-							<div>pickup drofff adress reequired</div>
-						</div>
 					</div>
 				</div>
 			</div>
