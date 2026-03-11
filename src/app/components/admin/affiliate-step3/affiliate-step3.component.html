@@ -1,7 +1,7 @@
 <form [formGroup]="addInsuranceForm" class="step_form_wrapper" appInvalidControlScroll>
 	<!-- Main page content-->
 	<section class="user_information">
-		<h2 class="headinginfo"> Insurance Settingssss </h2>
+		<h2 class="headinginfo"> Insurance Settings </h2>
 		<div class="container">
 			<div class="row ">
 				<div class="col-md-6">
@@ -68,28 +68,26 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline"
-						[class.is-invalid-input]="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required)">
+						[class.is-invalid-input]="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required) || (f.policyExpiredDate.touched && f.policyExpiredDate.errors)">
 						<mat-label>Policy Expire Date <span class="asterisk">*</span></mat-label>
 						<input matInput [matDatepicker]="policyExpiredDatePicker" formControlName="policyExpiredDate"
-							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()" readonly>
+							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()"
+							(dateChange)="chosenDateHandler()" readonly>
 						<mat-datepicker-toggle matSuffix [for]="policyExpiredDatePicker"></mat-datepicker-toggle>
-						<mat-datepicker #policyExpiredDatePicker></mat-datepicker>
+						<mat-datepicker startView="multi-year" #policyExpiredDatePicker
+							(yearSelected)="chosenYearHandler($event)"
+							(monthSelected)="chosenMonthHandler($event)"></mat-datepicker>
 					</mat-form-field>
 					<div *ngIf="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required) || (f.policyExpiredDate.touched && f.policyExpiredDate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.policyExpiredDate.errors?.required">This field is required</div>
-						<div *ngIf="f.policyExpiredDate.errors?.pastDate">Selected policy date is in the past or
-							expired.</div>
+						<div *ngIf="f.policyExpiredDate.errors?.pastDate">Please enter future date</div>
 					</div>
-					<!-- <span [hidden]="!addInsuranceForm.hasError('policyError')"
-						class="text-danger margin-bottom-thin my-mat-hint">Please enter future date.</span>
-					<span [hidden]="!addInsuranceForm.hasError('InvalidDate')"
-						class="text-danger margin-bottom-thin my-mat-hint">Invalid Date</span> -->
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Insurance Limits <span class="theme-color">(Choose Closest Limit)</span> <span
-								class="asterisk">*</span></mat-label>
+						<mat-label>Insurance Limits <span class="theme-color">(Choose
+								Closest Limit)</span> <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="insuranceLimits" tabIndex="1">
 							<mat-option value="300000">300,000</mat-option>
 							<mat-option value="500000">500,000</mat-option>

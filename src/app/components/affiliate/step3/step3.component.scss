@@ -37,13 +37,13 @@
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float mat-mdc-form-field-label {
-	padding-left: 0px;
-	background-color: #fff;
-	max-width: 250px;
-	text-align: center;
-	left: -6px;
-}
+// .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float mat-mdc-form-field-label {
+// 	padding-left: 0px;
+// 	background-color: #fff;
+// 	max-width: 250px;
+// 	text-align: center;
+// 	left: -6px;
+// }
 
 .vehtype_extintwrap .row {
 	justify-content: space-between !important;
@@ -113,7 +113,7 @@
 	position: relative;
 	top: 15px;
 	left: 8px;
-	background: #fff;
+	// background: #fff;
 	color: #000 !important;
 	padding: 0 3px;
 	font-size: 12px !important;

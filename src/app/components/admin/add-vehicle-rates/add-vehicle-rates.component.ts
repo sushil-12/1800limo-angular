@@ -1,12 +1,14 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AdminService } from '../../../services/admin.service';
 import { HttpClient } from "@angular/common/http";
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { AiRateScoreDialogComponent, AiRateScoreDialogData } from '../ai-rate-score-calculator/ai-rate-score-dialog.component';
 declare var $: any;
 @Component({
 	selector: 'app-add-vehicle-rates',
@@ -50,7 +52,29 @@ export class AddVehicleRatesComponent implements OnInit {
 		private stateManagementService: StateManagementService,
 		private formBuilder: FormBuilder,
 		private activatedroute: ActivatedRoute,
-		private httpClient: HttpClient) { }
+		private httpClient: HttpClient,
+		private dialog: MatDialog
+	) { }
+
+	openAiRateScoreDialog(): void {
+		if (!this.addVehicleRatesForm) return;
+		const data: AiRateScoreDialogData = {
+			ratesData: this.addVehicleRatesForm.value,
+			vehicleContext: {
+				vehicleType: this.vehicleType || 'Vehicle',
+				currency: this.addVehicleRatesForm.get('currency')?.value || 'USD',
+				currencySymbol: this.currencySymbol || '$',
+				unit: this.milage_rate_selected ? 'mile' : 'kilometer',
+			},
+		};
+		this.dialog.open(AiRateScoreDialogComponent, {
+			width: 'min(560px, calc(100vw - 2rem))',
+			maxWidth: '95vw',
+			maxHeight: '95vh',
+			data,
+			panelClass: 'ai-rate-score-dialog-panel',
+		});
+	}
 
 	ngOnInit(): void {
 
@@ -577,6 +601,15 @@ export class AddVehicleRatesComponent implements OnInit {
 		return false;
 	}
 
+	/** Both cruise port rates cannot be 0 — at least one must have a value > 0 */
+	bothCruisePortRatesZero(): boolean {
+		const arrival = this.addVehicleRatesForm?.get('minimum_cruise_port_arrival_rate')?.value;
+		const departure = this.addVehicleRatesForm?.get('minimum_cruise_port_departure_rate')?.value;
+		const a = parseFloat(arrival);
+		const d = parseFloat(departure);
+		return (isNaN(a) || a === 0) && (isNaN(d) || d === 0);
+	}
+
 	submitForm() {
 		this.submittedForm = true;
 		this.addVehicleRatesForm.patchValue({
@@ -584,6 +617,9 @@ export class AddVehicleRatesComponent implements OnInit {
 		});
 		// stop here if form is invalid
 		if (this.addVehicleRatesForm.invalid) {
+			return;
+		}
+		if (this.bothCruisePortRatesZero()) {
 			return;
 		}
 		this.addVehicleRatesForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('5');

@@ -99,9 +99,12 @@
 						[class.is-invalid-input]="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required)">
 						<mat-label>Policy Expire Date <span class="asterisk">*</span></mat-label>
 						<input matInput [matDatepicker]="policyExpiredDatePicker" formControlName="policyExpiredDate"
-							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()" readonly>
+							placeholder="MM/DD/YYYY" (click)="policyExpiredDatePicker.open()"
+							(dateChange)="chosenDateHandler()" readonly>
 						<mat-datepicker-toggle matSuffix [for]="policyExpiredDatePicker"></mat-datepicker-toggle>
-						<mat-datepicker #policyExpiredDatePicker></mat-datepicker>
+						<mat-datepicker startView="multi-year" #policyExpiredDatePicker
+							(yearSelected)="chosenYearHandler($event)"
+							(monthSelected)="chosenMonthHandler($event)"></mat-datepicker>
 					</mat-form-field>
 					<div *ngIf="f.policyExpiredDate.errors?.pastDate || (submittedForm && f.policyExpiredDate.errors?.required) || (f.policyExpiredDate.touched && f.policyExpiredDate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">

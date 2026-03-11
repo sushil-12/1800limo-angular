@@ -158,3 +158,38 @@ div#rate-manager-slider {
 	border: 2px solid red;
 	border-radius: 4px;
 }
+
+.ai-rate-score-fab {
+	position: fixed;
+	bottom: 24px;
+	right: 24px;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.25rem;
+	background: #6366f1;
+	color: white;
+	border: none;
+	border-radius: 50px;
+	box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+	font-size: 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+	}
+
+	.bi-cpu {
+		font-size: 1.1rem;
+	}
+
+	.fab-label {
+		@media (max-width: 575px) {
+			display: none;
+		}
+	}
+}
