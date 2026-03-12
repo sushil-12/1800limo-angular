@@ -924,994 +924,981 @@
 						</div>
 					</div>
 				</div>
-				<div class="row px-3">
-					<!-- Meet Greet Choices -->
-					<div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Meet and Greet Choices
-							</mat-label>
-							<mat-select formControlName="meet_greet_choices">
-								<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
-									{{ meetGreet.message }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
-
-					<!-- Number Of Vehicles -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Number of Vehicles
-							</mat-label>
-							<input type="text" matInput placholder="Number of Vehicles"
-								[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
-								(focus)="$event.target.select()"
-								(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
-						</mat-form-field>
-					</div>
-
-					<!-- Travel Date -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Travel Date
-							</mat-label>
-							<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-								placeholder="Travel Date" (dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
-								formControlName="pickup_date" (click)="onwy_dt.open()" readonly [min]="minDate" />
-							<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
-							<mat-datepicker #onwy_dt></mat-datepicker>
-						</mat-form-field>
-					</div>
-
-					<!-- Travel Time -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Pickup Time
-							</mat-label>
-							<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
-						</mat-form-field>
-						<ngx-material-timepicker #onwy_tm
-							[defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
-					</div>
-				</div>
-
-
-				<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
-					Pickup <h6 *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')"
-						class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
-						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
-							FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-							address in the next field.
-						</label>
-
-					</h6>
-				</h4>
-
-				<!-- Pickup - Address Field -->
-				<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-					<div class="row px-3">
-						<div class="col-md-12" id="pickup_address">
-							<mat-form-field appearance="outline">
-								<mat-label> Pickup Address </mat-label>
-								<input #pickupInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Pickup - Airport Fields -->
-				<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
-					<div class="row px-4">
-						<!-- Airport -->
-						<div class="col-md-6 mb-2" id="pickup_address">
-							<!-- Ng-Select - Pickup > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
-								placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="pickup_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.pickup_airport_option.errors.required">This field is required</div>
-							</div>
-
-
-						</div>
-
-						<!-- FBO new filed -->
-						<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
-							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
-								<mat-label>
-									Enter FBO address
-								</mat-label>
-								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
-									formControlName="fbo_address" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-
-						<!-- FBO name -->
-						<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
-							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
-								<mat-label>
-									Enter FBO name
-								</mat-label>
-								<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
-									formControlName="fbo_name" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-
-						<!-- Airline -->
-						<div class="col-md-6 mb-2" *ngIf="Form.pickup_airport.value != '3283' ">
-							<!-- Ng-Select > Airline -->
-							<ng-select appearance="outline" [items]="BigData?.airlinesData"
-								[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
-								placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-								[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airline_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.pickup_airline_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.pickup_airline_option.errors.required">This field is required</div>
-							</div>
-						</div>
-
-						<!-- Flight / Tail # -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="vehicleLable mt-0"
-								style="margin-top: 0px !important;">
-								<mat-label>
-									{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
-										class="asterisk">*</span>
-								</mat-label>
-								<input type="text" matInput
-									placeholder="{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
-									aria-label="Flight" formControlName="pickup_flight"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)">
-								<div class="error-message"
-									*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.pickup_flight.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Origin Airport / City -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="vehicleLable mt-0"
-								style="margin-top: 0px !important;">
-								<mat-label>
-									Origin Airport / City <span class="asterisk">*</span>
-								</mat-label>
-								<input formControlName="origin_airport_city" type="text" matInput
-									placeholder="Origin Airport / City" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.origin_airport_city.invalid && (Form.origin_airport_city.touched || Form.origin_airport_city.dirty)">
-								<div class="error-message"
-									*ngIf="Form.origin_airport_city.invalid && (Form.origin_airport_city.touched || Form.origin_airport_city.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0"
-										*ngIf="Form.origin_airport_city.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Pickup - Cruise Details -->
-				<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-					<div class="row px-3">
-						<!-- Cruise Port -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Port
-								</mat-label>
-								<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
-								<div class="error-message"
-									*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Cruise Ship Name -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Ship Name
-								</mat-label>
-								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
-								<div class="error-message"
-									*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Time -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Ship Arrival time
-								</mat-label>
-								<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
-									(focus)="$event.target.select()" readonly />
-							</mat-form-field>
-							<ngx-material-timepicker #crse_tm
-								[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
-						</div>
-					</div>
-				</div>
-
-				<h4 class="border-secondary pl-2 mt-3">
-					Dropoff
-				</h4>
-
-				<!-- Dropoff - Address Field -->
-				<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-					<div class="row px-3">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label> Dropoff Address </mat-label>
-								<input #dropoffInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Dropoff - Airport Field -->
-				<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-					<div class="row px-4">
-						<!-- Airport -->
-						<div class="col-md-6 mb-2">
-							<!-- Ng-Select > Dropoff > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
-								placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="dropoff_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.dropoff_airport_option.errors.required">This field is required</div>
-							</div>
-						</div>
-
-						<!-- Airline -->
-						<div class="col-md-6 mb-2">
-							<!-- Ng-Select > Dropoff > Airline -->
-							<ng-select appearance="outline" [items]="BigData?.airlinesData"
-								[searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
-								placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-								[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airline_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.dropoff_airline_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.dropoff_airline_option.errors.required">This field is required</div>
-							</div>
-						</div>
-
-						<!-- Flight / Tail # -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="vehicleLable mt-0"
-								style="margin-top: 0px !important;">
-								<mat-label>
-									Flight / Tail #
-								</mat-label>
-								<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-									formControlName="dropoff_flight" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)">
-								<div class="error-message"
-									*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.dropoff_flight.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Dropoff - Cruise Details -->
-				<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-					<div class="row px-3">
-						<!-- Cruise Port -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Port
-								</mat-label>
-								<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
-								<div class="error-message"
-									*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Cruise Ship Name -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Ship Name
-								</mat-label>
-								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
-								<div class="error-message"
-									*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Time -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Ship Departure time
-								</mat-label>
-								<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
-									(focus)="$event.target.select()" readonly />
-							</mat-form-field>
-							<ngx-material-timepicker #crse_tm
-								[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Extra Stops -->
-				<div class="row mt-3">
-					<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-						<h4 class="m-0">
-							Extra Stops
-						</h4>
-						<div class="mx-4">
-							<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
-								Add Stop
-							</button>
-						</div>
-					</div>
-				</div>
-				<!-- Extra Stop Address Field -->
-				<div class="row mt-2 mb-4 align-items-center m-0"
-					*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
-					<div class="extra-stop-field col-11">
-						<mat-form-field appearance="outline">
-							<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
-							<input #extraStopInput type="text" matInput placeholder="Type your address"
-								[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-					<div class="col-1 p-0 p-md-3">
-						<div class="delete-icon">
-							<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
-								(click)="deleteExtraStop(false, stop_index)"></i>
-						</div>
-					</div>
-				</div>
-				<!-- Extra Stop Address Field Ends -->
-
-				<!-- Special Instructions -->
-				<div class="col-md-12 my-2">
+			</div>
+			<div class="row px-3">
+				<!-- Meet Greet Choices -->
+				<div class="col-md-12">
 					<mat-form-field appearance="outline">
-						<mat-label style="color:red;">
-							Special Instructions / Exact Building Name
+						<mat-label>
+							Meet and Greet Choices
 						</mat-label>
-						<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-							formControlName="booking_instructions" rows="5"></textarea>
+						<mat-select formControlName="meet_greet_choices">
+							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
+								{{ meetGreet.message }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="row m-2">
-					<p class="text-lg"
-						style="color: #dc3545!important;font-weight: 500;background: yellow;padding: 5px;">
-						NOTE : Enter pickup and drop off locations first, then enter extra stops.
-					</p>
-				</div>
 
-
-
-				<!-- AGM Map -->
-				<div class="row">
-					<!-- AGM Map -->
-					<div class="col-md-12">
-						<div class="map-block">
-							<div class="google_map">
-								<div id="map" class="map"></div>
-							</div>
-							<div class="row">
-								<h6 class="mx-2">
-									Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-									}} Km
-								</h6>
-								<h6 class="mx-2">
-									Estimated time: {{convertToMinutes(Form.journeyTime.value)}}
-								</h6>
-							</div>
-						</div>
-					</div>
-					<!-- AGM Map Ends -->
-				</div>
-			</div>
-			<!-- Section - Booking Details Ends -->
-
-
-			<!-- Section - Return Journey Details -->
-			<div class="section-container" *ngIf="Form.service_type.value == 'round_trip'">
-				<h2 style="margin-bottom: 0;">
-					Return Booking
-				</h2>
-				<div class="row px-3">
-					<!-- Meet Greet Choices -->
-					<div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Meet and Greet Choices
-							</mat-label>
-							<mat-select formControlName="return_meet_greet_choices">
-								<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
-									{{ meetGreet.message }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
-
-					<!-- Travel Date -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Arrival Date
-							</mat-label>
-							<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="retn_dt"
-								placeholder="Arrival Date"
-								(dateChangeWithFormat)="SetFormValue('return_pickup_date', $event)"
-								formControlName="return_pickup_date" (click)="retn_dt.open()" [min]="minDate" />
-							<mat-datepicker-toggle matSuffix [for]="retn_dt"></mat-datepicker-toggle>
-							<mat-datepicker #retn_dt></mat-datepicker>
-						</mat-form-field>
-					</div>
-
-					<!-- Travel Time -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Arrival Time
-							</mat-label>
-							<input [ngxTimepicker]="rt_onwy_tm" matInput formControlName="return_pickup_time"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-						<ngx-material-timepicker #rt_onwy_tm
-							[defaultTime]="Form.return_pickup_time.value"></ngx-material-timepicker>
-					</div>
-				</div>
-
-				<h4 class="pl-2" style="margin-bottom: 0;">
-					Return Pickup<h6 *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')"
-						class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
-						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
-							FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-							address in the next field.
-						</label>
-
-					</h6>
-				</h4>
-
-				<!-- Return Pickup - Address Field -->
-				<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
-					<div class="row px-3">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label> Pickup Address </mat-label>
-								<input #return_pickupInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Return Pickup - Airport Fields -->
-				<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
-					<div class="row px-3">
-						<!-- Airport -->
-						<div class="col-md-6 mb-2">
-							<!-- Ng-Select > Return > Pickup > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
-								bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="return_pickup_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.return_pickup_airport_option.errors.required">This field is required
-								</div>
-							</div>
-						</div>
-
-						<!-- FBO new filed -->
-						<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
-							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
-								<mat-label>
-									Enter FBO address
-								</mat-label>
-								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
-									formControlName="return_fbo_address" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-
-						<!-- FBO name -->
-						<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
-							<mat-form-field appearance="outline" style="margin-top: 0px !important;">
-								<mat-label>
-									Enter FBO name
-								</mat-label>
-								<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
-									formControlName="return_fbo_name" (focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-
-
-						<!-- Airline -->
-						<div class="col-md-6 mb-2" *ngIf="Form.return_pickup_airport.value != '3283' ">
-							<!-- Ng-Select > Return > Pickup > Airline -->
-							<ng-select appearance="outline" [items]="BigData?.airlinesData"
-								[searchFn]="airlineSearchFunction" (change)="change($event, 'return_pickup_airline')"
-								bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
-								[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airline_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.return_pickup_airline_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.return_pickup_airline_option.errors.required">This field is required
-								</div>
-							</div>
-						</div>
-
-						<!-- Flight / Tail # -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="vehicleLable mt-0"
-								style="margin-top: 0px !important;">
-								<mat-label>
-									{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
-										class="asterisk">*</span>
-								</mat-label>
-								<input type="text" matInput
-									placeholder="{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
-									aria-label="Flight" formControlName="return_pickup_flight"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)">
-								<div class="error-message"
-									*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0"
-										*ngIf="Form.return_pickup_flight.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Departing Airport / City -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="vehicleLable mt-0"
-								style="margin-top: 0px !important;">
-								<mat-label>
-									Departing Airport / City <span class="asterisk">*</span>
-								</mat-label>
-								<input formControlName="departing_airport_city" type="text" matInput
-									placeholder="Departing Airport / City" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)">
-								<div class="error-message"
-									*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0"
-										*ngIf="Form.departing_airport_city.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-
-				<!-- Return Pickup - Cruise Details -->
-				<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
-					<div class="row px-3">
-						<!-- Cruise Port -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Port
-								</mat-label>
-								<input type="text" matInput placeholder="Cruise Port"
-									formControlName="return_cruise_port" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
-								<div class="error-message"
-									*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Cruise Ship Name -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Ship Name
-								</mat-label>
-								<input formControlName="return_cruise_name" type="text" matInput
-									placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
-								<div class="error-message"
-									*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Time -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Ship Arrival time
-								</mat-label>
-								<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
-									(focus)="$event.target.select()" readonly />
-							</mat-form-field>
-							<ngx-material-timepicker #re_crse_tm
-								[defaultTime]="Form.return_cruise_time.value"></ngx-material-timepicker>
-						</div>
-					</div>
-				</div>
-
-				<h4 class="pl-2" style="margin-bottom: 0;">
-					Dropoff
-				</h4>
-
-				<!-- Return Dropoff - Address Field -->
-				<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
-					<div class="row px-3">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label> Dropoff Address </mat-label>
-								<input #return_dropoffInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'return_dropoff', null)"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Return Dropoff - Airport Field -->
-				<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
-					<div class="row px-2">
-						<!-- Airport -->
-						<div class="col-md-6 mb-2">
-							<!-- Ng-Select > Return > Dropoff > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
-								bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="return_dropoff_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.return_dropoff_airport_option.errors.required">This field is required
-								</div>
-							</div>
-						</div>
-
-						<!-- Airline -->
-						<div class="col-md-6 mb-2">
-							<!-- Ng-Select > Return > Dropoff > Airline -->
-							<ng-select appearance="outline" [items]="BigData?.airlinesData"
-								[searchFn]="airlineSearchFunction" (change)="change($event, 'return_dropoff_airline')"
-								bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
-								[markFirst]="true" [virtualScroll]="true"
-								formControlName="return_dropoff_airline_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airline_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
-							<div *ngIf="(submitBookingForm && Form.return_dropoff_airline_option.invalid) "
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.return_dropoff_airline_option.errors.required">This field is required
-								</div>
-							</div>
-						</div>
-
-						<!-- Flight / Tail # -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="vehicleLable mt-0"
-								style="margin-top: 0px !important;">
-								<mat-label>
-									Flight / Tail #
-								</mat-label>
-								<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
-									formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)">
-								<div class="error-message"
-									*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0"
-										*ngIf="Form.return_dropoff_flight.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<!-- Return Dropoff - Cruise Details -->
-				<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
-					<div class="row px-3">
-						<!-- Cruise Port -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Port
-								</mat-label>
-								<input type="text" matInput placeholder="Cruise Port"
-									formControlName="return_cruise_port" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
-								<div class="error-message"
-									*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Cruise Ship Name -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Cruise Ship Name
-								</mat-label>
-								<input formControlName="return_cruise_name" type="text" matInput
-									placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
-							</mat-form-field>
-							<div class="error-box"
-								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
-								<div class="error-message"
-									*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
-									style="margin-top:-15px">
-									<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
-										This field is required
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<!-- Time -->
-						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Ship Departure time
-								</mat-label>
-								<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
-									(focus)="$event.target.select()" readonly />
-							</mat-form-field>
-							<ngx-material-timepicker #re_crse_tm
-								[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
-						</div>
-					</div>
-				</div>
-
-				<!-- Extra Stops -->
-				<div class="row my-3 justify-items-end">
-					<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-						<h4 class="m-0">
-							Extra Stops
-						</h4>
-						<div class="mx-4">
-							<button type="button" class="custom-filled-button" (click)="addExtraStop(true)">
-								Add Stop
-							</button>
-						</div>
-					</div>
-				</div>
-				<!-- Extra Stop Address Field -->
-				<div class="row my-2 align-items-center"
-					*ngFor="let extra_stop of ReturnExtraStops.controls; let stop_index = index">
-					<div class="extra-stop-field col-md-11">
-						<mat-form-field appearance="outline">
-							<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
-							<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
-								[value]="fetchStopValue('return_extra_stops', stop_index)"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-					<div class="col-md-1">
-						<div class="delete-icons">
-							<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
-								(click)="deleteExtraStop(true, stop_index)"></i>
-						</div>
-					</div>
-				</div>
-				<!-- Extra Stop Address Field Ends -->
-
-				<div class="col-md-12 my-2">
+				<!-- Number Of Vehicles -->
+				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label style="color:red;">
-							Special Instructions / Exact Building Name
+						<mat-label>
+							Number of Vehicles
 						</mat-label>
-						<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-							rows="5"></textarea>
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
+							(focus)="$event.target.select()"
+							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
 					</mat-form-field>
 				</div>
-				<div class="row m-2">
-					<p class="text-lg" style="color: #dc3545!important;">
-						NOTE : Enter pickup and drop off locations first, then enter extra stops.
-					</p>
+
+				<!-- Travel Date -->
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Travel Date
+						</mat-label>
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
+							placeholder="Travel Date" (dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
+							formControlName="pickup_date" (click)="onwy_dt.open()" readonly [min]="minDate" />
+						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
+						<mat-datepicker #onwy_dt></mat-datepicker>
+					</mat-form-field>
 				</div>
 
+				<!-- Travel Time -->
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Pickup Time
+						</mat-label>
+						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
+					</mat-form-field>
+					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
+				</div>
+			</div>
 
 
+			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
+				Pickup <h6 *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')"
+					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
+						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
+						address in the next field.
+					</label>
 
-				<!-- AGM Map -->
-				<div class="row">
-					<!-- AGM Map -->
-					<div class="col-md-12">
-						<div class="map-block">
-							<div class="google_map">
-								<div id="return_map" class="map"></div>
-							</div>
-							<div class="row">
-								<h6 class="mx-2">
-									Total Distance: {{ mToMi(return_distance) }} Miles / {{
-									mToKm(return_distance) }} Km
-								</h6>
-								<h6 class="mx-2">
-									Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}}
-								</h6>
+				</h6>
+			</h4>
+
+			<!-- Pickup - Address Field -->
+			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
+				<div class="row px-3">
+					<div class="col-md-12" id="pickup_address">
+						<mat-form-field appearance="outline">
+							<mat-label> Pickup Address </mat-label>
+							<input #pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Pickup - Airport Fields -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
+				<div class="row px-4">
+					<!-- Airport -->
+					<div class="col-md-6 mb-2" id="pickup_address">
+						<!-- Ng-Select - Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
+							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="pickup_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.pickup_airport_option.errors.required">This field is required</div>
+						</div>
+
+
+					</div>
+
+					<!-- FBO new filed -->
+					<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO address
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+								formControlName="fbo_address" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- FBO name -->
+					<div class="col-md-6" *ngIf="Form.pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO name
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
+								formControlName="fbo_name" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- Airline -->
+					<div class="col-md-6 mb-2" *ngIf="Form.pickup_airport.value != '3283' ">
+						<!-- Ng-Select > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airline_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.pickup_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.pickup_airline_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- Flight / Tail # -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
+							<mat-label>
+								{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+									class="asterisk">*</span>
+							</mat-label>
+							<input type="text" matInput
+								placeholder="{{Form.pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+								aria-label="Flight" formControlName="pickup_flight" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)">
+							<div class="error-message"
+								*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.pickup_flight.errors?.required">
+									This field is required
+								</p>
 							</div>
 						</div>
 					</div>
-					<!-- AGM Map Ends -->
+
+					<!-- Origin Airport / City -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
+							<mat-label>
+								Origin Airport / City <span class="asterisk">*</span>
+							</mat-label>
+							<input formControlName="origin_airport_city" type="text" matInput
+								placeholder="Origin Airport / City" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.origin_airport_city.invalid && (Form.origin_airport_city.touched || Form.origin_airport_city.dirty)">
+							<div class="error-message"
+								*ngIf="Form.origin_airport_city.invalid && (Form.origin_airport_city.touched || Form.origin_airport_city.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.origin_airport_city.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<!-- AGM Map -->
 			</div>
-			<!-- Section - Return Journey Details Ends -->
 
 
-			<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates"
-				[affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates" [book_data]="booking_data"
-				[reservation_id]="booking_id" [isCreatedByAdmin]="isCreatedByAdmin" [reset]="reset_button"
-				[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [isFarmoutBooking]="true"
-				[isTravelShare]="isTravelShare" [parentError]="numberOfHoursError"
-				(hoursErrorChange)="numberOfHoursError = $event" [vehicle_id]="params_QB_vehicle_id"
-				[hours]="Form.number_of_hours?.value" [service_type]="service_type"
-				[vehicles]="Form.number_of_vehicles?.value" [currencyObject]="currencyObj"
-				(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
-			</app-rates-forms>
+			<!-- Pickup - Cruise Details -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
+				<div class="row px-3">
+					<!-- Cruise Port -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Port
+							</mat-label>
+							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
+							<div class="error-message"
+								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Cruise Ship Name -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Ship Name
+							</mat-label>
+							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
+							<div class="error-message"
+								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Time -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Ship Arrival time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
+								(focus)="$event.target.select()" readonly />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+					</div>
+				</div>
+			</div>
+
+			<h4 class="border-secondary pl-2 mt-3">
+				Dropoff
+			</h4>
+
+			<!-- Dropoff - Address Field -->
+			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
+				<div class="row px-3">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label> Dropoff Address </mat-label>
+							<input #dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Dropoff - Airport Field -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
+				<div class="row px-4">
+					<!-- Airport -->
+					<div class="col-md-6 mb-2">
+						<!-- Ng-Select > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
+							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="dropoff_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.dropoff_airport_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- Airline -->
+					<div class="col-md-6 mb-2">
+						<!-- Ng-Select > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airline_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.dropoff_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.dropoff_airline_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- Flight / Tail # -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
+							<mat-label>
+								Flight / Tail #
+							</mat-label>
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
+								formControlName="dropoff_flight" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)">
+							<div class="error-message"
+								*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.dropoff_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Dropoff - Cruise Details -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
+				<div class="row px-3">
+					<!-- Cruise Port -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Port
+							</mat-label>
+							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)">
+							<div class="error-message"
+								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Cruise Ship Name -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Ship Name
+							</mat-label>
+							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)">
+							<div class="error-message"
+								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Time -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Ship Departure time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
+								(focus)="$event.target.select()" readonly />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Extra Stops -->
+			<div class="row mt-3">
+				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
+					<h4 class="m-0">
+						Extra Stops
+					</h4>
+					<div class="mx-4">
+						<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
+							Add Stop
+						</button>
+					</div>
+				</div>
+			</div>
+			<!-- Extra Stop Address Field -->
+			<div class="row mt-2 mb-4 align-items-center m-0"
+				*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
+				<div class="extra-stop-field col-11">
+					<mat-form-field appearance="outline">
+						<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
+						<input #extraStopInput type="text" matInput placeholder="Type your address"
+							[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
+					</mat-form-field>
+				</div>
+				<div class="col-1 p-0 p-md-3">
+					<div class="delete-icon">
+						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
+							(click)="deleteExtraStop(false, stop_index)"></i>
+					</div>
+				</div>
+			</div>
+			<!-- Extra Stop Address Field Ends -->
+
+			<!-- Special Instructions -->
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label style="color:red;">
+						Special Instructions / Exact Building Name
+					</mat-label>
+					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+						formControlName="booking_instructions" rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;font-weight: 500;background: yellow;padding: 5px;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
 
 
 
-
-
-
+			<!-- AGM Map -->
 			<div class="row">
-				<div class="col-md-12 d-flex preview_button_edit">
-					<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
-					Reset
-				</button> -->
-					<button type="submit" class="custom-filled-button m-3" (click)="submitForm(false)">
-						Preview
-					</button>
+				<!-- AGM Map -->
+				<div class="col-md-12">
+					<div class="map-block">
+						<div class="google_map">
+							<div id="map" class="map"></div>
+						</div>
+						<div class="row">
+							<h6 class="mx-2">
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}}
+							</h6>
+						</div>
+					</div>
 				</div>
+				<!-- AGM Map Ends -->
 			</div>
 		</div>
+		<!-- Section - Booking Details Ends -->
+
+
+		<!-- Section - Return Journey Details -->
+		<div class="section-container" *ngIf="Form.service_type.value == 'round_trip'">
+			<h2 style="margin-bottom: 0;">
+				Return Booking
+			</h2>
+			<div class="row px-3">
+				<!-- Meet Greet Choices -->
+				<div class="col-md-12">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Meet and Greet Choices
+						</mat-label>
+						<mat-select formControlName="return_meet_greet_choices">
+							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
+								{{ meetGreet.message }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+
+				<!-- Travel Date -->
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Arrival Date
+						</mat-label>
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="retn_dt"
+							placeholder="Arrival Date"
+							(dateChangeWithFormat)="SetFormValue('return_pickup_date', $event)"
+							formControlName="return_pickup_date" (click)="retn_dt.open()" [min]="minDate" />
+						<mat-datepicker-toggle matSuffix [for]="retn_dt"></mat-datepicker-toggle>
+						<mat-datepicker #retn_dt></mat-datepicker>
+					</mat-form-field>
+				</div>
+
+				<!-- Travel Time -->
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Arrival Time
+						</mat-label>
+						<input [ngxTimepicker]="rt_onwy_tm" matInput formControlName="return_pickup_time"
+							(focus)="$event.target.select()" />
+					</mat-form-field>
+					<ngx-material-timepicker #rt_onwy_tm
+						[defaultTime]="Form.return_pickup_time.value"></ngx-material-timepicker>
+				</div>
+			</div>
+
+			<h4 class="pl-2" style="margin-bottom: 0;">
+				Return Pickup<h6 *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')"
+					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
+						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
+						address in the next field.
+					</label>
+
+				</h6>
+			</h4>
+
+			<!-- Return Pickup - Address Field -->
+			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
+				<div class="row px-3">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label> Pickup Address </mat-label>
+							<input #return_pickupInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Return Pickup - Airport Fields -->
+			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
+				<div class="row px-3">
+					<!-- Airport -->
+					<div class="col-md-6 mb-2">
+						<!-- Ng-Select > Return > Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="return_pickup_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_pickup_airport_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- FBO new filed -->
+					<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO address
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+								formControlName="return_fbo_address" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- FBO name -->
+					<div class="col-md-6" *ngIf="Form.return_pickup_airport.value == '3283' ">
+						<mat-form-field appearance="outline" style="margin-top: 0px !important;">
+							<mat-label>
+								Enter FBO name
+							</mat-label>
+							<input type="text" matInput placeholder="Enter FBO name" aria-label="FBOname"
+								formControlName="return_fbo_name" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+
+					<!-- Airline -->
+					<div class="col-md-6 mb-2" *ngIf="Form.return_pickup_airport.value != '3283' ">
+						<!-- Ng-Select > Return > Pickup > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_pickup_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airline_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_pickup_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_pickup_airline_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- Flight / Tail # -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
+							<mat-label>
+								{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}} <span
+									class="asterisk">*</span>
+							</mat-label>
+							<input type="text" matInput
+								placeholder="{{Form.return_pickup_airport.value == '3283' ? 'Tail #' : 'Flight #'}}"
+								aria-label="Flight" formControlName="return_pickup_flight"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)">
+							<div class="error-message"
+								*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_pickup_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Departing Airport / City -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
+							<mat-label>
+								Departing Airport / City <span class="asterisk">*</span>
+							</mat-label>
+							<input formControlName="departing_airport_city" type="text" matInput
+								placeholder="Departing Airport / City" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)">
+							<div class="error-message"
+								*ngIf="Form.departing_airport_city.invalid && (Form.departing_airport_city.touched || Form.departing_airport_city.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.departing_airport_city.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+
+			<!-- Return Pickup - Cruise Details -->
+			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
+				<div class="row px-3">
+					<!-- Cruise Port -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Port
+							</mat-label>
+							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Cruise Ship Name -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Ship Name
+							</mat-label>
+							<input formControlName="return_cruise_name" type="text" matInput
+								placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Time -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Ship Arrival time
+							</mat-label>
+							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
+								(focus)="$event.target.select()" readonly />
+						</mat-form-field>
+						<ngx-material-timepicker #re_crse_tm
+							[defaultTime]="Form.return_cruise_time.value"></ngx-material-timepicker>
+					</div>
+				</div>
+			</div>
+
+			<h4 class="pl-2" style="margin-bottom: 0;">
+				Dropoff
+			</h4>
+
+			<!-- Return Dropoff - Address Field -->
+			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
+				<div class="row px-3">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label> Dropoff Address </mat-label>
+							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
+								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Return Dropoff - Airport Field -->
+			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
+				<div class="row px-2">
+					<!-- Airport -->
+					<div class="col-md-6 mb-2">
+						<!-- Ng-Select > Return > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="return_dropoff_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_dropoff_airport_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- Airline -->
+					<div class="col-md-6 mb-2">
+						<!-- Ng-Select > Return > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_dropoff_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airline_option.invalid) }"
+							style="height:66px;">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_dropoff_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_dropoff_airline_option.errors.required">This field is required</div>
+						</div>
+					</div>
+
+					<!-- Flight / Tail # -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
+							<mat-label>
+								Flight / Tail #
+							</mat-label>
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
+								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)">
+							<div class="error-message"
+								*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_dropoff_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Return Dropoff - Cruise Details -->
+			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
+				<div class="row px-3">
+					<!-- Cruise Port -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Port
+							</mat-label>
+							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Cruise Ship Name -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Ship Name
+							</mat-label>
+							<input formControlName="return_cruise_name" type="text" matInput
+								placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box"
+							*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Time -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Ship Departure time
+							</mat-label>
+							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
+								(focus)="$event.target.select()" readonly />
+						</mat-form-field>
+						<ngx-material-timepicker #re_crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+					</div>
+				</div>
+			</div>
+
+			<!-- Extra Stops -->
+			<div class="row my-3 justify-items-end">
+				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
+					<h4 class="m-0">
+						Extra Stops
+					</h4>
+					<div class="mx-4">
+						<button type="button" class="custom-filled-button" (click)="addExtraStop(true)">
+							Add Stop
+						</button>
+					</div>
+				</div>
+			</div>
+			<!-- Extra Stop Address Field -->
+			<div class="row my-2 align-items-center"
+				*ngFor="let extra_stop of ReturnExtraStops.controls; let stop_index = index">
+				<div class="extra-stop-field col-md-11">
+					<mat-form-field appearance="outline">
+						<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
+						<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
+							[value]="fetchStopValue('return_extra_stops', stop_index)"
+							(focus)="$event.target.select()" />
+					</mat-form-field>
+				</div>
+				<div class="col-md-1">
+					<div class="delete-icons">
+						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
+							(click)="deleteExtraStop(true, stop_index)"></i>
+					</div>
+				</div>
+			</div>
+			<!-- Extra Stop Address Field Ends -->
+
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label style="color:red;">
+						Special Instructions / Exact Building Name
+					</mat-label>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
+						rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+
+
+
+
+			<!-- AGM Map -->
+			<div class="row">
+				<!-- AGM Map -->
+				<div class="col-md-12">
+					<div class="map-block">
+						<div class="google_map">
+							<div id="return_map" class="map"></div>
+						</div>
+						<div class="row">
+							<h6 class="mx-2">
+								Total Distance: {{ mToMi(return_distance) }} Miles / {{
+								mToKm(return_distance) }} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}}
+							</h6>
+						</div>
+					</div>
+				</div>
+				<!-- AGM Map Ends -->
+			</div>
+			<!-- AGM Map -->
+		</div>
+		<!-- Section - Return Journey Details Ends -->
+
+
+		<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id"
+			[isCreatedByAdmin]="isCreatedByAdmin" [reset]="reset_button" [initReturnRates]="init_return_rates"
+			(formvalue)="RateFormValue($event)" [isFarmoutBooking]="true" [isTravelShare]="isTravelShare"
+			[parentError]="numberOfHoursError" (hoursErrorChange)="numberOfHoursError = $event"
+			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value" [service_type]="service_type"
+			[vehicles]="Form.number_of_vehicles?.value" [currencyObject]="currencyObj"
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		</app-rates-forms>
+
+
+
+
+
+
+		<div class="row">
+			<div class="col-md-12 d-flex preview_button_edit">
+				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
+					Reset
+				</button> -->
+				<button type="submit" class="custom-filled-button m-3" (click)="submitForm(false)">
+					Preview
+				</button>
+			</div>
+		</div>
+	</div>
 </form>
 
 <style>

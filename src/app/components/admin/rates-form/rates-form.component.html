@@ -94,7 +94,7 @@
 							(keydown)="blockNegative($event)" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="numberOfHoursError" class="text-danger m-0"
-						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px !important; font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
 						number of hours should be a minimum of 2 hours
 					</div>
 					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
