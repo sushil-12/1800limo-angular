@@ -91,7 +91,6 @@ export class HeaderComponent implements OnInit {
 	get Value(): string {
 		const user = this.currentUser;
 		const status = this.accountStatus;
-		console.log(user, "useruseruser")
 
 		if (user?.roleName == 'travel_agent') {
 			let stepsObj: any = {};
@@ -141,15 +140,12 @@ export class HeaderComponent implements OnInit {
 
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
-		console.log('NGINIT HEADER - Current User:', this.currentUser);
 		if (this.currentUser) {
 			this.getPermissions()
 		}
 		// Get Steps
 		this.steps = localStorage.getItem("stepCompleted") || "";
 		this.accountStatus = localStorage.getItem("account_approval") || "";
-
-		console.log('NGINIT HEADER - Value (Getter):', this.Value);
 
 		this.cdr.detectChanges();
 

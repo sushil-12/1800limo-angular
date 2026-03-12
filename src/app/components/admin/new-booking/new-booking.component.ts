@@ -1,5 +1,5 @@
 import { MapUtils } from '../../../utils/map-utils';
-import { Component, EventEmitter, OnInit, OnDestroy, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck, distinctUntilChanged } from 'rxjs/operators';
@@ -30,7 +30,7 @@ declare var $: any
 export class NewBookingComponent implements OnInit, OnDestroy {
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
 	@ViewChild('lose_aff_name_input') lose_aff_name_input: ElementRef;
-
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
 	@ViewChildren('hourField') hourFields!: QueryList<ElementRef>;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
@@ -964,19 +964,48 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 	}
 
-	handleNoOfHours(value) {
-		this.number_of_hours = value
-		console.log('in function handle no of hours->', value, value > 0)
-		const hoursNum = Number(value);
-		if (this.service_type === 'charter_tour') {
-			this.numberOfHoursError = hoursNum < 2;
+	handleNoOfHours(eventValue: any) {
+		const value = Number(eventValue);
+
+		// Reactive error flag update
+		if (this.Form.service_type.value == 'charter_tour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
 		} else {
 			this.numberOfHoursError = false;
 		}
-		if (hoursNum > 0) {
-			this.buildBookingData();
+
+		// Only emit when value is already valid (>= 2)
+		if (!isNaN(value) && value >= 2) {
+			this.returnNumberOfHr.emit(value);
 		}
 	}
+
+	// Force minimum 2 when user clicks away (perfect for 0, 1, empty)
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+
+		if (this.Form.service_type.value == 'charter_tour' && (isNaN(value) || value < 2)) {
+			// If it's less than 2, we force it to 2 and clear the error
+			value = 2;
+			this.number_of_hours = 2;
+			this.SetFormValue('number_of_hours', 2);
+			this.numberOfHoursError = false;
+		}
+
+		this.returnNumberOfHr.emit(value);
+	}
+
+	// Block negative sign while typing
+	blockNegative(event: KeyboardEvent) {
+		if (event.key === '-') {
+			event.preventDefault();
+		}
+	}
+
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
@@ -1133,14 +1162,21 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round' || this.updateType == 'edit') {
 				this.scroll('pickup_adress')
-				if (new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime()) {
+				if (new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime() && this.updateType != 'edit') {
 					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				}
 				else {
 					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 				}
+			}
+
+			// Instant error display for prefilled values
+			if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
 			}
 
 		})
@@ -3156,19 +3192,19 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (this.BookingForm.invalid) {
 			return;
 		}
-			// Validate minimum number of hours for charter_tour
-			if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
-				this.numberOfHoursError = true;
-				if (this.hourFields && this.hourFields.length > 0) {
-					const activeField = this.hourFields.find(field => field.nativeElement.offsetParent !== null);
-					if (activeField) {
-						activeField.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-					} else {
-						this.hourFields.first.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-					}
+		// Validate minimum number of hours for charter_tour
+		if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
+			this.numberOfHoursError = true;
+			if (this.hourFields && this.hourFields.length > 0) {
+				const activeField = this.hourFields.find(field => field.nativeElement.offsetParent !== null);
+				if (activeField) {
+					activeField.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				} else {
+					this.hourFields.first.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 				}
-				return;
 			}
+			return;
+		}
 
 		if (this.booking_created_from == 'subscriber') {
 			this.BookingForm.patchValue({
@@ -4454,7 +4490,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
-		this.BookingForm.get('number_of_hours').setValue(data)
+		this.BookingForm.get('number_of_hours').setValue(data);
+		this.numberOfHoursError = false;
 	}
 
 	checkUniqueness() {

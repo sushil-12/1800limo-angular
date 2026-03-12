@@ -28,12 +28,14 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("service_type") service_type: string = "";
 	@Input("currencyObject") currencyObject: any;
 	@Input("booking_created_from") booking_created_from: any;
+	@Input() parentError: boolean = false;
 
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
+	@Output() hoursErrorChange = new EventEmitter<boolean>();
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -92,6 +94,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	currencySymbol: any = '$';
 	currentUser: any;
 	previousBookingData: any = null;
+	numberOfHoursError: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -248,6 +251,10 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			// 		}
 			// 	}
 			// })
+		}
+
+		if (changes.parentError) {
+			this.numberOfHoursError = changes.parentError.currentValue;
 		}
 
 		if (changes.reset && changes.reset.currentValue) {
@@ -492,6 +499,13 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 				this.initRates();
+
+				// Instant error check on prefill
+				if (this.service_type === 'charter_tour' && this.hours < 2) {
+					this.numberOfHoursError = true;
+				} else {
+					this.numberOfHoursError = false;
+				}
 			}
 		});
 	}
@@ -551,6 +565,14 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.returnRatesdata.next(response?.data?.retrunRateArray)
 				this.initReturnRates()
 			}
+
+			// Instant error check on prefill
+			if (this.service_type === 'charter_tour' && this.hours < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+
 			// Store current booking_data as previous for next comparison
 			this.previousBookingData = JSON.parse(JSON.stringify(data));
 			console.log('[buildBookingData] Method completed successfully');
@@ -664,6 +686,19 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	handleHourChange(event: any) {
 		const value = Number(event.target.value);
 
+		// Reactive error flag update
+		if (this.service_type === 'charter_tour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+			this.hoursErrorChange.emit(this.numberOfHoursError);
+		} else {
+			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
+		}
+
 		// Only emit when value is already valid (>= 2)
 		if (!isNaN(value) && value >= 2) {
 			this.returnNumberOfHr.emit(value);
@@ -674,9 +709,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	enforceMinimumHours(event: any) {
 		let value = Number(event.target.value || 0);
 
-		if (isNaN(value) || value < 2) {
+		if (this.service_type == 'charter_tour' && (isNaN(value) || value < 2)) {
 			value = 2;
+			this.hours = 2;
 			event.target.value = 2;   // show 2 in the box
+			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
 		}
 
 		this.returnNumberOfHr.emit(value);
