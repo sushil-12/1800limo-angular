@@ -90,16 +90,25 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div>
-						<mat-form-field appearance="outline">
+				<div class="flex-grow-1 ml-2 mr-2" style="min-width: 0;"
+					*ngIf="Form.service_type.value == 'charter_tour'">
+					<div #hourField style="position: relative; width: 100%;">
+						<mat-form-field appearance="outline" style="width: 100%;"
+							[class.error-field]="numberOfHoursError">
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								(focus)="$event.target.select()" />
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(focus)="$event.target.select()" (keyup)="handleNoOfHours($event.target.value)"
+								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
+								(blur)="enforceMinimumHours($event)" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
+						<div *ngIf="numberOfHoursError" class="text-danger m-0"
+							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+							number of hours should be a minimum of 2 hours
+						</div>
 					</div>
 				</div>
 			</div>
@@ -894,16 +903,25 @@
 				</div>
 
 				<!-- Hours -->
-				<div class="flex-grow-1 ml-2 mr-2" *ngIf="Form.service_type.value == 'charter_tour'">
-					<div>
-						<mat-form-field appearance="outline">
+				<div class="flex-grow-1 ml-2 mr-2" style="min-width: 0;"
+					*ngIf="Form.service_type.value == 'charter_tour'">
+					<div #hourField style="position: relative; width: 100%;">
+						<mat-form-field appearance="outline" style="width: 100%;"
+							[class.error-field]="numberOfHoursError">
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								(focus)="$event.target.select()" />
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(focus)="$event.target.select()" (keyup)="handleNoOfHours($event.target.value)"
+								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
+								(blur)="enforceMinimumHours($event)" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
+						<div *ngIf="numberOfHoursError" class="text-danger m-0"
+							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+							number of hours should be a minimum of 2 hours
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1859,7 +1877,8 @@
 			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id"
 			[isCreatedByAdmin]="isCreatedByAdmin" [reset]="reset_button" [initReturnRates]="init_return_rates"
 			(formvalue)="RateFormValue($event)" [isFarmoutBooking]="true" [isTravelShare]="isTravelShare"
-			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
+			[parentError]="numberOfHoursError" (hoursErrorChange)="numberOfHoursError = $event"
+			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value" [service_type]="service_type"
 			[vehicles]="Form.number_of_vehicles?.value" [currencyObject]="currencyObj"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-forms>

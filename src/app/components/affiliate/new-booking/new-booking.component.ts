@@ -117,6 +117,7 @@ export class NewBookingComponent implements OnInit {
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
 	number_of_hours: any = '0';
+	numberOfHoursError: boolean = false;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare: boolean;
 	isCreatedByAdmin: boolean = true;
@@ -894,6 +895,7 @@ export class NewBookingComponent implements OnInit {
 			this.initphonefield()
 			this.$spinner.hide('normalspinner')
 			this.scroll('booking_detail')
+			this.handleNoOfHours(this.number_of_hours)
 		})
 
 	}
@@ -1408,10 +1410,44 @@ export class NewBookingComponent implements OnInit {
 			return_affiliate_type: this.BookingForm.get('affiliate_type').value,
 		}
 	}
-	handleNoOfHours(value) {
-		this.number_of_hours = value
-		console.log('in function handle no of hours->', value, value > 0)
-		this.number_of_hours > 0 ? this.buildBookingData() : ''
+	handleNoOfHours(eventValue: any) {
+		const value = Number(eventValue);
+		// Update error flag reactively
+		if (this.Form.service_type.value == 'charter_tour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+		} else {
+			this.numberOfHoursError = false;
+		}
+
+		if (!isNaN(value) && value > 0) {
+			this.number_of_hours = value;
+			this.buildBookingData();
+		}
+	}
+
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+
+		if (this.Form.service_type.value == 'charter_tour' && (isNaN(value) || value < 2)) {
+			value = 2;
+			this.number_of_hours = 2;
+			this.SetFormValue('number_of_hours', 2);
+			this.numberOfHoursError = false;
+		}
+
+		if (!isNaN(value) && value > 0) {
+			this.buildBookingData();
+		}
+	}
+
+	blockNegative(event: KeyboardEvent) {
+		if (event.key === '-') {
+			event.preventDefault();
+		}
 	}
 	onSelectionChangeServiceType(event: any) {
 		console.log("in service type change--->", event.value)
