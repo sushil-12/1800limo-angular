@@ -20,7 +20,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h4 class="border-secondary">
-				{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Bookingss
+				{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -100,9 +100,9 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (focus)="$event.target.select()"
-								(keyup)="handleNoOfHours($event.target.value)"
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(focus)="$event.target.select()" (keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
 								(blur)="enforceMinimumHours($event)" />
 							<span matSuffix>Hrs.</span>
@@ -912,9 +912,9 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (focus)="$event.target.select()"
-								(keyup)="handleNoOfHours($event.target.value)"
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(focus)="$event.target.select()" (keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
 								(blur)="enforceMinimumHours($event)" />
 							<span matSuffix>Hrs.</span>
@@ -981,7 +981,7 @@
 				</div>
 			</div>
 
-			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
+			<h4 class="border-secondary pl-2 mt-2" id="pickup_address">
 				Pickup <h6 *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')"
 					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
@@ -996,10 +996,15 @@
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline">
+						<mat-form-field appearance="outline"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup.invalid) }">
 							<mat-label> Pickup Address </mat-label>
 							<input #pickupInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
+								formControlName="pickup" [value]="fillValue(null, 'pickup', null)"
+								(focus)="$event.target.select()" />
+							<mat-error *ngIf="Form.pickup.errors?.required">
+								Pickup address is required
+							</mat-error>
 						</mat-form-field>
 					</div>
 				</div>
@@ -1177,7 +1182,7 @@
 			</div>
 
 
-			<h4 class="border-secondary pl-2 mt-2">
+			<h4 class="border-secondary pl-2 mt-2" id="dropoff_address">
 				Dropoff
 			</h4>
 
@@ -1185,10 +1190,15 @@
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline">
+						<mat-form-field appearance="outline"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff.invalid) }">
 							<mat-label> Dropoff Address </mat-label>
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
+								formControlName="dropoff" [value]="fillValue(null, 'dropoff', null)"
+								(focus)="$event.target.select()" />
+							<mat-error *ngIf="Form.dropoff.errors?.required">
+								Dropoff address is required
+							</mat-error>
 						</mat-form-field>
 					</div>
 				</div>
@@ -1689,7 +1699,7 @@
 				</div>
 			</div>
 
-			<h4 class="pl-2" style="margin-bottom: 0;">
+			<h4 class="pl-2" style="margin-bottom: 0;" id="return_pickup_address">
 				Return Pickup <h6 *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')"
 					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
@@ -1704,10 +1714,15 @@
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline">
+						<mat-form-field appearance="outline"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup.invalid) }">
 							<mat-label> Pickup Address </mat-label>
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
+								formControlName="return_pickup" [value]="fillValue(null, 'return_pickup', null)"
+								(focus)="$event.target.select()" />
+							<mat-error *ngIf="Form.return_pickup.errors?.required">
+								Return pickup address is required
+							</mat-error>
 						</mat-form-field>
 					</div>
 				</div>
@@ -1887,7 +1902,7 @@
 			</div>
 
 
-			<h4 class="pl-2" style="margin-bottom: 5px;">
+			<h4 class="pl-2" style="margin-bottom: 5px;" id="return_dropoff_address">
 				Dropoff
 			</h4>
 
@@ -1895,10 +1910,15 @@
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-3">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline">
+						<mat-form-field appearance="outline"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff.invalid) }">
 							<mat-label> Dropoff Address </mat-label>
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()" />
+								formControlName="return_dropoff" [value]="fillValue(null, 'return_dropoff', null)"
+								(focus)="$event.target.select()" />
+							<mat-error *ngIf="Form.return_dropoff.errors?.required">
+								Return dropoff address is required
+							</mat-error>
 						</mat-form-field>
 					</div>
 				</div>

@@ -2229,6 +2229,22 @@ export class CreateBookingComponent implements OnInit {
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value), false)
 			this.return_transfer_type = reverseStringChars(value)
+
+			// pickup address validation
+			if (!value.startsWith('airport_')) {
+				this.BookingForm.get('pickup')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm.get('pickup')?.clearValidators();
+			}
+			this.BookingForm.get('pickup')?.updateValueAndValidity();
+
+			// dropoff address validation
+			if (!value.endsWith('_airport')) {
+				this.BookingForm.get('dropoff')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm.get('dropoff')?.clearValidators();
+			}
+			this.BookingForm.get('dropoff')?.updateValueAndValidity();
 		})
 
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
@@ -2447,6 +2463,22 @@ export class CreateBookingComponent implements OnInit {
 					this.BookingForm.get('departing_airport_city').clearValidators();
 					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
+
+				// return pickup address validation
+				if (!value.startsWith('airport_')) {
+					this.BookingForm.get('return_pickup')?.setValidators([Validators.required]);
+				} else {
+					this.BookingForm.get('return_pickup')?.clearValidators();
+				}
+				this.BookingForm.get('return_pickup')?.updateValueAndValidity();
+
+				// return dropoff address validation
+				if (!value.endsWith('_airport')) {
+					this.BookingForm.get('return_dropoff')?.setValidators([Validators.required]);
+				} else {
+					this.BookingForm.get('return_dropoff')?.clearValidators();
+				}
+				this.BookingForm.get('return_dropoff')?.updateValueAndValidity();
 			}
 		})
 
