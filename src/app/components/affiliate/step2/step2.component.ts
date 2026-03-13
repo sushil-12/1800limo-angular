@@ -12,12 +12,37 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import * as moment from "moment";
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FormControl } from '@angular/forms';
+
 declare var $: any;
+
+export const MY_FORMATS = {
+	parse: {
+		dateInput: 'MM/YYYY',
+	},
+	display: {
+		dateInput: 'MM/YYYY',
+		monthYearLabel: 'MMM YYYY',
+		dateA11yLabel: 'LL',
+		monthYearA11yLabel: 'MMMM YYYY',
+	},
+};
 
 @Component({
 	selector: 'app-step2',
 	templateUrl: './step2.component.html',
 	styleUrls: ['./step2.component.scss'],
+	providers: [
+		{
+			provide: DateAdapter,
+			useClass: MomentDateAdapter,
+			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+		},
+		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+	],
 })
 export class Step2Component implements OnInit, AfterViewInit {
 	@ViewChild('search1') search1!: ElementRef;
@@ -72,6 +97,9 @@ export class Step2Component implements OnInit, AfterViewInit {
 	isSsnSelected: boolean = false;
 	isAddressSelected: boolean = false;
 	isRoutingSelected: boolean = false;
+
+	// Month-Year Picker Logic
+	expiryDateControl = new FormControl(moment());
 
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -1056,6 +1084,7 @@ export class Step2Component implements OnInit, AfterViewInit {
 			id_back_image: '',
 		});
 		this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+		this.expiryDateControl.reset();
 
 		this.id_front_image = "";
 		this.id_back_image = "";
@@ -1187,5 +1216,33 @@ export class Step2Component implements OnInit, AfterViewInit {
 
 				this.spinner.hide();//hide spinner
 			});
+	}
+
+	chosenYearHandler(normalizedYear: moment.Moment) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.year(normalizedYear.year());
+		this.expiryDateControl.setValue(ctrlValue);
+	}
+
+	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
+		const ctrlValue = this.expiryDateControl.value || moment();
+		ctrlValue.month(normalizedMonth.month());
+		ctrlValue.year(normalizedMonth.year());
+		this.expiryDateControl.setValue(ctrlValue);
+
+		// Patch Form Values
+		const monthStr = (normalizedMonth.month() + 1).toString() //.padStart(2, '0'); // The existing option values are "1", "2", etc.
+		const yearStr = normalizedMonth.year().toString();
+
+		this.addBankForm.patchValue({
+			primaryMM: monthStr,
+			primaryYY: yearStr
+		});
+
+		// Mark as dirty/touched for validation display
+		this.addBankForm.get('primaryMM').markAsDirty();
+		this.addBankForm.get('primaryYY').markAsDirty();
+
+		datepicker.close();
 	}
 }

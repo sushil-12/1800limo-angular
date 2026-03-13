@@ -1114,76 +1114,25 @@
 								</ng-template>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<label class="select-ex-month-label">
-								Expiry Month
-							</label>
-							<div class="selectStyle">
-								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
-									formControlName="primaryMM" tabindex="1">
-									<option value="">
-										Choose Expiry Month
-									</option>
-									<option value="1">01</option>
-									<option value="2">02</option>
-									<option value="3">03</option>
-									<option value="4">04</option>
-									<option value="5">05</option>
-									<option value="6">06</option>
-									<option value="7">07</option>
-									<option value="8">08</option>
-									<option value="9">09</option>
-									<option value="10">10</option>
-									<option value="11">11</option>
-									<option value="12">12</option>
-								</select>
-								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-									style="
-										enable-background: new 0 0 122.88 63.9;
-									" xml:space="preserve">
-									<style type="text/css">
-										.sty0 {
-											fill-rule: evenodd;
-											clip-rule: evenodd;
-										}
-									</style>
-									<g>
-										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-									</g>
-								</svg>
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label class="required-field">Expiration date</mat-label>
+								<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl"
+									placeholder="MM/YYYY" (click)="dp.open()" readonly>
+								<mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+								<mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+									(monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+								</mat-datepicker>
+							</mat-form-field>
+							<div class="error-message"
+								*ngIf="(f.primaryMM.invalid || f.primaryYY.invalid) && (f.primaryMM.touched || f.primaryMM.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="f.primaryMM.errors?.required || f.primaryYY.errors?.required">
+									Expiry Date is required
+								</p>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<label class="select-ex-year-label">Expiry Year</label>
-							<div class="selectStyle">
-								<select class="selectInputStyle" (click)="selectDropdownExYear()"
-									formControlName="primaryYY" tabindex="1">
-									<option value="">
-										Choose Expiry Year
-									</option>
-									<option *ngFor="let yearOption of yearOptions" value="{{ yearOption }}">
-										{{ yearOption }}
-									</option>
-								</select>
-								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-									style="
-										enable-background: new 0 0 122.88 63.9;
-									" xml:space="preserve">
-									<style type="text/css">
-										.sty0 {
-											fill-rule: evenodd;
-											clip-rule: evenodd;
-										}
-									</style>
-									<g>
-										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-									</g>
-								</svg>
-							</div>
-						</div>
-						<div class="col-md-4">
+						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>CVV (3-4 digit code)</mat-label>
 								<input matInput placeholder="CVV (3-4 digit code)" (focus)="$event.target.select()"
