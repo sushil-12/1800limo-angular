@@ -941,6 +941,7 @@ export class SelectVehicleComponent implements OnInit {
 		})
 	}
 
+
 	openAffiliateDetailsModal(vehinfo: any) {
 		this.passengerDetails = vehinfo;
 		$('#sendEmailModal').modal('show');
