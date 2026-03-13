@@ -3396,15 +3396,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	Subscriptions() {
 		//pickup time change 
-		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
+		this.BookingForm?.get('pickup_time')?.valueChanges.subscribe((value: string) => {
 			this.buildBookingData()
 		})
-		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
+		this.BookingForm?.get('return_pickup_time')?.valueChanges.subscribe((value: string) => {
 			this.buildBookingData()
 		})
 
 		// Service Type
-		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
+		this.BookingForm?.get('service_type')?.valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				setTimeout(() => {
@@ -3418,11 +3418,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BookingForm.patchValue({
 					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_affiliate_id: this.BookingForm.get('affiliate_id').value
+					return_affiliate_id: this.BookingForm?.get('affiliate_id')?.value
 				})
 				if (this.booking_created_from == 'subscriber') {
 					this.BookingForm.patchValue({
-						return_susbcriber_name: this.BookingForm.get('susbcriber_name').value,
+						return_susbcriber_name: this.BookingForm?.get('susbcriber_name')?.value,
 						// return_driver_name: this.currentUser?.name,
 						// return_driver_email: this.currentUser.email,
 						// return_driver_cell_isd: this.currentUser?.isd,
@@ -3433,7 +3433,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 				if (this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber') {
 					this.BookingForm.patchValue({
-						return_susbcriber_name: this.BookingForm.get('susbcriber_name').value,
+						return_susbcriber_name: this.BookingForm?.get('susbcriber_name')?.value,
 					})
 				}
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
@@ -3441,9 +3441,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 			}
 			if (value != 'charter_tour') {
-				this.BookingForm.get('number_of_hours').setValue(0)
+				this.BookingForm?.get('number_of_hours')?.setValue(0)
 				this.BookingForm.updateValueAndValidity()
-				console.log(this.BookingForm.get('number_of_hours').value);
+				console.log(this.BookingForm?.get('number_of_hours')?.value);
 				this.BookingForm.patchValue({
 					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours.toString(),
 					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours.toString()
@@ -3451,32 +3451,55 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 			if (value == 'one_way') {
 				console.log("setting value of return cruise port and name not mandatory")
-				this.BookingForm.get('return_cruise_name').clearValidators();
-				this.BookingForm.get('return_cruise_port').clearValidators();
+				this.BookingForm?.get('return_cruise_name')?.clearValidators();
+				this.BookingForm?.get('return_cruise_port')?.clearValidators();
 				// this.BookingForm.get('return_dropoff_flight').clearValidators();
 				// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
-				this.BookingForm.get('return_dropoff_airport_option').clearValidators();
-				this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
-				this.BookingForm.get('return_dropoff_airline_option').clearValidators();
-				this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
-				this.BookingForm.get('return_pickup_flight').clearValidators();
-				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
-				this.BookingForm.get('return_pickup_airline_option').clearValidators();
-				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
-				this.BookingForm.get('return_pickup_airport_option').clearValidators();
-				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
-				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
-				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff_airport_option')?.clearValidators();
+				this.BookingForm?.get('return_dropoff_airport_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff_airline_option')?.clearValidators();
+				this.BookingForm?.get('return_dropoff_airline_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_pickup_flight')?.clearValidators();
+				this.BookingForm?.get('return_pickup_flight')?.updateValueAndValidity();
+				this.BookingForm?.get('return_pickup_airline_option')?.clearValidators();
+				this.BookingForm?.get('return_pickup_airline_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_pickup_airport_option')?.clearValidators();
+				this.BookingForm?.get('return_pickup_airport_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_cruise_name')?.updateValueAndValidity();
+				this.BookingForm?.get('return_cruise_port')?.updateValueAndValidity();
 				this.BookingForm.patchValue({
 					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString()
 				})
+
+				// Clear return leg address validators
+				this.BookingForm?.get('return_pickup')?.clearValidators();
+				this.BookingForm?.get('return_dropoff')?.clearValidators();
+				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
 			}
 		})
 
 		// Transfer Type
-		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
+		this.BookingForm?.get('transfer_type')?.valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
+
+			// pickup address mandatory
+			if (!value.startsWith('airport_')) {
+				this.BookingForm?.get('pickup')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm?.get('pickup')?.clearValidators();
+			}
+			this.BookingForm?.get('pickup')?.updateValueAndValidity();
+
+			// dropoff address mandatory
+			if (!value.endsWith('_airport')) {
+				this.BookingForm?.get('dropoff')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm?.get('dropoff')?.clearValidators();
+			}
+			this.BookingForm?.get('dropoff')?.updateValueAndValidity();
+
 			// Store old value for comparison
 			const oldValue = this.transfer_type;
 			const newValue = value;
@@ -3689,8 +3712,32 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 
 
-		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
+		this.BookingForm?.get('return_transfer_type')?.valueChanges.subscribe((value: string) => {
 			console.log("in return_transfer_type value changes", value)
+
+			if (this.BookingForm?.get('service_type')?.value == 'round_trip') {
+				// return pickup address mandatory
+				if (!value.startsWith('airport_')) {
+					this.BookingForm?.get('return_pickup')?.setValidators([Validators.required]);
+				} else {
+					this.BookingForm?.get('return_pickup')?.clearValidators();
+				}
+				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
+
+				// return dropoff address mandatory
+				if (!value.endsWith('_airport')) {
+					this.BookingForm?.get('return_dropoff')?.setValidators([Validators.required]);
+				} else {
+					this.BookingForm?.get('return_dropoff')?.clearValidators();
+				}
+				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
+			} else {
+				this.BookingForm?.get('return_pickup')?.clearValidators();
+				this.BookingForm?.get('return_dropoff')?.clearValidators();
+				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
+			}
+
 			// this.initAllAutocompletes()
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
 				if (value.includes("city_")) {
@@ -3769,7 +3816,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 
 		// Account Type Subscription
-		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {
+		this.BookingForm?.get('account_type')?.valueChanges.subscribe((value: string) => {
 			if (value == 'loose_customer') {
 				setTimeout(() => {
 					this.initphonefield()
