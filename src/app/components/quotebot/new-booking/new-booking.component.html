@@ -94,17 +94,23 @@
 					</div>
 
 					<!-- Hours -->
-					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
+					<div class="flex-grow-1 m-2" style="position: relative;" *ngIf="Form.service_type.value == 'charter_tour'">
 						<div>
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" style="width: 100%;">
 								<mat-label>
 									Number of Hours
 								</mat-label>
-								<input type="number" matInput placeholder="Enter Hours"
+								<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
 									formControlName="number_of_hours" [(ngModel)]="number_of_hours"
-									(keyup)="handleNoOfHours($event.target.value)" (focus)="$event.target.select()" />
+									(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+									(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
+									(focus)="$event.target.select()" />
 								<span matSuffix>Hrs.</span>
 							</mat-form-field>
+							<div *ngIf="numberOfHoursError" class="text-danger m-0"
+								style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -15px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+								number of hours should be a minimum of 2 hours
+							</div>
 						</div>
 					</div>
 				</div>
@@ -497,6 +503,26 @@
 									</p>
 								</div>
 							</div>
+						</div>						<div class="col-md-6 px-1">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.cruise_name.invalid) }">
+								<mat-label>Cruise Ship Name</mat-label>
+								<input matInput type="text" placeholder="Enter Ship Name"
+									formControlName="cruise_name" />
+							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.cruise_name.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.cruise_name.errors.required">This field is required</div>
+							</div>
+						</div>
+
+						<div class="col-md-6 px-1">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.cruise_port.invalid) }">
+								<mat-label>Port Name</mat-label>
+								<input matInput type="text" placeholder="Enter Port Name"
+									formControlName="cruise_port" />
+							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.cruise_port.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.cruise_port.errors.required">This field is required</div>
+							</div>
 						</div>
 						<div class="col-md-4">
 							<mat-form-field appearance="outline" class="m-0">
@@ -774,7 +800,7 @@
 					<!-- Hours -->
 					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
 						<div>
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.number_of_hours.invalid) }">
 								<mat-label>
 									Number of Hours
 								</mat-label>
@@ -783,6 +809,9 @@
 									(keyup)="handleNoOfHours($event.target.value)" (focus)="$event.target.select()" />
 								<span matSuffix>Hrs.</span>
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.number_of_hours.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.number_of_hours.errors.required">This field is required</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -861,15 +890,21 @@
 				<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 					<div class="row px-2">
 						<div class="col-md-12 ml-2" id="pickup_address">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.pickup.invalid) }">
 								<mat-label> Pickup Address </mat-label>
 								<input #pickupInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()" />
-								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 									[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
+									(keyup)="SetFormValue('pickup', $event.target.value)"
+									(input)="SetFormValue('pickup', $event.target.value)" />
+								<!-- <input type="text" matInput placeholder="Type your address"
+									matGoogleMapsAutocomplete
 									(onAutocompleteSelected)="fillAddress('pickup', $event)"
+									(focus)="$event.target.select()"
 									(onLocationSelected)="fillLocationPoints('pickup', $event)" /> -->
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.pickup.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.pickup.errors.required">This field is required</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1033,24 +1068,30 @@
 					<div class="row px-2">
 						<!-- Cruise Port -->
 						<div class="col-md-4">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.cruise_port.invalid) }">
 								<mat-label>
 									Cruise Port
 								</mat-label>
 								<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.cruise_port.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.cruise_port.errors.required">This field is required</div>
+							</div>
 						</div>
 
 						<!-- Cruise Ship Name -->
 						<div class="col-md-4">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.cruise_name.invalid) }">
 								<mat-label>
 									Cruise Ship Name
 								</mat-label>
 								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.cruise_name.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.cruise_name.errors.required">This field is required</div>
+							</div>
 						</div>
 
 						<!-- Time -->
@@ -1076,16 +1117,21 @@
 				<!-- Dropoff - Address Field -->
 				<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
 					<div class="row px-2">
-						<div class="col-md-12 ml-2">
-							<mat-form-field appearance="outline">
+						<div class="col-md-12 ml-2" id="dropoff_address">
+							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff.invalid) }">
 								<mat-label> Dropoff Address </mat-label>
 								<input #dropoffInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()" />
+									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
+									(keyup)="SetFormValue('dropoff', $event.target.value)"
+									(input)="SetFormValue('dropoff', $event.target.value)" />
 								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
 									(onAutocompleteSelected)="fillAddress('dropoff', $event)"
 									(onLocationSelected)="fillLocationPoints('dropoff', $event)" /> -->
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.dropoff.invalid)" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.dropoff.errors.required">This field is required</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1691,16 +1737,24 @@
 				<!-- Return Pickup - Address Field -->
 				<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
 					<div class="row px-2">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
+						<div class="col-md-12 ml-2" id="return_pickup_address">
+							<mat-form-field appearance="outline"
+								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup.invalid) }">
 								<mat-label> Pickup Address </mat-label>
 								<input #return_pickupInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()" />
-								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 									[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
+									(keyup)="SetFormValue('return_pickup', $event.target.value)"
+									(input)="SetFormValue('return_pickup', $event.target.value)" />
+								<!-- <input type="text" matInput placeholder="Type your address"
+									matGoogleMapsAutocomplete
 									(onAutocompleteSelected)="fillAddress('return_pickup', $event)"
+									(focus)="$event.target.select()"
 									(onLocationSelected)="fillLocationPoints('return_pickup', $event)" /> -->
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.return_pickup.invalid)"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.return_pickup.errors.required">This field is required</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1865,24 +1919,34 @@
 					<div class="row px-2">
 						<!-- Cruise Port -->
 						<div class="col-md-4">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline"
+								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_cruise_port.invalid) }">
 								<mat-label>
 									Cruise Port
 								</mat-label>
 								<input type="text" matInput placeholder="Cruise Port"
 									formControlName="return_cruise_port" (focus)="$event.target.select()" />
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.return_cruise_port.invalid)"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.return_cruise_port.errors.required">This field is required</div>
+							</div>
 						</div>
 
 						<!-- Cruise Ship Name -->
 						<div class="col-md-4">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline"
+								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_cruise_name.invalid) }">
 								<mat-label>
 									Cruise Ship Name
 								</mat-label>
 								<input formControlName="return_cruise_name" type="text" matInput
 									placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.return_cruise_name.invalid)"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.return_cruise_name.errors.required">This field is required</div>
+							</div>
 						</div>
 
 						<!-- Time -->
@@ -1909,17 +1973,25 @@
 				<!-- Return Dropoff - Address Field -->
 				<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
 					<div class="row px-2">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
+						<div class="col-md-12 ml-2" id="return_dropoff_address">
+							<mat-form-field appearance="outline"
+								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff.invalid) }">
 								<mat-label> Dropoff Address </mat-label>
 								<input #return_dropoffInput type="text" matInput placeholder="Type your address"
 									[value]="fillValue(null, 'return_dropoff', null)"
-									(focus)="$event.target.select()" />
-								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
-									[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()"
+									(focus)="$event.target.select()"
+									(keyup)="SetFormValue('return_dropoff', $event.target.value)"
+									(input)="SetFormValue('return_dropoff', $event.target.value)" />
+								<!-- <input type="text" matInput placeholder="Type your address"
+									matGoogleMapsAutocomplete
 									(onAutocompleteSelected)="fillAddress('return_dropoff', $event)"
+									(focus)="$event.target.select()"
 									(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" /> -->
 							</mat-form-field>
+							<div *ngIf="(submitBookingForm && Form.return_dropoff.invalid)"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.return_dropoff.errors.required">This field is required</div>
+							</div>
 						</div>
 					</div>
 				</div>
