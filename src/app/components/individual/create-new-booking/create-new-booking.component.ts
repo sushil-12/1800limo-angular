@@ -74,7 +74,7 @@ export class CreateNewBookingComponent implements OnInit {
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
 	PaxTelObject: any
-	number_of_hours: any = '0';
+	number_of_hours: any = 2;
 	distance: number = 0
 	return_distance: number = 0
 
@@ -149,7 +149,7 @@ export class CreateNewBookingComponent implements OnInit {
 	booking_created_from: string = 'admin';
 	blockaddressfield: boolean = false;
 	previousBookingData: any = null;
-
+	numberOfHoursError: boolean = false;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -336,7 +336,7 @@ export class CreateNewBookingComponent implements OnInit {
 			service_type: ['one_way', Validators.required],
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
-			number_of_hours: ['0'],
+			number_of_hours: [2],
 			// acc_id: [''],
 			account_type: ['individual'],
 			// travel_client_id: [''],
@@ -652,6 +652,8 @@ export class CreateNewBookingComponent implements OnInit {
 			this.BookingForm.patchValue({
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
+
+			this.handleNoOfHours(this.number_of_hours)
 
 			// if (this.Form.updateType.value == 'edit') {
 			// 	this.booking_params.client_account_types.pop()
@@ -1069,8 +1071,41 @@ export class CreateNewBookingComponent implements OnInit {
 			})
 		}
 	}
-	handleNoOfHours(value) {
-		this.number_of_hours = value
+	handleNoOfHours(eventValue: any) {
+		const value = Number(eventValue);
+
+		// Update error flag reactively
+		if (this.Form.service_type.value == 'charter_tour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+		} else {
+			this.numberOfHoursError = false;
+		}
+
+		if (!isNaN(value) && value > 0) {
+			this.number_of_hours = value;
+		}
+	}
+
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+
+		if (this.Form.service_type.value == 'charter_tour' && (isNaN(value) || value < 2)) {
+			value = 2;
+			this.number_of_hours = 2;
+			this.SetFormValue('number_of_hours', 2);
+			this.numberOfHoursError = false;
+		}
+
+	}
+
+	blockNegative(event: any) {
+		if (event.key == '-' || event.key == 'e' || event.key == 'E' || event.key == '+') {
+			event.preventDefault();
+		}
 	}
 	addExtraStop(is_return: boolean = false) {
 		// console.log('Adding Extra Stop ...')

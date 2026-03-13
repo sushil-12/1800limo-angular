@@ -100,14 +100,16 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(change)="handleNoOfHours($event.target.value)" (focus)="$event.target.select()" />
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
+								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
 						<div *ngIf="numberOfHoursError" class="text-danger m-0"
-							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -18px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
-							Number of hours should be minimum 2 hours.
+							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+							number of hours should be a minimum of 2 hours
 						</div>
 					</div>
 				</div>
@@ -1289,14 +1291,16 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(change)="handleNoOfHours($event.target.value)" (focus)="$event.target.select()" />
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
+								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
 						<div *ngIf="numberOfHoursError" class="text-danger m-0"
-							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -18px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
-							Number of hours should be minimum 2 hours.
+							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+							number of hours should be a minimum of 2 hours
 						</div>
 					</div>
 				</div>
@@ -2123,14 +2127,16 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
-								(change)="handleNoOfHours($event.target.value)" (focus)="$event.target.select()" />
+							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
+								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
+								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
 						<div *ngIf="numberOfHoursError" class="text-danger m-0"
-							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -18px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
-							Number of hours should be minimum 2 hours.
+							style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+							number of hours should be a minimum of 2 hours
 						</div>
 					</div>
 				</div>
@@ -3198,6 +3204,7 @@
 			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
+			[parentError]="numberOfHoursError" (hoursErrorChange)="numberOfHoursError = $event"
 			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
 			[service_type]="service_type" [currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">

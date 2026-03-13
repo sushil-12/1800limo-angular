@@ -31,7 +31,9 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
-	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<any>();
+	@Input() parentError: boolean = false;
+	@Output() hoursErrorChange = new EventEmitter<boolean>();
 
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
@@ -88,6 +90,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	farmoutShare: any = 0;
 	currencySymbol: any;
 	previousBookingData: any = null;
+	numberOfHoursError: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -124,6 +127,9 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
+		if (changes.parentError) {
+			this.numberOfHoursError = changes.parentError.currentValue;
+		}
 		console.warn("Change has been detected: ", changes);
 		console.log("servicetyep", this.book_data?.service_type)
 		this.currencySymbol = this.currencyObject?.symbol
@@ -457,7 +463,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 			console.log('[buildBookingData] No changes detected in booking_data. Skipping rate calculation.');
 			return;
 		}
-		
+
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
 			data, this.master_vehicle_id)
@@ -584,12 +590,42 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 		return this.returnRatesdata.asObservable();
 	}
 	handleHourChange(event: any) {
-		console.log('------->>>>>>>', event.target.value)
-		if (event.target.value == '') {
-			let n_hr: any = 1
-			this.returnNumberOfHr.emit(n_hr)
+		const value = Number(event.target.value);
+
+		if (this.service_type == 'charter_tour' || this.service_type == 'chartertour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+			this.hoursErrorChange.emit(this.numberOfHoursError);
+		} else {
+			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
 		}
-		this.returnNumberOfHr.emit(event.target.value)
+
+		// Only emit when value is already valid (>= 2)
+		if (!isNaN(value) && value >= 2) {
+			this.returnNumberOfHr.emit(value);
+		}
+	}
+
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+		if ((this.service_type == 'charter_tour' || this.service_type == 'chartertour') && (isNaN(value) || value < 2)) {
+			value = 2;
+			this.hours = 2;
+			event.target.value = 2;   // show 2 in the box
+			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
+		}
+		this.returnNumberOfHr.emit(value);
+	}
+
+	blockNegative(event: KeyboardEvent) {
+		if (event.key === '-') {
+			event.preventDefault();
+		}
 	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {

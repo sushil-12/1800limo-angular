@@ -417,3 +417,16 @@ ul {
 .phoneNumberClass {
 	padding-left: 55px !important;
 }
+
+.error-field {
+	::ng-deep .mat-mdc-text-field-wrapper {
+		outline: 3px solid red !important;
+		border-radius: 10px !important;
+	}
+
+	::ng-deep .mdc-notched-outline__leading,
+	::ng-deep .mdc-notched-outline__notch,
+	::ng-deep .mdc-notched-outline__trailing {
+		border-color: transparent !important;
+	}
+}

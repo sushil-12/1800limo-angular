@@ -126,7 +126,8 @@ export class CreateNewBookingComponent implements OnInit {
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
-	number_of_hours: any = '0';
+	number_of_hours: any = '2';
+	numberOfHoursError: boolean = false;
 	booking_data: any = {}
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	extraStops_rate: any = 0
@@ -897,8 +898,9 @@ export class CreateNewBookingComponent implements OnInit {
 			this.BookingForm.updateValueAndValidity()
 
 			// override specific value
+			this.service_type = response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour'
 			this.BookingForm.patchValue({
-				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
+				service_type: this.service_type,
 			})
 
 			// if (this.Form.updateType.value == 'edit') {
@@ -936,6 +938,13 @@ export class CreateNewBookingComponent implements OnInit {
 				console.error('Set Country Error:', e)
 			}
 
+			// Instant error display for prefilled values
+			if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+
 			this.$spinner.hide('normalspinner')
 		})
 	}
@@ -945,15 +954,16 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 	SetFormValue(form_control: string, value: any, emit: boolean = true) {
-		if (!value || !form_control) {
+		if ((value === undefined || value === null) || !form_control) {
 			console.info(`No Value to set for ${form_control}. Returning ...`)
 			return
 		}
 		console.log('Setting Form Value for ', form_control, ' : ', value);
 		try {
-
-			this.BookingForm.get(form_control).setValue(value, { emitEvent: emit })
-			this.BookingForm.updateValueAndValidity()
+			if (this.BookingForm.get(form_control)) {
+				this.BookingForm.get(form_control).setValue(value, { emitEvent: emit })
+				this.BookingForm.updateValueAndValidity()
+			}
 		}
 		catch (err) {
 			console.error('NFC Error: ')
@@ -3070,6 +3080,8 @@ export class CreateNewBookingComponent implements OnInit {
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
 		this.BookingForm.get('number_of_hours').setValue(data)
+		this.number_of_hours = data;
+		this.numberOfHoursError = false;
 	}
 
 	checkUniqueness() {
@@ -3250,10 +3262,45 @@ export class CreateNewBookingComponent implements OnInit {
 			return_affiliate_type: this.BookingForm.get('affiliate_type').value,
 		}
 	}
-	handleNoOfHours(value) {
-		this.number_of_hours = value
-		console.log('in function handle no of hours->', value, value > 0)
-		this.number_of_hours > 0 ? this.buildBookingData() : ''
+	handleNoOfHours(eventValue: any) {
+		const value = Number(eventValue);
+		this.number_of_hours = value;
+
+		if (this.service_type == 'charter_tour' || this.service_type == 'chartertour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+		} else {
+			this.numberOfHoursError = false;
+		}
+		console.log('in function handle no of hours->', value, value >= 2)
+		if (!isNaN(value) && value >= 2) {
+			this.buildBookingData();
+		}
+	}
+
+	enforceMinimumHours(event: any) {
+		let value = Number(event.target.value || 0);
+
+		if ((this.service_type == 'charter_tour' || this.service_type == 'chartertour') && (isNaN(value) || value < 2)) {
+			value = 2;
+			this.number_of_hours = 2;
+			this.BookingForm.get('number_of_hours').setValue(2);
+			this.numberOfHoursError = false;
+		}
+
+		console.log('enforceMinimumHours ->', value);
+		if (!isNaN(value) && value >= 2) {
+			this.buildBookingData();
+		}
+	}
+
+	blockNegative(event: KeyboardEvent) {
+		if (event.key === '-') {
+			event.preventDefault();
+		}
 	}
 	onSelectionChangeServiceType(event: any) {
 		this.service_type = event.value;
