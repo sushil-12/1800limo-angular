@@ -2282,6 +2282,11 @@ export class CreateNewBookingComponent implements OnInit {
 				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
 				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
 				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+
+				this.BookingForm?.get('return_pickup')?.clearValidators();
+				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff')?.clearValidators();
+				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
 			}
 		})
 
@@ -2440,6 +2445,22 @@ export class CreateNewBookingComponent implements OnInit {
 			if (value.includes("city_")) {
 				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 			}
+
+			// pickup address mandatory
+			if (!value.startsWith('airport_')) {
+				this.BookingForm?.get('pickup')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm?.get('pickup')?.clearValidators();
+			}
+			this.BookingForm?.get('pickup')?.updateValueAndValidity();
+
+			// dropoff address mandatory
+			if (!value.endsWith('_airport')) {
+				this.BookingForm?.get('dropoff')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm?.get('dropoff')?.clearValidators();
+			}
+			this.BookingForm?.get('dropoff')?.updateValueAndValidity();
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
@@ -2653,6 +2674,22 @@ export class CreateNewBookingComponent implements OnInit {
 				if (value.includes("city_")) {
 					this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 				}
+
+				// return pickup address mandatory
+				if (!value.startsWith('airport_')) {
+					this.BookingForm?.get('return_pickup')?.setValidators([Validators.required]);
+				} else {
+					this.BookingForm?.get('return_pickup')?.clearValidators();
+				}
+				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
+
+				// return dropoff address mandatory
+				if (!value.endsWith('_airport')) {
+					this.BookingForm?.get('return_dropoff')?.setValidators([Validators.required]);
+				} else {
+					this.BookingForm?.get('return_dropoff')?.clearValidators();
+				}
+				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
 
 				// set cruise ship name and cruise port mandatory
 				if (value.includes('_cruise') || value.includes('cruise_')) {
@@ -3066,6 +3103,10 @@ export class CreateNewBookingComponent implements OnInit {
 				}, 2000)
 			}
 		})
+
+		// Initial triggers for validators
+		this.BookingForm?.get('transfer_type')?.setValue(this.BookingForm?.get('transfer_type')?.value);
+		this.BookingForm?.get('return_transfer_type')?.setValue(this.BookingForm?.get('return_transfer_type')?.value);
 	}
 
 
