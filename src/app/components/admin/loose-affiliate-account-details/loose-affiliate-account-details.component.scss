@@ -3,25 +3,7 @@
     border-radius: 15px;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
-    padding-left: 0px;
-    // background-color: #fff;
-    max-width: 70px;
-    text-align: center;
-    left: -6px;
-    top: 24px;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.phoneLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
-    padding-left: 0px;
-    // background-color: #fff;
-    max-width: 120px;
-    text-align: center;
-    left: -5px;
-    top: 24px;
-}
+// Mobile/Phone labels standardized via global rules
 
 
 .single-image .row {
@@ -82,8 +64,8 @@
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
-    border-top-color: #3f51b5 !important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+    border-top-color: #f44336 !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
@@ -129,8 +111,9 @@
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
-    top: 1.3675em
+:host ::ng-deep .mat-mdc-form-field-label {
+    top: 1.55em !important;
+    color: #191919 !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
@@ -142,6 +125,8 @@
 }
 
 :host ::ng-deep .mat-mdc-form-field {
+    margin-bottom: 0.25rem !important; // Consistent row spacing
+
     /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-outline {
         &-end {
@@ -155,10 +140,9 @@
     }
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
-    border-radius: 10px;
-    background-color: rgb(226, 226, 226, 1);
+    border-radius: 10px !important;
+    background-color: rgb(226, 226, 226, 1) !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
@@ -169,8 +153,11 @@
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
-    transform: translateY(-1em) scale(0.99) !important;
-    width: 133.3333333333%
+    transform: translateY(-1.45em) scale(0.85) !important; // Sit on border
+    background: #f4f6ff !important; // Notch effect
+    padding: 0 4px !important;
+    width: auto !important;
+    z-index: 10 !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
@@ -189,6 +176,107 @@
 
 :host ::ng-deep .ng-option {
     background-color: rgb(226, 226, 226, 1) !important;
+}
+
+
+:host ::ng-deep .ng-select-container {
+    background-color: rgb(226, 226, 226, 1) !important;
+    border: 1px solid #b2b2b2 !important;
+    border-radius: 10px !important;
+    min-height: 50px !important; // Restore matching height
+    padding-top: 0px !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease-in-out;
+    overflow: visible !important; // Prevent label clipping
+
+    &:after {
+        display: none !important; // Kill any inherited outline borders
+    }
+}
+
+/* Float the placeholder like a Material label */
+:host ::ng-deep .ng-select .ng-placeholder {
+    top: 1.2em !important;
+    left: 14px !important;
+    transition: transform 0.2s ease, font-size 0.2s ease, top 0.2s ease;
+    color: #555;
+    background: transparent;
+}
+
+:host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline .ng-placeholder {
+    background: none !important;
+}
+
+:host ::ng-deep .ng-select .ng-select-container {
+    height: 58px !important;
+}
+
+:host ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    background-color: #f3933d !important;
+    padding: 5px !important;
+}
+
+:host ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon {
+    font-weight: 800 !important;
+    color: #fff !important;
+}
+
+:host ::ng-deep .ng-select.ng-select-opened .ng-placeholder,
+:host ::ng-deep .ng-select.ng-has-value .ng-placeholder {
+    transform: translateY(-1.45em) scale(0.82) !important; // Match mat-form-field float position better
+    background: #f4f6ff !important; // Background notch effect
+    padding: 0 4px !important;
+    left: 10px !important;
+    color: #3f51b5 !important;
+    opacity: 1;
+    font-weight: 400 !important;
+    width: auto !important;
+    z-index: 10 !important;
+    height: auto !important;
+}
+
+/* Modern Tag Styling */
+:host ::ng-deep argin-bottom {
+    background-color: #f3933d !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+    font-weight: 500;
+    margin-right: 5px;
+    padding: 0px 8px !important;
+    display: flex;
+    align-items: center;
+    border: none;
+}
+
+:host ::ng-deep .ng-select .ng-value-container .ng-value .ng-value-icon {
+    margin-right: 6px;
+    padding-right: 6px;
+}
+
+:host ::ng-deep .ng-select .ng-value-container .ng-value .ng-value-icon:hover {
+    background-color: none !important;
+}
+
+/* Dropdown and Clear Icons */
+:host ::ng-deep .ng-select .ng-clear-wrapper,
+:host ::ng-deep .ng-select .ng-arrow-wrapper {
+    padding-right: 10px;
+}
+
+:host ::ng-deep .ng-select .ng-arrow-wrapper .ng-arrow {
+    border-color: #333 transparent transparent;
+}
+
+:host ::ng-deep .ng-select .ng-value-container {
+    padding-left: 12px !important;
+    padding-top: 10px !important; // Vertically center chips
+    padding-bottom: 2px !important;
+}
+
+:host ::ng-deep .ng-select {
+    margin-top: 20px !important;
+    padding-bottom: 0 !important; // Match material form field bottom space
+    margin-bottom: 0 !important;
 }
 
 .asterisk {
@@ -248,23 +336,24 @@ button.custom-filled-accept-button {
     color: red !important;
     font-size: 15px !important;
     /* Red color for the placeholder */
-  }
-  
-  .red-placeholder {
+}
+
+.red-placeholder {
     color: red !important;
     font-weight: 500 !important;
     font-size: 15px !important;
-  }
+}
 
-  .input-with-icon {
+.input-with-icon {
     position: relative;
-  }
-  
-  .phoneNumberClass {
-    padding-right: 40px; /* Space for the phone icon */
-  }
-  
-  .phone_icon {
+}
+
+.phoneNumberClass {
+    padding-right: 40px;
+    /* Space for the phone icon */
+}
+
+.phone_icon {
     position: absolute;
     top: 50%;
     right: 10px;
@@ -272,16 +361,17 @@ button.custom-filled-accept-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px; /* Increased size for the icon container */
+    width: 32px;
+    /* Increased size for the icon container */
     height: 32px;
     cursor: pointer;
     z-index: 2;
-  }
-  
-  .phone_icon svg {
-    width: 28px; /* Increased size for the icon itself */
+}
+
+.phone_icon svg {
+    width: 28px;
+    /* Increased size for the icon itself */
     height: 28px;
-    fill: #33a867; /* Adjust color if necessary */
-  }
-  
-  
+    fill: #33a867;
+    /* Adjust color if necessary */
+}

@@ -240,10 +240,10 @@
 							<tbody>
 								<tr *ngFor="let card of userCreditCards">
 									<td class="text-center align-middle">{{ card.name }}</td>
-									<td class="text-center align-middle">XXXX-XXXX-XXXX-{{ card.last4 }}</td>
+									<td class="text-center align-middle">{{ card.last4 }}</td>
 									<td class="text-center align-middle">{{ card.exp_month }}/{{ card.exp_year }}</td>
 									<td class="text-center align-middle">
-										<span class="badge badge-info text-uppercase">{{ card.brand }}</span>
+										<span class="badge badge-info text-uppercase">{{ card.card_type }}</span>
 									</td>
 								</tr>
 							</tbody>
