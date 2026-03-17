@@ -156,8 +156,9 @@ export class AddCardComponent implements OnInit {
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		this.addCardForm.value.acc_id = this.accountId
+		this.expiryDateControl.markAsTouched();
 		// stop here if form is invalid
-		if (this.addCardForm.invalid) {
+		if (this.addCardForm.invalid || this.expiryDateControl.invalid) {
 			return;
 		}
 
@@ -195,7 +196,7 @@ export class AddCardComponent implements OnInit {
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 	}
 	// Month-Year Picker Logic
-	expiryDateControl = new FormControl(moment());
+	expiryDateControl = new FormControl(null, [Validators.required]);
 
 	chosenYearHandler(normalizedYear: moment.Moment) {
 		const ctrlValue = this.expiryDateControl.value || moment();
@@ -217,6 +218,16 @@ export class AddCardComponent implements OnInit {
 			exp_month: monthStr,
 			exp_year: yearStr
 		});
+
+		// Validation check for past date
+		const today = moment().startOf('month');
+		if (normalizedMonth.isBefore(today)) {
+			this.addCardForm.get('exp_month').setErrors({ 'pastDate': true });
+			this.expiryDateControl.setErrors({ 'pastDate': true });
+		} else {
+			this.addCardForm.get('exp_month').setErrors(null);
+			this.expiryDateControl.setErrors(null);
+		}
 
 		// Mark as dirty/touched for validation display
 		this.addCardForm.get('exp_month').markAsDirty();

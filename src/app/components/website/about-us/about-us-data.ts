@@ -206,7 +206,7 @@ export const aboutUsData = {
         features: [
             { icon: "bi-check2-circle", iconImage: "assets/images/Check.png", text: "30+ Years Experience" },
             { icon: "bi-shield", iconImage: "assets/images/Check.png", text: "Fully Licensed & Insured" },
-            { icon: "bi-star", iconImage: "assets/images/Check.png", text: "4.9 Star Average Rating" }
+            { icon: "bi-star", iconImage: "assets/images/Check.png", text: "4.96 Star Average Rating" }
         ]
     }
 };

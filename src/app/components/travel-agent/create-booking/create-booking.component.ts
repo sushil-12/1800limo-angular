@@ -650,10 +650,14 @@ export class CreateBookingComponent implements OnInit {
 					this.SetFormValue(item, value);
 				}
 				if (editing_data[item] && item != "passenger_cell_isd") {
-					if (isNaN(Number(editing_data[item]))) {
-						this.SetFormValue(item, editing_data[item]);
+					let val = editing_data[item];
+					if (item == 'transfer_type' || item == 'return_transfer_type') {
+						if (val == 'airport_to_cruise_port') val = 'airport_to_cruise';
+					}
+					if (isNaN(Number(val))) {
+						this.SetFormValue(item, val);
 					} else {
-						this.SetFormValue(item, Number(editing_data[item]));
+						this.SetFormValue(item, Number(val));
 					}
 				}
 			}

@@ -223,6 +223,33 @@
 						}
 					</style>
 				</div>
+
+				<!-- Saved Credit Cards -->
+				<div *ngIf="userCreditCards && userCreditCards.length > 0" class="mt-3 px-4 pb-3">
+					<h5 class="mb-3">Saved Credit Cards</h5>
+					<div class="table-responsive">
+						<table class="table table-hover table-bordered shadow-sm">
+							<thead class="thead-light">
+								<tr>
+									<th class="text-center">Card Holder Name</th>
+									<th class="text-center">Card No.</th>
+									<th class="text-center">MM/YYYY</th>
+									<th class="text-center">Card Type</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let card of userCreditCards">
+									<td class="text-center align-middle">{{ card.name }}</td>
+									<td class="text-center align-middle">{{ card.last4 }}</td>
+									<td class="text-center align-middle">{{ card.exp_month }}/{{ card.exp_year }}</td>
+									<td class="text-center align-middle">
+										<span class="badge badge-info text-uppercase">{{ card.card_type }}</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 				<!-- Acc Type TA -->
 				<div *ngIf="Form['account_type'].value == 'travel_planner'">
 					<div class="row">
@@ -580,7 +607,7 @@
 								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()" (keyup)="handlePassengerName($event)" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
