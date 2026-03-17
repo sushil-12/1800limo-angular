@@ -155,6 +155,12 @@ export class FinalizeBookingComponent implements OnInit {
 		if (method == 'new_card') {
 			this.isCardFormOpen = true
 			this.paymentMethod = 'card'
+			// Prefill card holder name with passenger name
+			if (this.BookingDetail && this.BookingDetail.passenger_name) {
+				this.cardForm.patchValue({
+					name: this.BookingDetail.passenger_name
+				});
+			}
 		} else {
 			this.paymentMethod = method
 			this.isCardFormOpen = false
@@ -581,6 +587,11 @@ export class FinalizeBookingComponent implements OnInit {
 
 	}
 	saveCardDetails() {
+		if (this.cardForm.invalid) {
+			this.cardForm.markAllAsTouched();
+			this.$spinner.hide();
+			return;
+		}
 		console.log('saving card details')
 		this.$spinner.show()
 		// {

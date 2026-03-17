@@ -183,6 +183,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	minDate = new Date();
 	waiting_time_in_mins: any = 0;
 	bigDataSubscription: Subscription;
+	userCreditCards: any[] = [];
 
 	constructor(
 		private $form: FormBuilder,
@@ -1682,6 +1683,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 			this.$spinner.hide();
 		})
+		if (accType === 'individual') {
+			this.$api.cardsList(account_id).then((res: any) => {
+				this.userCreditCards = res?.data || [];
+			}).catch(() => {
+				this.userCreditCards = [];
+			});
+		} else {
+			this.userCreditCards = [];
+		}
 	}
 
 	fillLCDetails(choose_user: any) {
@@ -1708,6 +1718,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			passenger_cell_isd: '+1',
 			passenger_cell_country: 'us',
 		})
+		this.userCreditCards = [];
 		if (selectedAcc == 'travel_planner') {
 			this.BookingForm.get('travel_client_id').setValidators([Validators.required]);
 			this.BookingForm.get('travel_client_id').updateValueAndValidity();
@@ -1732,13 +1743,16 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	handleChangeTravelAccounts(selectedAcc) {
 		console.log('handleChangeTravelAccounts-->>', selectedAcc)
-		if (selectedAcc == 'travel_individual') {
-			this.BookingForm.get('travel_client_id').setValidators([Validators.required]);
-			this.BookingForm.get('travel_client_id').updateValueAndValidity();
-		}
-		else {
-			this.BookingForm.get('travel_client_id').clearValidators();
-			this.BookingForm.get('travel_client_id').updateValueAndValidity();
+		const travel_client_id = this.BookingForm.get('travel_client_id');
+		if (travel_client_id) {
+			if (selectedAcc == 'travel_individual') {
+				travel_client_id.setValidators([Validators.required]);
+				travel_client_id.updateValueAndValidity();
+			}
+			else {
+				travel_client_id.clearValidators();
+				travel_client_id.updateValueAndValidity();
+			}
 		}
 
 	}
@@ -1748,23 +1762,62 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			console.log("detail ->>>>>>>", response)
 			this.autofillData('passenger', response?.data);
 		})
-
+		if (this.Form.travel_client_acc?.value === 'travel_individual') {
+			this.$api.cardsList(value.id).then((res: any) => {
+				this.userCreditCards = res?.data || [];
+			}).catch(() => {
+				this.userCreditCards = [];
+			});
+		}
 	}
 
-	handleLooseCustomerPhone(event) {
+	handleLooseCustomerPhone(event: any) {
 		console.log('handleLooseCustomerPhone->>', event, event.target.value)
 		const loose_customer = this.BookingForm.get('loose_customer') as FormGroup
-		this.BookingForm.patchValue({
-			passenger_cell: event.target.value,
-			passenger_cell_isd: loose_customer.get('phone_isd').value,
-			passenger_cell_country: loose_customer.get('phone_country').value
-		})
+		if (loose_customer) {
+			this.BookingForm.patchValue({
+				passenger_cell: event.target.value,
+				passenger_cell_isd: loose_customer.get('phone_isd')?.value,
+				passenger_cell_country: loose_customer.get('phone_country')?.value
+			})
+		}
 	}
-	handleLooseCustomerName(event) {
-		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+
+	handlePassengerName(event: any) {
+		let value = this.BookingForm.get('passenger_name').value || '';
+		value = value.replace(/\b\w/g, (l: string) => l.toUpperCase());
 		this.BookingForm.patchValue({
-			passenger_name: loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
-		})
+			passenger_name: value
+		}, { emitEvent: false });
+	}
+
+	handleLooseCustomerName(event) {
+		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup);
+		let first_name = loose_customer.get('first_name').value || '';
+		let last_name = loose_customer.get('last_name').value || '';
+
+		// Capitalize first and last name
+		first_name = first_name.replace(/\b\w/g, (l: string) => l.toUpperCase());
+		last_name = last_name.replace(/\b\w/g, (l: string) => l.toUpperCase());
+
+		loose_customer.patchValue({
+			first_name: first_name,
+			last_name: last_name
+		}, { emitEvent: false });
+
+		const fullName = (first_name + ' ' + last_name).trim();
+
+		this.BookingForm.patchValue({
+			passenger_name: fullName
+		});
+
+		// Prefill Card Holder Name
+		const card_details = loose_customer.get('card_details') as FormGroup;
+		if (card_details) {
+			card_details.patchValue({
+				name: fullName
+			});
+		}
 	}
 
 	handleLooseAffiliateName() {
