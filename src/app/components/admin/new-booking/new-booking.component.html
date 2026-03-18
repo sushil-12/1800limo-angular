@@ -231,6 +231,7 @@
 						<table class="table table-hover table-bordered shadow-sm">
 							<thead class="thead-light">
 								<tr>
+									<th class="text-center">Card Owner</th>
 									<th class="text-center">Card Holder Name</th>
 									<th class="text-center">Card No.</th>
 									<th class="text-center">MM/YYYY</th>
@@ -239,6 +240,12 @@
 							</thead>
 							<tbody>
 								<tr *ngFor="let card of userCreditCards">
+									<td class="text-center align-middle">
+										<span class="badge"
+											[ngClass]="badge-secondary">
+											{{ card.ownerLabel }}
+										</span>
+									</td>
 									<td class="text-center align-middle">{{ card.name }}</td>
 									<td class="text-center align-middle">{{ card.last4 }}</td>
 									<td class="text-center align-middle">{{ card.exp_month }}/{{ card.exp_year }}</td>

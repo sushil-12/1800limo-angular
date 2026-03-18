@@ -127,6 +127,7 @@
                         <ng-select class="language-select" [class.language-select-has-value]="profileForm.get('language')?.value?.length"
                             appearance="outline" [items]="languageList" bindLabel="name" bindValue="id"
                             formControlName="language" [multiple]="true" [searchable]="true" [closeOnSelect]="false"
+                            [clearSearchOnAdd]="true"
                             dropdownPosition="bottom" appendTo="body"
                             placeholder="Choose More Languages" tabindex="1">
                         </ng-select>

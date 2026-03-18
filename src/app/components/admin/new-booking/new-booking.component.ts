@@ -1687,13 +1687,48 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	private loadSavedCards(accountId: number, shouldLoad: boolean) {
-		if (!shouldLoad || !accountId) {
+		const travelAdvisorId = this.Form?.account_type?.value === 'travel_planner' ? this.Form?.acc_id?.value : null;
+		this.loadCombinedSavedCards(accountId, shouldLoad, travelAdvisorId);
+	}
+
+	private normalizeSavedCards(cards: any[] = [], ownerType: 'TRAVEL ADVISOR' | 'INDIVIDUAL') {
+		const ownerLabel = ownerType === 'TRAVEL ADVISOR' ? 'TRAVEL ADVISOR' : 'INDIVIDUAL';
+		return cards.map((card: any) => ({
+			...card,
+			ownerType,
+			ownerLabel
+		}));
+	}
+
+	private loadCombinedSavedCards(accountId: number, shouldLoad: boolean, travelAdvisorId?: number) {
+		if ((!shouldLoad || !accountId) && !travelAdvisorId) {
 			this.userCreditCards = [];
 			return;
 		}
 
-		this.$api.cardsList(accountId).then((res: any) => {
-			this.userCreditCards = res?.data || [];
+		const requests: Promise<any>[] = [];
+		const resultKeys: Array<'travelAdvisorCards' | 'clientCards'> = [];
+
+		if (travelAdvisorId) {
+			requests.push(this.$api.cardsList(travelAdvisorId));
+			resultKeys.push('travelAdvisorCards');
+		}
+
+		if (shouldLoad && accountId) {
+			requests.push(this.$api.cardsList(accountId));
+			resultKeys.push('clientCards');
+		}
+
+		Promise.all(requests).then((responses: any[]) => {
+			const cardsMap = responses.reduce((acc: any, response: any, index: number) => {
+				acc[resultKeys[index]] = response?.data || [];
+				return acc;
+			}, {});
+
+			const travelAdvisorCards = this.normalizeSavedCards(cardsMap.travelAdvisorCards || [], 'TRAVEL ADVISOR');
+			const clientCards = this.normalizeSavedCards(cardsMap.clientCards || [], 'INDIVIDUAL');
+
+			this.userCreditCards = [...travelAdvisorCards, ...clientCards];
 		}).catch(() => {
 			this.userCreditCards = [];
 		});
@@ -1780,7 +1815,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			console.log("detail ->>>>>>>", response)
 			this.autofillData('passenger', response?.data);
 		})
-		this.loadSavedCards(value?.id, this.Form.travel_client_acc?.value === 'travel_individual');
+		this.loadCombinedSavedCards(value?.id, this.Form.travel_client_acc?.value === 'travel_individual', this.Form?.acc_id?.value);
 	}
 
 	handleLooseCustomerPhone(event: any) {
