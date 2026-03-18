@@ -79,6 +79,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
         this.spinner.hide();//hide spinner
         this.resp = data
         this.languageList = this.resp?.data?.languages;
+        this.syncSelectedLanguages();
 
       })
 
@@ -112,7 +113,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     }, 500);
 
     this.selectedLanguages = [1]
-    this.profileForm.patchValue({ language: this.selectedLanguages });
+    this.syncSelectedLanguages();
 
 
     //google map autocomplete
@@ -284,6 +285,19 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
     return this.profileForm.controls;
   }
 
+  private syncSelectedLanguages() {
+    if (!this.languageList?.length) {
+      return;
+    }
+
+    const selectedValues = Array.isArray(this.selectedLanguages) ? this.selectedLanguages : [this.selectedLanguages];
+    const normalizedIds = selectedValues
+      .map((item: any) => item && typeof item === 'object' ? Number(item.id) : Number(item))
+      .filter((id: number) => !Number.isNaN(id) && this.languageList.some((language) => Number(language.id) === id));
+
+    this.profileForm.patchValue({ language: normalizedIds }, { emitEvent: false });
+  }
+
   getProfile() {
     this.spinner.show();
     this.adminService.getLooseAffAccDetails(this.userId)
@@ -334,8 +348,8 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
           latitude: this.getProfileResponseData?.data?.latitude,
           longitude: this.getProfileResponseData?.data?.longitude,
         })
-        this.selectedLanguages = this.getProfileResponseData?.data?.language_spoken; // Assuming API returns [1, 2] for selected languages
-        this.profileForm.patchValue({ language: this.selectedLanguages });
+        this.selectedLanguages = this.getProfileResponseData?.data?.language_spoken || [];
+        this.syncSelectedLanguages();
         console.log('profile this.getProfileResponseData?.data-->>>>', this.profileForm.value)
         this.MobileObject.setCountry(this.getProfileResponseData?.data?.phone_country)
         this.OfficeObject.setCountry(this.getProfileResponseData?.data?.work_country)

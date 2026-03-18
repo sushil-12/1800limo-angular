@@ -124,8 +124,10 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <ng-select appearance="outline" [items]="languageList" bindLabel="name" bindValue="id"
-                            formControlName="language" [multiple]="true" [searchable]="true"
+                        <ng-select class="language-select" [class.language-select-has-value]="profileForm.get('language')?.value?.length"
+                            appearance="outline" [items]="languageList" bindLabel="name" bindValue="id"
+                            formControlName="language" [multiple]="true" [searchable]="true" [closeOnSelect]="false"
+                            dropdownPosition="bottom" appendTo="body"
                             placeholder="Choose More Languages" tabindex="1">
                         </ng-select>
                     </div>

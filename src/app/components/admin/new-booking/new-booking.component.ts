@@ -1683,15 +1683,33 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 			this.$spinner.hide();
 		})
-		if (accType === 'individual') {
-			this.$api.cardsList(account_id).then((res: any) => {
-				this.userCreditCards = res?.data || [];
-			}).catch(() => {
-				this.userCreditCards = [];
-			});
-		} else {
+		this.loadSavedCards(account_id, accType === 'individual');
+	}
+
+	private loadSavedCards(accountId: number, shouldLoad: boolean) {
+		if (!shouldLoad || !accountId) {
 			this.userCreditCards = [];
+			return;
 		}
+
+		this.$api.cardsList(accountId).then((res: any) => {
+			this.userCreditCards = res?.data || [];
+		}).catch(() => {
+			this.userCreditCards = [];
+		});
+	}
+
+	private shouldHandlePrefilledBookingAccount(): boolean {
+		return ['repeat', 'return', 'edit', 'round'].includes(this.updateType);
+	}
+
+	shouldRenderSavedCardsSection(): boolean {
+		const isDirectIndividual = this.Form?.account_type?.value === 'individual' && !!this.Form?.acc_id?.value;
+		const isTravelIndividual = this.Form?.account_type?.value === 'travel_planner'
+			&& this.Form?.travel_client_acc?.value === 'travel_individual'
+			&& !!this.Form?.travel_client_id?.value;
+
+		return isDirectIndividual || isTravelIndividual;
 	}
 
 	fillLCDetails(choose_user: any) {
@@ -1762,13 +1780,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			console.log("detail ->>>>>>>", response)
 			this.autofillData('passenger', response?.data);
 		})
-		if (this.Form.travel_client_acc?.value === 'travel_individual') {
-			this.$api.cardsList(value.id).then((res: any) => {
-				this.userCreditCards = res?.data || [];
-			}).catch(() => {
-				this.userCreditCards = [];
-			});
-		}
+		this.loadSavedCards(value?.id, this.Form.travel_client_acc?.value === 'travel_individual');
 	}
 
 	handleLooseCustomerPhone(event: any) {
@@ -4046,7 +4058,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
+			if (value && this.shouldHandlePrefilledBookingAccount()) {
 				this.handleTravelStaffAccounts({ id: value })
 			}
 		})

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
@@ -48,6 +48,7 @@ export class AddCardComponent implements OnInit {
 	public accountId: string;
 	public accountType: string;
 	public yearOptions: any = [];
+	expiryDateControl = new FormControl(moment());
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -74,7 +75,8 @@ export class AddCardComponent implements OnInit {
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
-		});
+		}, { validators: this.expiryDateValidator() });
+		this.setExpiryDate(moment());
 
 		/* Card Number Spacing */
 
@@ -116,6 +118,7 @@ export class AddCardComponent implements OnInit {
 
 	submitForm() {
 		this.submittedForm = true;
+		this.expiryDateControl.markAsTouched();
 		if (this.addCardForm.invalid) {
 			return;
 		}
@@ -142,6 +145,10 @@ export class AddCardComponent implements OnInit {
 
 	resetForm() {
 		this.addCardForm.reset();
+		this.addCardForm.patchValue({
+			card_type: 'personal'
+		});
+		this.setExpiryDate(moment());
 	}
 	backButton() {
 		this.router.navigate(['/affiliate/step2']);
@@ -152,7 +159,37 @@ export class AddCardComponent implements OnInit {
 	}
 
 	// Month-Year Picker Logic
-	expiryDateControl = new FormControl(moment());
+	get minExpiryDate() {
+		return moment().startOf('month');
+	}
+
+	private setExpiryDate(date: moment.Moment) {
+		const selectedDate = date.clone().startOf('month');
+		this.expiryDateControl.setValue(selectedDate);
+		this.addCardForm.patchValue({
+			exp_month: selectedDate.format('MM'),
+			exp_year: selectedDate.year()
+		}, { emitEvent: false });
+		this.addCardForm.updateValueAndValidity({ emitEvent: false });
+	}
+
+	private expiryDateValidator(): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const expMonth = control.get('exp_month')?.value;
+			const expYear = control.get('exp_year')?.value;
+
+			if (!expMonth || !expYear) {
+				return null;
+			}
+
+			const selectedDate = moment(`${expYear}-${expMonth}-01`, 'YYYY-MM-DD', true);
+			if (!selectedDate.isValid()) {
+				return { invalidExpiryDate: true };
+			}
+
+			return selectedDate.isBefore(moment().startOf('month')) ? { invalidExpiryDate: true } : null;
+		};
+	}
 
 	chosenYearHandler(normalizedYear: moment.Moment) {
 		const ctrlValue = this.expiryDateControl.value || moment();
@@ -161,23 +198,14 @@ export class AddCardComponent implements OnInit {
 	}
 
 	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
-		const ctrlValue = this.expiryDateControl.value || moment();
-		ctrlValue.month(normalizedMonth.month());
-		ctrlValue.year(normalizedMonth.year());
-		this.expiryDateControl.setValue(ctrlValue);
+		const selectedDate = normalizedMonth.clone().year(normalizedMonth.year()).month(normalizedMonth.month());
+		this.setExpiryDate(selectedDate);
 
-		// Patch Form Values
-		const monthStr = (normalizedMonth.month() + 1).toString().padStart(2, '0');
-		const yearStr = normalizedMonth.year();
-
-		this.addCardForm.patchValue({
-			exp_month: monthStr,
-			exp_year: yearStr
-		});
-
-		// Mark as dirty/touched for validation display
 		this.addCardForm.get('exp_month').markAsDirty();
 		this.addCardForm.get('exp_year').markAsDirty();
+		this.addCardForm.get('exp_month').markAsTouched();
+		this.addCardForm.get('exp_year').markAsTouched();
+		this.expiryDateControl.markAsTouched();
 
 		datepicker.close();
 	}
