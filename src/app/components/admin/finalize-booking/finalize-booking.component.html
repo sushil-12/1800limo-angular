@@ -323,7 +323,7 @@
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">Expiration date</mat-label>
 								<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl"
-									placeholder="MM/YYYY" (click)="dp.open()" readonly>
+									[min]="minExpiryDate" placeholder="MM/YYYY" (click)="dp.open()" readonly>
 								<mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
 								<mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
 									(monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
@@ -331,10 +331,13 @@
 							</mat-form-field>
 							<!-- Error Message Logic -->
 							<div class="error-message"
-								*ngIf="(cardForm.controls.exp_month.invalid || cardForm.controls.exp_year.invalid) && (cardForm.controls.exp_month.touched || cardForm.controls.exp_month.dirty)">
+								*ngIf="((cardForm.controls.exp_month.invalid || cardForm.controls.exp_year.invalid) && (cardForm.controls.exp_month.touched || cardForm.controls.exp_month.dirty)) || (cardForm.errors?.invalidExpiryDate && (cardForm.controls.exp_month.touched || cardForm.controls.exp_month.dirty || expiryDateControl.touched))">
 								<p class="text-danger text-lg m-0"
 									*ngIf="cardForm.controls.exp_month.errors?.required || cardForm.controls.exp_year.errors?.required">
 									Expiry Date is required
+								</p>
+								<p class="text-danger text-lg m-0" *ngIf="cardForm.errors?.invalidExpiryDate">
+									Please select a valid date
 								</p>
 							</div>
 						</div>

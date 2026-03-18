@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
@@ -49,6 +49,7 @@ export class AddCardComponent implements OnInit {
 	public accountType: string;
 	public yearOptions: any = [];
 	addingCartFor: any;
+	expiryDateControl = new FormControl(moment());
 
 
 	constructor(
@@ -89,7 +90,8 @@ export class AddCardComponent implements OnInit {
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
-		});
+		}, { validators: this.expiryDateValidator() });
+		this.setExpiryDate(moment());
 		/* Card Number Spacing */
 
 		// $('#card-number').on('keypress change blur', function ()
@@ -191,12 +193,47 @@ export class AddCardComponent implements OnInit {
 
 	resetForm() {
 		this.addCardForm.reset();
+		this.addCardForm.patchValue({
+			card_type: 'personal'
+		});
+		this.setExpiryDate(moment());
 	}
 	backButton() {
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 	}
 	// Month-Year Picker Logic
-	expiryDateControl = new FormControl(null, [Validators.required]);
+	get minExpiryDate() {
+		return moment().startOf('month');
+	}
+
+	private setExpiryDate(date: moment.Moment) {
+		const selectedDate = date.clone().startOf('month');
+		this.expiryDateControl.setValue(selectedDate);
+		this.addCardForm.patchValue({
+			exp_month: selectedDate.format('MM'),
+			exp_year: selectedDate.year()
+		}, { emitEvent: false });
+		this.addCardForm.updateValueAndValidity({ emitEvent: false });
+		this.expiryDateControl.setErrors(null);
+	}
+
+	private expiryDateValidator(): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const expMonth = control.get('exp_month')?.value;
+			const expYear = control.get('exp_year')?.value;
+
+			if (!expMonth || !expYear) {
+				return null;
+			}
+
+			const selectedDate = moment(`${expYear}-${expMonth}-01`, 'YYYY-MM-DD', true);
+			if (!selectedDate.isValid()) {
+				return { invalidExpiryDate: true };
+			}
+
+			return selectedDate.isBefore(moment().startOf('month')) ? { invalidExpiryDate: true } : null;
+		};
+	}
 
 	chosenYearHandler(normalizedYear: moment.Moment) {
 		const ctrlValue = this.expiryDateControl.value || moment();
@@ -205,33 +242,14 @@ export class AddCardComponent implements OnInit {
 	}
 
 	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
-		const ctrlValue = this.expiryDateControl.value || moment();
-		ctrlValue.month(normalizedMonth.month());
-		ctrlValue.year(normalizedMonth.year());
-		this.expiryDateControl.setValue(ctrlValue);
+		const selectedDate = normalizedMonth.clone().year(normalizedMonth.year()).month(normalizedMonth.month());
+		this.setExpiryDate(selectedDate);
 
-		// Patch Form Values
-		const monthStr = (normalizedMonth.month() + 1).toString().padStart(2, '0');
-		const yearStr = normalizedMonth.year();
-
-		this.addCardForm.patchValue({
-			exp_month: monthStr,
-			exp_year: yearStr
-		});
-
-		// Validation check for past date
-		const today = moment().startOf('month');
-		if (normalizedMonth.isBefore(today)) {
-			this.addCardForm.get('exp_month').setErrors({ 'pastDate': true });
-			this.expiryDateControl.setErrors({ 'pastDate': true });
-		} else {
-			this.addCardForm.get('exp_month').setErrors(null);
-			this.expiryDateControl.setErrors(null);
-		}
-
-		// Mark as dirty/touched for validation display
 		this.addCardForm.get('exp_month').markAsDirty();
 		this.addCardForm.get('exp_year').markAsDirty();
+		this.addCardForm.get('exp_month').markAsTouched();
+		this.addCardForm.get('exp_year').markAsTouched();
+		this.expiryDateControl.markAsTouched();
 
 		datepicker.close();
 	}

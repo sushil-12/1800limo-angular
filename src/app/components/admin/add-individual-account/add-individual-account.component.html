@@ -261,17 +261,18 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Expiration date*</mat-label>
-							<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl" placeholder="MM/YYYY"
+							<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl" [min]="minExpiryDate" placeholder="MM/YYYY"
 								(click)="dp.open()" readonly>
 							<mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
 							<mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
 								(monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
 							</mat-datepicker>
 						</mat-form-field>
-						<div *ngIf="submittedForm && (f.exp_month.errors || f.exp_year.errors) || (f.exp_month.touched && (f.exp_month.errors || f.exp_year.errors))"
+						<div *ngIf="(submittedForm && (f.exp_month.errors || f.exp_year.errors || addIndividualAccountForm.errors?.invalidExpiryDate)) || ((f.exp_month.touched || expiryDateControl.touched) && (f.exp_month.errors || f.exp_year.errors || addIndividualAccountForm.errors?.invalidExpiryDate))"
 							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.exp_month.errors?.required || f.exp_year.errors?.required">Expiry Date is
 								required</div>
+							<div *ngIf="addIndividualAccountForm.errors?.invalidExpiryDate">Please select a valid date</div>
 						</div>
 					</div>
 					<div class="col-md-6">
