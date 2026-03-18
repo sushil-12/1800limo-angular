@@ -127,6 +127,7 @@ export class CreateNewBookingComponent implements OnInit {
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '2';
+	private invalidLocationDialogOpen = false;
 	numberOfHoursError: boolean = false;
 	booking_data: any = {}
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
@@ -740,6 +741,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
+		this.updateNumberOfHoursValidators(this.BookingForm.get('service_type')?.value);
 		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
@@ -992,6 +994,12 @@ export class CreateNewBookingComponent implements OnInit {
 	async MapController(is_return: boolean = false) {
 		// console.log('Map has been initialised.')
 		try {
+			if (this.hasSameAirportSelection(is_return)) {
+				this.resetJourneyMetrics(is_return);
+				this.openInvalidLocationDialog();
+				return;
+			}
+
 			let waypoints = []
 			let origin: google.maps.LatLng
 			let destination: google.maps.LatLng
@@ -1085,6 +1093,58 @@ export class CreateNewBookingComponent implements OnInit {
 			console.error('Error initializing MapController:', error);
 		}
 
+	}
+
+	private hasSameAirportSelection(is_return: boolean = false): boolean {
+		if (is_return) {
+			return this.Form.return_transfer_type.value === 'airport_to_airport'
+				&& !!this.Form.return_pickup_airport.value
+				&& this.Form.return_pickup_airport.value === this.Form.return_dropoff_airport.value;
+		}
+
+		return this.Form.transfer_type.value === 'airport_to_airport'
+			&& !!this.Form.pickup_airport.value
+			&& this.Form.pickup_airport.value === this.Form.dropoff_airport.value;
+	}
+
+	private resetJourneyMetrics(is_return: boolean = false): void {
+		if (is_return) {
+			this.return_distance = 0;
+			this.BookingForm.patchValue({
+				returnJourneyDistance: 0,
+				returnJourneyTime: 0
+			}, { emitEvent: false });
+			return;
+		}
+
+		this.distance = 0;
+		this.BookingForm.patchValue({
+			journeyDistance: 0,
+			journeyTime: 0
+		}, { emitEvent: false });
+	}
+
+	private openInvalidLocationDialog(): void {
+		if (this.invalidLocationDialogOpen) {
+			return;
+		}
+
+		this.invalidLocationDialogOpen = true;
+		const dialogRef = this.$errors.openDialog({
+			errors: {
+				error: 'Please select a valid location point.'
+			}
+		});
+
+		if (dialogRef?.afterClosed) {
+			dialogRef.afterClosed().subscribe(() => {
+				this.invalidLocationDialogOpen = false;
+			});
+		} else {
+			setTimeout(() => {
+				this.invalidLocationDialogOpen = false;
+			}, 300);
+		}
 	}
 
 
@@ -2028,6 +2088,38 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 	}
 
+	private logInvalidControls(control: AbstractControl, path: string = ''): void {
+		if (control instanceof FormGroup) {
+			Object.keys(control.controls).forEach((key) => {
+				const childControl = control.get(key);
+				if (childControl) {
+					const childPath = path ? `${path}.${key}` : key;
+					this.logInvalidControls(childControl, childPath);
+				}
+			});
+			return;
+		}
+
+		if (control instanceof FormArray) {
+			control.controls.forEach((childControl, index) => {
+				const childPath = `${path}[${index}]`;
+				this.logInvalidControls(childControl, childPath);
+			});
+			return;
+		}
+
+		if (control.invalid) {
+			console.log('Invalid control:', {
+				path,
+				errors: control.errors,
+				value: control.value,
+				status: control.status,
+				touched: control.touched,
+				dirty: control.dirty
+			});
+		}
+	}
+
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
@@ -2080,6 +2172,8 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 
 		if (this.BookingForm.invalid) {
+			console.log('Booking form is invalid. Invalid controls are listed below:');
+			this.logInvalidControls(this.BookingForm);
 			return;
 		}
 
@@ -2209,12 +2303,8 @@ export class CreateNewBookingComponent implements OnInit {
 		let total_time = 0
 		return new Promise((resolve) => {
 			data.routes[0].legs.forEach((item: any) => {
-				if (item.distance.value == 0) {
-					this.$errors.openDialog({
-						errors: {
-							error: 'Please select a valid location point.'
-						}
-					})
+				if (item.distance.value == 0 && this.BookingForm.get('service_type').value != 'charter_tour') {
+					this.openInvalidLocationDialog()
 					return
 				}
 				else {
@@ -2240,6 +2330,112 @@ export class CreateNewBookingComponent implements OnInit {
 
 	}
 
+	updateReturnLegValidators(value: string) {
+		if (this.BookingForm?.get('service_type')?.value == 'round_trip') {
+			if (!value.startsWith('airport_')) {
+				this.BookingForm?.get('return_pickup')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm?.get('return_pickup')?.clearValidators();
+			}
+			this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
+
+			if (!value.endsWith('_airport')) {
+				this.BookingForm?.get('return_dropoff')?.setValidators([Validators.required]);
+			} else {
+				this.BookingForm?.get('return_dropoff')?.clearValidators();
+			}
+			this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
+
+			if (value.includes("city_")) {
+				this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+			}
+
+			if (value.includes('_cruise') || value.includes('cruise_')) {
+				if (value.includes("cruise_")) {
+					this.SetFormValue('return_booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when ship has arrived.");
+				}
+				this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
+				this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			} else {
+				this.BookingForm.get('return_cruise_name').clearValidators();
+				this.BookingForm.get('return_cruise_port').clearValidators();
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
+
+			if (value.includes('_airport')) {
+				this.BookingForm.get('return_dropoff_airline_option').setValidators([Validators.required]);
+				this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('return_dropoff_airport_option').setValidators([Validators.required]);
+				this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
+			} else {
+				this.BookingForm.get('return_dropoff_airline_option').clearValidators();
+				this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('return_dropoff_airport_option').clearValidators();
+				this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
+			}
+
+			if (value.includes('airport_')) {
+				this.SetFormValue('return_booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when plane has arrived.");
+				this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_airline_option').setValidators([Validators.required]);
+				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
+				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+				this.BookingForm.get('departing_airport_city').setValidators([Validators.required]);
+				this.BookingForm.get('departing_airport_city').updateValueAndValidity();
+			} else {
+				this.BookingForm.get('return_pickup_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_airline_option').clearValidators();
+				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_airport_option').clearValidators();
+				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+				this.BookingForm.get('departing_airport_city').clearValidators();
+				this.BookingForm.get('departing_airport_city').updateValueAndValidity();
+			}
+		} else {
+			this.clearReturnOnlyValidators();
+		}
+	}
+
+	private updateNumberOfHoursValidators(serviceType: string): void {
+		const hoursControl = this.BookingForm?.get('number_of_hours');
+		if (!hoursControl) {
+			return;
+		}
+
+		if (serviceType == 'charter_tour' || serviceType == 'chartertour') {
+			hoursControl.setValidators([Validators.min(2)]);
+		} else {
+			hoursControl.clearValidators();
+			this.numberOfHoursError = false;
+		}
+
+		hoursControl.updateValueAndValidity({ emitEvent: false });
+	}
+
+	private clearReturnOnlyValidators(): void {
+		[
+			'return_pickup',
+			'return_dropoff',
+			'return_cruise_name',
+			'return_cruise_port',
+			'return_dropoff_airport_option',
+			'return_dropoff_airline_option',
+			'return_pickup_flight',
+			'return_pickup_airline_option',
+			'return_pickup_airport_option',
+			'departing_airport_city'
+		].forEach((controlName) => {
+			this.BookingForm?.get(controlName)?.clearValidators();
+			this.BookingForm?.get(controlName)?.updateValueAndValidity();
+		});
+	}
+
 	Subscriptions() {
 		//pickup time change 
 		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
@@ -2251,6 +2447,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
+			this.updateNumberOfHoursValidators(value);
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				this.initAllAutocompletes()
@@ -2259,6 +2456,7 @@ export class CreateNewBookingComponent implements OnInit {
 				setTimeout(() => {
 					this.MapController(true)
 				}, 2000)
+				this.updateReturnLegValidators(this.BookingForm.get('return_transfer_type').value);
 			}
 			if (value != 'charter_tour') {
 				this.BookingForm.get('number_of_hours').setValue(0)
@@ -2266,27 +2464,7 @@ export class CreateNewBookingComponent implements OnInit {
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}
 			if (value == 'one_way') {
-				this.BookingForm.get('return_cruise_name').clearValidators();
-				this.BookingForm.get('return_cruise_port').clearValidators();
-				// this.BookingForm.get('return_dropoff_flight').clearValidators();
-				// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
-				this.BookingForm.get('return_dropoff_airport_option').clearValidators();
-				this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
-				this.BookingForm.get('return_dropoff_airline_option').clearValidators();
-				this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
-				this.BookingForm.get('return_pickup_flight').clearValidators();
-				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
-				this.BookingForm.get('return_pickup_airline_option').clearValidators();
-				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
-				this.BookingForm.get('return_pickup_airport_option').clearValidators();
-				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
-				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
-				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
-
-				this.BookingForm?.get('return_pickup')?.clearValidators();
-				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
-				this.BookingForm?.get('return_dropoff')?.clearValidators();
-				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
+				this.clearReturnOnlyValidators();
 			}
 		})
 
@@ -2517,6 +2695,7 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value), false)
 			this.return_transfer_type = reverseStringChars(value)
+			this.updateReturnLegValidators(this.return_transfer_type);
 		})
 
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
@@ -2746,6 +2925,8 @@ export class CreateNewBookingComponent implements OnInit {
 				}
 				this.SetFormValue('transfer_type', reverseStringChars(value), false)
 				this.transfer_type = reverseStringChars(value)
+			} else {
+				this.clearReturnOnlyValidators();
 			}
 		})
 

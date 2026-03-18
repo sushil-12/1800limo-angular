@@ -1002,7 +1002,8 @@
 							<input #pickupInput type="text" matInput placeholder="Type your address"
 								formControlName="pickup" [value]="fillValue(null, 'pickup', null)"
 								(focus)="$event.target.select()" />
-							<mat-error *ngIf="Form.pickup.errors?.required">
+							<mat-error
+								*ngIf="(submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.errors?.required)">
 								Pickup address is required
 							</mat-error>
 						</mat-form-field>
@@ -1015,20 +1016,21 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-4">
 					<!-- Airport -->
-					<div class="col-md-6 mb-2">
+					<div class="col-md-6 mb-2 field-with-error">
 						<!-- Ng-Select - Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
 							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="pickup_airport_option">
+							formControlName="pickup_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
-							class="text-danger my-mat-hint" style="margin-bottom: 10px; padding-left: 10px;">
-							<div *ngIf="Form.pickup_airport_option.errors.required">This field is required</div>
+							class="text-danger my-mat-hint">
+							<div *ngIf="Form.pickup_airport_option.errors.required">Pickup airport is required</div>
 						</div>
 
 
@@ -1058,18 +1060,19 @@
 
 
 					<!-- Airline -->
-					<div class="col-md-6 mb-2" *ngIf="Form.pickup_airport.value != '3283' ">
+					<div class="col-md-6 mb-2 field-with-error" *ngIf="Form.pickup_airport.value != '3283' ">
 						<!-- Ng-Select > Airline -->
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option">
+							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airline_option.invalid) }">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.pickup_airline_option.invalid) "
-							class="text-danger my-mat-hint" style="margin-bottom: 10px; padding-left: 10px;">
+							class="text-danger my-mat-hint">
 							<div *ngIf="Form.pickup_airline_option.errors.required">This field is required</div>
 						</div>
 					</div>
@@ -1196,7 +1199,8 @@
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
 								formControlName="dropoff" [value]="fillValue(null, 'dropoff', null)"
 								(focus)="$event.target.select()" />
-							<mat-error *ngIf="Form.dropoff.errors?.required">
+							<mat-error
+								*ngIf="(submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.errors?.required)">
 								Dropoff address is required
 							</mat-error>
 						</mat-form-field>
@@ -1209,7 +1213,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-4">
 					<!-- Airport -->
-					<div class="col-md-6 mb-2">
+					<div class="col-md-6 mb-2 field-with-error">
 						<!-- Ng-Select > Dropoff > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
@@ -1221,13 +1225,13 @@
 							</ng-template>
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
-							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.dropoff_airport_option.errors.required">This field is required</div>
+							class="text-danger my-mat-hint">
+							<div *ngIf="Form.dropoff_airport_option.errors.required">Dropoff airport is required</div>
 						</div>
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-6 mb-2">
+					<div class="col-md-6 mb-2 field-with-error">
 						<!-- Ng-Select > Dropoff > Airline -->
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
@@ -1238,7 +1242,7 @@
 							</ng-template>
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.dropoff_airline_option.invalid) "
-							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							class="text-danger my-mat-hint">
 							<div *ngIf="Form.dropoff_airline_option.errors.required">This field is required</div>
 						</div>
 					</div>
@@ -1720,7 +1724,8 @@
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
 								formControlName="return_pickup" [value]="fillValue(null, 'return_pickup', null)"
 								(focus)="$event.target.select()" />
-							<mat-error *ngIf="Form.return_pickup.errors?.required">
+							<mat-error
+								*ngIf="(submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.errors?.required)">
 								Return pickup address is required
 							</mat-error>
 						</mat-form-field>
@@ -1746,7 +1751,8 @@
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.return_pickup_airport_option.errors.required">This field is required</div>
+							<div *ngIf="Form.return_pickup_airport_option.errors.required">Return pickup airport is
+								required</div>
 						</div>
 					</div>
 
@@ -1916,7 +1922,8 @@
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
 								formControlName="return_dropoff" [value]="fillValue(null, 'return_dropoff', null)"
 								(focus)="$event.target.select()" />
-							<mat-error *ngIf="Form.return_dropoff.errors?.required">
+							<mat-error
+								*ngIf="(submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.errors?.required)">
 								Return dropoff address is required
 							</mat-error>
 						</mat-form-field>
@@ -1942,7 +1949,8 @@
 						</ng-select>
 						<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.return_dropoff_airport_option.errors.required">This field is required</div>
+							<div *ngIf="Form.return_dropoff_airport_option.errors.required">Return dropoff airport is
+								required</div>
 						</div>
 					</div>
 
