@@ -21,6 +21,11 @@ export class RatesFormTaComponent implements OnInit {
 	@Input("vehicle_id") QB_vehicle_id: any = 0;
 	@Input('reset') reset: boolean = false;
 	@Input('book_data') book_data: any = {};
+	@Input('isTravelShare') isTravelShare: boolean = false;
+	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
+	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
+	@Input("service_type") service_type: string = "";
+	@Input("booking_created_from") booking_created_from: any;
 
 	
 	
@@ -69,6 +74,7 @@ export class RatesFormTaComponent implements OnInit {
 	grandtotal: number = 0;
 	r_grandtotal: number = 0;
 	admin_share: number = 25;
+	travel_share: number = 10;
 	calc_admin_share: number = 0;
 	r_calc_admin_share: number = 0;
 
@@ -78,6 +84,11 @@ export class RatesFormTaComponent implements OnInit {
 	is_readonly_min_rate: boolean = false;
 	bookingType: any = 'new';
 	master_vehicle_id: any = null;
+	travel_agent_share: any = 0;
+	r_travel_agent_share: any = 0;
+	farmoutShare: any = 0;
+	r_farmoutShare: any = 0;
+	currentUser: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -102,6 +113,7 @@ export class RatesFormTaComponent implements OnInit {
 				this.master_vehicle_id = params.vehicle_id
 			}
 		})
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 	}
 
 	handleSubHeading(items: string) {
@@ -126,6 +138,7 @@ export class RatesFormTaComponent implements OnInit {
 		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		// }
 		if(changes?.book_data?.currentValue){
+			this.service_type = changes?.book_data?.currentValue?.service_type || this.service_type;
 
 			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		}
@@ -182,6 +195,16 @@ export class RatesFormTaComponent implements OnInit {
 		if (changes.nums) {
 			this.hours = Number(changes.nums.currentValue)
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+		}
+		if (changes.affiliate_type || changes.booking_created_from) {
+			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+			this.ReturnRatesForm && this.calculateAmount('ReturnRatesForm', 'all_inclusive_rates', 'Base_Rate');
+		}
+		if (changes.isTravelShare) {
+			this.initRates();
+			if (this.ReturnRatesForm) {
+				this.initReturnRates();
+			}
 		}
 
 		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
@@ -598,8 +621,86 @@ export class RatesFormTaComponent implements OnInit {
 		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
 	}
 
+	calculateReturnBaseRateShare() {
+		try {
+			let baseRate = 0;
+			if (this.service_type == 'charter_tour') {
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+			}
+			else {
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
+			});
+			['Baby_Seat', 'Baggage_Meet_(Dom)', 'Baggage_Meet_(Int)', 'Bike_Rack', 'Booster_Seat', 'Golf_Bags',
+				'Lei_Greeting_–_Hawaii', 'Luggage_Trailer', 'Per_Diem', 'Red_Carpet', 'Security_/_Guard', 'Skis',
+				'Tour_Guide', 'Wedding_Package'].map((j) => {
+					baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('amenities'))?.get(j)))?.get("baserate").value || 0
+				})
+			return baseRate;
+		} catch (error) {
+			console.log('error-----____>>>>', error)
+		}
+	}
+	calculateReturnAdminShare() {
+		let baseRate = this.calculateReturnBaseRateShare()
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && this.affiliate_type == 'loose_affiliate') ? 0 : 25
+		this.r_calc_admin_share = baseRate * this.admin_share / 100 + (this.ReturnRatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
+		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
+	}
+	calculateReturnTravelShare() {
+		if (!this.isTravelShare && this.isCreatedByAdmin) {
+			return 0
+		}
+		let baseRate = this.calculateReturnBaseRateShare()
+		this.r_travel_agent_share = baseRate * this.travel_share / 100
+	}
+
+	calculateBaseRateShare() {
+		try {
+			let baseRate = 0;
+
+			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+			}
+			else {
+				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
+				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
+			});
+			['Baby_Seat', 'Baggage_Meet_(Dom)', 'Baggage_Meet_(Int)', 'Bike_Rack', 'Booster_Seat', 'Golf_Bags',
+				'Lei_Greeting_–_Hawaii', 'Luggage_Trailer', 'Per_Diem', 'Red_Carpet', 'Security_/_Guard', 'Skis',
+				'Tour_Guide', 'Wedding_Package'].map((j) => {
+					baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('amenities'))?.get(j)))?.get("baserate").value || 0
+				})
+
+
+			return baseRate;
+		} catch (error) {
+			console.log('error---------------->>>>>>', error)
+		}
+	}
+	calculateAdminShare() {
+
+		let baseRate = this.calculateBaseRateShare()
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && this.affiliate_type == 'loose_affiliate') ? 0 : 25
+		this.calc_admin_share = baseRate * this.admin_share / 100 + (this.RatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
+		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''
+	}
+	calculateTravelShare() {
+		if (!this.isTravelShare && this.isCreatedByAdmin) {
+			return 0
+		}
+		let baseRate = this.calculateBaseRateShare()
+		this.travel_agent_share = baseRate * this.travel_share / 100
+	}
+
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
+		await this.calculateAdminShare()
+		await this.calculateTravelShare()
 
 		if (form === "RatesForm") {
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
@@ -621,22 +722,19 @@ export class RatesFormTaComponent implements OnInit {
 				// Hourly Rate - only in case of hours
 				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate) {
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
-				}else {
+				} else {
 					amount = baserate;
 				}
 
 				// Admin Share Calculation
 				if (subform == 'Base_Rate' && !this.is_readonly_min_rate) {
-					this.calc_admin_share = (amount * this.admin_share) / 100;
-					console.log('calc_admin_share--->>', amount, this.calc_admin_share)
-					amount = parseFloat((amount + this.calc_admin_share).toFixed(2));
+				console.log('calc_admin_share--->>', amount, this.calc_admin_share)
 				}
-				console.log('is_readonly_min_rate-->>' ,this.is_readonly_min_rate )
-				if(this.is_readonly_min_rate && subform == 'Base_Rate'){
-					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
-					this.calc_admin_share = (min_rate * this.admin_share) / 100
-					amount = amount + this.calc_admin_share;
-					console.log('is_readonly_min_rate_amount-->>' , amount , this.calc_admin_share )
+				console.log('is_readonly_min_rate-->>', this.is_readonly_min_rate)
+				if (this.isTravelShare && subform == 'Base_Rate') {
+				}
+				if (this.is_readonly_min_rate && subform == 'Base_Rate') {
+					console.log('is_readonly_min_rate_amount-->>', amount, this.calc_admin_share)
 				}
 
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
@@ -679,8 +777,7 @@ export class RatesFormTaComponent implements OnInit {
 				}
 
 				if (type === "percent") {
-					// let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let kmrate = await this.calculateBaseRate('RatesForm');
 					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -695,11 +792,27 @@ export class RatesFormTaComponent implements OnInit {
 
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.total[subform] = Number(Number(amount).toFixed(2));
+			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
+				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
+				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+				}
+				baseRateAmount += this.calc_admin_share
+				if (this.isTravelShare && !this.isCreatedByAdmin) {
+					baseRateAmount = baseRateAmount + this.travel_agent_share;
+				}
+				else if (this.isFarmoutBooking) {
+					baseRateAmount = baseRateAmount + this.farmoutShare;
+				}
+				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
+			}
 			this.RatesForm.updateValueAndValidity();
 		}
 
 		// --------------------- RETURN RATES FORM ------------------------
 		if (form === "ReturnRatesForm") {
+			await this.calculateReturnAdminShare()
+			await this.calculateReturnTravelShare()
 			let baserate = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
 			if (["direct_taxes", "amenities", "taxes", "misc"].includes(formgroup)) {
@@ -711,8 +824,8 @@ export class RatesFormTaComponent implements OnInit {
 			if (formgroup == "all_inclusive_rates") {
 				let amount = baserate;
 				if (subform == 'Base_Rate') {
-					this.r_calc_admin_share = (amount * this.admin_share) / 100;
-					amount = parseFloat((amount + this.r_calc_admin_share).toFixed(2));
+					if (this.isTravelShare && subform == 'Base_Rate') {
+					}
 				}
 				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 			}
@@ -759,8 +872,7 @@ export class RatesFormTaComponent implements OnInit {
 				}
 
 				if (type === "percent") {
-					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm');
 					let taxvalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -776,9 +888,22 @@ export class RatesFormTaComponent implements OnInit {
 
 			let amount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
+			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
+				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
+				if (this.service_type == 'charter_tour') {
+					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+				}
+				baseRateAmount += this.r_calc_admin_share
+				if (this.isTravelShare && !this.isCreatedByAdmin) {
+					baseRateAmount = baseRateAmount + this.r_travel_agent_share;
+				}
+				else if (this.isFarmoutBooking) {
+					baseRateAmount = baseRateAmount + this.r_farmoutShare;
+				}
+				this.r_total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
+			}
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
 		// console.log(this.total, this.r_total);
 	}
 }
-

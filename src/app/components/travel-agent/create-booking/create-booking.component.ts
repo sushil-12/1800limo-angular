@@ -959,19 +959,23 @@ export class CreateBookingComponent implements OnInit {
 
 		if (!isNaN(value) && value > 0) {
 			this.number_of_hours = value;
-			const numVehicles = this.Form.number_of_vehicles?.value || 1;
+			this.recalculateDisplayedRates();
+		}
+	}
 
+	private recalculateDisplayedRates() {
+		if (this.rateArray) {
 			const rates = this.calculateRates(this.rateArray, this.min_rate_involved, false);
 			this.subtotal = rates.subtotal;
 			this.grandtotal = rates.subtotal;
 			this.agentShare = rates.agentShare;
+		}
 
-			if (this.Form.service_type.value == 'round_trip') {
-				const r_rates = this.calculateRates(this.returnRateArray, this.min_rate_involved, true);
-				this.r_subtotal = r_rates.subtotal;
-				this.r_grandtotal = r_rates.subtotal;
-				this.r_agentShare = r_rates.agentShare;
-			}
+		if (this.Form.service_type.value == 'round_trip' && this.returnRateArray) {
+			const r_rates = this.calculateRates(this.returnRateArray, this.min_rate_involved, true);
+			this.r_subtotal = r_rates.subtotal;
+			this.r_grandtotal = r_rates.subtotal;
+			this.r_agentShare = r_rates.agentShare;
 		}
 	}
 
@@ -984,17 +988,7 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('number_of_hours', 2);
 			this.numberOfHoursError = false;
 		}
-		const rates = this.calculateRates(this.rateArray, this.min_rate_involved, false);
-		this.subtotal = rates.subtotal;
-		this.grandtotal = rates.subtotal;
-		this.agentShare = rates.agentShare;
-
-		if (this.Form.service_type.value == 'round_trip') {
-			const r_rates = this.calculateRates(this.returnRateArray, this.min_rate_involved, true);
-			this.r_subtotal = r_rates.subtotal;
-			this.r_grandtotal = r_rates.subtotal;
-			this.r_agentShare = r_rates.agentShare;
-		}
+		this.recalculateDisplayedRates();
 
 	}
 
@@ -1008,22 +1002,28 @@ export class CreateBookingComponent implements OnInit {
 		let subtotal = 0;
 		let agentShare = 0;
 		let base_rate = 0;
+		let tax_base = 0;
 
-		// 1. Calculate base_rate (sum of baserates of all-inclusive and amenities)
+		// 1. Calculate base_rate for shares, and tax_base like admin rates-form.
 		const serviceType = this.BookingForm.value?.service_type;
 		let baseRateObj = rateArray?.all_inclusive_rates?.["Base_Rate"];
 		
 		if (baseRateObj) {
 			if (serviceType === 'charter_tour' && !min_rate_involved) {
-				base_rate += (baseRateObj.baserate || 0) * (this.number_of_hours || 1);
+				const multipliedBaseRate = (baseRateObj.baserate || 0) * (this.number_of_hours || 1);
+				base_rate += multipliedBaseRate;
+				tax_base += multipliedBaseRate;
 			} else {
 				base_rate += (baseRateObj.baserate || 0);
+				tax_base += (baseRateObj.baserate || 0);
 			}
 		}
 
 		['ELH_Charges', 'Stops', 'Wait'].forEach(key => {
 			if (rateArray?.all_inclusive_rates?.[key]) {
-				base_rate += (rateArray.all_inclusive_rates[key].baserate || 0);
+				const inclusiveRate = (rateArray.all_inclusive_rates[key].baserate || 0);
+				base_rate += inclusiveRate;
+				tax_base += inclusiveRate;
 			}
 		});
 
@@ -1051,7 +1051,7 @@ export class CreateBookingComponent implements OnInit {
 						if (innerObject.hasOwnProperty(innerKey)) {
 							const tax = innerObject[innerKey];
 							if (tax.type === 'percent') {
-								subtotal += (base_rate * parseFloat(tax.baserate || 0)) / 100;
+								subtotal += (tax_base * parseFloat(tax.baserate || 0)) / 100;
 							} else {
 								subtotal += parseFloat(tax.baserate || 0);
 							}
@@ -1091,21 +1091,11 @@ export class CreateBookingComponent implements OnInit {
 			this.min_rate_involved = response?.data?.min_rate_involved
 			this.rateArray = response?.data?.rateArray
 			this.returnRateArray = response?.data?.retrunRateArray
-
-			const rates = this.calculateRates(this.rateArray, this.min_rate_involved, false);
-			this.subtotal = rates.subtotal;
-			this.agentShare = rates.agentShare;
-			this.grandtotal = rates.subtotal;
-
-			console.log('grandtotal->', this.grandtotal);
-
-			// In case of round trip
-			if (this.booking_data?.service_type == 'round_trip') {
-				const r_rates = this.calculateRates(this.returnRateArray, this.min_rate_involved, true);
-				this.r_subtotal = r_rates.subtotal;
-				this.r_agentShare = r_rates.agentShare;
-				this.r_grandtotal = r_rates.subtotal;
+			const prefilledHours = Number(this.BookingForm?.get('number_of_hours')?.value);
+			if (!isNaN(prefilledHours) && prefilledHours > 0) {
+				this.number_of_hours = prefilledHours;
 			}
+			this.recalculateDisplayedRates();
 		});
 	}
 	autofillData(filling_for: string, data: any) {
@@ -2189,6 +2179,21 @@ export class CreateBookingComponent implements OnInit {
 		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
 			this.buildBookingData()
 		})
+		this.BookingForm.get('number_of_hours').valueChanges.subscribe((value: any) => {
+			const numericValue = Number(value);
+			if (!isNaN(numericValue) && numericValue > 0) {
+				this.number_of_hours = numericValue;
+			}
+
+			if (this.Form.service_type.value == 'charter_tour') {
+				this.numberOfHoursError = !isNaN(numericValue) && numericValue < 2;
+			} else {
+				this.numberOfHoursError = false;
+			}
+
+			this.recalculateDisplayedRates();
+			this.buildBookingData();
+		})
 
 
 		// Service Type
@@ -2211,6 +2216,7 @@ export class CreateBookingComponent implements OnInit {
 			if (value == 'one_way') {
 				this.clearReturnOnlyValidators();
 			}
+			this.recalculateDisplayedRates();
 		})
 
 		// Transfer Type
@@ -3170,7 +3176,9 @@ export class CreateBookingComponent implements OnInit {
 	}
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
+		this.number_of_hours = Number(data) || this.number_of_hours;
 		this.BookingForm.get('number_of_hours').setValue(data)
+		this.recalculateDisplayedRates();
 	}
 
 
@@ -3602,69 +3610,12 @@ export class CreateBookingComponent implements OnInit {
 				this.min_rate_involved = response?.data?.min_rate_involved
 				this.rateArray = response?.data?.rateArray
 				this.rateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate.amount
-				for (let outerKey in this.rateArray) {
-					if (this.rateArray.hasOwnProperty(outerKey)) {
-						const innerObject = this.rateArray[outerKey];
-						for (let innerKey in innerObject) {
-							if (innerObject.hasOwnProperty(innerKey)) {
-								this.subtotal += innerObject[innerKey].amount ? innerObject[innerKey].amount : 0
-
-							}
-						}
-					}
-				}
-				let base_rate = 0
-				if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
-					base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
-				}
-				else {
-					base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate
-				}
-				['ELH_Charges', 'Stops', 'Wait'].map((key) => {
-					base_rate += this.rateArray.all_inclusive_rates[key].baserate
-				});
-				for (const key of Object.keys(this.rateArray.amenities)) {
-					base_rate += this.rateArray.amenities[key].baserate;
-				}
-				if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
-					this.agentShare = base_rate * 0.10
-				}
-				// this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
-				this.grandtotal = (parseFloat(this.subtotal))
-				console.log("grand total--->", this.grandtotal)
 			}
 			if (booking_data.service_type == 'round_trip') {
 				this.returnRateArray = response?.data?.retrunRateArray
 				this.returnRateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate.amount
-				for (let outerKey in this.returnRateArray) {
-					if (this.returnRateArray.hasOwnProperty(outerKey)) {
-						const innerObject = this.returnRateArray[outerKey];
-						for (let innerKey in innerObject) {
-							if (innerObject.hasOwnProperty(innerKey)) {
-								this.r_subtotal += innerObject[innerKey].amount ? innerObject[innerKey].amount : 0
-							}
-						}
-					}
-				}
-				let base_rate = 0
-				if (this.BookingForm.value?.service_type == 'charter_tour') {
-					base_rate += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
-				}
-				else {
-					base_rate += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate
-				}
-				['ELH_Charges', 'Stops', 'Wait'].map((key) => {
-					base_rate += this.returnRateArray.all_inclusive_rates[key].baserate
-				});
-				for (const key of Object.keys(this.returnRateArray.amenities)) {
-					base_rate += this.returnRateArray.amenities[key].baserate;
-				}
-				if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
-					this.r_agentShare = base_rate * 0.10
-				}
-				//   this.r_agentShare = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
-				this.r_grandtotal = (parseFloat(this.r_subtotal))
 			}
+			this.recalculateDisplayedRates();
 			// Store current booking_data as previous for next comparison
 			this.previousBookingData = JSON.parse(JSON.stringify(booking_data));
 			console.log('[buildBookingData] Method completed successfully');
