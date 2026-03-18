@@ -181,7 +181,9 @@ ul {
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
 }
-
+:host ::ng-deep.ng-select{
+		padding: 0 !important;
+}
 ::ng-deep .col-md-3.margin-mat-field {
 	margin-top: -15px;
 }
@@ -388,9 +390,40 @@ ul {
 	}
 }
 
-.border-red {
+.border-red:not(ng-select) {
 	border: 3px solid red;
 	border-radius: 12px;
+}
+
+.field-with-error {
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 8px;
+}
+
+.field-with-error ng-select {
+	display: block;
+	width: 100%;
+}
+
+.field-with-error .my-mat-hint {
+	margin-top: 2px;
+	margin-bottom: 0;
+	padding-left: 0;
+	line-height: 1.2;
+}
+
+:host ::ng-deep ng-select.border-red .ng-select-container,
+:host ::ng-deep ng-select.border-red.ng-select-focused .ng-select-container,
+:host ::ng-deep ng-select.border-red.ng-select-opened .ng-select-container {
+	border: 1px solid #f44336 !important;
+	box-shadow: inset 0 0 0 1px #f44336;
+}
+
+:host ::ng-deep ng-select.border-red .ng-select-container.ng-appearance-outline:after,
+:host ::ng-deep ng-select.border-red.ng-select-focused .ng-select-container.ng-appearance-outline:after,
+:host ::ng-deep ng-select.border-red.ng-select-opened .ng-select-container.ng-appearance-outline:after {
+	border-color: #f44336 !important;
 }
 
 @media (min-width: 992px) {
