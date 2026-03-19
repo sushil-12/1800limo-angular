@@ -184,6 +184,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	waiting_time_in_mins: any = 0;
 	bigDataSubscription: Subscription;
 	userCreditCards: any[] = [];
+	isLoadingSavedCards: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -1687,7 +1688,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	private loadSavedCards(accountId: number, shouldLoad: boolean) {
-		const travelAdvisorId = this.Form?.account_type?.value === 'travel_planner' ? this.Form?.acc_id?.value : null;
+		const travelAdvisorId = this.Form?.account_type?.value === 'travel_planner'
+			? (accountId || this.Form?.acc_id?.value)
+			: null;
 		this.loadCombinedSavedCards(accountId, shouldLoad, travelAdvisorId);
 	}
 
@@ -1703,8 +1706,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	private loadCombinedSavedCards(accountId: number, shouldLoad: boolean, travelAdvisorId?: number) {
 		if ((!shouldLoad || !accountId) && !travelAdvisorId) {
 			this.userCreditCards = [];
+			this.isLoadingSavedCards = false;
 			return;
 		}
+
+		this.isLoadingSavedCards = true;
+		this.userCreditCards = [];
 
 		const requests: Promise<any>[] = [];
 		const resultKeys: Array<'travelAdvisorCards' | 'clientCards'> = [];
@@ -1731,6 +1738,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.userCreditCards = [...travelAdvisorCards, ...clientCards];
 		}).catch(() => {
 			this.userCreditCards = [];
+		}).finally(() => {
+			this.isLoadingSavedCards = false;
 		});
 	}
 
@@ -1740,11 +1749,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	shouldRenderSavedCardsSection(): boolean {
 		const isDirectIndividual = this.Form?.account_type?.value === 'individual' && !!this.Form?.acc_id?.value;
+		const isTravelAdvisor = this.Form?.account_type?.value === 'travel_planner' && !!this.Form?.acc_id?.value;
 		const isTravelIndividual = this.Form?.account_type?.value === 'travel_planner'
 			&& this.Form?.travel_client_acc?.value === 'travel_individual'
 			&& !!this.Form?.travel_client_id?.value;
 
-		return isDirectIndividual || isTravelIndividual;
+		return isDirectIndividual || isTravelAdvisor || isTravelIndividual;
 	}
 
 	fillLCDetails(choose_user: any) {
@@ -1772,6 +1782,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			passenger_cell_country: 'us',
 		})
 		this.userCreditCards = [];
+		this.isLoadingSavedCards = false;
 		if (selectedAcc == 'travel_planner') {
 			this.BookingForm.get('travel_client_id').setValidators([Validators.required]);
 			this.BookingForm.get('travel_client_id').updateValueAndValidity();
@@ -1807,6 +1818,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				travel_client_id.updateValueAndValidity();
 			}
 		}
+
+		const travelAdvisorId = this.Form?.acc_id?.value;
+		const travelClientId = this.Form?.travel_client_id?.value;
+		this.loadCombinedSavedCards(
+			travelClientId,
+			selectedAcc == 'travel_individual',
+			travelAdvisorId
+		);
 
 	}
 	handleTravelStaffAccounts(value: any) {

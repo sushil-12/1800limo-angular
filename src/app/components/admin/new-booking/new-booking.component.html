@@ -227,7 +227,11 @@
 				<!-- Saved Credit Cards -->
 				<div *ngIf="shouldRenderSavedCardsSection()" class="mt-3 px-4 pb-3">
 					<h5 class="mb-3">Saved Credit Cards</h5>
-					<div class="table-responsive" *ngIf="userCreditCards && userCreditCards.length > 0; else noSavedCards">
+					<div *ngIf="isLoadingSavedCards" class="text-muted py-2">
+						Loading saved credit cards...
+					</div>
+					<div class="table-responsive"
+						*ngIf="!isLoadingSavedCards && userCreditCards && userCreditCards.length > 0; else noSavedCards">
 						<table class="table table-hover table-bordered shadow-sm">
 							<thead class="thead-light">
 								<tr>
@@ -257,7 +261,7 @@
 						</table>
 					</div>
 					<ng-template #noSavedCards>
-						<p class="mb-0 text-muted">No saved credit cards found.</p>
+						<p *ngIf="!isLoadingSavedCards" class="mb-0 text-muted">No saved credit cards found.</p>
 					</ng-template>
 				</div>
 				<!-- Acc Type TA -->

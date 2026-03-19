@@ -100,6 +100,7 @@ export class Step2Component implements OnInit, AfterViewInit {
 
 	// Month-Year Picker Logic
 	expiryDateControl = new FormControl(moment());
+	minExpiryDate = moment().startOf('month');
 
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -1219,20 +1220,33 @@ export class Step2Component implements OnInit, AfterViewInit {
 	}
 
 	chosenYearHandler(normalizedYear: moment.Moment) {
-		const ctrlValue = this.expiryDateControl.value || moment();
-		ctrlValue.year(normalizedYear.year());
+		const ctrlValue = (this.expiryDateControl.value || moment()).clone();
+		const currentMonth = this.minExpiryDate.month();
+		const selectedYear = Math.max(normalizedYear.year(), this.minExpiryDate.year());
+
+		ctrlValue.year(selectedYear);
+		if (selectedYear === this.minExpiryDate.year() && ctrlValue.month() < currentMonth) {
+			ctrlValue.month(currentMonth);
+		}
+
 		this.expiryDateControl.setValue(ctrlValue);
 	}
 
 	chosenMonthHandler(normalizedMonth: moment.Moment, datepicker: any) {
-		const ctrlValue = this.expiryDateControl.value || moment();
-		ctrlValue.month(normalizedMonth.month());
-		ctrlValue.year(normalizedMonth.year());
+		const ctrlValue = (this.expiryDateControl.value || moment()).clone();
+		let selectedDate = normalizedMonth.clone().startOf('month');
+
+		if (selectedDate.isBefore(this.minExpiryDate, 'month')) {
+			selectedDate = this.minExpiryDate.clone();
+		}
+
+		ctrlValue.month(selectedDate.month());
+		ctrlValue.year(selectedDate.year());
 		this.expiryDateControl.setValue(ctrlValue);
 
 		// Patch Form Values
-		const monthStr = (normalizedMonth.month() + 1).toString() //.padStart(2, '0'); // The existing option values are "1", "2", etc.
-		const yearStr = normalizedMonth.year().toString();
+		const monthStr = (selectedDate.month() + 1).toString();
+		const yearStr = selectedDate.year().toString();
 
 		this.addBankForm.patchValue({
 			primaryMM: monthStr,

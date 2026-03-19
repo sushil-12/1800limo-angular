@@ -1117,10 +1117,11 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label class="required-field">Expiration date</mat-label>
-								<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl"
+								<input matInput [matDatepicker]="dp" [formControl]="expiryDateControl" [min]="minExpiryDate"
 									placeholder="MM/YYYY" (click)="dp.open()" readonly>
 								<mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-								<mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+								<mat-datepicker #dp startView="multi-year" [startAt]="minExpiryDate"
+									(yearSelected)="chosenYearHandler($event)"
 									(monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
 								</mat-datepicker>
 							</mat-form-field>
