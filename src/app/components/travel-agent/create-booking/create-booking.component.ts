@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, isDevMode } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { AdminService } from '../../../services/admin.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -690,8 +690,31 @@ export class CreateBookingComponent implements OnInit {
 			'departing_airport_city'
 		].forEach((controlName) => {
 			this.BookingForm?.get(controlName)?.clearValidators();
-			this.BookingForm?.get(controlName)?.updateValueAndValidity();
+			this.BookingForm?.get(controlName)?.updateValueAndValidity({ emitEvent: false });
 		});
+	}
+
+	private logInvalidControls(control: AbstractControl, path: string = 'BookingForm'): void {
+		if (control instanceof FormGroup) {
+			Object.keys(control.controls).forEach((key) => {
+				this.logInvalidControls(control.controls[key], `${path}.${key}`);
+			});
+			return;
+		}
+
+		if (control instanceof FormArray) {
+			control.controls.forEach((childControl, index) => {
+				this.logInvalidControls(childControl, `${path}[${index}]`);
+			});
+			return;
+		}
+
+		if (control.invalid) {
+			console.log('[INVALID CONTROL]', path, {
+				errors: control.errors,
+				value: control.value
+			});
+		}
 	}
 
 	private clearAddressState(formControl: string) {
@@ -2217,7 +2240,7 @@ export class CreateBookingComponent implements OnInit {
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}
-			if (value == 'one_way') {
+			if (value != 'round_trip') {
 				this.clearReturnOnlyValidators();
 			}
 			this.recalculateDisplayedRates();
@@ -3422,6 +3445,8 @@ export class CreateBookingComponent implements OnInit {
 		}
 
 		if (this.BookingForm.invalid) {
+			console.log('[BOOKING FORM INVALID] Preview/submit blocked after validation.');
+			this.logInvalidControls(this.BookingForm);
 			return;
 		}
 
