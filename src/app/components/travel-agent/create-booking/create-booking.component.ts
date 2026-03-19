@@ -1003,6 +1003,7 @@ export class CreateBookingComponent implements OnInit {
 		let agentShare = 0;
 		let base_rate = 0;
 		let tax_base = 0;
+		const extraGratuityAmount = rateArray?.misc?.Extra_Gratuity?.amount || 0;
 
 		// 1. Calculate base_rate for shares, and tax_base like admin rates-form.
 		const serviceType = this.BookingForm.value?.service_type;
@@ -1073,10 +1074,12 @@ export class CreateBookingComponent implements OnInit {
 		if ((accountType === 'travel_planner' && !this.isCreatedByAdmin) || 
 			['repeat', 'return', 'round'].includes(this.updateType)) {
 			let adminShare = (base_rate * 15) / 100;
+			adminShare += extraGratuityAmount * 0.25;
 			agentShare = base_rate * 0.10;
 			subtotal += adminShare + agentShare;
 		} else {
 			let adminShare = (base_rate * 25) / 100;
+			adminShare += extraGratuityAmount * 0.25;
 			subtotal += adminShare;
 		}
 

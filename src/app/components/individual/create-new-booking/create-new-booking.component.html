@@ -1594,7 +1594,8 @@
                     </p>
                 </div>
                 <div class="col-md-4 col-xl-5 text-3xl text-right">
-                    <span style="color:#dc3545;">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) }}
+                    <span style="color:#dc3545;">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) *
+                    Form.number_of_vehicles.value }}
                 </div>
             </div>
             <!-- <div class="row px-2 justify-content-between align-items-center flex-nowrap">
