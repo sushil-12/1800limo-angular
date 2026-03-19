@@ -45,7 +45,7 @@
 		</div>
 		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
 			class="row rates-row align-items-center justify-content-between mx-auto"
-			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
+			*ngFor="let sub_item of item?.value?.controls | keyvalue: (item.key === 'all_inclusive_rates' ? sortVehicleBaseRates : returnZero); index as sub_item_index">
 			<!-- Base Rate -->
 			<div class="col-6 col-sm-4 col-md-5 my-3" [formGroupName]="sub_item.key"
 				*ngIf="sub_item.key !== 'Minimum_Rate'">
@@ -290,7 +290,7 @@
 		</div>
 		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
 			class="row rates-row align-items-center justify-content-between mx-auto"
-			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
+			*ngFor="let sub_item of item?.value?.controls | keyvalue: (item.key === 'all_inclusive_rates' ? sortVehicleBaseRates : returnZero); index as sub_item_index">
 			<!-- Base Rate -->
 			<div class="col-6 col-sm-4 col-md-5 my-3" [formGroupName]="sub_item.key"
 				*ngIf="sub_item.key !== 'Minimum_Rate'">

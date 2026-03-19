@@ -277,6 +277,32 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	returnZero() {
 		return 0;
 	}
+
+	vehicleBaseRateOrder = [
+		'Base_Rate',
+		'Stops',
+		'Wait',
+		'ELH_Charges',
+		'Holiday_Charge',
+	];
+
+	sortVehicleBaseRates = (a: any, b: any) => {
+		const getPriority = (item: any) => {
+			const key = item?.key;
+			const rateLabel = item?.value?.controls?.rate_label?.value;
+			const normalizedLabel = typeof rateLabel === 'string' ? rateLabel.toLowerCase() : '';
+
+			if (key === 'Holiday_Charge' || normalizedLabel.includes('holiday charge')) {
+				return this.vehicleBaseRateOrder.indexOf('Holiday_Charge');
+			}
+
+			const index = this.vehicleBaseRateOrder.indexOf(key);
+			return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+		};
+
+		return getPriority(a) - getPriority(b);
+	}
+
 	handleNegtiveValue(formgroup, subform, formcontrol, value) {
 		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
 		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
