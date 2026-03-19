@@ -913,6 +913,7 @@ export class CreateBookingComponent implements OnInit {
 			})
 
 			this.handleNoOfHours(this.number_of_hours)
+			this.syncPrefilledTravelClientSelection();
 
 			// if (this.Form.updateType.value == 'edit') {
 			// 	this.booking_params.client_account_types.pop()
@@ -1071,8 +1072,8 @@ export class CreateBookingComponent implements OnInit {
 
 		// 3. Calculate shares
 		const accountType = this.BookingForm.value?.account_type;
-		if ((accountType === 'travel_planner' && !this.isCreatedByAdmin) || 
-			['repeat', 'return', 'round'].includes(this.updateType)) {
+		if ((accountType === 'travel_planner' && !this.isCreatedByAdmin) ||
+			['repeat', 'return', 'round', 'edit'].includes(this.updateType)) {
 			let adminShare = (base_rate * 15) / 100;
 			adminShare += extraGratuityAmount * 0.25;
 			agentShare = base_rate * 0.10;
@@ -3127,6 +3128,7 @@ export class CreateBookingComponent implements OnInit {
 						console.log("accounts->>>>>>>>>>", result)
 						this.travelStaffAccounts = result?.data
 						this.travelStaffAccounts_Original = result?.data ? [...result.data] : []
+						this.syncPrefilledTravelClientSelection();
 					})
 						.catch(err => {
 							this.$spinner.hide();//hide spinner
@@ -3152,10 +3154,25 @@ export class CreateBookingComponent implements OnInit {
 			console.log("accounts->>>>>>>>>>", result)
 			this.travelStaffAccounts = result?.data
 			this.travelStaffAccounts_Original = result?.data ? [...result.data] : []
+			this.syncPrefilledTravelClientSelection();
 		})
 			.catch(err => {
 				this.$spinner.hide();//hide spinner
 			});
+	}
+
+	private syncPrefilledTravelClientSelection() {
+		const currentTravelClientId = this.BookingForm?.get('travel_client_id')?.value;
+		if (!currentTravelClientId || !this.travelStaffAccounts?.length) {
+			return;
+		}
+
+		const matchedClient = this.travelStaffAccounts.find((client: any) => Number(client?.id) === Number(currentTravelClientId));
+		if (matchedClient) {
+			this.BookingForm.patchValue({
+				travel_client_id: matchedClient.id
+			}, { emitEvent: false });
+		}
 	}
 
 	resetDriverAndVehicle(affiliate_type: string) {
@@ -3235,7 +3252,7 @@ export class CreateBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round' || this.updateType == 'edit') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
@@ -3289,7 +3306,10 @@ export class CreateBookingComponent implements OnInit {
 				affiliateShare: returnGrandTotal - adminShare
 			}
 			// travelAgentShare : 
-			if (this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate') {
+			if (
+				(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate')
+				|| this.updateType == 'edit'
+			) {
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10
