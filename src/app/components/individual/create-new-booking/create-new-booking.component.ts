@@ -1000,8 +1000,8 @@ export class CreateNewBookingComponent implements OnInit {
 		subtotal += adminShare + agentShare
 
 		return {
-			subtotal: parseFloat((subtotal * numberOfVehicles).toFixed(2)),
-			agentShare: parseFloat((agentShare * numberOfVehicles).toFixed(2))
+			subtotal: parseFloat(subtotal.toFixed(2)),
+			agentShare: parseFloat(agentShare.toFixed(2))
 		}
 	}
 
