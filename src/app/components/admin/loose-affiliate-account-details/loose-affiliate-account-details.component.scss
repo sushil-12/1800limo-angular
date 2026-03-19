@@ -312,7 +312,9 @@
     padding: 0 4px !important;
     transition: all 0.2s ease !important;
 }
-
+:host ::ng-deep .ng-select .ng-select-container .ng-value-container {
+    border-top: 5px solid transparent;
+}
 :host ::ng-deep .language-select.ng-has-value .ng-placeholder,
 :host ::ng-deep .language-select.ng-select-opened .ng-placeholder,
 :host ::ng-deep .language-select.language-select-has-value .ng-placeholder {
@@ -320,7 +322,7 @@
     left: 12px !important;
     transform: translateY(-50%) scale(0.82) !important;
     background: #f4f6ff !important;
-    color: #3f51b5 !important;
+    color: #000 !important;
     opacity: 1 !important;
     visibility: visible !important;
     z-index: 3 !important;
