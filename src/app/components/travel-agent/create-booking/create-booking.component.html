@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h4 class="border-secondary">
-				{{updateType =='reaffiliate' ? 'edit' : updateType | titlecase}} a Bookingssss
+				{{updateType =='reaffiliate' ? 'edit' : updateType | titlecase}} a Booking
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -1978,7 +1978,7 @@
 						</div>
 					</div>
 					<!-- && Form.affiliate_type.value!='affiliate' -->
-					<div class="mx-2" *ngIf="r_grandtotal">
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip' && r_grandtotal">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
