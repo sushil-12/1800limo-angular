@@ -333,6 +333,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
+		// test thing
 		console.log("in loadf auto complete", input, fieldName)
 		void attachPlaceAutocompleteElement(
 			input,
