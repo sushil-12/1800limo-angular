@@ -674,3 +674,12 @@ div.mat-mdc-autocomplete-panel {
 .iti--separate-dial-code input[type="tel"] {
     padding-left: 90px !important;
 }
+
+// Google Maps Platform — Place Autocomplete widgets (shadow host; border-radius is supported on the element)
+// overflow must stay visible: the predictions list renders outside the input box; hidden clips all suggestions.
+gmp-place-autocomplete,
+gmp-basic-place-autocomplete {
+    border-radius: 14px;
+    overflow: visible;
+    box-sizing: border-box;
+}

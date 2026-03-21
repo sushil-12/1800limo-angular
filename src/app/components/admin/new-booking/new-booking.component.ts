@@ -1,4 +1,5 @@
 import { MapUtils } from '../../../utils/map-utils';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -537,35 +538,39 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
 		console.log("initautocomplete", nativeInput)
 
-		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
-		});
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return;
 
-		autocomplete.addListener('place_changed', () => {
-			const place = autocomplete.getPlace();
-			if (!place.geometry || !place.geometry.location) return;
+				const formattedAddress = place.formatted_address ?? '';
+				const placeName = place.name ?? '';
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+				const location = {
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				};
 
-			const formatted_address = place.formatted_address;
-			const location = {
-				latitude: place.geometry.location.lat(),
-				longitude: place.geometry.location.lng()
-			};
+				if (control === 'loose_customer') {
+					this.fillLooseCustomerAddress(place);
+					nativeInput.value = displayAddress;
+					return;
+				}
 
-			// 👇 Special case: if this is the loose customer input
-			if (control === 'loose_customer') {
-				this.fillLooseCustomerAddress(place);
-				return;
+				if (control === 'extra_stops' || control === 'return_extra_stops') {
+					this.fillExtraStop(!!is_return, index!, { formatted_address: formattedAddress, display_address: displayAddress }, location);
+					nativeInput.value = displayAddress;
+				} else {
+					this.fillAddress(control, { formatted_address: formattedAddress, display_address: displayAddress });
+					this.fillLocationPoints(control, location);
+					nativeInput.value = displayAddress;
+				}
 			}
-
-			if (control === 'extra_stops' || control === 'return_extra_stops') {
-				this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
-			} else {
-				this.fillAddress(control, { formatted_address });
-				this.fillLocationPoints(control, location);
-			}
-		});
+		);
 	}
 
 
@@ -1068,6 +1073,22 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 			}
+			const pickupLine = editing_data.pickup || editing_data.pickup_address;
+			if (pickupLine) {
+				this.SetFormValue('pickup', pickupLine);
+			}
+			const dropoffLine = editing_data.dropoff || editing_data.dropoff_address;
+			if (dropoffLine) {
+				this.SetFormValue('dropoff', dropoffLine);
+			}
+			const returnPickupLine = editing_data.return_pickup || editing_data.return_pickup_address;
+			if (returnPickupLine) {
+				this.SetFormValue('return_pickup', returnPickupLine);
+			}
+			const returnDropoffLine = editing_data.return_dropoff || editing_data.return_dropoff_address;
+			if (returnDropoffLine) {
+				this.SetFormValue('return_dropoff', returnDropoffLine);
+			}
 			// if (editing_data?.loose_customer) {
 			// 	console.log('n function fill loose customer data', editing_data?.loose_customer)
 			// 	try {
@@ -1181,8 +1202,26 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.numberOfHoursError = false;
 			}
 
+			setTimeout(() => this.syncPlaceAutocompleteFieldsFromForm(), 0);
+			setTimeout(() => this.syncPlaceAutocompleteFieldsFromForm(), 300);
+
 		})
 
+	}
+
+	/** gmp-place-autocomplete does not mirror the hidden bound input after patchValue — sync visible text. */
+	private syncPlaceAutocompleteFieldsFromForm() {
+		[
+			this.pickupInput,
+			this.dropoffInput,
+			this.return_pickupInput,
+			this.return_dropoffInput,
+			this.loosecustomerInput,
+		].forEach((ref) => {
+			if (ref?.nativeElement) {
+				syncPlaceAutocompleteDisplay(ref.nativeElement);
+			}
+		});
 	}
 	scroll(id) {
 		// let el = document.getElementById(id);
@@ -1588,7 +1627,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 			})
-		this.SetFormValue(form_control, address.formatted_address)
+		this.SetFormValue(form_control, address?.display_address ?? address?.formatted_address)
 	}
 
 	fillLocationPoints(form_control: string, location: any) {
@@ -2827,10 +2866,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any) {
 		console.log(is_return, index, address, location);
+		const displayAddress = address?.display_address ?? address?.formatted_address ?? '';
 		if (is_return) {
 			if (address) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
-					address: address.formatted_address
+					address: displayAddress
 				})
 				let return_pickup_location = this.Form.return_pickup?.value
 				if (this.Form.transfer_type.value.includes('_airport')) {
@@ -2851,7 +2891,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 			if (address) {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
-					address: address.formatted_address,
+					address: displayAddress,
 				});
 				let pickup_location = this.Form.pickup.value
 				if (this.Form.transfer_type.value.includes('airport_')) {
@@ -4806,7 +4846,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('Addresss-->>>', place);
 
 		const looseCustomerGroup = <FormGroup>this.BookingForm.get('loose_customer');
-		looseCustomerGroup.get('address').setValue(place.formatted_address);
+		const formattedAddress = place?.formatted_address ?? '';
+		const placeName = place?.name ?? '';
+		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+		looseCustomerGroup.get('address').setValue(displayAddress);
 
 		place.address_components.forEach(component => {
 			const types = component.types;

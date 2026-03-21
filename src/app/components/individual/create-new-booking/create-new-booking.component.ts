@@ -13,6 +13,7 @@ import { StateManagementService } from '../../../services/statemanagement.servic
 import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
 import { CommonService } from 'src/app/services/common.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 declare var $: any
 
 
@@ -21,7 +22,7 @@ declare var $: any
 	templateUrl: './create-new-booking.component.html',
 	styleUrls: ['./create-new-booking.component.scss']
 })
-export class CreateNewBookingComponent implements OnInit {
+export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	@ViewChild('pickupInput') pickupInput!: ElementRef<HTMLInputElement>
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef<HTMLInputElement>
 	@ViewChild('returnPickupInput') returnPickupInput!: ElementRef<HTMLInputElement>
@@ -299,35 +300,36 @@ export class CreateNewBookingComponent implements OnInit {
 		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
 		console.log("initautocomplete", nativeInput)
 
-		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
-		});
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return
 
-
-		autocomplete.addListener('place_changed', () => {
-			const place = autocomplete.getPlace()
-			if (!place.geometry || !place.geometry.location) return
-
-			const formatted_address = place.formatted_address
-			const location = {
-				latitude: place.geometry.location.lat(),
-				longitude: place.geometry.location.lng()
-			}
-
-			// Multi-stop case
-			if (control === 'extra_stops' || control === 'return_extra_stops') {
-				if (typeof index === 'number') {
-					this.fillExtraStop(is_return, index, { formatted_address }, location)
+				const formattedAddress = place.formatted_address ?? ''
+				const placeName = place.name ?? ''
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress
+				const location = {
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
 				}
-				return
-			}
 
-			// Standard pickup/dropoff
-			this.fillAddress(control, { formatted_address })
-			this.fillLocationPoints(control, location)
-		})
+				if (control === 'extra_stops' || control === 'return_extra_stops') {
+					if (typeof index === 'number') {
+						this.fillExtraStop(is_return, index, { formatted_address: formattedAddress, display_address: displayAddress }, location)
+						nativeInput.value = displayAddress
+					}
+					return
+				}
+
+				this.fillAddress(control, { formatted_address: formattedAddress, display_address: displayAddress })
+				this.fillLocationPoints(control, location)
+				nativeInput.value = displayAddress
+			}
+		)
 	}
 
 
@@ -1411,10 +1413,11 @@ export class CreateNewBookingComponent implements OnInit {
 
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any) {
 		console.log(is_return, index, address, location);
+		const displayAddress = address?.display_address ?? address?.formatted_address ?? '';
 		if (is_return) {
 			if (address) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
-					address: address.formatted_address
+					address: displayAddress
 				})
 				let return_pickup_location = this.Form.return_pickup?.value
 				if (this.Form.transfer_type.value.includes('_airport')) {
@@ -1435,7 +1438,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 			if (address) {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
-					address: address.formatted_address,
+					address: displayAddress,
 				});
 				let pickup_location = this.Form.pickup.value
 				if (this.Form.transfer_type.value.includes('airport_')) {
@@ -1528,7 +1531,7 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 	fillAddress(form_control: string, address: any) {
 		// console.log('Address: ', address)
-		this.SetFormValue(form_control, address.formatted_address)
+		this.SetFormValue(form_control, address?.display_address ?? address?.formatted_address ?? '')
 	}
 	// MapController(is_return: boolean = false) {
 	// 	// console.log('Map has been initialised.')

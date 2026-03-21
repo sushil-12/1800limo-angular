@@ -50,6 +50,15 @@ mat-form-field {
 	margin: 1rem 0 !important;
 }
 
+// Material outline fields default to overflow:hidden; that clips gmp-place-autocomplete prediction lists.
+:host ::ng-deep mat-form-field.gps-address-field {
+	.mat-mdc-text-field-wrapper,
+	.mat-mdc-form-field-flex,
+	.mat-mdc-form-field-infix {
+		overflow: visible !important;
+	}
+}
+
 .mat-mdc-form-field.m-0 {
 	margin: 1rem 0 0 0 !important;
 }

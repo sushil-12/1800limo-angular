@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from '../../../services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { environment } from 'src/environments/environment';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 
 @Component({
@@ -92,55 +93,45 @@ export class PartnerRegistrationComponent implements OnInit {
     //google map autocomplete
     this.geoCoder = new google.maps.Geocoder();
 
-    const autocomplete = new google.maps.places.Autocomplete(
+    void attachPlaceAutocompleteElement(
       this.search1.nativeElement,
       {
-        types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+        types: ['geocode', 'establishment'],
+        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+      },
+      (place) => {
+        this.ngZone.run(() => {
+          if (!place.geometry || !place.geometry.location) return;
+
+          this.registrationForm.patchValue({
+            address: place.formatted_address,
+            latitude: place.geometry.location.lat(),
+            longitude: place.geometry.location.lng()
+          });
+
+          place.address_components?.forEach((component) => {
+            const types = component.types;
+            if (types.includes('country')) {
+              this.registrationForm.patchValue({
+                country: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_1')) {
+              this.registrationForm.patchValue({
+                state: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_3')) {
+              this.registrationForm.patchValue({
+                city: component.long_name
+              });
+            } else if (types.includes('postal_code')) {
+              this.registrationForm.patchValue({
+                zipCode: component.long_name
+              });
+            }
+          });
+        });
       }
     );
-
-    autocomplete.addListener("place_changed", () => {
-      this.ngZone.run(() => {
-        //get the place result
-        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-        if (!place.geometry || !place.geometry.location) return;
-
-        this.registrationForm.patchValue({
-          address: place.formatted_address,
-          latitude: place.geometry.location.lat(),
-          longitude: place.geometry.location.lng()
-        });
-
-
-        // Extract address components
-        place.address_components?.forEach(component => {
-          const types = component.types;
-          if (types.includes('country')) {
-            this.registrationForm.patchValue({
-              country: component.long_name
-            });
-          } else if (types.includes('administrative_area_level_1')) {
-            this.registrationForm.patchValue({
-              state: component.long_name
-            });
-          } else if (types.includes('administrative_area_level_3')) {
-            this.registrationForm.patchValue({
-              city: component.long_name
-            });
-          } else if (types.includes('postal_code')) {
-            this.registrationForm.patchValue({
-              zipCode: component.long_name
-            });
-          }
-          // else if (types.includes('street_number')) {
-          // 	this.registrationForm.patchValue({
-          // 		address: component.long_name
-          // 	});
-          // }
-        });
-      });
-    });
   }
 
   buildregistrationForm() {

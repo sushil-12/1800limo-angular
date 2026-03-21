@@ -353,7 +353,10 @@
 
 									<div class="col-12 mr-0 p-0 ml-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'">
-											<div class="input-contain d-flex align-items-center">
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
+												<div class="airport-field-icon" aria-hidden="true">
+													<i class="fas fa-plane"></i>
+												</div>
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important;"
 														placeholder="Pickup Address - Airport" id="pickup_airport"
@@ -370,14 +373,11 @@
 														</mat-option>
 													</mat-autocomplete>
 												</div>
-												<div class="cross-svg">
-													<svg *ngIf="airportinput?.value" fill="#000000"
-														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-														class="crossStyle pickUpsvg" width="48px" height="48px"
-														name="svgType" (click)="reset('pickup_airport')">
-														<path
-															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-													</svg>
+												<div class="airport-clear-wrap" *ngIf="airportinput?.value">
+													<button type="button" class="airport-clear-btn"
+														(click)="reset('pickup_airport')" aria-label="Clear pickup airport">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+													</button>
 												</div>
 											</div>
 											<div *ngIf="submitted && QBForm?.pickup_airport?.errors;"
@@ -446,7 +446,10 @@
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value == 'airport'"
 											style="">
-											<div class="input-contain d-flex align-items-center">
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
+												<div class="airport-field-icon" aria-hidden="true">
+													<i class="fas fa-plane"></i>
+												</div>
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important;"
 														placeholder="Dropoff Address - Airport" id="dropoff_airport"
@@ -463,14 +466,11 @@
 														</mat-option>
 													</mat-autocomplete>
 												</div>
-												<div class="cross-svg">
-													<svg *ngIf="dropairportinput?.value" fill="#000000"
-														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-														class="crossStyle pickUpsvg" width="48px" height="48px"
-														name="svgType" (click)="reset('dropoff_airport')">
-														<path
-															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-													</svg>
+												<div class="airport-clear-wrap" *ngIf="dropairportinput?.value">
+													<button type="button" class="airport-clear-btn"
+														(click)="reset('dropoff_airport')" aria-label="Clear dropoff airport">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+													</button>
 												</div>
 											</div>
 											<div *ngIf="submitted && QBForm?.dropoff_airport?.errors;"
@@ -601,7 +601,10 @@
 									<div class=" col-12 mr-0 p-0 m-0">
 										<div class="errorMsg col-md-12"
 											*ngIf="QBForm?.dropoff_type?.value == 'airport'">
-											<div class="input-contain d-flex align-items-center">
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
+												<div class="airport-field-icon" aria-hidden="true">
+													<i class="fas fa-plane"></i>
+												</div>
 												<div class="input-box">
 													<input type="text" placeholder="Return Pickup Address - Airport"
 														style="font-size: 16px !important;" #retairportinput
@@ -619,14 +622,12 @@
 														</mat-option>
 													</mat-autocomplete>
 												</div>
-												<div class="cross-svg">
-													<svg *ngIf="retairportinput?.value" fill="#000000"
-														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-														class="crossStyle pickUpsvg" width="48px" height="48px"
-														name="svgType" (click)="reset('return_pickup_airport')">
-														<path
-															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-													</svg>
+												<div class="airport-clear-wrap" *ngIf="retairportinput?.value">
+													<button type="button" class="airport-clear-btn"
+														(click)="reset('return_pickup_airport')"
+														aria-label="Clear return pickup airport">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+													</button>
 												</div>
 											</div>
 											<div *ngIf="submitted && QBForm?.return_pickup_airport?.errors;"
@@ -698,7 +699,10 @@
 												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'">
-											<div class="input-contain d-flex align-items-center">
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
+												<div class="airport-field-icon" aria-hidden="true">
+													<i class="fas fa-plane"></i>
+												</div>
 												<div class="input-box">
 													<input type="text" placeholder="Return Dropoff Address - Airport"
 														style="font-size: 16px !important;" #retdropairportinput
@@ -716,14 +720,12 @@
 														</mat-option>
 													</mat-autocomplete>
 												</div>
-												<div class="cross-svg">
-													<svg *ngIf="retdropairportinput?.value" fill="#000000"
-														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-														class="crossStyle pickUpsvg" width="48px" height="48px"
-														name="svgType" (click)="reset('return_dropoff_airport')">
-														<path
-															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-													</svg>
+												<div class="airport-clear-wrap" *ngIf="retdropairportinput?.value">
+													<button type="button" class="airport-clear-btn"
+														(click)="reset('return_dropoff_airport')"
+														aria-label="Clear return dropoff airport">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+													</button>
 												</div>
 											</div>
 										</div>

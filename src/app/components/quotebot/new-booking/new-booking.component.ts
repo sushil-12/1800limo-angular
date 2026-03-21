@@ -12,6 +12,7 @@ import { QuotebotService } from '../../../services/quotebot.service';
 import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 declare var $: any
 
@@ -344,35 +345,44 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
 		console.log("initautocomplete", nativeInput)
 
-		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
-		});
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return;
 
-		autocomplete.addListener('place_changed', () => {
-			const place = autocomplete.getPlace();
-			if (!place.geometry || !place.geometry.location) return;
+				const formattedAddress = place.formatted_address ?? '';
+				const placeName = place.name ?? '';
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+				const placeId = place.place_id ?? '';
+				const location = {
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				};
 
-			const formatted_address = place.formatted_address;
-			const location = {
-				latitude: place.geometry.location.lat(),
-				longitude: place.geometry.location.lng()
-			};
+				if (control === 'loose_customer') {
+					this.fillLooseCustomerAddress(place);
+					nativeInput.value = displayAddress;
+					return;
+				}
 
-			// 👇 Special case: if this is the loose customer input
-			if (control === 'loose_customer') {
-				this.fillLooseCustomerAddress(place);
-				return;
+				if (control === 'extra_stops' || control === 'return_extra_stops') {
+					this.fillExtraStop(!!is_return, index!, {
+						formatted_address: formattedAddress,
+						display_address: displayAddress,
+						place_id: placeId
+					}, location);
+				} else {
+					this.fillAddress(control, { formatted_address: formattedAddress, display_address: displayAddress });
+					this.fillLocationPoints(control, location);
+					this.SetFormValue(control + '_place_id', placeId);
+					nativeInput.value = displayAddress;
+				}
 			}
-
-			if (control === 'extra_stops' || control === 'return_extra_stops') {
-				this.fillExtraStop(!!is_return, index!, { formatted_address }, location);
-			} else {
-				this.fillAddress(control, { formatted_address });
-				this.fillLocationPoints(control, location);
-			}
-		});
+		);
 	}
 
 
@@ -457,6 +467,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				phone_country: ['us'],
 				email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 				address: [''],
+				place_id: [''],
 				country: [''],
 				state: [''],
 				city: [''],
@@ -515,6 +526,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			pickup_time: ['12:00 am'],
 			extra_stops: this.$form.array([]),
 			pickup: [''],
+			pickup_place_id: [''],
 			pickup_latitude: [''],
 			pickup_longitude: [''],
 			pickup_airport_option: [''],
@@ -531,6 +543,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			cruise_name: [''],
 			cruise_time: ['12:00 am'],
 			dropoff: [''],
+			dropoff_place_id: [''],
 			dropoff_latitude: [''],
 			dropoff_longitude: [''],
 			dropoff_airport_option: [''],
@@ -548,6 +561,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			return_pickup_time: ['12:00 pm'],
 			return_extra_stops: this.$form.array([]),
 			return_pickup: [''],
+			return_pickup_place_id: [''],
 			return_pickup_latitude: [''],
 			return_pickup_longitude: [''],
 			return_pickup_airport_option: [''],
@@ -563,6 +577,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			return_cruise_name: [''],
 			return_cruise_time: ['12:00 pm'],
 			return_dropoff: [''],
+			return_dropoff_place_id: [''],
 			return_dropoff_latitude: [''],
 			return_dropoff_longitude: [''],
 			return_dropoff_airport_option: [''],
@@ -1037,7 +1052,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 	fillAddress(form_control: string, address: any) {
 		// console.log('Address: ', address)
-		this.SetFormValue(form_control, address.formatted_address)
+		const value = address?.display_address ?? address?.formatted_address ?? '';
+		this.SetFormValue(form_control, value)
 	}
 
 	fillLocationPoints(form_control: string, location: any) {
@@ -1626,6 +1642,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			let index = Object.keys(this.ReturnExtraStops).length + 1;
 			(<FormArray>this.BookingForm.get('return_extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
+				place_id: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
@@ -1636,6 +1653,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			let index = Object.keys(this.ExtraStops).length + 1;
 			(<FormArray>this.BookingForm.get('extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
+				place_id: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
@@ -1660,10 +1678,12 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any) {
 		console.log(is_return, index, address, location);
+		const displayAddress = address?.display_address ?? address?.formatted_address ?? '';
 		if (is_return) {
 			if (address) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
-					address: address.formatted_address
+					address: displayAddress,
+					place_id: address?.place_id ?? ''
 				})
 				let return_pickup_location = this.Form.return_pickup?.value
 				if (this.Form.transfer_type.value.includes('_airport')) {
@@ -1684,7 +1704,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 			if (address) {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
-					address: address.formatted_address,
+					address: displayAddress,
+					place_id: address?.place_id ?? '',
 				});
 				let pickup_location = this.Form.pickup.value
 				if (this.Form.transfer_type.value.includes('airport_')) {
@@ -2943,6 +2964,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				this.SetFormValue('return_dropoff', value)
 				this.SetFormValue('return_dropoff_latitude', this.Form.pickup_latitude.value)
 				this.SetFormValue('return_dropoff_longitude', this.Form.pickup_longitude.value)
+				this.SetFormValue('return_dropoff_place_id', this.Form.pickup_place_id.value)
 				this.MapController()
 			}, 1000)
 			if (this.Form.service_type.value == 'round_trip') {
@@ -2958,6 +2980,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				this.SetFormValue('return_pickup', value)
 				this.SetFormValue('return_pickup_latitude', this.Form.dropoff_latitude.value)
 				this.SetFormValue('return_pickup_longitude', this.Form.dropoff_longitude.value)
+				this.SetFormValue('return_pickup_place_id', this.Form.dropoff_place_id.value)
 				this.MapController()
 			}, 1000)
 			if (this.Form.service_type.value == 'round_trip') {
@@ -3042,9 +3065,14 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		console.log('Addresss-->>>', place);
 
 		const looseCustomerGroup = <FormGroup>this.BookingForm.get('loose_customer');
-		looseCustomerGroup.get('address').setValue(place.formatted_address);
+		const formattedAddress = place?.formatted_address ?? '';
+		const placeName = place?.name ?? '';
+		const displayAddress = (placeName && formattedAddress) ? `${placeName} - ${formattedAddress}` : (placeName || formattedAddress);
 
-		place.address_components.forEach(component => {
+		looseCustomerGroup.get('address').setValue(displayAddress);
+		looseCustomerGroup.get('place_id')?.setValue(place?.place_id ?? '');
+
+		place?.address_components?.forEach(component => {
 			const types = component.types;
 			if (types.includes('postal_code')) {
 				looseCustomerGroup.get('zipCode').setValue(component.long_name);

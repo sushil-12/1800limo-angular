@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
   selector: 'app-edit-card',
@@ -113,44 +114,39 @@ export class EditCardComponent implements OnInit, AfterViewInit {
     //google map autocomplete
     this.geoCoder = new google.maps.Geocoder();
 
-    const autocomplete = new google.maps.places.Autocomplete(
+    void attachPlaceAutocompleteElement(
       this.search1.nativeElement,
       {
-        types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+        types: ['geocode', 'establishment'],
+        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+      },
+      (place) => {
+        this.ngZone.run(() => {
+          if (!place.geometry || !place.geometry.location) return;
+
+          place.address_components?.forEach((component) => {
+            const types = component.types;
+            if (types.includes('country')) {
+              this.editCardForm.patchValue({
+                secondaryCountry: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_1')) {
+              this.editCardForm.patchValue({
+                secondaryState: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_3')) {
+              this.editCardForm.patchValue({
+                secondaryCity: component.long_name
+              });
+            } else if (types.includes('postal_code')) {
+              this.editCardForm.patchValue({
+                secondaryZip: component.long_name
+              });
+            }
+          });
+        });
       }
     );
-
-    autocomplete.addListener("place_changed", () => {
-      this.ngZone.run(() => {
-        //get the place result
-        const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-        if (!place.geometry || !place.geometry.location) return;
-
-
-        // Extract address components
-        place.address_components?.forEach(component => {
-          const types = component.types;
-          if (types.includes('country')) {
-            this.editCardForm.patchValue({
-              secondaryCountry: component.long_name
-            });
-          } else if (types.includes('administrative_area_level_1')) {
-            this.editCardForm.patchValue({
-              secondaryState: component.long_name
-            });
-          } else if (types.includes('administrative_area_level_3')) {
-            this.editCardForm.patchValue({
-              secondaryCity: component.long_name
-            });
-          } else if (types.includes('postal_code')) {
-            this.editCardForm.patchValue({
-              secondaryZip: component.long_name
-            });
-          }
-        });
-      });
-    });
   }
 
   onCountryChange(event, type) {
