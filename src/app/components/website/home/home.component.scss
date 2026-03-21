@@ -1179,9 +1179,8 @@ a.user-profile:active::after {
 .errorMsg {
 	margin-bottom: 10px !important;
 	border: 2px solid;
+	padding: 0px !important;
 	border-radius: 14px;
-	box-shadow: 5px 3px 20px -6px #f5f4fe;
-	background-color: #f5f4fe;
 	width: 100%;
 }
 
@@ -1196,6 +1195,64 @@ a.user-profile:active::after {
 
 .input-box {
 	width: 100%;
+}
+
+// Airport autocomplete rows: plane icon (left) + field + circular clear (right)
+.input-contain--airport {
+	.input-box {
+		flex: 1;
+		min-width: 0;
+		width: auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+}
+
+.airport-field-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	min-width: 40px;
+	background-color: #fff;
+	border-radius: 14px 0 0 14px;
+	margin-right: -4px;
+	align-self: stretch;
+	min-height: 30px;
+	color: #4a4a4a;
+	font-size: 14px;
+}
+
+.airport-clear-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	padding: 0 10px 0 6px;
+	background-color: #fff;
+	border-radius: 0 14px 14px 0;
+	margin-left: -4px;
+	align-self: stretch;
+	min-height: 30px;
+}
+
+.airport-clear-btn {
+	background: #fff;
+	border: none;
+
+	&:hover,
+	&:focus-visible {
+		background: #fff;
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&:focus-visible {
+		box-shadow: 0 0 0 2px rgba(243, 147, 61, 0.45);
+	}
 }
 
 .input-f {
@@ -1384,11 +1441,6 @@ a.user-profile:active::after {
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append {
 	border: none;
-}
-
-.bannerform_wrapper .quoteform_homewrapper input {
-	// border-radius: 5px;
-	background-color: #f5f4fe !important;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append .input-group-text {
@@ -1957,6 +2009,10 @@ div#google_translate_element_home_mobile {
 	.discover_diff {
 		margin: 0px !important;
 	}
+}
+
+.cross-svg {
+	display: none;
 }
 
 /* --- Mobile Landscape Mode Optimizations --- */

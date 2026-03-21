@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-add-sub-admin',
@@ -178,44 +179,42 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
 		console.log("initautocomplete", nativeInput)
 
-		const autocomplete = new google.maps.places.Autocomplete(nativeInput, {
-			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
-			// componentRestrictions: { country: 'us' } // Optional: Uncomment if needed
-		});
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return;
 
-		autocomplete.addListener('place_changed', () => {
-			const place = autocomplete.getPlace();
-			if (!place.geometry || !place.geometry.location) return;
+				const lat = place.geometry.location.lat();
+				const lng = place.geometry.location.lng();
 
-			const formatted_address = place.formatted_address;
-			const lat = place.geometry.location.lat();
-			const lng = place.geometry.location.lng();
+				this.addSubAdminAccountForm.patchValue({
+					address: place.formatted_address,
+					latitude: lat,
+					longitude: lng
+				});
 
-			this.addSubAdminAccountForm.patchValue({
-				address: place.formatted_address,
-				latitude: lat,
-				longitude: lng
-			});
+				place.address_components?.forEach((component) => {
+					const types = component.types;
 
-			place.address_components?.forEach(component => {
-				const types = component.types;
-
-				if (types.includes('locality')) {
-					this.addSubAdminAccountForm.patchValue({ city: component.long_name });
-				}
-				if (types.includes('administrative_area_level_1')) {
-					this.addSubAdminAccountForm.patchValue({ state: component.long_name });
-				}
-				if (types.includes('country')) {
-					this.addSubAdminAccountForm.patchValue({ country: component.long_name });
-				}
-				if (types.includes('postal_code')) {
-					this.addSubAdminAccountForm.patchValue({ zipCode: component.long_name });
-				}
-			});
-
-		});
+					if (types.includes('locality')) {
+						this.addSubAdminAccountForm.patchValue({ city: component.long_name });
+					}
+					if (types.includes('administrative_area_level_1')) {
+						this.addSubAdminAccountForm.patchValue({ state: component.long_name });
+					}
+					if (types.includes('country')) {
+						this.addSubAdminAccountForm.patchValue({ country: component.long_name });
+					}
+					if (types.includes('postal_code')) {
+						this.addSubAdminAccountForm.patchValue({ zipCode: component.long_name });
+					}
+				});
+			}
+		);
 	}
 
 	onCountryChange(event) {

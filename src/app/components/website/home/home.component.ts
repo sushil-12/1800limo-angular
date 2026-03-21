@@ -11,6 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../../components/shared/shared.module';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
@@ -333,29 +334,35 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
 		console.log("in loadf auto complete", input, fieldName)
-		const autocomplete = new google.maps.places.Autocomplete(input, {
-			types: ['geocode', 'establishment'], // Use geocode for addresses and landmarks // Optional: Restrict to US addresses
-			fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
-		});
+		void attachPlaceAutocompleteElement(
+			input,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+			},
+			(place) => {
+				const geometryLocation = place.geometry?.location;
+				if (!geometryLocation) return;
 
+				const formattedAddress = place.formatted_address ?? '';
+				const placeName = place.name ?? '';
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
-		autocomplete.addListener('place_changed', () => {
-			const place = autocomplete.getPlace();
-			if (!place.geometry) return;
+				const location = {
+					formatted_address: formattedAddress,
+					display_address: displayAddress,
+					latitude: geometryLocation.lat(),
+					longitude: geometryLocation.lng()
+				};
 
-			const location = {
-				formatted_address: place.formatted_address,
-				latitude: place.geometry.location.lat(),
-				longitude: place.geometry.location.lng()
-			};
-
-			this.onAutocompleteSelected(location, fieldName);
-			this.onLocationSelected(location, fieldName);
-		});
+				this.onAutocompleteSelected(location, fieldName);
+				this.onLocationSelected(location, fieldName);
+			}
+		);
 	}
 
 	onAutocompleteSelected(location: any, fieldName: string) {
-		this.SetFormValue(fieldName, location.formatted_address);
+		this.SetFormValue(fieldName, location.display_address ?? location.formatted_address);
 		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
 			this.fillReturnDetails();
 		}
