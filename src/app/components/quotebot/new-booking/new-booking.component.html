@@ -302,8 +302,13 @@
 									<mat-label>
 										Address
 									</mat-label>
-									<input #loosecustomerInput type="text" matInput placeholder="Type your address"
-										(focus)="$event.target.select()" />
+								<input #loosecustomerInput type="text" matInput placeholder="Type your address"
+									(focus)="$event.target.select()" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(loosecustomerInput, 'loose_customer')"
+									(click)="clearAddressField('loose_customer')" aria-label="Clear address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 									<!-- <input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
 										(onAutocompleteSelected)="fillLooseCustomerAddress($event)"
@@ -896,6 +901,11 @@
 									[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
 									(keyup)="SetFormValue('pickup', $event.target.value)"
 									(input)="SetFormValue('pickup', $event.target.value)" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(pickupInput, 'pickup')"
+									(click)="clearAddressField('pickup')" aria-label="Clear pickup address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 								<!-- <input type="text" matInput placeholder="Type your address"
 									matGoogleMapsAutocomplete
 									(onAutocompleteSelected)="fillAddress('pickup', $event)"
@@ -962,6 +972,11 @@
 								</mat-label>
 								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #fboAddressInput
 									formControlName="fbo_address" (focus)="$event.target.select()" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(fboAddressInput, 'fbo_address')"
+									(click)="clearAddressField('fbo_address')" aria-label="Clear FBO address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 							</mat-form-field>
 						</div>
 
@@ -1124,6 +1139,11 @@
 									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
 									(keyup)="SetFormValue('dropoff', $event.target.value)"
 									(input)="SetFormValue('dropoff', $event.target.value)" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(dropoffInput, 'dropoff')"
+									(click)="clearAddressField('dropoff')" aria-label="Clear dropoff address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
 									(onAutocompleteSelected)="fillAddress('dropoff', $event)"
@@ -1303,6 +1323,11 @@
 							<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<input #extraStopInput type="text" matInput placeholder="Type your address"
 								[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="shouldShowAddressClear(extraStopInput, 'extra_stops', stop_index)"
+								(click)="clearAddressField('extra_stops', stop_index)" aria-label="Clear extra stop address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 						</mat-form-field>
 					</div>
 					<div class="col-1 p-0 p-md-3">
@@ -1745,6 +1770,11 @@
 									[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
 									(keyup)="SetFormValue('return_pickup', $event.target.value)"
 									(input)="SetFormValue('return_pickup', $event.target.value)" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(return_pickupInput, 'return_pickup')"
+									(click)="clearAddressField('return_pickup')" aria-label="Clear return pickup address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 								<!-- <input type="text" matInput placeholder="Type your address"
 									matGoogleMapsAutocomplete
 									(onAutocompleteSelected)="fillAddress('return_pickup', $event)"
@@ -1811,6 +1841,11 @@
 								</mat-label>
 								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #returnFboAddressInput
 									formControlName="return_fbo_address" (focus)="$event.target.select()" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(returnFboAddressInput, 'return_fbo_address')"
+									(click)="clearAddressField('return_fbo_address')" aria-label="Clear return FBO address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 							</mat-form-field>
 						</div>
 
@@ -1982,6 +2017,11 @@
 									(focus)="$event.target.select()"
 									(keyup)="SetFormValue('return_dropoff', $event.target.value)"
 									(input)="SetFormValue('return_dropoff', $event.target.value)" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="shouldShowAddressClear(return_dropoffInput, 'return_dropoff')"
+									(click)="clearAddressField('return_dropoff')" aria-label="Clear return dropoff address">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
 								<!-- <input type="text" matInput placeholder="Type your address"
 									matGoogleMapsAutocomplete
 									(onAutocompleteSelected)="fillAddress('return_dropoff', $event)"
@@ -2188,6 +2228,11 @@
 							<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
 								[value]="fetchStopValue('return_extra_stops', stop_index)"
 								(focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="shouldShowAddressClear(returnExtraStopInput, 'return_extra_stops', stop_index)"
+								(click)="clearAddressField('return_extra_stops', stop_index)" aria-label="Clear return extra stop address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 						</mat-form-field>
 					</div>
 					<div class="col-md-1">
