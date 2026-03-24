@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-edit-travel-planner-account',
@@ -15,6 +16,8 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 })
 export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 
+	@ViewChild('search1') search1!: ElementRef;
+	geoCoder!: google.maps.Geocoder;
 	@ViewChild('officeInput') officeInput!: ElementRef;
 	@ViewChild('mobileInput') mobileInput!: ElementRef;
 	@ViewChild('faxInput') faxInput!: ElementRef;
@@ -147,33 +150,56 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 
 
 	ngAfterViewInit(): void {
+
 		this.initallphonefields()
+
+
+		//google map autocomplete
+		this.geoCoder = new google.maps.Geocoder();
+
+		void attachPlaceAutocompleteElement(
+			this.search1.nativeElement,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.editTravelPlannerAccountForm.get('address')!,
+			},
+			(place) => {
+				this.ngZone.run(() => {
+					if (!place.geometry || !place.geometry.location) return;
+
+					this.editTravelPlannerAccountForm.patchValue({
+						address: place.formatted_address,
+						latitude: place.geometry.location.lat(),
+						longitude: place.geometry.location.lng()
+					});
+
+					place.address_components?.forEach((component) => {
+						const types = component.types;
+						if (types.includes('country')) {
+							this.editTravelPlannerAccountForm.patchValue({
+								country: component.long_name
+							});
+						} else if (types.includes('administrative_area_level_1')) {
+							this.editTravelPlannerAccountForm.patchValue({
+								state: component.long_name
+							});
+						} else if (types.includes('administrative_area_level_3')) {
+							this.editTravelPlannerAccountForm.patchValue({
+								city: component.long_name
+							});
+						} else if (types.includes('postal_code')) {
+							this.editTravelPlannerAccountForm.patchValue({
+								zipCode: component.long_name
+							});
+						}
+					});
+				});
+			}
+		);
+
 	}
 
-	onGmpEditTravelPlannerAddressSelected(place: google.maps.places.PlaceResult): void {
-		this.ngZone.run(() => {
-			if (!place.geometry?.location) {
-				return;
-			}
-			this.editTravelPlannerAccountForm.patchValue({
-				address: place.formatted_address,
-				latitude: place.geometry.location.lat(),
-				longitude: place.geometry.location.lng()
-			});
-			place.address_components?.forEach((component) => {
-				const types = component.types;
-				if (types.includes('country')) {
-					this.editTravelPlannerAccountForm.patchValue({ country: component.long_name });
-				} else if (types.includes('administrative_area_level_1')) {
-					this.editTravelPlannerAccountForm.patchValue({ state: component.long_name });
-				} else if (types.includes('administrative_area_level_3')) {
-					this.editTravelPlannerAccountForm.patchValue({ city: component.long_name });
-				} else if (types.includes('postal_code')) {
-					this.editTravelPlannerAccountForm.patchValue({ zipCode: component.long_name });
-				}
-			});
-		});
-	}
 
 	initallphonefields() {
 

@@ -523,8 +523,9 @@
                         <mat-form-field appearance="outline" class="gps-address-field"
                             [ngClass]="{ 'error-field': (submitBookingForm && Form.pickup.invalid) }">
                             <mat-label> Pickup Address </mat-label>
-                            <app-place-autocomplete-field formControlName="pickup" placeholder="Type your address"
-                                (placeSelected)="onGmpBookingPlaceSelected($event, 'pickup')" />
+                            <input #pickupInput type="text" matInput placeholder="Type your address"
+                                (focus)="$event.target.select()"
+                                formControlName="pickup" />
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.errors?.required)">
                                 Pickup address is required
@@ -568,8 +569,8 @@
                             <mat-label>
                                 Enter FBO address
                             </mat-label>
-                            <app-place-autocomplete-field formControlName="fbo_address" placeholder="Enter FBO address"
-                                ariaLabel="FBO address" (placeSelected)="onGmpBookingPlaceSelected($event, 'fbo_address')" />
+                            <input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #fboAddressInput
+                                formControlName="fbo_address" (focus)="$event.target.select()" />
                         </mat-form-field>
                     </div>
 
@@ -722,8 +723,9 @@
                         <mat-form-field appearance="outline" class="gps-address-field"
                             [ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff.invalid) }">
                             <mat-label> Dropoff Address </mat-label>
-                            <app-place-autocomplete-field formControlName="dropoff" placeholder="Type your address"
-                                (placeSelected)="onGmpBookingPlaceSelected($event, 'dropoff')" />
+                            <input #dropoffInput type="text" matInput placeholder="Type your address"
+                                (focus)="$event.target.select()"
+                                formControlName="dropoff" />
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.errors?.required)">
                                 Dropoff address is required
@@ -873,12 +875,12 @@
             </div>
             <!-- Extra Stop Address Field -->
             <div class="row mt-2 mb-4 align-items-center m-0"
-                *ngFor="let extra_stop of ExtraStops.controls; index as stop_index" [formGroup]="$any(extra_stop)">
+                *ngFor="let extra_stop of ExtraStops.controls; index as stop_index">
                 <div class="extra-stop-field col-11">
                     <mat-form-field appearance="outline" class="gps-address-field">
                         <mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
-                        <app-place-autocomplete-field formControlName="address" placeholder="Type your address"
-                            (placeSelected)="onGmpBookingPlaceSelected($event, 'extra_stops', stop_index, false)" />
+                        <input #extraStopInput type="text" matInput placeholder="Type your address"
+                            (focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)" />
                         <!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
                             (onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
                             (focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)"
@@ -1091,8 +1093,9 @@
                         <mat-form-field appearance="outline" class="gps-address-field"
                             [ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup.invalid) }">
                             <mat-label> Pickup Address </mat-label>
-                            <app-place-autocomplete-field formControlName="return_pickup" placeholder="Type your address"
-                                (placeSelected)="onGmpBookingPlaceSelected($event, 'return_pickup')" />
+                            <input #returnPickupInput type="text" matInput placeholder="Type your address"
+                                (focus)="$event.target.select()"
+                                formControlName="return_pickup" />
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.errors?.required)">
                                 Return pickup address is required
@@ -1133,8 +1136,8 @@
                             <mat-label>
                                 Enter FBO address
                             </mat-label>
-                            <app-place-autocomplete-field formControlName="return_fbo_address" placeholder="Enter FBO address"
-                                ariaLabel="Return FBO address" (placeSelected)="onGmpBookingPlaceSelected($event, 'return_fbo_address')" />
+                            <input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #returnFboAddressInput
+                                formControlName="return_fbo_address" (focus)="$event.target.select()" />
                         </mat-form-field>
                     </div>
 
@@ -1292,8 +1295,9 @@
                         <mat-form-field appearance="outline" class="gps-address-field"
                             [ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff.invalid) }">
                             <mat-label> Dropoff Address </mat-label>
-                            <app-place-autocomplete-field formControlName="return_dropoff" placeholder="Type your address"
-                                (placeSelected)="onGmpBookingPlaceSelected($event, 'return_dropoff')" />
+                            <input #returnDropoffInput type="text" matInput placeholder="Type your address"
+                                (focus)="$event.target.select()"
+                                formControlName="return_dropoff" />
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.errors?.required)">
                                 Return dropoff address is required
@@ -1458,14 +1462,15 @@
             </div>
             <!-- Extra Stop Address Field -->
             <div class="row my-2 align-items-center"
-                *ngFor="let extra_stop of ReturnExtraStops.controls; index as stop_index" [formGroup]="$any(extra_stop)">
+                *ngFor="let extra_stop of ReturnExtraStops.controls; index as stop_index">
                 <div class="extra-stop-field col-md-11">
                     <mat-form-field appearance="outline" class="gps-address-field">
                         <mat-label>
                             Return Extra Stop Address {{ stop_index + 1 }}
                         </mat-label>
-                        <app-place-autocomplete-field formControlName="address" placeholder="Type your address"
-                            (placeSelected)="onGmpBookingPlaceSelected($event, 'return_extra_stops', stop_index, true)" />
+                        <input #returnExtraStopInput type="text" matInput placeholder="Type your address"
+                            (focus)="$event.target.select()"
+                            [value]="fetchStopValue('return_extra_stops', stop_index)" />
                         <!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
                             (onAutocompleteSelected)="fillExtraStop(true, stop_index, $event, null)"
                             (focus)="$event.target.select()" [value]="fetchStopValue('return_extra_stops', stop_index)"

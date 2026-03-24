@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { TravelAgentService } from '../../../services/travel-agent.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { AuthService } from '../../../services/auth.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 import * as intlTelInput from 'intl-tel-input';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -44,7 +45,8 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class ProfileComponent implements OnInit, AfterViewInit {
+export class ProfileComponent implements OnInit {
+  @ViewChild('search1') search1!: ElementRef;
   geoCoder!: google.maps.Geocoder;
   @ViewChild('cellInput') cellInput!: ElementRef;
   @ViewChild('mobileInput') mobileInput!: ElementRef;
@@ -181,35 +183,53 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
 
 
+        if (this.search1 && this.search1.nativeElement) {
+
+          void attachPlaceAutocompleteElement(
+            this.search1.nativeElement,
+            {
+              types: ['geocode', 'establishment'],
+              fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+              syncControl: this.profileForm.get('address')!,
+            },
+            (place) => {
+              this.ngZone.run(() => {
+                if (!place.geometry || !place.geometry.location) return;
+
+                this.profileForm.patchValue({
+                  address: place.formatted_address,
+                  latitude: place.geometry.location.lat(),
+                  longitude: place.geometry.location.lng()
+                });
+
+                place.address_components?.forEach((component) => {
+                  const types = component.types;
+                  if (types.includes('country')) {
+                    this.profileForm.patchValue({
+                      country: component.long_name
+                    });
+                  } else if (types.includes('administrative_area_level_1')) {
+                    this.profileForm.patchValue({
+                      state: component.long_name
+                    });
+                  } else if (types.includes('administrative_area_level_3')) {
+                    this.profileForm.patchValue({
+                      city: component.long_name
+                    });
+                  } else if (types.includes('postal_code')) {
+                    this.profileForm.patchValue({
+                      zipCode: component.long_name
+                    });
+                  }
+                });
+              });
+            }
+          );
+        }
       }, 500);
     });
 
 
-  }
-
-  onGmpTravelAgentProfileAddressSelected(place: google.maps.places.PlaceResult): void {
-    this.ngZone.run(() => {
-      if (!place.geometry?.location) {
-        return;
-      }
-      this.profileForm.patchValue({
-        address: place.formatted_address,
-        latitude: place.geometry.location.lat(),
-        longitude: place.geometry.location.lng()
-      });
-      place.address_components?.forEach((component) => {
-        const types = component.types;
-        if (types.includes('country')) {
-          this.profileForm.patchValue({ country: component.long_name });
-        } else if (types.includes('administrative_area_level_1')) {
-          this.profileForm.patchValue({ state: component.long_name });
-        } else if (types.includes('administrative_area_level_3')) {
-          this.profileForm.patchValue({ city: component.long_name });
-        } else if (types.includes('postal_code')) {
-          this.profileForm.patchValue({ zipCode: component.long_name });
-        }
-      });
-    });
   }
 
   initallphonefields() {

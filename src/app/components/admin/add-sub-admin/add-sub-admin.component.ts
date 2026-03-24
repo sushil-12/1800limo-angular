@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-add-sub-admin',
@@ -14,6 +15,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 	styleUrls: ['./add-sub-admin.component.scss']
 })
 export class AddSubAdminComponent implements OnInit, AfterViewInit {
+	@ViewChild('search1') search1!: ElementRef;
 	@ViewChild('phoneInput') phoneInput!: ElementRef;
 
 	public addSubAdminAccountForm: FormGroup;
@@ -108,6 +110,10 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 
+		if (this.search1) {
+			this.initAutocomplete(this.search1.nativeElement, 'pickup');
+		}
+
 		this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -169,34 +175,47 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	onGmpAddSubAdminAddressSelected(place: google.maps.places.PlaceResult): void {
-		this.ngZone.run(() => {
-			if (!place.geometry?.location) {
-				return;
+	initAutocomplete(input: ElementRef | HTMLInputElement, control: string, index?: number, is_return: boolean = false) {
+		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
+		console.log("initautocomplete", nativeInput)
+
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addSubAdminAccountForm.get('address')!,
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return;
+
+				const lat = place.geometry.location.lat();
+				const lng = place.geometry.location.lng();
+
+				this.addSubAdminAccountForm.patchValue({
+					address: place.formatted_address,
+					latitude: lat,
+					longitude: lng
+				});
+
+				place.address_components?.forEach((component) => {
+					const types = component.types;
+
+					if (types.includes('locality')) {
+						this.addSubAdminAccountForm.patchValue({ city: component.long_name });
+					}
+					if (types.includes('administrative_area_level_1')) {
+						this.addSubAdminAccountForm.patchValue({ state: component.long_name });
+					}
+					if (types.includes('country')) {
+						this.addSubAdminAccountForm.patchValue({ country: component.long_name });
+					}
+					if (types.includes('postal_code')) {
+						this.addSubAdminAccountForm.patchValue({ zipCode: component.long_name });
+					}
+				});
 			}
-			const lat = place.geometry.location.lat();
-			const lng = place.geometry.location.lng();
-			this.addSubAdminAccountForm.patchValue({
-				address: place.formatted_address,
-				latitude: lat,
-				longitude: lng
-			});
-			place.address_components?.forEach((component) => {
-				const types = component.types;
-				if (types.includes('locality')) {
-					this.addSubAdminAccountForm.patchValue({ city: component.long_name });
-				}
-				if (types.includes('administrative_area_level_1')) {
-					this.addSubAdminAccountForm.patchValue({ state: component.long_name });
-				}
-				if (types.includes('country')) {
-					this.addSubAdminAccountForm.patchValue({ country: component.long_name });
-				}
-				if (types.includes('postal_code')) {
-					this.addSubAdminAccountForm.patchValue({ zipCode: component.long_name });
-				}
-			});
-		});
+		);
 	}
 
 	onCountryChange(event) {

@@ -24,7 +24,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { DatePickerComponent } from './date-picker/date-picker.component';
-import { PlaceAutocompleteFieldComponent } from './place-autocomplete-field/place-autocomplete-field.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -60,8 +59,7 @@ export const DATE_FORMATS = {
 		MatCheckboxModule,
 		MatSlideToggleModule,
 		FormsModule,
-		MatFormFieldModule,
-		PlaceAutocompleteFieldComponent,
+		MatFormFieldModule
 
 	],
 	exports: [
@@ -86,8 +84,7 @@ export const DATE_FORMATS = {
 		FormsModule,
 		MatIconModule,
 		MatButtonModule,
-		MatFormFieldModule,
-		PlaceAutocompleteFieldComponent,
+		MatFormFieldModule
 	],
 	providers: [
 		{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },

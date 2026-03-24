@@ -8,133 +8,6 @@ import { Subscription } from 'rxjs';
  */
 const CLEANUP_KEY = '__gmpPlaceAutocompleteCleanup';
 const GMP_ATTACH_SHADOW_PATCHED_KEY = '__gmpAttachShadowPatched';
-const MAPS_READY_WAIT_MS = 10000;
-/** Host class when legacy Autocomplete is used (mobile); component SCSS shows the real input. */
-export const PLACE_AUTOCOMPLETE_LEGACY_HOST_CLASS = 'place-autocomplete-field--legacy-mobile';
-
-/**
- * On narrow viewports / touch devices, `gmp-place-autocomplete` uses a full-screen white search sheet
- * that is hard to theme. Legacy `google.maps.places.Autocomplete` attaches to a normal input and uses
- * `.pac-container` (styleable in global CSS).
- */
-function shouldUseLegacyAutocompleteOnMobile(): boolean {
-	if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-		return false;
-	}
-	return window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
-}
-
-/**
- * @returns true if legacy autocomplete was attached (caller must skip GMP path).
- */
-async function tryAttachLegacyPlacesAutocomplete(
-	nativeInput: HTMLInputElement,
-	_options: AttachPlaceAutocompleteOptions | undefined,
-	onPlaceSelect: (place: google.maps.places.PlaceResult) => void
-): Promise<boolean> {
-	const gmaps = google.maps as typeof google.maps & {
-		importLibrary?: (name: string) => Promise<unknown>;
-	};
-	if (typeof gmaps.importLibrary === 'function') {
-		try {
-			await gmaps.importLibrary('places');
-		} catch {
-			return false;
-		}
-	}
-
-	const AutocompleteCtor = (
-		google.maps.places as typeof google.maps.places & {
-			Autocomplete?: new (
-				input: HTMLInputElement,
-				opts?: google.maps.places.AutocompleteOptions
-			) => google.maps.places.Autocomplete;
-		}
-	).Autocomplete;
-
-	if (typeof AutocompleteCtor !== 'function') {
-		return false;
-	}
-
-	const host = nativeInput.closest('app-place-autocomplete-field');
-	host?.classList.add(PLACE_AUTOCOMPLETE_LEGACY_HOST_CLASS);
-
-	const types = _options?.types?.length ? _options.types : (['geocode', 'establishment'] as string[]);
-	const autocomplete = new AutocompleteCtor(nativeInput, {
-		types,
-	} as google.maps.places.AutocompleteOptions);
-
-	const listener = autocomplete.addListener('place_changed', () => {
-		const place = autocomplete.getPlace();
-		if (!place.geometry?.location) {
-			return;
-		}
-		onPlaceSelect(place);
-	});
-
-	let valueSub: Subscription | undefined;
-	if (_options?.syncControl) {
-		valueSub = _options.syncControl.valueChanges.subscribe(() => {
-			queueMicrotask(() => {
-				const v = _options!.syncControl!.value;
-				if (v != null && v !== '') {
-					nativeInput.value = String(v);
-				}
-			});
-		});
-	}
-
-	const cleanup = () => {
-		valueSub?.unsubscribe();
-		valueSub = undefined;
-		google.maps.event.removeListener(listener);
-		try {
-			google.maps.event.clearInstanceListeners(autocomplete);
-		} catch {
-			/* ignore */
-		}
-		host?.classList.remove(PLACE_AUTOCOMPLETE_LEGACY_HOST_CLASS);
-		delete (nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY];
-	};
-
-	(nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY] = cleanup;
-	return true;
-}
-
-/**
- * Resolves when the Maps JS API is usable (importLibrary available).
- * Prevents race conditions when the script loads with `loading=async`.
- */
-export function waitForGoogleMapsReady(maxWaitMs: number = MAPS_READY_WAIT_MS): Promise<void> {
-	if (typeof window === 'undefined') {
-		return Promise.resolve();
-	}
-	const start = Date.now();
-	return new Promise((resolve, reject) => {
-		const check = () => {
-			const gmaps = (
-				window as typeof window & {
-					google?: { maps?: { importLibrary?: (name: string) => Promise<Record<string, unknown>>; places?: unknown } };
-				}
-			).google?.maps;
-			if (typeof gmaps?.importLibrary === 'function') {
-				resolve();
-				return;
-			}
-			// Classic script: `places` exists without `importLibrary`
-			if (gmaps?.places) {
-				resolve();
-				return;
-			}
-			if (Date.now() - start >= maxWaitMs) {
-				reject(new Error(`Google Maps API did not become ready within ${maxWaitMs}ms`));
-				return;
-			}
-			setTimeout(check, 50);
-		};
-		check();
-	});
-}
 
 export interface AttachPlaceAutocompleteOptions {
 	types?: string[];
@@ -142,11 +15,6 @@ export interface AttachPlaceAutocompleteOptions {
 	fields?: string[];
 	/** When set, keeps the visible gmp widget in sync after patchValue/setValue (e.g. async API load). */
 	syncControl?: AbstractControl;
-	/**
-	 * When true, keeps `gmp-place-autocomplete` on mobile (full-screen Google sheet).
-	 * Default false: mobile uses legacy `Autocomplete` + `.pac-container` (themeable).
-	 */
-	forceGmpOnMobile?: boolean;
 }
 
 function newPlaceToLegacyPlaceResult(place: {
@@ -180,18 +48,6 @@ function newPlaceToLegacyPlaceResult(place: {
 		place_id: place.id,
 		types: place.types,
 	} as google.maps.places.PlaceResult;
-}
-
-/** Same mapping used by `attachPlaceAutocompleteElement` for consumers that need the legacy shape. */
-export function placeNewApiToLegacyPlaceResult(place: {
-	id?: string;
-	displayName?: string;
-	formattedAddress?: string;
-	location?: google.maps.LatLng | google.maps.LatLngLiteral | null;
-	addressComponents?: Array<{ longText: string; shortText: string; types: string[] }>;
-	types?: string[];
-}): google.maps.places.PlaceResult {
-	return newPlaceToLegacyPlaceResult(place);
 }
 
 /**
@@ -283,37 +139,15 @@ function installGmpAttachShadowPatch(): void {
 	w[GMP_ATTACH_SHADOW_PATCHED_KEY] = true;
 }
 
-/** Removes the GMP widget and restores the native input (e.g. on component destroy). */
-export function detachPlaceAutocompleteElement(nativeInput: HTMLInputElement): void {
-	const prev = (nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY];
-	if (typeof prev === 'function') {
-		(prev as () => void)();
-	}
-}
-
 export async function attachPlaceAutocompleteElement(
 	nativeInput: HTMLInputElement,
 	_options: AttachPlaceAutocompleteOptions | undefined,
 	onPlaceSelect: (place: google.maps.places.PlaceResult) => void
 ): Promise<void> {
-	try {
-		await waitForGoogleMapsReady();
-	} catch (error) {
-		console.error('PlaceAutocompleteElement init skipped: Google Maps script is not ready yet.', error);
-		return;
-	}
-
 	installGmpAttachShadowPatch();
 	const prev = (nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY];
 	if (typeof prev === 'function') {
 		(prev as () => void)();
-	}
-
-	if (!_options?.forceGmpOnMobile && shouldUseLegacyAutocompleteOnMobile()) {
-		const legacyOk = await tryAttachLegacyPlacesAutocomplete(nativeInput, _options, onPlaceSelect);
-		if (legacyOk) {
-			return;
-		}
 	}
 
 	const gmaps = google.maps as unknown as {

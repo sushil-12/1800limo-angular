@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, NgZone, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StateManagementService } from '../../../services/statemanagement.service';
@@ -12,6 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from '../../../services/common.service';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 
 @Component({
@@ -20,6 +21,9 @@ declare var $: any;
 	styleUrls: ['./affiliate-step2.component.scss']
 })
 export class AffiliateStep2Component implements OnInit {
+	@ViewChild('search1') search1!: ElementRef;
+
+	geoCoder!: google.maps.Geocoder;
 
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
@@ -355,31 +359,50 @@ export class AffiliateStep2Component implements OnInit {
 
 	}
 
-	onGmpAdminAffiliateStep2AddressSelected(place: google.maps.places.PlaceResult): void {
-		this.ngZone.run(() => {
-			if (!place.geometry?.location) {
-				return;
+	ngAfterViewInit(): void {
+		this.geoCoder = new google.maps.Geocoder;
+
+		void attachPlaceAutocompleteElement(
+			this.search1.nativeElement,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addBankForm.get('address')!,
+			},
+			(place) => {
+				this.ngZone.run(() => {
+					if (!place.geometry || !place.geometry.location) return;
+
+					this.addBankForm.patchValue({
+						latitude: place.geometry.location.lat(),
+						longitude: place.geometry.location.lng(),
+						address: place.formatted_address
+					});
+
+					place.address_components?.forEach((component) => {
+						const types = component.types;
+						console.log("{DEBUG} Address file data", types, component)
+						if (types.includes('country')) {
+							this.addBankForm.patchValue({
+								country: component.short_name
+							});
+						} else if (types.includes('administrative_area_level_1')) {
+							this.addBankForm.patchValue({
+								state: component.short_name
+							});
+						} else if (types.includes('administrative_area_level_3')) {
+							this.addBankForm.patchValue({
+								city: component.long_name
+							});
+						} else if (types.includes('postal_code')) {
+							this.addBankForm.patchValue({
+								zipCode: component.long_name
+							});
+						}
+					});
+				});
 			}
-			this.addBankForm.patchValue({
-				latitude: place.geometry.location.lat(),
-				longitude: place.geometry.location.lng(),
-				address: place.formatted_address
-			});
-			place.address_components?.forEach((component) => {
-				const types = component.types;
-				console.log("{DEBUG} Address file data", types, component);
-				if (types.includes('country')) {
-					this.addBankForm.patchValue({ country: component.short_name });
-				} else if (types.includes('administrative_area_level_1')) {
-					this.addBankForm.patchValue({ state: component.short_name });
-				} else if (types.includes('administrative_area_level_3')) {
-					this.addBankForm.patchValue({ city: component.long_name });
-				} else if (types.includes('postal_code')) {
-					this.addBankForm.patchValue({ zipCode: component.long_name });
-				}
-			});
-			this.removeErrorSsn(this.addBankForm.get('address')?.value, 'address');
-		});
+		);
 	}
 
 

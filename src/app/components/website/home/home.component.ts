@@ -11,6 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../../components/shared/shared.module';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
@@ -26,6 +27,10 @@ declare var $: any;
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+	@ViewChild('addressinput') addressinput!: ElementRef;
+	@ViewChild('dropaddressinput') dropaddressinput!: ElementRef;
+	@ViewChild('retaddressinput') retaddressinput!: ElementRef;
+	@ViewChild('retdropaddressinput') retdropaddressinput!: ElementRef;
 	@ViewChild('clientLogoContainer') clientLogoContainer!: ElementRef;
 
 	clientLogoSwiper: Swiper | null = null;
@@ -251,6 +256,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		// Client carousel will be initialized in fetchHomePageData() after data loads
 		this.fetchHomePageData();
+		this.Subscriptions();
 
 
 		// $('.scrollDownButton').css('left', '3px');
@@ -322,25 +328,39 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			var myVar = setInterval(function () { myTimer() }, 0);
 
 		}
+		this.initializeallloadGoogleAutocomplete()
 
 	}
 
-	onGmpHomePlaceSelected(place: google.maps.places.PlaceResult, fieldName: string): void {
-		const geometryLocation = place.geometry?.location;
-		if (!geometryLocation) {
-			return;
-		}
-		const formattedAddress = place.formatted_address ?? '';
-		const placeName = place.name ?? '';
-		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
-		const location = {
-			formatted_address: formattedAddress,
-			display_address: displayAddress,
-			latitude: geometryLocation.lat(),
-			longitude: geometryLocation.lng()
-		};
-		this.onAutocompleteSelected(location, fieldName);
-		this.onLocationSelected(location, fieldName);
+	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
+		// test thing
+		console.log("in loadf auto complete", input, fieldName)
+		void attachPlaceAutocompleteElement(
+			input,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.quoteBotForm?.get(fieldName) ?? undefined,
+			},
+			(place) => {
+				const geometryLocation = place.geometry?.location;
+				if (!geometryLocation) return;
+
+				const formattedAddress = place.formatted_address ?? '';
+				const placeName = place.name ?? '';
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+
+				const location = {
+					formatted_address: formattedAddress,
+					display_address: displayAddress,
+					latitude: geometryLocation.lat(),
+					longitude: geometryLocation.lng()
+				};
+
+				this.onAutocompleteSelected(location, fieldName);
+				this.onLocationSelected(location, fieldName);
+			}
+		);
 	}
 
 	onAutocompleteSelected(location: any, fieldName: string) {
@@ -358,6 +378,42 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
+	initializeallloadGoogleAutocomplete() {
+		if (this.addressinput) {
+			this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
+		}
+		if (this.dropaddressinput) {
+			this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
+		}
+		if (this.retaddressinput) {
+			this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
+		}
+		if (this.retdropaddressinput) {
+			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
+		}
+	}
+
+	Subscriptions() {
+		this.quoteBotForm.get('service_type')?.valueChanges.subscribe(() => {
+			setTimeout(() => {
+				this.initializeallloadGoogleAutocomplete();
+			}, 200);
+		});
+
+		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
+			console.log("in value chanes", value)
+			setTimeout(() => {
+				this.initializeallloadGoogleAutocomplete()
+			}, 200)
+		})
+
+		this.quoteBotForm.get('dropoff_type').valueChanges.subscribe((value: string) => {
+			console.log("in value chanes", value)
+			setTimeout(() => {
+				this.initializeallloadGoogleAutocomplete()
+			}, 200)
+		})
+	}
 	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
 			if (this.homePageData) {

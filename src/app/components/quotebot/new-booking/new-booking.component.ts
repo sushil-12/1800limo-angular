@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, QueryList, ViewChild, ViewChildren, isDevMode } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { SharedModule } from '../../shared/shared.module';
@@ -12,6 +12,8 @@ import { QuotebotService } from '../../../services/quotebot.service';
 import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
+import { attachPlaceAutocompleteElement, getBookingAddressSyncControl } from '../../../utils/google-place-autocomplete';
+
 declare var $: any
 
 
@@ -22,6 +24,17 @@ declare var $: any
 })
 export class NewBookingComponent implements OnInit, AfterViewInit {
 	@ViewChild('cellInput', { static: false }) cellInput!: ElementRef;
+
+	@ViewChild('pickupInput') pickupInput!: ElementRef;
+	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
+	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
+	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
+	@ViewChild('return_dropoffInput') return_dropoffInput!: ElementRef;
+	@ViewChild('fboAddressInput') fboAddressInput!: ElementRef;
+	@ViewChild('returnFboAddressInput') returnFboAddressInput!: ElementRef;
+	@ViewChildren('extraStopInput') extraStopInputs!: QueryList<ElementRef>;
+	@ViewChildren('returnExtraStopInput') returnExtraStopInputs!: QueryList<ElementRef>;
+
 
 
 
@@ -252,6 +265,17 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 		this.initphonefield()
 
+		this.initAllAutocompletes()
+
+		// Re-initialize when dynamic views update
+		this.extraStopInputs.changes.subscribe(() => {
+			setTimeout(() => this.initAllAutocompletes(), 100);
+		});
+
+		this.returnExtraStopInputs.changes.subscribe(() => {
+			setTimeout(() => this.initAllAutocompletes(), 100);
+		});
+
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
 			this.scroll('id="pickup_address"')
@@ -289,44 +313,85 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 	}
 
-	/** GMP place selection: form value is set by PlaceAutocompleteFieldComponent; this fills lat/lng and related fields. */
-	onGmpBookingPlaceSelected(
-		place: google.maps.places.PlaceResult,
-		control: string,
-		index?: number,
-		is_return: boolean = false
-	): void {
-		if (!place.geometry?.location) {
-			return;
-		}
-		const formattedAddress = place.formatted_address ?? '';
-		const placeName = place.name ?? '';
-		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
-		const placeId = place.place_id ?? '';
-		const location = {
-			latitude: place.geometry.location.lat(),
-			longitude: place.geometry.location.lng(),
-		};
-
-		if (control === 'loose_customer') {
-			this.fillLooseCustomerAddress(place);
-			return;
-		}
-
-		if (control === 'extra_stops' || control === 'return_extra_stops') {
-			if (typeof index === 'number') {
-				this.fillExtraStop(!!is_return, index, {
-					formatted_address: formattedAddress,
-					display_address: displayAddress,
-					place_id: placeId,
-				}, location);
+	initAllAutocompletes() {
+		setTimeout(() => {
+			if (this.pickupInput) {
+				this.initAutocomplete(this.pickupInput.nativeElement, 'pickup');
 			}
-			return;
-		}
+			if (this.dropoffInput) {
+				this.initAutocomplete(this.dropoffInput.nativeElement, 'dropoff');
+			}
+			if (this.loosecustomerInput) {
+				this.initAutocomplete(this.loosecustomerInput.nativeElement, 'loose_customer');
+			}
+			if (this.return_pickupInput) {
+				this.initAutocomplete(this.return_pickupInput.nativeElement, 'return_pickup');
+			}
+			if (this.return_dropoffInput) {
+				this.initAutocomplete(this.return_dropoffInput.nativeElement, 'return_dropoff');
+			}
+			if (this.fboAddressInput) {
+				this.initAutocomplete(this.fboAddressInput.nativeElement, 'fbo_address');
+			}
+			if (this.returnFboAddressInput) {
+				this.initAutocomplete(this.returnFboAddressInput.nativeElement, 'return_fbo_address');
+			}
 
-		this.fillAddress(control, { formatted_address: formattedAddress, display_address: displayAddress });
-		this.fillLocationPoints(control, location);
-		this.SetFormValue(control + '_place_id', placeId);
+			// Dynamic fields: extra stops
+			this.extraStopInputs.forEach((input, index) => {
+				this.initAutocomplete(input, 'extra_stops', index, false);
+			});
+
+			this.returnExtraStopInputs.forEach((input, index) => {
+				this.initAutocomplete(input, 'return_extra_stops', index, true);
+			});
+
+		}, 200);
+	}
+
+	initAutocomplete(input: ElementRef, control: string, index?: number, is_return: boolean = false) {
+		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
+		console.log("initautocomplete", nativeInput)
+
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: getBookingAddressSyncControl(this.BookingForm, control, index),
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return;
+
+				const formattedAddress = place.formatted_address ?? '';
+				const placeName = place.name ?? '';
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+				const placeId = place.place_id ?? '';
+				const location = {
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				};
+
+				if (control === 'loose_customer') {
+					this.fillLooseCustomerAddress(place);
+					nativeInput.value = displayAddress;
+					return;
+				}
+
+				if (control === 'extra_stops' || control === 'return_extra_stops') {
+					this.fillExtraStop(!!is_return, index!, {
+						formatted_address: formattedAddress,
+						display_address: displayAddress,
+						place_id: placeId
+					}, location);
+				} else {
+					this.fillAddress(control, { formatted_address: formattedAddress, display_address: displayAddress });
+					this.fillLocationPoints(control, location);
+					this.SetFormValue(control + '_place_id', placeId);
+					nativeInput.value = displayAddress;
+				}
+			}
+		);
 	}
 
 
@@ -577,6 +642,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 	}
 	changeTransferType(type: string) {
 		this.transfer_type = type
+		this.initAllAutocompletes()
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
 			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
@@ -1081,6 +1147,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 	changeReturnTransferType(event: any) {
 		console.log('changeReturnTransferType')
 		this.return_transfer_type = event
+		this.initAllAutocompletes()
 	}
 
 	chooseUser(account_id: number) {
@@ -2006,6 +2073,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
+				this.initAllAutocompletes()
 				this.init_return_rates = true;
 				setTimeout(() => {
 					this.MapController(true)
@@ -2041,6 +2109,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
+			this.initAllAutocompletes();
 			const oldValue = this.transfer_type;
 			const newValue = value;
 
@@ -2339,6 +2408,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			this.BookingForm.get('return_cruise_name').updateValueAndValidity();
 			this.BookingForm.get('return_cruise_port').updateValueAndValidity();
 
+			this.initAllAutocompletes();
 			const oldValue = this.return_transfer_type;
 			const newValue = value;
 
@@ -2559,6 +2629,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		// Account Type Subscription
 		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_customer') {
+				this.initAllAutocompletes();
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer
 				for (let item in loose_customer.controls) {

@@ -1182,22 +1182,14 @@ a.user-profile:active::after {
 	padding: 0px !important;
 	border-radius: 14px;
 	width: 100%;
-
-	/* Align search icon + GMP + clear button on one row with matching height */
-	> .input-contain.d-flex.align-items-center {
-		align-items: stretch;
-	}
 }
 
 .cross-svg {
 	background-color: #f5f4fe;
-	border-radius: 0 14px 14px 0;
-	align-self: stretch;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	border-radius: 0 5px 5px 0;
+	align-self: center;
 	margin-left: -4px;
-	min-height: 30px;
+	height: 30px;
 	cursor: pointer;
 }
 

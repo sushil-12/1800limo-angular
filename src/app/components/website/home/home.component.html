@@ -391,18 +391,15 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
 												<div class="input-box">
-													<app-place-autocomplete-field
-														formControlName="pickup_address"
-														inputId="pickup_address"
-														tabindex="1"
-														[showSearchIcon]="true"
-														[inputClass]="'input-f font-weight-bolder'"
-														[placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Pickup Address - Cruise Port'"
-														(placeSelected)="onGmpHomePlaceSelected($event, 'pickup_address')" />
+													<input type="text" style="font-size: 16px !important;"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Pickup Address - Cruise Port'"
+														id="pickup_address" #addressinput
+														formControlName="pickup_address" (focus)="addressinput.select()"
+														tabindex="1" class="input-f font-weight-bolder" />
 												</div>
 
 												<div class="cross-svg">
-													<svg *ngIf="QBForm?.pickup_address?.value" fill="#000000"
+													<svg *ngIf="addressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('pickup_address')">
@@ -486,18 +483,16 @@
 											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<app-place-autocomplete-field
+													<input type="text" style="font-size: 16px !important;"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Dropoff Address - Cruise Port'"
+														id="dropoff_address" #dropaddressinput
 														formControlName="dropoff_address"
-														inputId="dropoff_address"
-														tabindex="1"
-														[showSearchIcon]="true"
-														[inputClass]="'input-f font-weight-bolder'"
-														[placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Dropoff Address - Cruise Port'"
-														(placeSelected)="onGmpHomePlaceSelected($event, 'dropoff_address')" />
+														(focus)="dropaddressinput.select()" tabindex="1"
+														class="input-f font-weight-bolder" />
 												</div>
 
 												<div class="cross-svg">
-													<svg *ngIf="QBForm?.dropoff_address?.value" fill="#000000"
+													<svg *ngIf="dropaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('dropoff_address')">
@@ -645,18 +640,16 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
-													<app-place-autocomplete-field
+													<input type="text" style="font-size: 16px !important;"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port'"
+														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address"
-														inputId="return_pickup_address"
-														tabindex="1"
-														[showSearchIcon]="true"
-														[inputClass]="'input-f font-weight-bolder'"
-														[placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port'"
-														(placeSelected)="onGmpHomePlaceSelected($event, 'return_pickup_address')" />
+														(focus)="retaddressinput.select()" tabindex="1"
+														class="input-f font-weight-bolder" />
 												</div>
 
 												<div class="cross-svg">
-													<svg *ngIf="QBForm?.return_pickup_address?.value" fill="#000000"
+													<svg *ngIf="retaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('return_pickup_address')">
@@ -737,18 +730,16 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
-													<app-place-autocomplete-field
+													<input type="text" style="font-size: 16px !important;"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port'"
+														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address"
-														inputId="return_dropoff_address"
-														tabindex="1"
-														[showSearchIcon]="true"
-														[inputClass]="'input-f font-weight-bolder'"
-														[placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port'"
-														(placeSelected)="onGmpHomePlaceSelected($event, 'return_dropoff_address')" />
+														(focus)="retdropaddressinput.select()" tabindex="1"
+														class="input-f font-weight-bolder" />
 												</div>
 
 												<div class="cross-svg">
-													<svg *ngIf="QBForm?.return_dropoff_address?.value" fill="#000000"
+													<svg *ngIf="retdropaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('return_dropoff_address')">

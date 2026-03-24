@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CommonService } from '../../../services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { environment } from 'src/environments/environment';
+import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 
 @Component({
@@ -18,6 +19,8 @@ declare var $: any;
 })
 export class PartnerRegistrationComponent implements OnInit {
   @ViewChild('phoneInput') phoneInput!: ElementRef;
+  @ViewChild('search1') search1!: ElementRef;
+  geoCoder!: google.maps.Geocoder;
 
   public registrationForm: FormGroup;
   public otpForm: FormGroup;
@@ -80,31 +83,56 @@ export class PartnerRegistrationComponent implements OnInit {
       this.onCountryChange(countryData, 'mobile')
     });
 
+    this.initautoComplete()
+
+
   }
 
-  onGmpPartnerRegistrationAddressSelected(place: google.maps.places.PlaceResult): void {
-    this.ngZone.run(() => {
-      if (!place.geometry?.location) {
-        return;
+  initautoComplete() {
+
+    //google map autocomplete
+    this.geoCoder = new google.maps.Geocoder();
+
+    void attachPlaceAutocompleteElement(
+      this.search1.nativeElement,
+      {
+        types: ['geocode', 'establishment'],
+        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+        syncControl: this.registrationForm.get('address')!,
+      },
+      (place) => {
+        this.ngZone.run(() => {
+          if (!place.geometry || !place.geometry.location) return;
+
+          this.registrationForm.patchValue({
+            address: place.formatted_address,
+            latitude: place.geometry.location.lat(),
+            longitude: place.geometry.location.lng()
+          });
+
+          place.address_components?.forEach((component) => {
+            const types = component.types;
+            if (types.includes('country')) {
+              this.registrationForm.patchValue({
+                country: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_1')) {
+              this.registrationForm.patchValue({
+                state: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_3')) {
+              this.registrationForm.patchValue({
+                city: component.long_name
+              });
+            } else if (types.includes('postal_code')) {
+              this.registrationForm.patchValue({
+                zipCode: component.long_name
+              });
+            }
+          });
+        });
       }
-      this.registrationForm.patchValue({
-        address: place.formatted_address,
-        latitude: place.geometry.location.lat(),
-        longitude: place.geometry.location.lng()
-      });
-      place.address_components?.forEach((component) => {
-        const types = component.types;
-        if (types.includes('country')) {
-          this.registrationForm.patchValue({ country: component.long_name });
-        } else if (types.includes('administrative_area_level_1')) {
-          this.registrationForm.patchValue({ state: component.long_name });
-        } else if (types.includes('administrative_area_level_3')) {
-          this.registrationForm.patchValue({ city: component.long_name });
-        } else if (types.includes('postal_code')) {
-          this.registrationForm.patchValue({ zipCode: component.long_name });
-        }
-      });
-    });
+    );
   }
 
   buildregistrationForm() {
