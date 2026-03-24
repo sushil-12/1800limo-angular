@@ -1,5 +1,5 @@
 import { MapUtils } from '../../../utils/map-utils';
-import { attachPlaceAutocompleteElement, getBookingAddressSyncControl } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -1630,6 +1630,50 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (this.Form.service_type.value == 'round_trip') {
 			this.MapController(true)
 		}
+	}
+
+	clearAddressField(formControl: string) {
+		this.BookingForm.get(formControl)?.setValue('');
+		this.BookingForm.get(`${formControl}_latitude`)?.setValue('');
+		this.BookingForm.get(`${formControl}_longitude`)?.setValue('');
+		this.BookingForm.updateValueAndValidity();
+
+		const inputMap: Record<string, ElementRef | undefined> = {
+			pickup: this.pickupInput,
+			dropoff: this.dropoffInput,
+			return_pickup: this.return_pickupInput,
+			return_dropoff: this.return_dropoffInput,
+			fbo_address: this.fboAddressInput,
+			return_fbo_address: this.returnFboAddressInput,
+		};
+
+		const nativeInput = inputMap[formControl]?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
+	}
+
+	clearExtraStopAddress(isReturn: boolean, stopIndex: number, input?: HTMLInputElement) {
+		const formArrayName = isReturn ? 'return_extra_stops' : 'extra_stops';
+		const stopGroup = (this.BookingForm.get(formArrayName) as FormArray)?.at(stopIndex);
+
+		stopGroup?.get('address')?.setValue('');
+		stopGroup?.get('latitude')?.setValue('');
+		stopGroup?.get('longitude')?.setValue('');
+		this.BookingForm.updateValueAndValidity();
+
+		if (input) {
+			input.value = '';
+			syncPlaceAutocompleteDisplay(input);
+		}
+
+		if (isReturn) {
+			this.MapController(true);
+		} else {
+			this.MapController();
+		}
+		this.buildBookingData();
 	}
 
 	fetchAirportsAndBigData(): void {
@@ -4615,6 +4659,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (value == 3283) {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+				setTimeout(() => this.initAllAutocompletes(), 100);
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
@@ -4674,6 +4719,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (value == '3283') {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+				setTimeout(() => this.initAllAutocompletes(), 100);
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)

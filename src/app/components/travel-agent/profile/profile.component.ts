@@ -11,7 +11,7 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { AuthService } from '../../../services/auth.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 import * as intlTelInput from 'intl-tel-input';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -550,6 +550,26 @@ export class ProfileComponent implements OnInit {
   validateOfficeNumber() {
     this.validatePhoneGeneric(this.profileForm.get('office_number'), this.OfficePhoneObject);
   }
+
+  clearAddressField(): void {
+    this.profileForm.patchValue({
+      address: '',
+      city: '',
+      state: '',
+      country: '',
+      zip: '',
+      latitude: '',
+      longitude: ''
+    });
+    this.profileForm.updateValueAndValidity();
+
+    const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+    if (nativeInput) {
+      nativeInput.value = '';
+      syncPlaceAutocompleteDisplay(nativeInput);
+    }
+  }
+
   telInputObjectOffice(obj) {
     this.OfficeObject = obj;
   }

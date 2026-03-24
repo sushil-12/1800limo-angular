@@ -105,27 +105,36 @@ function installGmpAttachShadowPatch(): void {
 		const shadow = originalAttachShadow.call(this, { ...init, mode: 'open' });
 
 		const style = document.createElement('style');
-		style.textContent = `
-		.widget-container { border: none !important; }
-		.input-container { padding: 0 !important; }
-		.focus-ring { display: none !important; }
+			style.textContent = `
+			.widget-container { border: none !important; }
+			.input-container { padding: 0 !important; }
+			.focus-ring { display: none !important; }
+			button[aria-label*="Clear"],
+			button[title*="Clear"],
+			.clear-button,
+			.clear-icon {
+				display: none !important;
+			}
+
+		:host {
+			display: block;
+			min-height: 45px;
+			position: relative;
+		}
 
 		/* 🔥 MAIN FIX: override full screen dialog */
 		dialog.full-window-autocomplete-dialog[open] {
-			position: absolute !important;
+			position: fixed !important;
 			inset: unset !important;
-			top: 100% !important;
-			left: 0 !important;
-			width: 100% !important;
+			top: var(--dialog-top, 100px) !important;
+			left: var(--dialog-left, 0px) !important;
+			width: var(--dialog-width, 100%) !important;
 			max-height: 250px !important;
-			border-radius: 12px !important;
+			border-radius: 5px !important;
 			overflow-y: auto !important;
 			box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
-		}
-
-		/* Optional: spacing below input */
-		dialog.full-window-autocomplete-dialog {
-			margin-top: 6px !important;
+			margin: 0 !important;
+			transform: none !important;
 		}
 		`;
 
@@ -206,6 +215,23 @@ export async function attachPlaceAutocompleteElement(
 
 	nativeInput.after(pac);
 
+	const updatePlacement = () => {
+		const rect = pac.getBoundingClientRect();
+		// Avoid anchoring to negative (offscreen top) if weird scroll bounce occurs, though 
+		// fixed positioning handles out of viewport cleanly.
+		pac.style.setProperty('--dialog-top', `${rect.top}px`);
+		pac.style.setProperty('--dialog-left', `${rect.left}px`);
+		pac.style.setProperty('--dialog-width', `${rect.width}px`);
+	};
+
+	pac.addEventListener('click', updatePlacement);
+	pac.addEventListener('focusin', updatePlacement);
+	window.addEventListener('resize', updatePlacement);
+	window.addEventListener('scroll', updatePlacement, { capture: true, passive: true });
+
+	// Force initial placement calculation slightly after attach
+	setTimeout(updatePlacement, 50);
+
 	const handler = async (ev: Event) => {
 		const raw = ev as unknown as {
 			placePrediction?: { toPlace: () => unknown };
@@ -215,6 +241,15 @@ export async function attachPlaceAutocompleteElement(
 			(ev as unknown as CustomEvent<{ placePrediction?: { toPlace: () => unknown } }>).detail
 				?.placePrediction;
 		if (!placePrediction) {
+			// User cleared the input via the GMP internal 'x' button!
+			onPlaceSelect({
+				formatted_address: '',
+				name: '',
+				geometry: undefined,
+				address_components: [],
+				place_id: '',
+				types: []
+			} as unknown as google.maps.places.PlaceResult);
 			return;
 		}
 		const place = placePrediction.toPlace() as {
@@ -245,6 +280,10 @@ export async function attachPlaceAutocompleteElement(
 		valueSub?.unsubscribe();
 		valueSub = undefined;
 		pac.removeEventListener('gmp-select', handler as EventListener);
+		pac.removeEventListener('click', updatePlacement);
+		pac.removeEventListener('focusin', updatePlacement);
+		window.removeEventListener('resize', updatePlacement);
+		window.removeEventListener('scroll', updatePlacement, { capture: true } as EventListenerOptions);
 		pac.remove();
 		nativeInput.style.display = prevDisplay;
 		nativeInput.style.position = prevPosition;
@@ -259,6 +298,7 @@ export async function attachPlaceAutocompleteElement(
 
 	/** FormControl writes to the hidden input; the visible web component must be synced. */
 	queueMicrotask(() => syncPlaceAutocompleteDisplay(nativeInput));
+	queueMicrotask(() => syncRestoredPlaceAutocompleteValue(nativeInput, _options?.syncControl));
 }
 
 /**
@@ -298,23 +338,79 @@ export function syncPlaceAutocompleteDisplay(nativeInput: HTMLInputElement): voi
 	if (!pac || pac.tagName.toLowerCase() !== 'gmp-place-autocomplete') {
 		return;
 	}
-	const v = nativeInput.value;
-	if (v == null || v === '') {
-		return;
-	}
+	const v = nativeInput.value || '';
 	const el = pac as HTMLElement & { value?: string };
 	try {
 		el.value = v;
 	} catch {
 		/* ignore */
 	}
-	try {
-		const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
-		const inner = root?.querySelector?.('input');
-		if (inner instanceof HTMLInputElement) {
-			inner.value = v;
+	const trySyncInner = (retries = 10) => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const inner = root?.querySelector?.('input');
+			if (inner instanceof HTMLInputElement) {
+				if (inner.value !== (v || '')) {
+					inner.value = (v || '');
+				}
+			} else if (retries > 0) {
+				setTimeout(() => trySyncInner(retries - 1), 50);
+			}
+		} catch {
+			/* ignore */
 		}
-	} catch {
-		/* ignore */
+	};
+	trySyncInner();
+}
+
+/**
+ * If the visible GMP widget restores a value on page load before Angular's hidden input/control
+ * knows about it, mirror that value back into the hidden input and optional FormControl.
+ */
+export function syncRestoredPlaceAutocompleteValue(
+	nativeInput: HTMLInputElement,
+	syncControl?: AbstractControl
+): void {
+	if (!nativeInput) {
+		return;
 	}
+
+	const pac = nativeInput.nextElementSibling;
+	if (!pac || pac.tagName.toLowerCase() !== 'gmp-place-autocomplete') {
+		return;
+	}
+
+	const trySyncFromInner = (retries = 20) => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const inner = root?.querySelector?.('input');
+
+			if (inner instanceof HTMLInputElement) {
+				const visibleValue = inner.value || '';
+				if (!visibleValue.trim()) {
+					if (retries > 0) {
+						setTimeout(() => trySyncFromInner(retries - 1), 100);
+					}
+					return;
+				}
+
+				if (nativeInput.value !== visibleValue) {
+					nativeInput.value = visibleValue;
+				}
+
+				if (syncControl && syncControl.value !== visibleValue) {
+					syncControl.setValue(visibleValue);
+					syncControl.updateValueAndValidity();
+				}
+			} else if (retries > 0) {
+				setTimeout(() => trySyncFromInner(retries - 1), 100);
+			}
+		} catch {
+			if (retries > 0) {
+				setTimeout(() => trySyncFromInner(retries - 1), 100);
+			}
+		}
+	};
+
+	trySyncFromInner();
 }

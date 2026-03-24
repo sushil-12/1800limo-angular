@@ -12,7 +12,7 @@ import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from 'src/app/services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 @Component({
 	selector: 'app-stripe-form',
@@ -272,6 +272,28 @@ export class StripeFormComponent implements OnInit {
 			}
 		);
 
+	}
+
+	clearAddressField(): void {
+		this.addBankForm.patchValue({
+			address: '',
+			latitude: '',
+			longitude: '',
+			street: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			unit: ''
+		});
+		this.addBankForm.updateValueAndValidity();
+		this.addressErrorMessage = '';
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 
 

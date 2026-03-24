@@ -140,9 +140,26 @@
     }
 }
 
+:host ::ng-deep mat-form-field:has(app-place-autocomplete-field) {
+    .mat-mdc-text-field-wrapper,
+    .mat-mdc-form-field-flex,
+    .mat-mdc-form-field-infix {
+        overflow: visible !important;
+    }
+}
+
 :host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
     border-radius: 10px !important;
     background-color: rgb(226, 226, 226, 1) !important;
+}
+
+.address-clear-btn {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin-right: 8px;
+    line-height: 0;
+    cursor: pointer;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/

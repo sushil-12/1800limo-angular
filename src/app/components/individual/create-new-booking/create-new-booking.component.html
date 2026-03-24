@@ -526,6 +526,11 @@
                             <input #pickupInput type="text" matInput placeholder="Type your address"
                                 (focus)="$event.target.select()"
                                 formControlName="pickup" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="Form.pickup.value || pickupInput?.value"
+                                (click)="clearAddressField('pickup')" aria-label="Clear pickup address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.errors?.required)">
                                 Pickup address is required
@@ -571,6 +576,11 @@
                             </mat-label>
                             <input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #fboAddressInput
                                 formControlName="fbo_address" (focus)="$event.target.select()" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="Form.fbo_address.value || fboAddressInput?.value"
+                                (click)="clearAddressField('fbo_address')" aria-label="Clear FBO address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
                         </mat-form-field>
                     </div>
 
@@ -726,6 +736,11 @@
                             <input #dropoffInput type="text" matInput placeholder="Type your address"
                                 (focus)="$event.target.select()"
                                 formControlName="dropoff" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="Form.dropoff.value || dropoffInput?.value"
+                                (click)="clearAddressField('dropoff')" aria-label="Clear dropoff address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.errors?.required)">
                                 Dropoff address is required
@@ -877,13 +892,19 @@
             <div class="row mt-2 mb-4 align-items-center m-0"
                 *ngFor="let extra_stop of ExtraStops.controls; index as stop_index">
                 <div class="extra-stop-field col-11">
-                    <mat-form-field appearance="outline" class="gps-address-field">
-                        <mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
-                        <input #extraStopInput type="text" matInput placeholder="Type your address"
-                            (focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)" />
-                        <!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
-                            (onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
-                            (focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)"
+                        <mat-form-field appearance="outline" class="gps-address-field">
+                            <mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
+                            <input #extraStopInput type="text" matInput placeholder="Type your address"
+                                (focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="fetchStopValue('extra_stops', stop_index) || extraStopInput?.value"
+                                (click)="clearExtraStopAddress(false, stop_index, extraStopInput)"
+                                aria-label="Clear extra stop address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
+                            <!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+                                (onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
+                                (focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)"
                             (onLocationSelected)="fillExtraStop(false, stop_index, null, $event)" /> -->
                     </mat-form-field>
                 </div>
@@ -1096,6 +1117,11 @@
                             <input #returnPickupInput type="text" matInput placeholder="Type your address"
                                 (focus)="$event.target.select()"
                                 formControlName="return_pickup" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="Form.return_pickup.value || returnPickupInput?.value"
+                                (click)="clearAddressField('return_pickup')" aria-label="Clear return pickup address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.errors?.required)">
                                 Return pickup address is required
@@ -1138,6 +1164,11 @@
                             </mat-label>
                             <input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #returnFboAddressInput
                                 formControlName="return_fbo_address" (focus)="$event.target.select()" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="Form.return_fbo_address.value || returnFboAddressInput?.value"
+                                (click)="clearAddressField('return_fbo_address')" aria-label="Clear return FBO address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
                         </mat-form-field>
                     </div>
 
@@ -1298,6 +1329,11 @@
                             <input #returnDropoffInput type="text" matInput placeholder="Type your address"
                                 (focus)="$event.target.select()"
                                 formControlName="return_dropoff" />
+                            <button matSuffix type="button" class="address-clear-btn"
+                                *ngIf="Form.return_dropoff.value || returnDropoffInput?.value"
+                                (click)="clearAddressField('return_dropoff')" aria-label="Clear return dropoff address">
+                                <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                            </button>
                             <mat-error
                                 *ngIf="(submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.errors?.required)">
                                 Return dropoff address is required
@@ -1471,6 +1507,12 @@
                         <input #returnExtraStopInput type="text" matInput placeholder="Type your address"
                             (focus)="$event.target.select()"
                             [value]="fetchStopValue('return_extra_stops', stop_index)" />
+                        <button matSuffix type="button" class="address-clear-btn"
+                            *ngIf="fetchStopValue('return_extra_stops', stop_index) || returnExtraStopInput?.value"
+                            (click)="clearExtraStopAddress(true, stop_index, returnExtraStopInput)"
+                            aria-label="Clear return extra stop address">
+                            <svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+                        </button>
                         <!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
                             (onAutocompleteSelected)="fillExtraStop(true, stop_index, $event, null)"
                             (focus)="$event.target.select()" [value]="fetchStopValue('return_extra_stops', stop_index)"

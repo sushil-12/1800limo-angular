@@ -78,6 +78,15 @@ top:2.05em}
 		border-radius: 10px;
 		background-color: rgb(226, 226, 226,1);
   } 
+
+.address-clear-btn{
+	background: transparent;
+	border: 0;
+	padding: 0;
+	margin-right: 8px;
+	line-height: 0;
+	cursor: pointer;
+}
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:5px}
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/

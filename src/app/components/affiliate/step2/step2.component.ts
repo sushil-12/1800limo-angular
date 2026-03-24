@@ -12,7 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -111,6 +111,19 @@ export class Step2Component implements OnInit, AfterViewInit {
 	rotateDriverLicence: boolean = false;
 	rotateDriverLicenceBack: boolean = false;
 	TaxIdMatch: string;
+	private addressAutocompleteAttached = false;
+
+	private syncAddressControlState(): void {
+		const addressControlNames = ['country', 'state'];
+		addressControlNames.forEach((controlName) => {
+			const control = this.addBankForm?.get(controlName);
+			if (!control) {
+				return;
+			}
+			control.enable({ emitEvent: false });
+		});
+	}
+
 	constructor(
 		private affiliateService: AffiliateService,
 		private adminService: AdminService,
@@ -209,6 +222,7 @@ export class Step2Component implements OnInit, AfterViewInit {
 			primaryYY: [''],
 			primaryCardHolderName: ['']
 		});
+		this.syncAddressControlState();
 
 		//load list of currencies
 		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
@@ -302,6 +316,8 @@ export class Step2Component implements OnInit, AfterViewInit {
 							else {
 								this.canChangeAddress = false;
 							}
+							this.syncAddressControlState();
+							setTimeout(() => this.mapFunction());
 
 							this.addBankForm.patchValue({
 								id: this.response.data?.bankinfo?.id,
@@ -428,6 +444,8 @@ export class Step2Component implements OnInit, AfterViewInit {
 				else {
 					this.canChangeDocument = true;//can add or change documents
 					this.canChangeAddress = true;//can add or change address
+					this.syncAddressControlState();
+					setTimeout(() => this.mapFunction());
 
 					//for selected country
 					this.changeCountry(currentUser?.phoneCountry.toUpperCase());
@@ -442,6 +460,8 @@ export class Step2Component implements OnInit, AfterViewInit {
 			else {
 				//for selected country
 				this.spinner.hide();
+				this.syncAddressControlState();
+				setTimeout(() => this.mapFunction());
 				this.changeCountry(currentUser?.phoneCountry.toUpperCase());
 				this.addBankForm.patchValue({
 					country: currentUser?.phoneCountry.toUpperCase()
@@ -466,6 +486,10 @@ export class Step2Component implements OnInit, AfterViewInit {
 	}
 
 	mapFunction() {
+		if (!this.search1?.nativeElement || this.addressAutocompleteAttached) {
+			return;
+		}
+		this.addressAutocompleteAttached = true;
 
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
@@ -481,42 +505,74 @@ export class Step2Component implements OnInit, AfterViewInit {
 				this.ngZone.run(() => {
 					if (!place.geometry || !place.geometry.location) return;
 
-					this.addBankForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
+					let countryCode = '';
+					let stateCode = '';
+					let cityName = '';
+					let zipCode = '';
+					let streetNumber = '';
+					let routeName = '';
 
 					place.address_components?.forEach((component) => {
 						const types = component.types;
 						if (types.includes('country')) {
-							this.addBankForm.patchValue({
-								country: component.short_name
-							});
+							countryCode = component.short_name;
 						} else if (types.includes('administrative_area_level_1')) {
-							this.addBankForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addBankForm.patchValue({
-								city: component.long_name
-							});
+							stateCode = component.short_name;
+						} else if (
+							types.includes('locality') ||
+							types.includes('administrative_area_level_3') ||
+							types.includes('postal_town')
+						) {
+							cityName = component.long_name;
 						} else if (types.includes('postal_code')) {
-							this.addBankForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-						else if (types.includes('street_number')) {
-							this.addBankForm.patchValue({
-								street: component.long_name
-							})
+							zipCode = component.long_name;
+						} else if (types.includes('street_number')) {
+							streetNumber = component.long_name;
+						} else if (types.includes('route')) {
+							routeName = component.long_name;
 						}
 					});
+
+					if (countryCode) {
+						this.changeCountry(countryCode);
+					}
+
+					this.addBankForm.patchValue({
+						address: place.formatted_address,
+						latitude: place.geometry.location.lat(),
+						longitude: place.geometry.location.lng(),
+						country: countryCode || this.addBankForm.get('country')?.value,
+						state: stateCode,
+						city: cityName,
+						zipCode: zipCode,
+						street: [streetNumber, routeName].filter(Boolean).join(' ')
+					});
+					this.isAddressSelected = true;
 				});
 				this.spinner.hide()
 			}
 		);
 
+	}
+
+	clearAddressField() {
+		this.addBankForm.patchValue({
+			address: '',
+			latitude: '',
+			longitude: '',
+			street: '',
+			city: '',
+			zipCode: '',
+		});
+		this.addBankForm.updateValueAndValidity();
+		this.addressErrorMessage = '';
+		this.isAddressSelected = false;
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 
 
