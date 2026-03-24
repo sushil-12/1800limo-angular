@@ -6168,8 +6168,6 @@ header .navbar-toggler {
 	outline: none !important;
 	box-shadow: none !important;
 	height: 58px !important;
-	background: #fff !important;
-	color: #000 !important;
 	
   }
   .input-container:focus{
@@ -6189,8 +6187,6 @@ header .navbar-toggler {
     --gmp-color-stroke-input-focus: transparent;
     
     outline: none !important;
-	background: #fff !important;
-	color: #000 !important;
     
     &:focus,
     &:focus-within,

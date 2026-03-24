@@ -109,7 +109,6 @@ function installGmpAttachShadowPatch(): void {
 			.widget-container { border: none !important; }
 			.input-container {
 				padding: 0 !important;
-				background: #fff !important;
 				color: #000 !important;
 			}
 			.input-container,
@@ -119,7 +118,6 @@ function installGmpAttachShadowPatch(): void {
 			.suggestion-item,
 			.text-content {
 				text-align: left !important;
-				background: #fff !important;
 				color: #000 !important;
 			}
 			svg,
@@ -151,7 +149,6 @@ function installGmpAttachShadowPatch(): void {
 			display: block;
 			min-height: 45px;
 			position: relative;
-			background: #fff !important;
 			color: #000 !important;
 		}
 
