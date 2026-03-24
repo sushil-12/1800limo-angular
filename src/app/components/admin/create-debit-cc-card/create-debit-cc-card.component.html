@@ -104,9 +104,9 @@
                         <div class="col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>Street Address<span class="asterisk">*</span></mat-label>
-                                <app-place-autocomplete-field formControlName="otherStreetAddress"
-                                    placeholder="Street Address"
-                                    (placeSelected)="onGmpCreateDebitCcStreetAddressSelected($event)" />
+                                <input #search1 formControlName="otherStreetAddress" type="text" matInput
+                                    placeholder="Street Address" (focus)="$event.target.select()"
+                                    autocomplete="off" />
                             </mat-form-field>
                             <div *ngIf="submittedForm && f.otherStreetAddress.errors" class="text-danger">
                                 <div *ngIf="f.otherStreetAddress.errors.required">This field is required</div>
