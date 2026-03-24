@@ -1223,6 +1223,8 @@ a.user-profile:active::after {
 
 // Airport autocomplete rows: plane icon (left) + field + circular clear (right)
 .input-contain--airport {
+	position: relative;
+
 	.input-box {
 		flex: 1;
 		min-width: 0;
@@ -1230,6 +1232,10 @@ a.user-profile:active::after {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+	}
+
+	input {
+		padding-right: 42px !important;
 	}
 }
 
@@ -1262,6 +1268,19 @@ a.user-profile:active::after {
 }
 
 .address-clear-wrap {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	padding: 0;
+	margin-left: 0;
+	min-height: auto;
+	background: transparent;
+	border-radius: 0;
+	z-index: 2;
+}
+
+.airport-clear-wrap--inside {
 	position: absolute;
 	right: 10px;
 	top: 50%;
