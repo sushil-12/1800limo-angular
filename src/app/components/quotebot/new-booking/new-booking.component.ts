@@ -12,7 +12,7 @@ import { QuotebotService } from '../../../services/quotebot.service';
 import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
-import { attachPlaceAutocompleteElement, getBookingAddressSyncControl } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, getBookingAddressSyncControl, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 
 declare var $: any
 
@@ -1056,6 +1056,80 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 	get ReturnExtraStops() {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
+	}
+
+	shouldShowAddressClear(inputRef: ElementRef | HTMLInputElement | undefined, control: string, index?: number): boolean {
+		const nativeInput = inputRef instanceof ElementRef ? inputRef.nativeElement : inputRef;
+		const controlValue = getBookingAddressSyncControl(this.BookingForm, control, index)?.value;
+		const visibleValue = getPlaceAutocompleteDisplayValue(nativeInput);
+
+		return !!String(controlValue || visibleValue || '').trim();
+	}
+
+	private getAddressInput(control: string, index?: number): HTMLInputElement | undefined {
+		switch (control) {
+			case 'loose_customer':
+				return this.loosecustomerInput?.nativeElement;
+			case 'pickup':
+				return this.pickupInput?.nativeElement;
+			case 'dropoff':
+				return this.dropoffInput?.nativeElement;
+			case 'return_pickup':
+				return this.return_pickupInput?.nativeElement;
+			case 'return_dropoff':
+				return this.return_dropoffInput?.nativeElement;
+			case 'fbo_address':
+				return this.fboAddressInput?.nativeElement;
+			case 'return_fbo_address':
+				return this.returnFboAddressInput?.nativeElement;
+			case 'extra_stops':
+				return this.extraStopInputs?.get(index ?? -1)?.nativeElement;
+			case 'return_extra_stops':
+				return this.returnExtraStopInputs?.get(index ?? -1)?.nativeElement;
+			default:
+				return undefined;
+		}
+	}
+
+	clearAddressField(control: string, index?: number): void {
+		if (control === 'loose_customer') {
+			(this.BookingForm.get('loose_customer') as FormGroup).patchValue({
+				address: '',
+				place_id: '',
+				country: '',
+				state: '',
+				city: '',
+				zipCode: ''
+			});
+		} else if (control === 'extra_stops' || control === 'return_extra_stops') {
+			const stopGroup = (this.BookingForm.get(control) as FormArray).at(index ?? 0) as FormGroup;
+			stopGroup.patchValue({
+				address: '',
+				place_id: '',
+				latitude: '',
+				longitude: ''
+			});
+			control === 'return_extra_stops' ? this.MapController(true) : this.MapController();
+			this.buildBookingData();
+		} else if (control === 'fbo_address' || control === 'return_fbo_address') {
+			this.SetFormValue(control, '');
+		} else {
+			this.SetFormValue(control, '');
+			this.SetFormValue(control + '_place_id', '');
+			this.SetFormValue(control + '_latitude', '');
+			this.SetFormValue(control + '_longitude', '');
+			if (control.startsWith('return_')) {
+				this.MapController(true);
+			} else {
+				this.MapController();
+			}
+		}
+
+		const nativeInput = this.getAddressInput(control, index);
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 
 
@@ -2862,6 +2936,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
 			}
+			setTimeout(() => this.initAllAutocompletes(), 200);
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 				this.SetFormValue('pickup_airport_name', airport_selected.formatted_name);
@@ -2921,6 +2996,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
 			}
+			setTimeout(() => this.initAllAutocompletes(), 200);
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 				this.SetFormValue('return_pickup_airport_name', airport_selected.formatted_name);
@@ -3440,4 +3516,3 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		});
 	}
 }
-
