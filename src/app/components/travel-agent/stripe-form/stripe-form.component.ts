@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -12,7 +12,6 @@ import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from 'src/app/services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 @Component({
 	selector: 'app-stripe-form',
@@ -20,9 +19,6 @@ declare var $: any;
 	styleUrls: ['./stripe-form.component.scss']
 })
 export class StripeFormComponent implements OnInit {
-	@ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
-
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
 	public submittedForm: boolean;
@@ -216,61 +212,33 @@ export class StripeFormComponent implements OnInit {
 	requestLongitude: number;
 	TaxIdMatch: string;
 
-	ngAfterViewInit(): void {
-		this.mapFunction()
-	}
-
-	mapFunction() {
-
-		//google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
-
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
-
-					this.addBankForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						if (types.includes('country')) {
-							this.addBankForm.patchValue({
-								country: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addBankForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addBankForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addBankForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-						else if (types.includes('street_number')) {
-							this.addBankForm.patchValue({
-								street: component.long_name
-							});
-						}
-					});
-				});
-				this.spinner.hide()
+	onGmpTravelAgentStripeFormAddressSelected(place: google.maps.places.PlaceResult): void {
+		this.ngZone.run(() => {
+			if (!place.geometry?.location) {
+				return;
 			}
-		);
-
+			this.addBankForm.patchValue({
+				address: place.formatted_address,
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng()
+			});
+			place.address_components?.forEach((component) => {
+				const types = component.types;
+				if (types.includes('country')) {
+					this.addBankForm.patchValue({ country: component.short_name });
+				} else if (types.includes('administrative_area_level_1')) {
+					this.addBankForm.patchValue({ state: component.short_name });
+				} else if (types.includes('administrative_area_level_3')) {
+					this.addBankForm.patchValue({ city: component.long_name });
+				} else if (types.includes('postal_code')) {
+					this.addBankForm.patchValue({ zipCode: component.long_name });
+				} else if (types.includes('street_number')) {
+					this.addBankForm.patchValue({ street: component.long_name });
+				}
+			});
+			this.removeErrorSsn(this.addBankForm.get('address')?.value, 'address');
+		});
+		this.spinner.hide();
 	}
 
 

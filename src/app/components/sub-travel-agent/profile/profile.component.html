@@ -114,8 +114,8 @@
                     <div class="col-md-12">
                         <mat-form-field appearance="outline" [ngClass]="{ 'border-red': (f.address.value == '')}">
                             <mat-label>Street Address <span class="asterisk">*</span></mat-label>
-                            <input formControlName="address" type="text" matInput placeholder="Street Address" #search1
-                                (focus)="$event.target.select()">
+                            <app-place-autocomplete-field formControlName="address" placeholder="Street Address"
+                                (placeSelected)="onGmpSubTravelAgentProfileAddressSelected($event)" />
                         </mat-form-field>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
                         <div *ngIf="submittedForm && f?.address?.errors || f?.address?.touced && f?.address?.errors"

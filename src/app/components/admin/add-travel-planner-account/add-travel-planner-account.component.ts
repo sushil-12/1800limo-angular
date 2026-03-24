@@ -10,7 +10,6 @@ import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -43,7 +42,6 @@ export const MY_FORMATS = {
 	],
 })
 export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
-	@ViewChild('search1') search1!: ElementRef;
 	@ViewChild('officeInput') officeInput!: ElementRef;
 	@ViewChild('mobileInput') mobileInput!: ElementRef;
 	@ViewChild('faxInput') faxInput!: ElementRef;
@@ -86,7 +84,6 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	geoCoder!: google.maps.Geocoder;
 
 	ngOnInit(): void {
 		const currentYear = (new Date()).getFullYear();
@@ -176,51 +173,32 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-
 		this.initallphonefields()
+	}
 
-		//ggole maps autocomplete
-		this.geoCoder = new google.maps.Geocoder();
-
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
-
-					this.addTravelPlannerAccountForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng(),
-						address: place.formatted_address
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						if (types.includes('country')) {
-							this.addTravelPlannerAccountForm.patchValue({
-								country: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addTravelPlannerAccountForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addTravelPlannerAccountForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addTravelPlannerAccountForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-					});
-				});
+	onGmpAddTravelPlannerAddressSelected(place: google.maps.places.PlaceResult): void {
+		this.ngZone.run(() => {
+			if (!place.geometry?.location) {
+				return;
 			}
-		);
+			this.addTravelPlannerAccountForm.patchValue({
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng(),
+				address: place.formatted_address
+			});
+			place.address_components?.forEach((component) => {
+				const types = component.types;
+				if (types.includes('country')) {
+					this.addTravelPlannerAccountForm.patchValue({ country: component.short_name });
+				} else if (types.includes('administrative_area_level_1')) {
+					this.addTravelPlannerAccountForm.patchValue({ state: component.short_name });
+				} else if (types.includes('administrative_area_level_3')) {
+					this.addTravelPlannerAccountForm.patchValue({ city: component.long_name });
+				} else if (types.includes('postal_code')) {
+					this.addTravelPlannerAccountForm.patchValue({ zipCode: component.long_name });
+				}
+			});
+		});
 	}
 
 	initallphonefields() {

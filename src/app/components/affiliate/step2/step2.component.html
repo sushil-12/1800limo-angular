@@ -797,9 +797,10 @@
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress"
 						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
-							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1"
-							(keyup)="removeErrorSsn($event.target.value,'address')" />
+						<app-place-autocomplete-field formControlName="address"
+							placeholder="Search Here and Set Location Pin" tabindex="1"
+							[readOnly]="!canChangeAddress"
+							(placeSelected)="onGmpAffiliateStep2AddressSelected($event)" />
 					</mat-form-field>
 					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>

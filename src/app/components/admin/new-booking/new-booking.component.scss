@@ -35,6 +35,15 @@ mat-form-field {
 	margin: 1rem 0 !important;
 }
 
+:host ::ng-deep mat-form-field.gps-address-field,
+:host ::ng-deep mat-form-field:has(app-place-autocomplete-field) {
+	.mat-mdc-text-field-wrapper,
+	.mat-mdc-form-field-flex,
+	.mat-mdc-form-field-infix {
+		overflow: visible !important;
+	}
+}
+
 .margin-top-minus {
 	margin-top: -26px !important;
 }
@@ -442,4 +451,17 @@ ul {
 	::ng-deep .mdc-notched-outline__trailing {
 		border-color: transparent !important;
 	}
+}
+
+gmp-place-autocomplete {
+    --gmp-color-stroke-input-focus: transparent;
+    
+    outline: none !important;
+    
+    &:focus,
+    &:focus-within,
+    &:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+    }
 }

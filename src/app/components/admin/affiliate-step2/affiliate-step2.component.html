@@ -532,12 +532,12 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+						<mat-form-field appearance="outline"
 						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address" autocomplete="off"
-							#search1 tabindex="1" (focus)="$event.target.select()"
-							(keyup)="removeErrorSsn($event.target.value,'address')">
+						<app-place-autocomplete-field formControlName="address"
+							placeholder="Search Here and Set Location Pin" tabindex="1"
+							(placeSelected)="onGmpAdminAffiliateStep2AddressSelected($event)" />
 					</mat-form-field>
 					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>

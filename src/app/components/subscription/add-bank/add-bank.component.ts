@@ -11,7 +11,6 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { SharedModule } from '../../shared/shared.module';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from 'src/app/services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
   selector: 'app-add-bank',
@@ -19,10 +18,6 @@ import { attachPlaceAutocompleteElement } from '../../../utils/google-place-auto
   styleUrls: ['./add-bank.component.scss']
 })
 export class AddBankComponent implements OnInit {
-  @ViewChild('search1') search1!: ElementRef;
-  geoCoder!: google.maps.Geocoder;
-
-
   public addBankForm: FormGroup;
   public requestAddressChangeForm: FormGroup;
   public submittedForm: boolean;
@@ -185,56 +180,31 @@ export class AddBankComponent implements OnInit {
   requestLatitude: number;
   requestLongitude: number;
 
-  ngAfterViewInit(): void {
-    this.mapFunction()
-  }
-
-  mapFunction() {
-
-    //google map autocomplete
-    this.geoCoder = new google.maps.Geocoder();
-
-    void attachPlaceAutocompleteElement(
-      this.search1.nativeElement,
-      {
-        types: ['geocode', 'establishment'],
-        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-      },
-      (place) => {
-        this.ngZone.run(() => {
-          if (!place.geometry || !place.geometry.location) return;
-
-          this.addBankForm.patchValue({
-            address: place.formatted_address,
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
-          });
-
-          place.address_components?.forEach((component) => {
-            const types = component.types;
-            if (types.includes('country')) {
-              this.addBankForm.patchValue({
-                country: component.short_name
-              });
-            } else if (types.includes('administrative_area_level_1')) {
-              this.addBankForm.patchValue({
-                state: component.short_name
-              });
-            } else if (types.includes('administrative_area_level_3')) {
-              this.addBankForm.patchValue({
-                city: component.long_name
-              });
-            } else if (types.includes('postal_code')) {
-              this.addBankForm.patchValue({
-                zipCode: component.long_name
-              });
-            }
-          });
-        });
-        this.spinner.hide();
+  onGmpSubscriptionAddBankAddressSelected(place: google.maps.places.PlaceResult): void {
+    this.ngZone.run(() => {
+      if (!place.geometry?.location) {
+        return;
       }
-    );
-
+      this.addBankForm.patchValue({
+        address: place.formatted_address,
+        latitude: place.geometry.location.lat(),
+        longitude: place.geometry.location.lng()
+      });
+      place.address_components?.forEach((component) => {
+        const types = component.types;
+        if (types.includes('country')) {
+          this.addBankForm.patchValue({ country: component.short_name });
+        } else if (types.includes('administrative_area_level_1')) {
+          this.addBankForm.patchValue({ state: component.short_name });
+        } else if (types.includes('administrative_area_level_3')) {
+          this.addBankForm.patchValue({ city: component.long_name });
+        } else if (types.includes('postal_code')) {
+          this.addBankForm.patchValue({ zipCode: component.long_name });
+        }
+      });
+      this.removeErrorSsn(this.addBankForm.get('address')?.value, 'address');
+    });
+    this.spinner.hide();
   }
 
   getFormData() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, Input } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StateManagementService } from '../../../services/statemanagement.service';
@@ -12,7 +12,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -45,10 +44,7 @@ export const MY_FORMATS = {
 		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
 	],
 })
-export class Step2Component implements OnInit, AfterViewInit {
-	@ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
-
+export class Step2Component implements OnInit {
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
 	public submittedForm: boolean;
@@ -457,65 +453,34 @@ export class Step2Component implements OnInit, AfterViewInit {
 	longitude: number;
 	requestLatitude: number;
 	requestLongitude: number;
-	@ViewChild('search2')
-	public search2ElementRef: ElementRef;
 
-
-	ngAfterViewInit(): void {
-		this.mapFunction()
-	}
-
-	mapFunction() {
-
-		//google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
-
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
-
-					this.addBankForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						if (types.includes('country')) {
-							this.addBankForm.patchValue({
-								country: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addBankForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addBankForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addBankForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-						else if (types.includes('street_number')) {
-							this.addBankForm.patchValue({
-								street: component.long_name
-							})
-						}
-					});
-				});
-				this.spinner.hide()
+	onGmpAffiliateStep2AddressSelected(place: google.maps.places.PlaceResult): void {
+		this.ngZone.run(() => {
+			if (!place.geometry?.location) {
+				return;
 			}
-		);
-
+			this.addBankForm.patchValue({
+				address: place.formatted_address,
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng()
+			});
+			place.address_components?.forEach((component) => {
+				const types = component.types;
+				if (types.includes('country')) {
+					this.addBankForm.patchValue({ country: component.short_name });
+				} else if (types.includes('administrative_area_level_1')) {
+					this.addBankForm.patchValue({ state: component.short_name });
+				} else if (types.includes('administrative_area_level_3')) {
+					this.addBankForm.patchValue({ city: component.long_name });
+				} else if (types.includes('postal_code')) {
+					this.addBankForm.patchValue({ zipCode: component.long_name });
+				} else if (types.includes('street_number')) {
+					this.addBankForm.patchValue({ street: component.long_name });
+				}
+			});
+			this.removeErrorSsn(this.addBankForm.get('address')?.value, 'address');
+		});
+		this.spinner.hide();
 	}
 
 

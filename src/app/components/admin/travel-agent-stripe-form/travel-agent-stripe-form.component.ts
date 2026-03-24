@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -12,18 +12,13 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-travel-agent-stripe-form',
 	templateUrl: './travel-agent-stripe-form.component.html',
 	styleUrls: ['./travel-agent-stripe-form.component.scss']
 })
-export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
-	@ViewChild('search1') search1!: ElementRef;
-	geoCoder!: google.maps.Geocoder;
-
-
+export class TravelAgentStripeFormComponent implements OnInit {
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
 	public submittedForm: boolean;
@@ -217,56 +212,31 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 	requestLatitude: number;
 	requestLongitude: number;
 
-	ngAfterViewInit(): void {
-		this.mapFunction()
-	}
-
-	mapFunction() {
-
-		//google map autocomplete
-		this.geoCoder = new google.maps.Geocoder();
-
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
-
-					this.addBankForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						if (types.includes('country')) {
-							this.addBankForm.patchValue({
-								country: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addBankForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addBankForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addBankForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-					});
-				});
-				this.spinner.hide()
+	onGmpAdminTravelAgentStripeFormAddressSelected(place: google.maps.places.PlaceResult): void {
+		this.ngZone.run(() => {
+			if (!place.geometry?.location) {
+				return;
 			}
-		);
-
+			this.addBankForm.patchValue({
+				address: place.formatted_address,
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng()
+			});
+			place.address_components?.forEach((component) => {
+				const types = component.types;
+				if (types.includes('country')) {
+					this.addBankForm.patchValue({ country: component.short_name });
+				} else if (types.includes('administrative_area_level_1')) {
+					this.addBankForm.patchValue({ state: component.short_name });
+				} else if (types.includes('administrative_area_level_3')) {
+					this.addBankForm.patchValue({ city: component.long_name });
+				} else if (types.includes('postal_code')) {
+					this.addBankForm.patchValue({ zipCode: component.long_name });
+				}
+			});
+			this.removeErrorSsn(this.addBankForm.get('address')?.value, 'address');
+		});
+		this.spinner.hide();
 	}
 
 	getFormData() {

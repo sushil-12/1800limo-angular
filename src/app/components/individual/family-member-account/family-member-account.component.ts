@@ -9,7 +9,6 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
   selector: 'app-family-member-account',
@@ -18,8 +17,6 @@ import { attachPlaceAutocompleteElement } from '../../../utils/google-place-auto
 })
 export class FamilyMemberAccountComponent implements OnInit {
   @ViewChild('phoneInput') phoneInput!: ElementRef;
-  @ViewChild('search1') search1!: ElementRef;
-  geoCoder!: google.maps.Geocoder;
 
   public addFamilyMemberAccountForm: FormGroup;
   public submittedForm: boolean;
@@ -108,9 +105,6 @@ export class FamilyMemberAccountComponent implements OnInit {
     this.initphonefield()
 
 
-    this.initautoComplete()
-
-
   }
 
   initphonefield() {
@@ -131,52 +125,6 @@ export class FamilyMemberAccountComponent implements OnInit {
     }
 
   }
-
-  initautoComplete() {
-    //google map autocomplete
-    this.geoCoder = new google.maps.Geocoder();
-
-    void attachPlaceAutocompleteElement(
-      this.search1.nativeElement,
-      {
-        types: ['geocode', 'establishment'],
-        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-      },
-      (place) => {
-        this.ngZone.run(() => {
-          if (!place.geometry || !place.geometry.location) return;
-
-          this.addFamilyMemberAccountForm.patchValue({
-            address: place.formatted_address,
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
-          });
-
-          place.address_components?.forEach((component) => {
-            const types = component.types;
-            if (types.includes('country')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                country: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_1')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                state: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_3')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                city: component.long_name
-              });
-            } else if (types.includes('postal_code')) {
-              this.addFamilyMemberAccountForm.patchValue({
-                zipCode: component.long_name
-              });
-            }
-          });
-        });
-      }
-    );
-  }
-
 
   buildAddIndividualForm() {
     this.addFamilyMemberAccountForm = this.formBuilder.group({

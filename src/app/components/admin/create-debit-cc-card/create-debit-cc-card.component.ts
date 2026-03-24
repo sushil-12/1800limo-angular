@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,7 +6,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
   selector: 'app-create-debit-cc-card',
@@ -14,10 +13,6 @@ import { attachPlaceAutocompleteElement } from '../../../utils/google-place-auto
   styleUrls: ['./create-debit-cc-card.component.scss']
 })
 export class CreateDebitCcCardComponent implements OnInit {
-  @ViewChild('search1') search1!: ElementRef;
-
-  geoCoder!: google.maps.Geocoder;
-
   public createCCDebitCardForm: FormGroup;
   public submittedForm: boolean;
   public disableSubmitButton: boolean = false;
@@ -56,42 +51,24 @@ export class CreateDebitCcCardComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.geoCoder = new google.maps.Geocoder();
-
-    void attachPlaceAutocompleteElement(
-      this.search1.nativeElement,
-      {
-        types: ['geocode', 'establishment'],
-        fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-      },
-      (place) => {
-        this.ngZone.run(() => {
-          if (!place.geometry || !place.geometry.location) return;
-
-          place.address_components?.forEach((component) => {
-            const types = component.types;
-            if (types.includes('country')) {
-              this.createCCDebitCardForm.patchValue({
-                otherCountry: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_1')) {
-              this.createCCDebitCardForm.patchValue({
-                otherState: component.long_name
-              });
-            } else if (types.includes('administrative_area_level_3')) {
-              this.createCCDebitCardForm.patchValue({
-                otherCity: component.long_name
-              });
-            } else if (types.includes('postal_code')) {
-              this.createCCDebitCardForm.patchValue({
-                otherZip: component.long_name
-              });
-            }
-          });
-        });
+  onGmpCreateDebitCcStreetAddressSelected(place: google.maps.places.PlaceResult): void {
+    this.ngZone.run(() => {
+      if (!place.geometry?.location) {
+        return;
       }
-    );
+      place.address_components?.forEach((component) => {
+        const types = component.types;
+        if (types.includes('country')) {
+          this.createCCDebitCardForm.patchValue({ otherCountry: component.long_name });
+        } else if (types.includes('administrative_area_level_1')) {
+          this.createCCDebitCardForm.patchValue({ otherState: component.long_name });
+        } else if (types.includes('administrative_area_level_3')) {
+          this.createCCDebitCardForm.patchValue({ otherCity: component.long_name });
+        } else if (types.includes('postal_code')) {
+          this.createCCDebitCardForm.patchValue({ otherZip: component.long_name });
+        }
+      });
+    });
   }
 
   onCountryChange(event, type) {

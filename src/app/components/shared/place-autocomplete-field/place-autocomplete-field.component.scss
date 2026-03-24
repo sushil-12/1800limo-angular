@@ -1,0 +1,111 @@
+:host {
+	--place-autocomplete-radius: 14px;
+	--place-autocomplete-z: 10000;
+	--place-autocomplete-min-height: 48px;
+	--place-autocomplete-leading-icon-width: 40px;
+
+	display: block;
+	position: relative;
+	width: 100%;
+	min-width: 0;
+	z-index: 0;
+	box-sizing: border-box;
+}
+
+.place-autocomplete-field__wrap {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+.place-autocomplete-field__control {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+}
+
+:host(.place-autocomplete-field--dense) {
+	--place-autocomplete-min-height: 40px;
+}
+
+.place-autocomplete-field__native {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	pointer-events: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+}
+
+/* Sibling gmp widget inserted after the native input */
+:host ::ng-deep gmp-place-autocomplete {
+	display: block;
+	width: 100%;
+	min-height: var(--place-autocomplete-min-height);
+	border-radius: var(--place-autocomplete-radius);
+	overflow: visible;
+	box-sizing: border-box;
+	z-index: var(--place-autocomplete-z);
+}
+
+/* Icon + field: round left on icon, round right on GMP (clear/suffix sits outside this component). */
+.place-autocomplete-field__wrap--leading-icon {
+	.place-autocomplete-field__leading-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: var(--place-autocomplete-leading-icon-width);
+		min-height: var(--place-autocomplete-min-height);
+		background: #fff;
+		color: #6a6a6a;
+		border: 1px solid rgba(0, 0, 0, 0.08);
+		border-right: none;
+		border-radius: var(--place-autocomplete-radius) 0 0 var(--place-autocomplete-radius);
+		box-sizing: border-box;
+	}
+
+	::ng-deep gmp-place-autocomplete {
+		border-radius: 0 var(--place-autocomplete-radius) var(--place-autocomplete-radius) 0 !important;
+	}
+}
+
+@media (max-width: 767px) {
+	:host {
+		--place-autocomplete-z: 10001;
+	}
+
+	:host ::ng-deep gmp-place-autocomplete {
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
+/* Mobile legacy `google.maps.places.Autocomplete`: real input is visible (no GMP full-screen sheet). */
+:host(.place-autocomplete-field--legacy-mobile) .place-autocomplete-field__native {
+	position: relative !important;
+	width: 100% !important;
+	height: auto !important;
+	min-height: var(--place-autocomplete-min-height);
+	opacity: 1 !important;
+	pointer-events: auto !important;
+	clip: auto !important;
+	overflow: visible !important;
+	box-sizing: border-box;
+	/* Colors come from inputClass / parent (e.g. home `.input-f`, Material). */
+}
+
+:host(.place-autocomplete-field--legacy-mobile) .place-autocomplete-field__wrap--leading-icon .place-autocomplete-field__native {
+	border-radius: 0 var(--place-autocomplete-radius) var(--place-autocomplete-radius) 0 !important;
+	border-left: none !important;
+}

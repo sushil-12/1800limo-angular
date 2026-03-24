@@ -10,7 +10,6 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -43,7 +42,6 @@ export const MY_FORMATS = {
 	],
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
-	@ViewChild('search1') search1!: ElementRef;
 	geoCoder!: google.maps.Geocoder;
 	@ViewChild('mobileInput') mobileInput!: ElementRef;
 	@ViewChild('workInput') workInput!: ElementRef;
@@ -134,46 +132,41 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
 
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
+	}
 
-					this.addIndividualAccountForm.patchValue({
-						address: place.formatted_address,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						if (types.includes('country')) {
-							this.addIndividualAccountForm.patchValue({
-								country: component.long_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addIndividualAccountForm.patchValue({
-								state: component.long_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addIndividualAccountForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addIndividualAccountForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-					});
-				});
+	onGmpProfileAddressSelected(place: google.maps.places.PlaceResult): void {
+		this.ngZone.run(() => {
+			if (!place.geometry || !place.geometry.location) {
+				return;
 			}
-		);
 
+			this.addIndividualAccountForm.patchValue({
+				address: place.formatted_address,
+				latitude: place.geometry.location.lat(),
+				longitude: place.geometry.location.lng(),
+			});
+
+			place.address_components?.forEach((component) => {
+				const types = component.types;
+				if (types.includes('country')) {
+					this.addIndividualAccountForm.patchValue({
+						country: component.long_name,
+					});
+				} else if (types.includes('administrative_area_level_1')) {
+					this.addIndividualAccountForm.patchValue({
+						state: component.long_name,
+					});
+				} else if (types.includes('administrative_area_level_3')) {
+					this.addIndividualAccountForm.patchValue({
+						city: component.long_name,
+					});
+				} else if (types.includes('postal_code')) {
+					this.addIndividualAccountForm.patchValue({
+						zipCode: component.long_name,
+					});
+				}
+			});
+		});
 	}
 
 	initallphonefields() {
