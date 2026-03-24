@@ -88,9 +88,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Street Address*</label>
-                                    <app-place-autocomplete-field formControlName="secondaryStreetAddress"
-                                        placeholder="Street Address"
-                                        (placeSelected)="onGmpEditCardSecondaryAddressSelected($event)" />
+                                    <input #search1 formControlName="secondaryStreetAddress" type="text" matInput
+                                        placeholder="Street Address" (focus)="$event.target.select()"
+                                        autocomplete="off" />
                                     <div *ngIf="submittedForm && f.secondaryStreetAddress.errors" class="text-danger">
                                         <div *ngIf="f.secondaryStreetAddress.errors.required">This field is required
                                         </div>
