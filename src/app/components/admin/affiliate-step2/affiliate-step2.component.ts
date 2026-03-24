@@ -12,7 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from '../../../services/common.service';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 
 @Component({
@@ -417,6 +417,37 @@ export class AffiliateStep2Component implements OnInit {
 
 	get f() {
 		return this.addBankForm.controls;
+	}
+
+	shouldShowAddressClear(): boolean {
+		const controlValue = this.addBankForm?.get('address')?.value;
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		const visibleValue = getPlaceAutocompleteDisplayValue(nativeInput);
+
+		return !!String(controlValue || visibleValue || '').trim();
+	}
+
+	clearAddressField(): void {
+		this.addBankForm.patchValue({
+			address: '',
+			latitude: '',
+			longitude: '',
+			street: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			unit: ''
+		});
+		this.addBankForm.updateValueAndValidity();
+		this.addressErrorMessage = '';
+		this.isAddressSelected = false;
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 	haveEin(haveEinNo) {
 		switch (haveEinNo) {
