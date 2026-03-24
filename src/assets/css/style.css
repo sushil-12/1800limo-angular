@@ -526,8 +526,8 @@ header {
 	appearance: none;
 	height: 48px;
 	font-size: 17px;
-	border-top-right-radius: 5px;
-	border-bottom-right-radius: 5px;
+	border-top-right-radius: 14px;
+	border-bottom-right-radius: 14px;
 	padding: 0px 10px;
 	color: #000;
 }
@@ -6168,6 +6168,8 @@ header .navbar-toggler {
 	outline: none !important;
 	box-shadow: none !important;
 	height: 58px !important;
+	background: #fff !important;
+	color: #000 !important;
 	
   }
   .input-container:focus{
@@ -6187,6 +6189,8 @@ header .navbar-toggler {
     --gmp-color-stroke-input-focus: transparent;
     
     outline: none !important;
+	background: #fff !important;
+	color: #000 !important;
     
     &:focus,
     &:focus-within,

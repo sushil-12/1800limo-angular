@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../../components/shared/shared.module';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, getPlaceAutocompleteDisplayValue } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
@@ -97,6 +97,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	currentActiveStep: number = 1;
 	stepRotationInterval: any;
 	progressWidth: number = 25; // Progress line width percentage
+	private quoteBotAutofillSyncInterval?: ReturnType<typeof setInterval>;
+	private quoteBotAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
 
 
 	constructor(
@@ -328,17 +330,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			var myVar = setInterval(function () { myTimer() }, 0);
 
 		}
-		this.initializeallloadGoogleAutocomplete()
+		this.retryGoogleAutocompleteInitialization()
 
 		// Fix for Browser Autofill suppressing events:
 		// Periodically check native inputs and sync with Angular Reactive Form if populated natively
 		this.ngZone.runOutsideAngular(() => {
-			setInterval(() => {
+			this.quoteBotAutofillSyncInterval = setInterval(() => {
 				let changed = false;
 				const checkAndSync = (inputRef: ElementRef, controlName: string) => {
 					if (inputRef && inputRef.nativeElement) {
-						const nativeVal = inputRef.nativeElement.value;
+						const nativeVal = getPlaceAutocompleteDisplayValue(inputRef.nativeElement);
 						const control = this.quoteBotForm?.get(controlName);
+						if (nativeVal && inputRef.nativeElement.value !== nativeVal) {
+							inputRef.nativeElement.value = nativeVal;
+							changed = true;
+						}
 						if (control && nativeVal && control.value !== nativeVal) {
 							control.setValue(nativeVal, { emitEvent: false });
 							changed = true;
@@ -358,6 +364,33 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				}
 			}, 100);
 		});
+	}
+
+	private retryGoogleAutocompleteInitialization(attempts = 8, delay = 250): void {
+		if (this.quoteBotAutocompleteRetryTimeout) {
+			clearTimeout(this.quoteBotAutocompleteRetryTimeout);
+		}
+
+		const tryAttach = (remainingAttempts: number) => {
+			const googleReady = typeof google !== 'undefined' && !!google?.maps;
+			const hasAnyAddressInput =
+				!!this.addressinput?.nativeElement ||
+				!!this.dropaddressinput?.nativeElement ||
+				!!this.retaddressinput?.nativeElement ||
+				!!this.retdropaddressinput?.nativeElement;
+
+			if (googleReady && hasAnyAddressInput) {
+				this.initializeallloadGoogleAutocomplete();
+			}
+
+			if (remainingAttempts > 1) {
+				this.quoteBotAutocompleteRetryTimeout = setTimeout(() => {
+					tryAttach(remainingAttempts - 1);
+				}, delay);
+			}
+		};
+
+		tryAttach(attempts);
 	}
 
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
@@ -398,6 +431,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		);
 	}
 
+	shouldShowAddressClear(inputRef: ElementRef | HTMLInputElement | undefined, controlName: string): boolean {
+		const controlValue = this.quoteBotForm?.get(controlName)?.value;
+		const nativeInput = inputRef instanceof ElementRef ? inputRef.nativeElement : inputRef;
+		const visibleValue = getPlaceAutocompleteDisplayValue(nativeInput);
+
+		return !!String(controlValue || visibleValue || '').trim();
+	}
+
 	onAutocompleteSelected(location: any, fieldName: string) {
 		this.SetFormValue(fieldName, location.display_address ?? location.formatted_address);
 		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
@@ -431,21 +472,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	Subscriptions() {
 		this.quoteBotForm.get('service_type')?.valueChanges.subscribe(() => {
 			setTimeout(() => {
-				this.initializeallloadGoogleAutocomplete();
+				this.retryGoogleAutocompleteInitialization();
 			}, 200);
 		});
 
 		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
 			setTimeout(() => {
-				this.initializeallloadGoogleAutocomplete()
+				this.retryGoogleAutocompleteInitialization()
 			}, 200)
 		})
 
 		this.quoteBotForm.get('dropoff_type').valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
 			setTimeout(() => {
-				this.initializeallloadGoogleAutocomplete()
+				this.retryGoogleAutocompleteInitialization()
 			}, 200)
 		})
 	}
@@ -793,6 +834,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
 			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
 
 			// if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
 			// 	console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
@@ -818,6 +860,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 
 			this.quoteBotSwitch('one_way')
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
 
 			// Auto-pick location for first time users if pickup_address is empty
 			this.autoPickLocationIfEmpty()
@@ -2163,6 +2206,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnDestroy(): void {
+		if (this.quoteBotAutofillSyncInterval) {
+			clearInterval(this.quoteBotAutofillSyncInterval);
+		}
+		if (this.quoteBotAutocompleteRetryTimeout) {
+			clearTimeout(this.quoteBotAutocompleteRetryTimeout);
+		}
 		// Clean up step rotation interval
 		if (this.stepRotationInterval) {
 			clearInterval(this.stepRotationInterval);
@@ -2182,7 +2231,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.showAppStorePopup = !this.showAppStorePopup;
 	}
 }
-
 
 
 

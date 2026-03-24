@@ -107,7 +107,38 @@ function installGmpAttachShadowPatch(): void {
 		const style = document.createElement('style');
 			style.textContent = `
 			.widget-container { border: none !important; }
-			.input-container { padding: 0 !important; }
+			.input-container {
+				padding: 0 !important;
+				background: #fff !important;
+				color: #000 !important;
+			}
+			.input-container,
+			.input-container input,
+			input,
+			[role="option"],
+			.suggestion-item,
+			.text-content {
+				text-align: left !important;
+				background: #fff !important;
+				color: #000 !important;
+			}
+			svg,
+			path,
+			.location-icon,
+			.leading-icon,
+			.icon,
+			[aria-hidden="true"] {
+				color: #000 !important;
+				fill: #000 !important;
+				stroke: #000 !important;
+				opacity: 1 !important;
+				font-weight: 700 !important;
+			}
+			input::placeholder,
+			.input-container input::placeholder {
+				color: #6b7280 !important;
+				opacity: 1 !important;
+			}
 			.focus-ring { display: none !important; }
 			button[aria-label*="Clear"],
 			button[title*="Clear"],
@@ -120,6 +151,15 @@ function installGmpAttachShadowPatch(): void {
 			display: block;
 			min-height: 45px;
 			position: relative;
+			background: #fff !important;
+			color: #000 !important;
+		}
+
+		:host *,
+		:host input,
+		:host button,
+		:host [role="option"] {
+			color: #000 !important;
 		}
 
 		/* 🔥 MAIN FIX: override full screen dialog */
@@ -135,6 +175,8 @@ function installGmpAttachShadowPatch(): void {
 			box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 			margin: 0 !important;
 			transform: none !important;
+			background: #fff !important;
+			color: #000 !important;
 		}
 		`;
 
@@ -361,6 +403,39 @@ export function syncPlaceAutocompleteDisplay(nativeInput: HTMLInputElement): voi
 		}
 	};
 	trySyncInner();
+}
+
+export function getPlaceAutocompleteDisplayValue(
+	nativeInput: HTMLInputElement | null | undefined
+): string {
+	if (!nativeInput) {
+		return '';
+	}
+
+	if ((nativeInput.value || '').trim()) {
+		return nativeInput.value;
+	}
+
+	const pac = nativeInput.nextElementSibling;
+	if (!pac || pac.tagName.toLowerCase() !== 'gmp-place-autocomplete') {
+		return '';
+	}
+
+	try {
+		const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+		const inner = root?.querySelector?.('input');
+		if (inner instanceof HTMLInputElement) {
+			return inner.value || '';
+		}
+	} catch {
+		/* ignore */
+	}
+
+	try {
+		return ((pac as HTMLElement & { value?: string }).value || '');
+	} catch {
+		return '';
+	}
 }
 
 /**
