@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -187,6 +187,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 			{
 				types: ['geocode', 'establishment'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addTravelPlannerAccountForm.get('address')!,
 			},
 			(place) => {
 				this.ngZone.run(() => {
@@ -375,6 +376,25 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 					control.setErrors(Object.keys(otherErrors).length > 0 ? otherErrors : null);
 				}
 			}
+		}
+	}
+
+	clearAddressField(): void {
+		this.addTravelPlannerAccountForm.patchValue({
+			address: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			latitude: '',
+			longitude: ''
+		});
+		this.addTravelPlannerAccountForm.updateValueAndValidity();
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
 		}
 	}
 

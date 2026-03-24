@@ -8,7 +8,7 @@ import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
 import { CommonService } from '../../../services/common.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-edit-individual-account',
@@ -115,6 +115,7 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 			{
 				types: ['geocode', 'establishment'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addIndividualAccountForm.get('address')!,
 			},
 			(place) => {
 				this.ngZone.run(() => {
@@ -276,6 +277,25 @@ export class EditIndividualAccountComponent implements OnInit, AfterViewInit {
 
 	get f() {
 		return this.addIndividualAccountForm.controls;
+	}
+
+	clearAddressField(): void {
+		this.addIndividualAccountForm.patchValue({
+			address: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			latitude: '',
+			longitude: ''
+		});
+		this.addIndividualAccountForm.updateValueAndValidity();
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 
 

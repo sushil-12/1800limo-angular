@@ -847,6 +847,11 @@
 							<input #pickupInput type="text" matInput placeholder="Type your address"
 								formControlName="pickup" [value]="fillValue(null, 'pickup', null)"
 								(focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.pickup.value || pickupInput?.value"
+								(click)="clearAddressField('pickup')" aria-label="Clear pickup address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 							<mat-error *ngIf="submitBookingForm && Form.pickup.invalid">This field is
 								required</mat-error>
 						</mat-form-field>
@@ -884,8 +889,13 @@
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #fboAddressInput
 								formControlName="fbo_address" (focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.fbo_address.value || fboAddressInput?.value"
+								(click)="clearAddressField('fbo_address')" aria-label="Clear FBO address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 						</mat-form-field>
 					</div>
 
@@ -1039,6 +1049,11 @@
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
 								formControlName="dropoff" [value]="fillValue(null, 'dropoff', null)"
 								(focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.dropoff.value || dropoffInput?.value"
+								(click)="clearAddressField('dropoff')" aria-label="Clear dropoff address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 							<mat-error *ngIf="submitBookingForm && Form.dropoff.invalid">This field is
 								required</mat-error>
 						</mat-form-field>
@@ -1192,6 +1207,12 @@
 						<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 						<input #extraStopInput type="text" matInput placeholder="Type your address"
 							[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
+						<button matSuffix type="button" class="address-clear-btn"
+							*ngIf="fetchStopValue('extra_stops', stop_index) || extraStopInput?.value"
+							(click)="clearExtraStopAddress(false, stop_index, extraStopInput)"
+							aria-label="Clear extra stop address">
+							<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+						</button>
 					</mat-form-field>
 				</div>
 				<div class="col-1 p-0 p-md-3">
@@ -1404,6 +1425,11 @@
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
 								formControlName="return_pickup" [value]="fillValue(null, 'return_pickup', null)"
 								(focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.return_pickup.value || return_pickupInput?.value"
+								(click)="clearAddressField('return_pickup')" aria-label="Clear return pickup address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 							<mat-error *ngIf="submitBookingForm && Form.return_pickup.invalid">This field is
 								required</mat-error>
 						</mat-form-field>
@@ -1442,8 +1468,13 @@
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #returnFboAddressInput
 								formControlName="return_fbo_address" (focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.return_fbo_address.value || returnFboAddressInput?.value"
+								(click)="clearAddressField('return_fbo_address')" aria-label="Clear return FBO address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 						</mat-form-field>
 					</div>
 
@@ -1604,6 +1635,11 @@
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
 								formControlName="return_dropoff" [value]="fillValue(null, 'return_dropoff', null)"
 								(focus)="$event.target.select()" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.return_dropoff.value || return_dropoffInput?.value"
+								(click)="clearAddressField('return_dropoff')" aria-label="Clear return dropoff address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
 							<mat-error *ngIf="submitBookingForm && Form.return_dropoff.invalid">This field is
 								required</mat-error>
 						</mat-form-field>
@@ -1794,6 +1830,12 @@
 						<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
 							[value]="fetchStopValue('return_extra_stops', stop_index)"
 							(focus)="$event.target.select()" />
+						<button matSuffix type="button" class="address-clear-btn"
+							*ngIf="fetchStopValue('return_extra_stops', stop_index) || returnExtraStopInput?.value"
+							(click)="clearExtraStopAddress(true, stop_index, returnExtraStopInput)"
+							aria-label="Clear return extra stop address">
+							<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+						</button>
 					</mat-form-field>
 				</div>
 				<div class="col-md-1">

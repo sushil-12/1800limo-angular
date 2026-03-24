@@ -12,7 +12,7 @@ import { QuotebotService } from '../../../services/quotebot.service';
 import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, getBookingAddressSyncControl } from '../../../utils/google-place-autocomplete';
 
 declare var $: any
 
@@ -30,6 +30,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
 	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
 	@ViewChild('return_dropoffInput') return_dropoffInput!: ElementRef;
+	@ViewChild('fboAddressInput') fboAddressInput!: ElementRef;
+	@ViewChild('returnFboAddressInput') returnFboAddressInput!: ElementRef;
 	@ViewChildren('extraStopInput') extraStopInputs!: QueryList<ElementRef>;
 	@ViewChildren('returnExtraStopInput') returnExtraStopInputs!: QueryList<ElementRef>;
 
@@ -328,6 +330,12 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			if (this.return_dropoffInput) {
 				this.initAutocomplete(this.return_dropoffInput.nativeElement, 'return_dropoff');
 			}
+			if (this.fboAddressInput) {
+				this.initAutocomplete(this.fboAddressInput.nativeElement, 'fbo_address');
+			}
+			if (this.returnFboAddressInput) {
+				this.initAutocomplete(this.returnFboAddressInput.nativeElement, 'return_fbo_address');
+			}
 
 			// Dynamic fields: extra stops
 			this.extraStopInputs.forEach((input, index) => {
@@ -350,6 +358,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			{
 				types: ['geocode', 'establishment'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: getBookingAddressSyncControl(this.BookingForm, control, index),
 			},
 			(place) => {
 				if (!place.geometry || !place.geometry.location) return;

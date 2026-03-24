@@ -64,6 +64,7 @@ export class CreateDebitCcCardComponent implements OnInit {
       {
         types: ['geocode', 'establishment'],
         fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+        syncControl: this.createCCDebitCardForm.get('otherStreetAddress')!,
       },
       (place) => {
         this.ngZone.run(() => {

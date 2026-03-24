@@ -99,6 +99,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       {
         types: ['geocode', 'establishment'],
         fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+        syncControl: this.profileForm.get('address')!,
       },
       (place) => {
         this.ngZone.run(() => {

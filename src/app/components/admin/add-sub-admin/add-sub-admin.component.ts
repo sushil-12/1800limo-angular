@@ -184,6 +184,7 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 			{
 				types: ['geocode', 'establishment'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addSubAdminAccountForm.get('address')!,
 			},
 			(place) => {
 				if (!place.geometry || !place.geometry.location) return;

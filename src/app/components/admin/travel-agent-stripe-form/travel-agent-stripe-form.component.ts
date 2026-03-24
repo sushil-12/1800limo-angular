@@ -12,7 +12,7 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-travel-agent-stripe-form',
@@ -231,6 +231,7 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 			{
 				types: ['geocode', 'establishment'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addBankForm.get('address')!,
 			},
 			(place) => {
 				this.ngZone.run(() => {
@@ -267,6 +268,28 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 			}
 		);
 
+	}
+
+	clearAddressField(): void {
+		this.addBankForm.patchValue({
+			address: '',
+			latitude: '',
+			longitude: '',
+			street: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			unit: ''
+		});
+		this.addBankForm.updateValueAndValidity();
+		this.addressErrorMessage = '';
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 
 	getFormData() {

@@ -330,6 +330,34 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		this.initializeallloadGoogleAutocomplete()
 
+		// Fix for Browser Autofill suppressing events:
+		// Periodically check native inputs and sync with Angular Reactive Form if populated natively
+		this.ngZone.runOutsideAngular(() => {
+			setInterval(() => {
+				let changed = false;
+				const checkAndSync = (inputRef: ElementRef, controlName: string) => {
+					if (inputRef && inputRef.nativeElement) {
+						const nativeVal = inputRef.nativeElement.value;
+						const control = this.quoteBotForm?.get(controlName);
+						if (control && nativeVal && control.value !== nativeVal) {
+							control.setValue(nativeVal, { emitEvent: false });
+							changed = true;
+						}
+					}
+				};
+
+				checkAndSync(this.addressinput, 'pickup_address');
+				checkAndSync(this.dropaddressinput, 'dropoff_address');
+				checkAndSync(this.retaddressinput, 'return_pickup_address');
+				checkAndSync(this.retdropaddressinput, 'return_dropoff_address');
+
+				if (changed) {
+					this.ngZone.run(() => {
+						this.quoteBotForm.updateValueAndValidity();
+					});
+				}
+			}, 100);
+		});
 	}
 
 	loadGoogleAutocomplete(input: HTMLInputElement, fieldName: string) {
@@ -339,25 +367,33 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			input,
 			{
 				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.quoteBotForm?.get(fieldName) ?? undefined,
 			},
 			(place) => {
-				const geometryLocation = place.geometry?.location;
-				if (!geometryLocation) return;
+				this.ngZone.run(() => {
+					const geometryLocation = place.geometry?.location;
+					if (!geometryLocation) {
+						this.SetFormValue(fieldName, '');
+						this.SetFormValue(`${fieldName}_lat`, '');
+						this.SetFormValue(`${fieldName}_long`, '');
+						return;
+					}
 
-				const formattedAddress = place.formatted_address ?? '';
-				const placeName = place.name ?? '';
-				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = place.name ?? '';
+					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
-				const location = {
-					formatted_address: formattedAddress,
-					display_address: displayAddress,
-					latitude: geometryLocation.lat(),
-					longitude: geometryLocation.lng()
-				};
+					const location = {
+						formatted_address: formattedAddress,
+						display_address: displayAddress,
+						latitude: geometryLocation.lat(),
+						longitude: geometryLocation.lng()
+					};
 
-				this.onAutocompleteSelected(location, fieldName);
-				this.onLocationSelected(location, fieldName);
+					this.onAutocompleteSelected(location, fieldName);
+					this.onLocationSelected(location, fieldName);
+				});
 			}
 		);
 	}
@@ -385,14 +421,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
 		}
 		if (this.retaddressinput) {
-			this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'pickup_address');
+			this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
 		}
 		if (this.retdropaddressinput) {
-			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'dropoff_address');
+			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
 		}
 	}
 
 	Subscriptions() {
+		this.quoteBotForm.get('service_type')?.valueChanges.subscribe(() => {
+			setTimeout(() => {
+				this.initializeallloadGoogleAutocomplete();
+			}, 200);
+		});
 
 		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
@@ -592,43 +633,47 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				this.spinner.hide();
-				const lat = position.coords.latitude;
-				const lng = position.coords.longitude;
+				this.ngZone.run(() => {
+					this.spinner.hide();
+					const lat = position.coords.latitude;
+					const lng = position.coords.longitude;
 
-				console.log("Current Location:", lat, lng);
+					console.log("Current Location:", lat, lng);
 
-				// Fill the QB form lat/long fields
-				this.SetFormValue(`${fieldName}_lat`, lat);
-				this.SetFormValue(`${fieldName}_long`, lng);
+					// Fill the QB form lat/long fields
+					this.SetFormValue(`${fieldName}_lat`, lat);
+					this.SetFormValue(`${fieldName}_long`, lng);
 
-				// Reverse Geocode to get formatted address
-				this.reverseGeocode(lat, lng, fieldName);
+					// Reverse Geocode to get formatted address
+					this.reverseGeocode(lat, lng, fieldName);
+				});
 			},
 			(error) => {
-				this.spinner.hide();
-				console.error("Geolocation Error:", error);
-				let errorMessage = "Unable to fetch your location. ";
+				this.ngZone.run(() => {
+					this.spinner.hide();
+					console.error("Geolocation Error:", error);
+					let errorMessage = "Unable to fetch your location. ";
 
-				switch (error.code) {
-					case error.PERMISSION_DENIED:
-						errorMessage += "Please enable location access in your browser settings.";
-						break;
-					case error.POSITION_UNAVAILABLE:
-						errorMessage += "Location information is unavailable.";
-						break;
-					case error.TIMEOUT:
-						errorMessage += "Location request timed out. Please try again.";
-						break;
-					default:
-						errorMessage += "Please check your GPS and try again.";
-						break;
-				}
-
-				this.errorDialogService.openDialog({
-					errors: {
-						error: errorMessage
+					switch (error.code) {
+						case error.PERMISSION_DENIED:
+							errorMessage += "Please enable location access in your browser settings.";
+							break;
+						case error.POSITION_UNAVAILABLE:
+							errorMessage += "Location information is unavailable.";
+							break;
+						case error.TIMEOUT:
+							errorMessage += "Location request timed out. Please try again.";
+							break;
+						default:
+							errorMessage += "Please check your GPS and try again.";
+							break;
 					}
+
+					this.errorDialogService.openDialog({
+						errors: {
+							error: errorMessage
+						}
+					});
 				});
 			},
 			options
@@ -646,21 +691,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		const latlng = { lat: lat, lng: lng };
 
 		geocoder.geocode({ location: latlng }, (results, status) => {
-			if (status === "OK" && results[0]) {
-				const address = results[0].formatted_address;
-				this.SetFormValue(fieldName, address);
-				console.log("Reverse Geocoded Address:", address);
+			this.ngZone.run(() => {
+				if (status === "OK" && results[0]) {
+					const address = results[0].formatted_address;
+					this.SetFormValue(fieldName, address);
+					console.log("Reverse Geocoded Address:", address);
 
-				// Fill return details for round trip if this is pickup_address
-				if (this.QBForm?.service_type?.value === 'round_trip' && fieldName === 'pickup_address') {
-					this.fillReturnDetails();
+					// Fill return details for round trip if this is pickup_address
+					if (this.QBForm?.service_type?.value === 'round_trip' && fieldName === 'pickup_address') {
+						this.fillReturnDetails();
+					}
+				} else {
+					console.warn("Reverse Geocoding failed:", status);
+					// Still set coordinates even if geocoding fails
+					const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+					this.SetFormValue(fieldName, fallbackAddress);
 				}
-			} else {
-				console.warn("Reverse Geocoding failed:", status);
-				// Still set coordinates even if geocoding fails
-				const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-				this.SetFormValue(fieldName, fallbackAddress);
-			}
+			});
 		});
 	}
 

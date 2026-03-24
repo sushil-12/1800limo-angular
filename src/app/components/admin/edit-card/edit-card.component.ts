@@ -119,6 +119,7 @@ export class EditCardComponent implements OnInit, AfterViewInit {
       {
         types: ['geocode', 'establishment'],
         fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+        syncControl: this.editCardForm.get('secondaryStreetAddress')!,
       },
       (place) => {
         this.ngZone.run(() => {

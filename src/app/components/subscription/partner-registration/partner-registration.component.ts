@@ -98,6 +98,7 @@ export class PartnerRegistrationComponent implements OnInit {
       {
         types: ['geocode', 'establishment'],
         fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+        syncControl: this.registrationForm.get('address')!,
       },
       (place) => {
         this.ngZone.run(() => {

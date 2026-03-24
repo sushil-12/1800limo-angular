@@ -14,10 +14,10 @@
 			</div>
 			<div class="col-md-12" *ngIf="response?.data?.stripeDetail?.transfer_status != 'active'">
 				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
-					Stripe Activation can take upto 24 Hours?.
+					Stripe Activation can take upto 24 Hours.
 				</p>
 			</div>
-			<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
+			<div class="col-md-12" *ngIf="response?.data?.stripeDetail?.stripe_errors">
 				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
 					{{TaxIdMatch}}</p>
 			</div>
@@ -87,7 +87,7 @@
 			Company Bank Settings
 			<span class="spanText">
 				(Per
-				<a href="https://www?.stripe?.com/" target="_blank" style="text-decoration: underline">STRIPE</a>
+				<a href="https://www.stripe.com/" target="_blank" style="text-decoration: underline">STRIPE</a>
 				- For Identification, Verification & Direct Deposits)
 			</span>
 		</h2>
@@ -242,7 +242,7 @@
 								}
 							</style>
 							<g>
-								<polygon class="sty0" points="61?.44,63?.9 122?.88,0 0,0 61?.44,63?.9" />
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
@@ -489,13 +489,15 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="example-full-width"
-						[ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' "
-						[ngClass]="isBadgeCity ? '' : 'border-red'">
-						<mat-label [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">Badge city (Enter
+						[ngClass]="{
+							'red-placeholder': !f?.badge_city_name?.value,
+							'border-red': !isBadgeCity
+						}">
+						<mat-label [ngClass]="(f?.badge_city_name?.value) ? '' : 'red-placeholder' ">Badge city (Enter
 							Largest Major City You Service)
 						</mat-label>
 						<input type="text" placeholder="Enter Largest Major City You Service"
-							[ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' " aria-label="Number" matInput
+							[ngClass]="(f?.badge_city_name?.value) ? '' : 'red-placeholder' " aria-label="Number" matInput
 							formControlName="badge_city_name" [matAutocomplete]="auto"
 							(keyup)="handleBadgeCity($event.target.value)">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
@@ -794,12 +796,18 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress"
+					<mat-form-field appearance="outline"
 						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
-							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1"
-							(keyup)="removeErrorSsn($event.target.value,'address')" />
+						<input #search1 matInput type="text" formControlName="address"
+							placeholder="Search Here and Set Location Pin"
+							tabindex="1"
+							(focus)="$event.target.select()" />
+						<button matSuffix type="button" class="address-clear-btn"
+							*ngIf="f?.address?.value || search1?.value"
+							(click)="clearAddressField()" aria-label="Clear address">
+							<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+						</button>
 					</mat-form-field>
 					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>
@@ -845,7 +853,7 @@
 					<label class="select-country-label">Country <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownCountry()" formControlName="country"
-							(selectionChange)="changeCountry($event.value)" [disabled]="!canChangeAddress" tabindex="1">
+							(change)="changeCountry($any($event.target).value)" tabindex="1">
 							<option value="">Choose Country</option>
 							<option *ngFor="let countryOption of countryOptions"
 								[value]="countryOption?.countryShortCode">
@@ -879,7 +887,7 @@
 					<label class="select-state-label">State/Province <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownState()" formControlName="state"
-							[disabled]="!canChangeAddress" tabindex="1">
+							tabindex="1">
 							<option value="">Choose State/Province</option>
 							<option *ngFor="let stateOption of stateOptions" [value]="stateOption?.shortCode">
 								{{ stateOption?.name }}
@@ -1126,9 +1134,9 @@
 								</mat-datepicker>
 							</mat-form-field>
 							<div class="error-message"
-								*ngIf="(f.primaryMM.invalid || f.primaryYY.invalid) && (f.primaryMM.touched || f.primaryMM.dirty)">
+								*ngIf="(f?.primaryMM?.invalid || f?.primaryYY?.invalid) && (f?.primaryMM?.touched || f?.primaryMM?.dirty)">
 								<p class="text-danger text-lg m-0"
-									*ngIf="f.primaryMM.errors?.required || f.primaryYY.errors?.required">
+									*ngIf="f?.primaryMM?.errors?.required || f?.primaryYY?.errors?.required">
 									Expiry Date is required
 								</p>
 							</div>

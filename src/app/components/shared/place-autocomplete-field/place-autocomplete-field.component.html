@@ -1,0 +1,11 @@
+<input
+	#nativeInput
+	type="text"
+	autocomplete="off"
+	class="place-autocomplete-field__native"
+	[attr.id]="inputId || null"
+	[attr.placeholder]="placeholder"
+	[attr.aria-label]="ariaLabel || placeholder || 'Address'"
+	(focus)="onNativeFocus($event)"
+	(blur)="onNativeBlur()"
+/>

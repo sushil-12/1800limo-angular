@@ -1176,6 +1176,19 @@ a.user-profile:active::after {
 	// margin-bottom: 10px !important;
 }
 
+.input-contain--address {
+	position: relative;
+
+	.input-box {
+		width: 100%;
+	}
+
+	gmp-place-autocomplete,
+	input {
+		padding-right: 42px !important;
+	}
+}
+
 .errorMsg {
 	margin-bottom: 10px !important;
 	border: 2px solid;
@@ -1195,6 +1208,17 @@ a.user-profile:active::after {
 
 .input-box {
 	width: 100%;
+}
+
+.input-contain {
+	.input-box {
+		flex: 1;
+		min-width: 0;
+		width: auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
 }
 
 // Airport autocomplete rows: plane icon (left) + field + circular clear (right)
@@ -1237,9 +1261,24 @@ a.user-profile:active::after {
 	min-height: 30px;
 }
 
+.address-clear-wrap {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	padding: 0;
+	margin-left: 0;
+	min-height: auto;
+	background: transparent;
+	border-radius: 0;
+	z-index: 2;
+}
+
 .airport-clear-btn {
 	background: #fff;
 	border: none;
+	padding: 0;
+	line-height: 0;
 
 	&:hover,
 	&:focus-visible {

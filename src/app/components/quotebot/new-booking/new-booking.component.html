@@ -960,7 +960,7 @@
 								<mat-label>
 									Enter FBO address
 								</mat-label>
-								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #fboAddressInput
 									formControlName="fbo_address" (focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
@@ -1809,7 +1809,7 @@
 								<mat-label>
 									Enter FBO address
 								</mat-label>
-								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight"
+								<input type="text" matInput placeholder="Enter FBO address" aria-label="Flight" #returnFboAddressInput
 									formControlName="return_fbo_address" (focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>

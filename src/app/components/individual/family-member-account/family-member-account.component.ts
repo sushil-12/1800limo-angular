@@ -141,6 +141,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       {
         types: ['geocode', 'establishment'],
         fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+        syncControl: this.addFamilyMemberAccountForm.get('address')!,
       },
       (place) => {
         this.ngZone.run(() => {

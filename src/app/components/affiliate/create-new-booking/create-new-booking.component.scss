@@ -49,6 +49,15 @@ mat-form-field {
 	margin: 1rem 0 !important;
 }
 
+:host ::ng-deep mat-form-field.gps-address-field,
+:host ::ng-deep mat-form-field:has(app-place-autocomplete-field) {
+	.mat-mdc-text-field-wrapper,
+	.mat-mdc-form-field-flex,
+	.mat-mdc-form-field-infix {
+		overflow: visible !important;
+	}
+}
+
 .mat-mdc-form-field.m-0 {
 	margin: 1rem 0 0 0 !important;
 }
@@ -420,4 +429,13 @@ _::-webkit-full-page-media,
 _:future,
 :root .phoneNumberClass {
 	padding-left: 90px !important;
+}
+
+.address-clear-btn {
+	background: transparent;
+	border: 0;
+	padding: 0;
+	margin-right: 8px;
+	line-height: 0;
+	cursor: pointer;
 }

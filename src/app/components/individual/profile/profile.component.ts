@@ -10,7 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 import * as moment from "moment";
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -139,6 +139,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 			{
 				types: ['geocode', 'establishment'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.addIndividualAccountForm.get('address')!,
 			},
 			(place) => {
 				this.ngZone.run(() => {
@@ -331,6 +332,29 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
 	validateWork() {
 		this.validatePhoneGeneric(this.addIndividualAccountForm.get('work'), this.WorkObject);
+	}
+
+	clearAddressField(): void {
+		if (this.is_family_member) {
+			return;
+		}
+
+		this.addIndividualAccountForm.patchValue({
+			address: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			latitude: '',
+			longitude: ''
+		});
+		this.addIndividualAccountForm.updateValueAndValidity();
+
+		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		}
 	}
 
 

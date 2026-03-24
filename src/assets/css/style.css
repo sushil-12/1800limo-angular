@@ -526,8 +526,8 @@ header {
 	appearance: none;
 	height: 48px;
 	font-size: 17px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
 	padding: 0px 10px;
 	color: #000;
 }
@@ -6149,4 +6149,49 @@ header .navbar-toggler {
 
 .timepicker-backdrop-overlay {
 	background: none !important;
+}
+
+/* New Address Field CSS */
+
+.mat-mdc-form-field-infix:has(gmp-place-autocomplete) {
+	padding: 0px !important;
+}
+
+.mat-mdc-form-field:has(gmp-place-autocomplete) .mat-mdc-text-field-wrapper {
+	padding-top: 0 !important;
+  }
+  
+  .mat-mdc-form-field:has(gmp-place-autocomplete) .mdc-notched-outline__notch {
+	display: none !important;
+  }
+  .mat-mdc-form-field:has(gmp-place-autocomplete) gmp-place-autocomplete {
+	outline: none !important;
+	box-shadow: none !important;
+	height: 58px !important;
+	
+  }
+  .input-container:focus{
+	outline: none !important;
+	box-shadow: none !important;
+  }
+  .input-container:focus-visible{
+	outline: none !important;
+	box-shadow: none !important;
+  }
+  .focus-ring{
+	display: none !important;
+	visibility: hidden !important;
+  }
+
+  gmp-place-autocomplete {
+    --gmp-color-stroke-input-focus: transparent;
+    
+    outline: none !important;
+    
+    &:focus,
+    &:focus-within,
+    &:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+    }
 }
