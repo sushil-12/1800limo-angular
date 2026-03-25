@@ -111,9 +111,7 @@ function installGmpAttachShadowPatch(): void {
 				padding: 0 !important;
 				color: #000 !important;
 			}
-			.input-container,
-			.input-container input,
-			input{padding-right:25px !important;},
+			input{padding-right:18px !important;},
 			[role="option"],
 			.suggestion-item,
 			.text-content,
@@ -297,6 +295,46 @@ function restoreMobileAutocompleteFocus(pac: HTMLElement): void {
 	setTimeout(() => focusInnerInput(), 0);
 }
 
+function syncPlaceAutocompleteElementValue(
+	pac: Element,
+	value: string,
+	retries = 20
+): void {
+	const normalizedValue = value || '';
+	const el = pac as HTMLElement & { value?: string };
+
+	try {
+		el.value = normalizedValue;
+	} catch {
+		/* ignore */
+	}
+
+	try {
+		(pac as HTMLElement).setAttribute('value', normalizedValue);
+	} catch {
+		/* ignore */
+	}
+
+	try {
+		const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+		const inner = root?.querySelector?.('input');
+		if (inner instanceof HTMLInputElement) {
+			if (inner.value !== normalizedValue) {
+				inner.value = normalizedValue;
+				inner.dispatchEvent(new Event('input', { bubbles: true }));
+				inner.dispatchEvent(new Event('change', { bubbles: true }));
+			}
+			inner.scrollLeft = 0;
+		} else if (retries > 0) {
+			setTimeout(() => syncPlaceAutocompleteElementValue(pac, normalizedValue, retries - 1), 75);
+		}
+	} catch {
+		if (retries > 0) {
+			setTimeout(() => syncPlaceAutocompleteElementValue(pac, normalizedValue, retries - 1), 75);
+		}
+	}
+}
+
 export async function attachPlaceAutocompleteElement(
 	nativeInput: HTMLInputElement,
 	_options: AttachPlaceAutocompleteOptions | undefined,
@@ -449,6 +487,9 @@ export async function attachPlaceAutocompleteElement(
 	/** FormControl writes to the hidden input; the visible web component must be synced. */
 	queueMicrotask(() => syncPlaceAutocompleteDisplay(nativeInput));
 	queueMicrotask(() => syncRestoredPlaceAutocompleteValue(nativeInput, _options?.syncControl));
+	[100, 250, 500, 900].forEach((delay) => {
+		setTimeout(() => syncPlaceAutocompleteDisplay(nativeInput), delay);
+	});
 }
 
 /**
@@ -489,28 +530,7 @@ export function syncPlaceAutocompleteDisplay(nativeInput: HTMLInputElement): voi
 		return;
 	}
 	const v = nativeInput.value || '';
-	const el = pac as HTMLElement & { value?: string };
-	try {
-		el.value = v;
-	} catch {
-		/* ignore */
-	}
-	const trySyncInner = (retries = 10) => {
-		try {
-			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
-			const inner = root?.querySelector?.('input');
-			if (inner instanceof HTMLInputElement) {
-				if (inner.value !== (v || '')) {
-					inner.value = (v || '');
-				}
-			} else if (retries > 0) {
-				setTimeout(() => trySyncInner(retries - 1), 50);
-			}
-		} catch {
-			/* ignore */
-		}
-	};
-	trySyncInner();
+	syncPlaceAutocompleteElementValue(pac, v);
 }
 
 export function getPlaceAutocompleteDisplayValue(
@@ -585,6 +605,8 @@ export function syncRestoredPlaceAutocompleteValue(
 					syncControl.setValue(visibleValue);
 					syncControl.updateValueAndValidity();
 				}
+
+				syncPlaceAutocompleteElementValue(pac, visibleValue);
 			} else if (retries > 0) {
 				setTimeout(() => trySyncFromInner(retries - 1), 100);
 			}
