@@ -118,14 +118,14 @@ export class BookingsComponent implements OnInit {
 		// 	date.toISOString().substring(0, 10);
 
 		this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
-			this.affiliateService.getCookie('indv_startDate') :
-			date.toISOString().substring(0, 10);
+			moment(this.affiliateService.getCookie('indv_startDate'), 'YYYY-MM-DD').toDate() :
+			date;
 
 		date.setDate(date.getDate() + 7);
 
 		this.endDate = this.affiliateService.checkCookie('indv_endDate') ?
-			this.affiliateService.getCookie('indv_endDate') :
-			date.toISOString().substring(0, 10);
+			moment(this.affiliateService.getCookie('indv_endDate'), 'YYYY-MM-DD').toDate() :
+			new Date(date);
 
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
@@ -144,7 +144,7 @@ export class BookingsComponent implements OnInit {
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
-		this.loadBookings();
+		this.loadBookings(null, true);
 
 
 		this.changeStatusForm = this.formBuilder.group({
@@ -231,7 +231,7 @@ export class BookingsComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
-	loadBookings(pageUrl = null) {
+	loadBookings(pageUrl = null, includeDatesInPayload: boolean = false) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
 		if (pageUrl) {
@@ -243,8 +243,15 @@ export class BookingsComponent implements OnInit {
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		console.log("this.staert", this.startDate)
-		let start = this.startDate instanceof Date ? moment(this.startDate).format('YYYY-MM-DD') : this.startDate;
-		let end = this.endDate instanceof Date ? moment(this.endDate).format('YYYY-MM-DD') : this.endDate;
+		const fallbackStartDate = this.startDate || moment().format('YYYY-MM-DD');
+		const fallbackEndDate = this.endDate || moment().add(7, 'day').format('YYYY-MM-DD');
+		const shouldSendDates = includeDatesInPayload || this.useDateFilter || !!this.searchText?.trim();
+		let start = shouldSendDates
+			? (fallbackStartDate instanceof Date ? moment(fallbackStartDate).format('YYYY-MM-DD') : fallbackStartDate)
+			: fallbackStartDate;
+		let end = shouldSendDates
+			? (fallbackEndDate instanceof Date ? moment(fallbackEndDate).format('YYYY-MM-DD') : fallbackEndDate)
+			: fallbackEndDate;
 
 		console.log("start.start", start)
 
@@ -258,15 +265,8 @@ export class BookingsComponent implements OnInit {
 		this.individualService.loadBookings(pageUrl, this.searchText, start, end, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
 			this.spinner.hide()
-			let date = new Date();
-			let timestamp = date.getTime();
-			date.setDate(date.getDate() + 7);
-			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if (!this.useDateFilter && !this.searchText) {
-				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
-			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -301,8 +301,11 @@ export class BookingsComponent implements OnInit {
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.runBookingsSearch()
-		}, 700)
+			this.saveCookie('indv_startDate', this.startDate);
+			this.saveCookie('indv_endDate', this.endDate);
+			this.saveCookie('indv_search', this.searchText ?? "");
+			this.loadBookings();
+		}, 400)
 	}
 
 	highlighText(args: string) {
@@ -313,9 +316,10 @@ export class BookingsComponent implements OnInit {
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
-	saveCookie(key: string, value: string) {
+	saveCookie(key: string, value: any) {
 		console.log('in function set cookies for', key, value)
-		this.affiliateService.setCookie(key, value, 30);
+		const formattedValue = value instanceof Date ? moment(value).format('YYYY-MM-DD') : value;
+		this.affiliateService.setCookie(key, formattedValue, 30);
 	}
 	formatPhoneNumber(ph: any) {
 		if (!ph.includes('+')) {
@@ -327,11 +331,11 @@ export class BookingsComponent implements OnInit {
 
 	reset() {
 		let date = new Date();
-		this.startDate = date.toISOString().substring(0, 10);
+		this.startDate = date;
 
 		let endDate = new Date();
 		endDate.setDate(date.getDate() + 7);
-		this.endDate = endDate.toISOString().substring(0, 10);
+		this.endDate = endDate;
 
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
@@ -347,7 +351,10 @@ export class BookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
-		this.runBookingsSearch();
+		this.saveCookie('indv_startDate', this.startDate);
+		this.saveCookie('indv_endDate', this.endDate);
+		this.saveCookie('indv_search', this.searchText ?? "");
+		this.loadBookings(null, true);
 	}
 
 	handleChangeCheckbox(value: any) {
@@ -356,9 +363,9 @@ export class BookingsComponent implements OnInit {
 		localStorage.setItem('indvUseDateFilter', value)
 		if (!this.startDate || !this.endDate) {
 			const date = new Date();
-			this.startDate = date.toISOString().substring(0, 10);
+			this.startDate = date;
 			date.setDate(date.getDate() + 7);
-			this.endDate = moment(date.getTime()).format("YYYY-MM-DD");
+			this.endDate = new Date(date);
 		}
 
 		this.selectedDateRange = {
@@ -368,7 +375,9 @@ export class BookingsComponent implements OnInit {
 
 		console.log('this.startDate', this.startDate)
 		console.log('this.endDate', this.endDate)
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	textFormatter(text: string) {
@@ -585,18 +594,22 @@ export class BookingsComponent implements OnInit {
 			return;
 		}
 
-		// Convert Date object to YYYY-MM-DD string format
-		const formattedDate = date instanceof Date ? date.toISOString().substring(0, 10) : date;
+		const normalizedDate = date instanceof Date
+			? dayjs(date).startOf('day').toDate()
+			: dayjs(date, 'YYYY-MM-DD').startOf('day').toDate();
 
 		if (dateType == 'startDate') {
-			this.startDate = formattedDate;
-			if (this.endDate && moment(this.startDate, 'YYYY-MM-DD').isAfter(moment(this.endDate, 'YYYY-MM-DD'), 'day')) {
+			this.startDate = normalizedDate;
+			if (this.endDate && moment(this.startDate).isAfter(moment(this.endDate), 'day')) {
 				this.endDate = this.startDate;
 				this.saveCookie('indv_endDate', this.endDate);
 			}
 		}
 		else {
-			this.endDate = formattedDate;
+			this.endDate = normalizedDate;
+			if (this.startDate && moment(this.endDate).isBefore(moment(this.startDate), 'day')) {
+				this.endDate = this.startDate;
+			}
 		}
 
 		this.selectedDateRange = {
@@ -604,10 +617,15 @@ export class BookingsComponent implements OnInit {
 			endDate: dayjs(this.endDate)
 		};
 
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	runBookingsSearch(pageUrl = null) {
+		if (!this.useDateFilter) {
+			return;
+		}
 		this.saveCookie('indv_startDate', this.startDate);
 		this.saveCookie('indv_endDate', this.endDate);
 		this.saveCookie('indv_search', this.searchText ?? "");
@@ -615,8 +633,8 @@ export class BookingsComponent implements OnInit {
 	}
 
 	choosedDate(event) {
-		this.startDate = event.startDate.format('YYYY-MM-DD'); // Convert to string for API
-		this.endDate = event.endDate.format('YYYY-MM-DD'); // Convert to string for API
+		this.startDate = event.startDate.toDate();
+		this.endDate = event.endDate.toDate();
 		console.log(this.startDate, this.endDate);
 	}
 	dateFormat(value: any) {

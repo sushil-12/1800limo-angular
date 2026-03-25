@@ -167,7 +167,7 @@ export class DailyBookingsComponent implements OnInit {
 
 		this.selectedStatus = localStorage.getItem("DBS_Status") ? localStorage.getItem("DBS_Status") : null;
 
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus, true);
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -377,16 +377,20 @@ export class DailyBookingsComponent implements OnInit {
 
 		if (!this.startDate || !this.endDate) {
 			const date = new Date();
-			this.startDate = dayjs(date.getTime()).toDate();
+			this.startDate = dayjs(date).startOf('day').toDate();
 			date.setDate(date.getDate() + 7);
-			this.endDate = dayjs(date.getTime()).toDate();
+			this.endDate = dayjs(date).startOf('day').toDate();
+			this.saveCookie("admin_startDate", this.startDate);
+			this.saveCookie("admin_endDate", this.endDate);
 		}
 
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
 			endDate: dayjs(this.endDate)
 		};
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 	handleCheckboxSort(value: any) {
 		if (value) {
@@ -477,7 +481,17 @@ export class DailyBookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log("Reset Successfully. ");
-		this.runBookingsSearch();
+		this.saveCookie("admin_startDate", this.startDate);
+		this.saveCookie("admin_endDate", this.endDate);
+		localStorage.setItem("DBSearch", this.searchText);
+		this.loadBookings(
+			null,
+			this.startDate,
+			this.endDate,
+			this.searchText,
+			this.selectedStatus,
+			true
+		);
 	}
 
 	applyStatusFilter(status: any) {
@@ -820,16 +834,23 @@ export class DailyBookingsComponent implements OnInit {
 		start_date: Date | null, // Changed to Date
 		end_date: Date | null, // Changed to Date
 		search_value: string = "",
-		status: any = null
+		status: any = null,
+		includeDatesInPayload: boolean = false
 	) {
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
 			this.scroll('daily_bookings_table')
 		}
 
-		// Convert Dates back to strings for API if needed (assuming API expects 'YYYY-MM-DD')
-		const startDateStr = start_date ? dayjs(start_date).format('YYYY-MM-DD') : '';
-		const endDateStr = end_date ? dayjs(end_date).format('YYYY-MM-DD') : '';
+		const fallbackStartDate = start_date ? dayjs(start_date) : dayjs();
+		const fallbackEndDate = end_date ? dayjs(end_date) : dayjs().add(7, "day");
+		const shouldSendDates = includeDatesInPayload || this.useDateFilter || !!search_value?.trim();
+		const startDateStr = shouldSendDates
+			? fallbackStartDate.format('YYYY-MM-DD')
+			: fallbackStartDate.format('YYYY-MM-DD');
+		const endDateStr = shouldSendDates
+			? fallbackEndDate.format('YYYY-MM-DD')
+			: fallbackEndDate.format('YYYY-MM-DD');
 
 		search_value == "" && this.spinner.show();
 		this.noError = false;
@@ -850,17 +871,10 @@ export class DailyBookingsComponent implements OnInit {
 					if (result?.data?.reservations?.data == 0) {
 						this.noError = true;
 					}
-					let date = new Date();
-					let timestamp = date.getTime();
-					date.setDate(date.getDate() + 7);
-					timestamp = date.getTime();
 					this.bookingsRes = result;
 					this.bookings_Original = this.bookingsRes?.data?.reservations?.data || [];
 					this.sortBookings();
 					this.filterBookingsByStatus();
-					if (!this.useDateFilter && !this.searchText) {
-						this.endDate = this.bookings?.length > 0 ? dayjs(this.bookings[this.bookings?.length - 1]?.pickup_date).toDate() : dayjs(timestamp).toDate()
-					}
 					this.total_amount = this.bookingsRes?.data?.total_amount
 					this.admin_total = this.bookingsRes?.data?.admin_total
 					this.totalRecords = this.bookingsRes.data?.reservations?.total;
@@ -893,17 +907,10 @@ export class DailyBookingsComponent implements OnInit {
 					if (result?.data?.reservations?.data == 0) {
 						this.noError = true;
 					}
-					let date = new Date();
-					let timestamp = date.getTime();
-					date.setDate(date.getDate() + 7);
-					timestamp = date.getTime();
 					this.bookingsRes = result;
 					this.bookings_Original = this.bookingsRes?.data?.reservations?.data || [];
 					this.sortBookings();
 					this.filterBookingsByStatus();
-					if (!this.useDateFilter && !this.searchText) {
-						this.endDate = this.bookings?.length > 0 ? dayjs(this.bookings[this.bookings?.length - 1]?.pickup_date).toDate() : dayjs(timestamp).toDate()
-					}
 					this.totalRecords = this.bookingsRes.data?.reservations?.total;
 					this.total_amount = this.bookingsRes?.data?.total_amount
 					this.admin_total = this.bookingsRes?.data?.admin_total
@@ -931,11 +938,18 @@ export class DailyBookingsComponent implements OnInit {
 		start_date: Date | null, // Changed to Date
 		end_date: Date | null, // Changed to Date
 		search_value: string = "",
-		status: any = null
+		status: any = null,
+		includeDatesInPayload: boolean = false
 	) {
-		// Convert Dates back to strings for API if needed
-		const startDateStr = start_date ? dayjs(start_date).format('YYYY-MM-DD') : '';
-		const endDateStr = end_date ? dayjs(end_date).format('YYYY-MM-DD') : '';
+		const fallbackStartDate = start_date ? dayjs(start_date) : dayjs();
+		const fallbackEndDate = end_date ? dayjs(end_date) : dayjs().add(7, "day");
+		const shouldSendDates = includeDatesInPayload || this.useDateFilter || !!search_value?.trim();
+		const startDateStr = shouldSendDates
+			? fallbackStartDate.format('YYYY-MM-DD')
+			: fallbackStartDate.format('YYYY-MM-DD');
+		const endDateStr = shouldSendDates
+			? fallbackEndDate.format('YYYY-MM-DD')
+			: fallbackEndDate.format('YYYY-MM-DD');
 
 		search_value == "" && this.spinner.show();
 		this.noError = false;
@@ -1089,14 +1103,17 @@ export class DailyBookingsComponent implements OnInit {
 		}
 
 		if (dateType == 'startDate') {
-			this.startDate = dayjs(date).toDate();
+			this.startDate = dayjs(date).startOf('day').toDate();
 			if (this.endDate && dayjs(this.startDate).isAfter(this.endDate, "day")) {
 				this.endDate = dayjs(this.startDate).toDate();
 				this.saveCookie('admin_endDate', this.endDate);
 			}
 			this.saveCookie('admin_startDate', this.startDate);
 		} else {
-			this.endDate = dayjs(date).toDate();
+			this.endDate = dayjs(date).startOf('day').toDate();
+			if (this.startDate && dayjs(this.endDate).isBefore(this.startDate, "day")) {
+				this.endDate = dayjs(this.startDate).toDate();
+			}
 			this.saveCookie('admin_endDate', this.endDate);
 		}
 
@@ -1105,7 +1122,9 @@ export class DailyBookingsComponent implements OnInit {
 			endDate: dayjs(this.endDate)
 		};
 
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 	fomatAffiliateType(type: any) {
 		if (type == "taxi_operator") {
@@ -1425,8 +1444,11 @@ export class DailyBookingsComponent implements OnInit {
 		return formattedText;
 	}
 
-	timer: any;
-	runBookingsSearch(searchValue: string = this.searchText) {
+timer: any;
+runBookingsSearch(searchValue: string = this.searchText) {
+		if (!this.useDateFilter) {
+			return;
+		}
 		this.searchText = searchValue ?? "";
 		localStorage.setItem("DBSearch", this.searchText);
 		if (this.startDate) {
@@ -1444,13 +1466,26 @@ export class DailyBookingsComponent implements OnInit {
 		);
 	}
 
-	searchInBookings(search_value: string) {
+searchInBookings(search_value: string) {
 		this.searchText = search_value ?? "";
 		console.log("--->>>>>", search_value);
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.runBookingsSearch(this.searchText);
-		}, 700);
+			localStorage.setItem("DBSearch", this.searchText);
+			if (this.startDate) {
+				this.saveCookie("admin_startDate", this.startDate);
+			}
+			if (this.endDate) {
+				this.saveCookie("admin_endDate", this.endDate);
+			}
+			this.loadBookings(
+				null,
+				this.startDate,
+				this.endDate,
+				this.searchText?.replace(/&/g, '%26'),
+				this.selectedStatus
+			);
+		}, 400);
 	}
 
 	handleKeypressEvents() {

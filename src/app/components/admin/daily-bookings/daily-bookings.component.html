@@ -32,7 +32,7 @@
 							<mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
 								<mat-label>Start Date</mat-label>
 								<input matInput [matDatepicker]="picker1" placeholder="Start Date"
-									(dateChange)="changeDate('startDate', $event.value)" (click)="picker1.open()"
+									(dateInput)="changeDate('startDate', $event.value)" (click)="picker1.open()"
 									[value]="startDate" readonly />
 								<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 								<mat-datepicker #picker1></mat-datepicker>
@@ -43,7 +43,7 @@
 							<mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
 								<mat-label>End Date</mat-label>
 								<input matInput [matDatepicker]="picker2" placeholder="End Date"
-									(dateChange)="changeDate('endDate', $event.value)" (click)="picker2.open()"
+									(dateInput)="changeDate('endDate', $event.value)" (click)="picker2.open()"
 									[value]="endDate" [min]="startDate" readonly />
 								<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
 								<mat-datepicker #picker2></mat-datepicker>
@@ -74,8 +74,7 @@
 				<div class="col-md-12 m-0 p-0 pl-2">
 					<p style="margin: 0;">
 						<mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-							{{useDateFilter ? 'Uncheck the box and see all future bookings.' : 'Check the box and only
-							see the next 7 days bookings or search for past bookings.' }}
+							{{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date filter.' }}
 						</mat-checkbox>
 					</p>
 				</div>
