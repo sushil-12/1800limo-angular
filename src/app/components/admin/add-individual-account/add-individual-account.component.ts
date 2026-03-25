@@ -197,12 +197,17 @@ export class AddIndividualAccountComponent implements OnInit, AfterViewInit {
 
 					const lat = place.geometry.location.lat();
 					const lng = place.geometry.location.lng();
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = place.name ?? '';
+					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
 					this.addIndividualAccountForm.patchValue({
-						address: place.formatted_address,
+						address: displayAddress,
 						latitude: lat,
 						longitude: lng
 					});
+					this.search1.nativeElement.value = displayAddress;
+					syncPlaceAutocompleteDisplay(this.search1.nativeElement);
 
 					place.address_components?.forEach((component) => {
 						const types = component.types;

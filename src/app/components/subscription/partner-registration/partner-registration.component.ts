@@ -103,9 +103,12 @@ export class PartnerRegistrationComponent implements OnInit {
       (place) => {
         this.ngZone.run(() => {
           if (!place.geometry || !place.geometry.location) return;
+          const formattedAddress = place.formatted_address ?? '';
+          const placeName = place.name ?? '';
+          const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
           this.registrationForm.patchValue({
-            address: place.formatted_address,
+            address: displayAddress,
             latitude: place.geometry.location.lat(),
             longitude: place.geometry.location.lng()
           });

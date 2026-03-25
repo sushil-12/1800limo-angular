@@ -117,11 +117,15 @@ export class BookingsComponent implements OnInit {
 		// 	this.affiliateService.getCookie('indv_endDate') :
 		// 	date.toISOString().substring(0, 10);
 
-		this.startDate = date.toISOString().substring(0, 10);;
+		this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
+			this.affiliateService.getCookie('indv_startDate') :
+			date.toISOString().substring(0, 10);
 
 		date.setDate(date.getDate() + 7);
 
-		this.endDate = date.toISOString().substring(0, 10);;
+		this.endDate = this.affiliateService.checkCookie('indv_endDate') ?
+			this.affiliateService.getCookie('indv_endDate') :
+			date.toISOString().substring(0, 10);
 
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
@@ -293,12 +297,11 @@ export class BookingsComponent implements OnInit {
 	}
 
 	searchInBookings(search_value: string) {
-		this.searchText = search_value
+		this.searchText = search_value ?? ""
 		console.log('--->>>>>', search_value)
-		this.saveCookie('indv_search', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.loadBookings(null)
+			this.runBookingsSearch()
 		}, 700)
 	}
 
@@ -344,20 +347,20 @@ export class BookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
+		this.runBookingsSearch();
 	}
 
 	handleChangeCheckbox(value: any) {
 		console.log('event---->> ', value)
 		this.useDateFilter = value
-		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('indvUseDateFilter', value)
-		let date = new Date();
-		this.startDate = date.toISOString().substring(0, 10);
-		date.setDate(date.getDate() + 7);
-		let timestamp = date.getTime();
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
+		if (!this.startDate || !this.endDate) {
+			const date = new Date();
+			this.startDate = date.toISOString().substring(0, 10);
+			date.setDate(date.getDate() + 7);
+			this.endDate = moment(date.getTime()).format("YYYY-MM-DD");
+		}
 
-		// Update selectedDateRange to keep date picker in sync
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
 			endDate: dayjs(this.endDate)
@@ -365,7 +368,7 @@ export class BookingsComponent implements OnInit {
 
 		console.log('this.startDate', this.startDate)
 		console.log('this.endDate', this.endDate)
-		this.loadBookings();
+		this.runBookingsSearch();
 	}
 
 	textFormatter(text: string) {
@@ -578,15 +581,37 @@ export class BookingsComponent implements OnInit {
 	}
 
 	changeDate(dateType, date) {
+		if (!date) {
+			return;
+		}
+
 		// Convert Date object to YYYY-MM-DD string format
 		const formattedDate = date instanceof Date ? date.toISOString().substring(0, 10) : date;
 
 		if (dateType == 'startDate') {
 			this.startDate = formattedDate;
+			if (this.endDate && moment(this.startDate, 'YYYY-MM-DD').isAfter(moment(this.endDate, 'YYYY-MM-DD'), 'day')) {
+				this.endDate = this.startDate;
+				this.saveCookie('indv_endDate', this.endDate);
+			}
 		}
 		else {
 			this.endDate = formattedDate;
 		}
+
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
+
+		this.runBookingsSearch();
+	}
+
+	runBookingsSearch(pageUrl = null) {
+		this.saveCookie('indv_startDate', this.startDate);
+		this.saveCookie('indv_endDate', this.endDate);
+		this.saveCookie('indv_search', this.searchText ?? "");
+		this.loadBookings(pageUrl);
 	}
 
 	choosedDate(event) {

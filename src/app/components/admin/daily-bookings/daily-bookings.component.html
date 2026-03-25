@@ -56,7 +56,7 @@
 						<div class="mr-2">
 							<button class="custom-filled-button orange-button"
 								style="color:#fff;padding: 5px 12px !important;"
-								(click)="loadBookings(null, startDate, endDate, searchText, selectedStatus); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
+								(click)="runBookingsSearch()">
 								Search
 							</button>
 						</div>
@@ -123,7 +123,7 @@
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0 w-100">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
-								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+								(focus)="$event.target.select()" (input)="searchInBookings($event.target.value)"
 								[value]="searchText"
 								placeholder="Search by booking number, status, name, cell phone, vehicle type"
 								id="keyword" autofocus>

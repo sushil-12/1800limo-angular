@@ -167,9 +167,12 @@ export class EditTravelPlannerAccountComponent implements OnInit, AfterViewInit 
 			(place) => {
 				this.ngZone.run(() => {
 					if (!place.geometry || !place.geometry.location) return;
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = place.name ?? '';
+					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
 					this.editTravelPlannerAccountForm.patchValue({
-						address: place.formatted_address,
+						address: displayAddress,
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng()
 					});

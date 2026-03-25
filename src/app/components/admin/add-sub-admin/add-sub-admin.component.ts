@@ -191,9 +191,12 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 
 				const lat = place.geometry.location.lat();
 				const lng = place.geometry.location.lng();
+				const formattedAddress = place.formatted_address ?? '';
+				const placeName = place.name ?? '';
+				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
 				this.addSubAdminAccountForm.patchValue({
-					address: place.formatted_address,
+					address: displayAddress,
 					latitude: lat,
 					longitude: lng
 				});

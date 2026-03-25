@@ -116,8 +116,32 @@ function installGmpAttachShadowPatch(): void {
 			input,
 			[role="option"],
 			.suggestion-item,
-			.text-content {
+			.text-content,
+			.primary-text,
+			.secondary-text,
+			.place-name,
+			.place-address {
 				text-align: left !important;
+				color: #000 !important;
+			}
+			[role="listbox"],
+			.suggestions-container,
+			.suggestion-list,
+			.list-container {
+				background: #fff !important;
+				color: #000 !important;
+			}
+			[role="option"] {
+				border-bottom: 1px solid rgba(0,0,0,0.12) !important;
+			}
+			[role="option"][aria-selected="true"],
+			[role="option"]:hover,
+			[role="option"]:focus,
+			[role="option"]:focus-visible,
+			.suggestion-item:hover,
+			.suggestion-item:focus,
+			.suggestion-item:focus-visible {
+				background: #f3f4f6 !important;
 				color: #000 !important;
 			}
 			svg,
@@ -172,6 +196,17 @@ function installGmpAttachShadowPatch(): void {
 			box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
 			margin: 0 !important;
 			transform: none !important;
+			background: #fff !important;
+			color: #000 !important;
+		}
+		dialog.full-window-autocomplete-dialog[open] * {
+			background: transparent !important;
+			color: #000 !important;
+		}
+		dialog.full-window-autocomplete-dialog[open] [role="listbox"],
+		dialog.full-window-autocomplete-dialog[open] [role="option"],
+		dialog.full-window-autocomplete-dialog[open] .suggestion-item,
+		dialog.full-window-autocomplete-dialog[open] .text-content {
 			background: #fff !important;
 			color: #000 !important;
 		}

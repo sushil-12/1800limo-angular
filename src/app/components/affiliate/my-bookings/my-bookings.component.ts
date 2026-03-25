@@ -103,11 +103,15 @@ export class MyBookingsComponent implements OnInit {
 		// 	this.affiliateService.getCookie('affiliate_endDate') :
 		// 	date.toISOString().substring(0, 10);
 
-		this.startDate = date.toISOString().substring(0, 10);
+		this.startDate = this.affiliateService.checkCookie('affiliate_startDate') ?
+			this.affiliateService.getCookie('affiliate_startDate') :
+			date.toISOString().substring(0, 10);
 
 		date.setDate(date.getDate() + 7);
 
-		this.endDate = date.toISOString().substring(0, 10);
+		this.endDate = this.affiliateService.checkCookie('affiliate_endDate') ?
+			this.affiliateService.getCookie('affiliate_endDate') :
+			date.toISOString().substring(0, 10);
 
 
 		this.searchText = this.affiliateService.checkCookie('affiliate_search') ?
@@ -291,12 +295,11 @@ export class MyBookingsComponent implements OnInit {
 	}
 
 	searchInBookings(search_value: string) {
-		this.searchText = search_value
+		this.searchText = search_value ?? ""
 		console.log('--->>>>>', search_value)
-		this.saveCookie('affiliate_search', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.loadBookings(null)
+			this.runBookingsSearch()
 		}, 700)
 	}
 	formatBaseRate(baseRate: string | number): string {
@@ -333,13 +336,14 @@ export class MyBookingsComponent implements OnInit {
 	handleChangeCheckbox(value: any) {
 		console.log('event---->> ', value)
 		this.useDateFilter = value
-		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('farmInuseDateFilter', value)
-		let date = new Date();
-		date.setDate(date.getDate() + 7);
-		let timestamp = date.getTime();
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
-		this.loadBookings();
+		if (!this.startDate || !this.endDate) {
+			const date = new Date();
+			this.startDate = date.toISOString().substring(0, 10);
+			date.setDate(date.getDate() + 7);
+			this.endDate = date.toISOString().substring(0, 10);
+		}
+		this.runBookingsSearch();
 	}
 
 	reset() {
@@ -357,6 +361,7 @@ export class MyBookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
+		this.runBookingsSearch();
 	}
 	textFormatter(text: string) {
 		try {
@@ -600,12 +605,30 @@ export class MyBookingsComponent implements OnInit {
 	}
 
 	changeDate(dateType, date) {
+		if (!date) {
+			return;
+		}
+
 		if (dateType == 'startDate') {
 			this.startDate = date;
+			if (this.endDate && moment(this.startDate, 'YYYY-MM-DD').isAfter(moment(this.endDate, 'YYYY-MM-DD'), 'day')) {
+				this.endDate = this.startDate;
+				this.saveCookie('affiliate_endDate', this.endDate);
+			}
 		}
 		else {
 			this.endDate = date;
 		}
+		this.saveCookie('affiliate_startDate', this.startDate);
+		this.saveCookie('affiliate_endDate', this.endDate);
+		this.runBookingsSearch();
+	}
+
+	runBookingsSearch(pageUrl = null) {
+		this.saveCookie('affiliate_startDate', this.startDate);
+		this.saveCookie('affiliate_endDate', this.endDate);
+		this.saveCookie('affiliate_search', this.searchText ?? "");
+		this.loadBookings(pageUrl);
 	}
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')

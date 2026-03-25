@@ -327,57 +327,54 @@ export class FinalizeBookingComponent implements OnInit {
 	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
-			let base_rate = 0
-			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate * this.finalize_params.number_of_hours
-			}
-			else {
-				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate
-			}
+			const vehiclesMultiplier = this.finalize_params.number_of_vehicles != 0 ? this.finalize_params.number_of_vehicles : 1;
+			let base_rate = this.edit_rates_value?.all_inclusive_rates?.["Base_Rate"]?.amount
+				?? this.edit_rates_value?.all_inclusive_rates?.["Base_Rate"]?.baserate
+				?? 0;
+
 			['ELH_Charges', 'Stops', 'Wait'].map((key) => {
-				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate
+				base_rate += this.edit_rates_value?.all_inclusive_rates?.[key]?.amount
+					?? this.edit_rates_value?.all_inclusive_rates?.[key]?.baserate
+					?? 0;
 			});
 			for (const key of Object.keys(this.edit_rates_value.amenities)) {
-				base_rate += this.edit_rates_value.amenities[key].baserate;
+				base_rate += this.edit_rates_value?.amenities?.[key]?.amount
+					?? this.edit_rates_value?.amenities?.[key]?.baserate
+					?? 0;
 			}
-			// for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
-			// 	base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
-			// }
-			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
-			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
-			// }
-			if (this.finalize_params.number_of_vehicles != 0) {
-				base_rate *= this.finalize_params.number_of_vehicles
-			}
-			let grandTotal = this.edit_rates_value.grand_total
-			let stripeFee = grandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100
-			let deducted_admin_share = adminShare - stripeFee
-			let shareArray = {
+			base_rate *= vehiclesMultiplier
+			const grandTotal = this.edit_rates_value.grand_total
+			const stripeFee = grandTotal * 0.05 + 0.30
+			const extraGratuityShare = ((this.edit_rates_value?.misc?.Extra_Gratuity?.amount ?? 0) * 0.25) * vehiclesMultiplier
+			const isTravelBooking = this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin;
+			const adminSharePercent = this.booking_created_from == 'subscriber'
+				? 0
+				: (isTravelBooking || this.isFarmoutBooking ? 15 : 25);
+			const travelAgentShare = isTravelBooking ? base_rate * 0.10 : 0;
+			const farmoutShare = this.isFarmoutBooking ? base_rate * 0.10 : 0;
+			const adminShare = (base_rate * adminSharePercent) / 100 + extraGratuityShare;
+			const deducted_admin_share = this.booking_created_from == 'subscriber'
+				? 0
+				: adminShare - stripeFee;
+
+			const shareArray: any = {
 				baseRate: base_rate,
-				grandTotal: grandTotal,
-				stripeFee: stripeFee,
-				adminShare: adminShare,
-				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
+				grandTotal,
+				stripeFee,
+				adminShare,
+				deducted_admin_share,
 				affiliateShare: grandTotal - base_rate * 0.25
 			}
-			// travelAgentShare : 
-			if (this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
-				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
-				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
-				shareArray['travelAgentShare'] = base_rate * 0.10
+
+			if (travelAgentShare) {
+				shareArray['travelAgentShare'] = travelAgentShare;
 			}
-			else if (this.isFarmoutBooking) {
-				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
-				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
-				shareArray['farmoutShare'] = base_rate * 0.10
+
+			if (farmoutShare) {
+				shareArray['farmoutShare'] = farmoutShare;
 			}
-			else if (this.booking_created_from == 'subscriber') {
-				this.adminSharePercent = 0
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
-				shareArray['deducted_admin_share'] = 0
+
+			if (this.booking_created_from == 'subscriber') {
 				shareArray['affiliateShare'] = grandTotal - stripeFee
 			}
 			this.shareArray = shareArray
@@ -558,6 +555,7 @@ export class FinalizeBookingComponent implements OnInit {
 		this.edit_rates_value = form
 		console.log("edit_rates_value", this.edit_rates_value)
 		this.payableAmount = this.edit_rates_value.grand_total
+		this.createReservationShareArray()
 		if (this.BookingDetail?.booking_status == 'finalized') {
 			if (this.edit_rates_value.grand_total != this.BookingDetail?.grand_total) {
 				this.isFinalizeButton = false

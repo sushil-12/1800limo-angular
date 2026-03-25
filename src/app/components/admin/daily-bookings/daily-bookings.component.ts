@@ -374,19 +374,19 @@ export class DailyBookingsComponent implements OnInit {
 		console.log("event---->> ", value);
 		this.useDateFilter = value;
 		this.saveCookie("useDateFilter", value);
-		let date = new Date();
-		date.setDate(date.getDate());
-		let timestamp = date.getTime();
-		this.startDate = dayjs(timestamp).toDate();
-		// let date = new Date();
-		date.setDate(date.getDate() + 7);
-		timestamp = date.getTime();
-		this.endDate = dayjs(timestamp).toDate();
+
+		if (!this.startDate || !this.endDate) {
+			const date = new Date();
+			this.startDate = dayjs(date.getTime()).toDate();
+			date.setDate(date.getDate() + 7);
+			this.endDate = dayjs(date.getTime()).toDate();
+		}
+
 		this.selectedDateRange = {
 			startDate: dayjs(this.startDate),
 			endDate: dayjs(this.endDate)
 		};
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
+		this.runBookingsSearch();
 	}
 	handleCheckboxSort(value: any) {
 		if (value) {
@@ -477,7 +477,7 @@ export class DailyBookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log("Reset Successfully. ");
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
+		this.runBookingsSearch();
 	}
 
 	applyStatusFilter(status: any) {
@@ -1084,13 +1084,28 @@ export class DailyBookingsComponent implements OnInit {
 
 	changeDate(dateType, date: Date) { // $event is now Date
 		console.log("---------__>>>>>>", dateType, date);
+		if (!date) {
+			return;
+		}
+
 		if (dateType == 'startDate') {
 			this.startDate = dayjs(date).toDate();
+			if (this.endDate && dayjs(this.startDate).isAfter(this.endDate, "day")) {
+				this.endDate = dayjs(this.startDate).toDate();
+				this.saveCookie('admin_endDate', this.endDate);
+			}
 			this.saveCookie('admin_startDate', this.startDate);
 		} else {
 			this.endDate = dayjs(date).toDate();
 			this.saveCookie('admin_endDate', this.endDate);
 		}
+
+		this.selectedDateRange = {
+			startDate: dayjs(this.startDate),
+			endDate: dayjs(this.endDate)
+		};
+
+		this.runBookingsSearch();
 	}
 	fomatAffiliateType(type: any) {
 		if (type == "taxi_operator") {
@@ -1411,14 +1426,30 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	timer: any;
+	runBookingsSearch(searchValue: string = this.searchText) {
+		this.searchText = searchValue ?? "";
+		localStorage.setItem("DBSearch", this.searchText);
+		if (this.startDate) {
+			this.saveCookie("admin_startDate", this.startDate);
+		}
+		if (this.endDate) {
+			this.saveCookie("admin_endDate", this.endDate);
+		}
+		this.loadBookings(
+			null,
+			this.startDate,
+			this.endDate,
+			this.searchText?.replace(/&/g, '%26'),
+			this.selectedStatus
+		);
+	}
+
 	searchInBookings(search_value: string) {
-		this.searchText = search_value
+		this.searchText = search_value ?? "";
 		console.log("--->>>>>", search_value);
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			// this.saveCookie("search", this.searchText);
-			localStorage.setItem("DBSearch", this.searchText);
-			this.loadBookings(null, this.startDate, this.endDate, search_value?.replace(/&/g, '%26'), this.selectedStatus);
+			this.runBookingsSearch(this.searchText);
 		}, 700);
 	}
 
