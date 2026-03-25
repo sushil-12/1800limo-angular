@@ -143,7 +143,7 @@ export class FarmOutComponent implements OnInit {
 
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
-		this.loadBookings()
+		this.loadBookings(null, true)
 
 		$("#search-field-farmout").addClass("box-outline")
 		// this.MapController()
@@ -234,7 +234,7 @@ export class FarmOutComponent implements OnInit {
 	}
 
 
-	loadBookings(pageUrl = null) {
+	loadBookings(pageUrl = null, includeDatesInPayload: boolean = false) {
 		/** spinner starts on init */
 		// this.$spinner.show();
 		if (pageUrl) {
@@ -244,20 +244,16 @@ export class FarmOutComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		let start = this.startDate ? moment(this.startDate).format('YYYY-MM-DD') : '';
-		let end = this.endDate ? moment(this.endDate).format('YYYY-MM-DD') : '';
+		const fallbackStartDate = this.startDate || moment().format('YYYY-MM-DD');
+		const fallbackEndDate = this.endDate || moment().add(7, 'day').format('YYYY-MM-DD');
+		const shouldSendDates = includeDatesInPayload || this.useDateFilter || !!this.searchText?.trim();
+		let start = shouldSendDates ? moment(fallbackStartDate).format('YYYY-MM-DD') : moment(fallbackStartDate).format('YYYY-MM-DD');
+		let end = shouldSendDates ? moment(fallbackEndDate).format('YYYY-MM-DD') : moment(fallbackEndDate).format('YYYY-MM-DD');
 		this.$affiliateService.loadFarmoutBookings(pageUrl, this.searchText, start, end, this.useDateFilter).then(result => {
 			this.$spinner.hide();//hide spinner
 			console.log('result---->>>', result)
-			let date = new Date();
-			let timestamp = date.getTime();
-			date.setDate(date.getDate() + 7);
-			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if (!this.useDateFilter && !this.searchText) {
-				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : new Date(timestamp);
-			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -290,8 +286,17 @@ export class FarmOutComponent implements OnInit {
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.runBookingsSearch()
-		}, 700)
+			if (this.startDate) {
+				localStorage.setItem('farmout_startDate', this.startDate);
+				this.saveCookie('farmout_startDate', this.startDate);
+			}
+			if (this.endDate) {
+				localStorage.setItem('farmout_endDate', this.endDate);
+				this.saveCookie('farmout_endDate', this.endDate);
+			}
+			this.saveCookie('farmout_search', this.searchText ?? "");
+			this.loadBookings();
+		}, 400)
 	}
 	saveCookie(key: string, value: string) {
 		console.log('in function set cookies for', key, value)
@@ -321,7 +326,16 @@ export class FarmOutComponent implements OnInit {
 		this.useDateFilter = false
 
 		console.log('Reset Successfully. ');
-		this.runBookingsSearch();
+		if (this.startDate) {
+			localStorage.setItem('farmout_startDate', this.startDate);
+			this.saveCookie('farmout_startDate', this.startDate);
+		}
+		if (this.endDate) {
+			localStorage.setItem('farmout_endDate', this.endDate);
+			this.saveCookie('farmout_endDate', this.endDate);
+		}
+		this.saveCookie('farmout_search', this.searchText ?? "");
+		this.loadBookings(null, true);
 	}
 
 	handleChangeCheckbox(value: any) {
@@ -336,7 +350,9 @@ export class FarmOutComponent implements OnInit {
 			this.startDateModel = moment(this.startDate, 'YYYY-MM-DD');
 			this.endDateModel = moment(this.endDate, 'YYYY-MM-DD');
 		}
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	dateFormat(value: any) {
@@ -389,13 +405,21 @@ export class FarmOutComponent implements OnInit {
 		}
 		else {
 			this.endDate = date;
+			if (this.startDate && moment(this.endDate, 'YYYY-MM-DD').isBefore(moment(this.startDate, 'YYYY-MM-DD'), 'day')) {
+				this.endDate = this.startDate;
+			}
 			this.endDateModel = moment(this.endDate, 'YYYY-MM-DD');
 			localStorage.setItem('farmout_endDate', date);
 		}
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	runBookingsSearch(pageUrl = null) {
+		if (!this.useDateFilter) {
+			return;
+		}
 		if (this.startDate) {
 			localStorage.setItem('farmout_startDate', this.startDate);
 			this.saveCookie('farmout_startDate', this.startDate);

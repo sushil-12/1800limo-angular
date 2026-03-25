@@ -146,7 +146,7 @@ export class BookingComponent implements OnInit {
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
-		this.loadBookings();
+		this.loadBookings(null, true);
 
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
@@ -242,7 +242,7 @@ export class BookingComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
-	loadBookings(pageUrl = null) {
+	loadBookings(pageUrl = null, includeDatesInPayload: boolean = false) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
 		if (pageUrl) {
@@ -253,17 +253,15 @@ export class BookingComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.travelAgentService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+		const fallbackStartDate = this.startDate || moment().format('YYYY-MM-DD');
+		const fallbackEndDate = this.endDate || moment().add(7, 'day').format('YYYY-MM-DD');
+		const shouldSendDates = includeDatesInPayload || this.useDateFilter || !!this.searchText?.trim();
+		const startDate = shouldSendDates ? fallbackStartDate : fallbackStartDate;
+		const endDate = shouldSendDates ? fallbackEndDate : fallbackEndDate;
+		this.travelAgentService.loadBookings(pageUrl, this.searchText, startDate, endDate, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
-			let date = new Date();
-			let timestamp = date.getTime();
-			date.setDate(date.getDate() + 7);
-			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.reservations?.data;
-			if (!this.useDateFilter && !this.searchText) {
-				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
-			}
 			this.total_amount = this.bookingsRes?.data?.total_amount
 			this.ta_share_total = this.bookingsRes?.data?.travel_agent_total
 			this.totalRecords = this.bookingsRes?.data?.reservations?.total;
@@ -299,8 +297,11 @@ export class BookingComponent implements OnInit {
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.runBookingsSearch()
-		}, 700)
+			this.saveCookie('ta_startDate', this.startDate);
+			this.saveCookie('ta_endDate', this.endDate);
+			this.saveCookie('ta_search', this.searchText ?? "");
+			this.loadBookings();
+		}, 400)
 	}
 
 	highlighText(args: string) {
@@ -358,7 +359,10 @@ export class BookingComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
-		this.runBookingsSearch();
+		this.saveCookie('ta_startDate', this.startDate);
+		this.saveCookie('ta_endDate', this.endDate);
+		this.saveCookie('ta_search', this.searchText ?? "");
+		this.loadBookings(null, true);
 	}
 
 	handleChangeCheckbox(value: any) {
@@ -371,7 +375,9 @@ export class BookingComponent implements OnInit {
 			date.setDate(date.getDate() + 7);
 			this.endDate = date.toISOString().substring(0, 10);
 		}
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	textFormatter(text: string) {
@@ -713,11 +719,19 @@ export class BookingComponent implements OnInit {
 		}
 		else {
 			this.endDate = date;
+			if (this.startDate && moment(this.endDate, 'YYYY-MM-DD').isBefore(moment(this.startDate, 'YYYY-MM-DD'), 'day')) {
+				this.endDate = this.startDate;
+			}
 		}
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	runBookingsSearch(pageUrl = null) {
+		if (!this.useDateFilter) {
+			return;
+		}
 		this.saveCookie('ta_startDate', this.startDate);
 		this.saveCookie('ta_endDate', this.endDate);
 		this.saveCookie('ta_search', this.searchText ?? "");
@@ -1136,4 +1150,3 @@ export class BookingComponent implements OnInit {
 		return '138px'; // > 5 lines
 	}
 }
-

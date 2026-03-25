@@ -126,7 +126,7 @@ export class MyBookingsComponent implements OnInit {
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
-		this.loadBookings();
+		this.loadBookings(null, true);
 		this.loadVehicles();
 
 		this.changeStatusForm = this.formBuilder.group({
@@ -230,7 +230,7 @@ export class MyBookingsComponent implements OnInit {
 	}
 
 
-	loadBookings(pageUrl = null) {
+	loadBookings(pageUrl = null, includeDatesInPayload: boolean = false) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
 		if (pageUrl) {
@@ -241,17 +241,15 @@ export class MyBookingsComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+		const fallbackStartDate = this.startDate || moment().format('YYYY-MM-DD');
+		const fallbackEndDate = this.endDate || moment().add(7, 'day').format('YYYY-MM-DD');
+		const shouldSendDates = includeDatesInPayload || this.useDateFilter || !!this.searchText?.trim();
+		const startDate = shouldSendDates ? fallbackStartDate : fallbackStartDate;
+		const endDate = shouldSendDates ? fallbackEndDate : fallbackEndDate;
+		this.affiliateService.loadBookings(pageUrl, this.searchText, startDate, endDate, this.useDateFilter).then(result => {
 			console.log('result------------------------->>>', result)
-			let date = new Date();
-			let timestamp = date.getTime();
-			date.setDate(date.getDate() + 7);
-			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.reservations?.data;
-			if (!this.useDateFilter && !this.searchText) {
-				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
-			}
 			this.totalRecords = this.bookingsRes?.data?.reservations?.total;
 			this.total_amount = this.bookingsRes?.data?.total_amount
 			this.net_total_amount = this.bookingsRes?.data?.affiliate_total
@@ -299,8 +297,11 @@ export class MyBookingsComponent implements OnInit {
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.runBookingsSearch()
-		}, 700)
+			this.saveCookie('affiliate_startDate', this.startDate);
+			this.saveCookie('affiliate_endDate', this.endDate);
+			this.saveCookie('affiliate_search', this.searchText ?? "");
+			this.loadBookings();
+		}, 400)
 	}
 	formatBaseRate(baseRate: string | number): string {
 		// Convert baseRate to a number if it is a string
@@ -343,7 +344,9 @@ export class MyBookingsComponent implements OnInit {
 			date.setDate(date.getDate() + 7);
 			this.endDate = date.toISOString().substring(0, 10);
 		}
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	reset() {
@@ -361,7 +364,10 @@ export class MyBookingsComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
-		this.runBookingsSearch();
+		this.saveCookie('affiliate_startDate', this.startDate);
+		this.saveCookie('affiliate_endDate', this.endDate);
+		this.saveCookie('affiliate_search', this.searchText ?? "");
+		this.loadBookings(null, true);
 	}
 	textFormatter(text: string) {
 		try {
@@ -618,13 +624,21 @@ export class MyBookingsComponent implements OnInit {
 		}
 		else {
 			this.endDate = date;
+			if (this.startDate && moment(this.endDate, 'YYYY-MM-DD').isBefore(moment(this.startDate, 'YYYY-MM-DD'), 'day')) {
+				this.endDate = this.startDate;
+			}
 		}
 		this.saveCookie('affiliate_startDate', this.startDate);
 		this.saveCookie('affiliate_endDate', this.endDate);
-		this.runBookingsSearch();
+		if (this.useDateFilter) {
+			this.runBookingsSearch();
+		}
 	}
 
 	runBookingsSearch(pageUrl = null) {
+		if (!this.useDateFilter) {
+			return;
+		}
 		this.saveCookie('affiliate_startDate', this.startDate);
 		this.saveCookie('affiliate_endDate', this.endDate);
 		this.saveCookie('affiliate_search', this.searchText ?? "");
