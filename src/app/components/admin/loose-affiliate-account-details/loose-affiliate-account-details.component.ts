@@ -391,8 +391,12 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit, AfterViewI
         }
       });
 
+      const formattedAddress = place.formatted_address ?? '';
+      const placeName = place.name ?? '';
+      const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+
       this.profileForm.patchValue({
-        address: place.formatted_address ?? '',
+        address: displayAddress,
         latitude: place.geometry.location.lat(),
         longitude: place.geometry.location.lng(),
         country,

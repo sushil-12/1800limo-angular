@@ -119,11 +119,15 @@ export class BookingComponent implements OnInit {
 		// 	this.affiliateService.getCookie('ta_endDate') :
 		// 	date.toISOString().substring(0, 10);
 
-		this.startDate = date.toISOString().substring(0, 10);;
+		this.startDate = this.affiliateService.checkCookie('ta_startDate') ?
+			this.affiliateService.getCookie('ta_startDate') :
+			date.toISOString().substring(0, 10);
 
 		date.setDate(date.getDate() + 7);
 
-		this.endDate = date.toISOString().substring(0, 10);;
+		this.endDate = this.affiliateService.checkCookie('ta_endDate') ?
+			this.affiliateService.getCookie('ta_endDate') :
+			date.toISOString().substring(0, 10);
 
 
 		this.searchText = this.affiliateService.checkCookie('ta_search') ?
@@ -291,12 +295,11 @@ export class BookingComponent implements OnInit {
 		return m.format("ll");
 	}
 	searchInBookings(search_value: string) {
-		this.searchText = search_value
+		this.searchText = search_value ?? ""
 		console.log('--->>>>>', search_value)
-		this.saveCookie('ta_search', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.loadBookings(null)
+			this.runBookingsSearch()
 		}, 700)
 	}
 
@@ -355,18 +358,20 @@ export class BookingComponent implements OnInit {
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
+		this.runBookingsSearch();
 	}
 
 	handleChangeCheckbox(value: any) {
 		console.log('event---->> ', value)
 		this.useDateFilter = value
-		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('traveluseDateFilter', value)
-		let date = new Date();
-		date.setDate(date.getDate() + 7);
-		let timestamp = date.getTime();
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
-		this.loadBookings();
+		if (!this.startDate || !this.endDate) {
+			const date = new Date();
+			this.startDate = date.toISOString().substring(0, 10);
+			date.setDate(date.getDate() + 7);
+			this.endDate = date.toISOString().substring(0, 10);
+		}
+		this.runBookingsSearch();
 	}
 
 	textFormatter(text: string) {
@@ -695,12 +700,28 @@ export class BookingComponent implements OnInit {
 	}
 
 	changeDate(dateType, date) {
+		if (!date) {
+			return;
+		}
+
 		if (dateType == 'startDate') {
 			this.startDate = date;
+			if (this.endDate && moment(this.startDate, 'YYYY-MM-DD').isAfter(moment(this.endDate, 'YYYY-MM-DD'), 'day')) {
+				this.endDate = this.startDate;
+				this.saveCookie('ta_endDate', this.endDate);
+			}
 		}
 		else {
 			this.endDate = date;
 		}
+		this.runBookingsSearch();
+	}
+
+	runBookingsSearch(pageUrl = null) {
+		this.saveCookie('ta_startDate', this.startDate);
+		this.saveCookie('ta_endDate', this.endDate);
+		this.saveCookie('ta_search', this.searchText ?? "");
+		this.loadBookings(pageUrl);
 	}
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
@@ -1115,5 +1136,4 @@ export class BookingComponent implements OnInit {
 		return '138px'; // > 5 lines
 	}
 }
-
 

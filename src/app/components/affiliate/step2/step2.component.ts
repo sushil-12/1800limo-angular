@@ -536,9 +536,12 @@ export class Step2Component implements OnInit, AfterViewInit {
 					if (countryCode) {
 						this.changeCountry(countryCode);
 					}
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = place.name ?? '';
+					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
 
 					this.addBankForm.patchValue({
-						address: place.formatted_address,
+						address: displayAddress,
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng(),
 						country: countryCode || this.addBankForm.get('country')?.value,

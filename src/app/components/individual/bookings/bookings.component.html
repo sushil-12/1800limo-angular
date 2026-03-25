@@ -54,14 +54,14 @@
                     <div class="ml-2">
                         <button class="custom-filled-button orange-button"
                             style="color:#fff;padding: 5px 12px !important;"
-                            (click)="loadBookings(); saveCookie('indv_startDate', startDate); saveCookie('indv_endDate', endDate);saveCookie('indv_search',searchText)">
+                            (click)="runBookingsSearch()">
                             Search
                         </button>
                     </div>
                     <div class="ml-2">
                         <button class="custom-filled-back-button"
                             style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
-                            (click)="reset();loadBookings()">
+                            (click)="reset()">
                             Reset
                         </button>
                     </div>
@@ -72,7 +72,7 @@
                     <div id="search-field-my-booking">
                         <mat-form-field appearance="outline" class="m-0">
                             <input matInput type="text" (keypress)="handleKeypressEvents()"
-                                (focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+                                (focus)="$event.target.select()" (input)="searchInBookings($event.target.value)"
                                 [value]="searchText"
                                 placeholder="Search by booking number, status, name, cell phone, vehicle type"
                                 id="keyword" autofocus>
