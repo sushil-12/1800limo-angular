@@ -113,7 +113,7 @@ function installGmpAttachShadowPatch(): void {
 			}
 			.input-container,
 			.input-container input,
-			input,
+			input{padding-right:25px !important;},
 			[role="option"],
 			.suggestion-item,
 			.text-content,
@@ -156,6 +156,10 @@ function installGmpAttachShadowPatch(): void {
 				opacity: 1 !important;
 				font-weight: 700 !important;
 			}
+			.place-autocomplete-element-row .place-autocomplete-element-prediction-item-icon {
+				padding: 6px !important;
+			}
+			.place-autocomplete-element-row .place-autocomplete-element-text-div{text-align:left !important;}
 			input::placeholder,
 			.input-container input::placeholder {
 				color: #6b7280 !important;
@@ -209,6 +213,16 @@ function installGmpAttachShadowPatch(): void {
 		dialog.full-window-autocomplete-dialog[open] .text-content {
 			background: #fff !important;
 			color: #000 !important;
+		}
+		@media (max-width: 767px) {
+			dialog.full-window-autocomplete-dialog[open] .text-content,
+			dialog.full-window-autocomplete-dialog[open] .primary-text,
+			dialog.full-window-autocomplete-dialog[open] .secondary-text,
+			dialog.full-window-autocomplete-dialog[open] .place-name,
+			dialog.full-window-autocomplete-dialog[open] .place-address {
+				width: 100% !important;
+				text-align: left !important;
+			}
 		}
 		`;
 
