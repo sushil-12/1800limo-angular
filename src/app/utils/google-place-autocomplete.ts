@@ -145,7 +145,6 @@ function installGmpAttachShadowPatch(): void {
 				color: #000 !important;
 			}
 			svg,
-			path,
 			.location-icon,
 			.leading-icon,
 			.icon,
@@ -158,6 +157,38 @@ function installGmpAttachShadowPatch(): void {
 			}
 			.place-autocomplete-element-row .place-autocomplete-element-prediction-item-icon {
 				padding: 6px !important;
+				position: relative !important;
+				width: 30px !important;
+				height: 30px !important;
+				background-color: transparent !important;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 21.25c-.27 0-.53-.11-.72-.31-.86-.9-6.03-6.36-6.03-11.02C5.25 5.82 8.28 3 12 3s6.75 2.82 6.75 6.92c0 4.66-5.17 10.12-6.03 11.02-.19.2-.45.31-.72.31Z' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='9.92' r='2.65' stroke='%23000' stroke-width='1.9'/%3E%3C/svg%3E") !important;
+				background-repeat: no-repeat !important;
+				background-position: center !important;
+				background-size: 0 !important;
+				border-radius: 0 !important;
+			}
+			.place-autocomplete-element-row .place-autocomplete-element-prediction-item-icon svg,
+			.place-autocomplete-element-row .place-autocomplete-element-prediction-item-icon [aria-hidden="true"] {
+				opacity: 0 !important;
+			}
+			.place-autocomplete-element-row .place-autocomplete-element-prediction-item-icon svg,
+			.location-icon svg,
+			.leading-icon svg,
+			.icon svg {
+				display: block !important;
+				width: 18px !important;
+				height: 18px !important;
+				overflow: visible !important;
+				transform: translateZ(0) !important;
+				-webkit-transform: translateZ(0) !important;
+			}
+			.place-autocomplete-element-row .place-autocomplete-element-prediction-item-icon path,
+			.location-icon path,
+			.leading-icon path,
+			.icon path {
+				fill: #000 !important;
+				stroke: #000 !important;
+				opacity: 1 !important;
 			}
 			.place-autocomplete-element-row .place-autocomplete-element-text-div{text-align:left !important;}
 			input::placeholder,
@@ -234,6 +265,36 @@ function installGmpAttachShadowPatch(): void {
 	};
 
 	w[GMP_ATTACH_SHADOW_PATCHED_KEY] = true;
+}
+
+function restoreMobileAutocompleteFocus(pac: HTMLElement): void {
+	if (typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches) {
+		return;
+	}
+
+	const focusInnerInput = (retries = 10) => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const inner = root?.querySelector?.('input');
+			if (inner instanceof HTMLInputElement) {
+				const resetToStart = () => {
+					inner.focus({ preventScroll: true });
+					inner.setSelectionRange(0, 0);
+					inner.scrollLeft = 0;
+				};
+				resetToStart();
+				requestAnimationFrame(resetToStart);
+			} else if (retries > 0) {
+				setTimeout(() => focusInnerInput(retries - 1), 50);
+			}
+		} catch {
+			if (retries > 0) {
+				setTimeout(() => focusInnerInput(retries - 1), 50);
+			}
+		}
+	};
+
+	setTimeout(() => focusInnerInput(), 0);
 }
 
 export async function attachPlaceAutocompleteElement(
@@ -353,6 +414,7 @@ export async function attachPlaceAutocompleteElement(
 			fields: ['id', 'displayName', 'formattedAddress', 'location', 'addressComponents', 'types'],
 		});
 		onPlaceSelect(newPlaceToLegacyPlaceResult(place));
+		restoreMobileAutocompleteFocus(pac);
 	};
 
 	pac.addEventListener('gmp-select', handler as EventListener);
