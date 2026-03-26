@@ -26,25 +26,87 @@
 	justify-content: center !important;
 }
 
-/* Prevent scaling of the image during drag */
-.cdk-drag-preview img {
-	transform: none !important;
-	width: auto !important;
-	height: auto !important;
+.vehicle-row {
+	background: #fff;
 }
 
-/* Prevent the drag preview (image and container) from scaling */
-.cdk-drag-preview {
-	transform: none !important;
-	width: auto !important;
-	height: auto !important;
-	max-width: none !important;
-	max-height: none !important;
+.vehicle-row td:first-child {
+	width: 48px;
 }
 
-/* Prevent the entire row from being scaled during drag */
-.cdk-drag {
-	transform: none !important;
-	width: auto !important;
-	height: auto !important;
+.vehicle-drag-preview {
+	display: grid;
+	grid-template-columns: 48px 80px minmax(220px, 1fr) 120px;
+	align-items: center;
+	column-gap: 20px;
+	width: min(980px, calc(100vw - 80px));
+	padding: 14px 18px;
+	background: #fff;
+	border: 1px solid rgba(249, 156, 52, 0.25);
+	border-radius: 10px;
+	box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+	pointer-events: none;
+}
+
+.vehicle-drag-preview__handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #f99c34;
+}
+
+.vehicle-drag-preview__image img {
+	width: 72px;
+	height: 44px;
+	object-fit: contain;
+	display: block;
+}
+
+.vehicle-drag-preview__name {
+	font-size: 16px;
+	font-weight: 600;
+	color: #1f1f1f;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.vehicle-drag-preview__action {
+	justify-self: end;
+	padding: 8px 18px;
+	border-radius: 999px;
+	background: #f99c34;
+	color: #fff;
+	font-weight: 600;
+	line-height: 1;
+}
+
+.vehicle-drag-placeholder td {
+	height: 72px;
+	background: rgba(249, 156, 52, 0.08);
+	border: 2px dashed #f99c34;
+}
+
+.cdk-drag-animating {
+	transition: transform 220ms ease;
+}
+
+.driverside_table .cdk-drop-list-dragging .vehicle-row:not(.cdk-drag-placeholder) {
+	transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.vehicle-row.cdk-drag-dragging {
+	opacity: 0.35;
+}
+
+@media (max-width: 767px) {
+	.vehicle-drag-preview {
+		grid-template-columns: 40px 64px minmax(140px, 1fr);
+		width: calc(100vw - 32px);
+		column-gap: 12px;
+	}
+
+	.vehicle-drag-preview__action {
+		display: none;
+	}
 }

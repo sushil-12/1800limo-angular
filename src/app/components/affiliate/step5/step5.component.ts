@@ -2,8 +2,8 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { forkJoin, throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AdminService } from 'src/app/services/admin.service';
@@ -19,7 +19,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 	public paramResponse: any;
 	public vehicleTypeId: string;
 	public vehiclesRes: any;
-	public vehicles: any;
+	public vehicles: any[] = [];
 	public affiliateId: any;
 	public canAddVehicle: boolean = false;
 	public currentUser: any = {};
@@ -103,21 +103,120 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		$('#amenityListModal').modal('show');
 	}
 
-	drop(event: CdkDragDrop<string[]>) {
-		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
-		console.log(event, "check event")
-		console.log("previous index", event.previousIndex)
-		console.log("current index", event.currentIndex)
+	drop(event: CdkDragDrop<any[]>) {
+		if (event.previousIndex === event.currentIndex) {
+			return;
+		}
+
+		const previousVehicles = [...this.vehicles];
+		moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);
+
 		this.spinner.show();
-		let id = this.vehicles[event.previousIndex].ID
-		console.log(id, "////////////")
-		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex, type: "affiliate-vehicle" }).subscribe((response: any) => {
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-				this.router.navigate(['/affiliate/step5']);
-			});
+
+		const fieldDataRequest = this.affiliateService.getFieldsData();
+		const vehicleDetailsRequests = this.vehicles.map((vehicle: any) =>
+			this.affiliateService.getVehicleData(vehicle.ID || vehicle.id)
+		);
+
+		forkJoin([fieldDataRequest, ...vehicleDetailsRequests]).pipe(
+			switchMap((responses: any[]) => {
+				const fieldData = responses[0]?.data || {};
+				const vehicleResponses = responses.slice(1);
+				const updateRequests = vehicleResponses.map((response: any, index: number) =>
+					this.affiliateService.editVehicle(
+						this.buildAffiliateVehicleUpdatePayload(
+							response.data,
+							this.vehicles[index],
+							fieldData,
+							index + 1
+						)
+					)
+				);
+
+				return forkJoin(updateRequests);
+			}),
+			catchError(err => {
+				this.vehicles = previousVehicles;
+				this.spinner.hide();
+				return throwError(err);
+			})
+		).subscribe(() => {
 			this.spinner.hide();
-			// console.log(response.data)
-		})
+		});
+	}
+
+	private buildAffiliateVehicleUpdatePayload(vehicleDetails: any, vehicleSummary: any, fieldData: any, sortOrder: number) {
+		const vehicleId = vehicleSummary?.ID || vehicleSummary?.id || vehicleDetails?.id || vehicleDetails?.ID || '';
+		const selectedSpecialAmenities = Array.isArray(vehicleDetails?.specialAmenities) ? vehicleDetails.specialAmenities : [];
+		const selectedInteriors = Array.isArray(vehicleDetails?.vehicleInterior) ? vehicleDetails.vehicleInterior : [];
+		const chargableAmenitiesArray = this.extractAmenityIdsFromGroup(vehicleDetails?.chargableAmenities);
+		const nonChargableAmenitiesArray = this.extractAmenityIdsFromGroup(vehicleDetails?.nonChargableAmenities);
+		const amenities = [...new Set([...chargableAmenitiesArray, ...nonChargableAmenitiesArray])];
+
+		return {
+			id: vehicleId,
+			vehicleType: parseInt(vehicleDetails?.vehicle_type || vehicleDetails?.vehicleType || vehicleDetails?.vehicleType_id, 10) || '',
+			make: parseInt(vehicleDetails?.make, 10) || '',
+			model: parseInt(vehicleDetails?.model, 10) || '',
+			year: parseInt(vehicleDetails?.year, 10) || '',
+			color: parseInt(vehicleDetails?.color, 10) || '',
+			licensePlate: vehicleDetails?.license_plate || vehicleDetails?.licensePlate || '',
+			numberOfVehicles: vehicleDetails?.numberOfVehicles || vehicleDetails?.number_of_vehicles || 1,
+			seats: vehicleDetails?.seats || '',
+			luggage: vehicleDetails?.luggage || '',
+			charterCancelPolicy: vehicleDetails?.charterCancelPolicy || '24',
+			nonCharterCancelPolicy: vehicleDetails?.nonCharterCancelPolicy || '24',
+			typeOfService: Array.isArray(vehicleDetails?.typeOfService) ? vehicleDetails.typeOfService : [],
+			chargableAmenitiesArray: chargableAmenitiesArray,
+			nonChargableAmenitiesArray: nonChargableAmenitiesArray,
+			amenities: amenities,
+			specialAmenitiesGet: this.buildBooleanSelectionArray(fieldData?.specialAmenities, selectedSpecialAmenities),
+			specialAmenities: selectedSpecialAmenities,
+			vehicleInteriorGet: this.buildBooleanSelectionArray(fieldData?.vehicleInterior, selectedInteriors),
+			vehicleInterior: selectedInteriors,
+			vehicle_image_1: vehicleDetails?.vehicle_image_1?.ID || '',
+			vehicle_image_2: vehicleDetails?.vehicle_image_2?.ID || '',
+			vehicle_image_3: vehicleDetails?.vehicle_image_3?.ID || '',
+			vehicle_image_4: vehicleDetails?.vehicle_image_4?.ID || '',
+			vehicle_image_5: vehicleDetails?.vehicle_image_5?.ID || '',
+			vehicle_image_6: vehicleDetails?.vehicle_image_6?.ID || '',
+			vehicle_image_7: vehicleDetails?.vehicle_image_7?.ID || '',
+			vehicle_image_8: vehicleDetails?.vehicle_image_8?.ID || '',
+			vehicle_image_9: vehicleDetails?.vehicle_image_9?.ID || '',
+			rearPlateImage: vehicleDetails?.rear_plate_image?.ID || '',
+			windowPermitImage: vehicleDetails?.window_permitImage?.ID || '',
+			windowPermit2Image: vehicleDetails?.window_permitImage2?.ID || '',
+			usdotPermitImage: vehicleDetails?.usdot_permitImage?.ID || '',
+			mcImage: vehicleDetails?.mc_image?.ID || '',
+			sort_order: sortOrder
+		};
+	}
+
+	private buildBooleanSelectionArray(optionList: any, selectedValues: any[]): boolean[] {
+		if (!Array.isArray(optionList) || !optionList.length) {
+			return [];
+		}
+
+		const selectedSet = new Set((selectedValues || []).map((value: any) => String(value)));
+		return optionList.map((item: any) => selectedSet.has(String(item?.id)));
+	}
+
+	private extractAmenityIdsFromGroup(amenityGroup: any): any[] {
+		const amenityIds: any[] = [];
+		if (!amenityGroup) {
+			return amenityIds;
+		}
+
+		Object.values(amenityGroup).forEach((group: any) => {
+			const amenities = Array.isArray(group) ? group : Object.values(group || {});
+			amenities.forEach((amenity: any) => {
+				if (amenity?.isSelected && amenity?.id !== undefined && amenity?.id !== null) {
+					amenityIds.push(amenity.id);
+				}
+			});
+		});
+
+		return amenityIds;
 	}
 
 	addVehicleClick(vehicleTypeId) {
@@ -161,4 +260,3 @@ export class Step5Component implements OnInit, AfterViewChecked {
 
 	}
 }
-
