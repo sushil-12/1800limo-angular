@@ -3,8 +3,8 @@ import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { forkJoin, throwError } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { CommonService } from '../../../services/common.service';
@@ -18,7 +18,8 @@ declare var $: any;
 })
 export class MasterVehicleTypesComponent implements OnInit {
 
-	vehicles: any;
+	vehicles: any[] = [];
+	allVehicles: any[] = [];
 	vehiclesRes: any;
 
 	public addVehicleTypeForm: FormGroup;
@@ -44,6 +45,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 	color: ThemePalette = 'accent';
 	disabled = false;
 	convertCurrenyResp: any
+	searchTerm: string = '';
 
 	constructor(
 		private adminService: AdminService,
@@ -61,8 +63,9 @@ export class MasterVehicleTypesComponent implements OnInit {
 		// Load Our vehicles using API
 		this.adminService.getOurVehicles().then(result => {
 			this.vehiclesRes = result;
-			this.vehicles = this.vehiclesRes.data;
-			sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.vehicles));
+			this.allVehicles = Array.isArray(this.vehiclesRes.data) ? [...this.vehiclesRes.data] : [];
+			this.vehicles = [...this.allVehicles];
+			sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.allVehicles));
 			this.spinner.hide();//hide spinner
 		})
 			.catch(err => {
@@ -138,32 +141,106 @@ export class MasterVehicleTypesComponent implements OnInit {
 
 	}
 
-	drop(event: CdkDragDrop<string[]>) {
-		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
-		console.log(event, "check event")
-		console.log("previous index", event.previousIndex)
-		console.log("current index", event.currentIndex)
+	drop(event: CdkDragDrop<any[]>) {
+		if (event.previousIndex === event.currentIndex) {
+			return;
+		}
+
+		const previousVehicles = [...this.vehicles];
+		const previousAllVehicles = [...this.allVehicles];
+
+		moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);
+		this.syncAllVehiclesAfterVisibleReorder();
+
 		this.spinner.show();
-		let id = this.vehicles[event.previousIndex].ID
-		console.log(id, "////////////")
-		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex, type: "master-vehicle" }).subscribe((response: any) => {
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-				this.router.navigate(['/admin/master-vehicle-types']);
-			});
-			this.spinner.hide();
-			// console.log(response.data)
-		})
+
+		const vehicleDetailsRequests = this.allVehicles.map((vehicle: any) =>
+			this.adminService.getVehicleType(vehicle.id || vehicle.ID)
+		);
+
+		forkJoin(vehicleDetailsRequests).pipe(
+			switchMap((responses: any[]) => {
+				const updateRequests = responses.map((response: any, index: number) =>
+					this.adminService.updateVehicleType(this.buildVehicleUpdatePayload(response.data, index + 1))
+				);
+
+				return forkJoin(updateRequests);
+			}),
+			catchError(err => {
+				this.vehicles = previousVehicles;
+				this.allVehicles = previousAllVehicles;
+				sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.allVehicles));
+				this.spinner.hide();//hide spinner
+				return throwError(err);
+			})
+		).subscribe(() => {
+			this.refreshVehicleCollections();
+			sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.allVehicles));
+			this.spinner.hide();//hide spinner
+		});
 	}
 	serach(val) {
-		console.log(val);
-		let allVehicleTypes = JSON.parse(sessionStorage.getItem('vehiclesTypes') || '[]');
-		let searchVehicles = allVehicleTypes.filter(function (vehicleType) {
-			if (vehicleType.vehicle_name.toLowerCase().search(val) != -1) {
+		this.searchTerm = (val || '').toLowerCase().trim();
+		let searchVehicles = this.allVehicles.filter((vehicleType) => {
+			if ((vehicleType.vehicle_name || '').toLowerCase().search(this.searchTerm) != -1) {
 				return true;
 			}
 		});
-		// console.log(searchVehicles);
-		this.vehicles = searchVehicles;
+		this.vehicles = this.searchTerm ? searchVehicles : [...this.allVehicles];
+	}
+
+	private syncAllVehiclesAfterVisibleReorder() {
+		if (!this.searchTerm) {
+			this.allVehicles = [...this.vehicles];
+			return;
+		}
+
+		const reorderedVisibleVehicles = [...this.vehicles];
+		const reorderedVisibleVehicleIds = new Set(
+			reorderedVisibleVehicles.map((vehicle: any) => String(vehicle.id || vehicle.ID))
+		);
+		let visibleVehicleIndex = 0;
+
+		this.allVehicles = this.allVehicles.map((vehicle: any) => {
+			const vehicleId = String(vehicle.id || vehicle.ID);
+			if (!reorderedVisibleVehicleIds.has(vehicleId)) {
+				return vehicle;
+			}
+
+			const reorderedVehicle = reorderedVisibleVehicles[visibleVehicleIndex];
+			visibleVehicleIndex += 1;
+			return reorderedVehicle;
+		});
+	}
+
+	private refreshVehicleCollections() {
+		this.vehicles = this.searchTerm
+			? this.allVehicles.filter((vehicle: any) =>
+				(vehicle.vehicle_name || '').toLowerCase().includes(this.searchTerm))
+			: [...this.allVehicles];
+	}
+
+	private buildVehicleUpdatePayload(vehicleDetails: any, sortOrder: number) {
+		return {
+			vehicleId: vehicleDetails.id || vehicleDetails.ID,
+			vehicleType: vehicleDetails.vehicle_cat_name || vehicleDetails.vehicle_name || '',
+			vehicleImage: vehicleDetails.vehicle_cat_image || '',
+			vehicleImageInput: '',
+			vehicle_homepage_img: vehicleDetails.vehicle_homepage_img || '',
+			vehicleHomepageImageInput: '',
+			gallery_images: Array.isArray(vehicleDetails.gallery_images) ? vehicleDetails.gallery_images : [],
+			galleryImagesInput: '',
+			tagline: vehicleDetails.tagline || '',
+			badge_text: vehicleDetails.badge_text || '',
+			features: Array.isArray(vehicleDetails.features)
+				? vehicleDetails.features
+				: (vehicleDetails.features ? String(vehicleDetails.features).split(',').map((feature: string) => feature.trim()).filter((feature: string) => feature.length > 0) : []),
+			descriptions: vehicleDetails.descriptions || '',
+			status: vehicleDetails.status || 'enable',
+			sort_order: sortOrder,
+			seats: vehicleDetails.seats ?? 1,
+			luggage: vehicleDetails.luggage ?? 0
+		};
 	}
 
 	get f() {

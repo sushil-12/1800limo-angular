@@ -103,6 +103,7 @@ import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-ste
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
 import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loose-affiliate-accounts.component';
 import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
@@ -236,6 +237,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 		MatExpansionModule,
 		MatIconModule,
 		ClipboardModule,
+		DragDropModule,
 		NgxChartsModule,
 		NgxDaterangepickerMd.forRoot({
 			separator: ' - ',
