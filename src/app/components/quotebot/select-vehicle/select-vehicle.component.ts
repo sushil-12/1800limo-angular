@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { bindCallback, Observable, throwError } from 'rxjs';
@@ -236,6 +236,11 @@ export class SelectVehicleComponent implements OnInit {
 	currencySymbol: any;
 	vehicleListAmenity: any = [];
 	selectedAffiliate: any;
+
+	@HostListener('window:popstate')
+	handleBrowserBack(): void {
+		this.closeTransientPopups();
+	}
 
 
 	constructor(
@@ -1028,5 +1033,16 @@ export class SelectVehicleComponent implements OnInit {
 	viewAmenities(id) {
 		this.vehicleListAmenity = this.vehicleDetails.find(item => item.id === id);
 		console.log("in veh amenity--->", this.vehicleListAmenity, '=====', this.vehicleListAmenity.amenities)
+	}
+
+	private closeTransientPopups(): void {
+		this.openfilters = false;
+		this.show = false;
+		$('#sendEmailModal').modal('hide');
+		$('#filtersModal').modal('hide');
+		$('#notificationModal').modal('hide');
+		$('.modal-backdrop').remove();
+		$('body').removeClass('modal-open');
+		$('body').css('padding-right', '');
 	}
 }

@@ -334,6 +334,40 @@ export class AffiliateAccountsComponent implements OnInit {
 			.join(', ') || 'N/A';
 	}
 
+	getDriverListItems(driverList: any[] = []): any[] {
+		if (!Array.isArray(driverList) || !driverList.length) {
+			return [];
+		}
+
+		return driverList
+			.map((driver: any) => ({
+				...driver,
+				displayName: [
+					driver?.first_name,
+					driver?.middle_name,
+					driver?.last_name
+				].filter(Boolean).join(' ').trim()
+			}))
+			.filter((driver: any) => driver?.displayName);
+	}
+
+	openDriverProfile(driver: any, affiliateAccount: any, event?: Event) {
+		event?.preventDefault();
+		event?.stopPropagation();
+
+		if (!driver?.id || !affiliateAccount?.id) {
+			return;
+		}
+
+		sessionStorage.setItem('affiliateId', JSON.stringify(affiliateAccount.id));
+		sessionStorage.setItem('affiliateType', affiliateAccount.AffiliateType);
+		sessionStorage.setItem('affiliateName', `${affiliateAccount.FirstName || ''} ${affiliateAccount.LastName || ''}`.trim());
+		sessionStorage.setItem('affiliateUserData', JSON.stringify(affiliateAccount));
+		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+			this.router.navigate(['/admin/affiliate/step4/add-driver'], { queryParams: { driverId: driver.id } });
+		});
+	}
+
 	private getSearchRegex() {
 		const searchTerm = this.searchText?.toString();
 		if (!searchTerm) {
