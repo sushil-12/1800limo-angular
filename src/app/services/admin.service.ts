@@ -170,6 +170,10 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + 'edit-vehicle-types', data);
 	}
 
+	updateVehicleSortOrders(data) {
+		return this.httpClient.post(this.serverUrl + 'update-vehicle-sort-orders', data);
+	}
+
 	//amenities
 	async getAmenities() {
 		const result = await this.httpClient.get(this.serverUrl + 'amenities').toPromise();
@@ -251,6 +255,9 @@ export class AdminService {
 	}
 	adminAffiliateEditVehicle(data) {
 		return this.httpClient.put(this.serverUrl + 'admin/edit-vehicle-for-affiliate', data);
+	}
+	adminAffiliateUpdateVehicleSortOrders(data) {
+		return this.httpClient.post(this.serverUrl + 'admin/update-sort-order-for-affiliate-vehicles', data);
 	}
 	adminAffiliateGetFieldsData() {
 		return this.httpClient.get(this.serverUrl + 'admin/vehicle-data');

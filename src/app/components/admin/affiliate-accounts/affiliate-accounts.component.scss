@@ -55,6 +55,17 @@
     padding: 0.875rem 1.058rem;
 }
 
+.search-action-buttons {
+    gap: 10px;
+}
+
+.custom-filled-back-button {
+    white-space: nowrap;
+    color: #fff !important;
+    padding: 0.875rem 1.058rem !important;
+    background-color: #000 !important;
+}
+
 .clickable {
     cursor: pointer;
     transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
@@ -217,6 +228,14 @@ a.dropdown-item {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
+    }
+
+    .search-action-buttons {
+        width: 100%;
+    }
+
+    .search-action-buttons button {
+        width: 100%;
     }
 
     .send-buttons-wrapper {

@@ -613,8 +613,56 @@ section {
 	}
 
 	.font-weight-bolder {
-		font-size: 12.5px !important;
+		font-size: 14px !important;
 	}
+
+	.bannerform_wrapper .quoteform_homewrapper .inselect select,
+	.bannerform_wrapper .quoteform_homewrapper .pickupTime select,
+	.bannerform_wrapper .quoteform_homewrapper .pickupdate mat-form-field input {
+		font-size: 14px !important;
+		padding-right: 42px !important;
+		position: relative;
+		z-index: 1;
+	}
+
+	.bannerform_wrapper .quoteform_homewrapper .inselect,
+	.bannerform_wrapper .quoteform_homewrapper .pickupTime,
+	.bannerform_wrapper .quoteform_homewrapper .pickupdate {
+		position: relative;
+	}
+
+	.bannerform_wrapper .quoteform_homewrapper .inselect .fa-angle-down,
+	.bannerform_wrapper .quoteform_homewrapper .pickupTime svg {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 30px;
+		height: 100%;
+		background-color: var(--orange-color);
+		border-radius: 0 5px 5px 0;
+		z-index: 3;
+		pointer-events: none;
+	}
+
+	.bannerform_wrapper .quoteform_homewrapper .pickupdate .mat-datepicker-toggle {
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+		width: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--orange-color);
+		border-radius: 0 5px 5px 0;
+		z-index: 3;
+	}
+
+	.bannerform_wrapper .quoteform_homewrapper .pickupdate .mat-datepicker-toggle button {
+		position: relative;
+		z-index: 4;
+	}
+	::ng-deep .pickupdate .mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-base{max-height: 38px !important;}
 }
 
 .gear-bg-black {

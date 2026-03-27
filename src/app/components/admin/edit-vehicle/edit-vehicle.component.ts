@@ -235,7 +235,8 @@ export class EditVehicleComponent implements OnInit {
 				this.filteredYear = this.year = this.response.data.years;
 				this.filteredMake = this.make = this.response.data.make;
 				this.filteredModel = this.model = this.response.data.model;
-				this.filteredVehicleTypes = this.vehicleTypes = this.response.data.vehicle_types;
+				this.vehicleTypes = this.sortVehicleTypesBySortOrder(this.response.data.vehicle_types || []);
+				this.filteredVehicleTypes = [...this.vehicleTypes];
 				this.filteredColor = this.color = this.response.data.color;
 				this.specialAmenities = this.response.data.specialAmenities || [];
 				this.interiors = this.response.data.vehicleInterior || [];
@@ -516,6 +517,20 @@ export class EditVehicleComponent implements OnInit {
 				});
 		}
 	}
+
+	sortVehicleTypesBySortOrder(vehicleTypes) {
+		return [...vehicleTypes].sort((firstVehicleType: any, secondVehicleType: any) => {
+			const firstSortOrder = Number(firstVehicleType?.sort_order ?? Number.MAX_SAFE_INTEGER);
+			const secondSortOrder = Number(secondVehicleType?.sort_order ?? Number.MAX_SAFE_INTEGER);
+
+			if (firstSortOrder === secondSortOrder) {
+				return String(firstVehicleType?.name || '').localeCompare(String(secondVehicleType?.name || ''));
+			}
+
+			return firstSortOrder - secondSortOrder;
+		});
+	}
+
 	selectVehicleType(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{

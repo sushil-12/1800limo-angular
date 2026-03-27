@@ -7,6 +7,113 @@
 	max-width: 530px !important;
 }
 
+.vehicle-type-modal-dialog {
+	max-width: 1180px !important;
+	width: min(1180px, calc(100vw - 2rem));
+}
+
+.vehicle-type-modal-content {
+	border-radius: 18px;
+}
+
+.vehicle-type-modal-body {
+	padding: 1rem 1.25rem 0.5rem;
+}
+
+.vehicle-type-modal-form {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.75rem 1rem;
+	align-items: start;
+}
+
+.vehicle-type-modal-form .form-group {
+	margin: 0;
+}
+
+.vehicle-type-modal-form .mt-3,
+.vehicle-type-modal-form .row.mt-3 {
+	margin-top: 0 !important;
+}
+
+.vehicle-type-modal-form .form-group.full-width,
+.vehicle-type-modal-form > .row.full-width {
+	grid-column: 1 / -1;
+}
+
+.vehicle-type-modal-form mat-form-field {
+	width: 100%;
+}
+
+.vehicle-type-modal-form .row.full-width {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.vehicle-type-modal-form .row.full-width>[class*='col-'] {
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+}
+
+.vehicle-type-modal-form .row.full-width>[class*='col-']:first-child {
+	padding-left: 0;
+}
+
+.vehicle-type-modal-form .row.full-width>[class*='col-']:last-child {
+	padding-right: 0;
+}
+
+.vehicle-type-modal-form input[type='file'] {
+	display: block;
+	width: 100%;
+	padding: 0.65rem 0.75rem;
+	border: 1px dashed #c9ccd5;
+	border-radius: 12px;
+	background: #fafbff;
+}
+
+.vehicle-type-modal-form .d-flex.flex-wrap.mt-2 {
+	padding: 0.5rem;
+	border: 1px solid #eceef4;
+	border-radius: 12px;
+	background: #fff;
+}
+
+.vehicle-type-modal-content .modal-header {
+	justify-content: space-between !important;
+	align-items: center;
+	padding: 1rem 1.25rem 0.35rem;
+}
+
+.vehicle-type-modal-content .modal-footer {
+	padding: 0.5rem 1.25rem 1rem;
+	border-top: 0;
+}
+
+.vehicle-type-modal-form textarea[matInput] {
+	min-height: 92px;
+}
+
+.vehicle-type-detail-row {
+	align-items: flex-start;
+}
+
+.vehicle-type-stack-column {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	align-self: center;
+}
+
+.vehicle-type-stack-item label {
+	display: block;
+	margin-bottom: 0.35rem;
+}
+
+.vehicle-type-stack-item .text-danger {
+	margin-top: 0.25rem;
+}
+
 .modal .modal-body ul {
 	margin-left: 5px !important;
 	padding: 0 !important;
@@ -34,38 +141,44 @@
 	width: 48px;
 }
 
-.vehicle-drag-preview {
-	display: grid;
-	grid-template-columns: 48px 80px minmax(220px, 1fr) 120px;
-	align-items: center;
-	column-gap: 20px;
-	width: min(980px, calc(100vw - 80px));
-	padding: 14px 18px;
-	background: #fff;
-	border: 1px solid rgba(249, 156, 52, 0.25);
-	border-radius: 10px;
-	box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
-	pointer-events: none;
-}
-
+.drag-grip-icon,
 .vehicle-drag-preview__handle {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: #f99c34;
+	font-size: 24px;
+	line-height: 1;
+}
+
+.vehicle-drag-preview {
+	display: grid;
+	grid-template-columns: 48px 160px minmax(260px, 1fr) 160px;
+	align-items: center;
+	column-gap: 20px;
+	width: min(100%, 1200px);
+	padding: 14px 20px;
+	background: #fff;
+	border: 1px solid rgba(249, 156, 52, 0.25);
+	border-radius: 0;
+	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+	pointer-events: none;
 }
 
 .vehicle-drag-preview__image img {
-	width: 72px;
-	height: 44px;
+	width: 90px;
+	height: 52px;
 	object-fit: contain;
 	display: block;
+	background: transparent;
+	padding: 0;
 }
 
 .vehicle-drag-preview__name {
 	font-size: 16px;
-	font-weight: 600;
+	font-weight: 500;
 	color: #1f1f1f;
+	line-height: 1.3;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -73,6 +186,7 @@
 
 .vehicle-drag-preview__action {
 	justify-self: end;
+	align-self: center;
 	padding: 8px 18px;
 	border-radius: 999px;
 	background: #f99c34;
@@ -100,10 +214,40 @@
 }
 
 @media (max-width: 767px) {
+	.vehicle-type-modal-dialog {
+		width: calc(100vw - 1rem);
+		max-width: calc(100vw - 1rem) !important;
+		margin: 0.5rem auto;
+	}
+
+	.vehicle-type-modal-body {
+		padding: 1rem 1rem 0.5rem;
+	}
+
+	.vehicle-type-modal-form {
+		grid-template-columns: 1fr;
+		gap: 0.85rem;
+	}
+
+	.vehicle-type-modal-form .row.full-width>[class*='col-'] {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.vehicle-type-stack-column {
+		margin-top: 0.75rem;
+	}
+
 	.vehicle-drag-preview {
-		grid-template-columns: 40px 64px minmax(140px, 1fr);
+		grid-template-columns: 32px 72px minmax(140px, 1fr);
 		width: calc(100vw - 32px);
 		column-gap: 12px;
+		padding: 14px;
+	}
+
+	.vehicle-drag-preview__image img {
+		width: 72px;
+		height: 52px;
 	}
 
 	.vehicle-drag-preview__action {
