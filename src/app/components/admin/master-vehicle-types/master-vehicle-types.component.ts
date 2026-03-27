@@ -81,7 +81,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 			vehicleType: ['', Validators.required],
 			vehicleImage: [''],
 			vehicleImageInput: [''],
-			vehicle_homepage_img: [''],
+			vehicle_homepage_img: ['', Validators.required],
 			vehicleHomepageImageInput: [''],
 			gallery_images: [[]],
 			galleryImagesInput: [''],
@@ -365,7 +365,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 		this.adminService.addVehicleType(payload)
 			.pipe(
 				catchError(err => {
-					$('#addVehicleTypeModal').modal('hide');
+					this.spinner.hide();
+					this.disableAddButton = false;
 					return throwError(err);
 				})
 			)
@@ -600,7 +601,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 		this.adminService.updateVehicleType(payload)
 			.pipe(
 				catchError(err => {
-					$('#editVehicleTypeModal').modal('hide');
+					this.spinner.hide();
+					this.disableEditButton = false;
 					return throwError(err);
 				})
 			)

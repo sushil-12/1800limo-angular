@@ -155,16 +155,16 @@
 <!-- Add vehicle type modal -->
 <div class="modal fade" id="addVehicleTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content user_inforamtion">
+	<div class="modal-dialog modal-dialog-centered vehicle-type-modal-dialog" role="document">
+		<div class="modal-content user_inforamtion vehicle-type-modal-content">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Add Vehicle Type</h3>
 				<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-				<form [formGroup]="addVehicleTypeForm">
+			<div class="modal-body vehicle-type-modal-body">
+				<form [formGroup]="addVehicleTypeForm" class="vehicle-type-modal-form">
 					<div class="form-group">
 						<mat-form-field appearance="outline">
 							<mat-label>Vehicle Type</mat-label>
@@ -185,10 +185,21 @@
 					</div> -->
 
 					<div class="form-group mt-3">
-						<mat-label>Vehicle Homepage Image</mat-label>
+						<mat-form-field appearance="outline">
+							<mat-label>Tagline</mat-label>
+							<input type="text" matInput placeholder="e.g. Premium comfort for your journey"
+								formControlName="tagline">
+						</mat-form-field>
+					</div>
+
+					<div class="form-group mt-3">
+						<mat-label>Vehicle Homepage Image <span class="asterisk">*</span></mat-label>
 						<br>
 						<input type="file" formControlName="vehicleHomepageImageInput"
 							(change)="onHomepageImgChange($event)" />
+						<div *ngIf="submitted && f.vehicle_homepage_img.errors" class="text-danger">
+							<div *ngIf="f.vehicle_homepage_img.errors.required">The Vehicle Homepage Image is required</div>
+						</div>
 						<img src="{{homepageImageSrc}}" height="100px" style="padding-left: 35px;"
 							*ngIf="homepageImageSrc">
 					</div>
@@ -212,14 +223,6 @@
 
 					<div class="form-group mt-3">
 						<mat-form-field appearance="outline">
-							<mat-label>Tagline</mat-label>
-							<input type="text" matInput placeholder="e.g. Premium comfort for your journey"
-								formControlName="tagline">
-						</mat-form-field>
-					</div>
-
-					<div class="form-group mt-3">
-						<mat-form-field appearance="outline">
 							<mat-label>Badge Text</mat-label>
 							<input type="text" matInput placeholder="e.g. Popular" formControlName="badge_text">
 						</mat-form-field>
@@ -233,15 +236,7 @@
 						</mat-form-field>
 					</div>
 
-					<div class="form-group mt-3">
-						<mat-form-field appearance="outline">
-							<mat-label>Description</mat-label>
-							<textarea matInput rows="3" placeholder="Enter Vehicle Description"
-								formControlName="descriptions"></textarea>
-						</mat-form-field>
-					</div>
-
-					<div class="row mt-3">
+					<div class="row mt-3 full-width">
 						<div class="col-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Status</mat-label>
@@ -258,90 +253,100 @@
 							</mat-form-field>
 						</div>
 					</div>
-					<div class="row mt-3">
-						<!-- Number of Passengers -->
-						<div class="col-6 col-md-6">
-							<label>
-								# of Passengers
-							</label>
-							<div>
-								<ul class="number passengers_qty">
-									<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-											fill="#fff" height="22px">
-											<path
-												d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
-										</svg>
-									</li>
-									<li>
-										<div class="input-group">
-											<div class="input-group-prepend">
-												<button style="min-width: 2.5rem"
-													class="btn btn-decrement btn-outline-secondary" type="button"
-													(click)="change('d','p')">
-													<strong>-</strong>
-												</button>
-											</div>
-											<input type="number" formControlName="seats" min="0" max="1000" step="1"
-												inputmode="decimal" style="text-align: center" class="form-control"
-												placeholder="" [class.errorValid]="submitted && f.seats.errors">
-											<div class="input-group-append">
-												<button style="min-width: 2.5rem"
-													class="btn btn-increment btn-outline-secondary" type="button"
-													(click)="change('i','p')">
-													<strong>+</strong>
-												</button>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-							<div *ngIf="submitted && f.seats.errors" class="text-danger">
-								<div *ngIf="f.seats.errors.required"># of Passengers is
-									required
-								</div>
+					<div class="row mt-3 full-width vehicle-type-detail-row">
+						<div class="col-12 col-md-6">
+							<div class="form-group">
+								<mat-form-field appearance="outline">
+									<mat-label>Description</mat-label>
+									<textarea matInput rows="6" placeholder="Enter Vehicle Description"
+										formControlName="descriptions"></textarea>
+								</mat-form-field>
 							</div>
 						</div>
 
-						<!-- Number of Luggage -->
-						<div class="col-6 col-md-6">
-							<label># of Luggage</label>
-							<div>
-								<ul class="number passengers_qty">
-									<li class="user_grp">
-										<svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
-											stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd"
-											viewBox="0 0 65 64" fill="#fff" height="22px">
-											<rect width="64" height="64" x=".749" fill="none" />
-											<path fill-rule="nonzero"
-												d="M24.784,11.883l0,-2.92c0.01,-1.551 1.341,-2.959 2.954,-2.989c4.016,-0.026 8.032,-0.026 12.048,0c1.549,0.029 2.943,1.364 2.954,2.989l0,2.944c4.998,0.016 9.996,0.037 14.994,0.052c2.578,0.024 4.932,2.258 4.957,4.957c0.035,12.002 0.111,24.004 0,36.005c-0.04,2.551 -2.246,4.883 -4.926,4.925c-16.001,0.149 -32.005,0.149 -48.007,0c-2.561,-0.04 -4.883,-2.229 -4.925,-4.925c-0.112,-12.012 -0.112,-24.025 0,-36.036c0.04,-2.548 2.238,-4.884 4.925,-4.926c5.009,-0.046 10.017,-0.069 15.026,-0.076Zm32.938,2.071c-5.268,-0.016 -42.618,0 -47.9,0c-1.552,0.005 -2.979,1.335 -2.994,2.974c-0.037,11.989 -0.112,23.979 0,35.968c0.024,1.545 1.364,2.941 2.974,2.956c15.979,0.05 31.96,0.148 47.938,-0.001c1.545,-0.024 2.941,-1.393 2.956,-2.973c0.035,-11.99 0.111,-23.98 0,-35.968c-0.024,-1.545 -1.355,-2.941 -2.974,-2.956Zm-44.909,5.985l-0.997,0c-0.577,-0.037 -0.697,-0.209 -0.864,-0.498c-0.343,-0.594 0.102,-1.447 0.864,-1.497l43.892,0c0.044,0.003 0.087,0.006 0.13,0.009c0.419,0.083 0.516,0.192 0.662,0.382c0.438,0.571 0.043,1.55 -0.792,1.604l-40.9,0l0,4.988c-0.023,0.979 -1.96,1.461 -1.995,0l0,-4.988Zm27.932,-8.038c0,-0.987 0.018,-1.974 -0.001,-2.961c-0.016,-0.512 -0.467,-0.961 -0.984,-0.971c-3.993,-0.025 -7.987,0 -11.98,0c-0.525,0.003 -0.998,0.454 -1.001,1l0,2.912c4.655,-0.003 9.311,0.006 13.966,0.02Z" />
-										</svg>
-									</li>
-									<li>
-										<div class="input-group  ">
-											<div class="input-group-prepend">
-												<button style="min-width: 2.5rem"
-													class="btn btn-decrement btn-outline-secondary" type="button"
-													(click)="change('d','l')">
-													<strong>-</strong>
-												</button>
+						<div class="col-12 col-md-6 vehicle-type-stack-column">
+							<div class="vehicle-type-stack-item">
+								<label>
+									# of Passengers
+								</label>
+								<div>
+									<ul class="number passengers_qty">
+										<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+												fill="#fff" height="22px">
+												<path
+													d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
+											</svg>
+										</li>
+										<li>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<button style="min-width: 2.5rem"
+														class="btn btn-decrement btn-outline-secondary" type="button"
+														(click)="change('d','p')">
+														<strong>-</strong>
+													</button>
+												</div>
+												<input type="number" formControlName="seats" min="0" max="1000" step="1"
+													inputmode="decimal" style="text-align: center" class="form-control"
+													placeholder="" [class.errorValid]="submitted && f.seats.errors">
+												<div class="input-group-append">
+													<button style="min-width: 2.5rem"
+														class="btn btn-increment btn-outline-secondary" type="button"
+														(click)="change('i','p')">
+														<strong>+</strong>
+													</button>
+												</div>
 											</div>
-											<input type="number" formControlName="luggage" min="0" max="2000" step="1"
-												inputmode="decimal" style="text-align: center" class="form-control "
-												placeholder="" [class.errorValid]="submitted && f.luggage.errors">
-											<div class="input-group-append">
-												<button style="min-width: 2.5rem"
-													class="btn btn-increment btn-outline-secondary" type="button"
-													(click)="change('i','l')">
-													<strong>+</strong>
-												</button>
-											</div>
-										</div>
-									</li>
-								</ul>
+										</li>
+									</ul>
+								</div>
+								<div *ngIf="submitted && f.seats.errors" class="text-danger">
+									<div *ngIf="f.seats.errors.required"># of Passengers is
+										required
+									</div>
+								</div>
 							</div>
-							<div *ngIf="submitted && f.luggage.errors" class="text-danger">
-								<div *ngIf="f.luggage.errors.required">
-									# of Luggage is required
+
+							<div class="vehicle-type-stack-item">
+								<label># of Luggage</label>
+								<div>
+									<ul class="number passengers_qty">
+										<li class="user_grp">
+											<svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
+												stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd"
+												viewBox="0 0 65 64" fill="#fff" height="22px">
+												<rect width="64" height="64" x=".749" fill="none" />
+												<path fill-rule="nonzero"
+													d="M24.784,11.883l0,-2.92c0.01,-1.551 1.341,-2.959 2.954,-2.989c4.016,-0.026 8.032,-0.026 12.048,0c1.549,0.029 2.943,1.364 2.954,2.989l0,2.944c4.998,0.016 9.996,0.037 14.994,0.052c2.578,0.024 4.932,2.258 4.957,4.957c0.035,12.002 0.111,24.004 0,36.005c-0.04,2.551 -2.246,4.883 -4.926,4.925c-16.001,0.149 -32.005,0.149 -48.007,0c-2.561,-0.04 -4.883,-2.229 -4.925,-4.925c-0.112,-12.012 -0.112,-24.025 0,-36.036c0.04,-2.548 2.238,-4.884 4.925,-4.926c5.009,-0.046 10.017,-0.069 15.026,-0.076Zm32.938,2.071c-5.268,-0.016 -42.618,0 -47.9,0c-1.552,0.005 -2.979,1.335 -2.994,2.974c-0.037,11.989 -0.112,23.979 0,35.968c0.024,1.545 1.364,2.941 2.974,2.956c15.979,0.05 31.96,0.148 47.938,-0.001c1.545,-0.024 2.941,-1.393 2.956,-2.973c0.035,-11.99 0.111,-23.98 0,-35.968c-0.024,-1.545 -1.355,-2.941 -2.974,-2.956Zm-44.909,5.985l-0.997,0c-0.577,-0.037 -0.697,-0.209 -0.864,-0.498c-0.343,-0.594 0.102,-1.447 0.864,-1.497l43.892,0c0.044,0.003 0.087,0.006 0.13,0.009c0.419,0.083 0.516,0.192 0.662,0.382c0.438,0.571 0.043,1.55 -0.792,1.604l-40.9,0l0,4.988c-0.023,0.979 -1.96,1.461 -1.995,0l0,-4.988Zm27.932,-8.038c0,-0.987 0.018,-1.974 -0.001,-2.961c-0.016,-0.512 -0.467,-0.961 -0.984,-0.971c-3.993,-0.025 -7.987,0 -11.98,0c-0.525,0.003 -0.998,0.454 -1.001,1l0,2.912c4.655,-0.003 9.311,0.006 13.966,0.02Z" />
+											</svg>
+										</li>
+										<li>
+											<div class="input-group  ">
+												<div class="input-group-prepend">
+													<button style="min-width: 2.5rem"
+														class="btn btn-decrement btn-outline-secondary" type="button"
+														(click)="change('d','l')">
+														<strong>-</strong>
+													</button>
+												</div>
+												<input type="number" formControlName="luggage" min="0" max="2000" step="1"
+													inputmode="decimal" style="text-align: center" class="form-control "
+													placeholder="" [class.errorValid]="submitted && f.luggage.errors">
+												<div class="input-group-append">
+													<button style="min-width: 2.5rem"
+														class="btn btn-increment btn-outline-secondary" type="button"
+														(click)="change('i','l')">
+														<strong>+</strong>
+													</button>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div *ngIf="submitted && f.luggage.errors" class="text-danger">
+									<div *ngIf="f.luggage.errors.required">
+										# of Luggage is required
+									</div>
 								</div>
 							</div>
 						</div>
@@ -359,16 +364,16 @@
 <!-- Edit vehicle type modal -->
 <div class="modal fade" id="editVehicleTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content user_inforamtion">
+	<div class="modal-dialog modal-dialog-centered vehicle-type-modal-dialog" role="document">
+		<div class="modal-content user_inforamtion vehicle-type-modal-content">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Edit Vehicle Type</h3>
 				<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
-				<form [formGroup]="editVehicleTypeForm">
+			<div class="modal-body vehicle-type-modal-body">
+				<form [formGroup]="editVehicleTypeForm" class="vehicle-type-modal-form">
 					<div class="form-group">
 						<mat-form-field appearance="outline">
 							<mat-label>Vehicle Type</mat-label>
@@ -385,6 +390,14 @@
 						<img src="{{imageSrc || editVehiclePic}}" height="100px" style="padding-left: 35px;"
 							*ngIf="imageSrc || editVehiclePic">
 					</div> -->
+
+					<div class="form-group mt-3">
+						<mat-form-field appearance="outline">
+							<mat-label>Tagline</mat-label>
+							<input type="text" matInput placeholder="e.g. Premium comfort for your journey"
+								formControlName="tagline">
+						</mat-form-field>
+					</div>
 
 					<div class="form-group mt-3">
 						<mat-label>Vehicle Homepage Image</mat-label>
@@ -414,14 +427,6 @@
 
 					<div class="form-group mt-3">
 						<mat-form-field appearance="outline">
-							<mat-label>Tagline</mat-label>
-							<input type="text" matInput placeholder="e.g. Premium comfort for your journey"
-								formControlName="tagline">
-						</mat-form-field>
-					</div>
-
-					<div class="form-group mt-3">
-						<mat-form-field appearance="outline">
 							<mat-label>Badge Text</mat-label>
 							<input type="text" matInput placeholder="e.g. Popular" formControlName="badge_text">
 						</mat-form-field>
@@ -435,15 +440,7 @@
 						</mat-form-field>
 					</div>
 
-					<div class="form-group mt-3">
-						<mat-form-field appearance="outline">
-							<mat-label>Description</mat-label>
-							<textarea matInput rows="3" placeholder="Enter Vehicle Description"
-								formControlName="descriptions"></textarea>
-						</mat-form-field>
-					</div>
-
-					<div class="row mt-3">
+					<div class="row mt-3 full-width">
 						<div class="col-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Status</mat-label>
@@ -460,90 +457,100 @@
 							</mat-form-field>
 						</div>
 					</div>
-					<div class="row mt-3">
-						<!-- Number of Passengers -->
-						<div class="col-6 col-md-6">
-							<label>
-								# of Passengers
-							</label>
-							<div>
-								<ul class="number passengers_qty">
-									<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-											fill="#fff" height="22px">
-											<path
-												d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
-										</svg>
-									</li>
-									<li>
-										<div class="input-group">
-											<div class="input-group-prepend">
-												<button style="min-width: 2.5rem"
-													class="btn btn-decrement btn-outline-secondary" type="button"
-													(click)="editChange('d','p')">
-													<strong>-</strong>
-												</button>
-											</div>
-											<input type="number" formControlName="seats" min="0" max="1000" step="1"
-												inputmode="decimal" style="text-align: center" class="form-control"
-												placeholder="" [class.errorValid]="submitted && fEdit.seats.errors">
-											<div class="input-group-append">
-												<button style="min-width: 2.5rem"
-													class="btn btn-increment btn-outline-secondary" type="button"
-													(click)="editChange('i','p')">
-													<strong>+</strong>
-												</button>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-							<div *ngIf="submitted && fEdit.seats.errors" class="text-danger">
-								<div *ngIf="fEdit.seats.errors.required"># of Passengers is
-									required
-								</div>
+					<div class="row mt-3 full-width vehicle-type-detail-row">
+						<div class="col-12 col-md-6">
+							<div class="form-group">
+								<mat-form-field appearance="outline">
+									<mat-label>Description</mat-label>
+									<textarea matInput rows="6" placeholder="Enter Vehicle Description"
+										formControlName="descriptions"></textarea>
+								</mat-form-field>
 							</div>
 						</div>
 
-						<!-- Number of Luggage -->
-						<div class="col-6 col-md-6">
-							<label># of Luggage</label>
-							<div>
-								<ul class="number passengers_qty">
-									<li class="user_grp">
-										<svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
-											stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd"
-											viewBox="0 0 65 64" fill="#fff" height="22px">
-											<rect width="64" height="64" x=".749" fill="none" />
-											<path fill-rule="nonzero"
-												d="M24.784,11.883l0,-2.92c0.01,-1.551 1.341,-2.959 2.954,-2.989c4.016,-0.026 8.032,-0.026 12.048,0c1.549,0.029 2.943,1.364 2.954,2.989l0,2.944c4.998,0.016 9.996,0.037 14.994,0.052c2.578,0.024 4.932,2.258 4.957,4.957c0.035,12.002 0.111,24.004 0,36.005c-0.04,2.551 -2.246,4.883 -4.926,4.925c-16.001,0.149 -32.005,0.149 -48.007,0c-2.561,-0.04 -4.883,-2.229 -4.925,-4.925c-0.112,-12.012 -0.112,-24.025 0,-36.036c0.04,-2.548 2.238,-4.884 4.925,-4.926c5.009,-0.046 10.017,-0.069 15.026,-0.076Zm32.938,2.071c-5.268,-0.016 -42.618,0 -47.9,0c-1.552,0.005 -2.979,1.335 -2.994,2.974c-0.037,11.989 -0.112,23.979 0,35.968c0.024,1.545 1.364,2.941 2.974,2.956c15.979,0.05 31.96,0.148 47.938,-0.001c1.545,-0.024 2.941,-1.393 2.956,-2.973c0.035,-11.99 0.111,-23.98 0,-35.968c-0.024,-1.545 -1.355,-2.941 -2.974,-2.956Zm-44.909,5.985l-0.997,0c-0.577,-0.037 -0.697,-0.209 -0.864,-0.498c-0.343,-0.594 0.102,-1.447 0.864,-1.497l43.892,0c0.044,0.003 0.087,0.006 0.13,0.009c0.419,0.083 0.516,0.192 0.662,0.382c0.438,0.571 0.043,1.55 -0.792,1.604l-40.9,0l0,4.988c-0.023,0.979 -1.96,1.461 -1.995,0l0,-4.988Zm27.932,-8.038c0,-0.987 0.018,-1.974 -0.001,-2.961c-0.016,-0.512 -0.467,-0.961 -0.984,-0.971c-3.993,-0.025 -7.987,0 -11.98,0c-0.525,0.003 -0.998,0.454 -1.001,1l0,2.912c4.655,-0.003 9.311,0.006 13.966,0.02Z" />
-										</svg>
-									</li>
-									<li>
-										<div class="input-group  ">
-											<div class="input-group-prepend">
-												<button style="min-width: 2.5rem"
-													class="btn btn-decrement btn-outline-secondary" type="button"
-													(click)="editChange('d','l')">
-													<strong>-</strong>
-												</button>
+						<div class="col-12 col-md-6 vehicle-type-stack-column">
+							<div class="vehicle-type-stack-item">
+								<label>
+									# of Passengers
+								</label>
+								<div>
+									<ul class="number passengers_qty">
+										<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+												fill="#fff" height="22px">
+												<path
+													d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
+											</svg>
+										</li>
+										<li>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<button style="min-width: 2.5rem"
+														class="btn btn-decrement btn-outline-secondary" type="button"
+														(click)="editChange('d','p')">
+														<strong>-</strong>
+													</button>
+												</div>
+												<input type="number" formControlName="seats" min="0" max="1000" step="1"
+													inputmode="decimal" style="text-align: center" class="form-control"
+													placeholder="" [class.errorValid]="submitted && fEdit.seats.errors">
+												<div class="input-group-append">
+													<button style="min-width: 2.5rem"
+														class="btn btn-increment btn-outline-secondary" type="button"
+														(click)="editChange('i','p')">
+														<strong>+</strong>
+													</button>
+												</div>
 											</div>
-											<input type="number" formControlName="luggage" min="0" max="2000" step="1"
-												inputmode="decimal" style="text-align: center" class="form-control "
-												placeholder="" [class.errorValid]="submitted && fEdit.luggage.errors">
-											<div class="input-group-append">
-												<button style="min-width: 2.5rem"
-													class="btn btn-increment btn-outline-secondary" type="button"
-													(click)="editChange('i','l')">
-													<strong>+</strong>
-												</button>
-											</div>
-										</div>
-									</li>
-								</ul>
+										</li>
+									</ul>
+								</div>
+								<div *ngIf="submitted && fEdit.seats.errors" class="text-danger">
+									<div *ngIf="fEdit.seats.errors.required"># of Passengers is
+										required
+									</div>
+								</div>
 							</div>
-							<div *ngIf="submitted && fEdit.luggage.errors" class="text-danger">
-								<div *ngIf="fEdit.luggage.errors.required">
-									# of Luggage is required
+
+							<div class="vehicle-type-stack-item">
+								<label># of Luggage</label>
+								<div>
+									<ul class="number passengers_qty">
+										<li class="user_grp">
+											<svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
+												stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd"
+												viewBox="0 0 65 64" fill="#fff" height="22px">
+												<rect width="64" height="64" x=".749" fill="none" />
+												<path fill-rule="nonzero"
+													d="M24.784,11.883l0,-2.92c0.01,-1.551 1.341,-2.959 2.954,-2.989c4.016,-0.026 8.032,-0.026 12.048,0c1.549,0.029 2.943,1.364 2.954,2.989l0,2.944c4.998,0.016 9.996,0.037 14.994,0.052c2.578,0.024 4.932,2.258 4.957,4.957c0.035,12.002 0.111,24.004 0,36.005c-0.04,2.551 -2.246,4.883 -4.926,4.925c-16.001,0.149 -32.005,0.149 -48.007,0c-2.561,-0.04 -4.883,-2.229 -4.925,-4.925c-0.112,-12.012 -0.112,-24.025 0,-36.036c0.04,-2.548 2.238,-4.884 4.925,-4.926c5.009,-0.046 10.017,-0.069 15.026,-0.076Zm32.938,2.071c-5.268,-0.016 -42.618,0 -47.9,0c-1.552,0.005 -2.979,1.335 -2.994,2.974c-0.037,11.989 -0.112,23.979 0,35.968c0.024,1.545 1.364,2.941 2.974,2.956c15.979,0.05 31.96,0.148 47.938,-0.001c1.545,-0.024 2.941,-1.393 2.956,-2.973c0.035,-11.99 0.111,-23.98 0,-35.968c-0.024,-1.545 -1.355,-2.941 -2.974,-2.956Zm-44.909,5.985l-0.997,0c-0.577,-0.037 -0.697,-0.209 -0.864,-0.498c-0.343,-0.594 0.102,-1.447 0.864,-1.497l43.892,0c0.044,0.003 0.087,0.006 0.13,0.009c0.419,0.083 0.516,0.192 0.662,0.382c0.438,0.571 0.043,1.55 -0.792,1.604l-40.9,0l0,4.988c-0.023,0.979 -1.96,1.461 -1.995,0l0,-4.988Zm27.932,-8.038c0,-0.987 0.018,-1.974 -0.001,-2.961c-0.016,-0.512 -0.467,-0.961 -0.984,-0.971c-3.993,-0.025 -7.987,0 -11.98,0c-0.525,0.003 -0.998,0.454 -1.001,1l0,2.912c4.655,-0.003 9.311,0.006 13.966,0.02Z" />
+											</svg>
+										</li>
+										<li>
+											<div class="input-group  ">
+												<div class="input-group-prepend">
+													<button style="min-width: 2.5rem"
+														class="btn btn-decrement btn-outline-secondary" type="button"
+														(click)="editChange('d','l')">
+														<strong>-</strong>
+													</button>
+												</div>
+												<input type="number" formControlName="luggage" min="0" max="2000" step="1"
+													inputmode="decimal" style="text-align: center" class="form-control "
+													placeholder="" [class.errorValid]="submitted && fEdit.luggage.errors">
+												<div class="input-group-append">
+													<button style="min-width: 2.5rem"
+														class="btn btn-increment btn-outline-secondary" type="button"
+														(click)="editChange('i','l')">
+														<strong>+</strong>
+													</button>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div *ngIf="submitted && fEdit.luggage.errors" class="text-danger">
+									<div *ngIf="fEdit.luggage.errors.required">
+										# of Luggage is required
+									</div>
 								</div>
 							</div>
 						</div>

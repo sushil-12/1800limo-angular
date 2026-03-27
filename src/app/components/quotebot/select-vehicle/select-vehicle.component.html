@@ -382,7 +382,8 @@
 					<!-- DIV: AFFILIATE INFO FOR ADMIN-->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && (currentUser?.roleName == 'admin') && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
-						<div class="affiliate-info-unit" (click)="openAffiliateDetailsModal(vehinfo)">
+						<div class="affiliate-info-unit"
+							(click)="openAffiliateDetailsModal(vehinfo); $event.stopPropagation()">
 							<p class="m-0 affiliate-text">
 
 								{{vehinfo?.affiliate_name}}/{{vehinfo?.affiliate_phone}}
@@ -395,7 +396,8 @@
 					<!-- AFFILIATE INFO FOR AFFILIATE -->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && (currentUser?.roleName == 'driver') && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
-						<div class="affiliate-info-unit" (click)="openAffiliateDetailsModal(vehinfo)">
+						<div class="affiliate-info-unit"
+							(click)="openAffiliateDetailsModal(vehinfo); $event.stopPropagation()">
 							<p class="m-0 affiliate-text">
 								{{vehinfo?.affiliate_name}}/{{vehinfo?.affiliate_phone}}
 							</p>
@@ -574,7 +576,8 @@
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser?.roleName == 'admin' && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
-						<div class="affiliate-info-unit" (click)="openAffiliateDetailsModal(vehinfo)">
+						<div class="affiliate-info-unit"
+							(click)="openAffiliateDetailsModal(vehinfo); $event.stopPropagation()">
 							<p class="m-0 affiliate-text">
 								{{vehinfo?.affiliate_name}}/{{vehinfo?.affiliate_phone}}
 							</p>
@@ -926,8 +929,9 @@
 										class="text-dark font-weight-500">
 										<i class="fas fa-user-circle mr-2 text-warning"></i>
 										<span style="cursor:pointer; text-decoration: underline;">{{
-											passengerDetails?.affiliate_name }}({{ passengerDetails?.affiliate_company
-											}})</span>
+											passengerDetails?.affiliate_name }}<ng-container
+											*ngIf="passengerDetails?.affiliate_company">{{
+											' (' + passengerDetails?.affiliate_company + ')' }}</ng-container></span>
 									</p>
 									<p class="text-dark font-weight-500"
 										*ngIf="passengerDetails?.badge_city && passengerDetails?.badge_city != 'N/A'">
