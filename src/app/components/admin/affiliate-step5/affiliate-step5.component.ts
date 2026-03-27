@@ -2,8 +2,8 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { catchError, switchMap } from 'rxjs/operators';
-import { forkJoin, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
@@ -137,33 +137,20 @@ export class AffiliateStep5Component implements OnInit {
 
 		const previousVehicles = [...this.vehicles];
 		moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);
+		this.applySequentialSortOrders();
 
 		this.spinner.show();
+		const payload = {
+			sort_orders: this.vehicles.map((vehicle: any, index: number) => ({
+				id: vehicle.ID || vehicle.id,
+				sort_order: index + 1
+			}))
+		};
 
-		const fieldDataRequest = this.adminService.adminAffiliateGetFieldsData();
-		const vehicleDetailsRequests = this.vehicles.map((vehicle: any) =>
-			this.adminService.adminAffiliateGetVehicleData(vehicle.ID || vehicle.id)
-		);
-
-		forkJoin([fieldDataRequest, ...vehicleDetailsRequests]).pipe(
-			switchMap((responses: any[]) => {
-				const fieldData = responses[0]?.data || {};
-				const vehicleResponses = responses.slice(1);
-				const updateRequests = vehicleResponses.map((response: any, index: number) =>
-					this.adminService.adminAffiliateEditVehicle(
-						this.buildAffiliateVehicleUpdatePayload(
-							response.data,
-							this.vehicles[index],
-							fieldData,
-							index + 1
-						)
-					)
-				);
-
-				return forkJoin(updateRequests);
-			}),
+		this.adminService.adminAffiliateUpdateVehicleSortOrders(payload).pipe(
 			catchError(err => {
 				this.vehicles = previousVehicles;
+				this.applySequentialSortOrders();
 				this.spinner.hide();
 				return throwError(err);
 			})
@@ -172,93 +159,11 @@ export class AffiliateStep5Component implements OnInit {
 		});
 	}
 
-	private buildAffiliateVehicleUpdatePayload(vehicleDetails: any, vehicleSummary: any, fieldData: any, sortOrder: number) {
-		const selectedAmenities = this.extractSelectedAmenityIds(vehicleDetails);
-		const specialAmenities = Array.isArray(vehicleDetails.specialAmenities) ? vehicleDetails.specialAmenities : [];
-		const vehicleInterior = Array.isArray(vehicleDetails.vehicleInterior) ? vehicleDetails.vehicleInterior : [];
-		const vehicleId = vehicleSummary?.ID || vehicleSummary?.id || vehicleDetails.id || vehicleDetails.ID || '';
-		const relativeVehicleId = vehicleSummary?.ID || vehicleSummary?.id || vehicleId;
-		const specialAmenitiesGet = this.buildBooleanSelectionArray(fieldData?.specialAmenities, specialAmenities);
-		const vehicleInteriorGet = this.buildBooleanSelectionArray(fieldData?.vehicleInterior, vehicleInterior);
-
-		return {
-			acc_id: '',
-			affiliate_type: this.affiliateType,
-			id: vehicleId,
-			relative_vehicle_id: relativeVehicleId,
-			vehicleType: parseInt(vehicleDetails.vehicle_type || vehicleDetails.vehicleType || vehicleDetails.vehicleType_id, 10) || '',
-			make: vehicleDetails.make || '',
-			model: vehicleDetails.model || '',
-			year: vehicleDetails.year || '',
-			color: vehicleDetails.color || '',
-			licensePlate: vehicleDetails.license_plate || vehicleDetails.licensePlate || '',
-			numberOfVehicles: vehicleDetails.numberOfVehicles || vehicleDetails.number_of_vehicles || 1,
-			seats: vehicleDetails.seats || '',
-			luggage: vehicleDetails.luggage || '',
-			charterCancelPolicy: vehicleDetails.charterCancelPolicy || '24',
-			nonCharterCancelPolicy: vehicleDetails.nonCharterCancelPolicy || '24',
-			typeOfService: Array.isArray(vehicleDetails.typeOfService) ? vehicleDetails.typeOfService : [],
-			amenities: selectedAmenities,
-			specialAmenitiesGet: specialAmenitiesGet,
-			specialAmenities: specialAmenities,
-			vehicleInteriorGet: vehicleInteriorGet,
-			vehicleInterior: vehicleInterior,
-			vehicle_image_1: vehicleDetails.vehicle_image_1?.ID || '',
-			vehicle_image_2: vehicleDetails.vehicle_image_2?.ID || '',
-			vehicle_image_3: vehicleDetails.vehicle_image_3?.ID || '',
-			vehicle_image_4: vehicleDetails.vehicle_image_4?.ID || '',
-			vehicle_image_5: vehicleDetails.vehicle_image_5?.ID || '',
-			vehicle_image_6: vehicleDetails.vehicle_image_6?.ID || '',
-			vehicle_image_7: vehicleDetails.vehicle_image_7?.ID || '',
-			vehicle_image_8: vehicleDetails.vehicle_image_8?.ID || '',
-			vehicle_image_9: vehicleDetails.vehicle_image_9?.ID || '',
-			rearPlateImage: vehicleDetails.rear_plate_image?.ID || '',
-			windowPermitImage: vehicleDetails.window_permitImage?.ID || '',
-			windowPermit2Image: vehicleDetails.window_permitImage2?.ID || '',
-			usdotPermitImage: vehicleDetails.usdot_permitImage?.ID || '',
-			mcImage: vehicleDetails.mc_image?.ID || '',
-			sort_order: sortOrder
-		};
-	}
-
-	private buildBooleanSelectionArray(optionList: any, selectedValues: any[]): boolean[] {
-		if (!Array.isArray(optionList) || !optionList.length) {
-			return [];
-		}
-
-		const selectedSet = new Set((selectedValues || []).map((value: any) => String(value)));
-		return optionList.map((item: any) => selectedSet.has(String(item?.id)));
-	}
-
-	private extractSelectedAmenityIds(vehicleDetails: any): any[] {
-		if (Array.isArray(vehicleDetails.amenities)) {
-			return vehicleDetails.amenities;
-		}
-
-		const selectedAmenityIds = [
-			...this.extractAmenityIdsFromGroup(vehicleDetails.chargableAmenities),
-			...this.extractAmenityIdsFromGroup(vehicleDetails.nonChargableAmenities)
-		];
-
-		return [...new Set(selectedAmenityIds)];
-	}
-
-	private extractAmenityIdsFromGroup(amenityGroup: any): any[] {
-		const amenityIds: any[] = [];
-		if (!amenityGroup) {
-			return amenityIds;
-		}
-
-		Object.values(amenityGroup).forEach((group: any) => {
-			const amenities = Array.isArray(group) ? group : Object.values(group || {});
-			amenities.forEach((amenity: any) => {
-				if (amenity?.isSelected && amenity?.id !== undefined && amenity?.id !== null) {
-					amenityIds.push(amenity.id);
-				}
-			});
-		});
-
-		return amenityIds;
+	private applySequentialSortOrders() {
+		this.vehicles = this.vehicles.map((vehicle: any, index: number) => ({
+			...vehicle,
+			sort_order: index + 1
+		}));
 	}
 
 	clickEditVehicle(vehicleId) {

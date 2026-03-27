@@ -17,6 +17,9 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
+	private readonly affiliateSearchStorageKey = 'affiliateSearch';
+	private readonly affiliateFilterStorageKey = 'affiliateFilterType';
+	private readonly affiliateOperatorStorageKey = 'affiliateOperatorSelect';
 	@ViewChild('fileInput') fileInput!: ElementRef;
 	@ViewChild('fileInput1') fileInput1!: ElementRef;
 	@ViewChild('message') message!: ElementRef;
@@ -88,11 +91,11 @@ export class AffiliateAccountsComponent implements OnInit {
 	ngOnInit(): void {
 
 		this.buildSendEmailForm();
-		this.operatorSelect = 'all';
-		this.filter_type = 'all'
-		this.searchText = localStorage.getItem('affiliateSearch') ? localStorage.getItem('affiliateSearch') : ''
+		this.operatorSelect = localStorage.getItem(this.affiliateOperatorStorageKey) || 'all';
+		this.filter_type = localStorage.getItem(this.affiliateFilterStorageKey) || 'all';
+		this.searchText = localStorage.getItem(this.affiliateSearchStorageKey) || '';
 
-		this.affiliateTypeSwitch('all')
+		this.affiliateTypeSwitch(this.operatorSelect)
 		sessionStorage.clear()
 
 		this.rejectCauseForm = this.formBuilder.group({
@@ -114,9 +117,12 @@ export class AffiliateAccountsComponent implements OnInit {
 	onChangeFilterType(value: string) {
 		console.log('Changing Filter Type: ', value)
 		this.filter_type = value
+		localStorage.setItem(this.affiliateFilterStorageKey, value);
 		this.loadAffiliateOperators()
 	}
 	affiliateTypeSwitch(_affiliateType: string) {
+		this.operatorSelect = _affiliateType;
+		localStorage.setItem(this.affiliateOperatorStorageKey, _affiliateType);
 		switch (_affiliateType) {
 			case 'black-limo-operator': {
 				this.heading = "Black Car / Limo Accounts";
@@ -167,13 +173,24 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.searchText = text
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			localStorage.setItem('affiliateSearch', text)
+			localStorage.setItem(this.affiliateSearchStorageKey, text || '')
 			// this.loadAffiliateOperators()
 			// this.getEmailList()
 		}, 700)
 	}
 	handleKeypressEvents() {
 		clearTimeout(this.timer)
+	}
+
+	reset() {
+		clearTimeout(this.timer);
+		this.searchText = '';
+		this.filter_type = 'all';
+		this.operatorSelect = 'all';
+		localStorage.removeItem(this.affiliateSearchStorageKey);
+		localStorage.removeItem(this.affiliateFilterStorageKey);
+		localStorage.removeItem(this.affiliateOperatorStorageKey);
+		this.affiliateTypeSwitch('all');
 	}
 
 	scroll(id) {
@@ -193,16 +210,15 @@ export class AffiliateAccountsComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 	handleSearch() {
-		if (this.searchText && this.searchText.length > 0) {
-			this.filter_type = 'all';
-			console.log('Setting filter_type to all due to search keyword');
-		}
+		localStorage.setItem(this.affiliateSearchStorageKey, this.searchText || '');
 		this.loadAffiliateOperators();
 	}
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
 		var keyword = this.searchText?.replace(/&/g, '%26')
-		localStorage.setItem('affiliateSearch', this.searchText || '');
+		localStorage.setItem(this.affiliateSearchStorageKey, this.searchText || '');
+		localStorage.setItem(this.affiliateFilterStorageKey, this.filter_type || 'all');
+		localStorage.setItem(this.affiliateOperatorStorageKey, this.operatorSelect || 'all');
 
 		if (pageUrl) {
 			console.log("pageurl", pageUrl)
@@ -212,10 +228,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
-			this.affiliate_accounts = result.data.data;
-			this.affiliate_accounts_emails = this.affiliate_accounts.filter(item => item.Email !== null)
-			this.affiliate_accounts_numbers = this.affiliate_accounts.filter(item => item.CellNumber !== null)
-			this.affiliate_accounts = this.affiliate_accounts.map(i => {
+			const affiliateAccounts = result.data.data.map(i => {
 				if (i?.LanguagesSpoken) {
 					console.log("in language iffff")
 					i['readMore'] = (i?.LanguagesSpoken?.length) > 2 ? true : false
@@ -226,6 +239,9 @@ export class AffiliateAccountsComponent implements OnInit {
 				}
 				return i
 			})
+			this.affiliate_accounts = this.filterAffiliateAccounts(affiliateAccounts);
+			this.affiliate_accounts_emails = this.affiliate_accounts.filter(item => item.Email !== null)
+			this.affiliate_accounts_numbers = this.affiliate_accounts.filter(item => item.CellNumber !== null)
 			this.affiliate_count = result.data.account_counts;
 			this.firstPage = 1;
 			this.lastPage = result.data.last_page;
@@ -241,6 +257,91 @@ export class AffiliateAccountsComponent implements OnInit {
 			// sessionStorage.setItem('blackCarLimoBus',JSON.stringify(this.blackCarLimoBus));
 			this.spinner.hide();//hide spinner
 		})
+	}
+
+	private filterAffiliateAccounts(accounts: any[] = []) {
+		const searchTerm = this.searchText?.toString().trim().toLowerCase();
+		if (!searchTerm) {
+			return accounts;
+		}
+
+		return accounts.filter((account) =>
+			this.getAffiliateSearchValues(account).some((value) =>
+				value.toLowerCase().includes(searchTerm)
+			)
+		);
+	}
+
+	private getAffiliateSearchValues(account: any): string[] {
+		const fullName = [
+			account?.FirstName,
+			account?.MiddleName,
+			account?.LastName
+		].filter(Boolean).join(' ').trim();
+		const driverNames = this.getDriverNames(account?.driver_list);
+		const phoneNumber = [
+			account?.CellIsd,
+			account?.CellNumber
+		].filter(Boolean).join('');
+		const phoneWithCountry = [
+			phoneNumber,
+			account?.CellNumberCountry ? `(${account.CellNumberCountry.toUpperCase()})` : ''
+		].filter(Boolean).join(' ');
+		const vehicleTypes = Array.isArray(account?.vehicles) ? account.vehicles.join(' ') : account?.vehicles;
+		const languageValues = Array.isArray(account?.LanguagesSpoken)
+			? account.LanguagesSpoken.join(' ')
+			: account?.LanguagesSpoken;
+
+		return [
+			account?.account_approval,
+			account?.account_approval?.replace(/[_-]/g, ' '),
+			account?.CellIsd,
+			account?.CellNumber,
+			account?.CellNumberCountry,
+			phoneNumber,
+			phoneWithCountry,
+			account?.at_step,
+			account?.at_step_nmae,
+			account?.at_step_nmae?.replace(/[_-]/g, ' '),
+			account?.status ? 'enabled active true' : 'disabled inactive false',
+			account?.AffiliateType,
+			account?.AffiliateTypeName,
+			fullName,
+			driverNames,
+			account?.Email,
+			account?.badge_city_name,
+			account?.CompanyName,
+			account?.DBA,
+			languageValues,
+			account?.Address,
+			vehicleTypes,
+			account?.number_of_vehicles?.toString()
+		].filter(Boolean).map((value) => value.toString());
+	}
+
+	getDriverNames(driverList: any[] = []): string {
+		if (!Array.isArray(driverList) || !driverList.length) {
+			return 'N/A';
+		}
+
+		return driverList
+			.map((driver: any) => [
+				driver?.first_name,
+				driver?.middle_name,
+				driver?.last_name
+			].filter(Boolean).join(' ').trim())
+			.filter((name: string) => name.length > 0)
+			.join(', ') || 'N/A';
+	}
+
+	private getSearchRegex() {
+		const searchTerm = this.searchText?.toString();
+		if (!searchTerm) {
+			return null;
+		}
+
+		const escapedSearchText = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		return new RegExp(escapedSearchText, 'gi');
 	}
 
 	addAffiliateAccountClick() {
@@ -339,8 +440,8 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (!this.searchText) { return args ? args : "N/A"; }
 		if (args) {
 			args = args.toString()
-			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+			const re = this.getSearchRegex();
+			return re ? args.replace(re, '<mark class="font-weight-bold">$&</mark>') : args;
 		}
 
 	}
@@ -349,8 +450,8 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll(",", ", ") : "N/A"; }
 		if (args) {
 			args = args.toString().replaceAll(",", ", ")
-			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+			const re = this.getSearchRegex();
+			return re ? args.replace(re, '<mark class="font-weight-bold">$&</mark>') : args;
 		}
 
 	}
@@ -359,8 +460,8 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (!this.searchText) { return args ? args.replace("_", " ").toUpperCase() : "N/A"; }
 		if (args) {
 			args = args.replace("_", " ").toUpperCase()
-			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+			const re = this.getSearchRegex();
+			return re ? args.replace(re, '<mark class="font-weight-bold">$&</mark>') : args;
 		}
 
 	}

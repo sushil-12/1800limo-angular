@@ -298,6 +298,9 @@ export class AffiliateService {
 	editVehicle(data) {
 		return this.httpClient.put(this.serverUrl + 'edit-vehicle-by-affiliate', data);
 	}
+	updateVehicleSortOrders(data) {
+		return this.httpClient.post(this.serverUrl + 'update-sort-order-for-vehicle', data);
+	}
 	duplicateVehicle(data) {
 		return this.httpClient.post(this.serverUrl + 'duplicate-affiliate-vehicle', data);
 	}

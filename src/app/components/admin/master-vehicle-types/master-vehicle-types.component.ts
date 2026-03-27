@@ -3,8 +3,8 @@ import { AdminService } from '../../../services/admin.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError, switchMap } from 'rxjs/operators';
-import { forkJoin, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { CommonService } from '../../../services/common.service';
@@ -151,24 +151,24 @@ export class MasterVehicleTypesComponent implements OnInit {
 
 		moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);
 		this.syncAllVehiclesAfterVisibleReorder();
+		this.applySequentialSortOrders();
+		sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.allVehicles));
 
 		this.spinner.show();
 
-		const vehicleDetailsRequests = this.allVehicles.map((vehicle: any) =>
-			this.adminService.getVehicleType(vehicle.id || vehicle.ID)
-		);
+			const payload = {
+				sort_orders: this.allVehicles.map((vehicle: any, index: number) => ({
+					id: vehicle.ID || vehicle.id,
+					sort_order: index + 1
+				}))
+			};
 
-		forkJoin(vehicleDetailsRequests).pipe(
-			switchMap((responses: any[]) => {
-				const updateRequests = responses.map((response: any, index: number) =>
-					this.adminService.updateVehicleType(this.buildVehicleUpdatePayload(response.data, index + 1))
-				);
-
-				return forkJoin(updateRequests);
-			}),
+		this.adminService.updateVehicleSortOrders(payload).pipe(
 			catchError(err => {
 				this.vehicles = previousVehicles;
 				this.allVehicles = previousAllVehicles;
+				this.applySequentialSortOrders();
+				this.refreshVehicleCollections();
 				sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.allVehicles));
 				this.spinner.hide();//hide spinner
 				return throwError(err);
@@ -220,27 +220,11 @@ export class MasterVehicleTypesComponent implements OnInit {
 			: [...this.allVehicles];
 	}
 
-	private buildVehicleUpdatePayload(vehicleDetails: any, sortOrder: number) {
-		return {
-			vehicleId: vehicleDetails.id || vehicleDetails.ID,
-			vehicleType: vehicleDetails.vehicle_cat_name || vehicleDetails.vehicle_name || '',
-			vehicleImage: vehicleDetails.vehicle_cat_image || '',
-			vehicleImageInput: '',
-			vehicle_homepage_img: vehicleDetails.vehicle_homepage_img || '',
-			vehicleHomepageImageInput: '',
-			gallery_images: Array.isArray(vehicleDetails.gallery_images) ? vehicleDetails.gallery_images : [],
-			galleryImagesInput: '',
-			tagline: vehicleDetails.tagline || '',
-			badge_text: vehicleDetails.badge_text || '',
-			features: Array.isArray(vehicleDetails.features)
-				? vehicleDetails.features
-				: (vehicleDetails.features ? String(vehicleDetails.features).split(',').map((feature: string) => feature.trim()).filter((feature: string) => feature.length > 0) : []),
-			descriptions: vehicleDetails.descriptions || '',
-			status: vehicleDetails.status || 'enable',
-			sort_order: sortOrder,
-			seats: vehicleDetails.seats ?? 1,
-			luggage: vehicleDetails.luggage ?? 0
-		};
+	private applySequentialSortOrders() {
+		this.allVehicles = this.allVehicles.map((vehicle: any, index: number) => ({
+			...vehicle,
+			sort_order: index + 1
+		}));
 	}
 
 	get f() {

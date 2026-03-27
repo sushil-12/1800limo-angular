@@ -10,21 +10,17 @@
 						<mat-label>
 							Operator Account
 						</mat-label>
-						<mat-select [(value)]="operatorSelect">
-							<mat-option value="all" name="affiliateType" (click)="affiliateTypeSwitch('all')">All
+						<mat-select [(value)]="operatorSelect" (selectionChange)="affiliateTypeSwitch($event.value)">
+							<mat-option value="all" name="affiliateType">All
 								Accounts</mat-option>
-							<mat-option value="black-limo-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('black-limo-operator')">Black Car /
+							<mat-option value="black-limo-operator" name="affiliateType">Black Car /
 								Limo Accounts
 							</mat-option>
-							<mat-option value="fleet-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('fleet-operator')">Fleet/Coach
+							<mat-option value="fleet-operator" name="affiliateType">Fleet/Coach
 								Accounts</mat-option>
-							<mat-option value="taxi-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('taxi-operator')">Taxi
+							<mat-option value="taxi-operator" name="affiliateType">Taxi
 								Accounts</mat-option>
-							<mat-option value="gig-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('gig-operator')">Gig
+							<mat-option value="gig-operator" name="affiliateType">Gig
 								Accounts</mat-option>
 						</mat-select>
 					</mat-form-field>
@@ -57,11 +53,16 @@
 				<div class="col-md-4 py-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<input type="text" matInput [(ngModel)]="searchText" (focus)="$event.target.select()"
-							(ngModelChange)="handleSearchKeyword($event)" placeholder="Search" id="keyword1" autofocus>
+							(ngModelChange)="handleSearchKeyword($event)"
+							placeholder="Search by status, name, email, phone, company, city, address, vehicle type"
+							id="keyword1" autofocus>
 					</mat-form-field>
 				</div>
 				<div class="col-md-2 py-2">
-					<button class="custom-filled-button m-0" (click)="handleSearch()">SEARCH</button>
+					<div class="d-flex flex-wrap align-items-center search-action-buttons">
+						<button class="custom-filled-button orange-button m-0" (click)="handleSearch()">Search</button>
+						<button class="custom-filled-back-button m-0" (click)="reset()">Reset</button>
+					</div>
 				</div>
 			</div>
 			<!-- <h3 class="headinginfoH3" style="margin-top: 10px !important;">{{heading}}</h3> -->
@@ -128,6 +129,7 @@
 								<th>Affiliate Type</th>
 
 								<th>Name</th>
+								<th>Driver Name</th>
 								<th>Email</th>
 								<th>Badge City</th>
 
@@ -230,6 +232,7 @@
 										<span>N/A</span>
 									</ng-template>
 								</td>
+								<td><span [innerHTML]="highlighText(getDriverNames(blackCarLimoBus?.driver_list))"></span></td>
 								<td class="clickable" (dblclick)="sendMessage('email', blackCarLimoBus)"
 									data-messagetype="email">
 									<span [innerHTML]="highlighText(blackCarLimoBus?.Email)"></span>
