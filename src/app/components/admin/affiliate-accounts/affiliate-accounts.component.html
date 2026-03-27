@@ -4,8 +4,8 @@
 	<section class="user_information" id="affiliates_table">
 		<h2 class="headinginfo">Affiliate Accounts</h2>
 		<div class="containeredd">
-			<div class="row align-items-center p-3">
-				<div class="col-md-3 py-2">
+			<div class="row align-items-center p-3 affiliate-filter-row">
+				<div class="col-md-3 py-2 affiliate-filter-col">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Operator Account
@@ -25,7 +25,7 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="col-md-3 py-2">
+				<div class="col-md-3 py-2 affiliate-filter-col">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Filter
@@ -50,7 +50,7 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="col-md-4 py-2">
+				<div class="col-md-4 py-2 affiliate-search-col">
 					<mat-form-field appearance="outline" class="m-0">
 						<input type="text" matInput [(ngModel)]="searchText" (focus)="$event.target.select()"
 							(ngModelChange)="handleSearchKeyword($event)"
@@ -58,9 +58,9 @@
 							id="keyword1" autofocus>
 					</mat-form-field>
 				</div>
-				<div class="col-md-2 py-2">
+				<div class="col-md-2 py-2 affiliate-search-action-col">
 					<div class="d-flex flex-wrap align-items-center search-action-buttons">
-						<button class="custom-filled-button orange-button m-0" (click)="handleSearch()">Search</button>
+						<button style="color:#fff !important;" class="custom-filled-button orange-button m-0" (click)="handleSearch()">Search</button>
 						<button class="custom-filled-back-button m-0" (click)="reset()">Reset</button>
 					</div>
 				</div>
@@ -129,7 +129,7 @@
 								<th>Affiliate Type</th>
 
 								<th>Name</th>
-								<th>Driver Name</th>
+								<th>Drivers</th>
 								<th>Email</th>
 								<th>Badge City</th>
 
@@ -232,7 +232,22 @@
 										<span>N/A</span>
 									</ng-template>
 								</td>
-								<td><span [innerHTML]="highlighText(getDriverNames(blackCarLimoBus?.driver_list))"></span></td>
+								<td>
+									<ng-container *ngIf="getDriverListItems(blackCarLimoBus?.driver_list).length; else noDrivers">
+										<div class="driver-list-cell">
+											<button
+												*ngFor="let driver of getDriverListItems(blackCarLimoBus?.driver_list); index as driverIndex"
+												type="button"
+												class="driver-list-link"
+												(click)="openDriverProfile(driver, blackCarLimoBus, $event)">
+												{{ driverIndex + 1 }}. <span [innerHTML]="highlighText(driver?.displayName)"></span>
+											</button>
+										</div>
+									</ng-container>
+									<ng-template #noDrivers>
+										<span>N/A</span>
+									</ng-template>
+								</td>
 								<td class="clickable" (dblclick)="sendMessage('email', blackCarLimoBus)"
 									data-messagetype="email">
 									<span [innerHTML]="highlighText(blackCarLimoBus?.Email)"></span>

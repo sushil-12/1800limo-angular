@@ -109,10 +109,10 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			}
 			);
 
-		this.currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
+		this.currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData") || 'null');
 		this.affiliateId = sessionStorage.getItem("affiliateId");
 		//hide star rating field
-		this.affiliateType = this.currentUser.AffiliateType;
+		this.affiliateType = this.currentUser?.AffiliateType || sessionStorage.getItem('affiliateType');
 
 		//add driver form validation
 		// start date validations before 
@@ -356,7 +356,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 					}
 					else {
 						this.onLanguageChange('1', true);//set english as default language
-						if (this.currentUser.affiliate_type != 'fleet_operator') {
+						if (this.currentUser?.affiliate_type != 'fleet_operator' && this.currentUser?.AffiliateType != 'fleet_operator') {
 							this.spinner.show()
 							// get data from logged in affiliate and set in driver fields
 							this.adminService.getAffiliateAccount(this.affiliateId)
@@ -477,10 +477,12 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		// this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
 		// this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
 		// this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
-		this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
-		this.addDriverForm.patchValue({
-			Country: this.currentUser.CellNumberCountry.toUpperCase()
-		});
+		if (this.currentUser?.CellNumberCountry) {
+			this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
+			this.addDriverForm.patchValue({
+				Country: this.currentUser.CellNumberCountry.toUpperCase()
+			});
+		}
 	}
 
 	closeButton() {

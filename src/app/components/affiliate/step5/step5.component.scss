@@ -161,7 +161,18 @@ table.dataTable
 }
 
 .affiliate-step5-preview-button {
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+	min-height: 2.4rem;
+	padding: 0.55rem 1rem;
+	border: 0;
+	border-radius: 0.85rem;
+	background: var(--green) !important;
+	color: #fff !important;
+	font-weight: 500;
+	box-shadow: 0 8px 18px rgba(46, 204, 64, 0.22);
 	pointer-events: none;
 }
 

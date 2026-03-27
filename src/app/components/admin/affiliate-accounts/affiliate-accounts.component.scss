@@ -209,6 +209,63 @@ a.dropdown-item {
     gap: 15px;
 }
 
+.driver-list-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.driver-list-link {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    color: #000;
+    text-decoration: underline;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.driver-list-link:hover {
+    color: #000;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .affiliate-filter-row {
+        align-items: flex-start !important;
+    }
+
+    .affiliate-filter-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .affiliate-search-col {
+        flex: 0 0 68%;
+        max-width: 68%;
+    }
+
+    .affiliate-search-action-col {
+        flex: 0 0 32%;
+        max-width: 32%;
+    }
+
+    .search-action-buttons {
+        display: flex;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start;
+        align-items: center;
+        height: 100%;
+        gap: 10px;
+    }
+
+    .search-action-buttons button {
+        width: auto !important;
+        flex: 0 0 auto;
+    }
+}
+
 @media screen and (max-width:767px) {
     .headings_count {
         justify-content: center;

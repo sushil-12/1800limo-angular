@@ -24,7 +24,7 @@
 		</div>
 		<div class="row mb-4" *ngIf="canAddVehicle">
 			<div class="col-md-12">
-				<button type="button" class="custom-filled-button" (click)="addVehicleClick(vehicleTypeId)"
+				<button style="color:#fff !important;" type="button" class="custom-filled-button" (click)="addVehicleClick(vehicleTypeId)"
 					tabindex="1">
 					<i class="bi bi-plus-lg" style="font-size: 1.2rem"></i>
 					Add Vehicle
@@ -115,9 +115,9 @@
 									<td class="vehicleFontDesign">{{vehicle?.model}}</td>
 									<td class="vehicleFontDesign">{{vehicle?.color}}</td>
 									<td>
-										<button (click)="updateAmenityList(vehicle?.amenities)"
+										<button style="color: #fff !important;" (click)="updateAmenityList(vehicle?.amenities)"
 											class="custom-filled-button" tabindex="1">
-											Amenity List
+											Amenities
 										</button>
 									</td>
 									<td class="vehicleFontDesign">{{vehicle?.licensePlate}}</td>
@@ -164,9 +164,11 @@
 													<td class="vehicleFontDesign">{{vehicle?.make}}</td>
 													<td class="vehicleFontDesign">{{vehicle?.model}}</td>
 													<td class="vehicleFontDesign">{{vehicle?.color}}</td>
-													<td><span
-															class="custom-filled-button affiliate-step5-preview-button">Amenity
-															List</span></td>
+													<td>
+														<button style="color: #fff !important;" type="button" class="custom-filled-button affiliate-step5-preview-button">
+															Amenities
+														</button>
+													</td>
 													<td class="vehicleFontDesign">{{vehicle?.licensePlate}}</td>
 													<td><i class="fa fa-trash affiliate-step5-preview-delete-icon"></i>
 													</td>

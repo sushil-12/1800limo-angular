@@ -235,7 +235,7 @@ export class EditVehicleComponent implements OnInit {
 				this.filteredYear = this.year = this.response.data.years;
 				this.filteredMake = this.make = this.response.data.make;
 				this.filteredModel = this.model = this.response.data.model;
-				this.vehicleTypes = this.sortVehicleTypesBySortOrder(this.response.data.vehicle_types || []);
+				this.vehicleTypes = this.response.data.vehicle_types || [];
 				this.filteredVehicleTypes = [...this.vehicleTypes];
 				this.filteredColor = this.color = this.response.data.color;
 				this.specialAmenities = this.response.data.specialAmenities || [];
