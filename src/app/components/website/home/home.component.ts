@@ -439,6 +439,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return !!String(controlValue || visibleValue || '').trim();
 	}
 
+	getAirportPanelWidth(inputRef: HTMLInputElement | null | undefined): number | undefined {
+		const fieldContainer = inputRef?.closest('.input-contain--airport') as HTMLElement | null;
+		return fieldContainer?.offsetWidth || inputRef?.offsetWidth || undefined;
+	}
+
 	onAutocompleteSelected(location: any, fieldName: string) {
 		this.SetFormValue(fieldName, location.display_address ?? location.formatted_address);
 		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
@@ -2231,7 +2236,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.showAppStorePopup = !this.showAppStorePopup;
 	}
 }
-
 
 
 
