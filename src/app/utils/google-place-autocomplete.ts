@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
  */
 const CLEANUP_KEY = '__gmpPlaceAutocompleteCleanup';
 const GMP_ATTACH_SHADOW_PATCHED_KEY = '__gmpAttachShadowPatched';
+const ATTACH_REQUEST_KEY = '__gmpPlaceAutocompleteAttachRequest';
 type PacHelperMode = 'prompt' | 'loading' | 'empty' | 'hidden';
 
 export interface AttachPlaceAutocompleteOptions {
@@ -80,6 +81,13 @@ function injectGmpFocusRingSuppressor(): void {
 			outline: none !important;
 			box-shadow: none !important;
 			border-color: transparent !important;
+		}
+
+		html[data-mobile-place-dialog-open="true"],
+		body[data-mobile-place-dialog-open="true"] {
+			overflow: hidden !important;
+			overscroll-behavior: none !important;
+			touch-action: none !important;
 		}
 
 		.input-contain--address[data-mobile-place-dialog-open="true"] .address-clear-wrap,
@@ -199,7 +207,14 @@ function installGmpAttachShadowPatch(): void {
 			input::placeholder,
 			.input-container input::placeholder {
 				color: #6b7280 !important;
+				-webkit-text-fill-color: #6b7280 !important;
+				transition: none !important;
 				opacity: 1 !important;
+			}
+
+			input,
+			.input-container input {
+				transition: none !important;
 			}
 			.focus-ring { display: none !important; }
 			button[aria-label*="Clear"],
@@ -337,6 +352,7 @@ function installGmpAttachShadowPatch(): void {
 			dialog.full-window-autocomplete-dialog[open] input::placeholder {
 				color: #6b7280 !important;
 				-webkit-text-fill-color: #6b7280 !important;
+				transition: none !important;
 				opacity: 1 !important;
 			}
 
@@ -789,6 +805,9 @@ export async function attachPlaceAutocompleteElement(
 	onPlaceSelect: (place: google.maps.places.PlaceResult) => void
 ): Promise<void> {
 	installGmpAttachShadowPatch();
+	const inputState = nativeInput as unknown as Record<string, unknown>;
+	const attachRequestId = ((inputState[ATTACH_REQUEST_KEY] as number | undefined) || 0) + 1;
+	inputState[ATTACH_REQUEST_KEY] = attachRequestId;
 	const prev = (nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY];
 	if (typeof prev === 'function') {
 		(prev as () => void)();
@@ -818,8 +837,23 @@ export async function attachPlaceAutocompleteElement(
 		return;
 	}
 
+	if ((inputState[ATTACH_REQUEST_KEY] as number | undefined) !== attachRequestId) {
+		return;
+	}
+
 	// Inject global CSS suppressor once (no-op if already done)
 	injectGmpFocusRingSuppressor();
+
+	let sibling = nativeInput.nextElementSibling;
+	while (sibling) {
+		const nextSibling = sibling.nextElementSibling;
+		if (sibling.tagName.toLowerCase() === 'gmp-place-autocomplete') {
+			sibling.remove();
+		} else {
+			break;
+		}
+		sibling = nextSibling;
+	}
 
 	const pac = new PlaceAutocompleteElement();
 	pac.id = nativeInput.id;
@@ -853,6 +887,13 @@ export async function attachPlaceAutocompleteElement(
 	let lastDraftValue = nativeInput.value || '';
 	let isRebuildingAutocomplete = false;
 	let cleanup: (() => void) | undefined;
+	let dialogObserverRetryTimeouts: number[] = [];
+	let lastAnchorRect: DOMRect | null = null;
+	let isMobileDialogPinned = false;
+	let isMobileAnchorLocked = false;
+	let hasCompletedFirstMobileOpen = false;
+	let lockedScrollX = 0;
+	let lockedScrollY = 0;
 
 	const readInnerDraftValue = (): string => {
 		try {
@@ -869,6 +910,10 @@ export async function attachPlaceAutocompleteElement(
 		if (innerDraft.trim()) {
 			lastDraftValue = innerDraft;
 		}
+		if (isMobileDialogPinned) {
+			window.scrollTo(lockedScrollX, lockedScrollY);
+			updatePlacement();
+		}
 	};
 
 	const updatePlacement = () => {
@@ -877,30 +922,153 @@ export async function attachPlaceAutocompleteElement(
 			(nativeInput.closest('.input-contain--address') as HTMLElement | null) ??
 			(nativeInput.parentElement as HTMLElement | null) ??
 			pac;
-		const rect = anchorElement.getBoundingClientRect();
+		const liveRect = anchorElement.getBoundingClientRect();
+		const isMobile = window.matchMedia('(max-width: 767px)').matches;
+		const rect = isMobile && lastAnchorRect ? lastAnchorRect : liveRect;
 		const visualViewport = window.visualViewport;
 		const viewportHeight = visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0;
 		const viewportOffsetTop = visualViewport?.offsetTop || 0;
 		const viewportOffsetLeft = visualViewport?.offsetLeft || 0;
 		const estimatedDialogHeight = Math.min(250, Math.max(180, viewportHeight * 0.35));
 		const spaceBelow = viewportHeight - rect.bottom;
-		const isMobile = window.matchMedia('(max-width: 767px)').matches;
 		const shouldOpenAbove = !isMobile && spaceBelow < estimatedDialogHeight && rect.top > spaceBelow;
-		const dialogTop = shouldOpenAbove
-			? Math.max(8, rect.top + viewportOffsetTop - estimatedDialogHeight)
-			: rect.bottom + viewportOffsetTop + 4;
+		const dialogTop = isMobile
+			? Math.max(8, rect.top + viewportOffsetTop)
+			: shouldOpenAbove
+				? Math.max(8, rect.top + viewportOffsetTop - estimatedDialogHeight)
+				: rect.bottom + viewportOffsetTop + 4;
+		const dialogLeft = isMobile ? rect.left + viewportOffsetLeft : rect.left + viewportOffsetLeft;
 
 		pac.style.setProperty('--dialog-top', `${dialogTop}px`);
-		pac.style.setProperty('--dialog-left', `${rect.left + viewportOffsetLeft}px`);
+		pac.style.setProperty('--dialog-left', `${dialogLeft}px`);
 		pac.style.setProperty('--dialog-width', `${rect.width}px`);
+	};
+
+	const lockMobileScroll = () => {
+		if (isMobileDialogPinned || !window.matchMedia('(max-width: 767px)').matches) {
+			return;
+		}
+		isMobileDialogPinned = true;
+		lockedScrollX = window.scrollX || window.pageXOffset || 0;
+		lockedScrollY = window.scrollY || window.pageYOffset || 0;
+		document.documentElement.setAttribute('data-mobile-place-dialog-open', 'true');
+		document.body.setAttribute('data-mobile-place-dialog-open', 'true');
+		document.body.style.position = 'fixed';
+		document.body.style.top = `-${lockedScrollY}px`;
+		document.body.style.left = `-${lockedScrollX}px`;
+		document.body.style.right = '0';
+		document.body.style.width = '100%';
+	};
+
+	const unlockMobileScroll = () => {
+		if (!isMobileDialogPinned) {
+			isMobileAnchorLocked = false;
+			lastAnchorRect = null;
+			return;
+		}
+		isMobileDialogPinned = false;
+		isMobileAnchorLocked = false;
+		lastAnchorRect = null;
+		document.documentElement.removeAttribute('data-mobile-place-dialog-open');
+		document.body.removeAttribute('data-mobile-place-dialog-open');
+		document.body.style.position = '';
+		document.body.style.top = '';
+		document.body.style.left = '';
+		document.body.style.right = '';
+		document.body.style.width = '';
+		window.scrollTo(lockedScrollX, lockedScrollY);
 	};
 
 	const schedulePlacementSync = () => {
 		updatePlacement();
 		requestAnimationFrame(updatePlacement);
-		[60, 120, 220, 360].forEach((delay) => {
+		[60, 120, 220, 360, 520, 760].forEach((delay) => {
 			setTimeout(updatePlacement, delay);
 		});
+	};
+
+	let dialogOpenObserver: MutationObserver | undefined;
+
+	const cacheAnchorRect = () => {
+		const anchorElement =
+			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
+			(nativeInput.closest('.input-contain--address') as HTMLElement | null) ??
+			(nativeInput.parentElement as HTMLElement | null) ??
+			pac;
+		lastAnchorRect = anchorElement.getBoundingClientRect();
+	};
+
+	const clearDialogObserverRetries = () => {
+		dialogObserverRetryTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
+		dialogObserverRetryTimeouts = [];
+	};
+
+	const stabilizeMobileOpenPlacement = (dialog: HTMLDialogElement) => {
+		const delays = hasCompletedFirstMobileOpen ? [0, 80, 180] : [0, 80, 180, 320, 520];
+		isMobileAnchorLocked = false;
+		delays.forEach((delay, index) => {
+			window.setTimeout(() => {
+				if (!dialog.hasAttribute('open')) {
+					return;
+				}
+				cacheAnchorRect();
+				schedulePlacementSync();
+				if (index === delays.length - 1) {
+					isMobileAnchorLocked = true;
+					hasCompletedFirstMobileOpen = true;
+				}
+			}, delay);
+		});
+	};
+
+	const observeDialogOpenState = () => {
+		dialogOpenObserver?.disconnect();
+		dialogOpenObserver = undefined;
+		clearDialogObserverRetries();
+
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const dialog = root?.querySelector?.('dialog.full-window-autocomplete-dialog') as HTMLDialogElement | null;
+			if (!dialog) {
+				[50, 120, 220, 400, 650, 900].forEach((delay) => {
+					dialogObserverRetryTimeouts.push(window.setTimeout(() => {
+						if (!window.matchMedia('(max-width: 767px)').matches || !isMobileAnchorLocked) {
+							cacheAnchorRect();
+						}
+						observeDialogOpenState();
+						schedulePlacementSync();
+					}, delay));
+				});
+				return;
+			}
+
+			dialogOpenObserver = new MutationObserver(() => {
+				const isMobile = window.matchMedia('(max-width: 767px)').matches;
+				if (!dialog.hasAttribute('open')) {
+					unlockMobileScroll();
+					return;
+				}
+				if (isMobile) {
+					lockMobileScroll();
+					stabilizeMobileOpenPlacement(dialog);
+				} else {
+					cacheAnchorRect();
+					isMobileAnchorLocked = true;
+				}
+				schedulePlacementSync();
+				requestAnimationFrame(() => schedulePlacementSync());
+				setTimeout(schedulePlacementSync, 100);
+				setTimeout(schedulePlacementSync, 220);
+				setTimeout(schedulePlacementSync, 420);
+			});
+
+			dialogOpenObserver.observe(dialog, {
+				attributes: true,
+				attributeFilter: ['open']
+			});
+		} catch {
+			/* ignore */
+		}
 	};
 
 	const restoreInlineFieldUi = (value: string) => {
@@ -1000,6 +1168,7 @@ export async function attachPlaceAutocompleteElement(
 
 			if (dialog instanceof HTMLDialogElement && dialog.open) {
 				dialog.addEventListener('close', () => {
+					unlockMobileScroll();
 					requestAnimationFrame(() => {
 						finalizeRestore();
 						setTimeout(finalizeRestore, 40);
@@ -1015,6 +1184,7 @@ export async function attachPlaceAutocompleteElement(
 			}
 
 			(pac as HTMLElement).blur();
+			unlockMobileScroll();
 			finalizeRestore();
 			requestAnimationFrame(() => {
 				finalizeRestore();
@@ -1165,9 +1335,36 @@ export async function attachPlaceAutocompleteElement(
 		closeAutocompletePopup();
 	};
 
+	const handlePinnedMobileViewportChange = () => {
+		if (!isMobileDialogPinned) {
+			updatePlacement();
+			return;
+		}
+		window.scrollTo(lockedScrollX, lockedScrollY);
+		if (!isMobileAnchorLocked) {
+			cacheAnchorRect();
+		}
+		updatePlacement();
+	};
+
+	const handlePinnedWindowScroll = () => {
+		if (!isMobileDialogPinned) {
+			updatePlacement();
+			return;
+		}
+		window.scrollTo(lockedScrollX, lockedScrollY);
+		updatePlacement();
+	};
+
 	pac.addEventListener('click', schedulePlacementSync);
 	pac.addEventListener('focusin', schedulePlacementSync);
 	pac.addEventListener('touchstart', schedulePlacementSync, { passive: true });
+	pac.addEventListener('click', cacheAnchorRect);
+	pac.addEventListener('focusin', cacheAnchorRect);
+	pac.addEventListener('touchstart', cacheAnchorRect, { passive: true });
+	pac.addEventListener('click', observeDialogOpenState);
+	pac.addEventListener('focusin', observeDialogOpenState);
+	pac.addEventListener('touchstart', observeDialogOpenState, { passive: true });
 	pac.addEventListener('input', syncDraftFromInner as EventListener, true);
 	pac.addEventListener('change', syncDraftFromInner as EventListener, true);
 	pac.addEventListener('touchstart', handleDialogTouchStart, true);
@@ -1176,12 +1373,13 @@ export async function attachPlaceAutocompleteElement(
 	document.addEventListener('touchstart', handleDocumentPointerDown, true);
 	document.addEventListener('focusin', handleDocumentFocusIn, true);
 	window.addEventListener('resize', updatePlacement);
-	window.addEventListener('scroll', updatePlacement, { capture: true, passive: true });
-	window.visualViewport?.addEventListener('resize', updatePlacement);
-	window.visualViewport?.addEventListener('scroll', updatePlacement);
+	window.addEventListener('scroll', handlePinnedWindowScroll, { capture: true, passive: true });
+	window.visualViewport?.addEventListener('resize', handlePinnedMobileViewportChange);
+	window.visualViewport?.addEventListener('scroll', handlePinnedMobileViewportChange);
 
 	// Force initial placement calculation slightly after attach
 	setTimeout(schedulePlacementSync, 50);
+	setTimeout(observeDialogOpenState, 50);
 
 	const handler = async (ev: Event) => {
 		const raw = ev as unknown as {
@@ -1236,6 +1434,12 @@ export async function attachPlaceAutocompleteElement(
 		pac.removeEventListener('click', schedulePlacementSync);
 		pac.removeEventListener('focusin', schedulePlacementSync);
 		pac.removeEventListener('touchstart', schedulePlacementSync);
+		pac.removeEventListener('click', cacheAnchorRect);
+		pac.removeEventListener('focusin', cacheAnchorRect);
+		pac.removeEventListener('touchstart', cacheAnchorRect);
+		pac.removeEventListener('click', observeDialogOpenState);
+		pac.removeEventListener('focusin', observeDialogOpenState);
+		pac.removeEventListener('touchstart', observeDialogOpenState);
 		pac.removeEventListener('input', syncDraftFromInner as EventListener, true);
 		pac.removeEventListener('change', syncDraftFromInner as EventListener, true);
 		pac.removeEventListener('touchstart', handleDialogTouchStart, true);
@@ -1244,9 +1448,13 @@ export async function attachPlaceAutocompleteElement(
 		document.removeEventListener('touchstart', handleDocumentPointerDown, true);
 		document.removeEventListener('focusin', handleDocumentFocusIn, true);
 		window.removeEventListener('resize', updatePlacement);
-		window.removeEventListener('scroll', updatePlacement, { capture: true } as EventListenerOptions);
-		window.visualViewport?.removeEventListener('resize', updatePlacement);
-		window.visualViewport?.removeEventListener('scroll', updatePlacement);
+		window.removeEventListener('scroll', handlePinnedWindowScroll, { capture: true } as EventListenerOptions);
+		window.visualViewport?.removeEventListener('resize', handlePinnedMobileViewportChange);
+		window.visualViewport?.removeEventListener('scroll', handlePinnedMobileViewportChange);
+		dialogOpenObserver?.disconnect();
+		dialogOpenObserver = undefined;
+		clearDialogObserverRetries();
+		unlockMobileScroll();
 		pac.remove();
 		nativeInput.style.display = prevDisplay;
 		nativeInput.style.position = prevPosition;
@@ -1255,6 +1463,9 @@ export async function attachPlaceAutocompleteElement(
 		nativeInput.style.opacity = prevOpacity;
 		nativeInput.style.pointerEvents = prevPointer;
 		delete (nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY];
+		if ((inputState[ATTACH_REQUEST_KEY] as number | undefined) === attachRequestId) {
+			delete inputState[ATTACH_REQUEST_KEY];
+		}
 	};
 
 	(nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY] = cleanup;
