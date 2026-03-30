@@ -1604,6 +1604,26 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
 	}
 
+	private hydrateExtraStopsFromQuoteBot(stops: Array<any> = [], isReturn: boolean = false) {
+		const formArray = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		formArray.clear();
+
+		(stops || []).forEach((item: any, index: number) => {
+			if (!item?.address) {
+				return;
+			}
+
+			this.addExtraStop(isReturn);
+			this.fillExtraStop(isReturn, index, {
+				formatted_address: item.address,
+				display_address: item.address
+			}, {
+				latitude: item.latitude,
+				longitude: item.longitude
+			});
+		});
+	}
+
 
 	fillAddress(form_control: string, address: any) {
 		console.log('Address: ', address)
@@ -5133,6 +5153,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		const quoteServiceType = QB?.service_type || 'one_way';
+		const transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
+		const return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+
+		this.service_type = quoteServiceType;
+		this.transfer_type = transfer_type_value;
+		this.return_transfer_type = return_transfer_type_value;
+
+		this.BookingForm.patchValue({
+			service_type: quoteServiceType,
+			transfer_type: transfer_type_value,
+			return_transfer_type: return_transfer_type_value
+		}, { emitEvent: false });
+
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
@@ -5174,8 +5208,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
 		this.currencySymbol = this.currencyObj?.symbol
 		//dropOFF
-		this.SetFormValue('service_type', QB?.service_type)
-		if (QB?.service_type == 'charter_tour') {
+		if (quoteServiceType == 'charter_tour') {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
 			this.number_of_hours = QB?.booking_hour
 		}
@@ -5186,8 +5219,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			cancellation_hours: selected_vehicle?.cancellation_policy.toString(),
 			return_cancellation_hours: selected_vehicle?.cancellation_policy.toString()
 		})
-		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
-		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 		this.SetFormValue('transfer_type', transfer_type_value)
 		this.SetFormValue('return_transfer_type', return_transfer_type_value)
 		this.SetFormValue('total_passengers', QB?.no_of_luggage)
@@ -5238,6 +5269,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
 		this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))
 		this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
+		this.hydrateExtraStopsFromQuoteBot(QB?.extra_stops, false)
+		this.hydrateExtraStopsFromQuoteBot(QB?.return_extra_stops, true)
 		if (QB?.pickup_type == 'airport') {
 			let location = {
 				latitude: QB?.pickup_airport_lat,

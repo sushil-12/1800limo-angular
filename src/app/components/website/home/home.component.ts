@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, NgZone, HostListener, AfterViewInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebsiteService } from '../../../services/website.service';
 import { AuthService } from '../../../services/auth.service';
@@ -32,6 +32,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('retaddressinput') retaddressinput!: ElementRef;
 	@ViewChild('retdropaddressinput') retdropaddressinput!: ElementRef;
 	@ViewChild('clientLogoContainer') clientLogoContainer!: ElementRef;
+	@ViewChildren('extraStopInput') extraStopInputs!: QueryList<ElementRef>;
+	@ViewChildren('returnExtraStopInput') returnExtraStopInputs!: QueryList<ElementRef>;
 
 	clientLogoSwiper: Swiper | null = null;
 
@@ -439,8 +441,161 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return !!String(controlValue || visibleValue || '').trim();
 	}
 
+	get ExtraStops(): FormArray {
+		return this.quoteBotForm.get('extra_stops') as FormArray;
+	}
+
+	get ReturnExtraStops(): FormArray {
+		return this.quoteBotForm.get('return_extra_stops') as FormArray;
+	}
+
+	canAddExtraStop(isReturn: boolean = false): boolean {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		if (!stops?.length) {
+			return true;
+		}
+
+		return this.isExtraStopFilled(stops.at(stops.length - 1));
+	}
+
+	private isExtraStopFilled(control: AbstractControl | null): boolean {
+		return !!String(control?.get('address')?.value || '').trim()
+			&& !!String(control?.get('latitude')?.value || '').trim()
+			&& !!String(control?.get('longitude')?.value || '').trim();
+	}
+
+	private getFilledExtraStops(isReturn: boolean = false): Array<any> {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		return stops.controls
+			.map((stop) => stop.value)
+			.filter((stop: any) => !!String(stop?.address || '').trim() && stop?.latitude && stop?.longitude);
+	}
+
+	addExtraStop(isReturn: boolean = false): void {
+		if (!this.canAddExtraStop(isReturn)) {
+			return;
+		}
+
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		stops.push(this.formBuilder.group({
+			address: [''],
+			latitude: [''],
+			longitude: ['']
+		}));
+
+		setTimeout(() => this.initializeExtraStopAutocompletes(), 0);
+	}
+
+	deleteExtraStop(index: number, isReturn: boolean = false): void {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		stops.removeAt(index);
+	}
+
+	clearExtraStop(index: number, input?: HTMLInputElement, isReturn: boolean = false): void {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		const stop = stops.at(index);
+		stop?.patchValue({
+			address: '',
+			latitude: '',
+			longitude: ''
+		});
+
+		if (input) {
+			input.value = '';
+		}
+	}
+
+	fetchExtraStopValue(index: number, isReturn: boolean = false): string {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		return stops.at(index)?.get('address')?.value || '';
+	}
+
+	updateExtraStopDraft(index: number, value: string, isReturn: boolean = false): void {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		stops.at(index)?.patchValue({
+			address: value,
+			latitude: '',
+			longitude: ''
+		}, { emitEvent: false });
+	}
+
+	private initializeExtraStopAutocompletes(): void {
+		this.extraStopInputs?.forEach((inputRef, index) => {
+			this.loadExtraStopAutocomplete(inputRef.nativeElement, index, false);
+		});
+		this.returnExtraStopInputs?.forEach((inputRef, index) => {
+			this.loadExtraStopAutocomplete(inputRef.nativeElement, index, true);
+		});
+	}
+
+	private loadExtraStopAutocomplete(input: HTMLInputElement, index: number, isReturn: boolean): void {
+		const stops = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		void attachPlaceAutocompleteElement(
+			input,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: stops.at(index)?.get('address') ?? undefined,
+			},
+			(place) => {
+				this.ngZone.run(() => {
+					const geometryLocation = place.geometry?.location;
+					if (!geometryLocation) {
+						stops.at(index)?.patchValue({
+							address: '',
+							latitude: '',
+							longitude: ''
+						});
+						return;
+					}
+
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = place.name ?? '';
+					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+					input.value = displayAddress;
+
+					stops.at(index)?.patchValue({
+						address: displayAddress,
+						latitude: geometryLocation.lat(),
+						longitude: geometryLocation.lng()
+					});
+				});
+			}
+		);
+	}
+
+	private syncCharterTripEndpoints(): void {
+		if (this.QBForm?.service_type?.value !== 'charter_tour') {
+			return;
+		}
+
+		const pickupType = this.QBForm?.pickup_type?.value;
+		this.quoteBotForm.patchValue({
+			dropoff_type: pickupType
+		}, { emitEvent: false });
+
+		if (pickupType === 'airport') {
+			this.quoteBotForm.patchValue({
+				dropoff_airport: this.QBForm?.pickup_airport?.value,
+				dropoff_airport_name: this.QBForm?.pickup_airport_name?.value,
+				dropoff_airport_lat: this.QBForm?.pickup_airport_lat?.value,
+				dropoff_airport_long: this.QBForm?.pickup_airport_long?.value
+			}, { emitEvent: false });
+			return;
+		}
+
+		this.quoteBotForm.patchValue({
+			dropoff_address: this.QBForm?.pickup_address?.value,
+			dropoff_address_lat: this.QBForm?.pickup_address_lat?.value,
+			dropoff_address_long: this.QBForm?.pickup_address_long?.value
+		}, { emitEvent: false });
+	}
+
 	onAutocompleteSelected(location: any, fieldName: string) {
 		this.SetFormValue(fieldName, location.display_address ?? location.formatted_address);
+		if (fieldName === 'pickup_address') {
+			this.syncCharterTripEndpoints();
+		}
 		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
 			this.fillReturnDetails();
 		}
@@ -449,6 +604,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	onLocationSelected(location: any, fieldName: string) {
 		this.SetFormValue(`${fieldName}_lat`, location.latitude);
 		this.SetFormValue(`${fieldName}_long`, location.longitude);
+		if (fieldName === 'pickup_address') {
+			this.syncCharterTripEndpoints();
+		}
 		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
 			this.fillReturnDetails();
 		}
@@ -467,6 +625,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.retdropaddressinput) {
 			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
 		}
+		this.initializeExtraStopAutocompletes();
 	}
 
 	Subscriptions() {
@@ -478,6 +637,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
+			if (this.quoteBotForm.get('service_type')?.value === 'charter_tour') {
+				this.quoteBotForm.patchValue({ dropoff_type: value }, { emitEvent: false });
+				this.syncCharterTripEndpoints();
+			}
 			setTimeout(() => {
 				this.retryGoogleAutocompleteInitialization()
 			}, 200)
@@ -643,6 +806,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return_dropoff_address_long: ['',],
 			no_of_passenger: [1,],
 			no_of_luggage: [0,],
+			extra_stops: this.formBuilder.array([]),
+			return_extra_stops: this.formBuilder.array([]),
 			location_info: this.formBuilder.array([],),
 		});
 
@@ -831,6 +996,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				no_of_luggage: Math.max(0, previous_quotebot?.no_of_luggage || 0),
 				location_info: previous_quotebot?.location_info
 			})
+			this.ExtraStops.clear();
+			(previous_quotebot?.extra_stops || []).forEach((stop: any) => {
+				this.ExtraStops.push(this.formBuilder.group({
+					address: [stop?.address || ''],
+					latitude: [stop?.latitude || ''],
+					longitude: [stop?.longitude || '']
+				}));
+			});
+			this.ReturnExtraStops.clear();
+			(previous_quotebot?.return_extra_stops || []).forEach((stop: any) => {
+				this.ReturnExtraStops.push(this.formBuilder.group({
+					address: [stop?.address || ''],
+					latitude: [stop?.latitude || ''],
+					longitude: [stop?.longitude || '']
+				}));
+			});
 			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
 			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
@@ -1052,6 +1233,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.SetFormValue(field_name + '_lat', value.lat)
 		this.SetFormValue(field_name + '_long', value.lon)
 		console.log(this.quoteBotForm.value)
+		if (field_name === 'pickup_airport') {
+			this.syncCharterTripEndpoints();
+		}
 		this.vars[field_name + '_name'] = value.airport
 		if (field_name.includes('pickup_airport')) this.vars['return_dropoff_airport_name'] = value.airport
 		if (field_name.includes('dropoff_airport')) this.vars['return_pickup_airport_name'] = value.airport
@@ -1150,6 +1334,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					return_pickup_address_long: '',
 				})
 				break
+			case 'extra_stops':
+				this.ExtraStops.clear();
+				break
+			case 'return_extra_stops':
+				this.ReturnExtraStops.clear();
+				break
 			case 'pickup_airport':
 				this.quoteBotForm.patchValue({
 					pickup_airport: '',
@@ -1202,6 +1392,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	 */
 	quoteBotSwitch(quoteBotType: string) {
 		this.QBForm.service_type.setValue(quoteBotType)
+		if (quoteBotType == 'charter_tour') {
+			this.syncCharterTripEndpoints()
+		}
 		if (quoteBotType == 'round_trip') {
 			this.fillReturnDetails()
 		}
@@ -1339,6 +1532,54 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return newPromise;
 	}
 
+	calculateDistanceWithStops(origin: any, destination: any, stops: Array<any>) {
+		const newPromise = new Promise((resolve, reject) => {
+			if (!google || !google.maps) {
+				reject('Google Maps JavaScript API not loaded');
+				return;
+			}
+
+			const directionsService = new google.maps.DirectionsService();
+			const waypoints = stops
+				.filter((stop) => stop?.latitude && stop?.longitude)
+				.map((stop) => ({
+					location: {
+						lat: Number(stop.latitude),
+						lng: Number(stop.longitude)
+					},
+					stopover: true
+				}));
+
+			directionsService.route({
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: false,
+				travelMode: google.maps.TravelMode.DRIVING
+			}, (response, status) => {
+				if (status !== google.maps.DirectionsStatus.OK || !response?.routes?.[0]?.legs?.length) {
+					reject(status || 'InvalidLocationPoints');
+					return;
+				}
+
+				const totals = response.routes[0].legs.reduce((acc: any, leg: any) => {
+					acc.distance += leg.distance?.value || 0;
+					acc.duration += leg.duration?.value || 0;
+					return acc;
+				}, { distance: 0, duration: 0 });
+
+				(this.QBForm.location_info as FormArray).push(this.formBuilder.group({
+					distance: [{ value: totals.distance, text: `${(totals.distance / 1609.34).toFixed(2)} mi` }, Validators.required],
+					duration: [{ value: totals.duration, text: `${Math.round(totals.duration / 60)} mins` }, Validators.required]
+				}));
+
+				resolve(true);
+			});
+		});
+
+		return newPromise;
+	}
+
 
 	// calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[]) {
 	// 	console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
@@ -1399,43 +1640,124 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// }
 
 	ValidateForm(form: FormGroup) {
-		// remove return keys for other than round_trip
-		if (form.get('service_type').value == "one_way" || form.get('service_type').value == 'charter_tour') {
-			console.log('Removing Controls ...')
-			// for (const key in form.controls) {
-			// 	if (key.includes('return_')) {
-			// 		// clear all validators 
-			// 		this.quoteBotForm.removeControl(key)
-			// 		this.quoteBotForm.updateValueAndValidity()
-			// 	}
-			// }
+		const serviceType = form.get('service_type')?.value;
+		const pickupType = form.get('pickup_type')?.value;
+		const dropoffType = form.get('dropoff_type')?.value;
+		const isRoundTrip = serviceType === 'round_trip';
+		const isCharter = serviceType === 'charter_tour';
 
+		this.setFieldValidators(['booking_hour'], isCharter);
 
-			if (form.get('pickup_type').value == 'airport') {
-				console.log('clear validator for 1')
-				this.clearValidatorsAndReset(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
-				this.addRequiredValidators(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
-			}
-			if (this.QBForm.dropoff_type.value == 'airport') {
-				console.log('clear validator for 2')
-				this.clearValidatorsAndReset(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long'])
-				this.addRequiredValidators(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
-			}
-			if (this.QBForm.pickup_type.value != 'airport') {
-				console.log('clear validator for 3')
-				this.clearValidatorsAndReset(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
-				this.addRequiredValidators(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
-			}
-			if (this.QBForm.dropoff_type.value == 'city') {
-				console.log('clear validator for 4')
-				this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
-			}
-			// else {
-			// 	this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
-			// }
-			this.quoteBotForm.updateValueAndValidity()
-		}
+		this.setLocationValidators('pickup', pickupType === 'airport');
+		this.setLocationValidators('dropoff', dropoffType === 'airport');
+
+		this.setFieldValidators(['return_pickup_date', 'return_pickup_time'], isRoundTrip);
+
+		this.setLocationValidators('return_pickup', dropoffType === 'airport', isRoundTrip);
+		this.setLocationValidators('return_dropoff', pickupType === 'airport', isRoundTrip);
+		this.validateMatchingEndpoints();
+
+		form.updateValueAndValidity();
 		console.log('form validated')
+	}
+
+	private validateMatchingEndpoints(): void {
+		const allowSameLocation = this.QBForm?.service_type?.value === 'charter_tour';
+
+		this.setSameLocationError(
+			'dropoff_address',
+			this.areLocationsSame(false)
+		);
+		this.setSameLocationError(
+			'dropoff_airport',
+			this.areLocationsSame(false)
+		);
+
+		this.setSameLocationError(
+			'return_dropoff_address',
+			!allowSameLocation && this.QBForm?.service_type?.value === 'round_trip' && this.areLocationsSame(true)
+		);
+		this.setSameLocationError(
+			'return_dropoff_airport',
+			!allowSameLocation && this.QBForm?.service_type?.value === 'round_trip' && this.areLocationsSame(true)
+		);
+	}
+
+	private areLocationsSame(isReturn: boolean): boolean {
+		if (this.QBForm?.service_type?.value === 'charter_tour') {
+			return false;
+		}
+
+		const pickupType = isReturn
+			? (this.QBForm?.dropoff_type?.value || this.QBForm?.return_pickup_type?.value)
+			: this.QBForm?.pickup_type?.value;
+		const dropoffType = isReturn
+			? (this.QBForm?.pickup_type?.value || this.QBForm?.return_dropoff_type?.value)
+			: this.QBForm?.dropoff_type?.value;
+
+		if (pickupType !== dropoffType) {
+			return false;
+		}
+
+		const pickupPrefix = isReturn ? 'return_pickup' : 'pickup';
+		const dropoffPrefix = isReturn ? 'return_dropoff' : 'dropoff';
+		const pickupKey = pickupType === 'airport' ? `${pickupPrefix}_airport` : `${pickupPrefix}_address`;
+		const dropoffKey = dropoffType === 'airport' ? `${dropoffPrefix}_airport` : `${dropoffPrefix}_address`;
+		const pickupLat = Number(this.quoteBotForm?.get(`${pickupKey}_lat`)?.value);
+		const pickupLng = Number(this.quoteBotForm?.get(`${pickupKey}_long`)?.value);
+		const dropoffLat = Number(this.quoteBotForm?.get(`${dropoffKey}_lat`)?.value);
+		const dropoffLng = Number(this.quoteBotForm?.get(`${dropoffKey}_long`)?.value);
+
+		if ([pickupLat, pickupLng, dropoffLat, dropoffLng].some((value) => Number.isNaN(value))) {
+			return false;
+		}
+
+		return pickupLat === dropoffLat && pickupLng === dropoffLng;
+	}
+
+	private setSameLocationError(controlName: string, shouldSet: boolean): void {
+		const control = this.quoteBotForm.get(controlName);
+		if (!control) {
+			return;
+		}
+
+		const currentErrors = { ...(control.errors || {}) };
+		if (shouldSet) {
+			currentErrors['sameLocation'] = true;
+			control.setErrors(currentErrors);
+			return;
+		}
+
+		if (currentErrors['sameLocation']) {
+			delete currentErrors['sameLocation'];
+			control.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
+		}
+	}
+
+	private setFieldValidators(arr: Array<string>, isRequired: boolean) {
+		arr.forEach((item: string) => {
+			const control = this.quoteBotForm.get(item);
+			if (!control) {
+				return;
+			}
+
+			control.setValidators(isRequired ? [Validators.required] : []);
+			control.updateValueAndValidity({ emitEvent: false });
+		})
+	}
+
+	private setLocationValidators(prefix: string, useAirportFields: boolean, isRequired: boolean = true) {
+		const addressFields = [`${prefix}_address`, `${prefix}_address_lat`, `${prefix}_address_long`];
+		const airportFields = [`${prefix}_airport`, `${prefix}_airport_lat`, `${prefix}_airport_long`];
+
+		if (!isRequired) {
+			this.setFieldValidators(addressFields, false);
+			this.setFieldValidators(airportFields, false);
+			return;
+		}
+
+		this.setFieldValidators(addressFields, !useAirportFields);
+		this.setFieldValidators(airportFields, useAirportFields);
 	}
 	addRequiredValidators(arr: Array<string>) {
 		arr.forEach((item: string) => {
@@ -1453,13 +1775,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	async fileTheQuote() {
-		this.submitted = true
+		this.submitted = true;
+		(this.QBForm.location_info as FormArray).clear();
+		if (this.QBForm.service_type.value === 'charter_tour') {
+			this.syncCharterTripEndpoints();
+		}
 		this.ValidateForm(this.quoteBotForm)
 
 		console.log('checking form valid', this.quoteBotForm.valid, this.quoteBotForm, this.QBForm.location_info.valid);
 
-		// enter only if values excluding location_info presents invalid status
-		if (!this.quoteBotForm.valid && !this.QBForm.location_info.valid) {
+		if (!this.quoteBotForm.valid) {
 			console.log('-------------->>>>>>>>>>>>>>>>>>> returning the form', this.quoteBotForm)
 			return
 		}
@@ -1531,9 +1856,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.spinner.show();
 		// finally calculate the distance between the coordinates and proceed after success only else show error
-		(pickup_coordinates.length > 0 || dropoff_coordinates.length > 0) && this.calculateDistance(pickup_coordinates, dropoff_coordinates).then((response: any) => {
+		const extraStops = this.getFilledExtraStops(false);
+		const returnExtraStops = this.getFilledExtraStops(true);
+		const hasAnyStops = extraStops.length > 0 || returnExtraStops.length > 0;
+		const distancePromise = this.QBForm.service_type.value === 'round_trip' && hasAnyStops
+			? Promise.all([
+				this.calculateDistanceWithStops(pickup_coordinates[0], dropoff_coordinates[0], extraStops),
+				this.calculateDistanceWithStops(pickup_coordinates[1], dropoff_coordinates[1], returnExtraStops)
+			])
+			: extraStops.length
+				? this.calculateDistanceWithStops(pickup_coordinates[0], dropoff_coordinates[0], extraStops)
+				: this.calculateDistance(pickup_coordinates, dropoff_coordinates);
+
+		(pickup_coordinates.length > 0 || dropoff_coordinates.length > 0) && distancePromise.then((response: any) => {
 			//store data in localstorage after succesfully sending request to backend 
 			this.quoteBotForm.value['other_details'] = this.vars
+			this.quoteBotForm.value['extra_stops'] = extraStops;
+			this.quoteBotForm.value['return_extra_stops'] = returnExtraStops;
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`, this.quoteBotForm.value)
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
@@ -2231,7 +2570,3 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.showAppStorePopup = !this.showAppStorePopup;
 	}
 }
-
-
-
-

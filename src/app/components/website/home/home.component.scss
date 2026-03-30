@@ -109,6 +109,33 @@
 	opacity: 1;
 }
 
+.charter-stop-add-btn,
+.charter-stop-delete-btn {
+	border: none;
+	border-radius: 999px;
+	width: 38px;
+	height: 38px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+}
+
+.charter-stop-add-btn {
+	background: #f89a3c;
+	color: #fff;
+}
+
+.charter-stop-add-btn:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.charter-stop-delete-btn {
+	background: transparent;
+	color: #f89a3c;
+}
+
 @media (max-width: 600px) {
 	.section-title {
 		font-size: 24px;
