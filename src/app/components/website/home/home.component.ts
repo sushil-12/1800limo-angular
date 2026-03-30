@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../../components/shared/shared.module';
-import { attachPlaceAutocompleteElement, getPlaceAutocompleteDisplayValue } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
@@ -339,8 +339,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				let changed = false;
 				const checkAndSync = (inputRef: ElementRef, controlName: string) => {
 					if (inputRef && inputRef.nativeElement) {
-						const nativeVal = getPlaceAutocompleteDisplayValue(inputRef.nativeElement);
 						const control = this.quoteBotForm?.get(controlName);
+						const rawNativeValue = inputRef.nativeElement.value || '';
+						if (!rawNativeValue.trim() && !(control?.value || '').toString().trim()) {
+							clearPlaceAutocompleteDisplay(inputRef.nativeElement);
+							return;
+						}
+						const nativeVal = getPlaceAutocompleteDisplayValue(inputRef.nativeElement);
 						if (nativeVal && inputRef.nativeElement.value !== nativeVal) {
 							inputRef.nativeElement.value = nativeVal;
 							changed = true;
@@ -1100,100 +1105,96 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// $(".returnClassChange").removeClass("col-12 col-md-12").addClass("col-6 col-md-6");
 	// reset the input fields on click of cross svg
 	reset(field_name: string) {
+		const clearField = (...fields: string[]) => {
+			const patch: Record<string, string> = {};
+			fields.forEach((field) => {
+				patch[field] = '';
+			});
+			this.quoteBotForm.patchValue(patch);
+		};
+		const syncAddressField = (inputRef?: ElementRef) => {
+			if (inputRef?.nativeElement) {
+				queueMicrotask(() => clearPlaceAutocompleteDisplay(inputRef.nativeElement));
+				setTimeout(() => clearPlaceAutocompleteDisplay(inputRef.nativeElement), 0);
+			}
+		};
+
 		switch (field_name) {
 			case 'pickup_address':
-				this.quoteBotForm.patchValue({
-					pickup_address: '',
-					pickup_address_lat: '',
-					pickup_address_long: '',
-					return_dropoff_address: '',
-					return_dropoff_address_lat: '',
-					return_dropoff_address_long: ''
-				})
+				clearField(
+					'pickup_address',
+					'pickup_address_lat',
+					'pickup_address_long',
+					'return_dropoff_address',
+					'return_dropoff_address_lat',
+					'return_dropoff_address_long'
+				);
+				syncAddressField(this.addressinput);
+				syncAddressField(this.retdropaddressinput);
 				break
 			case 'pickup_airport':
 				console.log('resseting pickup address')
-				this.quoteBotForm.patchValue({
-					pickup_airport: '',
-					pickup_airport_name: '',
-					pickup_airport_lat: '',
-					pickup_airport_long: '',
-				})
+				clearField(
+					'pickup_airport',
+					'pickup_airport_name',
+					'pickup_airport_lat',
+					'pickup_airport_long',
+					'return_dropoff_airport',
+					'return_dropoff_airport_name',
+					'return_dropoff_airport_lat',
+					'return_dropoff_airport_long'
+				);
 				break
 			case 'dropoff_airport':
 				console.log('resseting dropoff_airport address')
-				this.quoteBotForm.patchValue({
-					dropoff_airport: '',
-					dropoff_airport_name: '',
-					dropoff_airport_lat: '',
-					dropoff_airport_long: '',
-				})
+				clearField(
+					'dropoff_airport',
+					'dropoff_airport_name',
+					'dropoff_airport_lat',
+					'dropoff_airport_long',
+					'return_pickup_airport',
+					'return_pickup_airport_name',
+					'return_pickup_airport_lat',
+					'return_pickup_airport_long'
+				);
 				break
 			case 'return_pickup_airport':
 				console.log('resseting return_pickup_airport address')
-				this.quoteBotForm.patchValue({
-					return_pickup_airport: '',
-					return_pickup_airport_name: '',
-					return_pickup_airport_lat: '',
-					return_pickup_airport_long: '',
-				})
+				clearField(
+					'return_pickup_airport',
+					'return_pickup_airport_name',
+					'return_pickup_airport_lat',
+					'return_pickup_airport_long'
+				);
 				break
 			case 'return_dropoff_airport':
 				console.log('resseting return_dropoff_airport address')
-				this.quoteBotForm.patchValue({
-					return_dropoff_airport: '',
-					return_dropoff_airport_name: ''
-				})
+				clearField(
+					'return_dropoff_airport',
+					'return_dropoff_airport_name',
+					'return_dropoff_airport_lat',
+					'return_dropoff_airport_long'
+				);
 				break
 			case 'dropoff_address':
-				this.quoteBotForm.patchValue({
-					dropoff_address: '',
-					dropoff_address_lat: '',
-					dropoff_address_long: '',
-					return_pickup_address: '',
-					return_pickup_address_lat: '',
-					return_pickup_address_long: '',
-				})
-				break
-			case 'pickup_airport':
-				this.quoteBotForm.patchValue({
-					pickup_airport: '',
-					pickup_airport_lat: '',
-					pickup_airport_long: '',
-					return_dropoff_airport: '',
-					return_dropoff_airport_lat: '',
-					return_dropoff_airport_long: '',
-				})
-				break
-			case 'dropoff_airport':
-				this.quoteBotForm.patchValue({
-					dropoff_airport: '',
-					dropoff_airport_lat: '',
-					dropoff_airport_long: '',
-					return_pickup_airport: '',
-					return_pickup_airport_lat: '',
-					return_pickup_airport_long: ''
-				})
+				clearField(
+					'dropoff_address',
+					'dropoff_address_lat',
+					'dropoff_address_long',
+					'return_pickup_address',
+					'return_pickup_address_lat',
+					'return_pickup_address_long'
+				);
+				syncAddressField(this.dropaddressinput);
+				syncAddressField(this.retaddressinput);
 				break
 			case 'return_pickup_address':
-				this.quoteBotForm.patchValue({
-					return_pickup_address: ''
-				})
-				break
-			case 'return_pickup_airport':
-				this.quoteBotForm.patchValue({
-					return_pickup_airport: ''
-				})
+				clearField('return_pickup_address', 'return_pickup_address_lat', 'return_pickup_address_long');
+				syncAddressField(this.retaddressinput);
 				break
 			case 'return_dropoff_address':
-				this.quoteBotForm.patchValue({
-					return_dropoff_address: ''
-				})
-				break
-			case 'return_dropoff_airport':
-				this.quoteBotForm.patchValue({
-					return_dropoff_airport: ''
-				})
+				clearField('return_dropoff_address', 'return_dropoff_address_lat', 'return_dropoff_address_long');
+				syncAddressField(this.retdropaddressinput);
 				break
 		}
 	}
@@ -2236,6 +2237,3 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.showAppStorePopup = !this.showAppStorePopup;
 	}
 }
-
-
-
