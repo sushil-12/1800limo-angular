@@ -56,6 +56,8 @@
 }
 
 .search-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
@@ -66,26 +68,18 @@
     background-color: #000 !important;
 }
 
-.affiliate-filter-col,
-.affiliate-search-col {
-    mat-form-field {
-        width: 100%;
-    }
-}
-
-.affiliate-search-row {
-    align-items: flex-start !important;
-}
-
-.affiliate-search-action-col {
-    display: flex;
-    align-items: center;
-}
-
 .search-action-buttons {
-    display: flex;
-    flex-wrap: wrap;
     gap: 10px;
+}
+
+.search-action-buttons button {
+    width: 92px;
+    min-width: 92px;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1rem !important;
 }
 
 .clickable {
@@ -285,23 +279,6 @@ a.dropdown-item {
     .search-action-buttons button {
         width: auto !important;
         flex: 0 0 auto;
-    }
-}
-
-@media screen and (min-width: 1025px) and (max-width: 1400px) {
-    .affiliate-filter-row,
-    .affiliate-search-row {
-        align-items: flex-start !important;
-    }
-
-    .affiliate-search-col {
-        flex: 0 0 70%;
-        max-width: 70%;
-    }
-
-    .affiliate-search-action-col {
-        flex: 0 0 30%;
-        max-width: 30%;
     }
 }
 

@@ -5,7 +5,7 @@
 		<h2 class="headinginfo">Affiliate Accounts</h2>
 		<div class="containeredd">
 			<div class="row align-items-center p-3 affiliate-filter-row">
-				<div class="col-md-4 col-lg-3 py-2 affiliate-filter-col">
+				<div class="col-md-3 py-2 affiliate-filter-col">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Operator Account
@@ -25,7 +25,7 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="col-md-4 col-lg-3 py-2 affiliate-filter-col">
+				<div class="col-md-3 py-2 affiliate-filter-col">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Filter
@@ -50,9 +50,7 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-			</div>
-			<div class="row align-items-center px-3 pb-3 affiliate-search-row">
-				<div class="col-md-8 col-lg-6 py-2 affiliate-search-col">
+				<div class="col-md-4 py-2 affiliate-search-col">
 					<mat-form-field appearance="outline" class="m-0">
 						<input type="text" matInput [(ngModel)]="searchText" (focus)="$event.target.select()"
 							(ngModelChange)="handleSearchKeyword($event)"
@@ -60,7 +58,7 @@
 							id="keyword1" autofocus>
 					</mat-form-field>
 				</div>
-				<div class="col-md-4 col-lg-3 py-2 affiliate-search-action-col">
+				<div class="col-md-2 py-2 affiliate-search-action-col">
 					<div class="d-flex flex-wrap align-items-center search-action-buttons">
 						<button style="color:#fff !important;" class="custom-filled-button orange-button m-0" (click)="handleSearch()">Search</button>
 						<button class="custom-filled-back-button m-0" (click)="reset()">Reset</button>

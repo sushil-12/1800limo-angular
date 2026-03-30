@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
  */
 const CLEANUP_KEY = '__gmpPlaceAutocompleteCleanup';
 const GMP_ATTACH_SHADOW_PATCHED_KEY = '__gmpAttachShadowPatched';
+type PacHelperMode = 'prompt' | 'loading' | 'empty' | 'hidden';
 
 export interface AttachPlaceAutocompleteOptions {
 	types?: string[];
@@ -244,6 +245,42 @@ function installGmpAttachShadowPatch(): void {
 			color: #000 !important;
 		}
 		@media (max-width: 767px) {
+			dialog.full-window-autocomplete-dialog[open] {
+				pointer-events: none !important;
+				background: transparent !important;
+			}
+
+			dialog.full-window-autocomplete-dialog[open]::backdrop {
+				background: transparent !important;
+				pointer-events: none !important;
+			}
+
+			dialog.full-window-autocomplete-dialog[open] .widget-container,
+			dialog.full-window-autocomplete-dialog[open] .input-container {
+				background: #fff !important;
+			}
+
+			dialog.full-window-autocomplete-dialog[open] .input-container {
+				box-shadow: 0 6px 16px rgba(0,0,0,0.2) !important;
+				border-radius: 5px 5px 0 0 !important;
+			}
+
+			dialog.full-window-autocomplete-dialog[open] input {
+				background: #fff !important;
+				color: #000 !important;
+				opacity: 1 !important;
+			}
+
+			dialog.full-window-autocomplete-dialog[open] .widget-container,
+			dialog.full-window-autocomplete-dialog[open] .input-container,
+			dialog.full-window-autocomplete-dialog[open] [role="listbox"],
+			dialog.full-window-autocomplete-dialog[open] [role="option"],
+			dialog.full-window-autocomplete-dialog[open] .suggestion-item,
+			dialog.full-window-autocomplete-dialog[open] .text-content,
+			dialog.full-window-autocomplete-dialog[open] input {
+				pointer-events: auto !important;
+			}
+
 			dialog.full-window-autocomplete-dialog[open] .text-content,
 			dialog.full-window-autocomplete-dialog[open] .primary-text,
 			dialog.full-window-autocomplete-dialog[open] .secondary-text,
@@ -252,6 +289,52 @@ function installGmpAttachShadowPatch(): void {
 				width: 100% !important;
 				text-align: left !important;
 			}
+		}
+
+		.pac-helper-state {
+			display: none;
+			position: absolute;
+			top: 52px;
+			left: 0;
+			right: 0;
+			z-index: 5;
+			align-items: center;
+			gap: 10px;
+			min-height: 56px;
+			padding: 16px;
+			background: #fff !important;
+			color: #6b7280 !important;
+			font-size: 14px;
+			font-weight: 500;
+			border-top: 1px solid rgba(0,0,0,0.08);
+			pointer-events: none;
+		}
+
+		.pac-helper-state.visible {
+			display: flex;
+		}
+
+		.pac-helper-state::before {
+			content: "⌕";
+			font-size: 15px;
+			line-height: 1;
+			color: #9ca3af !important;
+		}
+
+		.pac-helper-state[data-mode="loading"]::before {
+			content: "↻";
+			animation: pac-helper-spin 0.9s linear infinite;
+		}
+
+		.pac-helper-state[data-mode="empty"]::before {
+			content: "!";
+			color: #ef4444 !important;
+			font-weight: 700;
+		}
+
+		@keyframes pac-helper-spin {
+			from { transform: rotate(0deg); }
+			to { transform: rotate(360deg); }
 		}
 		`;
 
@@ -335,6 +418,184 @@ function syncPlaceAutocompleteElementValue(
 	}
 }
 
+function setupPlaceAutocompleteHelper(pac: HTMLElement): () => void {
+	let helperEl: HTMLDivElement | null = null;
+	let emptyTimer: number | null = null;
+	let delayedSyncTimers: number[] = [];
+	let inputListener: (() => void) | null = null;
+	let focusListener: (() => void) | null = null;
+	let blurListener: (() => void) | null = null;
+
+	const getRoot = () => (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot ?? null;
+
+	const getInnerInput = (): HTMLInputElement | null => {
+		try {
+			const inner = getRoot()?.querySelector?.('input');
+			return inner instanceof HTMLInputElement ? inner : null;
+		} catch {
+			return null;
+		}
+	};
+
+	const isInputFocused = (inner: HTMLInputElement): boolean => {
+		const root = getRoot();
+		return document.activeElement === pac || document.activeElement === inner || root?.activeElement === inner;
+	};
+
+	const getDialog = (): HTMLElement | null => {
+		const root = getRoot();
+		if (!root) {
+			return null;
+		}
+		return (root.querySelector('dialog.full-window-autocomplete-dialog[open]') as HTMLElement | null)
+			?? (root.querySelector('dialog.full-window-autocomplete-dialog') as HTMLElement | null);
+	};
+
+	const ensureHelper = (): HTMLDivElement | null => {
+		const root = getRoot();
+		if (!root) {
+			return null;
+		}
+		const dialog =
+			(root.querySelector('dialog.full-window-autocomplete-dialog[open]') as HTMLElement | null) ??
+			(root.querySelector('dialog.full-window-autocomplete-dialog') as HTMLElement | null);
+		const helperHost = (dialog as HTMLElement | null) ?? root;
+		if (helperEl && root.contains(helperEl)) {
+			if (helperEl.parentElement !== helperHost) {
+				helperHost.appendChild(helperEl);
+			}
+			return helperEl;
+		}
+		helperEl = root.querySelector('.pac-helper-state') as HTMLDivElement | null;
+		if (!helperEl) {
+			helperEl = document.createElement('div');
+			helperEl.className = 'pac-helper-state';
+		}
+		helperHost.appendChild(helperEl);
+		return helperEl;
+	};
+
+	const setMode = (mode: PacHelperMode, text = '') => {
+		const helper = ensureHelper();
+		const dialog = getDialog();
+		if (mode === 'hidden') {
+			if (helper) {
+				helper.classList.remove('visible');
+				helper.textContent = '';
+				helper.setAttribute('data-mode', mode);
+			}
+			dialog?.removeAttribute('data-helper-visible');
+			dialog?.removeAttribute('data-helper-text');
+			dialog?.removeAttribute('data-helper-mode');
+			return;
+		}
+		if (helper) {
+			helper.classList.add('visible');
+			helper.textContent = text;
+			helper.setAttribute('data-mode', mode);
+		}
+		dialog?.setAttribute('data-helper-visible', 'true');
+		dialog?.setAttribute('data-helper-text', text);
+		dialog?.setAttribute('data-helper-mode', mode);
+	};
+
+	const getPredictionCount = (): number => {
+		const root = getRoot();
+		if (!root) {
+			return 0;
+		}
+		return root.querySelectorAll('[role="option"], .suggestion-item').length;
+	};
+
+	const clearEmptyTimer = () => {
+		if (emptyTimer !== null) {
+			window.clearTimeout(emptyTimer);
+			emptyTimer = null;
+		}
+	};
+
+	const clearDelayedSyncTimers = () => {
+		delayedSyncTimers.forEach((timer) => window.clearTimeout(timer));
+		delayedSyncTimers = [];
+	};
+
+	const syncState = () => {
+		const inner = getInnerInput();
+		if (!inner) {
+			return;
+		}
+		const value = inner.value.trim();
+		const hasPredictions = getPredictionCount() > 0;
+		const isFocused = isInputFocused(inner);
+
+		if (!isFocused) {
+			clearEmptyTimer();
+			setMode('hidden');
+			return;
+		}
+		if (!value) {
+			clearEmptyTimer();
+			setMode('prompt', 'Search address');
+			return;
+		}
+		if (hasPredictions) {
+			clearEmptyTimer();
+			setMode('hidden');
+			return;
+		}
+
+		setMode('loading', 'Loading addresses...');
+		clearEmptyTimer();
+		emptyTimer = window.setTimeout(() => {
+			emptyTimer = null;
+			const currentInput = getInnerInput();
+			if (currentInput && isInputFocused(currentInput) && currentInput.value.trim() && getPredictionCount() === 0) {
+				setMode('empty', 'Result not found');
+			}
+		}, 700);
+	};
+
+	const attach = (retries = 20) => {
+		const root = getRoot();
+		const inner = getInnerInput();
+		if (!root || !inner) {
+			if (retries > 0) {
+				window.setTimeout(() => attach(retries - 1), 100);
+			}
+			return;
+		}
+
+		ensureHelper();
+		inputListener = () => {
+			clearEmptyTimer();
+			clearDelayedSyncTimers();
+			syncState();
+			delayedSyncTimers = [250, 700, 1200].map((delay) =>
+				window.setTimeout(() => syncState(), delay)
+			);
+		};
+		focusListener = () => syncState();
+		blurListener = () => window.setTimeout(() => syncState(), 0);
+
+		inner.addEventListener('input', inputListener);
+		inner.addEventListener('focus', focusListener);
+		inner.addEventListener('blur', blurListener);
+		syncState();
+	};
+
+	attach();
+
+	return () => {
+		clearEmptyTimer();
+		clearDelayedSyncTimers();
+		const inner = getInnerInput();
+		if (inner && inputListener) inner.removeEventListener('input', inputListener);
+		if (inner && focusListener) inner.removeEventListener('focus', focusListener);
+		if (inner && blurListener) inner.removeEventListener('blur', blurListener);
+		helperEl?.remove();
+	};
+}
+
 export async function attachPlaceAutocompleteElement(
 	nativeInput: HTMLInputElement,
 	_options: AttachPlaceAutocompleteOptions | undefined,
@@ -401,23 +662,210 @@ export async function attachPlaceAutocompleteElement(
 	nativeInput.style.pointerEvents = 'none';
 
 	nativeInput.after(pac);
+	const cleanupHelper = setupPlaceAutocompleteHelper(pac);
 
 	const updatePlacement = () => {
-		const rect = pac.getBoundingClientRect();
-		// Avoid anchoring to negative (offscreen top) if weird scroll bounce occurs, though 
-		// fixed positioning handles out of viewport cleanly.
-		pac.style.setProperty('--dialog-top', `${rect.top}px`);
-		pac.style.setProperty('--dialog-left', `${rect.left}px`);
+		const anchorElement =
+			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
+			(nativeInput.closest('.input-contain--address') as HTMLElement | null) ??
+			(nativeInput.parentElement as HTMLElement | null) ??
+			pac;
+		const rect = anchorElement.getBoundingClientRect();
+		const visualViewport = window.visualViewport;
+		const viewportHeight = visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0;
+		const viewportOffsetTop = visualViewport?.offsetTop || 0;
+		const viewportOffsetLeft = visualViewport?.offsetLeft || 0;
+		const estimatedDialogHeight = Math.min(250, Math.max(180, viewportHeight * 0.35));
+		const spaceBelow = viewportHeight - rect.bottom;
+		const isMobile = window.matchMedia('(max-width: 767px)').matches;
+		const shouldOpenAbove = !isMobile && spaceBelow < estimatedDialogHeight && rect.top > spaceBelow;
+		const dialogTop = shouldOpenAbove
+			? Math.max(8, rect.top + viewportOffsetTop - estimatedDialogHeight)
+			: rect.bottom + viewportOffsetTop + 4;
+
+		pac.style.setProperty('--dialog-top', `${dialogTop}px`);
+		pac.style.setProperty('--dialog-left', `${rect.left + viewportOffsetLeft}px`);
 		pac.style.setProperty('--dialog-width', `${rect.width}px`);
 	};
 
-	pac.addEventListener('click', updatePlacement);
-	pac.addEventListener('focusin', updatePlacement);
+	const schedulePlacementSync = () => {
+		updatePlacement();
+		requestAnimationFrame(updatePlacement);
+		[60, 120, 220, 360].forEach((delay) => {
+			setTimeout(updatePlacement, delay);
+		});
+	};
+
+	const closeAutocompletePopup = () => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const inner = root?.querySelector?.('input');
+			const dialog = root?.querySelector?.('dialog.full-window-autocomplete-dialog[open]');
+
+			if (dialog instanceof HTMLDialogElement && dialog.open) {
+				dialog.close();
+			}
+
+			if (inner instanceof HTMLInputElement) {
+				inner.blur();
+			}
+
+			(pac as HTMLElement).blur();
+		} catch {
+			/* ignore */
+		}
+	};
+
+	const getOpenDialog = (): HTMLDialogElement | null => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const dialog = root?.querySelector?.('dialog.full-window-autocomplete-dialog[open]');
+			return dialog instanceof HTMLDialogElement ? dialog : null;
+		} catch {
+			return null;
+		}
+	};
+
+	const isWithinCurrentAutocomplete = (target: Node | null): boolean => {
+		if (!target) {
+			return false;
+		}
+
+		const fieldContainer =
+			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
+			(nativeInput.parentElement as HTMLElement | null);
+
+		return pac.contains(target) || nativeInput.contains(target) || fieldContainer?.contains(target) || false;
+	};
+
+	const getFocusableTarget = (target: Node | null): HTMLElement | null => {
+		if (!(target instanceof HTMLElement)) {
+			return null;
+		}
+
+		return target.closest('input, textarea, select, button, [tabindex]') as HTMLElement | null;
+	};
+
+	const getEventPoint = (event: Event): { clientX: number; clientY: number } | null => {
+		if ('clientX' in event && 'clientY' in event) {
+			const pointerEvent = event as PointerEvent;
+			return { clientX: pointerEvent.clientX, clientY: pointerEvent.clientY };
+		}
+
+		if ('touches' in event && (event as TouchEvent).touches?.length) {
+			const touch = (event as TouchEvent).touches[0];
+			return { clientX: touch.clientX, clientY: touch.clientY };
+		}
+
+		if ('changedTouches' in event && (event as TouchEvent).changedTouches?.length) {
+			const touch = (event as TouchEvent).changedTouches[0];
+			return { clientX: touch.clientX, clientY: touch.clientY };
+		}
+
+		return null;
+	};
+
+	const focusUnderlyingElementAtPoint = (event: Event) => {
+		const point = getEventPoint(event);
+		if (!point) {
+			return;
+		}
+
+		const findAndFocus = () => {
+			const elements = document.elementsFromPoint(point.clientX, point.clientY) as HTMLElement[];
+			const nextTarget = elements.find((element) => {
+				if (!element || element === pac || pac.contains(element) || nativeInput.contains(element)) {
+					return false;
+				}
+
+				return !!element.closest('input, textarea, select, button, [tabindex]');
+			});
+
+			const focusTarget = getFocusableTarget(nextTarget ?? null);
+			if (focusTarget && !pac.contains(focusTarget)) {
+				focusTarget.focus({ preventScroll: true });
+				if (focusTarget instanceof HTMLInputElement || focusTarget instanceof HTMLTextAreaElement) {
+					focusTarget.click();
+				}
+			}
+		};
+
+		closeAutocompletePopup();
+
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				findAndFocus();
+				setTimeout(findAndFocus, 60);
+			});
+		});
+	};
+
+	const isSuggestionTarget = (target: EventTarget | null): boolean => {
+		if (!(target instanceof HTMLElement)) {
+			return false;
+		}
+
+		return !!target.closest('[role="option"], .suggestion-item, input');
+	};
+
+	const handleDialogTouchStart = (event: Event) => {
+		const dialog = getOpenDialog();
+		const target = event.target;
+
+		if (!dialog || !dialog.contains(target as Node) || isSuggestionTarget(target)) {
+			return;
+		}
+
+		event.preventDefault();
+		event.stopPropagation();
+		closeAutocompletePopup();
+		focusUnderlyingElementAtPoint(event);
+	};
+
+	const handleDocumentPointerDown = (event: Event) => {
+		const targetNode = event.target as Node | null;
+		if (isWithinCurrentAutocomplete(targetNode)) {
+			return;
+		}
+
+		const openDialog = getOpenDialog();
+		const shouldRetargetFocus = !!openDialog && targetNode instanceof Node && openDialog.contains(targetNode);
+		closeAutocompletePopup();
+		if (shouldRetargetFocus) {
+			focusUnderlyingElementAtPoint(event);
+			return;
+		}
+
+		const focusTarget = getFocusableTarget(targetNode);
+		if (focusTarget && !pac.contains(focusTarget)) {
+			setTimeout(() => focusTarget.focus({ preventScroll: true }), 0);
+		}
+	};
+
+	const handleDocumentFocusIn = (event: FocusEvent) => {
+		const targetNode = event.target as Node | null;
+		if (isWithinCurrentAutocomplete(targetNode)) {
+			return;
+		}
+
+		closeAutocompletePopup();
+	};
+
+	pac.addEventListener('click', schedulePlacementSync);
+	pac.addEventListener('focusin', schedulePlacementSync);
+	pac.addEventListener('touchstart', schedulePlacementSync, { passive: true });
+	pac.addEventListener('touchstart', handleDialogTouchStart, true);
+	pac.addEventListener('mousedown', handleDialogTouchStart, true);
+	document.addEventListener('pointerdown', handleDocumentPointerDown, true);
+	document.addEventListener('touchstart', handleDocumentPointerDown, true);
+	document.addEventListener('focusin', handleDocumentFocusIn, true);
 	window.addEventListener('resize', updatePlacement);
 	window.addEventListener('scroll', updatePlacement, { capture: true, passive: true });
+	window.visualViewport?.addEventListener('resize', updatePlacement);
+	window.visualViewport?.addEventListener('scroll', updatePlacement);
 
 	// Force initial placement calculation slightly after attach
-	setTimeout(updatePlacement, 50);
+	setTimeout(schedulePlacementSync, 50);
 
 	const handler = async (ev: Event) => {
 		const raw = ev as unknown as {
@@ -465,13 +913,22 @@ export async function attachPlaceAutocompleteElement(
 	}
 
 	const cleanup = () => {
+		cleanupHelper();
 		valueSub?.unsubscribe();
 		valueSub = undefined;
 		pac.removeEventListener('gmp-select', handler as EventListener);
-		pac.removeEventListener('click', updatePlacement);
-		pac.removeEventListener('focusin', updatePlacement);
+		pac.removeEventListener('click', schedulePlacementSync);
+		pac.removeEventListener('focusin', schedulePlacementSync);
+		pac.removeEventListener('touchstart', schedulePlacementSync);
+		pac.removeEventListener('touchstart', handleDialogTouchStart, true);
+		pac.removeEventListener('mousedown', handleDialogTouchStart, true);
+		document.removeEventListener('pointerdown', handleDocumentPointerDown, true);
+		document.removeEventListener('touchstart', handleDocumentPointerDown, true);
+		document.removeEventListener('focusin', handleDocumentFocusIn, true);
 		window.removeEventListener('resize', updatePlacement);
 		window.removeEventListener('scroll', updatePlacement, { capture: true } as EventListenerOptions);
+		window.visualViewport?.removeEventListener('resize', updatePlacement);
+		window.visualViewport?.removeEventListener('scroll', updatePlacement);
 		pac.remove();
 		nativeInput.style.display = prevDisplay;
 		nativeInput.style.position = prevPosition;
