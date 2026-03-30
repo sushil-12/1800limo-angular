@@ -895,6 +895,16 @@ export async function attachPlaceAutocompleteElement(
 	let lockedScrollX = 0;
 	let lockedScrollY = 0;
 
+	const getAnchorElement = (): HTMLElement => {
+		return (
+			(nativeInput.closest('.input-contain--address') as HTMLElement | null) ??
+			(nativeInput.closest('.input-contain--airport') as HTMLElement | null) ??
+			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
+			(nativeInput.parentElement as HTMLElement | null) ??
+			pac
+		);
+	};
+
 	const readInnerDraftValue = (): string => {
 		try {
 			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
@@ -907,9 +917,7 @@ export async function attachPlaceAutocompleteElement(
 
 	const syncDraftFromInner = () => {
 		const innerDraft = readInnerDraftValue();
-		if (innerDraft.trim()) {
-			lastDraftValue = innerDraft;
-		}
+		lastDraftValue = innerDraft;
 		if (isMobileDialogPinned) {
 			window.scrollTo(lockedScrollX, lockedScrollY);
 			updatePlacement();
@@ -917,11 +925,7 @@ export async function attachPlaceAutocompleteElement(
 	};
 
 	const updatePlacement = () => {
-		const anchorElement =
-			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
-			(nativeInput.closest('.input-contain--address') as HTMLElement | null) ??
-			(nativeInput.parentElement as HTMLElement | null) ??
-			pac;
+		const anchorElement = getAnchorElement();
 		const liveRect = anchorElement.getBoundingClientRect();
 		const isMobile = window.matchMedia('(max-width: 767px)').matches;
 		const rect = isMobile && lastAnchorRect ? lastAnchorRect : liveRect;
@@ -990,11 +994,7 @@ export async function attachPlaceAutocompleteElement(
 	let dialogOpenObserver: MutationObserver | undefined;
 
 	const cacheAnchorRect = () => {
-		const anchorElement =
-			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
-			(nativeInput.closest('.input-contain--address') as HTMLElement | null) ??
-			(nativeInput.parentElement as HTMLElement | null) ??
-			pac;
+		const anchorElement = getAnchorElement();
 		lastAnchorRect = anchorElement.getBoundingClientRect();
 	};
 
@@ -1215,9 +1215,7 @@ export async function attachPlaceAutocompleteElement(
 			return false;
 		}
 
-		const fieldContainer =
-			(nativeInput.closest('.input-contain') as HTMLElement | null) ??
-			(nativeInput.parentElement as HTMLElement | null);
+		const fieldContainer = getAnchorElement();
 
 		return pac.contains(target) || nativeInput.contains(target) || fieldContainer?.contains(target) || false;
 	};
@@ -1519,6 +1517,14 @@ export function syncPlaceAutocompleteDisplay(nativeInput: HTMLInputElement): voi
 	syncPlaceAutocompleteElementValue(pac, v);
 }
 
+export function clearPlaceAutocompleteDisplay(nativeInput: HTMLInputElement | null | undefined): void {
+	if (!nativeInput) {
+		return;
+	}
+	nativeInput.value = '';
+	syncPlaceAutocompleteDisplay(nativeInput);
+}
+
 export function getPlaceAutocompleteDisplayValue(
 	nativeInput: HTMLInputElement | null | undefined
 ): string {
@@ -1571,6 +1577,12 @@ export function syncRestoredPlaceAutocompleteValue(
 
 	const trySyncFromInner = (retries = 20) => {
 		try {
+			const currentNativeValue = nativeInput.value || '';
+			const currentControlValue = String(syncControl?.value ?? '');
+			if (!currentNativeValue.trim() && !currentControlValue.trim()) {
+				return;
+			}
+
 			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
 			const inner = root?.querySelector?.('input');
 
