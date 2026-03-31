@@ -14,7 +14,6 @@ import { HttpClient } from '@angular/common/http';
 import * as intlTelInput from 'intl-tel-input';
 import { CommonService } from 'src/app/services/common.service';
 import { attachPlaceAutocompleteElement, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
-import { MapUtils } from '../../../utils/map-utils';
 declare var $: any
 
 
@@ -81,10 +80,6 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	number_of_hours: any = 2;
 	distance: number = 0
 	return_distance: number = 0
-	pickupMarkers: google.maps.Marker[] = [];
-	returnMarkers: google.maps.Marker[] = [];
-	pickupDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
-	returnDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
 
 
 	LCTelObject: any
@@ -759,26 +754,6 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	}
 	get ReturnExtraStops() {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
-	}
-
-	private hydrateExtraStopsFromQuoteBot(stops: Array<any> = [], isReturn: boolean = false) {
-		const formArray = isReturn ? this.ReturnExtraStops : this.ExtraStops;
-		formArray.clear();
-
-		(stops || []).forEach((item: any, index: number) => {
-			if (!item?.address) {
-				return;
-			}
-
-			this.addExtraStop(isReturn);
-			this.fillExtraStop(isReturn, index, {
-				formatted_address: item.address,
-				display_address: item.address
-			}, {
-				latitude: item.latitude,
-				longitude: item.longitude
-			});
-		});
 	}
 	searchSubstring(text: string, search_string: string, start: number = 0): boolean {
 		return text.indexOf(search_string, start) != -1
@@ -1760,99 +1735,19 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 
 	}
 
-	private renderCustomMarkers(
-		map: google.maps.Map,
-		response: google.maps.DirectionsResult,
-		is_return: boolean = false
-	) {
-		if (is_return) {
-			this.returnMarkers.forEach(marker => marker.setMap(null));
-			this.returnMarkers = [];
-		} else {
-			this.pickupMarkers.forEach(marker => marker.setMap(null));
-			this.pickupMarkers = [];
-		}
-
-		const route = response.routes[0];
-		if (!route?.legs?.length) {
-			return;
-		}
-
-		const locations: google.maps.LatLngLiteral[] = [];
-		const legs = route.legs;
-
-		locations.push(legs[0].start_location.toJSON());
-		for (let i = 0; i < legs.length - 1; i++) {
-			locations.push(legs[i].end_location.toJSON());
-		}
-		locations.push(legs[legs.length - 1].end_location.toJSON());
-
-		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
-
-		adjusted.forEach((item, index) => {
-			const labelChar = String.fromCharCode(65 + index);
-			const marker = new google.maps.Marker({
-				position: item.position,
-				map,
-				zIndex: 1000 + index,
-				title: `Stop ${labelChar}`,
-				icon: {
-					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
-					fillColor: "#EA4335",
-					fillOpacity: 1,
-					strokeColor: "#B31412",
-					strokeWeight: 1,
-					scale: 1.5,
-					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.5), 22),
-					labelOrigin: new google.maps.Point(12, 9)
-				},
-				label: {
-					text: labelChar,
-					color: 'white',
-					fontSize: '14px',
-					fontWeight: 'bold'
-				}
-			});
-
-			if (is_return) {
-				this.returnMarkers.push(marker);
-			} else {
-				this.pickupMarkers.push(marker);
-			}
-		});
-	}
-
 	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
 		if (!request.origin || !request.destination) {
 			console.error('Request object missing origin/destination');
 			return;
 		}
 
-		if (is_return) {
-			if (this.returnDirectionsRenderer) {
-				this.returnDirectionsRenderer.setMap(null);
-				this.returnDirectionsRenderer = null;
-			}
-			this.returnDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
-			this.returnDirectionsRenderer.setMap(map);
-		} else {
-			if (this.pickupDirectionsRenderer) {
-				this.pickupDirectionsRenderer.setMap(null);
-				this.pickupDirectionsRenderer = null;
-			}
-			this.pickupDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
-			this.pickupDirectionsRenderer.setMap(map);
-		}
-
+		const directionsRenderer = new google.maps.DirectionsRenderer()
 		const directionsService = new google.maps.DirectionsService()
+		directionsRenderer.setMap(map)
 
 		directionsService.route(request, (response: any, status: string) => {
 			if (status === google.maps.DirectionsStatus.OK) {
-				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
-				if (renderer) {
-					renderer.setDirections(response)
-				}
-				this.renderCustomMarkers(map, response, is_return);
+				directionsRenderer.setDirections(response)
 
 				this.fetchDistanceAndTime(response).then((res: { distance: number, time: number }) => {
 					if (is_return) {
@@ -3741,8 +3636,6 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
 			this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))
 			this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
-			this.hydrateExtraStopsFromQuoteBot(QB?.extra_stops, false)
-			this.hydrateExtraStopsFromQuoteBot(QB?.return_extra_stops, true)
 
 			//driver information from selected vehicle
 			this.SetFormValue('driver_id', selected_vehicle?.driverInformation?.id)
@@ -3771,11 +3664,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 				}
 				this.fillLocationPoints('airport', location)
 			}
-			setTimeout(() => this.initAllAutocompletes(), 100)
-			this.MapController()
-			if (this.service_type == 'round_trip') {
-				this.MapController(true)
-			}
+			this.MapController(this.transfer_type == 'round_trip' ? true : false)
 			this.driverImgUrl = selected_vehicle?.driverInformation?.imageUrl || "../../../../assets/images/driverImg.jpg"
 			this.vehicleImgUrl = selected_vehicle?.vehicle_images[0] || ""
 			this.driver_info = selected_vehicle?.driverInformation || {}

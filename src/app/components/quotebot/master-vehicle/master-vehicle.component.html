@@ -1,31 +1,5 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 
-<div class="trip-preview-overlay" *ngIf="showTripSummaryPopup">
-	<div class="trip-preview-dialog">
-		<div class="trip-preview-header">
-			<div>
-				<h3>Trip Preview</h3>
-			</div>
-			<div class="trip-preview-total">
-				<span>{{ tripPreviewTotalDistanceText }}</span>
-				<small>{{ tripPreviewTotalDurationText }}</small>
-			</div>
-		</div>
-
-		<div class="trip-preview-map-shell">
-			<google-map #tripPreviewMap height="420px" width="100%" [center]="mapCenter" [zoom]="mapZoom"
-				[options]="mapOptions">
-			</google-map>
-		</div>
-
-		<div class="trip-preview-actions">
-			<button type="button" class="custom-filled-button green-button px-4" (click)="closeTripSummaryPopup()">
-				Continue
-			</button>
-		</div>
-	</div>
-</div>
-
 <!-- FILTERS AND SORT BUTTON SECTION -->
 <section id="fixed-filters-sortby-button" class="fixed-bottom">
 	<div id="fixed-section-container" class="container-fluid mb-2">

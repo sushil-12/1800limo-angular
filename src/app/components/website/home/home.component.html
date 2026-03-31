@@ -347,34 +347,6 @@
 									</div>
 								</div>
 
-								<div class="row mb-3" *ngIf="availableAmenities.length > 0">
-									<div class="col-12">
-										<div class="quotebot-amenities-box">
-											<div class="quotebot-amenities-header">
-												<div class="quotebot-amenities-title">Amenities</div>
-												<button type="button" class="quotebot-more-amenities-btn"
-													*ngIf="hasMoreAmenities" data-toggle="modal"
-													data-target="#quoteBotAmenitiesModal"
-													aria-controls="quoteBotAmenitiesModal" aria-haspopup="dialog">
-													More
-												</button>
-											</div>
-											<div class="row">
-												<div class="col-12 col-md-6 amenity-checkbox-item"
-													*ngFor="let amenity of inlineAmenities">
-													<label class="quotebot-amenity-option">
-														<input type="checkbox" class="quotebot-amenity-native-checkbox"
-															[checked]="isAmenitySelected(amenity)"
-															(change)="toggleAmenitySelection(amenity, $any($event.target).checked)">
-														<span class="quotebot-amenity-box" aria-hidden="true"></span>
-														<span class="quotebot-amenity-label">{{ amenity.name }}</span>
-													</label>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
 
 								<div class="row m-0 justify-content-start"
 									[class]="QBForm?.service_type?.value == 'round_trip' ? '' : '' ">
@@ -417,15 +389,6 @@
 													Pickup airport is required
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm?.return_dropoff_airport?.errors;"
-												class="text-danger">
-												<div *ngIf="QBForm?.return_dropoff_airport?.errors?.required">
-													Return dropoff airport is required
-												</div>
-												<div *ngIf="QBForm?.return_dropoff_airport?.errors?.sameLocation">
-													Return pickup and return dropoff cannot be the same unless it is a charter tour
-												</div>
-											</div>
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<div class="input-contain input-contain--address d-flex align-items-center"
@@ -463,52 +426,14 @@
 												</div>
 											</ng-template>
 										</div>
-										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions">
-											<div class="quotebot-stop-action-group">
-												<span class="text-white font-weight-bold">Extra Stops</span>
-												<button type="button" class="charter-stop-add-btn"
-													(click)="addExtraStop()" [disabled]="!canAddExtraStop()"
-													aria-label="Add extra stop">
-													<i class="bi bi-plus-lg"></i>
-												</button>
-											</div>
+										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+											*ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<a href="javascript:void(0)"
-												*ngIf="QBForm?.pickup_type?.value != 'airport'"
 												(click)="useCurrentPickupLocation('pickup_address')"
 												class="text-decoration-none small font-weight-bold text-primary"
 												title="Use Current Location" tabindex="1">
 												<i class="fas fa-location mr-1"></i> Use Current Location
 											</a>
-										</div>
-
-										<div class="col-md-12 p-0 mt-3">
-											<div class="mt-3" *ngFor="let stop of ExtraStops.controls; let stop_index = index">
-												<div class="input-contain input-contain--address d-flex align-items-center">
-													<div class="input-box">
-														<input #extraStopInput type="text"
-															style="font-size: 16px !important; background-color: #fff !important; color: #000 !important;"
-															placeholder="Extra Stop Address {{ stop_index + 1 }}"
-															[value]="fetchExtraStopValue(stop_index)"
-															(input)="updateExtraStopDraft(stop_index, $any($event.target).value)"
-															(focus)="$event.target.select()" tabindex="1"
-															class="input-f font-weight-bolder" />
-													</div>
-													<div class="airport-clear-wrap address-clear-wrap"
-														*ngIf="fetchExtraStopValue(stop_index) || extraStopInput?.value">
-														<button type="button" class="airport-clear-btn"
-															(click)="clearExtraStop(stop_index, extraStopInput)"
-															aria-label="Clear extra stop address">
-															<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
-														</button>
-													</div>
-												</div>
-												<div class="d-flex justify-content-end mt-2">
-													<button type="button" class="charter-stop-delete-btn"
-														(click)="deleteExtraStop(stop_index)" aria-label="Delete extra stop">
-														<i class="bi bi-trash"></i>
-													</button>
-												</div>
-											</div>
 										</div>
 
 
@@ -555,9 +480,6 @@
 												<div *ngIf="QBForm?.dropoff_airport?.errors?.required">
 													Dropoff airport is required
 												</div>
-												<div *ngIf="QBForm?.dropoff_airport?.errors?.sameLocation">
-													Pickup and dropoff cannot be the same unless it is a charter tour
-												</div>
 											</div>
 										</div>
 										<div class="errorMsg col-md-12"
@@ -585,9 +507,6 @@
 												<div *ngIf="QBForm?.dropoff_address?.errors?.required">
 													Drop Off Address is required
 												</div>
-												<div *ngIf="QBForm?.dropoff_address?.errors?.sameLocation">
-													Pickup and dropoff cannot be the same unless it is a charter tour
-												</div>
 											</div>
 											<input type="hidden" formControlName="dropoff_address_lat">
 											<input type="hidden" formControlName="dropoff_address_long">
@@ -610,7 +529,6 @@
 												<i class="fas fa-location mr-1"></i> Use Current Location
 											</a>
 										</div>
-
 									</div>
 								</div>
 
@@ -759,52 +677,14 @@
 												</div>
 											</ng-template>
 										</div>
-										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions">
-											<div class="quotebot-stop-action-group">
-												<span class="text-white font-weight-bold">Return Extra Stops</span>
-												<button type="button" class="charter-stop-add-btn"
-													(click)="addExtraStop(true)" [disabled]="!canAddExtraStop(true)"
-													aria-label="Add return extra stop">
-													<i class="bi bi-plus-lg"></i>
-												</button>
-											</div>
+										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<a href="javascript:void(0)"
-												*ngIf="QBForm?.dropoff_type?.value != 'airport'"
 												(click)="useCurrentPickupLocation('return_pickup_address')"
 												class="text-decoration-none small font-weight-bold text-primary"
 												title="Use Current Location" tabindex="1">
 												<i class="fas fa-location mr-1"></i> Use Current Location
 											</a>
-										</div>
-
-										<div class="col-md-12 p-0 mt-3">
-											<div class="mt-3" *ngFor="let stop of ReturnExtraStops.controls; let stop_index = index">
-												<div class="input-contain input-contain--address d-flex align-items-center">
-													<div class="input-box">
-														<input #returnExtraStopInput type="text"
-															style="font-size: 16px !important; background-color: #fff !important; color: #000 !important;"
-															placeholder="Return Extra Stop Address {{ stop_index + 1 }}"
-															[value]="fetchExtraStopValue(stop_index, true)"
-															(input)="updateExtraStopDraft(stop_index, $any($event.target).value, true)"
-															(focus)="$event.target.select()" tabindex="1"
-															class="input-f font-weight-bolder" />
-													</div>
-													<div class="airport-clear-wrap address-clear-wrap"
-														*ngIf="fetchExtraStopValue(stop_index, true) || returnExtraStopInput?.value">
-														<button type="button" class="airport-clear-btn"
-															(click)="clearExtraStop(stop_index, returnExtraStopInput, true)"
-															aria-label="Clear return extra stop address">
-															<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
-														</button>
-													</div>
-												</div>
-												<div class="d-flex justify-content-end mt-2">
-													<button type="button" class="charter-stop-delete-btn"
-														(click)="deleteExtraStop(stop_index, true)" aria-label="Delete return extra stop">
-														<i class="bi bi-trash"></i>
-													</button>
-												</div>
-											</div>
 										</div>
 
 
@@ -876,9 +756,6 @@
 													Off
 													Address is required
 												</div>
-												<div *ngIf="QBForm?.return_dropoff_address?.errors?.sameLocation">
-													Return pickup and return dropoff cannot be the same unless it is a charter tour
-												</div>
 											</div>
 											<input type="hidden" formControlName="return_dropoff_address_lat">
 											<input type="hidden" formControlName="return_dropoff_address_long">
@@ -900,6 +777,8 @@
 												<i class="fas fa-location mr-1"></i> Use Current Location
 											</a>
 										</div>
+
+
 
 									</div>
 								</div>
@@ -1377,53 +1256,6 @@
 			</div>
 			<div class="modal-footer pt-0">
 				<button type="button" data-dismiss="modal" class="btn btnStyle">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="quoteBotAmenitiesModal" role="dialog" tabindex="-1"
-	aria-labelledby="quoteBotAmenitiesModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-		<div class="modal-content quotebot-amenities-modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<div class="modal-header pb-0">
-				<h3 class="modal-title mb-0" id="quoteBotAmenitiesModalLabel">Select Amenities</h3>
-			</div>
-			<div class="modal-body quotebot-amenities-modal-body">
-				<div class="quotebot-amenity-group" *ngIf="chargeableAmenities.length > 0">
-					<h4 class="quotebot-amenity-group-title">Chargeable Amenities</h4>
-					<div class="row">
-						<div class="col-12 col-md-6 amenity-checkbox-item" *ngFor="let amenity of chargeableAmenities">
-							<label class="quotebot-amenity-option">
-								<input type="checkbox" class="quotebot-amenity-native-checkbox"
-									[checked]="isAmenitySelected(amenity)"
-									(change)="toggleAmenitySelection(amenity, $any($event.target).checked)">
-								<span class="quotebot-amenity-box" aria-hidden="true"></span>
-								<span class="quotebot-amenity-label">{{ amenity.name }}</span>
-							</label>
-						</div>
-					</div>
-				</div>
-				<div class="quotebot-amenity-group" *ngIf="nonChargeableAmenities.length > 0">
-					<h4 class="quotebot-amenity-group-title">Non-Chargeable Amenities</h4>
-					<div class="row">
-						<div class="col-12 col-md-6 amenity-checkbox-item" *ngFor="let amenity of nonChargeableAmenities">
-							<label class="quotebot-amenity-option">
-								<input type="checkbox" class="quotebot-amenity-native-checkbox"
-									[checked]="isAmenitySelected(amenity)"
-									(change)="toggleAmenitySelection(amenity, $any($event.target).checked)">
-								<span class="quotebot-amenity-box" aria-hidden="true"></span>
-								<span class="quotebot-amenity-label">{{ amenity.name }}</span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer pt-0">
-				<button type="button" data-dismiss="modal" class="btn btnStyle">Done</button>
 			</div>
 		</div>
 	</div>
