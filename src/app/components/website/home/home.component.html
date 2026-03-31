@@ -461,11 +461,14 @@
 											</ng-template>
 										</div>
 										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions">
-											<button type="button" class="charter-stop-add-btn"
-												(click)="addExtraStop()" [disabled]="!canAddExtraStop()"
-												aria-label="Add extra stop">
-												<i class="bi bi-plus-lg"></i>
-											</button>
+											<div class="quotebot-stop-action-group">
+												<span class="text-white font-weight-bold">Extra Stops</span>
+												<button type="button" class="charter-stop-add-btn"
+													(click)="addExtraStop()" [disabled]="!canAddExtraStop()"
+													aria-label="Add extra stop">
+													<i class="bi bi-plus-lg"></i>
+												</button>
+											</div>
 											<a href="javascript:void(0)"
 												*ngIf="QBForm?.pickup_type?.value != 'airport'"
 												(click)="useCurrentPickupLocation('pickup_address')"
@@ -476,10 +479,6 @@
 										</div>
 
 										<div class="col-md-12 p-0 mt-3">
-											<div class="d-flex justify-content-between align-items-center px-3 px-md-0">
-												<span class="text-white font-weight-bold">Extra Stops</span>
-											</div>
-
 											<div class="mt-3" *ngFor="let stop of ExtraStops.controls; let stop_index = index">
 												<div class="input-contain input-contain--address d-flex align-items-center">
 													<div class="input-box">
@@ -752,11 +751,14 @@
 											</ng-template>
 										</div>
 										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions">
-											<button type="button" class="charter-stop-add-btn"
-												(click)="addExtraStop(true)" [disabled]="!canAddExtraStop(true)"
-												aria-label="Add return extra stop">
-												<i class="bi bi-plus-lg"></i>
-											</button>
+											<div class="quotebot-stop-action-group">
+												<span class="text-white font-weight-bold">Return Extra Stops</span>
+												<button type="button" class="charter-stop-add-btn"
+													(click)="addExtraStop(true)" [disabled]="!canAddExtraStop(true)"
+													aria-label="Add return extra stop">
+													<i class="bi bi-plus-lg"></i>
+												</button>
+											</div>
 											<a href="javascript:void(0)"
 												*ngIf="QBForm?.dropoff_type?.value != 'airport'"
 												(click)="useCurrentPickupLocation('return_pickup_address')"
@@ -767,10 +769,6 @@
 										</div>
 
 										<div class="col-md-12 p-0 mt-3">
-											<div class="d-flex justify-content-between align-items-center px-3 px-md-0">
-												<span class="text-white font-weight-bold">Return Extra Stops</span>
-											</div>
-
 											<div class="mt-3" *ngFor="let stop of ReturnExtraStops.controls; let stop_index = index">
 												<div class="input-contain input-contain--address d-flex align-items-center">
 													<div class="input-box">
