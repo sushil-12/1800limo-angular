@@ -539,7 +539,52 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.initAutocomplete(input, 'return_extra_stops', index, true);
 			});
 
+			this.syncVisibleAddressInputs();
+
 		}, 200);
+	}
+
+	private getAddressInput(control: string, index?: number): HTMLInputElement | undefined {
+		switch (control) {
+			case 'pickup':
+				return this.pickupInput?.nativeElement;
+			case 'dropoff':
+				return this.dropoffInput?.nativeElement;
+			case 'return_pickup':
+				return this.return_pickupInput?.nativeElement;
+			case 'return_dropoff':
+				return this.return_dropoffInput?.nativeElement;
+			case 'fbo_address':
+				return this.fboAddressInput?.nativeElement;
+			case 'return_fbo_address':
+				return this.returnFboAddressInput?.nativeElement;
+			case 'extra_stops':
+				return this.extraStopInputs?.get(index ?? -1)?.nativeElement;
+			case 'return_extra_stops':
+				return this.returnExtraStopInputs?.get(index ?? -1)?.nativeElement;
+			default:
+				return undefined;
+		}
+	}
+
+	private syncVisibleAddressInput(control: string, index?: number): void {
+		const nativeInput = this.getAddressInput(control, index);
+		const syncControl = getBookingAddressSyncControl(this.BookingForm, control, index);
+		if (!nativeInput || !syncControl) {
+			return;
+		}
+
+		nativeInput.value = syncControl.value || '';
+		syncPlaceAutocompleteDisplay(nativeInput);
+	}
+
+	private syncVisibleAddressInputs(): void {
+		['pickup', 'dropoff', 'return_pickup', 'return_dropoff', 'fbo_address', 'return_fbo_address'].forEach((control: string) => {
+			this.syncVisibleAddressInput(control);
+		});
+
+		this.extraStopInputs?.forEach((_, index) => this.syncVisibleAddressInput('extra_stops', index));
+		this.returnExtraStopInputs?.forEach((_, index) => this.syncVisibleAddressInput('return_extra_stops', index));
 	}
 
 	initAutocomplete(input: ElementRef | HTMLInputElement, control: string, index?: number, is_return: boolean = false) {
@@ -1602,6 +1647,26 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	get ReturnExtraStops() {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
+	}
+
+	private hydrateExtraStopsFromQuoteBot(stops: Array<any> = [], isReturn: boolean = false) {
+		const formArray = isReturn ? this.ReturnExtraStops : this.ExtraStops;
+		formArray.clear();
+
+		(stops || []).forEach((item: any, index: number) => {
+			if (!item?.address) {
+				return;
+			}
+
+			this.addExtraStop(isReturn);
+			this.fillExtraStop(isReturn, index, {
+				formatted_address: item.address,
+				display_address: item.address
+			}, {
+				latitude: item.latitude,
+				longitude: item.longitude
+			});
+		});
 	}
 
 
@@ -2705,13 +2770,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 
 	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null, sep?: string): string | number {
-		// fail-safe
-		if (!this.BigData) {
-			return ''
-		}
-
 		if (list === null && return_key === null) {
 			return this.BookingForm.get(form_control).value ?? ''
+		}
+
+		// fail-safe for lookup-based fields only
+		if (!this.BigData) {
+			return ''
 		}
 
 		// fail-safes
@@ -2739,6 +2804,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		return temp ? temp[return_key] : ''
 
+	}
+
+	private findOptionById(collection: Array<any> = [], id: any): any {
+		if (id === undefined || id === null || id === '') {
+			return null;
+		}
+		return collection.find((item: any) => String(item?.id) === String(id)) || null;
 	}
 
 
@@ -5131,127 +5203,158 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 			})
 		}
-		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		try {
+			let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+			let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+			const quoteServiceType = QB?.service_type || 'one_way';
+			const transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
+			const return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+			const safeDate = (value: any) => value ? moment(value).format('YYYY-MM-DD') : '';
+			const safeTime = (value: any) => value ? this.FormatTime(value) : '';
+			const airports = this.BigData?.airportsData || [];
+			const airlines = this.BigData?.airlinesData || [];
+			const cancellationHours = selected_vehicle?.cancellation_policy != null
+				? String(selected_vehicle.cancellation_policy)
+				: '';
+
+			this.service_type = quoteServiceType;
+			this.transfer_type = transfer_type_value;
+			this.return_transfer_type = return_transfer_type_value;
+
+			this.BookingForm.patchValue({
+				service_type: quoteServiceType,
+				transfer_type: transfer_type_value,
+				return_transfer_type: return_transfer_type_value
+			}, { emitEvent: false });
+
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
 		// }    
-		this.affiliate_id = selected_vehicle?.affiliate_id
-		this.veh_created_by = selected_vehicle?.created_by
+			this.affiliate_id = selected_vehicle?.affiliate_id
+			this.veh_created_by = selected_vehicle?.created_by
 
-		if (selected_vehicle?.created_by != 1) {
-			console.log("in affiliate info")
-			this.booking_created_from == 'subscriber'
-			this.BookingForm.patchValue({
-				susbcriber_name: selected_vehicle?.affiliate_name,
-				// driver_name: this.currentUser?.name,
-				// driver_email: this.currentUser.email,
-				// driver_cell_isd: this.currentUser?.isd,
-				// driver_cell: this.currentUser?.phone,
-				// driver_cell_country: this.currentUser?.phoneCountry
-			})
-
-			if (this.service_type == 'round_trip') {
+			if (selected_vehicle?.created_by != 1) {
+				console.log("in affiliate info")
+				this.booking_created_from == 'subscriber'
 				this.BookingForm.patchValue({
-					return_susbcriber_name: selected_vehicle?.affiliate_name,
+					susbcriber_name: selected_vehicle?.affiliate_name,
+					// driver_name: this.currentUser?.name,
+					// driver_email: this.currentUser.email,
+					// driver_cell_isd: this.currentUser?.isd,
+					// driver_cell: this.currentUser?.phone,
+					// driver_cell_country: this.currentUser?.phoneCountry
 				})
+
+				if (this.service_type == 'round_trip') {
+					this.BookingForm.patchValue({
+						return_susbcriber_name: selected_vehicle?.affiliate_name,
+					})
+				}
 			}
-		}
-		else if (selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber') {
-			this.isFarmoutBooking = true
-			this.booking_created_from == 'admin'
-			this.BookingForm.patchValue({
-				susbcriber_name: selected_vehicle?.affiliate_name,
-			})
-			if (this.service_type == 'round_trip') {
+			else if (selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber') {
+				this.isFarmoutBooking = true
+				this.booking_created_from == 'admin'
 				this.BookingForm.patchValue({
-					return_susbcriber_name: selected_vehicle?.affiliate_name,
+					susbcriber_name: selected_vehicle?.affiliate_name,
 				})
+				if (this.service_type == 'round_trip') {
+					this.BookingForm.patchValue({
+						return_susbcriber_name: selected_vehicle?.affiliate_name,
+					})
+				}
 			}
-		}
 
-		this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
-		this.currencySymbol = this.currencyObj?.symbol
-		//dropOFF
-		this.SetFormValue('service_type', QB?.service_type)
-		if (QB?.service_type == 'charter_tour') {
-			this.SetFormValue('number_of_hours', QB?.booking_hour)
-			this.number_of_hours = QB?.booking_hour
-		}
-		//set no of vehicles
-		this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
-		//set cancellation period
-		this.BookingForm.patchValue({
-			cancellation_hours: selected_vehicle?.cancellation_policy.toString(),
-			return_cancellation_hours: selected_vehicle?.cancellation_policy.toString()
-		})
-		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
-		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
-		this.SetFormValue('transfer_type', transfer_type_value)
-		this.SetFormValue('return_transfer_type', return_transfer_type_value)
-		this.SetFormValue('total_passengers', QB?.no_of_luggage)
-		this.SetFormValue('luggage_count', QB?.no_of_passenger)
-		this.SetFormValue('affiliate_type', 'affiliate')
-		this.SetFormValue('affiliate_id', this.affiliate_id)
-		this.SetFormValue('return_affiliate_id', this.affiliate_id)
-		//vehicle id when chossing vehicle from Quote bot screen
-		this.QB_vehicle_id = selected_vehicle?.id || null
-		//pickup
-		this.SetFormValue('pickup_date', moment(QB?.pickup_date).format('YYYY-MM-DD'))
-		this.SetFormValue('pickup', QB?.pickup_address)
-		this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
-		this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
-		this.SetFormValue('pickup_airport', QB?.pickup_airport)
-		this.SetFormValue('pickup_airport_option', QB?.other_details?.pickup_airport_name)
-		this.SetFormValue('pickup_airport_latitude', QB?.pickup_airport_lat)
-		this.SetFormValue('pickup_airport_longitude', QB?.pickup_airport_long)
-		this.SetFormValue('dropoff', QB?.dropoff_address)
-		this.SetFormValue('dropoff_latitude', QB?.dropoff_address_lat)
-		this.SetFormValue('dropoff_longitude', QB?.dropoff_address_long)
-		this.SetFormValue('dropoff_airport', QB?.dropoff_airport)
-		this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
-		this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
-		this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_address_long)
-		// this.SetFormValue('dropoff_airline_option', QB?.dropoff_airline);
-
-
-		//return pickup
-		this.SetFormValue('return_pickup_date', moment(QB?.return_pickup_date).format('YYYY-MM-DD'))
-		this.SetFormValue('return_pickup', QB?.return_dropoff_address)
-		this.SetFormValue('return_pickup_latitude', QB?.return_dropoff_address_lat)
-		this.SetFormValue('return_pickup_longitude', QB?.return_dropoff_address_long)
-		this.SetFormValue('return_pickup_airport', QB?.return_pickup_airport)
-		this.SetFormValue('return_pickup_airport_option', QB?.other_details?.return_pickup_airport_name)
-		this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
-		this.SetFormValue('return_pickup_airport_longitude', QB?.return_pickup_airport_long)
-
-		//return dropOff
-		this.SetFormValue('return_dropoff', QB?.return_dropoff_address)
-		this.SetFormValue('return_dropoff_latitude', QB?.return_dropoff_address_lat)
-		this.SetFormValue('return_dropoff_longitude', QB?.return_dropoff_address_long)
-		this.SetFormValue('return_dropoff_airport', QB?.return_dropoff_airport)
-		this.SetFormValue('return_dropoff_airport_option', QB?.other_details?.return_dropoff_airport_name)
-		this.SetFormValue('return_dropoff_airport_latitude', QB?.return_dropoff_airport_lat)
-		this.SetFormValue('return_dropoff_airport_longitude', QB?.return_dropoff_airport_long)
-		this.SetFormValue('pickup_time', this.FormatTime(QB?.pickup_time))
-		this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
-		this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))
-		this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
-		if (QB?.pickup_type == 'airport') {
-			let location = {
-				latitude: QB?.pickup_airport_lat,
-				longitude: QB?.pickup_airport_long
+			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = this.currencyObj?.symbol
+			//dropOFF
+			if (quoteServiceType == 'charter_tour') {
+				this.SetFormValue('number_of_hours', QB?.booking_hour)
+				this.number_of_hours = QB?.booking_hour
 			}
-			this.fillLocationPoints('airport', location)
+			//set no of vehicles
+			this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
+			//set cancellation period
+			this.BookingForm.patchValue({
+				cancellation_hours: cancellationHours,
+				return_cancellation_hours: cancellationHours
+			})
+			this.SetFormValue('transfer_type', transfer_type_value)
+			this.SetFormValue('return_transfer_type', return_transfer_type_value)
+			this.SetFormValue('total_passengers', QB?.no_of_passenger)
+			this.SetFormValue('luggage_count', QB?.no_of_luggage)
+			this.SetFormValue('affiliate_type', 'affiliate')
+			this.SetFormValue('affiliate_id', this.affiliate_id)
+			this.SetFormValue('return_affiliate_id', this.affiliate_id)
+			//vehicle id when chossing vehicle from Quote bot screen
+			this.QB_vehicle_id = selected_vehicle?.id || null
+			//pickup
+			this.SetFormValue('pickup_date', safeDate(QB?.pickup_date))
+			this.SetFormValue('pickup', QB?.pickup_address)
+			this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
+			this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
+			this.SetFormValue('pickup_airport', QB?.pickup_airport)
+			this.SetFormValue('pickup_airport_option', this.findOptionById(airports, QB?.pickup_airport) || QB?.other_details?.pickup_airport_name)
+			this.SetFormValue('pickup_airport_latitude', QB?.pickup_airport_lat)
+			this.SetFormValue('pickup_airport_longitude', QB?.pickup_airport_long)
+			this.SetFormValue('dropoff', QB?.dropoff_address)
+			this.SetFormValue('dropoff_latitude', QB?.dropoff_address_lat)
+			this.SetFormValue('dropoff_longitude', QB?.dropoff_address_long)
+			this.SetFormValue('dropoff_airport', QB?.dropoff_airport)
+			this.SetFormValue('dropoff_airport_option', this.findOptionById(airports, QB?.dropoff_airport) || QB?.other_details?.dropoff_airport_name)
+			this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
+			this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_airport_long)
+			// this.SetFormValue('dropoff_airline_option', QB?.dropoff_airline);
+
+
+			//return pickup
+			this.SetFormValue('return_pickup_date', safeDate(QB?.return_pickup_date))
+			this.SetFormValue('return_pickup', QB?.return_pickup_address)
+			this.SetFormValue('return_pickup_latitude', QB?.return_pickup_address_lat)
+			this.SetFormValue('return_pickup_longitude', QB?.return_pickup_address_long)
+			this.SetFormValue('return_pickup_airport', QB?.return_pickup_airport)
+			this.SetFormValue('return_pickup_airport_option', this.findOptionById(airports, QB?.return_pickup_airport) || QB?.other_details?.return_pickup_airport_name)
+			this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
+			this.SetFormValue('return_pickup_airport_longitude', QB?.return_pickup_airport_long)
+
+			//return dropOff
+			this.SetFormValue('return_dropoff', QB?.return_dropoff_address)
+			this.SetFormValue('return_dropoff_latitude', QB?.return_dropoff_address_lat)
+			this.SetFormValue('return_dropoff_longitude', QB?.return_dropoff_address_long)
+			this.SetFormValue('return_dropoff_airport', QB?.return_dropoff_airport)
+			this.SetFormValue('return_dropoff_airport_option', this.findOptionById(airports, QB?.return_dropoff_airport) || QB?.other_details?.return_dropoff_airport_name)
+			this.SetFormValue('return_dropoff_airport_latitude', QB?.return_dropoff_airport_lat)
+			this.SetFormValue('return_dropoff_airport_longitude', QB?.return_dropoff_airport_long)
+			this.SetFormValue('pickup_airline_option', this.findOptionById(airlines, QB?.pickup_airline))
+			this.SetFormValue('dropoff_airline_option', this.findOptionById(airlines, QB?.dropoff_airline))
+			this.SetFormValue('return_pickup_airline_option', this.findOptionById(airlines, QB?.return_pickup_airline))
+			this.SetFormValue('return_dropoff_airline_option', this.findOptionById(airlines, QB?.return_dropoff_airline))
+			this.SetFormValue('pickup_time', safeTime(QB?.pickup_time))
+			this.SetFormValue('return_pickup_time', safeTime(QB?.return_pickup_time))
+			this.SetFormValue('cruise_time', safeTime(QB?.pickup_time))
+			this.SetFormValue('return_cruise_time', safeTime(QB?.return_pickup_time))
+			this.hydrateExtraStopsFromQuoteBot(QB?.extra_stops, false)
+			this.hydrateExtraStopsFromQuoteBot(QB?.return_extra_stops, true)
+			setTimeout(() => this.syncVisibleAddressInputs(), 0)
+			setTimeout(() => this.syncVisibleAddressInputs(), 250)
+			setTimeout(() => this.syncVisibleAddressInputs(), 600)
+			if (QB?.pickup_type == 'airport') {
+				let location = {
+					latitude: QB?.pickup_airport_lat,
+					longitude: QB?.pickup_airport_long
+				}
+				this.fillLocationPoints('airport', location)
+			}
+			this.MapController()
+			this.MapController(true)
+			setTimeout(() => {
+				console.log('settimeout finction---------------------------------------------------------------')
+				this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
+				this.fetchAffiliateDrivers(this.affiliate_id)
+			}, 5000)
+		} catch (error) {
+			console.error('setValueByBookNow admin error ->', error);
 		}
-		this.MapController()
-		this.MapController(true)
-		setTimeout(() => {
-			console.log('settimeout finction---------------------------------------------------------------')
-			this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
-			this.fetchAffiliateDrivers(this.affiliate_id)
-		}, 5000)
 	}
 
 	// numbers in red and seperated to next line

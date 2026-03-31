@@ -13,6 +13,7 @@ import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
 import { attachPlaceAutocompleteElement, getBookingAddressSyncControl, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
+import { MapUtils } from '../../../utils/map-utils';
 
 declare var $: any
 
@@ -110,6 +111,10 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 	distance: number = 0
 	return_distance: number = 0
+	pickupMarkers: google.maps.Marker[] = [];
+	returnMarkers: google.maps.Marker[] = [];
+	pickupDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
+	returnDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
 	distance_for_rates: string = ''
 	amenities: Array<string> = []
 
@@ -346,7 +351,29 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				this.initAutocomplete(input, 'return_extra_stops', index, true);
 			});
 
+			this.syncVisibleAddressInputs();
+
 		}, 200);
+	}
+
+	private syncVisibleAddressInput(control: string, index?: number): void {
+		const nativeInput = this.getAddressInput(control, index);
+		const syncControl = getBookingAddressSyncControl(this.BookingForm, control, index);
+		if (!nativeInput || !syncControl) {
+			return;
+		}
+
+		nativeInput.value = syncControl.value || '';
+		syncPlaceAutocompleteDisplay(nativeInput);
+	}
+
+	private syncVisibleAddressInputs(): void {
+		['pickup', 'dropoff', 'return_pickup', 'return_dropoff', 'fbo_address', 'return_fbo_address'].forEach((control: string) => {
+			this.syncVisibleAddressInput(control);
+		});
+
+		this.extraStopInputs?.forEach((_, index) => this.syncVisibleAddressInput('extra_stops', index));
+		this.returnExtraStopInputs?.forEach((_, index) => this.syncVisibleAddressInput('return_extra_stops', index));
 	}
 
 	initAutocomplete(input: ElementRef, control: string, index?: number, is_return: boolean = false) {
@@ -998,6 +1025,68 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		});
 	}
 
+	private renderCustomMarkers(
+		map: google.maps.Map,
+		response: google.maps.DirectionsResult,
+		is_return: boolean = false
+	) {
+		if (is_return) {
+			this.returnMarkers.forEach(marker => marker.setMap(null));
+			this.returnMarkers = [];
+		} else {
+			this.pickupMarkers.forEach(marker => marker.setMap(null));
+			this.pickupMarkers = [];
+		}
+
+		const route = response.routes[0];
+		if (!route?.legs?.length) {
+			return;
+		}
+
+		const locations: google.maps.LatLngLiteral[] = [];
+		const legs = route.legs;
+
+		locations.push(legs[0].start_location.toJSON());
+		for (let i = 0; i < legs.length - 1; i++) {
+			locations.push(legs[i].end_location.toJSON());
+		}
+		locations.push(legs[legs.length - 1].end_location.toJSON());
+
+		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
+
+		adjusted.forEach((item, index) => {
+			const labelChar = String.fromCharCode(65 + index);
+			const marker = new google.maps.Marker({
+				position: item.position,
+				map,
+				zIndex: 1000 + index,
+				title: `Stop ${labelChar}`,
+				icon: {
+					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+					fillColor: "#EA4335",
+					fillOpacity: 1,
+					strokeColor: "#B31412",
+					strokeWeight: 1,
+					scale: 1.5,
+					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.5), 22),
+					labelOrigin: new google.maps.Point(12, 9)
+				},
+				label: {
+					text: labelChar,
+					color: 'white',
+					fontSize: '14px',
+					fontWeight: 'bold'
+				}
+			});
+
+			if (is_return) {
+				this.returnMarkers.push(marker);
+			} else {
+				this.pickupMarkers.push(marker);
+			}
+		});
+	}
+
 
 	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
 		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
@@ -1005,14 +1094,31 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			return
 		}
 
-		const directionsRenderer = new google.maps.DirectionsRenderer()
+		if (is_return) {
+			if (this.returnDirectionsRenderer) {
+				this.returnDirectionsRenderer.setMap(null);
+				this.returnDirectionsRenderer = null;
+			}
+			this.returnDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.returnDirectionsRenderer.setMap(map);
+		} else {
+			if (this.pickupDirectionsRenderer) {
+				this.pickupDirectionsRenderer.setMap(null);
+				this.pickupDirectionsRenderer = null;
+			}
+			this.pickupDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.pickupDirectionsRenderer.setMap(map);
+		}
+
 		const directionsService = new google.maps.DirectionsService()
-		directionsRenderer.setMap(map)
 
 		directionsService.route(request, (response: any, status: string) => {
 			if (status == google.maps.DirectionsStatus.OK) {
-				// console.log('Directions Service Response: ', response)
-				directionsRenderer.setDirections(response)
+				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
+				if (renderer) {
+					renderer.setDirections(response)
+				}
+				this.renderCustomMarkers(map, response, is_return);
 				this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 					if (is_return) {
 						this.return_distance = response.distance
@@ -1554,13 +1660,13 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 
 	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null, sep?: string): string | number {
-		// fail-safe
-		if (!this.BigData) {
-			return ''
-		}
-
 		if (list === null && return_key === null) {
 			return this.BookingForm.get(form_control).value ?? ''
+		}
+
+		// fail-safe for lookup-based fields only
+		if (!this.BigData) {
+			return ''
 		}
 
 		// fail-safes
@@ -3341,10 +3447,59 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		return moment(time, "HH:mm:ss").format("LT");
 	}
 
+	private findOptionById(collection: Array<any> = [], id: any): any {
+		if (id === undefined || id === null || id === '') {
+			return null;
+		}
+		return collection.find((item: any) => String(item?.id) === String(id)) || null;
+	}
+
+	private syncFormArrayValues(formControl: 'amenities' | 'chargedAmenities', values: Array<any> = []): void {
+		const formArray = this.BookingForm.get(formControl) as FormArray;
+		while (formArray.length) {
+			formArray.removeAt(0);
+		}
+		values.forEach((value: any) => {
+			if (value !== undefined && value !== null && value !== '') {
+				formArray.push(new FormControl(value));
+			}
+		});
+	}
+
+	private syncExtraStops(formControl: 'extra_stops' | 'return_extra_stops', stops: Array<any> = []): void {
+		const formArray = this.BookingForm.get(formControl) as FormArray;
+		while (formArray.length) {
+			formArray.removeAt(0);
+		}
+
+		stops.forEach((stop: any) => {
+			const address = stop?.display_address ?? stop?.formatted_address ?? stop?.address ?? '';
+			const latitude = stop?.latitude ?? stop?.lat ?? '';
+			const longitude = stop?.longitude ?? stop?.lng ?? '';
+			if (!address) {
+				return;
+			}
+
+			formArray.push(new FormGroup({
+				address: new FormControl(address),
+				place_id: new FormControl(stop?.place_id ?? ''),
+				latitude: new FormControl(latitude),
+				longitude: new FormControl(longitude),
+				rate: new FormControl(stop?.rate ?? ''),
+				booking_instructions: new FormControl(stop?.booking_instructions ?? '')
+			}));
+		});
+	}
+
 	setValueByBookNow() {
 		try {
 			let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 			let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+			const safeDate = (value: any) => value ? moment(value).format('YYYY-MM-DD') : '';
+			const safeTime = (value: any) => value ? this.FormatTime(value) : '';
+			const airports = this.BigData?.airportsData || [];
+			const airlines = this.BigData?.airlinesData || [];
+
 			this.affiliate_id = selected_vehicle?.affiliate_id
 			this.SetFormValue('service_type', QB?.service_type)
 			if (QB?.service_type == 'charter_tour') {
@@ -3360,38 +3515,37 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			this.service_type = QB?.service_type
 			this.transfer_type = transfer_type_value
 			this.return_transfer_type = return_transfer_type_value
-			// this.SetFormValue('return_transfer_type', return_transfer_type_value)
-			this.SetFormValue('total_passengers', QB?.no_of_luggage)
-			this.SetFormValue('luggage_count', QB?.no_of_passenger)
+			this.SetFormValue('total_passengers', QB?.no_of_passenger)
+			this.SetFormValue('luggage_count', QB?.no_of_luggage)
 			this.SetFormValue('affiliate_type', 'affiliate')
 			this.SetFormValue('affiliate_id', this.affiliate_id)
 			//vehicle id when chossing vehicle from Quote bot screen
 			this.QB_vehicle_id = selected_vehicle?.id || null
 			//pickup
-			this.SetFormValue('pickup_date', moment(QB?.pickup_date).format('YYYY-MM-DD'))
+			this.SetFormValue('pickup_date', safeDate(QB?.pickup_date))
 			this.SetFormValue('pickup', QB?.pickup_address)
 			this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
 			this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
 			this.SetFormValue('pickup_airport', QB?.pickup_airport)
-			this.SetFormValue('pickup_airport_option', QB?.other_details?.pickup_airport_name)
+			this.SetFormValue('pickup_airport_option', this.findOptionById(airports, QB?.pickup_airport) || QB?.other_details?.pickup_airport_name)
 			this.SetFormValue('pickup_airport_latitude', QB?.pickup_airport_lat)
 			this.SetFormValue('pickup_airport_longitude', QB?.pickup_airport_long)
 			this.SetFormValue('dropoff', QB?.dropoff_address)
 			this.SetFormValue('dropoff_latitude', QB?.dropoff_address_lat)
 			this.SetFormValue('dropoff_longitude', QB?.dropoff_address_long)
 			this.SetFormValue('dropoff_airport', QB?.dropoff_airport)
-			this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
+			this.SetFormValue('dropoff_airport_option', this.findOptionById(airports, QB?.dropoff_airport) || QB?.other_details?.dropoff_airport_name)
 			this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
-			this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_address_long)
+			this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_airport_long)
 
 
 			//return pickup
-			this.SetFormValue('return_pickup_date', moment(QB?.return_pickup_date).format('YYYY-MM-DD'))
-			this.SetFormValue('return_pickup', QB?.return_dropoff_address)
-			this.SetFormValue('return_pickup_latitude', QB?.return_dropoff_address_lat)
-			this.SetFormValue('return_pickup_longitude', QB?.return_dropoff_address_long)
+			this.SetFormValue('return_pickup_date', safeDate(QB?.return_pickup_date))
+			this.SetFormValue('return_pickup', QB?.return_pickup_address)
+			this.SetFormValue('return_pickup_latitude', QB?.return_pickup_address_lat)
+			this.SetFormValue('return_pickup_longitude', QB?.return_pickup_address_long)
 			this.SetFormValue('return_pickup_airport', QB?.return_pickup_airport)
-			this.SetFormValue('return_pickup_airport_option', QB?.other_details?.return_pickup_airport_name)
+			this.SetFormValue('return_pickup_airport_option', this.findOptionById(airports, QB?.return_pickup_airport) || QB?.other_details?.return_pickup_airport_name)
 			this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
 			this.SetFormValue('return_pickup_airport_longitude', QB?.return_pickup_airport_long)
 
@@ -3400,24 +3554,34 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			this.SetFormValue('return_dropoff_latitude', QB?.return_dropoff_address_lat)
 			this.SetFormValue('return_dropoff_longitude', QB?.return_dropoff_address_long)
 			this.SetFormValue('return_dropoff_airport', QB?.return_dropoff_airport)
-			this.SetFormValue('return_dropoff_airport_option', QB?.other_details?.return_dropoff_airport_name)
+			this.SetFormValue('return_dropoff_airport_option', this.findOptionById(airports, QB?.return_dropoff_airport) || QB?.other_details?.return_dropoff_airport_name)
 			this.SetFormValue('return_dropoff_airport_latitude', QB?.return_dropoff_airport_lat)
 			this.SetFormValue('return_dropoff_airport_longitude', QB?.return_dropoff_airport_long)
-			this.SetFormValue('pickup_time', this.FormatTime(QB?.pickup_time))
-			this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
-			this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))
-			this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
+			this.SetFormValue('pickup_airline_option', this.findOptionById(airlines, QB?.pickup_airline))
+			this.SetFormValue('dropoff_airline_option', this.findOptionById(airlines, QB?.dropoff_airline))
+			this.SetFormValue('return_pickup_airline_option', this.findOptionById(airlines, QB?.return_pickup_airline))
+			this.SetFormValue('return_dropoff_airline_option', this.findOptionById(airlines, QB?.return_dropoff_airline))
+			this.SetFormValue('pickup_time', safeTime(QB?.pickup_time))
+			this.SetFormValue('return_pickup_time', safeTime(QB?.return_pickup_time))
+			this.SetFormValue('cruise_time', safeTime(QB?.pickup_time))
+			this.SetFormValue('return_cruise_time', safeTime(QB?.return_pickup_time))
+			this.syncFormArrayValues('amenities', QB?.amenities || [])
+			this.syncFormArrayValues('chargedAmenities', QB?.chargedAmenities || [])
+			this.syncExtraStops('extra_stops', QB?.extra_stops || [])
+			this.syncExtraStops('return_extra_stops', QB?.return_extra_stops || [])
+			setTimeout(() => this.syncVisibleAddressInputs(), 0)
+			setTimeout(() => this.syncVisibleAddressInputs(), 250)
 
 			//driver information from selected vehicle
 			this.SetFormValue('driver_id', selected_vehicle?.driverInformation?.id)
 			this.SetFormValue('driver_name', selected_vehicle?.driverInformation?.name)
 			this.SetFormValue('driver_email', selected_vehicle?.driverInformation?.email)
-			this.SetFormValue('driver_cell', selected_vehicle?.driverInformation?.phone.replaceAll('+', ''))
+			this.SetFormValue('driver_cell', selected_vehicle?.driverInformation?.phone?.replaceAll('+', '') || '')
 			this.SetFormValue('driver_gender', selected_vehicle?.driverInformation?.gender)
 			this.SetFormValue('vehicle_id', selected_vehicle?.id)
 			this.driverImgUrl = selected_vehicle?.driverInformation?.imageUrl || "../../../../assets/images/driverImg.jpg"
 			this.vehicleImgUrl = selected_vehicle?.vehicle_images[0]
-			this.driver_info = selected_vehicle?.driverInformation || ""
+			this.driver_info = selected_vehicle?.driverInformation || {}
 			this.driver_info['type'] = selected_vehicle?.name || ""
 			this.driver_info['make'] = selected_vehicle?.vehicle_details?.make || ""
 			this.driver_info['model'] = selected_vehicle?.vehicle_details?.model || ""

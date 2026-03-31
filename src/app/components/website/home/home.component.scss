@@ -6,7 +6,7 @@
 	overflow: hidden;
 	/* Prevents scrollbars if animations slide out */
 }
-
+.bannerform_wrapper .quoteform_homewrapper span{text-align: left !important;}
 /* Shimmer container (before owl loads) */
 /* Shimmer container (before owl loads) */
 .chk_vehicles.shimmer-wrapper {
@@ -107,6 +107,33 @@
 .swiper-pagination-bullet-active {
 	background: rgb(243, 147, 61) !important;
 	opacity: 1;
+}
+
+.charter-stop-add-btn,
+.charter-stop-delete-btn {
+	border: none;
+	border-radius: 999px;
+	width: 25px;
+	height: 25px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+}
+
+.charter-stop-add-btn {
+	background: #f89a3c;
+	color: #fff;
+}
+
+.charter-stop-add-btn:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.charter-stop-delete-btn {
+	background: transparent;
+	color: #f89a3c;
 }
 
 @media (max-width: 600px) {
@@ -823,6 +850,228 @@ section {
 	justify-content: center;
 }
 
+.quotebot-amenities-box {
+	padding: 14px 16px;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	border-radius: 12px;
+	// background: linear-gradient(180deg, rgba(22, 28, 40, 0.92) 0%, rgba(16, 20, 31, 0.92) 100%);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.quotebot-amenities-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+.quotebot-amenities-title {
+	color: #ffffff;
+	font-size: 16px;
+	font-weight: 700;
+	margin-bottom: 0;
+}
+
+.quotebot-amenities-copy {
+	color: rgba(255, 255, 255, 0.7);
+	font-size: 13px;
+	line-height: 1.45;
+	margin-bottom: 14px;
+}
+
+.amenity-checkbox-item {
+	margin-bottom: 14px;
+	color: #f4f4f4;
+}
+
+.quotebot-amenity-option {
+	display: grid;
+	grid-template-columns: 20px minmax(0, 1fr);
+	column-gap: 12px;
+	align-items: start;
+	margin: 0;
+	cursor: pointer;
+	width: 100%;
+	position: relative;
+}
+
+.quotebot-amenity-native-checkbox {
+	width: 20px;
+	height: 20px;
+	margin: 2px 0 0;
+	opacity: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.quotebot-amenity-box {
+	width: 20px;
+	height: 20px;
+	margin-top: 2px;
+	border: 2px solid rgba(255, 255, 255, 0.72);
+	border-radius: 3px;
+	background: transparent;
+	display: inline-block;
+	position: relative;
+	transition: 0.18s ease;
+}
+
+.quotebot-amenity-box::after {
+	content: "";
+	position: absolute;
+	left: 5px;
+	top: 1px;
+	width: 5px;
+	height: 10px;
+	border: solid #10141f;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	opacity: 0;
+}
+
+.quotebot-amenity-native-checkbox:checked + .quotebot-amenity-box {
+	background: var(--orange-color, #f3933d);
+	border-color: var(--orange-color, #f3933d);
+}
+
+.quotebot-amenity-native-checkbox:checked + .quotebot-amenity-box::after {
+	opacity: 1;
+}
+
+.quotebot-amenity-native-checkbox:focus-visible + .quotebot-amenity-box {
+	outline: 3px solid rgba(243, 147, 61, 0.95);
+	outline-offset: 2px;
+}
+
+@media only screen and (max-width: 767px) {
+	.quotebot-amenities-header {
+		align-items: center;
+	}
+
+	.quotebot-amenities-header .quotebot-more-amenities-btn {
+		margin-left: auto;
+		flex: 0 0 auto;
+		width: auto;
+		max-width: fit-content;
+		min-width: 72px;
+		padding: 6px 14px;
+		min-height: 36px;
+		display: inline-flex;
+		align-self: flex-start;
+	}
+}
+
+.quotebot-amenity-label {
+	color: inherit;
+	line-height: 1.3;
+	font-weight: 600;
+	margin: 0;
+}
+
+.quotebot-more-amenities-btn {
+	width: 20%;
+	min-height: 35px;
+	border: 1px dashed rgba(255, 255, 255, 0.45);
+	border-radius: 10px;
+	background: rgba(243, 147, 61, 0.1);
+	color: #ffffff;
+	font-weight: 700;
+	text-align: center;
+	padding: 0;
+	transition: 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.quotebot-more-amenities-btn:hover {
+	background: rgba(243, 147, 61, 0.2);
+	border-color: var(--orange-color, #f3933d);
+}
+
+.quotebot-more-amenities-btn:focus-visible {
+	outline: 3px solid rgba(243, 147, 61, 0.95);
+	outline-offset: 2px;
+}
+
+.quotebot-amenities-modal-content {
+	background: #0f1420;
+	color: #f5f5f5;
+	border-radius: 18px;
+	border: 1px solid rgba(243, 147, 61, 0.22);
+	box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+
+	.amenity-checkbox-item {
+		color: #f5f5f5;
+	}
+
+	.modal-header {
+		padding-top: 28px;
+	}
+
+	.modal-title {
+		color: var(--orange-color, #f3933d);
+		font-weight: 800;
+	}
+
+	.closeButton {
+		color: #ff5b5b;
+		opacity: 1;
+		text-shadow: none;
+	}
+
+	.btnStyle {
+		background: var(--green, #33c658);
+		color: #fff;
+		border: none;
+		min-width: 120px;
+		border-radius: 999px;
+		font-weight: 700;
+	}
+}
+
+.modal-dialog.modal-lg {
+	max-width: 920px;
+}
+
+.quotebot-amenities-copy--modal {
+	color: rgba(255, 255, 255, 0.72) !important;
+	margin-bottom: 18px;
+}
+
+.quotebot-amenities-modal-body {
+	min-height: 68vh;
+	max-height: 68vh;
+	overflow-y: auto;
+	padding: 0 28px 8px;
+}
+
+.quotebot-amenity-group + .quotebot-amenity-group {
+	margin-top: 20px;
+	padding-top: 18px;
+	border-top: 1px solid rgba(243, 147, 61, 0.18);
+}
+
+.quotebot-amenity-group-title {
+	color: var(--orange-color, #f3933d);
+	font-size: 16px;
+	font-weight: 700;
+	margin-bottom: 14px;
+}
+
+.quotebot-amenities-modal-body::-webkit-scrollbar {
+	width: 10px;
+}
+
+.quotebot-amenities-modal-body::-webkit-scrollbar-thumb {
+	background: rgba(243, 147, 61, 0.55);
+	border-radius: 999px;
+}
+
 .modal-body p {
 	color: #fff !important;
 	text-align: left !important;
@@ -834,6 +1083,13 @@ section {
 	background-color: #fff;
 	margin: 10px 347px 20px 347px;
 	display: block;
+}
+
+.quotebot-amenities-modal-content hr {
+	border-color: var(--orange-color, #f3933d);
+	background-color: var(--orange-color, #f3933d);
+	width: 110px;
+	margin: 10px auto 18px;
 }
 
 @media only screen and (max-width: 767px) {
@@ -2814,6 +3070,24 @@ div#google_translate_element_home_mobile {
 
 .current_loc_button a {
 	color: #f3933d !important;
+}
+
+.quotebot-location-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	text-align: initial;
+}
+
+.quotebot-stop-action-group {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.quotebot-location-actions .charter-stop-add-btn {
+	flex: 0 0 auto;
+	margin-right: 0;
 }
 
 // MISSION SECTION REORDERING (1024px Fix)

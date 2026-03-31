@@ -16,6 +16,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
 import { attachPlaceAutocompleteElement, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
+import { MapUtils } from '../../../utils/map-utils';
 
 declare var $: any
 
@@ -106,6 +107,10 @@ export class NewBookingComponent implements OnInit {
 	distance: number = 0
 	extraStops_rate: any = 0
 	return_distance: number = 0
+	pickupMarkers: google.maps.Marker[] = [];
+	returnMarkers: google.maps.Marker[] = [];
+	pickupDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
+	returnDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
 	distance_for_rates: string = ''
 	amenities: Array<string> = []
 
@@ -1259,6 +1264,68 @@ export class NewBookingComponent implements OnInit {
 		});
 	}
 
+	private renderCustomMarkers(
+		map: google.maps.Map,
+		response: google.maps.DirectionsResult,
+		is_return: boolean = false
+	) {
+		if (is_return) {
+			this.returnMarkers.forEach(marker => marker.setMap(null));
+			this.returnMarkers = [];
+		} else {
+			this.pickupMarkers.forEach(marker => marker.setMap(null));
+			this.pickupMarkers = [];
+		}
+
+		const route = response.routes[0];
+		if (!route?.legs?.length) {
+			return;
+		}
+
+		const locations: google.maps.LatLngLiteral[] = [];
+		const legs = route.legs;
+
+		locations.push(legs[0].start_location.toJSON());
+		for (let i = 0; i < legs.length - 1; i++) {
+			locations.push(legs[i].end_location.toJSON());
+		}
+		locations.push(legs[legs.length - 1].end_location.toJSON());
+
+		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
+
+		adjusted.forEach((item, index) => {
+			const labelChar = String.fromCharCode(65 + index);
+			const marker = new google.maps.Marker({
+				position: item.position,
+				map,
+				zIndex: 1000 + index,
+				title: `Stop ${labelChar}`,
+				icon: {
+					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+					fillColor: "#EA4335",
+					fillOpacity: 1,
+					strokeColor: "#B31412",
+					strokeWeight: 1,
+					scale: 1.5,
+					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.5), 22),
+					labelOrigin: new google.maps.Point(12, 9)
+				},
+				label: {
+					text: labelChar,
+					color: 'white',
+					fontSize: '14px',
+					fontWeight: 'bold'
+				}
+			});
+
+			if (is_return) {
+				this.returnMarkers.push(marker);
+			} else {
+				this.pickupMarkers.push(marker);
+			}
+		});
+	}
+
 
 	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
 		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
@@ -1267,14 +1334,31 @@ export class NewBookingComponent implements OnInit {
 		}
 
 
-		const directionsRenderer = new google.maps.DirectionsRenderer()
+		if (is_return) {
+			if (this.returnDirectionsRenderer) {
+				this.returnDirectionsRenderer.setMap(null);
+				this.returnDirectionsRenderer = null;
+			}
+			this.returnDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.returnDirectionsRenderer.setMap(map);
+		} else {
+			if (this.pickupDirectionsRenderer) {
+				this.pickupDirectionsRenderer.setMap(null);
+				this.pickupDirectionsRenderer = null;
+			}
+			this.pickupDirectionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+			this.pickupDirectionsRenderer.setMap(map);
+		}
+
 		const directionsService = new google.maps.DirectionsService()
-		directionsRenderer.setMap(map)
 
 		directionsService.route(request, (response: any, status: string) => {
 			if (status == google.maps.DirectionsStatus.OK) {
-				// console.log('Directions Service Response: ', response)
-				directionsRenderer.setDirections(response)
+				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
+				if (renderer) {
+					renderer.setDirections(response)
+				}
+				this.renderCustomMarkers(map, response, is_return);
 
 				this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 					if (is_return) {

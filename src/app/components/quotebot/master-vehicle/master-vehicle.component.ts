@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GoogleMap } from '@angular/google-maps';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { bindCallback, Observable, throwError } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { MapUtils } from 'src/app/utils/map-utils';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -24,7 +26,8 @@ interface Filters {
 	templateUrl: './master-vehicle.component.html',
 	styleUrls: ['./master-vehicle.component.scss']
 })
-export class MasterVehicleComponent implements OnInit {
+export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy {
+	@ViewChild('tripPreviewMap') tripPreviewMap?: GoogleMap;
 
 	/**
 	 * 
@@ -220,6 +223,23 @@ export class MasterVehicleComponent implements OnInit {
 	isLoading: boolean = true; // Add loading state
 	skeletonItems = new Array(8); // Skeleton items
 	currencySymbol: any;
+	showTripSummaryPopup: boolean = true;
+	tripPreviewLegs: Array<{ title: string, distanceText: string, durationText: string }> = [];
+	tripPreviewTotalDistanceText: string = 'Total Distance: 0.00 mi / 0.00 km';
+	tripPreviewTotalDurationText: string = 'Estimated time: 0 minutes';
+	tripPreviewStorageKey: string = '';
+	mapCenter: google.maps.LatLngLiteral = { lat: 41.8781, lng: -87.6298 };
+	mapZoom = 10;
+	mapOptions: google.maps.MapOptions = {
+		disableDefaultUI: true,
+		zoomControl: true,
+		fullscreenControl: false,
+		streetViewControl: false,
+		mapTypeControl: false
+	};
+	private tripPreviewRenderers: google.maps.DirectionsRenderer[] = [];
+	private tripPreviewMarkers: google.maps.Marker[] = [];
+	private hasRenderedTripPreview = false;
 
 
 	constructor(
@@ -259,6 +279,8 @@ export class MasterVehicleComponent implements OnInit {
 			// fetch the user's travelling quote
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
+		this.tripPreviewStorageKey = this.buildTripPreviewStorageKey();
+		this.showTripSummaryPopup = !sessionStorage.getItem(this.tripPreviewStorageKey);
 
 		this.$activatedRoute.queryParams.subscribe((params: any) => {
 			if (params?.list == 'master') {
@@ -273,11 +295,353 @@ export class MasterVehicleComponent implements OnInit {
 
 		this.fetchMasterVehicles()	// fetches 16 vehicle categories
 		this.getAllFilters()	// fetch filters from database
+		this.buildTripPreviewSummary();
 	}
 	// ngOnInit ends
+
+	ngAfterViewInit(): void {
+		setTimeout(() => this.renderTripPreviewMap(), 150);
+	}
+
+	ngOnDestroy(): void {
+		this.clearTripPreviewRenderers();
+		this.clearTripPreviewMarkers();
+	}
 	// documentgetElementById('affiliate-info')
 	isArray(value: any): boolean {
 		return Array.isArray(value)
+	}
+
+	closeTripSummaryPopup(): void {
+		this.showTripSummaryPopup = false;
+		if (this.tripPreviewStorageKey) {
+			sessionStorage.setItem(this.tripPreviewStorageKey, 'hidden');
+		}
+	}
+
+	private buildTripPreviewSummary(): void {
+		const locationInfo = this.quotebot_form?.location_info || [];
+		this.tripPreviewLegs = [];
+
+		if (locationInfo[0]) {
+			this.tripPreviewLegs.push({
+				title: this.quotebot_form?.service_type === 'round_trip' ? 'Outbound Trip' : 'Trip Distance',
+				distanceText: this.formatDistanceText(locationInfo[0]?.distance),
+				durationText: this.formatDurationText(locationInfo[0]?.duration)
+			});
+		}
+
+		if (this.quotebot_form?.service_type === 'round_trip' && locationInfo[1]) {
+			this.tripPreviewLegs.push({
+				title: 'Return Trip',
+				distanceText: this.formatDistanceText(locationInfo[1]?.distance),
+				durationText: this.formatDurationText(locationInfo[1]?.duration)
+			});
+		}
+
+		const totalDistance = locationInfo.reduce((sum: number, leg: any) => sum + Number(leg?.distance?.value || 0), 0);
+		const totalDuration = locationInfo.reduce((sum: number, leg: any) => sum + Number(leg?.duration?.value || 0), 0);
+		this.tripPreviewTotalDistanceText = this.buildPreviewDistanceLine(totalDistance);
+		this.tripPreviewTotalDurationText = this.buildPreviewDurationLine(totalDuration);
+
+		const firstPoint = this.getRoutePoint(false, true);
+		if (firstPoint) {
+			this.mapCenter = firstPoint;
+		}
+	}
+
+	private renderTripPreviewMap(retryCount: number = 6): void {
+		if (!this.showTripSummaryPopup || this.hasRenderedTripPreview || typeof google === 'undefined') {
+			return;
+		}
+
+		if (!this.tripPreviewMap?.googleMap) {
+			if (retryCount > 0) {
+				setTimeout(() => this.renderTripPreviewMap(retryCount - 1), 200);
+			}
+			return;
+		}
+
+		const map = this.tripPreviewMap.googleMap;
+		const legs: google.maps.DirectionsRequest[] = [];
+		const outboundRequest = this.buildDirectionsRequest(false);
+		if (outboundRequest) {
+			legs.push(outboundRequest);
+		}
+		if (this.quotebot_form?.service_type === 'round_trip') {
+			const returnRequest = this.buildDirectionsRequest(true);
+			if (returnRequest) {
+				legs.push(returnRequest);
+			}
+		}
+
+		this.clearTripPreviewRenderers();
+		this.clearTripPreviewMarkers();
+		const routeSummaries: Array<{ title: string, distanceText: string, durationText: string, distanceValue: number, durationValue: number }> = [];
+		const bounds = new google.maps.LatLngBounds();
+		const directionsService = new google.maps.DirectionsService();
+
+		legs.forEach((request: google.maps.DirectionsRequest, index: number) => {
+			const renderer = new google.maps.DirectionsRenderer({
+				map,
+				suppressMarkers: true,
+				polylineOptions: {
+					strokeColor: index === 0 ? '#ff9b37' : '#2e90fa',
+					strokeOpacity: 0.9,
+					strokeWeight: 5
+				}
+			});
+			this.tripPreviewRenderers.push(renderer);
+
+			directionsService.route(request, (response, status) => {
+				if (status === google.maps.DirectionsStatus.OK && response) {
+					renderer.setDirections(response);
+					this.renderTripPreviewMarkers(map, response, index === 1);
+					const summary = this.extractRouteSummary(response, index === 1);
+					routeSummaries[index] = summary;
+					this.tripPreviewLegs = routeSummaries
+						.filter(Boolean)
+						.map(({ title, distanceText, durationText }) => ({ title, distanceText, durationText }));
+					const totalDistance = routeSummaries.reduce((sum, item) => sum + Number(item?.distanceValue || 0), 0);
+					const totalDuration = routeSummaries.reduce((sum, item) => sum + Number(item?.durationValue || 0), 0);
+					this.tripPreviewTotalDistanceText = this.buildPreviewDistanceLine(totalDistance);
+					this.tripPreviewTotalDurationText = this.buildPreviewDurationLine(totalDuration);
+					response.routes.forEach((route) => {
+						route.legs.forEach((leg) => {
+							leg.steps?.forEach((step) => {
+								step.path?.forEach((point) => bounds.extend(point));
+							});
+							if (leg.start_location) {
+								bounds.extend(leg.start_location);
+							}
+							if (leg.end_location) {
+								bounds.extend(leg.end_location);
+							}
+						});
+					});
+					if (!bounds.isEmpty()) {
+						map.fitBounds(bounds);
+					}
+				}
+			});
+		});
+
+		this.hasRenderedTripPreview = true;
+	}
+
+	private clearTripPreviewRenderers(): void {
+		this.tripPreviewRenderers.forEach((renderer) => renderer.setMap(null));
+		this.tripPreviewRenderers = [];
+	}
+
+	private clearTripPreviewMarkers(): void {
+		this.tripPreviewMarkers.forEach((marker) => marker.setMap(null));
+		this.tripPreviewMarkers = [];
+	}
+
+	private extractRouteSummary(
+		response: google.maps.DirectionsResult,
+		isReturn: boolean
+	): { title: string, distanceText: string, durationText: string, distanceValue: number, durationValue: number } {
+		const legs = response.routes?.[0]?.legs || [];
+		const distanceValue = legs.reduce((sum, leg) => sum + Number(leg.distance?.value || 0), 0);
+		const durationValue = legs.reduce((sum, leg) => sum + Number(leg.duration?.value || 0), 0);
+
+		return {
+			title: this.quotebot_form?.service_type === 'round_trip'
+				? (isReturn ? 'Return Trip' : 'Outbound Trip')
+				: 'Trip Distance',
+			distanceText: `${(distanceValue / 1609.34).toFixed(2)} mi`,
+			durationText: this.convertSecondsToDuration(durationValue),
+			distanceValue,
+			durationValue
+		};
+	}
+
+	private buildDirectionsRequest(isReturn: boolean): google.maps.DirectionsRequest | null {
+		const origin = this.getRoutePoint(isReturn, true);
+		const destination = this.getRoutePoint(isReturn, false);
+		if (!origin || !destination) {
+			return null;
+		}
+
+		const stops = (isReturn ? this.quotebot_form?.return_extra_stops : this.quotebot_form?.extra_stops) || [];
+		const waypoints = stops
+			.filter((stop: any) => stop?.latitude && stop?.longitude)
+			.map((stop: any) => ({
+				location: {
+					lat: Number(stop.latitude),
+					lng: Number(stop.longitude)
+				},
+				stopover: true
+			}));
+
+		return {
+			origin,
+			destination,
+			waypoints,
+			optimizeWaypoints: false,
+			travelMode: google.maps.TravelMode.DRIVING
+		};
+	}
+
+	private renderTripPreviewMarkers(
+		map: google.maps.Map,
+		response: google.maps.DirectionsResult,
+		isReturn: boolean = false
+	): void {
+		const route = response.routes?.[0];
+		if (!route?.legs?.length) {
+			return;
+		}
+
+		const locations: google.maps.LatLngLiteral[] = [];
+		locations.push(route.legs[0].start_location.toJSON());
+		for (let i = 0; i < route.legs.length - 1; i++) {
+			locations.push(route.legs[i].end_location.toJSON());
+		}
+		locations.push(route.legs[route.legs.length - 1].end_location.toJSON());
+
+		const adjusted = MapUtils.getOffsetMarkers(locations, 100);
+
+		adjusted.forEach((item, index) => {
+			const marker = new google.maps.Marker({
+				position: item.position,
+				map,
+				zIndex: 1000 + index,
+				title: `${isReturn ? 'Return ' : ''}Stop ${String.fromCharCode(65 + index)}`,
+				icon: {
+					path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z",
+					fillColor: isReturn ? "#2e90fa" : "#EA4335",
+					fillOpacity: 1,
+					strokeColor: isReturn ? "#1f5fbf" : "#B31412",
+					strokeWeight: 1,
+					scale: 1.45,
+					anchor: new google.maps.Point(12 - (item.pixelOffset / 1.45), 22),
+					labelOrigin: new google.maps.Point(12, 9)
+				},
+				label: {
+					text: String.fromCharCode(65 + index),
+					color: 'white',
+					fontSize: '13px',
+					fontWeight: 'bold'
+				}
+			});
+
+			this.tripPreviewMarkers.push(marker);
+		});
+	}
+
+	private getRoutePoint(isReturn: boolean, isPickup: boolean): google.maps.LatLngLiteral | null {
+		const prefix = isReturn ? 'return_' : '';
+		const fallbackReturnType = isPickup ? this.quotebot_form?.dropoff_type : this.quotebot_form?.pickup_type;
+		const typeKey = isReturn
+			? (isPickup ? 'return_pickup_type' : 'return_dropoff_type')
+			: (isPickup ? 'pickup_type' : 'dropoff_type');
+		const typeValue = this.quotebot_form?.[typeKey] || (isReturn ? fallbackReturnType : this.quotebot_form?.[isPickup ? 'pickup_type' : 'dropoff_type']);
+		const baseKey = typeValue === 'airport'
+			? `${prefix}${isPickup ? 'pickup_airport' : 'dropoff_airport'}`
+			: `${prefix}${isPickup ? 'pickup_address' : 'dropoff_address'}`;
+
+		const lat = Number(this.quotebot_form?.[`${baseKey}_lat`]);
+		const lng = Number(this.quotebot_form?.[`${baseKey}_long`]);
+
+		if (Number.isNaN(lat) || Number.isNaN(lng)) {
+			return null;
+		}
+
+		return { lat, lng };
+	}
+
+	private formatDistanceText(distance: any): string {
+		if (distance?.text) {
+			return distance.text;
+		}
+
+		const value = Number(distance?.value || 0);
+		return `${(value / 1609.34).toFixed(2)} mi`;
+	}
+
+	private formatDurationText(duration: any): string {
+		if (duration?.text) {
+			return duration.text;
+		}
+
+		return this.convertSecondsToDuration(Number(duration?.value || 0));
+	}
+
+	private convertSecondsToDuration(totalSeconds: number): string {
+		if (!totalSeconds) {
+			return '0 mins';
+		}
+
+		const totalMinutes = Math.round(totalSeconds / 60);
+		const hours = Math.floor(totalMinutes / 60);
+		const minutes = totalMinutes % 60;
+
+		if (hours && minutes) {
+			return `${hours} h ${minutes} mins`;
+		}
+		if (hours) {
+			return `${hours} h`;
+		}
+		return `${minutes} mins`;
+	}
+
+	private buildPreviewDistanceLine(distanceInMeters: number): string {
+		const miles = distanceInMeters / 1609.34;
+		const kilometers = distanceInMeters / 1000;
+		return `Total Distance: ${miles.toFixed(2)} mi / ${kilometers.toFixed(2)} km`;
+	}
+
+	private buildPreviewDurationLine(totalSeconds: number): string {
+		return `Estimated time: ${this.convertSecondsToReadableDuration(totalSeconds)}`;
+	}
+
+	private buildTripPreviewStorageKey(): string {
+		const bookingIdentity = JSON.stringify({
+			service_type: this.quotebot_form?.service_type,
+			pickup_date: this.quotebot_form?.pickup_date,
+			pickup_time: this.quotebot_form?.pickup_time,
+			pickup_address: this.quotebot_form?.pickup_address,
+			pickup_address_lat: this.quotebot_form?.pickup_address_lat,
+			pickup_address_long: this.quotebot_form?.pickup_address_long,
+			dropoff_address: this.quotebot_form?.dropoff_address,
+			dropoff_address_lat: this.quotebot_form?.dropoff_address_lat,
+			dropoff_address_long: this.quotebot_form?.dropoff_address_long,
+			return_pickup_date: this.quotebot_form?.return_pickup_date,
+			return_pickup_time: this.quotebot_form?.return_pickup_time,
+			return_pickup_address: this.quotebot_form?.return_pickup_address,
+			return_pickup_address_lat: this.quotebot_form?.return_pickup_address_lat,
+			return_pickup_address_long: this.quotebot_form?.return_pickup_address_long,
+			return_dropoff_address: this.quotebot_form?.return_dropoff_address,
+			return_dropoff_address_lat: this.quotebot_form?.return_dropoff_address_lat,
+			return_dropoff_address_long: this.quotebot_form?.return_dropoff_address_long,
+			extra_stops: this.quotebot_form?.extra_stops || [],
+			return_extra_stops: this.quotebot_form?.return_extra_stops || [],
+			no_of_passenger: this.quotebot_form?.no_of_passenger,
+			no_of_luggage: this.quotebot_form?.no_of_luggage
+		});
+
+		return `quotebot_trip_preview_seen_${bookingIdentity}`;
+	}
+
+	private convertSecondsToReadableDuration(totalSeconds: number): string {
+		if (!totalSeconds) {
+			return '0 minutes';
+		}
+
+		const totalMinutes = Math.round(totalSeconds / 60);
+		const hours = Math.floor(totalMinutes / 60);
+		const minutes = totalMinutes % 60;
+
+		if (hours && minutes) {
+			return `${hours} hour${hours > 1 ? 's' : ''}, ${minutes} minute${minutes > 1 ? 's' : ''}`;
+		}
+		if (hours) {
+			return `${hours} hour${hours > 1 ? 's' : ''}`;
+		}
+		return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
 	}
 
 
@@ -380,6 +744,7 @@ export class MasterVehicleComponent implements OnInit {
 
 
 			this.cutTillMinimum(this.min_length)	// cut the list till min length
+			this.applyPreselectedAmenities()
 
 			// fetch the last selected category
 			// this.$state.get().subscribe((data: any) =>
@@ -396,6 +761,32 @@ export class MasterVehicleComponent implements OnInit {
 			console.group('Filters List: ', this.filters)
 			console.log('--------------------------------\n\n')
 			console.groupEnd()
+		});
+	}
+
+	private applyPreselectedAmenities(): void {
+		const categoryMappings = [
+			{
+				formValues: this.quotebot_form?.chargedAmenities || [],
+				filterCategory: 'amenities'
+			},
+			{
+				formValues: this.quotebot_form?.amenities || [],
+				filterCategory: 'special-amenities'
+			}
+		];
+
+		categoryMappings.forEach(({ formValues, filterCategory }) => {
+			if (!formValues.length || !Array.isArray(this.filters.original[filterCategory])) {
+				return;
+			}
+
+			formValues.forEach((selectedId: any) => {
+				const amenity = this.filters.original[filterCategory].find((item: any) => item?.id == selectedId);
+				if (amenity) {
+					this.filterSelection(true, filterCategory, amenity);
+				}
+			});
 		});
 	}
 

@@ -607,7 +607,21 @@ export class SelectVehicleComponent implements OnInit {
 				}
 
 				this.vehicleDetails = [...response.data?.vehicleData]
-				this.quotebotNewData = response.data?.quote
+				const persistedQuote = JSON.parse(localStorage.getItem('quotebot_form') || '{}');
+				const apiQuote = response.data?.quote || {};
+				this.quotebotNewData = {
+					...persistedQuote,
+					...apiQuote,
+					extra_stops: apiQuote?.extra_stops?.length ? apiQuote.extra_stops : (persistedQuote?.extra_stops || []),
+					return_extra_stops: apiQuote?.return_extra_stops?.length ? apiQuote.return_extra_stops : (persistedQuote?.return_extra_stops || []),
+					amenities: apiQuote?.amenities?.length ? apiQuote.amenities : (persistedQuote?.amenities || []),
+					chargedAmenities: apiQuote?.chargedAmenities?.length ? apiQuote.chargedAmenities : (persistedQuote?.chargedAmenities || []),
+					location_info: apiQuote?.location_info?.length ? apiQuote.location_info : persistedQuote?.location_info,
+					other_details: {
+						...(persistedQuote?.other_details || {}),
+						...(apiQuote?.other_details || {})
+					}
+				}
 
 				// let location_info = []
 				// let tempObj = {
