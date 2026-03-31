@@ -12,7 +12,7 @@ export class CommonService {
 		const [file] = event.target.files
 		const fileType = file.type // image/jpeg
 		console.log("fileType", fileType)
-		const acceptedFiles: any = ["image/jpeg", "image/png"];
+		const acceptedFiles: any = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 		console.log(!acceptedFiles.includes(fileType))
 		if (!acceptedFiles.includes(fileType)) {
 			return this.errorModal.openDialog({
