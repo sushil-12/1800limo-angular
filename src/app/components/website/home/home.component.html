@@ -460,14 +460,14 @@
 												</div>
 											</ng-template>
 										</div>
-										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions"
-											*ngIf="QBForm?.pickup_type?.value != 'airport'">
+										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions">
 											<button type="button" class="charter-stop-add-btn"
 												(click)="addExtraStop()" [disabled]="!canAddExtraStop()"
 												aria-label="Add extra stop">
 												<i class="bi bi-plus-lg"></i>
 											</button>
 											<a href="javascript:void(0)"
+												*ngIf="QBForm?.pickup_type?.value != 'airport'"
 												(click)="useCurrentPickupLocation('pickup_address')"
 												class="text-decoration-none small font-weight-bold text-primary"
 												title="Use Current Location" tabindex="1">
@@ -751,14 +751,14 @@
 												</div>
 											</ng-template>
 										</div>
-										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions"
-											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
+										<div class="col-md-12 w-100 current_loc_button quotebot-location-actions">
 											<button type="button" class="charter-stop-add-btn"
 												(click)="addExtraStop(true)" [disabled]="!canAddExtraStop(true)"
 												aria-label="Add return extra stop">
 												<i class="bi bi-plus-lg"></i>
 											</button>
 											<a href="javascript:void(0)"
+												*ngIf="QBForm?.dropoff_type?.value != 'airport'"
 												(click)="useCurrentPickupLocation('return_pickup_address')"
 												class="text-decoration-none small font-weight-bold text-primary"
 												title="Use Current Location" tabindex="1">
