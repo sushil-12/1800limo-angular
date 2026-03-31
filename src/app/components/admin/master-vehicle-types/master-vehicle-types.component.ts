@@ -231,6 +231,23 @@ export class MasterVehicleTypesComponent implements OnInit {
 		return this.addVehicleTypeForm.controls;
 	}
 
+	private uploadSingleImageForVehicleTypes(file: File, onSuccess: (response: any) => void) {
+		const formData = new FormData();
+		formData.append('image', file, file.name);
+
+		this.adminService.uploadVehicleImageBinary(formData)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				onSuccess(response);
+				this.spinner.hide();
+			});
+	}
+
 	// async onFileChange(event) {
 	// 	if (!await this.commonServices.handleFile(event)) {
 	// 		return;
@@ -277,20 +294,12 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.homepageImageSrc = reader.result as string;
 				this.spinner.show();
 
-				this.adminService.uploadVehicleImage(this.homepageImageSrc)
-					.pipe(
-						catchError(err => {
-							this.spinner.hide();
-							return throwError(err);
-						})
-					)
-					.subscribe((response: any) => {
-						this.addVehicleTypeForm.patchValue({
-							vehicle_homepage_img: response.data.image,
-							vehicleImage: response.data.image,
-						});
-						this.spinner.hide();
+				this.uploadSingleImageForVehicleTypes(file, (response: any) => {
+					this.addVehicleTypeForm.patchValue({
+						vehicle_homepage_img: response.data.image,
+						vehicleImage: response.data.image,
 					});
+				});
 			};
 		}
 	}
@@ -435,19 +444,11 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.imageSrc = reader.result as string;
 				this.spinner.show();
 
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err => {
-							this.spinner.hide();
-							return throwError(err);
-						})
-					)
-					.subscribe((response: any) => {
-						this.editVehicleTypeForm.patchValue({
-							vehicleImage: response.data.id
-						});
-						this.spinner.hide();
+				this.uploadSingleImageForVehicleTypes(file, (response: any) => {
+					this.editVehicleTypeForm.patchValue({
+						vehicleImage: response.data.id
 					});
+				});
 			};
 		}
 	}
@@ -466,20 +467,12 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.homepageImageSrcEdit = reader.result as string;
 				this.spinner.show();
 
-				this.adminService.uploadVehicleImage(this.homepageImageSrcEdit)
-					.pipe(
-						catchError(err => {
-							this.spinner.hide();
-							return throwError(err);
-						})
-					)
-					.subscribe((response: any) => {
-						this.editVehicleTypeForm.patchValue({
-							vehicle_homepage_img: response.data.image,
-							vehicleImage: response.data.image,
-						});
-						this.spinner.hide();
+				this.uploadSingleImageForVehicleTypes(file, (response: any) => {
+					this.editVehicleTypeForm.patchValue({
+						vehicle_homepage_img: response.data.image,
+						vehicleImage: response.data.image,
 					});
+				});
 			};
 		}
 	}
