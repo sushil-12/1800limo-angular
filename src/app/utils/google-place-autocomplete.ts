@@ -1420,10 +1420,7 @@ export async function attachPlaceAutocompleteElement(
 	let valueSub: Subscription | undefined;
 	if (_options?.syncControl) {
 		valueSub = _options.syncControl.valueChanges.subscribe(() => {
-			queueMicrotask(() => {
-				nativeInput.value = _options.syncControl?.value || '';
-				syncPlaceAutocompleteDisplay(nativeInput);
-			});
+			queueMicrotask(() => syncPlaceAutocompleteDisplay(nativeInput));
 		});
 	}
 
@@ -1472,17 +1469,10 @@ export async function attachPlaceAutocompleteElement(
 	(nativeInput as unknown as Record<string, unknown>)[CLEANUP_KEY] = cleanup;
 
 	/** FormControl writes to the hidden input; the visible web component must be synced. */
-	const syncFromControl = () => {
-		if (_options?.syncControl) {
-			nativeInput.value = _options.syncControl.value || '';
-		}
-		syncPlaceAutocompleteDisplay(nativeInput);
-	};
-
-	queueMicrotask(syncFromControl);
+	queueMicrotask(() => syncPlaceAutocompleteDisplay(nativeInput));
 	queueMicrotask(() => syncRestoredPlaceAutocompleteValue(nativeInput, _options?.syncControl));
 	[100, 250, 500, 900].forEach((delay) => {
-		setTimeout(syncFromControl, delay);
+		setTimeout(() => syncPlaceAutocompleteDisplay(nativeInput), delay);
 	});
 }
 

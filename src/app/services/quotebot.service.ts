@@ -48,11 +48,6 @@ export class QuotebotService
 		return this.httpClient.get(`${this.serverUrl}get-airports`)
 	}
 
-	getAmenitiesData()
-	{
-		return this.httpClient.get(`${this.serverUrl}amenities-languages-dresses-v1?types=amenity`)
-	}
-
 	createBooking(data: any, update_type: string) {
 		if (update_type == 'return' || update_type == 'repeat') {
 			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
