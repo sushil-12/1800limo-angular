@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ChangeDetectorRef, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { StateManagementService } from '../../../../services/statemanagement.service';
@@ -31,11 +31,11 @@ export class FooterComponent implements OnInit {
 	constructor(
 		private authService: AuthService,
 		private spinner: NgxSpinnerService,
-		private adminService: AdminService,
 		private stateManagementService: StateManagementService,
 		private router: Router,
 		private errorDialogService: ErrorDialogService,
 		private cdr: ChangeDetectorRef,
+		private injector: Injector,
 
 	) { }
 
@@ -95,7 +95,7 @@ export class FooterComponent implements OnInit {
 
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
-		if (this.currentUser) {
+		if (this.currentUser && !this.shouldSkipPermissionsFetch()) {
 			this.getPermissions()
 		}
 		// Get Steps
@@ -122,9 +122,12 @@ export class FooterComponent implements OnInit {
 		})
 
 	}
+	private shouldSkipPermissionsFetch(): boolean {
+		return ['/home', '/services', '/quotebot_section'].includes(this.router.url);
+	}
 
 	getPermissions() {
-		this.adminService.getMyPermissions()
+		this.injector.get(AdminService).getMyPermissions()
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner

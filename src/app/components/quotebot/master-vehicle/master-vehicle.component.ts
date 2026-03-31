@@ -225,8 +225,9 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 	currencySymbol: any;
 	showTripSummaryPopup: boolean = true;
 	tripPreviewLegs: Array<{ title: string, distanceText: string, durationText: string }> = [];
-	tripPreviewTotalDistanceText: string = '0.00 mi';
-	tripPreviewTotalDurationText: string = '0 mins';
+	tripPreviewTotalDistanceText: string = 'Total Distance: 0.00 mi / 0.00 km';
+	tripPreviewTotalDurationText: string = 'Estimated time: 0 minutes';
+	tripPreviewStorageKey: string = '';
 	mapCenter: google.maps.LatLngLiteral = { lat: 41.8781, lng: -87.6298 };
 	mapZoom = 10;
 	mapOptions: google.maps.MapOptions = {
@@ -278,6 +279,8 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 			// fetch the user's travelling quote
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
+		this.tripPreviewStorageKey = this.buildTripPreviewStorageKey();
+		this.showTripSummaryPopup = !sessionStorage.getItem(this.tripPreviewStorageKey);
 
 		this.$activatedRoute.queryParams.subscribe((params: any) => {
 			if (params?.list == 'master') {
@@ -311,6 +314,9 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	closeTripSummaryPopup(): void {
 		this.showTripSummaryPopup = false;
+		if (this.tripPreviewStorageKey) {
+			sessionStorage.setItem(this.tripPreviewStorageKey, 'hidden');
+		}
 	}
 
 	private buildTripPreviewSummary(): void {
@@ -335,8 +341,8 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 
 		const totalDistance = locationInfo.reduce((sum: number, leg: any) => sum + Number(leg?.distance?.value || 0), 0);
 		const totalDuration = locationInfo.reduce((sum: number, leg: any) => sum + Number(leg?.duration?.value || 0), 0);
-		this.tripPreviewTotalDistanceText = `${(totalDistance / 1609.34).toFixed(2)} mi`;
-		this.tripPreviewTotalDurationText = this.convertSecondsToDuration(totalDuration);
+		this.tripPreviewTotalDistanceText = this.buildPreviewDistanceLine(totalDistance);
+		this.tripPreviewTotalDurationText = this.buildPreviewDurationLine(totalDuration);
 
 		const firstPoint = this.getRoutePoint(false, true);
 		if (firstPoint) {
@@ -398,8 +404,8 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 						.map(({ title, distanceText, durationText }) => ({ title, distanceText, durationText }));
 					const totalDistance = routeSummaries.reduce((sum, item) => sum + Number(item?.distanceValue || 0), 0);
 					const totalDuration = routeSummaries.reduce((sum, item) => sum + Number(item?.durationValue || 0), 0);
-					this.tripPreviewTotalDistanceText = `${(totalDistance / 1609.34).toFixed(2)} mi`;
-					this.tripPreviewTotalDurationText = this.convertSecondsToDuration(totalDuration);
+					this.tripPreviewTotalDistanceText = this.buildPreviewDistanceLine(totalDistance);
+					this.tripPreviewTotalDurationText = this.buildPreviewDurationLine(totalDuration);
 					response.routes.forEach((route) => {
 						route.legs.forEach((leg) => {
 							leg.steps?.forEach((step) => {
@@ -582,6 +588,62 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 		return `${minutes} mins`;
 	}
 
+	private buildPreviewDistanceLine(distanceInMeters: number): string {
+		const miles = distanceInMeters / 1609.34;
+		const kilometers = distanceInMeters / 1000;
+		return `Total Distance: ${miles.toFixed(2)} mi / ${kilometers.toFixed(2)} km`;
+	}
+
+	private buildPreviewDurationLine(totalSeconds: number): string {
+		return `Estimated time: ${this.convertSecondsToReadableDuration(totalSeconds)}`;
+	}
+
+	private buildTripPreviewStorageKey(): string {
+		const bookingIdentity = JSON.stringify({
+			service_type: this.quotebot_form?.service_type,
+			pickup_date: this.quotebot_form?.pickup_date,
+			pickup_time: this.quotebot_form?.pickup_time,
+			pickup_address: this.quotebot_form?.pickup_address,
+			pickup_address_lat: this.quotebot_form?.pickup_address_lat,
+			pickup_address_long: this.quotebot_form?.pickup_address_long,
+			dropoff_address: this.quotebot_form?.dropoff_address,
+			dropoff_address_lat: this.quotebot_form?.dropoff_address_lat,
+			dropoff_address_long: this.quotebot_form?.dropoff_address_long,
+			return_pickup_date: this.quotebot_form?.return_pickup_date,
+			return_pickup_time: this.quotebot_form?.return_pickup_time,
+			return_pickup_address: this.quotebot_form?.return_pickup_address,
+			return_pickup_address_lat: this.quotebot_form?.return_pickup_address_lat,
+			return_pickup_address_long: this.quotebot_form?.return_pickup_address_long,
+			return_dropoff_address: this.quotebot_form?.return_dropoff_address,
+			return_dropoff_address_lat: this.quotebot_form?.return_dropoff_address_lat,
+			return_dropoff_address_long: this.quotebot_form?.return_dropoff_address_long,
+			extra_stops: this.quotebot_form?.extra_stops || [],
+			return_extra_stops: this.quotebot_form?.return_extra_stops || [],
+			no_of_passenger: this.quotebot_form?.no_of_passenger,
+			no_of_luggage: this.quotebot_form?.no_of_luggage
+		});
+
+		return `quotebot_trip_preview_seen_${bookingIdentity}`;
+	}
+
+	private convertSecondsToReadableDuration(totalSeconds: number): string {
+		if (!totalSeconds) {
+			return '0 minutes';
+		}
+
+		const totalMinutes = Math.round(totalSeconds / 60);
+		const hours = Math.floor(totalMinutes / 60);
+		const minutes = totalMinutes % 60;
+
+		if (hours && minutes) {
+			return `${hours} hour${hours > 1 ? 's' : ''}, ${minutes} minute${minutes > 1 ? 's' : ''}`;
+		}
+		if (hours) {
+			return `${hours} hour${hours > 1 ? 's' : ''}`;
+		}
+		return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+	}
+
 
 	//increment/decrement in ONE WAY form
 	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
@@ -682,6 +744,7 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 			this.cutTillMinimum(this.min_length)	// cut the list till min length
+			this.applyPreselectedAmenities()
 
 			// fetch the last selected category
 			// this.$state.get().subscribe((data: any) =>
@@ -698,6 +761,32 @@ export class MasterVehicleComponent implements OnInit, AfterViewInit, OnDestroy 
 			console.group('Filters List: ', this.filters)
 			console.log('--------------------------------\n\n')
 			console.groupEnd()
+		});
+	}
+
+	private applyPreselectedAmenities(): void {
+		const categoryMappings = [
+			{
+				formValues: this.quotebot_form?.chargedAmenities || [],
+				filterCategory: 'amenities'
+			},
+			{
+				formValues: this.quotebot_form?.amenities || [],
+				filterCategory: 'special-amenities'
+			}
+		];
+
+		categoryMappings.forEach(({ formValues, filterCategory }) => {
+			if (!formValues.length || !Array.isArray(this.filters.original[filterCategory])) {
+				return;
+			}
+
+			formValues.forEach((selectedId: any) => {
+				const amenity = this.filters.original[filterCategory].find((item: any) => item?.id == selectedId);
+				if (amenity) {
+					this.filterSelection(true, filterCategory, amenity);
+				}
+			});
 		});
 	}
 

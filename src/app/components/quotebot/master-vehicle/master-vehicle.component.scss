@@ -3,8 +3,8 @@
 	position: fixed;
 	inset: 0;
 	z-index: 1055;
-	background: rgba(5, 11, 24, 0.76);
-	backdrop-filter: blur(4px);
+	background: rgba(15, 23, 42, 0.24);
+	backdrop-filter: blur(3px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -12,13 +12,15 @@
 }
 
 .trip-preview-dialog {
-	width: min(860px, 100%);
-	background: linear-gradient(180deg, #08101f 0%, #121d34 100%);
-	border: 1px solid rgba(255, 255, 255, 0.12);
+	width: min(1100px, 100%);
+	max-height: min(90vh, 980px);
+	background: linear-gradient(180deg, #fffdf8 0%, #f7f2e9 100%);
+	border: 1px solid rgba(243, 147, 61, 0.24);
 	border-radius: 24px;
-	box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
-	padding: 24px;
-	color: #fff;
+	box-shadow: 0 24px 70px rgba(31, 41, 55, 0.18);
+	padding: 28px;
+	color: #1f2937;
+	overflow: hidden;
 }
 
 .trip-preview-header {
@@ -32,6 +34,7 @@
 		margin: 4px 0 0;
 		font-size: 1.65rem;
 		font-weight: 700;
+		color: #111827;
 	}
 }
 
@@ -46,28 +49,35 @@
 .trip-preview-total {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-end;
-	padding: 12px 16px;
+	align-items: flex-start;
+	padding: 14px 18px;
 	border-radius: 16px;
-	background: rgba(255, 255, 255, 0.08);
+	background: #ffffff;
+	border: 1px solid rgba(243, 147, 61, 0.18);
+	min-width: 350px;
 
 	span {
-		font-size: 1.4rem;
+		font-size: 1rem;
 		font-weight: 700;
 		color: #ffb34d;
+		white-space: nowrap;
 	}
 
 	small {
-		font-size: 0.9rem;
-		color: rgba(255, 255, 255, 0.8);
+		font-size: 0.95rem;
+		color: #4b5563;
+		margin-top: 4px;
+		white-space: nowrap;
 	}
 }
 
 .trip-preview-map-shell {
+	margin-top: 8px;
 	border-radius: 18px;
 	overflow: hidden;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	background: #dbe7f7;
+	border: 1px solid rgba(15, 23, 42, 0.08);
+	background: #ffffff;
+	box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 .trip-preview-summary {
@@ -111,6 +121,9 @@
 	.trip-preview-dialog {
 		padding: 16px;
 		border-radius: 20px;
+		width: min(96vw, 100%);
+		max-height: 92vh;
+		overflow-y: auto;
 	}
 
 	.trip-preview-header {
@@ -120,6 +133,12 @@
 	.trip-preview-total {
 		align-items: flex-start;
 		width: 100%;
+		min-width: 0;
+
+		span,
+		small {
+			white-space: normal;
+		}
 	}
 
 	.trip-preview-actions {

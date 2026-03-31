@@ -77,6 +77,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	airports_data_dropoff: Array<any>
 	airports_data_r_pickup: Array<any>
 	airports_data_r_dropoff: Array<any>
+	availableAmenities: Array<any> = []
+	readonly inlineAmenitiesLimit: number = 4;
 
 	//For reactive form
 	quoteBotForm: FormGroup;
@@ -187,6 +189,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 		this.fetchAirportsData()
+		this.fetchAmenitiesData()
 
 		setTimeout(() => {
 
@@ -806,6 +809,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return_dropoff_address_long: ['',],
 			no_of_passenger: [1,],
 			no_of_luggage: [0,],
+			amenities: this.formBuilder.array([]),
+			chargedAmenities: this.formBuilder.array([]),
 			extra_stops: this.formBuilder.array([]),
 			return_extra_stops: this.formBuilder.array([]),
 			location_info: this.formBuilder.array([],),
@@ -996,6 +1001,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				no_of_luggage: Math.max(0, previous_quotebot?.no_of_luggage || 0),
 				location_info: previous_quotebot?.location_info
 			})
+			this.patchAmenitySelections('amenities', previous_quotebot?.amenities || [])
+			this.patchAmenitySelections('chargedAmenities', previous_quotebot?.chargedAmenities || [])
 			this.ExtraStops.clear();
 			(previous_quotebot?.extra_stops || []).forEach((stop: any) => {
 				this.ExtraStops.push(this.formBuilder.group({
@@ -1039,6 +1046,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				no_of_passenger: 1,
 				no_of_luggage: 0,
 			})
+			this.patchAmenitySelections('amenities', [])
+			this.patchAmenitySelections('chargedAmenities', [])
 
 			this.quoteBotSwitch('one_way')
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
@@ -1155,6 +1164,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		})
 	}
 
+	fetchAmenitiesData() {
+		this.quotebotService.getAmenitiesData().subscribe((response: any) => {
+			const amenities = response?.data?.amenity || response?.data || [];
+			this.availableAmenities = response?.success ? amenities : [];
+		})
+	}
+
 	returnSearchAirport(searchText: string) {
 		console.log('search text is->', searchText);
 
@@ -1267,6 +1283,52 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	SetFormValidator(field_name: string, validators: Array<any>): void {
 		this.quoteBotForm.get(field_name).setValidators(validators)
 		this.quoteBotForm.updateValueAndValidity()
+	}
+
+	private getAmenityFormArray(formControlName: 'amenities' | 'chargedAmenities'): FormArray {
+		return this.quoteBotForm.get(formControlName) as FormArray;
+	}
+
+	private patchAmenitySelections(formControlName: 'amenities' | 'chargedAmenities', values: Array<any>): void {
+		const formArray = this.getAmenityFormArray(formControlName);
+		formArray.clear();
+		values.forEach((value: any) => formArray.push(new FormControl(value)));
+	}
+
+	get inlineAmenities(): Array<any> {
+		return this.availableAmenities.slice(0, this.inlineAmenitiesLimit);
+	}
+
+	get hasMoreAmenities(): boolean {
+		return this.availableAmenities.length > this.inlineAmenitiesLimit;
+	}
+
+	get chargeableAmenities(): Array<any> {
+		return this.availableAmenities.filter((amenity: any) => amenity?.chargeable === 'yes');
+	}
+
+	get nonChargeableAmenities(): Array<any> {
+		return this.availableAmenities.filter((amenity: any) => amenity?.chargeable !== 'yes');
+	}
+
+	isAmenitySelected(amenity: any): boolean {
+		const formControlName = amenity?.chargeable === 'yes' ? 'chargedAmenities' : 'amenities';
+		return this.getAmenityFormArray(formControlName).value.includes(amenity?.id);
+	}
+
+	toggleAmenitySelection(amenity: any, checked: boolean): void {
+		const formControlName = amenity?.chargeable === 'yes' ? 'chargedAmenities' : 'amenities';
+		const formArray = this.getAmenityFormArray(formControlName);
+		const index = formArray.value.findIndex((item: any) => item == amenity?.id);
+
+		if (checked && index === -1) {
+			formArray.push(new FormControl(amenity?.id));
+			return;
+		}
+
+		if (!checked && index > -1) {
+			formArray.removeAt(index);
+		}
 	}
 
 

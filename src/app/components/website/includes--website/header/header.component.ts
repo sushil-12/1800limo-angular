@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ChangeDetectorRef, Injector } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { StateManagementService } from '../../../../services/statemanagement.service';
 import { NavigationEnd, Router, Scroll } from '@angular/router';
@@ -33,11 +33,11 @@ export class HeaderComponent implements OnInit {
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private authService: AuthService,
-		private adminService: AdminService,
 		private stateManagementService: StateManagementService,
 		private errorDialogService: ErrorDialogService,
 		private elementRef: ElementRef,
 		private cdr: ChangeDetectorRef,
+		private injector: Injector,
 
 	) {
 		this.router.events.pipe(filter(e => e instanceof Scroll)).subscribe((e: any) => {
@@ -142,7 +142,7 @@ export class HeaderComponent implements OnInit {
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
 		console.log('NGINIT HEADER - Current User:', this.currentUser);
-		if (this.currentUser) {
+		if (this.currentUser && !this.shouldSkipPermissionsFetch()) {
 			this.getPermissions()
 		}
 		// Get Steps
@@ -212,8 +212,11 @@ export class HeaderComponent implements OnInit {
 		// 	}
 		// }, 300)
 	}
+	private shouldSkipPermissionsFetch(): boolean {
+		return ['/home', '/services', '/quotebot_section'].includes(this.router.url);
+	}
 	getPermissions() {
-		this.adminService.getMyPermissions()
+		this.injector.get(AdminService).getMyPermissions()
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner

@@ -4,8 +4,7 @@
 	<div class="trip-preview-dialog">
 		<div class="trip-preview-header">
 			<div>
-				<p class="trip-preview-eyebrow">Trip Preview</p>
-				<h3>Your route is ready</h3>
+				<h3>Trip Preview</h3>
 			</div>
 			<div class="trip-preview-total">
 				<span>{{ tripPreviewTotalDistanceText }}</span>
@@ -14,17 +13,9 @@
 		</div>
 
 		<div class="trip-preview-map-shell">
-			<google-map #tripPreviewMap height="260px" width="100%" [center]="mapCenter" [zoom]="mapZoom"
+			<google-map #tripPreviewMap height="420px" width="100%" [center]="mapCenter" [zoom]="mapZoom"
 				[options]="mapOptions">
 			</google-map>
-		</div>
-
-		<div class="trip-preview-summary">
-			<div class="trip-preview-card" *ngFor="let leg of tripPreviewLegs">
-				<strong>{{ leg.title }}</strong>
-				<span>{{ leg.distanceText }}</span>
-				<small>{{ leg.durationText }}</small>
-			</div>
 		</div>
 
 		<div class="trip-preview-actions">

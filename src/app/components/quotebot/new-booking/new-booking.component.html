@@ -895,12 +895,10 @@
 				<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 					<div class="row px-2">
 						<div class="col-md-12 ml-2" id="pickup_address">
-							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.pickup.invalid) }">
-								<mat-label> Pickup Address </mat-label>
-								<input #pickupInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
-									(keyup)="SetFormValue('pickup', $event.target.value)"
-									(input)="SetFormValue('pickup', $event.target.value)" />
+								<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.pickup.invalid) }">
+									<mat-label> Pickup Address </mat-label>
+									<input #pickupInput type="text" matInput placeholder="Type your address"
+										formControlName="pickup" (focus)="$event.target.select()" />
 								<button matSuffix type="button" class="address-clear-btn"
 									*ngIf="shouldShowAddressClear(pickupInput, 'pickup')"
 									(click)="clearAddressField('pickup')" aria-label="Clear pickup address">
@@ -1136,9 +1134,7 @@
 							<mat-form-field appearance="outline" [ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff.invalid) }">
 								<mat-label> Dropoff Address </mat-label>
 								<input #dropoffInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
-									(keyup)="SetFormValue('dropoff', $event.target.value)"
-									(input)="SetFormValue('dropoff', $event.target.value)" />
+									formControlName="dropoff" (focus)="$event.target.select()" />
 								<button matSuffix type="button" class="address-clear-btn"
 									*ngIf="shouldShowAddressClear(dropoffInput, 'dropoff')"
 									(click)="clearAddressField('dropoff')" aria-label="Clear dropoff address">
@@ -1322,7 +1318,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<input #extraStopInput type="text" matInput placeholder="Type your address"
-								[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
+								[formControl]="extra_stop.get('address')" (focus)="$event.target.select()" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="shouldShowAddressClear(extraStopInput, 'extra_stops', stop_index)"
 								(click)="clearAddressField('extra_stops', stop_index)" aria-label="Clear extra stop address">
@@ -1767,9 +1763,7 @@
 								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup.invalid) }">
 								<mat-label> Pickup Address </mat-label>
 								<input #return_pickupInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
-									(keyup)="SetFormValue('return_pickup', $event.target.value)"
-									(input)="SetFormValue('return_pickup', $event.target.value)" />
+									formControlName="return_pickup" (focus)="$event.target.select()" />
 								<button matSuffix type="button" class="address-clear-btn"
 									*ngIf="shouldShowAddressClear(return_pickupInput, 'return_pickup')"
 									(click)="clearAddressField('return_pickup')" aria-label="Clear return pickup address">
@@ -2013,10 +2007,7 @@
 								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff.invalid) }">
 								<mat-label> Dropoff Address </mat-label>
 								<input #return_dropoffInput type="text" matInput placeholder="Type your address"
-									[value]="fillValue(null, 'return_dropoff', null)"
-									(focus)="$event.target.select()"
-									(keyup)="SetFormValue('return_dropoff', $event.target.value)"
-									(input)="SetFormValue('return_dropoff', $event.target.value)" />
+									formControlName="return_dropoff" (focus)="$event.target.select()" />
 								<button matSuffix type="button" class="address-clear-btn"
 									*ngIf="shouldShowAddressClear(return_dropoffInput, 'return_dropoff')"
 									(click)="clearAddressField('return_dropoff')" aria-label="Clear return dropoff address">
@@ -2226,7 +2217,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
-								[value]="fetchStopValue('return_extra_stops', stop_index)"
+								[formControl]="extra_stop.get('address')"
 								(focus)="$event.target.select()" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="shouldShowAddressClear(returnExtraStopInput, 'return_extra_stops', stop_index)"
