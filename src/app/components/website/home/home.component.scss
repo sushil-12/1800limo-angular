@@ -1272,6 +1272,10 @@ a.user-profile:active::after {
 // Airport autocomplete rows: GMP field with internal plane icon + circular clear button
 .input-contain--airport {
 	position: relative;
+	background-color: #fff !important;
+	border-radius: 14px;
+	--app-place-bg: #fff;
+	--app-place-text: #000;
 
 	.input-box {
 		flex: 1;
@@ -1280,11 +1284,24 @@ a.user-profile:active::after {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		background-color: #fff !important;
+		border-radius: 14px !important;
 	}
 
+	gmp-place-autocomplete,
 	input {
+		background-color: #fff !important;
+		color: #000 !important;
 		padding-right: 42px !important;
 	}
+}
+
+.bannerform_wrapper .quoteform_homewrapper .input-contain--airport,
+.bannerform_wrapper .quoteform_homewrapper .input-contain--airport .input-box,
+.bannerform_wrapper .quoteform_homewrapper .input-contain--airport gmp-place-autocomplete,
+.bannerform_wrapper .quoteform_homewrapper .input-contain--airport input {
+	background-color: #fff !important;
+	color: #000 !important;
 }
 
 .airport-clear-wrap {

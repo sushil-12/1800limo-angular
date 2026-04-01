@@ -148,6 +148,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	isVehicleLoading = true;
 
 	ngOnInit() {
+		this.spinner.hide();
+		this.spinner.hide('fetchspinner');
+		this.spinner.hide('normalspinner');
+		this.spinner.hide('savespinner');
+
 		// Set SEO Metadata for Home Page matching index.html
 		this.titleService.setTitle('1800 Limo - Premium Chauffeur & Luxury Transportation Services');
 		this.metaService.updateTag({ name: 'description', content: '1800 Limo offers premium chauffeur services, luxury vehicle hire, and airport transfers worldwide. Book your ride today.' });

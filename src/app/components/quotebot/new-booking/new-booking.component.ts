@@ -301,8 +301,28 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			if (existing) {
 				existing.destroy();
 			}
-			const telOptions: any = this.commonServices.getTelInputOptions();
+			const looseCustomerGroup = this.BookingForm.get('loose_customer') as FormGroup;
+			const lcCountry = String(
+				looseCustomerGroup?.get('phone_country')?.value
+				|| this.BookingForm.get('passenger_cell_country')?.value
+				|| 'us'
+			).toLowerCase();
+			const telOptions: any = this.commonServices.getTelInputOptions(lcCountry);
 			this.PaxTelObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+			this.LCTelObject = this.PaxTelObject;
+
+			const countryData = this.PaxTelObject.getSelectedCountryData();
+			if (countryData?.dialCode) {
+				looseCustomerGroup.patchValue({
+					phone_isd: '+' + countryData.dialCode,
+					phone_country: countryData.iso2
+				}, { emitEvent: false });
+
+				this.BookingForm.patchValue({
+					passenger_cell_isd: '+' + countryData.dialCode,
+					passenger_cell_country: countryData.iso2
+				}, { emitEvent: false });
+			}
 
 			this.addCustomCountrySearch(this.cellInput.nativeElement);
 
@@ -1470,6 +1490,136 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		this.initAllAutocompletes()
 	}
 
+	private clearRoundTripOnlyValidators(): void {
+		console.log('quotebot/new-booking clearRoundTripOnlyValidators');
+		[
+			'return_pickup',
+			'return_dropoff',
+			'return_dropoff_airport_option',
+			'return_dropoff_airline_option',
+			'return_pickup_flight',
+			'return_pickup_airline_option',
+			'return_pickup_airport_option',
+			'return_cruise_name',
+			'return_cruise_port',
+			'departing_airport_city'
+		].forEach((controlName) => {
+			const control = this.BookingForm.get(controlName);
+			control?.clearValidators();
+			control?.updateValueAndValidity({ emitEvent: false });
+		});
+	}
+
+	private syncNumberOfHoursValidation(serviceType: string): void {
+		const control = this.BookingForm.get('number_of_hours');
+		if (!control) {
+			return;
+		}
+
+		if (serviceType === 'charter_tour') {
+			control.setValidators([Validators.required, Validators.min(2)]);
+			if (!control.value || Number(control.value) < 2) {
+				control.setValue(2, { emitEvent: false });
+				this.number_of_hours = 2;
+			}
+			this.numberOfHoursError = Number(control.value) < 2;
+		} else {
+			control.clearValidators();
+			control.setErrors(null);
+			control.setValue(0, { emitEvent: false });
+			control.markAsPristine();
+			control.markAsUntouched();
+			this.number_of_hours = 0;
+			this.numberOfHoursError = false;
+		}
+
+		control.updateValueAndValidity({ emitEvent: false });
+	}
+
+	private refreshTripValidationState(): void {
+		const currentTransferType = this.BookingForm.get('transfer_type')?.value;
+		const currentReturnTransferType = this.BookingForm.get('return_transfer_type')?.value
+			|| (typeof currentTransferType === 'string' ? currentTransferType.split('_').reverse().join('_') : '');
+		console.log('quotebot/new-booking refreshTripValidationState:start', {
+			service_type: this.BookingForm.get('service_type')?.value,
+			transfer_type: currentTransferType,
+			return_transfer_type: currentReturnTransferType
+		});
+
+		this.syncNumberOfHoursValidation(this.BookingForm.get('service_type')?.value);
+
+		if (currentTransferType) {
+			this.BookingForm.get('transfer_type')?.setValue(currentTransferType);
+		}
+
+		if (currentReturnTransferType) {
+			this.BookingForm.get('return_transfer_type')?.setValue(currentReturnTransferType);
+			this.return_transfer_type = currentReturnTransferType;
+		}
+
+		this.BookingForm.updateValueAndValidity({ emitEvent: false });
+		console.log('quotebot/new-booking refreshTripValidationState:end', {
+			status: this.BookingForm.status,
+			invalidControls: this.collectInvalidControlPaths(this.BookingForm)
+		});
+	}
+
+	private collectInvalidControlPaths(
+		control: AbstractControl | null | undefined,
+		path = ''
+	): string[] {
+		if (!control) {
+			return [];
+		}
+
+		if (control instanceof FormControl) {
+			return control.invalid ? [path || '(root)'] : [];
+		}
+
+		if (control instanceof FormGroup) {
+			return Object.keys(control.controls).flatMap((key) =>
+				this.collectInvalidControlPaths(control.get(key), path ? `${path}.${key}` : key)
+			);
+		}
+
+		if (control instanceof FormArray) {
+			return control.controls.flatMap((child, index) =>
+				this.collectInvalidControlPaths(child, `${path}[${index}]`)
+			);
+		}
+
+		return [];
+	}
+
+	private resyncValidationForCurrentServiceType(): void {
+		const serviceType = this.BookingForm.get('service_type')?.value;
+		console.log('quotebot/new-booking resyncValidationForCurrentServiceType', {
+			service_type: serviceType,
+			transfer_type: this.BookingForm.get('transfer_type')?.value,
+			return_transfer_type: this.BookingForm.get('return_transfer_type')?.value
+		});
+
+		if (serviceType === 'round_trip') {
+			this.refreshTripValidationState();
+			return;
+		}
+
+		if (serviceType === 'charter_tour') {
+			this.syncNumberOfHoursValidation(serviceType);
+			this.clearRoundTripOnlyValidators();
+			this.BookingForm.get('pickup')?.clearValidators();
+			this.BookingForm.get('pickup')?.updateValueAndValidity({ emitEvent: false });
+			this.BookingForm.get('dropoff')?.clearValidators();
+			this.BookingForm.get('dropoff')?.updateValueAndValidity({ emitEvent: false });
+		}
+
+		if (serviceType !== 'charter_tour') {
+			this.syncNumberOfHoursValidation(serviceType);
+		}
+
+		this.BookingForm.updateValueAndValidity({ emitEvent: false });
+	}
+
 	chooseUser(account_id: number) {
 		// this.$spinner.show()
 		// this.chosen_user = {}
@@ -2169,6 +2319,12 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+		this.resyncValidationForCurrentServiceType();
+		console.group('quotebot/new-booking submitForm');
+		console.log('preview', preview);
+		console.log('service_type', this.BookingForm.get('service_type')?.value);
+		console.log('transfer_type', this.BookingForm.get('transfer_type')?.value);
+		console.log('return_transfer_type', this.BookingForm.get('return_transfer_type')?.value);
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
 
@@ -2223,6 +2379,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 			this.BookingForm.get('loose_customer.phone').setValue(this.BookingForm.get('loose_customer.phone').value.substring(this.BookingForm.get('loose_customer.phone_isd').value.length));
 		}
 		if (this.BookingForm.invalid || this.numberOfHoursError) {
+			console.log('quotebot/new-booking invalid controls', this.collectInvalidControlPaths(this.BookingForm));
+			console.groupEnd();
 			return;
 		}
 
@@ -2267,6 +2425,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 		else {
 			$('#previewBooking').modal('handleUpdate').modal('show')
 		}
+		console.groupEnd();
 	}
 
 	resetFields() {
@@ -2391,17 +2550,27 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
+			console.log('quotebot/new-booking service_type changed', {
+				value,
+				transfer_type: this.BookingForm.get('transfer_type')?.value,
+				return_transfer_type: this.BookingForm.get('return_transfer_type')?.value
+			});
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
-				this.initAllAutocompletes()
 				this.init_return_rates = true;
 				setTimeout(() => {
+					this.refreshTripValidationState();
+					this.initAllAutocompletes()
+					this.MapController()
 					this.MapController(true)
-				}, 2000)
+				}, 0)
+			}
+			if (value == 'charter_tour') {
+				this.syncNumberOfHoursValidation(value);
+				this.clearRoundTripOnlyValidators();
 			}
 			if (value != 'charter_tour') {
-				this.BookingForm.get('number_of_hours').setValue(0)
-				this.numberOfHoursError = false;
+				this.syncNumberOfHoursValidation(value);
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}
@@ -2424,6 +2593,11 @@ export class NewBookingComponent implements OnInit, AfterViewInit {
 				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
 				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
 			}
+			console.log('quotebot/new-booking service_type changed:end', {
+				value,
+				status: this.BookingForm.status,
+				invalidControls: this.collectInvalidControlPaths(this.BookingForm)
+			});
 		})
 
 		// Transfer Type

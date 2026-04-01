@@ -100,7 +100,7 @@
 								<mat-label>
 									Number of Hours
 								</mat-label>
-								<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+								<input type="number" [attr.min]="Form.service_type.value == 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
 									formControlName="number_of_hours" [(ngModel)]="number_of_hours"
 									(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
 									(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
@@ -1281,7 +1281,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<input #extraStopInput type="text" matInput placeholder="Type your address"
-								[value]="fetchStopValue('extra_stops', stop_index)" (focus)="$event.target.select()" />
+								[formControl]="extra_stop.get('address')" (focus)="$event.target.select()" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="shouldShowAddressClear(extraStopInput, 'extra_stops', stop_index)"
 								(click)="clearAddressField('extra_stops', stop_index)" aria-label="Clear extra stop address">
@@ -2185,7 +2185,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
-								[value]="fetchStopValue('return_extra_stops', stop_index)"
+								[formControl]="extra_stop.get('address')"
 								(focus)="$event.target.select()" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="shouldShowAddressClear(returnExtraStopInput, 'return_extra_stops', stop_index)"
