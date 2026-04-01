@@ -925,43 +925,22 @@
 					<div class="row px-2 ml-2">
 						<!-- Airport -->
 						<div class="col-md-6" id="pickup_address">
-							<!-- <mat-form-field appearance="outline">
-								<mat-label>
-									Airport
-								</mat-label>
-								<input #searchInput type="search" matInput
-									placeholder="Search For Airport" (focus)="$event.target.select()"
-									aria-label="Airport" [matAutocomplete]="onwy_airport"
-									(click)="openAutoCompletePanel()"
-									(keyup)="searchValue('airportsData', $event.target.value, 'name')"
-									formControlName="pickup_airport_name" />
-								<mat-autocomplete #onwy_airport="matAutocomplete">
-									<mat-option *ngFor="let option of BigData?.airportsData"
-										(click)="SetFormValue('pickup_airport', option.id)">
-										{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-										option.country }}
-									</mat-option>
-								</mat-autocomplete>
-							</mat-form-field> -->
-
-							<!-- Ng-Select - Pickup > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
-								placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="pickup_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
+							<mat-form-field appearance="outline" class="airport-autocomplete-field"
+								[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup_airport_option.invalid) }">
+								<mat-label>Pickup Airport</mat-label>
+								<input #pickupAirportInput type="text" matInput
+									placeholder="Select Airport (Search by airport code or name)"
+									formControlName="pickup_airport_option" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="Form.pickup_airport_option.value || pickupAirportInput?.value"
+									(click)="clearAirportField('pickup_airport')" aria-label="Clear pickup airport">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
+							</mat-form-field>
 							<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.pickup_airport_option.errors.required">This field is required</div>
 							</div>
-
-
 						</div>
 
 						<!-- FBO new filed -->
@@ -1162,38 +1141,18 @@
 					<div class="row ml-1">
 						<!-- Airport -->
 						<div class="col-md-6">
-							<!-- <mat-form-field appearance="outline">
-								<mat-label>
-									Airport
-								</mat-label>
-								<input #searchInput type="text" matInput
-									placeholder="Search For Airport" aria-label="Airport"
-									formControlName="dropoff_airport_name"
-									(click)="openAutoCompletePanel()"
-									(keyup)="searchValue('airportsData', $event.target.value, 'name')"
-									[matAutocomplete]="onwy_drop_airport"
-									(focus)="$event.target.select()" />
-								<mat-autocomplete #onwy_drop_airport="matAutocomplete">
-									<mat-option *ngFor="let option of BigData?.airportsData"
-										(click)="SetFormValue('dropoff_airport', option.id)">
-										{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-										option.country }}
-									</mat-option>
-								</mat-autocomplete>
-							</mat-form-field> -->
-
-							<!-- Ng-Select > Dropoff > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
-								placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="dropoff_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
+							<mat-form-field appearance="outline" class="airport-autocomplete-field"
+								[ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff_airport_option.invalid) }">
+								<mat-label>Dropoff Airport</mat-label>
+								<input #dropoffAirportInput type="text" matInput
+									placeholder="Select Airport (Search by airport code or name)"
+									formControlName="dropoff_airport_option" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="Form.dropoff_airport_option.value || dropoffAirportInput?.value"
+									(click)="clearAirportField('dropoff_airport')" aria-label="Clear dropoff airport">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
+							</mat-form-field>
 							<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.dropoff_airport_option.errors.required">This field is required</div>
@@ -1814,18 +1773,18 @@
 								</mat-autocomplete>
 						</mat-form-field> -->
 
-							<!-- Ng-Select > Return > Pickup > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
-								bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="return_pickup_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
+							<mat-form-field appearance="outline" class="airport-autocomplete-field"
+								[ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup_airport_option.invalid) }">
+								<mat-label>Return Pickup Airport</mat-label>
+								<input #returnPickupAirportInput type="text" matInput
+									placeholder="Select Airport (Search by airport code or name)"
+									formControlName="return_pickup_airport_option" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="Form.return_pickup_airport_option.value || returnPickupAirportInput?.value"
+									(click)="clearAirportField('return_pickup_airport')" aria-label="Clear return pickup airport">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
+							</mat-form-field>
 							<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.return_pickup_airport_option.errors.required">This field is required
@@ -2062,18 +2021,18 @@
 								</mat-autocomplete>
 							</mat-form-field> -->
 
-							<!-- Ng-Select > Return > Dropoff > Airport -->
-							<ng-select appearance="outline" [items]="BigData?.airportsData"
-								[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
-								bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
-								dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-								formControlName="return_dropoff_airport_option"
-								[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
-								style="height:66px;">
-								<ng-template ng-option-tmp let-item="item">
-									<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-								</ng-template>
-							</ng-select>
+							<mat-form-field appearance="outline" class="airport-autocomplete-field"
+								[ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }">
+								<mat-label>Return Dropoff Airport</mat-label>
+								<input #returnDropoffAirportInput type="text" matInput
+									placeholder="Select Airport (Search by airport code or name)"
+									formControlName="return_dropoff_airport_option" />
+								<button matSuffix type="button" class="address-clear-btn"
+									*ngIf="Form.return_dropoff_airport_option.value || returnDropoffAirportInput?.value"
+									(click)="clearAirportField('return_dropoff_airport')" aria-label="Clear return dropoff airport">
+									<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								</button>
+							</mat-form-field>
 							<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.return_dropoff_airport_option.errors.required">This field is required

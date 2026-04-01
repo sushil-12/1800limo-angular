@@ -466,7 +466,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 					const formattedAddress = place.formatted_address ?? '';
 					const placeName = (place.name ?? '').trim();
-					const airportDisplayName = placeName || formattedAddress;
+					const airportDisplayName = this.getAirportSelectionLabel(placeName, formattedAddress);
 
 					this.onAirportSelected({
 						id: place.place_id ?? '',
@@ -477,6 +477,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				});
 			}
 		);
+	}
+
+	getAirportSelectionLabel(placeName: string, formattedAddress: string): string {
+		const normalizedName = String(placeName || '').trim();
+		const normalizedAddress = String(formattedAddress || '').trim();
+
+		if (normalizedName && normalizedAddress) {
+			if (normalizedAddress === normalizedName || normalizedAddress.startsWith(`${normalizedName} - `)) {
+				return normalizedAddress;
+			}
+			return `${normalizedName} - ${normalizedAddress}`;
+		}
+
+		return normalizedName || normalizedAddress;
 	}
 
 	shouldShowAddressClear(inputRef: ElementRef | HTMLInputElement | undefined, controlName: string): boolean {

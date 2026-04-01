@@ -2734,7 +2734,7 @@
 			<!-- AGM Map -->
 		</div>
 		<!-- IF ROUND TRIP Section - Return Affiliate/Loose Details -->
-		<div class="section-container mt-2" *ngIf="service_type == 'round_trip' ">
+		<div class="section-container mt-2" *ngIf="Form.service_type.value == 'round_trip' ">
 			<h4 class=" border-secondary">
 				Return Affiliate Details
 			</h4>
@@ -2892,7 +2892,7 @@
 		<!-- Affiliate Vehicle Information -->
 		<!-- New section conatiner for Vehicle details -->
 		<div class="section-container mt-2"
-			*ngIf="service_type == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
+			*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
 			<h4>
 				Vehicle Preferences
 			</h4>
@@ -3120,7 +3120,7 @@
 		<!-- Affiliate Driver Information -->
 		<!-- && currentUser?.created_by_role != 'subscriber' -->
 		<div class="section-container mt-2"
-			*ngIf="service_type == 'round_trip' && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
+			*ngIf="Form.service_type.value == 'round_trip' && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
 			<h4 style="margin-bottom: 0;">
 				Driver Preferences
 			</h4>
@@ -3283,6 +3283,7 @@
 
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			[return_affiliate_type]="Form.return_affiliate_type.value"
 			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[isTravelShare]="isTravelShare"
 			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates"
@@ -4462,7 +4463,7 @@
 
 				<!--Return Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -4594,7 +4595,7 @@
 
 				<!-- Return Loose Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && service_type == 'round_trip' then returnlooseAffiliate">
+					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' then returnlooseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
@@ -4709,7 +4710,7 @@
 
 				<hr>
 
-				<div *ngIf="service_type == 'round_trip' ">
+				<div *ngIf="Form.service_type.value == 'round_trip' ">
 					<!-- Driver Information -->
 
 					<h4 class="font-weight-bolder m-0 mt-3">

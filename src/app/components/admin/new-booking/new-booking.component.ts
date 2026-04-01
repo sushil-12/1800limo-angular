@@ -301,12 +301,16 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('rebuild booking data')
 		const vehicleId = this.BookingForm.get('vehicle_id').value;
 		const returnVehicleId = this.BookingForm.get('return_vehicle_id').value || vehicleId;
+		const affiliateId = this.BookingForm.get('affiliate_id').value;
+		const returnAffiliateId = this.BookingForm.get('return_affiliate_id').value || affiliateId;
 		const affiliateType = this.BookingForm.get('affiliate_type').value;
 		const returnAffiliateType = this.BookingForm.get('return_affiliate_type').value || affiliateType;
 		const transferType = this.BookingForm.get('transfer_type').value;
 		const returnTransferType = this.BookingForm.get('return_transfer_type').value;
 		const serviceType = this.BookingForm.get('service_type').value;
 		this.booking_data = {
+			affiliate_id: affiliateId,
+			return_affiliate_id: returnAffiliateId,
 			vehicle_id: vehicleId,
 			return_vehicle_id: returnVehicleId,
 			transfer_type: transferType,
@@ -1712,10 +1716,17 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		const displayName = typeof airport?.displayName === 'string'
 			? airport.displayName
 			: airport?.displayName?.text;
+		const primaryName = airport?.name || displayName || '';
+		const displayValue = this.getAirportDisplayValue(airport);
 
-		return airport?.name
-			|| displayName
-			|| this.getAirportDisplayValue(airport);
+		if (primaryName && displayValue) {
+			if (displayValue === primaryName || displayValue.startsWith(`${primaryName} - `)) {
+				return displayValue;
+			}
+			return `${primaryName} - ${displayValue}`;
+		}
+
+		return primaryName || displayValue;
 	}
 
 	normalizeAirportMatchText(value: any): string {
@@ -3505,6 +3516,61 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		return str.startsWith('+') ? str : '+' + str;
 	}
 
+	private syncMissingReturnVehicleFromOutbound(): void {
+		if (this.service_type !== 'round_trip' || this.Form.return_vehicle_type.value) {
+			return;
+		}
+
+		const outboundVehicleType = this.Form.vehicle_type.value;
+		if (!outboundVehicleType) {
+			return;
+		}
+
+		console.log('admin/new-booking syncMissingReturnVehicleFromOutbound', {
+			return_affiliate_type: this.Form.return_affiliate_type.value,
+			outbound_vehicle_type: this.Form.vehicle_type.value,
+			outbound_vehicle_id: this.Form.vehicle_id.value
+		});
+
+		[
+			'return_vehicle_type',
+			'return_vehicle_type_name',
+			'return_vehicle_id',
+			'return_vehicle_make',
+			'return_vehicle_make_name',
+			'return_vehicle_model',
+			'return_vehicle_model_name',
+			'return_vehicle_year',
+			'return_vehicle_year_name',
+			'return_vehicle_color',
+			'return_vehicle_color_name',
+			'return_vehicle_license_plate',
+			'return_vehicle_seats',
+			'return_cancellation_hours'
+		].forEach((controlName) => {
+			const outboundControl = controlName.replace(/^return_/, '');
+			this.SetFormValue(controlName, this.BookingForm.get(outboundControl)?.value, false);
+		});
+
+		if (!this.Form.return_driver_name.value && this.Form.driver_name.value) {
+			[
+				'return_driver_id',
+				'return_driver_name',
+				'return_driver_gender',
+				'return_driver_cell',
+				'return_driver_cell_isd',
+				'return_driver_cell_country',
+				'return_driver_email',
+				'return_driver_phone_type'
+			].forEach((controlName) => {
+				const outboundControl = controlName.replace(/^return_/, '');
+				this.SetFormValue(controlName, this.BookingForm.get(outboundControl)?.value, false);
+			});
+		}
+
+		this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity({ emitEvent: false });
+	}
+
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
@@ -3583,6 +3649,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			driver_cell_isd: this.ensurePlusPrefix(this.BookingForm?.get('driver_cell_isd')?.value),
 			lose_affiliate_phone_isd: this.ensurePlusPrefix(this.BookingForm?.get('lose_affiliate_phone_isd')?.value)
 		});
+
+		this.syncMissingReturnVehicleFromOutbound();
 
 		// this.BookingForm['currency'] = this.currencyObj?.currency
 		if (this.service_type == 'round_trip') {
@@ -4011,6 +4079,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 		// Service Type
 		this.BookingForm?.get('service_type')?.valueChanges.subscribe((value: string) => {
+			this.service_type = value;
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				setTimeout(() => {
@@ -4817,7 +4886,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate vehicle_type', value)
 				if (value) {
-					this.return_VehicleList.map(i => (i.unique_key == this.return_unique_key) ? this.handleSelectVehicleType(i) : '')
+					this.return_VehicleList.map(i => (i.unique_key == this.return_unique_key) ? this.handleReturnSelectVehicleType(i) : '')
 				}
 				else {
 					this.SetFormValue('return_vehicle_type_name', '');
@@ -4835,6 +4904,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			} else {
 				if (value && this.BigData) {
 					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					this.SetFormValue('return_vehicle_type_name', name);
 					this.BookingForm.get('return_vehicle_make').setValue('')
 					this.BookingForm.get('return_vehicle_make_name').setValue('')
 					this.BookingForm.get('return_vehicle_model').setValue('')
