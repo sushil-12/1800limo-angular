@@ -172,6 +172,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	selectedVehicle: any;
 	return_selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
+	route_is_master_vehicle: boolean | null = null
 	isTravelShare: boolean = false
 	travelStaffAccounts: any;
 	manual_change_aff_veh: boolean = false;
@@ -180,6 +181,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	r_shareArray: any;
 	adminSharePercent: number = 25;
 	isFarmoutBooking: boolean = false;
+	private isPrefillingTransferTypes: boolean = false;
 	AffiliateAccounts_copy: any;
 	public canceloptions: Array<Object>;
 	currencySymbol: any;
@@ -215,6 +217,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.buildBookingForm()
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			const isNewBookingFlow = params?.new === true || params?.new === 'true';
+			const hasMasterVehicleParam = params?.is_master_vehicle !== undefined;
+			const routeIsMasterVehicle = params?.is_master_vehicle === true || params?.is_master_vehicle === 'true';
 			console.log('admin/new-booking queryParams', params, { isNewBookingFlow });
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
@@ -227,6 +231,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.newBooking = true
 				this.affiliate_id = parseInt(params?.affiliate_id)
 				this.booking_created_from = params?.created_by
+				if (hasMasterVehicleParam) {
+					this.route_is_master_vehicle = routeIsMasterVehicle;
+					this.is_master_vehicle = routeIsMasterVehicle;
+				}
 			}
 			else if (params?.reaffiliate_book_id) {
 				this.updateType = params?.updateType
@@ -240,6 +248,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 			// this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData')) ? JSON.parse(sessionStorage.getItem('currencyData')) : null
 			this.currencySymbol = JSON.parse(localStorage.getItem('currencySymbol'))
+			console.log('admin/new-booking is_master_vehicle source', {
+				routeValue: params?.is_master_vehicle,
+				routeResolved: hasMasterVehicleParam ? routeIsMasterVehicle : 'no-param',
+				sessionValue: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle,
+				finalValue: this.is_master_vehicle
+			});
 
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
@@ -4079,6 +4093,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			console.log('current component service_type', this.service_type);
 			console.log('current component transfer_type before update', this.transfer_type);
 			console.log('current form return_transfer_type before sync', this.BookingForm?.get('return_transfer_type')?.value);
+			console.log('isPrefillingTransferTypes', this.isPrefillingTransferTypes);
 			console.log("in transfer_type value changes", value)
 
 			// pickup address mandatory
@@ -4303,9 +4318,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
 			}
-			this.SetFormValue('return_transfer_type', reverseStringChars(value), false)
-			this.return_transfer_type = reverseStringChars(value)
-			this.updateReturnLegValidators(this.return_transfer_type);
+			if (!this.isPrefillingTransferTypes) {
+				this.SetFormValue('return_transfer_type', reverseStringChars(value), false)
+				this.return_transfer_type = reverseStringChars(value)
+				this.updateReturnLegValidators(this.return_transfer_type);
+			}
 			console.log('component transfer_type after update', this.transfer_type);
 			console.log('component return_transfer_type after sync', this.return_transfer_type);
 			console.log('form return_transfer_type after sync', this.BookingForm?.get('return_transfer_type')?.value);
@@ -4318,6 +4335,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			console.log('incoming return_transfer_type value', value);
 			console.log('current component return_transfer_type before update', this.return_transfer_type);
 			console.log('current form transfer_type before sync', this.BookingForm?.get('transfer_type')?.value);
+			console.log('isPrefillingTransferTypes', this.isPrefillingTransferTypes);
 			console.log("in return_transfer_type value changes", value)
 
 			if (this.BookingForm?.get('service_type')?.value == 'round_trip') {
@@ -4415,8 +4433,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
 			}
-			this.SetFormValue('transfer_type', reverseStringChars(value), false)
-			this.transfer_type = reverseStringChars(value)
+			if (!this.isPrefillingTransferTypes) {
+				this.SetFormValue('transfer_type', reverseStringChars(value), false)
+				this.transfer_type = reverseStringChars(value)
+			}
 			console.log('component return_transfer_type after update', this.return_transfer_type);
 			console.log('component transfer_type after sync', this.transfer_type);
 			console.log('form transfer_type after sync', this.BookingForm?.get('transfer_type')?.value);
@@ -5483,6 +5503,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// }    
 		this.affiliate_id = selected_vehicle?.affiliate_id
 		this.veh_created_by = selected_vehicle?.created_by
+		this.is_master_vehicle = this.route_is_master_vehicle ?? selected_vehicle?.is_master_vehicle ?? this.is_master_vehicle
 
 		if (selected_vehicle?.created_by != 1) {
 			console.log("in affiliate info")
@@ -5526,21 +5547,35 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		//set no of vehicles
 		this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
-		//set cancellation period
-		this.BookingForm.patchValue({
-			cancellation_hours: selected_vehicle?.cancellation_policy.toString(),
-			return_cancellation_hours: selected_vehicle?.cancellation_policy.toString()
-		})
+		// set cancellation period without breaking master-vehicle prefill
+		const fallbackCancellationHours =
+			selected_vehicle?.cancellation_policy ??
+			selected_vehicle?.non_charter_cancellation_hours ??
+			selected_vehicle?.charter_cancellation_hours ??
+			this.BookingForm.get('cancellation_hours')?.value;
+		if (fallbackCancellationHours !== undefined && fallbackCancellationHours !== null && fallbackCancellationHours !== '') {
+			this.BookingForm.patchValue({
+				cancellation_hours: fallbackCancellationHours.toString(),
+				return_cancellation_hours: fallbackCancellationHours.toString()
+			}, { emitEvent: false })
+		} else {
+			console.warn('QB -> admin/new-booking prefill missing cancellation policy on selected vehicle', selected_vehicle);
+		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+		this.isPrefillingTransferTypes = true;
 		this.transfer_type = transfer_type_value
 		this.return_transfer_type = return_transfer_type_value
 		console.group('QB -> admin/new-booking prefill')
 		console.log('quotebot_form snapshot', QB)
 		console.log('selected_vehicle snapshot', selected_vehicle)
+		console.log('selected_vehicle is_master_vehicle', selected_vehicle?.is_master_vehicle)
+		console.log('route is_master_vehicle', this.route_is_master_vehicle)
+		console.log('component is_master_vehicle before transfer apply', this.is_master_vehicle)
 		console.log('derived service_type', this.service_type)
 		console.log('derived transfer_type', transfer_type_value)
 		console.log('derived return_transfer_type', return_transfer_type_value)
+		console.log('isPrefillingTransferTypes before set', this.isPrefillingTransferTypes)
 		this.SetFormValue('transfer_type', transfer_type_value, false)
 		this.SetFormValue('return_transfer_type', return_transfer_type_value, false)
 		this.changeTransferType(transfer_type_value)
@@ -5566,6 +5601,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('post-apply component return_transfer_type', this.return_transfer_type)
 		console.groupEnd()
 		setTimeout(() => {
+			this.isPrefillingTransferTypes = false;
+			console.log('QB -> admin/new-booking prefill guard released', {
+				form_transfer_type: this.BookingForm.get('transfer_type')?.value,
+				form_return_transfer_type: this.BookingForm.get('return_transfer_type')?.value,
+				component_transfer_type: this.transfer_type,
+				component_return_transfer_type: this.return_transfer_type
+			});
 			this.logTransferTypeState('post-prefill-render');
 		}, 0)
 		this.SetFormValue('total_passengers', QB?.no_of_luggage)
