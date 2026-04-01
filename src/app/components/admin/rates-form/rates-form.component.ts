@@ -138,9 +138,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		console.log("affiliate_type", this.affiliate_type)
 		this.currencySymbol = this.currencyObject ? this.currencyObject?.symbol : "$"
 		this.ratesform = true;
-		// changes.init_rates?.currentValue ?? this.ratesform
-		this.returnratesform =
-			changes.init_r_rates?.currentValue ?? this.returnratesform;
+		const shouldShowReturnRates =
+			!!this.init_r_rates ||
+			this.service_type === 'round_trip' ||
+			this.book_data?.service_type === 'round_trip' ||
+			changes?.book_data?.currentValue?.service_type === 'round_trip';
+		this.returnratesform = shouldShowReturnRates;
 
 		// if(changes?.distance.currentValue){
 		// 	console.log('<><><>><><><><><><><><><><><><><><>' ,changes?.distance.currentValue , changes?.book_data?.currentValue)
@@ -177,6 +180,19 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		if (changes.init_rates?.currentValue) {
 			if (!this.QB_vehicle_id) {
 				this.initRates();
+			}
+		}
+
+		if (shouldShowReturnRates && !this.ReturnRatesForm) {
+			const seededReturnRates = this.resolveReturnRateArray({
+				data: {
+					retrunRateArray: this.returnRatesdata.getValue(),
+					rateArray: this.ratesdata.getValue()
+				}
+			});
+			if (this.hasRateArrayContent(seededReturnRates)) {
+				this.returnRatesdata.next(seededReturnRates);
+				this.initReturnRates();
 			}
 		}
 
@@ -540,7 +556,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.returnRatesdata.next({})
 		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-			this.returnRatesdata.next(response?.data?.retrunRateArray)
+			this.returnRatesdata.next(this.resolveReturnRateArray(response))
 			this.initReturnRates()
 		});
 	}
@@ -588,7 +604,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.initRates();
 
 			if (data.service_type == 'round_trip') {
-				this.returnRatesdata.next(response?.data?.retrunRateArray)
+				this.returnRatesdata.next(this.resolveReturnRateArray(response))
 				this.initReturnRates()
 			}
 
@@ -627,6 +643,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		const keysToCompare = [
 			'vehicle_id',
 			'transfer_type',
+			'return_transfer_type',
 			'service_type',
 			'numberOfVehicles',
 			'distance',
@@ -707,6 +724,34 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	}
 	getRatesData() {
 		return this.ratesdata.asObservable();
+	}
+
+	hasRateArrayContent(rateArray: any): boolean {
+		if (!rateArray || typeof rateArray !== 'object') {
+			return false;
+		}
+
+		return ['all_inclusive_rates', 'taxes', 'amenities', 'misc', 'direct_taxes'].some((key) => {
+			const section = rateArray?.[key];
+			return section && typeof section === 'object' && Object.keys(section).length > 0;
+		});
+	}
+
+	resolveReturnRateArray(response: any): any {
+		const returnRateArray = response?.data?.retrunRateArray;
+		if (this.hasRateArrayContent(returnRateArray)) {
+			console.log('admin/rates-form return rate source', 'retrunRateArray');
+			return returnRateArray;
+		}
+
+		const outboundRateArray = response?.data?.rateArray;
+		if (this.hasRateArrayContent(outboundRateArray)) {
+			console.log('admin/rates-form return rate source', 'rateArray fallback');
+			return JSON.parse(JSON.stringify(outboundRateArray));
+		}
+
+		console.log('admin/rates-form return rate source', 'empty');
+		return {};
 	}
 	// Live update while typing (allows 10, 11, 12, 15 etc.)
 	handleHourChange(event: any) {

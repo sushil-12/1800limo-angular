@@ -353,28 +353,13 @@
 
 									<div class="col-12 mr-0 p-0 ml-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'">
-											<div class="input-contain input-contain--airport d-flex align-items-stretch"
-												matAutocompleteOrigin #pickupAirportOrigin="matAutocompleteOrigin">
-												<div class="airport-field-icon" aria-hidden="true">
-													<i class="fas fa-plane"></i>
-												</div>
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important;"
 														placeholder="Pickup Address - Airport" id="pickup_airport"
 														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
-														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
-														[matAutocomplete]="airportautocomplete"
-														[matAutocompleteConnectedTo]="pickupAirportOrigin"
 														formControlName="pickup_airport_name">
-													<mat-autocomplete #airportautocomplete="matAutocomplete"
-														[panelWidth]="getAirportPanelWidth(airportinput)">
-														<mat-option
-															*ngFor="let airport_obj of airports_data_pickup; index as airport_obj_index"
-															(onSelectionChange)="selectedAirport(airports_data_pickup, airport_obj, 'pickup_airport')">
-															{{ airport_obj?.airport }}
-														</mat-option>
-													</mat-autocomplete>
 												</div>
 												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="airportinput?.value">
 													<button type="button" class="airport-clear-btn"
@@ -445,28 +430,13 @@
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value == 'airport'"
 											style="">
-											<div class="input-contain input-contain--airport d-flex align-items-stretch"
-												matAutocompleteOrigin #dropoffAirportOrigin="matAutocompleteOrigin">
-												<div class="airport-field-icon" aria-hidden="true">
-													<i class="fas fa-plane"></i>
-												</div>
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important;"
 														placeholder="Dropoff Address - Airport" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
-														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
-														[matAutocomplete]="dropoffairportautocomplete"
-														[matAutocompleteConnectedTo]="dropoffAirportOrigin"
 														formControlName="dropoff_airport_name">
-													<mat-autocomplete #dropoffairportautocomplete="matAutocomplete"
-														[panelWidth]="getAirportPanelWidth(dropairportinput)">
-														<mat-option
-															*ngFor="let airport_obj of airports_data_dropoff; index as airport_obj_index"
-															(onSelectionChange)="selectedAirport(airports_data_dropoff, airport_obj, 'dropoff_airport')">
-															{{ airport_obj?.airport }}
-														</mat-option>
-													</mat-autocomplete>
 												</div>
 												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="dropairportinput?.value">
 													<button type="button" class="airport-clear-btn"
@@ -599,29 +569,13 @@
 									<div class=" col-12 mr-0 p-0 m-0">
 										<div class="errorMsg col-md-12"
 											*ngIf="QBForm?.dropoff_type?.value == 'airport'">
-											<div class="input-contain input-contain--airport d-flex align-items-stretch"
-												matAutocompleteOrigin #returnPickupAirportOrigin="matAutocompleteOrigin">
-												<div class="airport-field-icon" aria-hidden="true">
-													<i class="fas fa-plane"></i>
-												</div>
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
 												<div class="input-box">
 													<input type="text" placeholder="Return Pickup Address - Airport"
 														style="font-size: 16px !important;" #retairportinput
 														id="return_pickup_airport" class="input-f font-weight-bolder"
 														tabindex="1" (focus)="$event.target.select()"
-														(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
-														[matAutocomplete]="returnpickupairportautocomplete"
-														[matAutocompleteConnectedTo]="returnPickupAirportOrigin"
 														formControlName="return_pickup_airport_name">
-													<mat-autocomplete
-														#returnpickupairportautocomplete="matAutocomplete"
-														[panelWidth]="getAirportPanelWidth(retairportinput)">
-														<mat-option
-															*ngFor="let airport_obj of airports_data_r_pickup; index as airport_obj_index"
-															(onSelectionChange)="selectedAirport(airports_data_r_pickup, airport_obj, 'return_pickup_airport')">
-															{{ airport_obj?.airport }}
-														</mat-option>
-													</mat-autocomplete>
 												</div>
 												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="retairportinput?.value">
 													<button type="button" class="airport-clear-btn"
@@ -696,29 +650,13 @@
 												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'">
-											<div class="input-contain input-contain--airport d-flex align-items-stretch"
-												matAutocompleteOrigin #returnDropoffAirportOrigin="matAutocompleteOrigin">
-												<div class="airport-field-icon" aria-hidden="true">
-													<i class="fas fa-plane"></i>
-												</div>
+											<div class="input-contain input-contain--airport d-flex align-items-stretch">
 												<div class="input-box">
 													<input type="text" placeholder="Return Dropoff Address - Airport"
 														style="font-size: 16px !important;" #retdropairportinput
 														id="return_dropoff_airport" class="input-f font-weight-bolder"
 														tabindex="1" (focus)="$event.target.select()"
-														(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
-														[matAutocomplete]="returndropoffairportautocomplete"
-														[matAutocompleteConnectedTo]="returnDropoffAirportOrigin"
 														formControlName="return_dropoff_airport_name">
-													<mat-autocomplete
-														#returndropoffairportautocomplete="matAutocomplete"
-														[panelWidth]="getAirportPanelWidth(retdropairportinput)">
-														<mat-option
-															*ngFor="let airport_obj of airports_data_r_dropoff; index as airport_obj_index"
-															(onSelectionChange)="selectedAirport(airports_data_r_dropoff, airport_obj, 'return_dropoff_airport')">
-															{{ airport_obj?.airport }}
-														</mat-option>
-													</mat-autocomplete>
 												</div>
 												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="retdropairportinput?.value">
 													<button type="button" class="airport-clear-btn"

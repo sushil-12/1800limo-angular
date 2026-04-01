@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-declare var $: any;
+import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'app-scroll-to-top',
@@ -8,6 +7,8 @@ declare var $: any;
 })
 export class ScrollToTopComponent implements OnInit
 {
+	showScrollTop: boolean = false;
+	showScrollDown: boolean = true;
 
 	scrollTop()
 	{
@@ -32,7 +33,7 @@ export class ScrollToTopComponent implements OnInit
 
 	scrollDown(){
 			window.scrollTo({
-			  top: document.body.scrollHeight,
+			  top: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
 			  behavior: "smooth" // Optional, adds smooth scrolling effect
 			});
 		// (function smoothDownScroll()
@@ -48,35 +49,24 @@ export class ScrollToTopComponent implements OnInit
 
 	ngOnInit()
 	{
-		$(window).scroll(function ()
-		{
-			var vH = $(window).height(),
-				bodyHeight = ($(document).height() - (vH * 2)),
-				scrolledPX = $(window).scrollTop();
-			if (scrolledPX > bodyHeight)
-			{
-				$('.scrollTopButton').css('opacity', '1');
-				$('.scrollTopButton').css('z-index', '999');
-			} else
-			{
-				$('.scrollTopButton').css('opacity', '0');
-				$('.scrollTopButton').css('z-index', '0');
-			};
-		});
-		$(window).scroll(function (){
-			var vH = $(window).height(),
-				bodyHeight = ($(document).height() - (vH * 2)),
-				scrolledPX = $(window).scrollTop();
-			if (scrolledPX < bodyHeight)
-			{
-				$('.scrollDownButton').css('opacity', '1');
-				$('.scrollDownButton').css('z-index', '999');
-			} else
-			{
-				$('.scrollDownButton').css('opacity', '0');
-				$('.scrollDownButton').css('z-index', '0');
-			};
-		});
+		this.updateScrollButtons();
+	}
+
+	@HostListener('window:scroll')
+	@HostListener('window:resize')
+	updateScrollButtons()
+	{
+		const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+		const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+		const documentHeight = Math.max(
+			document.body.scrollHeight,
+			document.documentElement.scrollHeight,
+			document.body.offsetHeight,
+			document.documentElement.offsetHeight
+		);
+		const threshold = 160;
+
+		this.showScrollTop = scrollTop > threshold;
+		this.showScrollDown = (scrollTop + viewportHeight) < (documentHeight - threshold);
 	}
 }
-

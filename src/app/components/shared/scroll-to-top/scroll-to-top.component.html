@@ -1,4 +1,4 @@
-<div class="scrollTopButton">
+<div class="scrollTopButton" [class.show-scrollTop]="showScrollTop">
     <button type="button" class="btn active scrollButton" data-toggle="button" aria-pressed="true" (click)="scrollTop()" tabindex="-1">
         <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" x="0px" y="0px"
             width="40px" height="40px">
@@ -31,7 +31,7 @@
 
 
 
-<div class="scrollDownButton">
+<div class="scrollDownButton" [class.show-scrollDown]="showScrollDown">
     <button type="button" class="btn active scrollButton rotate-btn" 
              (click)="scrollDown()"  data-toggle="button" aria-pressed="true" tabindex="-1">
         <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" x="0px" y="0px"

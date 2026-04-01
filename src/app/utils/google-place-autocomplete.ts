@@ -9,10 +9,13 @@ import { Subscription } from 'rxjs';
 const CLEANUP_KEY = '__gmpPlaceAutocompleteCleanup';
 const GMP_ATTACH_SHADOW_PATCHED_KEY = '__gmpAttachShadowPatched';
 const ATTACH_REQUEST_KEY = '__gmpPlaceAutocompleteAttachRequest';
+const FORCE_EMPTY_KEY = '__gmpPlaceAutocompleteForceEmpty';
 type PacHelperMode = 'prompt' | 'loading' | 'empty' | 'hidden';
 
 export interface AttachPlaceAutocompleteOptions {
 	types?: string[];
+	primaryTypes?: string[];
+	airportField?: boolean;
 	/** Ignored for fetchFields; new API always loads id, displayName, formattedAddress, location, addressComponents, types */
 	fields?: string[];
 	/** When set, keeps the visible gmp widget in sync after patchValue/setValue (e.g. async API load). */
@@ -50,6 +53,74 @@ function newPlaceToLegacyPlaceResult(place: {
 		place_id: place.id,
 		types: place.types,
 	} as google.maps.places.PlaceResult;
+}
+
+function isAirportSuggestionText(text: string): boolean {
+	const normalized = (text || '').toLowerCase();
+	if (!normalized.trim()) {
+		return false;
+	}
+
+	return [
+		'airport',
+		'terminal',
+		'fbo',
+		'airfield',
+		'aerodrome',
+		'concourse',
+	].some((keyword) => normalized.includes(keyword));
+}
+
+function installAirportSuggestionFilter(
+	pac: HTMLElement
+): () => void {
+	let observer: MutationObserver | undefined;
+
+	const applyFilter = () => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			if (!root) {
+				return;
+			}
+
+			const options = Array.from(
+				root.querySelectorAll('[role="option"], .suggestion-item')
+			) as HTMLElement[];
+
+			options.forEach((option) => {
+				const optionText = (option.textContent || '').replace(/\s+/g, ' ').trim();
+				const shouldShow = isAirportSuggestionText(optionText);
+				option.style.display = shouldShow ? '' : 'none';
+				option.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+			});
+		} catch {
+			/* ignore */
+		}
+	};
+
+	try {
+		const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+		if (root) {
+			observer = new MutationObserver(() => applyFilter());
+			observer.observe(root, {
+				childList: true,
+				subtree: true,
+				characterData: true,
+			});
+			applyFilter();
+		}
+	} catch {
+		/* ignore */
+	}
+
+	[50, 150, 300, 600].forEach((delay) => {
+		setTimeout(() => applyFilter(), delay);
+	});
+
+	return () => {
+		observer?.disconnect();
+		observer = undefined;
+	};
 }
 
 /**
@@ -126,6 +197,49 @@ function installGmpAttachShadowPatch(): void {
 				padding: 0 !important;
 				color: #000 !important;
 			}
+			:host([data-airport-field="true"]) .input-container {
+				position: relative !important;
+				overflow: hidden !important;
+			}
+			:host([data-airport-field="true"]) .input-container::before {
+				content: "" !important;
+				position: absolute !important;
+				left: 10px !important;
+				top: 50% !important;
+				transform: translateY(-50%) !important;
+				width: 30px !important;
+				height: 30px !important;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8-2.5V19l-2 1.5V22l4-1 4 1v-1.5L14 19v-5.5L21 16Z' fill='%234a4a4a'/%3E%3C/svg%3E") !important;
+				background-repeat: no-repeat !important;
+				background-position: center !important;
+				background-size: 18px 18px !important;
+				background-color: #fff !important;
+				border-radius: 999px !important;
+				pointer-events: none !important;
+				z-index: 8 !important;
+			}
+			:host([data-airport-field="true"]) .input-container > :not(input):not(button) {
+				opacity: 0 !important;
+				width: 0 !important;
+				min-width: 0 !important;
+				max-width: 0 !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				overflow: hidden !important;
+				pointer-events: none !important;
+				flex: 0 0 0 !important;
+			}
+			:host([data-airport-field="true"]) .input-container input {
+				padding-left: 0 !important;
+				position: relative !important;
+				z-index: 1 !important;
+				text-indent: 50px !important;
+			}
+			:host([data-airport-field="true"]) .input-container input::placeholder {
+				padding-left: 0 !important;
+				text-indent: 50px !important;
+			}
+			.input-container div.autocomplete-icon{width:43px !important;}
 			input{padding-right:18px !important;},
 			[role="option"],
 			.suggestion-item,
@@ -202,6 +316,17 @@ function installGmpAttachShadowPatch(): void {
 				fill: #000 !important;
 				stroke: #000 !important;
 				opacity: 1 !important;
+			}
+
+			:host([data-airport-field="true"]) .input-container .leading-icon svg,
+			:host([data-airport-field="true"]) .input-container .location-icon svg,
+			:host([data-airport-field="true"]) .input-container .icon svg,
+			:host([data-airport-field="true"]) .input-container .search-icon svg,
+			:host([data-airport-field="true"]) .input-container .leading-icon [aria-hidden="true"],
+			:host([data-airport-field="true"]) .input-container .location-icon [aria-hidden="true"],
+			:host([data-airport-field="true"]) .input-container .icon [aria-hidden="true"],
+			:host([data-airport-field="true"]) .input-container .search-icon [aria-hidden="true"] {
+				opacity: 0 !important;
 			}
 			.place-autocomplete-element-row .place-autocomplete-element-text-div{text-align:left !important;}
 			input::placeholder,
@@ -544,6 +669,15 @@ function syncPlaceAutocompleteElementValue(
 ): void {
 	const normalizedValue = value || '';
 	const el = pac as HTMLElement & { value?: string };
+	const nativeInput = pac.previousElementSibling instanceof HTMLInputElement ? pac.previousElementSibling : null;
+
+	if (nativeInput) {
+		if (normalizedValue.trim()) {
+			delete (nativeInput as unknown as Record<string, unknown>)[FORCE_EMPTY_KEY];
+		} else {
+			(nativeInput as unknown as Record<string, unknown>)[FORCE_EMPTY_KEY] = true;
+		}
+	}
 
 	try {
 		el.value = normalizedValue;
@@ -856,8 +990,20 @@ export async function attachPlaceAutocompleteElement(
 	}
 
 	const pac = new PlaceAutocompleteElement();
+	const pacAny = pac as HTMLElement & {
+		includedPrimaryTypes?: string[];
+		includedTypes?: string[];
+	};
 	pac.id = nativeInput.id;
 	pac.className = nativeInput.className;
+	if (_options?.primaryTypes?.length) {
+		pacAny.includedPrimaryTypes = _options.primaryTypes;
+	} else if (_options?.types?.length) {
+		pacAny.includedTypes = _options.types;
+	}
+	if (_options?.airportField || _options?.primaryTypes?.includes('airport')) {
+		pac.setAttribute('data-airport-field', 'true');
+	}
 	const styleAttr = nativeInput.getAttribute('style');
 	if (styleAttr) {
 		pac.setAttribute('style', styleAttr);
@@ -884,6 +1030,7 @@ export async function attachPlaceAutocompleteElement(
 
 	nativeInput.after(pac);
 	const cleanupHelper = setupPlaceAutocompleteHelper(pac, nativeInput, _options?.syncControl);
+	const cleanupAirportSuggestionFilter = _options?.airportField ? installAirportSuggestionFilter(pac) : undefined;
 	let lastDraftValue = nativeInput.value || '';
 	let isRebuildingAutocomplete = false;
 	let cleanup: (() => void) | undefined;
@@ -1137,7 +1284,12 @@ export async function attachPlaceAutocompleteElement(
 			const inner = root?.querySelector?.('input');
 			const dialog = root?.querySelector?.('dialog.full-window-autocomplete-dialog[open]');
 			const currentValue = inner instanceof HTMLInputElement ? inner.value || '' : '';
-			const restoredValue = currentValue.trim() ? currentValue : lastDraftValue;
+			const forceEmpty = !!(nativeInput as unknown as Record<string, unknown>)[FORCE_EMPTY_KEY];
+			const persistedValue =
+				(nativeInput.value || '').trim() ||
+				(typeof _options?.syncControl?.value === 'string' ? _options.syncControl.value : '') ||
+				'';
+			const restoredValue = forceEmpty ? '' : (currentValue.trim() ? currentValue : persistedValue);
 			const finalizeRestore = () => {
 				restoreInlineFieldUi(restoredValue);
 				syncPlaceAutocompleteDisplay(nativeInput);
@@ -1426,6 +1578,7 @@ export async function attachPlaceAutocompleteElement(
 
 	cleanup = () => {
 		cleanupHelper();
+		cleanupAirportSuggestionFilter?.();
 		valueSub?.unsubscribe();
 		valueSub = undefined;
 		pac.removeEventListener('gmp-select', handler as EventListener);
@@ -1521,6 +1674,7 @@ export function clearPlaceAutocompleteDisplay(nativeInput: HTMLInputElement | nu
 	if (!nativeInput) {
 		return;
 	}
+	(nativeInput as unknown as Record<string, unknown>)[FORCE_EMPTY_KEY] = true;
 	nativeInput.value = '';
 	syncPlaceAutocompleteDisplay(nativeInput);
 }

@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../../components/shared/shared.module';
-import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getPlaceAutocompleteDisplayValue } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
@@ -31,6 +31,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('dropaddressinput') dropaddressinput!: ElementRef;
 	@ViewChild('retaddressinput') retaddressinput!: ElementRef;
 	@ViewChild('retdropaddressinput') retdropaddressinput!: ElementRef;
+	@ViewChild('airportinput') airportinput!: ElementRef;
+	@ViewChild('dropairportinput') dropairportinput!: ElementRef;
+	@ViewChild('retairportinput') retairportinput!: ElementRef;
+	@ViewChild('retdropairportinput') retdropairportinput!: ElementRef;
 	@ViewChild('clientLogoContainer') clientLogoContainer!: ElementRef;
 
 	clientLogoSwiper: Swiper | null = null;
@@ -361,6 +365,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				checkAndSync(this.dropaddressinput, 'dropoff_address');
 				checkAndSync(this.retaddressinput, 'return_pickup_address');
 				checkAndSync(this.retdropaddressinput, 'return_dropoff_address');
+				checkAndSync(this.airportinput, 'pickup_airport_name');
+				checkAndSync(this.dropairportinput, 'dropoff_airport_name');
+				checkAndSync(this.retairportinput, 'return_pickup_airport_name');
+				checkAndSync(this.retdropairportinput, 'return_dropoff_airport_name');
 
 				if (changed) {
 					this.ngZone.run(() => {
@@ -382,7 +390,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				!!this.addressinput?.nativeElement ||
 				!!this.dropaddressinput?.nativeElement ||
 				!!this.retaddressinput?.nativeElement ||
-				!!this.retdropaddressinput?.nativeElement;
+				!!this.retdropaddressinput?.nativeElement ||
+				!!this.airportinput?.nativeElement ||
+				!!this.dropairportinput?.nativeElement ||
+				!!this.retairportinput?.nativeElement ||
+				!!this.retdropairportinput?.nativeElement;
 
 			if (googleReady && hasAnyAddressInput) {
 				this.initializeallloadGoogleAutocomplete();
@@ -436,6 +448,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		);
 	}
 
+	loadGoogleAirportAutocomplete(input: HTMLInputElement, fieldName: string) {
+		void attachPlaceAutocompleteElement(
+			input,
+			{
+				airportField: true,
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				syncControl: this.quoteBotForm?.get(`${fieldName}_name`) ?? undefined,
+			},
+			(place) => {
+				this.ngZone.run(() => {
+					const geometryLocation = place.geometry?.location;
+					if (!geometryLocation) {
+						this.clearAirportSelection(fieldName);
+						return;
+					}
+
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = (place.name ?? '').trim();
+					const airportDisplayName = placeName || formattedAddress;
+
+					this.onAirportSelected({
+						id: place.place_id ?? '',
+						name: airportDisplayName,
+						latitude: geometryLocation.lat(),
+						longitude: geometryLocation.lng()
+					}, fieldName);
+				});
+			}
+		);
+	}
+
 	shouldShowAddressClear(inputRef: ElementRef | HTMLInputElement | undefined, controlName: string): boolean {
 		const controlValue = this.quoteBotForm?.get(controlName)?.value;
 		const nativeInput = inputRef instanceof ElementRef ? inputRef.nativeElement : inputRef;
@@ -476,6 +519,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		if (this.retdropaddressinput) {
 			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
+		}
+		if (this.airportinput) {
+			this.loadGoogleAirportAutocomplete(this.airportinput.nativeElement, 'pickup_airport');
+		}
+		if (this.dropairportinput) {
+			this.loadGoogleAirportAutocomplete(this.dropairportinput.nativeElement, 'dropoff_airport');
+		}
+		if (this.retairportinput) {
+			this.loadGoogleAirportAutocomplete(this.retairportinput.nativeElement, 'return_pickup_airport');
+		}
+		if (this.retdropairportinput) {
+			this.loadGoogleAirportAutocomplete(this.retdropairportinput.nativeElement, 'return_dropoff_airport');
 		}
 	}
 
@@ -1084,6 +1139,89 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
+	onAirportSelected(
+		airport: { id: string; name: string; latitude: number; longitude: number },
+		fieldName: string
+	): void {
+		this.SetFormValue(fieldName, airport.id);
+		this.SetFormValue(`${fieldName}_name`, airport.name);
+		this.SetFormValue(`${fieldName}_lat`, airport.latitude);
+		this.SetFormValue(`${fieldName}_long`, airport.longitude);
+		this.vars[`${fieldName}_name`] = airport.name;
+
+		if (fieldName === 'pickup_airport') {
+			this.SetFormValue('return_dropoff_airport', airport.id);
+			this.SetFormValue('return_dropoff_airport_name', airport.name);
+			this.SetFormValue('return_dropoff_airport_lat', airport.latitude);
+			this.SetFormValue('return_dropoff_airport_long', airport.longitude);
+			this.vars['return_dropoff_airport_name'] = airport.name;
+		} else if (fieldName === 'dropoff_airport') {
+			this.SetFormValue('return_pickup_airport', airport.id);
+			this.SetFormValue('return_pickup_airport_name', airport.name);
+			this.SetFormValue('return_pickup_airport_lat', airport.latitude);
+			this.SetFormValue('return_pickup_airport_long', airport.longitude);
+			this.vars['return_pickup_airport_name'] = airport.name;
+		}
+
+		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
+			this.fillReturnDetails();
+			this.SetFormValue(
+				fieldName === 'pickup_airport' ? 'return_dropoff_airport_name' : 'return_pickup_airport_name',
+				airport.name
+			);
+		}
+	}
+
+	clearAirportSelection(fieldName: string): void {
+		this.SetFormValue(fieldName, '');
+		this.SetFormValue(`${fieldName}_name`, '');
+		this.SetFormValue(`${fieldName}_lat`, '');
+		this.SetFormValue(`${fieldName}_long`, '');
+		delete this.vars[`${fieldName}_name`];
+
+		if (fieldName === 'pickup_airport') {
+			this.SetFormValue('return_dropoff_airport', '');
+			this.SetFormValue('return_dropoff_airport_name', '');
+			this.SetFormValue('return_dropoff_airport_lat', '');
+			this.SetFormValue('return_dropoff_airport_long', '');
+			delete this.vars['return_dropoff_airport_name'];
+		} else if (fieldName === 'dropoff_airport') {
+			this.SetFormValue('return_pickup_airport', '');
+			this.SetFormValue('return_pickup_airport_name', '');
+			this.SetFormValue('return_pickup_airport_lat', '');
+			this.SetFormValue('return_pickup_airport_long', '');
+			delete this.vars['return_pickup_airport_name'];
+		}
+	}
+
+	clearAddressSelection(fieldName: string): void {
+		this.SetFormValue(fieldName, '');
+		this.SetFormValue(`${fieldName}_lat`, '');
+		this.SetFormValue(`${fieldName}_long`, '');
+
+		if (fieldName === 'pickup_address') {
+			this.SetFormValue('return_dropoff_address', '');
+			this.SetFormValue('return_dropoff_address_lat', '');
+			this.SetFormValue('return_dropoff_address_long', '');
+		} else if (fieldName === 'dropoff_address') {
+			this.SetFormValue('return_pickup_address', '');
+			this.SetFormValue('return_pickup_address_lat', '');
+			this.SetFormValue('return_pickup_address_long', '');
+		}
+	}
+
+	private persistQuoteBotState(): void {
+		if (!this.quoteBotForm) {
+			return;
+		}
+
+		const savedState = {
+			...this.quoteBotForm.getRawValue(),
+			other_details: { ...this.vars }
+		};
+		localStorage.setItem('quotebot_form', JSON.stringify(savedState));
+	}
+
 	SetFormValue(field_name: string, value: string | number) {
 		console.log(`Filling ${value} into ${field_name}`)
 		this.quoteBotForm.get(field_name)?.setValue(value)
@@ -1105,14 +1243,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// $(".returnClassChange").removeClass("col-12 col-md-12").addClass("col-6 col-md-6");
 	// reset the input fields on click of cross svg
 	reset(field_name: string) {
-		const clearField = (...fields: string[]) => {
-			const patch: Record<string, string> = {};
-			fields.forEach((field) => {
-				patch[field] = '';
-			});
-			this.quoteBotForm.patchValue(patch);
-		};
 		const syncAddressField = (inputRef?: ElementRef) => {
+			if (inputRef?.nativeElement) {
+				queueMicrotask(() => clearPlaceAutocompleteDisplay(inputRef.nativeElement));
+				setTimeout(() => clearPlaceAutocompleteDisplay(inputRef.nativeElement), 0);
+			}
+		};
+		const syncAirportField = (inputRef?: ElementRef) => {
 			if (inputRef?.nativeElement) {
 				queueMicrotask(() => clearPlaceAutocompleteDisplay(inputRef.nativeElement));
 				setTimeout(() => clearPlaceAutocompleteDisplay(inputRef.nativeElement), 0);
@@ -1121,82 +1258,50 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		switch (field_name) {
 			case 'pickup_address':
-				clearField(
-					'pickup_address',
-					'pickup_address_lat',
-					'pickup_address_long',
-					'return_dropoff_address',
-					'return_dropoff_address_lat',
-					'return_dropoff_address_long'
-				);
+				this.clearAddressSelection('pickup_address');
 				syncAddressField(this.addressinput);
 				syncAddressField(this.retdropaddressinput);
 				break
 			case 'pickup_airport':
 				console.log('resseting pickup address')
-				clearField(
-					'pickup_airport',
-					'pickup_airport_name',
-					'pickup_airport_lat',
-					'pickup_airport_long',
-					'return_dropoff_airport',
-					'return_dropoff_airport_name',
-					'return_dropoff_airport_lat',
-					'return_dropoff_airport_long'
-				);
+				this.clearAirportSelection('pickup_airport');
+				syncAirportField(this.airportinput);
+				syncAirportField(this.retdropairportinput);
 				break
 			case 'dropoff_airport':
 				console.log('resseting dropoff_airport address')
-				clearField(
-					'dropoff_airport',
-					'dropoff_airport_name',
-					'dropoff_airport_lat',
-					'dropoff_airport_long',
-					'return_pickup_airport',
-					'return_pickup_airport_name',
-					'return_pickup_airport_lat',
-					'return_pickup_airport_long'
-				);
+				this.clearAirportSelection('dropoff_airport');
+				syncAirportField(this.dropairportinput);
+				syncAirportField(this.retairportinput);
 				break
 			case 'return_pickup_airport':
 				console.log('resseting return_pickup_airport address')
-				clearField(
-					'return_pickup_airport',
-					'return_pickup_airport_name',
-					'return_pickup_airport_lat',
-					'return_pickup_airport_long'
-				);
+				this.clearAirportSelection('return_pickup_airport');
+				syncAirportField(this.retairportinput);
 				break
 			case 'return_dropoff_airport':
 				console.log('resseting return_dropoff_airport address')
-				clearField(
-					'return_dropoff_airport',
-					'return_dropoff_airport_name',
-					'return_dropoff_airport_lat',
-					'return_dropoff_airport_long'
-				);
+				this.clearAirportSelection('return_dropoff_airport');
+				syncAirportField(this.retdropairportinput);
 				break
 			case 'dropoff_address':
-				clearField(
-					'dropoff_address',
-					'dropoff_address_lat',
-					'dropoff_address_long',
-					'return_pickup_address',
-					'return_pickup_address_lat',
-					'return_pickup_address_long'
-				);
+				this.clearAddressSelection('dropoff_address');
 				syncAddressField(this.dropaddressinput);
 				syncAddressField(this.retaddressinput);
 				break
 			case 'return_pickup_address':
-				clearField('return_pickup_address', 'return_pickup_address_lat', 'return_pickup_address_long');
+				this.clearAddressSelection('return_pickup_address');
 				syncAddressField(this.retaddressinput);
 				break
 			case 'return_dropoff_address':
-				clearField('return_dropoff_address', 'return_dropoff_address_lat', 'return_dropoff_address_long');
+				this.clearAddressSelection('return_dropoff_address');
 				syncAddressField(this.retdropaddressinput);
 				break
 		}
+
+		this.quoteBotForm.markAsDirty();
+		this.quoteBotForm.updateValueAndValidity();
+		this.persistQuoteBotState();
 	}
 
 
@@ -1631,9 +1736,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	}
 	ReturnNameOfAirportById(id: any) {
-		let airport = this.airports_data.find((item) => item.id == id)
+		let airport = this.airports_data?.find((item) => item.id == id)
 		console.log('airport found-->>>', id, airport)
-		return airport ? airport.airport : ''
+		if (airport) {
+			return airport.airport
+		}
+
+		const airportFieldNames = ['pickup_airport', 'dropoff_airport', 'return_pickup_airport', 'return_dropoff_airport'];
+		for (const fieldName of airportFieldNames) {
+			if (this.quoteBotForm?.get(fieldName)?.value == id) {
+				return this.quoteBotForm?.get(`${fieldName}_name`)?.value || '';
+			}
+		}
+
+		return ''
 	}
 
 

@@ -1269,7 +1269,7 @@ a.user-profile:active::after {
 	}
 }
 
-// Airport autocomplete rows: plane icon (left) + field + circular clear (right)
+// Airport autocomplete rows: GMP field with internal plane icon + circular clear button
 .input-contain--airport {
 	position: relative;
 
@@ -1285,21 +1285,6 @@ a.user-profile:active::after {
 	input {
 		padding-right: 42px !important;
 	}
-}
-
-.airport-field-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	min-width: 40px;
-	background-color: #fff;
-	border-radius: 14px 0 0 14px;
-	margin-right: -4px;
-	align-self: stretch;
-	min-height: 30px;
-	color: #4a4a4a;
-	font-size: 14px;
 }
 
 .airport-clear-wrap {

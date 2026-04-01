@@ -554,7 +554,7 @@ export class DailyBookingsComponent implements OnInit {
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
-	updatedEmailAll() {
+	updatedEmailAll(sourceModal: string = 'updatedEmailAll') {
 		console.log(
 			"In function updatedEmailAll all",
 			this.sendEmailForm.value.reservation_id,
@@ -574,7 +574,12 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				console.log("response--------->>>>>>>>", response);
 				this.spinner.hide();
-				$("#updatedEmailAll").modal("hide");
+				$(`#${sourceModal}`).modal("hide");
+				$('#successModal').modal('show')
+				this.successMessage = 'Updated email has been sent successfully'
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
 			});
 	}
 
