@@ -29,7 +29,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way ?</mat-option>
@@ -48,7 +48,7 @@
 								Transfer Type
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
+								(selectionChange)="changeTransferType($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -75,7 +75,7 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+							<mat-select formControlName="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
@@ -1266,7 +1266,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way ?</mat-option>
@@ -1285,7 +1285,7 @@
 								Transfer Type
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
+								(selectionChange)="changeTransferType($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -1307,7 +1307,7 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+							<mat-select formControlName="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
@@ -1450,18 +1450,18 @@
 				<div class="row px-4">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2">
-						<!-- Ng-Select - Pickup > Airport -->
-						<ng-select appearance="outline" [items]="BigData?.airportsData"
-							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
-							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
-							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="pickup_airport_option"
-							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
-							style="height:66px;">
-							<ng-template ng-option-tmp let-item="item">
-								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-							</ng-template>
-						</ng-select>
+						<mat-form-field appearance="outline" class="airport-autocomplete-field"
+							[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup_airport_option.invalid) }">
+							<mat-label>Pickup Airport</mat-label>
+							<input #pickupAirportInput type="text" matInput
+								placeholder="Select Airport (Search by airport code or name)"
+								formControlName="pickup_airport_option" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.pickup_airport_option.value || pickupAirportInput?.value"
+								(click)="clearAirportField('pickup_airport')" aria-label="Clear pickup airport">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
+						</mat-form-field>
 						<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 							<div *ngIf="Form.pickup_airport_option.errors.required">Pickup airport is required</div>
@@ -1660,18 +1660,18 @@
 				<div class="row px-4">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2">
-						<!-- Ng-Select > Dropoff > Airport -->
-						<ng-select appearance="outline" [items]="BigData?.airportsData"
-							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
-							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
-							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="dropoff_airport_option"
-							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
-							style="height:66px;">
-							<ng-template ng-option-tmp let-item="item">
-								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-							</ng-template>
-						</ng-select>
+						<mat-form-field appearance="outline" class="airport-autocomplete-field"
+							[ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff_airport_option.invalid) }">
+							<mat-label>Dropoff Airport</mat-label>
+							<input #dropoffAirportInput type="text" matInput
+								placeholder="Select Airport (Search by airport code or name)"
+								formControlName="dropoff_airport_option" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.dropoff_airport_option.value || dropoffAirportInput?.value"
+								(click)="clearAirportField('dropoff_airport')" aria-label="Clear dropoff airport">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
+						</mat-form-field>
 						<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 							<div *ngIf="Form.dropoff_airport_option.errors.required">Dropoff airport is required</div>
@@ -2122,7 +2122,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way ?</mat-option>
@@ -2141,8 +2141,7 @@
 								Transfer Type
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)"
-								[(ngModel)]="Form.transfer_type.value">
+								(selectionChange)="changeTransferType($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -2164,7 +2163,7 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+							<mat-select formControlName="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
@@ -2295,18 +2294,18 @@
 				<div class="row px-3">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2">
-						<!-- Ng-Select > Return > Pickup > Airport -->
-						<ng-select appearance="outline" [items]="BigData?.airportsData"
-							[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
-							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
-							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="return_pickup_airport_option"
-							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
-							style="height:66px;">
-							<ng-template ng-option-tmp let-item="item">
-								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-							</ng-template>
-						</ng-select>
+						<mat-form-field appearance="outline" class="airport-autocomplete-field"
+							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup_airport_option.invalid) }">
+							<mat-label>Return Pickup Airport</mat-label>
+							<input #returnPickupAirportInput type="text" matInput
+								placeholder="Select Airport (Search by airport code or name)"
+								formControlName="return_pickup_airport_option" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.return_pickup_airport_option.value || returnPickupAirportInput?.value"
+								(click)="clearAirportField('return_pickup_airport')" aria-label="Clear return pickup airport">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
+						</mat-form-field>
 						<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 							<div *ngIf="Form.return_pickup_airport_option.errors.required">Return pickup airport is
@@ -2509,18 +2508,18 @@
 				<div class="row px-2">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2">
-						<!-- Ng-Select > Return > Dropoff > Airport -->
-						<ng-select appearance="outline" [items]="BigData?.airportsData"
-							[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
-							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
-							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="return_dropoff_airport_option"
-							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
-							style="height:66px;">
-							<ng-template ng-option-tmp let-item="item">
-								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
-							</ng-template>
-						</ng-select>
+						<mat-form-field appearance="outline" class="airport-autocomplete-field"
+							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }">
+							<mat-label>Return Dropoff Airport</mat-label>
+							<input #returnDropoffAirportInput type="text" matInput
+								placeholder="Select Airport (Search by airport code or name)"
+								formControlName="return_dropoff_airport_option" />
+							<button matSuffix type="button" class="address-clear-btn"
+								*ngIf="Form.return_dropoff_airport_option.value || returnDropoffAirportInput?.value"
+								(click)="clearAirportField('return_dropoff_airport')" aria-label="Clear return dropoff airport">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							</button>
+						</mat-form-field>
 						<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 							<div *ngIf="Form.return_dropoff_airport_option.errors.required">Return dropoff airport is
@@ -2735,7 +2734,7 @@
 			<!-- AGM Map -->
 		</div>
 		<!-- IF ROUND TRIP Section - Return Affiliate/Loose Details -->
-		<div class="section-container mt-2" *ngIf="service_type == 'round_trip' ">
+		<div class="section-container mt-2" *ngIf="Form.service_type.value == 'round_trip' ">
 			<h4 class=" border-secondary">
 				Return Affiliate Details
 			</h4>
@@ -2893,7 +2892,7 @@
 		<!-- Affiliate Vehicle Information -->
 		<!-- New section conatiner for Vehicle details -->
 		<div class="section-container mt-2"
-			*ngIf="service_type == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
+			*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
 			<h4>
 				Vehicle Preferences
 			</h4>
@@ -3121,7 +3120,7 @@
 		<!-- Affiliate Driver Information -->
 		<!-- && currentUser?.created_by_role != 'subscriber' -->
 		<div class="section-container mt-2"
-			*ngIf="service_type == 'round_trip' && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
+			*ngIf="Form.service_type.value == 'round_trip' && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
 			<h4 style="margin-bottom: 0;">
 				Driver Preferences
 			</h4>
@@ -3284,12 +3283,16 @@
 
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			[return_affiliate_type]="Form.return_affiliate_type.value"
 			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
-			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[isTravelShare]="isTravelShare"
+			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates"
+			(formvalue)="RateFormValue($event)"
 			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[parentError]="numberOfHoursError" (hoursErrorChange)="numberOfHoursError = $event"
 			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
-			[service_type]="service_type" [currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
+			[service_type]="Form.service_type.value" [currencyObject]="currencyObj"
+			[booking_created_from]="booking_created_from"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
@@ -3454,10 +3457,10 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-airport-color">
-									{{ textFormatter(Form.pickup_airport_name.value) }}
+									{{ textFormatter(getPreviewAirportDisplay(Form.pickup_airport_name.value, Form.pickup_airport_option.value)) }}
 								</span>
 								<span class="font-weight-bolder preview-airport-color"
-									(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
+									(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.pickup_airport_name.value, Form.pickup_airport_option.value))"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
@@ -3629,10 +3632,10 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder">
-									{{ textFormatter(Form.dropoff_airport_name.value ) }}
+									{{ textFormatter(getPreviewAirportDisplay(Form.dropoff_airport_name.value, Form.dropoff_airport_option.value)) }}
 								</span>
 								<span class="font-weight-bolder"
-									(click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
+									(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.dropoff_airport_name.value, Form.dropoff_airport_option.value))"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
@@ -3916,10 +3919,10 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-airport-color">
-										{{ textFormatter(Form.return_pickup_airport_name.value) }}
+										{{ textFormatter(getPreviewAirportDisplay(Form.return_pickup_airport_name.value, Form.return_pickup_airport_option.value)) }}
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
-										(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
+										(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.return_pickup_airport_name.value, Form.return_pickup_airport_option.value))"><i
 											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
@@ -4061,10 +4064,10 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-airport-color">
-										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
+										{{ textFormatter(getPreviewAirportDisplay(Form.return_dropoff_airport_name.value, Form.return_dropoff_airport_option.value)) }}
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
-										(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
+										(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.return_dropoff_airport_name.value, Form.return_dropoff_airport_option.value))"><i
 											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
@@ -4460,7 +4463,7 @@
 
 				<!--Return Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -4592,7 +4595,7 @@
 
 				<!-- Return Loose Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && service_type == 'round_trip' then returnlooseAffiliate">
+					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' then returnlooseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
@@ -4707,7 +4710,7 @@
 
 				<hr>
 
-				<div *ngIf="service_type == 'round_trip' ">
+				<div *ngIf="Form.service_type.value == 'round_trip' ">
 					<!-- Driver Information -->
 
 					<h4 class="font-weight-bolder m-0 mt-3">

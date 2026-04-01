@@ -23,10 +23,15 @@ export class InvalidControlScrollDirective {
 	}
 
 	private scrollToFirstInvalidControl() {
-		let firstInvalidControl: HTMLElement;
+		let firstInvalidControl: HTMLElement | null;
 		firstInvalidControl = this.el.nativeElement.querySelector(
-			".ng-invalid"
+			"input.ng-invalid, textarea.ng-invalid, select.ng-invalid, mat-select.ng-invalid, .mat-mdc-input-element.ng-invalid, .mat-mdc-select.ng-invalid, [formcontrolname].ng-invalid"
 		);
+		if (!firstInvalidControl) {
+			firstInvalidControl = this.el.nativeElement.querySelector(
+				".ng-invalid"
+			);
+		}
 		if (!firstInvalidControl) {
 			firstInvalidControl = this.el.nativeElement.querySelector(
 				".text-danger"
@@ -34,6 +39,9 @@ export class InvalidControlScrollDirective {
 		}
 
 		console.log(firstInvalidControl, "1111111111111111")
+		if (!firstInvalidControl) {
+			return;
+		}
 
 		window.scroll({
 			top: this.getTopOffset(firstInvalidControl),

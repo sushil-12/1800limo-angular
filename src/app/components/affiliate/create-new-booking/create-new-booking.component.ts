@@ -3636,14 +3636,14 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('dropoff_airport', QB?.dropoff_airport)
 		this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
 		this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
-		this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_address_long)
+		this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_airport_long)
 
 
 		//return pickup
 		this.SetFormValue('return_pickup_date', QB?.return_pickup_date)
-		this.SetFormValue('return_pickup', QB?.return_dropoff_address)
-		this.SetFormValue('return_pickup_latitude', QB?.return_dropoff_address_lat)
-		this.SetFormValue('return_pickup_longitude', QB?.return_dropoff_address_long)
+		this.SetFormValue('return_pickup', QB?.return_pickup_address ?? QB?.return_dropoff_address)
+		this.SetFormValue('return_pickup_latitude', QB?.return_pickup_address_lat ?? QB?.return_dropoff_address_lat)
+		this.SetFormValue('return_pickup_longitude', QB?.return_pickup_address_long ?? QB?.return_dropoff_address_long)
 		this.SetFormValue('return_pickup_airport', QB?.return_pickup_airport)
 		this.SetFormValue('return_pickup_airport_option', QB?.other_details?.return_pickup_airport_name)
 		this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
@@ -3668,6 +3668,18 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			this.fillLocationPoints('airport', location)
 		}
+		console.log('affiliate/create-new-booking map prefill snapshot', {
+			transfer_type: this.Form.transfer_type.value,
+			return_transfer_type: this.Form.return_transfer_type.value,
+			pickup_airport_latitude: this.Form.pickup_airport_latitude.value,
+			pickup_airport_longitude: this.Form.pickup_airport_longitude.value,
+			dropoff_airport_latitude: this.Form.dropoff_airport_latitude.value,
+			dropoff_airport_longitude: this.Form.dropoff_airport_longitude.value,
+			return_pickup_airport_latitude: this.Form.return_pickup_airport_latitude.value,
+			return_pickup_airport_longitude: this.Form.return_pickup_airport_longitude.value,
+			return_dropoff_airport_latitude: this.Form.return_dropoff_airport_latitude.value,
+			return_dropoff_airport_longitude: this.Form.return_dropoff_airport_longitude.value
+		});
 		this.MapController()
 		this.MapController(true)
 		setTimeout(() => {

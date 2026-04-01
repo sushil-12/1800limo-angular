@@ -15,6 +15,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("initRates") init_rates: boolean = false;
 	@Input("initReturnRates") init_r_rates: boolean = false;
 	@Input("affiliate_type") affiliate_type: string = "";
+	@Input("return_affiliate_type") return_affiliate_type: string = "";
 	@Input("distance") distance: string = "";
 	@Input("reservation_id") bookingId: number = 0;
 	@Input("vehicles") vehs: number = 0;
@@ -138,9 +139,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		console.log("affiliate_type", this.affiliate_type)
 		this.currencySymbol = this.currencyObject ? this.currencyObject?.symbol : "$"
 		this.ratesform = true;
-		// changes.init_rates?.currentValue ?? this.ratesform
-		this.returnratesform =
-			changes.init_r_rates?.currentValue ?? this.returnratesform;
+		const shouldShowReturnRates =
+			!!this.init_r_rates ||
+			this.service_type === 'round_trip' ||
+			this.book_data?.service_type === 'round_trip' ||
+			changes?.book_data?.currentValue?.service_type === 'round_trip';
+		this.returnratesform = shouldShowReturnRates;
 
 		// if(changes?.distance.currentValue){
 		// 	console.log('<><><>><><><><><><><><><><><><><><>' ,changes?.distance.currentValue , changes?.book_data?.currentValue)
@@ -180,6 +184,19 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 		}
 
+		if (shouldShowReturnRates && !this.ReturnRatesForm) {
+			const seededReturnRates = this.resolveReturnRateArray({
+				data: {
+					retrunRateArray: this.returnRatesdata.getValue(),
+					rateArray: this.ratesdata.getValue()
+				}
+			});
+			if (this.hasRateArrayContent(seededReturnRates)) {
+				this.returnRatesdata.next(seededReturnRates);
+				this.initReturnRates();
+			}
+		}
+
 
 		// if (changes.init_r_rates?.currentValue || this.returnratesform) {
 		// 	this.hours = 0;
@@ -204,7 +221,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.hours = Number(changes.nums.currentValue)
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 		}
-		if (changes.affiliate_type || changes.booking_created_from) {
+		if (changes.affiliate_type || changes.return_affiliate_type || changes.booking_created_from) {
 			console.log("in chnage affiloate typre")
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 			this.ReturnRatesForm && this.calculateAmount('ReturnRatesForm', 'all_inclusive_rates', 'Base_Rate');
@@ -368,6 +385,23 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.scroll('rate-heading')
 		}, 300)
 	}
+
+	private recalculateAllRates(form: "RatesForm" | "ReturnRatesForm"): void {
+		const targetForm = form === 'RatesForm' ? this.RateForm : this.ReturnRateForm;
+		if (!targetForm) {
+			return;
+		}
+
+		for (let formgroup in targetForm) {
+			for (let subform in targetForm[formgroup]?.controls) {
+				this.calculateAmount(form, formgroup, subform);
+			}
+		}
+
+		this.calculateTotal(form);
+		this.calculateGrandTotal(form);
+	}
+
 	initRates() {
 		try {
 
@@ -389,6 +423,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				if (response && Object.keys(response).length > 0) {
 					console.log('get rates data resposne-->>', response)
 					this.buildRatesForm('RatesForm', response);
+					this.recalculateAllRates('RatesForm');
 				}
 			})
 
@@ -444,13 +479,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.getReturnRatesData().subscribe((response: any) => {
 				if (response && Object.keys(response).length > 0) {
 					this.buildRatesForm('ReturnRatesForm', response);
-					if (this.bookingId) {
-						for (let formgroup in this.ReturnRateForm) {
-							for (let subform in this.ReturnRateForm[formgroup].controls) {
-								this.calculateAmount('ReturnRatesForm', formgroup, subform)
-							}
-						}
-					}
+					this.recalculateAllRates('ReturnRatesForm');
 				}
 			});
 			console.log('calculating return total for QB ')
@@ -465,13 +494,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.getReturnRatesData().subscribe((response: any) => {
 				if (response && Object.keys(response).length > 0) {
 					this.buildRatesForm('ReturnRatesForm', response);
-					if (this.bookingId) {
-						for (let formgroup in this.ReturnRateForm) {
-							for (let subform in this.ReturnRateForm[formgroup].controls) {
-								this.calculateAmount('ReturnRatesForm', formgroup, subform)
-							}
-						}
-					}
+					this.recalculateAllRates('ReturnRatesForm');
 				}
 			});
 		}
@@ -540,10 +563,93 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.returnRatesdata.next({})
 		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-			this.returnRatesdata.next(response?.data?.retrunRateArray)
+			this.returnRatesdata.next(this.resolveReturnRateArray(response))
 			this.initReturnRates()
 		});
 	}
+
+	private getBaseRateValue(rateArray: any): number {
+		const baseRate = rateArray?.all_inclusive_rates?.Base_Rate;
+		const amount = Number(baseRate?.amount);
+		const baserate = Number(baseRate?.baserate);
+		if (!isNaN(amount) && amount > 0) {
+			return amount;
+		}
+		if (!isNaN(baserate) && baserate > 0) {
+			return baserate;
+		}
+		return 0;
+	}
+
+	private shouldUseDedicatedReturnRateFetch(data: any, response: any): boolean {
+		if (data?.service_type !== 'round_trip') {
+			return false;
+		}
+
+		if (data?.affiliate_type !== 'loose_affiliate') {
+			return false;
+		}
+
+		if (data?.return_affiliate_type !== 'affiliate') {
+			return false;
+		}
+
+		if (!data?.return_vehicle_id || !data?.return_affiliate_id) {
+			return false;
+		}
+
+		const returnBaseRate = this.getBaseRateValue(response?.data?.retrunRateArray);
+		const outboundBaseRate = this.getBaseRateValue(response?.data?.rateArray);
+		const shouldFallback = returnBaseRate === 0 && outboundBaseRate === 0;
+		if (shouldFallback) {
+			console.log('admin/rates-form dedicated return-rate fallback triggered', {
+				affiliate_type: data?.affiliate_type,
+				return_affiliate_type: data?.return_affiliate_type,
+				return_vehicle_id: data?.return_vehicle_id,
+				return_affiliate_id: data?.return_affiliate_id,
+				return_distance: data?.return_distance,
+				returnBaseRate,
+				outboundBaseRate
+			});
+		}
+		return shouldFallback;
+	}
+
+	private buildDedicatedReturnBookingData(data: any): any {
+		const returnDistance = data?.return_distance || data?.distance;
+		return {
+			...data,
+			affiliate_id: data?.return_affiliate_id,
+			return_affiliate_id: data?.return_affiliate_id,
+			vehicle_id: data?.return_vehicle_id,
+			return_vehicle_id: data?.return_vehicle_id,
+			transfer_type: data?.return_transfer_type || data?.transfer_type,
+			return_transfer_type: data?.return_transfer_type || data?.transfer_type,
+			distance: returnDistance,
+			return_distance: returnDistance,
+			extra_stops: Array.isArray(data?.return_extra_stops) ? data.return_extra_stops : [],
+			return_extra_stops: Array.isArray(data?.return_extra_stops) ? data.return_extra_stops : [],
+			pickup_time: data?.return_pickup_time || data?.pickup_time,
+			return_pickup_time: data?.return_pickup_time || data?.pickup_time,
+			affiliate_type: data?.return_affiliate_type || data?.affiliate_type,
+			return_affiliate_type: data?.return_affiliate_type || data?.affiliate_type,
+			is_master_vehicle: false
+		};
+	}
+
+	private fetchDedicatedReturnRates(data: any): void {
+		const returnBookingData = this.buildDedicatedReturnBookingData(data);
+		console.log('admin/rates-form dedicated return-rate payload', returnBookingData);
+		this.$api.fetchRatesByAffiliateVeh(returnBookingData.vehicle_id, returnBookingData).subscribe((response: any) => {
+			console.log('admin/rates-form dedicated return-rate response', response);
+			const dedicatedReturnRates = response?.data?.rateArray || {};
+			this.returnRatesdata.next(dedicatedReturnRates);
+			this.initReturnRates();
+		}, (error: any) => {
+			console.error('admin/rates-form dedicated return-rate error', error);
+		});
+	}
+
 	fetchRatesArrayByAffiliateVehicle(data) {
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>', data,
 			data.vehicle_id, this.master_vehicle_id)
@@ -588,8 +694,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.initRates();
 
 			if (data.service_type == 'round_trip') {
-				this.returnRatesdata.next(response?.data?.retrunRateArray)
-				this.initReturnRates()
+				if (this.shouldUseDedicatedReturnRateFetch(data, response)) {
+					this.fetchDedicatedReturnRates(data);
+				} else {
+					this.returnRatesdata.next(this.resolveReturnRateArray(response))
+					this.initReturnRates()
+				}
 			}
 
 			// Instant error check on prefill
@@ -625,8 +735,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 		// Compare all properties
 		const keysToCompare = [
+			'affiliate_id',
+			'return_affiliate_id',
 			'vehicle_id',
 			'transfer_type',
+			'return_transfer_type',
 			'service_type',
 			'numberOfVehicles',
 			'distance',
@@ -707,6 +820,35 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	}
 	getRatesData() {
 		return this.ratesdata.asObservable();
+	}
+
+	hasRateArrayContent(rateArray: any): boolean {
+		if (!rateArray || typeof rateArray !== 'object') {
+			return false;
+		}
+
+		return ['all_inclusive_rates', 'taxes', 'amenities', 'misc', 'direct_taxes'].some((key) => {
+			const section = rateArray?.[key];
+			return section && typeof section === 'object' && Object.keys(section).length > 0;
+		});
+	}
+
+	resolveReturnRateArray(response: any): any {
+		const returnRateArray = response?.data?.retrunRateArray;
+		if (this.hasRateArrayContent(returnRateArray)) {
+			console.log('admin/rates-form return rate source', 'retrunRateArray');
+			console.log('admin/rates-form return Base_Rate snapshot', returnRateArray?.all_inclusive_rates?.Base_Rate);
+			return returnRateArray;
+		}
+
+		const outboundRateArray = response?.data?.rateArray;
+		if (this.hasRateArrayContent(outboundRateArray)) {
+			console.log('admin/rates-form return rate source', 'rateArray fallback');
+			return JSON.parse(JSON.stringify(outboundRateArray));
+		}
+
+		console.log('admin/rates-form return rate source', 'empty');
+		return {};
 	}
 	// Live update while typing (allows 10, 11, 12, 15 etc.)
 	handleHourChange(event: any) {
@@ -886,7 +1028,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	}
 	calculateReturnAdminShare() {
 		let baseRate = this.calculateReturnBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && this.affiliate_type == 'loose_affiliate') ? 0 : 25
+		const effectiveReturnAffiliateType = this.return_affiliate_type || this.affiliate_type;
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && effectiveReturnAffiliateType == 'loose_affiliate') ? 0 : 25
 		this.r_calc_admin_share = baseRate * this.admin_share / 100 + (this.ReturnRatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
 		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
 	}

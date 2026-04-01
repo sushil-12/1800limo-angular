@@ -610,7 +610,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
-				<h3 class="mb-0">Email</h3>
+				<h3 class="mb-0">Email To All</h3>
 			</div>
 			<div class="modal-body text-center">
 				<p>Are you sure, You want to send email?</p>
@@ -618,6 +618,8 @@
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="emailAll()">Send
 					Email</button>
+				<button type="button" class="custom-btn savebutton"
+					(click)="updatedEmailAll('emailAll')">Send Updated Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
 		</div>

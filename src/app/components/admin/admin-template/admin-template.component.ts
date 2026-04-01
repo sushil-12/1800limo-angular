@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
@@ -13,7 +13,7 @@ declare var $: any;
 	templateUrl: './admin-template.component.html',
 	styleUrls: ['./admin-template.component.scss']
 })
-export class AdminTemplateComponent implements OnInit {
+export class AdminTemplateComponent implements OnInit, AfterViewInit, OnDestroy {
 	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM'
 	public role: string;
 	public created_by_role: any;
@@ -36,11 +36,18 @@ export class AdminTemplateComponent implements OnInit {
 	subModules: any = localStorage.getItem('sub_modules') || ''
 	desktopWidth: any;
 	name: any;
+	private collapseChevronBindings = [
+		{ selector: '#collapse6', key: 'chevron1' as const },
+		{ selector: '#collapse8', key: 'chevron2' as const },
+		{ selector: '#collapse10', key: 'chevron3' as const },
+		{ selector: '#collapse11', key: 'chevron4' as const },
+	];
 	constructor(private router: Router, private authService: AuthService,
 		private stateManagementService: StateManagementService,
 		private spinner: NgxSpinnerService,
 		private adminService: AdminService,
 		private elementRef: ElementRef,
+		private ngZone: NgZone,
 	) { }
 
 	// ngAfterViewInit()
@@ -87,7 +94,12 @@ export class AdminTemplateComponent implements OnInit {
 	ngAfterViewInit() {
 
 		this.googleTranslateInitFunction();
+		this.initSidebarChevronSync();
 
+	}
+
+	ngOnDestroy(): void {
+		this.destroySidebarChevronSync();
 	}
 
 	handleDivClick(event: MouseEvent | TouchEvent) {
@@ -184,14 +196,16 @@ export class AdminTemplateComponent implements OnInit {
 			});
 	}
 	showSidebarFunc(status) {
-
-		$("body").toggleClass("sidenav-toggled");
 		if (status) {
+			$("body").removeClass("sidenav-toggled");
 			this.showSidebar = true;
+			this.syncAllSidebarChevrons();
+			return;
 		}
-		else {
-			this.showSidebar = false;
-		}
+
+		this.closeAllSidebarSubmenus();
+		$("body").addClass("sidenav-toggled");
+		this.showSidebar = false;
 	}
 
 	closeSidebarFunc(status) {
@@ -311,5 +325,48 @@ export class AdminTemplateComponent implements OnInit {
 
 		this.router.navigateByUrl('/home');
 
+	}
+
+	private initSidebarChevronSync() {
+		this.destroySidebarChevronSync();
+		this.syncAllSidebarChevrons();
+
+		this.collapseChevronBindings.forEach(({ selector, key }) => {
+			const $collapse = $(selector);
+
+			$collapse.on('shown.bs.collapse.adminChevronSync', () => {
+				this.ngZone.run(() => {
+					this[key] = true;
+				});
+			});
+
+			$collapse.on('hidden.bs.collapse.adminChevronSync', () => {
+				this.ngZone.run(() => {
+					this[key] = false;
+				});
+			});
+		});
+	}
+
+	private destroySidebarChevronSync() {
+		this.collapseChevronBindings.forEach(({ selector }) => {
+			$(selector).off('.adminChevronSync');
+		});
+	}
+
+	private syncAllSidebarChevrons() {
+		this.collapseChevronBindings.forEach(({ selector, key }) => {
+			this[key] = $(selector).hasClass('show');
+		});
+	}
+
+	private closeAllSidebarSubmenus() {
+		this.collapseChevronBindings.forEach(({ selector, key }) => {
+			const $collapse = $(selector);
+			if ($collapse.hasClass('show')) {
+				$collapse.collapse('hide');
+			}
+			this[key] = false;
+		});
 	}
 }
