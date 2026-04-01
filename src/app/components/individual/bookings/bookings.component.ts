@@ -167,25 +167,104 @@ export class BookingsComponent implements OnInit {
 		$("#search-field-my-booking").addClass("box-outline")
 	}
 
+	private toFiniteNumber(value: any): number | null {
+		const num = Number(value);
+		return Number.isFinite(num) ? num : null;
+	}
+
+	private buildLatLngFromValues(latValue: any, lngValue: any): google.maps.LatLng | null {
+		const lat = this.toFiniteNumber(latValue);
+		const lng = this.toFiniteNumber(lngValue);
+		if (lat === null || lng === null) {
+			return null;
+		}
+		return new google.maps.LatLng(lat, lng);
+	}
+
+	private getPreviewLocationValue(primaryLabel: any, fallbackLabel: any): string | null {
+		const primary = String(primaryLabel || '').trim();
+		if (primary) {
+			return primary;
+		}
+		const fallback = String(fallbackLabel || '').trim();
+		return fallback || null;
+	}
+
+	private resolvePreviewRoutePoint(kind: 'pickup' | 'dropoff'): google.maps.LatLng | string | null {
+		const transferType = String(this.bookingPreview?.transfer_type || '');
+		const usesAirportPoint = kind === 'pickup'
+			? transferType.includes('airport_')
+			: transferType.includes('_airport');
+
+		const airportPoint = this.buildLatLngFromValues(
+			this.bookingPreview?.[`${kind}_airport_latitude`],
+			this.bookingPreview?.[`${kind}_airport_longitude`]
+		);
+		const addressPoint = this.buildLatLngFromValues(
+			this.bookingPreview?.[`${kind}_latitude`],
+			this.bookingPreview?.[`${kind}_longitude`]
+		);
+
+		if (usesAirportPoint && airportPoint) {
+			return airportPoint;
+		}
+
+		if (addressPoint) {
+			return addressPoint;
+		}
+
+		if (airportPoint) {
+			return airportPoint;
+		}
+
+		if (usesAirportPoint) {
+			return this.getPreviewLocationValue(
+				this.bookingPreview?.[`${kind}_airport_name`],
+				this.bookingPreview?.[`${kind}`]
+			);
+		}
+
+		return this.getPreviewLocationValue(
+			this.bookingPreview?.[`${kind}`],
+			this.bookingPreview?.[`${kind}_airport_name`]
+		);
+	}
+
+	private resolvePreviewWaypoints(): google.maps.DirectionsWaypoint[] {
+		const stops = Array.isArray(this.bookingPreview?.extra_stops) ? this.bookingPreview.extra_stops : [];
+
+		return stops
+			.map((stop: any) => {
+				const stopPoint = this.buildLatLngFromValues(stop?.latitude, stop?.longitude);
+				const stopAddress = String(stop?.address || '').trim();
+				const location = stopPoint ?? stopAddress;
+
+				if (!location) {
+					return null;
+				}
+
+				return {
+					location,
+					stopover: true
+				} as google.maps.DirectionsWaypoint;
+			})
+			.filter((waypoint: google.maps.DirectionsWaypoint | null): waypoint is google.maps.DirectionsWaypoint => !!waypoint);
+	}
 
 	MapController() {
 		console.log('Map has been initialised.')
-		let origin: google.maps.LatLng;
-		let destination: google.maps.LatLng;
-		const waypoints: google.maps.DirectionsWaypoint[] = [];
+		const origin = this.resolvePreviewRoutePoint('pickup');
+		const destination = this.resolvePreviewRoutePoint('dropoff');
+		const waypoints = this.resolvePreviewWaypoints();
 
-		// Base values
-		origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
-		destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
-
-
-		// Override based on transfer_type
-		if (this.bookingPreview.transfer_type?.includes('airport_')) {
-			origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
-		}
-
-		if (this.bookingPreview.transfer_type?.includes('_airport')) {
-			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
+		if (!origin || !destination) {
+			console.error('Preview map route points are incomplete', {
+				transfer_type: this.bookingPreview?.transfer_type,
+				origin,
+				destination,
+				bookingPreview: this.bookingPreview
+			});
+			return;
 		}
 
 
@@ -204,7 +283,13 @@ export class BookingsComponent implements OnInit {
 
 	drawMap(request: google.maps.DirectionsRequest) {
 		const directionsService = new google.maps.DirectionsService();
-		this.directionsRenderer = new google.maps.DirectionsRenderer();
+		if (this.directionsRenderer) {
+			this.directionsRenderer.setMap(null);
+		}
+		this.directionsRenderer = new google.maps.DirectionsRenderer({
+			suppressMarkers: false,
+			preserveViewport: false
+		});
 
 		const mapInstance = this.map.googleMap;
 		if (!mapInstance) {

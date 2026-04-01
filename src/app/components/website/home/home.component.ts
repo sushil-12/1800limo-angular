@@ -453,6 +453,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			input,
 			{
 				airportField: true,
+				primaryTypes: ['airport'],
 				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
 				syncControl: this.quoteBotForm?.get(`${fieldName}_name`) ?? undefined,
 			},

@@ -635,6 +635,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			nativeInput,
 			{
 				airportField: true,
+				primaryTypes: ['airport'],
 				syncControl: this.BookingForm.get(`${control}_option`) ?? undefined,
 			},
 			(place) => {
