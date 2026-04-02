@@ -88,7 +88,7 @@
 				<!-- Pickup Details Airport -->
 				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Airport </p>
-					<strong>{{ BookingDetail?.pickup_airport_name | titlecase }}</strong>
+					<strong>{{BookingDetail?.pickup_address ? BookingDetail?.pickup_address : (BookingDetail?.pickup_airport_name | titlecase) }}</strong>
 				</div>
 				<!-- <div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Airline</p>
@@ -121,7 +121,7 @@
 				<!-- Dropoff Details Airport -->
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_airport')">
 					<p>DropOff Airport </p>
-					<strong>{{ BookingDetail?.dropoff_airport_name | titlecase }}</strong>
+					<strong>{{ BookingDetail?.dropoff_address ? BookingDetail?.dropoff_address : (BookingDetail?.dropoff_airport_name | titlecase) }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_airport')">
 					<p>DropOff Airline</p>
