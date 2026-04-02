@@ -58,9 +58,9 @@
 			<p>Pickup Address: </p>
 			<strong> {{ BookingDetail?.pickup_address }}</strong>
 		</div>
-		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name">
+		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name || BookingDetails?.pickup_address">
 			<p>Pickup Airport: </p>
-			<strong>{{ BookingDetail?.pickup_airport_name }}</strong>
+			<strong>{{BookingDetail?.pickup_address ? BookingDetails?.pickup_address : BookingDetail?.pickup_airport_name }}</strong>
 		</div>
 		<!-- <div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airline_name">
 			<p>Pickup Airline: </p>
@@ -78,9 +78,9 @@
 			<p>Drop-Off Address: </p>
 			<strong>{{ BookingDetail?.dropoff_address }}</strong>
 		</div>
-		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airport_name">
+		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airport_name || BookingDetail?.dropoff_address">
 			<p>Drop-Off Airport: </p>
-			<strong>{{ BookingDetail?.dropoff_airport_name }}</strong>
+			<strong>{{BookingDetail?.dropoff_address ? BookingDetail?.dropoff_address : BookingDetail?.dropoff_airport_name }}</strong>
 		</div>
 		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airline_name">
 			<p>Drop-Off Airline: </p>

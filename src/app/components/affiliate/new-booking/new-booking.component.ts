@@ -940,13 +940,17 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('pickup_time', this.FormatTime(response?.data?.pickup_time))
 			this.SetFormValue('cruise_time', this.FormatTime(response?.data?.cruise_time))
 			this.SetFormValue('return_pickup_time', this.FormatTime(response?.data?.return_pickup_time))
-			this.SetFormValue('pickup_airport_option', this.getAirportDisplayValue(this.BigData?.airportsData?.find((item: any) => item?.id == this.Form?.pickup_airport?.value)));
+			this.SetFormValue('pickup_airport_option', this.getEditAirportDisplayValue(this.Form?.pickup_airport?.value, editing_data.pickup_address));
+			this.SetFormValue('pickup_airport_name', this.getEditAirportDisplayValue(this.Form?.pickup_airport?.value, editing_data.pickup_address));
 			this.SetFormValue('pickup_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this.Form?.pickup_airline?.value));
-			this.SetFormValue('dropoff_airport_option', this.getAirportDisplayValue(this.BigData?.airportsData?.find((item: any) => item?.id == this.Form?.dropoff_airport?.value)));
+			this.SetFormValue('dropoff_airport_option', this.getEditAirportDisplayValue(this.Form?.dropoff_airport?.value, editing_data.dropoff_address));
+			this.SetFormValue('dropoff_airport_name', this.getEditAirportDisplayValue(this.Form?.dropoff_airport?.value, editing_data.dropoff_address));
 			this.SetFormValue('dropoff_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this.Form?.dropoff_airline?.value));
-			this.SetFormValue('return_pickup_airport_option', this.getAirportDisplayValue(this.BigData?.airportsData?.find((item: any) => item?.id == this.Form?.return_pickup_airport?.value)));
+			this.SetFormValue('return_pickup_airport_option', this.getEditAirportDisplayValue(this.Form?.return_pickup_airport?.value, editing_data.return_pickup_address));
+			this.SetFormValue('return_pickup_airport_name', this.getEditAirportDisplayValue(this.Form?.return_pickup_airport?.value, editing_data.return_pickup_address));
 			this.SetFormValue('return_pickup_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this.Form?.return_pickup_airline?.value));
-			this.SetFormValue('return_dropoff_airport_option', this.getAirportDisplayValue(this.BigData?.airportsData?.find((item: any) => item?.id == this?.Form?.return_dropoff_airport?.value)));
+			this.SetFormValue('return_dropoff_airport_option', this.getEditAirportDisplayValue(this.Form?.return_dropoff_airport?.value, editing_data.return_dropoff_address));
+			this.SetFormValue('return_dropoff_airport_name', this.getEditAirportDisplayValue(this.Form?.return_dropoff_airport?.value, editing_data.return_dropoff_address));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this?.Form?.return_dropoff_airline?.value));
 			this.SetFormValue('origin_airport_city', editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city)
 
@@ -1410,6 +1414,20 @@ export class NewBookingComponent implements OnInit {
 
 	getPreviewAirportDisplay(name: any, option: any): string {
 		return this.getAirportDisplayValue(name) || this.getAirportDisplayValue(option) || '';
+	}
+
+	private getEditAirportDisplayValue(
+		airportId: any,
+		savedAirportLine: any
+	): string {
+		const savedDisplay = String(savedAirportLine || '').trim();
+		if (savedDisplay) {
+			return savedDisplay;
+		}
+
+		return this.getAirportDisplayValue(
+			this.BigData?.airportsData?.find((item: any) => item?.id == airportId)
+		);
 	}
 
 	syncAirportPayloadFields() {
