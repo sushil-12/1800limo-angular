@@ -58,9 +58,9 @@
 			<p>Pickup Address: </p>
 			<strong> {{ BookingDetail?.pickup_address }}</strong>
 		</div>
-		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name || BookingDetails?.pickup_address">
+		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name || BookingDetail?.pickup_address">
 			<p>Pickup Airport: </p>
-			<strong>{{BookingDetail?.pickup_address ? BookingDetails?.pickup_address : BookingDetail?.pickup_airport_name }}</strong>
+			<strong>{{BookingDetail?.pickup_address ? BookingDetail?.pickup_address : BookingDetail?.pickup_airport_name }}</strong>
 		</div>
 		<!-- <div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airline_name">
 			<p>Pickup Airline: </p>
