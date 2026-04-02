@@ -211,6 +211,29 @@ function setupPlaceAutocompleteHelper(
 		});
 	};
 
+	const hasVisibleAirportPrediction = (): boolean => {
+		const root = getRoot();
+		if (!root) {
+			return false;
+		}
+		const options = Array.from(root.querySelectorAll('[role="option"], .suggestion-item')) as HTMLElement[];
+		return options.some((option) => {
+			const style = window.getComputedStyle(option);
+			if (
+				style.display === 'none'
+				|| style.visibility === 'hidden'
+				|| option.getAttribute('aria-hidden') === 'true'
+			) {
+				return false;
+			}
+			const optionText = (option.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+			if (!optionText.includes('airport')) {
+				return false;
+			}
+			return !['terminal', 'concourse', 'fbo'].some((keyword) => optionText.includes(keyword));
+		});
+	};
+
 	const syncDraftToField = (value: string) => {
 		if (!nativeInput) {
 			return;
@@ -233,19 +256,24 @@ function setupPlaceAutocompleteHelper(
 		if (!isCodeSearch || rawValue.endsWith(' ')) {
 			return;
 		}
-		if (getPredictionCount() > 0) {
+		const predictionCount = getPredictionCount();
+		if (predictionCount > 0 && hasVisibleTerminalPrediction()) {
 			return;
 		}
 
 		clearAirportCodeAssistTimer();
 		airportCodeAssistTimer = window.setTimeout(() => {
 			airportCodeAssistTimer = null;
-			if (!isInputFocused(inner) || getPredictionCount() > 0) {
+			if (!isInputFocused(inner)) {
 				return;
 			}
 
 			const latestValue = (inner.value || '').trim();
 			if (!/^[A-Za-z]{3,4}$/.test(latestValue)) {
+				return;
+			}
+			const latestPredictionCount = getPredictionCount();
+			if (latestPredictionCount > 0 && hasVisibleTerminalPrediction()) {
 				return;
 			}
 
@@ -286,7 +314,7 @@ function setupPlaceAutocompleteHelper(
 		}
 
 		const predictionCount = getPredictionCount();
-		if (predictionCount === 0 || hasVisibleTerminalPrediction()) {
+		if (predictionCount === 0 || hasVisibleAirportPrediction()) {
 			return;
 		}
 
@@ -301,13 +329,13 @@ function setupPlaceAutocompleteHelper(
 			const latestIsCodeSearch = /^[A-Za-z]{3,4}$/.test(latestValue);
 			const latestHasTerminalKeyword = /(terminal|concourse|fbo)\b/i.test(latestValue);
 			const latestIsAirportNameSearch = !latestIsCodeSearch && latestValue.length >= 4 && !latestHasTerminalKeyword;
-			if (!latestIsAirportNameSearch || getPredictionCount() === 0 || hasVisibleTerminalPrediction()) {
+			if (!latestIsAirportNameSearch || getPredictionCount() === 0 || hasVisibleAirportPrediction()) {
 				return;
 			}
 
 			airportNameAssistActive = true;
 			try {
-				const expandedValue = `${latestValue} airport terminal`;
+				const expandedValue = `${latestValue} airport`;
 				inner.value = expandedValue;
 				inner.dispatchEvent(new Event('input', { bubbles: true }));
 				inner.dispatchEvent(new Event('change', { bubbles: true }));
