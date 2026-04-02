@@ -56,6 +56,7 @@ export class IndividualService {
 
   createBooking(data: any, update_type: string) {
     if (update_type == 'return' || update_type == 'repeat' || update_type == 'round') {
+      data.account_type = 'individual';
       return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
     }
     if (data.reservation_id) {
