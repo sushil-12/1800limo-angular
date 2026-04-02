@@ -157,6 +157,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	affiliate_id: any;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
+	route_vehicle_id: number | null = null;
 	unique_key: any;
 	return_unique_key: any;
 	firstLoadAffiliateId: void;
@@ -230,6 +231,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			else if (params && isNewBookingFlow) {
 				this.newBooking = true
 				this.affiliate_id = parseInt(params?.affiliate_id)
+				const routeVehicleId = Number(params?.vehicle_id);
+				this.route_vehicle_id = Number.isFinite(routeVehicleId) && routeVehicleId > 0 ? routeVehicleId : null;
 				this.booking_created_from = params?.created_by
 				if (hasMasterVehicleParam) {
 					this.route_is_master_vehicle = routeIsMasterVehicle;
@@ -2618,6 +2621,34 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 		}
 		this.buildBookingData()
+	}
+
+	private prefillVehiclePreferencesFromMasterVehicle(selectedVehicle: any, isReturn: boolean = false) {
+		if (!selectedVehicle) {
+			return;
+		}
+
+		const prefix = isReturn ? 'return_' : '';
+		const setVehicleValue = (controlName: string, value: any) => {
+			if (value === undefined || value === null || value === '') {
+				return;
+			}
+			this.BookingForm.get(`${prefix}${controlName}`)?.setValue(value, { emitEvent: false });
+		};
+
+		setVehicleValue('vehicle_id', selectedVehicle?.ID || selectedVehicle?.id);
+		setVehicleValue('vehicle_type', selectedVehicle?.vehicleType_id);
+		setVehicleValue('vehicle_type_name', selectedVehicle?.vehicleType);
+		setVehicleValue('vehicle_make', selectedVehicle?.make_id);
+		setVehicleValue('vehicle_make_name', selectedVehicle?.make);
+		setVehicleValue('vehicle_model', selectedVehicle?.model_id);
+		setVehicleValue('vehicle_model_name', selectedVehicle?.model);
+		setVehicleValue('vehicle_year', selectedVehicle?.year_id);
+		setVehicleValue('vehicle_year_name', selectedVehicle?.year);
+		setVehicleValue('vehicle_color', selectedVehicle?.color_id);
+		setVehicleValue('vehicle_color_name', selectedVehicle?.color);
+		setVehicleValue('vehicle_license_plate', selectedVehicle?.licensePlate);
+		setVehicleValue('vehicle_seats', selectedVehicle?.seats);
 	}
 
 	fetchAffiliateVehicles(affiliate_id: any) {
@@ -5636,6 +5667,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		//set no of vehicles
 		this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
+		this.prefillVehiclePreferencesFromMasterVehicle(selected_vehicle);
+		if (this.service_type === 'round_trip') {
+			this.prefillVehiclePreferencesFromMasterVehicle(selected_vehicle, true);
+		}
 		// set cancellation period without breaking master-vehicle prefill
 		const fallbackCancellationHours =
 			selected_vehicle?.cancellation_policy ??
@@ -5705,7 +5740,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('affiliate_id', this.affiliate_id)
 		this.SetFormValue('return_affiliate_id', this.affiliate_id)
 		//vehicle id when chossing vehicle from Quote bot screen
-		this.QB_vehicle_id = selected_vehicle?.id || null
+		this.QB_vehicle_id = selected_vehicle?.id || this.route_vehicle_id || null
 		//pickup
 		const matchedPickupAirport = this.resolveInternalAirportRecord({
 			name: QB?.other_details?.pickup_airport_name,
