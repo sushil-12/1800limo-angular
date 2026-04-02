@@ -103,6 +103,8 @@ export class DailyBookingsComponent implements OnInit {
 	directionsRenderer!: google.maps.DirectionsRenderer;
 	markers: google.maps.Marker[] = [];
 	showCopyIcon: boolean = false
+	selectedEmailBookingShowChangedFields: boolean = false;
+	selectedEmailBookingStatus: string = '';
 
 	constructor(
 		private adminService: AdminService,
@@ -1223,8 +1225,10 @@ export class DailyBookingsComponent implements OnInit {
 			});
 	}
 
-	sendEmailClicked(bookingId, emailTarget) {
+	sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatus = '') {
 		console.log('in func send email click', bookingId, emailTarget)
+		this.selectedEmailBookingShowChangedFields = !!showChangedFields;
+		this.selectedEmailBookingStatus = bookingStatus || '';
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 			emailTarget: emailTarget,

@@ -1242,7 +1242,14 @@ a.user-profile:active::after {
 	border: 2px solid;
 	padding: 0px !important;
 	border-radius: 14px;
-	width: 100%;
+}
+
+.errorMsg .text-danger {
+	background-color: #fff !important;
+	padding: 0px 8px !important;
+	border-radius: 10px;
+	display: block;
+	margin-top:5px !important;
 }
 
 .cross-svg {

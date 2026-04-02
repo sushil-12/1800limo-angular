@@ -481,3 +481,30 @@ ul {
 	line-height: 0;
 	cursor: pointer;
 }
+
+:host ::ng-deep mat-form-field.airport-autocomplete-field {
+	margin: 0 !important;
+	width: 100%;
+
+	.mat-mdc-text-field-wrapper {
+		height: 58px !important;
+		min-height: 58px !important;
+		max-height: 58px !important;
+	}
+
+	.mat-mdc-form-field-flex {
+		height: 58px !important;
+		min-height: 58px !important;
+		max-height: 58px !important;
+		align-items: center !important;
+	}
+
+	.mat-mdc-form-field-infix {
+		min-height: 58px !important;
+		height: 58px !important;
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+		display: flex !important;
+		align-items: center !important;
+	}
+}

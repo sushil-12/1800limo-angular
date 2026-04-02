@@ -162,24 +162,100 @@ export class FarmOutComponent implements OnInit {
 	}
 
 	MapController() {
-		console.log('Map has been initialised.')
-		let origin: google.maps.LatLng;
-		let destination: google.maps.LatLng;
+		console.log('farmout/preview MapController:start', {
+			reservation_id: this.bookingPreview?.reservation_id,
+			transferType: this.bookingPreview?.transfer_type,
+		})
+		const transferType = this.bookingPreview?.transfer_type || '';
+		let originCoords: google.maps.LatLng | null;
+		let destinationCoords: google.maps.LatLng | null;
 		const waypoints: google.maps.DirectionsWaypoint[] = [];
 
 		// Base values
-		origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
-		destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
+		originCoords = this.resolveLatLng([
+			['pickup_latitude', 'pickup_longitude'],
+			['pickup_address_lat', 'pickup_address_long'],
+			['pickup_lat', 'pickup_long'],
+		]);
+		destinationCoords = this.resolveLatLng([
+			['dropoff_latitude', 'dropoff_longitude'],
+			['dropoff_address_lat', 'dropoff_address_long'],
+			['dropoff_lat', 'dropoff_long'],
+		]);
 
 
 		// Override based on transfer_type
-		if (this.bookingPreview.transfer_type?.includes('airport_')) {
-			origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
+		if (transferType.includes('airport_')) {
+			originCoords = this.resolveLatLng([
+				['pickup_airport_latitude', 'pickup_airport_longitude'],
+				['pickup_airport_lat', 'pickup_airport_long'],
+			]) || originCoords;
 		}
 
-		if (this.bookingPreview.transfer_type?.includes('_airport')) {
-			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
+		if (transferType.includes('_airport')) {
+			destinationCoords = this.resolveLatLng([
+				['dropoff_airport_latitude', 'dropoff_airport_longitude'],
+				['dropoff_airport_lat', 'dropoff_airport_long'],
+			]) || destinationCoords;
 		}
+
+		const origin = this.resolveRouteLocation(
+			originCoords,
+			transferType.includes('airport_')
+				? ['pickup_airport_name', 'pickup']
+				: ['pickup', 'pickup_airport_name']
+		);
+		const destination = this.resolveRouteLocation(
+			destinationCoords,
+			transferType.includes('_airport')
+				? ['dropoff_airport_name', 'dropoff']
+				: ['dropoff', 'dropoff_airport_name']
+		);
+
+		console.log('farmout/preview MapController:raw-fields', {
+			pickup: this.bookingPreview?.pickup,
+			dropoff: this.bookingPreview?.dropoff,
+			pickup_airport_name: this.bookingPreview?.pickup_airport_name,
+			dropoff_airport_name: this.bookingPreview?.dropoff_airport_name,
+			pickup_latitude: this.bookingPreview?.pickup_latitude,
+			pickup_longitude: this.bookingPreview?.pickup_longitude,
+			pickup_address_lat: this.bookingPreview?.pickup_address_lat,
+			pickup_address_long: this.bookingPreview?.pickup_address_long,
+			pickup_airport_latitude: this.bookingPreview?.pickup_airport_latitude,
+			pickup_airport_longitude: this.bookingPreview?.pickup_airport_longitude,
+			pickup_airport_lat: this.bookingPreview?.pickup_airport_lat,
+			pickup_airport_long: this.bookingPreview?.pickup_airport_long,
+			dropoff_latitude: this.bookingPreview?.dropoff_latitude,
+			dropoff_longitude: this.bookingPreview?.dropoff_longitude,
+			dropoff_address_lat: this.bookingPreview?.dropoff_address_lat,
+			dropoff_address_long: this.bookingPreview?.dropoff_address_long,
+			dropoff_airport_latitude: this.bookingPreview?.dropoff_airport_latitude,
+			dropoff_airport_longitude: this.bookingPreview?.dropoff_airport_longitude,
+			dropoff_airport_lat: this.bookingPreview?.dropoff_airport_lat,
+			dropoff_airport_long: this.bookingPreview?.dropoff_airport_long,
+		});
+
+		if (!origin || !destination) {
+			console.error('farmout/preview MapController:route-input-missing', {
+				transferType,
+				origin,
+				destination,
+			});
+			return;
+		}
+
+		if (originCoords) {
+			this.mapCenter = { lat: originCoords.lat(), lng: originCoords.lng() };
+		} else if (destinationCoords) {
+			this.mapCenter = { lat: destinationCoords.lat(), lng: destinationCoords.lng() };
+		}
+		console.log('farmout/preview MapController:resolved', {
+			transferType,
+			origin,
+			destination,
+			originCoords: originCoords ? { lat: originCoords.lat(), lng: originCoords.lng() } : null,
+			destinationCoords: destinationCoords ? { lat: destinationCoords.lat(), lng: destinationCoords.lng() } : null,
+		});
 
 		setTimeout(() => {
 			this.drawMap({
@@ -195,25 +271,103 @@ export class FarmOutComponent implements OnInit {
 	}
 
 	drawMap(request: google.maps.DirectionsRequest) {
+		console.log('farmout/preview drawMap:request', {
+			origin: request.origin instanceof google.maps.LatLng
+				? { lat: request.origin.lat(), lng: request.origin.lng(), type: 'latlng' }
+				: { value: request.origin, type: typeof request.origin },
+			destination: request.destination instanceof google.maps.LatLng
+				? { lat: request.destination.lat(), lng: request.destination.lng(), type: 'latlng' }
+				: { value: request.destination, type: typeof request.destination },
+			waypointsCount: request.waypoints?.length || 0,
+			travelMode: request.travelMode,
+		});
 		const directionsService = new google.maps.DirectionsService();
 		this.directionsRenderer = new google.maps.DirectionsRenderer();
 
 		const mapInstance = this.map.googleMap;
 		if (!mapInstance) {
-			console.error('Map is not initialized yet');
+			console.error('farmout/preview drawMap:map-missing');
 			return;
 		}
 
+		google.maps.event.trigger(mapInstance, 'resize');
+		mapInstance.setCenter(this.mapCenter);
 		this.directionsRenderer.setMap(mapInstance);
 
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK) {
-				console.log('Directions loaded:', response);
+				console.log('farmout/preview drawMap:success', {
+					status,
+					legs: response?.routes?.[0]?.legs?.length || 0,
+				});
 				this.directionsRenderer.setDirections(response);
 			} else {
-				console.error('Directions request failed due to ' + status);
+				console.error('farmout/preview drawMap:failure', {
+					status,
+					requestOrigin: request.origin instanceof google.maps.LatLng
+						? { lat: request.origin.lat(), lng: request.origin.lng(), type: 'latlng' }
+						: request.origin,
+					requestDestination: request.destination instanceof google.maps.LatLng
+						? { lat: request.destination.lat(), lng: request.destination.lng(), type: 'latlng' }
+						: request.destination,
+				});
 			}
 		});
+	}
+
+	private resolveCoordinate(...keys: string[]): number | null {
+		for (const key of keys) {
+			const rawValue = this.bookingPreview?.[key];
+			const parsedValue = Number(rawValue);
+			if (rawValue !== null && rawValue !== undefined && rawValue !== '' && Number.isFinite(parsedValue)) {
+				return parsedValue;
+			}
+		}
+
+		return null;
+	}
+
+	private resolveLatLng(keyPairs: Array<[string, string]>): google.maps.LatLng | null {
+		for (const [latKey, lngKey] of keyPairs) {
+			const lat = this.resolveCoordinate(latKey);
+			const lng = this.resolveCoordinate(lngKey);
+
+			if (lat !== null && lng !== null) {
+				// The preview API sometimes sends 0,0 for missing airport coordinates.
+				// Treat that sentinel as "no coordinates" so we can fall back to the address/airport label.
+				if (lat === 0 && lng === 0) {
+					console.warn('farmout/preview resolveLatLng:ignoring-zero-coordinates', {
+						latKey,
+						lngKey,
+						lat,
+						lng,
+					});
+					continue;
+				}
+
+				return new google.maps.LatLng(lat, lng);
+			}
+		}
+
+		return null;
+	}
+
+	private resolveRouteLocation(
+		coords: google.maps.LatLng | null,
+		textKeys: string[]
+	): string | google.maps.LatLng | null {
+		if (coords) {
+			return coords;
+		}
+
+		for (const key of textKeys) {
+			const rawValue = this.bookingPreview?.[key];
+			if (typeof rawValue === 'string' && rawValue.trim()) {
+				return rawValue.trim();
+			}
+		}
+
+		return null;
 	}
 
 	scroll(id) {

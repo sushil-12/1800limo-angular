@@ -403,6 +403,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 			if (googleReady && hasAnyAddressInput) {
 				this.initializeallloadGoogleAutocomplete();
+				return;
 			}
 
 			if (remainingAttempts > 1) {
