@@ -716,7 +716,7 @@
 		<div class="modal-content" style="background: #f5f4fe;">
 			<div class="modal-header d-flex justify-content-start py-0">
 				<h3 class="modal-title">
-					Preview Booking #{{bookingPreview?.reservation_id}}
+					Preview Bookingsss #{{bookingPreview?.reservation_id}}
 				</h3>
 				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
@@ -1184,20 +1184,17 @@
 
 				</div>
 				<hr>
-				<br>
 				<div class="google_map">
-					<div class="google_map">
-						<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
-					</div>
-					<br>
-					<hr>
-					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+				</div>
+				<hr>
+				<!-- Passenger Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
-					</h4>
+				</h4>
 
-					<!-- Passenger > Name -->
-					<div class="mx-2 preview-pickup-color">
+				<!-- Passenger > Name -->
+				<div class="mx-2 preview-pickup-color">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1210,10 +1207,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+				</div>
 
-					<!-- Passenger > Email -->
-					<!-- <div class="mx-2">
+				<!-- Passenger > Email -->
+				<!-- <div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1228,8 +1225,8 @@
 						</div>
 					</div> -->
 
-					<!-- Passenger > Phone -->
-					<div class="mx-2 preview-pickup-color">
+				<!-- Passenger > Phone -->
+				<div class="mx-2 preview-pickup-color">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;color: #1e7500;">
@@ -1249,8 +1246,8 @@
 							</span> -->
 							</div>
 						</div>
-					</div>
-					<div class="mx-2">
+				</div>
+				<div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1263,8 +1260,8 @@
 								</span>
 							</div>
 						</div>
-					</div>
-					<div class="mx-2">
+				</div>
+				<div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1277,16 +1274,16 @@
 								</span>
 							</div>
 						</div>
-					</div>
-					<!-- Travel Information -->
-					<!-- <h4 class="font-weight m-0 mt-3">
+				</div>
+				<!-- Travel Information -->
+				<!-- <h4 class="font-weight m-0 mt-3">
 						Travel Information
 					</h4> -->
 
-					<!-- Number of Hours -->
+				<!-- Number of Hours -->
 
-					<hr>
-					<div class="mx-2">
+				<hr>
+				<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1300,9 +1297,9 @@
 								</span>
 							</div>
 						</div>
-					</div>
-					<hr>
-					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+				</div>
+				<hr>
+				<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1315,9 +1312,9 @@
 								</span>
 							</div>
 						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
+				</div>
+				<hr>
+				<div class="mx-2">
 						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1331,13 +1328,13 @@
 							</div>
 							<hr>
 						</div>
-					</div>
+				</div>
 
-					<!-- Grand Total -->
-					<h4 class="font-weight-bolder m-0">
+				<!-- Grand Total -->
+				<h4 class="font-weight-bolder m-0">
 						Vehicle Type
-					</h4>
-					<div class="row p-2">
+				</h4>
+				<div class="row p-2">
 						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Type
@@ -1348,8 +1345,8 @@
 								{{ bookingPreview?.vehicle_type_name}}
 							</span>
 						</div>
-					</div>
-					<div class="row p-2">
+				</div>
+				<div class="row p-2">
 						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Vehicle Make
@@ -1361,8 +1358,8 @@
 								bookingPreview?.vehicle_year}} | {{ bookingPreview?.vehicle_color}}
 							</span>
 						</div>
-					</div>
-					<div class="row p-2">
+				</div>
+				<div class="row p-2">
 						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								Licence plate
@@ -1373,8 +1370,8 @@
 								{{ bookingPreview?.vehicle_license_plate}}
 							</span>
 						</div>
-					</div>
-					<div class="row p-2">
+				</div>
+				<div class="row p-2">
 						<!-- <div class="col-md-4 key">
 							<span style="font-weight: 550 !important;">
 								No. of seats
@@ -1385,14 +1382,14 @@
 								{{ bookingPreview?.vehicle_seats}} pax / {{bookingPreview?.vehicle_luggage}} luggage
 							</span>
 						</div>
-					</div>
-					<hr>
-					<!-- Driver Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+				</div>
+				<hr>
+				<!-- Driver Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
 						Driver Information
-					</h4>
-					<!-- Driver Name -->
-					<div class="mx-2">
+				</h4>
+				<!-- Driver Name -->
+				<div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1405,10 +1402,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+				</div>
 
-					<!-- Driver Email -->
-					<div class="mx-2">
+				<!-- Driver Email -->
+				<div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1421,10 +1418,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+				</div>
 
-					<!-- Driver Cell -->
-					<div class="mx-2">
+				<!-- Driver Cell -->
+				<div class="mx-2">
 						<div class="row m-0 align-items-center flex-md-nowrap flex-wrap">
 							<div class="col-4 col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -1438,10 +1435,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
-					<hr>
-					<!-- Affiliate -->
-					<div>
+				</div>
+				<hr>
+				<!-- Affiliate -->
+				<div>
 						<h4 class="font-weight-bolder m-0 mt-3">
 							{{bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose'}}
 						</h4>
@@ -1499,7 +1496,7 @@
 							</div>
 						</div>
 						<hr>
-					</div>
+				</div>
 					<!-- <div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
 					<h4 class="font-weight-bolder m-0 my-3">
 						Rates Distribution
@@ -1608,14 +1605,13 @@
 							</div>
 						</div>
 					</div>
-				</div>  -->
+					</div>  -->
 
 				</div>
 
-
-
 				<div class="modal-footer justify-content-end">
-					<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+						style="font-size: 50px !important;">
 						<span aria-hidden="true" class="bi bi-x-circle"></span>
 					</button>
 

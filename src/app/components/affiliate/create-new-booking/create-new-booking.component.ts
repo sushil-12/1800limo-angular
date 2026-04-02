@@ -14,7 +14,7 @@ import { CommonService } from '../../../services/common.service';
 import { HttpClient } from '@angular/common/http';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
-import { attachPlaceAutocompleteElement, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 
 declare var $: any
 
@@ -30,6 +30,10 @@ export class CreateNewBookingComponent implements OnInit {
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
 	@ViewChild('return_pickupInput') return_pickupInput!: ElementRef;
 	@ViewChild('return_dropoffInput') return_dropoffInput!: ElementRef;
+	@ViewChild('pickupAirportInput') pickupAirportInput!: ElementRef;
+	@ViewChild('dropoffAirportInput') dropoffAirportInput!: ElementRef;
+	@ViewChild('returnPickupAirportInput') returnPickupAirportInput!: ElementRef;
+	@ViewChild('returnDropoffAirportInput') returnDropoffAirportInput!: ElementRef;
 	@ViewChild('fboAddressInput') fboAddressInput!: ElementRef;
 	@ViewChild('returnFboAddressInput') returnFboAddressInput!: ElementRef;
 	@ViewChildren('extraStopInput') extraStopInputs!: QueryList<ElementRef>;
@@ -469,6 +473,18 @@ export class CreateNewBookingComponent implements OnInit {
 			if (this.return_dropoffInput) {
 				this.initAutocomplete(this.return_dropoffInput.nativeElement, 'return_dropoff');
 			}
+			if (this.pickupAirportInput) {
+				this.initAirportAutocomplete(this.pickupAirportInput.nativeElement, 'pickup_airport');
+			}
+			if (this.dropoffAirportInput) {
+				this.initAirportAutocomplete(this.dropoffAirportInput.nativeElement, 'dropoff_airport');
+			}
+			if (this.returnPickupAirportInput) {
+				this.initAirportAutocomplete(this.returnPickupAirportInput.nativeElement, 'return_pickup_airport');
+			}
+			if (this.returnDropoffAirportInput) {
+				this.initAirportAutocomplete(this.returnDropoffAirportInput.nativeElement, 'return_dropoff_airport');
+			}
 			if (this.fboAddressInput) {
 				this.initAutocomplete(this.fboAddressInput.nativeElement, 'fbo_address');
 			}
@@ -526,6 +542,25 @@ export class CreateNewBookingComponent implements OnInit {
 					this.fillLocationPoints(control, location);
 					nativeInput.value = displayAddress;
 				}
+			}
+		);
+	}
+
+	initAirportAutocomplete(input: ElementRef | HTMLInputElement, control: string) {
+		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
+		console.log("init airport autocomplete", nativeInput, control)
+
+		void attachPlaceAutocompleteElement(
+			nativeInput,
+			{
+				airportField: true,
+				primaryTypes: ['airport'],
+				syncControl: this.BookingForm.get(`${control}_option`) ?? undefined,
+			},
+			(place) => {
+				if (!place.geometry || !place.geometry.location) return;
+				this.handleAirportPlaceSelection(control, place);
+				nativeInput.value = this.getAirportSelectionLabel(place);
 			}
 		);
 	}
@@ -871,13 +906,13 @@ export class CreateNewBookingComponent implements OnInit {
 					}
 				}
 			}
-			this.SetFormValue('pickup_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.pickup_airport.value));
+			this.SetFormValue('pickup_airport_option', this.getAirportDisplayValue(this.BigData.airportsData.find((item: any) => item.id == this.Form.pickup_airport.value)));
 			this.SetFormValue('pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.pickup_airline.value));
-			this.SetFormValue('dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.dropoff_airport.value));
+			this.SetFormValue('dropoff_airport_option', this.getAirportDisplayValue(this.BigData.airportsData.find((item: any) => item.id == this.Form.dropoff_airport.value)));
 			this.SetFormValue('dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.dropoff_airline.value));
-			this.SetFormValue('return_pickup_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_pickup_airport.value));
+			this.SetFormValue('return_pickup_airport_option', this.getAirportDisplayValue(this.BigData.airportsData.find((item: any) => item.id == this.Form.return_pickup_airport.value)));
 			this.SetFormValue('return_pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_pickup_airline.value));
-			this.SetFormValue('return_dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value));
+			this.SetFormValue('return_dropoff_airport_option', this.getAirportDisplayValue(this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value)));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
 			this.SetFormValue('origin_airport_city', editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city)
 
@@ -1280,6 +1315,213 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 	}
 
+	getAirportDisplayValue(airport: any): string {
+		if (!airport) {
+			return '';
+		}
+		return airport?.formatted_name
+			|| airport?.display_address
+			|| airport?.formattedAddress
+			|| airport?.formatted_address
+			|| airport?.name
+			|| airport?.displayName
+			|| (typeof airport === 'string' ? airport : '');
+	}
+
+	getAirportSelectionLabel(airport: any): string {
+		if (!airport) {
+			return '';
+		}
+
+		const displayName = typeof airport?.displayName === 'string'
+			? airport.displayName
+			: airport?.displayName?.text;
+		const primaryName = airport?.name || displayName || '';
+		const displayValue = this.getAirportDisplayValue(airport);
+
+		if (primaryName && displayValue) {
+			if (displayValue === primaryName || displayValue.startsWith(`${primaryName} - `)) {
+				return displayValue;
+			}
+			return `${primaryName} - ${displayValue}`;
+		}
+
+		return primaryName || displayValue;
+	}
+
+	getPreviewAirportDisplay(name: any, option: any): string {
+		return this.getAirportDisplayValue(name) || this.getAirportDisplayValue(option) || '';
+	}
+
+	syncAirportPayloadFields() {
+		const airportFields = [
+			'pickup_airport',
+			'dropoff_airport',
+			'return_pickup_airport',
+			'return_dropoff_airport',
+		];
+
+		for (const field of airportFields) {
+			const selectedAirportId = this.BookingForm.get(field)?.value;
+			const optionControl = this.BookingForm.get(`${field}_option`);
+			const nameControl = this.BookingForm.get(`${field}_name`);
+			const latControl = this.BookingForm.get(`${field}_latitude`);
+			const lngControl = this.BookingForm.get(`${field}_longitude`);
+			const matchedAirport = this.resolveInternalAirportRecord({
+				name: nameControl?.value || optionControl?.value,
+				formatted_address: optionControl?.value || nameControl?.value
+			}, latControl?.value, lngControl?.value);
+			const airportSelected = matchedAirport || this.BigData?.airportsData?.find((item: any) => item.id == selectedAirportId);
+			const airportDisplay = this.getPreviewAirportDisplay(nameControl?.value, optionControl?.value)
+				|| this.getAirportDisplayValue(airportSelected);
+
+			if (airportDisplay && nameControl && !nameControl.value) {
+				nameControl.setValue(airportDisplay, { emitEvent: false });
+			}
+
+			if (airportDisplay && optionControl && !optionControl.value) {
+				optionControl.setValue(airportDisplay, { emitEvent: false });
+			}
+
+			if (airportSelected) {
+				if (this.BookingForm.get(field)?.value != airportSelected.id) {
+					this.BookingForm.get(field)?.setValue(airportSelected.id, { emitEvent: false });
+				}
+				if (latControl && (latControl.value === '' || latControl.value === null || latControl.value === undefined)) {
+					latControl.setValue(airportSelected.lat, { emitEvent: false });
+				}
+				if (lngControl && (lngControl.value === '' || lngControl.value === null || lngControl.value === undefined)) {
+					lngControl.setValue(airportSelected.long, { emitEvent: false });
+				}
+			}
+		}
+	}
+
+	normalizeAirportMatchText(value: any): string {
+		return String(value || '')
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, ' ')
+			.trim();
+	}
+
+	getNumericAirportCoordinate(value: any): number | null {
+		const parsed = Number(value);
+		return Number.isFinite(parsed) ? parsed : null;
+	}
+
+	getAirportCoordinates(airport: any): { lat: number, lng: number } | null {
+		const lat = this.getNumericAirportCoordinate(airport?.lat ?? airport?.latitude);
+		const lng = this.getNumericAirportCoordinate(airport?.long ?? airport?.lng ?? airport?.longitude);
+		return lat !== null && lng !== null ? { lat, lng } : null;
+	}
+
+	getAirportDistanceInKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+		const toRadians = (value: number) => value * Math.PI / 180;
+		const earthRadiusKm = 6371;
+		const deltaLat = toRadians(lat2 - lat1);
+		const deltaLng = toRadians(lng2 - lng1);
+		const a =
+			Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+			Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+			Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		return earthRadiusKm * c;
+	}
+
+	resolveInternalAirportRecord(placeLike: any, latitude?: number | null, longitude?: number | null): any {
+		const airports = this.BigData?.airportsData || [];
+		if (!airports.length) {
+			return null;
+		}
+
+		const normalizedLat = this.getNumericAirportCoordinate(latitude);
+		const normalizedLng = this.getNumericAirportCoordinate(longitude);
+
+		if (normalizedLat !== null && normalizedLng !== null) {
+			let nearestAirport: any = null;
+			let nearestDistance = Number.POSITIVE_INFINITY;
+
+			for (const airport of airports) {
+				const coordinates = this.getAirportCoordinates(airport);
+				if (!coordinates) {
+					continue;
+				}
+				const distance = this.getAirportDistanceInKm(normalizedLat, normalizedLng, coordinates.lat, coordinates.lng);
+				if (distance < nearestDistance) {
+					nearestDistance = distance;
+					nearestAirport = airport;
+				}
+			}
+
+			if (nearestAirport) {
+				return nearestAirport;
+			}
+		}
+
+		const displayValue = this.getAirportDisplayValue(placeLike);
+		const nameValue = placeLike?.name || placeLike?.displayName || '';
+		const addressValue = placeLike?.formatted_address || placeLike?.formattedAddress || '';
+		const searchBlob = this.normalizeAirportMatchText([displayValue, nameValue, addressValue].filter(Boolean).join(' '));
+
+		if (!searchBlob) {
+			return null;
+		}
+
+		const codeTokens = searchBlob.split(' ');
+		let bestMatch: any = null;
+		let bestScore = 0;
+
+		for (const airport of airports) {
+			const code = String(airport?.code || '').toLowerCase();
+			const name = this.normalizeAirportMatchText(airport?.name);
+			const formattedName = this.normalizeAirportMatchText(airport?.formatted_name);
+			const city = this.normalizeAirportMatchText(airport?.city);
+			const country = this.normalizeAirportMatchText(airport?.country);
+			let score = 0;
+
+			if (code && codeTokens.includes(code)) {
+				score += 300;
+			}
+			if (name && searchBlob.includes(name)) {
+				score += 220;
+			}
+			if (formattedName && searchBlob.includes(formattedName)) {
+				score += 180;
+			}
+			if (city && searchBlob.includes(city)) {
+				score += 40;
+			}
+			if (country && searchBlob.includes(country)) {
+				score += 20;
+			}
+
+			if (score > bestScore) {
+				bestScore = score;
+				bestMatch = airport;
+			}
+		}
+
+		return bestScore > 0 ? bestMatch : null;
+	}
+
+	handleAirportPlaceSelection(formControl: string, place: google.maps.places.PlaceResult) {
+		const displayValue = this.getAirportSelectionLabel(place);
+		const location = place.geometry?.location;
+		if (!location) {
+			return;
+		}
+		const latitude = location.lat();
+		const longitude = location.lng();
+		const matchedAirport = this.resolveInternalAirportRecord(place, latitude, longitude);
+
+		this.BookingForm.get(`${formControl}_option`)?.setValue(displayValue);
+		this.BookingForm.get(`${formControl}_name`)?.setValue(displayValue);
+		this.BookingForm.get(`${formControl}_latitude`)?.setValue(latitude);
+		this.BookingForm.get(`${formControl}_longitude`)?.setValue(longitude);
+		this.BookingForm.get(formControl)?.setValue(matchedAirport?.id ?? '');
+		this.BookingForm.updateValueAndValidity();
+	}
+
 	clearAddressField(formControl: string) {
 		this.BookingForm.get(formControl)?.setValue('');
 		this.BookingForm.get(`${formControl}_latitude`)?.setValue('');
@@ -1298,6 +1540,52 @@ export class CreateNewBookingComponent implements OnInit {
 			nativeInput.value = '';
 			syncPlaceAutocompleteDisplay(nativeInput);
 		}
+	}
+
+	clearAirportField(formControl: string) {
+		this.BookingForm.get(formControl)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${formControl}_option`)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${formControl}_name`)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${formControl}_latitude`)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${formControl}_longitude`)?.setValue('', { emitEvent: false });
+		this.BookingForm.updateValueAndValidity();
+
+		const inputMap: Record<string, ElementRef | undefined> = {
+			pickup_airport: this.pickupAirportInput,
+			dropoff_airport: this.dropoffAirportInput,
+			return_pickup_airport: this.returnPickupAirportInput,
+			return_dropoff_airport: this.returnDropoffAirportInput,
+		};
+
+		const nativeInput = inputMap[formControl]?.nativeElement as HTMLInputElement | undefined;
+		if (nativeInput) {
+			nativeInput.value = '';
+			clearPlaceAutocompleteDisplay(nativeInput);
+		}
+
+		this.resyncAirportAutocompleteDisplays();
+		requestAnimationFrame(() => this.resyncAirportAutocompleteDisplays());
+		setTimeout(() => this.resyncAirportAutocompleteDisplays(), 0);
+		setTimeout(() => this.resyncAirportAutocompleteDisplays(), 120);
+	}
+
+	private resyncAirportAutocompleteDisplays() {
+		const syncMap: Array<{ formControl: string; inputRef?: ElementRef }> = [
+			{ formControl: 'pickup_airport', inputRef: this.pickupAirportInput },
+			{ formControl: 'dropoff_airport', inputRef: this.dropoffAirportInput },
+			{ formControl: 'return_pickup_airport', inputRef: this.returnPickupAirportInput },
+			{ formControl: 'return_dropoff_airport', inputRef: this.returnDropoffAirportInput },
+		];
+
+		syncMap.forEach(({ formControl, inputRef }) => {
+			const nativeInput = inputRef?.nativeElement as HTMLInputElement | undefined;
+			if (!nativeInput) {
+				return;
+			}
+
+			nativeInput.value = this.BookingForm.get(`${formControl}_option`)?.value || '';
+			syncPlaceAutocompleteDisplay(nativeInput);
+		});
 	}
 
 	clearExtraStopAddress(isReturn: boolean, stopIndex: number, input?: HTMLInputElement) {
@@ -2180,6 +2468,8 @@ export class CreateNewBookingComponent implements OnInit {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
+
+		this.syncAirportPayloadFields();
 
 
 
@@ -3209,10 +3499,14 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
-				this.SetFormValue('pickup_airport_name', airport_selected.formatted_name);
-				this.SetFormValue('pickup_airport_latitude', airport_selected.lat);
-				this.SetFormValue('pickup_airport_longitude', airport_selected.long);
-				this.SetFormValue('return_dropoff_airport_option', airport_selected);
+				const airport_display = this.Form.pickup_airport_option.value || this.getAirportDisplayValue(airport_selected);
+				airport_selected && this.SetFormValue('pickup_airport_name', airport_display);
+				airport_selected && this.SetFormValue('pickup_airport_latitude', this.Form.pickup_airport_latitude.value || airport_selected.lat);
+				airport_selected && this.SetFormValue('pickup_airport_longitude', this.Form.pickup_airport_longitude.value || airport_selected.long);
+				this.SetFormValue('return_dropoff_airport_option', airport_display);
+				this.SetFormValue('return_dropoff_airport_name', this.Form.pickup_airport_name.value || airport_display);
+				this.SetFormValue('return_dropoff_airport_latitude', this.Form.pickup_airport_latitude.value || airport_selected?.lat);
+				this.SetFormValue('return_dropoff_airport_longitude', this.Form.pickup_airport_longitude.value || airport_selected?.long);
 				this.SetFormValue('return_dropoff_airport', value);
 				this.MapController();
 				if (this.Form.service_type.value == 'round_trip') {
@@ -3237,10 +3531,14 @@ export class CreateNewBookingComponent implements OnInit {
 		this.BookingForm.get('dropoff_airport').valueChanges.subscribe((value: string) => {
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
-				this.SetFormValue('dropoff_airport_name', airport_selected.formatted_name);
-				this.SetFormValue('dropoff_airport_latitude', airport_selected.lat)
-				this.SetFormValue('dropoff_airport_longitude', airport_selected.long)
-				this.SetFormValue('return_pickup_airport_option', airport_selected);
+				const airport_display = this.Form.dropoff_airport_option.value || this.getAirportDisplayValue(airport_selected);
+				airport_selected && this.SetFormValue('dropoff_airport_name', airport_display);
+				airport_selected && this.SetFormValue('dropoff_airport_latitude', this.Form.dropoff_airport_latitude.value || airport_selected.lat)
+				airport_selected && this.SetFormValue('dropoff_airport_longitude', this.Form.dropoff_airport_longitude.value || airport_selected.long)
+				this.SetFormValue('return_pickup_airport_option', airport_display);
+				this.SetFormValue('return_pickup_airport_name', this.Form.dropoff_airport_name.value || airport_display);
+				this.SetFormValue('return_pickup_airport_latitude', this.Form.dropoff_airport_latitude.value || airport_selected?.lat);
+				this.SetFormValue('return_pickup_airport_longitude', this.Form.dropoff_airport_longitude.value || airport_selected?.long);
 				this.SetFormValue('return_pickup_airport', value)
 				this.MapController()
 				if (this.Form.service_type.value == 'round_trip') {
@@ -3269,9 +3567,10 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
-				this.SetFormValue('return_pickup_airport_name', airport_selected.formatted_name);
-				this.SetFormValue('return_pickup_airport_latitude', airport_selected.lat);
-				this.SetFormValue('return_pickup_airport_longitude', airport_selected.long);
+				const airport_display = this.Form.return_pickup_airport_option.value || this.getAirportDisplayValue(airport_selected);
+				airport_selected && this.SetFormValue('return_pickup_airport_name', airport_display);
+				airport_selected && this.SetFormValue('return_pickup_airport_latitude', this.Form.return_pickup_airport_latitude.value || airport_selected.lat);
+				airport_selected && this.SetFormValue('return_pickup_airport_longitude', this.Form.return_pickup_airport_longitude.value || airport_selected.long);
 				setTimeout(() => this.MapController(), 2000)
 				if (this.Form.service_type.value == 'round_trip') {
 					setTimeout(() => {
@@ -3293,9 +3592,10 @@ export class CreateNewBookingComponent implements OnInit {
 		this.BookingForm.get('return_dropoff_airport').valueChanges.subscribe((value: string) => {
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value);
-				this.SetFormValue('return_dropoff_airport_name', airport_selected.formatted_name);
-				this.SetFormValue('return_dropoff_airport_latitude', airport_selected.lat);
-				this.SetFormValue('return_dropoff_airport_longitude', airport_selected.long);
+				const airport_display = this.Form.return_dropoff_airport_option.value || this.getAirportDisplayValue(airport_selected);
+				airport_selected && this.SetFormValue('return_dropoff_airport_name', airport_display);
+				airport_selected && this.SetFormValue('return_dropoff_airport_latitude', this.Form.return_dropoff_airport_latitude.value || airport_selected.lat);
+				airport_selected && this.SetFormValue('return_dropoff_airport_longitude', this.Form.return_dropoff_airport_longitude.value || airport_selected.long);
 				setTimeout(() => this.MapController(), 2000)
 				if (this.Form.service_type.value == 'round_trip') {
 					setTimeout(() => {
@@ -3621,20 +3921,38 @@ export class CreateNewBookingComponent implements OnInit {
 		//vehicle id when chossing vehicle from Quote bot screen
 		this.QB_vehicle_id = selected_vehicle?.id
 		this.params_QB_vehicle_id = selected_vehicle?.id || null
+		const matchedPickupAirport = this.resolveInternalAirportRecord({
+			name: QB?.other_details?.pickup_airport_name,
+			formatted_address: QB?.other_details?.pickup_airport_name
+		}, QB?.pickup_airport_lat, QB?.pickup_airport_long);
+		const matchedDropoffAirport = this.resolveInternalAirportRecord({
+			name: QB?.other_details?.dropoff_airport_name,
+			formatted_address: QB?.other_details?.dropoff_airport_name
+		}, QB?.dropoff_airport_lat, QB?.dropoff_airport_long);
+		const matchedReturnPickupAirport = this.resolveInternalAirportRecord({
+			name: QB?.other_details?.return_pickup_airport_name,
+			formatted_address: QB?.other_details?.return_pickup_airport_name
+		}, QB?.return_pickup_airport_lat, QB?.return_pickup_airport_long);
+		const matchedReturnDropoffAirport = this.resolveInternalAirportRecord({
+			name: QB?.other_details?.return_dropoff_airport_name,
+			formatted_address: QB?.other_details?.return_dropoff_airport_name
+		}, QB?.return_dropoff_airport_lat, QB?.return_dropoff_airport_long);
 		//pickup
 		this.SetFormValue('pickup_date', QB?.pickup_date)
 		this.SetFormValue('pickup', QB?.pickup_address)
 		this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
 		this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
-		this.SetFormValue('pickup_airport', QB?.pickup_airport)
+		this.SetFormValue('pickup_airport', matchedPickupAirport?.id ?? QB?.pickup_airport)
 		this.SetFormValue('pickup_airport_option', QB?.other_details?.pickup_airport_name)
+		this.SetFormValue('pickup_airport_name', QB?.other_details?.pickup_airport_name)
 		this.SetFormValue('pickup_airport_latitude', QB?.pickup_airport_lat)
 		this.SetFormValue('pickup_airport_longitude', QB?.pickup_airport_long)
 		this.SetFormValue('dropoff', QB?.dropoff_address)
 		this.SetFormValue('dropoff_latitude', QB?.dropoff_address_lat)
 		this.SetFormValue('dropoff_longitude', QB?.dropoff_address_long)
-		this.SetFormValue('dropoff_airport', QB?.dropoff_airport)
+		this.SetFormValue('dropoff_airport', matchedDropoffAirport?.id ?? QB?.dropoff_airport)
 		this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
+		this.SetFormValue('dropoff_airport_name', QB?.other_details?.dropoff_airport_name)
 		this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
 		this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_airport_long)
 
@@ -3644,8 +3962,9 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('return_pickup', QB?.return_pickup_address ?? QB?.return_dropoff_address)
 		this.SetFormValue('return_pickup_latitude', QB?.return_pickup_address_lat ?? QB?.return_dropoff_address_lat)
 		this.SetFormValue('return_pickup_longitude', QB?.return_pickup_address_long ?? QB?.return_dropoff_address_long)
-		this.SetFormValue('return_pickup_airport', QB?.return_pickup_airport)
+		this.SetFormValue('return_pickup_airport', matchedReturnPickupAirport?.id ?? QB?.return_pickup_airport)
 		this.SetFormValue('return_pickup_airport_option', QB?.other_details?.return_pickup_airport_name)
+		this.SetFormValue('return_pickup_airport_name', QB?.other_details?.return_pickup_airport_name)
 		this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
 		this.SetFormValue('return_pickup_airport_longitude', QB?.return_pickup_airport_long)
 
@@ -3653,8 +3972,9 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('return_dropoff', QB?.return_dropoff_address)
 		this.SetFormValue('return_dropoff_latitude', QB?.return_dropoff_address_lat)
 		this.SetFormValue('return_dropoff_longitude', QB?.return_dropoff_address_long)
-		this.SetFormValue('return_dropoff_airport', QB?.return_dropoff_airport)
+		this.SetFormValue('return_dropoff_airport', matchedReturnDropoffAirport?.id ?? QB?.return_dropoff_airport)
 		this.SetFormValue('return_dropoff_airport_option', QB?.other_details?.return_dropoff_airport_name)
+		this.SetFormValue('return_dropoff_airport_name', QB?.other_details?.return_dropoff_airport_name)
 		this.SetFormValue('return_dropoff_airport_latitude', QB?.return_dropoff_airport_lat)
 		this.SetFormValue('return_dropoff_airport_longitude', QB?.return_dropoff_airport_long)
 		this.SetFormValue('pickup_time', this.FormatTime(QB?.pickup_time))

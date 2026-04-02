@@ -377,7 +377,7 @@
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<div class="input-contain input-contain--address d-flex align-items-center"
-												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
+												[class.errorValid]="submitted && (QBForm?.pickup_address?.errors || QBForm?.pickup_address_lat?.errors)">
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Pickup Address - Cruise Port'"
@@ -454,7 +454,8 @@
 										</div>
 										<div class="errorMsg col-md-12"
 											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
-											<div class="input-contain input-contain--address d-flex align-items-center">
+											<div class="input-contain input-contain--address d-flex align-items-center"
+												[class.errorValid]="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_address_lat?.errors)">
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Dropoff Address - Cruise Port'"
@@ -595,7 +596,7 @@
 										<div class="errorMsg col-md-12"
 											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<div class="input-contain input-contain--address d-flex align-items-center"
-												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
+												[class.errorValid]="submitted && (QBForm?.return_pickup_address?.errors || QBForm?.return_pickup_address_lat?.errors)">
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port'"
@@ -669,7 +670,7 @@
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<div class="input-contain input-contain--address d-flex align-items-center"
-												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
+												[class.errorValid]="submitted && (QBForm?.return_dropoff_address?.errors || QBForm?.return_dropoff_address_lat?.errors)">
 												<div class="input-box">
 													<input type="text" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port'"

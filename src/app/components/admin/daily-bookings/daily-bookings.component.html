@@ -215,13 +215,13 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
+											<!-- <a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll', booking?.show_changed_fields)"
 												data-toggle="modal" data-target="#updatedEmailAll"
 												*ngIf="currentUser?.roleName == 'admin' && booking?.show_changed_fields">
 												<div class="dropdown-item-icon"></div>
 												Update Email to All
-											</a>
+											</a> -->
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#accept_charge_modal"
 												(click)="acceptChargeClick(booking.booking_id)"
@@ -259,7 +259,7 @@
 												Email Passenger
 											</a>
 											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
+												(click)="sendEmailClicked(booking.booking_id,'emailAll', booking?.show_changed_fields, booking?.booking_status)"
 												data-toggle="modal" data-target="#emailAll"
 												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_all')">
 												<div class="dropdown-item-icon"></div>
@@ -272,8 +272,7 @@
 												<div class="dropdown-item-icon"></div>
 												Send Email to Anyone
 											</a>
-											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
-												*ngIf="(currentUser?.roleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
+											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>
@@ -614,11 +613,23 @@
 			</div>
 			<div class="modal-body text-center">
 				<p>Are you sure, You want to send email?</p>
+				<div style="border: 1px solid #d9d9d9; border-radius: 8px; padding: 12px 14px; text-align: left; background: #fafafa;">
+					<p class="mb-2"><strong>Note</strong></p>
+					<p class="mb-1">
+						<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #28a745; margin-right: 8px;"></span>
+						<strong>Send Email:</strong> Sends email with no updated text.
+					</p>
+					<p class="mb-0" *ngIf="currentUser?.roleName == 'admin' && selectedEmailBookingShowChangedFields && selectedEmailBookingStatus != 'paid' && selectedEmailBookingStatus != 'paid_cash'">
+						<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #dc3545; margin-right: 8px;"></span>
+						<strong>Send Updated Email:</strong> Sends emails with updated text.
+					</p>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="emailAll()">Send
 					Email</button>
-				<button type="button" class="custom-btn savebutton"
+				<button style="background-color: #ff0000 !important; border-color: red;" type="button" class="custom-btn savebutton"
+					*ngIf="currentUser?.roleName == 'admin' && selectedEmailBookingShowChangedFields && selectedEmailBookingStatus != 'paid' && selectedEmailBookingStatus != 'paid_cash'"
 					(click)="updatedEmailAll('emailAll')">Send Updated Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
