@@ -12,7 +12,6 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { CommonService } from '../../../services/common.service';
-import { attachPlaceAutocompleteElement, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-travel-agent-stripe-form',
@@ -62,6 +61,11 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 	addressErrorMessage: string;
 	dobErrorMessage: string;
 	public AddressCheckStripe = ['address', 'street', 'city', 'country']
+	activeAddressDropdown: boolean = false;
+	addressOptions: any[] = [];
+	addressSearchLoading: boolean = false;
+	private customPlacesService: google.maps.places.PlacesService | null = null;
+	private addressSearchVersion = 0;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -223,54 +227,135 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 
 	mapFunction() {
 
-		//google map autocomplete
 		this.geoCoder = new google.maps.Geocoder();
+	}
 
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-				syncControl: this.addBankForm.get('address')!,
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
-					const formattedAddress = place.formatted_address ?? '';
-					const placeName = place.name ?? '';
-					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
-
-					this.addBankForm.patchValue({
-						address: displayAddress,
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						if (types.includes('country')) {
-							this.addBankForm.patchValue({
-								country: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addBankForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addBankForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addBankForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-					});
-				});
-				this.spinner.hide()
-			}
+	private getGoogleMapsApiKey(): string {
+		const script = Array.from(document.querySelectorAll('script[src]')).find((item) =>
+			item.getAttribute('src')?.includes('maps.googleapis.com/maps/api/js')
 		);
+		const src = script?.getAttribute('src') || '';
+		try {
+			return new URL(src).searchParams.get('key') || '';
+		} catch {
+			return '';
+		}
+	}
 
+	private getCustomPlacesService(): google.maps.places.PlacesService | null {
+		if (this.customPlacesService) {
+			return this.customPlacesService;
+		}
+		if (!(window as any)?.google?.maps?.places?.PlacesService) {
+			return null;
+		}
+		const container = document.createElement('div');
+		container.style.display = 'none';
+		document.body.appendChild(container);
+		this.customPlacesService = new google.maps.places.PlacesService(container);
+		return this.customPlacesService;
+	}
+
+	private getPredictionTextValue(value: any): string {
+		if (!value) return '';
+		if (typeof value === 'string') return value;
+		return value?.text || value?.plainText || value?.stringValue || value?.text?.text || '';
+	}
+
+	private searchGooglePredictions(searchText: string): Promise<Array<any>> {
+		const apiKey = this.getGoogleMapsApiKey();
+		if (!apiKey || !String(searchText || '').trim()) {
+			return Promise.resolve([]);
+		}
+
+		return fetch('https://places.googleapis.com/v1/places:autocomplete', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Goog-Api-Key': apiKey,
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text'
+			},
+			body: JSON.stringify({
+				input: searchText,
+				includeQueryPredictions: false,
+				languageCode: 'en-US'
+			})
+		})
+			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
+			.then((response: any) => {
+				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
+				return suggestions
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.map((prediction: any) => ({
+						placeId: prediction.placeId,
+						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+							|| this.getPredictionTextValue(prediction?.text),
+						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+						description: this.getPredictionTextValue(prediction?.text)
+					}))
+					.slice(0, 8);
+			})
+			.catch(() => []);
+	}
+
+	private fetchPlaceDetails(placeId: string): Promise<google.maps.places.PlaceResult | null> {
+		const service = this.getCustomPlacesService();
+		if (!service || !placeId) {
+			return Promise.resolve(null);
+		}
+		return new Promise((resolve) => {
+			service.getDetails({
+				placeId,
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+			}, (place, status) => {
+				if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+					resolve(null);
+					return;
+				}
+				resolve(place);
+			});
+		});
+	}
+
+	private applySelectedAddress(place: google.maps.places.PlaceResult): void {
+		if (!place.geometry?.location) return;
+		const formattedAddress = place.formatted_address ?? '';
+		const placeName = place.name ?? '';
+		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+		const patch: any = {
+			address: displayAddress,
+			latitude: place.geometry.location.lat(),
+			longitude: place.geometry.location.lng(),
+			country: '',
+			state: '',
+			city: '',
+			zipCode: ''
+		};
+
+		place.address_components?.forEach((component) => {
+			const types = component.types || [];
+			if (types.includes('country')) {
+				patch.country = component.short_name;
+			} else if (types.includes('administrative_area_level_1')) {
+				patch.state = component.short_name;
+			} else if (types.includes('locality') || types.includes('postal_town') || types.includes('administrative_area_level_3')) {
+				if (!patch.city) patch.city = component.long_name;
+			} else if (types.includes('postal_code')) {
+				patch.zipCode = component.long_name;
+			}
+		});
+
+		this.addBankForm.patchValue(patch);
+		if (patch.country) {
+			this.changeCountry(patch.country);
+			if (patch.state) {
+				this.addBankForm.get('state')?.setValue(patch.state);
+			}
+		}
+		this.addBankForm.updateValueAndValidity();
+		this.spinner.hide();
 	}
 
 	clearAddressField(): void {
@@ -287,12 +372,79 @@ export class TravelAgentStripeFormComponent implements OnInit, AfterViewInit {
 		});
 		this.addBankForm.updateValueAndValidity();
 		this.addressErrorMessage = '';
+		this.addressOptions = [];
+		this.addressSearchLoading = false;
+		this.activeAddressDropdown = false;
+	}
 
-		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
-		if (nativeInput) {
-			nativeInput.value = '';
-			syncPlaceAutocompleteDisplay(nativeInput);
+	onAddressFocus(input?: HTMLInputElement): void {
+		input?.select();
+		this.activeAddressDropdown = true;
+		void this.searchAddressOptions(this.addBankForm.get('address')?.value || '');
+	}
+
+	onAddressBlur(): void {
+		setTimeout(() => {
+			this.activeAddressDropdown = false;
+		}, 150);
+	}
+
+	onAddressInput(value: string): void {
+		this.removeErrorSsn(value, 'address');
+		this.addBankForm.patchValue({
+			address: value || '',
+			latitude: '',
+			longitude: ''
+		}, { emitEvent: false });
+		this.addBankForm.get('latitude')?.updateValueAndValidity({ emitEvent: false });
+		this.addBankForm.get('longitude')?.updateValueAndValidity({ emitEvent: false });
+		this.activeAddressDropdown = true;
+		void this.searchAddressOptions(value || '');
+	}
+
+	getAddressOptionLabel(option: any): string {
+		return String(option?.name || option?.description || '').trim();
+	}
+
+	getAddressOptionSecondary(option: any): string {
+		return String(option?.secondaryText || '').trim();
+	}
+
+	shouldShowAddressPrompt(): boolean {
+		return this.activeAddressDropdown && !String(this.addBankForm.get('address')?.value || '').trim() && !this.addressSearchLoading;
+	}
+
+	shouldShowAddressEmpty(): boolean {
+		return this.activeAddressDropdown && !!String(this.addBankForm.get('address')?.value || '').trim() && !this.addressSearchLoading && !this.addressOptions.length;
+	}
+
+	private async searchAddressOptions(value: string): Promise<void> {
+		const requestVersion = ++this.addressSearchVersion;
+		const searchText = String(value || '').trim();
+		if (!searchText) {
+			if (requestVersion === this.addressSearchVersion) {
+				this.addressSearchLoading = false;
+				this.addressOptions = [];
+			}
+			return;
 		}
+
+		this.addressSearchLoading = true;
+		const options = await this.searchGooglePredictions(searchText);
+		if (requestVersion === this.addressSearchVersion) {
+			this.addressOptions = options;
+			this.addressSearchLoading = false;
+		}
+	}
+
+	async selectAddressOption(option: any): Promise<void> {
+		const place = await this.fetchPlaceDetails(option?.placeId);
+		this.ngZone.run(() => {
+			if (place) {
+				this.applySelectedAddress(place);
+			}
+			this.activeAddressDropdown = false;
+		});
 	}
 
 	getFormData() {

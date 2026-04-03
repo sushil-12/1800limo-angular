@@ -7,7 +7,6 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import * as intlTelInput from 'intl-tel-input';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement } from '../../../utils/google-place-autocomplete';
 
 @Component({
 	selector: 'app-add-sub-admin',
@@ -43,6 +42,11 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 	zoom: number;
 	address: string;
 	geoCoder!: google.maps.Geocoder;
+	activeAddressDropdown: boolean = false;
+	addressOptions: any[] = [];
+	addressSearchLoading: boolean = false;
+	private customPlacesService: google.maps.places.PlacesService | null = null;
+	private addressSearchVersion = 0;
 
 	ngOnInit(): void {
 		//add amenity form validation
@@ -110,10 +114,6 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 
-		if (this.search1) {
-			this.initAutocomplete(this.search1.nativeElement, 'pickup');
-		}
-
 		this.MobileObject = intlTelInput(this.phoneInput.nativeElement, {
 			initialCountry: 'us',
 			preferredCountries: ['us', 'ca', 'mx', 'gb'],
@@ -133,8 +133,137 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 			this.validatePhone('mobile', this.MobileObject);
 		});
 
-		this.MobileObject.setCountry(this.response.data.mobileCountry);
+		if (this.response?.data?.mobileCountry) {
+			this.MobileObject.setCountry(this.response.data.mobileCountry);
+		}
 
+	}
+
+	private getGoogleMapsApiKey(): string {
+		const script = Array.from(document.querySelectorAll('script[src]')).find((item) =>
+			item.getAttribute('src')?.includes('maps.googleapis.com/maps/api/js')
+		);
+		const src = script?.getAttribute('src') || '';
+		try {
+			return new URL(src).searchParams.get('key') || '';
+		} catch {
+			return '';
+		}
+	}
+
+	private getCustomPlacesService(): google.maps.places.PlacesService | null {
+		if (this.customPlacesService) {
+			return this.customPlacesService;
+		}
+		if (!(window as any)?.google?.maps?.places?.PlacesService) {
+			return null;
+		}
+		const container = document.createElement('div');
+		container.style.display = 'none';
+		document.body.appendChild(container);
+		this.customPlacesService = new google.maps.places.PlacesService(container);
+		return this.customPlacesService;
+	}
+
+	private getPredictionTextValue(value: any): string {
+		if (!value) return '';
+		if (typeof value === 'string') return value;
+		return value?.text || value?.plainText || value?.stringValue || value?.text?.text || '';
+	}
+
+	private searchGooglePredictions(searchText: string): Promise<Array<any>> {
+		const apiKey = this.getGoogleMapsApiKey();
+		if (!apiKey || !String(searchText || '').trim()) {
+			return Promise.resolve([]);
+		}
+
+		return fetch('https://places.googleapis.com/v1/places:autocomplete', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Goog-Api-Key': apiKey,
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text'
+			},
+			body: JSON.stringify({
+				input: searchText,
+				includeQueryPredictions: false,
+				languageCode: 'en-US'
+			})
+		})
+			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
+			.then((response: any) => {
+				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
+				return suggestions
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.map((prediction: any) => ({
+						placeId: prediction.placeId,
+						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+							|| this.getPredictionTextValue(prediction?.text),
+						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+						description: this.getPredictionTextValue(prediction?.text)
+					}))
+					.slice(0, 8);
+			})
+			.catch(() => []);
+	}
+
+	private fetchPlaceDetails(placeId: string): Promise<google.maps.places.PlaceResult | null> {
+		const service = this.getCustomPlacesService();
+		if (!service || !placeId) {
+			return Promise.resolve(null);
+		}
+		return new Promise((resolve) => {
+			service.getDetails({
+				placeId,
+				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types']
+			}, (place, status) => {
+				if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+					resolve(null);
+					return;
+				}
+				resolve(place);
+			});
+		});
+	}
+
+	private applySelectedAddress(place: google.maps.places.PlaceResult): void {
+		if (!place.geometry?.location) return;
+
+		const lat = place.geometry.location.lat();
+		const lng = place.geometry.location.lng();
+		const formattedAddress = place.formatted_address ?? '';
+		const placeName = place.name ?? '';
+		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+		const patch: any = {
+			address: displayAddress,
+			latitude: lat,
+			longitude: lng,
+			city: '',
+			state: '',
+			country: '',
+			zipCode: ''
+		};
+
+		place.address_components?.forEach((component) => {
+			const types = component.types || [];
+			if (types.includes('locality') || types.includes('postal_town') || types.includes('administrative_area_level_3')) {
+				if (!patch.city) patch.city = component.long_name;
+			}
+			if (types.includes('administrative_area_level_1')) {
+				patch.state = component.long_name;
+			}
+			if (types.includes('country')) {
+				patch.country = component.long_name;
+			}
+			if (types.includes('postal_code')) {
+				patch.zipCode = component.long_name;
+			}
+		});
+
+		this.addSubAdminAccountForm.patchValue(patch);
+		this.addSubAdminAccountForm.updateValueAndValidity();
 	}
 
 	numberOnly(event: any): boolean {
@@ -175,52 +304,6 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	initAutocomplete(input: ElementRef | HTMLInputElement, control: string, index?: number, is_return: boolean = false) {
-		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
-		console.log("initautocomplete", nativeInput)
-
-		void attachPlaceAutocompleteElement(
-			nativeInput,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-				syncControl: this.addSubAdminAccountForm.get('address')!,
-			},
-			(place) => {
-				if (!place.geometry || !place.geometry.location) return;
-
-				const lat = place.geometry.location.lat();
-				const lng = place.geometry.location.lng();
-				const formattedAddress = place.formatted_address ?? '';
-				const placeName = place.name ?? '';
-				const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
-
-				this.addSubAdminAccountForm.patchValue({
-					address: displayAddress,
-					latitude: lat,
-					longitude: lng
-				});
-
-				place.address_components?.forEach((component) => {
-					const types = component.types;
-
-					if (types.includes('locality')) {
-						this.addSubAdminAccountForm.patchValue({ city: component.long_name });
-					}
-					if (types.includes('administrative_area_level_1')) {
-						this.addSubAdminAccountForm.patchValue({ state: component.long_name });
-					}
-					if (types.includes('country')) {
-						this.addSubAdminAccountForm.patchValue({ country: component.long_name });
-					}
-					if (types.includes('postal_code')) {
-						this.addSubAdminAccountForm.patchValue({ zipCode: component.long_name });
-					}
-				});
-			}
-		);
-	}
-
 	onCountryChange(event) {
 		this.addSubAdminAccountForm.patchValue({
 			mobileIsd: '+' + event.dialCode,
@@ -231,6 +314,91 @@ export class AddSubAdminComponent implements OnInit, AfterViewInit {
 
 	get f() {
 		return this.addSubAdminAccountForm.controls;
+	}
+
+	clearAddressField(): void {
+		this.addSubAdminAccountForm.patchValue({
+			address: '',
+			city: '',
+			state: '',
+			country: '',
+			zipCode: '',
+			latitude: '',
+			longitude: ''
+		});
+		this.addSubAdminAccountForm.updateValueAndValidity();
+		this.addressOptions = [];
+		this.addressSearchLoading = false;
+		this.activeAddressDropdown = false;
+	}
+
+	onAddressFocus(input?: HTMLInputElement): void {
+		input?.select();
+		this.activeAddressDropdown = true;
+		void this.searchAddressOptions(this.addSubAdminAccountForm.get('address')?.value || '');
+	}
+
+	onAddressBlur(): void {
+		setTimeout(() => {
+			this.activeAddressDropdown = false;
+		}, 150);
+	}
+
+	onAddressInput(value: string): void {
+		this.addSubAdminAccountForm.patchValue({
+			address: value || '',
+			latitude: '',
+			longitude: ''
+		}, { emitEvent: false });
+		this.addSubAdminAccountForm.get('latitude')?.updateValueAndValidity({ emitEvent: false });
+		this.addSubAdminAccountForm.get('longitude')?.updateValueAndValidity({ emitEvent: false });
+		this.activeAddressDropdown = true;
+		void this.searchAddressOptions(value || '');
+	}
+
+	getAddressOptionLabel(option: any): string {
+		return String(option?.name || option?.description || '').trim();
+	}
+
+	getAddressOptionSecondary(option: any): string {
+		return String(option?.secondaryText || '').trim();
+	}
+
+	shouldShowAddressPrompt(): boolean {
+		return this.activeAddressDropdown && !String(this.addSubAdminAccountForm.get('address')?.value || '').trim() && !this.addressSearchLoading;
+	}
+
+	shouldShowAddressEmpty(): boolean {
+		return this.activeAddressDropdown && !!String(this.addSubAdminAccountForm.get('address')?.value || '').trim() && !this.addressSearchLoading && !this.addressOptions.length;
+	}
+
+	private async searchAddressOptions(value: string): Promise<void> {
+		const requestVersion = ++this.addressSearchVersion;
+		const searchText = String(value || '').trim();
+		if (!searchText) {
+			if (requestVersion === this.addressSearchVersion) {
+				this.addressSearchLoading = false;
+				this.addressOptions = [];
+			}
+			return;
+		}
+
+		this.addressSearchLoading = true;
+		const options = await this.searchGooglePredictions(searchText);
+		if (requestVersion === this.addressSearchVersion) {
+			this.addressOptions = options;
+			this.addressSearchLoading = false;
+		}
+	}
+
+	async selectAddressOption(option: any): Promise<void> {
+		const place = await this.fetchPlaceDetails(option?.placeId);
+		this.ngZone.run(() => {
+			if (place) {
+				this.applySelectedAddress(place);
+			}
+			this.activeAddressDropdown = false;
+		});
 	}
 
 	telInputObjectMobile(obj) {
