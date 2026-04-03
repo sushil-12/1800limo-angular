@@ -76,6 +76,17 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	}
 	BigData: any
 	BigData_COPY: any
+	activeCustomAddressDropdown: string | null = null;
+	activeCustomAirportDropdown: string | null = null;
+	private customAddressDropdownBlurTimeout?: ReturnType<typeof setTimeout>;
+	private customAirportDropdownBlurTimeout?: ReturnType<typeof setTimeout>;
+	private customPlacesService?: google.maps.places.PlacesService;
+	private customAddressSearchVersion: Record<string, number> = {};
+	private customAirportSearchVersion: Record<string, number> = {};
+	private customAddressSearchLoading: Record<string, boolean> = {};
+	private customAirportSearchLoading: Record<string, boolean> = {};
+	private customAddressOptions: Record<string, Array<any>> = {};
+	private customAirportOptions: Record<string, Array<any>> = {};
 	BookingForm: FormGroup
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
@@ -313,47 +324,6 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 
 	initAllAutocompletes() {
 		setTimeout(() => {
-			if (this.pickupInput) {
-				this.initAutocomplete(this.pickupInput.nativeElement, 'pickup');
-			}
-			if (this.dropoffInput) {
-				this.initAutocomplete(this.dropoffInput.nativeElement, 'dropoff');
-			}
-
-			if (this.returnPickupInput) {
-				this.initAutocomplete(this.returnPickupInput.nativeElement, 'return_pickup');
-			}
-			if (this.returnDropoffInput) {
-				this.initAutocomplete(this.returnDropoffInput.nativeElement, 'return_dropoff');
-			}
-			if (this.pickupAirportInput) {
-				this.initAirportAutocomplete(this.pickupAirportInput.nativeElement, 'pickup_airport');
-			}
-			if (this.dropoffAirportInput) {
-				this.initAirportAutocomplete(this.dropoffAirportInput.nativeElement, 'dropoff_airport');
-			}
-			if (this.returnPickupAirportInput) {
-				this.initAirportAutocomplete(this.returnPickupAirportInput.nativeElement, 'return_pickup_airport');
-			}
-			if (this.returnDropoffAirportInput) {
-				this.initAirportAutocomplete(this.returnDropoffAirportInput.nativeElement, 'return_dropoff_airport');
-			}
-			if (this.fboAddressInput) {
-				this.initAutocomplete(this.fboAddressInput.nativeElement, 'fbo_address');
-			}
-			if (this.returnFboAddressInput) {
-				this.initAutocomplete(this.returnFboAddressInput.nativeElement, 'return_fbo_address');
-			}
-
-			// Dynamic fields: extra stops
-			this.extraStopInputs.forEach((input, index) => {
-				this.initAutocomplete(input, 'extra_stops', index, false);
-			});
-
-			this.returnExtraStopInputs.forEach((input, index) => {
-				this.initAutocomplete(input, 'return_extra_stops', index, true);
-			});
-
 		}, 200);
 	}
 
@@ -428,6 +398,412 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 				syncPlaceAutocompleteDisplay(nativeInput);
 			}, 150);
 		});
+	}
+
+	private isTouchBookingInteraction(): boolean {
+		if (typeof window === 'undefined') {
+			return false;
+		}
+
+		return window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 1024;
+	}
+
+	private getGoogleMapsApiKey(): string {
+		if (typeof document === 'undefined') {
+			return '';
+		}
+
+		const script = Array.from(document.querySelectorAll('script[src]')).find((item) =>
+			item.getAttribute('src')?.includes('maps.googleapis.com/maps/api/js')
+		);
+
+		if (!script) {
+			return '';
+		}
+
+		try {
+			const scriptUrl = new URL(script.getAttribute('src') || '', window.location.origin);
+			return scriptUrl.searchParams.get('key') || '';
+		} catch {
+			return '';
+		}
+	}
+
+	private getCustomPlacesService(): google.maps.places.PlacesService | null {
+		if (typeof google === 'undefined' || !google?.maps?.places) {
+			return null;
+		}
+
+		if (!this.customPlacesService) {
+			this.customPlacesService = new google.maps.places.PlacesService(document.createElement('div'));
+		}
+
+		return this.customPlacesService;
+	}
+
+	getExtraStopFieldKey(isReturn: boolean, index: number): string {
+		return `${isReturn ? 'return_extra_stops' : 'extra_stops'}:${index}`;
+	}
+
+	private parseExtraStopFieldKey(fieldName: string): { formArrayName: 'extra_stops' | 'return_extra_stops'; index: number } | null {
+		const match = String(fieldName || '').match(/^(extra_stops|return_extra_stops):(\d+)$/);
+		if (!match) {
+			return null;
+		}
+
+		return {
+			formArrayName: match[1] as 'extra_stops' | 'return_extra_stops',
+			index: Number(match[2])
+		};
+	}
+
+	private getExtraStopGroup(fieldName: string): FormGroup | null {
+		const parsedField = this.parseExtraStopFieldKey(fieldName);
+		if (!parsedField) {
+			return null;
+		}
+
+		return ((this.BookingForm.get(parsedField.formArrayName) as FormArray)?.at(parsedField.index) as FormGroup) || null;
+	}
+
+	private getCustomAddressFieldValue(fieldName: string): string {
+		const extraStopGroup = this.getExtraStopGroup(fieldName);
+		if (extraStopGroup) {
+			return String(extraStopGroup.get('address')?.value || '').trim();
+		}
+
+		return String(this.BookingForm.get(fieldName)?.value || '').trim();
+	}
+
+	private setCustomAddressFieldValue(fieldName: string, value: string): void {
+		const extraStopGroup = this.getExtraStopGroup(fieldName);
+		if (extraStopGroup) {
+			extraStopGroup.patchValue({
+				address: value,
+				latitude: '',
+				longitude: ''
+			}, { emitEvent: false });
+		}
+	}
+
+	private getPredictionTextValue(value: any): string {
+		if (!value) {
+			return '';
+		}
+		if (typeof value === 'string') {
+			return value.trim();
+		}
+		if (typeof value?.text === 'string') {
+			return value.text.trim();
+		}
+		if (typeof value?.text?.text === 'string') {
+			return value.text.text.trim();
+		}
+		return '';
+	}
+
+	private nextCustomSearchVersion(kind: 'address' | 'airport', fieldName: string): number {
+		const versionMap = kind === 'address' ? this.customAddressSearchVersion : this.customAirportSearchVersion;
+		const nextVersion = (versionMap[fieldName] || 0) + 1;
+		versionMap[fieldName] = nextVersion;
+		return nextVersion;
+	}
+
+	private isLatestCustomSearchVersion(kind: 'address' | 'airport', fieldName: string, version: number): boolean {
+		const versionMap = kind === 'address' ? this.customAddressSearchVersion : this.customAirportSearchVersion;
+		return (versionMap[fieldName] || 0) === version;
+	}
+
+	private setCustomSearchLoading(kind: 'address' | 'airport', fieldName: string, isLoading: boolean): void {
+		const loadingMap = kind === 'address' ? this.customAddressSearchLoading : this.customAirportSearchLoading;
+		loadingMap[fieldName] = isLoading;
+	}
+
+	isCustomSearchLoading(kind: 'address' | 'airport', fieldName: string): boolean {
+		const loadingMap = kind === 'address' ? this.customAddressSearchLoading : this.customAirportSearchLoading;
+		return !!loadingMap[fieldName];
+	}
+
+	private setCustomOptions(kind: 'address' | 'airport', fieldName: string, options: Array<any>): void {
+		const optionsMap = kind === 'address' ? this.customAddressOptions : this.customAirportOptions;
+		optionsMap[fieldName] = options;
+	}
+
+	getCustomAddressOptions(fieldName: string): Array<any> {
+		return this.customAddressOptions[fieldName] || [];
+	}
+
+	getCustomAirportOptions(fieldName: string): Array<any> {
+		return this.customAirportOptions[fieldName] || [];
+	}
+
+	isCustomAddressDropdownOpen(fieldName: string): boolean {
+		return this.activeCustomAddressDropdown === fieldName;
+	}
+
+	isCustomAirportDropdownOpen(fieldName: string): boolean {
+		return this.activeCustomAirportDropdown === fieldName;
+	}
+
+	shouldShowCustomPrompt(kind: 'address' | 'airport', fieldName: string): boolean {
+		const value = kind === 'address'
+			? this.getCustomAddressFieldValue(fieldName)
+			: String(this.BookingForm?.get(`${fieldName}_option`)?.value || '').trim();
+		const isOpen = kind === 'address' ? this.isCustomAddressDropdownOpen(fieldName) : this.isCustomAirportDropdownOpen(fieldName);
+		return isOpen && !value && !this.isCustomSearchLoading(kind, fieldName);
+	}
+
+	shouldShowCustomEmpty(kind: 'address' | 'airport', fieldName: string): boolean {
+		const value = kind === 'address'
+			? this.getCustomAddressFieldValue(fieldName)
+			: String(this.BookingForm?.get(`${fieldName}_option`)?.value || '').trim();
+		const isOpen = kind === 'address' ? this.isCustomAddressDropdownOpen(fieldName) : this.isCustomAirportDropdownOpen(fieldName);
+		const options = kind === 'address' ? this.getCustomAddressOptions(fieldName) : this.getCustomAirportOptions(fieldName);
+		return isOpen && !!value && !this.isCustomSearchLoading(kind, fieldName) && !options.length;
+	}
+
+	private clearCustomAddressDropdownBlurTimer(): void {
+		if (this.customAddressDropdownBlurTimeout) {
+			clearTimeout(this.customAddressDropdownBlurTimeout);
+			this.customAddressDropdownBlurTimeout = undefined;
+		}
+	}
+
+	private clearCustomAirportDropdownBlurTimer(): void {
+		if (this.customAirportDropdownBlurTimeout) {
+			clearTimeout(this.customAirportDropdownBlurTimeout);
+			this.customAirportDropdownBlurTimeout = undefined;
+		}
+	}
+
+	openCustomAddressDropdown(fieldName: string): void {
+		this.clearCustomAddressDropdownBlurTimer();
+		this.closeCustomAirportDropdown();
+		this.activeCustomAddressDropdown = fieldName;
+		void this.searchCustomAddress(fieldName, this.getCustomAddressFieldValue(fieldName));
+	}
+
+	closeCustomAddressDropdown(fieldName?: string): void {
+		this.clearCustomAddressDropdownBlurTimer();
+		if (!fieldName || this.activeCustomAddressDropdown === fieldName) {
+			this.activeCustomAddressDropdown = null;
+		}
+	}
+
+	openCustomAirportDropdown(fieldName: string): void {
+		this.clearCustomAirportDropdownBlurTimer();
+		this.closeCustomAddressDropdown();
+		this.activeCustomAirportDropdown = fieldName;
+		void this.searchCustomAirport(fieldName, this.BookingForm.get(`${fieldName}_option`)?.value || '');
+	}
+
+	closeCustomAirportDropdown(fieldName?: string): void {
+		this.clearCustomAirportDropdownBlurTimer();
+		if (!fieldName || this.activeCustomAirportDropdown === fieldName) {
+			this.activeCustomAirportDropdown = null;
+		}
+	}
+
+	onCustomAddressFocus(fieldName: string, input?: HTMLInputElement): void {
+		if (!this.isTouchBookingInteraction()) {
+			input?.select();
+		}
+		this.openCustomAddressDropdown(fieldName);
+	}
+
+	onCustomAddressBlur(fieldName: string): void {
+		this.clearCustomAddressDropdownBlurTimer();
+		this.customAddressDropdownBlurTimeout = setTimeout(() => this.closeCustomAddressDropdown(fieldName), 150);
+	}
+
+	onCustomAirportFocus(fieldName: string, input?: HTMLInputElement): void {
+		if (!this.isTouchBookingInteraction()) {
+			input?.select();
+		}
+		this.openCustomAirportDropdown(fieldName);
+	}
+
+	onCustomAirportBlur(fieldName: string): void {
+		this.clearCustomAirportDropdownBlurTimer();
+		this.customAirportDropdownBlurTimeout = setTimeout(() => this.closeCustomAirportDropdown(fieldName), 150);
+	}
+
+	onCustomAddressInput(fieldName: string, value: string): void {
+		this.clearCustomAddressDropdownBlurTimer();
+		const extraStopGroup = this.getExtraStopGroup(fieldName);
+		if (extraStopGroup) {
+			this.setCustomAddressFieldValue(fieldName, value || '');
+		} else {
+			this.BookingForm.get(`${fieldName}_latitude`)?.setValue('', { emitEvent: false });
+			this.BookingForm.get(`${fieldName}_longitude`)?.setValue('', { emitEvent: false });
+		}
+		this.BookingForm.updateValueAndValidity();
+		this.openCustomAddressDropdown(fieldName);
+		void this.searchCustomAddress(fieldName, value || '');
+	}
+
+	onCustomAirportInput(fieldName: string, value: string): void {
+		this.clearCustomAirportDropdownBlurTimer();
+		this.BookingForm.get(fieldName)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${fieldName}_name`)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('', { emitEvent: false });
+		this.BookingForm.get(`${fieldName}_longitude`)?.setValue('', { emitEvent: false });
+		this.BookingForm.updateValueAndValidity();
+		this.openCustomAirportDropdown(fieldName);
+		void this.searchCustomAirport(fieldName, value || '');
+	}
+
+	getCustomOptionLabel(option: any): string {
+		return String(option?.name || option?.description || '').trim();
+	}
+
+	getCustomOptionSecondary(option: any): string {
+		return String(option?.secondaryText || '').trim();
+	}
+
+	private searchGooglePredictions(searchText: string): Promise<Array<any>> {
+		const apiKey = this.getGoogleMapsApiKey();
+		if (!apiKey || !String(searchText || '').trim()) {
+			return Promise.resolve([]);
+		}
+
+		return fetch('https://places.googleapis.com/v1/places:autocomplete', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Goog-Api-Key': apiKey,
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text,suggestions.placePrediction.types'
+			},
+			body: JSON.stringify({
+				input: searchText,
+				includeQueryPredictions: false,
+				languageCode: 'en-US'
+			})
+		})
+			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
+			.then((response: any) => {
+				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
+				return suggestions
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.map((prediction: any) => ({
+						placeId: prediction.placeId,
+						types: prediction.types || [],
+						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+							|| this.getPredictionTextValue(prediction?.text),
+						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+						description: this.getPredictionTextValue(prediction?.text)
+					}))
+					.slice(0, 8);
+			})
+			.catch(() => []);
+	}
+
+	private isAirportPrediction(option: any): boolean {
+		const combined = [option?.name, option?.secondaryText, option?.description, (option?.types || []).join(' ')].join(' ').toLowerCase();
+		return ['airport', 'terminal', 'concourse', 'fbo', 'airfield', 'aerodrome', 'gate', 'parking', 'garage', 'departures', 'arrivals'].some((keyword) =>
+			combined.includes(keyword)
+		);
+	}
+
+	private fetchPlaceDetails(placeId: string): Promise<google.maps.places.PlaceResult | null> {
+		const service = this.getCustomPlacesService();
+		if (!service || !placeId) {
+			return Promise.resolve(null);
+		}
+
+		return new Promise((resolve) => {
+			service.getDetails(
+				{
+					placeId,
+					fields: ['place_id', 'name', 'formatted_address', 'geometry', 'address_components', 'types']
+				},
+				(place, status) => {
+					if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+						resolve(null);
+						return;
+					}
+					resolve(place);
+				}
+			);
+		});
+	}
+
+	async searchCustomAddress(fieldName: string, value: string): Promise<void> {
+		const requestVersion = this.nextCustomSearchVersion('address', fieldName);
+		const searchText = String(value || '').trim();
+		if (!searchText) {
+			if (this.isLatestCustomSearchVersion('address', fieldName, requestVersion)) {
+				this.setCustomSearchLoading('address', fieldName, false);
+				this.setCustomOptions('address', fieldName, []);
+			}
+			return;
+		}
+
+		this.setCustomSearchLoading('address', fieldName, true);
+		const options = await this.searchGooglePredictions(searchText);
+		if (this.isLatestCustomSearchVersion('address', fieldName, requestVersion)) {
+			this.setCustomOptions('address', fieldName, options);
+			this.setCustomSearchLoading('address', fieldName, false);
+		}
+	}
+
+	async searchCustomAirport(fieldName: string, value: string): Promise<void> {
+		const requestVersion = this.nextCustomSearchVersion('airport', fieldName);
+		const searchText = String(value || '').trim();
+		if (!searchText) {
+			if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
+				this.setCustomSearchLoading('airport', fieldName, false);
+				this.setCustomOptions('airport', fieldName, []);
+			}
+			return;
+		}
+
+		this.setCustomSearchLoading('airport', fieldName, true);
+		const options = (await this.searchGooglePredictions(searchText)).filter((option) => this.isAirportPrediction(option));
+		if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
+			this.setCustomOptions('airport', fieldName, options);
+			this.setCustomSearchLoading('airport', fieldName, false);
+		}
+	}
+
+	async selectCustomAddressOption(fieldName: string, option: any): Promise<void> {
+		this.clearCustomAddressDropdownBlurTimer();
+		const place = await this.fetchPlaceDetails(option?.placeId);
+		if (place?.geometry?.location) {
+			const formattedAddress = place.formatted_address ?? '';
+			const placeName = place.name ?? '';
+			const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+			const addressPayload = {
+				...place,
+				formatted_address: formattedAddress,
+				display_address: displayAddress
+			};
+			const extraStopField = this.parseExtraStopFieldKey(fieldName);
+			if (extraStopField) {
+				this.fillExtraStop(extraStopField.formArrayName === 'return_extra_stops', extraStopField.index, addressPayload, {
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+			} else {
+				this.fillAddress(fieldName, addressPayload);
+				this.fillLocationPoints(fieldName, {
+					latitude: place.geometry.location.lat(),
+					longitude: place.geometry.location.lng()
+				});
+			}
+		}
+		this.closeCustomAddressDropdown(fieldName);
+	}
+
+	async selectCustomAirportOption(fieldName: string, option: any): Promise<void> {
+		this.clearCustomAirportDropdownBlurTimer();
+		const place = await this.fetchPlaceDetails(option?.placeId);
+		if (place?.geometry?.location) {
+			this.handleAirportPlaceSelection(fieldName, place);
+		}
+		this.closeCustomAirportDropdown(fieldName);
 	}
 
 
@@ -1735,6 +2111,76 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 		}
 	}
 
+	private syncVisibleFieldPayloads() {
+		const addressInputs: Array<{ control: string; inputRef?: ElementRef<HTMLInputElement> }> = [
+			{ control: 'pickup', inputRef: this.pickupInput },
+			{ control: 'dropoff', inputRef: this.dropoffInput },
+			{ control: 'return_pickup', inputRef: this.returnPickupInput },
+			{ control: 'return_dropoff', inputRef: this.returnDropoffInput },
+			{ control: 'fbo_address', inputRef: this.fboAddressInput },
+			{ control: 'return_fbo_address', inputRef: this.returnFboAddressInput },
+		];
+
+		addressInputs.forEach(({ control, inputRef }) => {
+			const nativeValue = String(inputRef?.nativeElement?.value || '').trim();
+			const controlRef = this.BookingForm.get(control);
+			const controlValue = String(controlRef?.value || '').trim();
+
+			if (nativeValue && controlRef && !controlValue) {
+				controlRef.setValue(nativeValue, { emitEvent: false });
+				controlRef.updateValueAndValidity({ emitEvent: false });
+			}
+		});
+
+		const airportInputs: Array<{ control: string; inputRef?: ElementRef<HTMLInputElement> }> = [
+			{ control: 'pickup_airport', inputRef: this.pickupAirportInput },
+			{ control: 'dropoff_airport', inputRef: this.dropoffAirportInput },
+			{ control: 'return_pickup_airport', inputRef: this.returnPickupAirportInput },
+			{ control: 'return_dropoff_airport', inputRef: this.returnDropoffAirportInput },
+		];
+
+		airportInputs.forEach(({ control, inputRef }) => {
+			const nativeValue = String(inputRef?.nativeElement?.value || '').trim();
+			const optionControl = this.BookingForm.get(`${control}_option`);
+			const nameControl = this.BookingForm.get(`${control}_name`);
+			const optionValue = String(optionControl?.value || '').trim();
+			const nameValue = String(nameControl?.value || '').trim();
+
+			if (nativeValue && optionControl && !optionValue) {
+				optionControl.setValue(nativeValue, { emitEvent: false });
+				optionControl.updateValueAndValidity({ emitEvent: false });
+			}
+
+			if (nativeValue && nameControl && !nameValue) {
+				nameControl.setValue(nativeValue, { emitEvent: false });
+				nameControl.updateValueAndValidity({ emitEvent: false });
+			}
+		});
+
+		this.BookingForm.updateValueAndValidity({ emitEvent: false });
+	}
+
+	private applyQuoteBotAirportPrefill(
+		fieldPrefix: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff',
+		airportDisplay: any,
+		airportLat: any,
+		airportLng: any,
+		rawAirportId: any,
+		matchedAirport: any
+	) {
+		const resolvedDisplay = String(airportDisplay || '').trim();
+		const resolvedAirportId = matchedAirport?.id ?? rawAirportId ?? '';
+		const valuesToPatch: Record<string, any> = {
+			[`${fieldPrefix}_airport`]: resolvedAirportId,
+			[`${fieldPrefix}_airport_option`]: resolvedDisplay,
+			[`${fieldPrefix}_airport_name`]: resolvedDisplay,
+			[`${fieldPrefix}_airport_latitude`]: airportLat ?? '',
+			[`${fieldPrefix}_airport_longitude`]: airportLng ?? '',
+		};
+
+		this.patchControls(valuesToPatch);
+	}
+
 	normalizeAirportMatchText(value: any): string {
 		return String(value || '')
 			.toLowerCase()
@@ -1898,6 +2344,8 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	}
 
 	clearAirportField(formControl: string) {
+		this.closeCustomAirportDropdown(formControl);
+		this.closeCustomAddressDropdown();
 		this.BookingForm.get(formControl)?.setValue('', { emitEvent: false });
 		this.BookingForm.get(`${formControl}_option`)?.setValue('', { emitEvent: false });
 		this.BookingForm.get(`${formControl}_name`)?.setValue('', { emitEvent: false });
@@ -2329,6 +2777,8 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	}
 
 	clearAddressField(formControl: string) {
+		this.closeCustomAddressDropdown(formControl);
+		this.closeCustomAirportDropdown();
 		this.BookingForm.get(formControl)?.setValue('');
 		this.BookingForm.get(`${formControl}_latitude`)?.setValue('');
 		this.BookingForm.get(`${formControl}_longitude`)?.setValue('');
@@ -2351,6 +2801,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	}
 
 	clearExtraStopAddress(isReturn: boolean, stopIndex: number, input?: HTMLInputElement) {
+		this.closeCustomAddressDropdown(this.getExtraStopFieldKey(isReturn, stopIndex));
 		const formArrayName = isReturn ? 'return_extra_stops' : 'extra_stops';
 		const stopGroup = (this.BookingForm.get(formArrayName) as FormArray)?.at(stopIndex);
 
@@ -3734,13 +4185,14 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			}
 		}
 
+		this.syncVisibleFieldPayloads();
+		this.syncAirportPayloadFields();
+
 		if (this.BookingForm.invalid) {
 			console.log('[BOOKING FORM INVALID] Preview/submit blocked after validation.');
 			this.logInvalidControls(this.BookingForm);
 			return;
 		}
-
-		this.syncAirportPayloadFields();
 
 		let value = this.BookingForm.value
 
@@ -4081,19 +4533,25 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			this.SetFormValue('pickup', QB?.pickup_address)
 			this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
 			this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
-			this.SetFormValue('pickup_airport', matchedPickupAirport?.id ?? QB?.pickup_airport)
-			this.SetFormValue('pickup_airport_option', QB?.other_details?.pickup_airport_name)
-			this.SetFormValue('pickup_airport_name', QB?.other_details?.pickup_airport_name)
-			this.SetFormValue('pickup_airport_latitude', QB?.pickup_airport_lat)
-			this.SetFormValue('pickup_airport_longitude', QB?.pickup_airport_long)
+			this.applyQuoteBotAirportPrefill(
+				'pickup',
+				QB?.other_details?.pickup_airport_name,
+				QB?.pickup_airport_lat,
+				QB?.pickup_airport_long,
+				QB?.pickup_airport,
+				matchedPickupAirport
+			)
 			this.SetFormValue('dropoff', QB?.dropoff_address)
 			this.SetFormValue('dropoff_latitude', QB?.dropoff_address_lat)
 			this.SetFormValue('dropoff_longitude', QB?.dropoff_address_long)
-			this.SetFormValue('dropoff_airport', matchedDropoffAirport?.id ?? QB?.dropoff_airport)
-			this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
-			this.SetFormValue('dropoff_airport_name', QB?.other_details?.dropoff_airport_name)
-			this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
-			this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_airport_long)
+			this.applyQuoteBotAirportPrefill(
+				'dropoff',
+				QB?.other_details?.dropoff_airport_name,
+				QB?.dropoff_airport_lat,
+				QB?.dropoff_airport_long,
+				QB?.dropoff_airport,
+				matchedDropoffAirport
+			)
 
 
 			//return pickup
@@ -4101,21 +4559,27 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			this.SetFormValue('return_pickup', QB?.return_pickup_address ?? QB?.return_dropoff_address)
 			this.SetFormValue('return_pickup_latitude', QB?.return_pickup_address_lat ?? QB?.return_dropoff_address_lat)
 			this.SetFormValue('return_pickup_longitude', QB?.return_pickup_address_long ?? QB?.return_dropoff_address_long)
-			this.SetFormValue('return_pickup_airport', matchedReturnPickupAirport?.id ?? QB?.return_pickup_airport)
-			this.SetFormValue('return_pickup_airport_option', QB?.other_details?.return_pickup_airport_name)
-			this.SetFormValue('return_pickup_airport_name', QB?.other_details?.return_pickup_airport_name)
-			this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
-			this.SetFormValue('return_pickup_airport_longitude', QB?.return_pickup_airport_long)
+			this.applyQuoteBotAirportPrefill(
+				'return_pickup',
+				QB?.other_details?.return_pickup_airport_name,
+				QB?.return_pickup_airport_lat,
+				QB?.return_pickup_airport_long,
+				QB?.return_pickup_airport,
+				matchedReturnPickupAirport
+			)
 
 			//return dropOff
 			this.SetFormValue('return_dropoff', QB?.return_dropoff_address)
 			this.SetFormValue('return_dropoff_latitude', QB?.return_dropoff_address_lat)
 			this.SetFormValue('return_dropoff_longitude', QB?.return_dropoff_address_long)
-			this.SetFormValue('return_dropoff_airport', matchedReturnDropoffAirport?.id ?? QB?.return_dropoff_airport)
-			this.SetFormValue('return_dropoff_airport_option', QB?.other_details?.return_dropoff_airport_name)
-			this.SetFormValue('return_dropoff_airport_name', QB?.other_details?.return_dropoff_airport_name)
-			this.SetFormValue('return_dropoff_airport_latitude', QB?.return_dropoff_airport_lat)
-			this.SetFormValue('return_dropoff_airport_longitude', QB?.return_dropoff_airport_long)
+			this.applyQuoteBotAirportPrefill(
+				'return_dropoff',
+				QB?.other_details?.return_dropoff_airport_name,
+				QB?.return_dropoff_airport_lat,
+				QB?.return_dropoff_airport_long,
+				QB?.return_dropoff_airport,
+				matchedReturnDropoffAirport
+			)
 			this.SetFormValue('pickup_time', this.FormatTime(QB?.pickup_time))
 			this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
 			this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))

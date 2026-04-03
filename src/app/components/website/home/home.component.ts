@@ -79,6 +79,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	airports_data_dropoff: Array<any>
 	airports_data_r_pickup: Array<any>
 	airports_data_r_dropoff: Array<any>
+	address_data_pickup: Array<any> = []
+	address_data_dropoff: Array<any> = []
+	address_data_r_pickup: Array<any> = []
+	address_data_r_dropoff: Array<any> = []
+	activeAirportDropdown: string | null = null;
+	activeAddressDropdown: string | null = null;
+	private airportDropdownBlurTimeout?: ReturnType<typeof setTimeout>;
+	private addressDropdownBlurTimeout?: ReturnType<typeof setTimeout>;
+	private airportPlacesService?: google.maps.places.PlacesService;
+	private addressPlacesService?: google.maps.places.PlacesService;
+	private airportSearchRequestVersion: Record<string, number> = {};
+	private addressSearchRequestVersion: Record<string, number> = {};
+	private addressSearchLoadingState: Record<string, boolean> = {};
 
 	//For reactive form
 	quoteBotForm: FormGroup;
@@ -346,13 +359,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.ngZone.runOutsideAngular(() => {
 			this.quoteBotAutofillSyncInterval = setInterval(() => {
 				let changed = false;
-				let needsAutocompleteInit = false;
 				const checkAndSync = (inputRef: ElementRef, controlName: string) => {
 					if (inputRef && inputRef.nativeElement) {
-						const widget = inputRef.nativeElement.nextElementSibling;
-						if (widget?.tagName?.toLowerCase() !== 'gmp-place-autocomplete') {
-							needsAutocompleteInit = true;
-						}
 						const control = this.quoteBotForm?.get(controlName);
 						const rawNativeValue = inputRef.nativeElement.value || '';
 						if (!rawNativeValue.trim() && !(control?.value || '').toString().trim()) {
@@ -383,12 +391,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				if (changed) {
 					this.ngZone.run(() => {
 						this.quoteBotForm.updateValueAndValidity();
-					});
-				}
-
-				if (needsAutocompleteInit) {
-					this.ngZone.run(() => {
-						this.retryGoogleAutocompleteInitialization(3, 150);
 					});
 				}
 			}, 100);
@@ -514,7 +516,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	shouldShowAddressClear(inputRef: ElementRef | HTMLInputElement | undefined, controlName: string): boolean {
 		const controlValue = this.quoteBotForm?.get(controlName)?.value;
 		const nativeInput = inputRef instanceof ElementRef ? inputRef.nativeElement : inputRef;
-		const visibleValue = getPlaceAutocompleteDisplayValue(nativeInput);
+		const visibleValue = getPlaceAutocompleteDisplayValue(nativeInput) || nativeInput?.value || '';
 
 		return !!String(controlValue || visibleValue || '').trim();
 	}
@@ -540,32 +542,632 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	initializeallloadGoogleAutocomplete() {
-		if (this.addressinput) {
-			this.loadGoogleAutocomplete(this.addressinput.nativeElement, 'pickup_address');
+		this.scheduleQuoteBotAutocompleteDisplaySync();
+	}
+
+	getAddressOptions(fieldName: string): Array<any> {
+		switch (fieldName) {
+			case 'pickup_address':
+				return this.address_data_pickup || [];
+			case 'dropoff_address':
+				return this.address_data_dropoff || [];
+			case 'return_pickup_address':
+				return this.address_data_r_pickup || [];
+			case 'return_dropoff_address':
+				return this.address_data_r_dropoff || [];
+			default:
+				return [];
 		}
-		if (this.dropaddressinput) {
-			this.loadGoogleAutocomplete(this.dropaddressinput.nativeElement, 'dropoff_address');
+	}
+
+	isAddressDropdownOpen(fieldName: string): boolean {
+		return this.activeAddressDropdown === fieldName;
+	}
+
+	shouldShowAddressEmptyState(fieldName: string): boolean {
+		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		return this.isAddressDropdownOpen(fieldName)
+			&& !!currentValue
+			&& !this.isAddressSearchLoading(fieldName)
+			&& !this.getAddressOptions(fieldName)?.length;
+	}
+
+	shouldShowAddressPromptState(fieldName: string): boolean {
+		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		return this.isAddressDropdownOpen(fieldName) && !currentValue;
+	}
+
+	private clearAddressDropdownBlurTimer(): void {
+		if (this.addressDropdownBlurTimeout) {
+			clearTimeout(this.addressDropdownBlurTimeout);
+			this.addressDropdownBlurTimeout = undefined;
 		}
-		if (this.retaddressinput) {
-			this.loadGoogleAutocomplete(this.retaddressinput.nativeElement, 'return_pickup_address');
+	}
+
+	openAddressDropdown(fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.activeAddressDropdown = fieldName;
+		void this.searchAddress(this.quoteBotForm.get(fieldName)?.value || '', fieldName);
+	}
+
+	closeAddressDropdown(fieldName?: string): void {
+		this.clearAddressDropdownBlurTimer();
+		if (!fieldName || this.activeAddressDropdown === fieldName) {
+			this.activeAddressDropdown = null;
 		}
-		if (this.retdropaddressinput) {
-			this.loadGoogleAutocomplete(this.retdropaddressinput.nativeElement, 'return_dropoff_address');
+	}
+
+	onAddressFieldFocus(fieldName: string, input?: HTMLInputElement): void {
+		if (!this.isTouchAirportInteraction()) {
+			input?.select();
 		}
-		if (this.airportinput) {
-			this.loadGoogleAirportAutocomplete(this.airportinput.nativeElement, 'pickup_airport');
+		this.openAddressDropdown(fieldName);
+	}
+
+	onAddressFieldBlur(fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.addressDropdownBlurTimeout = setTimeout(() => {
+			this.closeAddressDropdown(fieldName);
+		}, 150);
+	}
+
+	private clearAddressResolvedSelection(fieldName: string): void {
+		this.SetFormValue(`${fieldName}_lat`, '');
+		this.SetFormValue(`${fieldName}_long`, '');
+
+		if (fieldName === 'pickup_address') {
+			this.SetFormValue('return_dropoff_address', '');
+			this.SetFormValue('return_dropoff_address_lat', '');
+			this.SetFormValue('return_dropoff_address_long', '');
+		} else if (fieldName === 'dropoff_address') {
+			this.SetFormValue('return_pickup_address', '');
+			this.SetFormValue('return_pickup_address_lat', '');
+			this.SetFormValue('return_pickup_address_long', '');
 		}
-		if (this.dropairportinput) {
-			this.loadGoogleAirportAutocomplete(this.dropairportinput.nativeElement, 'dropoff_airport');
+	}
+
+	onAddressFieldInput(value: string, fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.openAddressDropdown(fieldName);
+		this.clearAddressResolvedSelection(fieldName);
+		void this.searchAddress(value || '', fieldName);
+	}
+
+	async selectAddressOption(address: any, fieldName: string): Promise<void> {
+		this.clearAddressDropdownBlurTimer();
+		const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
+		if (googleAddress) {
+			this.onAutocompleteSelected(googleAddress, fieldName);
+			this.onLocationSelected(googleAddress, fieldName);
 		}
-		if (this.retairportinput) {
-			this.loadGoogleAirportAutocomplete(this.retairportinput.nativeElement, 'return_pickup_airport');
-		}
-		if (this.retdropairportinput) {
-			this.loadGoogleAirportAutocomplete(this.retdropairportinput.nativeElement, 'return_dropoff_airport');
+		this.closeAddressDropdown(fieldName);
+	}
+
+	getAddressOptionLabel(address: any): string {
+		const normalizedName = String(address?.name || '').trim();
+		if (normalizedName) {
+			return normalizedName;
 		}
 
-		this.scheduleQuoteBotAutocompleteDisplaySync();
+		const description = String(address?.description || '').trim();
+		if (description) {
+			return description.split(',')[0]?.trim() || description;
+		}
+
+		return '';
+	}
+
+	getAddressOptionSecondaryText(address: any): string {
+		const secondaryText = String(address?.secondaryText || '').trim();
+		if (secondaryText) {
+			return secondaryText;
+		}
+
+		const description = String(address?.description || '').trim();
+		if (description) {
+			const parts = description.split(',').map((part: string) => part.trim()).filter(Boolean);
+			if (parts.length > 1) {
+				return parts.slice(1).join(', ');
+			}
+		}
+
+		return '';
+	}
+
+	private setAddressOptions(fieldName: string, options: Array<any>): void {
+		switch (fieldName) {
+			case 'pickup_address':
+				this.address_data_pickup = options;
+				break;
+			case 'dropoff_address':
+				this.address_data_dropoff = options;
+				break;
+			case 'return_pickup_address':
+				this.address_data_r_pickup = options;
+				break;
+			case 'return_dropoff_address':
+				this.address_data_r_dropoff = options;
+				break;
+		}
+	}
+
+	private nextAddressSearchVersion(fieldName: string): number {
+		const nextVersion = (this.addressSearchRequestVersion[fieldName] || 0) + 1;
+		this.addressSearchRequestVersion[fieldName] = nextVersion;
+		return nextVersion;
+	}
+
+	private isLatestAddressSearchVersion(fieldName: string, version: number): boolean {
+		return (this.addressSearchRequestVersion[fieldName] || 0) === version;
+	}
+
+	isAddressSearchLoading(fieldName: string): boolean {
+		return !!this.addressSearchLoadingState[fieldName];
+	}
+
+	private setAddressSearchLoading(fieldName: string, isLoading: boolean): void {
+		this.addressSearchLoadingState[fieldName] = isLoading;
+	}
+
+	private getAddressPlacesService(): google.maps.places.PlacesService | null {
+		if (typeof google === 'undefined' || !google?.maps?.places) {
+			return null;
+		}
+
+		if (!this.addressPlacesService) {
+			this.addressPlacesService = new google.maps.places.PlacesService(document.createElement('div'));
+		}
+
+		return this.addressPlacesService;
+	}
+
+	private getAddressSelectionLabel(placeName: string, formattedAddress: string): string {
+		const normalizedName = String(placeName || '').trim();
+		const normalizedAddress = String(formattedAddress || '').trim();
+
+		return normalizedName ? `${normalizedName} - ${normalizedAddress}` : normalizedAddress;
+	}
+
+	private searchGoogleAddressPredictions(searchText: string): Promise<Array<any>> {
+		const apiKey = this.getGoogleMapsApiKey();
+		if (!apiKey || !String(searchText || '').trim()) {
+			return Promise.resolve([]);
+		}
+
+		return fetch('https://places.googleapis.com/v1/places:autocomplete', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Goog-Api-Key': apiKey,
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text'
+			},
+			body: JSON.stringify({
+				input: searchText,
+				includeQueryPredictions: false,
+				languageCode: 'en-US'
+			})
+		})
+			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
+			.then((response: any) => {
+				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
+				return suggestions
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.map((prediction: any) => ({
+						placeId: prediction.placeId,
+						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+							|| this.getPredictionTextValue(prediction?.text),
+						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+						description: this.getPredictionTextValue(prediction?.text)
+					}))
+					.slice(0, 8);
+			})
+			.catch(() => []);
+	}
+
+	private fetchGoogleAddressDetails(placeId: string): Promise<any | null> {
+		const service = this.getAddressPlacesService();
+		if (!service || !placeId) {
+			return Promise.resolve(null);
+		}
+
+		return new Promise((resolve) => {
+			service.getDetails(
+				{
+					placeId,
+					fields: ['place_id', 'name', 'formatted_address', 'geometry']
+				},
+				(place, status) => {
+					if (status !== google.maps.places.PlacesServiceStatus.OK || !place?.geometry?.location) {
+						resolve(null);
+						return;
+					}
+
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = (place.name ?? '').trim();
+
+					resolve({
+						formatted_address: formattedAddress,
+						display_address: this.getAddressSelectionLabel(placeName, formattedAddress),
+						latitude: place.geometry.location.lat(),
+						longitude: place.geometry.location.lng()
+					});
+				}
+			);
+		});
+	}
+
+	async searchAddress(value: string, fieldName: string): Promise<void> {
+		const requestVersion = this.nextAddressSearchVersion(fieldName);
+		const searchText = String(value || '').trim();
+
+		if (!searchText) {
+			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
+				this.setAddressSearchLoading(fieldName, false);
+				this.setAddressOptions(fieldName, []);
+			}
+			return;
+		}
+
+		this.setAddressSearchLoading(fieldName, true);
+
+		try {
+			const options = await this.searchGoogleAddressPredictions(searchText);
+			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
+				this.setAddressOptions(fieldName, options);
+				this.setAddressSearchLoading(fieldName, false);
+			}
+		} catch {
+			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
+				this.setAddressOptions(fieldName, []);
+				this.setAddressSearchLoading(fieldName, false);
+			}
+		}
+	}
+
+	getAirportOptions(fieldName: string): Array<any> {
+		switch (fieldName) {
+			case 'pickup_airport':
+				return this.airports_data_pickup || [];
+			case 'dropoff_airport':
+				return this.airports_data_dropoff || [];
+			case 'return_pickup_airport':
+				return this.airports_data_r_pickup || [];
+			case 'return_dropoff_airport':
+				return this.airports_data_r_dropoff || [];
+			default:
+				return [];
+		}
+	}
+
+	isAirportDropdownOpen(fieldName: string): boolean {
+		return this.activeAirportDropdown === fieldName;
+	}
+
+	private clearAirportDropdownBlurTimer(): void {
+		if (this.airportDropdownBlurTimeout) {
+			clearTimeout(this.airportDropdownBlurTimeout);
+			this.airportDropdownBlurTimeout = undefined;
+		}
+	}
+
+	openAirportDropdown(fieldName: string): void {
+		this.clearAirportDropdownBlurTimer();
+		this.activeAirportDropdown = fieldName;
+		void this.searchAirport(this.quoteBotForm.get(`${fieldName}_name`)?.value || '', fieldName);
+	}
+
+	closeAirportDropdown(fieldName?: string): void {
+		this.clearAirportDropdownBlurTimer();
+		if (!fieldName || this.activeAirportDropdown === fieldName) {
+			this.activeAirportDropdown = null;
+		}
+	}
+
+	private isTouchAirportInteraction(): boolean {
+		if (typeof window === 'undefined') {
+			return false;
+		}
+
+		return window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 1024;
+	}
+
+	onAirportFieldFocus(fieldName: string, input?: HTMLInputElement): void {
+		if (!this.isTouchAirportInteraction()) {
+			input?.select();
+		}
+		this.openAirportDropdown(fieldName);
+	}
+
+	onAirportFieldBlur(fieldName: string): void {
+		this.clearAirportDropdownBlurTimer();
+		this.airportDropdownBlurTimeout = setTimeout(() => {
+			this.closeAirportDropdown(fieldName);
+		}, 150);
+	}
+
+	private clearAirportResolvedSelection(fieldName: string): void {
+		this.SetFormValue(fieldName, '');
+		this.SetFormValue(`${fieldName}_lat`, '');
+		this.SetFormValue(`${fieldName}_long`, '');
+	}
+
+	onAirportFieldInput(value: string, fieldName: string): void {
+		this.clearAirportDropdownBlurTimer();
+		this.openAirportDropdown(fieldName);
+		this.clearAirportResolvedSelection(fieldName);
+		void this.searchAirport(value || '', fieldName);
+	}
+
+	async selectAirportOption(airport: any, fieldName: string): Promise<void> {
+		this.clearAirportDropdownBlurTimer();
+		if (airport?.placeId) {
+			const googleAirport = await this.fetchGoogleAirportDetails(airport.placeId, airport.name);
+			if (googleAirport) {
+				this.onAirportSelected(googleAirport, fieldName);
+			}
+		} else {
+			this.selectedAirport(this.getAirportOptions(fieldName), airport, fieldName);
+		}
+		this.closeAirportDropdown(fieldName);
+	}
+
+	getAirportOptionLabel(airport: any): string {
+		const normalizedName = String(airport?.name || airport?.airport || '').trim();
+		if (normalizedName) {
+			return normalizedName;
+		}
+
+		const description = String(airport?.description || '').trim();
+		if (description) {
+			return description.split(',')[0]?.trim() || description;
+		}
+
+		return '';
+	}
+
+	getAirportOptionSecondaryText(airport: any): string {
+		const description = String(airport?.description || '').trim();
+		if (description) {
+			const parts = description.split(',').map((part: string) => part.trim()).filter(Boolean);
+			if (parts.length > 1) {
+				return parts.slice(1).join(', ');
+			}
+		}
+
+		const secondaryText = airport?.secondaryText || airport?.city || '';
+		if (secondaryText) {
+			return secondaryText;
+		}
+
+		return '';
+	}
+
+	private setAirportOptions(fieldName: string, options: Array<any>): void {
+		switch (fieldName) {
+			case 'pickup_airport':
+				this.airports_data_pickup = options;
+				break;
+			case 'dropoff_airport':
+				this.airports_data_dropoff = options;
+				break;
+			case 'return_pickup_airport':
+				this.airports_data_r_pickup = options;
+				break;
+			case 'return_dropoff_airport':
+				this.airports_data_r_dropoff = options;
+				break;
+		}
+	}
+
+	private nextAirportSearchVersion(fieldName: string): number {
+		const nextVersion = (this.airportSearchRequestVersion[fieldName] || 0) + 1;
+		this.airportSearchRequestVersion[fieldName] = nextVersion;
+		return nextVersion;
+	}
+
+	private isLatestAirportSearchVersion(fieldName: string, version: number): boolean {
+		return (this.airportSearchRequestVersion[fieldName] || 0) === version;
+	}
+
+	private getAirportPlacesService(): google.maps.places.PlacesService | null {
+		if (typeof google === 'undefined' || !google?.maps?.places) {
+			return null;
+		}
+
+		if (!this.airportPlacesService) {
+			this.airportPlacesService = new google.maps.places.PlacesService(document.createElement('div'));
+		}
+
+		return this.airportPlacesService;
+	}
+
+	private isAirportLikePredictionText(value: string): boolean {
+		const predictionText = String(value || '').toLowerCase();
+
+		return ['airport', 'terminal', 'concourse', 'fbo', 'airfield', 'aerodrome', 'gate', 'parking', 'garage', 'departures', 'arrivals'].some((keyword) =>
+			predictionText.includes(keyword)
+		);
+	}
+
+	private isAirportOrTerminalResult(name: string, secondaryText: string, description: string): boolean {
+		const combinedText = [name, secondaryText, description].join(' ').toLowerCase();
+
+		return ['airport', 'terminal', 'concourse', 'fbo', 'airfield', 'aerodrome'].some((keyword) =>
+			combinedText.includes(keyword)
+		);
+	}
+
+	private getPredictionTextValue(value: any): string {
+		if (!value) {
+			return '';
+		}
+
+		if (typeof value === 'string') {
+			return value.trim();
+		}
+
+		if (typeof value?.text === 'string') {
+			return value.text.trim();
+		}
+
+		if (typeof value?.text?.text === 'string') {
+			return value.text.text.trim();
+		}
+
+		if (typeof value?.plainText === 'string') {
+			return value.plainText.trim();
+		}
+
+		if (typeof value?.stringValue === 'string') {
+			return value.stringValue.trim();
+		}
+
+		return '';
+	}
+
+	private getGoogleMapsApiKey(): string {
+		if (typeof document === 'undefined') {
+			return '';
+		}
+
+		const script = Array.from(document.querySelectorAll('script[src]')).find((item) =>
+			item.getAttribute('src')?.includes('maps.googleapis.com/maps/api/js')
+		);
+
+		if (!script) {
+			return '';
+		}
+
+		try {
+			const scriptUrl = new URL(script.getAttribute('src') || '', window.location.origin);
+			return scriptUrl.searchParams.get('key') || '';
+		} catch {
+			return '';
+		}
+	}
+
+	private searchGoogleAirportPredictions(searchText: string): Promise<Array<any>> {
+		const apiKey = this.getGoogleMapsApiKey();
+		if (!apiKey) {
+			return Promise.resolve([]);
+		}
+
+		return fetch('https://places.googleapis.com/v1/places:autocomplete', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Goog-Api-Key': apiKey,
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text,suggestions.placePrediction.types'
+			},
+			body: JSON.stringify({
+				input: searchText,
+				includeQueryPredictions: false,
+				languageCode: 'en-US'
+			})
+		})
+			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
+			.then(async (response: any) => {
+				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
+				const predictions = suggestions
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction)
+					.filter((prediction: any) => {
+						const types = Array.isArray(prediction?.types) ? prediction.types.join(' ').toLowerCase() : '';
+						const label = [
+							this.getPredictionTextValue(prediction?.text),
+							this.getPredictionTextValue(prediction?.structuredFormat?.mainText),
+							this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText)
+						].join(' ');
+
+						return this.isAirportLikePredictionText(`${types} ${label}`);
+					})
+					.map((prediction: any) => ({
+						placeId: prediction.placeId,
+						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+							|| this.getPredictionTextValue(prediction?.text),
+						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+						description: this.getPredictionTextValue(prediction?.text)
+					}));
+
+				return Promise.all(predictions.slice(0, 8).map((prediction: any) => this.fetchGoogleAirportDropdownOption(prediction)))
+					.then((items) => items.filter((item) => !!item));
+			})
+			.catch(() => []);
+	}
+
+	private fetchGoogleAirportDropdownOption(prediction: any): Promise<any> {
+		const service = this.getAirportPlacesService();
+		if (!service || !prediction?.placeId) {
+			return Promise.resolve(prediction);
+		}
+
+		return new Promise((resolve) => {
+			service.getDetails(
+				{
+					placeId: prediction.placeId,
+					fields: ['place_id', 'name', 'formatted_address']
+				},
+				(place, status) => {
+					if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+						resolve(prediction);
+						return;
+					}
+
+					const resolvedName = String(place.name || prediction.name || '').trim();
+					const resolvedSecondaryText = String(place.formatted_address || prediction.secondaryText || '').trim();
+					const resolvedDescription = [
+						resolvedName,
+						resolvedSecondaryText
+					].filter(Boolean).join(', ');
+
+					if (!this.isAirportOrTerminalResult(resolvedName, resolvedSecondaryText, resolvedDescription)) {
+						resolve(null);
+						return;
+					}
+
+					resolve({
+						...prediction,
+						name: resolvedName,
+						secondaryText: resolvedSecondaryText,
+						description: resolvedDescription
+					});
+				}
+			);
+		});
+	}
+
+	private fetchGoogleAirportDetails(placeId: string, fallbackName = ''): Promise<{ id: string; name: string; latitude: number; longitude: number } | null> {
+		const service = this.getAirportPlacesService();
+		if (!service || !placeId) {
+			return Promise.resolve(null);
+		}
+
+		return new Promise((resolve) => {
+			service.getDetails(
+				{
+					placeId,
+					fields: ['place_id', 'name', 'formatted_address', 'geometry']
+				},
+				(place, status) => {
+					if (status !== google.maps.places.PlacesServiceStatus.OK || !place?.geometry?.location) {
+						resolve(null);
+						return;
+					}
+
+					const formattedAddress = place.formatted_address ?? '';
+					const placeName = (place.name ?? fallbackName ?? '').trim();
+					resolve({
+						id: place.place_id ?? placeId,
+						name: this.getAirportSelectionLabel(placeName, formattedAddress),
+						latitude: place.geometry.location.lat(),
+						longitude: place.geometry.location.lng()
+					});
+				}
+			);
+		});
 	}
 
 	private syncQuoteBotAutocompleteDisplays(): void {
@@ -602,6 +1204,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
+			this.closeAirportDropdown();
+			this.closeAddressDropdown();
 			setTimeout(() => {
 				this.retryGoogleAutocompleteInitialization()
 			}, 200)
@@ -609,6 +1213,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.quoteBotForm.get('dropoff_type').valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
+			this.closeAirportDropdown();
+			this.closeAddressDropdown();
 			setTimeout(() => {
 				this.retryGoogleAutocompleteInitialization()
 			}, 200)
@@ -862,8 +1468,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.SetFormValue(fieldName, address);
 					console.log("Reverse Geocoded Address:", address);
 
-					// Fill return details for round trip if this is pickup_address
-					if (this.QBForm?.service_type?.value === 'round_trip' && fieldName === 'pickup_address') {
+					// Keep round-trip mirrored addresses in sync with the outbound side.
+					if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
 						this.fillReturnDetails();
 					}
 				} else {
@@ -1179,29 +1785,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
-	searchAirport(letter: string, form_control: string) {
-		if (form_control == 'pickup_airport') {
+	async searchAirport(letter: string, form_control: string) {
+		const requestVersion = this.nextAirportSearchVersion(form_control);
+		const searchText = (letter || '').trim();
+		const fallbackOptions = (searchText == '')
+			? JSON.parse(JSON.stringify(this.airports_data_copy || []))
+			: this.returnSearchAirport(searchText);
 
-			this.airports_data_pickup = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
-		}
-		if (form_control == 'dropoff_airport') {
-
-			this.airports_data_dropoff = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
-		}
-		if (form_control == 'return_pickup_airport') {
-
-			this.airports_data_r_pickup = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
-		}
-		if (form_control == 'return_dropoff_airport') {
-
-			this.airports_data_r_dropoff = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
+		if (!searchText) {
+			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+				this.setAirportOptions(form_control, fallbackOptions);
+			}
+			return;
 		}
 
-		// console.log('airport data-------->>>>>>>>>', this.airports_data)
-
-		// assign the value to form control if airport code is entered, as the code will give zero results for airport.
-		if (this.airports_data.length == 0) {
-			this.SetFormValue(form_control, letter)
+		const googleOptions = await this.searchGoogleAirportPredictions(searchText);
+		if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+			this.setAirportOptions(form_control, googleOptions.length ? googleOptions : fallbackOptions);
 		}
 	}
 
@@ -1264,6 +1864,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.SetFormValue(`${fieldName}_long`, airport.longitude);
 		this.vars[`${fieldName}_name`] = airport.name;
 
+		if (fieldName.includes('pickup_airport')) {
+			this.vars['return_dropoff_airport_name'] = airport.name;
+		}
+		if (fieldName.includes('dropoff_airport')) {
+			this.vars['return_pickup_airport_name'] = airport.name;
+		}
+
+		this.fillReturnDetails();
+
 		if (fieldName === 'pickup_airport') {
 			this.SetFormValue('return_dropoff_airport', airport.id);
 			this.SetFormValue('return_dropoff_airport_name', airport.name);
@@ -1276,18 +1885,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.SetFormValue('return_pickup_airport_lat', airport.latitude);
 			this.SetFormValue('return_pickup_airport_long', airport.longitude);
 			this.vars['return_pickup_airport_name'] = airport.name;
-		}
-
-		if (this.QBForm?.service_type?.value === 'round_trip' && !fieldName.includes('return_')) {
-			this.fillReturnDetails();
-			this.SetFormValue(
-				fieldName === 'pickup_airport' ? 'return_dropoff_airport_name' : 'return_pickup_airport_name',
-				airport.name
-			);
+		} else if (fieldName === 'return_pickup_airport') {
+			this.SetFormValue('dropoff_airport_name', airport.name);
+		} else if (fieldName === 'return_dropoff_airport') {
+			this.SetFormValue('pickup_airport_name', airport.name);
 		}
 	}
 
 	clearAirportSelection(fieldName: string): void {
+		this.closeAirportDropdown(fieldName);
 		this.SetFormValue(fieldName, '');
 		this.SetFormValue(`${fieldName}_name`, '');
 		this.SetFormValue(`${fieldName}_lat`, '');
@@ -1310,6 +1916,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	clearAddressSelection(fieldName: string): void {
+		this.closeAddressDropdown(fieldName);
 		this.SetFormValue(fieldName, '');
 		this.SetFormValue(`${fieldName}_lat`, '');
 		this.SetFormValue(`${fieldName}_long`, '');
@@ -1339,8 +1946,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	SetFormValue(field_name: string, value: string | number) {
 		console.log(`Filling ${value} into ${field_name}`)
-		this.quoteBotForm.get(field_name)?.setValue(value)
-		this.quoteBotForm.updateValueAndValidity()
+		const control = this.quoteBotForm.get(field_name);
+		control?.setValue(value);
+		control?.updateValueAndValidity();
+		this.quoteBotForm.updateValueAndValidity();
 	}
 
 	SetFormValidator(field_name: string, validators: Array<any>): void {
