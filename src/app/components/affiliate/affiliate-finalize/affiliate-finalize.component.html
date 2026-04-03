@@ -54,7 +54,7 @@
 				{{ timeFormat(BookingDetail?.pickup_time) }}</strong>
 		</div>
 
-		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_address">
+		<div class="col-md-4 field" *ngIf="transferType?.includes('city_') || transferType?.includes('cruise_')">
 			<p>Pickup Address: </p>
 			<strong> {{ BookingDetail?.pickup_address }}</strong>
 		</div>
@@ -74,7 +74,7 @@
 			<p>Pickup Origin Airport / City: </p>
 			<strong>{{ BookingDetail?.origin_airport_city }}</strong>
 		</div>
-		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_address">
+		<div class="col-md-4 field" *ngIf="transferType?.includes('_city') || transferType?.includes('_cruise')">
 			<p>Drop-Off Address: </p>
 			<strong>{{ BookingDetail?.dropoff_address }}</strong>
 		</div>
