@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../../components/shared/shared.module';
-import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getPlaceAutocompleteDisplayValue } from '../../../utils/google-place-autocomplete';
+import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
 import * as moment from 'moment';
@@ -346,8 +346,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.ngZone.runOutsideAngular(() => {
 			this.quoteBotAutofillSyncInterval = setInterval(() => {
 				let changed = false;
+				let needsAutocompleteInit = false;
 				const checkAndSync = (inputRef: ElementRef, controlName: string) => {
 					if (inputRef && inputRef.nativeElement) {
+						const widget = inputRef.nativeElement.nextElementSibling;
+						if (widget?.tagName?.toLowerCase() !== 'gmp-place-autocomplete') {
+							needsAutocompleteInit = true;
+						}
 						const control = this.quoteBotForm?.get(controlName);
 						const rawNativeValue = inputRef.nativeElement.value || '';
 						if (!rawNativeValue.trim() && !(control?.value || '').toString().trim()) {
@@ -378,6 +383,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				if (changed) {
 					this.ngZone.run(() => {
 						this.quoteBotForm.updateValueAndValidity();
+					});
+				}
+
+				if (needsAutocompleteInit) {
+					this.ngZone.run(() => {
+						this.retryGoogleAutocompleteInitialization(3, 150);
 					});
 				}
 			}, 100);
@@ -553,6 +564,33 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.retdropairportinput) {
 			this.loadGoogleAirportAutocomplete(this.retdropairportinput.nativeElement, 'return_dropoff_airport');
 		}
+
+		this.scheduleQuoteBotAutocompleteDisplaySync();
+	}
+
+	private syncQuoteBotAutocompleteDisplays(): void {
+		const inputRefs = [
+			this.addressinput,
+			this.dropaddressinput,
+			this.retaddressinput,
+			this.retdropaddressinput,
+			this.airportinput,
+			this.dropairportinput,
+			this.retairportinput,
+			this.retdropairportinput,
+		];
+
+		inputRefs.forEach((inputRef) => {
+			if (inputRef?.nativeElement) {
+				syncPlaceAutocompleteDisplay(inputRef.nativeElement);
+			}
+		});
+	}
+
+	private scheduleQuoteBotAutocompleteDisplaySync(): void {
+		[0, 100, 300, 700].forEach((delay) => {
+			setTimeout(() => this.syncQuoteBotAutocompleteDisplays(), delay);
+		});
 	}
 
 	Subscriptions() {
@@ -974,6 +1012,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.vars = { ...previousOtherDetails }
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
 			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
+			this.scheduleQuoteBotAutocompleteDisplaySync()
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
 
 			// if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
@@ -1000,6 +1039,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 
 			this.quoteBotSwitch('one_way')
+			this.scheduleQuoteBotAutocompleteDisplaySync()
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
 
 			// Auto-pick location for first time users if pickup_address is empty
