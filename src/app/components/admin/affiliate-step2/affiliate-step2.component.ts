@@ -12,7 +12,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from '../../../services/common.service';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-import { attachPlaceAutocompleteElement, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 declare var $: any;
 
 @Component({
@@ -78,6 +77,11 @@ export class AffiliateStep2Component implements OnInit {
 	badgeOptions: any;
 	cards: any;
 	TaxIdMatch: string;
+	activeAddressDropdown: boolean = false;
+	addressOptions: any[] = [];
+	addressSearchLoading: boolean = false;
+	private customPlacesService: google.maps.places.PlacesService | null = null;
+	private addressSearchVersion = 0;
 
 	constructor(
 		private adminService: AdminService,
@@ -361,51 +365,156 @@ export class AffiliateStep2Component implements OnInit {
 
 	ngAfterViewInit(): void {
 		this.geoCoder = new google.maps.Geocoder;
+	}
 
-		void attachPlaceAutocompleteElement(
-			this.search1.nativeElement,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
-				syncControl: this.addBankForm.get('address')!,
-			},
-			(place) => {
-				this.ngZone.run(() => {
-					if (!place.geometry || !place.geometry.location) return;
-					const formattedAddress = place.formatted_address ?? '';
-					const placeName = place.name ?? '';
-					const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
-
-					this.addBankForm.patchValue({
-						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng(),
-						address: displayAddress
-					});
-
-					place.address_components?.forEach((component) => {
-						const types = component.types;
-						console.log("{DEBUG} Address file data", types, component)
-						if (types.includes('country')) {
-							this.addBankForm.patchValue({
-								country: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_1')) {
-							this.addBankForm.patchValue({
-								state: component.short_name
-							});
-						} else if (types.includes('administrative_area_level_3')) {
-							this.addBankForm.patchValue({
-								city: component.long_name
-							});
-						} else if (types.includes('postal_code')) {
-							this.addBankForm.patchValue({
-								zipCode: component.long_name
-							});
-						}
-					});
-				});
-			}
+	private getGoogleMapsApiKey(): string {
+		const script = Array.from(document.querySelectorAll('script[src]')).find((item) =>
+			item.getAttribute('src')?.includes('maps.googleapis.com/maps/api/js')
 		);
+		const src = script?.getAttribute('src') || '';
+		try {
+			return new URL(src).searchParams.get('key') || '';
+		} catch {
+			return '';
+		}
+	}
+
+	private getCustomPlacesService(): google.maps.places.PlacesService | null {
+		if (this.customPlacesService) {
+			return this.customPlacesService;
+		}
+
+		if (!(window as any)?.google?.maps?.places?.PlacesService) {
+			return null;
+		}
+
+		const container = document.createElement('div');
+		container.style.display = 'none';
+		document.body.appendChild(container);
+		this.customPlacesService = new google.maps.places.PlacesService(container);
+		return this.customPlacesService;
+	}
+
+	private getPredictionTextValue(value: any): string {
+		if (!value) {
+			return '';
+		}
+		if (typeof value === 'string') {
+			return value;
+		}
+		return value?.text || value?.plainText || value?.stringValue || value?.text?.text || '';
+	}
+
+	private searchGooglePredictions(searchText: string): Promise<Array<any>> {
+		const apiKey = this.getGoogleMapsApiKey();
+		if (!apiKey || !String(searchText || '').trim()) {
+			return Promise.resolve([]);
+		}
+
+		return fetch('https://places.googleapis.com/v1/places:autocomplete', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Goog-Api-Key': apiKey,
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text'
+			},
+			body: JSON.stringify({
+				input: searchText,
+				includeQueryPredictions: false,
+				languageCode: 'en-US'
+			})
+		})
+			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
+			.then((response: any) => {
+				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
+				return suggestions
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.map((prediction: any) => ({
+						placeId: prediction.placeId,
+						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+							|| this.getPredictionTextValue(prediction?.text),
+						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+						description: this.getPredictionTextValue(prediction?.text)
+					}))
+					.slice(0, 8);
+			})
+			.catch(() => []);
+	}
+
+	private fetchPlaceDetails(placeId: string): Promise<google.maps.places.PlaceResult | null> {
+		const service = this.getCustomPlacesService();
+		if (!service || !placeId) {
+			return Promise.resolve(null);
+		}
+
+		return new Promise((resolve) => {
+			service.getDetails(
+				{
+					placeId,
+					fields: ['formatted_address', 'geometry', 'place_id', 'name', 'address_components', 'types'],
+				},
+				(place, status) => {
+					if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+						resolve(null);
+						return;
+					}
+					resolve(place);
+				}
+			);
+		});
+	}
+
+	private applySelectedAddress(place: google.maps.places.PlaceResult): void {
+		if (!place.geometry?.location) {
+			return;
+		}
+
+		const formattedAddress = place.formatted_address ?? '';
+		const placeName = place.name ?? '';
+		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+		const valuesToPatch: any = {
+			latitude: place.geometry.location.lat(),
+			longitude: place.geometry.location.lng(),
+			address: displayAddress,
+			street: '',
+			city: '',
+			state: '',
+			zipCode: '',
+		};
+
+		let countryCode = '';
+		place.address_components?.forEach((component) => {
+			const types = component.types || [];
+			if (types.includes('country')) {
+				countryCode = component.short_name;
+				valuesToPatch.country = component.short_name;
+			} else if (types.includes('administrative_area_level_1')) {
+				valuesToPatch.state = component.short_name;
+			} else if (types.includes('administrative_area_level_3') || types.includes('locality')) {
+				if (!valuesToPatch.city) {
+					valuesToPatch.city = component.long_name;
+				}
+			} else if (types.includes('route') || types.includes('street_number')) {
+				valuesToPatch.street = valuesToPatch.street
+					? `${valuesToPatch.street} ${component.long_name}`.trim()
+					: component.long_name;
+			} else if (types.includes('postal_code')) {
+				valuesToPatch.zipCode = component.long_name;
+			}
+		});
+
+		this.addBankForm.patchValue(valuesToPatch);
+		if (countryCode) {
+			this.changeCountry(countryCode);
+			if (valuesToPatch.state) {
+				this.addBankForm.get('state')?.setValue(valuesToPatch.state);
+			}
+		}
+		this.addressErrorMessage = '';
+		this.isAddressSelected = true;
+		this.addBankForm.updateValueAndValidity();
 	}
 
 
@@ -424,10 +533,8 @@ export class AffiliateStep2Component implements OnInit {
 
 	shouldShowAddressClear(): boolean {
 		const controlValue = this.addBankForm?.get('address')?.value;
-		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
-		const visibleValue = getPlaceAutocompleteDisplayValue(nativeInput);
-
-		return !!String(controlValue || visibleValue || '').trim();
+		const nativeValue = this.search1?.nativeElement?.value;
+		return !!String(controlValue || nativeValue || '').trim();
 	}
 
 	clearAddressField(): void {
@@ -445,12 +552,79 @@ export class AffiliateStep2Component implements OnInit {
 		this.addBankForm.updateValueAndValidity();
 		this.addressErrorMessage = '';
 		this.isAddressSelected = false;
+		this.addressOptions = [];
+		this.addressSearchLoading = false;
+		this.activeAddressDropdown = false;
+	}
 
-		const nativeInput = this.search1?.nativeElement as HTMLInputElement | undefined;
-		if (nativeInput) {
-			nativeInput.value = '';
-			syncPlaceAutocompleteDisplay(nativeInput);
+	onAddressFocus(input?: HTMLInputElement): void {
+		input?.select();
+		this.activeAddressDropdown = true;
+		void this.searchAddressOptions(this.addBankForm.get('address')?.value || '');
+	}
+
+	onAddressBlur(): void {
+		setTimeout(() => {
+			this.activeAddressDropdown = false;
+		}, 150);
+	}
+
+	onAddressInput(value: string): void {
+		this.removeErrorSsn(value, 'address');
+		this.addBankForm.patchValue({
+			address: value || '',
+			latitude: '',
+			longitude: ''
+		}, { emitEvent: false });
+		this.addBankForm.get('latitude')?.updateValueAndValidity({ emitEvent: false });
+		this.addBankForm.get('longitude')?.updateValueAndValidity({ emitEvent: false });
+		this.activeAddressDropdown = true;
+		void this.searchAddressOptions(value || '');
+	}
+
+	getAddressOptionLabel(option: any): string {
+		return String(option?.name || option?.description || '').trim();
+	}
+
+	getAddressOptionSecondary(option: any): string {
+		return String(option?.secondaryText || '').trim();
+	}
+
+	shouldShowAddressPrompt(): boolean {
+		return this.activeAddressDropdown && !String(this.addBankForm.get('address')?.value || '').trim() && !this.addressSearchLoading;
+	}
+
+	shouldShowAddressEmpty(): boolean {
+		return this.activeAddressDropdown && !!String(this.addBankForm.get('address')?.value || '').trim() && !this.addressSearchLoading && !this.addressOptions.length;
+	}
+
+	private async searchAddressOptions(value: string): Promise<void> {
+		const requestVersion = ++this.addressSearchVersion;
+		const searchText = String(value || '').trim();
+		if (!searchText) {
+			if (requestVersion === this.addressSearchVersion) {
+				this.addressSearchLoading = false;
+				this.addressOptions = [];
+			}
+			return;
 		}
+
+		this.addressSearchLoading = true;
+		const options = await this.searchGooglePredictions(searchText);
+		if (requestVersion === this.addressSearchVersion) {
+			this.addressOptions = options;
+			this.addressSearchLoading = false;
+		}
+	}
+
+	async selectAddressOption(option: any): Promise<void> {
+		const place = await this.fetchPlaceDetails(option?.placeId);
+		this.ngZone.run(() => {
+			if (place) {
+				this.applySelectedAddress(place);
+			}
+			this.activeAddressDropdown = false;
+		});
 	}
 	haveEin(haveEinNo) {
 		switch (haveEinNo) {

@@ -132,11 +132,13 @@
                             placeholder="Chose or Enter More Languages" tabindex="1">
                         </ng-select>
                     </div>
-                    <div class="col-md-12">
-                        <mat-form-field appearance="outline">
+                    <div class="col-md-12 quote-ui-dropdown-host">
+                        <mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address">
                             <mat-label>Address </mat-label>
+                            <i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
                             <input #search1 formControlName="address" type="text" matInput placeholder="Address"
-                                (focus)="$event.target.select()" tabindex="1">
+                                (focus)="onAddressFocus(search1)" (blur)="onAddressBlur()"
+                                (input)="onAddressInput($any($event.target).value)" autocomplete="off" tabindex="1">
                             <button matSuffix type="button" class="address-clear-btn"
                                 *ngIf="f?.address?.value || search1?.value"
                                 (click)="clearAddressField()" aria-label="Clear address">
@@ -147,6 +149,19 @@
                                 </svg>
                             </button>
                         </mat-form-field>
+                        <div *ngIf="activeAddressDropdown" class="quote-ui-dropdown-panel">
+                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of addressOptions"
+                                (mousedown)="$event.preventDefault()" (click)="selectAddressOption(option)">
+                                <i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+                                <span class="quote-ui-dropdown-option__content">
+                                    <span class="quote-ui-dropdown-option__label">{{ getAddressOptionLabel(option) }}</span>
+                                    <span class="quote-ui-dropdown-option__secondary">{{ getAddressOptionSecondary(option) }}</span>
+                                </span>
+                            </button>
+                            <div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Searching...</div>
+                            <div *ngIf="shouldShowAddressEmpty()" class="quote-ui-dropdown-empty">No Result found</div>
+                        </div>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
                         <div *ngIf="submittedForm && f?.address?.errors || f?.address?.touced && f?.address?.errors"
                             class="text-danger">
