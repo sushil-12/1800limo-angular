@@ -32,6 +32,15 @@ function isAirportSuggestionText(text: string): boolean {
 	);
 }
 
+function isAirportCodeSearch(value: string): boolean {
+	const normalized = (value || '').trim();
+	if (!normalized || normalized !== normalized.toUpperCase()) {
+		return false;
+	}
+
+	return /^[A-Z]{3,4}$/.test(normalized);
+}
+
 function installAirportSuggestionFilter(pac: HTMLElement): () => void {
 	let observer: MutationObserver | undefined;
 
@@ -252,7 +261,7 @@ function setupPlaceAutocompleteHelper(
 
 		const rawValue = inner.value || '';
 		const trimmedValue = rawValue.trim();
-		const isCodeSearch = /^[A-Za-z]{3,4}$/.test(trimmedValue);
+		const isCodeSearch = isAirportCodeSearch(trimmedValue);
 		if (!isCodeSearch || rawValue.endsWith(' ')) {
 			return;
 		}
@@ -269,7 +278,7 @@ function setupPlaceAutocompleteHelper(
 			}
 
 			const latestValue = (inner.value || '').trim();
-			if (!/^[A-Za-z]{3,4}$/.test(latestValue)) {
+			if (!isAirportCodeSearch(latestValue)) {
 				return;
 			}
 			const latestPredictionCount = getPredictionCount();
@@ -305,7 +314,7 @@ function setupPlaceAutocompleteHelper(
 
 		const rawValue = inner.value || '';
 		const trimmedValue = rawValue.trim();
-		const isCodeSearch = /^[A-Za-z]{3,4}$/.test(trimmedValue);
+		const isCodeSearch = isAirportCodeSearch(trimmedValue);
 		const hasTerminalKeyword = /(terminal|concourse|fbo)\b/i.test(trimmedValue);
 		const isAirportNameSearch = !isCodeSearch && trimmedValue.length >= 4 && !hasTerminalKeyword;
 
@@ -326,7 +335,7 @@ function setupPlaceAutocompleteHelper(
 			}
 
 			const latestValue = (inner.value || '').trim();
-			const latestIsCodeSearch = /^[A-Za-z]{3,4}$/.test(latestValue);
+			const latestIsCodeSearch = isAirportCodeSearch(latestValue);
 			const latestHasTerminalKeyword = /(terminal|concourse|fbo)\b/i.test(latestValue);
 			const latestIsAirportNameSearch = !latestIsCodeSearch && latestValue.length >= 4 && !latestHasTerminalKeyword;
 			if (!latestIsAirportNameSearch || getPredictionCount() === 0 || hasVisibleAirportPrediction()) {
@@ -404,6 +413,11 @@ function setupPlaceAutocompleteHelper(
 		ensureHelper();
 		inputListener = () => {
 			const currentValue = inner.value || '';
+			if (isMobileAirportDialogOpen(pac)) {
+				applyMobileAirportPopupInputAlignment(pac, inner);
+			} else {
+				applyClosedAirportFieldAlignment(pac, inner);
+			}
 			syncDraftToField(currentValue);
 			clearEmptyTimer();
 			clearDelayedSyncTimers();
@@ -418,6 +432,11 @@ function setupPlaceAutocompleteHelper(
 		};
 		focusListener = () => {
 			const currentValue = inner.value || '';
+			if (isMobileAirportDialogOpen(pac)) {
+				applyMobileAirportPopupInputAlignment(pac, inner);
+			} else {
+				applyClosedAirportFieldAlignment(pac, inner);
+			}
 			if (currentValue) {
 				syncDraftToField(currentValue);
 			}
@@ -582,29 +601,35 @@ function installGmpAttachShadowPatch(): void {
 			.pac-helper-state {
 				display: none;
 				position: absolute;
-				top: 52px;
+				top: 60px;
 				left: 0;
 				right: 0;
-				z-index: 5;
-				align-items: center;
+				z-index: 12;
+				align-items: flex-start;
 				gap: 10px;
-				min-height: 56px;
-				padding: 16px;
+				min-height: 58px;
+				padding: 16px 18px 18px 20px;
 				background: #fff !important;
 				color: #6b7280 !important;
-				font-size: 14px;
-				font-weight: 500;
+				font-size: 16px;
+				line-height: 1.4;
+				font-weight: 600;
 				border-top: 1px solid rgba(0,0,0,0.08);
 				pointer-events: none;
+				box-sizing: border-box !important;
+				white-space: normal !important;
+				word-break: break-word !important;
 			}
 			.pac-helper-state.visible {
 				display: flex;
 			}
 			.pac-helper-state::before {
 				content: "⌕";
-				font-size: 15px;
-				line-height: 1;
+				font-size: 17px;
+				line-height: 1.1;
 				color: #9ca3af !important;
+				flex: 0 0 auto;
+				margin-top: 2px;
 			}
 			.pac-helper-state[data-mode="loading"]::before {
 				content: "↻";
@@ -729,11 +754,13 @@ function installGmpAttachShadowPatch(): void {
 			flex: 0 0 0 !important;
 		}
 		:host([data-airport-field="true"]) .input-container input {
-			padding-left: 40px !important;
+			padding-left: 52px !important;
+			padding-inline-start: 52px !important;
 			position: relative !important;
 			z-index: 1 !important;
 			text-indent: 0 !important;
 			text-align: left !important;
+			direction: ltr !important;
 		}
 
 		:host *,
@@ -770,19 +797,54 @@ function installGmpAttachShadowPatch(): void {
 			background: #fff !important;
 			color: #000 !important;
 		}
-		@media (max-width: 767px) {
-			:host([data-airport-field="true"]) dialog.full-window-autocomplete-dialog[open] .input-container::before {
-				display: none !important;
-			}
-			:host([data-airport-field="true"]) dialog.full-window-autocomplete-dialog[open] .input-container input {
-				padding-left: 0 !important;
-				text-indent: 0 !important;
-				text-align: left !important;
-			}
-			dialog.full-window-autocomplete-dialog[open] .text-content,
-			dialog.full-window-autocomplete-dialog[open] .primary-text,
-			dialog.full-window-autocomplete-dialog[open] .secondary-text,
-			dialog.full-window-autocomplete-dialog[open] .place-name,
+			@media (max-width: 767px) {
+				dialog.full-window-autocomplete-dialog[open] .input-container {
+					display: flex !important;
+					align-items: center !important;
+					justify-content: flex-start !important;
+					gap: 0 !important;
+					padding-left: 0 !important;
+					padding-right: 0 !important;
+					text-align: left !important;
+				}
+				:host([data-airport-field="true"]) dialog.full-window-autocomplete-dialog[open] .input-container::before {
+					display: none !important;
+				}
+				:host([data-airport-field="true"]) dialog.full-window-autocomplete-dialog[open] .input-container > :not(input):not(button) {
+					opacity: 0 !important;
+					width: 0 !important;
+					min-width: 0 !important;
+					max-width: 0 !important;
+					margin: 0 !important;
+					padding: 0 !important;
+					overflow: hidden !important;
+					pointer-events: none !important;
+					flex: 0 0 0 !important;
+				}
+				:host([data-airport-field="true"]) dialog.full-window-autocomplete-dialog[open] .input-container input {
+					flex: 1 1 auto !important;
+					min-width: 0 !important;
+					margin-left: 0 !important;
+					padding-left: 0 !important;
+					padding-right: 42px !important;
+					text-indent: 0 !important;
+					text-align: left !important;
+				}
+				dialog.full-window-autocomplete-dialog[open] .pac-helper-state {
+					top: 86px !important;
+					left: 10px !important;
+					right: 10px !important;
+					padding: 14px 16px 16px 18px !important;
+					font-size: 16px !important;
+					line-height: 1.45 !important;
+					border-top: none !important;
+					border-radius: 0 0 12px 12px !important;
+					box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1) !important;
+				}
+				dialog.full-window-autocomplete-dialog[open] .text-content,
+				dialog.full-window-autocomplete-dialog[open] .primary-text,
+				dialog.full-window-autocomplete-dialog[open] .secondary-text,
+				dialog.full-window-autocomplete-dialog[open] .place-name,
 			dialog.full-window-autocomplete-dialog[open] .place-address {
 				width: 100% !important;
 				text-align: left !important;
@@ -848,6 +910,14 @@ function isMobileAirportDialogOpen(pac: Element): boolean {
 	}
 }
 
+function shouldPreserveInputViewport(
+	pac: Element,
+	inner: HTMLInputElement,
+	root?: ShadowRoot | null
+): boolean {
+	return document.activeElement === pac || document.activeElement === inner || root?.activeElement === inner;
+}
+
 function applyMobileAirportPopupInputAlignment(
 	pac: Element,
 	innerInput?: HTMLInputElement | null
@@ -864,16 +934,19 @@ function applyMobileAirportPopupInputAlignment(
 		if (!(inner instanceof HTMLInputElement)) {
 			return;
 		}
+		const preserveViewport = shouldPreserveInputViewport(pac, inner, root);
 
 		inner.style.setProperty('text-align', 'left', 'important');
 		inner.style.setProperty('text-indent', '0', 'important');
 		inner.style.setProperty('padding-left', '0', 'important');
-		inner.style.setProperty('padding-right', '18px', 'important');
+		inner.style.setProperty('padding-right', '42px', 'important');
 		inner.style.setProperty('margin', '0', 'important');
 		inner.style.setProperty('width', '100%', 'important');
 		inner.style.setProperty('box-sizing', 'border-box', 'important');
 		inner.style.setProperty('justify-content', 'flex-start', 'important');
-		inner.scrollLeft = 0;
+		if (!preserveViewport) {
+			inner.scrollLeft = 0;
+		}
 	} catch {
 		/* ignore */
 	}
@@ -898,14 +971,16 @@ function applyClosedAirportFieldAlignment(
 		if (!(inner instanceof HTMLInputElement)) {
 			return;
 		}
-
 		inner.style.setProperty('text-align', 'left', 'important');
 		inner.style.setProperty('text-indent', '0', 'important');
-		inner.style.setProperty('padding-left', '50px', 'important');
-		inner.style.setProperty('padding-right', '18px', 'important');
+		inner.style.setProperty('padding-left', '52px', 'important');
+		inner.style.setProperty('padding-inline-start', '52px', 'important');
+		inner.style.setProperty('padding-right', '42px', 'important');
 		inner.style.setProperty('margin', '0', 'important');
 		inner.style.setProperty('width', '100%', 'important');
 		inner.style.setProperty('box-sizing', 'border-box', 'important');
+		inner.style.setProperty('direction', 'ltr', 'important');
+		inner.style.setProperty('justify-content', 'flex-start', 'important');
 		inner.scrollLeft = 0;
 	} catch {
 		/* ignore */
@@ -936,10 +1011,7 @@ function syncPlaceAutocompleteElementValue(
 		const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
 		const inner = root?.querySelector?.('input');
 		if (inner instanceof HTMLInputElement) {
-			const isFocused =
-				document.activeElement === pac
-				|| document.activeElement === inner
-				|| root?.activeElement === inner;
+			const isFocused = shouldPreserveInputViewport(pac, inner, root);
 			if (isMobileAirportDialogOpen(pac)) {
 				applyMobileAirportPopupInputAlignment(pac, inner);
 			} else {
@@ -1052,6 +1124,66 @@ export async function attachPlaceAutocompleteElement(
 
 	const cleanupHelper = setupPlaceAutocompleteHelper(pac, nativeInput, _options?.syncControl);
 	const cleanupAirportSuggestionFilter = isAirportField ? installAirportSuggestionFilter(pac) : undefined;
+	let outsidePointerListener: ((event: PointerEvent) => void) | undefined;
+
+	const getOpenDialog = (): HTMLDialogElement | null => {
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const dialog = root?.querySelector?.('dialog.full-window-autocomplete-dialog[open]');
+			return dialog instanceof HTMLDialogElement ? dialog : null;
+		} catch {
+			return null;
+		}
+	};
+
+	const closeMobileDialog = () => {
+		const dialog = getOpenDialog();
+		if (!dialog) {
+			return;
+		}
+
+		try {
+			const root = (pac as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot;
+			const inner = root?.querySelector?.('input');
+			if (inner instanceof HTMLInputElement) {
+				inner.blur();
+			}
+		} catch {
+			/* ignore */
+		}
+
+		try {
+			dialog.close();
+		} catch {
+			dialog.removeAttribute('open');
+		}
+	};
+
+	const installOutsideTapClose = () => {
+		if (outsidePointerListener || typeof document === 'undefined') {
+			return;
+		}
+
+		outsidePointerListener = (event: PointerEvent) => {
+			if (typeof window === 'undefined' || !window.matchMedia('(max-width: 767px)').matches) {
+				return;
+			}
+
+			const dialog = getOpenDialog();
+			if (!dialog) {
+				return;
+			}
+
+			const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+			if (path.includes(pac) || path.includes(dialog)) {
+				return;
+			}
+
+			closeMobileDialog();
+		};
+
+		document.addEventListener('pointerdown', outsidePointerListener, true);
+	};
 
 	const updatePlacement = () => {
 		const rect = pac.getBoundingClientRect();
@@ -1067,6 +1199,7 @@ export async function attachPlaceAutocompleteElement(
 	pac.addEventListener('focusin', updatePlacement);
 	window.addEventListener('resize', updatePlacement);
 	window.addEventListener('scroll', updatePlacement, { capture: true, passive: true });
+	installOutsideTapClose();
 
 	// Force initial placement calculation slightly after attach
 	setTimeout(updatePlacement, 50);
@@ -1126,6 +1259,10 @@ export async function attachPlaceAutocompleteElement(
 		pac.removeEventListener('focusin', updatePlacement);
 		window.removeEventListener('resize', updatePlacement);
 		window.removeEventListener('scroll', updatePlacement, { capture: true } as EventListenerOptions);
+		if (outsidePointerListener) {
+			document.removeEventListener('pointerdown', outsidePointerListener, true);
+			outsidePointerListener = undefined;
+		}
 		pac.remove();
 		nativeInput.style.display = prevDisplay;
 		nativeInput.style.position = prevPosition;

@@ -158,6 +158,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	previousBookingData: any = null;
 	numberOfHoursError: boolean = false;
 	private isClearingSelection = false;
+	private bookingAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -225,19 +226,55 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 
-		this.initAllAutocompletes()
+		this.retryGoogleAutocompleteInitialization()
 		this.initphonefield()
 
 		// Re-initialize when dynamic views update
 		this.extraStopInputs.changes.subscribe(() => {
-			setTimeout(() => this.initAllAutocompletes(), 100);
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 		});
 
 		this.returnExtraStopInputs.changes.subscribe(() => {
-			setTimeout(() => this.initAllAutocompletes(), 100);
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 		});
 
 
+	}
+
+	private retryGoogleAutocompleteInitialization(attempts = 10, delay = 250): void {
+		if (this.bookingAutocompleteRetryTimeout) {
+			clearTimeout(this.bookingAutocompleteRetryTimeout);
+		}
+
+		const tryAttach = (remainingAttempts: number) => {
+			const googleReady = typeof google !== 'undefined' && !!google?.maps;
+			const hasAnyInput =
+				!!this.pickupInput?.nativeElement ||
+				!!this.dropoffInput?.nativeElement ||
+				!!this.returnPickupInput?.nativeElement ||
+				!!this.returnDropoffInput?.nativeElement ||
+				!!this.pickupAirportInput?.nativeElement ||
+				!!this.dropoffAirportInput?.nativeElement ||
+				!!this.returnPickupAirportInput?.nativeElement ||
+				!!this.returnDropoffAirportInput?.nativeElement ||
+				!!this.fboAddressInput?.nativeElement ||
+				!!this.returnFboAddressInput?.nativeElement ||
+				(this.extraStopInputs?.length ?? 0) > 0 ||
+				(this.returnExtraStopInputs?.length ?? 0) > 0;
+
+			if (googleReady && hasAnyInput) {
+				this.initAllAutocompletes();
+				return;
+			}
+
+			if (remainingAttempts > 1) {
+				this.bookingAutocompleteRetryTimeout = setTimeout(() => {
+					tryAttach(remainingAttempts - 1);
+				}, delay);
+			}
+		};
+
+		tryAttach(attempts);
 	}
 
 
@@ -360,6 +397,12 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	initAirportAutocomplete(input: ElementRef | HTMLInputElement, control: string) {
 		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
 		console.log("init airport autocomplete", nativeInput, control)
+		const airportDisplayValue =
+			this.BookingForm.get(`${control}_option`)?.value
+			|| this.BookingForm.get(`${control}_name`)?.value
+			|| '';
+
+		nativeInput.value = airportDisplayValue;
 
 		void attachPlaceAutocompleteElement(
 			nativeInput,
@@ -373,7 +416,18 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 				this.handleAirportPlaceSelection(control, place);
 				nativeInput.value = this.getAirportSelectionLabel(place);
 			}
-		);
+		).then(() => {
+			const latestAirportDisplayValue =
+				this.BookingForm.get(`${control}_option`)?.value
+				|| this.BookingForm.get(`${control}_name`)?.value
+				|| '';
+			nativeInput.value = latestAirportDisplayValue;
+			syncPlaceAutocompleteDisplay(nativeInput);
+			setTimeout(() => {
+				nativeInput.value = latestAirportDisplayValue;
+				syncPlaceAutocompleteDisplay(nativeInput);
+			}, 150);
+		});
 	}
 
 
@@ -949,6 +1003,9 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 				}, 2000)
 			}
 
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 150);
+
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
 			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
@@ -1237,7 +1294,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	changeTransferType(type: string) {
 		console.log('in function change transfer type', type)
 		this.transfer_type = type
-		this.initAllAutocompletes()
+		this.retryGoogleAutocompleteInitialization()
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
 			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
@@ -1256,7 +1313,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 	}
 	changeReturnTransferType(event: any) {
 		this.return_transfer_type = event
-		this.initAllAutocompletes()
+		this.retryGoogleAutocompleteInitialization()
 	}
 
 
@@ -2717,7 +2774,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			this.updateNumberOfHoursValidators(value);
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
-				this.initAllAutocompletes()
+				this.retryGoogleAutocompleteInitialization()
 				this.init_return_rates = true;
 				setTimeout(() => {
 					this.MapController(true)
@@ -2738,7 +2795,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in transfer_type value changes", value)
-			this.initAllAutocompletes();
+			this.retryGoogleAutocompleteInitialization();
 			const oldValue = this.transfer_type;
 			const newValue = value;
 
@@ -2886,7 +2943,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			}
 
 			this.transfer_type = value;
-			this.initAllAutocompletes();
+			this.retryGoogleAutocompleteInitialization();
 
 			// Pickup Address Validation
 			if (!this.searchSubstring(value, 'airport_')) {
@@ -2969,7 +3026,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in return_transfer_type value changes", value);
-			this.initAllAutocompletes();
+			this.retryGoogleAutocompleteInitialization();
 			const oldValue = this.return_transfer_type;
 			const newValue = value;
 
@@ -3118,7 +3175,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			}
 
 			this.return_transfer_type = value;
-			this.initAllAutocompletes();
+			this.retryGoogleAutocompleteInitialization();
 
 			// Return Pickup Address Validation
 			if (!this.searchSubstring(value, 'airport_')) {
@@ -3279,7 +3336,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			if (value == 3283) {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
-				setTimeout(() => this.initAllAutocompletes(), 100);
+				setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
@@ -3347,7 +3404,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit {
 			if (value == '3283') {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
-				setTimeout(() => this.initAllAutocompletes(), 100);
+				setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)

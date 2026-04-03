@@ -195,6 +195,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	bigDataSubscription: Subscription;
 	userCreditCards: any[] = [];
 	isLoadingSavedCards: boolean = false;
+	private bookingAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
 
 	constructor(
 		private $form: FormBuilder,
@@ -291,6 +292,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		if (this.bookingAutocompleteRetryTimeout) {
+			clearTimeout(this.bookingAutocompleteRetryTimeout);
+		}
 		if (this.bigDataSubscription) {
 			this.bigDataSubscription.unsubscribe();
 		}
@@ -342,19 +346,57 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 
-		this.initAllAutocompletes()
+		this.retryGoogleAutocompleteInitialization()
 
 		// Re-initialize when dynamic views update
 		this.extraStopInputs.changes.subscribe(() => {
-			setTimeout(() => this.initAllAutocompletes(), 100);
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 		});
 
 		this.returnExtraStopInputs.changes.subscribe(() => {
-			setTimeout(() => this.initAllAutocompletes(), 100);
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 		});
 
 		this.initphonefield()
 
+	}
+
+	private retryGoogleAutocompleteInitialization(attempts = 10, delay = 250): void {
+		if (this.bookingAutocompleteRetryTimeout) {
+			clearTimeout(this.bookingAutocompleteRetryTimeout);
+		}
+
+		const tryAttach = (remainingAttempts: number) => {
+			const googleReady = typeof google !== 'undefined' && !!google?.maps;
+			const hasAnyInput =
+				!!this.pickupInput?.nativeElement ||
+				!!this.dropoffInput?.nativeElement ||
+				!!this.loosecustomerInput?.nativeElement ||
+				!!this.return_pickupInput?.nativeElement ||
+				!!this.return_dropoffInput?.nativeElement ||
+				!!this.pickupAirportInput?.nativeElement ||
+				!!this.dropoffAirportInput?.nativeElement ||
+				!!this.returnPickupAirportInput?.nativeElement ||
+				!!this.returnDropoffAirportInput?.nativeElement ||
+				!!this.fboAddressInput?.nativeElement ||
+				!!this.returnFboAddressInput?.nativeElement ||
+				(this.extraStopInputs?.length ?? 0) > 0 ||
+				(this.returnExtraStopInputs?.length ?? 0) > 0;
+
+			if (googleReady && hasAnyInput) {
+				this.initAllAutocompletes();
+				this.resyncAirportAutocompleteDisplays();
+				return;
+			}
+
+			if (remainingAttempts > 1) {
+				this.bookingAutocompleteRetryTimeout = setTimeout(() => {
+					tryAttach(remainingAttempts - 1);
+				}, delay);
+			}
+		};
+
+		tryAttach(attempts);
 	}
 
 	initphonefield() {
@@ -633,6 +675,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	initAirportAutocomplete(input: ElementRef | HTMLInputElement, control: string) {
 		const nativeInput = input instanceof ElementRef ? input.nativeElement : input;
 		console.log("init airport autocomplete", nativeInput, control)
+		const airportDisplayValue =
+			this.BookingForm.get(`${control}_option`)?.value
+			|| this.BookingForm.get(`${control}_name`)?.value
+			|| '';
+
+		nativeInput.value = airportDisplayValue;
 
 		void attachPlaceAutocompleteElement(
 			nativeInput,
@@ -646,7 +694,18 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.handleAirportPlaceSelection(control, place);
 				nativeInput.value = this.getAirportSelectionLabel(place);
 			}
-		);
+		).then(() => {
+			const latestAirportDisplayValue =
+				this.BookingForm.get(`${control}_option`)?.value
+				|| this.BookingForm.get(`${control}_name`)?.value
+				|| '';
+			nativeInput.value = latestAirportDisplayValue;
+			syncPlaceAutocompleteDisplay(nativeInput);
+			setTimeout(() => {
+				nativeInput.value = latestAirportDisplayValue;
+				syncPlaceAutocompleteDisplay(nativeInput);
+			}, 150);
+		});
 	}
 
 
@@ -979,7 +1038,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 	changeTransferType(type: string) {
 		console.log("transfer type", type)
-		this.initAllAutocompletes()
+		this.retryGoogleAutocompleteInitialization()
 		this.transfer_type = type
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -1257,6 +1316,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 				}, 2000)
 			}
+
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 150);
+			setTimeout(() => this.resyncAirportAutocompleteDisplays(), 0);
+			setTimeout(() => this.resyncAirportAutocompleteDisplays(), 150);
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
@@ -2046,7 +2110,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	changeReturnTransferType(event: any) {
 		console.log("return transfer type", event)
 		this.return_transfer_type = event
-		this.initAllAutocompletes()
+		this.retryGoogleAutocompleteInitialization()
 	}
 
 	logTransferTypeState(context: string) {
@@ -4121,7 +4185,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				setTimeout(() => {
 					this.initphonefield()
 				}, 200)
-				this.initAllAutocompletes()
+				this.retryGoogleAutocompleteInitialization()
 				this.init_return_rates = true;
 				setTimeout(() => {
 					this.MapController(true)
@@ -4555,7 +4619,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				setTimeout(() => {
 					this.initphonefield()
 				}, 200)
-				this.initAllAutocompletes()
+				this.retryGoogleAutocompleteInitialization()
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 				// for every 'item' in loose_customer
 				for (let item in loose_customer.controls) {
@@ -5090,7 +5154,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (value == 3283) {
 				this.BookingForm.get('pickup_airline_option').clearValidators();
 				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
-				setTimeout(() => this.initAllAutocompletes(), 100);
+				setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
@@ -5158,7 +5222,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (value == '3283') {
 				this.BookingForm.get('return_pickup_airline_option').clearValidators();
 				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
-				setTimeout(() => this.initAllAutocompletes(), 100);
+				setTimeout(() => this.retryGoogleAutocompleteInitialization(), 100);
 			}
 			if (value) {
 				let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
@@ -5706,7 +5770,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.changeReturnTransferType(return_transfer_type_value)
 		if (this.service_type === 'round_trip') {
 			this.init_return_rates = false;
-			this.initAllAutocompletes();
+			this.retryGoogleAutocompleteInitialization();
 			this.BookingForm.patchValue({
 				return_affiliate_id: this.affiliate_id
 			}, { emitEvent: false });
