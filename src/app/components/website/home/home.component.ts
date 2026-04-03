@@ -870,9 +870,62 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return ' ';
 	}
 
+	private getStoredTextValue(value: any): string {
+		return typeof value === 'string' ? value : '';
+	}
+
+	private getStoredAirportValue(value: any, fallbackValue: any): string {
+		const storedValue = this.getStoredTextValue(value);
+		if (storedValue) {
+			return storedValue;
+		}
+
+		return this.getStoredTextValue(fallbackValue);
+	}
+
+	private getStoredCoordinateValue(value: any): number | '' {
+		if (value === '' || value === null || value === undefined) {
+			return '';
+		}
+
+		const numericValue = Number(value);
+		return Number.isFinite(numericValue) ? numericValue : '';
+	}
+
+	private syncAirportValueFromDisplay(prefix: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff'): void {
+		const airportControl = this.quoteBotForm?.get(`${prefix}_airport`);
+		const airportNameControl = this.quoteBotForm?.get(`${prefix}_airport_name`);
+		const airportLatControl = this.quoteBotForm?.get(`${prefix}_airport_lat`);
+		const airportLongControl = this.quoteBotForm?.get(`${prefix}_airport_long`);
+
+		if (!airportControl || !airportNameControl) {
+			return;
+		}
+
+		const airportValue = this.getStoredTextValue(airportControl.value);
+		const airportNameValue = this.getStoredTextValue(airportNameControl.value);
+		const latitude = airportLatControl?.value;
+		const longitude = airportLongControl?.value;
+		const hasCoordinates = latitude !== '' && latitude !== null && latitude !== undefined
+			&& longitude !== '' && longitude !== null && longitude !== undefined;
+
+		if (!airportValue && airportNameValue && hasCoordinates) {
+			airportControl.setValue(airportNameValue, { emitEvent: false });
+			airportControl.updateValueAndValidity({ emitEvent: false });
+		}
+	}
+
+	private syncPrefilledAirportSelections(): void {
+		this.syncAirportValueFromDisplay('pickup');
+		this.syncAirportValueFromDisplay('dropoff');
+		this.syncAirportValueFromDisplay('return_pickup');
+		this.syncAirportValueFromDisplay('return_dropoff');
+	}
+
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
+			const previousOtherDetails = previous_quotebot?.other_details ?? {};
 			console.log('return date function', this.returnValidDate(previous_quotebot?.pickup_date))
 			// fill previous values if localStorage has item
 			console.log('filling QB form from local-->>>', previous_quotebot, previous_quotebot?.service_type.length > 1)
@@ -883,41 +936,42 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				dropoff_type: previous_quotebot?.dropoff_type,
 				pickup_date: this.returnValidDate(previous_quotebot?.pickup_date),
 				pickup_time: previous_quotebot.pickup_time ? this.validateTimeHHMMSS(previous_quotebot.pickup_time) : "12:00:00",
-				pickup_airport: previous_quotebot?.pickup_airport,
-				pickup_airport_name: previous_quotebot?.other_details?.pickup_airport_name,
-				pickup_airport_lat: Number(previous_quotebot?.pickup_airport_lat),
-				pickup_airport_long: Number(previous_quotebot?.pickup_airport_long),
-				pickup_address: previous_quotebot?.pickup_address,
-				pickup_address_lat: Number(previous_quotebot?.pickup_address_lat),
-				pickup_address_long: Number(previous_quotebot?.pickup_address_long),
-				dropoff_airport: previous_quotebot?.dropoff_airport,
-				dropoff_airport_name: previous_quotebot?.other_details?.dropoff_airport_name,
-				dropoff_airport_lat: Number(previous_quotebot?.dropoff_airport_lat),
-				dropoff_airport_long: Number(previous_quotebot?.dropoff_airport_long),
-				dropoff_address: previous_quotebot?.dropoff_address,
-				dropoff_address_lat: Number(previous_quotebot?.dropoff_address_lat),
-				dropoff_address_long: Number(previous_quotebot?.dropoff_address_long),
+				pickup_airport: this.getStoredAirportValue(previous_quotebot?.pickup_airport, previousOtherDetails?.pickup_airport_name ?? previous_quotebot?.pickup_airport_name),
+				pickup_airport_name: this.getStoredTextValue(previousOtherDetails?.pickup_airport_name ?? previous_quotebot?.pickup_airport_name),
+				pickup_airport_lat: this.getStoredCoordinateValue(previous_quotebot?.pickup_airport_lat),
+				pickup_airport_long: this.getStoredCoordinateValue(previous_quotebot?.pickup_airport_long),
+				pickup_address: this.getStoredTextValue(previous_quotebot?.pickup_address),
+				pickup_address_lat: this.getStoredCoordinateValue(previous_quotebot?.pickup_address_lat),
+				pickup_address_long: this.getStoredCoordinateValue(previous_quotebot?.pickup_address_long),
+				dropoff_airport: this.getStoredAirportValue(previous_quotebot?.dropoff_airport, previousOtherDetails?.dropoff_airport_name ?? previous_quotebot?.dropoff_airport_name),
+				dropoff_airport_name: this.getStoredTextValue(previousOtherDetails?.dropoff_airport_name ?? previous_quotebot?.dropoff_airport_name),
+				dropoff_airport_lat: this.getStoredCoordinateValue(previous_quotebot?.dropoff_airport_lat),
+				dropoff_airport_long: this.getStoredCoordinateValue(previous_quotebot?.dropoff_airport_long),
+				dropoff_address: this.getStoredTextValue(previous_quotebot?.dropoff_address),
+				dropoff_address_lat: this.getStoredCoordinateValue(previous_quotebot?.dropoff_address_lat),
+				dropoff_address_long: this.getStoredCoordinateValue(previous_quotebot?.dropoff_address_long),
 				return_pickup_date: this.returnValidDate(previous_quotebot?.return_pickup_date),
 				return_pickup_time: previous_quotebot?.return_pickup_time ?? this.getTimeHHMMSS('', false),
-				return_pickup_airport: previous_quotebot?.return_pickup_airport,
-				return_pickup_airport_name: previous_quotebot?.other_details?.return_pickup_airport_name,
-				return_pickup_airport_lat: Number(previous_quotebot?.return_pickup_airport_lat),
-				return_pickup_airport_long: Number(previous_quotebot?.return_pickup_airport_long),
-				return_pickup_address: previous_quotebot?.return_pickup_address ?? previous_quotebot?.dropoff_address,
-				return_pickup_address_lat: Number(previous_quotebot?.return_pickup_address_lat),
-				return_pickup_address_long: Number(previous_quotebot?.return_pickup_address_long),
-				return_dropoff_airport: previous_quotebot?.return_dropoff_airport,
-				return_dropoff_airport_name: previous_quotebot?.other_details?.return_dropoff_airport_name,
-				return_dropoff_airport_lat: Number(previous_quotebot?.return_dropoff_airport_lat),
-				return_dropoff_airport_long: Number(previous_quotebot?.return_dropoff_airport_long),
-				return_dropoff_address: previous_quotebot?.return_dropoff_address ?? previous_quotebot?.pickup_address,
-				return_dropoff_address_lat: Number(previous_quotebot?.return_dropoff_address_lat),
-				return_dropoff_address_long: Number(previous_quotebot?.return_dropoff_address_long),
+				return_pickup_airport: this.getStoredAirportValue(previous_quotebot?.return_pickup_airport, previousOtherDetails?.return_pickup_airport_name ?? previous_quotebot?.return_pickup_airport_name),
+				return_pickup_airport_name: this.getStoredTextValue(previousOtherDetails?.return_pickup_airport_name ?? previous_quotebot?.return_pickup_airport_name),
+				return_pickup_airport_lat: this.getStoredCoordinateValue(previous_quotebot?.return_pickup_airport_lat),
+				return_pickup_airport_long: this.getStoredCoordinateValue(previous_quotebot?.return_pickup_airport_long),
+				return_pickup_address: this.getStoredTextValue(previous_quotebot?.return_pickup_address ?? previous_quotebot?.dropoff_address),
+				return_pickup_address_lat: this.getStoredCoordinateValue(previous_quotebot?.return_pickup_address_lat),
+				return_pickup_address_long: this.getStoredCoordinateValue(previous_quotebot?.return_pickup_address_long),
+				return_dropoff_airport: this.getStoredAirportValue(previous_quotebot?.return_dropoff_airport, previousOtherDetails?.return_dropoff_airport_name ?? previous_quotebot?.return_dropoff_airport_name),
+				return_dropoff_airport_name: this.getStoredTextValue(previousOtherDetails?.return_dropoff_airport_name ?? previous_quotebot?.return_dropoff_airport_name),
+				return_dropoff_airport_lat: this.getStoredCoordinateValue(previous_quotebot?.return_dropoff_airport_lat),
+				return_dropoff_airport_long: this.getStoredCoordinateValue(previous_quotebot?.return_dropoff_airport_long),
+				return_dropoff_address: this.getStoredTextValue(previous_quotebot?.return_dropoff_address ?? previous_quotebot?.pickup_address),
+				return_dropoff_address_lat: this.getStoredCoordinateValue(previous_quotebot?.return_dropoff_address_lat),
+				return_dropoff_address_long: this.getStoredCoordinateValue(previous_quotebot?.return_dropoff_address_long),
 				no_of_passenger: Math.max(1, previous_quotebot?.no_of_passenger || 1),
 				no_of_luggage: Math.max(0, previous_quotebot?.no_of_luggage || 0),
 				location_info: previous_quotebot?.location_info
 			})
-			this.vars = previous_quotebot.other_details
+			this.syncPrefilledAirportSelections()
+			this.vars = { ...previousOtherDetails }
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
 			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
@@ -1584,8 +1638,58 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		})
 	}
 
+	private normalizeLocationText(value: any): string {
+		return String(value ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
+	}
+
+	private getLocationIdentity(type: string, value: any, lat: any, long: any): string {
+		const normalizedValue = this.normalizeLocationText(value);
+		const latitude = Number(lat);
+		const longitude = Number(long);
+
+		if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+			return `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+		}
+
+		if (normalizedValue) {
+			return normalizedValue;
+		}
+
+		return this.normalizeLocationText(type);
+	}
+
+	private getQuoteBotLocationIdentity(prefix: 'pickup' | 'dropoff'): string {
+		const type = this.QBForm[`${prefix}_type`]?.value;
+
+		if (type == 'airport') {
+			return this.getLocationIdentity(
+				type,
+				this.QBForm[`${prefix}_airport`]?.value || this.QBForm[`${prefix}_airport_name`]?.value,
+				this.QBForm[`${prefix}_airport_lat`]?.value,
+				this.QBForm[`${prefix}_airport_long`]?.value
+			);
+		}
+
+		return this.getLocationIdentity(
+			type,
+			this.QBForm[`${prefix}_address`]?.value,
+			this.QBForm[`${prefix}_address_lat`]?.value,
+			this.QBForm[`${prefix}_address_long`]?.value
+		);
+	}
+
+	private hasInvalidSamePickupDropoff(): boolean {
+		const serviceType = this.QBForm.service_type.value;
+		if (serviceType != 'one_way' && serviceType != 'round_trip') {
+			return false;
+		}
+
+		return this.getQuoteBotLocationIdentity('pickup') === this.getQuoteBotLocationIdentity('dropoff');
+	}
+
 	async fileTheQuote() {
 		this.submitted = true
+		this.syncPrefilledAirportSelections()
 		this.ValidateForm(this.quoteBotForm)
 
 		console.log('checking form valid', this.quoteBotForm.valid, this.quoteBotForm, this.QBForm.location_info.valid);
@@ -1593,6 +1697,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		// enter only if values excluding location_info presents invalid status
 		if (!this.quoteBotForm.valid && !this.QBForm.location_info.valid) {
 			console.log('-------------->>>>>>>>>>>>>>>>>>> returning the form', this.quoteBotForm)
+			return
+		}
+
+		if (this.hasInvalidSamePickupDropoff()) {
+			this.errorDialogService.openDialog({
+				errors: {
+					error: "Pickup and drop locations must be different for One Way and Round Trip bookings."
+				}
+			})
 			return
 		}
 
