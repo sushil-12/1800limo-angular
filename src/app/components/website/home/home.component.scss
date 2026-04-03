@@ -1275,7 +1275,10 @@ a.user-profile:active::after {
 		justify-content: center;
 	}
 }
-
+.qb-airport-field__option-label{color:#000 !important}
+.qb-airport-field .qb-airport-field__input {
+    border-radius: 14px !important;
+}
 // Airport autocomplete rows: GMP field with internal plane icon + circular clear button
 .input-contain--airport {
 	position: relative;
@@ -1310,7 +1313,6 @@ a.user-profile:active::after {
 	background-color: #fff !important;
 	color: #000 !important;
 }
-
 .airport-clear-wrap {
 	display: flex;
 	align-items: center;
