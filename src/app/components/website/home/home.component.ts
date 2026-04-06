@@ -91,6 +91,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	private addressPlacesService?: google.maps.places.PlacesService;
 	private airportSearchRequestVersion: Record<string, number> = {};
 	private addressSearchRequestVersion: Record<string, number> = {};
+	private airportSearchLoadingState: Record<string, boolean> = {};
 	private addressSearchLoadingState: Record<string, boolean> = {};
 	private locationRequestVersionByField: Record<string, number> = {};
 	private airportSearchDebounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
@@ -618,10 +619,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return selectedOption ? [selectedOption] : [];
 	}
 
+	isAirportSearchLoading(fieldName: string): boolean {
+		return !!this.airportSearchLoadingState[fieldName];
+	}
+
+	private setAirportSearchLoading(fieldName: string, isLoading: boolean): void {
+		this.airportSearchLoadingState[fieldName] = isLoading;
+	}
+
+	shouldShowAirportLoadingState(fieldName: string): boolean {
+		return this.isAirportDropdownOpen(fieldName) && this.isAirportSearchLoading(fieldName);
+	}
+
 	shouldShowAirportEmptyState(fieldName: string): boolean {
 		const currentValue = String(this.quoteBotForm?.get(`${fieldName}_name`)?.value || '').trim();
 		return this.isAirportDropdownOpen(fieldName)
 			&& !!currentValue
+			&& !this.isAirportSearchLoading(fieldName)
 			&& !this.hasResolvedAirportSelection(fieldName)
 			&& !this.getVisibleAirportOptions(fieldName)?.length;
 	}
@@ -946,6 +960,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	private scheduleAirportSearch(value: string, fieldName: string, delay = 300): void {
 		this.clearAirportSearchDebounceTimer(fieldName);
+		this.setAirportSearchLoading(fieldName, !!String(value || '').trim());
 		this.airportSearchDebounceTimers[fieldName] = setTimeout(() => {
 			void this.searchAirport(value || '', fieldName);
 		}, delay);
@@ -1001,6 +1016,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.clearAirportDropdownBlurTimer();
 		this.activeAirportDropdown = fieldName;
 		this.clearAirportResolvedSelection(fieldName);
+		if (!String(value || '').trim()) {
+			this.setAirportSearchLoading(fieldName, false);
+		}
 		this.scheduleAirportSearch(value || '', fieldName, 300);
 	}
 
@@ -2054,19 +2072,30 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		if (!searchText) {
 			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+				this.setAirportSearchLoading(form_control, false);
 				this.setAirportOptions(form_control, fallbackOptions);
 			}
 			return;
 		}
 
-		const googleOptions = await this.searchGoogleAirportPredictions(searchText, form_control);
-		if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
-			this.setAirportOptions(
-				form_control,
-				googleOptions.length
-					? googleOptions
-					: (selectedOption ? [selectedOption] : fallbackOptions)
-			);
+		this.setAirportSearchLoading(form_control, true);
+
+		try {
+			const googleOptions = await this.searchGoogleAirportPredictions(searchText, form_control);
+			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+				this.setAirportOptions(
+					form_control,
+					googleOptions.length
+						? googleOptions
+						: (selectedOption ? [selectedOption] : fallbackOptions)
+				);
+				this.setAirportSearchLoading(form_control, false);
+			}
+		} catch {
+			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+				this.setAirportOptions(form_control, selectedOption ? [selectedOption] : fallbackOptions);
+				this.setAirportSearchLoading(form_control, false);
+			}
 		}
 	}
 

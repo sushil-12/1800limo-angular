@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from "@angular/core";
 import { AdminService } from "../../../services/admin.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -28,7 +28,7 @@ import { MapUtils } from '../../../utils/map-utils';
 	styleUrls: ["./daily-bookings.component.scss"],
 	providers: [BsDatepickerConfig] // Optional: Provide config if customizing globally
 })
-export class DailyBookingsComponent implements OnInit {
+export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 
 	// exampleHeader = DatePickerComponent; // Remove if not using Material
@@ -105,6 +105,7 @@ export class DailyBookingsComponent implements OnInit {
 	showCopyIcon: boolean = false
 	selectedEmailBookingShowChangedFields: boolean = false;
 	selectedEmailBookingStatus: string = '';
+	private afterPrintHandler?: () => void;
 
 	constructor(
 		private adminService: AdminService,
@@ -190,6 +191,7 @@ export class DailyBookingsComponent implements OnInit {
 		}
 
 	}
+
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");
 		$("#search-field").addClass("box-outline");
@@ -198,6 +200,36 @@ export class DailyBookingsComponent implements OnInit {
 			.querySelector("textarea")
 			.focus();
 		// this.MapController();
+	}
+
+	ngOnDestroy(): void {
+		if (this.afterPrintHandler) {
+			window.removeEventListener('afterprint', this.afterPrintHandler);
+		}
+		document.body.classList.remove('printing-daily-bookings');
+	}
+
+	get printGeneratedAt(): string {
+		return moment().format('MM/DD/YYYY, HH:mm');
+	}
+
+	printDailyBookings(): void {
+		document.body.classList.add('printing-daily-bookings');
+
+		if (this.afterPrintHandler) {
+			window.removeEventListener('afterprint', this.afterPrintHandler);
+		}
+
+		this.afterPrintHandler = () => {
+			document.body.classList.remove('printing-daily-bookings');
+			if (this.afterPrintHandler) {
+				window.removeEventListener('afterprint', this.afterPrintHandler);
+				this.afterPrintHandler = undefined;
+			}
+		};
+
+		window.addEventListener('afterprint', this.afterPrintHandler);
+		setTimeout(() => window.print(), 50);
 	}
 
 	stripeDetailsCheck() {
@@ -570,6 +602,50 @@ export class DailyBookingsComponent implements OnInit {
 			.bookingEmailAllUpdated(this.sendEmailForm.value.reservation_id)
 			.pipe(
 				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log("response--------->>>>>>>>", response);
+				this.spinner.hide();
+				$(`#${sourceModal}`).modal("hide");
+				$('#successModal').modal('show')
+				this.successMessage = 'Updated email has been sent successfully'
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
+			});
+	}
+
+	updatedEmailIndividual(sourceModal: string = 'emailAll') {
+		this.spinner.show();
+		this.adminService
+			.bookingUpdatedEmailByTarget(this.sendEmailForm.value.reservation_id, 'customer')
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide();
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log("response--------->>>>>>>>", response);
+				this.spinner.hide();
+				$(`#${sourceModal}`).modal("hide");
+				$('#successModal').modal('show')
+				this.successMessage = 'Updated email has been sent successfully'
+				setTimeout(() => {
+					$('#successModal').modal('hide')
+				}, 2000)
+			});
+	}
+
+	updatedEmailAffiliate(sourceModal: string = 'emailAll') {
+		this.spinner.show();
+		this.adminService
+			.bookingUpdatedEmailByTarget(this.sendEmailForm.value.reservation_id, 'affiliate')
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide();
 					return throwError(err);
 				})
 			)
