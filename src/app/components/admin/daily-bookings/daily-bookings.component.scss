@@ -773,8 +773,10 @@ a.dropdown-item {
 		::ng-deep .mat-mdc-select-value-text,
 		::ng-deep .mat-mdc-select-placeholder,
 		::ng-deep .mat-mdc-input-element,
+		::ng-deep .mat-mdc-input-element::placeholder,
 		::ng-deep .mdc-floating-label {
 			font-size: 16px !important;
+			font-family: "PT Serif", serif !important;
 		}
 	}
 }
