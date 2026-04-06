@@ -554,7 +554,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('address', 'pickup')" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="shouldShowCustomPrompt('address', 'pickup')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'pickup')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'pickup')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -585,7 +585,7 @@
                             </button>
                         </mat-form-field>
                         <div *ngIf="isCustomAirportDropdownOpen('pickup_airport')" class="quote-ui-dropdown-panel">
-                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('pickup_airport')"
+                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('pickup_airport')"
                                 (mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('pickup_airport', option)">
                                 <i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
                                 <span class="quote-ui-dropdown-option__content">
@@ -593,7 +593,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">Start typing to search airport</div>
+                            <div *ngIf="shouldShowCustomPrompt('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -633,7 +633,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('address', 'fbo_address')" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="shouldShowCustomPrompt('address', 'fbo_address')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'fbo_address')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'fbo_address')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -815,7 +815,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('address', 'dropoff')" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="shouldShowCustomPrompt('address', 'dropoff')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'dropoff')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'dropoff')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -846,7 +846,7 @@
                             </button>
                         </mat-form-field>
                         <div *ngIf="isCustomAirportDropdownOpen('dropoff_airport')" class="quote-ui-dropdown-panel">
-                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('dropoff_airport')"
+                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('dropoff_airport')"
                                 (mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('dropoff_airport', option)">
                                 <i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
                                 <span class="quote-ui-dropdown-option__content">
@@ -854,7 +854,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">Start typing to search airport</div>
+                            <div *ngIf="shouldShowCustomPrompt('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -1013,7 +1013,7 @@
                                 <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                             </span>
                         </button>
-                        <div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                        <div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                         <div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">Searching...</div>
                         <div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">Result not found</div>
                     </div>
@@ -1251,7 +1251,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('address', 'return_pickup')" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="shouldShowCustomPrompt('address', 'return_pickup')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'return_pickup')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'return_pickup')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -1284,7 +1284,7 @@
                             </button>
                         </mat-form-field>
                         <div *ngIf="isCustomAirportDropdownOpen('return_pickup_airport')" class="quote-ui-dropdown-panel">
-                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('return_pickup_airport')"
+                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('return_pickup_airport')"
                                 (mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('return_pickup_airport', option)">
                                 <i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
                                 <span class="quote-ui-dropdown-option__content">
@@ -1292,7 +1292,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">Start typing to search airport</div>
+                            <div *ngIf="shouldShowCustomPrompt('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -1331,7 +1331,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="shouldShowCustomPrompt('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -1518,7 +1518,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('address', 'return_dropoff')" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                            <div *ngIf="shouldShowCustomPrompt('address', 'return_dropoff')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'return_dropoff')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'return_dropoff')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -1551,7 +1551,7 @@
                             </button>
                         </mat-form-field>
                         <div *ngIf="isCustomAirportDropdownOpen('return_dropoff_airport')" class="quote-ui-dropdown-panel">
-                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('return_dropoff_airport')"
+                            <button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('return_dropoff_airport')"
                                 (mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('return_dropoff_airport', option)">
                                 <i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
                                 <span class="quote-ui-dropdown-option__content">
@@ -1559,7 +1559,7 @@
                                     <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowCustomPrompt('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">Start typing to search airport</div>
+                            <div *ngIf="shouldShowCustomPrompt('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">Searching...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">Result not found</div>
                         </div>
@@ -1733,7 +1733,7 @@
                                 <span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
                             </span>
                         </button>
-                        <div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">Start typing to search address</div>
+                        <div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                         <div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">Searching...</div>
                         <div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">Result not found</div>
                     </div>

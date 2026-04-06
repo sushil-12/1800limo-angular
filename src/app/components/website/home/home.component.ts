@@ -567,6 +567,70 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.activeAddressDropdown === fieldName;
 	}
 
+	private hasResolvedAirportSelection(fieldName: string): boolean {
+		const selectedId = this.quoteBotForm?.get(fieldName)?.value;
+		const displayValue = String(this.quoteBotForm?.get(`${fieldName}_name`)?.value || '').trim();
+		const latitude = this.quoteBotForm?.get(`${fieldName}_lat`)?.value;
+		const longitude = this.quoteBotForm?.get(`${fieldName}_long`)?.value;
+
+		return !!selectedId
+			&& !!displayValue
+			&& latitude !== ''
+			&& latitude !== null
+			&& latitude !== undefined
+			&& longitude !== ''
+			&& longitude !== null
+			&& longitude !== undefined;
+	}
+
+	private getResolvedAirportDropdownOption(fieldName: string): any | null {
+		if (!this.hasResolvedAirportSelection(fieldName)) {
+			return null;
+		}
+
+		const selectedId = this.quoteBotForm?.get(fieldName)?.value;
+		const displayValue = String(this.quoteBotForm?.get(`${fieldName}_name`)?.value || '').trim();
+		const latitude = this.quoteBotForm?.get(`${fieldName}_lat`)?.value;
+		const longitude = this.quoteBotForm?.get(`${fieldName}_long`)?.value;
+
+		if (!displayValue) {
+			return null;
+		}
+
+		return {
+			placeId: selectedId,
+			name: displayValue,
+			description: displayValue,
+			secondaryText: '',
+			isTerminal: displayValue.toLowerCase().includes('terminal'),
+			latitude,
+			longitude
+		};
+	}
+
+	getVisibleAirportOptions(fieldName: string): Array<any> {
+		const options = this.getAirportOptions(fieldName);
+		if (options?.length) {
+			return options;
+		}
+
+		const selectedOption = this.getResolvedAirportDropdownOption(fieldName);
+		return selectedOption ? [selectedOption] : [];
+	}
+
+	shouldShowAirportEmptyState(fieldName: string): boolean {
+		const currentValue = String(this.quoteBotForm?.get(`${fieldName}_name`)?.value || '').trim();
+		return this.isAirportDropdownOpen(fieldName)
+			&& !!currentValue
+			&& !this.hasResolvedAirportSelection(fieldName)
+			&& !this.getVisibleAirportOptions(fieldName)?.length;
+	}
+
+	shouldShowAirportPromptState(fieldName: string): boolean {
+		const currentValue = String(this.quoteBotForm?.get(`${fieldName}_name`)?.value || '').trim();
+		return this.isAirportDropdownOpen(fieldName) && !currentValue;
+	}
+
 	shouldShowAddressEmptyState(fieldName: string): boolean {
 		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
 		return this.isAddressDropdownOpen(fieldName)
@@ -858,6 +922,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	openAirportDropdown(fieldName: string): void {
 		this.clearAirportDropdownBlurTimer();
 		this.activeAirportDropdown = fieldName;
+		const selectedOption = this.getResolvedAirportDropdownOption(fieldName);
+		if (selectedOption) {
+			this.setAirportOptions(fieldName, [selectedOption]);
+			return;
+		}
 		void this.searchAirport(this.quoteBotForm.get(`${fieldName}_name`)?.value || '', fieldName);
 	}
 
@@ -1978,8 +2047,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	async searchAirport(letter: string, form_control: string) {
 		const requestVersion = this.nextAirportSearchVersion(form_control);
 		const searchText = (letter || '').trim();
-		const fallbackOptions = (searchText == '')
-			? JSON.parse(JSON.stringify(this.airports_data_copy || []))
+		const selectedOption = this.getResolvedAirportDropdownOption(form_control);
+		const fallbackOptions = searchText === ''
+			? (selectedOption ? [selectedOption] : [])
 			: this.returnSearchAirport(searchText);
 
 		if (!searchText) {
@@ -1991,7 +2061,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		const googleOptions = await this.searchGoogleAirportPredictions(searchText, form_control);
 		if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
-			this.setAirportOptions(form_control, googleOptions.length ? googleOptions : fallbackOptions);
+			this.setAirportOptions(
+				form_control,
+				googleOptions.length
+					? googleOptions
+					: (selectedOption ? [selectedOption] : fallbackOptions)
+			);
 		}
 	}
 
