@@ -6152,6 +6152,7 @@ header .navbar-toggler {
 }
 
 /* New Address Field CSS */
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch{border-left: none !important;}
 
 .mat-mdc-form-field-infix:has(gmp-place-autocomplete) {
 	padding: 0px !important;

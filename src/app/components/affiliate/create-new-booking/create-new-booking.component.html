@@ -1074,9 +1074,9 @@
 						<div *ngIf="isCustomAirportDropdownOpen('pickup_airport')" class="quote-ui-dropdown-panel">
 							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('pickup_airport')"
 								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('pickup_airport', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
 									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
@@ -1333,9 +1333,9 @@
 						<div *ngIf="isCustomAirportDropdownOpen('dropoff_airport')" class="quote-ui-dropdown-panel">
 							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('dropoff_airport')"
 								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('dropoff_airport', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
 									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
@@ -1677,9 +1677,9 @@
 						<div *ngIf="isCustomAirportDropdownOpen('return_pickup_airport')" class="quote-ui-dropdown-panel">
 							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('return_pickup_airport')"
 								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('return_pickup_airport', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
 									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
@@ -1938,9 +1938,9 @@
 						<div *ngIf="isCustomAirportDropdownOpen('return_dropoff_airport')" class="quote-ui-dropdown-panel">
 							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAirportOptions('return_dropoff_airport')"
 								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('return_dropoff_airport', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
 									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>

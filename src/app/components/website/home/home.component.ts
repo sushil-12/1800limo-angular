@@ -93,6 +93,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	private addressSearchRequestVersion: Record<string, number> = {};
 	private addressSearchLoadingState: Record<string, boolean> = {};
 	private locationRequestVersionByField: Record<string, number> = {};
+	private airportSearchDebounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+	private airportAutocompleteSessionTokens: Record<string, string> = {};
 
 	//For reactive form
 	quoteBotForm: FormGroup;
@@ -866,6 +868,38 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
+	private clearAirportSearchDebounceTimer(fieldName: string): void {
+		if (this.airportSearchDebounceTimers[fieldName]) {
+			clearTimeout(this.airportSearchDebounceTimers[fieldName]);
+			delete this.airportSearchDebounceTimers[fieldName];
+		}
+	}
+
+	private scheduleAirportSearch(value: string, fieldName: string, delay = 300): void {
+		this.clearAirportSearchDebounceTimer(fieldName);
+		this.airportSearchDebounceTimers[fieldName] = setTimeout(() => {
+			void this.searchAirport(value || '', fieldName);
+		}, delay);
+	}
+
+	private getOrCreateAirportSessionToken(fieldName: string): string {
+		const existingToken = this.airportAutocompleteSessionTokens[fieldName];
+		if (existingToken) {
+			return existingToken;
+		}
+
+		const token = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+			? crypto.randomUUID()
+			: `${fieldName}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+		this.airportAutocompleteSessionTokens[fieldName] = token;
+		return token;
+	}
+
+	private resetAirportSessionToken(fieldName: string): void {
+		delete this.airportAutocompleteSessionTokens[fieldName];
+	}
+
 	private isTouchAirportInteraction(): boolean {
 		if (typeof window === 'undefined') {
 			return false;
@@ -896,9 +930,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onAirportFieldInput(value: string, fieldName: string): void {
 		this.clearAirportDropdownBlurTimer();
-		this.openAirportDropdown(fieldName);
+		this.activeAirportDropdown = fieldName;
 		this.clearAirportResolvedSelection(fieldName);
-		void this.searchAirport(value || '', fieldName);
+		this.scheduleAirportSearch(value || '', fieldName, 300);
 	}
 
 	async selectAirportOption(airport: any, fieldName: string): Promise<void> {
@@ -911,7 +945,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		} else {
 			this.selectedAirport(this.getAirportOptions(fieldName), airport, fieldName);
 		}
+		this.resetAirportSessionToken(fieldName);
 		this.closeAirportDropdown(fieldName);
+	}
+
+	isAirportTerminalOption(airport: any): boolean {
+		return !!airport?.isTerminal;
 	}
 
 	getAirportOptionLabel(airport: any): string {
@@ -1049,9 +1088,143 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
-	private searchGoogleAirportPredictions(searchText: string): Promise<Array<any>> {
+	private getAirportPredictionType(prediction: any): string {
+		const types = Array.isArray(prediction?.types) ? prediction.types.map((type: string) => String(type || '').toLowerCase()) : [];
+		return types.includes('airport') ? 'airport' : 'terminal';
+	}
+
+	private mapAirportPrediction(prediction: any, searchText: string): any {
+		const name = this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+			|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+			|| this.getPredictionTextValue(prediction?.text);
+		const secondaryText = this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText);
+		const description = this.getPredictionTextValue(prediction?.text);
+
+		return {
+			placeId: prediction?.placeId,
+			name,
+			secondaryText,
+			description,
+			searchText,
+			resultType: this.getAirportPredictionType(prediction),
+			isTerminal: false,
+		};
+	}
+
+	private normalizeAirportSearchText(value: string): string {
+		return String(value || '')
+			.toLowerCase()
+			.replace(/[^a-z0-9\s]/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
+	}
+
+	private getAirportBaseQuery(searchText: string): string {
+		const normalizedSearchText = String(searchText || '')
+			.replace(/\s+/g, ' ')
+			.trim();
+
+		if (!normalizedSearchText) {
+			return '';
+		}
+
+		const terminalPrefixes = ['t', 'te', 'ter', 'term', 'termi', 'termin', 'termina', 'terminal'];
+		const parts = normalizedSearchText.split(' ').filter(Boolean);
+		const lastToken = String(parts[parts.length - 1] || '').toLowerCase();
+
+		if (terminalPrefixes.includes(lastToken)) {
+			return parts.slice(0, -1).join(' ').trim();
+		}
+
+		return normalizedSearchText.replace(/\bterminal\b.*$/i, '').replace(/\s+/g, ' ').trim();
+	}
+
+	private buildAirportMatchTokens(airport: any, searchText: string): string[] {
+		const codeMatches = [airport?.name, airport?.description, searchText]
+			.flatMap((value: any) => String(value || '').match(/\b[A-Z]{3,4}\b/g) || [])
+			.map((value: string) => value.toLowerCase());
+
+		const phraseCandidates = [
+			String(searchText || '').trim(),
+			String(airport?.name || '').trim(),
+			String(airport?.secondaryText || '').split(',')[0]?.trim() || '',
+		]
+			.map((value) => this.normalizeAirportSearchText(value))
+			.filter((value) => value.length >= 3);
+
+		return Array.from(new Set([...codeMatches, ...phraseCandidates]));
+	}
+
+	private findMatchingAirportForTerminal(terminal: any, airports: Array<any>, searchText: string): any | null {
+		const normalizedDescription = this.normalizeAirportSearchText(terminal?.description || terminal?.secondaryText || terminal?.name || '');
+		if (!normalizedDescription.includes('terminal')) {
+			return null;
+		}
+
+		for (const airport of airports) {
+			const tokens = this.buildAirportMatchTokens(airport, searchText);
+			if (tokens.some((token) => token && normalizedDescription.includes(token))) {
+				return airport;
+			}
+		}
+
+		return null;
+	}
+
+	private dedupeAirportDropdownOptions(options: Array<any>): Array<any> {
+		const seen = new Set<string>();
+		return options.filter((option: any) => {
+			const key = String(option?.placeId || `${option?.name}__${option?.description}`).toLowerCase();
+			if (!key || seen.has(key)) {
+				return false;
+			}
+			seen.add(key);
+			return true;
+		});
+	}
+
+	private mergeAirportAndTerminalPredictions(airports: Array<any>, terminals: Array<any>, searchText: string): Array<any> {
+		const merged: Array<any> = [];
+		const matchedTerminalIds = new Set<string>();
+		const normalizedTerminals = this.dedupeAirportDropdownOptions(terminals);
+
+		for (const airport of this.dedupeAirportDropdownOptions(airports)) {
+			merged.push({
+				...airport,
+				isTerminal: false,
+			});
+
+			const airportTerminals = normalizedTerminals.filter((terminal: any) => {
+				const matchingAirport = this.findMatchingAirportForTerminal(terminal, [airport], searchText);
+				if (!matchingAirport) {
+					return false;
+				}
+
+				const terminalKey = String(terminal?.placeId || `${terminal?.name}__${terminal?.description}`).toLowerCase();
+				if (matchedTerminalIds.has(terminalKey)) {
+					return false;
+				}
+
+				matchedTerminalIds.add(terminalKey);
+				return true;
+			});
+
+			if (airportTerminals.length) {
+				merged.push(...airportTerminals.map((terminal: any) => ({
+					...terminal,
+					isTerminal: true,
+					parentAirportPlaceId: airport.placeId,
+					parentAirportName: airport.name,
+				})));
+			}
+		}
+
+		return merged;
+	}
+
+	private fetchGooglePlaceAutocompleteSuggestions(input: string, sessionToken: string): Promise<Array<any>> {
 		const apiKey = this.getGoogleMapsApiKey();
-		if (!apiKey) {
+		if (!apiKey || !String(input || '').trim()) {
 			return Promise.resolve([]);
 		}
 
@@ -1063,81 +1236,49 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text,suggestions.placePrediction.types'
 			},
 			body: JSON.stringify({
-				input: searchText,
+				input,
 				includeQueryPredictions: false,
-				languageCode: 'en-US'
+				languageCode: 'en-US',
+				sessionToken
 			})
 		})
 			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
-			.then(async (response: any) => {
-				const suggestions = Array.isArray(response?.suggestions) ? response.suggestions : [];
-				const predictions = suggestions
-					.map((suggestion: any) => suggestion?.placePrediction)
-					.filter((prediction: any) => !!prediction)
-					.filter((prediction: any) => {
-						const types = Array.isArray(prediction?.types) ? prediction.types.join(' ').toLowerCase() : '';
-						const label = [
-							this.getPredictionTextValue(prediction?.text),
-							this.getPredictionTextValue(prediction?.structuredFormat?.mainText),
-							this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText)
-						].join(' ');
-
-						return this.isAirportLikePredictionText(`${types} ${label}`);
-					})
-					.map((prediction: any) => ({
-						placeId: prediction.placeId,
-						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
-							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
-							|| this.getPredictionTextValue(prediction?.text),
-						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
-						description: this.getPredictionTextValue(prediction?.text)
-					}));
-
-				return Promise.all(predictions.slice(0, 8).map((prediction: any) => this.fetchGoogleAirportDropdownOption(prediction)))
-					.then((items) => items.filter((item) => !!item));
-			})
+			.then((response: any) => Array.isArray(response?.suggestions) ? response.suggestions : [])
 			.catch(() => []);
 	}
 
-	private fetchGoogleAirportDropdownOption(prediction: any): Promise<any> {
-		const service = this.getAirportPlacesService();
-		if (!service || !prediction?.placeId) {
-			return Promise.resolve(prediction);
+	private searchGoogleAirportPredictions(searchText: string, fieldName: string): Promise<Array<any>> {
+		const rawSearchText = String(searchText || '').trim();
+		if (!rawSearchText) {
+			return Promise.resolve([]);
 		}
 
-		return new Promise((resolve) => {
-			service.getDetails(
-				{
-					placeId: prediction.placeId,
-					fields: ['place_id', 'name', 'formatted_address']
-				},
-				(place, status) => {
-					if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
-						resolve(prediction);
-						return;
-					}
+		const baseSearchText = this.getAirportBaseQuery(rawSearchText) || rawSearchText;
+		const terminalSearchText = `${baseSearchText} terminal`.trim();
+		const sessionToken = this.getOrCreateAirportSessionToken(fieldName);
 
-					const resolvedName = String(place.name || prediction.name || '').trim();
-					const resolvedSecondaryText = String(place.formatted_address || prediction.secondaryText || '').trim();
-					const resolvedDescription = [
-						resolvedName,
-						resolvedSecondaryText
-					].filter(Boolean).join(', ');
+		return Promise.all([
+			this.fetchGooglePlaceAutocompleteSuggestions(baseSearchText, sessionToken),
+			this.fetchGooglePlaceAutocompleteSuggestions(terminalSearchText, sessionToken)
+		]).then(([airportSuggestionResponse, terminalSuggestionResponse]) => {
+			const airportPredictions = airportSuggestionResponse
+				.map((suggestion: any) => suggestion?.placePrediction)
+				.filter((prediction: any) => !!prediction?.placeId)
+				.filter((prediction: any) => this.getAirportPredictionType(prediction) === 'airport')
+				.map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText));
 
-					if (!this.isAirportOrTerminalResult(resolvedName, resolvedSecondaryText, resolvedDescription)) {
-						resolve(null);
-						return;
-					}
+			const terminalPredictions = terminalSuggestionResponse
+				.map((suggestion: any) => suggestion?.placePrediction)
+				.filter((prediction: any) => !!prediction?.placeId)
+				.map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText))
+				.filter((prediction: any) => String(prediction?.description || '').toLowerCase().includes('terminal'));
 
-					resolve({
-						...prediction,
-						name: resolvedName,
-						secondaryText: resolvedSecondaryText,
-						description: resolvedDescription
-					});
-				}
-			);
-		});
+			if (!terminalPredictions.length) {
+				return this.dedupeAirportDropdownOptions(airportPredictions);
+			}
+
+			return this.mergeAirportAndTerminalPredictions(airportPredictions, terminalPredictions, baseSearchText);
+		}).catch(() => []);
 	}
 
 	private fetchGoogleAirportDetails(placeId: string, fallbackName = ''): Promise<{ id: string; name: string; latitude: number; longitude: number } | null> {
@@ -1383,7 +1524,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	useCurrentPickupLocation(fieldName: string) {
+		if (this.hasExistingQuoteBotLocation(fieldName)) {
+			return;
+		}
 		this.getCurrentLocation(fieldName, { showErrorDialog: true });
+	}
+
+	private hasExistingQuoteBotLocation(fieldName: string): boolean {
+		const addressValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		const latitude = this.quoteBotForm?.get(`${fieldName}_lat`)?.value;
+		const longitude = this.quoteBotForm?.get(`${fieldName}_long`)?.value;
+
+		return !!addressValue
+			&& latitude !== ''
+			&& latitude !== null
+			&& latitude !== undefined
+			&& longitude !== ''
+			&& longitude !== null
+			&& longitude !== undefined;
 	}
 
 	private nextLocationRequestVersion(fieldName: string): number {
@@ -1690,6 +1848,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return;
 			}
 
+			if (this.hasExistingQuoteBotLocation('pickup_address')) {
+				return;
+			}
+
 			console.log('Auto-picking current location on home page load...');
 			this.getCurrentLocation('pickup_address', { showErrorDialog: true });
 		}, 100);
@@ -1827,7 +1989,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return;
 		}
 
-		const googleOptions = await this.searchGoogleAirportPredictions(searchText);
+		const googleOptions = await this.searchGoogleAirportPredictions(searchText, form_control);
 		if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
 			this.setAirportOptions(form_control, googleOptions.length ? googleOptions : fallbackOptions);
 		}
@@ -1886,6 +2048,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		airport: { id: string; name: string; latitude: number; longitude: number },
 		fieldName: string
 	): void {
+		this.resetAirportSessionToken(fieldName);
 		this.SetFormValue(fieldName, airport.id);
 		this.SetFormValue(`${fieldName}_name`, airport.name);
 		this.SetFormValue(`${fieldName}_lat`, airport.latitude);
@@ -1921,6 +2084,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	clearAirportSelection(fieldName: string): void {
+		this.resetAirportSessionToken(fieldName);
+		this.clearAirportSearchDebounceTimer(fieldName);
 		this.closeAirportDropdown(fieldName);
 		this.SetFormValue(fieldName, '');
 		this.SetFormValue(`${fieldName}_name`, '');
@@ -3153,6 +3318,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		if ((this as any).resizeTimeout) {
 			clearTimeout((this as any).resizeTimeout);
 		}
+		Object.values(this.airportSearchDebounceTimers).forEach((timer) => clearTimeout(timer));
+		this.airportSearchDebounceTimers = {};
+		this.airportAutocompleteSessionTokens = {};
 		// Clean up Swiper instance
 		if (this.clientLogoSwiper) {
 			this.clientLogoSwiper.destroy(true, true);
