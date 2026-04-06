@@ -377,10 +377,11 @@
 													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('pickup_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'pickup_airport')"
-														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon" style="margin-top:4px; color:#111;"></i>
+														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
+														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
@@ -431,7 +432,7 @@
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
 														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
+															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
@@ -506,10 +507,11 @@
 													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('dropoff_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'dropoff_airport')"
-														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon" style="margin-top:4px; color:#111;"></i>
+														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
+														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
@@ -561,7 +563,7 @@
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
 														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
+															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
@@ -698,10 +700,11 @@
 													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('return_pickup_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'return_pickup_airport')"
-														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon" style="margin-top:4px; color:#111;"></i>
+														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
+														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
@@ -753,7 +756,7 @@
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
 														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
+															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
@@ -830,10 +833,11 @@
 													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('return_dropoff_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'return_dropoff_airport')"
-														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon" style="margin-top:4px; color:#111;"></i>
+														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
+														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
@@ -878,7 +882,7 @@
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
 														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:600; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
+															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>

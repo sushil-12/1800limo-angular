@@ -189,17 +189,60 @@ export class BookingComponent implements OnInit {
 			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
 		}
 
+		if (Array.isArray(this.bookingPreview?.extra_stops) && this.bookingPreview.extra_stops.length > 0) {
+			for (const stop of this.bookingPreview.extra_stops) {
+				const stopCoords = this.resolveStopLatLng(stop);
+				if (stopCoords) {
+					waypoints.push({
+						location: stopCoords,
+						stopover: true
+					});
+					continue;
+				}
+
+				const stopAddress = String(
+					stop?.display_address
+					|| stop?.formatted_address
+					|| stop?.address
+					|| ''
+				).trim();
+
+				if (stopAddress) {
+					waypoints.push({
+						location: stopAddress,
+						stopover: true
+					});
+				}
+			}
+		}
+
 
 		setTimeout(() => {
 			this.drawMap({
 				origin,
 				destination,
 				waypoints,
-				optimizeWaypoints: true,
+				optimizeWaypoints: false,
 				travelMode: google.maps.TravelMode.DRIVING
 			})
 		}, 100)
 
+	}
+
+	private resolveStopLatLng(stop: any): google.maps.LatLng | null {
+		const latitudeCandidates = [stop?.latitude, stop?.lat, stop?.pickup_latitude];
+		const longitudeCandidates = [stop?.longitude, stop?.lng, stop?.long, stop?.pickup_longitude];
+
+		for (let index = 0; index < latitudeCandidates.length; index++) {
+			const lat = Number(latitudeCandidates[index]);
+			const lng = Number(longitudeCandidates[index]);
+
+			if (Number.isFinite(lat) && Number.isFinite(lng) && !(lat === 0 && lng === 0)) {
+				return new google.maps.LatLng(lat, lng);
+			}
+		}
+
+		return null;
 	}
 
 	drawMap(request: google.maps.DirectionsRequest) {

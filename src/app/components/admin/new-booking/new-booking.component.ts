@@ -129,6 +129,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	private customAirportSearchLoading: Record<string, boolean> = {};
 	private customAddressOptions: Record<string, Array<any>> = {};
 	private customAirportOptions: Record<string, Array<any>> = {};
+	private customAirportSearchDebounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+	private customAirportAutocompleteSessionTokens: Record<string, string> = {};
 	ReturnAffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
@@ -306,6 +308,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (this.bookingAutocompleteRetryTimeout) {
 			clearTimeout(this.bookingAutocompleteRetryTimeout);
 		}
+		Object.values(this.customAirportSearchDebounceTimers).forEach((timer) => clearTimeout(timer));
+		this.customAirportSearchDebounceTimers = {};
+		this.customAirportAutocompleteSessionTokens = {};
 		if (this.bigDataSubscription) {
 			this.bigDataSubscription.unsubscribe();
 		}
@@ -889,6 +894,38 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	private clearCustomAirportSearchDebounceTimer(fieldName: string): void {
+		if (this.customAirportSearchDebounceTimers[fieldName]) {
+			clearTimeout(this.customAirportSearchDebounceTimers[fieldName]);
+			delete this.customAirportSearchDebounceTimers[fieldName];
+		}
+	}
+
+	private scheduleCustomAirportSearch(fieldName: string, value: string, delay = 300): void {
+		this.clearCustomAirportSearchDebounceTimer(fieldName);
+		this.customAirportSearchDebounceTimers[fieldName] = setTimeout(() => {
+			void this.searchCustomAirport(fieldName, value || '');
+		}, delay);
+	}
+
+	private getOrCreateCustomAirportSessionToken(fieldName: string): string {
+		const existingToken = this.customAirportAutocompleteSessionTokens[fieldName];
+		if (existingToken) {
+			return existingToken;
+		}
+
+		const token = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+			? crypto.randomUUID()
+			: `${fieldName}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+		this.customAirportAutocompleteSessionTokens[fieldName] = token;
+		return token;
+	}
+
+	private resetCustomAirportSessionToken(fieldName: string): void {
+		delete this.customAirportAutocompleteSessionTokens[fieldName];
+	}
+
 	onCustomAddressFocus(fieldName: string, input?: HTMLInputElement): void {
 		if (!this.isTouchBookingInteraction()) {
 			input?.select();
@@ -938,8 +975,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('', { emitEvent: false });
 		this.BookingForm.get(`${fieldName}_longitude`)?.setValue('', { emitEvent: false });
 		this.BookingForm.updateValueAndValidity();
-		this.openCustomAirportDropdown(fieldName);
-		void this.searchCustomAirport(fieldName, value || '');
+		this.activeCustomAirportDropdown = fieldName;
+		this.scheduleCustomAirportSearch(fieldName, value || '', 300);
 	}
 
 	getCustomOptionLabel(option: any): string {
@@ -950,7 +987,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		return String(option?.secondaryText || '').trim();
 	}
 
-	private searchGooglePredictions(searchText: string): Promise<Array<any>> {
+	isCustomAirportTerminalOption(option: any): boolean {
+		return !!option?.isTerminal;
+	}
+
+	private searchGooglePredictions(searchText: string, sessionToken?: string): Promise<Array<any>> {
 		const apiKey = this.getGoogleMapsApiKey();
 		if (!apiKey || !String(searchText || '').trim()) {
 			return Promise.resolve([]);
@@ -966,7 +1007,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			body: JSON.stringify({
 				input: searchText,
 				includeQueryPredictions: false,
-				languageCode: 'en-US'
+				languageCode: 'en-US',
+				...(sessionToken ? { sessionToken } : {})
 			})
 		})
 			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
@@ -994,6 +1036,122 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		return ['airport', 'terminal', 'concourse', 'fbo', 'airfield', 'aerodrome', 'gate', 'parking', 'garage', 'departures', 'arrivals'].some((keyword) =>
 			combined.includes(keyword)
 		);
+	}
+
+	private getCustomAirportBaseQuery(searchText: string): string {
+		const normalizedSearchText = String(searchText || '')
+			.replace(/\s+/g, ' ')
+			.trim();
+
+		if (!normalizedSearchText) {
+			return '';
+		}
+
+		const terminalPrefixes = ['t', 'te', 'ter', 'term', 'termi', 'termin', 'termina', 'terminal'];
+		const parts = normalizedSearchText.split(' ').filter(Boolean);
+		const lastToken = String(parts[parts.length - 1] || '').toLowerCase();
+
+		if (terminalPrefixes.includes(lastToken)) {
+			return parts.slice(0, -1).join(' ').trim();
+		}
+
+		return normalizedSearchText.replace(/\bterminal\b.*$/i, '').replace(/\s+/g, ' ').trim();
+	}
+
+	private getCustomAirportPredictionType(option: any): string {
+		const types = Array.isArray(option?.types) ? option.types.map((type: string) => String(type || '').toLowerCase()) : [];
+		return types.includes('airport') ? 'airport' : 'terminal';
+	}
+
+	private normalizeCustomAirportSearchText(value: string): string {
+		return String(value || '')
+			.toLowerCase()
+			.replace(/[^a-z0-9\s]/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
+	}
+
+	private buildCustomAirportMatchTokens(airport: any, searchText: string): string[] {
+		const codeMatches = [airport?.name, airport?.description, searchText]
+			.flatMap((value: any) => String(value || '').match(/\b[A-Z]{3,4}\b/g) || [])
+			.map((value: string) => value.toLowerCase());
+
+		const phraseCandidates = [
+			String(searchText || '').trim(),
+			String(airport?.name || '').trim(),
+			String(airport?.secondaryText || '').split(',')[0]?.trim() || '',
+		]
+			.map((value) => this.normalizeCustomAirportSearchText(value))
+			.filter((value) => value.length >= 3);
+
+		return Array.from(new Set([...codeMatches, ...phraseCandidates]));
+	}
+
+	private findMatchingCustomAirportForTerminal(terminal: any, airports: Array<any>, searchText: string): any | null {
+		const normalizedDescription = this.normalizeCustomAirportSearchText(terminal?.description || terminal?.secondaryText || terminal?.name || '');
+		if (!normalizedDescription.includes('terminal')) {
+			return null;
+		}
+
+		for (const airport of airports) {
+			const tokens = this.buildCustomAirportMatchTokens(airport, searchText);
+			if (tokens.some((token) => token && normalizedDescription.includes(token))) {
+				return airport;
+			}
+		}
+
+		return null;
+	}
+
+	private dedupeCustomAirportOptions(options: Array<any>): Array<any> {
+		const seen = new Set<string>();
+		return options.filter((option: any) => {
+			const key = String(option?.placeId || `${option?.name}__${option?.description}`).toLowerCase();
+			if (!key || seen.has(key)) {
+				return false;
+			}
+			seen.add(key);
+			return true;
+		});
+	}
+
+	private mergeCustomAirportAndTerminalPredictions(airports: Array<any>, terminals: Array<any>, searchText: string): Array<any> {
+		const merged: Array<any> = [];
+		const matchedTerminalIds = new Set<string>();
+		const normalizedTerminals = this.dedupeCustomAirportOptions(terminals);
+
+		for (const airport of this.dedupeCustomAirportOptions(airports)) {
+			merged.push({
+				...airport,
+				isTerminal: false,
+			});
+
+			const airportTerminals = normalizedTerminals.filter((terminal: any) => {
+				const matchingAirport = this.findMatchingCustomAirportForTerminal(terminal, [airport], searchText);
+				if (!matchingAirport) {
+					return false;
+				}
+
+				const terminalKey = String(terminal?.placeId || `${terminal?.name}__${terminal?.description}`).toLowerCase();
+				if (matchedTerminalIds.has(terminalKey)) {
+					return false;
+				}
+
+				matchedTerminalIds.add(terminalKey);
+				return true;
+			});
+
+			if (airportTerminals.length) {
+				merged.push(...airportTerminals.map((terminal: any) => ({
+					...terminal,
+					isTerminal: true,
+					parentAirportPlaceId: airport.placeId,
+					parentAirportName: airport.name,
+				})));
+			}
+		}
+
+		return merged;
 	}
 
 	private fetchPlaceDetails(placeId: string): Promise<google.maps.places.PlaceResult | null> {
@@ -1050,7 +1208,29 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 
 		this.setCustomSearchLoading('airport', fieldName, true);
-		const options = (await this.searchGooglePredictions(searchText)).filter((option) => this.isAirportPrediction(option));
+		const baseSearchText = this.getCustomAirportBaseQuery(searchText) || searchText;
+		const terminalSearchText = `${baseSearchText} terminal`.trim();
+		const sessionToken = this.getOrCreateCustomAirportSessionToken(fieldName);
+		const [airportOptions, terminalOptions] = await Promise.all([
+			this.searchGooglePredictions(baseSearchText, sessionToken),
+			this.searchGooglePredictions(terminalSearchText, sessionToken)
+		]);
+
+		const airportPredictions = airportOptions
+			.filter((option) => this.isAirportPrediction(option) && this.getCustomAirportPredictionType(option) === 'airport')
+			.map((option) => ({ ...option, isTerminal: false }));
+
+		const terminalPredictions = terminalOptions
+			.filter((option) =>
+				this.isAirportPrediction(option)
+				&& String(option?.description || '').toLowerCase().includes('terminal')
+			)
+			.map((option) => ({ ...option, isTerminal: true }));
+
+		const options = terminalPredictions.length
+			? this.mergeCustomAirportAndTerminalPredictions(airportPredictions, terminalPredictions, baseSearchText)
+			: this.dedupeCustomAirportOptions(airportPredictions);
+
 		if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
 			this.setCustomOptions('airport', fieldName, options);
 			this.setCustomSearchLoading('airport', fieldName, false);
@@ -1094,6 +1274,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (place?.geometry?.location) {
 			this.handleAirportPlaceSelection(fieldName, place);
 		}
+		this.resetCustomAirportSessionToken(fieldName);
 		this.closeCustomAirportDropdown(fieldName);
 	}
 
@@ -1869,6 +2050,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			let origin: google.maps.LatLng
 			let destination: google.maps.LatLng
 			let map: google.maps.Map;
+			const legLabel = is_return ? 'return' : 'outbound';
 
 			// Wait for Maps API to be ready (it should be ready when component loads if using @angular/google-maps properly)
 			await this.mapsApiReady();
@@ -1954,6 +2136,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 			}
 
+			console.group(`admin/new-booking _MapController ${legLabel}`);
+			console.log('transfer_type', is_return ? this.Form.return_transfer_type.value : this.Form.transfer_type.value);
+			console.log('origin', {
+				lat: origin?.lat?.(),
+				lng: origin?.lng?.()
+			});
+			console.log('destination', {
+				lat: destination?.lat?.(),
+				lng: destination?.lng?.()
+			});
+			console.log('waypoints_count', waypoints.length);
+			console.log('waypoints', waypoints);
+			console.groupEnd();
+
 			const request: google.maps.DirectionsRequest = {
 				origin,
 				destination,
@@ -1966,6 +2162,128 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		} catch (error) {
 			console.error('Error initializing MapController:', error);
 		}
+	}
+
+	private hasValidRouteCoordinates(is_return: boolean = false): boolean {
+		const transferType = is_return ? this.Form.return_transfer_type.value : this.Form.transfer_type.value;
+		const prefix = is_return ? 'return_' : '';
+
+		const pickupLatControl = transferType?.includes('airport_')
+			? `${prefix}pickup_airport_latitude`
+			: `${prefix}pickup_latitude`;
+		const pickupLngControl = transferType?.includes('airport_')
+			? `${prefix}pickup_airport_longitude`
+			: `${prefix}pickup_longitude`;
+		const dropoffLatControl = transferType?.includes('_airport')
+			? `${prefix}dropoff_airport_latitude`
+			: `${prefix}dropoff_latitude`;
+		const dropoffLngControl = transferType?.includes('_airport')
+			? `${prefix}dropoff_airport_longitude`
+			: `${prefix}dropoff_longitude`;
+
+		const pickupLat = this.parseRouteCoordinate(this.BookingForm.get(pickupLatControl)?.value);
+		const pickupLng = this.parseRouteCoordinate(this.BookingForm.get(pickupLngControl)?.value);
+		const dropoffLat = this.parseRouteCoordinate(this.BookingForm.get(dropoffLatControl)?.value);
+		const dropoffLng = this.parseRouteCoordinate(this.BookingForm.get(dropoffLngControl)?.value);
+		const isValid = [pickupLat, pickupLng, dropoffLat, dropoffLng].every((value) => value !== null && Number.isFinite(value));
+
+		console.group(`admin/new-booking hasValidRouteCoordinates ${is_return ? 'return' : 'outbound'}`);
+		console.log('transferType', transferType);
+		console.log('pickup controls', pickupLatControl, pickupLngControl);
+		console.log('dropoff controls', dropoffLatControl, dropoffLngControl);
+		console.log('pickup values', { pickupLat, pickupLng });
+		console.log('dropoff values', { dropoffLat, dropoffLng });
+		console.log('isValid', isValid);
+		console.groupEnd();
+
+		return isValid;
+	}
+
+	private parseRouteCoordinate(value: any): number | null {
+		if (value === '' || value === null || typeof value === 'undefined') {
+			return null;
+		}
+
+		const parsedValue = Number(value);
+		return Number.isFinite(parsedValue) ? parsedValue : null;
+	}
+
+	private syncRouteCoordinatesForTransferType(is_return: boolean = false): void {
+		const transferType = is_return ? this.Form.return_transfer_type.value : this.Form.transfer_type.value;
+		const prefix = is_return ? 'return_' : '';
+
+		if (!transferType) {
+			return;
+		}
+
+		const syncEndpointCoordinates = (endpoint: 'pickup' | 'dropoff', endpointUsesAirportCoordinates: boolean) => {
+			const addressControl = `${prefix}${endpoint}`;
+			const addressLatControl = `${prefix}${endpoint}_latitude`;
+			const addressLngControl = `${prefix}${endpoint}_longitude`;
+			const airportOptionControl = `${prefix}${endpoint}_airport_option`;
+			const airportNameControl = `${prefix}${endpoint}_airport_name`;
+			const airportLatControl = `${prefix}${endpoint}_airport_latitude`;
+			const airportLngControl = `${prefix}${endpoint}_airport_longitude`;
+
+			const addressValue = this.BookingForm.get(addressControl)?.value;
+			const airportDisplayValue = this.BookingForm.get(airportOptionControl)?.value || this.BookingForm.get(airportNameControl)?.value;
+			const addressLat = this.parseRouteCoordinate(this.BookingForm.get(addressLatControl)?.value);
+			const addressLng = this.parseRouteCoordinate(this.BookingForm.get(addressLngControl)?.value);
+			const airportLat = this.parseRouteCoordinate(this.BookingForm.get(airportLatControl)?.value);
+			const airportLng = this.parseRouteCoordinate(this.BookingForm.get(airportLngControl)?.value);
+			const hasAddressCoordinates = addressLat !== null && addressLng !== null;
+			const hasAirportCoordinates = airportLat !== null && airportLng !== null;
+			const hasAddressValue = !!addressValue;
+			const hasAirportValue = !!airportDisplayValue;
+
+			console.group(`admin/new-booking syncRouteCoordinates ${is_return ? 'return' : 'outbound'} ${endpoint}`);
+			console.log('transferType', transferType);
+			console.log('endpointUsesAirportCoordinates', endpointUsesAirportCoordinates);
+			console.log('addressValue', addressValue);
+			console.log('airportDisplayValue', airportDisplayValue);
+			console.log('addressCoordinates', { lat: addressLat, lng: addressLng, hasAddressCoordinates });
+			console.log('airportCoordinates', { lat: airportLat, lng: airportLng, hasAirportCoordinates });
+
+			if (!endpointUsesAirportCoordinates && hasAddressValue && !hasAddressCoordinates && hasAirportCoordinates) {
+				console.log('action', 'copy airport coords -> address coords');
+				this.SetFormValue(addressLatControl, airportLat, false);
+				this.SetFormValue(addressLngControl, airportLng, false);
+			}
+
+			if (endpointUsesAirportCoordinates && hasAirportValue && !hasAirportCoordinates && hasAddressCoordinates) {
+				console.log('action', 'copy address coords -> airport coords');
+				this.SetFormValue(airportLatControl, addressLat, false);
+				this.SetFormValue(airportLngControl, addressLng, false);
+			}
+
+			console.log('final address coords', {
+				lat: this.BookingForm.get(addressLatControl)?.value,
+				lng: this.BookingForm.get(addressLngControl)?.value
+			});
+			console.log('final airport coords', {
+				lat: this.BookingForm.get(airportLatControl)?.value,
+				lng: this.BookingForm.get(airportLngControl)?.value
+			});
+			console.groupEnd();
+		};
+
+		syncEndpointCoordinates('pickup', transferType.includes('airport_'));
+		syncEndpointCoordinates('dropoff', transferType.includes('_airport'));
+	}
+
+	private refreshMapIfRouteReady(is_return: boolean = false): void {
+		console.group(`admin/new-booking refreshMapIfRouteReady ${is_return ? 'return' : 'outbound'}`);
+		console.log('transferType before sync', is_return ? this.Form.return_transfer_type.value : this.Form.transfer_type.value);
+		this.syncRouteCoordinatesForTransferType(is_return);
+		const routeReady = this.hasValidRouteCoordinates(is_return);
+		console.log('routeReady', routeReady);
+		if (routeReady) {
+			console.log('action', 'calling MapController');
+			this.MapController(is_return);
+		} else {
+			console.log('action', 'skipping MapController because route is not ready');
+		}
+		console.groupEnd();
 	}
 
 
@@ -2410,6 +2728,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	clearAirportField(formControl: string) {
+		this.resetCustomAirportSessionToken(formControl);
+		this.clearCustomAirportSearchDebounceTimer(formControl);
 		this.closeCustomAirportDropdown(formControl);
 		this.closeCustomAddressDropdown();
 		this.BookingForm.get(formControl)?.setValue('', { emitEvent: false });
@@ -4923,6 +5243,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.return_transfer_type = reverseStringChars(value)
 				this.updateReturnLegValidators(this.return_transfer_type);
 			}
+			this.refreshMapIfRouteReady(false);
+			if (this.Form.service_type.value == 'round_trip') {
+				this.refreshMapIfRouteReady(true);
+			}
 			console.log('component transfer_type after update', this.transfer_type);
 			console.log('component return_transfer_type after sync', this.return_transfer_type);
 			console.log('form return_transfer_type after sync', this.BookingForm?.get('return_transfer_type')?.value);
@@ -5036,6 +5360,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (!this.isPrefillingTransferTypes) {
 				this.SetFormValue('transfer_type', reverseStringChars(value), false)
 				this.transfer_type = reverseStringChars(value)
+			}
+			if (this.Form.service_type.value == 'round_trip') {
+				this.refreshMapIfRouteReady(true);
 			}
 			console.log('component return_transfer_type after update', this.return_transfer_type);
 			console.log('component transfer_type after sync', this.transfer_type);

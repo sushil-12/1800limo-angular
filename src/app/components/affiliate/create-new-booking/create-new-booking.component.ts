@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, EventEmitter, isDevMode, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, EventEmitter, isDevMode, QueryList, ViewChildren } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -24,7 +24,7 @@ declare var $: any
 	templateUrl: './create-new-booking.component.html',
 	styleUrls: ['./create-new-booking.component.scss']
 })
-export class CreateNewBookingComponent implements OnInit {
+export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
 	@ViewChild('dropoffInput') dropoffInput!: ElementRef;
 	@ViewChild('loosecustomerInput') loosecustomerInput!: ElementRef;
@@ -107,6 +107,8 @@ export class CreateNewBookingComponent implements OnInit {
 	private customAirportSearchLoading: Record<string, boolean> = {};
 	private customAddressOptions: Record<string, Array<any>> = {};
 	private customAirportOptions: Record<string, Array<any>> = {};
+	private customAirportSearchDebounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+	private customAirportAutocompleteSessionTokens: Record<string, string> = {};
 	AffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
 	ClientAccounts_Original: Array<Record<string, any>> = []
@@ -234,6 +236,12 @@ export class CreateNewBookingComponent implements OnInit {
 			setTimeout(() => this.initAllAutocompletes(), 100);
 		});
 
+	}
+
+	ngOnDestroy(): void {
+		Object.values(this.customAirportSearchDebounceTimers).forEach((timer) => clearTimeout(timer));
+		this.customAirportSearchDebounceTimers = {};
+		this.customAirportAutocompleteSessionTokens = {};
 	}
 
 
@@ -694,6 +702,38 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 	}
 
+	private clearCustomAirportSearchDebounceTimer(fieldName: string): void {
+		if (this.customAirportSearchDebounceTimers[fieldName]) {
+			clearTimeout(this.customAirportSearchDebounceTimers[fieldName]);
+			delete this.customAirportSearchDebounceTimers[fieldName];
+		}
+	}
+
+	private scheduleCustomAirportSearch(fieldName: string, value: string, delay = 300): void {
+		this.clearCustomAirportSearchDebounceTimer(fieldName);
+		this.customAirportSearchDebounceTimers[fieldName] = setTimeout(() => {
+			void this.searchCustomAirport(fieldName, value || '');
+		}, delay);
+	}
+
+	private getOrCreateCustomAirportSessionToken(fieldName: string): string {
+		const existingToken = this.customAirportAutocompleteSessionTokens[fieldName];
+		if (existingToken) {
+			return existingToken;
+		}
+
+		const token = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+			? crypto.randomUUID()
+			: `${fieldName}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+		this.customAirportAutocompleteSessionTokens[fieldName] = token;
+		return token;
+	}
+
+	private resetCustomAirportSessionToken(fieldName: string): void {
+		delete this.customAirportAutocompleteSessionTokens[fieldName];
+	}
+
 	onCustomAddressFocus(fieldName: string, input?: HTMLInputElement): void {
 		if (!this.isTouchBookingInteraction()) {
 			input?.select();
@@ -734,8 +774,8 @@ export class CreateNewBookingComponent implements OnInit {
 		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('', { emitEvent: false });
 		this.BookingForm.get(`${fieldName}_longitude`)?.setValue('', { emitEvent: false });
 		this.BookingForm.updateValueAndValidity({ emitEvent: false });
-		this.openCustomAirportDropdown(fieldName);
-		void this.searchCustomAirport(fieldName, value || '');
+		this.activeCustomAirportDropdown = fieldName;
+		this.scheduleCustomAirportSearch(fieldName, value || '', 300);
 	}
 
 	getCustomOptionLabel(option: any): string {
@@ -746,7 +786,11 @@ export class CreateNewBookingComponent implements OnInit {
 		return String(option?.secondaryText || '').trim();
 	}
 
-	private searchGooglePredictions(searchText: string): Promise<Array<any>> {
+	isCustomAirportTerminalOption(option: any): boolean {
+		return !!option?.isTerminal;
+	}
+
+	private searchGooglePredictions(searchText: string, sessionToken?: string): Promise<Array<any>> {
 		const apiKey = this.getGoogleMapsApiKey();
 		if (!apiKey || !String(searchText || '').trim()) {
 			return Promise.resolve([]);
@@ -762,7 +806,8 @@ export class CreateNewBookingComponent implements OnInit {
 			body: JSON.stringify({
 				input: searchText,
 				includeQueryPredictions: false,
-				languageCode: 'en-US'
+				languageCode: 'en-US',
+				...(sessionToken ? { sessionToken } : {})
 			})
 		})
 			.then((response) => response.ok ? response.json() : Promise.resolve({ suggestions: [] }))
@@ -790,6 +835,122 @@ export class CreateNewBookingComponent implements OnInit {
 		return ['airport', 'terminal', 'concourse', 'fbo', 'airfield', 'aerodrome', 'gate', 'parking', 'garage', 'departures', 'arrivals'].some((keyword) =>
 			combined.includes(keyword)
 		);
+	}
+
+	private getCustomAirportBaseQuery(searchText: string): string {
+		const normalizedSearchText = String(searchText || '')
+			.replace(/\s+/g, ' ')
+			.trim();
+
+		if (!normalizedSearchText) {
+			return '';
+		}
+
+		const terminalPrefixes = ['t', 'te', 'ter', 'term', 'termi', 'termin', 'termina', 'terminal'];
+		const parts = normalizedSearchText.split(' ').filter(Boolean);
+		const lastToken = String(parts[parts.length - 1] || '').toLowerCase();
+
+		if (terminalPrefixes.includes(lastToken)) {
+			return parts.slice(0, -1).join(' ').trim();
+		}
+
+		return normalizedSearchText.replace(/\bterminal\b.*$/i, '').replace(/\s+/g, ' ').trim();
+	}
+
+	private getCustomAirportPredictionType(option: any): string {
+		const types = Array.isArray(option?.types) ? option.types.map((type: string) => String(type || '').toLowerCase()) : [];
+		return types.includes('airport') ? 'airport' : 'terminal';
+	}
+
+	private normalizeCustomAirportSearchText(value: string): string {
+		return String(value || '')
+			.toLowerCase()
+			.replace(/[^a-z0-9\s]/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
+	}
+
+	private buildCustomAirportMatchTokens(airport: any, searchText: string): string[] {
+		const codeMatches = [airport?.name, airport?.description, searchText]
+			.flatMap((value: any) => String(value || '').match(/\b[A-Z]{3,4}\b/g) || [])
+			.map((value: string) => value.toLowerCase());
+
+		const phraseCandidates = [
+			String(searchText || '').trim(),
+			String(airport?.name || '').trim(),
+			String(airport?.secondaryText || '').split(',')[0]?.trim() || '',
+		]
+			.map((value) => this.normalizeCustomAirportSearchText(value))
+			.filter((value) => value.length >= 3);
+
+		return Array.from(new Set([...codeMatches, ...phraseCandidates]));
+	}
+
+	private findMatchingCustomAirportForTerminal(terminal: any, airports: Array<any>, searchText: string): any | null {
+		const normalizedDescription = this.normalizeCustomAirportSearchText(terminal?.description || terminal?.secondaryText || terminal?.name || '');
+		if (!normalizedDescription.includes('terminal')) {
+			return null;
+		}
+
+		for (const airport of airports) {
+			const tokens = this.buildCustomAirportMatchTokens(airport, searchText);
+			if (tokens.some((token) => token && normalizedDescription.includes(token))) {
+				return airport;
+			}
+		}
+
+		return null;
+	}
+
+	private dedupeCustomAirportOptions(options: Array<any>): Array<any> {
+		const seen = new Set<string>();
+		return options.filter((option: any) => {
+			const key = String(option?.placeId || `${option?.name}__${option?.description}`).toLowerCase();
+			if (!key || seen.has(key)) {
+				return false;
+			}
+			seen.add(key);
+			return true;
+		});
+	}
+
+	private mergeCustomAirportAndTerminalPredictions(airports: Array<any>, terminals: Array<any>, searchText: string): Array<any> {
+		const merged: Array<any> = [];
+		const matchedTerminalIds = new Set<string>();
+		const normalizedTerminals = this.dedupeCustomAirportOptions(terminals);
+
+		for (const airport of this.dedupeCustomAirportOptions(airports)) {
+			merged.push({
+				...airport,
+				isTerminal: false,
+			});
+
+			const airportTerminals = normalizedTerminals.filter((terminal: any) => {
+				const matchingAirport = this.findMatchingCustomAirportForTerminal(terminal, [airport], searchText);
+				if (!matchingAirport) {
+					return false;
+				}
+
+				const terminalKey = String(terminal?.placeId || `${terminal?.name}__${terminal?.description}`).toLowerCase();
+				if (matchedTerminalIds.has(terminalKey)) {
+					return false;
+				}
+
+				matchedTerminalIds.add(terminalKey);
+				return true;
+			});
+
+			if (airportTerminals.length) {
+				merged.push(...airportTerminals.map((terminal: any) => ({
+					...terminal,
+					isTerminal: true,
+					parentAirportPlaceId: airport.placeId,
+					parentAirportName: airport.name,
+				})));
+			}
+		}
+
+		return merged;
 	}
 
 	private fetchPlaceDetails(placeId: string): Promise<google.maps.places.PlaceResult | null> {
@@ -846,7 +1007,29 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 
 		this.setCustomSearchLoading('airport', fieldName, true);
-		const options = (await this.searchGooglePredictions(searchText)).filter((option) => this.isAirportPrediction(option));
+		const baseSearchText = this.getCustomAirportBaseQuery(searchText) || searchText;
+		const terminalSearchText = `${baseSearchText} terminal`.trim();
+		const sessionToken = this.getOrCreateCustomAirportSessionToken(fieldName);
+		const [airportOptions, terminalOptions] = await Promise.all([
+			this.searchGooglePredictions(baseSearchText, sessionToken),
+			this.searchGooglePredictions(terminalSearchText, sessionToken)
+		]);
+
+		const airportPredictions = airportOptions
+			.filter((option) => this.isAirportPrediction(option) && this.getCustomAirportPredictionType(option) === 'airport')
+			.map((option) => ({ ...option, isTerminal: false }));
+
+		const terminalPredictions = terminalOptions
+			.filter((option) =>
+				this.isAirportPrediction(option)
+				&& String(option?.description || '').toLowerCase().includes('terminal')
+			)
+			.map((option) => ({ ...option, isTerminal: true }));
+
+		const options = terminalPredictions.length
+			? this.mergeCustomAirportAndTerminalPredictions(airportPredictions, terminalPredictions, baseSearchText)
+			: this.dedupeCustomAirportOptions(airportPredictions);
+
 		if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
 			this.setCustomOptions('airport', fieldName, options);
 			this.setCustomSearchLoading('airport', fieldName, false);
@@ -892,6 +1075,7 @@ export class CreateNewBookingComponent implements OnInit {
 		if (place?.geometry?.location) {
 			this.handleAirportPlaceSelection(fieldName, place);
 		}
+		this.resetCustomAirportSessionToken(fieldName);
 		this.closeCustomAirportDropdown(fieldName);
 	}
 
@@ -2077,6 +2261,8 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 
 	clearAirportField(formControl: string) {
+		this.resetCustomAirportSessionToken(formControl);
+		this.clearCustomAirportSearchDebounceTimer(formControl);
 		const clearFields = (controlName: string) => {
 			this.BookingForm.get(controlName)?.setValue('', { emitEvent: false });
 			this.BookingForm.get(`${controlName}_option`)?.setValue('', { emitEvent: false });

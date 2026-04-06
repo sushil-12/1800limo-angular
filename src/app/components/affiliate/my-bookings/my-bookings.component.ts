@@ -187,6 +187,33 @@ export class MyBookingsComponent implements OnInit {
 			]) || destinationCoords;
 		}
 
+		if (Array.isArray(this.bookingPreview?.extra_stops) && this.bookingPreview.extra_stops.length > 0) {
+			for (const stop of this.bookingPreview.extra_stops) {
+				const stopCoords = this.resolveStopLatLng(stop);
+				if (stopCoords) {
+					waypoints.push({
+						location: stopCoords,
+						stopover: true
+					});
+					continue;
+				}
+
+				const stopAddress = String(
+					stop?.display_address
+					|| stop?.formatted_address
+					|| stop?.address
+					|| ''
+				).trim();
+
+				if (stopAddress) {
+					waypoints.push({
+						location: stopAddress,
+						stopover: true
+					});
+				}
+			}
+		}
+
 		const origin = this.resolveRouteLocation(
 			originCoords,
 			transferType.includes('airport_')
@@ -238,7 +265,7 @@ export class MyBookingsComponent implements OnInit {
 				origin,
 				destination,
 				waypoints,
-				optimizeWaypoints: true,
+				optimizeWaypoints: false,
 				travelMode: google.maps.TravelMode.DRIVING
 			})
 		}, 100)
@@ -321,6 +348,22 @@ export class MyBookingsComponent implements OnInit {
 				if (lat === 0 && lng === 0) {
 					continue;
 				}
+				return new google.maps.LatLng(lat, lng);
+			}
+		}
+
+		return null;
+	}
+
+	private resolveStopLatLng(stop: any): google.maps.LatLng | null {
+		const latitudeCandidates = [stop?.latitude, stop?.lat, stop?.pickup_latitude];
+		const longitudeCandidates = [stop?.longitude, stop?.lng, stop?.long, stop?.pickup_longitude];
+
+		for (let index = 0; index < latitudeCandidates.length; index++) {
+			const lat = Number(latitudeCandidates[index]);
+			const lng = Number(longitudeCandidates[index]);
+
+			if (Number.isFinite(lat) && Number.isFinite(lng) && !(lat === 0 && lng === 0)) {
 				return new google.maps.LatLng(lat, lng);
 			}
 		}

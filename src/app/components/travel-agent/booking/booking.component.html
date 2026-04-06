@@ -922,7 +922,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-field">
-									{{ textFormatter(bookingPreview.pickup_airport_name) }}
+									{{ textFormatter(bookingPreview?.pickup_address ? bookingPreview?.pickup_address : bookingPreview.pickup_airport_name) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
@@ -1082,7 +1082,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-field">
-									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
+									{{ textFormatter(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address : bookingPreview.dropoff_airport_name ) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
