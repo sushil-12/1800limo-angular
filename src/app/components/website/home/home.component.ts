@@ -92,6 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	private airportSearchRequestVersion: Record<string, number> = {};
 	private addressSearchRequestVersion: Record<string, number> = {};
 	private addressSearchLoadingState: Record<string, boolean> = {};
+	private locationRequestVersionByField: Record<string, number> = {};
 
 	//For reactive form
 	quoteBotForm: FormGroup;
@@ -1382,21 +1383,37 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	useCurrentPickupLocation(fieldName: string) {
-		this.getCurrentLocation(fieldName);
+		this.getCurrentLocation(fieldName, { showErrorDialog: true });
 	}
 
-	getCurrentLocation(fieldName: string) {
+	private nextLocationRequestVersion(fieldName: string): number {
+		const nextVersion = (this.locationRequestVersionByField[fieldName] || 0) + 1;
+		this.locationRequestVersionByField[fieldName] = nextVersion;
+		return nextVersion;
+	}
+
+	private isLatestLocationRequest(fieldName: string, version: number): boolean {
+		return (this.locationRequestVersionByField[fieldName] || 0) === version;
+	}
+
+	getCurrentLocation(fieldName: string, options: { showErrorDialog?: boolean } = {}) {
+		const { showErrorDialog = true } = options;
+		this.errorDialogService.closeDialog();
+
 		if (!navigator.geolocation) {
-			this.errorDialogService.openDialog({
-				errors: {
-					error: "Geolocation is not supported by this browser."
-				}
-			});
+			if (showErrorDialog) {
+				this.errorDialogService.openDialog({
+					errors: {
+						error: "Geolocation is not supported by this browser."
+					}
+				});
+			}
 			return;
 		}
 
+		const requestVersion = this.nextLocationRequestVersion(fieldName);
 		this.spinner.show();
-		const options = {
+		const geoOptions = {
 			enableHighAccuracy: true,
 			timeout: 10000,
 			maximumAge: 300000 // 5 minutes
@@ -1405,7 +1422,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
 				this.ngZone.run(() => {
+					if (!this.isLatestLocationRequest(fieldName, requestVersion)) {
+						return;
+					}
+
 					this.spinner.hide();
+					this.errorDialogService.closeDialog();
 					const lat = position.coords.latitude;
 					const lng = position.coords.longitude;
 
@@ -1421,6 +1443,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			},
 			(error) => {
 				this.ngZone.run(() => {
+					if (!this.isLatestLocationRequest(fieldName, requestVersion)) {
+						return;
+					}
+
 					this.spinner.hide();
 					console.error("Geolocation Error:", error);
 					let errorMessage = "Unable to fetch your location. ";
@@ -1440,14 +1466,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 							break;
 					}
 
-					this.errorDialogService.openDialog({
-						errors: {
-							error: errorMessage
-						}
-					});
+					if (showErrorDialog) {
+						this.errorDialogService.openDialog({
+							errors: {
+								error: errorMessage
+							}
+						});
+					}
 				});
 			},
-			options
+			geoOptions
 		);
 	}
 
@@ -1464,6 +1492,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		geocoder.geocode({ location: latlng }, (results, status) => {
 			this.ngZone.run(() => {
 				if (status === "OK" && results[0]) {
+					this.errorDialogService.closeDialog();
 					const address = results[0].formatted_address;
 					this.SetFormValue(fieldName, address);
 					console.log("Reverse Geocoded Address:", address);
@@ -1620,6 +1649,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
 			this.scheduleQuoteBotAutocompleteDisplaySync()
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
+			this.autoPickLocationOnLoad();
 
 			// if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
 			// 	console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
@@ -1647,23 +1677,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.quoteBotSwitch('one_way')
 			this.scheduleQuoteBotAutocompleteDisplaySync()
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
-
-			// Auto-pick location for first time users if pickup_address is empty
-			this.autoPickLocationIfEmpty()
+			this.autoPickLocationOnLoad();
 		}
 	}
 
 	/**
-	 * Auto-pick location if pickup_address is empty on first page load
+	 * Auto-pick current pickup location on page load/reload.
 	 */
-	autoPickLocationIfEmpty() {
-		// Check if pickup_address is empty after a short delay to ensure form is initialized
+	autoPickLocationOnLoad() {
 		setTimeout(() => {
-			const pickupAddress = this.QBForm?.pickup_address?.value;
-			if (!pickupAddress || pickupAddress.trim() === '') {
-				console.log('Auto-picking location for first time user...');
-				this.getCurrentLocation('pickup_address');
+			if (this.QBForm?.pickup_type?.value === 'airport') {
+				return;
 			}
+
+			console.log('Auto-picking current location on home page load...');
+			this.getCurrentLocation('pickup_address', { showErrorDialog: true });
 		}, 100);
 	}
 
