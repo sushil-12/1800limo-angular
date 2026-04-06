@@ -1549,6 +1549,33 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+
+			// Parse JSON strings if necessary
+			if (typeof editing_data.extra_stops === 'string') {
+				try {
+					editing_data.extra_stops = JSON.parse(editing_data.extra_stops);
+				} catch (e) {
+					console.error('Error parsing extra_stops:', e);
+					editing_data.extra_stops = [];
+				}
+			}
+			if (typeof editing_data.return_extra_stops === 'string') {
+				try {
+					editing_data.return_extra_stops = JSON.parse(editing_data.return_extra_stops);
+				} catch (e) {
+					console.error('Error parsing return_extra_stops:', e);
+					editing_data.return_extra_stops = [];
+				}
+			}
+			if (typeof editing_data.share_array === 'string') {
+				try {
+					editing_data.share_array = JSON.parse(editing_data.share_array);
+				} catch (e) {
+					console.error('Error parsing share_array:', e);
+					editing_data.share_array = {};
+				}
+			}
+
 			let currency = editing_data?.currency
 			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 				for (const key of Object.keys(data)) {
@@ -1589,13 +1616,17 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					let value = editing_data[item].includes('+') ? editing_data[item] : '+'.concat(editing_data[item])
 					this.SetFormValue(item, value);
 				}
-				if (editing_data[item] && item != "passenger_cell_isd") {
+				if (editing_data[item] && item != "passenger_cell_isd" && typeof editing_data[item] !== 'object') {
 					if (isNaN(Number(editing_data[item]))) {
 						this.SetFormValue(item, editing_data[item]);
 					} else {
 						this.SetFormValue(item, Number(editing_data[item]));
 					}
 				}
+			}
+			// Handle field name mismatches
+			if (editing_data.meet_greet_choice_name) {
+				this.SetFormValue('meet_greet_choices_name', editing_data.meet_greet_choice_name);
 			}
 			const pickupLine = editing_data.pickup || editing_data.pickup_address;
 			if (pickupLine) {
@@ -1614,28 +1645,28 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.SetFormValue('return_dropoff', returnDropoffLine);
 			}
 			// if (editing_data?.loose_customer) {
-			// 	console.log('n function fill loose customer data', editing_data?.loose_customer)
-			// 	try {
-			// 		for (let item in editing_data?.loose_customer) {
-			// 			if (editing_data?.loose_customer[item]) {
-			// 				console.log('LC set value for', item, editing_data?.loose_customer[item])
-			// 				this.SetLCFormValue(item, editing_data?.loose_customer[item])
-			// 			}
-			// 		}
-			// 		this.SetLCFormValue('phone' ,editing_data?.loose_customer?.mobile )
-			// 		this.fillLooseCustomerAddress(editing_data?.loose_customer?.address)
-			// 		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
-			// 		loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
-			// 		loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
-			// 		loose_customer.get('first_name').setValidators([Validators.required])
-			// 		// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
-			// 		loose_customer.get('last_name').setValidators([Validators.required])
-			// 		loose_customer.get('address').setValidators(this.customValidator.whitespace())
-			// 		loose_customer.updateValueAndValidity()
-			// 	}
-			// 	catch (error) {
-			// 		console.log('error--->>>>>>', error)
-			// 	}
+			//  console.log('n function fill loose customer data', editing_data?.loose_customer)
+			//  try {
+			//      for (let item in editing_data?.loose_customer) {
+			//          if (editing_data?.loose_customer[item]) {
+			//              console.log('LC set value for', item, editing_data?.loose_customer[item])
+			//              this.SetLCFormValue(item, editing_data?.loose_customer[item])
+			//          }
+			//      }
+			//      this.SetLCFormValue('phone' ,editing_data?.loose_customer?.mobile )
+			//      this.fillLooseCustomerAddress(editing_data?.loose_customer?.address)
+			//      const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+			//      loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+			//      loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
+			//      loose_customer.get('first_name').setValidators([Validators.required])
+			//      // loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+			//      loose_customer.get('last_name').setValidators([Validators.required])
+			//      loose_customer.get('address').setValidators(this.customValidator.whitespace())
+			//      loose_customer.updateValueAndValidity()
+			//  }
+			//  catch (error) {
+			//      console.log('error--->>>>>>', error)
+			//  }
 			// }
 			this.SetFormValue('pickup_airport_option', this.getEditAirportDisplayValue(this.Form.pickup_airport.value, editing_data.pickup_address));
 			this.SetFormValue('pickup_airport_name', this.getEditAirportDisplayValue(this.Form.pickup_airport.value, editing_data.pickup_address));
@@ -1692,7 +1723,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			})
 
 			// if (this.Form.updateType.value == 'edit') {
-			// 	this.booking_params.client_account_types.pop()
+			//  this.booking_params.client_account_types.pop()
 			// }
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
@@ -1705,11 +1736,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 				}, 2000)
 			}
-
-			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
-			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 150);
-			setTimeout(() => this.resyncAirportAutocompleteDisplays(), 0);
-			setTimeout(() => this.resyncAirportAutocompleteDisplays(), 150);
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
