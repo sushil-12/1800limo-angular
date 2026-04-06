@@ -635,6 +635,57 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 		return this.customAirportOptions[fieldName] || [];
 	}
 
+	private hasResolvedCustomAirportSelection(fieldName: string): boolean {
+		const selectedId = this.BookingForm?.get(fieldName)?.value;
+		const displayValue = String(this.BookingForm?.get(`${fieldName}_option`)?.value || '').trim();
+		const latitude = this.BookingForm?.get(`${fieldName}_latitude`)?.value;
+		const longitude = this.BookingForm?.get(`${fieldName}_longitude`)?.value;
+
+		return !!selectedId
+			&& !!displayValue
+			&& latitude !== ''
+			&& latitude !== null
+			&& latitude !== undefined
+			&& longitude !== ''
+			&& longitude !== null
+			&& longitude !== undefined;
+	}
+
+	private getResolvedCustomAirportOption(fieldName: string): any | null {
+		if (!this.hasResolvedCustomAirportSelection(fieldName)) {
+			return null;
+		}
+
+		const selectedId = this.BookingForm?.get(fieldName)?.value;
+		const displayValue = String(this.BookingForm?.get(`${fieldName}_option`)?.value || '').trim();
+		const latitude = this.BookingForm?.get(`${fieldName}_latitude`)?.value;
+		const longitude = this.BookingForm?.get(`${fieldName}_longitude`)?.value;
+
+		if (!displayValue) {
+			return null;
+		}
+
+		return {
+			placeId: selectedId,
+			name: displayValue,
+			description: displayValue,
+			secondaryText: '',
+			isTerminal: displayValue.toLowerCase().includes('terminal'),
+			latitude,
+			longitude
+		};
+	}
+
+	getVisibleCustomAirportOptions(fieldName: string): Array<any> {
+		const options = this.getCustomAirportOptions(fieldName);
+		if (options?.length) {
+			return options;
+		}
+
+		const selectedOption = this.getResolvedCustomAirportOption(fieldName);
+		return selectedOption ? [selectedOption] : [];
+	}
+
 	isCustomAddressDropdownOpen(fieldName: string): boolean {
 		return this.activeCustomAddressDropdown === fieldName;
 	}
@@ -656,7 +707,7 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 			? this.getCustomAddressFieldValue(fieldName)
 			: String(this.BookingForm?.get(`${fieldName}_option`)?.value || '').trim();
 		const isOpen = kind === 'address' ? this.isCustomAddressDropdownOpen(fieldName) : this.isCustomAirportDropdownOpen(fieldName);
-		const options = kind === 'address' ? this.getCustomAddressOptions(fieldName) : this.getCustomAirportOptions(fieldName);
+		const options = kind === 'address' ? this.getCustomAddressOptions(fieldName) : this.getVisibleCustomAirportOptions(fieldName);
 		return isOpen && !!value && !this.isCustomSearchLoading(kind, fieldName) && !options.length;
 	}
 
@@ -692,6 +743,11 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 		this.clearCustomAirportDropdownBlurTimer();
 		this.closeCustomAddressDropdown();
 		this.activeCustomAirportDropdown = fieldName;
+		const selectedOption = this.getResolvedCustomAirportOption(fieldName);
+		if (selectedOption) {
+			this.setCustomOptions('airport', fieldName, [selectedOption]);
+			return;
+		}
 		void this.searchCustomAirport(fieldName, this.BookingForm.get(`${fieldName}_option`)?.value || '');
 	}
 
@@ -998,10 +1054,11 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	async searchCustomAirport(fieldName: string, value: string): Promise<void> {
 		const requestVersion = this.nextCustomSearchVersion('airport', fieldName);
 		const searchText = String(value || '').trim();
+		const selectedOption = this.getResolvedCustomAirportOption(fieldName);
 		if (!searchText) {
 			if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
 				this.setCustomSearchLoading('airport', fieldName, false);
-				this.setCustomOptions('airport', fieldName, []);
+				this.setCustomOptions('airport', fieldName, selectedOption ? [selectedOption] : []);
 			}
 			return;
 		}
@@ -1031,7 +1088,7 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 			: this.dedupeCustomAirportOptions(airportPredictions);
 
 		if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
-			this.setCustomOptions('airport', fieldName, options);
+			this.setCustomOptions('airport', fieldName, options.length ? options : (selectedOption ? [selectedOption] : []));
 			this.setCustomSearchLoading('airport', fieldName, false);
 		}
 	}

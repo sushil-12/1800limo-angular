@@ -374,7 +374,7 @@
 												</div>
 												<div *ngIf="isAirportDropdownOpen('pickup_airport')" class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('pickup_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('pickup_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'pickup_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
@@ -385,10 +385,15 @@
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
-													<div *ngIf="!getAirportOptions('pickup_airport')?.length"
+													<div *ngIf="shouldShowAirportEmptyState('pickup_airport')"
 														class="qb-airport-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														No Result found
+													</div>
+													<div *ngIf="shouldShowAirportPromptState('pickup_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -437,12 +442,12 @@
 														</span>
 													</button>
 													<div *ngIf="shouldShowAddressEmptyState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														No Result found
 													</div>
 													<div *ngIf="shouldShowAddressPromptState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
-														Start typing to search address
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -504,7 +509,7 @@
 												</div>
 												<div *ngIf="isAirportDropdownOpen('dropoff_airport')" class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('dropoff_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('dropoff_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'dropoff_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
@@ -515,10 +520,15 @@
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
-													<div *ngIf="!getAirportOptions('dropoff_airport')?.length"
+													<div *ngIf="shouldShowAirportEmptyState('dropoff_airport')"
 														class="qb-airport-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
+													</div>
+													<div *ngIf="shouldShowAirportPromptState('dropoff_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -568,12 +578,12 @@
 														</span>
 													</button>
 													<div *ngIf="shouldShowAddressEmptyState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
 													<div *ngIf="shouldShowAddressPromptState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
-														Start typing to search address
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -697,7 +707,7 @@
 												</div>
 												<div *ngIf="isAirportDropdownOpen('return_pickup_airport')" class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('return_pickup_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('return_pickup_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'return_pickup_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
@@ -708,10 +718,15 @@
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
-													<div *ngIf="!getAirportOptions('return_pickup_airport')?.length"
+													<div *ngIf="shouldShowAirportEmptyState('return_pickup_airport')"
 														class="qb-airport-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
+													</div>
+													<div *ngIf="shouldShowAirportPromptState('return_pickup_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -761,12 +776,12 @@
 														</span>
 													</button>
 													<div *ngIf="shouldShowAddressEmptyState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
 													<div *ngIf="shouldShowAddressPromptState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
-														Start typing to search address
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -830,7 +845,7 @@
 												</div>
 												<div *ngIf="isAirportDropdownOpen('return_dropoff_airport')" class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getAirportOptions('return_dropoff_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('return_dropoff_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'return_dropoff_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
@@ -841,10 +856,15 @@
 															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
-													<div *ngIf="!getAirportOptions('return_dropoff_airport')?.length"
+													<div *ngIf="shouldShowAirportEmptyState('return_dropoff_airport')"
 														class="qb-airport-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
+													</div>
+													<div *ngIf="shouldShowAirportPromptState('return_dropoff_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
@@ -887,12 +907,12 @@
 														</span>
 													</button>
 													<div *ngIf="shouldShowAddressEmptyState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
+														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
 													<div *ngIf="shouldShowAddressPromptState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
-														style="padding:12px 14px; color:#666; text-align:left;">
-														Start typing to search address
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
 													</div>
 												</div>
 											</div>
