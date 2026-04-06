@@ -995,6 +995,9 @@ export class AdminService {
 	bookingEmailAllUpdated(bookingId) {
 		return this.httpClient.get(this.serverUrl + `send-updated-email/${bookingId}`)
 	}
+	bookingUpdatedEmailByTarget(bookingId, target: 'customer' | 'affiliate') {
+		return this.httpClient.get(this.serverUrl + `send-updated-email/${bookingId}/${target}`)
+	}
 	auditTrailInfo(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}`)
 	}

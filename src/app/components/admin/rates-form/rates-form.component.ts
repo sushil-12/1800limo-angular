@@ -96,6 +96,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	currentUser: any;
 	previousBookingData: any = null;
 	numberOfHoursError: boolean = false;
+	private hasCapturedInitialBookingDataBaseline: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -279,6 +280,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.ReturnRatesForm = null
 			this.total = {}
 			this.r_total = {}
+			this.previousBookingData = null
+			this.hasCapturedInitialBookingDataBaseline = false
 			this.initRates()
 			this.calculateTotal('RatesForm')
 			this.calculateGrandTotal('RatesForm')
@@ -660,13 +663,17 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		const isDataComplete = this.isBookingDataComplete(data);
 
 
-		// On first time load: Only store data if it's complete, otherwise skip
-		if (isFirstTime && (this.bookingType == 'edit' || this.bookingType == 'repeat')) {
+		const shouldPreserveInitialReservationRates = ['edit', 'repeat', 'return', 'round'].includes(this.bookingType);
+
+		// On edit/repeat/return/round screens, preserve saved reservation rates during initial hydration.
+		// We only start live recalculation after a complete booking-data baseline has been captured.
+		if (shouldPreserveInitialReservationRates && !this.hasCapturedInitialBookingDataBaseline) {
+			this.previousBookingData = JSON.parse(JSON.stringify(data));
 			if (isDataComplete) {
-				console.log('[buildBookingData] First time load with complete data - storing booking_data but NOT calculating rates');
-				this.previousBookingData = JSON.parse(JSON.stringify(data));
+				this.hasCapturedInitialBookingDataBaseline = true;
+				console.log('[buildBookingData] Initial complete booking_data baseline captured - preserving reservation rates');
 			} else {
-				console.log('[buildBookingData] First time load with incomplete data - skipping (waiting for complete data)');
+				console.log('[buildBookingData] Initial incomplete booking_data snapshot captured - waiting for complete baseline');
 			}
 			return;
 		}

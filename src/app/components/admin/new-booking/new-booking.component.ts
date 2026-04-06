@@ -323,7 +323,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	buildBookingData() {
 		console.log('rebuild booking data')
 		const vehicleId = this.BookingForm.get('vehicle_id').value;
-		const returnVehicleId = this.BookingForm.get('return_vehicle_id').value || vehicleId;
+		const vehicleTypeId = this.BookingForm.get('vehicle_type').value;
+		const effectiveVehicleId = vehicleId || this.QB_vehicle_id || this.route_vehicle_id || this.firstLoadVehicleId || vehicleTypeId || '';
+		const returnVehicleId = this.BookingForm.get('return_vehicle_id').value;
+		const returnVehicleTypeId = this.BookingForm.get('return_vehicle_type').value;
+		const effectiveReturnVehicleId = returnVehicleId || returnVehicleTypeId || effectiveVehicleId;
 		const affiliateId = this.BookingForm.get('affiliate_id').value;
 		const returnAffiliateId = this.BookingForm.get('return_affiliate_id').value || affiliateId;
 		const affiliateType = this.BookingForm.get('affiliate_type').value;
@@ -334,8 +338,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.booking_data = {
 			affiliate_id: affiliateId,
 			return_affiliate_id: returnAffiliateId,
-			vehicle_id: vehicleId,
-			return_vehicle_id: returnVehicleId,
+			vehicle_id: effectiveVehicleId,
+			return_vehicle_id: effectiveReturnVehicleId,
 			transfer_type: transferType,
 			return_transfer_type: returnTransferType,
 			service_type: serviceType,
@@ -1768,6 +1772,26 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.returnNumberOfHr.emit(value);
 	}
 
+	private syncNumberOfHoursValidation(serviceType: string): void {
+		const numberOfHoursControl = this.BookingForm?.get('number_of_hours');
+		if (!numberOfHoursControl) {
+			return;
+		}
+
+		if (serviceType === 'charter_tour') {
+			numberOfHoursControl.updateValueAndValidity({ emitEvent: false });
+			this.numberOfHoursError = Number(numberOfHoursControl.value) < 2;
+			return;
+		}
+
+		numberOfHoursControl.setValue(0, { emitEvent: false });
+		numberOfHoursControl.setErrors(null);
+		numberOfHoursControl.markAsPristine();
+		numberOfHoursControl.markAsUntouched();
+		numberOfHoursControl.updateValueAndValidity({ emitEvent: false });
+		this.numberOfHoursError = false;
+	}
+
 	// Block negative sign while typing
 	blockNegative(event: KeyboardEvent) {
 		if (event.key === '-') {
@@ -2919,6 +2943,32 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log("return transfer type", event)
 		this.return_transfer_type = event
 		this.retryGoogleAutocompleteInitialization()
+	}
+
+	handleMirroredTransferTypeChange(type: string) {
+		if (!type) {
+			return;
+		}
+
+		if (this.BookingForm?.get('transfer_type')?.value !== type) {
+			this.BookingForm?.get('transfer_type')?.setValue(type);
+			return;
+		}
+
+		this.changeTransferType(type);
+	}
+
+	handleMirroredReturnTransferTypeChange(type: string) {
+		if (!type) {
+			return;
+		}
+
+		if (this.BookingForm?.get('return_transfer_type')?.value !== type) {
+			this.BookingForm?.get('return_transfer_type')?.setValue(type);
+			return;
+		}
+
+		this.changeReturnTransferType(type);
 	}
 
 	logTransferTypeState(context: string) {
@@ -4988,6 +5038,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Service Type
 		this.BookingForm?.get('service_type')?.valueChanges.subscribe((value: string) => {
 			this.service_type = value;
+			this.syncNumberOfHoursValidation(value);
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				setTimeout(() => {
@@ -5024,7 +5075,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.updateReturnLegValidators(this.BookingForm.get('return_transfer_type').value);
 			}
 			if (value != 'charter_tour') {
-				this.BookingForm?.get('number_of_hours')?.setValue(0)
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm?.get('number_of_hours')?.value);
 				this.BookingForm.patchValue({
@@ -5048,6 +5098,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BookingForm?.get('return_pickup_airline_option')?.updateValueAndValidity();
 				this.BookingForm?.get('return_pickup_airport_option')?.clearValidators();
 				this.BookingForm?.get('return_pickup_airport_option')?.updateValueAndValidity();
+				this.BookingForm?.get('departing_airport_city')?.clearValidators();
+				this.BookingForm?.get('departing_airport_city')?.updateValueAndValidity();
 				this.BookingForm?.get('return_cruise_name')?.updateValueAndValidity();
 				this.BookingForm?.get('return_cruise_port')?.updateValueAndValidity();
 				this.BookingForm.patchValue({
@@ -5340,6 +5392,22 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.BookingForm?.get('return_dropoff')?.clearValidators();
 				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
 				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
+				this.BookingForm?.get('return_cruise_name')?.clearValidators();
+				this.BookingForm?.get('return_cruise_port')?.clearValidators();
+				this.BookingForm?.get('return_cruise_name')?.updateValueAndValidity();
+				this.BookingForm?.get('return_cruise_port')?.updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff_airline_option')?.clearValidators();
+				this.BookingForm?.get('return_dropoff_airline_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_dropoff_airport_option')?.clearValidators();
+				this.BookingForm?.get('return_dropoff_airport_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_pickup_flight')?.clearValidators();
+				this.BookingForm?.get('return_pickup_flight')?.updateValueAndValidity();
+				this.BookingForm?.get('return_pickup_airline_option')?.clearValidators();
+				this.BookingForm?.get('return_pickup_airline_option')?.updateValueAndValidity();
+				this.BookingForm?.get('return_pickup_airport_option')?.clearValidators();
+				this.BookingForm?.get('return_pickup_airport_option')?.updateValueAndValidity();
+				this.BookingForm?.get('departing_airport_city')?.clearValidators();
+				this.BookingForm?.get('departing_airport_city')?.updateValueAndValidity();
 			}
 
 			// this.initAllAutocompletes()

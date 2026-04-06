@@ -390,6 +390,11 @@
 														style="padding:2px 6px; color:#666; text-align:left;">
 														No Result found
 													</div>
+													<div *ngIf="shouldShowAirportLoadingState('pickup_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
 													<div *ngIf="shouldShowAirportPromptState('pickup_airport')"
 														class="qb-airport-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
@@ -524,6 +529,11 @@
 														class="qb-airport-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
+													</div>
+													<div *ngIf="shouldShowAirportLoadingState('dropoff_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
 													</div>
 													<div *ngIf="shouldShowAirportPromptState('dropoff_airport')"
 														class="qb-airport-field__empty"
@@ -723,6 +733,11 @@
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
+													<div *ngIf="shouldShowAirportLoadingState('return_pickup_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
 													<div *ngIf="shouldShowAirportPromptState('return_pickup_airport')"
 														class="qb-airport-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
@@ -860,6 +875,11 @@
 														class="qb-airport-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
+													</div>
+													<div *ngIf="shouldShowAirportLoadingState('return_dropoff_airport')"
+														class="qb-airport-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
 													</div>
 													<div *ngIf="shouldShowAirportPromptState('return_dropoff_airport')"
 														class="qb-airport-field__empty"

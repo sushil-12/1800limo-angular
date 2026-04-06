@@ -47,8 +47,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+							<mat-select [value]="Form.transfer_type.value" class="font-weight-bolder"
+								(selectionChange)="handleMirroredTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -75,8 +75,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type"
-								(selectionChange)="changeReturnTransferType($event.value)">
+							<mat-select [value]="Form.return_transfer_type.value"
+								(selectionChange)="handleMirroredReturnTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -100,7 +100,7 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
 								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
 								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
@@ -1253,7 +1253,7 @@
 						<mat-select formControlName="driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
+							<mat-option value="lgbtq+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -1267,7 +1267,7 @@
 						<mat-select formControlName="driver_gender">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
+							<mat-option value="lgbtq+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -1308,8 +1308,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+							<mat-select [value]="Form.transfer_type.value" class="font-weight-bolder"
+								(selectionChange)="handleMirroredTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -1331,8 +1331,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type"
-								(selectionChange)="changeReturnTransferType($event.value)">
+							<mat-select [value]="Form.return_transfer_type.value"
+								(selectionChange)="handleMirroredReturnTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -1356,7 +1356,7 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
 								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
 								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
@@ -2326,7 +2326,7 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" min="2" step="1" matInput placeholder="Enter Hours"
+							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
 								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
 								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
@@ -3508,7 +3508,7 @@
 						<mat-select formControlName="return_driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
+							<mat-option value="lgbtq+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -3523,7 +3523,7 @@
 						<mat-select formControlName="return_driver_gender">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
+							<mat-option value="lgbtq+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>

@@ -243,6 +243,130 @@ button {
 	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
+.email-all-modal-dialog {
+	max-width: 980px;
+}
+
+.email-all-modal {
+	border: 0;
+	border-radius: 22px;
+	overflow: hidden;
+	box-shadow: 0 24px 60px rgb(0 0 0 / 22%);
+}
+
+.email-all-modal__header {
+	padding: 2.25rem 2rem 0.35rem;
+	position: relative;
+}
+
+.email-all-modal__body {
+	padding: 0.25rem 2rem 2rem;
+}
+
+.email-all-modal__text {
+	margin: 0;
+	color: #3f3f46;
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.email-all-modal__section {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-top: 1.75rem;
+	margin-bottom: 1rem;
+}
+
+.email-all-modal__section-title {
+	font-size: 0.95rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #2f2f2f;
+	white-space: nowrap;
+}
+
+.email-all-modal__section-rule {
+	height: 1px;
+	flex: 1;
+	background: #dadde3;
+}
+
+.email-all-modal__actions {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 12px;
+}
+
+.email-all-modal__body .email-all-modal__actions + .email-all-modal__section + .email-all-modal__actions {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	align-items: stretch;
+}
+
+.email-all-modal__btn {
+	width: 100%;
+	margin: 0;
+	padding: 13px 18px;
+	border-radius: 12px;
+	font-size: 0.98rem;
+	font-weight: 700;
+	box-shadow: none;
+}
+
+.email-all-modal__btn--primary {
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+}
+
+.email-all-modal__btn--orange {
+	background-color: #8f949c !important;
+	border-color: #8f949c !important;
+}
+
+.email-all-modal__btn--blue {
+	background-color: #8f949c !important;
+	border-color: #8f949c !important;
+}
+
+.email-all-modal__btn--purple {
+	background-color: #8f949c !important;
+	border-color: #8f949c !important;
+}
+
+.email-all-modal__close-icon {
+	position: absolute;
+	top: 14px;
+	right: 16px;
+	width: 52px;
+	height: 52px;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: #e11d48;
+	font-size: 2.7rem;
+	font-weight: 700;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+@media (max-width: 767px) {
+	.email-all-modal__header {
+		padding: 1.5rem 1.25rem 0.5rem;
+	}
+
+	.email-all-modal__body {
+		padding: 0.5rem 1.25rem 1.5rem;
+	}
+
+	.email-all-modal__body .email-all-modal__actions + .email-all-modal__section + .email-all-modal__actions {
+		grid-template-columns: 1fr;
+	}
+}
+
 .box-special-instruction {
 	overflow-y: auto;
 	max-height: 200px;
@@ -318,6 +442,29 @@ input::-webkit-input-placeholder {
 	left: 50%;
 	-ms-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
+}
+
+.print-button {
+	background-color: #5a6575 !important;
+	border-color: #5a6575 !important;
+}
+
+.print-report-header {
+	display: none;
+}
+
+.print-report-header__meta {
+	font-size: 11px;
+	font-weight: 600;
+	color: #444;
+}
+
+.print-report-header__title {
+	flex: 1;
+	text-align: center;
+	font-size: 12px;
+	font-weight: 700;
+	color: #333;
 }
 
 
@@ -480,6 +627,67 @@ a.dropdown-item {
 
 .text-red {
 	color: red;
+}
+
+@media print {
+	.print-report-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 12px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #d7d7d7;
+	}
+
+	.no-print {
+		display: none !important;
+	}
+
+	#daily_bookings_table {
+		box-shadow: none !important;
+		border: 0 !important;
+		background: #fff !important;
+	}
+
+	.containeredd,
+	.driverside_table,
+	.custom_table,
+	.table-responsive {
+		overflow: visible !important;
+		max-height: none !important;
+		min-height: auto !important;
+	}
+
+	table {
+		font-size: 11px;
+		white-space: normal;
+	}
+
+	th,
+	td {
+		padding: 6px !important;
+		vertical-align: top;
+	}
+}
+
+:host ::ng-deep body.printing-daily-bookings * {
+	visibility: hidden;
+}
+
+:host ::ng-deep body.printing-daily-bookings #daily_bookings_table,
+:host ::ng-deep body.printing-daily-bookings #daily_bookings_table * {
+	visibility: visible;
+}
+
+:host ::ng-deep body.printing-daily-bookings #daily_bookings_table {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	margin: 0;
+	padding: 16px 20px;
+	background: #fff;
 }
 
 @media (max-width: 768px) {
