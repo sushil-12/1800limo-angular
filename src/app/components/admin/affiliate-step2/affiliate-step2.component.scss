@@ -19,10 +19,12 @@
 .vehtype_extint .emptyImage {
 	height: 225px;
 }
-.disableSsn{
+
+.disableSsn {
 	pointer-events: none;
 }
-.border-red{
+
+.border-red {
 	border: 2px solid red;
 	border-radius: 6px;
 }
@@ -108,6 +110,7 @@
 	position: relative;
 	width: 100%;
 	min-width: 0;
+	margin-top: 22px;
 }
 
 .quote-ui-dropdown-panel {
@@ -173,6 +176,7 @@
 	color: #666;
 	text-align: left;
 }
+
 .vehtype_extint .emptyImage img {
 	height: 220px;
 }
@@ -425,48 +429,50 @@
 .radioLabel label {
 	font-size: 16px !important;
 }
-  .asterisk{
-    font-size: 1.45rem;
-    margin-left: 3px;
-  }
-  .red-placeholder ::placeholder {
+
+.asterisk {
+	font-size: 1.45rem;
+	margin-left: 3px;
+}
+
+.red-placeholder ::placeholder {
 	color: red !important;
 	font-size: 15px !important;
 	/* Red color for the placeholder */
-  }
-  
-  .red-placeholder {
+}
+
+.red-placeholder {
 	color: red !important;
 	font-weight: 500 !important;
 	font-size: 15px !important;
-  }
+}
 
-  :host ::ng-deep .selectStyle select {
+:host ::ng-deep .selectStyle select {
 	font-weight: 400;
 }
 
-.user_information .selectInputStyle{
+.user_information .selectInputStyle {
 	height: 58px !important;
 }
 
 .selectCurrencyLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
+	position: relative;
+	top: 43px;
+	left: 8px;
 	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
+	color: #808080 !important;
+	padding: 0 3px;
+	font-size: 16px !important;
 }
 
 .select-currency-label {
-	position  : relative;
-	top       : 18px;
-	left      : 8px;
+	position: relative;
+	top: 18px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 13px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 13px !important;
 	font-weight: 600 !important;
 	transition: 0.3s;
 }

@@ -446,6 +446,10 @@
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
+													<div *ngIf="shouldShowAddressLoadingState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
 													<div *ngIf="shouldShowAddressEmptyState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														No Result found
@@ -587,6 +591,10 @@
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
+													<div *ngIf="shouldShowAddressLoadingState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
 													<div *ngIf="shouldShowAddressEmptyState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
@@ -790,6 +798,10 @@
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
+													<div *ngIf="shouldShowAddressLoadingState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
 													<div *ngIf="shouldShowAddressEmptyState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
@@ -926,6 +938,10 @@
 															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
+													<div *ngIf="shouldShowAddressLoadingState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
 													<div *ngIf="shouldShowAddressEmptyState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found

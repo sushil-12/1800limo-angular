@@ -622,6 +622,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		const returnDistance = data?.return_distance || data?.distance;
 		return {
 			...data,
+			service_type: 'one_way',
 			affiliate_id: data?.return_affiliate_id,
 			return_affiliate_id: data?.return_affiliate_id,
 			vehicle_id: data?.return_vehicle_id,
@@ -640,6 +641,20 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		};
 	}
 
+	private buildDedicatedOutboundBookingData(data: any): any {
+		return {
+			...data,
+			service_type: 'one_way',
+			return_affiliate_id: null,
+			return_vehicle_id: null,
+			return_transfer_type: null,
+			return_distance: null,
+			return_extra_stops: [],
+			return_pickup_time: null,
+			return_affiliate_type: null
+		};
+	}
+
 	private fetchDedicatedReturnRates(data: any): void {
 		const returnBookingData = this.buildDedicatedReturnBookingData(data);
 		console.log('admin/rates-form dedicated return-rate payload', returnBookingData);
@@ -650,6 +665,21 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.initReturnRates();
 		}, (error: any) => {
 			console.error('admin/rates-form dedicated return-rate error', error);
+		});
+	}
+
+	private fetchDedicatedOutboundRates(data: any): void {
+		const outboundBookingData = this.buildDedicatedOutboundBookingData(data);
+		console.log('admin/rates-form dedicated outbound-rate payload', outboundBookingData);
+		this.$api.fetchRatesByAffiliateVeh(outboundBookingData.vehicle_id, outboundBookingData).subscribe((response: any) => {
+			console.log('admin/rates-form dedicated outbound-rate response', response);
+			const dedicatedOutboundRates = response?.data?.rateArray || {};
+			this.ratesdata.next({});
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false;
+			this.ratesdata.next(dedicatedOutboundRates);
+			this.initRates();
+		}, (error: any) => {
+			console.error('admin/rates-form dedicated outbound-rate error', error);
 		});
 	}
 
@@ -702,6 +732,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 			if (data.service_type == 'round_trip') {
 				if (this.shouldUseDedicatedReturnRateFetch(data, response)) {
+					this.fetchDedicatedOutboundRates(data);
 					this.fetchDedicatedReturnRates(data);
 				} else {
 					this.returnRatesdata.next(this.resolveReturnRateArray(response))

@@ -100,9 +100,10 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
-								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
-								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null"
+								step="1" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (blur)="enforceMinimumHours($event)"
+								(keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
@@ -245,8 +246,7 @@
 							<tbody>
 								<tr *ngFor="let card of userCreditCards">
 									<td class="text-center align-middle">
-										<span class="badge"
-											[ngClass]="badge-secondary">
+										<span class="badge" [ngClass]="badge-secondary">
 											{{ card.ownerLabel }}
 										</span>
 									</td>
@@ -451,36 +451,50 @@
 									<mat-label>
 										Address
 									</mat-label>
-									<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+									<i matPrefix
+										class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 									<input #loosecustomerInput type="text" matInput placeholder="Type your address"
-										[value]="LooseCustomer.address.value"
-										autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+										[value]="LooseCustomer.address.value" autocomplete="off" autocorrect="off"
+										autocapitalize="off" spellcheck="false"
 										(focus)="onCustomAddressFocus('loose_customer_address', loosecustomerInput)"
 										(click)="openCustomAddressDropdown('loose_customer_address')"
 										(input)="onCustomAddressInput('loose_customer_address', $any($event.target).value)"
 										(blur)="onCustomAddressBlur('loose_customer_address')" />
 									<button matSuffix type="button" class="address-clear-btn"
 										*ngIf="LooseCustomer.address.value || loosecustomerInput?.value"
-										(click)="clearLooseCustomerAddress(loosecustomerInput)" aria-label="Clear loose customer address">
-										<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+										(click)="clearLooseCustomerAddress(loosecustomerInput)"
+										aria-label="Clear loose customer address">
+										<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+											<path fill="#1f1f1f" fill-rule="evenodd"
+												d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+												clip-rule="evenodd"></path>
+										</svg>
 									</button>
 									<!-- <input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
 										(onAutocompleteSelected)="fillLooseCustomerAddress($event)"
 										(focus)="$event.target.select()" /> -->
 								</mat-form-field>
-								<div *ngIf="isCustomAddressDropdownOpen('loose_customer_address')" class="quote-ui-dropdown-panel">
-									<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('loose_customer_address')"
-										(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('loose_customer_address', option)">
+								<div *ngIf="isCustomAddressDropdownOpen('loose_customer_address')"
+									class="quote-ui-dropdown-panel">
+									<button type="button" class="quote-ui-dropdown-option"
+										*ngFor="let option of getCustomAddressOptions('loose_customer_address')"
+										(mousedown)="$event.preventDefault()"
+										(click)="selectCustomAddressOption('loose_customer_address', option)">
 										<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 										<span class="quote-ui-dropdown-option__content">
-											<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-											<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+											<span class="quote-ui-dropdown-option__label">{{
+												getCustomOptionLabel(option) }}</span>
+											<span class="quote-ui-dropdown-option__secondary">{{
+												getCustomOptionSecondary(option) }}</span>
 										</span>
 									</button>
-									<div *ngIf="shouldShowCustomPrompt('address', 'loose_customer_address')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-									<div *ngIf="isCustomSearchLoading('address', 'loose_customer_address')" class="quote-ui-dropdown-empty">Searching...</div>
-									<div *ngIf="shouldShowCustomEmpty('address', 'loose_customer_address')" class="quote-ui-dropdown-empty">No Result found</div>
+									<div *ngIf="shouldShowCustomPrompt('address', 'loose_customer_address')"
+										class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+									<div *ngIf="isCustomSearchLoading('address', 'loose_customer_address')"
+										class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+									<div *ngIf="shouldShowCustomEmpty('address', 'loose_customer_address')"
+										class="quote-ui-dropdown-empty">No Result found</div>
 								</div>
 								<div class="error-box"></div>
 							</div>
@@ -1141,7 +1155,7 @@
 							Choose Driver
 						</mat-label>
 						<mat-select formControlName="driver_id" placholder="Choose Driver"
-							(selectionChange)="autofillData('driver', $event.value)">
+							(selectionChange)="autofillData('driver', $event.value)" [disabled]="true">
 							<mat-option *ngFor="let driver of DriverList" [value]="driver.id">
 								{{ driver.FirstName }} {{ driver.MiddleName != null ?
 								driver.MiddleName : ''
@@ -1178,7 +1192,7 @@
 							Email
 						</mat-label>
 						<input matInput formControlName="driver_email" type="text" (focus)="$event.target.select()"
-							placeholder="Email">
+							placeholder="Email" readonly>
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -1250,11 +1264,7 @@
 						<mat-label>
 							Gender
 						</mat-label>
-						<mat-select formControlName="driver_gender" [disabled]="true">
-							<mat-option value="male"> Male </mat-option>
-							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">Non-Binary</mat-option>
-						</mat-select>
+						<input matInput formControlName="driver_gender" type="text" placeholder="Gender" readonly />
 					</mat-form-field>
 				</div>
 
@@ -1356,9 +1366,10 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
-								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
-								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null"
+								step="1" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (blur)="enforceMinimumHours($event)"
+								(keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
@@ -1447,19 +1458,23 @@
 						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup.invalid) }">
 							<mat-label> Pickup Address </mat-label>
-							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							<i matPrefix
+								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 							<input #pickupInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'pickup', null)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								[value]="fillValue(null, 'pickup', null)" autocomplete="off" autocorrect="off"
+								autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAddressFocus('pickup', pickupInput)"
 								(click)="openCustomAddressDropdown('pickup')"
 								(input)="onCustomAddressInput('pickup', $any($event.target).value)"
-								(blur)="onCustomAddressBlur('pickup')"
-								formControlName="pickup" />
+								(blur)="onCustomAddressBlur('pickup')" formControlName="pickup" />
 							<button matSuffix type="button" class="address-clear-btn"
-								*ngIf="Form.pickup.value || pickupInput?.value"
-								(click)="clearAddressField('pickup')" aria-label="Clear pickup address">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								*ngIf="Form.pickup.value || pickupInput?.value" (click)="clearAddressField('pickup')"
+								aria-label="Clear pickup address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 							<mat-error
 								*ngIf="(submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.errors?.required)">
@@ -1471,17 +1486,24 @@
 								(onLocationSelected)="fillLocationPoints('pickup', $event)" /> -->
 						</mat-form-field>
 						<div *ngIf="isCustomAddressDropdownOpen('pickup')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('pickup')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('pickup', option)">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getCustomAddressOptions('pickup')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAddressOption('pickup', option)">
 								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
+										}}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('address', 'pickup')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('address', 'pickup')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('address', 'pickup')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('address', 'pickup')" class="quote-ui-dropdown-empty">
+								Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('address', 'pickup')" class="quote-ui-dropdown-empty">
+								Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('address', 'pickup')" class="quote-ui-dropdown-empty">No
+								Result found</div>
 						</div>
 					</div>
 				</div>
@@ -1493,13 +1515,15 @@
 				<div class="row px-4">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2 quote-ui-dropdown-host">
-						<mat-form-field appearance="outline" class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
+						<mat-form-field appearance="outline"
+							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup_airport_option.invalid) }">
 							<mat-label>Pickup Airport</mat-label>
-							<i matPrefix class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
+							<i matPrefix
+								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #pickupAirportInput type="text" matInput
-								placeholder="Select Airport (Search by airport code or name)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								placeholder="Select Airport (Search by airport code or name)" autocomplete="off"
+								autocorrect="off" autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAirportFocus('pickup_airport', pickupAirportInput)"
 								(click)="openCustomAirportDropdown('pickup_airport')"
 								(input)="onCustomAirportInput('pickup_airport', $any($event.target).value)"
@@ -1508,21 +1532,34 @@
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.pickup_airport_option.value || pickupAirportInput?.value"
 								(click)="clearAirportField('pickup_airport')" aria-label="Clear pickup airport">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 						</mat-form-field>
 						<div *ngIf="isCustomAirportDropdownOpen('pickup_airport')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('pickup_airport')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('pickup_airport', option)">
-								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getVisibleCustomAirportOptions('pickup_airport')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAirportOption('pickup_airport', option)">
+								<i
+									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label"
+										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
+										getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('airport', 'pickup_airport')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('airport', 'pickup_airport')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('airport', 'pickup_airport')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('airport', 'pickup_airport')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 						<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -1532,14 +1569,16 @@
 
 					<!-- FBO new filed -->
 					<div class="col-md-6 quote-ui-dropdown-host" *ngIf="Form.pickup_airport.value == '3283' ">
-						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
-							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress" #fboAddressInput
-								formControlName="fbo_address"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+							<i matPrefix
+								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress"
+								#fboAddressInput formControlName="fbo_address" autocomplete="off" autocorrect="off"
+								autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAddressFocus('fbo_address', fboAddressInput)"
 								(click)="openCustomAddressDropdown('fbo_address')"
 								(input)="onCustomAddressInput('fbo_address', $any($event.target).value)"
@@ -1547,21 +1586,32 @@
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.fbo_address.value || fboAddressInput?.value"
 								(click)="clearAddressField('fbo_address')" aria-label="Clear FBO address">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 						</mat-form-field>
 						<div *ngIf="isCustomAddressDropdownOpen('fbo_address')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('fbo_address')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('fbo_address', option)">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getCustomAddressOptions('fbo_address')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAddressOption('fbo_address', option)">
 								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
+										}}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('address', 'fbo_address')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('address', 'fbo_address')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('address', 'fbo_address')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('address', 'fbo_address')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('address', 'fbo_address')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('address', 'fbo_address')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 					</div>
 
@@ -1714,19 +1764,23 @@
 						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff.invalid) }">
 							<mat-label> Dropoff Address </mat-label>
-							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							<i matPrefix
+								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 							<input #dropoffInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'dropoff', null)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								[value]="fillValue(null, 'dropoff', null)" autocomplete="off" autocorrect="off"
+								autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAddressFocus('dropoff', dropoffInput)"
 								(click)="openCustomAddressDropdown('dropoff')"
 								(input)="onCustomAddressInput('dropoff', $any($event.target).value)"
-								(blur)="onCustomAddressBlur('dropoff')"
-								formControlName="dropoff" />
+								(blur)="onCustomAddressBlur('dropoff')" formControlName="dropoff" />
 							<button matSuffix type="button" class="address-clear-btn"
-								*ngIf="Form.dropoff.value || dropoffInput?.value"
-								(click)="clearAddressField('dropoff')" aria-label="Clear dropoff address">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								*ngIf="Form.dropoff.value || dropoffInput?.value" (click)="clearAddressField('dropoff')"
+								aria-label="Clear dropoff address">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 							<mat-error
 								*ngIf="(submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.errors?.required)">
@@ -1738,17 +1792,24 @@
 								(onLocationSelected)="fillLocationPoints('dropoff', $event)" /> -->
 						</mat-form-field>
 						<div *ngIf="isCustomAddressDropdownOpen('dropoff')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('dropoff')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('dropoff', option)">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getCustomAddressOptions('dropoff')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAddressOption('dropoff', option)">
 								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
+										}}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('address', 'dropoff')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('address', 'dropoff')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('address', 'dropoff')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('address', 'dropoff')" class="quote-ui-dropdown-empty">
+								Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('address', 'dropoff')" class="quote-ui-dropdown-empty">
+								Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('address', 'dropoff')" class="quote-ui-dropdown-empty">No
+								Result found</div>
 						</div>
 					</div>
 				</div>
@@ -1760,13 +1821,15 @@
 				<div class="row px-4">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2 quote-ui-dropdown-host">
-						<mat-form-field appearance="outline" class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
+						<mat-form-field appearance="outline"
+							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff_airport_option.invalid) }">
 							<mat-label>Dropoff Airport</mat-label>
-							<i matPrefix class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
+							<i matPrefix
+								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #dropoffAirportInput type="text" matInput
-								placeholder="Select Airport (Search by airport code or name)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								placeholder="Select Airport (Search by airport code or name)" autocomplete="off"
+								autocorrect="off" autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAirportFocus('dropoff_airport', dropoffAirportInput)"
 								(click)="openCustomAirportDropdown('dropoff_airport')"
 								(input)="onCustomAirportInput('dropoff_airport', $any($event.target).value)"
@@ -1775,21 +1838,34 @@
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.dropoff_airport_option.value || dropoffAirportInput?.value"
 								(click)="clearAirportField('dropoff_airport')" aria-label="Clear dropoff airport">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 						</mat-form-field>
 						<div *ngIf="isCustomAirportDropdownOpen('dropoff_airport')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('dropoff_airport')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('dropoff_airport', option)">
-								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getVisibleCustomAirportOptions('dropoff_airport')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAirportOption('dropoff_airport', option)">
+								<i
+									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label"
+										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
+										getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('airport', 'dropoff_airport')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('airport', 'dropoff_airport')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('airport', 'dropoff_airport')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('airport', 'dropoff_airport')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 						<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -1923,8 +1999,8 @@
 						<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 						<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 						<input #extraStopInput type="text" matInput placeholder="Type your address"
-							[value]="fetchStopValue('extra_stops', stop_index)"
-							autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+							[value]="fetchStopValue('extra_stops', stop_index)" autocomplete="off" autocorrect="off"
+							autocapitalize="off" spellcheck="false"
 							(focus)="onCustomAddressFocus(getExtraStopFieldKey(false, stop_index), extraStopInput)"
 							(click)="openCustomAddressDropdown(getExtraStopFieldKey(false, stop_index))"
 							(input)="onCustomAddressInput(getExtraStopFieldKey(false, stop_index), $any($event.target).value)"
@@ -1933,21 +2009,32 @@
 							*ngIf="fetchStopValue('extra_stops', stop_index) || extraStopInput?.value"
 							(click)="clearExtraStopAddress(false, stop_index, extraStopInput)"
 							aria-label="Clear extra stop address">
-							<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+								<path fill="#1f1f1f" fill-rule="evenodd"
+									d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+									clip-rule="evenodd"></path>
+							</svg>
 						</button>
 					</mat-form-field>
-					<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-panel">
-						<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(false, stop_index))"
-							(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption(getExtraStopFieldKey(false, stop_index), option)">
+					<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(false, stop_index))"
+						class="quote-ui-dropdown-panel">
+						<button type="button" class="quote-ui-dropdown-option"
+							*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(false, stop_index))"
+							(mousedown)="$event.preventDefault()"
+							(click)="selectCustomAddressOption(getExtraStopFieldKey(false, stop_index), option)">
 							<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 							<span class="quote-ui-dropdown-option__content">
 								<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-								<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+								<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
+									}}</span>
 							</span>
 						</button>
-						<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-						<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">Searching...</div>
-						<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))" class="quote-ui-dropdown-empty">No Result found</div>
+						<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))"
+							class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+						<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(false, stop_index))"
+							class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+						<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))"
+							class="quote-ui-dropdown-empty">No Result found</div>
 					</div>
 				</div>
 				<div class="col-1 p-0 p-md-3">
@@ -2326,9 +2413,10 @@
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null" step="1" matInput placeholder="Enter Hours"
-								formControlName="number_of_hours" [(ngModel)]="number_of_hours"
-								(blur)="enforceMinimumHours($event)" (keyup)="handleNoOfHours($event.target.value)"
+							<input type="number" [attr.min]="Form?.service_type?.value === 'charter_tour' ? 2 : null"
+								step="1" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (blur)="enforceMinimumHours($event)"
+								(keyup)="handleNoOfHours($event.target.value)"
 								(change)="handleNoOfHours($event.target.value)" (keydown)="blockNegative($event)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
@@ -2405,19 +2493,23 @@
 						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup.invalid) }">
 							<mat-label> Pickup Address </mat-label>
-							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							<i matPrefix
+								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 							<input #return_pickupInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_pickup', null)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								[value]="fillValue(null, 'return_pickup', null)" autocomplete="off" autocorrect="off"
+								autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAddressFocus('return_pickup', return_pickupInput)"
 								(click)="openCustomAddressDropdown('return_pickup')"
 								(input)="onCustomAddressInput('return_pickup', $any($event.target).value)"
-								(blur)="onCustomAddressBlur('return_pickup')"
-								formControlName="return_pickup" />
+								(blur)="onCustomAddressBlur('return_pickup')" formControlName="return_pickup" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.return_pickup.value || return_pickupInput?.value"
 								(click)="clearAddressField('return_pickup')" aria-label="Clear return pickup address">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 							<mat-error
 								*ngIf="(submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.errors?.required)">
@@ -2429,17 +2521,24 @@
 								(onLocationSelected)="fillLocationPoints('return_pickup', $event)" /> -->
 						</mat-form-field>
 						<div *ngIf="isCustomAddressDropdownOpen('return_pickup')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('return_pickup')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('return_pickup', option)">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getCustomAddressOptions('return_pickup')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAddressOption('return_pickup', option)">
 								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
+										}}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('address', 'return_pickup')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('address', 'return_pickup')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('address', 'return_pickup')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('address', 'return_pickup')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('address', 'return_pickup')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('address', 'return_pickup')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 					</div>
 				</div>
@@ -2451,13 +2550,15 @@
 				<div class="row px-3">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2 quote-ui-dropdown-host">
-						<mat-form-field appearance="outline" class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
+						<mat-form-field appearance="outline"
+							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup_airport_option.invalid) }">
 							<mat-label>Return Pickup Airport</mat-label>
-							<i matPrefix class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
+							<i matPrefix
+								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #returnPickupAirportInput type="text" matInput
-								placeholder="Select Airport (Search by airport code or name)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								placeholder="Select Airport (Search by airport code or name)" autocomplete="off"
+								autocorrect="off" autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAirportFocus('return_pickup_airport', returnPickupAirportInput)"
 								(click)="openCustomAirportDropdown('return_pickup_airport')"
 								(input)="onCustomAirportInput('return_pickup_airport', $any($event.target).value)"
@@ -2465,22 +2566,37 @@
 								formControlName="return_pickup_airport_option" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.return_pickup_airport_option.value || returnPickupAirportInput?.value"
-								(click)="clearAirportField('return_pickup_airport')" aria-label="Clear return pickup airport">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								(click)="clearAirportField('return_pickup_airport')"
+								aria-label="Clear return pickup airport">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 						</mat-form-field>
-						<div *ngIf="isCustomAirportDropdownOpen('return_pickup_airport')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('return_pickup_airport')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('return_pickup_airport', option)">
-								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
+						<div *ngIf="isCustomAirportDropdownOpen('return_pickup_airport')"
+							class="quote-ui-dropdown-panel">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getVisibleCustomAirportOptions('return_pickup_airport')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAirportOption('return_pickup_airport', option)">
+								<i
+									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label"
+										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
+										getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('airport', 'return_pickup_airport')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('airport', 'return_pickup_airport')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('airport', 'return_pickup_airport')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('airport', 'return_pickup_airport')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 						<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -2491,14 +2607,16 @@
 
 					<!-- FBO new filed -->
 					<div class="col-md-6 quote-ui-dropdown-host" *ngIf="Form.return_pickup_airport.value == '3283' ">
-						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
-							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress" #returnFboAddressInput
-								formControlName="return_fbo_address"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+							<i matPrefix
+								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress"
+								#returnFboAddressInput formControlName="return_fbo_address" autocomplete="off"
+								autocorrect="off" autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAddressFocus('return_fbo_address', returnFboAddressInput)"
 								(click)="openCustomAddressDropdown('return_fbo_address')"
 								(input)="onCustomAddressInput('return_fbo_address', $any($event.target).value)"
@@ -2506,21 +2624,32 @@
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.return_fbo_address.value || returnFboAddressInput?.value"
 								(click)="clearAddressField('return_fbo_address')" aria-label="Clear return FBO address">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 						</mat-form-field>
 						<div *ngIf="isCustomAddressDropdownOpen('return_fbo_address')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('return_fbo_address')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('return_fbo_address', option)">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getCustomAddressOptions('return_fbo_address')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAddressOption('return_fbo_address', option)">
 								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
+										}}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('address', 'return_fbo_address')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('address', 'return_fbo_address')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('address', 'return_fbo_address')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('address', 'return_fbo_address')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 					</div>
 
@@ -2676,19 +2805,23 @@
 						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff.invalid) }">
 							<mat-label> Dropoff Address </mat-label>
-							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							<i matPrefix
+								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 							<input #return_dropoffInput type="text" matInput placeholder="Type your address"
-								[value]="fillValue(null, 'return_dropoff', null)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								[value]="fillValue(null, 'return_dropoff', null)" autocomplete="off" autocorrect="off"
+								autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAddressFocus('return_dropoff', return_dropoffInput)"
 								(click)="openCustomAddressDropdown('return_dropoff')"
 								(input)="onCustomAddressInput('return_dropoff', $any($event.target).value)"
-								(blur)="onCustomAddressBlur('return_dropoff')"
-								formControlName="return_dropoff" />
+								(blur)="onCustomAddressBlur('return_dropoff')" formControlName="return_dropoff" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.return_dropoff.value || return_dropoffInput?.value"
 								(click)="clearAddressField('return_dropoff')" aria-label="Clear return dropoff address">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 							<mat-error
 								*ngIf="(submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.errors?.required)">
@@ -2700,17 +2833,24 @@
 								(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" /> -->
 						</mat-form-field>
 						<div *ngIf="isCustomAddressDropdownOpen('return_dropoff')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions('return_dropoff')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption('return_dropoff', option)">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getCustomAddressOptions('return_dropoff')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAddressOption('return_dropoff', option)">
 								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
+										}}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('address', 'return_dropoff')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('address', 'return_dropoff')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('address', 'return_dropoff')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('address', 'return_dropoff')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('address', 'return_dropoff')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('address', 'return_dropoff')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 					</div>
 				</div>
@@ -2722,13 +2862,15 @@
 				<div class="row px-2">
 					<!-- Airport -->
 					<div class="col-md-6 mb-2 quote-ui-dropdown-host">
-						<mat-form-field appearance="outline" class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
+						<mat-form-field appearance="outline"
+							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }">
 							<mat-label>Return Dropoff Airport</mat-label>
-							<i matPrefix class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
+							<i matPrefix
+								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #returnDropoffAirportInput type="text" matInput
-								placeholder="Select Airport (Search by airport code or name)"
-								autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+								placeholder="Select Airport (Search by airport code or name)" autocomplete="off"
+								autocorrect="off" autocapitalize="off" spellcheck="false"
 								(focus)="onCustomAirportFocus('return_dropoff_airport', returnDropoffAirportInput)"
 								(click)="openCustomAirportDropdown('return_dropoff_airport')"
 								(input)="onCustomAirportInput('return_dropoff_airport', $any($event.target).value)"
@@ -2736,22 +2878,37 @@
 								formControlName="return_dropoff_airport_option" />
 							<button matSuffix type="button" class="address-clear-btn"
 								*ngIf="Form.return_dropoff_airport_option.value || returnDropoffAirportInput?.value"
-								(click)="clearAirportField('return_dropoff_airport')" aria-label="Clear return dropoff airport">
-								<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+								(click)="clearAirportField('return_dropoff_airport')"
+								aria-label="Clear return dropoff airport">
+								<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+									<path fill="#1f1f1f" fill-rule="evenodd"
+										d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+										clip-rule="evenodd"></path>
+								</svg>
 							</button>
 						</mat-form-field>
-						<div *ngIf="isCustomAirportDropdownOpen('return_dropoff_airport')" class="quote-ui-dropdown-panel">
-							<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getVisibleCustomAirportOptions('return_dropoff_airport')"
-								(mousedown)="$event.preventDefault()" (click)="selectCustomAirportOption('return_dropoff_airport', option)">
-								<i [class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
+						<div *ngIf="isCustomAirportDropdownOpen('return_dropoff_airport')"
+							class="quote-ui-dropdown-panel">
+							<button type="button" class="quote-ui-dropdown-option"
+								*ngFor="let option of getVisibleCustomAirportOptions('return_dropoff_airport')"
+								(mousedown)="$event.preventDefault()"
+								(click)="selectCustomAirportOption('return_dropoff_airport', option)">
+								<i
+									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
-									<span class="quote-ui-dropdown-option__label" [style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{ getCustomOptionLabel(option) }}</span>
-									<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+									<span class="quote-ui-dropdown-option__label"
+										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
+										getCustomOptionLabel(option) }}</span>
+									<span class="quote-ui-dropdown-option__secondary">{{
+										getCustomOptionSecondary(option) }}</span>
 								</span>
 							</button>
-							<div *ngIf="shouldShowCustomPrompt('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-							<div *ngIf="isCustomSearchLoading('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">Searching...</div>
-							<div *ngIf="shouldShowCustomEmpty('airport', 'return_dropoff_airport')" class="quote-ui-dropdown-empty">No Result found</div>
+							<div *ngIf="shouldShowCustomPrompt('airport', 'return_dropoff_airport')"
+								class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+							<div *ngIf="isCustomSearchLoading('airport', 'return_dropoff_airport')"
+								class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+							<div *ngIf="shouldShowCustomEmpty('airport', 'return_dropoff_airport')"
+								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
 						<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -2885,8 +3042,8 @@
 						<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
 						<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 						<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
-							[value]="fetchStopValue('return_extra_stops', stop_index)"
-							autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+							[value]="fetchStopValue('return_extra_stops', stop_index)" autocomplete="off"
+							autocorrect="off" autocapitalize="off" spellcheck="false"
 							(focus)="onCustomAddressFocus(getExtraStopFieldKey(true, stop_index), returnExtraStopInput)"
 							(click)="openCustomAddressDropdown(getExtraStopFieldKey(true, stop_index))"
 							(input)="onCustomAddressInput(getExtraStopFieldKey(true, stop_index), $any($event.target).value)"
@@ -2895,21 +3052,32 @@
 							*ngIf="fetchStopValue('return_extra_stops', stop_index) || returnExtraStopInput?.value"
 							(click)="clearExtraStopAddress(true, stop_index, returnExtraStopInput)"
 							aria-label="Clear return extra stop address">
-							<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+							<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+								<path fill="#1f1f1f" fill-rule="evenodd"
+									d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+									clip-rule="evenodd"></path>
+							</svg>
 						</button>
 					</mat-form-field>
-					<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-panel">
-						<button type="button" class="quote-ui-dropdown-option" *ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(true, stop_index))"
-							(mousedown)="$event.preventDefault()" (click)="selectCustomAddressOption(getExtraStopFieldKey(true, stop_index), option)">
+					<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(true, stop_index))"
+						class="quote-ui-dropdown-panel">
+						<button type="button" class="quote-ui-dropdown-option"
+							*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(true, stop_index))"
+							(mousedown)="$event.preventDefault()"
+							(click)="selectCustomAddressOption(getExtraStopFieldKey(true, stop_index), option)">
 							<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 							<span class="quote-ui-dropdown-option__content">
 								<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-								<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option) }}</span>
+								<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
+									}}</span>
 							</span>
 						</button>
-						<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-						<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">Searching...</div>
-						<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))" class="quote-ui-dropdown-empty">No Result found</div>
+						<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))"
+							class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+						<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(true, stop_index))"
+							class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+						<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))"
+							class="quote-ui-dropdown-empty">No Result found</div>
 					</div>
 				</div>
 				<div class="col-md-1">
@@ -3383,7 +3551,7 @@
 							Choose Driver
 						</mat-label>
 						<mat-select formControlName="return_driver_id" placholder="Choose Driver"
-							(selectionChange)="autofillData('return_driver', $event.value)">
+							(selectionChange)="autofillData('return_driver', $event.value)" [disabled]="true">
 							<mat-option *ngFor="let driver of return_DriverList" [value]="driver.id">
 								{{ driver.FirstName }} {{ driver.MiddleName != null ?
 								driver.MiddleName : ''
@@ -3401,7 +3569,7 @@
 							Driver Name
 						</mat-label>
 						<input matInput formControlName="return_driver_name" type="text" placeholder="Driver Name"
-							(focus)="$event.target.select()" />
+							(focus)="$event.target.select()" readonly />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -3420,7 +3588,7 @@
 							Email
 						</mat-label>
 						<input matInput formControlName="return_driver_email" type="text"
-							(focus)="$event.target.select()" placeholder="Email">
+							(focus)="$event.target.select()" placeholder="Email" readonly>
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -3439,7 +3607,7 @@
 							Email
 						</mat-label>
 						<input matInput formControlName="return_driver_email" type="text"
-							(focus)="$event.target.select()" placeholder="Email">
+							(focus)="$event.target.select()" placeholder="Email" readonly>
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -3473,7 +3641,7 @@
 						<input pattern="[0-9+]*" maxlength="16" matInput #return_loose_driver_cellInput
 							placeholder="1234567890" formControlName="return_driver_cell" class="phoneNumberClass"
 							tabindex="1" (focus)="$event.target.select()" (input)="validateReturnDriverCell()"
-							(blur)="validateReturnDriverCell()" />
+							(blur)="validateReturnDriverCell()" readonly />
 
 					</mat-form-field>
 					<div class="error-box">
@@ -3520,7 +3688,7 @@
 						<mat-label>
 							Gender
 						</mat-label>
-						<mat-select formControlName="return_driver_gender">
+						<mat-select formControlName="return_driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
 							<mat-option value="lgbtq+">Non-Binary</mat-option>
@@ -3534,16 +3702,14 @@
 
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[return_affiliate_type]="Form.return_affiliate_type.value"
-			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
-			[isTravelShare]="isTravelShare"
+			[return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
+			[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
 			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates"
-			(formvalue)="RateFormValue($event)"
-			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
-			[parentError]="numberOfHoursError" (hoursErrorChange)="numberOfHoursError = $event"
-			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
-			[service_type]="Form.service_type.value" [currencyObject]="currencyObj"
-			[booking_created_from]="booking_created_from"
+			(formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value"
+			[isCreatedByAdmin]="isCreatedByAdmin" [parentError]="numberOfHoursError"
+			(hoursErrorChange)="numberOfHoursError = $event" [vehicles]="Form.number_of_vehicles?.value"
+			[book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking" [service_type]="Form.service_type.value"
+			[currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
@@ -3708,7 +3874,8 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-airport-color">
-									{{ textFormatter(getPreviewAirportDisplay(Form.pickup_airport_name.value, Form.pickup_airport_option.value)) }}
+									{{ textFormatter(getPreviewAirportDisplay(Form.pickup_airport_name.value,
+									Form.pickup_airport_option.value)) }}
 								</span>
 								<span class="font-weight-bolder preview-airport-color"
 									(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.pickup_airport_name.value, Form.pickup_airport_option.value))"><i
@@ -3883,7 +4050,8 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder">
-									{{ textFormatter(getPreviewAirportDisplay(Form.dropoff_airport_name.value, Form.dropoff_airport_option.value)) }}
+									{{ textFormatter(getPreviewAirportDisplay(Form.dropoff_airport_name.value,
+									Form.dropoff_airport_option.value)) }}
 								</span>
 								<span class="font-weight-bolder"
 									(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.dropoff_airport_name.value, Form.dropoff_airport_option.value))"><i
@@ -4170,7 +4338,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-airport-color">
-										{{ textFormatter(getPreviewAirportDisplay(Form.return_pickup_airport_name.value, Form.return_pickup_airport_option.value)) }}
+										{{ textFormatter(getPreviewAirportDisplay(Form.return_pickup_airport_name.value,
+										Form.return_pickup_airport_option.value)) }}
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.return_pickup_airport_name.value, Form.return_pickup_airport_option.value))"><i
@@ -4315,7 +4484,9 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-airport-color">
-										{{ textFormatter(getPreviewAirportDisplay(Form.return_dropoff_airport_name.value, Form.return_dropoff_airport_option.value)) }}
+										{{
+										textFormatter(getPreviewAirportDisplay(Form.return_dropoff_airport_name.value,
+										Form.return_dropoff_airport_option.value)) }}
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.return_dropoff_airport_name.value, Form.return_dropoff_airport_option.value))"><i

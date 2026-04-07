@@ -61,20 +61,22 @@
 					<!-- <mat-label>Bank Name <span class="asterisk">*</span></mat-label> -->
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Name </mat-label>
-						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName" (focus)="$event.target.select()"/>
+						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Address </mat-label>
-						<input matInput placeholder="Bank Address" formControlName="BankAddress" (focus)="$event.target.select()"/>
+						<input matInput placeholder="Bank Address" formControlName="BankAddress"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Account Holder First Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder First Name*"
-							formControlName="AccountHolderFirstName" (focus)="$event.target.select()"/>
+							formControlName="AccountHolderFirstName" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="
 							f.AccountHolderFirstName.errors &&
@@ -89,8 +91,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Account Holder Last Name<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Holder Last Name*"
-							formControlName="AccountHolderLastName" (focus)="$event.target.select()"/>
+						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="
 							f.AccountHolderLastName.errors &&
@@ -105,7 +107,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Account Number<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Number*" formControlName="AccountNumber" (focus)="$event.target.select()"/>
+						<input matInput placeholder="Account Number*" formControlName="AccountNumber"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="
 							f.AccountNumber.errors &&
@@ -122,7 +125,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Checking Routing Number*" formControlName="Routing" (focus)="$event.target.select()"/>
+						<input matInput placeholder="Checking Routing Number*" formControlName="Routing"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="
 							f.Routing.errors &&
@@ -257,7 +261,7 @@
 							<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="SSN(USA required by stripe/GOVT ID for other countries)"
 							formControlName="ssn" tabindex="1" (change)="handleSsnInput($event.target.value)"
-							(keyup)="removeErrorSsn($event.target.value,'ssn')" (focus)="$event.target.select()"/>
+							(keyup)="removeErrorSsn($event.target.value,'ssn')" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
@@ -309,7 +313,7 @@
 						<mat-label>EIN / Business ID #
 							<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
-							formControlName="ein" tabindex="1" (focus)="$event.target.select()"/>
+							formControlName="ein" tabindex="1" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.ein.errors) ||
@@ -556,16 +560,17 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6 quote-ui-dropdown-host">
-					<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address" [ngClass]="{ 'border-red': addressErrorMessage }">
+					<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+						[ngClass]="{ 'border-red': addressErrorMessage }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 						<input #search1 matInput type="text" formControlName="address"
-							placeholder="Search Here and Set Location Pin" tabindex="1"
-							autocomplete="off" (focus)="onAddressFocus(search1)" (blur)="onAddressBlur()"
+							placeholder="Search Here and Set Location Pin" tabindex="1" autocomplete="off"
+							(focus)="onAddressFocus(search1)" (blur)="onAddressBlur()"
 							(input)="onAddressInput($any($event.target).value)" />
 						<button matSuffix type="button" class="address-clear-btn"
-							*ngIf="f?.address?.value || search1?.value"
-							(click)="clearAddressField()" aria-label="Clear address">
+							*ngIf="f?.address?.value || search1?.value" (click)="clearAddressField()"
+							aria-label="Clear address">
 							<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
 								<path fill="#1f1f1f" fill-rule="evenodd"
 									d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
@@ -579,11 +584,13 @@
 							<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 							<span class="quote-ui-dropdown-option__content">
 								<span class="quote-ui-dropdown-option__label">{{ getAddressOptionLabel(option) }}</span>
-								<span class="quote-ui-dropdown-option__secondary">{{ getAddressOptionSecondary(option) }}</span>
+								<span class="quote-ui-dropdown-option__secondary">{{ getAddressOptionSecondary(option)
+									}}</span>
 							</span>
 						</button>
-						<div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-						<div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Searching...</div>
+						<div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Enter address and select
+							from suggestions</div>
+						<div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Loading Suggestions...</div>
 						<div *ngIf="shouldShowAddressEmpty()" class="quote-ui-dropdown-empty">No Result found</div>
 					</div>
 					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">

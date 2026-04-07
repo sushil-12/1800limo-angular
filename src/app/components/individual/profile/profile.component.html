@@ -106,9 +106,11 @@
                         </h3>
                     </div>
                     <div class="col-md-12 quote-ui-dropdown-host">
-                        <mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address" [ngClass]="{ 'border-red': (f.address.value == '')}">
+                        <mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+                            [ngClass]="{ 'border-red': (f.address.value == '')}">
                             <mat-label>Address <span class="asterisk">*</span></mat-label>
-                            <i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+                            <i matPrefix
+                                class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
                             <input formControlName="address" type="text" matInput placeholder="Address" #search1
                                 autocomplete="off" (focus)="onAddressFocus(search1)" (blur)="onAddressBlur()"
                                 (input)="onAddressInput($any($event.target).value)" [readonly]="is_family_member">
@@ -127,12 +129,16 @@
                                 (mousedown)="$event.preventDefault()" (click)="selectAddressOption(option)">
                                 <i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
                                 <span class="quote-ui-dropdown-option__content">
-                                    <span class="quote-ui-dropdown-option__label">{{ getAddressOptionLabel(option) }}</span>
-                                    <span class="quote-ui-dropdown-option__secondary">{{ getAddressOptionSecondary(option) }}</span>
+                                    <span class="quote-ui-dropdown-option__label">{{ getAddressOptionLabel(option)
+                                        }}</span>
+                                    <span class="quote-ui-dropdown-option__secondary">{{
+                                        getAddressOptionSecondary(option) }}</span>
                                 </span>
                             </button>
-                            <div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-                            <div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Searching...</div>
+                            <div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Enter address and
+                                select from suggestions</div>
+                            <div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Loading Suggestions...
+                            </div>
                             <div *ngIf="shouldShowAddressEmpty()" class="quote-ui-dropdown-empty">No Result found</div>
                         </div>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->

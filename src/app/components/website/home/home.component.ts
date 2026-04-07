@@ -645,6 +645,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.isAirportDropdownOpen(fieldName) && !currentValue;
 	}
 
+	shouldShowAddressLoadingState(fieldName: string): boolean {
+		return this.isAddressDropdownOpen(fieldName) && this.isAddressSearchLoading(fieldName);
+	}
+
 	shouldShowAddressEmptyState(fieldName: string): boolean {
 		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
 		return this.isAddressDropdownOpen(fieldName)
