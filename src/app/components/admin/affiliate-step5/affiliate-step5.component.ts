@@ -32,6 +32,7 @@ export class AffiliateStep5Component implements OnInit {
 	public showInstructionIfStepNotCompleted: boolean = false;
 	currentUser: any;
 	affiliateType: string;
+	public isLoading: boolean = true;
 
 	constructor(
 		private adminService: AdminService,
@@ -67,6 +68,8 @@ export class AffiliateStep5Component implements OnInit {
 		}
 
 		// Load Our vehicles using API
+		this.isLoading = true;
+		this.spinner.show();
 		this.adminService.adminAffiliateVehicleList(this.affiliateId).then(result => {
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data.vehicleList;
@@ -94,6 +97,12 @@ export class AffiliateStep5Component implements OnInit {
 			setTimeout(() => {
 				$('[data-toggle="dropdown"]').tooltip();//Bootstrap tooltip
 			}, 500);
+			this.isLoading = false;
+			this.spinner.hide();
+		}).catch(err => {
+			this.isLoading = false;
+			this.spinner.hide();
+			console.error(err);
 		});
 	}
 
@@ -110,22 +119,22 @@ export class AffiliateStep5Component implements OnInit {
 		this.router.navigate(['/admin/affiliate/step5/add-vehicle'], { queryParams: { vehicleTypeId: vehicleTypeId } });
 	}
 	delete() {
-		// this.stateManagementService.setprogressBar(true);
+		this.spinner.show();
 		var status = 'disable';
 		$('#deleteConfirmationModal').modal('hide');
 
 		this.adminService.vehicleStatus(this.vehicleToDelete, status)
 			.pipe(
 				catchError(err => {
-					// this.stateManagementService.setprogressBar(false);
+					this.spinner.hide();
 					return throwError(err);
 				})
 			).subscribe(result => {
 				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/affiliate/step5']);
+					this.spinner.hide();
 				});
 
-				// this.stateManagementService.setprogressBar(false);
 			});
 	}
 

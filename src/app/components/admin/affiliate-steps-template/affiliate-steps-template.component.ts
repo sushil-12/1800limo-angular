@@ -46,9 +46,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 		this.router.events.subscribe((event) => {
 			if (event instanceof NavigationEnd) {
 				this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
-				if (this.stepCompletedObj) {
-					this.stepCompletionTick();
-				}
+				this.stepCompletionTick();
 			}
 		});
 
@@ -82,31 +80,32 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 							}
 						}
 					});
-			}
-			if (!this.affiliateId) {
+			} else {
 				const stepsObjStr = sessionStorage.getItem('step_completed_obj');
 				if (stepsObjStr) {
 					this.stepsObj = JSON.parse(stepsObjStr);
-					if (this.stepsObj) {
-						for (let [key, value] of Object.entries(this.stepsObj)) {
-							if (key == 'step0' && value == 'completed') {
-								this['step0'] = 'md-step ' + 'completed'
-							}
-						}
-					}
 				}
+				this.stepCompletionTick();
 			}
 		});
 	}
+
 	getAffiliateName() {
 		this.affiliateName = sessionStorage.getItem('affiliateName') || ""
-
 	}
 
 	stepCompletionTick() {
-		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
-			let stepNumber = key;
-			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
+		const steps = ['step0', 'step1', 'step2', 'step3', 'step4', 'step5', 'step6'];
+
+		if (this.stepCompletedObj) {
+			for (let [key, value] of Object.entries(this.stepCompletedObj)) {
+				let stepNumber = key;
+				this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
+			}
+		} else {
+			steps.forEach(step => {
+				this[step] = 'md-step' + (this.currentStep == step ? ' active' : '');
+			});
 		}
 		this.getAffiliateName()
 	}

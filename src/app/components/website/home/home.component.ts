@@ -73,12 +73,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	countriesListData1: Array<String>;
 	countriesListData2: Array<String>;
 
-	airports_data: Array<any>
-	airports_data_copy: Array<any>
-	airports_data_pickup: Array<any>
-	airports_data_dropoff: Array<any>
-	airports_data_r_pickup: Array<any>
-	airports_data_r_dropoff: Array<any>
+	airports_data: Array<any> = []
+	airports_data_copy: Array<any> = []
+	airports_data_pickup: Array<any> = []
+	airports_data_dropoff: Array<any> = []
+	airports_data_r_pickup: Array<any> = []
+	airports_data_r_dropoff: Array<any> = []
 	address_data_pickup: Array<any> = []
 	address_data_dropoff: Array<any> = []
 	address_data_r_pickup: Array<any> = []
@@ -210,7 +210,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 
-		this.fetchAirportsData()
+		// this.fetchAirportsData()
 
 		setTimeout(() => {
 
@@ -2027,52 +2027,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
-	/**
-	 * Fetches only Airports Data
-	 */
-	fetchAirportsData() {
-		this.quotebotService.getAirportsData().subscribe((response: any) => {
-			this.airports_data = response.success ? response.data : []
-			this.airports_data_copy = JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_pickup = JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_dropoff = JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_r_pickup = JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_r_dropoff = JSON.parse(JSON.stringify(this.airports_data))
-		})
-	}
-
-	returnSearchAirport(searchText: string) {
-		console.log('search text is->', searchText);
-
-		// Convert searchText to lowercase for case-insensitive comparison
-		const searchTextLower = searchText.toLowerCase();
-
-		// If the search term is exactly 3 characters, match it to the airport code (extracted from the 'airport' field)
-		if (searchText.length === 3) {
-			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-				// Extract the airport code (before the first dash) and match it with the search text
-				const airportCode = item['airport'].split('-')[0].toLowerCase();
-				return airportCode === searchTextLower;
-			})));
-		} else {
-			// If the search term is longer than 3 characters, match it to the airport name or city
-			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-				// Match the search text against the airport name or city (case-insensitive)
-				return item['airport'].toLowerCase().includes(searchTextLower) ||   // Airport name match
-					item['city'].toLowerCase().includes(searchTextLower);        // City name match
-			})));
-		}
-	}
-
-
-
 	async searchAirport(letter: string, form_control: string) {
 		const requestVersion = this.nextAirportSearchVersion(form_control);
 		const searchText = (letter || '').trim();
 		const selectedOption = this.getResolvedAirportDropdownOption(form_control);
 		const fallbackOptions = searchText === ''
 			? (selectedOption ? [selectedOption] : [])
-			: this.returnSearchAirport(searchText);
+			: []; // Removed local returnSearchAirport fallback
 
 		if (!searchText) {
 			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {

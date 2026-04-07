@@ -94,7 +94,7 @@
 									</div>
 								</td>
 							</tr>
-							<tr *ngIf="!driverList?.length">
+							<tr *ngIf="!driverList?.length && !isLoading">
 								<td colspan="7">No Driver Found!</td>
 							</tr>
 						</ng-container>

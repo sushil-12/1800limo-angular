@@ -1042,6 +1042,9 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg ">
 							<mat-form-field class="mt-3 mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
+								<span matPrefix *ngIf="form.city_tax_percent_flat.value == 'flat'">{{ currencySymbol }}
+									&nbsp;</span>
+								<span matSuffix *ngIf="form.city_tax_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input matInput placeholder="City Tax" formControlName="city_tax" tabindex="1"
 									(focus)="$event.target.select()">
 							</mat-form-field>
@@ -1084,6 +1087,9 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mt-3 mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
+								<span matPrefix *ngIf="form.state_tax_percent_flat.value == 'flat'">{{ currencySymbol }}
+									&nbsp;</span>
+								<span matSuffix *ngIf="form.state_tax_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input matInput placeholder="State Tax" formControlName="state_tax" tabindex="1"
 									(focus)="$event.target.select()">
 							</mat-form-field>
@@ -1126,6 +1132,9 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mt-3 mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
+								<span matPrefix *ngIf="form.vat_percent_flat.value == 'flat'">{{ currencySymbol }}
+									&nbsp;</span>
+								<span matSuffix *ngIf="form.vat_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input matInput placeholder="VAT" formControlName="vat" tabindex="1"
 									(focus)="$event.target.select()">
 							</mat-form-field>
@@ -1167,6 +1176,9 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mt-3 mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
+								<span matPrefix *ngIf="form.workman_comp_percent_flat.value == 'flat'">{{
+									currencySymbol }} &nbsp;</span>
+								<span matSuffix *ngIf="form.workman_comp_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input matInput placeholder="Workman's Comp" formControlName="workmans_comp"
 									tabindex="1" (focus)="$event.target.select()">
 							</mat-form-field>
@@ -1209,6 +1221,10 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mt-3 mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
+								<span matPrefix *ngIf="form.other_transportation_tax_percent_flat.value == 'flat'">{{
+									currencySymbol }} &nbsp;</span>
+								<span matSuffix
+									*ngIf="form.other_transportation_tax_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input matInput placeholder="Other Transportation Tax"
 									formControlName="other_transportation_tax" tabindex="1"
 									(focus)="$event.target.select()">

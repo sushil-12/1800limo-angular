@@ -696,7 +696,8 @@
 						Enter Numbers only
 					</div>
 				</div>
-				<div *ngIf="is_form_submitted && bothCruisePortRatesZero()" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="is_form_submitted && bothCruisePortRatesZero()"
+					class="text-danger margin-bottom-thin my-mat-hint">
 					<div>Both Arrival and Departure cannot be 0. Enter at least one rate.</div>
 				</div>
 			</div>
@@ -1246,7 +1247,7 @@
 				</div>
 
 				<!-- CITY CONGESSION TAX -->
-				<div class="col-md-6col-sm-6 col-12">
+				<div class="col-md-6 col-sm-6 col-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> City Congestion Tax </mat-label>
 						<span matPrefix>
@@ -1281,6 +1282,9 @@
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
+								<span matPrefix *ngIf="form.city_tax_percent_flat.value == 'flat'">{{ currency_symbol }}
+									&nbsp;</span>
+								<span matSuffix *ngIf="form.city_tax_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input type="number" matInput placeholder="City Tax" (focus)="$event.target.select()"
 									formControlName="city_tax" tabindex="1" autocomplete="off" />
 							</mat-form-field>
@@ -1347,6 +1351,9 @@
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
+								<span matPrefix *ngIf="form.state_tax_percent_flat.value == 'flat'">{{ currency_symbol }}
+									&nbsp;</span>
+								<span matSuffix *ngIf="form.state_tax_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input type="number" matInput placeholder="State Tax" formControlName="state_tax"
 									tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
@@ -1413,6 +1420,9 @@
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
+								<span matPrefix *ngIf="form.vat_percent_flat.value == 'flat'">{{ currency_symbol }}
+									&nbsp;</span>
+								<span matSuffix *ngIf="form.vat_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
@@ -1476,6 +1486,9 @@
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
+								<span matPrefix *ngIf="form.workman_comp_percent_flat.value == 'flat'">{{
+									currency_symbol }} &nbsp;</span>
+								<span matSuffix *ngIf="form.workman_comp_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input type="number" matInput placeholder="Workman's Comp"
 									formControlName="workmans_comp" tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
@@ -1542,6 +1555,10 @@
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
+								<span matPrefix *ngIf="form.other_transportation_tax_percent_flat.value == 'flat'">{{
+									currency_symbol }} &nbsp;</span>
+								<span matSuffix
+									*ngIf="form.other_transportation_tax_percent_flat.value == 'percent'">% &nbsp;</span>
 								<input type="number" matInput placeholder="Other Transportation Tax"
 									formControlName="other_transportation_tax" (focus)="$event.target.select()"
 									tabindex="1">
@@ -1640,13 +1657,9 @@
 		</div>
 	</div>
 
-	<button
-		type="button"
-		class="ai-rate-score-fab"
-		(click)="openAiRateScoreDialog()"
+	<button type="button" class="ai-rate-score-fab" (click)="openAiRateScoreDialog()"
 		title="See how your rates compare to market standards"
-		aria-label="Open AI Rate Score — Compare your rates to market"
-	>
+		aria-label="Open AI Rate Score — Compare your rates to market">
 		<i class="bi bi-cpu"></i>
 		<span class="fab-label">AI Score (BETA)</span>
 	</button>
