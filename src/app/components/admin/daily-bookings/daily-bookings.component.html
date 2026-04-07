@@ -162,7 +162,7 @@
 										<i class="fa" style="font-size: 20px;"
 											[ngClass]="{'fa-sort-up': orderBy === 'booking_id_asc', 'fa-sort-down': orderBy === 'booking_id_desc', 'fa-sort': !orderBy.startsWith('booking_id')}"></i>
 									</th>
-									<th>Status</th>
+
 									<th>Pax</th>
 									<th>Driver</th>
 									<th>Trip Route</th>
@@ -174,7 +174,7 @@
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td>
+									<td class="text-center">
 										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold {{ booking.booking_status }}"
 											href="javascript:void(0);" role="button" data-toggle="dropdown"
 											aria-haspopup="true" aria-expanded="false">
@@ -316,6 +316,16 @@
 											</a>
 
 										</div>
+										<div style="margin-top: 20px;" class="status-action-container">
+											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
+												data-target="#change_status_booking_Modal"
+												class="status-pill {{ booking.booking_status }}"
+												style="cursor: pointer;">
+												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+												booking.booking_status | bookingStatusTextReplace :
+												'_' : ' ' |titlecase}}
+											</div>
+										</div>
 									</td>
 
 									<td class="sorting_1"
@@ -345,15 +355,7 @@
 										</p>
 									</td>
 
-									<td>
-										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-											data-target="#change_status_booking_Modal"
-											[ngClass]="booking?.booking_status == 'paid' ? 'badge badge-pill booking_status disabled-btn ' + booking.booking_status : 'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
-											{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-											booking.booking_status | bookingStatusTextReplace :
-											'_' : ' ' |titlecase}}
-										</div>
-									</td>
+
 									<td>
 										<p style="white-space: pre" (click)="openModal(booking, 'Passenger')" id="box"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">

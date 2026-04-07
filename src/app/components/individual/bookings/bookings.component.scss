@@ -307,6 +307,20 @@ input::-webkit-input-placeholder {
 	border-radius: 3rem !important;
 }
 
+.status-pill {
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: bold;
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+	min-width: 80px;
+	text-align: center;
+}
+
+
+
 .x-cross-btn {
 	background: #fff !important;
 	color: #ff0000 !important;
@@ -674,9 +688,9 @@ a.dropdown-item {
 // Prevent wrapping for Booking Type and Vehicle columns in daily bookings table
 .custom_table table.table {
 
-	td:nth-child(8),
+	td:nth-child(7),
 	// Created By column  
-	td:nth-child(9) {
+	td:nth-child(8) {
 		// Vehicle column
 		white-space: nowrap !important;
 	}
@@ -685,8 +699,8 @@ a.dropdown-item {
 // Trip Route column styling - auto width based on content
 .custom_table table.table {
 
-	// Trip Route column (column 8)
-	td:nth-child(7) {
+	// Trip Route column (column 6)
+	td:nth-child(6) {
 		width: auto !important; // Allow cell to adapt to content width
 		white-space: normal !important;
 

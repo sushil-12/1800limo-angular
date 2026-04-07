@@ -108,7 +108,7 @@
 									<th>Actions</th>
 									<th>Date</th>
 									<th>Booking</th>
-									<th>Status</th>
+
 									<th>Pax</th>
 									<th>Driver</th>
 									<th>Trip Route</th>
@@ -119,7 +119,8 @@
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
+									<td class="text-center"
+										[ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
 										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold {{ booking.booking_status }}"
 											href="javascript:void(0);" role="button" data-toggle="dropdown"
 											aria-haspopup="true" aria-expanded="false">
@@ -200,6 +201,16 @@
 											</a> -->
 
 										</div>
+										<div style="margin-top: 20px;" class="status-action-container">
+											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
+												data-target="#change_status_booking_Modal"
+												class="status-pill {{ booking.booking_status }}"
+												style="cursor: pointer;">
+												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+												booking.booking_status | bookingStatusTextReplace :
+												'_' : ' ' |titlecase}}
+											</div>
+										</div>
 									</td>
 									<td class="sorting_1">
 										<p style="font-weight: 600 !important; white-space: nowrap !important;">{{
@@ -220,14 +231,7 @@
 												[innerHTML]="highlighText(booking?.share_array?.length > 0 ? booking?.share_array?.affiliateShare.toFixed(2) : (booking?.grand_total).toFixed(2))"></span>
 										</p>
 									</td>
-									<td>
-										<div data-toggle="modal" data-target="#change_status_booking_Modal"
-											[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-											{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-											booking.booking_status | bookingStatusTextReplace :
-											'_' : ' ' |titlecase}}
-										</div>
-									</td>
+
 
 									<!-- Pax Column -->
 									<td>

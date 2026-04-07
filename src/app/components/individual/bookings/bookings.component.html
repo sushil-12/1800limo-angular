@@ -25,7 +25,7 @@
             <div class="row my-2 align-items-center">
                 <!-- Date Range -->
                 <!-- Start Date -->
-                <div class="col-12 col-md-9 d-flex flex-column flex-md-row" style="gap: 15px;">
+                <div class="col-12 col-md-7 d-flex flex-column flex-md-row" style="gap: 15px;">
                     <div class="flex-grow-1">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Start Date</mat-label>
@@ -50,13 +50,14 @@
                 </div>
 
                 <!-- Search Button -->
-                <div class="col-12 col-md-3 d-flex align-items-end mt-2 mt-md-4" style="gap: 20px;">
+                <div class="col-12 col-md-5 d-flex align-items-end mt-2 mt-md-4" style="gap: 20px;">
                     <div class="ml-2">
                         <button class="custom-filled-button orange-button"
                             style="color:#fff;padding: 5px 12px !important;" (click)="runBookingsSearch()">
                             Search
                         </button>
                     </div>
+
                     <div class="ml-2">
                         <button class="custom-filled-back-button"
                             style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
@@ -64,6 +65,15 @@
                             Reset
                         </button>
                     </div>
+                    <div class="ml-2">
+                        <button class="custom-filled-button"
+                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #5373aa !important; border-color: #5373aa !important;"
+                            (click)="viewPastBookings()">
+                            {{ isPastBookingView ? 'See Future Bookings' : 'See past bookings' }}
+                        </button>
+
+                    </div>
+
                 </div>
             </div>
             <div class="row my-2 mb-2">
@@ -97,7 +107,7 @@
                                 <tr role="row">
                                     <th>Actions</th>
                                     <th>Booking</th>
-                                    <th>Status</th>
+
                                     <th>Date</th>
                                     <th>Pax</th>
                                     <th>Driver</th>
@@ -107,7 +117,8 @@
                             </thead>
                             <tbody>
                                 <tr role="row" class="odd" *ngFor="let booking of bookings">
-                                    <td [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
+                                    <td class="text-center"
+                                        [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
                                         <a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
                                             id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -160,6 +171,16 @@
                                                 Pay Booking
                                             </a> -->
                                         </div>
+                                        <div style="margin-top: 20px;" class="status-action-container">
+                                            <div data-toggle="modal" data-target="#change_status_booking_Modal"
+                                                class="status-pill {{ (booking?.booking_status == 'rejection_requested' ? 'pending' : booking?.booking_status) }}"
+                                                style="cursor: pointer;">
+                                                {{textFormatter(booking.booking_status == 'driver_unassigned' ?
+                                                'Unassigned'
+                                                : (booking.booking_status == 'rejection_requested' ? 'Pending' :
+                                                booking.booking_status)) |titlecase}}
+                                            </div>
+                                        </div>
                                     </td>
 
                                     <td class="text-left font-weight-bolder">
@@ -174,14 +195,7 @@
                                                 [innerHTML]="highlighText((booking.grand_total).toFixed(2))"></span>
                                         </p>
                                     </td>
-                                    <td>
-                                        <div data-toggle="modal" data-target="#change_status_booking_Modal"
-                                            [className]="'badge badge-pill booking_status cursor-pointer ' + (booking?.booking_status == 'rejection_requested' ? 'pending' : booking?.booking_status)">
-                                            {{textFormatter(booking.booking_status == 'driver_unassigned' ? 'Unassigned'
-                                            : (booking.booking_status == 'rejection_requested' ? 'Pending' :
-                                            booking.booking_status)) |titlecase}}
-                                        </div>
-                                    </td>
+
                                     <td class="sorting_1">
                                         <p style="font-weight: 600 !important; white-space: nowrap !important;">{{
                                             FormatDate(booking?.pickup_date) }}
