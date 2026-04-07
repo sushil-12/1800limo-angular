@@ -4778,6 +4778,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		value["booking_created_from"] = this.booking_created_from
 		value['proceed'] = this.proceed
 		value['currency'] = this.currencyObj?.currency
+		value['platform_type'] = 'web'
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']

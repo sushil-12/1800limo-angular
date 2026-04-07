@@ -3326,6 +3326,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 		});
 		value['currency'] = this.currencyObj?.currency
+		value['platform_type'] = 'web'
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']
