@@ -42,11 +42,6 @@ export class QuotebotService
 	}
 
 
-	getAirportsData()
-	{
-		console.log('Fetching Airports Data')
-		return this.httpClient.get(`${this.serverUrl}get-airports`)
-	}
 
 	createBooking(data: any, update_type: string) {
 		if (update_type == 'return' || update_type == 'repeat') {

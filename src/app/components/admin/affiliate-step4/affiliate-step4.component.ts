@@ -31,6 +31,7 @@ export class AffiliateStep4Component implements OnInit {
 	public alertMessage: string;
 	public storeId: number;
 	public storeStatus: string;
+	public isLoading: boolean = true;
 
 	public firstPage: Number;
 	public lastPage: Number;
@@ -64,13 +65,19 @@ export class AffiliateStep4Component implements OnInit {
 		this.alertMessage = "Are you sure you want to delete this Driver?"
 	}
 	loadDriver() {
-		// this.stateManagementService.setprogressBar(true);
+		this.isLoading = true;
+		this.spinner.show();
 		// Load Our driver using API
 		this.adminService.driverList(this.affiliateId).then(result => {
 			this.driverRes = result;
 			this.driverList = this.driverRes.data.data;
-			// this.stateManagementService.setprogressBar(false);
-		})
+			this.isLoading = false;
+			this.spinner.hide();
+		}).catch(err => {
+			this.isLoading = false;
+			this.spinner.hide();
+			console.error(err);
+		});
 	}
 	driverAccountStatus(id, param) {
 		this.storeId = id;
@@ -86,17 +93,17 @@ export class AffiliateStep4Component implements OnInit {
 	}
 	// Suspend or continue driver
 	accountStatus(accountStatus) {
-		// this.stateManagementService.setprogressBar(true);
+		this.spinner.show();
 		$('#suspendModal').modal('hide');
 		console.log("value is", accountStatus)
 		this.adminService.driverStatus(this.storeId, accountStatus)
 			.pipe(
 				catchError(err => {
-					// this.stateManagementService.setprogressBar(false);
+					this.spinner.hide();
 					return throwError(err);
 				})
 			).subscribe(result => {
-				// this.stateManagementService.setprogressBar(false);
+				this.spinner.hide();
 			});
 		if (accountStatus == 'enable') {
 			$('#Continue_' + this.storeId).addClass('checkedContinueLabel');
@@ -108,21 +115,21 @@ export class AffiliateStep4Component implements OnInit {
 	}
 	//Delete Driver
 	delete() {
-		// this.stateManagementService.setprogressBar(true);
+		this.spinner.show();
 		var status = 'disable';
 		$('#deleteConfirmationModal').modal('hide');
 
 		this.adminService.driverStatus(this.driverToDelete, status)
 			.pipe(
 				catchError(err => {
-					// this.stateManagementService.setprogressBar(false);
+					this.spinner.hide();
 					return throwError(err);
 				})
 			).subscribe(result => {
 				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/affiliate/step4']);
+					this.spinner.hide();
 				});
-				// this.stateManagementService.setprogressBar(false);
 			});
 	}
 

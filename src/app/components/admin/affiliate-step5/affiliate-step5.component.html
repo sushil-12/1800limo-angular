@@ -193,7 +193,7 @@
 								</tr>
 								</ng-template>
 								</tr>
-								<tr *ngIf="!vehicles?.length">
+								<tr *ngIf="!vehicles?.length && !isLoading">
 									<td colspan="13">No vehicle found!</td>
 								</tr>
 							</ng-container>
