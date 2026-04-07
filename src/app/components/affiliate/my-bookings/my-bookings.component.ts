@@ -478,7 +478,7 @@ export class MyBookingsComponent implements OnInit {
 			this.saveCookie('affiliate_endDate', this.endDate);
 			this.saveCookie('affiliate_search', this.searchText ?? "");
 			this.loadBookings();
-		}, 400)
+		}, 1200)
 	}
 	formatBaseRate(baseRate: string | number): string {
 		// Convert baseRate to a number if it is a string

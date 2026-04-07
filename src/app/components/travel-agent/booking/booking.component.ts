@@ -344,7 +344,7 @@ export class BookingComponent implements OnInit {
 			this.saveCookie('ta_endDate', this.endDate);
 			this.saveCookie('ta_search', this.searchText ?? "");
 			this.loadBookings();
-		}, 400)
+		}, 1200)
 	}
 
 	highlighText(args: string) {

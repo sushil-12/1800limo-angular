@@ -50,11 +50,10 @@
                 </div>
 
                 <!-- Search Button -->
-                <div class="col-12 col-md-3 d-flex align-items-end mt-2 mt-md-4">
+                <div class="col-12 col-md-3 d-flex align-items-end mt-2 mt-md-4" style="gap: 20px;">
                     <div class="ml-2">
                         <button class="custom-filled-button orange-button"
-                            style="color:#fff;padding: 5px 12px !important;"
-                            (click)="runBookingsSearch()">
+                            style="color:#fff;padding: 5px 12px !important;" (click)="runBookingsSearch()">
                             Search
                         </button>
                     </div>
@@ -82,7 +81,8 @@
             </div>
             <div class="row pl-2">
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-                        {{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date filter.' }}
+                        {{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date
+                        filter.' }}
                     </mat-checkbox>
                 </p>
             </div>
@@ -842,7 +842,8 @@
                             </div>
                             <div class="col-md-8 value preview-airport-color">
                                 <span class="font-weight-bolder preview-output-field">
-                                    {{ textFormatter(bookingPreview?.pickup_address ? bookingPreview?.pickup_address : bookingPreview.pickup_airport_name) }}
+                                    {{ textFormatter(bookingPreview?.pickup_address ? bookingPreview?.pickup_address :
+                                    bookingPreview.pickup_airport_name) }}
                                 </span>
                                 <span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
                                         class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
@@ -1001,9 +1002,11 @@
                             </div>
                             <div class="col-md-8 value preview-airport-color">
                                 <span class="font-weight-bolder preview-output-field">
-                                    {{ textFormatter(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address : bookingPreview.dropoff_airport_name ) }}
+                                    {{ textFormatter(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address :
+                                    bookingPreview.dropoff_airport_name ) }}
                                 </span>
-                                <span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address : bookingPreview.dropoff_airport_name)"><i
+                                <span
+                                    (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address : bookingPreview.dropoff_airport_name)"><i
                                         class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
                             </div>
                         </div>

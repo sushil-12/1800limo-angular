@@ -1551,7 +1551,7 @@ runBookingsSearch(searchValue: string = this.searchText) {
 		);
 	}
 
-searchInBookings(search_value: string) {
+	searchInBookings(search_value: string) {
 		this.searchText = search_value ?? "";
 		console.log("--->>>>>", search_value);
 		clearTimeout(this.timer);
@@ -1570,7 +1570,7 @@ searchInBookings(search_value: string) {
 				this.searchText?.replace(/&/g, '%26'),
 				this.selectedStatus
 			);
-		}, 400);
+		}, 1200);
 	}
 
 	handleKeypressEvents() {

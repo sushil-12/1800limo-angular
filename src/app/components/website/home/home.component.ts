@@ -3220,6 +3220,40 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				}
 			});
 
+			// App store modal carousel
+			$('#appStorePopup').on('shown.bs.modal', function () {
+				const $carousel = $('.app-store-carousel');
+				if ($carousel.length > 0 && !$carousel.hasClass('owl-loaded')) {
+					$carousel.owlCarousel({
+						responsiveClass: true,
+						responsive: {
+							0: {
+								items: 1,
+								loop: true,
+								autoplay: true,
+								autoplayTimeout: 3000,
+								autoplayHoverPause: true,
+								dots: true,
+								nav: false,
+								margin: 10
+							},
+							768: {
+								items: 2,
+								loop: false,
+								autoplay: false,
+								mouseDrag: false,
+								touchDrag: false,
+								pullDrag: false,
+								freeDrag: false,
+								dots: false,
+								nav: false,
+								margin: 0
+							}
+						}
+					});
+				}
+			});
+
 			// Destination carousel
 			$('.destinationCarousel').owlCarousel({
 				loop: true,
