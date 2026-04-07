@@ -86,6 +86,8 @@ export class BookingComponent implements OnInit {
 	currencySymbol: any;
 	total_amount: any;
 	ta_share_total: any;
+	isPastBookingView: boolean = false;
+
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -406,7 +408,26 @@ export class BookingComponent implements OnInit {
 		this.saveCookie('ta_endDate', this.endDate);
 		this.saveCookie('ta_search', this.searchText ?? "");
 		this.loadBookings(null, true);
+		this.isPastBookingView = false;
 	}
+
+
+	viewPastBookings() {
+		if (this.isPastBookingView) {
+			this.reset();
+		} else {
+			this.startDate = moment('2021-01-01').format('YYYY-MM-DD');
+			this.endDate = moment().format('YYYY-MM-DD');
+			this.useDateFilter = true;
+			localStorage.setItem('traveluseDateFilter', 'true');
+			this.saveCookie('ta_startDate', this.startDate);
+			this.saveCookie('ta_endDate', this.endDate);
+			this.loadBookings(null, true);
+			this.isPastBookingView = true;
+		}
+	}
+
+
 
 	handleChangeCheckbox(value: any) {
 		console.log('event---->> ', value)

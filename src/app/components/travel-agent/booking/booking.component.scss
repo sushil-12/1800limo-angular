@@ -304,6 +304,20 @@ input::-webkit-input-placeholder {
 	border-radius: 3rem !important;
 }
 
+.status-pill {
+	display: inline-block;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: bold;
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+	min-width: 80px;
+	text-align: center;
+}
+
+
+
 .x-cross-btn {
 	background: #fff !important;
 	color: #ff0000 !important;

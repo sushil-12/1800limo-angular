@@ -89,6 +89,7 @@ export class BookingsComponent implements OnInit {
 	cancelMessage: any;
 	currencySymbol: any;
 	is_family_member: any = false;
+	isPastBookingView: boolean = false;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -440,7 +441,30 @@ export class BookingsComponent implements OnInit {
 		this.saveCookie('indv_endDate', this.endDate);
 		this.saveCookie('indv_search', this.searchText ?? "");
 		this.loadBookings(null, true);
+		this.isPastBookingView = false;
 	}
+
+
+	viewPastBookings() {
+		if (this.isPastBookingView) {
+			this.reset();
+		} else {
+			this.startDate = moment('2021-01-01').toDate();
+			this.endDate = new Date();
+			this.useDateFilter = true;
+			this.selectedDateRange = {
+				startDate: dayjs(this.startDate),
+				endDate: dayjs(this.endDate)
+			};
+			localStorage.setItem('indvUseDateFilter', 'true');
+			this.saveCookie('indv_startDate', this.startDate);
+			this.saveCookie('indv_endDate', this.endDate);
+			this.loadBookings(null, true);
+			this.isPastBookingView = true;
+		}
+	}
+
+
 
 	handleChangeCheckbox(value: any) {
 		console.log('event---->> ', value)
