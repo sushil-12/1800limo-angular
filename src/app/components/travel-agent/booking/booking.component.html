@@ -97,8 +97,7 @@
 				<div class="align-btn d-flex justify-content-around">
 					<div class="col-sm-2 ml-n5">
 						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="runBookingsSearch()">
+							style="color:#fff;padding: 5px 12px !important;" (click)="runBookingsSearch()">
 							Search
 						</button>
 
@@ -129,11 +128,13 @@
 			<div class="row pl-2">
 				<p><mat-checkbox *ngIf="currentUser?.roleName == 'travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date filter.' }}
+						{{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date
+						filter.' }}
 					</mat-checkbox>
 					<mat-checkbox *ngIf="currentUser?.roleName == 'sub_travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date filter.' }}
+						{{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date
+						filter.' }}
 					</mat-checkbox>
 				</p>
 			</div>
@@ -922,7 +923,8 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-field">
-									{{ textFormatter(bookingPreview?.pickup_address ? bookingPreview?.pickup_address : bookingPreview.pickup_airport_name) }}
+									{{ textFormatter(bookingPreview?.pickup_address ? bookingPreview?.pickup_address :
+									bookingPreview.pickup_airport_name) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
@@ -1082,7 +1084,8 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-field">
-									{{ textFormatter(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address : bookingPreview.dropoff_airport_name ) }}
+									{{ textFormatter(bookingPreview?.dropoff_address ? bookingPreview?.dropoff_address :
+									bookingPreview.dropoff_airport_name ) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>

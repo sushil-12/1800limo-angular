@@ -353,36 +353,54 @@
 
 									<div class="col-12 mr-0 p-0 ml-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'">
-											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch" style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
-												<i class="fas fa-plane qb-airport-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch"
+												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
+												<i class="fas fa-plane qb-airport-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
-													<input type="text" class="qb-airport-field__input input-f font-weight-bolder" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
+													<input type="text"
+														class="qb-airport-field__input input-f font-weight-bolder"
+														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
 														placeholder="Pickup Address - Airport" id="pickup_airport"
-														#airportinput
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-														(focus)="onAirportFieldFocus('pickup_airport', airportinput)" tabindex="1"
-														(click)="openAirportDropdown('pickup_airport')"
+														#airportinput autocomplete="off" autocorrect="off"
+														autocapitalize="off" spellcheck="false"
+														(focus)="onAirportFieldFocus('pickup_airport', airportinput)"
+														tabindex="1" (click)="openAirportDropdown('pickup_airport')"
 														(input)="onAirportFieldInput($any($event.target).value, 'pickup_airport')"
 														(blur)="onAirportFieldBlur('pickup_airport')"
 														formControlName="pickup_airport_name">
 												</div>
-												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="airportinput?.value">
+												<div class="airport-clear-wrap airport-clear-wrap--inside"
+													*ngIf="airportinput?.value">
 													<button type="button" class="airport-clear-btn"
-														(click)="reset('pickup_airport')" aria-label="Clear pickup airport">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														(click)="reset('pickup_airport')"
+														aria-label="Clear pickup airport">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAirportDropdownOpen('pickup_airport')" class="qb-airport-field__dropdown"
+												<div *ngIf="isAirportDropdownOpen('pickup_airport')"
+													class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('pickup_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option"
+														*ngFor="let airport of getVisibleAirportOptions('pickup_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'pickup_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
-															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+															style="margin-top:4px; color:#111;"></i>
+														<span class="qb-airport-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span class="qb-airport-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
 													<div *ngIf="shouldShowAirportEmptyState('pickup_airport')"
@@ -413,48 +431,70 @@
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
 												[class.errorValid]="submitted && (QBForm?.pickup_address?.errors || QBForm?.pickup_address_lat?.errors)">
-												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
-													<input type="text" class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+													<input type="text"
+														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Pickup Address - Cruise Port'"
 														id="pickup_address" #addressinput
-														formControlName="pickup_address"
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+														formControlName="pickup_address" autocomplete="off"
+														autocorrect="off" autocapitalize="off" spellcheck="false"
 														(focus)="onAddressFieldFocus('pickup_address', addressinput)"
 														(click)="openAddressDropdown('pickup_address')"
 														(input)="onAddressFieldInput($any($event.target).value, 'pickup_address')"
-														(blur)="onAddressFieldBlur('pickup_address')"
-														tabindex="1" />
+														(blur)="onAddressFieldBlur('pickup_address')" tabindex="1" />
 												</div>
 
-												<div class="airport-clear-wrap address-clear-wrap" *ngIf="shouldShowAddressClear(addressinput, 'pickup_address')">
+												<div class="airport-clear-wrap address-clear-wrap"
+													*ngIf="shouldShowAddressClear(addressinput, 'pickup_address')">
 													<button type="button" class="airport-clear-btn"
-														(click)="reset('pickup_address')" aria-label="Clear pickup address">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														(click)="reset('pickup_address')"
+														aria-label="Clear pickup address">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAddressDropdownOpen('pickup_address')" class="qb-airport-field__dropdown qb-address-field__dropdown"
+												<div *ngIf="isAddressDropdownOpen('pickup_address')"
+													class="qb-airport-field__dropdown qb-address-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option qb-address-field__option" *ngFor="let address of getAddressOptions('pickup_address')"
+													<button type="button"
+														class="qb-airport-field__option qb-address-field__option"
+														*ngFor="let address of getAddressOptions('pickup_address')"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'pickup_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
-															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
+														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+															style="margin-top:4px; color:#111;"></i>
+														<span
+															class="qb-airport-field__option-content qb-address-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span
+																class="qb-airport-field__option-label qb-address-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAddressOptionLabel(address) }}</span>
+															<span
+																class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
-													<div *ngIf="shouldShowAddressLoadingState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressLoadingState('pickup_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Loading Suggestions....
 													</div>
-													<div *ngIf="shouldShowAddressEmptyState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressEmptyState('pickup_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														No Result found
 													</div>
-													<div *ngIf="shouldShowAddressPromptState('pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressPromptState('pickup_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Enter address and select from suggestions
 													</div>
@@ -497,36 +537,54 @@
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value == 'airport'"
 											style="">
-											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch" style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
-												<i class="fas fa-plane qb-airport-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch"
+												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
+												<i class="fas fa-plane qb-airport-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
-													<input type="text" class="qb-airport-field__input input-f font-weight-bolder" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
+													<input type="text"
+														class="qb-airport-field__input input-f font-weight-bolder"
+														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
 														placeholder="Dropoff Address - Airport" id="dropoff_airport"
-														#dropairportinput
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-														(focus)="onAirportFieldFocus('dropoff_airport', dropairportinput)" tabindex="1"
-														(click)="openAirportDropdown('dropoff_airport')"
+														#dropairportinput autocomplete="off" autocorrect="off"
+														autocapitalize="off" spellcheck="false"
+														(focus)="onAirportFieldFocus('dropoff_airport', dropairportinput)"
+														tabindex="1" (click)="openAirportDropdown('dropoff_airport')"
 														(input)="onAirportFieldInput($any($event.target).value, 'dropoff_airport')"
 														(blur)="onAirportFieldBlur('dropoff_airport')"
 														formControlName="dropoff_airport_name">
 												</div>
-												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="dropairportinput?.value">
+												<div class="airport-clear-wrap airport-clear-wrap--inside"
+													*ngIf="dropairportinput?.value">
 													<button type="button" class="airport-clear-btn"
-														(click)="reset('dropoff_airport')" aria-label="Clear dropoff airport">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														(click)="reset('dropoff_airport')"
+														aria-label="Clear dropoff airport">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAirportDropdownOpen('dropoff_airport')" class="qb-airport-field__dropdown"
+												<div *ngIf="isAirportDropdownOpen('dropoff_airport')"
+													class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('dropoff_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option"
+														*ngFor="let airport of getVisibleAirportOptions('dropoff_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'dropoff_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
-															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+															style="margin-top:4px; color:#111;"></i>
+														<span class="qb-airport-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span class="qb-airport-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
 													<div *ngIf="shouldShowAirportEmptyState('dropoff_airport')"
@@ -558,48 +616,70 @@
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
 												[class.errorValid]="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_address_lat?.errors)">
-												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
-													<input type="text" class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+													<input type="text"
+														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Dropoff Address - Cruise Port'"
 														id="dropoff_address" #dropaddressinput
-														formControlName="dropoff_address"
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+														formControlName="dropoff_address" autocomplete="off"
+														autocorrect="off" autocapitalize="off" spellcheck="false"
 														(focus)="onAddressFieldFocus('dropoff_address', dropaddressinput)"
 														(click)="openAddressDropdown('dropoff_address')"
 														(input)="onAddressFieldInput($any($event.target).value, 'dropoff_address')"
-														(blur)="onAddressFieldBlur('dropoff_address')"
-														tabindex="1" />
+														(blur)="onAddressFieldBlur('dropoff_address')" tabindex="1" />
 												</div>
 
-												<div class="airport-clear-wrap address-clear-wrap" *ngIf="shouldShowAddressClear(dropaddressinput, 'dropoff_address')">
+												<div class="airport-clear-wrap address-clear-wrap"
+													*ngIf="shouldShowAddressClear(dropaddressinput, 'dropoff_address')">
 													<button type="button" class="airport-clear-btn"
-														(click)="reset('dropoff_address')" aria-label="Clear dropoff address">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														(click)="reset('dropoff_address')"
+														aria-label="Clear dropoff address">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAddressDropdownOpen('dropoff_address')" class="qb-airport-field__dropdown qb-address-field__dropdown"
+												<div *ngIf="isAddressDropdownOpen('dropoff_address')"
+													class="qb-airport-field__dropdown qb-address-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option qb-address-field__option" *ngFor="let address of getAddressOptions('dropoff_address')"
+													<button type="button"
+														class="qb-airport-field__option qb-address-field__option"
+														*ngFor="let address of getAddressOptions('dropoff_address')"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'dropoff_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
-															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
+														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+															style="margin-top:4px; color:#111;"></i>
+														<span
+															class="qb-airport-field__option-content qb-address-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span
+																class="qb-airport-field__option-label qb-address-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAddressOptionLabel(address) }}</span>
+															<span
+																class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
-													<div *ngIf="shouldShowAddressLoadingState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressLoadingState('dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Loading Suggestions....
 													</div>
-													<div *ngIf="shouldShowAddressEmptyState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressEmptyState('dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
-													<div *ngIf="shouldShowAddressPromptState('dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressPromptState('dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Enter address and select from suggestions
 													</div>
@@ -703,37 +783,54 @@
 									<div class=" col-12 mr-0 p-0 m-0">
 										<div class="errorMsg col-md-12"
 											*ngIf="QBForm?.dropoff_type?.value == 'airport'">
-											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch" style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
-												<i class="fas fa-plane qb-airport-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch"
+												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
+												<i class="fas fa-plane qb-airport-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
 													<input type="text" placeholder="Return Pickup Address - Airport"
-														class="qb-airport-field__input input-f font-weight-bolder" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;" #retairportinput
-														id="return_pickup_airport"
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-														tabindex="1" (focus)="onAirportFieldFocus('return_pickup_airport', retairportinput)"
+														class="qb-airport-field__input input-f font-weight-bolder"
+														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
+														#retairportinput id="return_pickup_airport" autocomplete="off"
+														autocorrect="off" autocapitalize="off" spellcheck="false"
+														tabindex="1"
+														(focus)="onAirportFieldFocus('return_pickup_airport', retairportinput)"
 														(click)="openAirportDropdown('return_pickup_airport')"
 														(input)="onAirportFieldInput($any($event.target).value, 'return_pickup_airport')"
 														(blur)="onAirportFieldBlur('return_pickup_airport')"
 														formControlName="return_pickup_airport_name">
 												</div>
-												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="retairportinput?.value">
+												<div class="airport-clear-wrap airport-clear-wrap--inside"
+													*ngIf="retairportinput?.value">
 													<button type="button" class="airport-clear-btn"
 														(click)="reset('return_pickup_airport')"
 														aria-label="Clear return pickup airport">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAirportDropdownOpen('return_pickup_airport')" class="qb-airport-field__dropdown"
+												<div *ngIf="isAirportDropdownOpen('return_pickup_airport')"
+													class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('return_pickup_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option"
+														*ngFor="let airport of getVisibleAirportOptions('return_pickup_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'return_pickup_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
-															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+															style="margin-top:4px; color:#111;"></i>
+														<span class="qb-airport-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span class="qb-airport-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
 													<div *ngIf="shouldShowAirportEmptyState('return_pickup_airport')"
@@ -765,14 +862,16 @@
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
 												[class.errorValid]="submitted && (QBForm?.return_pickup_address?.errors || QBForm?.return_pickup_address_lat?.errors)">
-												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
-													<input type="text" class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+													<input type="text"
+														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port'"
 														id="return_pickup_address" #retaddressinput
-														formControlName="return_pickup_address"
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+														formControlName="return_pickup_address" autocomplete="off"
+														autocorrect="off" autocapitalize="off" spellcheck="false"
 														(focus)="onAddressFieldFocus('return_pickup_address', retaddressinput)"
 														(click)="openAddressDropdown('return_pickup_address')"
 														(input)="onAddressFieldInput($any($event.target).value, 'return_pickup_address')"
@@ -780,33 +879,54 @@
 														tabindex="1" />
 												</div>
 
-												<div class="airport-clear-wrap address-clear-wrap" *ngIf="shouldShowAddressClear(retaddressinput, 'return_pickup_address')">
+												<div class="airport-clear-wrap address-clear-wrap"
+													*ngIf="shouldShowAddressClear(retaddressinput, 'return_pickup_address')">
 													<button type="button" class="airport-clear-btn"
-														(click)="reset('return_pickup_address')" aria-label="Clear return pickup address">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														(click)="reset('return_pickup_address')"
+														aria-label="Clear return pickup address">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAddressDropdownOpen('return_pickup_address')" class="qb-airport-field__dropdown qb-address-field__dropdown"
+												<div *ngIf="isAddressDropdownOpen('return_pickup_address')"
+													class="qb-airport-field__dropdown qb-address-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option qb-address-field__option" *ngFor="let address of getAddressOptions('return_pickup_address')"
+													<button type="button"
+														class="qb-airport-field__option qb-address-field__option"
+														*ngFor="let address of getAddressOptions('return_pickup_address')"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'return_pickup_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
-															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
+														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+															style="margin-top:4px; color:#111;"></i>
+														<span
+															class="qb-airport-field__option-content qb-address-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span
+																class="qb-airport-field__option-label qb-address-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAddressOptionLabel(address) }}</span>
+															<span
+																class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
-													<div *ngIf="shouldShowAddressLoadingState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressLoadingState('return_pickup_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Loading Suggestions....
 													</div>
-													<div *ngIf="shouldShowAddressEmptyState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressEmptyState('return_pickup_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
-													<div *ngIf="shouldShowAddressPromptState('return_pickup_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressPromptState('return_pickup_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Enter address and select from suggestions
 													</div>
@@ -850,37 +970,54 @@
 												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
 										</div>
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'">
-											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch" style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
-												<i class="fas fa-plane qb-airport-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+											<div class="input-contain input-contain--airport qb-airport-field d-flex align-items-stretch"
+												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;">
+												<i class="fas fa-plane qb-airport-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
 													<input type="text" placeholder="Return Dropoff Address - Airport"
-														class="qb-airport-field__input input-f font-weight-bolder" style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;" #retdropairportinput
-														id="return_dropoff_airport"
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-														tabindex="1" (focus)="onAirportFieldFocus('return_dropoff_airport', retdropairportinput)"
+														class="qb-airport-field__input input-f font-weight-bolder"
+														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
+														#retdropairportinput id="return_dropoff_airport"
+														autocomplete="off" autocorrect="off" autocapitalize="off"
+														spellcheck="false" tabindex="1"
+														(focus)="onAirportFieldFocus('return_dropoff_airport', retdropairportinput)"
 														(click)="openAirportDropdown('return_dropoff_airport')"
 														(input)="onAirportFieldInput($any($event.target).value, 'return_dropoff_airport')"
 														(blur)="onAirportFieldBlur('return_dropoff_airport')"
 														formControlName="return_dropoff_airport_name">
 												</div>
-												<div class="airport-clear-wrap airport-clear-wrap--inside" *ngIf="retdropairportinput?.value">
+												<div class="airport-clear-wrap airport-clear-wrap--inside"
+													*ngIf="retdropairportinput?.value">
 													<button type="button" class="airport-clear-btn"
 														(click)="reset('return_dropoff_airport')"
 														aria-label="Clear return dropoff airport">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAirportDropdownOpen('return_dropoff_airport')" class="qb-airport-field__dropdown"
+												<div *ngIf="isAirportDropdownOpen('return_dropoff_airport')"
+													class="qb-airport-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option" *ngFor="let airport of getVisibleAirportOptions('return_dropoff_airport') | slice:0:8"
+													<button type="button" class="qb-airport-field__option"
+														*ngFor="let airport of getVisibleAirportOptions('return_dropoff_airport') | slice:0:8"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAirportOption(airport, 'return_dropoff_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAirportOptionLabel(airport) }}</span>
-															<span class="qb-airport-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAirportOptionSecondaryText(airport) }}</span>
+														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+															style="margin-top:4px; color:#111;"></i>
+														<span class="qb-airport-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span class="qb-airport-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAirportOptionLabel(airport) }}</span>
+															<span class="qb-airport-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAirportOptionSecondaryText(airport) }}</span>
 														</span>
 													</button>
 													<div *ngIf="shouldShowAirportEmptyState('return_dropoff_airport')"
@@ -905,14 +1042,16 @@
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
 												[class.errorValid]="submitted && (QBForm?.return_dropoff_address?.errors || QBForm?.return_dropoff_address_lat?.errors)">
-												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
-													<input type="text" class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+													<input type="text"
+														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port'"
 														id="return_dropoff_address" #retdropaddressinput
-														formControlName="return_dropoff_address"
-														autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+														formControlName="return_dropoff_address" autocomplete="off"
+														autocorrect="off" autocapitalize="off" spellcheck="false"
 														(focus)="onAddressFieldFocus('return_dropoff_address', retdropaddressinput)"
 														(click)="openAddressDropdown('return_dropoff_address')"
 														(input)="onAddressFieldInput($any($event.target).value, 'return_dropoff_address')"
@@ -920,33 +1059,54 @@
 														tabindex="1" />
 												</div>
 
-												<div class="airport-clear-wrap address-clear-wrap" *ngIf="shouldShowAddressClear(retdropaddressinput, 'return_dropoff_address')">
+												<div class="airport-clear-wrap address-clear-wrap"
+													*ngIf="shouldShowAddressClear(retdropaddressinput, 'return_dropoff_address')">
 													<button type="button" class="airport-clear-btn"
-														(click)="reset('return_dropoff_address')" aria-label="Clear return dropoff address">
-														<svg width="21" height="20" fill="none" viewBox="0 0 21 20"><path fill="#1f1f1f" fill-rule="evenodd" d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0" clip-rule="evenodd"></path></svg>
+														(click)="reset('return_dropoff_address')"
+														aria-label="Clear return dropoff address">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
 													</button>
 												</div>
-												<div *ngIf="isAddressDropdownOpen('return_dropoff_address')" class="qb-airport-field__dropdown qb-address-field__dropdown"
+												<div *ngIf="isAddressDropdownOpen('return_dropoff_address')"
+													class="qb-airport-field__dropdown qb-address-field__dropdown"
 													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-													<button type="button" class="qb-airport-field__option qb-address-field__option" *ngFor="let address of getAddressOptions('return_dropoff_address')"
+													<button type="button"
+														class="qb-airport-field__option qb-address-field__option"
+														*ngFor="let address of getAddressOptions('return_dropoff_address')"
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'return_dropoff_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon" style="margin-top:4px; color:#111;"></i>
-														<span class="qb-airport-field__option-content qb-address-field__option-content" style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-															<span class="qb-airport-field__option-label qb-address-field__option-label" style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
-															<span class="qb-airport-field__option-secondary qb-address-field__option-secondary" style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
+														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+															style="margin-top:4px; color:#111;"></i>
+														<span
+															class="qb-airport-field__option-content qb-address-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span
+																class="qb-airport-field__option-label qb-address-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAddressOptionLabel(address) }}</span>
+															<span
+																class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAddressOptionSecondaryText(address) }}</span>
 														</span>
 													</button>
-													<div *ngIf="shouldShowAddressLoadingState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressLoadingState('return_dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Loading Suggestions....
 													</div>
-													<div *ngIf="shouldShowAddressEmptyState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressEmptyState('return_dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Result not found
 													</div>
-													<div *ngIf="shouldShowAddressPromptState('return_dropoff_address')" class="qb-airport-field__empty qb-address-field__empty"
+													<div *ngIf="shouldShowAddressPromptState('return_dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
 														style="padding:2px 6px; color:#666; text-align:left;">
 														Enter address and select from suggestions
 													</div>
@@ -1521,7 +1681,7 @@
 <!-- App Store Popup -->
 <div class="modal fade" id="appStorePopup" role="dialog" tabindex="-1" aria-labelledby="appStorePopupLabel"
 	aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered app-store-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered app-store-dialog" role="document" style="max-width: 800px;">
 		<div class="modal-content app-store-modal">
 			<!-- Close Button -->
 			<button type="button" class="app-store-close" data-dismiss="modal" aria-label="Close">
@@ -1531,30 +1691,55 @@
 			<div class="modal-body app-store-body">
 				<h3 class="app-store-title">Download Our App Now</h3>
 
-				<div class="app-cards-row">
-					<!-- User App Card -->
-					<div class="app-card">
-						<div class="app-icon-wrap">
-							<img src="../../../../assets/images/User logo.png" alt="User App" class="app-card-img">
+				<div class="app-cards-row owl-carousel app-store-carousel">
+					<!-- User App Column -->
+					<div class="app-column item">
+						<div class="app-col-title">User Experience</div>
+
+						<div class="phones-container">
+							<div class="phone-wrapper phone-left">
+								<img src="../../../../assets/images/user-login.webp" alt="User Login">
+							</div>
+							<div class="phone-wrapper phone-right">
+								<img src="../../../../assets/images/user-map.webp" alt="User Map">
+							</div>
+							<div class="phone-wrapper phone-center">
+								<img src="../../../../assets/images/user.webp" alt="User App Dashboard">
+							</div>
 						</div>
-						<a href="https://apps.apple.com/in/app/1800limo/id6751568791" target="_blank"
-							class="app-download-btn">
-							<i class="fab fa-apple"></i>
-							<span>USER APP</span>
-						</a>
+
+						<div class="download-btn-container">
+							<a href="https://apps.apple.com/in/app/1800limo/id6751568791" target="_blank"
+								class="app-download-btn btn-blue">
+								DOWNLOAD
+							</a>
+							<div class="app-label">User App</div>
+						</div>
 					</div>
 
-					<!-- Chauffeur App Card -->
-					<div class="app-card">
-						<div class="app-icon-wrap">
-							<img src="../../../../assets/images/Driver logo.png" alt="Chauffeur App"
-								class="app-card-img">
+					<!-- Chauffeur App Column -->
+					<div class="app-column item">
+						<div class="app-col-title">Chauffeur Services</div>
+
+						<div class="phones-container">
+							<div class="phone-wrapper phone-left">
+								<img src="../../../../assets/images/driver-login.webp" alt="Chauffeur Login">
+							</div>
+							<div class="phone-wrapper phone-right">
+								<img src="../../../../assets/images/driver-map.webp" alt="Chauffeur Map">
+							</div>
+							<div class="phone-wrapper phone-center">
+								<img src="../../../../assets/images/deiver.webp" alt="Chauffeur App Dashboard">
+							</div>
 						</div>
-						<a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445" target="_blank"
-							class="app-download-btn">
-							<i class="fab fa-apple"></i>
-							<span>CHAUFFEUR APP</span>
-						</a>
+
+						<div class="download-btn-container">
+							<a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445" target="_blank"
+								class="app-download-btn btn-green">
+								DOWNLOAD
+							</a>
+							<div class="app-label">Chauffeur App</div>
+						</div>
 					</div>
 				</div>
 			</div>
