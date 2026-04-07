@@ -540,8 +540,7 @@
 							placeholder="Search Here and Set Location Pin" tabindex="1"
 							(focus)="onAddressFocus(search1)" (blur)="onAddressBlur()"
 							(input)="onAddressInput($any($event.target).value)" autocomplete="off" />
-						<button matSuffix type="button" class="address-clear-btn"
-							*ngIf="shouldShowAddressClear()"
+						<button matSuffix type="button" class="address-clear-btn" *ngIf="shouldShowAddressClear()"
 							(click)="clearAddressField()" aria-label="Clear address">
 							<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
 								<path fill="#1f1f1f" fill-rule="evenodd"
@@ -556,11 +555,13 @@
 							<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 							<span class="quote-ui-dropdown-option__content">
 								<span class="quote-ui-dropdown-option__label">{{ getAddressOptionLabel(option) }}</span>
-								<span class="quote-ui-dropdown-option__secondary">{{ getAddressOptionSecondary(option) }}</span>
+								<span class="quote-ui-dropdown-option__secondary">{{ getAddressOptionSecondary(option)
+									}}</span>
 							</span>
 						</button>
-						<div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-						<div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Searching...</div>
+						<div *ngIf="shouldShowAddressPrompt()" class="quote-ui-dropdown-empty">Enter address and select
+							from suggestions</div>
+						<div *ngIf="addressSearchLoading" class="quote-ui-dropdown-empty">Loading Suggestions...</div>
 						<div *ngIf="shouldShowAddressEmpty()" class="quote-ui-dropdown-empty">No Result found</div>
 					</div>
 					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
