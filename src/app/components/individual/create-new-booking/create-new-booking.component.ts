@@ -4457,6 +4457,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 			value["booking_created_from"] = 'subscriber'
 		}
 		value['currency'] = this.currencyObj?.currency
+		value['platform_type'] = 'web'
 		value['is_master_vehicle'] = this.is_master_vehicle
 		value['proceed'] = this.proceed
 		value['rateArray'] = this.rateArray

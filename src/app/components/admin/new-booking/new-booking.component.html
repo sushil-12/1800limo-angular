@@ -1264,7 +1264,9 @@
 						<mat-label>
 							Gender
 						</mat-label>
-						<input matInput formControlName="driver_gender" type="text" placeholder="Gender" readonly />
+						<input matInput
+							[value]="(Form.driver_gender.value?.toLowerCase()?.includes('lgbtq')) ? 'Non-Binary' : (Form.driver_gender.value | titlecase)"
+							type="text" placeholder="Gender" readonly />
 					</mat-form-field>
 				</div>
 
@@ -1277,7 +1279,7 @@
 						<mat-select formControlName="driver_gender">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">Non-Binary</mat-option>
+							<mat-option value="lgbtqia+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -3676,7 +3678,7 @@
 						<mat-select formControlName="return_driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">Non-Binary</mat-option>
+							<mat-option value="lgbtqia+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -3691,7 +3693,7 @@
 						<mat-select formControlName="return_driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">Non-Binary</mat-option>
+							<mat-option value="lgbtqia+">Non-Binary</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>

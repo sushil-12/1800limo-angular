@@ -4673,6 +4673,7 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 			}
 		});
 		value['currency'] = this.currencyObj?.currency
+		value['platform_type'] = 'web'
 		value['is_master_vehicle'] = this.is_master_vehicle
 		value['proceed'] = this.proceed
 		value['rateArray'] = this.rateArray
