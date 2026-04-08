@@ -319,6 +319,146 @@ input::-webkit-input-placeholder {
 	text-align: center;
 }
 
+.bookings-header-row {
+	align-items: center;
+	row-gap: 1rem;
+}
+
+.add-member-div {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.bookings-filter-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.bookings-filter-row {
+	row-gap: 1rem;
+}
+
+.bookings-date-fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 15px;
+}
+
+.bookings-date-field {
+	min-width: 0;
+}
+
+.bookings-action-row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: flex-start;
+	gap: 14px;
+}
+
+.bookings-action-btn {
+	min-height: 44px;
+	padding: 8px 18px !important;
+	border-radius: 14px !important;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.search-btn {
+	color: #fff !important;
+}
+
+.reset-btn {
+	color: #fff !important;
+	background-color: #000 !important;
+}
+
+.past-bookings-btn {
+	color: #fff !important;
+	background-color: #5373aa !important;
+	border-color: #5373aa !important;
+}
+
+.bookings-search-row {
+	margin-top: 0.25rem !important;
+}
+
+#search-field-my-booking {
+	width: 100%;
+}
+
+#search-field-my-booking .mat-mdc-form-field {
+	width: 100%;
+}
+
+.bookings-checkbox-row p {
+	margin-bottom: 0;
+}
+
+@media (max-width: 1199.98px) {
+	.bookings-action-row {
+		justify-content: flex-start;
+		align-items: center;
+	}
+}
+
+@media (max-width: 991.98px) {
+	.add-member-div {
+		justify-content: flex-start;
+	}
+
+	.btn-add-other-memeber {
+		width: 100%;
+		max-width: 360px;
+	}
+}
+
+@media (max-width: 767.98px) {
+	section {
+		padding: 14px 10px;
+	}
+
+	.bookings-date-fields {
+		grid-template-columns: 1fr;
+	}
+
+	.bookings-action-row {
+		gap: 12px;
+	}
+
+	.bookings-action-btn {
+		flex: 1 1 calc(50% - 12px);
+		justify-content: center;
+		text-align: center;
+	}
+}
+
+@media (max-width: 575.98px) {
+	.headinginfo {
+		font-size: 20px !important;
+		line-height: 1.3;
+	}
+
+	.btn-add-other-memeber {
+		max-width: 100%;
+	}
+
+	.bookings-action-row {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.bookings-action-btn {
+		width: 100%;
+		flex: 1 1 auto;
+	}
+
+	.bookings-checkbox-row {
+		padding-left: 0 !important;
+	}
+}
+
 
 
 .x-cross-btn {

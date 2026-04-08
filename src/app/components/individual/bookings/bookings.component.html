@@ -2,7 +2,7 @@
 <main>
     <!-- Main page content-->
     <section class="adminbox_shadow user_information" id="indv_bookings_table">
-        <div class="row mb-3">
+        <div class="row mb-3 bookings-header-row">
             <div class="col-md-7">
                 <h2 class="headinginfo d-flex align-items-center"
                     style="font-weight: 600 !important; font-size: 22px !important;">
@@ -21,12 +21,11 @@
                 </button>
             </div>
         </div>
-        <div class="containeredd mt-1 ">
-            <div class="row my-2 align-items-center">
-                <!-- Date Range -->
-                <!-- Start Date -->
-                <div class="col-12 col-md-7 d-flex flex-column flex-md-row" style="gap: 15px;">
-                    <div class="flex-grow-1">
+        <div class="containeredd mt-1 bookings-filter-panel">
+            <div class="row my-2 align-items-end bookings-filter-row">
+                <div class="col-12 col-xl-7">
+                    <div class="bookings-date-fields">
+                        <div class="bookings-date-field">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Start Date</mat-label>
                             <input matInput [matDatepicker]="picker1" placeholder="Start Date"
@@ -35,9 +34,8 @@
                             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                             <mat-datepicker #picker1></mat-datepicker>
                         </mat-form-field>
-                    </div>
-                    <!-- End Date -->
-                    <div class="flex-grow-1">
+                        </div>
+                        <div class="bookings-date-field">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>End Date</mat-label>
                             <input matInput [matDatepicker]="picker2" placeholder="End Date"
@@ -46,38 +44,31 @@
                             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                             <mat-datepicker #picker2></mat-datepicker>
                         </mat-form-field>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Search Button -->
-                <div class="col-12 col-md-5 d-flex align-items-end mt-2 mt-md-4" style="gap: 20px;">
-                    <div class="ml-2">
-                        <button class="custom-filled-button orange-button"
-                            style="color:#fff;padding: 5px 12px !important;" (click)="runBookingsSearch()">
+                <div class="col-12 col-xl-5 mt-3 mt-xl-0">
+                    <div class="bookings-action-row">
+                        <button class="custom-filled-button orange-button bookings-action-btn search-btn"
+                            (click)="runBookingsSearch()">
                             Search
                         </button>
-                    </div>
 
-                    <div class="ml-2">
-                        <button class="custom-filled-back-button"
-                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
+                        <button class="custom-filled-back-button bookings-action-btn reset-btn"
                             (click)="reset()">
                             Reset
                         </button>
-                    </div>
-                    <div class="ml-2">
-                        <button class="custom-filled-button"
-                            style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #5373aa !important; border-color: #5373aa !important;"
+
+                        <button class="custom-filled-button bookings-action-btn past-bookings-btn"
                             (click)="viewPastBookings()">
                             {{ isPastBookingView ? 'See Future Bookings' : 'See past bookings' }}
                         </button>
-
                     </div>
-
                 </div>
             </div>
-            <div class="row my-2 mb-2">
-                <div class="col-md-12">
+            <div class="row my-2 mb-2 bookings-search-row">
+                <div class="col-12">
                     <div id="search-field-my-booking">
                         <mat-form-field appearance="outline" class="m-0">
                             <input matInput type="text" (keypress)="handleKeypressEvents()"
@@ -89,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row pl-2">
+            <div class="row pl-2 bookings-checkbox-row">
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
                         {{useDateFilter ? 'Uncheck the box to view all bookings.' : 'Check the box to apply the date
                         filter.' }}
@@ -171,7 +162,7 @@
                                                 Pay Booking
                                             </a> -->
                                         </div>
-                                        <div style="margin-top: 20px;" class="status-action-container">
+                                        <div style="margin-top: 35px;" class="status-action-container">
                                             <div data-toggle="modal" data-target="#change_status_booking_Modal"
                                                 class="status-pill {{ (booking?.booking_status == 'rejection_requested' ? 'pending' : booking?.booking_status) }}"
                                                 style="cursor: pointer;">
