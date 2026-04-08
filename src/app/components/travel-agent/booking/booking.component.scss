@@ -354,7 +354,7 @@ input::-webkit-input-placeholder {
 	flex-wrap: wrap;
 	justify-content: flex-end;
 	align-items: flex-start;
-	gap: 14px;
+	gap: 20px;
 }
 
 .bookings-action-btn {
@@ -452,13 +452,19 @@ input::-webkit-input-placeholder {
 	}
 
 	.bookings-action-row {
-		flex-direction: column;
+		flex-direction: row;
 		align-items: stretch;
+		flex-wrap: wrap;
 	}
 
 	.bookings-action-btn {
+		flex: 1 1 calc(50% - 12px);
+		width: auto;
+	}
+
+	.past-bookings-btn {
+		flex-basis: 100%;
 		width: 100%;
-		flex: 1 1 auto;
 	}
 
 	.bookings-checkbox-row {
