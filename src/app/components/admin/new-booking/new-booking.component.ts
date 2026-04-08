@@ -323,9 +323,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	buildBookingData() {
 		console.log('rebuild booking data')
 		const vehicleId = this.BookingForm.get('vehicle_id').value;
+		const hasEmptyVehicleId =
+			vehicleId === null ||
+			vehicleId === undefined ||
+			vehicleId === '';
 		const isMasterVehiclePayload =
 			vehicleId === 0 ||
 			vehicleId === '0' ||
+			hasEmptyVehicleId ||
 			this.is_master_vehicle === true;
 		const vehicleTypeId = this.BookingForm.get('vehicle_type').value;
 		const effectiveVehicleId = vehicleId || this.QB_vehicle_id || this.route_vehicle_id || this.firstLoadVehicleId || vehicleTypeId || '';
