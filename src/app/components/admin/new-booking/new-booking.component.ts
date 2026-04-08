@@ -323,6 +323,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	buildBookingData() {
 		console.log('rebuild booking data')
 		const vehicleId = this.BookingForm.get('vehicle_id').value;
+		const isMasterVehiclePayload =
+			vehicleId === 0 ||
+			vehicleId === '0' ||
+			this.is_master_vehicle === true;
 		const vehicleTypeId = this.BookingForm.get('vehicle_type').value;
 		const effectiveVehicleId = vehicleId || this.QB_vehicle_id || this.route_vehicle_id || this.firstLoadVehicleId || vehicleTypeId || '';
 		const returnVehicleId = this.BookingForm.get('return_vehicle_id').value;
@@ -347,7 +351,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			distance: this.distance,
 			return_distance: this.return_distance,
 			no_of_hours: this.number_of_hours,
-			is_master_vehicle: this.is_master_vehicle,
+			is_master_vehicle: isMasterVehiclePayload,
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			manual_change_aff_veh: this.manual_change_aff_veh,
