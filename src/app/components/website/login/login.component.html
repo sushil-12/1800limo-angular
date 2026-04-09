@@ -76,7 +76,7 @@
 			<mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
 			<mat-form-field appearance="outline" class="mobileFieldlogin"
 				[class.is-invalid-input]="f.phone.errors && (f.phone.touched || f.phone.dirty || submitted)">
-				<mat-label>Phone Number</mat-label>
+				<mat-label>Enter your cell phone number </mat-label>
 				<input pattern="[0-9+]*" maxlength="16" matInput #phoneInput placeholder="1234567890" formControlName="phone" class="phoneNumberClass"
 					tabIndex="1" id="phn-input" autofocus style="text-indent: 0; font-size: 18px !important;"
 					(keypress)="numberOnly($event)" (input)="validatePhone()" (blur)="validatePhone()" />
