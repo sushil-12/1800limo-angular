@@ -136,6 +136,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	booking_data: any = {};
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
+	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '0';
 	numberOfHoursError: boolean = false;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
@@ -1353,6 +1354,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 	}
 	changeTransferType(type: string) {
+		this.transfer_type = type;
 		this.initAllAutocompletes()
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -1365,6 +1367,37 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
 		}
+	}
+
+	changeReturnTransferType(type: string) {
+		this.return_transfer_type = type;
+		this.initAllAutocompletes();
+	}
+
+	handleMirroredTransferTypeChange(type: string) {
+		if (!type) {
+			return;
+		}
+
+		if (this.BookingForm?.get('transfer_type')?.value !== type) {
+			this.BookingForm?.get('transfer_type')?.setValue(type);
+			return;
+		}
+
+		this.changeTransferType(type);
+	}
+
+	handleMirroredReturnTransferTypeChange(type: string) {
+		if (!type) {
+			return;
+		}
+
+		if (this.BookingForm?.get('return_transfer_type')?.value !== type) {
+			this.BookingForm?.get('return_transfer_type')?.setValue(type);
+			return;
+		}
+
+		this.changeReturnTransferType(type);
 	}
 
 	private updateReturnLegValidators(value: string) {

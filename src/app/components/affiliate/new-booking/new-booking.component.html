@@ -48,8 +48,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+							<mat-select [value]="Form.transfer_type.value" class="font-weight-bolder"
+								(selectionChange)="handleMirroredTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -74,7 +74,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type">
+							<mat-select [value]="Form.return_transfer_type.value"
+								(selectionChange)="handleMirroredReturnTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -897,8 +898,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+							<mat-select [value]="Form.transfer_type.value" class="font-weight-bolder"
+								(selectionChange)="handleMirroredTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
@@ -923,7 +924,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type">
+							<mat-select [value]="Form.return_transfer_type.value"
+								(selectionChange)="handleMirroredReturnTransferTypeChange($event.value)">
 								<mat-option value="airport_to_city">Airport To City ?</mat-option>
 								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
 								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
