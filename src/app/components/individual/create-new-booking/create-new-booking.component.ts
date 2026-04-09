@@ -3890,12 +3890,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
 				this.updateReturnLegValidators(value);
-				const reverseStringChars = (text: string) => {
-					let temp = text.split('_')
-					return temp.reverse().join('_')
-				}
-				this.SetFormValue('transfer_type', reverseStringChars(value), false)
-				this.transfer_type = reverseStringChars(value)
+				this.return_transfer_type = value
 			} else {
 				this.clearReturnOnlyValidators();
 			}

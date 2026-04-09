@@ -72,7 +72,6 @@ export class FooterComponent implements OnInit {
 	get Value(): string {
 		const user = this.currentUser;
 		const status = this.accountStatus;
-		console.log(user, "useruseruser")
 
 		if (user?.roleName == 'individual' || user?.roleName == 'travel_agent') {
 			if (user.is_profile_complete === 0 || user.is_profile_complete === '0') {
@@ -164,12 +163,10 @@ export class FooterComponent implements OnInit {
 		if (role == 'affiliate') {
 			this.spinner.show();//show spinner
 			this.router.navigateByUrl('/affiliate');
-			console.log("step 0  dashboard")
 		}
 		else if (role == 'admin') {
 			this.spinner.show();//show spinner
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
-			console.log("step 0  dashboard");
 
 		}
 	}
@@ -200,7 +197,6 @@ export class FooterComponent implements OnInit {
 					localStorage.removeItem('sub_modules')
 					this.router.navigate(['/home']);
 					location.reload()
-					console.log("Logout Successfully");
 				}
 			});
 	}

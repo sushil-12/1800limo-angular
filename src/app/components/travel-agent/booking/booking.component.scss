@@ -614,7 +614,7 @@ a.dropdown-item {
 	position: sticky;
 	left: 50px;
 	color: #000;
-	text-transform: uppercase;
+	text-transform: none;
 	padding: 0.5rem 0.8rem;
 	border-radius: 10px;
 	font-size: 1.10rem;
@@ -672,7 +672,7 @@ a.dropdown-item {
 	font-weight: 800 !important;
 	color: #000 !important;
 	border: 2px solid yellow;
-	text-transform: uppercase;
+	text-transform: none;
 }
 
 .pin-icon-preview {

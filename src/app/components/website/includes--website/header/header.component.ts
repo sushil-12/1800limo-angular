@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
 		this.router.events.pipe(filter(e => e instanceof Scroll)).subscribe((e: any) => {
 			const tree = this.router.parseUrl(this.router.url);
 			this.currentRoute = tree.root.children.primary.segments[0].path;
-			console.log(this.currentRoute)
 		});
 
 		//to remove join us btn from header
@@ -91,7 +90,6 @@ export class HeaderComponent implements OnInit {
 	get Value(): string {
 		const user = this.currentUser;
 		const status = this.accountStatus;
-		console.log(user, "useruseruser")
 
 		if (user?.roleName == 'travel_agent') {
 			let stepsObj: any = {};
@@ -141,15 +139,12 @@ export class HeaderComponent implements OnInit {
 
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
-		console.log('NGINIT HEADER - Current User:', this.currentUser);
 		if (this.currentUser && !this.shouldSkipPermissionsFetch()) {
 			this.getPermissions()
 		}
 		// Get Steps
 		this.steps = localStorage.getItem("stepCompleted") || "";
 		this.accountStatus = localStorage.getItem("account_approval") || "";
-
-		console.log('NGINIT HEADER - Value (Getter):', this.Value);
 
 		this.cdr.detectChanges();
 
@@ -250,19 +245,16 @@ export class HeaderComponent implements OnInit {
 	}
 
 	openLogoutModal() {
-		console.log('Open Logout Modal Clicked');
 		this.showLogoutModal = true;
 		this.cdr.detectChanges();
 	}
 
 	closeLogoutModal() {
-		console.log('Close Logout Modal Clicked');
 		this.showLogoutModal = false;
 		this.cdr.detectChanges();
 	}
 
 	logout() {
-		console.log('Logout Confirmed');
 		this.spinner.show()
 		this.authService.logout()
 			.pipe(
@@ -278,7 +270,6 @@ export class HeaderComponent implements OnInit {
 					localStorage.removeItem('sub_modules')
 					this.router.navigate(['/home']);
 					location.reload()
-					console.log("Logout Successfully");
 				}
 			});
 	}
@@ -292,13 +283,11 @@ export class HeaderComponent implements OnInit {
 			}
 			else {
 				this.router.navigateByUrl('/affiliate');
-				console.log("step 0  dashboard")
 			}
 		}
 		else if (role == 'admin') {
 			this.spinner.show();//show spinner
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
-			console.log("step 0  dashboard");
 
 		}
 		else if (role == 'sub_affiliate') {
@@ -322,13 +311,11 @@ export class HeaderComponent implements OnInit {
 		// 	}
 		// }
 		else {
-			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)
 		}
 	}
 	redirectCompleteProfile(role) {
-		console.log('redirecting to complete profile', role)
 		this.spinner.show()
 		if (role == 'affiliate' || role == 'driver') {
 			let isAffiliate_approved = localStorage.getItem('account_approval')
@@ -338,7 +325,6 @@ export class HeaderComponent implements OnInit {
 			}
 			else {
 				this.router.navigateByUrl('/affiliate');
-				console.log("step 0  dashboard")
 			}
 		}
 		else if (role == 'travel_agent') {
