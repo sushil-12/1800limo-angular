@@ -96,7 +96,7 @@
                             id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
                             <thead>
                                 <tr role="row">
-                                    <th>Actions</th>
+                                    <th>Status</th>
                                     <th>Booking</th>
 
                                     <th>Date</th>
@@ -110,6 +110,16 @@
                                 <tr role="row" class="odd" *ngFor="let booking of bookings">
                                     <td class="text-center"
                                         [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
+                                        <div style="margin-bottom: 38px !important;" class="status-action-container">
+                                            <div data-toggle="modal" data-target="#change_status_booking_Modal"
+                                                class="status-pill {{ (booking?.booking_status == 'rejection_requested' ? 'pending' : booking?.booking_status) }}"
+                                                style="cursor: pointer;">
+                                                {{textFormatter(booking.booking_status == 'driver_unassigned' ?
+                                                'Unassigned'
+                                                : (booking.booking_status == 'rejection_requested' ? 'Pending' :
+                                                booking.booking_status)) |titlecase}}
+                                            </div>
+                                        </div>
                                         <a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
                                             id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -161,16 +171,6 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Pay Booking
                                             </a> -->
-                                        </div>
-                                        <div style="margin-top: 35px;" class="status-action-container">
-                                            <div data-toggle="modal" data-target="#change_status_booking_Modal"
-                                                class="status-pill {{ (booking?.booking_status == 'rejection_requested' ? 'pending' : booking?.booking_status) }}"
-                                                style="cursor: pointer;">
-                                                {{textFormatter(booking.booking_status == 'driver_unassigned' ?
-                                                'Unassigned'
-                                                : (booking.booking_status == 'rejection_requested' ? 'Pending' :
-                                                booking.booking_status)) |titlecase}}
-                                            </div>
                                         </div>
                                     </td>
 
