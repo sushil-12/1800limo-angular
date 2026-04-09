@@ -45,8 +45,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+							<mat-select [value]="Form.transfer_type.value" class="font-weight-bolder"
+								(selectionChange)="handleMirroredTransferTypeChange($event.value)">
 								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -71,7 +71,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type">
+							<mat-select [value]="Form.return_transfer_type.value"
+								(selectionChange)="handleMirroredReturnTransferTypeChange($event.value)">
 								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -891,8 +892,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+							<mat-select [value]="Form.transfer_type.value" class="font-weight-bolder"
+								(selectionChange)="handleMirroredTransferTypeChange($event.value)">
 								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -917,7 +918,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type">
+							<mat-select [value]="Form.return_transfer_type.value"
+								(selectionChange)="handleMirroredReturnTransferTypeChange($event.value)">
 								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}

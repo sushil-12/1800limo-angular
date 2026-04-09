@@ -1462,6 +1462,18 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
+	handleMirroredTransferTypeChange(type: string) {
+		if (!type) {
+			return;
+		}
+
+		if (this.BookingForm?.get('transfer_type')?.value !== type) {
+			this.BookingForm?.get('transfer_type')?.setValue(type);
+			return;
+		}
+
+		this.changeTransferType(type);
+	}
 	handleClientAccChange(selectedAcc) {
 		this.isTravelShare = selectedAcc == 'travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
@@ -2536,6 +2548,19 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	changeReturnTransferType(event: any) {
 		this.return_transfer_type = event
 		this.initAllAutocompletes()
+	}
+
+	handleMirroredReturnTransferTypeChange(type: string) {
+		if (!type) {
+			return;
+		}
+
+		if (this.BookingForm?.get('return_transfer_type')?.value !== type) {
+			this.BookingForm?.get('return_transfer_type')?.setValue(type);
+			return;
+		}
+
+		this.changeReturnTransferType(type);
 	}
 
 
