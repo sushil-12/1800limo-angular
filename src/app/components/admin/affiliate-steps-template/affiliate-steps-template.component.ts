@@ -69,7 +69,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 					).subscribe(({ data }: any) => {
 						if (data) {
 							const stepCompleted = data.step_completed;
-							const stepCompletedObj = data.step_completed_obj;
+							const stepCompletedObj = this.mergeWithLocalCompletedSteps(data.step_completed_obj);
 							this.affiliateAccountStatus = data.account_approval;
 							if (stepCompleted) {
 								this.stepCompleted = stepCompleted;
@@ -84,10 +84,22 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 				const stepsObjStr = sessionStorage.getItem('step_completed_obj');
 				if (stepsObjStr) {
 					this.stepsObj = JSON.parse(stepsObjStr);
+					this.stepCompletedObj = this.mergeWithLocalCompletedSteps(this.stepsObj);
 				}
 				this.stepCompletionTick();
 			}
 		});
+	}
+
+	private mergeWithLocalCompletedSteps(stepCompletedObj: any) {
+		const mergedSteps = { ...(stepCompletedObj || {}) };
+		const localSteps = this.adminService.getLocalStepsCompleted?.() || [];
+		localSteps.forEach((step: string) => {
+			if (step !== null && step !== undefined && step !== '') {
+				mergedSteps[`step${step}`] = 'completed';
+			}
+		});
+		return mergedSteps;
 	}
 
 	getAffiliateName() {

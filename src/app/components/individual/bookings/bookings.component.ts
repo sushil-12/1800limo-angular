@@ -134,7 +134,7 @@ export class BookingsComponent implements OnInit {
 		};
 
 		this.searchText = this.affiliateService.checkCookie('indv_search') ?
-			(this.affiliateService.getCookie('indv_search') || '').toUpperCase()
+			(this.affiliateService.getCookie('indv_search') || '')
 			: "";
 
 		this.useDateFilter = localStorage.getItem('indvUseDateFilter') ?
@@ -383,7 +383,7 @@ export class BookingsComponent implements OnInit {
 	}
 
 	searchInBookings(search_value: string) {
-		this.searchText = (search_value ?? "").toUpperCase()
+		this.searchText = search_value ?? ""
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {

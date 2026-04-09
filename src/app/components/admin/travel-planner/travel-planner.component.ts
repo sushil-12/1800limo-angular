@@ -63,7 +63,7 @@ export class TravelPlannerComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.searchText = localStorage.getItem('TravelAgentSearch') ? (localStorage.getItem('TravelAgentSearch') || '').toUpperCase() : ''
+    this.searchText = localStorage.getItem('TravelAgentSearch') ? (localStorage.getItem('TravelAgentSearch') || '') : ''
     this.loadTravelPlanners();//load travelPlanners
     this.buildSendEmailForm();
 
@@ -80,7 +80,7 @@ export class TravelPlannerComponent implements OnInit {
   timer: any
   handleSearchKeyword(text: any) {
     console.log('on change search text-->>', text)
-    this.searchText = (text || '').toUpperCase()
+    this.searchText = text || ''
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       localStorage.setItem('TravelAgentSearch', this.searchText || '')

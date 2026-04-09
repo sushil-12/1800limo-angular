@@ -4129,12 +4129,7 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 					this.BookingForm.get('departing_airport_city').clearValidators();
 					this.BookingForm.get('departing_airport_city').updateValueAndValidity();
 				}
-				const reverseStringChars = (text: string) => {
-					let temp = text.split('_')
-					return temp.reverse().join('_')
-				}
-				this.SetFormValue('transfer_type', reverseStringChars(value), false)
-				this.transfer_type = reverseStringChars(value)
+				this.return_transfer_type = value
 			} else {
 				this.clearReturnOnlyValidators();
 			}

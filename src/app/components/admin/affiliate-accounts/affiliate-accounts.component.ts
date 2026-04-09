@@ -93,7 +93,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.buildSendEmailForm();
 		this.operatorSelect = localStorage.getItem(this.affiliateOperatorStorageKey) || 'all';
 		this.filter_type = localStorage.getItem(this.affiliateFilterStorageKey) || 'all';
-		this.searchText = (localStorage.getItem(this.affiliateSearchStorageKey) || '').toUpperCase();
+		this.searchText = localStorage.getItem(this.affiliateSearchStorageKey) || '';
 
 		this.affiliateTypeSwitch(this.operatorSelect)
 		sessionStorage.clear()
@@ -170,7 +170,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	timer: any
 	handleSearchKeyword(text: any) {
 		console.log('on change search text-->>', text)
-		this.searchText = (text || '').toUpperCase()
+		this.searchText = text || ''
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem(this.affiliateSearchStorageKey, this.searchText || '')
