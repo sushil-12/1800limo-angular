@@ -197,6 +197,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	isFarmoutBooking: boolean = false;
 	private isPrefillingTransferTypes: boolean = false;
 	AffiliateAccounts_copy: any;
+	private AffiliateAccounts_Original: Array<Record<string, any>> = [];
+	private ReturnAffiliateAccounts_Original: Array<Record<string, any>> = [];
 	public canceloptions: Array<Object>;
 	currencySymbol: any;
 	currencyObj: any;
@@ -3225,6 +3227,27 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 	}
 
+	private buildAffiliateDisplayName(item: any): string {
+		return [item?.name, item?.driver_name, item?.badge_city_name]
+			.map((value) => (value ?? '').toString().trim())
+			.filter((value) => !!value)
+			.join(' / ');
+	}
+
+	private getAffiliateSearchText(item: any): string {
+		return [
+			item?.name,
+			item?.driver_name,
+			item?.badge_city_name,
+			item?.phone,
+			item?.last_name,
+			item?.LastName
+		]
+			.map((value) => (value ?? '').toString().trim().toLowerCase())
+			.filter((value) => !!value)
+			.join(' ');
+	}
+
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
@@ -3240,10 +3263,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
+						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
 						return item
 					})
 					console.log('affiliate accounts', this.AffiliateAccounts)
+					this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
 					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
@@ -3273,11 +3297,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.Return_AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
+						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
 						return item
 					})
 					console.log('affiliate accounts', this.Return_AffiliateAccounts)
-					this.AffiliateAccounts_copy = [...this.Return_AffiliateAccounts]
+					this.ReturnAffiliateAccounts_Original = [...this.Return_AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
 					// {
@@ -3294,12 +3318,35 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	changeAffiliateAccount(event) {
 		console.log('in change aff acc', event)
-		this.AffiliateAccounts = this.AffiliateAccounts_copy.filter((item) =>
-			item.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
-			item.driver_name.toLowerCase().includes(event.target.value.toLowerCase())
+		this.AffiliateAccounts = this.AffiliateAccounts_Original.filter((item) =>
+			this.getAffiliateSearchText(item).includes((event.target.value || '').toLowerCase())
 		)
 		console.log('in change aff acc', this.AffiliateAccounts)
 
+	}
+
+	handleAffiliateSearch(event: { term?: string }) {
+		const term = (event?.term || '').toLowerCase().trim();
+		if (!term) {
+			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
+			return;
+		}
+
+		this.AffiliateAccounts = this.AffiliateAccounts_Original.filter((item) =>
+			this.getAffiliateSearchText(item).includes(term)
+		);
+	}
+
+	handleReturnAffiliateSearch(event: { term?: string }) {
+		const term = (event?.term || '').toLowerCase().trim();
+		if (!term) {
+			this.Return_AffiliateAccounts = [...this.ReturnAffiliateAccounts_Original];
+			return;
+		}
+
+		this.Return_AffiliateAccounts = this.ReturnAffiliateAccounts_Original.filter((item) =>
+			this.getAffiliateSearchText(item).includes(term)
+		);
 	}
 	// custom search function
 	airportSearchFunction(term: string, item: any) {
@@ -5488,20 +5535,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 			}
 
-			const reverseStringChars = (text: string) => {
-				let temp = text.split('_')
-				return temp.reverse().join('_')
-			}
-			if (!this.isPrefillingTransferTypes) {
-				this.SetFormValue('transfer_type', reverseStringChars(value), false)
-				this.transfer_type = reverseStringChars(value)
-			}
+			this.return_transfer_type = value
 			if (this.Form.service_type.value == 'round_trip') {
 				this.refreshMapIfRouteReady(true);
 			}
 			console.log('component return_transfer_type after update', this.return_transfer_type);
-			console.log('component transfer_type after sync', this.transfer_type);
-			console.log('form transfer_type after sync', this.BookingForm?.get('transfer_type')?.value);
+			console.log('component transfer_type remains', this.transfer_type);
+			console.log('form transfer_type remains', this.BookingForm?.get('transfer_type')?.value);
 			console.groupEnd();
 		})
 
@@ -6811,13 +6851,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	onSearchAffiliateId(term, item) {
 		console.log("term", term, "item", item)
-		// return item.bindNameAffiliate.toLowerCase().startsWith(term.toLowerCase())
-
-		return item.name.toLowerCase().includes(term.toLowerCase())
-			|| item.driver_name.toLowerCase().includes(term.toLowerCase())
-			|| item.phone.includes(term)
-			|| (item?.last_name && item.last_name.toLowerCase().includes(term.toLowerCase()))
-			|| (item?.LastName && item.LastName.toLowerCase().includes(term.toLowerCase()))
+		return this.getAffiliateSearchText(item).includes((term || '').toLowerCase())
 
 		//   console.log("in search",event)
 		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))

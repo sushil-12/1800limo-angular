@@ -54,3 +54,66 @@ div#imageModal {
     pointer-events: auto;
   }
 }
+@media only screen and (max-width: 1266px) {
+ div#imageModal {
+    padding: 1.25rem;
+
+    button.close {
+      right: 14px;
+      top: 300px;
+      width: 42px;
+      height: 42px;
+    } 
+    .close span {
+      font-size: 28px;
+    }
+
+    img {
+      max-width: calc(100% - 28px);
+      max-height: calc(100% - 28px);
+    }
+  }
+}
+@media only screen and (max-width: 991px) {
+  div#imageModal {
+    padding: 1.25rem;
+
+    button.close {
+      right: 14px;
+      top: 200px;
+      width: 42px;
+      height: 42px;
+    }
+
+    .close span {
+      font-size: 28px;
+    }
+
+    img {
+      max-width: calc(100% - 28px);
+      max-height: calc(100% - 28px);
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  div#imageModal {
+    padding: 0.85rem;
+
+    button.close {
+      right: 10px;
+      top: 300px;
+      width: 38px;
+      height: 38px;
+    }
+
+    .close span {
+      font-size: 25px;
+    }
+
+    img {
+      max-width: calc(100% - 20px);
+      max-height: calc(100% - 20px);
+    }
+  }
+}

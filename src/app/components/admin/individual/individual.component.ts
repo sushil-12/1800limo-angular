@@ -62,7 +62,7 @@ export class IndividualComponent implements OnInit {
 		private spinner: NgxSpinnerService) { }
 
 	ngOnInit(): void {
-		this.searchText = localStorage.getItem('individualSearch') ? localStorage.getItem('individualSearch') : ''
+		this.searchText = localStorage.getItem('individualSearch') ? (localStorage.getItem('individualSearch') || '').toUpperCase() : ''
 		this.loadIndividuals();//load individuals
 		this.buildSendEmailForm();
 
@@ -76,10 +76,10 @@ export class IndividualComponent implements OnInit {
 	timer: any
 	handleSearchKeyword(text: any) {
 		console.log('on change search text-->>', text)
-		this.searchText = text
+		this.searchText = (text || '').toUpperCase()
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			localStorage.setItem('individualSearch', text)
+			localStorage.setItem('individualSearch', this.searchText || '')
 			// this.loadIndividuals()
 		}, 700)
 	}

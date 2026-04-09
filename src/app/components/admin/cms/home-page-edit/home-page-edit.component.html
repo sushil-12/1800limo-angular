@@ -60,7 +60,7 @@
 																*ngIf="imagesRecords[k] != null">
 																<input type="file"
 																	(change)="DynamicImageChange($event, 'clientLogo', k, imagesRecords[k].id)"
-																	accept="image/jpeg, image/png">
+																	accept="image/jpeg, image/png, image/webp">
 																<svg xmlns="http://www.w3.org/2000/svg"
 																	viewBox="0 0 24 24">
 																	<path fill="none" d="M0 0h24v24H0V0z" />
@@ -73,7 +73,7 @@
 																*ngIf="imagesRecords[k] == null">
 																<input type="file"
 																	(change)="DynamicImageChange($event, 'clientLogo', k)"
-																	accept="image/jpeg, image/png">
+																	accept="image/jpeg, image/png, image/webp">
 																<svg xmlns="http://www.w3.org/2000/svg"
 																	viewBox="0 0 24 24">
 																	<path fill="none" d="M0 0h24v24H0V0z" />
@@ -220,7 +220,7 @@
 																			*ngIf="imageArray[j] != null">
 																			<input type="file"
 																				(change)="DynamicImageChange($event, 'sliderImages', j, slider_type_content[j].image.id)"
-																				accept="image/jpeg, image/png">
+																				accept="image/jpeg, image/png, image/webp">
 																			<svg xmlns="http://www.w3.org/2000/svg"
 																				viewBox="0 0 24 24">
 																				<path fill="none" d="M0 0h24v24H0V0z" />
@@ -233,7 +233,7 @@
 																			*ngIf="imageArray[j] == null">
 																			<input type="file"
 																				(change)="DynamicImageChange($event, 'sliderImages', j, null)"
-																				accept="image/jpeg, image/png">
+																				accept="image/jpeg, image/png, image/webp">
 																			<svg xmlns="http://www.w3.org/2000/svg"
 																				viewBox="0 0 24 24">
 																				<path fill="none" d="M0 0h24v24H0V0z" />

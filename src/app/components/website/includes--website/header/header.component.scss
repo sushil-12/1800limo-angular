@@ -42,8 +42,31 @@ header {
 	border-radius: 24px;
 }
 
+.contact-number,
+.login-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	box-sizing: border-box;
+	border: 2px solid transparent;
+}
+
 .login-button:hover {
 	color: #000 !important;
+}
+
+.contact-number:focus,
+.contact-number:active,
+.contact-number.show,
+.login-button:focus,
+.login-button:active,
+.login-button.show {
+	min-height: 44px;
+	box-sizing: border-box;
+	border: 2px solid transparent;
+	outline: none;
+	box-shadow: none;
 }
 
 .nav-buttons {
@@ -246,6 +269,33 @@ ul {
 
 	.nav-item.dropdown.button-signin {
 		flex-direction: column;
+	}
+
+	.nav-buttons .dropdown-menu,
+	.nav-buttons .logInDropdown {
+		position: absolute !important;
+		float: left;
+		left: 0 !important;
+		right: auto !important;
+		margin-top: -10px !important;
+		width: 280px;
+		max-width: calc(100vw - 70px);
+		border-radius: 14px;
+		background: #fff;
+		padding: 0.35rem 0 0.55rem;
+		z-index: 1000;
+	}
+
+	.nav-buttons .nav-item.dropdown {
+		position: relative;
+	}
+
+	.nav-buttons .dropdown-header {
+		padding: 0.9rem 0.9rem 0.6rem;
+	}
+
+	.nav-buttons .dropdown-item {
+		margin: 10px 12px;
 	}
 }
 

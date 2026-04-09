@@ -52,7 +52,7 @@
 				</div>
 				<div class="col-md-4 py-2 affiliate-search-col">
 					<mat-form-field appearance="outline" class="m-0">
-						<input type="text" matInput [(ngModel)]="searchText" (focus)="$event.target.select()"
+						<input type="text" matInput class="search-uppercase-input" [(ngModel)]="searchText" (focus)="$event.target.select()"
 							(ngModelChange)="handleSearchKeyword($event)"
 							placeholder="Search by status, name, email, phone, company, city, address, vehicle type"
 							id="keyword1" autofocus>

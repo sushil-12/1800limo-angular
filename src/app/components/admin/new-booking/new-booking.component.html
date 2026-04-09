@@ -801,11 +801,11 @@
 							formControlName="susbcriber_name" readonly />
 					</mat-form-field>
 					<!-- Ng-Select -->
-					<ng-select [searchable]="true" appearance="outline" [searchFn]="onSearchAffiliateId"
+					<ng-select [searchable]="true" appearance="outline"
 						[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
 						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)"
-						(search)="handleAffiliateSearch($event)" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
 			</div>
@@ -3188,11 +3188,10 @@
 
 					<!-- Ng-Select -->
 					<ng-select appearance="outline" [searchable]="true" appearance="outline"
-						[searchFn]="onSearchAffiliateId" [items]="Return_AffiliateAccounts"
+						[items]="Return_AffiliateAccounts"
 						bindLabel="bindNameAffiliate" bindValue="id" placeholder="Select Affiliate"
 						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)"
-						(search)="handleReturnAffiliateSearch($event)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>

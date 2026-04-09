@@ -67,7 +67,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.searchText = localStorage.getItem('looseAffiliateSearch') ? localStorage.getItem('looseAffiliateSearch') : ''
+    this.searchText = localStorage.getItem('looseAffiliateSearch') ? (localStorage.getItem('looseAffiliateSearch') || '').toUpperCase() : ''
     this.sendMessageForm = this.$form.group({
       file: [null]
     })
@@ -83,10 +83,10 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   timer: any
   handleSearchKeyword(text: any) {
     console.log('on change search text-->>', text)
-    this.searchText = text
+    this.searchText = (text || '').toUpperCase()
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      localStorage.setItem('looseAffiliateSearch', text)
+      localStorage.setItem('looseAffiliateSearch', this.searchText || '')
       // this.loadSubLooseAffiliateAcc()
     }, 700)
   }
