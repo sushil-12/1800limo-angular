@@ -306,7 +306,7 @@ header a.nav-link.active {
 	margin: 25px 25px;
 	border-radius: 20px;
 	padding: 25px 25px 0px 25px;
-	background: linear-gradient(279.48deg, rgba(18, 18, 18, 0.5) 4.05%, #1212129c 86.45%), url('../images/banner1.jpg');
+	background: linear-gradient(279.48deg, rgba(18, 18, 18, 0.5) 4.05%, #1212129c 86.45%), url('../images/home-page-banner.webp');
 	background-size: cover;
 	background-position: top center;
 	height: auto;

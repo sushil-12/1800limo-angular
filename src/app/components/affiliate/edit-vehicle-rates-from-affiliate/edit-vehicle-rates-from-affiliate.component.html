@@ -593,6 +593,7 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg ">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 								<input matInput placeholder="City Tax" formControlName="city_tax" tabindex="1">
 							</mat-form-field>
 							<div *ngIf="submittedForm && form.city_tax.errors || form.city_tax.touched && form.city_tax.errors"
@@ -634,6 +635,7 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 								<input matInput placeholder="State Tax" formControlName="state_tax" tabindex="1">
 							</mat-form-field>
 							<div *ngIf="submittedForm && form.state_tax.errors || form.state_tax.touched && form.state_tax.errors"
@@ -675,6 +677,7 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 								<input matInput placeholder="VAT" formControlName="vat" tabindex="1">
 							</mat-form-field>
 							<div *ngIf="submittedForm && form.vat.errors || form.vat.touched && form.vat.errors"
@@ -715,6 +718,7 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 								<input matInput placeholder="Workman's Comp" formControlName="workmans_comp"
 									tabindex="1">
 							</mat-form-field>
@@ -757,6 +761,7 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 								<input matInput placeholder="Other Transportation Tax"
 									formControlName="other_transportation_tax" tabindex="1">
 							</mat-form-field>

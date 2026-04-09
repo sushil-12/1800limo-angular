@@ -319,6 +319,14 @@ button {
 	border-color: var(--orange-color) !important;
 }
 
+.search-uppercase-input {
+	text-transform: uppercase;
+}
+
+.search-uppercase-input::placeholder {
+	text-transform: none;
+}
+
 .email-all-modal__btn--orange {
 	background-color: #8f949c !important;
 	border-color: #8f949c !important;

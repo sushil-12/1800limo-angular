@@ -17,7 +17,7 @@ export class CommonService {
 		if (!acceptedFiles.includes(fileType)) {
 			return this.errorModal.openDialog({
 				errors: {
-					error: 'Please upload only jpeg or png file type!'
+					error: 'Please upload only jpeg, png, webp, or avif file type!'
 				}
 			})
 		} else {

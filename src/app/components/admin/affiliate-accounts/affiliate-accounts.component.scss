@@ -82,6 +82,14 @@
     padding: 0.875rem 1rem !important;
 }
 
+.search-uppercase-input {
+    text-transform: uppercase;
+}
+
+.search-uppercase-input::placeholder {
+    text-transform: none;
+}
+
 .clickable {
     cursor: pointer;
     transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;

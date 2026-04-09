@@ -325,8 +325,8 @@ input::-webkit-input-placeholder {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	flex-wrap: wrap;
-	gap: 10px;
+	flex-wrap: nowrap;
+	gap: 12px;
 }
 
 .bookings-filter-panel {
@@ -406,11 +406,13 @@ input::-webkit-input-placeholder {
 @media (max-width: 991.98px) {
 	.bookings-invite-actions {
 		justify-content: flex-start;
+		flex-wrap: nowrap;
 	}
 
 	.invite-agent-button {
-		width: 100%;
-		max-width: 260px;
+		width: auto;
+		max-width: none;
+		flex: 0 1 240px;
 	}
 }
 
@@ -441,14 +443,17 @@ input::-webkit-input-placeholder {
 	}
 
 	.bookings-invite-actions {
-		flex-direction: column;
-		align-items: stretch;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		padding-right: 50px !important;
 	}
 
-	.invite-agent-button,
-	.x-copy-btn {
-		width: 100%;
-		max-width: 100%;
+	.invite-agent-button {
+		width: auto;
+		max-width: none;
+		flex: 1 1 auto;
 	}
 
 	.bookings-action-row {
@@ -590,8 +595,19 @@ a.dropdown-item {
 .x-copy-btn {
 	opacity: 1;
 	color: black;
-	font-size: xx-large;
-	width: max-content;
+	font-size: 1.7rem;
+	width: 46px;
+	min-width: 46px;
+	height: 46px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 12px;
+	margin: 0 !important;
+	float: none !important;
+	line-height: 1;
+	padding: 0 !important;
+	flex: 0 0 46px;
 }
 
 .uploadExcelFile {
@@ -643,7 +659,12 @@ a.dropdown-item {
 
 .invite-agent-button {
 	color: #fff !important;
-	padding: 2px 12px !important;
+	padding: 0 18px !important;
+	min-height: 46px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
 }
 
 .invite-agent-button:active {
