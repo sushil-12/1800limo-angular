@@ -99,16 +99,6 @@ export const aboutUsData = {
                     </div>
                 `
             },
-            {
-                year: "2008",
-                title: "March 2009 – Uber Technologies Starts funded by Google Ventures and others.",
-                description: ""
-            },
-            {
-                year: "2010",
-                title: "June 2012 – Lyft, Inc Starts and funded by numerous Silicon Venture firms and others.",
-                description: ""
-            }
         ]
     },
     efficiencies: {

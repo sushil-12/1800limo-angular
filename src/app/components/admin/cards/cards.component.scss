@@ -37,6 +37,14 @@
 	color: #f3933d;
 }
 
+.payment-amount-field {
+	.currencySymbol {
+		display: inline-flex;
+		align-items: center;
+		padding-right: 6px;
+	}
+}
+
 .btn-shadow{
 	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
 }

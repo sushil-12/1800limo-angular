@@ -3629,6 +3629,72 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		setVehicleValue('vehicle_seats', selectedVehicle?.seats);
 	}
 
+	private resolveBigDataOptionId(items: any[] = [], candidates: any[] = []): any {
+		const normalizedCandidates = candidates
+			.map((candidate) => (candidate ?? '').toString().trim().toLowerCase())
+			.filter((candidate) => !!candidate);
+
+		if (!normalizedCandidates.length || !Array.isArray(items) || !items.length) {
+			return null;
+		}
+
+		const matchedItem = items.find((item) => {
+			const itemName = (item?.name ?? item?.formatted_name ?? '').toString().trim().toLowerCase();
+			return normalizedCandidates.includes(itemName);
+		});
+
+		return matchedItem?.id ?? matchedItem?.vehicleType_id ?? matchedItem?.make_id ?? matchedItem?.model_id ?? matchedItem?.year_id ?? matchedItem?.color_id ?? null;
+	}
+
+	private normalizeMasterVehicleForPrefill(selectedVehicle: any): any {
+		if (!selectedVehicle) {
+			return null;
+		}
+
+		const vehicleDetails = selectedVehicle?.vehicle_details || {};
+		const vehicleTypeName = selectedVehicle?.vehicleType ?? selectedVehicle?.vehicleTypeName ?? selectedVehicle?.name ?? vehicleDetails?.type ?? '';
+		const vehicleMakeName = selectedVehicle?.make ?? selectedVehicle?.vehicleMake ?? vehicleDetails?.make ?? '';
+		const vehicleModelName = selectedVehicle?.model ?? selectedVehicle?.vehicleModel ?? vehicleDetails?.model ?? '';
+		const vehicleYearName = selectedVehicle?.year ?? selectedVehicle?.vehicleYear ?? vehicleDetails?.year ?? '';
+		const vehicleColorName = selectedVehicle?.color ?? selectedVehicle?.vehicleColor ?? vehicleDetails?.color ?? '';
+
+		return {
+			id: selectedVehicle?.ID ?? selectedVehicle?.id ?? selectedVehicle?.vehicle_id ?? null,
+			vehicleType_id: selectedVehicle?.vehicleType_id ?? selectedVehicle?.vehicle_type ?? this.resolveBigDataOptionId(this.BigData?.vehicleCategories, [vehicleTypeName]),
+			vehicleType: vehicleTypeName,
+			make_id: selectedVehicle?.make_id ?? selectedVehicle?.vehicle_make ?? this.resolveBigDataOptionId(this.BigData?.vehicleMakes, [vehicleMakeName]),
+			make: vehicleMakeName,
+			model_id: selectedVehicle?.model_id ?? selectedVehicle?.vehicle_model ?? this.resolveBigDataOptionId(this.BigData?.vehicleModels, [vehicleModelName]),
+			model: vehicleModelName,
+			year_id: selectedVehicle?.year_id ?? selectedVehicle?.vehicle_year ?? this.resolveBigDataOptionId(this.BigData?.vehicleYears, [vehicleYearName]),
+			year: vehicleYearName,
+			color_id: selectedVehicle?.color_id ?? selectedVehicle?.vehicle_color ?? this.resolveBigDataOptionId(this.BigData?.vehicleColors, [vehicleColorName]),
+			color: vehicleColorName,
+			licensePlate: selectedVehicle?.licensePlate ?? selectedVehicle?.vehicle_license_plate ?? vehicleDetails?.licensePlate ?? vehicleDetails?.license_plate ?? '',
+			seats: selectedVehicle?.seats ?? vehicleDetails?.seats ?? selectedVehicle?.passenger ?? vehicleDetails?.passenger ?? '',
+			number_of_vehicles: selectedVehicle?.number_of_vehicles,
+			cancellation_policy: selectedVehicle?.cancellation_policy,
+			non_charter_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours,
+			charter_cancellation_hours: selectedVehicle?.charter_cancellation_hours
+		};
+	}
+
+	private loadMasterVehicleInfoForQuoteBot(vehicleId: number, isReturn: boolean = false): void {
+		if (!vehicleId) {
+			return;
+		}
+
+		this.$api.getMasterVehicleInfo(vehicleId).subscribe({
+			next: (response: any) => {
+				const normalizedVehicle = this.normalizeMasterVehicleForPrefill(response?.data);
+				this.prefillVehiclePreferencesFromMasterVehicle(normalizedVehicle, isReturn);
+			},
+			error: (error: any) => {
+				console.error('Failed to fetch master vehicle info for QB admin prefill', error);
+			}
+		});
+	}
+
 	fetchAffiliateVehicles(affiliate_id: any) {
 		if (!affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
@@ -6614,6 +6680,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		const isMasterVehicleQuoteFlow = this.route_is_master_vehicle === true || selected_vehicle?.is_master_vehicle === true;
+		const resolvedMasterVehicleId = Number(selected_vehicle?.id || selected_vehicle?.ID || this.route_vehicle_id || 0);
+		const normalizedSelectedVehicle = this.normalizeMasterVehicleForPrefill(selected_vehicle);
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
@@ -6662,14 +6731,41 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('number_of_hours', QB?.booking_hour, false)
 			this.number_of_hours = QB?.booking_hour
 		}
+
+		if (isMasterVehicleQuoteFlow) {
+			this.BookingForm.patchValue({
+				affiliate_type: 'loose_affiliate',
+				affiliate_id: '',
+				loose_affiliate_id: '',
+				return_affiliate_type: 'loose_affiliate',
+				return_affiliate_id: '',
+				return_loose_affiliate_id: ''
+			});
+		} else {
+			this.SetFormValue('affiliate_type', 'affiliate');
+			this.SetFormValue('affiliate_id', this.affiliate_id);
+			if (this.service_type === 'round_trip') {
+				this.SetFormValue('return_affiliate_id', this.affiliate_id);
+			}
+		}
+
 		//set no of vehicles
-		this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
-		this.prefillVehiclePreferencesFromMasterVehicle(selected_vehicle);
+		this.SetFormValue('number_of_vehicles', normalizedSelectedVehicle?.number_of_vehicles ?? selected_vehicle?.number_of_vehicles)
+		this.prefillVehiclePreferencesFromMasterVehicle(normalizedSelectedVehicle);
 		if (this.service_type === 'round_trip') {
-			this.prefillVehiclePreferencesFromMasterVehicle(selected_vehicle, true);
+			this.prefillVehiclePreferencesFromMasterVehicle(normalizedSelectedVehicle, true);
+		}
+		if (isMasterVehicleQuoteFlow && resolvedMasterVehicleId > 0) {
+			this.loadMasterVehicleInfoForQuoteBot(resolvedMasterVehicleId);
+			if (this.service_type === 'round_trip') {
+				this.loadMasterVehicleInfoForQuoteBot(resolvedMasterVehicleId, true);
+			}
 		}
 		// set cancellation period without breaking master-vehicle prefill
 		const fallbackCancellationHours =
+			normalizedSelectedVehicle?.cancellation_policy ??
+			normalizedSelectedVehicle?.non_charter_cancellation_hours ??
+			normalizedSelectedVehicle?.charter_cancellation_hours ??
 			selected_vehicle?.cancellation_policy ??
 			selected_vehicle?.non_charter_cancellation_hours ??
 			selected_vehicle?.charter_cancellation_hours ??
@@ -6704,9 +6800,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (this.service_type === 'round_trip') {
 			this.init_return_rates = false;
 			this.retryGoogleAutocompleteInitialization();
-			this.BookingForm.patchValue({
-				return_affiliate_id: this.affiliate_id
-			}, { emitEvent: false });
+			if (!isMasterVehicleQuoteFlow) {
+				this.BookingForm.patchValue({
+					return_affiliate_id: this.affiliate_id
+				}, { emitEvent: false });
+			}
 			this.updateReturnLegValidators(return_transfer_type_value);
 			setTimeout(() => {
 				this.init_return_rates = true;
@@ -6733,11 +6831,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}, 0)
 		this.SetFormValue('total_passengers', QB?.no_of_luggage)
 		this.SetFormValue('luggage_count', QB?.no_of_passenger)
-		this.SetFormValue('affiliate_type', 'affiliate')
-		this.SetFormValue('affiliate_id', this.affiliate_id)
-		this.SetFormValue('return_affiliate_id', this.affiliate_id)
 		//vehicle id when chossing vehicle from Quote bot screen
-		this.QB_vehicle_id = selected_vehicle?.id || this.route_vehicle_id || null
+		this.QB_vehicle_id = normalizedSelectedVehicle?.id || this.route_vehicle_id || null
 		//pickup
 		const matchedPickupAirport = this.resolveInternalAirportRecord({
 			name: QB?.other_details?.pickup_airport_name,
@@ -6816,8 +6911,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		setTimeout(() => {
 			console.log('settimeout finction---------------------------------------------------------------')
-			this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
-			this.fetchAffiliateDrivers(this.affiliate_id)
+			if (!isMasterVehicleQuoteFlow) {
+				this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
+				this.fetchAffiliateDrivers(this.affiliate_id)
+			}
 		}, 5000)
 	}
 
