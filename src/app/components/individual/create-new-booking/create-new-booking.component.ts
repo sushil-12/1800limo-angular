@@ -1633,6 +1633,11 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 				this.blockaddressfield = true
 			}
 			this.fetchRates(booking_id)
+			if (this.bookingType == 'edit' || this.bookingType == 'repeat') {
+				setTimeout(() => {
+					this.previousBookingData = JSON.parse(JSON.stringify(this.getCurrentBookingDataForRates()));
+				}, 0);
+			}
 		})
 	}
 	numberOnly(event: any): boolean {
@@ -3485,6 +3490,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 				this.clearReturnOnlyValidators();
 			}
 			this.recalculateDisplayedRates();
+			this.buildBookingData();
 		})
 
 		// Transfer Type
@@ -4543,26 +4549,42 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 		}
 	}
 
-	buildBookingData() {
-		console.log('[buildBookingData] Method called');
+	private getCurrentBookingDataForRates() {
+		const rawVehicleId = this.BookingForm.get('vehicle_id').value;
+		const rawVehicleTypeId = this.BookingForm.get('vehicle_type').value;
+		const hasExplicitVehicleId = rawVehicleId !== '' &&
+			rawVehicleId !== null &&
+			rawVehicleId !== undefined &&
+			rawVehicleId !== 0 &&
+			rawVehicleId !== '0';
+		const effectiveVehicleId = hasExplicitVehicleId
+			? rawVehicleId
+			: (rawVehicleTypeId || this.master_vehicle_id);
+		const effectiveIsMasterVehicle = !hasExplicitVehicleId ? true : this.is_master_vehicle;
 
-		// Build current booking data
-		let booking_data = {
-			vehicle_id: this.BookingForm.get('vehicle_id').value,
+		return {
+			vehicle_id: effectiveVehicleId,
 			transfer_type: this.BookingForm.get('transfer_type').value,
 			service_type: this.BookingForm.get('service_type').value,
 			numberOfVehicles: 1,
 			distance: this.distance,
 			return_distance: this.return_distance,
 			no_of_hours: this.number_of_hours,
-			is_master_vehicle: this.is_master_vehicle,
+			is_master_vehicle: effectiveIsMasterVehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			pickup_time: this.BookingForm.get('pickup_time').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
-			return_vehicle_id: this.BookingForm.get('vehicle_id').value,
+			return_vehicle_id: effectiveVehicleId,
 			return_affiliate_type: this.BookingForm.get('affiliate_type').value,
-		}
+		};
+	}
+
+	buildBookingData() {
+		console.log('[buildBookingData] Method called');
+
+		// Build current booking data
+		let booking_data = this.getCurrentBookingDataForRates();
 
 		// Check if booking_data has changed
 		const bookingDataChanged = this.hasBookingDataChanged(booking_data);
