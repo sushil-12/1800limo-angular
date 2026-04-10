@@ -46,17 +46,20 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 		this.currentStep = this.router.url.includes('step')
 			? this.router.url.substring(this.router.url.indexOf('step')).split('?')[0]
 			: 'step0';
+		console.log('[affiliate-steps] ngOnInit initial currentStep', this.currentStep);
 		this.stepCompletionTick();
 
 		this.router.events.subscribe((event) => {
 			if (event instanceof NavigationEnd) {
 				this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
+				console.log('[affiliate-steps] NavigationEnd currentStep', this.currentStep, 'url', this.router.url);
 				this.stepCompletionTick();
 			}
 		});
 
 		this.activatedRoute.queryParams.subscribe(params => {
 			this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
+			console.log('[affiliate-steps] queryParams', params, 'resolved currentStep', this.currentStep);
 
 			if (params['affiliate']) {
 				this.affiliateId = params['affiliate'];
@@ -71,40 +74,79 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 						catchError(err => {
 							return throwError(err);
 						})
-					).subscribe(({ data }: any) => {
-						if (data) {
-							const stepCompleted = data.step_completed;
-							const stepCompletedObj = this.mergeWithLocalCompletedSteps(data.step_completed_obj);
-							this.affiliateAccountStatus = data.account_approval;
-							if (stepCompleted) {
+					).subscribe({
+						next: (response: any) => {
+							const responseData = response?.data ?? response;
+							if (responseData) {
+								const stepCompleted = Array.isArray(responseData.step_completed) ? responseData.step_completed : [];
+								const stepCompletedObj = this.mergeWithCompletedSteps(responseData.step_completed_obj, stepCompleted);
+								console.group('[affiliate-steps] API response');
+								console.log('affiliateId', this.affiliateId);
+								console.log('step_completed', stepCompleted);
+								console.log('step_completed_obj raw', responseData.step_completed_obj);
+								console.log('step_completed_obj merged', stepCompletedObj);
+								console.groupEnd();
+								this.affiliateAccountStatus = responseData.account_approval;
 								this.stepCompleted = stepCompleted;
 								this.stepCompletedObj = stepCompletedObj;
 								this.adminService.updateStepsArrayLocal(stepCompleted);
 								this.adminService.updateStepsCompletedObj(stepCompletedObj);
 								this.stepCompletionTick();
 							}
+						},
+						error: (error: any) => {
+							console.error('[affiliate-steps] getStepsCompleted subscribe error', error);
 						}
 					});
 			} else {
 				const stepsObjStr = sessionStorage.getItem('step_completed_obj');
 				if (stepsObjStr) {
 					this.stepsObj = JSON.parse(stepsObjStr);
-					this.stepCompletedObj = this.mergeWithLocalCompletedSteps(this.stepsObj);
+					const localStepArray = JSON.parse(sessionStorage.getItem('steps-completed') || '[]');
+					this.stepCompleted = Array.isArray(localStepArray) ? localStepArray : [];
+					this.stepCompletedObj = this.mergeWithCompletedSteps(this.stepsObj, this.stepCompleted);
+					console.group('[affiliate-steps] session fallback');
+					console.log('step_completed from session', this.stepCompleted);
+					console.log('step_completed_obj from session raw', this.stepsObj);
+					console.log('step_completed_obj from session merged', this.stepCompletedObj);
+					console.groupEnd();
 				}
 				this.stepCompletionTick();
 			}
 		});
 	}
 
-	private mergeWithLocalCompletedSteps(stepCompletedObj: any) {
+	private mergeWithCompletedSteps(stepCompletedObj: any, stepCompleted: any[] = []) {
 		const mergedSteps = { ...(stepCompletedObj || {}) };
-		const localSteps = this.adminService.getLocalStepsCompleted?.() || [];
+		stepCompleted.forEach((step: string) => {
+			if (step !== null && step !== undefined && step !== '') {
+				mergedSteps[`step${step}`] = 'completed';
+			}
+		});
+		const localStepValue = sessionStorage.getItem('stepCompleted');
+		const localSteps = localStepValue ? localStepValue.split(',') : [];
 		localSteps.forEach((step: string) => {
 			if (step !== null && step !== undefined && step !== '') {
 				mergedSteps[`step${step}`] = 'completed';
 			}
 		});
+		console.log('[affiliate-steps] mergeWithCompletedSteps', {
+			stepCompletedObj,
+			stepCompleted,
+			localSteps,
+			mergedSteps
+		});
 		return mergedSteps;
+	}
+
+	private isStepCompleted(stepKey: string): boolean {
+		const rawState = this.stepCompletedObj?.[stepKey];
+		if (rawState === 'completed' || rawState === 'done') {
+			return true;
+		}
+
+		const stepIndex = stepKey.replace('step', '');
+		return Array.isArray(this.stepCompleted) && this.stepCompleted.includes(stepIndex);
 	}
 
 	getAffiliateName() {
@@ -115,9 +157,24 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 		const steps = ['step0', 'step1', 'step2', 'step3', 'step4', 'step5', 'step6'];
 		steps.forEach(step => {
 			const rawStepState = this.stepCompletedObj?.[step] || 'uncompleted';
-			const stepState = rawStepState === 'done' ? 'completed' : rawStepState;
+			const normalizedState = rawStepState === 'done' ? 'completed' : rawStepState;
+			const stepState = this.isStepCompleted(step) ? 'completed' : normalizedState;
 			this[step] = `md-step ${stepState}${this.currentStep == step ? ' active' : ''}`;
 		});
+		console.group('[affiliate-steps] stepCompletionTick result');
+		console.log('currentStep', this.currentStep);
+		console.log('stepCompleted', this.stepCompleted);
+		console.log('stepCompletedObj', this.stepCompletedObj);
+		console.log('classes', {
+			step0: this.step0,
+			step1: this.step1,
+			step2: this.step2,
+			step3: this.step3,
+			step4: this.step4,
+			step5: this.step5,
+			step6: this.step6
+		});
+		console.groupEnd();
 		this.getAffiliateName()
 	}
 
