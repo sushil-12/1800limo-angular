@@ -145,7 +145,7 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
     // Store userId for room joining (this is the customerId)
     this.currentUserId = userId;
 
-    const socketUrl = 'https://limortservice.infodevbox.com';
+    const socketUrl = 'https://limortservice.1800limo.com';
     console.log('Connecting to socket URL:', socketUrl);
 
     try {
