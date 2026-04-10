@@ -294,7 +294,8 @@
 												<div class="dropdown-item-icon"></div>
 												Send Email to Anyone
 											</a>
-											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)">
+											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
+												*ngIf="booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>

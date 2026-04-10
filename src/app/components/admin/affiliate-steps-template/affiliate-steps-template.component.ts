@@ -43,6 +43,11 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
+		this.currentStep = this.router.url.includes('step')
+			? this.router.url.substring(this.router.url.indexOf('step')).split('?')[0]
+			: 'step0';
+		this.stepCompletionTick();
+
 		this.router.events.subscribe((event) => {
 			if (event instanceof NavigationEnd) {
 				this.currentStep = this.router.url.substring(this.router.url.indexOf('step')).split('?')[0];
@@ -108,17 +113,11 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 
 	stepCompletionTick() {
 		const steps = ['step0', 'step1', 'step2', 'step3', 'step4', 'step5', 'step6'];
-
-		if (this.stepCompletedObj) {
-			for (let [key, value] of Object.entries(this.stepCompletedObj)) {
-				let stepNumber = key;
-				this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
-			}
-		} else {
-			steps.forEach(step => {
-				this[step] = 'md-step' + (this.currentStep == step ? ' active' : '');
-			});
-		}
+		steps.forEach(step => {
+			const rawStepState = this.stepCompletedObj?.[step] || 'uncompleted';
+			const stepState = rawStepState === 'done' ? 'completed' : rawStepState;
+			this[step] = `md-step ${stepState}${this.currentStep == step ? ' active' : ''}`;
+		});
 		this.getAffiliateName()
 	}
 
