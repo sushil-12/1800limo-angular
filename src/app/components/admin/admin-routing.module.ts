@@ -91,6 +91,7 @@ import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-ave
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component'
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 
 const routes: Routes = [
@@ -197,6 +198,11 @@ const routes: Routes = [
 		path: 'booking-list',
 		canActivate: [SubAdminGuard],
 		component: AffiliateBookingComponent
+	},
+	{
+		path: 'booking-details',
+		canActivate: [SubAdminGuard],
+		component: BookingDetailsComponent
 	},
 	{
 		path: 'new-booking',

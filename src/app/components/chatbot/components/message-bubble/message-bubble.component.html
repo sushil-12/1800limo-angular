@@ -1,0 +1,199 @@
+<div class="bubble-row" [class.user-row]="message.from === 'user'" *ngIf="message.type === 'text'">
+	<div class="avatar bot-avatar" *ngIf="message.from === 'bot'">🚗</div>
+	<div class="bubble" [class.bot-bubble]="message.from === 'bot'" [class.user-bubble]="message.from === 'user'">
+		{{ message.text }}
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'loading'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble loading-bubble">
+		<span class="dot"></span><span class="dot"></span><span class="dot"></span>
+	</div>
+</div>
+
+<div class="chips-wrapper" *ngIf="message.type === 'chips'">
+	<div class="bubble bot-bubble" *ngIf="message.text">{{ message.text }}</div>
+	<div class="chips-row">
+		<button class="chip-btn" *ngFor="let chip of message.chips" (click)="onChipClick(chip)">
+			<span *ngIf="chip.icon" class="chip-icon">{{ chip.icon }}</span>
+			{{ chip.label }}
+		</button>
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'place-input'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble form-bubble">
+		<p class="form-label">{{ message.text }}</p>
+		<div class="places-search-wrapper">
+			<div class="places-input-row">
+				<i class="fas fa-map-marker-alt places-icon"></i>
+				<input
+					class="form-input places-input"
+					type="text"
+					[value]="placeSearchText"
+					(input)="onPlaceInput($any($event.target).value)"
+					(blur)="onPlaceBlur()"
+					(focus)="showPlaceDropdown = placeOptions.length > 0"
+					placeholder="Search airport, address, cruise port, or FBO..."
+					autocomplete="off"
+				/>
+				<span class="places-loading" *ngIf="placeLoading">
+					<span class="dot sm"></span><span class="dot sm"></span><span class="dot sm"></span>
+				</span>
+			</div>
+			<div class="places-dropdown" *ngIf="showPlaceDropdown && placeOptions.length > 0">
+				<button
+					class="places-option"
+					*ngFor="let opt of placeOptions"
+					(mousedown)="$event.preventDefault()"
+					(click)="selectPlaceOption(opt)">
+					<i [class]="getPlaceOptionIcon(opt) + ' places-opt-icon'"></i>
+					<span class="places-opt-content">
+						<span class="places-opt-name">{{ opt.name }}</span>
+						<span class="places-opt-secondary" *ngIf="opt.secondaryText">{{ opt.secondaryText }}</span>
+					</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'datetime-input'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble form-bubble">
+		<p class="form-label">{{ message.text || 'Select date and time' }}</p>
+		<div class="datetime-row">
+			<div class="field-group">
+				<label class="field-label">Date</label>
+				<input class="form-input" type="date" [(ngModel)]="dateValue" [min]="today" />
+			</div>
+			<div class="field-group">
+				<label class="field-label">Time</label>
+				<input class="form-input" type="time" [(ngModel)]="timeValue" />
+			</div>
+		</div>
+		<button class="form-submit-btn" (click)="submitDatetime()" [disabled]="!dateValue || !timeValue">
+			Continue →
+		</button>
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'hours-input'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble form-bubble">
+		<p class="form-label">{{ message.text }}</p>
+		<div class="stepper-row single-stepper">
+			<div class="stepper-group">
+				<label class="field-label">Hours</label>
+				<div class="stepper">
+					<button class="stepper-btn" (click)="decrement('hours')">−</button>
+					<span class="stepper-val">{{ hours }}</span>
+					<button class="stepper-btn" (click)="increment('hours')">+</button>
+				</div>
+			</div>
+		</div>
+		<button class="form-submit-btn" (click)="submitHours()">
+			Continue →
+		</button>
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'passenger-input'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble form-bubble">
+		<p class="form-label">How many passengers and bags?</p>
+		<div class="stepper-row">
+			<div class="stepper-group">
+				<label class="field-label">Passengers</label>
+				<div class="stepper">
+					<button class="stepper-btn" (click)="decrement('passengers')">−</button>
+					<span class="stepper-val">{{ passengers }}</span>
+					<button class="stepper-btn" (click)="increment('passengers')">+</button>
+				</div>
+			</div>
+			<div class="stepper-group">
+				<label class="field-label">Bags</label>
+				<div class="stepper">
+					<button class="stepper-btn" (click)="decrement('luggage')">−</button>
+					<span class="stepper-val">{{ luggage }}</span>
+					<button class="stepper-btn" (click)="increment('luggage')">+</button>
+				</div>
+			</div>
+		</div>
+		<button class="form-submit-btn" (click)="submitPassengers()">
+			Continue →
+		</button>
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'customer-form'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble form-bubble">
+		<p class="form-label">Your details:</p>
+		<div class="field-row">
+			<div class="field-group half">
+				<label class="field-label">First Name *</label>
+				<input class="form-input" type="text" [(ngModel)]="customerForm.first_name" placeholder="John" />
+			</div>
+			<div class="field-group half">
+				<label class="field-label">Last Name *</label>
+				<input class="form-input" type="text" [(ngModel)]="customerForm.last_name" placeholder="Doe" />
+			</div>
+		</div>
+		<div class="field-group">
+			<label class="field-label">Phone *</label>
+			<div class="phone-row">
+				<input class="form-input isd-input" type="text" [(ngModel)]="customerForm.phone_isd" placeholder="+1" />
+				<input class="form-input" type="tel" [(ngModel)]="customerForm.phone" placeholder="3125551234" />
+			</div>
+		</div>
+		<div class="field-group">
+			<label class="field-label">Email *</label>
+			<input class="form-input" type="email" [(ngModel)]="customerForm.email" placeholder="john@example.com" />
+		</div>
+		<button
+			class="form-submit-btn"
+			(click)="submitCustomer()"
+			[disabled]="!customerForm.first_name || !customerForm.last_name || !customerForm.phone || !customerForm.email">
+			Continue →
+		</button>
+	</div>
+</div>
+
+<div class="wide-bubble" *ngIf="message.type === 'vehicle-categories'">
+	<div class="vehicles-scroll">
+		<div class="category-card" *ngFor="let cat of message.vehicles" (click)="categorySelected.emit(cat)">
+			<img
+				*ngIf="cat.image || cat.image_url"
+				[src]="cat.image || cat.image_url"
+				[alt]="cat.name || cat.vehicle_type"
+				class="category-img"
+				onerror="this.style.display='none'" />
+			<div class="category-icon" *ngIf="!cat.image && !cat.image_url">🚗</div>
+			<div class="category-name">{{ cat.name || cat.vehicle_type || 'Vehicle' }}</div>
+		</div>
+	</div>
+</div>
+
+<div class="wide-bubble" *ngIf="message.type === 'vehicle-list'">
+	<div class="vehicle-list">
+		<app-vehicle-card
+			*ngFor="let vehicle of message.vehicles"
+			[vehicle]="vehicle"
+			[serviceType]="message.meta?.serviceType"
+			(selected)="vehicleSelected.emit($event)">
+		</app-vehicle-card>
+	</div>
+</div>
+
+<div class="bubble-row" *ngIf="message.type === 'summary'">
+	<div class="avatar bot-avatar">🚗</div>
+	<div class="bubble bot-bubble summary-bubble">
+		<div class="summary-row" *ngFor="let row of getSummaryRows()">
+			<span class="summary-key">{{ row.label }}</span>
+			<span class="summary-val">{{ row.value }}</span>
+		</div>
+	</div>
+</div>

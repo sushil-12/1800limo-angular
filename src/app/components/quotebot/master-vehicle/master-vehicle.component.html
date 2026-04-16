@@ -136,7 +136,7 @@
 													<input type="checkbox" class="custom-control-input"
 														[attr.id]="filter_text.dp + '_' + '_' + filter_index"
 														[attr.name]="filter_text.dp + '_' + '_' + filter_index"
-														(change)="filterSelection($event.target.checked, filter_text.rp, filter)"
+														(change)="filterSelection($event.target.checked, filter_text.rp, filter); getVehicleDetails(); openfilters=false"
 														[checked]="isFilterAlreadySelected(filter_text.rp, filter)" />
 													<label class="custom-control-label"
 														[attr.for]="filter_text.dp + '_' + '_' + filter_index">
@@ -235,7 +235,7 @@
 																	<input type="checkbox" class="custom-control-input"
 																		[attr.id]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
 																		[attr.name]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
-																		(change)="filterSelection($event.target.checked, inner_filter_text.rp, inner_filter)"
+																		(change)="filterSelection($event.target.checked, inner_filter_text.rp, inner_filter); getVehicleDetails(); openfilters=false"
 																		[checked]="isFilterAlreadySelected(inner_filter_text.rp, inner_filter)" />
 																	<label class="custom-control-label"
 																		[attr.for]="inner_filter_text.dp + '_' + '_' + inner_filter_index">
@@ -310,8 +310,6 @@
 			</div>
 		</section>
 		<!-- FILTERS SECTION ENDS -->
-
-
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
 		<div class="hideInMobile col-md-12 col-lg-9 col-xl-10"

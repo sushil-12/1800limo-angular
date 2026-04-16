@@ -3,6 +3,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WebsiteService } from '../../../services/website.service';
+import { AirportIndexService, LocalAirportOption } from '../../../services/airport-index.service';
 import { AuthService } from '../../../services/auth.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
@@ -121,6 +122,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	private quoteBotAutofillSyncInterval?: ReturnType<typeof setInterval>;
 	private quoteBotAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
 
+	// Extra stops & amenities
+	amenitiesList: any[] = [];
+	selectedAmenities: number[] = [];
+	showAllAmenities = false;
+	extraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
+	returnExtraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
+
 
 	constructor(
 		private ngZone: NgZone,
@@ -135,7 +143,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private globalFunctions: SharedModule,
 		private elementRef: ElementRef,
 		private titleService: Title,
-		private metaService: Meta
+		private metaService: Meta,
+		private airportIndex: AirportIndexService
 	) { }
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
@@ -720,12 +729,58 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	async selectAddressOption(address: any, fieldName: string): Promise<void> {
 		this.clearAddressDropdownBlurTimer();
-		const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
-		if (googleAddress) {
-			this.onAutocompleteSelected(googleAddress, fieldName);
-			this.onLocationSelected(googleAddress, fieldName);
+
+		if (address?.isAddressAirportResult) {
+			// User picked an airport result from an address field — auto-switch the type
+			const airportField = this.getCorrespondingAirportFieldName(fieldName);
+			const typeField = this.getAddressTypeFieldName(fieldName);
+
+			if (address.isLocalResult && address.localAirport) {
+				const local = address.localAirport;
+				this.SetFormValue(typeField, 'airport');
+				this.onAirportSelected({
+					id: String(local.id),
+					name: address.name,
+					latitude: local.lat ?? 0,
+					longitude: local.long ?? 0,
+				}, airportField);
+			} else if (address?.placeId) {
+				const googleAirport = await this.fetchGoogleAirportDetails(address.placeId, address.name);
+				if (googleAirport) {
+					this.SetFormValue(typeField, 'airport');
+					this.onAirportSelected(googleAirport, airportField);
+				}
+			}
+		} else {
+			const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
+			if (googleAddress) {
+				this.onAutocompleteSelected(googleAddress, fieldName);
+				this.onLocationSelected(googleAddress, fieldName);
+			}
 		}
 		this.closeAddressDropdown(fieldName);
+	}
+
+	/** Maps a pickup/dropoff address field to its corresponding airport field */
+	private getCorrespondingAirportFieldName(addressFieldName: string): string {
+		switch (addressFieldName) {
+			case 'pickup_address': return 'pickup_airport';
+			case 'dropoff_address': return 'dropoff_airport';
+			case 'return_pickup_address': return 'return_pickup_airport';
+			case 'return_dropoff_address': return 'return_dropoff_airport';
+			default: return 'pickup_airport';
+		}
+	}
+
+	/** Maps a pickup/dropoff address field to the form control that holds its type */
+	private getAddressTypeFieldName(addressFieldName: string): string {
+		switch (addressFieldName) {
+			case 'pickup_address': return 'pickup_type';
+			case 'dropoff_address': return 'dropoff_type';
+			case 'return_pickup_address': return 'dropoff_type'; // return pickup mirrors dropoff in round trip
+			case 'return_dropoff_address': return 'pickup_type'; // return dropoff mirrors pickup in round trip
+			default: return 'pickup_type';
+		}
 	}
 
 	getAddressOptionLabel(address: any): string {
@@ -897,15 +952,59 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.setAddressSearchLoading(fieldName, true);
 
+		// --- Airport detection for address fields ---
+		// IATA code (e.g. "ORD"): unambiguous — show only airport + terminals.
+		// Fuzzy text (e.g. "Chicago"): show airport suggestions at top, then regular addresses below.
+		if (this.airportIndex.isReady() && this.airportIndex.isIataCode(searchText)) {
+			const hit = this.airportIndex.findByCode(searchText);
+			if (hit) {
+				const localAirportMatches = [{ ...this.airportIndex.toDropdownOption(hit, searchText), isAddressAirportResult: true }];
+				const googleAirportQuery = hit.name;
+
+				// Show local result immediately
+				if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
+					this.setAddressOptions(fieldName, localAirportMatches);
+					this.setAddressSearchLoading(fieldName, false);
+				}
+
+				// Enrich with Google airport + terminal results
+				const airportField = this.getCorrespondingAirportFieldName(fieldName);
+				try {
+					const googleOptions = await this.searchGoogleAirportPredictions(googleAirportQuery, airportField);
+					if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
+						const enriched = googleOptions.map((o: any) => ({ ...o, isAddressAirportResult: true }));
+						this.setAddressOptions(fieldName, enriched.length ? enriched : localAirportMatches);
+						this.setAddressSearchLoading(fieldName, false);
+					}
+				} catch {
+					// keep local result already shown
+				}
+				return; // IATA code — no need for address results
+			}
+		}
+		// --- End IATA airport detection ---
+
+		// For all other input: run normal Google address search (returns cities, addresses,
+		// buildings, airports — everything). Prepend any local fuzzy airport matches at the
+		// top so airports appear as quick options without replacing address results.
+		let fuzzyAirportOptions: any[] = [];
+		if (this.airportIndex.isReady() && searchText.length >= 3) {
+			const hits = this.airportIndex.search(searchText, 3);
+			fuzzyAirportOptions = hits.map((a) => ({
+				...this.airportIndex.toDropdownOption(a, searchText),
+				isAddressAirportResult: true,
+			}));
+		}
+
 		try {
-			const options = await this.searchGoogleAddressPredictions(searchText);
+			const addressOptions = await this.searchGoogleAddressPredictions(searchText);
 			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
-				this.setAddressOptions(fieldName, options);
+				this.setAddressOptions(fieldName, [...fuzzyAirportOptions, ...addressOptions]);
 				this.setAddressSearchLoading(fieldName, false);
 			}
 		} catch {
 			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
-				this.setAddressOptions(fieldName, []);
+				this.setAddressOptions(fieldName, fuzzyAirportOptions);
 				this.setAddressSearchLoading(fieldName, false);
 			}
 		}
@@ -970,16 +1069,29 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}, delay);
 	}
 
+	/**
+	 * Generates a UUID v4 string (always exactly 36 characters).
+	 * Uses crypto.randomUUID() when available; falls back to a pure-JS
+	 * UUID v4 template so the token never exceeds the 36-char API limit.
+	 */
+	private generateSessionToken(): string {
+		if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+			return crypto.randomUUID();
+		}
+		// UUID v4 fallback — always exactly 36 characters
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+			const r = (Math.random() * 16) | 0;
+			const v = c === 'x' ? r : (r & 0x3) | 0x8;
+			return v.toString(16);
+		});
+	}
+
 	private getOrCreateAirportSessionToken(fieldName: string): string {
 		const existingToken = this.airportAutocompleteSessionTokens[fieldName];
 		if (existingToken) {
 			return existingToken;
 		}
-
-		const token = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-			? crypto.randomUUID()
-			: `${fieldName}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-
+		const token = this.generateSessionToken();
 		this.airportAutocompleteSessionTokens[fieldName] = token;
 		return token;
 	}
@@ -1028,7 +1140,27 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	async selectAirportOption(airport: any, fieldName: string): Promise<void> {
 		this.clearAirportDropdownBlurTimer();
-		if (airport?.placeId) {
+
+		if (airport?.isCityAddressFallback) {
+			// User picked a city address from the airport field — switch type back to city
+			const typeField = this.getTypeFieldForAirportField(fieldName);
+			const addressField = this.getAddressFieldForAirportField(fieldName);
+			this.SetFormValue(typeField, 'city');
+			const googleAddress = await this.fetchGoogleAddressDetails(airport?.placeId);
+			if (googleAddress) {
+				this.onAutocompleteSelected(googleAddress, addressField);
+				this.onLocationSelected(googleAddress, addressField);
+			}
+		} else if (airport?.isLocalResult && airport?.localAirport) {
+			// Local JSON result — lat/long already available, no Google call needed
+			const local = airport.localAirport;
+			this.onAirportSelected({
+				id: String(local.id),
+				name: airport.name,
+				latitude: local.lat ?? 0,
+				longitude: local.long ?? 0,
+			}, fieldName);
+		} else if (airport?.placeId) {
 			const googleAirport = await this.fetchGoogleAirportDetails(airport.placeId, airport.name);
 			if (googleAirport) {
 				this.onAirportSelected(googleAirport, fieldName);
@@ -1038,6 +1170,28 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		this.resetAirportSessionToken(fieldName);
 		this.closeAirportDropdown(fieldName);
+	}
+
+	/** Maps an airport field to the form control that holds its type (pickup_type / dropoff_type) */
+	private getTypeFieldForAirportField(airportFieldName: string): string {
+		switch (airportFieldName) {
+			case 'pickup_airport': return 'pickup_type';
+			case 'dropoff_airport': return 'dropoff_type';
+			case 'return_pickup_airport': return 'dropoff_type';
+			case 'return_dropoff_airport': return 'pickup_type';
+			default: return 'pickup_type';
+		}
+	}
+
+	/** Maps an airport field to its corresponding address field */
+	private getAddressFieldForAirportField(airportFieldName: string): string {
+		switch (airportFieldName) {
+			case 'pickup_airport': return 'pickup_address';
+			case 'dropoff_airport': return 'dropoff_address';
+			case 'return_pickup_airport': return 'return_pickup_address';
+			case 'return_dropoff_airport': return 'return_dropoff_address';
+			default: return 'pickup_address';
+		}
 	}
 
 	isAirportTerminalOption(airport: any): boolean {
@@ -1339,38 +1493,106 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	private searchGoogleAirportPredictions(searchText: string, fieldName: string): Promise<Array<any>> {
-		const rawSearchText = String(searchText || '').trim();
-		if (!rawSearchText) {
-			return Promise.resolve([]);
+  const rawSearchText = String(searchText || '').trim();
+  if (!rawSearchText) {
+    return Promise.resolve([]);
+  }
+
+  const baseSearchText = this.getAirportBaseQuery(rawSearchText) || rawSearchText;
+  const terminalSearchText = `${baseSearchText} terminal`.trim();
+  const sessionToken = this.getOrCreateAirportSessionToken(fieldName);
+
+  return Promise.all([
+    this.fetchGooglePlaceAutocompleteSuggestions(baseSearchText, sessionToken),
+    this.fetchGooglePlaceAutocompleteSuggestions(terminalSearchText, sessionToken)
+  ])
+    .then(([airportSuggestionResponse, terminalSuggestionResponse]) => {
+
+      const airportPredictions = airportSuggestionResponse
+        .map((suggestion: any) => suggestion?.placePrediction)
+        .filter((prediction: any) => !!prediction?.placeId)
+        .filter((prediction: any) => this.getAirportPredictionType(prediction) === 'airport')
+        .map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText));
+
+      // 🚫 HARD NEGATIVE KEYWORDS
+      const HARD_NEGATIVE_KEYWORDS = [
+        'lab', 'laboratory', 'research', 'defence', 'defense',
+        'hospital', 'clinic', 'diagnostic', 'pharmacy',
+        'bus', 'metro', 'railway', 'train', 'station', 'port',
+        'cargo', 'container', 'logistics', 'freight',
+         'harbour', 'harbor', 'cruise', 'ferry',
+        'tower', 'business', 'park', 'office', 'complex',
+        'college', 'university', 'institute'
+      ];
+
+      const NON_AIRPORT_TYPES = new Set([
+        'health', 'doctor', 'hospital', 'dentist', 'pharmacy', 'drugstore',
+        'restaurant', 'food', 'cafe', 'lodging', 'store', 'school',
+        'university', 'bank', 'finance', 'real_estate_agency', 'medical_clinic', 'point_of_interest'
+      ]);
+
+      const STOPWORDS = new Set(['international', 'airport', 'terminal', 'the', 'and', 'for']);
+
+      const airportNameWords = baseSearchText
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((w) => w.length >= 4 && !STOPWORDS.has(w));
+
+      const terminalPredictions = terminalSuggestionResponse
+        .map((suggestion: any) => suggestion?.placePrediction)
+        .filter((prediction: any) => !!prediction?.placeId)
+        .filter((prediction: any) => {
+
+          const types: string[] = Array.isArray(prediction?.types)
+            ? prediction.types.map((t: any) => String(t).toLowerCase())
+            : [];
+
+          const desc = String(
+            prediction?.text?.text || prediction?.description || ''
+          ).toLowerCase();
+
+          // 🚫 1. Block non-airport Google types
+          if (types.some((t) => NON_AIRPORT_TYPES.has(t))) return false;
+
+        const matchedKeywords = HARD_NEGATIVE_KEYWORDS.filter((keyword) => {
+			const regex = new RegExp(`\\b${keyword}\\b`, 'i'); // exact word match
+			return regex.test(desc);
+		});
+
+			if (matchedKeywords) {
+			console.log(
+				`❌ Filtered due to keyword: "${matchedKeywords}" | Description: "${desc}"`
+			);
+			// return false;
 		}
 
-		const baseSearchText = this.getAirportBaseQuery(rawSearchText) || rawSearchText;
-		const terminalSearchText = `${baseSearchText} terminal`.trim();
-		const sessionToken = this.getOrCreateAirportSessionToken(fieldName);
+          // ✅ 3. Must contain "terminal"
+          if (!desc.includes('terminal')) return false;
 
-		return Promise.all([
-			this.fetchGooglePlaceAutocompleteSuggestions(baseSearchText, sessionToken),
-			this.fetchGooglePlaceAutocompleteSuggestions(terminalSearchText, sessionToken)
-		]).then(([airportSuggestionResponse, terminalSuggestionResponse]) => {
-			const airportPredictions = airportSuggestionResponse
-				.map((suggestion: any) => suggestion?.placePrediction)
-				.filter((prediction: any) => !!prediction?.placeId)
-				.filter((prediction: any) => this.getAirportPredictionType(prediction) === 'airport')
-				.map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText));
+          // ✅ 4. Must be linked to airport context
+          const isAirportContext =
+            desc.includes('airport') ||
+            (airportNameWords.length > 0 &&
+              airportNameWords.some((w) => desc.includes(w)));
 
-			const terminalPredictions = terminalSuggestionResponse
-				.map((suggestion: any) => suggestion?.placePrediction)
-				.filter((prediction: any) => !!prediction?.placeId)
-				.map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText))
-				.filter((prediction: any) => String(prediction?.description || '').toLowerCase().includes('terminal'));
+          return isAirportContext;
+        })
+        .map((prediction: any) =>
+          this.mapAirportPrediction(prediction, baseSearchText)
+        );
 
-			if (!terminalPredictions.length) {
-				return this.dedupeAirportDropdownOptions(airportPredictions);
-			}
+      if (!terminalPredictions.length) {
+        return this.dedupeAirportDropdownOptions(airportPredictions);
+      }
 
-			return this.mergeAirportAndTerminalPredictions(airportPredictions, terminalPredictions, baseSearchText);
-		}).catch(() => []);
-	}
+      return this.mergeAirportAndTerminalPredictions(
+        airportPredictions,
+        terminalPredictions,
+        baseSearchText
+      );
+    })
+    .catch(() => []);
+}
 
 	private fetchGoogleAirportDetails(placeId: string, fallbackName = ''): Promise<{ id: string; name: string; latitude: number; longitude: number } | null> {
 		const service = this.getAirportPlacesService();
@@ -1501,6 +1723,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.generateQBForm()) {
 			this.prefillQuotebot()
 		}
+		this.quotebotService.getAllFilters().subscribe((response: any) => {
+			this.amenitiesList = response?.data?.amenities?.filter((a: any) => a.id !== 0) || [];
+		});
 	}
 
 
@@ -1561,6 +1786,89 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return_dropoff_airport_lat: this.QBForm.pickup_airport_lat.value,
 			return_dropoff_airport_long: this.QBForm.pickup_airport_long.value,
 		})
+	}
+
+	// ---- Extra Stops ----
+
+	addExtraStop(isReturn: boolean = false) {
+		this.getExtraStops(isReturn).push({ address: '', latitude: 0, longitude: 0 });
+		this.refreshExtraStopAutocompletes(isReturn);
+		this.persistQuoteBotState();
+	}
+
+	removeExtraStop(index: number, isReturn: boolean = false) {
+		this.getExtraStops(isReturn).splice(index, 1);
+		this.refreshExtraStopAutocompletes(isReturn);
+		this.persistQuoteBotState();
+	}
+
+	fillExtraStop(index: number, address: string, lat: number, lng: number, isReturn: boolean = false) {
+		const stops = this.getExtraStops(isReturn);
+		if (stops[index]) {
+			stops[index] = { address, latitude: lat, longitude: lng };
+			this.persistQuoteBotState();
+		}
+	}
+
+	private getExtraStops(isReturn: boolean = false): Array<{ address: string; latitude: number; longitude: number }> {
+		return isReturn ? this.returnExtraStops : this.extraStops;
+	}
+
+	private getPersistedExtraStops(isReturn: boolean = false): Array<{ address: string; latitude: number; longitude: number }> {
+		return this.getExtraStops(isReturn).filter(stop => stop.address && stop.address.trim());
+	}
+
+	private refreshExtraStopAutocompletes(isReturn: boolean = false): void {
+		setTimeout(() => {
+			this.getExtraStops(isReturn).forEach((_, index) => this.initExtraStopAutocomplete(index, isReturn));
+		}, 0);
+	}
+
+	private initExtraStopAutocomplete(index: number, isReturn: boolean = false) {
+		const inputs = this.elementRef.nativeElement.querySelectorAll(
+			isReturn ? 'input.return-extra-stop-input' : 'input.extra-stop-input'
+		);
+		const input = inputs[index] as HTMLInputElement;
+		if (!input) return;
+		void attachPlaceAutocompleteElement(
+			input,
+			{
+				types: ['geocode', 'establishment'],
+				fields: ['formatted_address', 'geometry', 'name'],
+			},
+				(place) => {
+					this.ngZone.run(() => {
+						const address = place.formatted_address || (place as any).name || '';
+						const lat = place.geometry?.location?.lat() || 0;
+						const lng = place.geometry?.location?.lng() || 0;
+						this.fillExtraStop(index, address, lat, lng, isReturn);
+					});
+				}
+			);
+		}
+
+	// ---- Amenities ----
+
+	toggleAmenity(id: number) {
+		const idx = this.selectedAmenities.indexOf(id);
+		idx === -1 ? this.selectedAmenities.push(id) : this.selectedAmenities.splice(idx, 1);
+	}
+
+	isAmenitySelected(id: number): boolean {
+		return this.selectedAmenities.includes(id);
+	}
+
+	getAmenityIcon(name: string): string {
+		const n = (name || '').toLowerCase();
+		if (n.includes('wifi') || n.includes('wi-fi')) return 'bi bi-wifi';
+		if (n.includes('water')) return 'bi bi-droplet';
+		if (n.includes('baby') || n.includes('child')) return 'bi bi-person-hearts';
+		if (n.includes('booster')) return 'bi bi-person-fill';
+		if (n.includes('plug') || n.includes('charger')) return 'bi bi-plug';
+		if (n.includes('wheelchair') || n.includes('accessible')) return 'bi bi-person-wheelchair';
+		if (n.includes('seat')) return 'bi bi-person-seat';
+		if (n.includes('luggage') || n.includes('bag')) return 'bi bi-briefcase';
+		return 'bi bi-star';
 	}
 
 	/**
@@ -1894,6 +2202,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 			this.syncPrefilledAirportSelections()
 			this.vars = { ...previousOtherDetails }
+
+			// Restore extra stops and selected amenities from previous session
+			if (Array.isArray(previous_quotebot?.extra_stops)) {
+				this.extraStops = previous_quotebot.extra_stops;
+				this.refreshExtraStopAutocompletes();
+			}
+			if (Array.isArray(previous_quotebot?.return_extra_stops)) {
+				this.returnExtraStops = previous_quotebot.return_extra_stops;
+				this.refreshExtraStopAutocompletes(true);
+			}
+			if (Array.isArray(previous_quotebot?.amenities)) {
+				this.selectedAmenities = previous_quotebot.amenities;
+			}
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
 			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
 			this.scheduleQuoteBotAutocompleteDisplaySync()
@@ -2045,16 +2366,69 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.setAirportSearchLoading(form_control, true);
 
-		try {
-			const googleOptions = await this.searchGoogleAirportPredictions(searchText, form_control);
-			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
-				this.setAirportOptions(
-					form_control,
-					googleOptions.length
-						? googleOptions
-						: (selectedOption ? [selectedOption] : fallbackOptions)
-				);
+		// --- Local index fast path ---
+		let localMatches: LocalAirportOption[] = [];
+		let googleQuery = searchText;
+		let isIataHit = false;
+
+		if (this.airportIndex.isReady()) {
+			if (this.airportIndex.isIataCode(searchText)) {
+				// O(1) exact IATA match (e.g. "IXC")
+				const hit = this.airportIndex.findByCode(searchText);
+				if (hit) {
+					localMatches = [this.airportIndex.toDropdownOption(hit, searchText)];
+					googleQuery = hit.name;
+					isIataHit = true;
+				}
+			} else {
+				// Check if text STARTS with a valid IATA code (e.g. "ORD Terminal 3")
+				const leadingIata = searchText.match(/^([A-Za-z]{3})\b/)?.[1];
+				const leadingHit = leadingIata ? this.airportIndex.findByCode(leadingIata.toUpperCase()) : null;
+				if (leadingHit) {
+					localMatches = [this.airportIndex.toDropdownOption(leadingHit, searchText)];
+					googleQuery = leadingHit.name;
+					isIataHit = true;
+				} else {
+					// Token-scored fuzzy search against local JSON
+					const hits = this.airportIndex.search(searchText, 6);
+					localMatches = hits.map((a) => this.airportIndex.toDropdownOption(a, searchText));
+				}
+			}
+
+			// For fuzzy path only: show local results immediately for instant feedback.
+			// For IATA hit: skip — Google returns the full airport + terminals set together,
+			// so showing local first just causes a visible flash when terminals arrive.
+			if (localMatches.length && !isIataHit && this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+				this.setAirportOptions(form_control, localMatches);
 				this.setAirportSearchLoading(form_control, false);
+			}
+		}
+		// --- End local fast path ---
+
+		try {
+			if (isIataHit) {
+				// IATA path: only airport search using full airport name, no city address fallback
+				const googleOptions = await this.searchGoogleAirportPredictions(googleQuery, form_control);
+				if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+					this.setAirportOptions(form_control, googleOptions.length ? googleOptions : localMatches);
+					this.setAirportSearchLoading(form_control, false);
+				}
+			} else {
+				// Fuzzy path: airport + address in parallel
+				// Airport results go first; address results appear below as city fallback options.
+				const [googleOptions, addressOptions] = await Promise.all([
+					this.searchGoogleAirportPredictions(googleQuery, form_control),
+					this.searchGoogleAddressPredictions(searchText).catch(() => []),
+				]);
+
+				if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
+					const airports = googleOptions.length
+						? googleOptions
+						: (selectedOption ? [selectedOption] : fallbackOptions);
+					const addresses = (addressOptions as any[]).map((o: any) => ({ ...o, isCityAddressFallback: true }));
+					this.setAirportOptions(form_control, [...airports, ...addresses]);
+					this.setAirportSearchLoading(form_control, false);
+				}
 			}
 		} catch {
 			if (this.isLatestAirportSearchVersion(form_control, requestVersion)) {
@@ -2201,6 +2575,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		const savedState = {
 			...this.quoteBotForm.getRawValue(),
+			extra_stops: this.getPersistedExtraStops(),
+			return_extra_stops: this.getPersistedExtraStops(true),
 			other_details: { ...this.vars }
 		};
 		localStorage.setItem('quotebot_form', JSON.stringify(savedState));
@@ -2301,6 +2677,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.QBForm.service_type.setValue(quoteBotType)
 		if (quoteBotType == 'round_trip') {
 			this.fillReturnDetails()
+			this.refreshExtraStopAutocompletes(true);
 		}
 	}
 
@@ -2692,8 +3069,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.quoteBotForm.value['other_details'] = this.vars
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`, this.quoteBotForm.value)
-			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
-			this.router.navigate(['quotebot/master-vehicle']);
+				const quotebotPayload = {
+					...this.quoteBotForm.value,
+					extra_stops: this.getPersistedExtraStops(),
+					return_extra_stops: this.QBForm.service_type.value === 'round_trip' ? this.getPersistedExtraStops(true) : [],
+					amenities: this.selectedAmenities,
+					chargedAmenities: []
+				};
+			localStorage.setItem('quotebot_form', JSON.stringify(quotebotPayload));
+			const hasAmenities = this.selectedAmenities.length > 0;
+			this.router.navigate(['quotebot/master-vehicle'], hasAmenities ? { queryParams: { autoApply: 1 } } : {});
 			return
 		}, (error) => {
 			console.group('Facing Some Issues while calculating distance .... Error fetched ->\n')
@@ -2717,6 +3102,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	swapPickupDropoff(value: any) {
 		try {
 			this.spinner.show()
+			const currentOutboundStops = this.extraStops.map((stop) => ({ ...stop }));
+			const currentReturnStops = this.returnExtraStops.map((stop) => ({ ...stop }));
 			let temp_dropoff = {
 				dropoff_address: this.quoteBotForm.get('dropoff_address')?.value,
 				dropoff_airport: this.quoteBotForm.get('dropoff_airport')?.value,
@@ -2758,13 +3145,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return_pickup_address_long: this.quoteBotForm.get('return_dropoff_address_long')?.value,
 				return_dropoff_airport_lat: this.quoteBotForm.get('return_pickup_airport_lat')?.value,
 				return_dropoff_airport_long: this.quoteBotForm.get('return_pickup_airport_long')?.value,
-				return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
-				return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
-			})
+					return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
+					return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
+				})
 
-		} catch (error) {
-			this.spinner.hide()
-			console.log(error)
+				if (this.QBForm.service_type.value == 'round_trip') {
+					this.extraStops = currentReturnStops;
+					this.returnExtraStops = currentOutboundStops;
+					this.refreshExtraStopAutocompletes();
+					this.refreshExtraStopAutocompletes(true);
+				}
+
+			} catch (error) {
+				this.spinner.hide()
+				console.log(error)
 		}
 		// need to set values of vars
 		this.vars = {
@@ -2773,13 +3167,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		// if round trip selected
 
-		if (this.QBForm.service_type.value == 'round_trip') {
-			this.vars['return_dropoff_airport_name'] = this.vars['pickup_airport_name']
-			this.vars['return_pickup_airport_name'] = this.vars['dropoff_airport_name']
-		}
-		this.spinner.hide()
+			if (this.QBForm.service_type.value == 'round_trip') {
+				this.vars['return_dropoff_airport_name'] = this.vars['pickup_airport_name']
+				this.vars['return_pickup_airport_name'] = this.vars['dropoff_airport_name']
+			}
+			this.persistQuoteBotState();
+			this.spinner.hide()
 
-	}
+		}
 	ReturnNameOfAirportById(id: any) {
 		let airport = this.airports_data?.find((item) => item.id == id)
 		console.log('airport found-->>>', id, airport)

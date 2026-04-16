@@ -237,9 +237,95 @@ export class SelectVehicleComponent implements OnInit {
 	vehicleListAmenity: any = [];
 	selectedAffiliate: any;
 
+	get requestedExtraStops(): string[] {
+		return (this.quotebot_form?.extra_stops || [])
+			.map((s: any) => s?.address)
+			.filter(Boolean);
+	}
+
+	get requestedAmenityNames(): string[] {
+		const ids: number[] = [
+			...(this.quotebot_form?.amenities || []),
+			...(this.quotebot_form?.chargedAmenities || [])
+		];
+		return this.getAmenityNamesByIds(ids);
+	}
+
+	private getSavedAmenityIds(): number[] {
+		return [...new Set(
+			[
+				...(this.quotebot_form?.amenities || []),
+				...(this.quotebot_form?.chargedAmenities || [])
+			]
+				.map((id: any) => Number(id))
+				.filter((id: number) => !Number.isNaN(id) && id > 0)
+		)];
+	}
+
+	private findAmenitySelection(id: number): { category: string, amenity: any } | null {
+		const originalFilters = this.filters.original as any;
+		for (const category of ['amenities', 'special-amenities']) {
+			const amenity = originalFilters?.[category]?.find((item: any) => item.id == id && item.id !== 0);
+			if (amenity) {
+				return { category, amenity };
+			}
+		}
+
+		return null;
+	}
+
+	private ensureFilterVisible(category: string, selector: any): void {
+		const copiedFilters = this.filters.copy as any;
+		if (!Array.isArray(copiedFilters?.[category])) {
+			return;
+		}
+
+		if (copiedFilters[category].findIndex((item: any) => item.id == selector.id) == -1) {
+			copiedFilters[category] = [...copiedFilters[category], selector];
+		}
+	}
+
+	private applySavedAmenitySelections(): void {
+		this.getSavedAmenityIds().forEach((id: number) => {
+			const match = this.findAmenitySelection(id);
+			if (!match) {
+				return;
+			}
+
+			this.ensureFilterVisible(match.category, match.amenity);
+
+			if (this.filters.selections.findIndex(item => item['catg_name'] == match.category && item['id'] == match.amenity.id) == -1) {
+				this.filterSelection(true, match.category, match.amenity);
+			}
+		});
+	}
+
+	private getAmenityNamesByIds(ids: number[]): string[] {
+		const amenityNames: string[] = [];
+
+		[...new Set(
+			(ids || [])
+				.map((id: any) => Number(id))
+				.filter((id: number) => !Number.isNaN(id) && id > 0)
+		)].forEach((id: number) => {
+			const match = this.findAmenitySelection(id);
+			if (match && amenityNames.indexOf(match.amenity.name) == -1) {
+				amenityNames.push(match.amenity.name);
+			}
+		});
+
+		return amenityNames;
+	}
+
 	@HostListener('window:popstate')
 	handleBrowserBack(): void {
 		this.closeTransientPopups();
+		// Clear saved amenities so master-vehicle won't auto-redirect back to select-vehicle
+		if (this.quotebot_form) {
+			this.quotebot_form.amenities = [];
+			this.quotebot_form.chargedAmenities = [];
+			localStorage.setItem('quotebot_form', JSON.stringify(this.quotebot_form));
+		}
 	}
 
 
@@ -430,7 +516,7 @@ export class SelectVehicleComponent implements OnInit {
 
 
 			this.cutTillMinimum(this.min_length)	// cut the list till min length
-
+			this.applySavedAmenitySelections()
 
 			// this.filters.copy['driver-background'] = [{
 			// 	slug: 'child_certified_driver',
@@ -842,6 +928,11 @@ export class SelectVehicleComponent implements OnInit {
 
 	clearFilters(filter: Filters['selections']) {
 		console.log('filter clear filter clicked--->>', !filter, this.filters.selections.length)
+		if(this.quotebot_form?.amenities.length > 0){
+			console.log('clearing amenities from quotebot form', this.quotebot_form.amenities)
+			this.quotebot_form.amenities = [];
+			localStorage.setItem('quotebot_form', JSON.stringify(this.quotebot_form))
+		}
 		if (this.filters.selections.length <= 1 || !filter) {
 			this.$router.navigateByUrl('/quotebot/master-vehicle')
 			return
@@ -921,11 +1012,12 @@ export class SelectVehicleComponent implements OnInit {
 	}
 
 	backButton() {
-		// when its time to go back to home page
-		// if (this.vehicleDetails.length == 0)
-		// {
-		// 	return
-		// }
+		// Clear saved amenities so master-vehicle won't auto-redirect back to select-vehicle
+		if (this.quotebot_form) {
+			this.quotebot_form.amenities = [];
+			this.quotebot_form.chargedAmenities = [];
+			localStorage.setItem('quotebot_form', JSON.stringify(this.quotebot_form));
+		}
 		this.$router.navigateByUrl('/quotebot/master-vehicle')
 
 		// remove all selections

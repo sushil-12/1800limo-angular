@@ -1581,19 +1581,8 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 				}
 			})
 
-			if (editing_data.extra_stops && editing_data.extra_stops.length > 0) {
-				editing_data.extra_stops.forEach((item: any, index: number) => {
-					if (item.hasOwnProperty('address')) {
-						item['formatted_address'] = item.address;
-						this.addExtraStop();
-						this.fillExtraStop(false, index, item, item);
-						console.log(this.BookingForm);
-					}
-				})
-			}
-			else {
-				console.error('No Extra Stops found.')
-			}
+			this.prefillExtraStops(editing_data.extra_stops);
+			this.prefillExtraStops(editing_data.return_extra_stops, true);
 			this.BookingForm.updateValueAndValidity()
 
 			// override specific value
@@ -1714,11 +1703,11 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	async MapController(is_return: boolean = false) {
 		// console.log('Map has been initialised.')
 		try {
-			if (this.hasSameAirportSelection(is_return)) {
-				this.resetJourneyMetrics(is_return);
-				this.openInvalidLocationDialog();
-				return;
-			}
+			// if (this.hasSameAirportSelection(is_return)) {
+			// 	this.resetJourneyMetrics(is_return);
+			// 	this.openInvalidLocationDialog();
+			// 	return;
+			// }
 
 			let waypoints = []
 			let origin: google.maps.LatLng
@@ -3102,7 +3091,81 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	private normalizeExtraStopsForPrefill(extraStops: any): Array<Record<string, any>> {
+		let parsedStops = extraStops;
+		if (typeof parsedStops === 'string') {
+			try {
+				parsedStops = JSON.parse(parsedStops);
+			} catch (error) {
+				console.error('Failed to parse extra stops for prefill', error);
+				return [];
+			}
+		}
 
+		if (!Array.isArray(parsedStops)) {
+			return [];
+		}
+
+		return parsedStops
+			.filter((item: any) => item && typeof item === 'object')
+			.map((item: any) => {
+				const address = String(
+					item?.display_address
+					|| item?.formatted_address
+					|| item?.address
+					|| ''
+				).trim();
+
+				return {
+					...item,
+					address,
+					formatted_address: address,
+					display_address: address,
+					latitude: item?.latitude ?? item?.lat ?? item?.pickup_latitude ?? '',
+					longitude: item?.longitude ?? item?.lng ?? item?.long ?? item?.pickup_longitude ?? ''
+				};
+			})
+			.filter((item: Record<string, any>) => !!item.address);
+	}
+
+	private prefillExtraStops(extraStops: any, is_return: boolean = false): void {
+		const normalizedStops = this.normalizeExtraStopsForPrefill(extraStops);
+		const formArrayName = is_return ? 'return_extra_stops' : 'extra_stops';
+		const formArray = this.BookingForm.get(formArrayName) as FormArray | null;
+
+		if (!formArray) {
+			return;
+		}
+
+		while (formArray.length > 0) {
+			formArray.removeAt(formArray.length - 1);
+		}
+
+		normalizedStops.forEach((item: Record<string, any>, index: number) => {
+			this.addExtraStop(is_return);
+			this.fillExtraStop(is_return, index, item, {
+				latitude: item.latitude,
+				longitude: item.longitude
+			});
+
+			const stopGroup = formArray.at(index) as FormGroup | null;
+			if (!stopGroup) {
+				return;
+			}
+
+			const stopPatch: Record<string, any> = {};
+			if (item.rate !== undefined && item.rate !== null && item.rate !== '') {
+				stopPatch['rate'] = item.rate;
+			}
+			if (item.booking_instructions !== undefined && item.booking_instructions !== null) {
+				stopPatch['booking_instructions'] = item.booking_instructions;
+			}
+
+			if (Object.keys(stopPatch).length > 0) {
+				stopGroup.patchValue(stopPatch, { emitEvent: false });
+			}
+		});
+	}
 
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any) {
 		console.log(is_return, index, address, location);
@@ -3538,7 +3601,8 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 		let total_time = 0
 		return new Promise((resolve) => {
 			data.routes[0].legs.forEach((item: any) => {
-				if (item.distance.value == 0 && this.BookingForm.get('service_type').value != 'charter_tour') {
+				const serviceTypeControl = this.BookingForm.get('service_type');
+				if (item.distance.value == 0 && serviceTypeControl && serviceTypeControl.value != 'charter_tour') {
 					this.openInvalidLocationDialog()
 					return
 				}

@@ -27,7 +27,7 @@
 						<div>
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Service Type
+									Service Type (QUOTEBOT)
 								</mat-label>
 								<mat-select formControlName="service_type"
 									(selectionChange)="onSelectionChangeServiceType($event)">
@@ -1644,8 +1644,7 @@
 
 			<!-- Amenities -->
 			<div id="amenities" class="section-container section-dropdown"
-				[ngClass]="booking_params.chevrons.amenities ? 'active' : ''"
-				*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
+				[ngClass]="booking_params.chevrons.amenities ? 'active' : ''">
 				<!-- Amenities -->
 				<div class="row align-items-center m-0" (click)="toggleDropdown('amenities')">
 					<div class="col-10 col-md-11">
