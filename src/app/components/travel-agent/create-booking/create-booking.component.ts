@@ -1997,19 +1997,8 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 				}
 			})
 
-			if (editing_data.extra_stops && editing_data.extra_stops.length > 0) {
-				editing_data.extra_stops.forEach((item: any, index: number) => {
-					if (item.hasOwnProperty('address')) {
-						item['formatted_address'] = item.address;
-						this.addExtraStop();
-						this.fillExtraStop(false, index, item, item);
-						console.log(this.BookingForm);
-					}
-				})
-			}
-			else {
-				console.error('No Extra Stops found.')
-			}
+			this.prefillExtraStops(editing_data.extra_stops);
+			this.prefillExtraStops(editing_data.return_extra_stops, true);
 			this.BookingForm.updateValueAndValidity()
 
 			// override specific value
@@ -2506,6 +2495,82 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 			(<FormArray>this.BookingForm.get('extra_stops')).removeAt(stop_index)
 			this.MapController()
 		}
+	}
+
+	private normalizeExtraStopsForPrefill(extraStops: any): Array<Record<string, any>> {
+		let parsedStops = extraStops;
+		if (typeof parsedStops === 'string') {
+			try {
+				parsedStops = JSON.parse(parsedStops);
+			} catch (error) {
+				console.error('Failed to parse extra stops for prefill', error);
+				return [];
+			}
+		}
+
+		if (!Array.isArray(parsedStops)) {
+			return [];
+		}
+
+		return parsedStops
+			.filter((item: any) => item && typeof item === 'object')
+			.map((item: any) => {
+				const address = String(
+					item?.display_address
+					|| item?.formatted_address
+					|| item?.address
+					|| ''
+				).trim();
+
+				return {
+					...item,
+					address,
+					formatted_address: address,
+					display_address: address,
+					latitude: item?.latitude ?? item?.lat ?? item?.pickup_latitude ?? '',
+					longitude: item?.longitude ?? item?.lng ?? item?.long ?? item?.pickup_longitude ?? ''
+				};
+			})
+			.filter((item: Record<string, any>) => !!item.address);
+	}
+
+	private prefillExtraStops(extraStops: any, is_return: boolean = false): void {
+		const normalizedStops = this.normalizeExtraStopsForPrefill(extraStops);
+		const formArrayName = is_return ? 'return_extra_stops' : 'extra_stops';
+		const formArray = this.BookingForm.get(formArrayName) as FormArray | null;
+
+		if (!formArray) {
+			return;
+		}
+
+		while (formArray.length > 0) {
+			formArray.removeAt(formArray.length - 1);
+		}
+
+		normalizedStops.forEach((item: Record<string, any>, index: number) => {
+			this.addExtraStop(is_return);
+			this.fillExtraStop(is_return, index, item, {
+				latitude: item.latitude,
+				longitude: item.longitude
+			});
+
+			const stopGroup = formArray.at(index) as FormGroup | null;
+			if (!stopGroup) {
+				return;
+			}
+
+			const stopPatch: Record<string, any> = {};
+			if (item.rate !== undefined && item.rate !== null && item.rate !== '') {
+				stopPatch['rate'] = item.rate;
+			}
+			if (item.booking_instructions !== undefined && item.booking_instructions !== null) {
+				stopPatch['booking_instructions'] = item.booking_instructions;
+			}
+
+			if (Object.keys(stopPatch).length > 0) {
+				stopGroup.patchValue(stopPatch, { emitEvent: false });
+			}
+		});
 	}
 
 	clearExtraStopAddress(isReturn: boolean, stopIndex: number, input?: HTMLInputElement) {
@@ -5085,6 +5150,8 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 				QB?.return_dropoff_airport,
 				matchedReturnDropoffAirport
 			)
+			this.prefillExtraStops(QB?.extra_stops);
+			this.prefillExtraStops(QB?.return_extra_stops, true);
 			this.SetFormValue('pickup_time', this.FormatTime(QB?.pickup_time))
 			this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
 			this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))

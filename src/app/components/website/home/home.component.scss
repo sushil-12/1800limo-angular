@@ -1,3 +1,65 @@
+/* --- AMENITY CHECKBOXES --- */
+.amenity-checkbox-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 6px 8px;
+}
+
+.amenity-checkbox-item {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	cursor: pointer;
+	margin: 0;
+	padding: 2px 0;
+
+	.amenity-real-checkbox {
+		position: absolute;
+		opacity: 0;
+		width: 0;
+		height: 0;
+		pointer-events: none;
+	}
+
+	.amenity-custom-checkbox {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 15px;
+		height: 15px;
+		min-width: 15px;
+		border: 2px solid #aaa;
+		border-radius: 3px;
+		background: transparent;
+		flex-shrink: 0;
+		transition: background 0.15s, border-color 0.15s;
+
+		svg {
+			display: none;
+			width: 10px;
+			height: 10px;
+		}
+	}
+
+	&:has(input:checked) .amenity-custom-checkbox {
+		background: #f8931f;
+		border-color: #f8931f;
+
+		svg {
+			display: block;
+		}
+	}
+}
+
+.amenity-checkbox-label {
+	font-size: 0.72rem;
+	color: #ddd;
+	font-weight: 500;
+	line-height: 1.2;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 /* --- SECTION WRAPPER --- */
 .how-it-works-section {
 	margin-top: 30px;

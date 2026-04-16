@@ -216,11 +216,91 @@ export class MasterVehicleComponent implements OnInit {
 	quotebot_form: any
 	role: number = JSON.parse(localStorage.getItem("currentUser"))?.role
 	openfilters: boolean = false
+	private autoApplyFilters: boolean = false
 	changeText: boolean = false
 	isLoading: boolean = true; // Add loading state
 	skeletonItems = new Array(8); // Skeleton items
 	currencySymbol: any;
 
+	get tripSummary(): { extraStops: string[], amenities: string[] } {
+		const form = this.quotebot_form;
+		if (!form) return { extraStops: [], amenities: [] };
+
+		const extraStops: string[] = (form.extra_stops || [])
+			.map((s: any) => s?.address)
+			.filter(Boolean);
+
+		const amenityIds: number[] = [...(form.amenities || []), ...(form.chargedAmenities || [])];
+		const amenities = this.getAmenityNamesByIds(amenityIds);
+
+		return { extraStops, amenities };
+	}
+
+	private getSavedAmenityIds(): number[] {
+		return [...new Set(
+			[
+				...(this.quotebot_form?.amenities || []),
+				...(this.quotebot_form?.chargedAmenities || [])
+			]
+				.map((id: any) => Number(id))
+				.filter((id: number) => !Number.isNaN(id) && id > 0)
+		)];
+	}
+
+	private findAmenitySelection(id: number): { category: string, amenity: any } | null {
+		const originalFilters = this.filters.original as any;
+		for (const category of ['amenities', 'special-amenities']) {
+			const amenity = originalFilters?.[category]?.find((item: any) => item.id == id && item.id !== 0);
+			if (amenity) {
+				return { category, amenity };
+			}
+		}
+
+		return null;
+	}
+
+	private ensureFilterVisible(category: string, selector: any): void {
+		const copiedFilters = this.filters.copy as any;
+		if (!Array.isArray(copiedFilters?.[category])) {
+			return;
+		}
+
+		if (copiedFilters[category].findIndex((item: any) => item.id == selector.id) == -1) {
+			copiedFilters[category] = [...copiedFilters[category], selector];
+		}
+	}
+
+	private applySavedAmenitySelections(): void {
+		this.getSavedAmenityIds().forEach((id: number) => {
+			const match = this.findAmenitySelection(id);
+			if (!match) {
+				return;
+			}
+
+			this.ensureFilterVisible(match.category, match.amenity);
+
+			if (this.filters.selections.findIndex(item => item['catg_name'] == match.category && item['id'] == match.amenity.id) == -1) {
+				this.filterSelection(true, match.category, match.amenity);
+			}
+		});
+	}
+
+	private getAmenityNamesByIds(ids: number[]): string[] {
+		const amenityNames: string[] = [];
+
+		[...new Set(
+			(ids || [])
+				.map((id: any) => Number(id))
+				.filter((id: number) => !Number.isNaN(id) && id > 0)
+		)].forEach((id: number) => {
+			const match = this.findAmenitySelection(id);
+			if (match && amenityNames.indexOf(match.amenity.name) == -1) {
+				amenityNames.push(match.amenity.name);
+			}
+		});
+
+		return amenityNames;
+	}
 
 	constructor(
 		private $quotebotService: QuotebotService,
@@ -268,6 +348,9 @@ export class MasterVehicleComponent implements OnInit {
 				this.Sort.LowToHigh()
 			} else {
 				this.Sort.HighToLow()
+			}
+			if (params?.autoApply == '1') {
+				this.autoApplyFilters = true
 			}
 		})
 
@@ -380,6 +463,20 @@ export class MasterVehicleComponent implements OnInit {
 
 
 			this.cutTillMinimum(this.min_length)	// cut the list till min length
+			this.applySavedAmenitySelections()
+
+			// If user arrived with amenities already selected (via Instant Quotes), skip master-vehicle and go directly to vehicle listing
+			if (this.autoApplyFilters && this.filters.selections.length > 0) {
+				// Replace the current history entry to remove ?autoApply=1.
+				// This prevents browser back from select-vehicle from re-triggering the auto-redirect.
+				this.$router.navigate([], {
+					relativeTo: this.$activatedRoute,
+					queryParams: {},
+					replaceUrl: true
+				});
+				this.getVehicleDetails()
+				return
+			}
 
 			// fetch the last selected category
 			// this.$state.get().subscribe((data: any) =>
@@ -709,7 +806,11 @@ export class MasterVehicleComponent implements OnInit {
 
 	clearFilters(filter: Filters['selections']) {
 		if (this.filters.selections.length == 0) return // don't do anything if no filter is selected
-
+		if(this.quotebot_form?.amenities.length > 0){
+			console.log('clearing amenities from quotebot form', this.quotebot_form.amenities)
+			this.quotebot_form.amenities = [];
+			localStorage.setItem('quotebot_form', JSON.stringify(this.quotebot_form))
+		}
 		if (filter !== null && this.filters.selections.length > 1) {
 			// deselecting the filter will remove from selections and request
 			this.filterSelection(false, filter['catg_name'], filter)

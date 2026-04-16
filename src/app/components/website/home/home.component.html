@@ -391,7 +391,7 @@
 														(click)="selectAirportOption(airport, 'pickup_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+														<i [class]="airport?.isCityAddressFallback ? 'fas fa-map-marker-alt qb-airport-field__option-icon' : (isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon')"
 															style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content"
 															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
@@ -468,7 +468,7 @@
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'pickup_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+														<i [class]="address.isAddressAirportResult ? (address.isTerminal ? 'fas fa-door-open qb-airport-field__option-icon qb-address-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon qb-address-field__option-icon') : 'fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon'"
 															style="margin-top:4px; color:#111;"></i>
 														<span
 															class="qb-airport-field__option-content qb-address-field__option-content"
@@ -529,6 +529,40 @@
 										</div>
 
 
+										<!-- EXTRA STOPS -->
+										<div class="extra-stops-section my-1">
+											<div *ngFor="let stop of extraStops; let i = index"
+												class="d-flex align-items-center mb-2">
+												<div class="flex-grow-1 input-contain qb-airport-field qb-address-field d-flex align-items-stretch"
+													style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
+													<i class="bi bi-geo qb-airport-field__icon"
+														style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+													<div class="input-box w-100">
+														<input type="text"
+															class="extra-stop-input qb-airport-field__input qb-address-field__input input-f"
+															style="font-size:15px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important;"
+															[placeholder]="'Stop ' + (i + 1) + ' address'"
+															[value]="stop.address"
+															autocomplete="off" />
+													</div>
+												</div>
+												<button type="button"
+													class="btn btn-link text-danger p-0 ml-2"
+													(click)="removeExtraStop(i)"
+													aria-label="Remove stop">
+													<i class="bi bi-x-circle-fill" style="font-size:1.3rem;"></i>
+												</button>
+											</div>
+											<div class="add-stop-link mt-1 mb-2">
+												<a role="button" class="text-warning fw-semibold small"
+													style="cursor:pointer; font-weight:600;"
+													(click)="addExtraStop()">
+													<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop (optional)
+												</a>
+											</div>
+										</div>
+										<!-- EXTRA STOPS ENDS -->
+
 										<div class="d-flex justify-content-center flip_div" style="">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
@@ -575,7 +609,7 @@
 														(click)="selectAirportOption(airport, 'dropoff_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+														<i [class]="airport?.isCityAddressFallback ? 'fas fa-map-marker-alt qb-airport-field__option-icon' : (isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon')"
 															style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content"
 															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
@@ -653,7 +687,7 @@
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'dropoff_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+														<i [class]="address.isAddressAirportResult ? (address.isTerminal ? 'fas fa-door-open qb-airport-field__option-icon qb-address-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon qb-address-field__option-icon') : 'fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon'"
 															style="margin-top:4px; color:#111;"></i>
 														<span
 															class="qb-airport-field__option-content qb-address-field__option-content"
@@ -821,7 +855,7 @@
 														(click)="selectAirportOption(airport, 'return_pickup_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+														<i [class]="airport?.isCityAddressFallback ? 'fas fa-map-marker-alt qb-airport-field__option-icon' : (isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon')"
 															style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content"
 															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
@@ -900,7 +934,7 @@
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'return_pickup_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+														<i [class]="address.isAddressAirportResult ? (address.isTerminal ? 'fas fa-door-open qb-airport-field__option-icon qb-address-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon qb-address-field__option-icon') : 'fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon'"
 															style="margin-top:4px; color:#111;"></i>
 														<span
 															class="qb-airport-field__option-content qb-address-field__option-content"
@@ -951,19 +985,52 @@
 												</div>
 											</ng-template>
 										</div>
-										<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
-											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
-											<a href="javascript:void(0)"
-												(click)="useCurrentPickupLocation('return_pickup_address')"
+											<div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
+												*ngIf="QBForm?.dropoff_type?.value != 'airport'">
+												<a href="javascript:void(0)"
+													(click)="useCurrentPickupLocation('return_pickup_address')"
 												class="text-decoration-none small font-weight-bold text-primary"
 												title="Use Current Location" tabindex="1">
-												<i class="fas fa-location mr-1"></i> Use Current Location
-											</a>
-										</div>
+													<i class="fas fa-location mr-1"></i> Use Current Location
+												</a>
+											</div>
+
+											<div class="extra-stops-section my-1">
+												<div *ngFor="let stop of returnExtraStops; let i = index"
+													class="d-flex align-items-center mb-2">
+													<div class="flex-grow-1 input-contain qb-airport-field qb-address-field d-flex align-items-stretch"
+														style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
+														<i class="bi bi-geo qb-airport-field__icon"
+															style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+														<div class="input-box w-100">
+															<input type="text"
+																class="return-extra-stop-input qb-airport-field__input qb-address-field__input input-f"
+																style="font-size:15px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important;"
+																[placeholder]="'Return Stop ' + (i + 1) + ' address'"
+																[value]="stop.address"
+																autocomplete="off" />
+														</div>
+													</div>
+													<button type="button"
+														class="btn btn-link text-danger p-0 ml-2"
+														(click)="removeExtraStop(i, true)"
+														aria-label="Remove return stop">
+														<i class="bi bi-x-circle-fill" style="font-size:1.3rem;"></i>
+													</button>
+												</div>
+												<div class="add-stop-link mt-1 mb-2">
+													<a role="button" class="text-warning fw-semibold small"
+														style="cursor:pointer; font-weight:600;"
+														(click)="addExtraStop(true)">
+														<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop
+														(optional)
+													</a>
+												</div>
+											</div>
 
 
-										<div class="d-flex justify-content-center flip_div"
-											style="width: 100% !important;">
+											<div class="d-flex justify-content-center flip_div"
+												style="width: 100% !important;">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 											<span class="text-white ml-3"
@@ -1008,7 +1075,7 @@
 														(click)="selectAirportOption(airport, 'return_dropoff_airport')"
 														[style.padding]="isAirportTerminalOption(airport) ? '12px 14px' : '12px 14px'"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i [class]="isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon'"
+														<i [class]="airport?.isCityAddressFallback ? 'fas fa-map-marker-alt qb-airport-field__option-icon' : (isAirportTerminalOption(airport) ? 'fas fa-door-open qb-airport-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon')"
 															style="margin-top:4px; color:#111;"></i>
 														<span class="qb-airport-field__option-content"
 															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
@@ -1080,7 +1147,7 @@
 														(mousedown)="$event.preventDefault()"
 														(click)="selectAddressOption(address, 'return_dropoff_address')"
 														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+														<i [class]="address.isAddressAirportResult ? (address.isTerminal ? 'fas fa-door-open qb-airport-field__option-icon qb-address-field__option-icon' : 'fas fa-plane qb-airport-field__option-icon qb-address-field__option-icon') : 'fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon'"
 															style="margin-top:4px; color:#111;"></i>
 														<span
 															class="qb-airport-field__option-content qb-address-field__option-content"
@@ -1146,6 +1213,40 @@
 
 									</div>
 								</div>
+							<!-- RIDE PREFERENCES -->
+							<div class="ride-preferences-section mx-2 mt-3 mb-2" *ngIf="amenitiesList?.length > 0">
+								<div class="d-flex align-items-center justify-content-between mb-2">
+									<span class="ride-pref-label"
+										style="font-size:0.75rem; font-weight:700; letter-spacing:0.06em; color:#ccc; text-transform:uppercase;">
+										Additional Services
+									</span>
+									<a *ngIf="amenitiesList.length > 6"
+										role="button"
+										(click)="showAllAmenities = !showAllAmenities"
+										class="text-decoration-none small font-weight-bold"
+										style="color:#f8931f; cursor:pointer; white-space:nowrap;">
+										{{ showAllAmenities ? 'See Less' : 'See More' }}
+									</a>
+								</div>
+								<div class="amenity-checkbox-grid">
+									<label *ngFor="let amenity of amenitiesList; let i = index"
+										class="amenity-checkbox-item"
+										[hidden]="i >= 6 && !showAllAmenities">
+										<input type="checkbox"
+											class="amenity-real-checkbox"
+											[checked]="isAmenitySelected(amenity.id)"
+											(change)="toggleAmenity(amenity.id)" />
+										<span class="amenity-custom-checkbox">
+											<svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+											</svg>
+										</span>
+										<span class="amenity-checkbox-label">{{ amenity.name }}</span>
+									</label>
+								</div>
+							</div>
+							<!-- RIDE PREFERENCES ENDS -->
+
 							</form>
 							<div id="search-button-container">
 								<div id="search-button-box" class="pb-3 pb-md-1">

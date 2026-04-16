@@ -1,309 +1,165 @@
-<!--
-<div class="container">
-			<h2 class="headinginfo pl-0">Booking Details</h2>
-			<div class="row topmargin2" *ngIf="bookingDetail.service_type">
-				<div class="col-md-4">
-					<p>Service Type: </p>
-				</div>
-				<div class="col-md-8">
-					<strong>{{bookingDetail.service_type |titlecase}}</strong>
-				</div>
+<div id="booking-details-container" class="container py-4" *ngIf="bookingDetail as detail; else bookingDetailsFallback">
+	<div class="booking-card shadow-sm">
+		<div class="booking-card__header">
+			<div>
+				<h2 class="mb-1">Booking Details</h2>
+				<p class="booking-card__subtext mb-0">Booking #{{ detail?.reservation_id }}</p>
 			</div>
-			<div class="row" *ngIf="bookingDetail.transfer_type">
-				<div class="col-md-4">
-					<p>Transfer Type: </p>
-				</div>
-				<div class="col-md-8">
-					<strong>{{bookingDetail.transfer_type |titlecase}}</strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.return_transfer_type">
-				<div class="col-md-4">
-					<p>Return Transfer Type: </p>
-				</div>
-				<div class="col-md-8">
-					<strong>{{bookingDetail.return_transfer_type |titlecase}}</strong>
-				</div>
-			</div>
-
-			<h2 class="headinginfoH2 topmargin pl-0">Journey Details</h2>
-			<div class="row topmargin2" *ngIf="bookingDetail.pickup_address">
-				<div class="col-md-4">
-					<p> Pickup Address: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.pickup_address}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.pickup_airport_name">
-				<div class="col-md-4">
-					<p>Pickup Airport: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.pickup_airport_name}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.pickup_airline_name">
-				<div class="col-md-4">
-					<p>Pickup Airline: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.pickup_airline_name}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.pickup_flight">
-				<div class="col-md-4">
-					<p> Pickup Flight Number: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.pickup_flight}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.origin_airport_city">
-				<div class="col-md-4">
-					<p> Pickup Origin Airport / City: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.origin_airport_city}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.dropoff_address">
-				<div class="col-md-4">
-					<p> Drop-Off Address: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.dropoff_address}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.dropoff_airport_name">
-				<div class="col-md-4">
-					<p> Drop-Off Airport: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.dropoff_airport_name}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.dropoff_airline_name">
-				<div class="col-md-4">
-					<p> Drop-Off Airline: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.dropoff_airline_name}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.dropoff_flight">
-				<div class="col-md-4">
-					<p> Drop-Off Flight Number: </p>
-				</div>
-				<div class="col-md-8">
-					<strong>{{bookingDetail.dropoff_flight}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.stop_1">
-				<div class="col-md-4">
-					<p> Extra Stops Number 2: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.stop_1}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.stop_2">
-				<div class="col-md-4">
-					<p> Extra Stops Number 3: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.stop_2}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.meet_greet_choices">
-				<div class="col-md-4">
-					<p> Meet and Greet Choices: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.meet_greet_choices}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.pickup_date">
-				<div class="col-md-4">
-					<p> Pickup Travel Date: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.pickup_date}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.pickup_time">
-				<div class="col-md-4">
-					<p> Pickup Travel Time: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.pickup_time}} </strong>
-				</div>
-			</div>
-			<div class="row" *ngIf="bookingDetail.distance">
-				<div class="col-md-4">
-					<p> Distance: </p>
-				</div>
-				<div class="col-md-8">
-					<strong> {{bookingDetail.distance}} </strong>
-				</div>
-			</div>
-
-			<h2 class="headinginfoH2 topmargin pl-0" *ngIf="bookingDetail.service_type=='roundtrip'">Return Details</h2>
-			<div *ngIf="bookingDetail.service_type=='roundtrip'">
-				<div class="row topmargin2" *ngIf="bookingDetail.return_pickup_address">
-					<div class="col-md-4">
-						<p> Return Pickup Address: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_address}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_pickup_airport_name">
-					<div class="col-md-4">
-						<p> Return Pickup Airport: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_airport_name}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_pickup_airline_name">
-					<div class="col-md-4">
-						<p> Return Pickup Airline: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_airline_name}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_pickup_flight">
-					<div class="col-md-4">
-						<p> Return Pickup Flight Number: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_flight}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_origin_airport_city">
-					<div class="col-md-4">
-						<p> Return Pickup Origin Airport / City: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_origin_airport_city}}
-						</strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_pickup_latitude">
-					<div class="col-md-4">
-						<p> Return Pickup Latitude/Longitude: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_latitude}}/{{bookingDetail.return_pickup_longitude}}
-						</strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_dropoff_address">
-					<div class="col-md-4">
-						<p> Return Drop-Off Address: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_dropoff_address}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_dropoff_airport_name">
-					<div class="col-md-4">
-						<p> Return Drop-Off Airport: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_dropoff_airport_name}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_dropoff_airline_name">
-					<div class="col-md-4">
-						<p>Return Drop-Off Airline: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_dropoff_airline_name}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_dropoff_flight">
-					<div class="col-md-4">
-						<p> Return Drop-Off Flight Number: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_dropoff_flight}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_dropoff_latitude">
-					<div class="col-md-4">
-						<p> Return Drop-Off Latitude/Longitude: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_dropoff_latitude}}/{{bookingDetail.return_dropoff_longitude}}
-						</strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_stop_1">
-					<div class="col-md-4">
-						<p> Return Extra Stops Number 2: </p>
-					</div>
-					<div class="col-md-8">
-						<strong>{{bookingDetail.return_stop_1}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_stop_1_latitude && bookingDetail.return_stop_1_longitude">
-					<div class="col-md-4">
-						<p> Return Extra Stops Number 2 Latitude/Longitude: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_stop_1_latitude}}/{{bookingDetail.return_stop_1_longitude}}
-						</strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_stop_2">
-					<div class="col-md-4">
-						<p> Return Extra Stops Number 3: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_stop_2}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_stop_2_latitude && bookingDetail.return_stop_2_longitude">
-					<div class="col-md-4">
-						<p> Return Extra Stops Number 3
-							Latitude/Longitude: </p>
-					</div>
-					<div class="col-md-8">
-						<strong>{{bookingDetail.return_stop_2_latitude}}/{{bookingDetail.return_stop_2_longitude}}
-						</strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_meet_greet_choices">
-					<div class="col-md-4">
-						<p> Return Meet and Greet Choices: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_meet_greet_choices
-							|titlecase}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_pickup_date">
-					<div class="col-md-4">
-						<p> Return Travel Date: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_date}} </strong>
-					</div>
-				</div>
-				<div class="row" *ngIf="bookingDetail.return_pickup_time">
-					<div class="col-md-4">
-						<p> Return Travel Time: </p>
-					</div>
-					<div class="col-md-8">
-						<strong> {{bookingDetail.return_pickup_time}} </strong>
-					</div>
-				</div>
-			</div>
-			<button class="custom-btn button2 mt-4" type="edit" (click)="editBooking()">Edit</button>
-
 		</div>
 
--->
+		<div class="booking-grid">
+			<div class="booking-section">
+				<h5>Travel Information</h5>
+				<div class="detail-row" *ngIf="detail?.service_type">
+					<span class="detail-row__label">Service Type</span>
+					<strong>{{ formatEnum(detail?.service_type) | titlecase }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.transfer_type">
+					<span class="detail-row__label">Transfer Type</span>
+					<strong>{{ formatEnum(detail?.transfer_type) | titlecase }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.pickup_date">
+					<span class="detail-row__label">Pickup Date</span>
+					<strong>{{ detail?.pickup_date }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.pickup_time">
+					<span class="detail-row__label">Pickup Time</span>
+					<strong>{{ detail?.pickup_time }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.distance">
+					<span class="detail-row__label">Distance</span>
+					<strong>{{ mToMi(detail?.distance) }} Miles / {{ mToKm(detail?.distance) }} Km</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.duration">
+					<span class="detail-row__label">Estimated Time</span>
+					<strong>{{ convertToMinutes(detail?.duration) }}</strong>
+				</div>
+			</div>
+
+			<div class="booking-section">
+				<h5>Route Map</h5>
+				<div class="google_map">
+					<google-map height="320px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+				</div>
+			</div>
+		</div>
+
+		<div class="booking-grid">
+			<div class="booking-section">
+				<h5>Pickup Details</h5>
+				<div class="detail-row" *ngIf="getPickupLocation()">
+					<span class="detail-row__label">Pickup Location</span>
+					<div class="detail-row__value">
+						<strong>{{ getPickupLocation() }}</strong>
+						<button type="button" class="pin-button" (click)="showLocationPointOnMapByAddress(getPickupLocation())">
+							<i class="bi bi-geo-alt-fill"></i>
+						</button>
+					</div>
+				</div>
+				<div class="detail-row" *ngIf="detail?.pickup_airline_name">
+					<span class="detail-row__label">Pickup Airline</span>
+					<strong>{{ detail?.pickup_airline_name }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.pickup_flight">
+					<span class="detail-row__label">Pickup Flight</span>
+					<strong>{{ detail?.pickup_flight }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.cruise_port">
+					<span class="detail-row__label">Cruise Port</span>
+					<strong>{{ detail?.cruise_port }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.cruise_name">
+					<span class="detail-row__label">Cruise Name</span>
+					<strong>{{ detail?.cruise_name }}</strong>
+				</div>
+			</div>
+
+			<div class="booking-section">
+				<h5>Drop Off Details</h5>
+				<div class="detail-row" *ngIf="getDropoffLocation()">
+					<span class="detail-row__label">Drop Off Location</span>
+					<div class="detail-row__value">
+						<strong>{{ getDropoffLocation() }}</strong>
+						<button type="button" class="pin-button" (click)="showLocationPointOnMapByAddress(getDropoffLocation())">
+							<i class="bi bi-geo-alt-fill"></i>
+						</button>
+					</div>
+				</div>
+				<div class="detail-row" *ngIf="detail?.dropoff_airline_name">
+					<span class="detail-row__label">Drop Off Airline</span>
+					<strong>{{ detail?.dropoff_airline_name }}</strong>
+				</div>
+				<div class="detail-row" *ngIf="detail?.dropoff_flight">
+					<span class="detail-row__label">Drop Off Flight</span>
+					<strong>{{ detail?.dropoff_flight }}</strong>
+				</div>
+			</div>
+		</div>
+
+		<div class="booking-section" *ngIf="detail?.extra_stops?.length > 0">
+			<h5>Extra Stops</h5>
+			<div class="detail-row" *ngFor="let stop of detail?.extra_stops; index as stopIndex">
+				<span class="detail-row__label">Stop {{ stopIndex + 1 }}</span>
+				<div class="detail-row__value">
+					<strong>{{ stop?.address || 'Stop ' + (stopIndex + 1) }}</strong>
+					<button
+						type="button"
+						class="pin-button"
+						*ngIf="stop?.address"
+						(click)="showLocationPointOnMapByAddress(stop?.address)">
+						<i class="bi bi-geo-alt-fill"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="booking-grid" *ngIf="hasReturnLeg()">
+			<div class="booking-section">
+				<h5>Return Details</h5>
+				<div class="detail-row" *ngIf="getReturnPickupLocation()">
+					<span class="detail-row__label">Return Pickup</span>
+					<div class="detail-row__value">
+						<strong>{{ getReturnPickupLocation() }}</strong>
+						<button type="button" class="pin-button" (click)="showLocationPointOnMapByAddress(getReturnPickupLocation())">
+							<i class="bi bi-geo-alt-fill"></i>
+						</button>
+					</div>
+				</div>
+				<div class="detail-row" *ngIf="getReturnDropoffLocation()">
+					<span class="detail-row__label">Return Drop Off</span>
+					<div class="detail-row__value">
+						<strong>{{ getReturnDropoffLocation() }}</strong>
+						<button type="button" class="pin-button" (click)="showLocationPointOnMapByAddress(getReturnDropoffLocation())">
+							<i class="bi bi-geo-alt-fill"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="booking-section" *ngIf="detail?.return_extra_stops?.length > 0">
+				<h5>Return Extra Stops</h5>
+				<div class="detail-row" *ngFor="let stop of detail?.return_extra_stops; index as stopIndex">
+					<span class="detail-row__label">Stop {{ stopIndex + 1 }}</span>
+					<div class="detail-row__value">
+						<strong>{{ stop?.address || 'Stop ' + (stopIndex + 1) }}</strong>
+						<button
+							type="button"
+							class="pin-button"
+							*ngIf="stop?.address"
+							(click)="showLocationPointOnMapByAddress(stop?.address)">
+							<i class="bi bi-geo-alt-fill"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #bookingDetailsFallback>
+	<div class="container py-4">
+		<div class="booking-card shadow-sm">
+			<p class="mb-0">{{ loading ? 'Loading booking details...' : 'No booking details found.' }}</p>
+		</div>
+	</div>
+</ng-template>

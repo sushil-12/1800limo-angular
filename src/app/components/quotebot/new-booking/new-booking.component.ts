@@ -243,14 +243,46 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 			return_distance: this.return_distance,
 			no_of_hours: this.number_of_hours,
 			is_master_vehicle: this.is_master_vehicle,
+			// Outbound
+			pickup: this.BookingForm.get('pickup').value,
+			pickup_latitude: this.BookingForm.get('pickup_latitude').value,
+			pickup_longitude: this.BookingForm.get('pickup_longitude').value,
+			pickup_airport: this.BookingForm.get('pickup_airport').value,
+			pickup_airport_name: this.BookingForm.get('pickup_airport_name').value,
+			pickup_airport_latitude: this.BookingForm.get('pickup_airport_latitude').value,
+			pickup_airport_longitude: this.BookingForm.get('pickup_airport_longitude').value,
+			dropoff: this.BookingForm.get('dropoff').value,
+			dropoff_latitude: this.BookingForm.get('dropoff_latitude').value,
+			dropoff_longitude: this.BookingForm.get('dropoff_longitude').value,
+			dropoff_airport: this.BookingForm.get('dropoff_airport').value,
+			dropoff_airport_name: this.BookingForm.get('dropoff_airport_name').value,
+			dropoff_airport_latitude: this.BookingForm.get('dropoff_airport_latitude').value,
+			dropoff_airport_longitude: this.BookingForm.get('dropoff_airport_longitude').value,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			pickup_time: this.BookingForm.get('pickup_time').value,
+			// Return
+			return_pickup: this.BookingForm.get('return_pickup').value,
+			return_pickup_latitude: this.BookingForm.get('return_pickup_latitude').value,
+			return_pickup_longitude: this.BookingForm.get('return_pickup_longitude').value,
+			return_pickup_airport: this.BookingForm.get('return_pickup_airport').value,
+			return_pickup_airport_name: this.BookingForm.get('return_pickup_airport_name').value,
+			return_pickup_airport_latitude: this.BookingForm.get('return_pickup_airport_latitude').value,
+			return_pickup_airport_longitude: this.BookingForm.get('return_pickup_airport_longitude').value,
+			return_dropoff: this.BookingForm.get('return_dropoff').value,
+			return_dropoff_latitude: this.BookingForm.get('return_dropoff_latitude').value,
+			return_dropoff_longitude: this.BookingForm.get('return_dropoff_longitude').value,
+			return_dropoff_airport: this.BookingForm.get('return_dropoff_airport').value,
+			return_dropoff_airport_name: this.BookingForm.get('return_dropoff_airport_name').value,
+			return_dropoff_airport_latitude: this.BookingForm.get('return_dropoff_airport_latitude').value,
+			return_dropoff_airport_longitude: this.BookingForm.get('return_dropoff_airport_longitude').value,
+			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
 
 		}
 		let vehicle_id = this.is_master_vehicle ? this.master_vehicle_id : this.booking_data?.vehicle_id
 		this.booking_data['vehicle_id'] = vehicle_id
+		// if (!vehicle_id) return;
+		console.log('fetch rates with', vehicle_id, this.booking_data)
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, this.booking_data).subscribe((response: any) => {
 			this.subtotal = 0
 			this.r_subtotal = 0
@@ -4478,6 +4510,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 	setValueByBookNow() {
 		try {
 			let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+			console.log('QB-->>>', QB)
 			let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 			const matchedPickupAirport = this.resolveInternalAirportRecord({
 				name: QB?.other_details?.pickup_airport_name,
@@ -4585,7 +4618,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 					latitude: QB?.pickup_airport_lat,
 					longitude: QB?.pickup_airport_long
 				}
-				this.fillLocationPoints('airport', location)
+				this.fillLocationPoints('pickup_airport', location)
 			}
 			console.log('affiliate/create-new-booking map prefill snapshot', {
 				transfer_type: this.Form.transfer_type.value,
@@ -4598,8 +4631,54 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 				dropoff_latitude: this.Form.dropoff_latitude.value,
 				dropoff_longitude: this.Form.dropoff_longitude.value
 			})
+			// Pre-populate extra stops from quotebot form
+				if (Array.isArray(QB?.extra_stops) && QB.extra_stops.length > 0) {
+					QB.extra_stops.forEach((stop: any) => {
+						if (stop?.address) {
+							this.addExtraStop(false);
+						const idx = this.ExtraStops.length - 1;
+						// Use fillExtraStop so checkExtraStopInTown runs, sets rate,
+						// and triggers buildBookingData() once the town check resolves.
+						this.fillExtraStop(false, idx, {
+							formatted_address: stop.address,
+							display_address: stop.address,
+							place_id: stop.place_id || ''
+						}, {
+							latitude: stop.latitude,
+							longitude: stop.longitude
+						});
+						}
+					});
+				}
+
+				if (QB?.service_type === 'round_trip' && Array.isArray(QB?.return_extra_stops) && QB.return_extra_stops.length > 0) {
+					QB.return_extra_stops.forEach((stop: any) => {
+						if (stop?.address) {
+							this.addExtraStop(true);
+							const idx = this.ReturnExtraStops.length - 1;
+							this.fillExtraStop(true, idx, {
+								formatted_address: stop.address,
+								display_address: stop.address,
+								place_id: stop.place_id || ''
+							}, {
+								latitude: stop.latitude,
+								longitude: stop.longitude
+							});
+						}
+					});
+				}
+
+				// Pre-populate amenities from quotebot form
+				if (Array.isArray(QB?.amenities) && QB.amenities.length > 0) {
+				QB.amenities.forEach((id: any) => {
+					this.select(true, 'amenities', id);
+				});
+			}
+
 			this.MapController()
-			this.MapController(true)
+			if (this.BookingForm.get('service_type')?.value === 'round_trip') {
+				this.MapController(true)
+			}
 		} catch (error) {
 			console.log('error--->>>', error)
 		}

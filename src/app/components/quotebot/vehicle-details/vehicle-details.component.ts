@@ -14,6 +14,7 @@ declare let $: any
 })
 export class VehicleDetailsComponent implements OnInit {
 	@ViewChild('map') map!: GoogleMap;
+	@ViewChild('returnMap') returnMap!: GoogleMap;
 
 	zoom = 15;
 	center = { lat: 41.850033, lng: -87.6500523 };
@@ -27,6 +28,8 @@ export class VehicleDetailsComponent implements OnInit {
 	round_trip_rates: any
 	distance: any = 0
 	duration: any = 0
+	returnDistance: any = 0
+	returnDuration: any = 0
 	bookingId: any = null
 	booking_created_from: string = 'admin';
 
@@ -193,7 +196,11 @@ export class VehicleDetailsComponent implements OnInit {
 	//ngOnInit ends
 
 	ngAfterViewInit() {
+		if (!this.quotebot_form) return;
 		this.initMap();
+		if (this.quotebot_form.service_type === 'round_trip') {
+			this.initReturnMap();
+		}
 	}
 
 	initMap(): any {
@@ -204,59 +211,128 @@ export class VehicleDetailsComponent implements OnInit {
 		const origin = this.getOrigin();
 		const destination = this.getDestination();
 
+		const waypoints: google.maps.DirectionsWaypoint[] = (this.quotebot_form.extra_stops || []).map((stop: any) => ({
+			location: { lat: stop.latitude, lng: stop.longitude },
+			stopover: true,
+		}));
+
 		const request: google.maps.DirectionsRequest = {
 			origin,
 			destination,
+			waypoints,
 			travelMode: google.maps.TravelMode.DRIVING,
-		  };
+		};
 
-		  directionsService.route(request, (response, status) => {
+		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK && response) {
-			  directionsRenderer.setDirections(response);
-	  
-			  response.routes.forEach(route => {
-				route.legs.forEach(leg => {
-				  this.distance += leg.distance?.value || 0;
-				  this.duration += leg.duration?.value || 0;
-				  console.log('Leg distance (m):', leg.distance?.value);
-				  console.log('Leg duration (s):', leg.duration?.value);
+				directionsRenderer.setDirections(response);
+				response.routes.forEach(route => {
+					route.legs.forEach(leg => {
+						this.distance += leg.distance?.value || 0;
+						this.duration += leg.duration?.value || 0;
+					});
 				});
-			  });
 			} else {
-			  console.error('Directions request failed due to', status);
+				console.error('Directions request failed due to', status);
 			}
-		  });
-		}
-	  
-		getOrigin(): google.maps.LatLngLiteral {
-		  switch (this.quotebot_form.pickup_type) {
+		});
+	}
+
+	initReturnMap(): any {
+		if (!this.returnMap?.googleMap) return;
+
+		const directionsService = new google.maps.DirectionsService();
+		const directionsRenderer = new google.maps.DirectionsRenderer();
+		directionsRenderer.setMap(this.returnMap.googleMap!);
+
+		const origin = this.getReturnOrigin();
+		const destination = this.getReturnDestination();
+
+		const waypoints: google.maps.DirectionsWaypoint[] = (this.quotebot_form.return_extra_stops || []).map((stop: any) => ({
+			location: { lat: stop.latitude, lng: stop.longitude },
+			stopover: true,
+		}));
+
+		const request: google.maps.DirectionsRequest = {
+			origin,
+			destination,
+			waypoints,
+			travelMode: google.maps.TravelMode.DRIVING,
+		};
+
+		directionsService.route(request, (response, status) => {
+			if (status === google.maps.DirectionsStatus.OK && response) {
+				directionsRenderer.setDirections(response);
+				response.routes.forEach(route => {
+					route.legs.forEach(leg => {
+						this.returnDistance += leg.distance?.value || 0;
+						this.returnDuration += leg.duration?.value || 0;
+					});
+				});
+			} else {
+				console.error('Return directions request failed due to', status);
+			}
+		});
+	}
+
+	getOrigin(): google.maps.LatLngLiteral {
+		switch (this.quotebot_form.pickup_type) {
 			case 'airport':
-			  return {
-				lat: Number(this.quotebot_form.pickup_airport_lat),
-				lng: Number(this.quotebot_form.pickup_airport_long),
-			  };
+				return {
+					lat: Number(this.quotebot_form.pickup_airport_lat),
+					lng: Number(this.quotebot_form.pickup_airport_long),
+				};
 			default:
-			  return {
-				lat: Number(this.quotebot_form.pickup_address_lat),
-				lng: Number(this.quotebot_form.pickup_address_long),
-			  };
-		  }
+				return {
+					lat: Number(this.quotebot_form.pickup_address_lat),
+					lng: Number(this.quotebot_form.pickup_address_long),
+				};
 		}
-	  
-		getDestination(): google.maps.LatLngLiteral {
-		  switch (this.quotebot_form.dropoff_type) {
+	}
+
+	getDestination(): google.maps.LatLngLiteral {
+		switch (this.quotebot_form.dropoff_type) {
 			case 'airport':
-			  return {
-				lat: Number(this.quotebot_form.dropoff_airport_lat),
-				lng: Number(this.quotebot_form.dropoff_airport_long),
-			  };
+				return {
+					lat: Number(this.quotebot_form.dropoff_airport_lat),
+					lng: Number(this.quotebot_form.dropoff_airport_long),
+				};
 			default:
-			  return {
-				lat: Number(this.quotebot_form.dropoff_address_lat),
-				lng: Number(this.quotebot_form.dropoff_address_long),
-			  };
-		  }
-	
+				return {
+					lat: Number(this.quotebot_form.dropoff_address_lat),
+					lng: Number(this.quotebot_form.dropoff_address_long),
+				};
+		}
+	}
+
+	getReturnOrigin(): google.maps.LatLngLiteral {
+		switch (this.quotebot_form.return_pickup_type) {
+			case 'airport':
+				return {
+					lat: Number(this.quotebot_form.return_pickup_airport_lat),
+					lng: Number(this.quotebot_form.return_pickup_airport_long),
+				};
+			default:
+				return {
+					lat: Number(this.quotebot_form.return_pickup_address_lat),
+					lng: Number(this.quotebot_form.return_pickup_address_long),
+				};
+		}
+	}
+
+	getReturnDestination(): google.maps.LatLngLiteral {
+		switch (this.quotebot_form.return_dropoff_type) {
+			case 'airport':
+				return {
+					lat: Number(this.quotebot_form.return_dropoff_airport_lat),
+					lng: Number(this.quotebot_form.return_dropoff_airport_long),
+				};
+			default:
+				return {
+					lat: Number(this.quotebot_form.return_dropoff_address_lat),
+					lng: Number(this.quotebot_form.return_dropoff_address_long),
+				};
+		}
 	}
 
 

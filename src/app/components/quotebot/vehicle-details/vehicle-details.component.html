@@ -174,7 +174,9 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="col-lg-12">
+							<!-- Outbound Map -->
 							<div class="map-image img-Block mt-4 mt-lg-0">
+								<h6 *ngIf="quotebot_form?.service_type == 'round_trip'" class="font-weight-bold mb-1" style="color: #e87c22;">Outbound Route</h6>
 								<google-map #map height="300px" width="100%" [center]="center" [zoom]="zoom"
 									[options]="mapOptions">
 								</google-map>
@@ -184,6 +186,21 @@
 									</h6>
 									<h6 class="mx-2">
 										Estimated time: {{convertToMinutes(duration)}}
+									</h6>
+								</div>
+							</div>
+							<!-- Return Map (round trip only) -->
+							<div class="map-image img-Block mt-4" *ngIf="quotebot_form?.service_type == 'round_trip'">
+								<h6 class="font-weight-bold mb-1" style="color: #e87c22;">Return Route</h6>
+								<google-map #returnMap height="300px" width="100%" [center]="center" [zoom]="zoom"
+									[options]="mapOptions">
+								</google-map>
+								<div class="row">
+									<h6 class="mx-2">
+										Total Distance: {{convertToMi(returnDistance)}} mi / {{convertToKm(returnDistance)}} km
+									</h6>
+									<h6 class="mx-2">
+										Estimated time: {{convertToMinutes(returnDuration)}}
 									</h6>
 								</div>
 							</div>
@@ -348,6 +365,23 @@
 		</div>
 
 
+		<!-- Extra Stops -->
+		<div *ngIf="quotebot_form.extra_stops?.length > 0">
+			<hr class="blue-line" />
+			<div class="row my-3" *ngFor="let stop of quotebot_form.extra_stops; index as i">
+				<div class="col-md-5">
+					<p class="pv-title">
+						Extra Stop {{ i + 1 }}
+					</p>
+				</div>
+				<div class="col-auto">
+					<p class="pv-title-value">
+						{{ stop.address }}
+					</p>
+				</div>
+			</div>
+		</div>
+
 		<!-- Travel Time/Miles -->
 		<div class="row my-3">
 			<div class="col-md-5">
@@ -470,6 +504,23 @@
 						</p>
 					</div>
 				</ng-template>
+			</div>
+
+			<!-- Return Extra Stops -->
+			<div *ngIf="quotebot_form.return_extra_stops?.length > 0">
+				<hr class="blue-line" />
+				<div class="row my-3" *ngFor="let stop of quotebot_form.return_extra_stops; index as i">
+					<div class="col-md-5">
+						<p class="pv-title">
+							Extra Stop {{ i + 1 }}
+						</p>
+					</div>
+					<div class="col-auto">
+						<p class="pv-title-value">
+							{{ stop.address }}
+						</p>
+					</div>
+				</div>
 			</div>
 
 			<!-- Travel Time/Miles -->

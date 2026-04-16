@@ -1,0 +1,51 @@
+<!-- Floating Chat Button -->
+<button class="chat-fab" (click)="togglePanel()" [class.open]="isOpen" title="Book a Limo">
+	<span class="chat-fab-icon" *ngIf="!isOpen">🚗</span>
+	<span class="chat-fab-icon" *ngIf="isOpen">✕</span>
+</button>
+
+<!-- Chat Panel -->
+<div class="chat-panel" [class.visible]="isOpen">
+
+	<!-- Header -->
+	<div class="chat-header">
+		<div class="chat-header-info">
+			<span class="chat-header-icon">🚗</span>
+			<div>
+				<div class="chat-header-title">Limo Booking Assistant</div>
+				<div class="chat-header-subtitle">Powered by AI</div>
+			</div>
+		</div>
+		<button class="chat-header-close" (click)="togglePanel()">✕</button>
+	</div>
+
+	<!-- Messages Area -->
+	<div class="chat-messages-area" #messagesContainer>
+		<app-message-bubble
+			*ngFor="let message of messages"
+			[message]="message"
+			(chipSelected)="chatbotService.handleChip($event)"
+			(formSubmitted)="chatbotService.handleFormSubmit($event)"
+			(categorySelected)="chatbotService.handleCategorySelect($event)"
+			(vehicleSelected)="chatbotService.handleVehicleSelect($event)"
+			(confirmBooking)="chatbotService.confirmBooking()"
+			(editBooking)="chatbotService.editBooking()">
+		</app-message-bubble>
+	</div>
+
+	<!-- Input Area -->
+	<div class="chat-input-area" [class.disabled]="isInputDisabled()">
+		<input
+			class="chat-input"
+			type="text"
+			[(ngModel)]="userInput"
+			(keydown)="onKeydown($event)"
+			[placeholder]="getInputPlaceholder()"
+			[disabled]="isInputDisabled()"
+		/>
+		<button class="chat-send-btn" (click)="send()" [disabled]="isInputDisabled() || !userInput.trim()">
+			➤
+		</button>
+	</div>
+
+</div>
