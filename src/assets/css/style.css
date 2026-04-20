@@ -571,7 +571,7 @@ header {
 	font-size: 15px;
 	width: 100%;
 	display: inline-block;
-	text-align: center;
+	text-align: left;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
