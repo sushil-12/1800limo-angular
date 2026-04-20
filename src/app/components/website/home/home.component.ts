@@ -128,6 +128,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	showAllAmenities = false;
 	extraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
 	returnExtraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
+	extraStopAddressData: Record<string, any[]> = {};
 
 
 	constructor(
@@ -558,7 +559,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.scheduleQuoteBotAutocompleteDisplaySync();
 	}
 
+	getExtraStopFieldName(index: number, isReturn: boolean = false): string {
+		return isReturn ? `return_extra_stop_${index}` : `extra_stop_${index}`;
+	}
+
+	private isExtraStopField(fieldName: string): boolean {
+		return /^(return_)?extra_stop_\d+$/.test(fieldName);
+	}
+
+	private getExtraStopFieldValue(fieldName: string): string {
+		const isReturn = fieldName.startsWith('return_extra_stop_');
+		const index = parseInt(fieldName.replace(isReturn ? 'return_extra_stop_' : 'extra_stop_', ''), 10);
+		return this.getExtraStops(isReturn)[index]?.address || '';
+	}
+
 	getAddressOptions(fieldName: string): Array<any> {
+		if (this.isExtraStopField(fieldName)) {
+			return this.extraStopAddressData[fieldName] || [];
+		}
 		switch (fieldName) {
 			case 'pickup_address':
 				return this.address_data_pickup || [];
@@ -659,7 +677,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	shouldShowAddressEmptyState(fieldName: string): boolean {
-		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		const currentValue = this.isExtraStopField(fieldName)
+			? this.getExtraStopFieldValue(fieldName)
+			: String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
 		return this.isAddressDropdownOpen(fieldName)
 			&& !!currentValue
 			&& !this.isAddressSearchLoading(fieldName)
@@ -667,7 +687,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	shouldShowAddressPromptState(fieldName: string): boolean {
-		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		const currentValue = this.isExtraStopField(fieldName)
+			? this.getExtraStopFieldValue(fieldName)
+			: String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
 		return this.isAddressDropdownOpen(fieldName) && !currentValue;
 	}
 
@@ -678,10 +700,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
-	openAddressDropdown(fieldName: string): void {
+	openAddressDropdown(fieldName: string, currentValue?: string): void {
 		this.clearAddressDropdownBlurTimer();
 		this.activeAddressDropdown = fieldName;
-		void this.searchAddress(this.quoteBotForm.get(fieldName)?.value || '', fieldName);
+		const value = currentValue !== undefined
+			? currentValue
+			: this.isExtraStopField(fieldName)
+				? this.getExtraStopFieldValue(fieldName)
+				: (this.quoteBotForm.get(fieldName)?.value || '');
+		void this.searchAddress(value, fieldName);
 	}
 
 	closeAddressDropdown(fieldName?: string): void {
@@ -731,33 +758,88 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.clearAddressDropdownBlurTimer();
 
 		if (address?.isAddressAirportResult) {
-			// User picked an airport result from an address field — auto-switch the type
 			const airportField = this.getCorrespondingAirportFieldName(fieldName);
 			const typeField = this.getAddressTypeFieldName(fieldName);
 
 			if (address.isLocalResult && address.localAirport) {
 				const local = address.localAirport;
-				this.SetFormValue(typeField, 'airport');
-				this.onAirportSelected({
-					id: String(local.id),
-					name: address.name,
-					latitude: local.lat ?? 0,
-					longitude: local.long ?? 0,
-				}, airportField);
+				this.ngZone.run(() => {
+					this.SetFormValue(typeField, 'airport');
+					this.SetFormValue(fieldName, address.name);
+					this.onAirportSelected({
+						id: String(local.id),
+						name: address.name,
+						latitude: local.lat ?? 0,
+						longitude: local.long ?? 0,
+					}, airportField);
+				});
 			} else if (address?.placeId) {
 				const googleAirport = await this.fetchGoogleAirportDetails(address.placeId, address.name);
 				if (googleAirport) {
-					this.SetFormValue(typeField, 'airport');
-					this.onAirportSelected(googleAirport, airportField);
+					this.ngZone.run(() => {
+						this.SetFormValue(typeField, 'airport');
+						this.SetFormValue(fieldName, (googleAirport as any).display_address || googleAirport.name);
+						this.onAirportSelected(googleAirport, airportField);
+					});
 				}
 			}
 		} else {
 			const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
 			if (googleAddress) {
-				this.onAutocompleteSelected(googleAddress, fieldName);
-				this.onLocationSelected(googleAddress, fieldName);
+				this.ngZone.run(() => {
+					const typeField = this.getAddressTypeFieldName(fieldName);
+					if (this.quoteBotForm.get(typeField)?.value === 'airport') {
+						this.SetFormValue(typeField, 'city');
+						const airportField = this.getCorrespondingAirportFieldName(fieldName);
+						this.clearAirportResolvedSelection(airportField);
+					}
+					this.onAutocompleteSelected(googleAddress, fieldName);
+					this.onLocationSelected(googleAddress, fieldName);
+				});
 			}
 		}
+		this.closeAddressDropdown(fieldName);
+	}
+
+	async selectExtraStopAddressOption(address: any, fieldName: string): Promise<void> {
+		this.clearAddressDropdownBlurTimer();
+		const isReturn = fieldName.startsWith('return_extra_stop_');
+		const index = parseInt(fieldName.replace(isReturn ? 'return_extra_stop_' : 'extra_stop_', ''), 10);
+		const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
+		if (googleAddress) {
+			const addr = (googleAddress as any).display_address || googleAddress.formatted_address || (googleAddress as any).name || '';
+			const lat = (googleAddress as any).latitude ?? 0;
+			const lng = (googleAddress as any).longitude ?? 0;
+			this.fillExtraStop(index, addr, lat, lng, isReturn);
+		}
+		this.closeAddressDropdown(fieldName);
+	}
+
+	onExtraStopAddressFocus(fieldName: string, input: HTMLInputElement): void {
+		if (!this.isTouchAirportInteraction()) {
+			input?.select();
+		}
+		this.openAddressDropdown(fieldName, input.value);
+	}
+
+	onExtraStopAddressInput(value: string, fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.openAddressDropdown(fieldName, value);
+		void this.searchAddress(value || '', fieldName);
+	}
+
+	onExtraStopAddressBlur(fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.addressDropdownBlurTimeout = setTimeout(() => {
+			this.closeAddressDropdown(fieldName);
+		}, 150);
+	}
+
+	clearExtraStopAddress(index: number, isReturn: boolean, input: HTMLInputElement): void {
+		this.fillExtraStop(index, '', 0, 0, isReturn);
+		input.value = '';
+		const fieldName = this.getExtraStopFieldName(index, isReturn);
+		this.setAddressOptions(fieldName, []);
 		this.closeAddressDropdown(fieldName);
 	}
 
@@ -815,6 +897,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	private setAddressOptions(fieldName: string, options: Array<any>): void {
+		if (this.isExtraStopField(fieldName)) {
+			this.extraStopAddressData[fieldName] = options;
+			return;
+		}
 		switch (fieldName) {
 			case 'pickup_address':
 				this.address_data_pickup = options;
@@ -984,27 +1070,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		// --- End IATA airport detection ---
 
-		// For all other input: run normal Google address search (returns cities, addresses,
-		// buildings, airports — everything). Prepend any local fuzzy airport matches at the
-		// top so airports appear as quick options without replacing address results.
-		let fuzzyAirportOptions: any[] = [];
-		if (this.airportIndex.isReady() && searchText.length >= 3) {
-			const hits = this.airportIndex.search(searchText, 3);
-			fuzzyAirportOptions = hits.map((a) => ({
-				...this.airportIndex.toDropdownOption(a, searchText),
-				isAddressAirportResult: true,
-			}));
-		}
-
+		// For all other input: run normal Google address search only.
+		// Airport results only appear for exact IATA codes (handled above).
 		try {
 			const addressOptions = await this.searchGoogleAddressPredictions(searchText);
 			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
-				this.setAddressOptions(fieldName, [...fuzzyAirportOptions, ...addressOptions]);
+				this.setAddressOptions(fieldName, addressOptions);
 				this.setAddressSearchLoading(fieldName, false);
 			}
 		} catch {
 			if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
-				this.setAddressOptions(fieldName, fuzzyAirportOptions);
+				this.setAddressOptions(fieldName, []);
 				this.setAddressSearchLoading(fieldName, false);
 			}
 		}
@@ -1772,20 +1848,31 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.quoteBotForm.get('return_dropoff_airport_long').setValidators([Validators.required])
 		this.quoteBotForm.updateValueAndValidity()
 
-		this.quoteBotForm.patchValue({
-			return_pickup_address: this.QBForm.dropoff_address.value,
-			return_pickup_address_lat: this.QBForm.dropoff_address_lat.value,
-			return_pickup_address_long: this.QBForm.dropoff_address_long.value,
-			return_dropoff_address: this.QBForm.pickup_address.value,
-			return_dropoff_address_lat: this.QBForm.pickup_address_lat.value,
-			return_dropoff_address_long: this.QBForm.pickup_address_long.value,
+		const retPickupEmpty = !String(this.QBForm.return_pickup_address.value || '').trim();
+		const retDropoffEmpty = !String(this.QBForm.return_dropoff_address.value || '').trim();
+
+		const patch: any = {
 			return_pickup_airport: this.QBForm.dropoff_airport.value,
 			return_pickup_airport_lat: this.QBForm.dropoff_airport_lat.value,
 			return_pickup_airport_long: this.QBForm.dropoff_airport_long.value,
 			return_dropoff_airport: this.QBForm.pickup_airport.value,
 			return_dropoff_airport_lat: this.QBForm.pickup_airport_lat.value,
 			return_dropoff_airport_long: this.QBForm.pickup_airport_long.value,
-		})
+		};
+
+		if (retPickupEmpty) {
+			patch.return_pickup_address = this.QBForm.dropoff_address.value;
+			patch.return_pickup_address_lat = this.QBForm.dropoff_address_lat.value;
+			patch.return_pickup_address_long = this.QBForm.dropoff_address_long.value;
+		}
+
+		if (retDropoffEmpty) {
+			patch.return_dropoff_address = this.QBForm.pickup_address.value;
+			patch.return_dropoff_address_lat = this.QBForm.pickup_address_lat.value;
+			patch.return_dropoff_address_long = this.QBForm.pickup_address_long.value;
+		}
+
+		this.quoteBotForm.patchValue(patch);
 	}
 
 	// ---- Extra Stops ----
@@ -1818,34 +1905,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.getExtraStops(isReturn).filter(stop => stop.address && stop.address.trim());
 	}
 
-	private refreshExtraStopAutocompletes(isReturn: boolean = false): void {
-		setTimeout(() => {
-			this.getExtraStops(isReturn).forEach((_, index) => this.initExtraStopAutocomplete(index, isReturn));
-		}, 0);
+	private refreshExtraStopAutocompletes(_isReturn: boolean = false): void {
+		// No-op: extra stops now use the custom dropdown (same as pickup/dropoff fields)
 	}
-
-	private initExtraStopAutocomplete(index: number, isReturn: boolean = false) {
-		const inputs = this.elementRef.nativeElement.querySelectorAll(
-			isReturn ? 'input.return-extra-stop-input' : 'input.extra-stop-input'
-		);
-		const input = inputs[index] as HTMLInputElement;
-		if (!input) return;
-		void attachPlaceAutocompleteElement(
-			input,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'name'],
-			},
-				(place) => {
-					this.ngZone.run(() => {
-						const address = place.formatted_address || (place as any).name || '';
-						const lat = place.geometry?.location?.lat() || 0;
-						const lng = place.geometry?.location?.lng() || 0;
-						this.fillExtraStop(index, address, lat, lng, isReturn);
-					});
-				}
-			);
-		}
 
 	// ---- Amenities ----
 
@@ -2556,16 +2618,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.SetFormValue(fieldName, '');
 		this.SetFormValue(`${fieldName}_lat`, '');
 		this.SetFormValue(`${fieldName}_long`, '');
-
-		if (fieldName === 'pickup_address') {
-			this.SetFormValue('return_dropoff_address', '');
-			this.SetFormValue('return_dropoff_address_lat', '');
-			this.SetFormValue('return_dropoff_address_long', '');
-		} else if (fieldName === 'dropoff_address') {
-			this.SetFormValue('return_pickup_address', '');
-			this.SetFormValue('return_pickup_address_lat', '');
-			this.SetFormValue('return_pickup_address_long', '');
-		}
 	}
 
 	private persistQuoteBotState(): void {
@@ -2622,7 +2674,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			case 'pickup_address':
 				this.clearAddressSelection('pickup_address');
 				syncAddressField(this.addressinput);
-				syncAddressField(this.retdropaddressinput);
 				break
 			case 'pickup_airport':
 				console.log('resseting pickup address')
@@ -2649,7 +2700,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			case 'dropoff_address':
 				this.clearAddressSelection('dropoff_address');
 				syncAddressField(this.dropaddressinput);
-				syncAddressField(this.retaddressinput);
 				break
 			case 'return_pickup_address':
 				this.clearAddressSelection('return_pickup_address');
@@ -2887,12 +2937,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 			if (form.get('pickup_type').value == 'airport') {
 				console.log('clear validator for 1')
-				this.clearValidatorsAndReset(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
+				this.clearValidatorsOnly(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
 				this.addRequiredValidators(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
 			}
 			if (this.QBForm.dropoff_type.value == 'airport') {
 				console.log('clear validator for 2')
-				this.clearValidatorsAndReset(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long'])
+				this.clearValidatorsOnly(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long'])
 				this.addRequiredValidators(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
 			}
 			if (this.QBForm.pickup_type.value != 'airport') {
@@ -2922,6 +2972,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			console.log('clearing valildations from ', item)
 			this.quoteBotForm.get(item).clearValidators()
 			this.quoteBotForm.get(item).reset()
+			this.quoteBotForm.get(item).updateValueAndValidity()
+		})
+	}
+
+	clearValidatorsOnly(arr: Array<string>) {
+		arr.forEach((item: string) => {
+			this.quoteBotForm.get(item).clearValidators()
 			this.quoteBotForm.get(item).updateValueAndValidity()
 		})
 	}
