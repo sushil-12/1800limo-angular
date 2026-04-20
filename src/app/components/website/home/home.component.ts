@@ -771,11 +771,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					latitude: local.lat ?? 0,
 					longitude: local.long ?? 0,
 				}, airportField);
+				this.SetFormValue(fieldName, address.name);
 			} else if (address?.placeId) {
 				const googleAirport = await this.fetchGoogleAirportDetails(address.placeId, address.name);
 				if (googleAirport) {
 					this.SetFormValue(typeField, 'airport');
 					this.onAirportSelected(googleAirport, airportField);
+					this.SetFormValue(fieldName, (googleAirport as any).display_address || googleAirport.name);
 				}
 			}
 		} else {
@@ -794,7 +796,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		const index = parseInt(fieldName.replace(isReturn ? 'return_extra_stop_' : 'extra_stop_', ''), 10);
 		const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
 		if (googleAddress) {
-			const addr = googleAddress.formatted_address || (googleAddress as any).name || '';
+			const addr = (googleAddress as any).display_address || googleAddress.formatted_address || (googleAddress as any).name || '';
 			const lat = googleAddress.geometry?.location?.lat() ?? 0;
 			const lng = googleAddress.geometry?.location?.lng() ?? 0;
 			this.fillExtraStop(index, addr, lat, lng, isReturn);
