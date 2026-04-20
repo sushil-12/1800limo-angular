@@ -3099,7 +3099,6 @@ div#google_translate_element_home_mobile {
   }
 }
 
-
 .app-images {
   display: flex;
   gap: 10px;
@@ -3110,20 +3109,31 @@ div#google_translate_element_home_mobile {
     width: 48%;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-	object-fit: cover; 
-  
+    object-fit: cover;
+
     @media (max-width: 768px) {
-      height: 350px;
-	  width: 40%;   
+      height: 200px;
+      width: auto;
     }
 
-	@media (min-width: 468px) {
-      height: 350px;
-	  width: 40%;   
-    }
+	@media (min-width: 200px) {
+		height: 200px;
+        width: auto;
+	}
   }
-} 
+}
 
+@media (max-width: 768px) {
+	.app-store-dialog{
+		padding:20px 10px !important;
+	}
+}
+
+@media (min-width: 200px) {
+	.app-store-dialog{
+		padding:20px 10px !important;
+	}
+}
 
 /* BUTTON */
 .store-btn {
