@@ -4841,6 +4841,8 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+
+		console.log("DEBUG-SUSHIL:" , QB)
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
@@ -4897,6 +4899,7 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 		this.applyQuoteBotAirportPrefill('dropoff', QB?.other_details?.dropoff_airport_name, QB?.dropoff_airport_lat, QB?.dropoff_airport_long, QB?.dropoff_airport, matchedDropoffAirport)
 
 
+		console.log("DEBUG-SUSHIL 2:" , QB)
 		//return pickup
 		this.SetFormValue('return_pickup_date', QB?.return_pickup_date)
 		this.SetFormValue('return_pickup', QB?.return_pickup_address ?? QB?.return_dropoff_address)
@@ -4933,6 +4936,8 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 			return_dropoff_airport_longitude: this.Form.return_dropoff_airport_longitude.value
 		});
 		this.syncAirportPayloadFields();
+		this.prefillExtraStops(QB?.extra_stops);
+		this.prefillExtraStops(QB?.return_extra_stops, true);
 		this.MapController()
 		this.MapController(true)
 		setTimeout(() => {
