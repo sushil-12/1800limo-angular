@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import * as moment from 'moment';
@@ -40,6 +40,7 @@ export class VehicleDetailsComponent implements OnInit {
 		private _router: Router,
 		private _activatedRoute: ActivatedRoute,
 		private _errorDialogService: ErrorDialogService,
+		 private cdr: ChangeDetectorRef
 	) { }
 
 	ngOnInit(): void {
@@ -482,6 +483,15 @@ export class VehicleDetailsComponent implements OnInit {
 				if (obj['location_info']?.length == 1) {
 					obj['location_info'].push(obj['location_info'][0])
 				}
+				setTimeout(() => {
+					this.cdr.detectChanges(); // force DOM update
+
+					if (this.returnMap?.googleMap) {
+					this.initReturnMap();
+					} else {
+					console.warn('returnMap not ready yet');
+					}
+				}, 300);
 				break
 			case 'one_way':
 				obj = { ...this.quotebot_form }
