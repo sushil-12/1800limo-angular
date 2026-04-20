@@ -3064,15 +3064,34 @@ div#google_translate_element_home_mobile {
   position: relative;
 }
 
+// .app-store-close {
+//   position: absolute;
+//   right: 20px;
+//   top: 15px;
+//   font-size: 28px;
+//   border: none;
+//   background: transparent;
+//   cursor: pointer;
+// }
+
 .app-store-close {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  font-size: 28px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-}
+		position: absolute;
+		right: 20px;
+		top: 15px;
+		z-index: 20;
+		background: transparent !important;
+		border: none !important;
+		color: #222 !important;
+		font-size: 38px;
+		line-height: 1;
+		cursor: pointer;
+		padding: 0;
+		transition: color 0.2s ease;
+
+		&:hover {
+			color: #777 !important;
+		}
+	}
 
 .app-store-title {
   text-align: center;
@@ -3125,7 +3144,7 @@ div#google_translate_element_home_mobile {
 
 /* BADGES */
 .badge {
-  font-size: 12px;
+  font-size: 14px;
   padding: 5px 10px;
   border-radius: 20px;
 
