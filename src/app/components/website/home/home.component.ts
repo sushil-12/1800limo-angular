@@ -535,6 +535,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return !!String(controlValue || visibleValue || '').trim();
 	}
 
+	shouldShowCurrentLocationIcon(inputRef: ElementRef | HTMLInputElement | undefined, controlName: string): boolean {
+		return !this.shouldShowAddressClear(inputRef, controlName);
+	}
+
 	getAirportPanelWidth(inputRef: HTMLInputElement | null | undefined): number | undefined {
 		const fieldContainer = inputRef?.closest('.input-contain--airport') as HTMLElement | null;
 		return fieldContainer?.offsetWidth || inputRef?.offsetWidth || undefined;
@@ -2954,9 +2958,32 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				console.log('clear validator for 4')
 				this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
 			}
-			// else {
-			// 	this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
-			// }
+			this.quoteBotForm.updateValueAndValidity()
+		} else if (form.get('service_type')?.value == 'round_trip') {
+			// pickup_type drives outbound pickup + return dropoff
+			if (this.QBForm.pickup_type.value == 'airport') {
+				this.clearValidatorsOnly(['pickup_address', 'pickup_address_lat', 'pickup_address_long',
+					'return_dropoff_address', 'return_dropoff_address_lat', 'return_dropoff_address_long'])
+				this.addRequiredValidators(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long',
+					'return_dropoff_airport', 'return_dropoff_airport_lat', 'return_dropoff_airport_long'])
+			} else {
+				this.clearValidatorsAndReset(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long',
+					'return_dropoff_airport', 'return_dropoff_airport_lat', 'return_dropoff_airport_long'])
+				this.addRequiredValidators(['pickup_address', 'pickup_address_lat', 'pickup_address_long',
+					'return_dropoff_address', 'return_dropoff_address_lat', 'return_dropoff_address_long'])
+			}
+			// dropoff_type drives outbound dropoff + return pickup
+			if (this.QBForm.dropoff_type.value == 'airport') {
+				this.clearValidatorsOnly(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long',
+					'return_pickup_address', 'return_pickup_address_lat', 'return_pickup_address_long'])
+				this.addRequiredValidators(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long',
+					'return_pickup_airport', 'return_pickup_airport_lat', 'return_pickup_airport_long'])
+			} else {
+				this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long',
+					'return_pickup_airport', 'return_pickup_airport_lat', 'return_pickup_airport_long'])
+				this.addRequiredValidators(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long',
+					'return_pickup_address', 'return_pickup_address_lat', 'return_pickup_address_long'])
+			}
 			this.quoteBotForm.updateValueAndValidity()
 		}
 		console.log('form validated')
