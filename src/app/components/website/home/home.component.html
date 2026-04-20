@@ -1705,6 +1705,7 @@
 		</div>
 	</div>
 </section>
+
 <!-- Modal -->
 <div class="modal fade show" id="myModal" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
@@ -1780,68 +1781,71 @@
 </div>
 
 <!-- App Store Popup -->
-<div class="modal fade" id="appStorePopup" role="dialog" tabindex="-1" aria-labelledby="appStorePopupLabel"
-	aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered app-store-dialog" role="document" style="max-width: 800px;">
-		<div class="modal-content app-store-modal">
-			<!-- Close Button -->
-			<button type="button" class="app-store-close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
+<div class="modal fade" id="appStorePopup" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered app-store-dialog">
+    <div class="modal-content app-store-modal">
 
-			<div class="modal-body app-store-body">
-				<h3 class="app-store-title">Download Our App Now</h3>
+      <!-- Close -->
+	  <button type="button" class="app-store-close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
 
-				<div class="app-cards-row owl-carousel app-store-carousel">
-					<!-- User App Column -->
-					<div class="app-column item">
-						<div class="app-col-title">User Experience</div>
+      <div class="app-store-body">
 
-						<div class="phones-container">
-							<div class="phone-wrapper phone-left">
-								<img src="../../../../assets/images/user-login.webp" alt="User Login">
-							</div>
-							<div class="phone-wrapper phone-right">
-								<img src="../../../../assets/images/user-map.webp" alt="User Map">
-							</div>
-							<div class="phone-wrapper phone-center">
-								<img src="../../../../assets/images/user.webp" alt="User App Dashboard">
-							</div>
-						</div>
+        <h3 class="app-store-title">Download Our Apps</h3>
 
-						<div class="download-btn-container">
-							<a href="https://apps.apple.com/in/app/1800limo/id6751568791" target="_blank"
-								class="app-download-btn btn-blue">
-								DOWNLOAD
-							</a>
-						</div>
-					</div>
+        <div class="app-grid">
 
-					<!-- Chauffeur App Column -->
-					<div class="app-column item">
-						<div class="app-col-title">Chauffeur Services</div>
+          <!-- Passenger App -->
+          <div class="app-card">
+            <div class="app-header">
+              <img src="assets/app-store/Passenger.svg" class="app-icon" />
+              <span class="badge passenger">Passenger App</span>
+            </div>
 
-						<div class="phones-container">
-							<div class="phone-wrapper phone-left">
-								<img src="../../../../assets/images/driver-login.webp" alt="Chauffeur Login">
-							</div>
-							<div class="phone-wrapper phone-right">
-								<img src="../../../../assets/images/driver-map.webp" alt="Chauffeur Map">
-							</div>
-							<div class="phone-wrapper phone-center">
-								<img src="../../../../assets/images/deiver.webp" alt="Chauffeur App Dashboard">
-							</div>
-						</div>
+            <h4>1800LIMO (passenger app)</h4>
+            <p>
+              Premium movement at your fingertips. Book instantly,
+              track in real-time, and experience the future of urban mobility.
+            </p>
 
-						<div class="download-btn-container">
-							<a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445" target="_blank"
-								class="app-download-btn btn-green">
-								DOWNLOAD
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="app-images">
+              <img src="assets/images/user-map.webp" />
+              <img src="assets/images/user.webp" />
+            </div>
+
+            <a href="https://apps.apple.com/in/app/1800limo/id6751568791"
+               target="_blank"
+               class="store-btn">
+               Download on App Store
+            </a>
+          </div>
+
+          <!-- Chauffeur App -->
+          <div class="app-card">
+            <div class="app-header">
+              <img src="assets/app-store/Passenger.svg" class="app-icon" />
+              <span class="badge driver">Driver App</span>
+            </div>
+
+            <h4>1800LIMO Chauffeurs</h4>
+            <p>
+              Maximum efficiency for modern professionals.
+              Optimize your route, track every cent, and drive with precision.
+            </p>
+
+            <div class="app-images">
+              <img src="assets/images/driver-map.webp" />
+              <img src="assets/images/deiver.webp" />
+            </div>
+
+            <a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445"
+               target="_blank"
+               class="store-btn">
+               Download on App Store
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
