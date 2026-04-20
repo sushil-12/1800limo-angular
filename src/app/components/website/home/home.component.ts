@@ -128,6 +128,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	showAllAmenities = false;
 	extraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
 	returnExtraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
+	extraStopAddressData: Record<string, any[]> = {};
 
 
 	constructor(
@@ -558,7 +559,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.scheduleQuoteBotAutocompleteDisplaySync();
 	}
 
+	getExtraStopFieldName(index: number, isReturn: boolean = false): string {
+		return isReturn ? `return_extra_stop_${index}` : `extra_stop_${index}`;
+	}
+
+	private isExtraStopField(fieldName: string): boolean {
+		return /^(return_)?extra_stop_\d+$/.test(fieldName);
+	}
+
+	private getExtraStopFieldValue(fieldName: string): string {
+		const isReturn = fieldName.startsWith('return_extra_stop_');
+		const index = parseInt(fieldName.replace(isReturn ? 'return_extra_stop_' : 'extra_stop_', ''), 10);
+		return this.getExtraStops(isReturn)[index]?.address || '';
+	}
+
 	getAddressOptions(fieldName: string): Array<any> {
+		if (this.isExtraStopField(fieldName)) {
+			return this.extraStopAddressData[fieldName] || [];
+		}
 		switch (fieldName) {
 			case 'pickup_address':
 				return this.address_data_pickup || [];
@@ -659,7 +677,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	shouldShowAddressEmptyState(fieldName: string): boolean {
-		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		const currentValue = this.isExtraStopField(fieldName)
+			? this.getExtraStopFieldValue(fieldName)
+			: String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
 		return this.isAddressDropdownOpen(fieldName)
 			&& !!currentValue
 			&& !this.isAddressSearchLoading(fieldName)
@@ -667,7 +687,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	shouldShowAddressPromptState(fieldName: string): boolean {
-		const currentValue = String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
+		const currentValue = this.isExtraStopField(fieldName)
+			? this.getExtraStopFieldValue(fieldName)
+			: String(this.quoteBotForm?.get(fieldName)?.value || '').trim();
 		return this.isAddressDropdownOpen(fieldName) && !currentValue;
 	}
 
@@ -678,10 +700,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
-	openAddressDropdown(fieldName: string): void {
+	openAddressDropdown(fieldName: string, currentValue?: string): void {
 		this.clearAddressDropdownBlurTimer();
 		this.activeAddressDropdown = fieldName;
-		void this.searchAddress(this.quoteBotForm.get(fieldName)?.value || '', fieldName);
+		const value = currentValue !== undefined
+			? currentValue
+			: this.isExtraStopField(fieldName)
+				? this.getExtraStopFieldValue(fieldName)
+				: (this.quoteBotForm.get(fieldName)?.value || '');
+		void this.searchAddress(value, fieldName);
 	}
 
 	closeAddressDropdown(fieldName?: string): void {
@@ -761,6 +788,48 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.closeAddressDropdown(fieldName);
 	}
 
+	async selectExtraStopAddressOption(address: any, fieldName: string): Promise<void> {
+		this.clearAddressDropdownBlurTimer();
+		const isReturn = fieldName.startsWith('return_extra_stop_');
+		const index = parseInt(fieldName.replace(isReturn ? 'return_extra_stop_' : 'extra_stop_', ''), 10);
+		const googleAddress = await this.fetchGoogleAddressDetails(address?.placeId);
+		if (googleAddress) {
+			const addr = googleAddress.formatted_address || (googleAddress as any).name || '';
+			const lat = googleAddress.geometry?.location?.lat() ?? 0;
+			const lng = googleAddress.geometry?.location?.lng() ?? 0;
+			this.fillExtraStop(index, addr, lat, lng, isReturn);
+		}
+		this.closeAddressDropdown(fieldName);
+	}
+
+	onExtraStopAddressFocus(fieldName: string, input: HTMLInputElement): void {
+		if (!this.isTouchAirportInteraction()) {
+			input?.select();
+		}
+		this.openAddressDropdown(fieldName, input.value);
+	}
+
+	onExtraStopAddressInput(value: string, fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.openAddressDropdown(fieldName, value);
+		void this.searchAddress(value || '', fieldName);
+	}
+
+	onExtraStopAddressBlur(fieldName: string): void {
+		this.clearAddressDropdownBlurTimer();
+		this.addressDropdownBlurTimeout = setTimeout(() => {
+			this.closeAddressDropdown(fieldName);
+		}, 150);
+	}
+
+	clearExtraStopAddress(index: number, isReturn: boolean, input: HTMLInputElement): void {
+		this.fillExtraStop(index, '', 0, 0, isReturn);
+		input.value = '';
+		const fieldName = this.getExtraStopFieldName(index, isReturn);
+		this.setAddressOptions(fieldName, []);
+		this.closeAddressDropdown(fieldName);
+	}
+
 	/** Maps a pickup/dropoff address field to its corresponding airport field */
 	private getCorrespondingAirportFieldName(addressFieldName: string): string {
 		switch (addressFieldName) {
@@ -815,6 +884,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	private setAddressOptions(fieldName: string, options: Array<any>): void {
+		if (this.isExtraStopField(fieldName)) {
+			this.extraStopAddressData[fieldName] = options;
+			return;
+		}
 		switch (fieldName) {
 			case 'pickup_address':
 				this.address_data_pickup = options;
@@ -1818,34 +1891,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.getExtraStops(isReturn).filter(stop => stop.address && stop.address.trim());
 	}
 
-	private refreshExtraStopAutocompletes(isReturn: boolean = false): void {
-		setTimeout(() => {
-			this.getExtraStops(isReturn).forEach((_, index) => this.initExtraStopAutocomplete(index, isReturn));
-		}, 0);
+	private refreshExtraStopAutocompletes(_isReturn: boolean = false): void {
+		// No-op: extra stops now use the custom dropdown (same as pickup/dropoff fields)
 	}
-
-	private initExtraStopAutocomplete(index: number, isReturn: boolean = false) {
-		const inputs = this.elementRef.nativeElement.querySelectorAll(
-			isReturn ? 'input.return-extra-stop-input' : 'input.extra-stop-input'
-		);
-		const input = inputs[index] as HTMLInputElement;
-		if (!input) return;
-		void attachPlaceAutocompleteElement(
-			input,
-			{
-				types: ['geocode', 'establishment'],
-				fields: ['formatted_address', 'geometry', 'name'],
-			},
-				(place) => {
-					this.ngZone.run(() => {
-						const address = place.formatted_address || (place as any).name || '';
-						const lat = place.geometry?.location?.lat() || 0;
-						const lng = place.geometry?.location?.lng() || 0;
-						this.fillExtraStop(index, address, lat, lng, isReturn);
-					});
-				}
-			);
-		}
 
 	// ---- Amenities ----
 
