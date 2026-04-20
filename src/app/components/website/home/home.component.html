@@ -301,71 +301,74 @@
 										<!-- EXTRA STOPS -->
 										<div class="extra-stops-section my-1">
 											<div *ngFor="let stop of extraStops; let i = index"
-												class="d-flex align-items-center mb-2">
-												<div class="flex-grow-1 input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
-													style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
-													<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
-														style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
-													<div class="input-box w-100">
-														<input #extraStopInputRef type="text"
-															class="extra-stop-input qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
-															style="font-size:16px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important; text-align:left !important;"
-															[placeholder]="'Stop ' + (i + 1) + ' address'"
-															[value]="stop.address"
-															autocomplete="off"
-															(focus)="onExtraStopAddressFocus(getExtraStopFieldName(i, false), extraStopInputRef)"
-															(click)="openAddressDropdown(getExtraStopFieldName(i, false), extraStopInputRef.value)"
-															(input)="onExtraStopAddressInput($any($event.target).value, getExtraStopFieldName(i, false))"
-															(blur)="onExtraStopAddressBlur(getExtraStopFieldName(i, false))" />
+												class="extra-stop-item mb-2">
+												<div class="extra-stop-item__title text-warning">Stop {{ i + 1 }}</div>
+												<div class="d-flex align-items-center">
+													<div class="flex-grow-1 input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
+														style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
+														<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+															style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+														<div class="input-box w-100">
+															<input #extraStopInputRef type="text"
+																class="extra-stop-input qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+																style="font-size:16px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important; text-align:left !important;"
+																[placeholder]="'Stop ' + (i + 1) + ' address'"
+																[value]="stop.address"
+																autocomplete="off"
+																(focus)="onExtraStopAddressFocus(getExtraStopFieldName(i, false), extraStopInputRef)"
+																(click)="openAddressDropdown(getExtraStopFieldName(i, false), extraStopInputRef.value)"
+																(input)="onExtraStopAddressInput($any($event.target).value, getExtraStopFieldName(i, false))"
+																(blur)="onExtraStopAddressBlur(getExtraStopFieldName(i, false))" />
+														</div>
+														<div class="airport-clear-wrap address-clear-wrap"
+															*ngIf="stop.address || extraStopInputRef?.value">
+															<button type="button" class="airport-clear-btn"
+																(click)="clearExtraStopAddress(i, false, extraStopInputRef)"
+																aria-label="Clear stop address">
+																<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+																	<path fill="#1f1f1f" fill-rule="evenodd"
+																		d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																		clip-rule="evenodd"></path>
+																</svg>
+															</button>
+														</div>
+														<div *ngIf="isAddressDropdownOpen(getExtraStopFieldName(i, false))"
+															class="qb-airport-field__dropdown qb-address-field__dropdown"
+															style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
+															<button type="button"
+																class="qb-airport-field__option qb-address-field__option"
+																*ngFor="let address of getAddressOptions(getExtraStopFieldName(i, false))"
+																(mousedown)="$event.preventDefault()"
+																(click)="selectExtraStopAddressOption(address, getExtraStopFieldName(i, false))"
+																style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+																<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+																	style="margin-top:4px; color:#111;"></i>
+																<span class="qb-airport-field__option-content qb-address-field__option-content"
+																	style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+																	<span class="qb-airport-field__option-label qb-address-field__option-label"
+																		style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
+																	<span class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																		style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
+																</span>
+															</button>
+															<div *ngIf="shouldShowAddressLoadingState(getExtraStopFieldName(i, false))"
+																class="qb-airport-field__empty qb-address-field__empty"
+																style="padding:2px 6px; color:#666; text-align:left;">Loading Suggestions....</div>
+															<div *ngIf="shouldShowAddressEmptyState(getExtraStopFieldName(i, false))"
+																class="qb-airport-field__empty qb-address-field__empty"
+																style="padding:2px 6px; color:#666; text-align:left;">No Result found</div>
+															<div *ngIf="shouldShowAddressPromptState(getExtraStopFieldName(i, false))"
+																class="qb-airport-field__empty qb-address-field__empty"
+																style="padding:2px 6px; color:#666; text-align:left;">Enter address and select from suggestions</div>
+														</div>
 													</div>
-													<div class="airport-clear-wrap address-clear-wrap"
-														*ngIf="stop.address || extraStopInputRef?.value">
-														<button type="button" class="airport-clear-btn"
-															(click)="clearExtraStopAddress(i, false, extraStopInputRef)"
-															aria-label="Clear stop address">
-															<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-																<path fill="#1f1f1f" fill-rule="evenodd"
-																	d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
-																	clip-rule="evenodd"></path>
-															</svg>
-														</button>
-													</div>
-													<div *ngIf="isAddressDropdownOpen(getExtraStopFieldName(i, false))"
-														class="qb-airport-field__dropdown qb-address-field__dropdown"
-														style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-														<button type="button"
-															class="qb-airport-field__option qb-address-field__option"
-															*ngFor="let address of getAddressOptions(getExtraStopFieldName(i, false))"
-															(mousedown)="$event.preventDefault()"
-															(click)="selectExtraStopAddressOption(address, getExtraStopFieldName(i, false))"
-															style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-															<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
-																style="margin-top:4px; color:#111;"></i>
-															<span class="qb-airport-field__option-content qb-address-field__option-content"
-																style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-																<span class="qb-airport-field__option-label qb-address-field__option-label"
-																	style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
-																<span class="qb-airport-field__option-secondary qb-address-field__option-secondary"
-																	style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
-															</span>
-														</button>
-														<div *ngIf="shouldShowAddressLoadingState(getExtraStopFieldName(i, false))"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">Loading Suggestions....</div>
-														<div *ngIf="shouldShowAddressEmptyState(getExtraStopFieldName(i, false))"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">No Result found</div>
-														<div *ngIf="shouldShowAddressPromptState(getExtraStopFieldName(i, false))"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">Enter address and select from suggestions</div>
-													</div>
+													<button type="button" 
+														class="btn btn-link text-warning p-0 ml-2"
+														(click)="removeExtraStop(i)"
+														aria-label="Remove stop">
+														<i class="fa-solid fa-minus-circle" style="font-size:1.3rem;"></i>
+													</button>
 												</div>
-												<button type="button"
-													class="btn btn-link text-danger p-0 ml-2"
-													(click)="removeExtraStop(i)"
-													aria-label="Remove stop">
-													<i class="bi bi-x-circle-fill" style="font-size:1.3rem;"></i>
-												</button>
 											</div>
 											<div class="add-stop-link mt-1 mb-2">
 												<a role="button" class="text-warning fw-semibold small"
@@ -844,71 +847,74 @@
 
 											<div class="extra-stops-section my-1">
 												<div *ngFor="let stop of returnExtraStops; let i = index"
-													class="d-flex align-items-center mb-2">
-													<div class="flex-grow-1 input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
-														style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
-														<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
-															style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
-														<div class="input-box w-100">
-															<input #returnExtraStopInputRef type="text"
-																class="return-extra-stop-input qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
-																style="font-size:16px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important; text-align:left !important;"
-																[placeholder]="'Return Stop ' + (i + 1) + ' address'"
-																[value]="stop.address"
-																autocomplete="off"
-																(focus)="onExtraStopAddressFocus(getExtraStopFieldName(i, true), returnExtraStopInputRef)"
-																(click)="openAddressDropdown(getExtraStopFieldName(i, true), returnExtraStopInputRef.value)"
-																(input)="onExtraStopAddressInput($any($event.target).value, getExtraStopFieldName(i, true))"
-																(blur)="onExtraStopAddressBlur(getExtraStopFieldName(i, true))" />
+													class="extra-stop-item mb-2">
+													<div class="extra-stop-item__title text-warning">Stop {{ i + 1 }}</div>
+													<div class="d-flex align-items-center">
+														<div class="flex-grow-1 input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
+															style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
+															<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+																style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+															<div class="input-box w-100">
+																<input #returnExtraStopInputRef type="text"
+																	class="return-extra-stop-input qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+																	style="font-size:16px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important; text-align:left !important;"
+																	[placeholder]="'Return Stop ' + (i + 1) + ' address'"
+																	[value]="stop.address"
+																	autocomplete="off"
+																	(focus)="onExtraStopAddressFocus(getExtraStopFieldName(i, true), returnExtraStopInputRef)"
+																	(click)="openAddressDropdown(getExtraStopFieldName(i, true), returnExtraStopInputRef.value)"
+																	(input)="onExtraStopAddressInput($any($event.target).value, getExtraStopFieldName(i, true))"
+																	(blur)="onExtraStopAddressBlur(getExtraStopFieldName(i, true))" />
+															</div>
+															<div class="airport-clear-wrap address-clear-wrap"
+																*ngIf="stop.address || returnExtraStopInputRef?.value">
+																<button type="button" class="airport-clear-btn"
+																	(click)="clearExtraStopAddress(i, true, returnExtraStopInputRef)"
+																	aria-label="Clear return stop address">
+																	<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+																		<path fill="#1f1f1f" fill-rule="evenodd"
+																			d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																			clip-rule="evenodd"></path>
+																	</svg>
+																</button>
+															</div>
+															<div *ngIf="isAddressDropdownOpen(getExtraStopFieldName(i, true))"
+																class="qb-airport-field__dropdown qb-address-field__dropdown"
+																style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
+																<button type="button"
+																	class="qb-airport-field__option qb-address-field__option"
+																	*ngFor="let address of getAddressOptions(getExtraStopFieldName(i, true))"
+																	(mousedown)="$event.preventDefault()"
+																	(click)="selectExtraStopAddressOption(address, getExtraStopFieldName(i, true))"
+																	style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+																	<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+																		style="margin-top:4px; color:#111;"></i>
+																	<span class="qb-airport-field__option-content qb-address-field__option-content"
+																		style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+																		<span class="qb-airport-field__option-label qb-address-field__option-label"
+																			style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
+																		<span class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																			style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
+																	</span>
+																</button>
+																<div *ngIf="shouldShowAddressLoadingState(getExtraStopFieldName(i, true))"
+																	class="qb-airport-field__empty qb-address-field__empty"
+																	style="padding:2px 6px; color:#666; text-align:left;">Loading Suggestions....</div>
+																<div *ngIf="shouldShowAddressEmptyState(getExtraStopFieldName(i, true))"
+																	class="qb-airport-field__empty qb-address-field__empty"
+																	style="padding:2px 6px; color:#666; text-align:left;">No Result found</div>
+																<div *ngIf="shouldShowAddressPromptState(getExtraStopFieldName(i, true))"
+																	class="qb-airport-field__empty qb-address-field__empty"
+																	style="padding:2px 6px; color:#666; text-align:left;">Enter address and select from suggestions</div>
+															</div>
 														</div>
-														<div class="airport-clear-wrap address-clear-wrap"
-															*ngIf="stop.address || returnExtraStopInputRef?.value">
-															<button type="button" class="airport-clear-btn"
-																(click)="clearExtraStopAddress(i, true, returnExtraStopInputRef)"
-																aria-label="Clear return stop address">
-																<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-																	<path fill="#1f1f1f" fill-rule="evenodd"
-																		d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
-																		clip-rule="evenodd"></path>
-																</svg>
-															</button>
-														</div>
-														<div *ngIf="isAddressDropdownOpen(getExtraStopFieldName(i, true))"
-															class="qb-airport-field__dropdown qb-address-field__dropdown"
-															style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-															<button type="button"
-																class="qb-airport-field__option qb-address-field__option"
-																*ngFor="let address of getAddressOptions(getExtraStopFieldName(i, true))"
-																(mousedown)="$event.preventDefault()"
-																(click)="selectExtraStopAddressOption(address, getExtraStopFieldName(i, true))"
-																style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-																<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
-																	style="margin-top:4px; color:#111;"></i>
-																<span class="qb-airport-field__option-content qb-address-field__option-content"
-																	style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-																	<span class="qb-airport-field__option-label qb-address-field__option-label"
-																		style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{ getAddressOptionLabel(address) }}</span>
-																	<span class="qb-airport-field__option-secondary qb-address-field__option-secondary"
-																		style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{ getAddressOptionSecondaryText(address) }}</span>
-																</span>
-															</button>
-															<div *ngIf="shouldShowAddressLoadingState(getExtraStopFieldName(i, true))"
-																class="qb-airport-field__empty qb-address-field__empty"
-																style="padding:2px 6px; color:#666; text-align:left;">Loading Suggestions....</div>
-															<div *ngIf="shouldShowAddressEmptyState(getExtraStopFieldName(i, true))"
-																class="qb-airport-field__empty qb-address-field__empty"
-																style="padding:2px 6px; color:#666; text-align:left;">No Result found</div>
-															<div *ngIf="shouldShowAddressPromptState(getExtraStopFieldName(i, true))"
-																class="qb-airport-field__empty qb-address-field__empty"
-																style="padding:2px 6px; color:#666; text-align:left;">Enter address and select from suggestions</div>
-														</div>
+														<button type="button"
+															class="btn btn-link text-warning p-0 ml-2"
+															(click)="removeExtraStop(i, true)"
+															aria-label="Remove return stop">
+															<i class="fa-solid fa-minus-circle" style="font-size:1.3rem;"></i>
+														</button>
 													</div>
-													<button type="button"
-														class="btn btn-link text-danger p-0 ml-2"
-														(click)="removeExtraStop(i, true)"
-														aria-label="Remove return stop">
-														<i class="bi bi-x-circle-fill" style="font-size:1.3rem;"></i>
-													</button>
 												</div>
 												<div class="add-stop-link mt-1 mb-2">
 													<a role="button" class="text-warning fw-semibold small"
