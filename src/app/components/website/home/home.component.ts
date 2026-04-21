@@ -1882,7 +1882,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// ---- Extra Stops ----
 
 	addExtraStop(isReturn: boolean = false) {
-		this.getExtraStops(isReturn).push({ address: '', latitude: 0, longitude: 0 });
+		const stops = this.getExtraStops(isReturn);
+		const emptyIdx = stops.findIndex(s => !s.address || !s.address.trim());
+		if (emptyIdx !== -1) {
+			const selector = isReturn ? '.return-extra-stop-input' : '.extra-stop-input';
+			setTimeout(() => {
+				const inputs = document.querySelectorAll<HTMLInputElement>(selector);
+				const target = inputs[emptyIdx];
+				if (target) {
+					target.focus();
+					target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+			});
+			return;
+		}
+		stops.push({ address: '', latitude: 0, longitude: 0 });
 		this.refreshExtraStopAutocompletes(isReturn);
 		this.persistQuoteBotState();
 	}
@@ -1980,6 +1994,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return_dropoff_address_long: ['',],
 			no_of_passenger: [1,],
 			no_of_luggage: [0,],
+			return_no_of_passenger: [1,],
+			return_no_of_luggage: [0,],
 			location_info: this.formBuilder.array([],),
 		});
 
@@ -2264,6 +2280,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return_dropoff_address_long: this.getStoredCoordinateValue(previous_quotebot?.return_dropoff_address_long),
 				no_of_passenger: Math.max(1, previous_quotebot?.no_of_passenger || 1),
 				no_of_luggage: Math.max(0, previous_quotebot?.no_of_luggage || 0),
+				return_no_of_passenger: Math.max(1, previous_quotebot?.return_no_of_passenger || previous_quotebot?.no_of_passenger || 1),
+				return_no_of_luggage: Math.max(0, previous_quotebot?.return_no_of_luggage || previous_quotebot?.no_of_luggage || 0),
 				location_info: previous_quotebot?.location_info
 			})
 			this.syncPrefilledAirportSelections()
@@ -2308,6 +2326,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return_pickup_time: this.getTimeHHMMSS('', false),
 				no_of_passenger: 1,
 				no_of_luggage: 0,
+				return_no_of_passenger: 1,
+				return_no_of_luggage: 0,
 			})
 
 			this.quoteBotSwitch('one_way')
@@ -3332,30 +3352,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	//increment/decrement in ONE WAY form
-	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
+	change(changeType: 'i' | 'd', fieldName: 'l' | 'p', isReturn: boolean = false) {
 		let max_length = 100
-		if (fieldName == 'p') {
-			// for passenger
-			$('#no_of_passenger').addClass('highlight-text')
-			setTimeout(() => {
-				$('#no_of_passenger').removeClass('highlight-text')
-			}, 1000)
-			if (changeType == 'i' && this.quoteBotForm.value.no_of_passenger < max_length) {
-				this.QBForm.no_of_passenger.setValue(parseInt(this.quoteBotForm.value.no_of_passenger) + 1)
-			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_passenger > 1) {
-				this.QBForm.no_of_passenger.setValue(parseInt(this.quoteBotForm.value.no_of_passenger) - 1)
-			}
-		} else {
-			// for luggage
-			$('#no_of_luggage').addClass('highlight-text')
-			setTimeout(() => {
-				$('#no_of_luggage').removeClass('highlight-text')
-			}, 1000)
-			if (changeType == 'i' && this.quoteBotForm.value.no_of_luggage < max_length) {
-				this.QBForm.no_of_luggage.setValue(parseInt(this.quoteBotForm.value.no_of_luggage) + 1)
-			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_luggage >= 1) {
-				this.QBForm.no_of_luggage.setValue(parseInt(this.quoteBotForm.value.no_of_luggage) - 1)
-			}
+		const controlName = fieldName == 'p'
+			? (isReturn ? 'return_no_of_passenger' : 'no_of_passenger')
+			: (isReturn ? 'return_no_of_luggage' : 'no_of_luggage')
+		const minValue = fieldName == 'p' ? 1 : 0
+		const elementId = '#' + controlName
+		$(elementId).addClass('highlight-text')
+		setTimeout(() => {
+			$(elementId).removeClass('highlight-text')
+		}, 1000)
+		const currentValue = this.quoteBotForm.value[controlName]
+		if (changeType == 'i' && currentValue < max_length) {
+			this.quoteBotForm.get(controlName).setValue(parseInt(currentValue) + 1)
+		} else if (changeType == 'd' && currentValue > minValue) {
+			this.quoteBotForm.get(controlName).setValue(parseInt(currentValue) - 1)
 		}
 	}
 
