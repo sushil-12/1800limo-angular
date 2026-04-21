@@ -3,6 +3,15 @@
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 6px 8px;
+
+	@media (max-width: 575.98px) {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 8px 6px;
+	}
+
+	@media (max-width: 360px) {
+		grid-template-columns: 1fr;
+	}
 }
 
 .amenity-checkbox-item {
@@ -59,6 +68,14 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+
+	@media (max-width: 575.98px) {
+		font-size: 0.78rem;
+		white-space: normal;
+		overflow: visible;
+		text-overflow: clip;
+		word-break: break-word;
+	}
 }
 
 /* --- SECTION WRAPPER --- */
@@ -499,7 +516,7 @@ section {
 
 		button {
 			font-size: 1.08rem;
-			padding: 0.675rem 0.758rem;
+			padding: 0.675rem 1.758rem;
 		}
 	}
 }
@@ -2137,7 +2154,7 @@ div#google_translate_element_home_mobile {
 /* --- Mobile Styling --- */
 @media (max-width: 767px) {
 	.mobile-app-minimal {
-		margin-top: 18px;
+		margin-top: 0px;
 		justify-content: center;
 		/* Centers the whole block */
 	}
@@ -3323,7 +3340,7 @@ div#google_translate_element_home_mobile {
 
 // CTA button — full width, cleaner radius
 .qb-cta-btn {
-	width: 80% !important;
+	width: max-content !important;
 	max-width: 360px;
 	border-radius: 12px !important;
 	height: 48px;
@@ -3351,7 +3368,7 @@ div#google_translate_element_home_mobile {
 	gap: 10px;
 	margin-top: 14px;
 	padding: 10px 14px;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 
 	span {
 		display: inline-flex;
@@ -3362,6 +3379,7 @@ div#google_translate_element_home_mobile {
 		color: rgba(255, 255, 255, 0.82);
 		letter-spacing: 0.01em;
 		justify-content: center;
+		white-space: nowrap;
 
 		i {
 			color: #f3933d;
@@ -3369,6 +3387,16 @@ div#google_translate_element_home_mobile {
 			font-size: 0.95rem;
 		}
 
+	}
+
+	@media (max-width: 575.98px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+
+		span {
+			white-space: normal;
+		}
 	}
 }
 

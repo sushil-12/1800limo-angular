@@ -179,7 +179,7 @@
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Pickup Airport' : (QBForm?.pickup_type?.value === 'city' ? 'Pickup Address - City Address (FBO)' : 'Pickup Address - Cruise Port')"
+														placeholder="Enter Pickup address"
 														id="pickup_address" #addressinput
 														formControlName="pickup_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -287,7 +287,7 @@
 												<div class="d-flex align-items-center">
 													<div class="flex-grow-1 input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 														style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
-														<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+														<i class="fas fa-map-marker-alt qb-airport-field__icon qb-address-field__icon"
 															style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 														<div class="input-box w-100">
 															<input #extraStopInputRef type="text"
@@ -373,7 +373,7 @@
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Dropoff Airport' : (QBForm?.dropoff_type?.value === 'city' ? 'Dropoff Address - City Address (FBO)' : 'Dropoff Address - Cruise Port')"
+														placeholder="Enter Dropoff address"
 														id="dropoff_address" #dropaddressinput
 														formControlName="dropoff_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -474,7 +474,7 @@
 											</a>
 										</div> -->
 
-										<div class="add-stop-link mt-1 mb-2">
+										<div class="add-stop-link d-flex mt-1 mb-2">
 											<a role="button" class="add-stop-btn fw-semibold small"
 												(click)="addExtraStop()">
 												<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop (optional)
@@ -795,7 +795,7 @@
 													<div class="d-flex align-items-center">
 														<div class="flex-grow-1 input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 															style="position:relative; border-radius:16px; overflow:visible; border:1px solid #d7d7d7; background:#fff;">
-															<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+															<i class="fas fa-map-marker-alt qb-airport-field__icon qb-address-field__icon"
 																style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 															<div class="input-box w-100">
 																<input #returnExtraStopInputRef type="text"
@@ -982,7 +982,7 @@
 											</a>
 										</div> -->
 
-										<div class="add-stop-link mt-1 mb-2">
+										<div class="add-stop-link  d-flex mt-1 mb-2">
 											<a role="button" class="add-stop-btn fw-semibold small"
 												(click)="addExtraStop(true)">
 												<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop

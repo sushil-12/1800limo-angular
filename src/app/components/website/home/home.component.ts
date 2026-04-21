@@ -1882,7 +1882,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// ---- Extra Stops ----
 
 	addExtraStop(isReturn: boolean = false) {
-		this.getExtraStops(isReturn).push({ address: '', latitude: 0, longitude: 0 });
+		const stops = this.getExtraStops(isReturn);
+		const emptyIdx = stops.findIndex(s => !s.address || !s.address.trim());
+		if (emptyIdx !== -1) {
+			const selector = isReturn ? '.return-extra-stop-input' : '.extra-stop-input';
+			setTimeout(() => {
+				const inputs = document.querySelectorAll<HTMLInputElement>(selector);
+				const target = inputs[emptyIdx];
+				if (target) {
+					target.focus();
+					target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+			});
+			return;
+		}
+		stops.push({ address: '', latitude: 0, longitude: 0 });
 		this.refreshExtraStopAutocompletes(isReturn);
 		this.persistQuoteBotState();
 	}
