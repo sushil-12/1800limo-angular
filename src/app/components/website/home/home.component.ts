@@ -203,18 +203,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 			// Add event listeners for focus and blur events to each element
 			console.log('home-- elementsWithTabIndex-->', elementsWithTabIndex)
-			elementsWithTabIndex?.forEach((element) => {
-				element.addEventListener('focus', () => {
-					element.classList.add('focus-border'); // Add the focus-border class on focus
-					setTimeout(() => {
-						element.classList.remove('focus-border');
-					}, 1500)
-				});
+			// elementsWithTabIndex?.forEach((element) => {
+			// 	element.addEventListener('focus', () => {
+			// 		element.classList.add('focus-border'); // Add the focus-border class on focus
+			// 		setTimeout(() => {
+			// 			element.classList.remove('focus-border');
+			// 		}, 1500)
+			// 	});
 
-				element.addEventListener('blur', () => {
-					element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
-				});
-			});
+			// 	element.addEventListener('blur', () => {
+			// 		element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
+			// 	});
+			// });
 		} catch (error) {
 			console.log(error)
 		}
