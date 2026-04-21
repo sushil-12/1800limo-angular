@@ -126,27 +126,8 @@
 
 							<form [formGroup]="quoteBotForm">
 
+								<div class="main-trip-section" [class.main-trip-section--paired]="QBForm?.service_type?.value === 'round_trip'">
 								<div class="row mt-2">
-									<div class="col-12 col-md-12 mb-3"
-										[hidden]="QBForm?.service_type?.value != 'charter_tour'">
-										<div class="inselect">
-											<select (change)="changeDetection?.bookingHours($event)"
-												class="selectHoursFields font-weight-bolder"
-												formControlName="booking_hour" tabindex="1"
-												[class.errorValid]="submitted && QBForm?.booking_hour?.errors">
-												<option *ngFor="let hour of hour_values" [value]="hour?.return_value">
-													{{ hour?.display_value }}
-												</option>
-											</select>
-											<i class="fa fa-angle-down bookingHoursDrop" aria-hidden="true"></i>
-										</div>
-										<div *ngIf="submitted && QBForm?.booking_hour?.errors" class="text-danger">
-											<div *ngIf="QBForm?.booking_hour?.errors?.required">
-												Booking Hours is required
-											</div>
-										</div>
-									</div>
-
 									<div class="col-6 col-md-6 d-none"
 										[ngClass]="QBForm.service_type.value == 'round_trip' ? 'after_icon_roundtrip' : 'after_icon' ">
 										<div class="inselect">
@@ -494,8 +475,7 @@
 										</div> -->
 
 										<div class="add-stop-link mt-1 mb-2">
-											<a role="button" class="text-warning fw-semibold small"
-												style="cursor:pointer; font-weight:600;"
+											<a role="button" class="add-stop-btn fw-semibold small"
 												(click)="addExtraStop()">
 												<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop (optional)
 											</a>
@@ -504,6 +484,33 @@
 									</div>
 								</div>
 
+
+								<div class="row mt-3 charter-hours-row" *ngIf="QBForm?.service_type?.value == 'charter_tour'">
+									<div class="col-12">
+										<div class="charter-hours-card">
+											<div class="charter-hours-card__left">
+												<span class="charter-hours-card__icon"><i class="fas fa-clock"></i></span>
+												<span class="charter-hours-card__title">Booking Hours</span>
+											</div>
+											<div class="charter-hours-card__select inselect">
+												<select (change)="changeDetection?.bookingHours($event)"
+													class="selectHoursFields font-weight-bolder"
+													formControlName="booking_hour" tabindex="1"
+													[class.errorValid]="submitted && QBForm?.booking_hour?.errors">
+													<option *ngFor="let hour of hour_values" [value]="hour?.return_value">
+														{{ hour?.display_value }}
+													</option>
+												</select>
+												<i class="fa fa-angle-down bookingHoursDrop" aria-hidden="true"></i>
+											</div>
+										</div>
+										<div *ngIf="submitted && QBForm?.booking_hour?.errors" class="text-danger mt-1">
+											<div *ngIf="QBForm?.booking_hour?.errors?.required">
+												Booking Hours is required
+											</div>
+										</div>
+									</div>
+								</div>
 
 								<div class="row mt-3 mb-3">
 									<div class="col-6 col-md-6">
@@ -659,69 +666,12 @@
 
 								
 
-								<div class="return-trip-card" *ngIf="QBForm?.service_type?.value === 'round_trip'">
-									<span class="badge">Return Trip</span>
 								</div>
 
-								<div class="row mt-2 mb-3" *ngIf="QBForm?.service_type?.value == 'round_trip'">
-									<div class="col-6 col-md-6">
-										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
-										<div class="pickupdate">
-											<mat-form-field appearance="fill">
-												<input matInput [matDatepicker]="picker3" [min]="minDate"
-													placeholder="Return Pickup Date" id="returnPickupDate"
-													(dateChange)="changeDetection.return_pickup_date($event.target.value)"
-													class="font-weight-bolder" readonly tabindex="1"
-													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
-													formControlName="return_pickup_date" (click)="picker3.open()">
-												<mat-datepicker-toggle matSuffix [for]="picker3">
-												</mat-datepicker-toggle>
-												<mat-datepicker #picker3></mat-datepicker>
-											</mat-form-field>
-										</div>
-										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
-											class="text-danger">
-											<div
-												*ngIf="QBForm?.return_pickup_date?.errors?.matDatepickerParse; else returnPickupDateRoundError">
-												Return Pickup Date is not valid
-											</div>
-											<ng-template #returnPickupDateRoundError>
-												<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
-													Return Pickup Date is required
-												</div>
-											</ng-template>
-										</div>
-									</div>
+								<fieldset class="return-trip-section" *ngIf="QBForm?.service_type?.value === 'round_trip'">
+								<legend class="return-trip-legend text-light"><i class="fa-solid fa-arrows-up-down text-light mr-1" style="transform: rotate(90deg);"></i> Return Trip</legend>
 
-									<div class="col-6 col-md-6">
-										<div class="qb-field-label"><i class="far fa-clock"></i> Return Time</div>
-										<div class="inselect pickupTime">
-											<select name="returPickupTime" placeholder="Return Pickup Time" required=""
-												formControlName="return_pickup_time" class="font-weight-bolder"
-												tabindex="1"
-												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
-												(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
-												[class.errorValid]="submitted && QBForm?.return_pickup_time?.errors">
-												<option *ngFor="let time of time_values" [value]="time?.return_value">
-													{{ time?.display_value }}
-												</option>
-											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
-										</div>
-										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
-											class="text-danger">
-											<div *ngIf="QBForm?.return_pickup_time?.errors?.required">
-												Return Pickup Time is required
-											</div>
-										</div>
-									</div>
-
-
-								</div>
+								
 								<div class="row mt-2 m-0 justify-content-start"
 									*ngIf="QBForm?.service_type?.value == 'round_trip'">
 
@@ -1033,8 +983,7 @@
 										</div> -->
 
 										<div class="add-stop-link mt-1 mb-2">
-											<a role="button" class="text-warning fw-semibold small"
-												style="cursor:pointer; font-weight:600;"
+											<a role="button" class="add-stop-btn fw-semibold small"
 												(click)="addExtraStop(true)">
 												<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop
 												(optional)
@@ -1043,6 +992,136 @@
 
 									</div>
 								</div>
+								<div class="row mt-2 mb-3" *ngIf="QBForm?.service_type?.value == 'round_trip'">
+									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
+										<div class="pickupdate">
+											<mat-form-field appearance="fill">
+												<input matInput [matDatepicker]="picker3" [min]="minDate"
+													placeholder="Return Pickup Date" id="returnPickupDate"
+													(dateChange)="changeDetection.return_pickup_date($event.target.value)"
+													class="font-weight-bolder" readonly tabindex="1"
+													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
+													formControlName="return_pickup_date" (click)="picker3.open()">
+												<mat-datepicker-toggle matSuffix [for]="picker3">
+												</mat-datepicker-toggle>
+												<mat-datepicker #picker3></mat-datepicker>
+											</mat-form-field>
+										</div>
+										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
+											class="text-danger">
+											<div
+												*ngIf="QBForm?.return_pickup_date?.errors?.matDatepickerParse; else returnPickupDateRoundError">
+												Return Pickup Date is not valid
+											</div>
+											<ng-template #returnPickupDateRoundError>
+												<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
+													Return Pickup Date is required
+												</div>
+											</ng-template>
+										</div>
+									</div>
+
+									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="far fa-clock"></i> Return Time</div>
+										<div class="inselect pickupTime">
+											<select name="returPickupTime" placeholder="Return Pickup Time" required=""
+												formControlName="return_pickup_time" class="font-weight-bolder"
+												tabindex="1"
+												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
+												(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
+												[class.errorValid]="submitted && QBForm?.return_pickup_time?.errors">
+												<option *ngFor="let time of time_values" [value]="time?.return_value">
+													{{ time?.display_value }}
+												</option>
+											</select>
+											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
+												width="60px" height="60px">
+												<path
+													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
+											</svg>
+										</div>
+										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
+											class="text-danger">
+											<div *ngIf="QBForm?.return_pickup_time?.errors?.required">
+												Return Pickup Time is required
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row mt-3 mb-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
+									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="fas fa-user"></i> Return Passengers</div>
+										<div>
+											<ul class="number passengers_qty" id="return_no_of_passenger_ul">
+												<li>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<button style="min-width: 2.5rem; font-size:28px !important;"
+																class="btn btn-decrement btn-outline-secondary highlightButton"
+																type="button" (click)="change('d','p',true)">
+																<strong>-</strong>
+															</button>
+														</div>
+														<input type="number" formControlName="return_no_of_passenger"
+															min="0" max="100" step="1" inputmode="numeric"
+															style="text-align: center" class="form-control"
+															placeholder="" id="return_no_of_passenger" tabindex="1"
+															(keypress)="numberOnly($event)"
+															(paste)="$event.preventDefault()"
+															(input)="validateInputLimit($event)"
+															[class.errorValid]="submitted && QBForm?.return_no_of_passenger?.errors"
+															(focus)="$event.target.select()">
+														<div class="input-group-append">
+															<button style="min-width: 2.5rem"
+																class="btn btn-increment btn-outline-secondary highlightButton"
+																type="button" (click)="change('i','p',true)">
+																<strong>+</strong>
+															</button>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+
+									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="fas fa-suitcase"></i> Return Luggage</div>
+										<div>
+											<ul class="number passengers_qty" id="return_no_of_luggage_ul">
+												<li>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<button style="min-width: 2.5rem"
+																class="btn btn-decrement btn-outline-secondary"
+																type="button" (click)="change('d','l',true)">
+																<strong>-</strong>
+															</button>
+														</div>
+														<input type="number" formControlName="return_no_of_luggage"
+															min="0" max="100" step="1" inputmode="numeric"
+															style="text-align: center" class="form-control"
+															placeholder="" id="return_no_of_luggage" tabindex="1"
+															(keypress)="numberOnly($event)"
+															(paste)="$event.preventDefault()"
+															(input)="validateInputLimit($event)"
+															[class.errorValid]="submitted && QBForm?.return_no_of_luggage?.errors"
+															(focus)="$event.target.select()">
+														<div class="input-group-append">
+															<button style="min-width: 2.5rem"
+																class="btn btn-increment btn-outline-secondary"
+																type="button" (click)="change('i','l',true)">
+																<strong>+</strong>
+															</button>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								</fieldset>
 							<!-- RIDE PREFERENCES -->
 							<div class="ride-preferences-section mx-2 mt-3 mb-2" *ngIf="amenitiesList?.length > 0">
 								<div class="d-flex align-items-center justify-content-between mb-2">
@@ -1105,7 +1184,7 @@
 					<div class="quoteform_homewrapper telephone_mobile"
 						style="border-bottom: none !important; margin: 0 !important;">
 						<a href="tel:+18005466266" class="contact-number" tabindex="1" style="display: inline-block;">
-							<i class="fas fa-phone" style="transform: rotate(90deg)" aria-hidden="true"></i>
+							<i class="fas fa-phone" aria-hidden="true"></i>
 							+1-800-5466.266
 						</a>
 						<div class="mt-2">

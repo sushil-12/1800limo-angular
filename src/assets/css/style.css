@@ -316,6 +316,15 @@ header a.nav-link.active {
 
 .bannerform_wrapper .bannertext {
 	width: 550px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+@media only screen and (max-width: 767px) {
+	.bannerform_wrapper .bannertext {
+		justify-content: flex-start;
+	}
 }
 
 .bannerform_wrapper .bannertext h2 {
@@ -431,7 +440,6 @@ header a.nav-link.active {
 	padding: 0;
 	position: relative;
 	width: 100%;
-	background-color: #fff;
 	border: 0;
 	appearance: none;
 	height: 30px;
@@ -2454,12 +2462,14 @@ footer .footer a {
 
 .pickupdate i {
 	position: absolute;
-	top: 0;
-	right: 0;
-	color: #fff;
-	background: linear-gradient(135deg, #f3933d, #e67e22);
-	padding: 10px;
-	border-radius: 0px 10px 10px 0px;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	color: #f3933d;
+	background: transparent;
+	padding: 0;
+	border-radius: 0;
+	z-index: 3;
 }
 
 .pickuptime i {
@@ -3389,7 +3399,6 @@ max-width     : 50%;padding:30px;*/
 .pickupdate .mat-mdc-form-field-icon-suffix.ng-star-inserted {
 	position: absolute;
 	right: 0;
-	top: -8px;
 	color: #fff;
 	background-color: var(--orange-color);
 	padding: 0;
@@ -3440,6 +3449,86 @@ max-width     : 50%;padding:30px;*/
 .pickupdate .mat-mdc-form-field-underline {
 	bottom: 0 !important;
 	opacity: 0
+}
+
+/* Align Pickup Date and Pickup Time field heights */
+.pickupdate .mat-mdc-text-field-wrapper,
+.pickupdate .mat-mdc-form-field-flex,
+.pickupdate .mdc-text-field--filled,
+.inselect {
+	height: 44px;
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+}
+
+.pickupdate .mat-mdc-form-field-infix {
+	display: flex;
+	align-items: center;
+	min-height: 44px !important;
+}
+
+.pickupdate .mat-mdc-form-field-infix input,
+.inselect select.form-control,
+.inselect select {
+	height: 44px;
+	line-height: 44px;
+	padding: 0 10px;
+	box-sizing: border-box;
+}
+
+/* Add-a-stop link — brand orange */
+.add-stop-btn {
+	color: #f3933d;
+	cursor: pointer;
+	text-decoration: none;
+	font-weight: 600;
+	transition: color .2s ease;
+}
+
+.add-stop-btn:hover,
+.add-stop-btn:focus {
+	color: #ffb26b;
+	text-decoration: underline;
+}
+
+.add-stop-btn i {
+	color: #f3933d;
+}
+
+/* Main-trip wrapper — when round-trip is active, mirror the return-trip accent on the right */
+.main-trip-section--paired {
+	background: rgba(255, 255, 255, 0.04);
+	/* border: 1px solid rgba(243, 147, 61, 0.2); */
+	border-right: 4px solid #f3933d;
+	border-radius: 10px;
+	padding: 16px 14px;
+	margin-top: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Return-trip fieldset styling */
+fieldset.return-trip-section {
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(243, 147, 61, 0.5);
+	border-radius: 10px;
+	padding: 14px 16px 18px;
+	margin: 22px 0 8px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+	min-width: 0;
+}
+
+.return-trip-legend {
+	width: auto;
+	padding: 0 10px;
+	margin: 0 0 0 8px;
+	color: #f3933d;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	line-height: 1;
+	float: none;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -6158,7 +6247,9 @@ header .navbar-toggler {
 }
 
 /* New Address Field CSS */
-.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch{border-left: none !important;}
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
+	border-left: none !important;
+}
 
 .mat-mdc-form-field-infix:has(gmp-place-autocomplete) {
 	padding: 0px !important;
@@ -6166,39 +6257,43 @@ header .navbar-toggler {
 
 .mat-mdc-form-field:has(gmp-place-autocomplete) .mat-mdc-text-field-wrapper {
 	padding-top: 0 !important;
-  }
-  
-  .mat-mdc-form-field:has(gmp-place-autocomplete) .mdc-notched-outline__notch {
+}
+
+.mat-mdc-form-field:has(gmp-place-autocomplete) .mdc-notched-outline__notch {
 	display: none !important;
-  }
-  .mat-mdc-form-field:has(gmp-place-autocomplete) gmp-place-autocomplete {
+}
+
+.mat-mdc-form-field:has(gmp-place-autocomplete) gmp-place-autocomplete {
 	outline: none !important;
 	box-shadow: none !important;
 	height: 58px !important;
-	
-  }
-  .input-container:focus{
+
+}
+
+.input-container:focus {
 	outline: none !important;
 	box-shadow: none !important;
-  }
-  .input-container:focus-visible{
+}
+
+.input-container:focus-visible {
 	outline: none !important;
 	box-shadow: none !important;
-  }
-  .focus-ring{
+}
+
+.focus-ring {
 	display: none !important;
 	visibility: hidden !important;
-  }
+}
 
-  gmp-place-autocomplete {
-    --gmp-color-stroke-input-focus: transparent;
-    
-    outline: none !important;
-    
-    &:focus,
-    &:focus-within,
-    &:focus-visible {
-        outline: none !important;
-        box-shadow: none !important;
-    }
+gmp-place-autocomplete {
+	--gmp-color-stroke-input-focus: transparent;
+
+	outline: none !important;
+
+	&:focus,
+	&:focus-within,
+	&:focus-visible {
+		outline: none !important;
+		box-shadow: none !important;
+	}
 }

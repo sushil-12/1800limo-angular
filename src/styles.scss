@@ -416,13 +416,6 @@ section {
     z-index: auto !important;
 }
 
-.mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled.mdc-text-field--no-label {
-    border-top-left-radius: 5px !important;
-    border-bottom-left-radius: 5px !important;
-    height: 30px !important;
-}
-
-
 // override mat radio lable css
 .mat-mdc-radio-button .mdc-form-field label {
     margin-bottom: 0;
