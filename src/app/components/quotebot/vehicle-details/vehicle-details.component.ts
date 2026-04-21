@@ -535,7 +535,15 @@ export class VehicleDetailsComponent implements OnInit {
 		return moment(value, 'HH:mm:ss').format('hh:mm a')
 	}
 
+ // helper function for images
+ getImageUrl(item: string): string {
+  const oldBase = 'https://1800limoapi.infodevbox.com/';
+  const newBase = 'https://api.1800limo.com/';
 
+  return item.startsWith(oldBase)
+    ? item.replace(oldBase, newBase)
+    : item;
+}
 
 
 
