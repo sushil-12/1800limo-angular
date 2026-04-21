@@ -3219,3 +3219,236 @@ div#google_translate_element_home_mobile {
 		transform: scale(1.05);
 	}
 }
+
+/* ======= QUOTEBOT PROFESSIONAL REDESIGN ======= */
+
+// Field labels above inputs
+.qb-field-label {
+	font-size: 0.88rem;
+	font-weight: 600;
+	color: rgba(255, 255, 255, 0.92);
+	letter-spacing: 0.01em;
+	margin-bottom: 8px;
+	padding-left: 2px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	i {
+		color: #f3933d;
+		font-size: 0.95rem;
+		opacity: 1;
+	}
+}
+
+// Redesigned swap/flip button
+.qb-swap-row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 6px 0;
+}
+
+.qb-swap-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: rgba(243, 147, 61, 0.1);
+	border: 1.5px solid rgba(243, 147, 61, 0.3);
+	cursor: pointer;
+	transition: background 0.2s ease, border-color 0.2s ease, transform 0.35s ease;
+
+	img {
+		width: 15px;
+		height: 15px;
+		margin: 0;
+		transform: none;
+		scale: none;
+	}
+
+	&:hover {
+		background: rgba(243, 147, 61, 0.22);
+		border-color: rgba(243, 147, 61, 0.6);
+		transform: rotate(180deg);
+	}
+
+	&:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(243, 147, 61, 0.25);
+	}
+}
+
+// errorMsg wraps input-contain (which already has its own border) — remove the double border
+.errorMsg {
+	border: none !important;
+	padding: 0 !important;
+}
+
+// Improved return trip divider card
+.return-trip-card {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 20px 0 10px;
+
+	&::before,
+	&::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.badge {
+		background: rgba(243, 147, 61, 0.1) !important;
+		color: #f3933d !important;
+		border: 1px solid rgba(243, 147, 61, 0.3);
+		border-radius: 20px !important;
+		font-size: 0.62rem !important;
+		font-weight: 700 !important;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		padding: 5px 16px !important;
+	}
+}
+
+// CTA button — full width, cleaner radius
+.qb-cta-btn {
+	width: 80% !important;
+	max-width: 360px;
+	border-radius: 12px !important;
+	height: 48px;
+	font-size: 1rem !important;
+	letter-spacing: 0.02em;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+
+	i {
+		font-size: 0.9rem;
+	}
+}
+.qb-swap-row button img {
+    transform: rotate(90deg) !important;
+}
+// Hint row below submit button
+.qb-hint-row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 10px;
+	flex-wrap: wrap;
+
+	span {
+		font-size: 0.72rem;
+		color: rgba(255, 255, 255, 0.55);
+		letter-spacing: 0.01em;
+
+		i {
+			color: #f3933d;
+			opacity: 0.8;
+		}
+	}
+}
+
+// Inline error text — no white pill, just red text under the field
+.errorMsg .text-danger {
+	background-color: transparent !important;
+	padding: 4px 2px 0 !important;
+	margin-top: 2px !important;
+	border-radius: 0 !important;
+	color: #ff6b6b !important;
+	font-size: 0.78rem;
+	font-weight: 500;
+	line-height: 1.3;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+
+	&::before {
+		content: '\f06a'; // fa-exclamation-circle
+		font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free', 'FontAwesome';
+		font-weight: 900;
+		font-size: 0.85rem;
+		opacity: 0.9;
+	}
+}
+
+// "Add a stop (optional)" — subtle pill-style action
+.add-stop-link {
+	margin: 6px 0 2px !important;
+
+	a {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 12px;
+		border-radius: 20px;
+		background: rgba(243, 147, 61, 0.08);
+		border: 1px dashed rgba(243, 147, 61, 0.4);
+		color: #f3933d !important;
+		font-size: 0.78rem !important;
+		font-weight: 600 !important;
+		letter-spacing: 0.01em;
+		text-decoration: none !important;
+		transition: background 0.2s ease, border-color 0.2s ease;
+
+		i {
+			font-size: 0.9rem;
+		}
+
+		&:hover {
+			background: rgba(243, 147, 61, 0.16);
+			border-color: rgba(243, 147, 61, 0.7);
+			border-style: solid;
+		}
+	}
+}
+
+// Extra-stop fields — visually distinct from pickup/dropoff
+.extra-stops-section {
+	position: relative;
+
+	&:has(.extra-stop-item) {
+		margin: 6px 0 10px 6px !important;
+		padding: 10px 10px 6px;
+		border-left: 2px dashed rgba(243, 147, 61, 0.45);
+	}
+}
+
+.extra-stop-item {
+	.extra-stop-item__title {
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: #f3933d !important;
+		margin-bottom: 4px;
+		padding-left: 2px;
+	}
+
+	.input-contain--address {
+		border: 1px dashed rgba(243, 147, 61, 0.55) !important;
+		background: rgba(255, 255, 255, 0.96) !important;
+		border-radius: 12px !important;
+
+		.qb-airport-field__icon {
+			color: #f3933d !important;
+		}
+	}
+
+	.btn-link {
+		color: rgba(255, 107, 107, 0.9) !important;
+		transition: transform 0.2s ease, color 0.2s ease;
+
+		&:hover {
+			color: #ff6b6b !important;
+			transform: scale(1.1);
+		}
+	}
+}

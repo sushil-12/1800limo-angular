@@ -370,23 +370,17 @@
 													</button>
 												</div>
 											</div>
-											<div class="add-stop-link mt-1 mb-2" style="text-align:left">
-												<a role="button" class="text-warning fw-semibold small"
-													style="cursor:pointer; font-weight:600;"
-													(click)="addExtraStop()">
-													<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop (optional)
-												</a>
-											</div>
 										</div>
 										<!-- EXTRA STOPS ENDS -->
 
 
-										<div class="d-flex justify-content-center flip_div" style=""
-											*ngIf="!extraStops.length">
-											<img src="../../../../assets/images/swap_logo.svg" alt="img"
-												class="swap_btn" (click)="swapPickupDropoff('oneway')">
-											<span class="text-white ml-3"
-												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
+										<div class="qb-swap-row" *ngIf="!extraStops.length">
+											<button type="button" class="qb-swap-btn"
+												(click)="swapPickupDropoff('oneway')"
+												title="Swap pickup and dropoff"
+												aria-label="Swap pickup and dropoff addresses">
+												<img src="../../../../assets/images/swap_logo.svg" alt="swap">
+											</button>
 										</div>
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
@@ -499,12 +493,21 @@
 											</a>
 										</div> -->
 
+										<div class="add-stop-link mt-1 mb-2">
+											<a role="button" class="text-warning fw-semibold small"
+												style="cursor:pointer; font-weight:600;"
+												(click)="addExtraStop()">
+												<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop (optional)
+											</a>
+										</div>
+
 									</div>
 								</div>
 
 
 								<div class="row mt-3 mb-3">
 									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Date</div>
 										<div class="pickupdate">
 											<!-- <mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker1" style="height:30px;" placeholder="Pickup Date" [min]="minDate"
@@ -542,6 +545,7 @@
 									</div>
 
 									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="far fa-clock"></i> Time</div>
 										<div class="inselect pickupTime">
 											<select name="pickupTime" placeholder="Pickup Time" required
 												formControlName="pickup_time" class="font-weight-bolder" tabindex="1"
@@ -565,8 +569,9 @@
 									</div>
 								</div>
 
-								<div class="row mt-2">
+								<div class="row mt-3">
 									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="fas fa-user"></i> Passengers</div>
 										<div>
 											<ul class="number passengers_qty" id="no_of_passenger_ul">
 
@@ -614,6 +619,7 @@
 									</div>
 
 									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="fas fa-suitcase"></i> Luggage</div>
 										<div>
 											<ul class="number passengers_qty" id="no_of_luggage_ul">
 
@@ -674,6 +680,7 @@
 
 								<div class="row mt-2 mb-3" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
 										<div class="pickupdate">
 											<mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker3" [min]="minDate"
@@ -702,6 +709,7 @@
 									</div>
 
 									<div class="col-6 col-md-6">
+										<div class="qb-field-label"><i class="far fa-clock"></i> Return Time</div>
 										<div class="inselect pickupTime">
 											<select name="returPickupTime" placeholder="Return Pickup Time" required=""
 												formControlName="return_pickup_time" class="font-weight-bolder"
@@ -760,7 +768,7 @@
 													(click)="useCurrentPickupLocation('return_pickup_address')"
 													aria-label="Use current location for return pickup address"
 													title="Use Current Location">
-													<i class="fa-light fa-crosshairs"></i>
+													<i class="fa-solid fa-crosshairs"></i>
 												</button>
 
 												<div class="airport-clear-wrap address-clear-wrap"
@@ -916,23 +924,15 @@
 														</button>
 													</div>
 												</div>
-												<div class="add-stop-link mt-1 mb-2">
-													<a role="button" class="text-warning fw-semibold small"
-														style="cursor:pointer; font-weight:600;"
-														(click)="addExtraStop(true)">
-														<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop
-														(optional)
-													</a>
-												</div>
 											</div>
 
-											<div class="d-flex justify-content-center flip_div"
-												style="width: 100% !important;"
-												*ngIf="!returnExtraStops.length">
-											<img src="../../../../assets/images/swap_logo.svg" alt="img"
-												class="swap_btn" (click)="swapPickupDropoff('oneway')">
-											<span class="text-white ml-3"
-												style="width: 0 !important;font-size: 15px;font-weight: 500;">(Flip)</span>
+											<div class="qb-swap-row" *ngIf="!returnExtraStops.length">
+											<button type="button" class="qb-swap-btn"
+												(click)="swapPickupDropoff('oneway')"
+												title="Swap return pickup and dropoff"
+												aria-label="Swap return pickup and dropoff addresses">
+												<img src="../../../../assets/images/swap_logo.svg" alt="swap">
+											</button>
 										</div>
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
@@ -1047,6 +1047,15 @@
 											</a>
 										</div> -->
 
+										<div class="add-stop-link mt-1 mb-2">
+											<a role="button" class="text-warning fw-semibold small"
+												style="cursor:pointer; font-weight:600;"
+												(click)="addExtraStop(true)">
+												<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop
+												(optional)
+											</a>
+										</div>
+
 									</div>
 								</div>
 							<!-- RIDE PREFERENCES -->
@@ -1054,7 +1063,7 @@
 								<div class="d-flex align-items-center justify-content-between mb-2">
 									<span class="ride-pref-label"
 										style="font-size:0.75rem; font-weight:700; letter-spacing:0.06em; color:#ccc; text-transform:uppercase;">
-										Additional Services
+										Extra Cost Amenities
 									</span>
 									<a *ngIf="amenitiesList.length > 6"
 										role="button"
@@ -1086,15 +1095,17 @@
 							</form>
 							<div id="search-button-container">
 								<div id="search-button-box" class="pb-3 pb-md-1">
-									<button type="submit" class="three-d-button" tabindex="1" (click)="fileTheQuote()"
-										(keyup.enter)="fileTheQuote()"
-										style="width: 42%; border-radius:25px !important;">
-										Instant Quotes
+									<button type="submit" class="three-d-button qb-cta-btn" tabindex="1" (click)="fileTheQuote()"
+										(keyup.enter)="fileTheQuote()">
+										<i class="fas fa-search mr-2"></i> Get Instant Quotes
 									</button>
 								</div>
 							</div>
-							<span style="margin-bottom: 5px !important;">2 CARRY ON = 1 LARGE BAG</span>
-							<span style="margin-bottom: 5px !important;"># OF LUGGAGE = VEHICLE SIZE</span>
+							<div class="qb-hint-row">
+								<span><i class="fas fa-info-circle mr-1"></i>2 carry-on = 1 large bag</span>
+								<span>·</span>
+								<span># of luggage = vehicle size</span>
+							</div>
 						</div>
 						<ul class="qutedrates">
 							<li>Vehicle and Rates Are Based On Availability</li>
