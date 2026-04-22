@@ -515,6 +515,24 @@
   }
 }
 
+@media (min-width: 768px) and (max-width: 1100px) {
+  .vd-map-card__header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .vd-map-card__heading {
+    flex: 1 1 100%;   // forces title to take full row
+  }
+
+  .vd-map-card__stats {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+    padding-top: 0.25rem;
+  }
+}
+
 .vd-map-stat {
   display: flex;
   align-items: center;
