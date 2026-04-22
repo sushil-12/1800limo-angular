@@ -44,83 +44,84 @@
       <!-- RIGHT COL: Vehicle Details Card -->
       <div class="vd-card">
 
-        <h2 class="vd-card__name">{{ selected_vehicle.name }}</h2>
-        <p class="vd-card__desc" *ngIf="selected_vehicle.description">
-          {{ selected_vehicle.description }}
-        </p>
+		 <div class="vd-card__content"></div>
+			<h2 class="vd-card__name">{{ selected_vehicle.name }}</h2>
+			<p class="vd-card__desc" *ngIf="selected_vehicle.description">
+			{{ selected_vehicle.description }}
+			</p>
 
-        <!-- Pax / Luggage badges -->
-        <div class="vd-card__badges">
-          <div class="vd-badge">
-            <img src="assets/images/select_vehicle/pass.png" alt="" class="vd-badge__img" />
-            <span class="vd-badge__label">Pax</span>
-            <span class="vd-badge__val">{{ selected_vehicle?.passenger }}</span>
-          </div>
-          <div class="vd-badge">
-            <img src="assets/images/select_vehicle/lug.png" alt="" class="vd-badge__img" />
-            <span class="vd-badge__label">Luggage</span>
-            <span class="vd-badge__val">{{ selected_vehicle?.luggage }}</span>
-          </div>
-        </div>
+			<!-- Pax / Luggage badges -->
+			<div class="vd-card__badges">
+			<div class="vd-badge">
+				<img src="assets/images/select_vehicle/pass.png" alt="" class="vd-badge__img" />
+				<span class="vd-badge__label">Pax</span>
+				<span class="vd-badge__val">{{ selected_vehicle?.passenger }}</span>
+			</div>
+			<div class="vd-badge">
+				<img src="assets/images/select_vehicle/lug.png" alt="" class="vd-badge__img" />
+				<span class="vd-badge__label">Luggage</span>
+				<span class="vd-badge__val">{{ selected_vehicle?.luggage }}</span>
+			</div>
+			</div>
 
-        <!-- Year / Make / Model -->
-        <div class="vd-specs">
-          <div class="vd-specs__cell">
-            <i class="bi bi-calendar3 vd-specs__icon"></i>
-            <span class="vd-specs__lbl">Year</span>
-            <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.year }}</span>
-          </div>
-          <div class="vd-specs__cell">
-            <i class="bi bi-tools vd-specs__icon"></i>
-            <span class="vd-specs__lbl">Make</span>
-            <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.make }}</span>
-          </div>
-          <div class="vd-specs__cell">
-            <i class="bi bi-car-front vd-specs__icon"></i>
-            <span class="vd-specs__lbl">Model</span>
-            <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.model }}</span>
-          </div>
-        </div>
+			<!-- Year / Make / Model -->
+			<div class="vd-specs">
+			<div class="vd-specs__cell">
+				<i class="bi bi-calendar3 vd-specs__icon"></i>
+				<span class="vd-specs__lbl">Year</span>
+				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.year }}</span>
+			</div>
+			<div class="vd-specs__cell">
+				<i class="bi bi-tools vd-specs__icon"></i>
+				<span class="vd-specs__lbl">Make</span>
+				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.make }}</span>
+			</div>
+			<div class="vd-specs__cell">
+				<i class="bi bi-car-front vd-specs__icon"></i>
+				<span class="vd-specs__lbl">Model</span>
+				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.model }}</span>
+			</div>
+			</div>
 
-        <!-- Pricing cards -->
-        <div class="vd-pricing" (change)="selectPrice()">
-          <!-- One Way -->
-          <label class="vd-price-card"
-            [class.vd-price-card--active]="quotebot_form.service_type == 'one_way'"
-            *ngIf="getKeyName() != 'charter_tour'">
-            <input type="checkbox" class="vd-price-card__input"
-              (change)="routeSelection('one_way')" value="one_way"
-              [checked]="quotebot_form.service_type == 'one_way'" />
-            <div class="vd-price-card__check-row">
-              <span class="vd-price-card__checkbox"
-                [class.vd-price-card__checkbox--on]="quotebot_form.service_type == 'one_way'">
-                <i class="bi bi-check" *ngIf="quotebot_form.service_type == 'one_way'"></i>
-              </span>
-              <span class="vd-price-card__type">One Way</span>
-            </div>
-            <div class="vd-price-card__amount">
-              {{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_one_way']?.grand_total }}
-            </div>
-          </label>
+			<!-- Pricing cards -->
+			<div class="vd-pricing" (change)="selectPrice()">
+			<!-- One Way -->
+			<label class="vd-price-card"
+				[class.vd-price-card--active]="quotebot_form.service_type == 'one_way'"
+				*ngIf="getKeyName() != 'charter_tour'">
+				<input type="checkbox" class="vd-price-card__input"
+				(change)="routeSelection('one_way')" value="one_way"
+				[checked]="quotebot_form.service_type == 'one_way'" />
+				<div class="vd-price-card__check-row">
+				<span class="vd-price-card__checkbox"
+					[class.vd-price-card__checkbox--on]="quotebot_form.service_type == 'one_way'">
+					<i class="bi bi-check" *ngIf="quotebot_form.service_type == 'one_way'"></i>
+				</span>
+				<span class="vd-price-card__type">One Way</span>
+				</div>
+				<div class="vd-price-card__amount">
+				{{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_one_way']?.grand_total }}
+				</div>
+			</label>
 
-          <!-- Round Trip -->
-          <label class="vd-price-card"
-            [class.vd-price-card--active]="quotebot_form.service_type == 'round_trip'"
-            *ngIf="getKeyName() != 'charter_tour'">
-            <input type="checkbox" class="vd-price-card__input"
-              (change)="routeSelection('round_trip')" value="round_trip"
-              [checked]="quotebot_form.service_type == 'round_trip'" />
-            <div class="vd-price-card__check-row">
-              <span class="vd-price-card__checkbox"
-                [class.vd-price-card__checkbox--on]="quotebot_form.service_type == 'round_trip'">
-                <i class="bi bi-check" *ngIf="quotebot_form.service_type == 'round_trip'"></i>
-              </span>
-              <span class="vd-price-card__type">Round Trip</span>
-            </div>
-            <div class="vd-price-card__amount">
-              {{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_round_trip']?.grand_total }}
-            </div>
-          </label>
+			<!-- Round Trip -->
+			<label class="vd-price-card"
+				[class.vd-price-card--active]="quotebot_form.service_type == 'round_trip'"
+				*ngIf="getKeyName() != 'charter_tour'">
+				<input type="checkbox" class="vd-price-card__input"
+				(change)="routeSelection('round_trip')" value="round_trip"
+				[checked]="quotebot_form.service_type == 'round_trip'" />
+				<div class="vd-price-card__check-row">
+				<span class="vd-price-card__checkbox"
+					[class.vd-price-card__checkbox--on]="quotebot_form.service_type == 'round_trip'">
+					<i class="bi bi-check" *ngIf="quotebot_form.service_type == 'round_trip'"></i>
+				</span>
+				<span class="vd-price-card__type">Round Trip</span>
+				</div>
+				<div class="vd-price-card__amount">
+				{{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_round_trip']?.grand_total }}
+				</div>
+			</label>
 
           <!-- Charter Tour -->
           <div class="vd-charter" *ngIf="getKeyName() == 'charter_tour'">
@@ -171,8 +172,7 @@
             <i class="bi bi-send-fill"></i>
           </div>
           <div class="vd-map-card__heading">
-            <p class="vd-map-card__title">Trip Route</p>
-            <p class="vd-map-card__sub">From pickup to drop-off</p>
+            <p class="vd-map-card__title">First Trip</p>
           </div>
           <div class="vd-map-card__stats">
             <div class="vd-map-stat">
@@ -290,8 +290,7 @@
               <i class="bi bi-send-fill"></i>
             </div>
             <div class="vd-map-card__heading">
-              <p class="vd-map-card__title">Outbound Route</p>
-              <p class="vd-map-card__sub">From pickup to drop-off</p>
+              <p class="vd-map-card__title">First Trip</p>
             </div>
             <div class="vd-map-card__stats">
               <div class="vd-map-stat">
@@ -326,23 +325,20 @@
                   <span class="vd-detail-cell__lbl">Date</span>
                   <span class="vd-detail-cell__val">{{ formatDate(quotebot_form.pickup_date) }}</span>
                 </div>
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Time</span>
-                  <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
-                </div>
-              </div>
-              <div class="vd-details-col">
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Passengers</span>
-                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
-                </div>
-                <div class="vd-detail-cell">
+               
+				<div class="vd-detail-cell">
                   <span class="vd-detail-cell__lbl">Luggage</span>
                   <span class="vd-detail-cell__val">{{ quotebot_form.no_of_luggage }}</span>
                 </div>
               </div>
               <div class="vd-details-col">
-                <ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then rt_pikair; else rt_pikadd">
+				<div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Time</span>
+                  <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
+                </div>
+                 
+
+				  <ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then rt_pikair; else rt_pikadd">
                 </ng-container>
                 <ng-template #rt_pikair>
                   <div class="vd-detail-cell">
@@ -356,6 +352,12 @@
                     <span class="vd-detail-cell__val">{{ quotebot_form.pickup_address }}</span>
                   </div>
                 </ng-template>
+              </div>
+              <div class="vd-details-col">
+               <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Passengers</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
+                </div>
                 <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then rt_dropair; else rt_dropadd">
                 </ng-container>
                 <ng-template #rt_dropair>
@@ -372,6 +374,7 @@
                 </ng-template>
               </div>
             </div>
+
             <div class="vd-extra-stops" *ngIf="quotebot_form.extra_stops?.length > 0">
               <div class="vd-detail-cell" *ngFor="let stop of quotebot_form.extra_stops; index as i">
                 <span class="vd-detail-cell__lbl">Extra Stop {{ i + 1 }}</span>
@@ -379,6 +382,7 @@
               </div>
             </div>
           </div>
+
         </div>
 
 
@@ -389,8 +393,7 @@
               <i class="bi bi-arrow-return-left"></i>
             </div>
             <div class="vd-map-card__heading">
-              <p class="vd-map-card__title">Return Route</p>
-              <p class="vd-map-card__sub">From drop-off back to pickup</p>
+              <p class="vd-map-card__title">Return Trip</p>
             </div>
             <div class="vd-map-card__stats">
               <div class="vd-map-stat">
@@ -414,9 +417,11 @@
             <div class="vd-details-panel__head">
               <span class="vd-details-panel__title vd-details-panel__title--return">Return Details</span>
               <span class="vd-details-panel__type">
+				   {{ quotebot_form?.service_type.includes('charter') ? 'Charter/Tour' :
+                 formatString(quotebot_form.service_type) | titlecase }}
+              &bull;
                 {{ formatString(quotebot_form.return_pickup_type) | titlecase }}
                 to {{ formatString(quotebot_form.return_dropoff_type) | titlecase }}
-                and Return
               </span>
             </div>
             <div class="vd-details-grid">
@@ -425,23 +430,19 @@
                   <span class="vd-detail-cell__lbl">Date</span>
                   <span class="vd-detail-cell__val">{{ formatDate(quotebot_form.return_pickup_date) }}</span>
                 </div>
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Time</span>
-                  <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.return_pickup_time) }}</span>
-                </div>
-              </div>
-              <div class="vd-details-col">
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Passengers</span>
-                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
-                </div>
-                <div class="vd-detail-cell">
+				 <div class="vd-detail-cell">
                   <span class="vd-detail-cell__lbl">Luggage</span>
                   <span class="vd-detail-cell__val">{{ quotebot_form.no_of_luggage }}</span>
                 </div>
               </div>
+
               <div class="vd-details-col">
-                <ng-container *ngIf="quotebot_form.return_pickup_type == 'airport'; then ret_pikair; else ret_pikadd">
+				 <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Time</span>
+                  <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.return_pickup_time) }}</span>
+                </div>
+                
+				 <ng-container *ngIf="quotebot_form.return_pickup_type == 'airport'; then ret_pikair; else ret_pikadd">
                 </ng-container>
                 <ng-template #ret_pikair>
                   <div class="vd-detail-cell">
@@ -455,6 +456,14 @@
                     <span class="vd-detail-cell__val">{{ quotebot_form.return_pickup_address }}</span>
                   </div>
                 </ng-template>
+              </div>
+
+              <div class="vd-details-col">
+				<div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Passengers</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
+                </div>
+               
                 <ng-container *ngIf="quotebot_form.return_dropoff_type == 'airport'; then ret_dropair; else ret_dropadd">
                 </ng-container>
                 <ng-template #ret_dropair>
@@ -478,9 +487,9 @@
               </div>
             </div>
           </div>
-        </div><!-- /return vd-map-card -->
+        </div>
 
-      </div><!-- /vd-maps-dual -->
+      </div>
     </ng-container>
 
     <!-- Bottom CTA -->
