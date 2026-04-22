@@ -77,7 +77,7 @@
 				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.make }}</span>
 			</div>
 			<div class="vd-specs__cell">
-				<i class="bi bi-car-front vd-specs__icon"></i>
+				<i class="bi bi-car-front-fill vd-specs__icon"></i>
 				<span class="vd-specs__lbl">Model</span>
 				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.model }}</span>
 			</div>
@@ -160,7 +160,7 @@
     </div>
 
 
-    <!-- ═════════ MAPS + DETAILS SECTION═════════-->
+    <!-- ═════════ MAPS + DETAILS SECTION ═════════-->
 
     <!-- ── SINGLE MAP (one-way / charter) ───────────────── -->
     <ng-container *ngIf="quotebot_form?.service_type !== 'round_trip'">
@@ -214,25 +214,18 @@
                 <span class="vd-detail-cell__lbl">Date</span>
                 <span class="vd-detail-cell__val">{{ formatDate(quotebot_form.pickup_date) }}</span>
               </div>
-              <div class="vd-detail-cell">
-                <span class="vd-detail-cell__lbl">Time</span>
-                <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
-              </div>
-            </div>
-            <!-- Col 2 -->
-            <div class="vd-details-col">
-              <div class="vd-detail-cell">
-                <span class="vd-detail-cell__lbl">Passengers</span>
-                <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
-              </div>
-              <div class="vd-detail-cell">
+			  <div class="vd-detail-cell">
                 <span class="vd-detail-cell__lbl">Luggage</span>
                 <span class="vd-detail-cell__val">{{ quotebot_form.no_of_luggage }}</span>
               </div>
             </div>
-            <!-- Col 3 -->
+            <!-- Col 2 -->
             <div class="vd-details-col">
-              <!-- Pickup Airport or Address -->
+			  <div class="vd-detail-cell">
+                <span class="vd-detail-cell__lbl">Time</span>
+                <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
+              </div>
+             <!-- Pickup Airport or Address -->
               <ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then sp_pikair; else sp_pikadd">
               </ng-container>
               <ng-template #sp_pikair>
@@ -247,6 +240,14 @@
                   <span class="vd-detail-cell__val">{{ quotebot_form.pickup_address }}</span>
                 </div>
               </ng-template>
+            
+            </div>
+            <!-- Col 3 -->
+            <div class="vd-details-col">
+			  <div class="vd-detail-cell">
+                <span class="vd-detail-cell__lbl">Passengers</span>
+                <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
+              </div>
 
               <!-- Dropoff Airport or Address -->
               <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">

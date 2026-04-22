@@ -101,8 +101,6 @@
 }
 
 // ── MAIN GRID ────────────────────────────────────────────────
-// Fixed pixel heights per breakpoint — both columns locked to identical height.
-// Heights are sized to fit the right-card content snugly (no empty gaps).
 
 .vd-main-grid {
   display: grid;
@@ -259,7 +257,7 @@
   }
 
   &__rate-note {
-    font-size: 0.74rem;
+    font-size: 0.9rem;
     font-style: italic;
     color: var(--fg-muted);
     margin: 0;
@@ -319,7 +317,7 @@
     @media (min-width: 480px) { padding: 0.75rem 0.5rem; }
   }
 
-  &__icon { font-size: 0.95rem; color: var(--fg-muted); }
+  &__icon { font-size: 1rem; color: var(--fg-muted); }
 
   &__lbl {
     font-size: 0.68rem;
