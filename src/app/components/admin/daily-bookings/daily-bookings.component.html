@@ -179,17 +179,21 @@
 											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
 												data-target="#change_status_booking_Modal"
 												class="status-pill {{ booking.booking_status }}"
-												style="cursor: pointer;">
+												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
 												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
 												booking.booking_status | bookingStatusTextReplace :
 												'_' : ' ' |titlecase}}
+												<i class="fas fa-pencil-alt" style="font-size: 11px; color: white;"></i>
 											</div>
 										</div>
-										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold {{ booking.booking_status }}"
-											href="javascript:void(0);" role="button" data-toggle="dropdown"
-											aria-haspopup="true" aria-expanded="false">
-											<span>View</span>
-										</a>
+										
+										<button class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
+    type="button" data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">
+    <span>View</span>
+    <!-- <i class="fas fa-ellipsis-v" style="margin-left: 6px;"></i> -->
+</button>
+
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage"
 											style="min-height: 200px;max-height: 480px;overflow-y: scroll; z-index: 2;">
