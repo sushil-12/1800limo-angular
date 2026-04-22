@@ -362,7 +362,7 @@
     box-shadow: 0 2px 10px rgba(243,147,61,.2);
   }
 
-  &__input { display: none; }
+  &__input { display: none; font-size:1rem; }
 
   &__check-row {
     display: flex;
@@ -380,7 +380,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: #fff;
     line-height: 1;
     transition: background .15s, border-color .15s;
@@ -426,7 +426,7 @@
   justify-content: center;
   gap: 0.4rem;
   border-radius: var(--r-pill);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   padding: 0.5rem 0.9rem;
   transition: all .18s;
@@ -640,14 +640,14 @@
   }
 }
 
-// ── BOTTOM PAGE CTA ──────────────────────────────────────────
+// ── BOTTOM PAGE CTA ───
 .vd-page-cta {
   display: flex;
   justify-content: flex-end;
   padding: 0.5rem 0 1.5rem;
 }
 
-// ── MODALS ───────────────────────────────────────────────────
+// ── MODALS ────
 .vd-modal {
   border: none !important;
   border-radius: var(--r-lg) !important;
@@ -677,12 +677,12 @@
   &__close {
     background: none;
     border: none;
-    font-size: 1.1rem;
     color: #ef4444;
     padding: 0;
     line-height: 1;
     transition: opacity .15s;
-
+    font-size: 2.5rem;
+    font-weight: 400; 
     &:hover { opacity: .65; }
   }
 
@@ -808,32 +808,78 @@
   &__val { font-weight: 600; color: var(--fg); text-align: right; }
 }
 
-// ── AMENITIES MODAL ──────────────────────────────────────────
+// ── AMENITIES MODAL ──
 .vd-amenities {
-  &__group-title {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--fg);
-    padding: 0.75rem 1rem 0.4rem;
+  padding: 1rem;
+
+  &__card {
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    background: var(--bg-card);
+    margin-bottom: 0.85rem;
+    overflow: hidden;
   }
 
-  &__list {
+  &__card-head {
     display: flex;
-    flex-wrap: wrap;
-    padding: 0 1rem 0.75rem;
-    gap: 0.1rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 900; 
+    color: var(--fg);
+    background: var(--bg-specs);
+    border-bottom: 1px solid var(--border);
 
-    li {
-      flex: 0 0 50%;
-      font-size: 0.875rem;
-      color: var(--fg);
-      padding: 0.25rem 0;
-
-      @media (max-width: 479px) { flex: 0 0 100%; }
-
-      &::before { content: '• '; color: var(--accent); }
+    i {
+      font-size: 0.9rem;
+      color: var(--accent);
     }
   }
 
-  &__currency { color: var(--accent); font-weight: 700; }
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0.7rem;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: var(--fg-muted);
+
+    i {
+      font-size: 1.2rem;
+      margin-bottom: 0.35rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      margin: 0;
+    }
+  }
+}
+
+// ── CHIP STYLES ───
+.vd-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--r-pill);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+
+  &--free {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+  }
+
+  &--paid {
+    background: #fff7ed;
+    color: #c2410c;
+    border-color: #fed7aa;
+  }
 }

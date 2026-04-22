@@ -513,9 +513,9 @@
       <div class="vd-modal__header">
         <div class="vd-modal__header-top">
           <h4 class="vd-modal__title">Estimated Rate Slip</h4>
-          <button type="button" class="vd-modal__close" data-dismiss="modal">
-            <i class="bi bi-x-lg"></i>
-          </button>
+         <button type="button" class="vd-modal__close" data-dismiss="modal">
+		    &times;
+		  </button>
         </div>
         <div class="vd-modal__alert">
           <i class="bi bi-info-circle-fill"></i>
@@ -577,8 +577,8 @@
         <div class="vd-modal__header-top">
           <h4 class="vd-modal__title">Driver Details</h4>
           <button type="button" class="vd-modal__close" data-dismiss="modal">
-            <i class="bi bi-x-lg"></i>
-          </button>
+		    &times;
+		  </button>
         </div>
       </div>
       <div class="vd-modal__body">
@@ -610,40 +610,72 @@
 <div class="modal fade" id="ModalAmenities" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
     <div class="modal-content vd-modal">
+
+      <!-- Header -->
       <div class="vd-modal__header">
         <div class="vd-modal__header-top">
           <h4 class="vd-modal__title">Vehicle Amenities</h4>
           <button type="button" class="vd-modal__close" data-dismiss="modal">
-            <i class="bi bi-x-lg"></i>
-          </button>
+		    &times;
+		  </button>
         </div>
       </div>
-      <div class="vd-modal__body">
-        <ng-container *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
-          <p class="vd-amenities__group-title">Chargeable Amenities</p>
-          <ul class="vd-amenities__list">
-            <li *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
-              <span class="vd-amenities__currency">{{ currencySymbol }}</span> {{ amenity.name }}
-            </li>
-          </ul>
-        </ng-container>
-        <ng-container *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
-          <p class="vd-amenities__group-title">Non-Chargeable Amenities</p>
-          <ul class="vd-amenities__list">
-            <li *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
+
+      <!-- Body -->
+      <div class="vd-modal__body vd-amenities">
+
+        <!-- Chargeable -->
+        <div class="vd-amenities__card"
+             *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
+
+          <div class="vd-amenities__card-head">
+            <i class="bi bi-currency-rupee"></i>
+            <span>Chargeable Amenities</span>
+          </div>
+
+          <div class="vd-amenities__chips">
+            <span class="vd-chip vd-chip--paid"
+                  *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
               {{ amenity.name }}
-            </li>
-          </ul>
-        </ng-container>
-        <p class="text-danger"
-           *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
-                  selected_vehicle.amenities['non-chargeable'].length == 0">
-          No amenities found for this vehicle.
-        </p>
+            </span>
+          </div>
+        </div>
+
+        <!-- Non Chargeable -->
+        <div class="vd-amenities__card"
+             *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
+
+          <div class="vd-amenities__card-head">
+            <i class="bi bi-check-circle"></i>
+            <span>Non-Chargeable Amenities</span>
+          </div>
+
+          <div class="vd-amenities__chips">
+            <span class="vd-chip vd-chip--free"
+                  *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
+              {{ amenity.name }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="vd-amenities__empty"
+             *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
+                    selected_vehicle.amenities['non-chargeable'].length == 0">
+
+          <i class="bi bi-info-circle"></i>
+          <p>No amenities available for this vehicle</p>
+        </div>
+
       </div>
+
+      <!-- Footer -->
       <div class="vd-modal__footer">
-        <button class="vd-btn-modal-close" data-dismiss="modal" type="button">Close</button>
+        <button class="vd-btn-modal-close" data-dismiss="modal" type="button">
+          Close
+        </button>
       </div>
+
     </div>
   </div>
 </div>
