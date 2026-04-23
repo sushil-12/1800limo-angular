@@ -43,6 +43,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	vehicles: any;
 	vehiclesRes: any;
 	minDate = new Date();
+
+	// Round-trip dual-month calendar
+	calOpen = false;
+	calPicking: 'pickup' | 'return' = 'pickup';
+	calStart: Date | null = null;
+	calEnd: Date | null = null;
+	calLeftMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+	calRightMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1);
+	readonly calWeekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+	@ViewChild('rangeCalendarWrap') rangeCalendarWrap!: ElementRef<HTMLElement>;
+
 	currentUser: any;
 	modalHeading: string;
 	modalInstructions: string;
@@ -1852,8 +1863,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.quoteBotForm.get('return_dropoff_airport_long').setValidators([Validators.required])
 		this.quoteBotForm.updateValueAndValidity()
 
-		const retPickupEmpty = !String(this.QBForm.return_pickup_address.value || '').trim();
-		const retDropoffEmpty = !String(this.QBForm.return_dropoff_address.value || '').trim();
+		const isCoordMissing = (value: any) => value === '' || value === null || value === undefined;
+		const retPickupEmpty = !String(this.QBForm.return_pickup_address.value || '').trim()
+			|| isCoordMissing(this.QBForm.return_pickup_address_lat.value)
+			|| isCoordMissing(this.QBForm.return_pickup_address_long.value);
+		const retDropoffEmpty = !String(this.QBForm.return_dropoff_address.value || '').trim()
+			|| isCoordMissing(this.QBForm.return_dropoff_address_lat.value)
+			|| isCoordMissing(this.QBForm.return_dropoff_address_long.value);
 
 		const patch: any = {
 			return_pickup_airport: this.QBForm.dropoff_airport.value,
@@ -2801,13 +2817,155 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.SetFormValue(form_control, roundedTime);
 		},
 		return_pickup_date: (value: any) => {
-			console.log('value-- return ', value.format("YYYY-MM-DD"))
 			this.SetFormValue('return_pickup_date', value.format("YYYY-MM-DD"))
 		},
 
 		bookingHours: (event: any) => {
 			this.SetFormValue('booking_hours', event.target.value)
 		}
+	}
+
+	// ── Round-trip calendar ──────────────────────────────────────────────────
+
+	private parseDateStr(ds: any): Date | null {
+		if (!ds) return null;
+		if (ds instanceof Date) return this.calStrip(ds);
+		if (typeof ds === 'string') {
+			const p = ds.split('T')[0].split('-');
+			if (p.length >= 3) return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+		}
+		const d = new Date(ds);
+		return isNaN(d.getTime()) ? null : this.calStrip(d);
+	}
+
+	openCal(mode?: 'pickup' | 'return') {
+		if (this.QBForm?.service_type?.value !== 'round_trip') return;
+		const p = this.QBForm?.pickup_date?.value;
+		const r = this.QBForm?.return_pickup_date?.value;
+		this.calStart = this.parseDateStr(p);
+		this.calEnd   = this.parseDateStr(r);
+		
+		if (mode) {
+			this.calPicking = mode;
+		} else {
+			// Skip straight to return mode if pickup is already set
+			this.calPicking = this.calStart && !this.calEnd ? 'return' : 'pickup';
+		}
+		
+		const anchor = this.calStart || this.minDate;
+		this.calLeftMonth  = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+		this.calRightMonth = new Date(anchor.getFullYear(), anchor.getMonth() + 1, 1);
+		this.calOpen = true;
+	}
+
+	closeCal() { this.calOpen = false; }
+
+	calPrev() {
+		this.calLeftMonth  = new Date(this.calLeftMonth.getFullYear(),  this.calLeftMonth.getMonth()  - 1, 1);
+		this.calRightMonth = new Date(this.calRightMonth.getFullYear(), this.calRightMonth.getMonth() - 1, 1);
+	}
+
+	calNext() {
+		this.calLeftMonth  = new Date(this.calLeftMonth.getFullYear(),  this.calLeftMonth.getMonth()  + 1, 1);
+		this.calRightMonth = new Date(this.calRightMonth.getFullYear(), this.calRightMonth.getMonth() + 1, 1);
+	}
+
+	calPickDate(d: Date) {
+		const today = this.calStrip(this.minDate);
+		if (d.getTime() < today.getTime()) return;
+
+		const m: any = moment;
+
+		if (this.calPicking === 'pickup') {
+			this.calStart = d;
+			this.SetFormValue('pickup_date', m(d).format('YYYY-MM-DD'));
+			
+			if (this.calEnd && d.getTime() > this.calEnd.getTime()) {
+				// Pickup is after return, clear return
+				this.calEnd = null;
+				this.SetFormValue('return_pickup_date', '');
+				this.calPicking = 'return';
+			} else if (!this.calEnd) {
+				// No return date set, switch to return
+				this.calPicking = 'return';
+			} else {
+				// Valid return date exists, just close
+				setTimeout(() => this.closeCal(), 120);
+			}
+		} else {
+			if (!this.calStart || d.getTime() < this.calStart.getTime()) {
+				// Picked earlier than pickup (or no pickup) — set pickup here, clear return.
+				this.calStart = d;
+				this.SetFormValue('pickup_date', m(d).format('YYYY-MM-DD'));
+				this.calEnd = null;
+				this.SetFormValue('return_pickup_date', '');
+				this.calPicking = 'return';
+				return;
+			}
+			this.calEnd = d;
+			this.SetFormValue('return_pickup_date', m(d).format('YYYY-MM-DD'));
+			setTimeout(() => this.closeCal(), 120);
+		}
+	}
+
+	calSwitchTo(mode: 'pickup' | 'return') {
+		if (mode === 'pickup') {
+			this.calEnd = null;
+			this.SetFormValue('return_pickup_date', '');
+		}
+		this.calPicking = mode;
+	}
+
+	private calStrip(d: Date): Date {
+		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+	}
+
+	calMonthTitle(m: Date): string {
+		return m.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+	}
+
+	calMonthGrid(month: Date): Array<Array<{ date: Date; inMonth: boolean; disabled: boolean }>> {
+		const year = month.getFullYear(), mon = month.getMonth();
+		const firstDow = new Date(year, mon, 1).getDay();
+		const daysInMonth = new Date(year, mon + 1, 0).getDate();
+		const todayTs = this.calStrip(this.minDate).getTime();
+		const cells: { date: Date; inMonth: boolean; disabled: boolean }[] = [];
+
+		for (let i = firstDow - 1; i >= 0; i--)
+			cells.push({ date: new Date(year, mon, -i), inMonth: false, disabled: true });
+
+		for (let i = 1; i <= daysInMonth; i++) {
+			const d = new Date(year, mon, i);
+			cells.push({ date: d, inMonth: true, disabled: d.getTime() < todayTs });
+		}
+		while (cells.length % 7 !== 0) {
+			const last = cells[cells.length - 1].date;
+			cells.push({ date: new Date(last.getFullYear(), last.getMonth(), last.getDate() + 1), inMonth: false, disabled: true });
+		}
+		const weeks: typeof cells[] = [];
+		for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+		return weeks;
+	}
+
+	calIsStart(d: Date)   { return !!this.calStart && d.getTime() === this.calStart.getTime(); }
+	calIsEnd(d: Date)     { return !!this.calEnd   && d.getTime() === this.calEnd.getTime(); }
+	calIsInRange(d: Date) {
+		if (!this.calStart || !this.calEnd) return false;
+		const t = d.getTime();
+		return t > this.calStart.getTime() && t < this.calEnd.getTime();
+	}
+
+	calFmt(d: Date | null): string {
+		if (!d) return '';
+		return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+	}
+
+	// kept for existing template refs that use formatRangeDisplay
+	formatRangeDisplay(value: any): string {
+		if (!value) return '';
+		const d = this.parseDateStr(value);
+		if (!d || isNaN(d.getTime())) return '';
+		return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 	}
 
 	locationInfo(rows: Array<any>, index: number) {
@@ -2950,6 +3108,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		// remove return keys for other than round_trip
 		if (form.get('service_type').value == "one_way" || form.get('service_type').value == 'charter_tour') {
 			console.log('Removing Controls ...')
+
+			// strip any lingering validators from return_* controls (may have been
+			// added by a prior round_trip session via fillReturnDetails)
+			this.clearValidatorsOnly([
+				'return_pickup_address', 'return_pickup_address_lat', 'return_pickup_address_long',
+				'return_pickup_airport', 'return_pickup_airport_lat', 'return_pickup_airport_long',
+				'return_dropoff_address', 'return_dropoff_address_lat', 'return_dropoff_address_long',
+				'return_dropoff_airport', 'return_dropoff_airport_lat', 'return_dropoff_airport_long',
+			])
 			// for (const key in form.controls) {
 			// 	if (key.includes('return_')) {
 			// 		// clear all validators 
@@ -3086,9 +3253,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		console.log('checking form valid', this.quoteBotForm.valid, this.quoteBotForm, this.QBForm.location_info.valid);
 
-		// enter only if values excluding location_info presents invalid status
-		if (!this.quoteBotForm.valid && !this.QBForm.location_info.valid) {
-			console.log('-------------->>>>>>>>>>>>>>>>>>> returning the form', this.quoteBotForm)
+		// block submission when the form is invalid (required pickup/dropoff, etc.)
+		if (!this.quoteBotForm.valid) {
+			const invalidControls: Record<string, any> = {};
+			Object.keys(this.quoteBotForm.controls).forEach((key) => {
+				const ctrl = this.quoteBotForm.get(key);
+				if (ctrl && ctrl.invalid) {
+					invalidControls[key] = {
+						value: ctrl.value,
+						errors: ctrl.errors,
+						hasValidator: ctrl.validator != null,
+					};
+				}
+			});
+			console.group('[fileTheQuote] form invalid — blocking submission');
+			console.log('service_type:', this.QBForm.service_type.value);
+			console.log('pickup_type:', this.QBForm.pickup_type.value, '| dropoff_type:', this.QBForm.dropoff_type.value);
+			console.log('invalid controls:', invalidControls);
+			console.log('full form value:', this.quoteBotForm.value);
+			console.groupEnd();
 			return
 		}
 

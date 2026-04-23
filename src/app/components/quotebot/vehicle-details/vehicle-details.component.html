@@ -1,861 +1,662 @@
-<!-- Selected Vehicle section -->
-<section class="pro-Fil">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<!-- Vehicle Selected details -->
-				<div class="d-md-none d-flex justify-content-start mt-3 mb-2 w-100">
-					<button type="button" class="btn-bg-green text-white font-weight-bold px-3 py-2"
-						style="display: flex; align-items: center; gap: 8px;" (click)="backButton()">
-						<i class="bi bi-arrow-left"></i> Back to vehicle listing
-					</button>
-				</div>
-				<div class="car-Details row">
-					<!-- OWL CAROUSEL -->
-					<div class="col-md-6 col-xl-4">
-						<div class="outer m-0 w-auto">
-							<div id="big" class="owl-carousel owl-theme m-0">
-								<div class="item"
-									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
-									<img [src]="item" id="V_Image_{{ item_index + 1 }}" class="mx-auto"
-										alt="Vehicle Image {{ item_index + 1 }}">
-									<!-- {{item }} -->
-								</div>
-							</div>
-							<div id="thumbs" class="owl-carousel owl-theme m-0 my-3">
-								<div class="item"
-									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
-									<!-- {{ item }} -->
-									<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}" class="mx-auto"
-										id="V_Image_{{ item_index + 1 }}">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- OWL CAROUSEL ENDS -->
+<div class="vd-page">
+  <div class="vd-container">
 
-					<!-- VEHICLE INFORMATION BLOCK -->
-					<div class="col-md-6 col-lg">
-						<div class="d-none d-md-flex justify-content-end mb-2 w-100">
-							<button type="button" class="btn-bg-green text-white font-weight-bold px-3 py-2"
-								style="display: flex; align-items: center; gap: 8px;" (click)="backButton()">
-								<i class="bi bi-arrow-left"></i> Back to vehicle listing
-							</button>
-						</div>
-						<!-- CONTENT BLOCK -->
-						<div class="cont-Block pl-lg-4" style="width: fit-content;">
-							<h5 class="mb-2">
-								{{ selected_vehicle.name }}
-							</h5>
-							<div id="icons" class="d-flex mb-2 justify-content-center" style="gap:8px;">
-								<div class="icon-container-mobile">
-									<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;" />
-									<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
-									<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
-										selected_vehicle?.passenger
-										}}</span>
-								</div>
-								<div class="icon-container-mobile">
-									<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;" />
-									<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
-									<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
-										selected_vehicle?.luggage
-										}}</span>
-								</div>
-							</div>
-							<!-- <div class="car-cap d-flex">
-								<div class="pass-det mx-2">
-									<img alt="" class="img-fluid mr-2" src="assets/images/select_vehicle/pass.png" /> {{
-									selected_vehicle.passenger }}
-								</div>
-								<div class="pass-det mx-2">
-									<img alt="" class="img-fluid mr-2" src="assets/images/select_vehicle/lug.png" /> {{
-									selected_vehicle.luggage }}
-								</div>
-							</div> -->
-							<div class="textArea mt-3" *ngIf="selected_vehicle.description">
-								{{ selected_vehicle.description }}
-							</div>
-							<div>
-								<div class="vehicle-details-data-mobile mb-2">
-									<div class="d-flex justify-content-center" style="max-height: 25px;gap: 10px;">
-										<p>
-											<span
-												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.year}}</span>
-										</p>
-										<p>
-											<span
-												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.make}}</span>
-										</p>
-										<p>
-											<span
-												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.model}}</span>
-										</p>
-									</div>
-								</div>
-							</div>
+    <!-- ── PAGE HEADER ──────────────────────────────────── -->
+    <div class="vd-header">
+      <div class="vd-header__title-block">
+        <p class="vd-header__eyebrow">Vehicle Details</p>
+        <h1 class="vd-header__title">Review your selection</h1>
+      </div>
+      <button type="button" class="vd-btn-back" (click)="backButton()">
+        <i class="bi bi-arrow-left"></i>
+        Back to vehicle listing
+      </button>
+    </div>
 
-							<!-- PRICE BLOCK -->
-							<div class="checkbox-block d-md-flex" (change)="selectPrice()">
-								<!-- One Way -->
-								<div class="custom-control custom-checkbox custom-control-inline"
-									*ngIf="getKeyName() != 'charter_tour'">
-									<input type="checkbox" id="price1" name="price1" class="custom-control-input"
-										(change)="routeSelection('one_way')" value="one_way"
-										[checked]="quotebot_form.service_type == 'one_way'" />
-									<label class="custom-control-label" for="price1">
-										<small>
-											One Way
-										</small>
-										{{currencySymbol}} {{
-										selected_vehicle['rate_breakdown_one_way']?.grand_total
-										}}
-									</label>
-								</div>
+    <!-- ── MAIN GRID: Gallery LEFT · Details RIGHT ─────── -->
+    <div class="vd-main-grid">
 
-								<!-- Round Trip -->
-								<div class="custom-control custom-checkbox custom-control-inline"
-									*ngIf="getKeyName() != 'charter_tour'">
-									<input type="checkbox" id="price2" name="price2" class="custom-control-input"
-										(change)="routeSelection('round_trip')" value="round_trip"
-										[checked]="quotebot_form.service_type == 'round_trip'" />
-									<label class="custom-control-label" for="price2">
-										<small>
-											Round Trip
-										</small>
-										{{currencySymbol}} {{
-										selected_vehicle['rate_breakdown_round_trip']?.grand_total
-										}}
-									</label>
-								</div>
+      <!-- LEFT COL: Image Gallery -->
+      <div class="vd-gallery">
+        <div class="vd-gallery__stage">
+          <div id="big" class="owl-carousel owl-theme">
+            <div class="item"
+              *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
+              <img [src]="getImageUrl(item)"
+                   id="V_Image_{{ item_index + 1 }}"
+                   class="vd-gallery__main-img"
+                   alt="Vehicle Image {{ item_index + 1 }}">
+            </div>
+          </div>
+        </div>
+        <div class="vd-gallery__thumbs-wrap">
+          <div id="thumbs" class="owl-carousel owl-theme">
+            <div class="item"
+              *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
+              <img [src]="getImageUrl(item)"
+                   id="V_Thumb_{{ item_index + 1 }}"
+                   class="vd-gallery__thumb-img"
+                   alt="Vehicle Thumbnail {{ item_index + 1 }}">
+            </div>
+          </div>
+        </div>
+      </div>
 
-								<!-- Charter Tour -->
-								<div id="charter-price" *ngIf="getKeyName() == 'charter_tour'">
-									<p class="font-weight-bolder">
-										Charter Tour: {{currencySymbol}} {{
-										selected_vehicle['rate_breakdown_charter_tour']?.grand_total
-										}}
-									</p>
-								</div>
-							</div>
-							<div class="price-Blc">
-								<small> All Inclusive Rates (Some Taxes, and Tolls are additional)
-								</small>
-							</div>
-							<!-- PRICE BLOCK ENDS -->
+      <!-- RIGHT COL: Vehicle Details Card -->
+      <div class="vd-card">
 
-						</div>
-						<!-- CONTENT BLOCK ENDS -->
+        <h2 class="vd-card__name">{{ selected_vehicle.name }}</h2>
+        <p class="vd-card__desc" *ngIf="selected_vehicle.description">
+          {{ selected_vehicle.description }}
+        </p>
 
-						<!-- FUNCTIONAL BUTTONS -->
-						<div class="btn-Area d-flex flex-wrap align-items-center" style="gap: 9px;">
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#ModalVehicleRates">
-								View Subtotals
-							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#ModalDriverDetails" *ngIf="selected_vehicle.driverInformation">
-								Driver Info
-							</button>
-							<button type="button" class="custom-btn" data-toggle="modal" data-target="#ModalAmenities">
-								Amenities
-							</button>
-							<button type="button" class="custom-filled-button text-dark book-now-btn"
-								(click)="bookNow()">
-								Book Now
-							</button>
-						</div>
-					</div>
-					<!-- ṾEHICLE INFORAMATION BLOCK ENDS -->
+        <!-- Pax / Luggage badges -->
+        <div class="vd-card__badges">
+          <div class="vd-badge">
+            <img src="assets/images/select_vehicle/pass.png" alt="" class="vd-badge__img" />
+            <span class="vd-badge__label">Pax</span>
+            <span class="vd-badge__val">{{ selected_vehicle?.passenger }}</span>
+          </div>
+          <div class="vd-badge">
+            <img src="assets/images/select_vehicle/lug.png" alt="" class="vd-badge__img" />
+            <span class="vd-badge__label">Luggage</span>
+            <span class="vd-badge__val">{{ selected_vehicle?.luggage }}</span>
+          </div>
+        </div>
 
-				</div>
+        <!-- Year / Make / Model -->
+        <div class="vd-specs">
+          <div class="vd-specs__cell">
+            <i class="bi bi-calendar3 vd-specs__icon"></i>
+            <span class="vd-specs__lbl">Year</span>
+            <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.year }}</span>
+          </div>
+          <div class="vd-specs__cell">
+            <i class="bi bi-tools vd-specs__icon"></i>
+            <span class="vd-specs__lbl">Make</span>
+            <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.make }}</span>
+          </div>
+          <div class="vd-specs__cell">
+            <i class="bi bi-car-front vd-specs__icon"></i>
+            <span class="vd-specs__lbl">Model</span>
+            <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.model }}</span>
+          </div>
+        </div>
 
-				<!-- MAP -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="col-lg-12">
-							<!-- Outbound Map -->
-							<div class="map-image img-Block mt-4 mt-lg-0">
-								<h6 *ngIf="quotebot_form?.service_type == 'round_trip'" class="font-weight-bold mb-1" style="color: #e87c22;">Outbound Route</h6>
-								<google-map #map height="300px" width="100%" [center]="center" [zoom]="zoom"
-									[options]="mapOptions">
-								</google-map>
-								<div class="row">
-									<h6 class="mx-2">
-										Total Distance: {{convertToMi(distance)}} mi / {{convertToKm(distance)}} km
-									</h6>
-									<h6 class="mx-2">
-										Estimated time: {{convertToMinutes(duration)}}
-									</h6>
-								</div>
-							</div>
-							<!-- Return Map (round trip only) -->
-							<div class="map-image img-Block mt-4" *ngIf="quotebot_form?.service_type == 'round_trip'">
-								<h6 class="font-weight-bold mb-1" style="color: #e87c22;">Return Route</h6>
-								<google-map #returnMap height="300px" width="100%" [center]="center" [zoom]="zoom"
-									[options]="mapOptions">
-								</google-map>
-								<div class="row">
-									<h6 class="mx-2">
-										Total Distance: {{convertToMi(returnDistance)}} mi / {{convertToKm(returnDistance)}} km
-									</h6>
-									<h6 class="mx-2">
-										Estimated time: {{convertToMinutes(returnDuration)}}
-									</h6>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- VEHICLE SELECTED DETAILS ENDS -->
-				<!-- {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-				}} -->
-			</div>
-		</div>
-	</div>
-</section>
-<!-- Selected Vehicle section ends -->
+        <!-- Pricing cards -->
+        <div class="vd-pricing" (change)="selectPrice()">
+          <!-- One Way -->
+          <label class="vd-price-card"
+            [class.vd-price-card--active]="quotebot_form.service_type == 'one_way'"
+            *ngIf="getKeyName() != 'charter_tour'">
+            <input type="checkbox" class="vd-price-card__input"
+              (change)="routeSelection('one_way')" value="one_way"
+              [checked]="quotebot_form.service_type == 'one_way'" />
+            <div class="vd-price-card__check-row">
+              <span class="vd-price-card__checkbox"
+                [class.vd-price-card__checkbox--on]="quotebot_form.service_type == 'one_way'">
+                <i class="bi bi-check" *ngIf="quotebot_form.service_type == 'one_way'"></i>
+              </span>
+              <span class="vd-price-card__type">One Way</span>
+            </div>
+            <div class="vd-price-card__amount">
+              {{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_one_way']?.grand_total }}
+            </div>
+          </label>
 
-<!-- QuoteBot Preview Section -->
-<section class="pre-Details py-5">
-	<div class="container-fluid">
-		<div class="row my-3">
-			<div class="col-sm-6 col-md-5">
-				<p class="pv-title pv-details text-orange">
-					Pickup Details
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value pv-details">
-					{{ quotebot_form?.service_type.includes('charter') ? 'Charter/Tour' :
-					formatString(quotebot_form.service_type) | titlecase }}
-					/
-					{{ formatString(quotebot_form.pickup_type) | titlecase }}
-					to
-					{{ formatString(quotebot_form.dropoff_type) | titlecase }}
-					{{ quotebot_form.service_type.includes('round') ? 'and Return' : '' }}
-				</p>
-			</div>
-		</div>
+          <!-- Round Trip -->
+          <label class="vd-price-card"
+            [class.vd-price-card--active]="quotebot_form.service_type == 'round_trip'"
+            *ngIf="getKeyName() != 'charter_tour'">
+            <input type="checkbox" class="vd-price-card__input"
+              (change)="routeSelection('round_trip')" value="round_trip"
+              [checked]="quotebot_form.service_type == 'round_trip'" />
+            <div class="vd-price-card__check-row">
+              <span class="vd-price-card__checkbox"
+                [class.vd-price-card__checkbox--on]="quotebot_form.service_type == 'round_trip'">
+                <i class="bi bi-check" *ngIf="quotebot_form.service_type == 'round_trip'"></i>
+              </span>
+              <span class="vd-price-card__type">Round Trip</span>
+            </div>
+            <div class="vd-price-card__amount">
+              {{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_round_trip']?.grand_total }}
+            </div>
+          </label>
 
-		<!-- Date -->
-		<div class="row my-3">
-			<div class="col-6 col-md-5">
-				<p class="pv-title">
-					Date
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{ formatDate(quotebot_form.pickup_date) }}
-				</p>
-			</div>
-		</div>
+          <!-- Charter Tour -->
+          <div class="vd-charter" *ngIf="getKeyName() == 'charter_tour'">
+            <span class="vd-charter__label">Charter Tour</span>
+            <span class="vd-charter__amount">
+              {{ currencySymbol }}&nbsp;{{ selected_vehicle['rate_breakdown_charter_tour']?.grand_total }}
+            </span>
+          </div>
+        </div>
 
-		<!-- Time -->
-		<div class="row my-3">
-			<div class="col-6 col-md-5">
-				<p class="pv-title">
-					Time
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{ formatTime(quotebot_form.pickup_time) }}
-				</p>
-			</div>
-		</div>
+        <p class="vd-card__rate-note">
+          All inclusive rates (some taxes and tolls are additional)
+        </p>
 
-		<!-- Number of Pax -->
-		<div class="row my-3">
-			<div class="col-6 col-md-5">
-				<p class="pv-title">
-					Number of Pax
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{ quotebot_form.no_of_passenger }}
-				</p>
-			</div>
-		</div>
+        <!-- Action buttons -->
+        <div class="vd-card__actions">
+          <button type="button" class="vd-btn-action"
+            data-toggle="modal" data-target="#ModalVehicleRates">
+            <i class="bi bi-receipt"></i>
+            Subtotals
+          </button>
+          <button type="button" class="vd-btn-action"
+            data-toggle="modal" data-target="#ModalDriverDetails"
+            *ngIf="selected_vehicle.driverInformation">
+            <i class="bi bi-person-badge"></i>
+            Driver Info
+          </button>
+          <button type="button" class="vd-btn-action"
+            data-toggle="modal" data-target="#ModalAmenities">
+            <i class="bi bi-stars"></i>
+            Amenities
+          </button>
+          <button type="button" class="vd-btn-book" (click)="bookNow()">
+            Book Now
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
 
-		<!-- Number of Luggage -->
-		<div class="row my-3">
-			<div class="col-6 col-md-5">
-				<p class="pv-title">
-					Number of Luggage
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{ quotebot_form.no_of_luggage }}
-				</p>
-			</div>
-		</div>
-
-		<hr class="blue-line" />
-
-		<!-- Pickup Address/Airport -->
-		<div class="row">
-
-			<!-- Controller -->
-			<ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then pikair; else pikadd"></ng-container>
-
-			<ng-template #pikair>
-				<div class="col-md-5">
-					<p class="pv-title">
-						Pickup Airport
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.other_details.pickup_airport_name }}
-					</p>
-				</div>
-			</ng-template>
-
-			<ng-template #pikadd>
-				<div class="col-md-5">
-					<p class="pv-title">
-						Pickup Address
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.pickup_address }}
-					</p>
-				</div>
-			</ng-template>
-		</div>
-
-		<hr class="blue-line" />
-
-		<!-- Dropoff Address/Airport -->
-		<div class="row my-3">
-
-			<!-- Controller -->
-			<ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then dropair; else dropadd"></ng-container>
-
-			<ng-template #dropair>
-				<div class="col-md-5">
-					<p class="pv-title">
-						Dropoff Airport
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.other_details.dropoff_airport_name }}
-					</p>
-				</div>
-			</ng-template>
-
-			<ng-template #dropadd>
-				<div class="col-md-5">
-					<p class="pv-title">
-						Dropoff Address
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.dropoff_address }}
-					</p>
-				</div>
-			</ng-template>
-		</div>
+      </div>
+    </div>
 
 
-		<!-- Extra Stops -->
-		<div *ngIf="quotebot_form.extra_stops?.length > 0">
-			<hr class="blue-line" />
-			<div class="row my-3" *ngFor="let stop of quotebot_form.extra_stops; index as i">
-				<div class="col-md-5">
-					<p class="pv-title">
-						Extra Stop {{ i + 1 }}
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ stop.address }}
-					</p>
-				</div>
-			</div>
-		</div>
+    <!-- ═════════ MAPS + DETAILS SECTION═════════-->
 
-		<!-- Travel Time/Miles -->
-		<div class="row my-3">
-			<div class="col-md-5">
-				<p class="pv-title">
-					Travel Time / Miles
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					<!-- {{ quotebot_form.location_info[0].duration.text }} -->
-					{{convertToMinutes(duration)}}
-					/
-					<!-- {{ ((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles -->
-					{{convertToMi(distance)}} miles
-				</p>
-			</div>
-		</div>
+    <!-- ── SINGLE MAP (one-way / charter) ───────────────── -->
+    <ng-container *ngIf="quotebot_form?.service_type !== 'round_trip'">
+      <div class="vd-map-card">
 
-		<hr class="perforated-line" />
+        <!-- Map header with stats -->
+        <div class="vd-map-card__header">
+          <div class="vd-map-card__icon-wrap">
+            <i class="bi bi-send-fill"></i>
+          </div>
+          <div class="vd-map-card__heading">
+            <p class="vd-map-card__title">Trip Route</p>
+            <p class="vd-map-card__sub">From pickup to drop-off</p>
+          </div>
+          <div class="vd-map-card__stats">
+            <div class="vd-map-stat">
+              <i class="bi bi-signpost-2-fill"></i>
+              <span>{{ convertToMi(distance) }} mi / {{ convertToKm(distance) }} km</span>
+            </div>
+            <div class="vd-map-stat">
+              <i class="bi bi-clock-fill"></i>
+              <span>{{ convertToMinutes(duration) }}</span>
+            </div>
+          </div>
+        </div>
 
-		<!-- Return Details -->
-		<div *ngIf="quotebot_form.service_type == 'round_trip'">
-			<h5 class="mt-4 text-org"> Return Details </h5>
+        <!-- Google Map -->
+        <div class="vd-map-card__map">
+          <google-map #map height="300px" width="100%"
+            [center]="center" [zoom]="zoom" [options]="mapOptions">
+          </google-map>
+        </div>
 
-			<!-- Return Date -->
-			<div class="row my-3">
-				<div class="col-6 col-md-5">
-					<p class="pv-title">
-						Date
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ formatDate(quotebot_form.return_pickup_date) }}
-					</p>
-				</div>
-			</div>
+        <!-- Pickup Details BELOW the map (3-column grid) -->
+        <div class="vd-details-panel">
+          <div class="vd-details-panel__head">
+            <span class="vd-details-panel__title">Pickup Details</span>
+            <span class="vd-details-panel__type">
+              {{ quotebot_form?.service_type.includes('charter') ? 'Charter/Tour' :
+                 formatString(quotebot_form.service_type) | titlecase }}
+              &bull;
+              {{ formatString(quotebot_form.pickup_type) | titlecase }}
+              to
+              {{ formatString(quotebot_form.dropoff_type) | titlecase }}
+            </span>
+          </div>
 
-			<!-- Return Time -->
-			<div class="row my-3">
-				<div class="col-6 col-md-5">
-					<p class="pv-title">
-						Time
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ formatTime(quotebot_form.return_pickup_time) }}
-					</p>
-				</div>
-			</div>
+          <div class="vd-details-grid">
+            <!-- Col 1 -->
+            <div class="vd-details-col">
+              <div class="vd-detail-cell">
+                <span class="vd-detail-cell__lbl">Date</span>
+                <span class="vd-detail-cell__val">{{ formatDate(quotebot_form.pickup_date) }}</span>
+              </div>
+              <div class="vd-detail-cell">
+                <span class="vd-detail-cell__lbl">Time</span>
+                <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
+              </div>
+            </div>
+            <!-- Col 2 -->
+            <div class="vd-details-col">
+              <div class="vd-detail-cell">
+                <span class="vd-detail-cell__lbl">Passengers</span>
+                <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
+              </div>
+              <div class="vd-detail-cell">
+                <span class="vd-detail-cell__lbl">Luggage</span>
+                <span class="vd-detail-cell__val">{{ quotebot_form.no_of_luggage }}</span>
+              </div>
+            </div>
+            <!-- Col 3 -->
+            <div class="vd-details-col">
+              <!-- Pickup Airport or Address -->
+              <ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then sp_pikair; else sp_pikadd">
+              </ng-container>
+              <ng-template #sp_pikair>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Pickup Airport</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.other_details.pickup_airport_name }}</span>
+                </div>
+              </ng-template>
+              <ng-template #sp_pikadd>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Pickup Address</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.pickup_address }}</span>
+                </div>
+              </ng-template>
 
-			<hr class="blue-line" />
+              <!-- Dropoff Airport or Address -->
+              <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">
+              </ng-container>
+              <ng-template #sp_dropair>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Dropoff Airport</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.other_details.dropoff_airport_name }}</span>
+                </div>
+              </ng-template>
+              <ng-template #sp_dropadd>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Dropoff Address</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.dropoff_address }}</span>
+                </div>
+              </ng-template>
+            </div>
+          </div>
 
-			<!-- Return Pickup Address/Airport -->
-			<div class="row my-3">
+          <!-- Extra Stops (if any) -->
+          <div class="vd-extra-stops" *ngIf="quotebot_form.extra_stops?.length > 0">
+            <div class="vd-detail-cell" *ngFor="let stop of quotebot_form.extra_stops; index as i">
+              <span class="vd-detail-cell__lbl">Extra Stop {{ i + 1 }}</span>
+              <span class="vd-detail-cell__val">{{ stop.address }}</span>
+            </div>
+          </div>
 
-				<!-- Controller -->
-				<ng-container *ngIf="quotebot_form.return_pickup_type == 'airport'; then rpikair; else rpikadd">
-				</ng-container>
-
-				<ng-template #rpikair>
-					<div class="col-md-5">
-						<p class="pv-title">
-							Pickup Airport
-						</p>
-					</div>
-					<div class="col-auto">
-						<p class="pv-title-value">
-							{{ quotebot_form.other_details.return_pickup_airport_name }}
-						</p>
-					</div>
-				</ng-template>
-
-				<ng-template #rpikadd>
-					<div class="col-md-5">
-						<p class="pv-title">
-							Pickup Address
-						</p>
-					</div>
-					<div class="col-auto">
-						<p class="pv-title-value">
-							{{ quotebot_form.return_pickup_address }}
-						</p>
-					</div>
-				</ng-template>
-
-			</div>
-
-			<hr class="blue-line" />
-
-			<!-- Return Dropoff Address/Airport -->
-			<div class="row my-3">
-
-				<!-- Controller -->
-				<ng-container *ngIf="quotebot_form.return_dropoff_type == 'airport'; then rdropair; else rdropadd">
-				</ng-container>
-
-				<ng-template #rdropair>
-					<div class="col-md-5">
-						<p class="pv-title">
-							Dropoff Airport
-						</p>
-					</div>
-					<div class="col-auto">
-						<p class="pv-title-value">
-							{{ quotebot_form.other_details.return_dropoff_airport_name }}
-						</p>
-					</div>
-				</ng-template>
-				<ng-template #rdropadd>
-					<div class="col-md-5">
-						<p class="pv-title">
-							Dropoff Address
-						</p>
-					</div>
-					<div class="col-auto">
-						<p class="pv-title-value">
-							{{ quotebot_form.return_dropoff_address }}
-						</p>
-					</div>
-				</ng-template>
-			</div>
-
-			<!-- Return Extra Stops -->
-			<div *ngIf="quotebot_form.return_extra_stops?.length > 0">
-				<hr class="blue-line" />
-				<div class="row my-3" *ngFor="let stop of quotebot_form.return_extra_stops; index as i">
-					<div class="col-md-5">
-						<p class="pv-title">
-							Extra Stop {{ i + 1 }}
-						</p>
-					</div>
-					<div class="col-auto">
-						<p class="pv-title-value">
-							{{ stop.address }}
-						</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- Travel Time/Miles -->
-			<div class="row my-3">
-				<div class="col-md-5">
-					<p class="pv-title">
-						Travel Time/Miles
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.location_info[1].duration.text }}
-						/
-						{{ ((quotebot_form.location_info[1].distance.value)/1609).toFixed(2) }}
-						miles
-					</p>
-				</div>
-			</div>
-		</div>
-		<!-- Return Details Ends -->
-		<div>
-
-		</div>
-		<!-- <div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year">
-			<div class="col-sm-6 col-md-5">
-				<p class="pv-title pv-details text-orange">
-					Vehicle Details
-				</p>
-			</div>
-		</div>
-		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year" style="flex-wrap: nowrap;">
-			<div class="col-md-5 ml-4" style="margin-left: 0px !important;">
-				<p class="pv-title">
-					<i class="bi bi-calendar-check text-orange"></i> Year
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{selected_vehicle?.vehicle_details.year}}
-				</p>
-			</div>
-		</div>
-		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.make" style="flex-wrap: nowrap;">
-			<div class="col-md-5 ml-4" style="margin-left: 0px !important;">
-				<p class="pv-title">
-					<i class="bi bi-wrench-adjustable text-orange"></i> Make
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{selected_vehicle?.vehicle_details.make}}
-				</p>
-			</div>
-		</div>
-		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.model" style="flex-wrap: nowrap;">
-			<div class="col-md-5 ml-4" style="margin-left: 0px !important;">
-				<p class="pv-title">
-					<i class="bi bi-boxes  text-orange"></i> Model
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{selected_vehicle?.vehicle_details.model}}
-				</p>
-			</div>
-		</div> -->
-	</div>
-	<!-- QuoteBot Preview Section ends -->
+        </div>
+      </div>
+    </ng-container>
 
 
+    <!-- ── DUAL MAPS (round trip) ────────────────────────── -->
+    <ng-container *ngIf="quotebot_form?.service_type === 'round_trip'">
+      <div class="vd-maps-dual">
 
-	<div class="btn-Area d-flex mx-5 justify-content-end align-items-center" stylee="gap: 1rem">
-		<div>
-			<button type="button" class="custom-filled-back-button" (click)="backButton()">
-				<svg width="41" height="16" viewBox="0 0 41 16" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-					<path
-						d="M37.963 0.500001H0.5L0.5 2H19.7407H36.963C37.7914 2 38.463 2.67157 38.463 3.5V9C38.463 9.82843 37.7914 10.5 36.963 10.5H19.7407H19.2407V10V6.59305L14.4313 10.75L19.2407 14.907V13V12.5H19.7407H37.963C38.6378 12.5 39.2838 12.2351 39.7591 11.7656C40.2342 11.2963 40.5 10.661 40.5 10V2.5C40.5 1.82723 40.2315 1.35011 39.8074 1.0275C39.3675 0.692862 38.7244 0.500001 37.963 0.500001Z"
-						fill="#fff" stroke="#fff" />
-				</svg>
-			</button>
-		</div>
-		<div>
-			<button type="button" class="custom-filled-button book-now-btn" (click)="bookNow()">
-				Book Now
-			</button>
-		</div>
-	</div>
-</section>
+        <!-- OUTBOUND map + details -->
+        <div class="vd-map-card">
+          <div class="vd-map-card__header">
+            <div class="vd-map-card__icon-wrap vd-map-card__icon-wrap--out">
+              <i class="bi bi-send-fill"></i>
+            </div>
+            <div class="vd-map-card__heading">
+              <p class="vd-map-card__title">First Trip</p>
+            </div>
+            <div class="vd-map-card__stats">
+              <div class="vd-map-stat">
+                <i class="bi bi-signpost-2-fill"></i>
+                <span>{{ convertToMi(distance) }} mi / {{ convertToKm(distance) }} km</span>
+              </div>
+              <div class="vd-map-stat">
+                <i class="bi bi-clock-fill"></i>
+                <span>{{ convertToMinutes(duration) }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="vd-map-card__map">
+            <google-map #map height="280px" width="100%"
+              [center]="center" [zoom]="zoom" [options]="mapOptions">
+            </google-map>
+          </div>
+
+          <!-- Outbound Pickup Details below map (3-col) -->
+          <div class="vd-details-panel">
+            <div class="vd-details-panel__head">
+              <span class="vd-details-panel__title">Pickup Details</span>
+              <span class="vd-details-panel__type">
+                {{ formatString(quotebot_form.service_type) | titlecase }}
+                &bull; {{ formatString(quotebot_form.pickup_type) | titlecase }}
+                to {{ formatString(quotebot_form.dropoff_type) | titlecase }}
+              </span>
+            </div>
+            <div class="vd-details-grid">
+              <div class="vd-details-col">
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Date</span>
+                  <span class="vd-detail-cell__val">{{ formatDate(quotebot_form.pickup_date) }}</span>
+                </div>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Time</span>
+                  <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
+                </div>
+              </div>
+              <div class="vd-details-col">
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Passengers</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
+                </div>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Luggage</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_luggage }}</span>
+                </div>
+              </div>
+              <div class="vd-details-col">
+                <ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then rt_pikair; else rt_pikadd">
+                </ng-container>
+                <ng-template #rt_pikair>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Pickup Airport</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.other_details.pickup_airport_name }}</span>
+                  </div>
+                </ng-template>
+                <ng-template #rt_pikadd>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Pickup Address</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.pickup_address }}</span>
+                  </div>
+                </ng-template>
+                <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then rt_dropair; else rt_dropadd">
+                </ng-container>
+                <ng-template #rt_dropair>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Airport</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.other_details.dropoff_airport_name }}</span>
+                  </div>
+                </ng-template>
+                <ng-template #rt_dropadd>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Address</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.dropoff_address }}</span>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+            <div class="vd-extra-stops" *ngIf="quotebot_form.extra_stops?.length > 0">
+              <div class="vd-detail-cell" *ngFor="let stop of quotebot_form.extra_stops; index as i">
+                <span class="vd-detail-cell__lbl">Extra Stop {{ i + 1 }}</span>
+                <span class="vd-detail-cell__val">{{ stop.address }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
+        <!-- RETURN map + details -->
+        <div class="vd-map-card">
+          <div class="vd-map-card__header">
+            <div class="vd-map-card__icon-wrap vd-map-card__icon-wrap--ret">
+              <i class="bi bi-arrow-return-left"></i>
+            </div>
+            <div class="vd-map-card__heading">
+              <p class="vd-map-card__title">Return Trip</p>
+            </div>
+            <div class="vd-map-card__stats">
+              <div class="vd-map-stat">
+                <i class="bi bi-signpost-2-fill"></i>
+                <span>{{ convertToMi(returnDistance) }} mi / {{ convertToKm(returnDistance) }} km</span>
+              </div>
+              <div class="vd-map-stat">
+                <i class="bi bi-clock-fill"></i>
+                <span>{{ convertToMinutes(returnDuration) }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="vd-map-card__map">
+            <google-map #returnMap height="280px" width="100%"
+              [center]="center" [zoom]="zoom" [options]="mapOptions">
+            </google-map>
+          </div>
 
-<!-- --------------------------------x-------------------x---------------------------------- -->
+          <!-- Return Details below map (3-col) -->
+          <div class="vd-details-panel">
+            <div class="vd-details-panel__head">
+              <span class="vd-details-panel__title vd-details-panel__title--return">Return Details</span>
+              <span class="vd-details-panel__type">
+                {{ formatString(quotebot_form.return_pickup_type) | titlecase }}
+                to {{ formatString(quotebot_form.return_dropoff_type) | titlecase }}
+                and Return
+              </span>
+            </div>
+            <div class="vd-details-grid">
+              <div class="vd-details-col">
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Date</span>
+                  <span class="vd-detail-cell__val">{{ formatDate(quotebot_form.return_pickup_date) }}</span>
+                </div>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Time</span>
+                  <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.return_pickup_time) }}</span>
+                </div>
+              </div>
+              <div class="vd-details-col">
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Passengers</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
+                </div>
+                <div class="vd-detail-cell">
+                  <span class="vd-detail-cell__lbl">Luggage</span>
+                  <span class="vd-detail-cell__val">{{ quotebot_form.no_of_luggage }}</span>
+                </div>
+              </div>
+              <div class="vd-details-col">
+                <ng-container *ngIf="quotebot_form.return_pickup_type == 'airport'; then ret_pikair; else ret_pikadd">
+                </ng-container>
+                <ng-template #ret_pikair>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Pickup Airport</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.other_details.return_pickup_airport_name }}</span>
+                  </div>
+                </ng-template>
+                <ng-template #ret_pikadd>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Pickup Address</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.return_pickup_address }}</span>
+                  </div>
+                </ng-template>
+                <ng-container *ngIf="quotebot_form.return_dropoff_type == 'airport'; then ret_dropair; else ret_dropadd">
+                </ng-container>
+                <ng-template #ret_dropair>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Airport</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.other_details.return_dropoff_airport_name }}</span>
+                  </div>
+                </ng-template>
+                <ng-template #ret_dropadd>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Address</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.return_dropoff_address }}</span>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+            <div class="vd-extra-stops" *ngIf="quotebot_form.return_extra_stops?.length > 0">
+              <div class="vd-detail-cell" *ngFor="let stop of quotebot_form.return_extra_stops; index as i">
+                <span class="vd-detail-cell__lbl">Extra Stop {{ i + 1 }}</span>
+                <span class="vd-detail-cell__val">{{ stop.address }}</span>
+              </div>
+            </div>
+          </div>
+        </div><!-- /return vd-map-card -->
 
+      </div><!-- /vd-maps-dual -->
+    </ng-container>
 
+    <!-- Bottom CTA -->
+    <div class="vd-page-cta">
+      <button type="button" class="vd-btn-book vd-btn-book--lg" (click)="bookNow()">
+        Book Now &rarr;
+      </button>
+    </div>
 
-<!-- --------------- MODALS ------------------------- -->
-
-
-
-
-<!-- Detailed Slip Modal -->
-<div aria-hidden="true" aria-labelledby="ModalVehicleRates" class="modal fade" id="ModalVehicleRates" tab-index="-1">
-	<div class="modal-dialog modal-md modal-dialog-centered">
-		<div class="modal-content p-0">
-			<div class="modal-header d-block">
-				<div class="d-flex align-items-center justify-content-between">
-					<h4 class="modal-title" style="margin: 0 !important;">
-						Estimated Rate Slip
-					</h4>
-					<button type="button" class="close p-0 m-0" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<h4 class="alert alert-danger mt-2"
-					style="padding :0.25rem 1.25rem; color: red !important;font-size: 15px !important;">
-					Gratuity Included (hand tip extra at own discretion)</h4>
-			</div>
-			<div class="modal-body" style="padding: 0rem 1rem 0rem 1rem;">
-				<table class="table">
-					<thead>
-						<th> Rate Type </th>
-						<th> Rate </th>
-						<th> Amount </th>
-					</thead>
-					<tbody
-						*ngIf="quotebot_form.service_type == 'one_way' || quotebot_form.service_type == 'charter_tour'">
-						<tr
-							*ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
-							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
-								{{ rate.value.rate_label }}
-							</td>
-							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
-								{{currencySymbol}} {{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple !=
-								undefined ||
-								rate.value.multiple
-								== null )
-								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
-								rate.value.multiple : '' }}
-							</td>
-							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
-								{{currencySymbol}} {{ rate.value.amount }}
-							</td>
-						</tr>
-						<tr class="total-fields">
-							<td class="font-weight-bolder">
-								Total:
-							</td>
-							<td></td>
-							<td class="font-weight-bolder">
-								{{currencySymbol}} {{ one_way_rates?.total }}
-							</td>
-						</tr>
-						<!-- <tr>
-							<td class="font-weight-bolder">
-								Grand Total:
-							</td>
-							<td></td>
-							<td class="font-weight-bolder">
-								${{ rates?.grand_total }}
-							</td>
-						</tr> -->
-					</tbody>
-					<tbody *ngIf="quotebot_form.service_type == 'round_trip'">
-						<tr
-							*ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
-							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
-								{{ rate.value.rate_label }}
-							</td>
-							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
-								{{currencySymbol}} {{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple !=
-								undefined ||
-								rate.value.multiple
-								== null )
-								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
-								rate.value.multiple : '' }}
-							</td>
-							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
-								{{currencySymbol}} {{ rate.value.amount }}
-							</td>
-						</tr>
-						<!-- <tr>
-													<td> Gratuity: </td>
-													<td>
-														{{ rates?.rateArray?.others?.Gratuity?.percentage }}%
-													</td>
-													<td> {{ rates?.rateArray?.others?.Gratuity?.amount }} </td>
-												</tr> -->
-						<tr class="total-fields">
-							<td class="font-weight-bolder">
-								Total:
-							</td>
-							<td></td>
-							<td class="font-weight-bolder">
-								{{currencySymbol}} {{ round_trip_rates?.total }}
-							</td>
-						</tr>
-						<!-- <tr>
-													<td class="font-weight-bolder">
-														Grand Total:
-													</td>
-													<td></td>
-													<td class="font-weight-bolder">
-														${{ rates?.grand_total }}
-													</td>
-												</tr> -->
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer flex justify-items-end">
-				<div class="btn-Area">
-					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
-						Close
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+  </div>
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="ModalDriverDetails" class="modal fade" id="ModalDriverDetails" tab-index="-1"
-	*ngIf="selected_vehicle.driverInformation">
-	<div class="modal-dialog modal-md modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<p class="text-org-light font-weight-bolder">
-					Driver Details
-				</p>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-6 col-md-5">
-						<div id="driver-image-container" class="w-100">
-							<div id="driver-image" class="ml-4 w-auto">
-								<img id="d_image" class="w-100" [src]="selected_vehicle.driverInformation.imageUrl" />
-							</div>
-						</div>
-					</div>
-					<div class="col-6 col-md-7">
-						<div id="driver-comp-info-container"
-							class="w-auto h-100 d-flex align-items-center justify-content-center">
-							<div id="driver-company-info" style="width: fit-content">
-								<p id="driver-name" class="text-secondary font-weight-bolder">
-									<i class="bi bi-dash"></i>
-									{{ selected_vehicle.name_initials }}.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<br />
-				<div class="row" *ngFor="let info of driver_info_display_keys">
-					<div class="col-3 col-md-5">
-						<p class="text-dark">
-							{{ formatString(info) | titlecase }}
-						</p>
-					</div>
-					<div class="col-9 col-md-7">
-						<p class="font-weight-bolder text-dark">
-							{{ selected_vehicle.driverInformation[info] | titlecase }}
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-center">
-				<div class="btn-Area">
-					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
-						Close
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+<!-- ═══════MODALS═════════ -->
+
+<!-- Rate Slip Modal -->
+<div class="modal fade" id="ModalVehicleRates" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content vd-modal">
+      <div class="vd-modal__header">
+        <div class="vd-modal__header-top">
+          <h4 class="vd-modal__title">Estimated Rate Slip</h4>
+          <button type="button" class="vd-modal__close" data-dismiss="modal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="vd-modal__alert">
+          <i class="bi bi-info-circle-fill"></i>
+          Gratuity Included (hand tip extra at own discretion)
+        </div>
+      </div>
+      <div class="vd-modal__body">
+        <table class="vd-table">
+          <thead>
+            <tr><th>Rate Type</th><th>Rate</th><th>Amount</th></tr>
+          </thead>
+          <tbody *ngIf="quotebot_form.service_type == 'one_way' || quotebot_form.service_type == 'charter_tour'">
+            <tr *ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue">
+              <ng-container *ngIf="rate?.value?.rate_label != 'Gratuity'">
+                <td>{{ rate.value.rate_label }}</td>
+                <td>{{ currencySymbol }} {{ rate.value.baserate.toFixed(2) }}
+                  {{ (rate.value.multitple != undefined || rate.value.multiple == null) ? '' : 'x' }}
+                  {{ rate.value.multiple !== undefined ? rate.value.multiple : '' }}
+                </td>
+                <td>{{ currencySymbol }} {{ rate.value.amount }}</td>
+              </ng-container>
+            </tr>
+            <tr class="vd-table__total">
+              <td><strong>Total:</strong></td><td></td>
+              <td><strong>{{ currencySymbol }} {{ one_way_rates?.total }}</strong></td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="quotebot_form.service_type == 'round_trip'">
+            <tr *ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue">
+              <ng-container *ngIf="rate?.value?.rate_label != 'Gratuity'">
+                <td>{{ rate.value.rate_label }}</td>
+                <td>{{ currencySymbol }} {{ rate.value.baserate.toFixed(2) }}
+                  {{ (rate.value.multitple != undefined || rate.value.multiple == null) ? '' : 'x' }}
+                  {{ rate.value.multiple !== undefined ? rate.value.multiple : '' }}
+                </td>
+                <td>{{ currencySymbol }} {{ rate.value.amount }}</td>
+              </ng-container>
+            </tr>
+            <tr class="vd-table__total">
+              <td><strong>Total:</strong></td><td></td>
+              <td><strong>{{ currencySymbol }} {{ round_trip_rates?.total }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="vd-modal__footer">
+        <button class="vd-btn-modal-close" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-<div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities" tab-index="-1">
-	<div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<p class="text-org-light font-weight-bolder">
-					Vehicle Amenities
-				</p>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row" *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
-					<div class="col-md-12">
-						<p class="font-weight-bolder">
-							Chargeable Amenities
-						</p>
-						<ul id="chargeable-amenities" style="list-style-type: disc" class="d-flex flex-wrap">
-							<li [attr.id]="'ul-ch-list-item_' + amenity_index"
-								*ngFor="let amenity of selected_vehicle.amenities['chargeable']; index as amenity_index">
-								<span class="text-orange">{{currencySymbol}}</span>
-								{{ amenity.name }}
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="row" *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
-					<div class="col-md-12">
-						<p class="font-weight-bolder">
-							Non-Chargeable Amenities
-						</p>
-						<ul id="chargeable-amenities" style="list-style-type: disc" class="d-flex flex-wrap">
-							<li [attr.id]="'ul-noch-list-item_' + amenity_index"
-								*ngFor="let amenity of selected_vehicle.amenities['non-chargeable']; index as amenity_index">
-								{{ amenity.name }}
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="row"
-					*ngIf="selected_vehicle.amenities['chargeable'].length == 0 && selected_vehicle.amenities['non-chargeable'].length == 0">
-					<div class="col-md-12">
-						<p class="text-danger ml-4">
-							No Amenities found for this vehicle.
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-center">
-				<div class="btn-Area">
-					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
-						Close
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+<!-- Driver Details Modal -->
+<div class="modal fade" id="ModalDriverDetails" tabindex="-1" aria-hidden="true"
+     *ngIf="selected_vehicle.driverInformation">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content vd-modal">
+      <div class="vd-modal__header">
+        <div class="vd-modal__header-top">
+          <h4 class="vd-modal__title">Driver Details</h4>
+          <button type="button" class="vd-modal__close" data-dismiss="modal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+      <div class="vd-modal__body">
+        <div class="vd-driver">
+          <div class="vd-driver__img-col">
+            <img class="vd-driver__img" [src]="selected_vehicle.driverInformation.imageUrl" alt="Driver" />
+          </div>
+          <div class="vd-driver__name-col">
+            <p class="vd-driver__name">
+              <i class="bi bi-dash"></i>{{ selected_vehicle.name_initials }}.
+            </p>
+          </div>
+        </div>
+        <div class="vd-driver__rows">
+          <div class="vd-driver__row" *ngFor="let info of driver_info_display_keys">
+            <span class="vd-driver__lbl">{{ formatString(info) | titlecase }}</span>
+            <span class="vd-driver__val">{{ selected_vehicle.driverInformation[info] | titlecase }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="vd-modal__footer">
+        <button class="vd-btn-modal-close" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Amenities Modal -->
+<div class="modal fade" id="ModalAmenities" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content vd-modal">
+      <div class="vd-modal__header">
+        <div class="vd-modal__header-top">
+          <h4 class="vd-modal__title">Vehicle Amenities</h4>
+          <button type="button" class="vd-modal__close" data-dismiss="modal">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+      <div class="vd-modal__body">
+        <ng-container *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
+          <div class="vd-amenities__section">
+            <div class="vd-amenities__chips">
+              <span class="vd-amenities__chip vd-amenities__chip--free" 
+                    *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
+                <i class="bi bi-check-circle-fill"></i>
+                {{ amenity.name }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
+          <div class="vd-amenities__section" *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
+            <div class="vd-amenities__divider"></div>
+          </div>
+          <div class="vd-amenities__section">
+            <div class="vd-amenities__section-header">
+              <div class="vd-amenities__section-icon">
+                <i class="bi bi-star"></i>
+              </div>
+              <h5 class="vd-amenities__section-title">Premium Amenities</h5>
+            </div>
+            <div class="vd-amenities__chips">
+              <span class="vd-amenities__chip vd-amenities__chip--paid" 
+                    *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
+                <span class="vd-amenities__chip-price">{{ currencySymbol }}</span>
+                {{ amenity.name }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="vd-amenities__empty" 
+             *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
+                    selected_vehicle.amenities['non-chargeable'].length == 0">
+          <i class="bi bi-info-circle"></i>
+          <p>No amenities available for this vehicle.</p>
+        </div>
+      </div>
+      <div class="vd-modal__footer">
+        <button class="vd-btn-modal-close" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-scroll-to-top></app-scroll-to-top>
