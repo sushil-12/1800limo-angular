@@ -4,7 +4,8 @@
     <!-- ── PAGE HEADER ──────────────────────────────────── -->
     <div class="vd-header">
       <div class="vd-header__title-block">
-       
+        <p class="vd-header__eyebrow">Vehicle Details</p>
+        <h1 class="vd-header__title">Review your selection</h1>
       </div>
       <button type="button" class="vd-btn-back" (click)="backButton()">
         <i class="bi bi-arrow-left"></i>
@@ -139,19 +140,23 @@
         <div class="vd-card__actions">
           <button type="button" class="vd-btn-action"
             data-toggle="modal" data-target="#ModalVehicleRates">
+            <i class="bi bi-receipt"></i>
             Subtotals
           </button>
           <button type="button" class="vd-btn-action"
             data-toggle="modal" data-target="#ModalDriverDetails"
             *ngIf="selected_vehicle.driverInformation">
+            <i class="bi bi-person-badge"></i>
             Driver Info
           </button>
           <button type="button" class="vd-btn-action"
             data-toggle="modal" data-target="#ModalAmenities">
+            <i class="bi bi-stars"></i>
             Amenities
           </button>
           <button type="button" class="vd-btn-book" (click)="bookNow()">
-            Book Now 
+            Book Now
+            <i class="bi bi-arrow-right"></i>
           </button>
         </div>
 
@@ -290,8 +295,7 @@
               <i class="bi bi-send-fill"></i>
             </div>
             <div class="vd-map-card__heading">
-              <p class="vd-map-card__title">Outbound Route</p>
-              <p class="vd-map-card__sub">From pickup to drop-off</p>
+              <p class="vd-map-card__title">First Trip</p>
             </div>
             <div class="vd-map-card__stats">
               <div class="vd-map-stat">
@@ -389,8 +393,7 @@
               <i class="bi bi-arrow-return-left"></i>
             </div>
             <div class="vd-map-card__heading">
-              <p class="vd-map-card__title">Return Route</p>
-              <p class="vd-map-card__sub">From drop-off back to pickup</p>
+              <p class="vd-map-card__title">Return Trip</p>
             </div>
             <div class="vd-map-card__stats">
               <div class="vd-map-stat">
@@ -609,27 +612,45 @@
         </div>
       </div>
       <div class="vd-modal__body">
-        <ng-container *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
-          <p class="vd-amenities__group-title">Chargeable Amenities</p>
-          <ul class="vd-amenities__list">
-            <li *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
-              <span class="vd-amenities__currency">{{ currencySymbol }}</span> {{ amenity.name }}
-            </li>
-          </ul>
-        </ng-container>
         <ng-container *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
-          <p class="vd-amenities__group-title">Non-Chargeable Amenities</p>
-          <ul class="vd-amenities__list">
-            <li *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
-              {{ amenity.name }}
-            </li>
-          </ul>
+          <div class="vd-amenities__section">
+            <div class="vd-amenities__chips">
+              <span class="vd-amenities__chip vd-amenities__chip--free" 
+                    *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
+                <i class="bi bi-check-circle-fill"></i>
+                {{ amenity.name }}
+              </span>
+            </div>
+          </div>
         </ng-container>
-        <p class="text-danger"
-           *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
-                  selected_vehicle.amenities['non-chargeable'].length == 0">
-          No amenities found for this vehicle.
-        </p>
+
+        <ng-container *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
+          <div class="vd-amenities__section" *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
+            <div class="vd-amenities__divider"></div>
+          </div>
+          <div class="vd-amenities__section">
+            <div class="vd-amenities__section-header">
+              <div class="vd-amenities__section-icon">
+                <i class="bi bi-star"></i>
+              </div>
+              <h5 class="vd-amenities__section-title">Premium Amenities</h5>
+            </div>
+            <div class="vd-amenities__chips">
+              <span class="vd-amenities__chip vd-amenities__chip--paid" 
+                    *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
+                <span class="vd-amenities__chip-price">{{ currencySymbol }}</span>
+                {{ amenity.name }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="vd-amenities__empty" 
+             *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
+                    selected_vehicle.amenities['non-chargeable'].length == 0">
+          <i class="bi bi-info-circle"></i>
+          <p>No amenities available for this vehicle.</p>
+        </div>
       </div>
       <div class="vd-modal__footer">
         <button class="vd-btn-modal-close" data-dismiss="modal" type="button">Close</button>

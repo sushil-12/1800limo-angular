@@ -205,6 +205,8 @@ export class VehicleDetailsComponent implements OnInit {
 	}
 
 	initMap(): any {
+		if (!this.map?.googleMap) return;
+
 		const directionsService = new google.maps.DirectionsService();
 		const directionsRenderer = new google.maps.DirectionsRenderer();
 		directionsRenderer.setMap(this.map.googleMap!);
@@ -223,6 +225,9 @@ export class VehicleDetailsComponent implements OnInit {
 			waypoints,
 			travelMode: google.maps.TravelMode.DRIVING,
 		};
+
+		this.distance = 0;
+		this.duration = 0;
 
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK && response) {
@@ -260,6 +265,9 @@ export class VehicleDetailsComponent implements OnInit {
 			waypoints,
 			travelMode: google.maps.TravelMode.DRIVING,
 		};
+
+		this.returnDistance = 0;
+		this.returnDuration = 0;
 
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK && response) {
@@ -486,14 +494,19 @@ export class VehicleDetailsComponent implements OnInit {
 				setTimeout(() => {
 					this.cdr.detectChanges(); // force DOM update
 
+					if (this.map?.googleMap) {
+						this.initMap();
+					}
 					if (this.returnMap?.googleMap) {
-					this.initReturnMap();
+						this.initReturnMap();
 					} else {
-					console.warn('returnMap not ready yet');
+						console.warn('returnMap not ready yet');
 					}
 				}, 300);
 				break
 			case 'one_way':
+			case 'oneway':
+			case 'charter_tour':
 				obj = { ...this.quotebot_form }
 				obj['pickup_airport_lat'] = Number(this.quotebot_form?.pickup_airport_lat)
 				obj['pickup_airport_long'] = Number(this.quotebot_form?.pickup_airport_long)
@@ -503,10 +516,6 @@ export class VehicleDetailsComponent implements OnInit {
 				obj['pickup_address_long'] = Number(this.quotebot_form?.pickup_address_long)
 				obj['dropoff_address_lat'] = Number(this.quotebot_form?.dropoff_address_lat)
 				obj['dropoff_address_long'] = Number(this.quotebot_form?.dropoff_address_long)
-			case 'oneway':
-				obj = { ...this.quotebot_form }
-			case 'charter_tour':
-				obj = { ...this.quotebot_form }
 				if (this.quotebot_form?.location_info?.length > 1) {
 					obj['location_info'].pop()
 				}
@@ -515,6 +524,14 @@ export class VehicleDetailsComponent implements OnInit {
 						delete obj[item]
 					}
 				}
+				setTimeout(() => {
+					this.cdr.detectChanges();
+					if (this.map?.googleMap) {
+						this.initMap();
+					} else {
+						console.warn('map not ready yet');
+					}
+				}, 300);
 				break
 		}
 		obj['service_type'] = type
