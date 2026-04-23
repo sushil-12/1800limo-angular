@@ -416,13 +416,6 @@ input::-webkit-input-placeholder {
 	font-size: 19px;
 }
 
-.view-button {
-	// background-color: #5373aa;
-	color: #fff !important;
-	padding: 5px 8px !important;
-	border-radius: 3rem !important;
-}
-
 .status-pill {
 	display: inline-block;
 	font-family: inherit;
@@ -972,4 +965,8 @@ button.view-button {
         border-color: #d97e20 !important;
         box-shadow: 0px 4px 8px rgba(242, 148, 57, 0.4) !important;
     }
+}
+
+button.view-button.dropdown-toggle::after {
+    font-size: 17px !important;
 }
