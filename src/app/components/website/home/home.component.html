@@ -528,8 +528,8 @@
 											</mat-form-field> -->
 											<ng-container *ngIf="QBForm?.service_type?.value === 'round_trip'; else oneWayPickupDate">
 												<div class="qb-date-display-trigger"
-													[class.errorValid]="submitted && QBForm?.pickup_date?.errors">
-													<i class="far fa-calendar-alt qb-date-display-trigger__icon"></i>
+													[class.errorValid]="submitted && QBForm?.pickup_date?.errors"
+													(click)="openRoundTripRangePicker('pickup'); $event.stopPropagation()">
 													<span *ngIf="roundTripRange?.startDate || QBForm?.pickup_date?.value; else pickupPlaceholder" class="qb-date-display-trigger__value">
 														{{ formatDateDisplay(roundTripRange?.startDate || QBForm?.pickup_date?.value) }}
 													</span>
@@ -538,6 +538,7 @@
 													</ng-template>
 													<input type="text"
 														#drpInput
+														#roundTripRangeInput
 														ngxDaterangepickerMd
 														[(ngModel)]="roundTripRange"
 														[ngModelOptions]="{standalone: true}"
@@ -593,11 +594,6 @@
 													{{ time?.display_value }}
 												</option>
 											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
 										</div>
 										<div *ngIf="submitted && QBForm?.pickup_time?.errors" class="text-danger">
 											<div *ngIf="QBForm?.pickup_time?.errors?.required">Pickup Time is required
@@ -1023,13 +1019,29 @@
 									<div class="col-6 col-md-6">
 										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
 										<div class="pickupdate">
-											<div class="qb-range-trigger qb-range-trigger--return"
+											<div class="qb-date-display-trigger"
 												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
-												(click)="drpInput.click()">
-												<i class="far fa-calendar-alt qb-range-trigger__icon"></i>
-												<span class="qb-range-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatDateDisplay(QBForm?.return_pickup_date?.value) }}</span>
-												<span class="qb-range-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Select return date</span>
+												(click)="openRoundTripRangePicker('return '); $event.stopPropagation()">
+												<span class="qb-date-display-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatDateDisplay(QBForm?.return_pickup_date?.value) }}</span>
+												<span class="qb-date-display-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Select return date</span>
 											</div>
+											<input type="text"
+													#drpInput
+													#roundTripRangeInput
+													ngxDaterangepickerMd
+													[(ngModel)]="roundTripRange"
+													[ngModelOptions]="{standalone: true}"
+													[autoApply]="true"
+													[alwaysShowCalendars]="true"
+													[showDropdowns]="true"
+													[linkedCalendars]="true"
+													[minDate]="minDateDayjs"
+													[locale]="dateRangeLocale"
+													startKey="startDate"
+													endKey="endDate"
+													(datesUpdated)="onRoundTripRangeChange($event)"
+													class="qb-drp-input qb-drp-input--overlay"
+													readonly />
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
 											class="text-danger">
@@ -1052,11 +1064,6 @@
 													{{ time?.display_value }}
 												</option>
 											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
 											class="text-danger">
