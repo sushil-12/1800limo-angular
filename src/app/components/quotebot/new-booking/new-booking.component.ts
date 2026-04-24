@@ -13,6 +13,7 @@ import { CommonService } from '../../../services/common.service';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
 import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBookingAddressSyncControl, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
+import { AmenitiesService } from 'src/app/services/amenities.service';
 
 declare var $: any
 
@@ -176,7 +177,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 		private $routeurl: ActivatedRoute,
 		private customValidator: CustomvalidationService,
 		private commonServices: CommonService,
-		private el: ElementRef
+		private el: ElementRef,
+		 private amenitiesService: AmenitiesService
 	) {
 		console.log('hi---->> in constructor')
 	}
@@ -277,7 +279,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 			return_dropoff_airport_longitude: this.BookingForm.get('return_dropoff_airport_longitude').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
-			selected_amenities: [...this.amenities],
+			selected_amenities: this.amenitiesService.getCurrentValue(),
 			return_selected_amenities: this.service_type === 'round_trip' ? [...this.amenities] : [],
 		}
 		let vehicle_id = this.is_master_vehicle ? this.master_vehicle_id : this.booking_data?.vehicle_id

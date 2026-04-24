@@ -4,6 +4,7 @@ import { AdminService } from "src/app/services/admin.service";
 
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
+import { AmenitiesService } from "src/app/services/amenities.service";
 
 @Component({
 	selector: "app-rates-form",
@@ -102,7 +103,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		private $form: FormBuilder,
 		private $api: AdminService,
 		private $routeurl: ActivatedRoute,
-
+         private amenitiesService: AmenitiesService
 	) { }
 
 	ngOnInit(): void {
@@ -730,6 +731,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 		}
 		data['is_master_vehicle'] = shouldUseMasterVehicle;
+
+		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
+
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			// && this.affiliate_type != 'loose_affiliate'
 			console.log("in this.$api.fetchRatesByAffiliateVeh", response)

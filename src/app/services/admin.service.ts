@@ -6,6 +6,7 @@ import * as moment from 'moment';
 
 
 import { BehaviorSubject } from 'rxjs';
+import { AmenitiesService } from './amenities.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -20,7 +21,7 @@ export class AdminService {
 
 
 	private serverUrl = environment.serverUrl;
-	constructor(private httpClient: HttpClient, private authService: AuthService) {
+	constructor(private httpClient: HttpClient, private authService: AuthService,  private amenitiesService: AmenitiesService) {
 		this.createBookingGetData().subscribe((response: any) => {
 			if (response && response.data) {
 				const data = response.data;
@@ -1254,8 +1255,10 @@ export class AdminService {
 	// 	.set('is_master_vehicle' , data?.is_master_vehicle);
 	fetchRatesByAffiliateVeh(vehicle_id, data) {
 		data['vehicle_id'] = vehicle_id
+		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`, data)
 	}
+	
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
 	}

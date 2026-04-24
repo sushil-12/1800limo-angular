@@ -6,6 +6,7 @@ import { WebsiteService } from '../../../services/website.service';
 import { AirportIndexService, LocalAirportOption } from '../../../services/airport-index.service';
 import { AuthService } from '../../../services/auth.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
+import { AmenitiesService } from '../../../services/amenities.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -157,7 +158,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	returnExtraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
 	extraStopAddressData: Record<string, any[]> = {};
 
-
 	constructor(
 		private ngZone: NgZone,
 		private formBuilder: FormBuilder,
@@ -172,8 +172,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private elementRef: ElementRef,
 		private titleService: Title,
 		private metaService: Meta,
-		private airportIndex: AirportIndexService
+		private airportIndex: AirportIndexService,
+		private amenitiesService: AmenitiesService 
 	) { }
+
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
 		// Allow: backspace, delete, tab, escape, enter, + symbol (43)
@@ -2111,10 +2113,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	// ---- Amenities ----
-
 	toggleAmenity(id: number) {
 		const idx = this.selectedAmenities.indexOf(id);
-		idx === -1 ? this.selectedAmenities.push(id) : this.selectedAmenities.splice(idx, 1);
+		if (idx === -1) {
+			this.selectedAmenities.push(id);
+		} else {
+			this.selectedAmenities.splice(idx, 1);
+		}
+		
+		this.amenitiesService.updateSelectedAmenities([...this.selectedAmenities]);
 	}
 
 	isAmenitySelected(id: number): boolean {
