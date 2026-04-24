@@ -147,7 +147,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	progressWidth: number = 25; // Progress line width percentage
 	private quoteBotAutofillSyncInterval?: ReturnType<typeof setInterval>;
 	private quoteBotAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
-	private roundTripPickerPanelSyncTimeout?: ReturnType<typeof setTimeout>;
+
 
 	// Extra stops & amenities
 	amenitiesList: any[] = [];
@@ -3115,12 +3115,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	private primeRoundTripPickerFromForm(): void {
 		const picker = this.roundTripRangePicker?.picker;
+		console.log('FUNC: primeRoundTripPickerFromForm - Priming round trip picker from form with picker', picker);
 		if (!picker) {
+			console.log('FUNC: primeRoundTripPickerFromForm - No picker instance available, cannot prime RETURNING');
 			return;
 		}
 
 		const pickupDate = this.getRoundTripPickupValue() || this.minDateDayjs.clone();
 		picker.setStartDate(pickupDate);
+
+		console.log('FUNC: primeRoundTripPickerFromForm - ', pickupDate, this.getRoundTripPickupValue(), this.roundTripRange?.startDate);
 
 		const returnDate = this.getRoundTripReturnValue();
 		if (returnDate) {
@@ -3130,10 +3134,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			picker.pickingDate = true;
 			picker.updateView();
 		}
+		console.log('FUNC: returnDate - ', returnDate, this.getRoundTripReturnValue(), this.roundTripRange?.endDate);
+
 	}
 
 	private applyRoundTripPickerTarget(target: 'pickup' | 'return'): void {
 		const picker = this.roundTripRangePicker?.picker;
+		console.log('Applying round trip picker target', picker);
 		if (!picker) {
 			return;
 		}
@@ -3158,19 +3165,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	openRoundTripRangePicker(target: 'pickup' | 'return' = 'pickup'): void {
 		const pickerDirective = this.roundTripRangePicker;
-		const picker = pickerDirective?.picker;
-		if (!pickerDirective || !picker) {
+		
+		console.log('Opening round trip picker with target', pickerDirective);
+		if (!pickerDirective) {
 			return;
 		}
 
-		if (!picker.isShown) {
+		if (!pickerDirective.picker.isShown) {
+			console.log('pickerDirective.picker', pickerDirective.picker);
 			this.primeRoundTripPickerFromForm();
 			pickerDirective.open();
 		}
 
 		this.applyRoundTripPickerTarget(target);
-		this.scheduleRoundTripPickerPanelSync();
 	}
+
+	
 
 	onRoundTripPickerStartDateChanged(): void {
 		const picker = this.roundTripRangePicker?.picker;
@@ -3187,82 +3197,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.scheduleRoundTripPickerPanelSync();
 	}
 
-	private scheduleRoundTripPickerPanelSync(): void {
-		if (this.roundTripPickerPanelSyncTimeout) {
-			clearTimeout(this.roundTripPickerPanelSyncTimeout);
-		}
-
-		this.roundTripPickerPanelSyncTimeout = setTimeout(() => {
-			this.syncRoundTripPickerPanelSummary();
-		}, 0);
-	}
-
-	private syncRoundTripPickerPanelSummary(): void {
-		const picker = this.roundTripRangePicker?.picker;
-		const panel = picker?.pickerContainer?.nativeElement as HTMLElement | undefined;
-		if (!picker || !panel) {
-			return;
-		}
-
-		let summary = panel.querySelector('.qb-drp-panel-summary') as HTMLDivElement | null;
-		if (!summary) {
-			summary = document.createElement('div');
-			summary.className = 'qb-drp-panel-summary';
-			summary.innerHTML = `
-				<div class="qb-date-display-trigger__summary">
-					<button type="button" class="qb-date-display-trigger__segment qb-date-display-trigger__segment--pickup qb-date-display-trigger__segment--action" data-target="pickup">
-						<span class="qb-date-display-trigger__segment-label">Pickup</span>
-						<span class="qb-date-display-trigger__segment-value"></span>
-					</button>
-					<div class="qb-date-display-trigger__summary-arrow" aria-hidden="true">
-						<i class="fas fa-arrow-right"></i>
-					</div>
-					<button type="button" class="qb-date-display-trigger__segment qb-date-display-trigger__segment--return qb-date-display-trigger__segment--action" data-target="return">
-						<span class="qb-date-display-trigger__segment-label">Return</span>
-						<span class="qb-date-display-trigger__segment-value"></span>
-					</button>
-				</div>
-			`;
-			panel.insertBefore(summary, panel.firstChild);
-		}
-
-		const pickupButton = summary.querySelector('[data-target="pickup"]') as HTMLButtonElement | null;
-		const returnButton = summary.querySelector('[data-target="return"]') as HTMLButtonElement | null;
-		const pickupValue = pickupButton?.querySelector('.qb-date-display-trigger__segment-value') as HTMLSpanElement | null;
-		const returnValue = returnButton?.querySelector('.qb-date-display-trigger__segment-value') as HTMLSpanElement | null;
-		const activeTarget = picker.endDate ? this.roundTripSelectionTarget : 'return';
-
-		if (!pickupButton || !returnButton || !pickupValue || !returnValue) {
-			return;
-		}
-
-		pickupButton.onclick = (event) => {
-			event.preventDefault();
-			event.stopPropagation();
-			this.applyRoundTripPickerTarget('pickup');
-			this.scheduleRoundTripPickerPanelSync();
-		};
-
-		returnButton.onclick = (event) => {
-			event.preventDefault();
-			event.stopPropagation();
-			this.applyRoundTripPickerTarget('return');
-			this.scheduleRoundTripPickerPanelSync();
-		};
-
-		const pickupText = picker.startDate ? this.formatDateDisplay(picker.startDate) : 'Select pickup date';
-		const returnText = picker.endDate ? this.formatDateDisplay(picker.endDate) : 'Select return date';
-
-		pickupValue.textContent = pickupText;
-		returnValue.textContent = returnText;
-
-		pickupButton.classList.toggle('qb-date-display-trigger__segment--filled', !!picker.startDate);
-		returnButton.classList.toggle('qb-date-display-trigger__segment--filled', !!picker.endDate);
-		pickupButton.classList.toggle('qb-date-display-trigger__segment--active', activeTarget === 'pickup');
-		returnButton.classList.toggle('qb-date-display-trigger__segment--active', activeTarget === 'return');
-		pickupValue.classList.toggle('qb-date-display-trigger__segment-value--placeholder', !picker.startDate);
-		returnValue.classList.toggle('qb-date-display-trigger__segment-value--placeholder', !picker.endDate);
-	}
+	private scheduleRoundTripPickerPanelSync(): void {}
 
 	locationInfo(rows: Array<any>, index: number) {
 		let group = this.formBuilder.group({
