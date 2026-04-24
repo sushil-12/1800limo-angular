@@ -255,7 +255,7 @@
 											<div *ngIf="submitted && (QBForm?.pickup_address?.errors || QBForm?.pickup_airport?.errors); else PickupAddressError"
 												class="text-danger">
 												<div *ngIf="QBForm?.pickup_address?.errors?.required || QBForm?.pickup_airport?.errors?.required">
-													{{ QBForm?.pickup_type?.value === 'airport' ? 'Pickup Airport is required' : 'Pickup Address is required' }}
+													{{ QBForm?.pickup_type?.value === 'airport' ? 'Pickup Address is required' : 'Pickup Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="pickup_address_lat">
@@ -264,7 +264,7 @@
 												<div *ngIf="submitted && (QBForm?.pickup_address_lat?.errors || QBForm?.pickup_airport_lat?.errors);"
 													class="text-danger">
 													<div *ngIf="QBForm?.pickup_address_lat?.errors?.required || QBForm?.pickup_airport_lat?.errors?.required">
-														{{ QBForm?.pickup_type?.value === 'airport' ? 'Please select a valid Pickup Airport' : 'Please enter valid Pickup Address' }}
+														{{ QBForm?.pickup_type?.value === 'airport' ? 'Please select a valid Pickup Address' : 'Please enter valid Pickup Address' }}
 													</div>
 												</div>
 											</ng-template>
@@ -527,11 +527,32 @@
 												<mat-datepicker #picker1></mat-datepicker>
 											</mat-form-field> -->
 											<ng-container *ngIf="QBForm?.service_type?.value === 'round_trip'; else oneWayPickupDate">
-												<div class="qb-range-trigger" (click)="openCal('pickup'); $event.stopPropagation()"
-													[class.errorValid]="submitted && QBForm?.pickup_date?.errors">
-													<i class="far fa-calendar-alt qb-range-trigger__icon"></i>
-													<span class="qb-range-trigger__value" *ngIf="QBForm?.pickup_date?.value">{{ formatRangeDisplay(QBForm?.pickup_date?.value) }}</span>
-													<span class="qb-range-trigger__placeholder" *ngIf="!QBForm?.pickup_date?.value">Pickup Date</span>
+												<div class="qb-date-display-trigger"
+													[class.errorValid]="submitted && QBForm?.pickup_date?.errors"
+													(click)="openRoundTripRangePicker('pickup'); $event.stopPropagation()">
+													<span *ngIf="roundTripRange?.startDate || QBForm?.pickup_date?.value; else pickupPlaceholder" class="qb-date-display-trigger__value">
+														{{ formatDateDisplay(roundTripRange?.startDate || QBForm?.pickup_date?.value) }}
+													</span>
+													<ng-template #pickupPlaceholder>
+														<span class="qb-date-display-trigger__placeholder">Select pickup date</span>
+													</ng-template>
+													<input type="text"
+														#drpInput
+														#roundTripRangeInput
+														ngxDaterangepickerMd
+														[(ngModel)]="roundTripRange"
+														[ngModelOptions]="{standalone: true}"
+														[autoApply]="true"
+														[alwaysShowCalendars]="true"
+														[showDropdowns]="true"
+														[linkedCalendars]="true"
+														[minDate]="minDateDayjs"
+														[locale]="dateRangeLocale"
+														startKey="startDate"
+														endKey="endDate"
+														(datesUpdated)="onRoundTripRangeChange($event)"
+														class="qb-drp-input qb-drp-input--overlay"
+														readonly />
 												</div>
 											</ng-container>
 											<ng-template #oneWayPickupDate>
@@ -573,11 +594,6 @@
 													{{ time?.display_value }}
 												</option>
 											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
 										</div>
 										<div *ngIf="submitted && QBForm?.pickup_time?.errors" class="text-danger">
 											<div *ngIf="QBForm?.pickup_time?.errors?.required">Pickup Time is required
@@ -696,7 +712,7 @@
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Airport' : (QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port')"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Address' : (QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address' : 'Return Pickup Address')"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -773,7 +789,7 @@
 											<div *ngIf="submitted && (QBForm?.return_pickup_address?.errors || QBForm?.return_pickup_airport?.errors); else DropoffAddressError"
 												class="text-danger">
 												<div *ngIf="QBForm?.return_pickup_address?.errors?.required || QBForm?.return_pickup_airport?.errors?.required">
-													{{ QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Airport is required' : 'Return Pickup Address is required' }}
+													{{ QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Address is required' : 'Return Pickup Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="return_pickup_address_lat">
@@ -782,7 +798,7 @@
 												<div *ngIf="submitted && (QBForm?.return_pickup_address_lat?.errors || QBForm?.return_pickup_airport_lat?.errors);"
 													class="text-danger">
 													<div *ngIf="QBForm?.return_pickup_address_lat?.errors?.required || QBForm?.return_pickup_airport_lat?.errors?.required">
-														{{ QBForm?.dropoff_type?.value === 'airport' ? 'Please select a valid Return Pickup Airport' : 'Please enter valid Return Pickup Address' }}
+														{{ QBForm?.dropoff_type?.value === 'airport' ? 'Please select a valid Return Pickup Address' : 'Please enter valid Return Pickup Address' }}
 													</div>
 												</div>
 											</ng-template>
@@ -888,7 +904,7 @@
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Return Dropoff Airport' : (QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port')"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Return Dropoff Address' : (QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address' : 'Return Dropoff Address')"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -1003,24 +1019,35 @@
 									<div class="col-6 col-md-6">
 										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
 										<div class="pickupdate">
-											<div class="qb-range-trigger" (click)="openCal('return'); $event.stopPropagation()"
-												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors">
-												<i class="far fa-calendar-alt qb-range-trigger__icon"></i>
-												<span class="qb-range-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatRangeDisplay(QBForm?.return_pickup_date?.value) }}</span>
-												<span class="qb-range-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Return Pickup Date</span>
+											<div class="qb-date-display-trigger"
+												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
+												(click)="openRoundTripRangePicker('return '); $event.stopPropagation()">
+												<span class="qb-date-display-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatDateDisplay(QBForm?.return_pickup_date?.value) }}</span>
+												<span class="qb-date-display-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Select return date</span>
 											</div>
+											<input type="text"
+													#drpInput
+													#roundTripRangeInput
+													ngxDaterangepickerMd
+													[(ngModel)]="roundTripRange"
+													[ngModelOptions]="{standalone: true}"
+													[autoApply]="true"
+													[alwaysShowCalendars]="true"
+													[showDropdowns]="true"
+													[linkedCalendars]="true"
+													[minDate]="minDateDayjs"
+													[locale]="dateRangeLocale"
+													startKey="startDate"
+													endKey="endDate"
+													(datesUpdated)="onRoundTripRangeChange($event)"
+													class="qb-drp-input qb-drp-input--overlay"
+													readonly />
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
 											class="text-danger">
-											<div
-												*ngIf="QBForm?.return_pickup_date?.errors?.matDatepickerParse; else returnPickupDateRoundError">
-												Return Pickup Date is not valid
+											<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
+												Return Pickup Date is required
 											</div>
-											<ng-template #returnPickupDateRoundError>
-												<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
-													Return Pickup Date is required
-												</div>
-											</ng-template>
 										</div>
 									</div>
 
@@ -1037,11 +1064,6 @@
 													{{ time?.display_value }}
 												</option>
 											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
 											class="text-danger">
@@ -1160,71 +1182,6 @@
 
 							</form>
 
-							<!-- Round-trip dual-month calendar -->
-							<div class="qb-cal-backdrop" *ngIf="calOpen" (click)="closeCal()"></div>
-							<div class="qb-cal" *ngIf="calOpen" #rangeCalendarWrap (click)="$event.stopPropagation()">
-
-								<!-- Header -->
-								<div class="qb-cal__header">
-									<span class="qb-cal__title">Select dates</span>
-									<button type="button" class="qb-cal__close" (click)="closeCal()" aria-label="Close">&times;</button>
-								</div>
-
-								<!-- Pickup / Return chips -->
-								<div class="qb-cal__chips">
-									<div class="qb-cal__chip" [class.qb-cal__chip--active]="calPicking === 'pickup'"
-										(click)="calSwitchTo('pickup'); $event.stopPropagation()">
-										<span class="qb-cal__chip-label">Pickup</span>
-										<span class="qb-cal__chip-value" *ngIf="calStart; else noStart">{{ calFmt(calStart) }}</span>
-										<ng-template #noStart><span class="qb-cal__chip-value qb-cal__chip-value--empty">Pick a date</span></ng-template>
-									</div>
-									<i class="fas fa-long-arrow-alt-right qb-cal__arrow"></i>
-									<div class="qb-cal__chip" [class.qb-cal__chip--active]="calPicking === 'return'"
-										(click)="calSwitchTo('return'); $event.stopPropagation()">
-										<span class="qb-cal__chip-label">Return</span>
-										<span class="qb-cal__chip-value" *ngIf="calEnd; else noEnd">{{ calFmt(calEnd) }}</span>
-										<ng-template #noEnd><span class="qb-cal__chip-value qb-cal__chip-value--empty">Pick a date</span></ng-template>
-									</div>
-								</div>
-
-								<!-- Month grids -->
-								<div class="qb-cal__body">
-									<button type="button" class="qb-cal__nav" (click)="calPrev()" aria-label="Previous">
-										<i class="fas fa-chevron-left"></i>
-									</button>
-									<div class="qb-cal__months">
-										<div class="qb-cal__month" *ngFor="let month of [calLeftMonth, calRightMonth]">
-											<div class="qb-cal__month-title">{{ calMonthTitle(month) }}</div>
-											<div class="qb-cal__weekdays">
-												<span *ngFor="let w of calWeekdays">{{ w }}</span>
-											</div>
-											<div class="qb-cal__grid">
-												<div class="qb-cal__row" *ngFor="let week of calMonthGrid(month)">
-													<button *ngFor="let cell of week" type="button"
-														class="qb-cal__day"
-														[class.qb-cal__day--other]="!cell.inMonth"
-														[class.qb-cal__day--disabled]="cell.disabled"
-														[class.qb-cal__day--start]="calIsStart(cell.date)"
-														[class.qb-cal__day--end]="calIsEnd(cell.date)"
-														[class.qb-cal__day--in]="calIsInRange(cell.date)"
-														[disabled]="cell.disabled || !cell.inMonth"
-														(click)="calPickDate(cell.date)">
-														{{ cell.date.getDate() }}
-													</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<button type="button" class="qb-cal__nav" (click)="calNext()" aria-label="Next">
-										<i class="fas fa-chevron-right"></i>
-									</button>
-								</div>
-
-								<!-- Hint -->
-								<div class="qb-cal__hint">
-									{{ calPicking === 'pickup' ? 'Tap a date to set pickup' : 'Tap a date to set return' }}
-								</div>
-							</div>
 							<div id="search-button-container">
 								<div id="search-button-box" class="pb-3 pb-md-1">
 									<button type="submit" class="three-d-button qb-cta-btn" tabindex="1" (click)="fileTheQuote()"

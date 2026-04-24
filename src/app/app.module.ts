@@ -88,6 +88,7 @@ import { LiveRideTrackingComponent } from './components/public/live-ride-trackin
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { PrivacyPolicyComponent } from './components/website/privacy-policy/privacy-policy.component';
 import { DeliveryMembershipTCComponent } from './components/website/delivery-membership-t-c/delivery-membership-t-c.component';
 import { ClientTCComponent } from './components/website/client-t-c/client-t-c.component';
@@ -175,7 +176,8 @@ import { BlogDetailComponent } from './components/website/blog-detail/blog-detai
 		MatRadioModule,
 		NgSelectModule,
 		NgxChartsModule,
-		BsDatepickerModule
+		BsDatepickerModule,
+		NgxDaterangepickerMd.forRoot()
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
