@@ -176,10 +176,14 @@
             <i class="bi bi-send-fill"></i>
           </div>
           <div class="vd-map-card__heading">
-            <p class="vd-map-card__title">Trip Route</p>
-            <p class="vd-map-card__sub">From pickup to drop-off</p>
+            <p class="vd-map-card__title">
+              {{ quotebot_form?.service_type === 'charter_tour' ? 'Pickup Location' : 'Trip Route' }}
+            </p>
+            <p class="vd-map-card__sub">
+              {{ quotebot_form?.service_type === 'charter_tour' ? 'Charter / Tour — hourly service' : 'From pickup to drop-off' }}
+            </p>
           </div>
-          <div class="vd-map-card__stats">
+          <div class="vd-map-card__stats" *ngIf="quotebot_form?.service_type !== 'charter_tour'">
             <div class="vd-map-stat">
               <i class="bi bi-signpost-2-fill"></i>
               <span>{{ convertToMi(distance) }} mi / {{ convertToKm(distance) }} km</span>
@@ -253,21 +257,23 @@
                 </div>
               </ng-template>
 
-              <!-- Dropoff Airport or Address -->
-              <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">
+              <!-- Dropoff Airport or Address (hidden for charter — no fixed destination) -->
+              <ng-container *ngIf="quotebot_form?.service_type !== 'charter_tour'">
+                <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">
+                </ng-container>
+                <ng-template #sp_dropair>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Airport</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.other_details.dropoff_airport_name }}</span>
+                  </div>
+                </ng-template>
+                <ng-template #sp_dropadd>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Address</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.dropoff_address }}</span>
+                  </div>
+                </ng-template>
               </ng-container>
-              <ng-template #sp_dropair>
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Dropoff Airport</span>
-                  <span class="vd-detail-cell__val">{{ quotebot_form.other_details.dropoff_airport_name }}</span>
-                </div>
-              </ng-template>
-              <ng-template #sp_dropadd>
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Dropoff Address</span>
-                  <span class="vd-detail-cell__val">{{ quotebot_form.dropoff_address }}</span>
-                </div>
-              </ng-template>
             </div>
           </div>
 

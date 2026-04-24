@@ -207,11 +207,21 @@ export class VehicleDetailsComponent implements OnInit {
 	initMap(): any {
 		if (!this.map?.googleMap) return;
 
+		const origin = this.getOrigin();
+
+		if (this.quotebot_form.service_type === 'charter_tour') {
+			this.distance = 0;
+			this.duration = 0;
+			this.map.googleMap.setCenter(origin);
+			this.map.googleMap.setZoom(13);
+			new google.maps.Marker({ position: origin, map: this.map.googleMap });
+			return;
+		}
+
 		const directionsService = new google.maps.DirectionsService();
 		const directionsRenderer = new google.maps.DirectionsRenderer();
 		directionsRenderer.setMap(this.map.googleMap!);
 
-		const origin = this.getOrigin();
 		const destination = this.getDestination();
 
 		const waypoints: google.maps.DirectionsWaypoint[] = (this.quotebot_form.extra_stops || []).map((stop: any) => ({
