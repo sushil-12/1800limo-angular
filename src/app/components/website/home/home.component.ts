@@ -2091,7 +2091,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	fillExtraStop(index: number, address: string, lat: number, lng: number, isReturn: boolean = false) {
 		const stops = this.getExtraStops(isReturn);
 		if (stops[index]) {
-			stops[index] = { address, latitude: lat, longitude: lng };
+			stops[index].address = address;
+			stops[index].latitude = lat;
+			stops[index].longitude = lng;
 			this.persistQuoteBotState();
 		}
 	}

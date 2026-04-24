@@ -614,6 +614,9 @@
       <div class="vd-modal__body">
         <ng-container *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
           <div class="vd-amenities__section">
+             <div class="vd-amenities__section-header">
+              Non-Chargable Amenities
+            </div>
             <div class="vd-amenities__chips">
               <span class="vd-amenities__chip vd-amenities__chip--free" 
                     *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
@@ -630,13 +633,10 @@
           </div>
           <div class="vd-amenities__section">
             <div class="vd-amenities__section-header">
-              <div class="vd-amenities__section-icon">
-                <i class="bi bi-star"></i>
-              </div>
-              <h5 class="vd-amenities__section-title">Premium Amenities</h5>
+              Chargable Amenities
             </div>
             <div class="vd-amenities__chips">
-              <span class="vd-amenities__chip vd-amenities__chip--paid" 
+              <span class="vd-amenities__chip vd-amenities__chip--free" 
                     *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
                 <span class="vd-amenities__chip-price">{{ currencySymbol }}</span>
                 {{ amenity.name }}
