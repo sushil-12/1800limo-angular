@@ -3957,6 +3957,11 @@ div#google_translate_element_home_mobile {
 	&:hover { border-color: #d7d7d7; }
 }
 
+.qb-range-trigger--return {
+	cursor: pointer;
+	&:hover { border-color: #0d2a5c; }
+}
+
 // ── Round-trip date display wrapper (shows only start date) ──────────────
 .qb-date-display-trigger {
 	position: relative;

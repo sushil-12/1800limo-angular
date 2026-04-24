@@ -530,13 +530,14 @@
 												<div class="qb-date-display-trigger"
 													[class.errorValid]="submitted && QBForm?.pickup_date?.errors">
 													<i class="far fa-calendar-alt qb-date-display-trigger__icon"></i>
-													<span *ngIf="roundTripRange?.startDate; else pickupPlaceholder" class="qb-date-display-trigger__value">
-														{{ formatDateDisplay(roundTripRange.startDate) }}
+													<span *ngIf="roundTripRange?.startDate || QBForm?.pickup_date?.value; else pickupPlaceholder" class="qb-date-display-trigger__value">
+														{{ formatDateDisplay(roundTripRange?.startDate || QBForm?.pickup_date?.value) }}
 													</span>
 													<ng-template #pickupPlaceholder>
 														<span class="qb-date-display-trigger__placeholder">Select pickup date</span>
 													</ng-template>
 													<input type="text"
+														#drpInput
 														ngxDaterangepickerMd
 														[(ngModel)]="roundTripRange"
 														[ngModelOptions]="{standalone: true}"
@@ -715,7 +716,7 @@
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Address' : (QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port')"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Address' : (QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address' : 'Return Pickup Address')"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -907,7 +908,7 @@
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Return Dropoff Address' : (QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port')"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Return Dropoff Address' : (QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address' : 'Return Dropoff Address')"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -1022,11 +1023,12 @@
 									<div class="col-6 col-md-6">
 										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
 										<div class="pickupdate">
-											<div class="qb-range-trigger qb-range-trigger--readonly"
-												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors">
+											<div class="qb-range-trigger qb-range-trigger--return"
+												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
+												(click)="drpInput.click()">
 												<i class="far fa-calendar-alt qb-range-trigger__icon"></i>
 												<span class="qb-range-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatDateDisplay(QBForm?.return_pickup_date?.value) }}</span>
-												<span class="qb-range-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Auto-filled from range above</span>
+												<span class="qb-range-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Select return date</span>
 											</div>
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
