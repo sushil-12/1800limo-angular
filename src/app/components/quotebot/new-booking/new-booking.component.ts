@@ -277,7 +277,8 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 			return_dropoff_airport_longitude: this.BookingForm.get('return_dropoff_airport_longitude').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
-
+			selected_amenities: [...this.amenities],
+			return_selected_amenities: this.service_type === 'round_trip' ? [...this.amenities] : [],
 		}
 		let vehicle_id = this.is_master_vehicle ? this.master_vehicle_id : this.booking_data?.vehicle_id
 		this.booking_data['vehicle_id'] = vehicle_id
