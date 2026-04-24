@@ -2021,9 +2021,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	useCurrentPickupLocation(fieldName: string) {
-		if (this.hasExistingQuoteBotLocation(fieldName)) {
-			return;
-		}
 		this.getCurrentLocation(fieldName, { showErrorDialog: true });
 	}
 
@@ -2055,7 +2052,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		const { showErrorDialog = true } = options;
 		this.errorDialogService.closeDialog();
 
+		const ua = navigator.userAgent;
+		const isInAppBrowser = /FBAN|FBAV|Instagram|Line\/|MicroMessenger|Twitter/i.test(ua);
+		console.log(`[GEO DEBUG] getCurrentLocation called — field: ${fieldName}, showErrorDialog: ${showErrorDialog}`);
+		console.log(`[GEO DEBUG] userAgent: ${ua}`);
+		console.log(`[GEO DEBUG] isInAppBrowser: ${isInAppBrowser}`);
+		console.log(`[GEO DEBUG] navigator.geolocation exists: ${!!navigator.geolocation}`);
+		console.log(`[GEO DEBUG] protocol: ${location.protocol}`);
+
 		if (!navigator.geolocation) {
+			console.error('[GEO DEBUG] Geolocation API not available on this browser/device.');
 			if (showErrorDialog) {
 				this.errorDialogService.openDialog({
 					errors: {
@@ -2068,69 +2074,81 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		const requestVersion = this.nextLocationRequestVersion(fieldName);
 		this.spinner.show();
-		const geoOptions = {
-			enableHighAccuracy: true,
-			timeout: 10000,
-			maximumAge: 300000 // 5 minutes
+		console.log(`[GEO DEBUG] Starting high-accuracy attempt (version ${requestVersion})...`);
+
+		const handleSuccess = (position: GeolocationPosition, attempt: string) => {
+			this.ngZone.run(() => {
+				console.log(`[GEO DEBUG] SUCCESS on ${attempt} — lat: ${position.coords.latitude}, lng: ${position.coords.longitude}, accuracy: ${position.coords.accuracy}m`);
+				if (!this.isLatestLocationRequest(fieldName, requestVersion)) {
+					console.log('[GEO DEBUG] Stale request, ignoring.');
+					return;
+				}
+				this.spinner.hide();
+				this.errorDialogService.closeDialog();
+				const lat = position.coords.latitude;
+				const lng = position.coords.longitude;
+				this.SetFormValue(`${fieldName}_lat`, lat);
+				this.SetFormValue(`${fieldName}_long`, lng);
+				this.reverseGeocode(lat, lng, fieldName);
+			});
+		};
+
+		const handleError = (error: GeolocationPositionError, finalAttempt: boolean) => {
+			this.ngZone.run(() => {
+				const attempt = finalAttempt ? 'low-accuracy' : 'high-accuracy';
+				console.error(`[GEO DEBUG] ERROR on ${attempt} — code: ${error.code}, message: "${error.message}"`);
+				console.error(`[GEO DEBUG] Error codes: PERMISSION_DENIED=1, POSITION_UNAVAILABLE=2, TIMEOUT=3. Got: ${error.code}`);
+
+				if (!this.isLatestLocationRequest(fieldName, requestVersion)) {
+					console.log('[GEO DEBUG] Stale request, ignoring error.');
+					return;
+				}
+
+				if (!finalAttempt) {
+					console.log('[GEO DEBUG] Retrying with low-accuracy (WiFi/cell)...');
+					navigator.geolocation.getCurrentPosition(
+						(pos) => handleSuccess(pos, 'low-accuracy'),
+						(err) => handleError(err, true),
+						{ enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+					);
+					return;
+				}
+
+				this.spinner.hide();
+				console.error('[GEO DEBUG] Both attempts failed. Showing error to user.');
+
+				let errorMessage = "Unable to fetch your location. ";
+				if (isInAppBrowser) {
+					errorMessage = "Location access is not available in this browser. Please open 1800limo.com directly in Safari or Chrome to use this feature.";
+				} else {
+					switch (error.code) {
+						case error.PERMISSION_DENIED:
+							errorMessage += "Location access was denied. To enable it on your device: go to Settings → Privacy & Security → Location Services → Safari Websites → select \"Ask Next Time Or When I Share\", then reload the page.";
+							break;
+						case error.POSITION_UNAVAILABLE:
+							errorMessage += "Location information is unavailable. Please enter your address manually.";
+							break;
+						case error.TIMEOUT:
+							errorMessage += "Location request timed out. Please try again or enter your address manually.";
+							break;
+						default:
+							errorMessage += "Please ensure location permissions are enabled in your device settings and try again.";
+							break;
+					}
+				}
+
+				if (showErrorDialog) {
+					this.errorDialogService.openDialog({
+						errors: { error: errorMessage }
+					});
+				}
+			});
 		};
 
 		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				this.ngZone.run(() => {
-					if (!this.isLatestLocationRequest(fieldName, requestVersion)) {
-						return;
-					}
-
-					this.spinner.hide();
-					this.errorDialogService.closeDialog();
-					const lat = position.coords.latitude;
-					const lng = position.coords.longitude;
-
-					console.log("Current Location:", lat, lng);
-
-					// Fill the QB form lat/long fields
-					this.SetFormValue(`${fieldName}_lat`, lat);
-					this.SetFormValue(`${fieldName}_long`, lng);
-
-					// Reverse Geocode to get formatted address
-					this.reverseGeocode(lat, lng, fieldName);
-				});
-			},
-			(error) => {
-				this.ngZone.run(() => {
-					if (!this.isLatestLocationRequest(fieldName, requestVersion)) {
-						return;
-					}
-
-					this.spinner.hide();
-					console.error("Geolocation Error:", error);
-					let errorMessage = "Unable to fetch your location. ";
-
-					switch (error.code) {
-						case error.PERMISSION_DENIED:
-							errorMessage += "Please enable location access in your browser settings.";
-							break;
-						case error.POSITION_UNAVAILABLE:
-							errorMessage += "Location information is unavailable.";
-							break;
-						case error.TIMEOUT:
-							errorMessage += "Location request timed out. Please try again.";
-							break;
-						default:
-							errorMessage += "Please check your GPS and try again.";
-							break;
-					}
-
-					if (showErrorDialog) {
-						this.errorDialogService.openDialog({
-							errors: {
-								error: errorMessage
-							}
-						});
-					}
-				});
-			},
-			geoOptions
+			(pos) => handleSuccess(pos, 'high-accuracy'),
+			(error) => handleError(error, false),
+			{ enableHighAccuracy: true, timeout: 8000, maximumAge: 300000 }
 		);
 	}
 
@@ -2367,7 +2385,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 
 			console.log('Auto-picking current location on home page load...');
-			this.getCurrentLocation('pickup_address', { showErrorDialog: true });
+			// iOS Safari blocks geolocation on auto-load (requires a direct user gesture).
+			// Suppress the error dialog here; user can tap "Use Current Location" to trigger manually.
+			this.getCurrentLocation('pickup_address', { showErrorDialog: false });
 		}, 100);
 	}
 
