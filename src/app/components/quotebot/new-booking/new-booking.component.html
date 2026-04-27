@@ -1521,6 +1521,10 @@
 							<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))"
 								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
+						<p class="text-danger text-sm mt-1 mb-0"
+							*ngIf="extra_stop.errors?.invalidPlace && extra_stop.get('address')?.value">
+							Please select a valid address from the suggestions
+						</p>
 					</div>
 					<div class="col-1 p-0 p-md-3">
 						<div class="delete-icon">
@@ -2625,6 +2629,10 @@
 							<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))"
 								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
+						<p class="text-danger text-sm mt-1 mb-0"
+							*ngIf="extra_stop.errors?.invalidPlace && extra_stop.get('address')?.value">
+							Please select a valid address from the suggestions
+						</p>
 					</div>
 					<div class="col-md-1">
 						<div class="delete-icons">

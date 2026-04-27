@@ -343,13 +343,14 @@
 																style="padding:2px 6px; color:#666; text-align:left;">Enter address and select from suggestions</div>
 														</div>
 													</div>
-													<button type="button" 
+													<button type="button"
 														class="btn btn-link text-warning p-0 ml-2"
 														(click)="removeExtraStop(i)"
 														aria-label="Remove stop">
 														<i class="fa-solid fa-minus-circle" style="font-size:1.3rem;"></i>
 													</button>
 												</div>
+												<span *ngIf="submitted && isExtraStopInvalid(i, false)" class="text-danger small">Please select an address from the suggestions.</span>
 											</div>
 										</div>
 										<!-- EXTRA STOPS ENDS -->
@@ -449,7 +450,7 @@
 											<div *ngIf="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_airport?.errors); else DropoffAddressError"
 												class="text-danger">
 												<div *ngIf="QBForm?.dropoff_address?.errors?.required || QBForm?.dropoff_airport?.errors?.required">
-													{{ QBForm?.dropoff_type?.value === 'airport' ? 'Drop Off Airport is required' : 'Drop Off Address is required' }}
+													{{ QBForm?.dropoff_type?.value === 'airport' ? 'Drop Off Address is required' : 'Drop Off Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="dropoff_address_lat">
@@ -883,6 +884,7 @@
 															<i class="fa-solid fa-minus-circle" style="font-size:1.3rem;"></i>
 														</button>
 													</div>
+													<span *ngIf="submitted && isExtraStopInvalid(i, true)" class="text-danger small">Please select an address from the suggestions.</span>
 												</div>
 											</div>
 
@@ -981,7 +983,7 @@
 											<div *ngIf="submitted && (QBForm?.return_dropoff_address?.errors || QBForm?.return_dropoff_airport?.errors); else DropoffAddressError"
 												class="text-danger">
 												<div *ngIf="QBForm?.return_dropoff_address?.errors?.required || QBForm?.return_dropoff_airport?.errors?.required">
-													{{ QBForm?.pickup_type?.value === 'airport' ? 'Return Drop Off Airport is required' : 'Return Drop Off Address is required' }}
+													{{ QBForm?.pickup_type?.value === 'airport' ? 'Return Drop Off Address is required' : 'Return Drop Off Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="return_dropoff_address_lat">
@@ -1074,7 +1076,7 @@
 									</div>
 								</div>
 
-								<div class="row mt-3 mb-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
+								<!-- <div class="row mt-3 mb-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<div class="col-6 col-md-6">
 										<div class="qb-field-label"><i class="fas fa-user"></i> Return Passengers</div>
 										<div>
@@ -1144,7 +1146,7 @@
 											</ul>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								</fieldset>
 							<!-- RIDE PREFERENCES -->
 							<div class="ride-preferences-section mx-2 mt-3 mb-2" *ngIf="amenitiesList?.length > 0">

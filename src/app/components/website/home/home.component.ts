@@ -2108,6 +2108,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.getExtraStops(isReturn).filter(stop => stop.address && stop.address.trim());
 	}
 
+	isExtraStopInvalid(index: number, isReturn: boolean = false): boolean {
+		const stop = this.getExtraStops(isReturn)[index];
+		if (!stop) return false;
+		return !!stop.address.trim() && stop.latitude === 0 && stop.longitude === 0;
+	}
+
+	private hasInvalidExtraStops(): boolean {
+		return this.extraStops.some((_, i) => this.isExtraStopInvalid(i, false))
+			|| this.returnExtraStops.some((_, i) => this.isExtraStopInvalid(i, true));
+	}
+
 	private refreshExtraStopAutocompletes(_isReturn: boolean = false): void {
 		// No-op: extra stops now use the custom dropdown (same as pickup/dropoff fields)
 	}
@@ -2263,6 +2274,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				const lng = position.coords.longitude;
 				this.SetFormValue(`${fieldName}_lat`, lat);
 				this.SetFormValue(`${fieldName}_long`, lng);
+				const typeField = this.getAddressTypeFieldName(fieldName);
+				if (typeField && this.quoteBotForm.get(typeField)?.value !== 'city') {
+					this.SetFormValue(typeField, 'city');
+				}
 				this.reverseGeocode(lat, lng, fieldName);
 			});
 		};
@@ -3283,6 +3298,29 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return newPromise;
 	}
 
+	private validateExtraStopsRoute(
+		pickupCoord: { lat: number; lng: number },
+		stops: Array<{ address: string; latitude: number; longitude: number }>
+	): Promise<void> {
+		const reachable = stops.filter(s => s.address.trim() && (s.latitude !== 0 || s.longitude !== 0));
+		if (!reachable.length) return Promise.resolve();
+		return new Promise((resolve, reject) => {
+			if (!google?.maps) { reject('Google Maps not loaded'); return; }
+			new google.maps.DistanceMatrixService().getDistanceMatrix({
+				origins: [{ lat: pickupCoord.lat, lng: pickupCoord.lng }],
+				destinations: reachable.map(s => ({ lat: s.latitude, lng: s.longitude })),
+				travelMode: google.maps.TravelMode.DRIVING,
+				unitSystem: google.maps.UnitSystem.METRIC,
+			}, (response) => {
+				if (!response) { reject('No response'); return; }
+				const hasInvalid = response.rows[0]?.elements.some(
+					el => el.status === 'ZERO_RESULTS' || el.status === 'NOT_FOUND'
+				);
+				if (hasInvalid) reject('InvalidExtraStop');
+				else resolve();
+			});
+		});
+	}
 
 	// calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[]) {
 	// 	console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
@@ -3467,13 +3505,43 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		);
 	}
 
+	private getReturnQuoteBotLocationIdentity(leg: 'return_pickup' | 'return_dropoff'): string {
+		// return_pickup type is driven by dropoff_type; return_dropoff type is driven by pickup_type
+		const typeField = leg === 'return_pickup' ? 'dropoff_type' : 'pickup_type';
+		const type = this.QBForm[typeField]?.value;
+
+		if (type === 'airport') {
+			return this.getLocationIdentity(
+				type,
+				this.QBForm[`${leg}_airport`]?.value || this.QBForm[`${leg}_airport_name`]?.value,
+				this.QBForm[`${leg}_airport_lat`]?.value,
+				this.QBForm[`${leg}_airport_long`]?.value
+			);
+		}
+
+		return this.getLocationIdentity(
+			type,
+			this.QBForm[`${leg}_address`]?.value,
+			this.QBForm[`${leg}_address_lat`]?.value,
+			this.QBForm[`${leg}_address_long`]?.value
+		);
+	}
+
 	private hasInvalidSamePickupDropoff(): boolean {
 		const serviceType = this.QBForm.service_type.value;
 		if (serviceType != 'one_way' && serviceType != 'round_trip') {
 			return false;
 		}
 
-		return this.getQuoteBotLocationIdentity('pickup') === this.getQuoteBotLocationIdentity('dropoff');
+		if (this.getQuoteBotLocationIdentity('pickup') === this.getQuoteBotLocationIdentity('dropoff')) {
+			return true;
+		}
+
+		if (serviceType === 'round_trip') {
+			return this.getReturnQuoteBotLocationIdentity('return_pickup') === this.getReturnQuoteBotLocationIdentity('return_dropoff');
+		}
+
+		return false;
 	}
 
 	async fileTheQuote() {
@@ -3503,6 +3571,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			console.log('full form value:', this.quoteBotForm.value);
 			console.groupEnd();
 			return
+		}
+
+		if (this.hasInvalidExtraStops()) {
+			return;
 		}
 
 		if (this.hasInvalidSamePickupDropoff()) {
@@ -3580,9 +3652,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 		this.spinner.show();
+		const allExtraStops = [
+			...this.getPersistedExtraStops(),
+			...(this.QBForm.service_type.value === 'round_trip' ? this.getPersistedExtraStops(true) : [])
+		];
+		const distanceCheck = (pickup_coordinates.length > 0 || dropoff_coordinates.length > 0)
+			? this.calculateDistance(pickup_coordinates, dropoff_coordinates)
+			: Promise.resolve(true);
+		const extraStopCheck = this.validateExtraStopsRoute(pickup_coordinates[0], allExtraStops);
+
 		// finally calculate the distance between the coordinates and proceed after success only else show error
-		(pickup_coordinates.length > 0 || dropoff_coordinates.length > 0) && this.calculateDistance(pickup_coordinates, dropoff_coordinates).then((response: any) => {
-			//store data in localstorage after succesfully sending request to backend 
+		Promise.all([distanceCheck, extraStopCheck]).then((response: any) => {
+			//store data in localstorage after succesfully sending request to backend
 			this.quoteBotForm.value['other_details'] = this.vars
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`, this.quoteBotForm.value)
