@@ -59,6 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Round-trip date range picker state for ngx-daterangepicker
 	roundTripRange: { startDate: any; endDate: any } | null = null;
 	roundTripSelectionTarget: 'pickup' | 'return' = 'pickup';
+	roundTripPickerOpen = false;
 	minDateDayjs = dayjs().startOf('day');
 	readonly dateRangeLocale = {
 		format: 'MMM D, YYYY',
@@ -66,7 +67,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		applyLabel: 'Apply',
 		cancelLabel: 'Cancel',
 		daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-		monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+		monthNames: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 		firstDay: 0
 	};
 
@@ -3087,6 +3088,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	// ── Round-trip date range handler ────────────────────────────────────────
 
+	closeRoundTripPicker(): void {
+		this.roundTripPickerOpen = false;
+		this.roundTripRangePicker?.picker?.hide();
+	}
+
 	onRoundTripRangeChange(event: { startDate: any; endDate: any }) {
 		if (!event || !event.startDate || !event.endDate) return;
 		const m: any = moment;
@@ -3094,9 +3100,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		const end   = event.endDate.toDate   ? event.endDate.toDate()   : new Date(event.endDate);
 		this.SetFormValue('pickup_date', m(start).format('YYYY-MM-DD'));
 		this.SetFormValue('return_pickup_date', m(end).format('YYYY-MM-DD'));
-		// keep ngModel in sync so the input shows the right value on re-open
 		this.roundTripRange = { startDate: event.startDate, endDate: event.endDate };
 		this.roundTripSelectionTarget = 'pickup';
+		this.roundTripPickerOpen = false;
 		this.scheduleRoundTripPickerPanelSync();
 	}
 
@@ -3186,20 +3192,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	openRoundTripRangePicker(target: 'pickup' | 'return' = 'pickup'): void {
-		const pickerDirective = this.roundTripRangePicker;
-		
-		console.log('Opening round trip picker with target', pickerDirective);
-		if (!pickerDirective) {
-			return;
-		}
-
-		if (!pickerDirective.picker.isShown) {
-			console.log('pickerDirective.picker', pickerDirective.picker);
+		this.roundTripPickerOpen = true;
+		// Wait one tick for *ngIf to render the modal and the input inside it
+		setTimeout(() => {
+			const pickerDirective = this.roundTripRangePicker;
+			if (!pickerDirective) return;
 			this.primeRoundTripPickerFromForm();
-			pickerDirective.open();
-		}
-
-		this.applyRoundTripPickerTarget(target);
+			if (!pickerDirective.picker.isShown) {
+				pickerDirective.open();
+			}
+			this.applyRoundTripPickerTarget(target);
+		}, 0);
 	}
 
 	

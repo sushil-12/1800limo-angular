@@ -4028,18 +4028,157 @@ div#google_translate_element_home_mobile {
 	padding: 0 !important;
 }
 
-// ── ngx-daterangepicker-material panel overrides ──────────────────────────
-::ng-deep .md-drppicker {
-	width: auto !important;
-	min-width: 580px !important;
-	border-radius: 12px !important;
-	box-shadow: 0 8px 40px rgba(0,0,0,.18) !important;
-	padding: 16px !important;
+@keyframes qbFadeIn {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+@keyframes qbSlideUp {
+	from { opacity: 0; transform: translateY(16px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Round-trip picker modal ──────────────────────────────────────────────────
+.rt-picker-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 1060;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: qbFadeIn .15s ease;
+	backdrop-filter: blur(3px);
+	-webkit-backdrop-filter: blur(3px);
+}
+
+.rt-picker-modal {
+	background: #fff;
+	border-radius: 20px;
+	width: min(680px, 96vw);
+	max-height: 92vh;
+	overflow: auto;
+	box-shadow: 0 24px 64px rgba(0,0,0,.28);
+	animation: qbSlideUp .2s ease;
+	display: flex;
+	flex-direction: column;
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 18px 24px 14px;
+		border-bottom: 1px solid #f0f2f7;
+		background: #fff;
+		border-radius: 20px 20px 0 0;
+	}
+
+	&__title {
+		font-size: 16px;
+		font-weight: 700;
+		color: #0d2a5c;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		i { font-size: 15px; opacity: .8; }
+	}
+
+	&__close {
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: none;
+		background: #f0f2f7;
+		color: #0d2a5c;
+		font-size: 13px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: background .12s, transform .12s;
+		&:hover { background: #dce4f5; transform: scale(1.08); }
+	}
+
+	&__chips {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 14px 24px;
+		background: #f8f9fb;
+		border-bottom: 1px solid #f0f2f7;
+	}
+
+	&__chip {
+		flex: 1;
+		padding: 10px 14px;
+		border-radius: 12px;
+		border: 2px solid #e5e7ef;
+		background: #fff;
+		transition: border-color .15s, box-shadow .15s;
+		min-width: 0;
+
+		&--active {
+			border-color: #0d2a5c;
+			box-shadow: 0 0 0 3px rgba(13,42,92,.1);
+		}
+	}
+
+	&__chip-label {
+		font-size: 10px;
+		font-weight: 700;
+		color: #6b7280;
+		text-transform: uppercase;
+		letter-spacing: .06em;
+	}
+
+	&__chip-value {
+		font-size: 13px;
+		font-weight: 700;
+		color: #0d2a5c;
+		margin-top: 3px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		&--empty { color: #adb5bd; font-weight: 500; }
+	}
+
+	&__chip-arrow {
+		flex: 0 0 auto;
+		color: #0d2a5c;
+		font-size: 16px;
+		opacity: .5;
+	}
+
+	&__hidden-input {
+		position: absolute !important;
+		opacity: 0 !important;
+		width: 1px !important;
+		height: 1px !important;
+		pointer-events: none !important;
+		overflow: hidden !important;
+	}
+}
+
+// ── ngx-daterangepicker-material inside the modal ────────────────────────────
+// The picker is placed inside .rt-picker-modal so it flows as part of the card.
+// Since the modal is behind *ngIf, display:flex here can't cause ghost auto-open.
+::ng-deep .rt-picker-modal .md-drppicker {
+	position: relative !important;
+	top: auto !important;
+	left: auto !important;
+	transform: none !important;
+	margin: 0 !important;
+	box-shadow: none !important;
+	border: none !important;
+	border-radius: 0 0 20px 20px !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	padding: 16px 20px 20px !important;
 	font-family: inherit !important;
 	background: #fff !important;
 	overflow: visible !important;
-
-	// Force two calendars side by side via flexbox
 	display: flex !important;
 	flex-direction: row !important;
 	flex-wrap: wrap !important;
@@ -4052,76 +4191,135 @@ div#google_translate_element_home_mobile {
 		max-width: none !important;
 		min-width: 260px !important;
 		flex: 1 1 260px !important;
-		padding: 0 8px !important;
+		padding: 0 12px !important;
 
-		&.left { border-right: 1px solid #eee; }
-		&.right { border-left: none; }
+		&.left { border-right: 1px solid #f0f2f7 !important; padding-right: 18px !important; }
+		&.right { border-left: none !important; padding-left: 18px !important; }
 	}
 
-	// Target spans explicitly to beat the global
-	// .bannerform_wrapper .quoteform_homewrapper span { color: #fff } rule
-	table td, table th,
-	table td span, table th span {
-		color: #333 !important;
-	}
+	.month {
+		white-space: nowrap !important;
+		overflow: visible !important;
+		font-weight: 700 !important;
+		font-size: 14px !important;
+		color: #0d2a5c !important;
+		padding: 2px 0 10px !important;
+		letter-spacing: .01em !important;
 
-	td.active span, td.active:hover span { color: #fff !important; text-align: center !important;  }
-	td.disabled span, td.off span { color: #ccc !important; }
-	td.in-range span { color: #0d2a5c !important; }
-
-	// Month/year header
-	.month { font-weight: 700; font-size: 14px; color: #0d2a5c; }
-
-	// Nav arrows
-	.prev, .next {
-		span { border-color: #0d2a5c !important; }
-	}
-
-	// Day cells
-	td.available:not(.off):not(.disabled) {
-		&:hover {
-			background: #e8edf7 !important;
-			border-radius: 50% !important;
+		select {
+			border: none !important;
+			background: transparent !important;
+			font-weight: 700 !important;
+			font-size: 14px !important;
 			color: #0d2a5c !important;
+			cursor: pointer !important;
+			padding: 0 2px !important;
+			max-width: none !important;
+			-webkit-appearance: auto !important;
+			appearance: auto !important;
+			&:focus { outline: none !important; }
 		}
 	}
 
-	// Start/end selected cells
-	td.active, td.active:hover {
-		background-color: #0d2a5c !important;
-		color: #fff !important;
-		border-radius: 50% !important;
+	table { table-layout: auto !important; width: 100% !important; }
+	thead tr:first-child th.month { min-width: 0 !important; }
+
+	.prev, .next {
+		cursor: pointer !important;
+		border-radius: 8px !important;
+		transition: background .12s !important;
+		padding: 4px 6px !important;
+		&:hover { background: #eef1f9 !important; }
+		span { border-color: #0d2a5c !important; border-width: 0 2px 2px 0 !important; padding: 5px !important; }
 	}
 
-	// In-range highlight
-	td.in-range {
-		background: #e8edf7 !important;
+	thead tr:nth-child(2) th {
+		font-size: 11px !important;
+		font-weight: 700 !important;
+		color: #6b7280 !important;
+		text-transform: uppercase !important;
+		letter-spacing: .05em !important;
+		padding: 6px 0 8px !important;
+		background: #f8f9fb !important;
+		border-bottom: 1px solid #eef0f5 !important;
+		&:first-child { border-radius: 8px 0 0 8px !important; }
+		&:last-child  { border-radius: 0 8px 8px 0 !important; }
+	}
+
+	table td, table th,
+	table td span, table th span { color: #1a2a44 !important; }
+
+	td { padding: 1px 0 !important; text-align: center !important; }
+
+	td span {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		width: 36px !important;
+		height: 36px !important;
+		border-radius: 50% !important;
+		font-size: 13px !important;
+		font-weight: 500 !important;
+		transition: background .1s, color .1s !important;
+	}
+
+	td.available:not(.off):not(.disabled):not(.active):hover span {
+		background: #dce5f5 !important;
 		color: #0d2a5c !important;
+		font-weight: 600 !important;
+	}
+
+	td.in-range { background: #e8edf7 !important; border-radius: 0 !important; }
+	td.in-range span { color: #0d2a5c !important; background: transparent !important; font-weight: 500 !important; }
+
+	td.start-date:not(.end-date) {
+		background: linear-gradient(to right, transparent 50%, #e8edf7 50%) !important;
 		border-radius: 0 !important;
 	}
-
-	// Apply/Cancel buttons
-	.btn {
-		border-radius: 8px !important;
-		font-weight: 600 !important;
-		padding: 6px 18px !important;
+	td.end-date:not(.start-date) {
+		background: linear-gradient(to left, transparent 50%, #e8edf7 50%) !important;
+		border-radius: 0 !important;
 	}
-	.btn-default { background: transparent !important; color: #666 !important; }
-	.btn-primary { background: #0d2a5c !important; color: #fff !important; }
+	td.start-date.end-date { background: transparent !important; }
 
-	// Disabled past dates
-	td.disabled, td.off { color: #ccc !important; pointer-events: none; }
+	td.active span, td.active:hover span {
+		background: #0d2a5c !important;
+		color: #fff !important;
+		font-weight: 700 !important;
+		box-shadow: 0 3px 10px rgba(13,42,92,.35) !important;
+	}
+	td.active, td.active:hover { color: #fff !important; }
 
-	// Buttons row full-width under both calendars
+	td.today:not(.active) span {
+		box-shadow: inset 0 0 0 2px #0d2a5c !important;
+		color: #0d2a5c !important;
+		font-weight: 700 !important;
+	}
+
+	td.disabled span, td.off span { color: #d0d5dd !important; font-weight: 400 !important; }
+	td.disabled, td.off { pointer-events: none !important; }
+	td.off { background: transparent !important; }
+
 	.buttons {
 		flex: 0 0 100% !important;
 		width: 100% !important;
-		padding-top: 12px !important;
-		border-top: 1px solid #eee !important;
-		margin-top: 8px !important;
+		padding-top: 14px !important;
+		border-top: 1px solid #f0f2f7 !important;
+		margin-top: 10px !important;
+		display: flex !important;
+		justify-content: flex-end !important;
+		gap: 8px !important;
 	}
-}
 
+	.btn {
+		border-radius: 10px !important;
+		font-weight: 600 !important;
+		font-size: 14px !important;
+		padding: 8px 22px !important;
+	}
+	.btn-default { background: transparent !important; color: #6b7280 !important; border: 1px solid #e0e4ed !important; }
+	.btn-primary { background: #0d2a5c !important; color: #fff !important; border: none !important; }
+}
 .qb-range-trigger {
 	position: relative;
 	display: flex;
@@ -4394,17 +4592,41 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 }
 
 @media (max-width: 600px) {
-	/* Further adjustments for smaller screens */
-	// ── ngx-daterangepicker-material panel overrides ──────────────────────────
-	::ng-deep .md-drppicker {
-		// min-width: 580px !important;
-		min-width: fit-content !important;
-		flex-wrap: wrap !important;
-		align-items: flex-start !important;
-		gap: 0 !important;
+	.rt-picker-modal {
+		border-radius: 16px;
+		width: 94vw;
+		max-height: 88vh;
+	}
+
+	::ng-deep .rt-picker-modal .md-drppicker {
+		padding: 12px 10px 16px !important;
+		border-radius: 0 0 16px 16px !important;
+
 		.calendar {
-			&.left { border-right: 0px solid #eee; }
-			&.right { border-left: none; }
+			flex: 1 1 100% !important;
+			padding: 0 6px !important;
+			&.left {
+				border-right: none !important;
+				border-bottom: 1px solid #f0f2f7 !important;
+				padding-bottom: 12px !important;
+				padding-right: 6px !important;
+			}
+			&.right { padding-left: 6px !important; padding-top: 12px !important; }
 		}
+
+		td span {
+			width: 32px !important;
+			height: 32px !important;
+			font-size: 12px !important;
+		}
+	}
+
+	.rt-picker-modal__chips {
+		padding: 10px 14px;
+		gap: 8px;
+	}
+
+	.rt-picker-modal__chip {
+		padding: 8px 10px;
 	}
 }

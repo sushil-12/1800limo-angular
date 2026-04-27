@@ -537,23 +537,6 @@
 													<ng-template #pickupPlaceholder>
 														<span class="qb-date-display-trigger__placeholder">Select pickup date</span>
 													</ng-template>
-													<input type="text"
-														#drpInput
-														#roundTripRangeInput
-														ngxDaterangepickerMd
-														[(ngModel)]="roundTripRange"
-														[ngModelOptions]="{standalone: true}"
-														[autoApply]="true"
-														[alwaysShowCalendars]="true"
-														[showDropdowns]="true"
-														[linkedCalendars]="true"
-														[minDate]="minDateDayjs"
-														[locale]="dateRangeLocale"
-														startKey="startDate"
-														endKey="endDate"
-														(datesUpdated)="onRoundTripRangeChange($event)"
-														class="qb-drp-input qb-drp-input--overlay"
-														readonly />
 												</div>
 											</ng-container>
 											<ng-template #oneWayPickupDate>
@@ -1023,27 +1006,10 @@
 										<div class="pickupdate">
 											<div class="qb-date-display-trigger"
 												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
-												(click)="openRoundTripRangePicker('return '); $event.stopPropagation()">
+												(click)="openRoundTripRangePicker('return'); $event.stopPropagation()">
 												<span class="qb-date-display-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatDateDisplay(QBForm?.return_pickup_date?.value) }}</span>
 												<span class="qb-date-display-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Select return date</span>
 											</div>
-											<input type="text"
-													#drpInput
-													#roundTripRangeInput
-													ngxDaterangepickerMd
-													[(ngModel)]="roundTripRange"
-													[ngModelOptions]="{standalone: true}"
-													[autoApply]="true"
-													[alwaysShowCalendars]="true"
-													[showDropdowns]="true"
-													[linkedCalendars]="true"
-													[minDate]="minDateDayjs"
-													[locale]="dateRangeLocale"
-													startKey="startDate"
-													endKey="endDate"
-													(datesUpdated)="onRoundTripRangeChange($event)"
-													class="qb-drp-input qb-drp-input--overlay"
-													readonly />
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
 											class="text-danger">
@@ -1183,6 +1149,60 @@
 							<!-- RIDE PREFERENCES ENDS -->
 
 							</form>
+
+							<!-- ── Round-trip date picker modal ── -->
+							<div *ngIf="roundTripPickerOpen" class="rt-picker-overlay" (click)="closeRoundTripPicker()">
+								<div class="rt-picker-modal" (click)="$event.stopPropagation()">
+
+									<!-- Header -->
+									<div class="rt-picker-modal__header">
+										<span class="rt-picker-modal__title">
+											<i class="far fa-calendar-alt"></i> Select Dates
+										</span>
+										<button type="button" class="rt-picker-modal__close" (click)="closeRoundTripPicker()" aria-label="Close">
+											<i class="fas fa-times"></i>
+										</button>
+									</div>
+
+									<!-- Summary chips -->
+									<div class="rt-picker-modal__chips">
+										<div class="rt-picker-modal__chip" [class.rt-picker-modal__chip--active]="roundTripSelectionTarget === 'pickup'">
+											<div class="rt-picker-modal__chip-label">Pickup Date</div>
+											<div class="rt-picker-modal__chip-value" [class.rt-picker-modal__chip-value--empty]="!roundTripRange?.startDate">
+												{{ roundTripRange?.startDate ? formatDateDisplay(roundTripRange.startDate) : 'Not selected' }}
+											</div>
+										</div>
+										<div class="rt-picker-modal__chip-arrow">
+											<i class="fas fa-long-arrow-alt-right"></i>
+										</div>
+										<div class="rt-picker-modal__chip" [class.rt-picker-modal__chip--active]="roundTripSelectionTarget === 'return'">
+											<div class="rt-picker-modal__chip-label">Return Date</div>
+											<div class="rt-picker-modal__chip-value" [class.rt-picker-modal__chip-value--empty]="!roundTripRange?.endDate">
+												{{ roundTripRange?.endDate ? formatDateDisplay(roundTripRange.endDate) : 'Not selected' }}
+											</div>
+										</div>
+									</div>
+
+									<!-- Daterangepicker input — inside the modal so picker renders here -->
+									<input type="text"
+										#roundTripRangeInput
+										ngxDaterangepickerMd
+										[(ngModel)]="roundTripRange"
+										[ngModelOptions]="{standalone: true}"
+										[autoApply]="true"
+										[alwaysShowCalendars]="true"
+										[showDropdowns]="true"
+										[linkedCalendars]="true"
+										[minDate]="minDateDayjs"
+										[locale]="dateRangeLocale"
+										startKey="startDate"
+										endKey="endDate"
+										(datesUpdated)="onRoundTripRangeChange($event)"
+										class="rt-picker-modal__hidden-input"
+										readonly />
+
+								</div>
+							</div>
 
 							<div id="search-button-container">
 								<div id="search-button-box" class="pb-3 pb-md-1">
