@@ -582,6 +582,12 @@ header {
 	text-align: left;
 }
 
+span.qb-range-trigger__value.ng-star-inserted {
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	color: black !important;
+}
+
 /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .bannerform_wrapper .quoteform_homewrapper span.mat-button-wrapper {
 	color: #fff !important;

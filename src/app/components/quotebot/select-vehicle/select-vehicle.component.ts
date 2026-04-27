@@ -1,13 +1,14 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { bindCallback, Observable, throwError } from 'rxjs';
+import { bindCallback, Observable, Subscription, throwError } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../shared/shared.module';
 import { AdminService } from '../../../services/admin.service';
+import { AmenitiesService } from 'src/app/services/amenities.service';
 
 declare let $: any
 
@@ -327,6 +328,8 @@ export class SelectVehicleComponent implements OnInit {
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quotebot_form));
 		}
 	}
+ selectedAmenities: number[] = [];
+private subscription: Subscription;
 
 
 	constructor(
@@ -338,6 +341,7 @@ export class SelectVehicleComponent implements OnInit {
 		private $activatedRoute: ActivatedRoute,
 		private $globals: SharedModule,
 		private adminService: AdminService,
+		private amenitiesService: AmenitiesService
 	) {
 		console.log('in constructor select vehicle')
 	}
@@ -350,69 +354,63 @@ export class SelectVehicleComponent implements OnInit {
 	 * Fetching vehicle details based on filters data
 	 */
 	ngOnInit(): void {
-		window.scrollTo(0, 0)
-		this.isLoading = true; // Ensure skeleton shows on page load
+			window.scrollTo(0, 0);
+			this.isLoading = true;
 
+			try {
+				// 1. First, subscribe to amenities service (so that selectedAmenities is updated)
+				this.subscription = this.amenitiesService.selectedAmenities$.subscribe(amenities => {
+				console.log('[SelectVehicle] received amenities from service:', amenities);
+				this.selectedAmenities = amenities;
+				if (this.quotebot_form) {
+					this.quotebot_form.amenities = amenities;
+				}
+				});
 
-		try {
-			console.log('in component select vehicle->>', JSON.parse(sessionStorage.getItem('filters')))
-
-
-			if (!JSON.parse(sessionStorage.getItem('filters'))) {
-				this.$router.navigateByUrl('/home')
-			}
-			this.$spinner.show()
-			sessionStorage.getItem('selected_vehicle') ? sessionStorage.removeItem('selected_vehicle') : ''
-			// Note: Do not add anything here or before below conditional logic. This should be the first step
-			if (!localStorage.getItem('quotebot_form')) {
+				// 2. Now load quotebot_form from localStorage
+				if (!localStorage.getItem('quotebot_form')) {
 				this.$errorDialog.openDialog({
-					errors: {
-						error: "Please request a Quote before selecting a vehicle. "
-					}
-				})
-				this.$router.navigateByUrl('/')
-
-			} else {
-				// fetch the user's travelling quote
-				this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
-			}
-
-			this.$activatedRoute.queryParams.subscribe((params: any) => {
-				console.log('paramsa->>>>', params.booking_id)
-				if (params?.id) {
-					this.bookingId = params?.id
+					errors: { error: "Please request a Quote before selecting a vehicle." }
+				});
+				this.$router.navigateByUrl('/');
+				return;
 				}
-				if (params?.list == 'master') {
-					this.vehicleDetails = []
+				this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'));
+
+				// 3. Check filters
+				if (!JSON.parse(sessionStorage.getItem('filters'))) {
+				this.$router.navigateByUrl('/home');
 				}
-				if (params?.sort == 'plh') {
-					this.Sort.LowToHigh()
+
+				this.$spinner.show();
+				sessionStorage.getItem('selected_vehicle') ? sessionStorage.removeItem('selected_vehicle') : '';
+
+				// 4. Now call APIs – they will use the updated this.selectedAmenities
+				this.fetchMasterVehicles();
+				this.getAllFilters();
+
+				this.$activatedRoute.queryParams.subscribe((params: any) => {
+				if (params?.id) this.bookingId = params?.id;
+				if (params?.list == 'master') this.vehicleDetails = [];
+				if (params?.sort == 'plh') this.Sort.LowToHigh();
+				else this.Sort.HighToLow();
+				});
+
+				if (this.bookingId) {
+				this.getQuoteDetails(this.bookingId);
 				} else {
-					this.Sort.HighToLow()
+				this.getVehicleDetails();
 				}
 
+				let currency = JSON.parse(sessionStorage.getItem('currencyData'));
+				this.currencySymbol = currency?.symbol;
 
-			})
-
-			this.fetchMasterVehicles()	// fetches 16 vehicle categories
-			this.getAllFilters()	// fetch filters from database
-			console.log('booking data', this.bookingId)
-			if (this.bookingId) {
-				console.log('booking data-->>>>>>', this.bookingId)
-				this.getQuoteDetails(this.bookingId)
+			} catch (error) {
+				console.log('errr----->>', error);
 			}
-			else {
-				this.getVehicleDetails()
-			}
-			let currency = JSON.parse(sessionStorage.getItem('currencyData'))
-			this.currencySymbol = currency?.symbol
+    }
+	
 
-
-		} catch (error) {
-			console.log('errr----->>', error)
-		}
-	}
-	// ngOnInit ends
 	// documentgetElementById('affiliate-info')
 	isArray(value: any): boolean {
 		return Array.isArray(value)
@@ -442,7 +440,6 @@ export class SelectVehicleComponent implements OnInit {
 	}
 
 
-
 	editAffiliateAccount(vehInfo: any) {
 		console.log('valueee--->>>>', vehInfo)
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
@@ -461,26 +458,27 @@ export class SelectVehicleComponent implements OnInit {
 
 	}
 
-
 	fetchMasterVehicles(): Promise<Array<any> | string> {
 		return new Promise((resolve, reject) => {
-			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
-				catchError(err => throwError(err))
-			).subscribe((response: any) => {
-				if (response.data.length == 0) {
-					this.no_vehicle_msg = "No Vehicle Categories Found. "
-					reject('No Master Vehicle Found.')
-					return
+			const payload = {
+			...this.quotebot_form,
+				selected_amenities: this.amenitiesService.getCurrentValue() 
+			};
+			this.$quotebotService.getMasterVehicleTypes(payload)
+			.pipe(catchError(err => throwError(err)))
+			.subscribe((response: any) => {
+				if (response.data.length === 0) {
+				this.no_vehicle_msg = "No Vehicle Categories Found.";
+				reject('No Master Vehicle Found.');
+				return;
 				}
-				this.master_vehicles = response.data
-				sessionStorage.setItem('currencyData', JSON.stringify(response?.currency))
-				this.currencySymbol = response.currency.symbol
-				resolve(this.master_vehicles)
-				return
-			})
-		})
+				this.master_vehicles = response.data;
+				sessionStorage.setItem('currencyData', JSON.stringify(response?.currency));
+				this.currencySymbol = response.currency.symbol;
+				resolve(this.master_vehicles);
+			});
+		});
 	}
-
 
 	/**
 	 * Selects the vehicle and fills its data in filters data and selected filters array
@@ -649,38 +647,41 @@ export class SelectVehicleComponent implements OnInit {
 	 * @returns void
 	 */
 	getVehicleDetails() {
-		console.log('Fetching Vehicle Details. ')
-		sessionStorage.setItem('filters', JSON.stringify(this.filters))
-		this.isLoading = true; // Show skeleton loader
-		let data = {}
-		if (this.quotebot_form != null) {
-			data = this.quotebot_form
-			data['filters'] = this.filters.request
-			data['user_id'] = this.currentUser?.id
-		}
-		// console.group('Sending Data to backend ... ', data)
-		// console.groupEnd()
-		this.$spinner.show()
-		// fetch the vehicle details - API HIT
-		this.$quotebotService.getVehicleDetails(data).subscribe((response: any) => {
-			if (response.data.length == 0) {
-				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
+		sessionStorage.setItem('filters', JSON.stringify(this.filters));
+		this.isLoading = true;
+		
+		const payload = {
+			...this.quotebot_form,
+			filters: this.filters.request,
+			user_id: this.currentUser?.id,
+			selected_amenities: this.amenitiesService.getCurrentValue() 
+		};
+		
+		this.$spinner.show();
+		this.$quotebotService.getVehicleDetails(payload).subscribe({
+			next: (response: any) => {
+			if (response.data.length === 0) {
+				this.no_vehicle_msg = 'No Vehicle found with the applied filter.';
 			}
-			this.vehicleDetails = [...response.data]
+			this.vehicleDetails = [...response.data];
 			this.vehicleDetails = this.vehicleDetails.map(i => {
 				if (i?.affiliate_company && i?.affiliate_name) {
-					i['readMore'] = (i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false
+				i['readMore'] = (i?.affiliate_company?.length || i?.affiliate_name?.length) > 8;
+				} else {
+				i['readMore'] = false;
 				}
-				else {
-					i['readMore'] = false
-				}
-				return i
-			})
-			console.log('vehicle details-->>', this.vehicleDetails)
-			this.Sort.LowToHigh() // default sort to Low-High
-			this.$spinner.hide()
+				return i;
+			});
+			this.Sort.LowToHigh();
+			this.$spinner.hide();
 			this.isLoading = false;
-		})
+			},
+			error: (err) => {
+			console.error(err);
+			this.$spinner.hide();
+			this.isLoading = false;
+			}
+		});
 	}
 
 	getQuoteDetails(id) {

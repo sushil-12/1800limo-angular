@@ -371,6 +371,21 @@
 
 /* --- MOBILE & TABLET OPTIMIZATIONS --- */
 @media (max-width: 600px) {
+
+	/* Further adjustments for smaller screens */
+	// ── ngx-daterangepicker-material panel overrides ──────────────────────────
+	::ng-deep .md-drppicker {
+		// min-width: 580px !important;
+		min-width: fit-content !important;
+		flex-wrap: wrap !important;
+		align-items: flex-start !important;
+		gap: 0 !important;
+		.calendar {
+			&.left { border-right: 0px solid #eee; }
+			&.right { border-left: none; }
+		}
+	}
+
 	.img-box {
 		padding: 0 !important;
 	}
@@ -1604,6 +1619,7 @@ a.user-profile:active::after {
 	width: 40px;
 }
 
+
 .bootstrap-datetimepicker-widget.dropdown-menu table th.picker-switch {
 	width: auto;
 }
@@ -2013,6 +2029,7 @@ div#google_translate_element_home_mobile {
 		height: 36px;
 		padding: 0px;
 		border: 0.8px solid #fff !important;
+		border-radius: 40px !important;
 
 		&:hover {
 			background-color: rgba(255, 255, 255, 0.1);
@@ -3715,7 +3732,6 @@ div#google_translate_element_home_mobile {
 		font-weight: 700 !important;
 		color: #1a1a2e !important;
 		text-align: center !important;
-		-moz-appearance: textfield !important;
 		padding: 0 !important;
 		min-width: 36px;
 
@@ -3920,5 +3936,475 @@ div#google_translate_element_home_mobile {
 	#no_of_passenger:focus,
 	#no_of_luggage:focus {
 		height: 38px !important;
+	}
+}
+
+// ── Round-trip calendar trigger ───────────────────────────────────────────
+// ── ngx-daterangepicker-material input trigger ────────────────────────────
+.qb-drp-input {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 48px;
+	padding: 0 14px 0 42px;
+	border: 1px solid #d7d7d7;
+	border-radius: 12px;
+	background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' width='16' height='16'%3E%3Cpath fill='%230d2a5c' d='M152 64H296V24c0-13.3 10.7-24 24-24s24 10.7 24 24V64h40c35.3 0 64 28.7 64 64v320c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128c0-35.3 28.7-64 64-64h40V24c0-13.3 10.7-24 24-24s24 10.7 24 24V64zM48 192v256c0 8.8 7.2 16 16 16h320c8.8 0 16-7.2 16-16V192H48z'/%3E%3C/svg%3E") no-repeat 14px center;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 600;
+	color: #111;
+	user-select: none;
+	transition: border-color .15s, box-shadow .15s;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+	box-sizing: border-box;
+
+	&::placeholder { color: #888; font-weight: 500; }
+	&:hover { border-color: #0d2a5c; }
+	&:focus { outline: none; border-color: #0d2a5c; box-shadow: 0 0 0 2px rgba(13,42,92,.15); }
+	&.errorValid { border-color: #e53935; box-shadow: 0 0 0 1px #e53935; }
+}
+
+.qb-range-trigger--readonly {
+	cursor: default;
+	background-color: #f8f9fb;
+	&:hover { border-color: #d7d7d7; }
+}
+
+.qb-range-trigger--return {
+	cursor: pointer;
+	&:hover { border-color: #0d2a5c; }
+}
+
+// ── Round-trip date display wrapper (shows only start date) ──────────────
+.qb-date-display-trigger {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 48px;
+	padding: 0 14px;
+	border: 1px solid #d7d7d7;
+	border-radius: 12px;
+	background: #fff;
+	cursor: pointer;
+	box-sizing: border-box;
+	transition: border-color .15s, box-shadow .15s;
+
+	&:hover { border-color: #0d2a5c; }
+	&.errorValid { border-color: #e53935; box-shadow: 0 0 0 1px #e53935; }
+
+	&__icon { display: none; }
+
+	&__value {
+		font-size: 14px;
+		font-weight: 600;
+		color: #111;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		pointer-events: none;
+	}
+
+	&__placeholder {
+		font-size: 14px;
+		font-weight: 500;
+		color: #888;
+		pointer-events: none;
+	}
+}
+
+.qb-drp-input--overlay {
+	position: absolute !important;
+	inset: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	opacity: 0 !important;
+	cursor: pointer !important;
+	border: none !important;
+	background: transparent !important;
+	padding: 0 !important;
+}
+
+// ── ngx-daterangepicker-material panel overrides ──────────────────────────
+::ng-deep .md-drppicker {
+	width: auto !important;
+	min-width: 580px !important;
+	border-radius: 12px !important;
+	box-shadow: 0 8px 40px rgba(0,0,0,.18) !important;
+	padding: 16px !important;
+	font-family: inherit !important;
+	background: #fff !important;
+	overflow: visible !important;
+
+	// Force two calendars side by side via flexbox
+	display: flex !important;
+	flex-direction: row !important;
+	flex-wrap: wrap !important;
+	align-items: flex-start !important;
+	gap: 0 !important;
+
+	.calendar {
+		float: none !important;
+		display: block !important;
+		max-width: none !important;
+		min-width: 260px !important;
+		flex: 1 1 260px !important;
+		padding: 0 8px !important;
+
+		&.left { border-right: 1px solid #eee; }
+		&.right { border-left: none; }
+	}
+
+	// Target spans explicitly to beat the global
+	// .bannerform_wrapper .quoteform_homewrapper span { color: #fff } rule
+	table td, table th,
+	table td span, table th span {
+		color: #333 !important;
+	}
+
+	td.active span, td.active:hover span { color: #fff !important; text-align: center !important;  }
+	td.disabled span, td.off span { color: #ccc !important; }
+	td.in-range span { color: #0d2a5c !important; }
+
+	// Month/year header
+	.month { font-weight: 700; font-size: 14px; color: #0d2a5c; }
+
+	// Nav arrows
+	.prev, .next {
+		span { border-color: #0d2a5c !important; }
+	}
+
+	// Day cells
+	td.available:not(.off):not(.disabled) {
+		&:hover {
+			background: #e8edf7 !important;
+			border-radius: 50% !important;
+			color: #0d2a5c !important;
+		}
+	}
+
+	// Start/end selected cells
+	td.active, td.active:hover {
+		background-color: #0d2a5c !important;
+		color: #fff !important;
+		border-radius: 50% !important;
+	}
+
+	// In-range highlight
+	td.in-range {
+		background: #e8edf7 !important;
+		color: #0d2a5c !important;
+		border-radius: 0 !important;
+	}
+
+	// Apply/Cancel buttons
+	.btn {
+		border-radius: 8px !important;
+		font-weight: 600 !important;
+		padding: 6px 18px !important;
+	}
+	.btn-default { background: transparent !important; color: #666 !important; }
+	.btn-primary { background: #0d2a5c !important; color: #fff !important; }
+
+	// Disabled past dates
+	td.disabled, td.off { color: #ccc !important; pointer-events: none; }
+
+	// Buttons row full-width under both calendars
+	.buttons {
+		flex: 0 0 100% !important;
+		width: 100% !important;
+		padding-top: 12px !important;
+		border-top: 1px solid #eee !important;
+		margin-top: 8px !important;
+	}
+}
+
+.qb-range-trigger {
+	position: relative;
+	display: flex;
+	align-items: center;
+	height: 48px;
+	padding: 0 14px 0 42px;
+	border: 1px solid #d7d7d7;
+	border-radius: 12px;
+	background: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	color: #000;
+	user-select: none;
+	transition: border-color .15s, box-shadow .15s;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+
+	&__icon {
+		position: absolute;
+		left: 16px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: #0d2a5c;
+		font-size: 16px;
+	}
+	&__placeholder { color: #888; font-weight: 500; }
+	&__value { color: #111; }
+	&:hover { border-color: #0d2a5c; }
+	&.errorValid { border-color: #e53935; box-shadow: 0 0 0 1px #e53935; }
+}
+
+// ── Calendar backdrop ─────────────────────────────────────────────────────
+.qb-cal-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,.4);
+	z-index: 1040;
+}
+span.qb-date-display-trigger__value.ng-star-inserted {
+    color: black;
+}
+
+// ── Calendar panel ────────────────────────────────────────────────────────
+.qb-cal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1050;
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 24px 64px rgba(0,0,0,.22);
+	width: min(860px, 96vw);
+	max-height: 94vh;
+	overflow-y: auto;
+	padding: 20px 22px 22px;
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 14px;
+	}
+	&__title {
+		font-size: 20px;
+		font-weight: 700;
+		color: #0d2a5c;
+	}
+	&__close {
+		background: none;
+		border: none;
+		font-size: 26px;
+		line-height: 1;
+		color: #0d2a5c;
+		cursor: pointer;
+		padding: 0 4px;
+	}
+
+	// Pickup / Return chips
+	&__chips {
+		display: flex;
+		align-items: stretch;
+		gap: 10px;
+		margin-bottom: 18px;
+	}
+	&__chip {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		padding: 8px 12px;
+		border-radius: 10px;
+		border: 2px solid #e5e7ef;
+		background: #f8f9fb;
+		cursor: pointer;
+		transition: border-color .15s, box-shadow .15s;
+		min-width: 0;
+
+		&--active {
+			border-color: #0d2a5c;
+			background: #fff;
+			box-shadow: 0 0 0 3px rgba(13,42,92,.1);
+		}
+	}
+	&__chip-label {
+		font-size: 11px;
+		font-weight: 700;
+		color: #6b7280;
+		text-transform: uppercase;
+		letter-spacing: .05em;
+	}
+	&__chip-value {
+		font-size: 14px;
+		font-weight: 700;
+		color: #0d2a5c;
+		margin-top: 2px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		&--empty { color: #adb5bd; font-weight: 500; }
+	}
+	&__arrow {
+		align-self: center;
+		color: #0d2a5c;
+		font-size: 16px;
+		opacity: .6;
+	}
+
+	// Month area
+	&__body {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+	}
+	&__nav {
+		flex: 0 0 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: none;
+		border: none;
+		color: #0d2a5c;
+		font-size: 16px;
+		cursor: pointer;
+		margin-top: 28px;
+		&:hover { background: #eceff7; }
+	}
+	&__months {
+		flex: 1;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 20px;
+		@media (max-width: 680px) { grid-template-columns: 1fr; }
+	}
+	&__month { display: flex; flex-direction: column; }
+	&__month-title {
+		font-size: 16px;
+		font-weight: 700;
+		color: #0d2a5c;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+	&__weekdays {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+		text-align: center;
+		font-size: 12px;
+		font-weight: 700;
+		color: #6b7280;
+		padding-bottom: 6px;
+		border-bottom: 1px solid #e5e7ef;
+		margin-bottom: 4px;
+	}
+	&__row {
+		display: grid;
+		grid-template-columns: repeat(7, 1fr);
+	}
+	&__day {
+		position: relative;
+		height: 44px;
+		min-height: 44px;
+		background: transparent;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 0;
+		border-radius: 0;
+		text-align: center;
+		touch-action: manipulation;
+		-webkit-tap-highlight-color: transparent;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: background 0.08s;
+
+		.qb-cal__day-inner {
+			position: relative;
+			z-index: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			font-size: 14px;
+			font-weight: 500;
+			color: #111;
+			flex-shrink: 0;
+			transition: background 0.1s, color 0.1s;
+		}
+
+		&:not([disabled]):not(.qb-cal__day--start):not(.qb-cal__day--end):not(.qb-cal__day--disabled):hover .qb-cal__day-inner {
+			background: #dce4f5;
+			color: #0d2a5c;
+		}
+
+		&--other { visibility: hidden; pointer-events: none; }
+
+		&--disabled .qb-cal__day-inner { color: #ccc !important; cursor: default; }
+
+		// In-range: full-width range highlight
+		&--in {
+			background: #e8edf7;
+			.qb-cal__day-inner { color: #0d2a5c; }
+		}
+
+		// Start: circle; no half-bg unless range is active
+		&--start .qb-cal__day-inner {
+			background: #0d2a5c;
+			color: #fff;
+			font-weight: 700;
+		}
+
+		// Start with an active range: right-half bg connects to range strip
+		&--start-connected {
+			background: linear-gradient(to right, transparent 50%, #e8edf7 50%);
+		}
+
+		// End: left-half bg connects from range strip, then circle
+		&--end {
+			background: linear-gradient(to left, transparent 50%, #e8edf7 50%);
+			.qb-cal__day-inner {
+				background: #0d2a5c;
+				color: #fff;
+				font-weight: 700;
+			}
+		}
+
+		// Hover preview end — lighter circle, same half-bg
+		&--hover-end {
+			background: linear-gradient(to left, transparent 50%, #e8edf7 50%);
+			.qb-cal__day-inner {
+				background: rgba(13, 42, 92, 0.25);
+				color: #fff;
+			}
+		}
+
+		// Same-day start and end: plain circle, no half-bg
+		&--start.qb-cal__day--end {
+			background: transparent !important;
+		}
+	}
+
+	&__hint {
+		margin-top: 14px;
+		text-align: center;
+		font-size: 13px;
+		color: #6b7280;
+	}
+}
+
+@media (max-width: 600px) {
+	/* Further adjustments for smaller screens */
+	// ── ngx-daterangepicker-material panel overrides ──────────────────────────
+	::ng-deep .md-drppicker {
+		// min-width: 580px !important;
+		min-width: fit-content !important;
+		flex-wrap: wrap !important;
+		align-items: flex-start !important;
+		gap: 0 !important;
+		.calendar {
+			&.left { border-right: 0px solid #eee; }
+			&.right { border-left: none; }
+		}
 	}
 }

@@ -172,7 +172,7 @@
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
-												[class.errorValid]="submitted && (QBForm?.pickup_address?.errors || QBForm?.pickup_address_lat?.errors)">
+												[class.errorValid]="submitted && (QBForm?.pickup_address?.errors || QBForm?.pickup_address_lat?.errors || QBForm?.pickup_airport?.errors || QBForm?.pickup_airport_lat?.errors)">
 												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
 													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
@@ -252,19 +252,19 @@
 												</div>
 											</div>
 
-											<div *ngIf="submitted && QBForm?.pickup_address?.errors; else PickupAddressError"
+											<div *ngIf="submitted && (QBForm?.pickup_address?.errors || QBForm?.pickup_airport?.errors); else PickupAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm?.pickup_address?.errors?.required">
-													Pickup Address is required
+												<div *ngIf="QBForm?.pickup_address?.errors?.required || QBForm?.pickup_airport?.errors?.required">
+													{{ QBForm?.pickup_type?.value === 'airport' ? 'Pickup Address is required' : 'Pickup Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="pickup_address_lat">
 											<input type="hidden" formControlName="pickup_address_long">
 											<ng-template #PickupAddressError>
-												<div *ngIf="submitted && QBForm?.pickup_address_lat?.errors;"
+												<div *ngIf="submitted && (QBForm?.pickup_address_lat?.errors || QBForm?.pickup_airport_lat?.errors);"
 													class="text-danger">
-													<div *ngIf="QBForm?.pickup_address_lat?.errors?.required">
-														Please enter valid Pickup Address
+													<div *ngIf="QBForm?.pickup_address_lat?.errors?.required || QBForm?.pickup_airport_lat?.errors?.required">
+														{{ QBForm?.pickup_type?.value === 'airport' ? 'Please select a valid Pickup Address' : 'Please enter valid Pickup Address' }}
 													</div>
 												</div>
 											</ng-template>
@@ -343,13 +343,14 @@
 																style="padding:2px 6px; color:#666; text-align:left;">Enter address and select from suggestions</div>
 														</div>
 													</div>
-													<button type="button" 
+													<button type="button"
 														class="btn btn-link text-warning p-0 ml-2"
 														(click)="removeExtraStop(i)"
 														aria-label="Remove stop">
 														<i class="fa-solid fa-minus-circle" style="font-size:1.3rem;"></i>
 													</button>
 												</div>
+												<span *ngIf="submitted && isExtraStopInvalid(i, false)" class="text-danger small">Please select an address from the suggestions.</span>
 											</div>
 										</div>
 										<!-- EXTRA STOPS ENDS -->
@@ -366,7 +367,7 @@
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
-												[class.errorValid]="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_address_lat?.errors)">
+												[class.errorValid]="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_address_lat?.errors || QBForm?.dropoff_airport?.errors || QBForm?.dropoff_airport_lat?.errors)">
 												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
 													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
@@ -446,19 +447,19 @@
 												</div>
 											</div>
 
-											<div *ngIf="submitted && QBForm?.dropoff_address?.errors; else DropoffAddressError"
+											<div *ngIf="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_airport?.errors); else DropoffAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm?.dropoff_address?.errors?.required">
-													Drop Off Address is required
+												<div *ngIf="QBForm?.dropoff_address?.errors?.required || QBForm?.dropoff_airport?.errors?.required">
+													{{ QBForm?.dropoff_type?.value === 'airport' ? 'Drop Off Address is required' : 'Drop Off Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="dropoff_address_lat">
 											<input type="hidden" formControlName="dropoff_address_long">
 											<ng-template #DropoffAddressError>
-												<div *ngIf="submitted && QBForm?.dropoff_address_lat?.errors;"
+												<div *ngIf="submitted && (QBForm?.dropoff_address_lat?.errors || QBForm?.dropoff_airport_lat?.errors);"
 													class="text-danger">
-													<div *ngIf="QBForm?.dropoff_address_lat?.errors?.required">
-														Please enter valid Drop Off Address
+													<div *ngIf="QBForm?.dropoff_address_lat?.errors?.required || QBForm?.dropoff_airport_lat?.errors?.required">
+														{{ QBForm?.dropoff_type?.value === 'airport' ? 'Please select a valid Drop Off Airport' : 'Please enter valid Drop Off Address' }}
 													</div>
 												</div>
 											</ng-template>
@@ -526,17 +527,48 @@
 												</mat-datepicker-toggle>
 												<mat-datepicker #picker1></mat-datepicker>
 											</mat-form-field> -->
-											<mat-form-field appearance="fill" class="date-input">
-												<input matInput [matDatepicker]="picker1" placeholder="Pickup Date"
-													[min]="minDate" formControlName="pickup_date"
-													class="form-control font-weight-bolder"
-													style="height:30px; background-color: #fff !important;"
-													(dateChange)="changeDetection.pickupDate($event.target.value)"
-													(click)="picker1.open()" readonly>
-												<mat-datepicker-toggle matSuffix
-													[for]="picker1"></mat-datepicker-toggle>
-												<mat-datepicker #picker1></mat-datepicker>
-											</mat-form-field>
+											<ng-container *ngIf="QBForm?.service_type?.value === 'round_trip'; else oneWayPickupDate">
+												<div class="qb-date-display-trigger"
+													[class.errorValid]="submitted && QBForm?.pickup_date?.errors"
+													(click)="openRoundTripRangePicker('pickup'); $event.stopPropagation()">
+													<span *ngIf="roundTripRange?.startDate || QBForm?.pickup_date?.value; else pickupPlaceholder" class="qb-date-display-trigger__value">
+														{{ formatDateDisplay(roundTripRange?.startDate || QBForm?.pickup_date?.value) }}
+													</span>
+													<ng-template #pickupPlaceholder>
+														<span class="qb-date-display-trigger__placeholder">Select pickup date</span>
+													</ng-template>
+													<input type="text"
+														#drpInput
+														#roundTripRangeInput
+														ngxDaterangepickerMd
+														[(ngModel)]="roundTripRange"
+														[ngModelOptions]="{standalone: true}"
+														[autoApply]="true"
+														[alwaysShowCalendars]="true"
+														[showDropdowns]="true"
+														[linkedCalendars]="true"
+														[minDate]="minDateDayjs"
+														[locale]="dateRangeLocale"
+														startKey="startDate"
+														endKey="endDate"
+														(datesUpdated)="onRoundTripRangeChange($event)"
+														class="qb-drp-input qb-drp-input--overlay"
+														readonly />
+												</div>
+											</ng-container>
+											<ng-template #oneWayPickupDate>
+												<mat-form-field appearance="fill" class="date-input">
+													<input matInput [matDatepicker]="picker1" placeholder="Pickup Date"
+														[min]="minDate" formControlName="pickup_date"
+														class="form-control font-weight-bolder"
+														style="height:30px; background-color: #fff !important;"
+														(dateChange)="changeDetection.pickupDate($event.target.value)"
+														(click)="picker1.open()" readonly>
+													<mat-datepicker-toggle matSuffix
+														[for]="picker1"></mat-datepicker-toggle>
+													<mat-datepicker #picker1></mat-datepicker>
+												</mat-form-field>
+											</ng-template>
 										</div>
 										<div *ngIf="submitted && QBForm?.pickup_date?.errors" class="text-danger">
 											<div
@@ -563,11 +595,6 @@
 													{{ time?.display_value }}
 												</option>
 											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
 										</div>
 										<div *ngIf="submitted && QBForm?.pickup_time?.errors" class="text-danger">
 											<div *ngIf="QBForm?.pickup_time?.errors?.required">Pickup Time is required
@@ -679,14 +706,14 @@
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
-												[class.errorValid]="submitted && (QBForm?.return_pickup_address?.errors || QBForm?.return_pickup_address_lat?.errors)">
+												[class.errorValid]="submitted && (QBForm?.return_pickup_address?.errors || QBForm?.return_pickup_address_lat?.errors || QBForm?.return_pickup_airport?.errors || QBForm?.return_pickup_airport_lat?.errors)">
 												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
 													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Airport' : (QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address - City Address (FBO)' : 'Return Pickup Address - Cruise Port')"
+														[attr.placeholder]="QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Address' : (QBForm?.dropoff_type?.value === 'city' ? 'Return Pickup Address' : 'Return Pickup Address')"
 														id="return_pickup_address" #retaddressinput
 														formControlName="return_pickup_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -760,21 +787,20 @@
 												</div>
 											</div>
 
-											<div *ngIf="submitted && QBForm?.return_pickup_address?.errors; else DropoffAddressError"
+											<div *ngIf="submitted && (QBForm?.return_pickup_address?.errors || QBForm?.return_pickup_airport?.errors); else DropoffAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm?.return_pickup_address?.errors?.required">Return
-													Pickup
-													Address is required
+												<div *ngIf="QBForm?.return_pickup_address?.errors?.required || QBForm?.return_pickup_airport?.errors?.required">
+													{{ QBForm?.dropoff_type?.value === 'airport' ? 'Return Pickup Address is required' : 'Return Pickup Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="return_pickup_address_lat">
 											<input type="hidden" formControlName="return_pickup_address_long">
 											<ng-template #DropoffAddressError>
-												<div *ngIf="submitted && QBForm?.return_pickup_address_lat?.errors;"
+												<div *ngIf="submitted && (QBForm?.return_pickup_address_lat?.errors || QBForm?.return_pickup_airport_lat?.errors);"
 													class="text-danger">
-													<div *ngIf="QBForm?.return_pickup_address_lat?.errors?.required">
-														Please
-														enter valid Return Pickup Address</div>
+													<div *ngIf="QBForm?.return_pickup_address_lat?.errors?.required || QBForm?.return_pickup_airport_lat?.errors?.required">
+														{{ QBForm?.dropoff_type?.value === 'airport' ? 'Please select a valid Return Pickup Address' : 'Please enter valid Return Pickup Address' }}
+													</div>
 												</div>
 											</ng-template>
 										</div>
@@ -858,6 +884,7 @@
 															<i class="fa-solid fa-minus-circle" style="font-size:1.3rem;"></i>
 														</button>
 													</div>
+													<span *ngIf="submitted && isExtraStopInvalid(i, true)" class="text-danger small">Please select an address from the suggestions.</span>
 												</div>
 											</div>
 
@@ -872,14 +899,14 @@
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
-												[class.errorValid]="submitted && (QBForm?.return_dropoff_address?.errors || QBForm?.return_dropoff_address_lat?.errors)">
+												[class.errorValid]="submitted && (QBForm?.return_dropoff_address?.errors || QBForm?.return_dropoff_address_lat?.errors || QBForm?.return_dropoff_airport?.errors || QBForm?.return_dropoff_airport_lat?.errors)">
 												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
 													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
 												<div class="input-box">
 													<input type="text"
 														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Return Dropoff Airport' : (QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address - City Address (FBO)' : 'Return Dropoff Address - Cruise Port')"
+														[attr.placeholder]="QBForm?.pickup_type?.value === 'airport' ? 'Return Dropoff Address' : (QBForm?.pickup_type?.value === 'city' ? 'Return Dropoff Address' : 'Return Dropoff Address')"
 														id="return_dropoff_address" #retdropaddressinput
 														formControlName="return_dropoff_address" autocomplete="off"
 														autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -953,22 +980,20 @@
 												</div>
 											</div>
 
-											<div *ngIf="submitted && QBForm?.return_dropoff_address?.errors; else DropoffAddressError"
+											<div *ngIf="submitted && (QBForm?.return_dropoff_address?.errors || QBForm?.return_dropoff_airport?.errors); else DropoffAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm?.return_dropoff_address?.errors?.required">Return
-													Drop
-													Off
-													Address is required
+												<div *ngIf="QBForm?.return_dropoff_address?.errors?.required || QBForm?.return_dropoff_airport?.errors?.required">
+													{{ QBForm?.pickup_type?.value === 'airport' ? 'Return Drop Off Address is required' : 'Return Drop Off Address is required' }}
 												</div>
 											</div>
 											<input type="hidden" formControlName="return_dropoff_address_lat">
 											<input type="hidden" formControlName="return_dropoff_address_long">
 											<ng-template #DropoffAddressError>
-												<div *ngIf="submitted && QBForm?.return_dropoff_address_lat?.errors;"
+												<div *ngIf="submitted && (QBForm?.return_dropoff_address_lat?.errors || QBForm?.return_dropoff_airport_lat?.errors);"
 													class="text-danger">
-													<div *ngIf="QBForm?.return_dropoff_address_lat?.errors?.required">
-														Please
-														enter valid Return Drop Off Address</div>
+													<div *ngIf="QBForm?.return_dropoff_address_lat?.errors?.required || QBForm?.return_dropoff_airport_lat?.errors?.required">
+														{{ QBForm?.pickup_type?.value === 'airport' ? 'Please select a valid Return Drop Off Airport' : 'Please enter valid Return Drop Off Address' }}
+													</div>
 												</div>
 											</ng-template>
 										</div>
@@ -996,29 +1021,35 @@
 									<div class="col-6 col-md-6">
 										<div class="qb-field-label"><i class="far fa-calendar-alt"></i> Return Date</div>
 										<div class="pickupdate">
-											<mat-form-field appearance="fill">
-												<input matInput [matDatepicker]="picker3" [min]="minDate"
-													placeholder="Return Pickup Date" id="returnPickupDate"
-													(dateChange)="changeDetection.return_pickup_date($event.target.value)"
-													class="font-weight-bolder" readonly tabindex="1"
-													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
-													formControlName="return_pickup_date" (click)="picker3.open()">
-												<mat-datepicker-toggle matSuffix [for]="picker3">
-												</mat-datepicker-toggle>
-												<mat-datepicker #picker3></mat-datepicker>
-											</mat-form-field>
+											<div class="qb-date-display-trigger"
+												[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
+												(click)="openRoundTripRangePicker('return '); $event.stopPropagation()">
+												<span class="qb-date-display-trigger__value" *ngIf="QBForm?.return_pickup_date?.value">{{ formatDateDisplay(QBForm?.return_pickup_date?.value) }}</span>
+												<span class="qb-date-display-trigger__placeholder" *ngIf="!QBForm?.return_pickup_date?.value">Select return date</span>
+											</div>
+											<input type="text"
+													#drpInput
+													#roundTripRangeInput
+													ngxDaterangepickerMd
+													[(ngModel)]="roundTripRange"
+													[ngModelOptions]="{standalone: true}"
+													[autoApply]="true"
+													[alwaysShowCalendars]="true"
+													[showDropdowns]="true"
+													[linkedCalendars]="true"
+													[minDate]="minDateDayjs"
+													[locale]="dateRangeLocale"
+													startKey="startDate"
+													endKey="endDate"
+													(datesUpdated)="onRoundTripRangeChange($event)"
+													class="qb-drp-input qb-drp-input--overlay"
+													readonly />
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors"
 											class="text-danger">
-											<div
-												*ngIf="QBForm?.return_pickup_date?.errors?.matDatepickerParse; else returnPickupDateRoundError">
-												Return Pickup Date is not valid
+											<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
+												Return Pickup Date is required
 											</div>
-											<ng-template #returnPickupDateRoundError>
-												<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
-													Return Pickup Date is required
-												</div>
-											</ng-template>
 										</div>
 									</div>
 
@@ -1035,11 +1066,6 @@
 													{{ time?.display_value }}
 												</option>
 											</select>
-											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-												width="60px" height="60px">
-												<path
-													d="M32,10c12.15,0,22,9.85,22,22s-9.85,22-22,22s-22-9.85-22-22S19.85,10,32,10z M34,32c0-0.366,0-13.634,0-14  c0-1.105-0.896-2-2-2s-2,0.895-2,2c0,0.282,0,8.196,0,12c-2.66,0-9.698,0-10,0c-1.105,0-2,0.896-2,2s0.895,2,2,2    c0.366,0,11.826,0,12,0C33.104,34,34,33.105,34,32z" />
-											</svg>
 										</div>
 										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
 											class="text-danger">
@@ -1050,7 +1076,7 @@
 									</div>
 								</div>
 
-								<div class="row mt-3 mb-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
+								<!-- <div class="row mt-3 mb-2" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<div class="col-6 col-md-6">
 										<div class="qb-field-label"><i class="fas fa-user"></i> Return Passengers</div>
 										<div>
@@ -1120,7 +1146,7 @@
 											</ul>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								</fieldset>
 							<!-- RIDE PREFERENCES -->
 							<div class="ride-preferences-section mx-2 mt-3 mb-2" *ngIf="amenitiesList?.length > 0">
@@ -1157,6 +1183,7 @@
 							<!-- RIDE PREFERENCES ENDS -->
 
 							</form>
+
 							<div id="search-button-container">
 								<div id="search-button-box" class="pb-3 pb-md-1">
 									<button type="submit" class="three-d-button qb-cta-btn" tabindex="1" (click)="fileTheQuote()"

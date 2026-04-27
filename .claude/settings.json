@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/usr/bin/head -n 80)",
+      "Bash(/usr/bin/head -n 40)",
+      "Bash(/usr/bin/head -n 20)",
+      "Bash(/usr/bin/head -n 30)",
+      "Bash(/usr/bin/sed -n '125,145p' /Users/sushil/Downloads/limo/1800-limo/src/assets/css/style.css)",
+      "Bash(/usr/bin/sed -n '3225,3260p' /Users/sushil/Downloads/limo/1800-limo/src/assets/admin/css/custom-admin.css)",
+      "Bash(/usr/bin/head -n 5)",
+      "Bash(/usr/bin/tail -n 5)",
+      "Bash(/usr/bin/head -n 3)"
+    ]
+  }
+}

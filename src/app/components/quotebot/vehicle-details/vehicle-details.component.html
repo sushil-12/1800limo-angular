@@ -4,7 +4,8 @@
     <!-- ── PAGE HEADER ──────────────────────────────────── -->
     <div class="vd-header">
       <div class="vd-header__title-block">
-       
+        <p class="vd-header__eyebrow">Vehicle Details</p>
+        <h1 class="vd-header__title">Review your selection</h1>
       </div>
       <button type="button" class="vd-btn-back" (click)="backButton()">
         <i class="bi bi-arrow-left"></i>
@@ -140,19 +141,23 @@
         <div class="vd-card__actions">
           <button type="button" class="vd-btn-action"
             data-toggle="modal" data-target="#ModalVehicleRates">
+            <i class="bi bi-receipt"></i>
             Subtotals
           </button>
           <button type="button" class="vd-btn-action"
             data-toggle="modal" data-target="#ModalDriverDetails"
             *ngIf="selected_vehicle.driverInformation">
+            <i class="bi bi-person-badge"></i>
             Driver Info
           </button>
           <button type="button" class="vd-btn-action"
             data-toggle="modal" data-target="#ModalAmenities">
+            <i class="bi bi-stars"></i>
             Amenities
           </button>
           <button type="button" class="vd-btn-book" (click)="bookNow()">
-            Book Now 
+            Book Now
+            <i class="bi bi-arrow-right"></i>
           </button>
         </div>
 
@@ -172,9 +177,14 @@
             <i class="bi bi-send-fill"></i>
           </div>
           <div class="vd-map-card__heading">
-            <p class="vd-map-card__title">First Trip</p>
+            <p class="vd-map-card__title">
+              {{ quotebot_form?.service_type === 'charter_tour' ? 'Pickup Location' : 'Trip Route' }}
+            </p>
+            <p class="vd-map-card__sub">
+              {{ quotebot_form?.service_type === 'charter_tour' ? 'Charter / Tour — hourly service' : 'From pickup to drop-off' }}
+            </p>
           </div>
-          <div class="vd-map-card__stats">
+          <div class="vd-map-card__stats" *ngIf="quotebot_form?.service_type !== 'charter_tour'">
             <div class="vd-map-stat">
               <i class="bi bi-signpost-2-fill"></i>
               <span>{{ convertToMi(distance) }} mi / {{ convertToKm(distance) }} km</span>
@@ -249,21 +259,23 @@
                 <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
               </div>
 
-              <!-- Dropoff Airport or Address -->
-              <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">
+              <!-- Dropoff Airport or Address (hidden for charter — no fixed destination) -->
+              <ng-container *ngIf="quotebot_form?.service_type !== 'charter_tour'">
+                <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">
+                </ng-container>
+                <ng-template #sp_dropair>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Airport</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.other_details.dropoff_airport_name }}</span>
+                  </div>
+                </ng-template>
+                <ng-template #sp_dropadd>
+                  <div class="vd-detail-cell">
+                    <span class="vd-detail-cell__lbl">Dropoff Address</span>
+                    <span class="vd-detail-cell__val">{{ quotebot_form.dropoff_address }}</span>
+                  </div>
+                </ng-template>
               </ng-container>
-              <ng-template #sp_dropair>
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Dropoff Airport</span>
-                  <span class="vd-detail-cell__val">{{ quotebot_form.other_details.dropoff_airport_name }}</span>
-                </div>
-              </ng-template>
-              <ng-template #sp_dropadd>
-                <div class="vd-detail-cell">
-                  <span class="vd-detail-cell__lbl">Dropoff Address</span>
-                  <span class="vd-detail-cell__val">{{ quotebot_form.dropoff_address }}</span>
-                </div>
-              </ng-template>
             </div>
           </div>
 
@@ -620,6 +632,7 @@
 		  </button>
         </div>
       </div>
+<<<<<<< HEAD
 
       <!-- Body -->
       <div class="vd-modal__body vd-amenities">
@@ -667,6 +680,48 @@
           <p>No amenities available for this vehicle</p>
         </div>
 
+=======
+      <div class="vd-modal__body">
+        <ng-container *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
+          <div class="vd-amenities__section">
+             <div class="vd-amenities__section-header">
+              Non-Chargable Amenities
+            </div>
+            <div class="vd-amenities__chips">
+              <span class="vd-amenities__chip vd-amenities__chip--free" 
+                    *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
+                <i class="bi bi-check-circle-fill"></i>
+                {{ amenity.name }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
+          <div class="vd-amenities__section" *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
+            <div class="vd-amenities__divider"></div>
+          </div>
+          <div class="vd-amenities__section">
+            <div class="vd-amenities__section-header">
+              Chargable Amenities
+            </div>
+            <div class="vd-amenities__chips">
+              <span class="vd-amenities__chip vd-amenities__chip--free" 
+                    *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
+                <span class="vd-amenities__chip-price">{{ currencySymbol }}</span>
+                {{ amenity.name }}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="vd-amenities__empty" 
+             *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
+                    selected_vehicle.amenities['non-chargeable'].length == 0">
+          <i class="bi bi-info-circle"></i>
+          <p>No amenities available for this vehicle.</p>
+        </div>
+>>>>>>> a3d8c814d5f2b2ece1bf27c963872f5e9d181fba
       </div>
 
       <!-- Footer -->
