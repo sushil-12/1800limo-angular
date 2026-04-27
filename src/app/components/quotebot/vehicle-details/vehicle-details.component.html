@@ -67,21 +67,18 @@
 
 			<!-- Year / Make / Model -->
 			<div class="vd-specs">
-			<div class="vd-specs__cell">
-				<i class="bi bi-calendar3 vd-specs__icon"></i>
-				<span class="vd-specs__lbl">Year</span>
-				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.year }}</span>
-			</div>
-			<div class="vd-specs__cell">
-				<i class="bi bi-tools vd-specs__icon"></i>
-				<span class="vd-specs__lbl">Make</span>
-				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.make }}</span>
-			</div>
-			<div class="vd-specs__cell">
-				<i class="bi bi-car-front-fill vd-specs__icon"></i>
-				<span class="vd-specs__lbl">Model</span>
-				<span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.model }}</span>
-			</div>
+        <div class="vd-specs__cell">
+          <span class="vd-specs__lbl">Year</span>
+          <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.year }}</span>
+        </div>
+        <div class="vd-specs__cell">
+          <span class="vd-specs__lbl">Make</span>
+          <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.make }}</span>
+        </div>
+        <div class="vd-specs__cell">
+          <span class="vd-specs__lbl">Model</span>
+          <span class="vd-specs__val">{{ selected_vehicle?.vehicle_details?.model }}</span>
+        </div>
 			</div>
 
 			<!-- Pricing cards -->
@@ -632,7 +629,6 @@
 		  </button>
         </div>
       </div>
-<<<<<<< HEAD
 
       <!-- Body -->
       <div class="vd-modal__body vd-amenities">
@@ -680,48 +676,6 @@
           <p>No amenities available for this vehicle</p>
         </div>
 
-=======
-      <div class="vd-modal__body">
-        <ng-container *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
-          <div class="vd-amenities__section">
-             <div class="vd-amenities__section-header">
-              Non-Chargable Amenities
-            </div>
-            <div class="vd-amenities__chips">
-              <span class="vd-amenities__chip vd-amenities__chip--free" 
-                    *ngFor="let amenity of selected_vehicle.amenities['non-chargeable']">
-                <i class="bi bi-check-circle-fill"></i>
-                {{ amenity.name }}
-              </span>
-            </div>
-          </div>
-        </ng-container>
-
-        <ng-container *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
-          <div class="vd-amenities__section" *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
-            <div class="vd-amenities__divider"></div>
-          </div>
-          <div class="vd-amenities__section">
-            <div class="vd-amenities__section-header">
-              Chargable Amenities
-            </div>
-            <div class="vd-amenities__chips">
-              <span class="vd-amenities__chip vd-amenities__chip--free" 
-                    *ngFor="let amenity of selected_vehicle.amenities['chargeable']">
-                <span class="vd-amenities__chip-price">{{ currencySymbol }}</span>
-                {{ amenity.name }}
-              </span>
-            </div>
-          </div>
-        </ng-container>
-
-        <div class="vd-amenities__empty" 
-             *ngIf="selected_vehicle.amenities['chargeable'].length == 0 &&
-                    selected_vehicle.amenities['non-chargeable'].length == 0">
-          <i class="bi bi-info-circle"></i>
-          <p>No amenities available for this vehicle.</p>
-        </div>
->>>>>>> a3d8c814d5f2b2ece1bf27c963872f5e9d181fba
       </div>
 
       <!-- Footer -->
