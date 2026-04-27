@@ -267,13 +267,6 @@ input::-webkit-input-placeholder {
 	font-size: 19px;
 }
 
-.view-button {
-	// background-color: #5373aa !important;
-	color: #fff !important;
-	padding: 5px 8px !important;
-	border-radius: 3rem !important;
-}
-
 .status-pill {
 	display: inline-block;
 	font-family: inherit;
@@ -399,7 +392,7 @@ input::-webkit-input-placeholder {
 	font-size: 26px;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 480px) {
 	main {
 		padding: inherit !important;
 	}
@@ -413,16 +406,24 @@ input::-webkit-input-placeholder {
 	}
 
 	.three-d-button {
-		font-size: 15px !important;
+	
+		font-size: 13px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
+		padding: 6px 10px !important;
 	}
 
 	.btn-add-other-memeber {
-		font-size: 15px !important;
+		font-size: 13px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
+		padding: 5px 10px !important;
 	}
+
+	 svg {
+        height: 15px !important;  
+        margin-right: 5px !important;  
+    }
 }
 
 .asterisk {
@@ -450,8 +451,9 @@ input::-webkit-input-placeholder {
 @media only screen and (max-width: 600px) {
 	.add-member-div {
 		display: flex;
-		justify-content: flex-start;
+		// justify-content: flex-start;
 		margin-top: 10px;
+		margin-right: 5px;
 	}
 }
 
@@ -585,36 +587,6 @@ input::-webkit-input-placeholder {
 .three-d-button:focus {
 	outline: none;
 	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
-}
-
-.date-fields-wrapper {
-	flex-direction: row;
-	gap: 10px;
-	max-width: 520px;
-
-	@media (max-width: 575px) {
-		flex-direction: column;
-		max-width: 100%;
-	}
-}
-
-.search-container-wrapper {
-	gap: 15px;
-	row-gap: 15px; // Ensure spacing when wrapped
-
-	.button-group {
-		margin-top: 10px; // Mobile spacing
-
-		@media (min-width: 576px) {
-			margin-top: 6px; // Visual alignment with form field input box
-		}
-	}
-}
-
-@media (min-width: 576px) {
-	.modal-dialog {
-		min-width: 600px !important;
-	}
 }
 
 .address-layout {
@@ -757,4 +729,83 @@ input::-webkit-input-placeholder {
 		white-space: nowrap; // Keep addresses on one line
 		overflow: visible;
 	}
+}
+
+button.view-button {
+    color: #fff !important;
+    background-color: #f29439 !important;
+    border: 2px solid #f29439 !important;
+    padding: 5px 14px !important;
+    border-radius: 6px !important;  
+    font-size: 14px !important;
+    font-weight: bold !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    cursor: pointer !important;
+    outline: none !important;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
+
+    &:hover, &:focus, &:active {
+        background-color: #d97e20 !important;
+        border-color: #d97e20 !important;
+        box-shadow: 0px 4px 8px rgba(242, 148, 57, 0.4) !important;
+    }
+}
+
+button.view-button.dropdown-toggle::after {
+    font-size: 17px !important;
+}
+
+.date-fields-wrapper {
+    flex-direction: row;
+    gap: 10px;
+    max-width: 620px; // increased from 520px to fit iPad Pro
+
+    @media (max-width: 575px) {
+        flex-direction: column !important;
+        flex: 1;
+        max-width: unset;
+        gap: 0;
+    }
+}
+
+.search-container-wrapper {
+    gap: 15px;
+    row-gap: 15px;
+    flex-wrap: nowrap; 
+
+    .button-group {
+        margin-top: 10px;
+        flex-shrink: 0; 
+
+        @media (min-width: 576px) {
+            margin-top: 6px;
+        }
+    }
+
+    // Mobile only
+    @media (max-width: 575px) {
+        flex-wrap: nowrap !important;
+        align-items: flex-start !important;
+
+        .button-group {
+            flex-direction: column !important;
+            flex-shrink: 0;
+            align-self: flex-start;
+            padding-top: 10px;
+            gap: 25px !important;
+            margin-top: 1px !important;
+
+            div {
+                margin: 0 !important;
+            }
+
+            button {
+                display: block;
+                width: 100%;
+                white-space: nowrap;
+            }
+        }
+    }
 }
