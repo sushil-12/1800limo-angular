@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { AmenitiesService } from 'src/app/services/amenities.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 
 @Component({
@@ -99,6 +100,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 		private $routeurl: ActivatedRoute,
 		private adminServices: AdminService,
 		private stateManagementService: StateManagementService,
+		private amenitiesService: AmenitiesService
 	) { }
 
 	ngOnInit(): void {
@@ -495,6 +497,8 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 			data, this.master_vehicle_id)
 		let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 		data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
+		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
+
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false

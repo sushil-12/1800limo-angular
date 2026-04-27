@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
+import { AmenitiesService } from 'src/app/services/amenities.service';
 
 @Component({
   selector: 'app-rates-form-ta',
@@ -94,7 +95,7 @@ export class RatesFormTaComponent implements OnInit {
 		private $form: FormBuilder,
 		private $api: AdminService,
 		private $routeurl: ActivatedRoute,
-
+		private amenitiesService: AmenitiesService
 	) { }
 
 	ngOnInit(): void {
@@ -485,6 +486,7 @@ export class RatesFormTaComponent implements OnInit {
 			data.vehicle_id , this.master_vehicle_id)
 			let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 			data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
+			data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			if(this.bookingType !='edit'){
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
