@@ -3123,7 +3123,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (!value) return '';
 		const dateStr = value?.format ? value.format('YYYY-MM-DD') : null;
 		const d = dateStr ? dayjs(dateStr) : dayjs(value?.toDate ? value.toDate() : value);
-		return d.isValid() ? d.format('ddd, MMM D, YYYY') : '';
+		return d.isValid() ? d.format('MMM D, YYYY') : '';
 	}
 
 	private getRoundTripPickerDate(value: any): _dayjs.Dayjs | null {
