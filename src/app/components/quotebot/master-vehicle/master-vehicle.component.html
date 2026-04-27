@@ -527,9 +527,9 @@
 								<p id="vehicle-name" class="vehicle-name-text-mobile">
 									{{ vehicle_obj?.name }}
 								</p>
-								<p id="vehicle-price" class="font-weight-bolder" style="font-size: 0.7rem;"
+								<p id="vehicle-price" class="font-weight-bolder" style="font-size: 16px;"
 									*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-									(All Inclusive Rate including tip) <br>
+									<span style="color: red;">(All Inclusive Rate including tip) </span> <br>
 									<span style="color: #c94505;font-weight: 500;">
 										From&nbsp;
 									</span>
