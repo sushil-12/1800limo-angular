@@ -210,12 +210,19 @@ export class VehicleDetailsComponent implements OnInit {
 		const origin = this.getOrigin();
 
 		if (this.quotebot_form.service_type === 'charter_tour') {
-			this.distance = 0;
-			this.duration = 0;
-			this.map.googleMap.setCenter(origin);
-			this.map.googleMap.setZoom(13);
-			new google.maps.Marker({ position: origin, map: this.map.googleMap });
-			return;
+			const hasDropoff = this.quotebot_form.dropoff_type === 'airport'
+				? (Number(this.quotebot_form.dropoff_airport_lat) && Number(this.quotebot_form.dropoff_airport_long))
+				: (Number(this.quotebot_form.dropoff_address_lat) && Number(this.quotebot_form.dropoff_address_long));
+
+			if (!hasDropoff) {
+				this.distance = 0;
+				this.duration = 0;
+				this.map.googleMap.setCenter(origin);
+				this.map.googleMap.setZoom(13);
+				new google.maps.Marker({ position: origin, map: this.map.googleMap });
+				return;
+			}
+			// dropoff exists — fall through to draw the route
 		}
 
 		const directionsService = new google.maps.DirectionsService();
@@ -567,9 +574,7 @@ export class VehicleDetailsComponent implements OnInit {
   const oldBase = 'https://1800limoapi.infodevbox.com/';
   const newBase = 'https://api.1800limo.com/';
 
-  return item.startsWith(oldBase)
-    ? item.replace(oldBase, newBase)
-    : item;
+  return item;
 }
 
 

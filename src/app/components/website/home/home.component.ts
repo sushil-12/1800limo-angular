@@ -60,6 +60,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	roundTripRange: { startDate: any; endDate: any } | null = null;
 	roundTripSelectionTarget: 'pickup' | 'return' = 'pickup';
 	roundTripPickerOpen = false;
+	rtLiveStart: any = null;
+	rtLiveEnd: any = null;
 	minDateDayjs = dayjs().startOf('day');
 	readonly dateRangeLocale = {
 		format: 'MMM D, YYYY',
@@ -3095,12 +3097,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onRoundTripRangeChange(event: { startDate: any; endDate: any }) {
 		if (!event || !event.startDate || !event.endDate) return;
-		const m: any = moment;
-		const start = event.startDate.toDate ? event.startDate.toDate() : new Date(event.startDate);
-		const end   = event.endDate.toDate   ? event.endDate.toDate()   : new Date(event.endDate);
-		this.SetFormValue('pickup_date', m(start).format('YYYY-MM-DD'));
-		this.SetFormValue('return_pickup_date', m(end).format('YYYY-MM-DD'));
+		const startStr = event.startDate?.format ? event.startDate.format('YYYY-MM-DD') : dayjs(event.startDate).format('YYYY-MM-DD');
+		const endStr   = event.endDate?.format   ? event.endDate.format('YYYY-MM-DD')   : dayjs(event.endDate).format('YYYY-MM-DD');
+		this.SetFormValue('pickup_date', startStr);
+		this.SetFormValue('return_pickup_date', endStr);
 		this.roundTripRange = { startDate: event.startDate, endDate: event.endDate };
+		this.rtLiveStart = event.startDate;
+		this.rtLiveEnd   = event.endDate;
 		this.roundTripSelectionTarget = 'pickup';
 		this.roundTripPickerOpen = false;
 		this.scheduleRoundTripPickerPanelSync();
@@ -3118,8 +3121,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	formatDateDisplay(value: any): string {
 		if (!value) return '';
-		const raw = value?.toDate ? value.toDate() : value;
-		const d = dayjs(raw);
+		const dateStr = value?.format ? value.format('YYYY-MM-DD') : null;
+		const d = dateStr ? dayjs(dateStr) : dayjs(value?.toDate ? value.toDate() : value);
 		return d.isValid() ? d.format('ddd, MMM D, YYYY') : '';
 	}
 
@@ -3192,6 +3195,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	openRoundTripRangePicker(target: 'pickup' | 'return' = 'pickup'): void {
+		this.rtLiveStart = this.roundTripRange?.startDate ?? null;
+		this.rtLiveEnd   = this.roundTripRange?.endDate ?? null;
 		this.roundTripPickerOpen = true;
 		// Wait one tick for *ngIf to render the modal and the input inside it
 		setTimeout(() => {
@@ -3207,17 +3212,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	
 
-	onRoundTripPickerStartDateChanged(): void {
+	onRoundTripPickerStartDateChanged(event: any): void {
 		const picker = this.roundTripRangePicker?.picker;
-		if (!picker) {
-			return;
+		const startDate = event?.startDate ?? event;
+		if (startDate) {
+			this.rtLiveStart = startDate;
+			this.rtLiveEnd = null;
 		}
-
-		this.roundTripSelectionTarget = picker.endDate ? 'pickup' : 'return';
+		this.roundTripSelectionTarget = picker?.endDate ? 'pickup' : 'return';
 		this.scheduleRoundTripPickerPanelSync();
 	}
 
-	onRoundTripPickerEndDateChanged(): void {
+	onRoundTripPickerEndDateChanged(event: any): void {
+		const endDate = event?.endDate ?? event;
+		if (endDate) {
+			this.rtLiveEnd = endDate;
+		}
 		this.roundTripSelectionTarget = 'pickup';
 		this.scheduleRoundTripPickerPanelSync();
 	}
