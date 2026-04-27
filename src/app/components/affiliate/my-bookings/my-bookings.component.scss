@@ -392,7 +392,7 @@ input::-webkit-input-placeholder {
 	font-size: 26px;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 480px) {
 	main {
 		padding: inherit !important;
 	}
@@ -406,16 +406,24 @@ input::-webkit-input-placeholder {
 	}
 
 	.three-d-button {
-		font-size: 15px !important;
+	
+		font-size: 13px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
+		padding: 6px 10px !important;
 	}
 
 	.btn-add-other-memeber {
-		font-size: 15px !important;
+		font-size: 13px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
+		padding: 5px 10px !important;
 	}
+
+	 svg {
+        height: 15px !important;  
+        margin-right: 5px !important;  
+    }
 }
 
 .asterisk {
@@ -443,8 +451,9 @@ input::-webkit-input-placeholder {
 @media only screen and (max-width: 600px) {
 	.add-member-div {
 		display: flex;
-		justify-content: flex-start;
+		// justify-content: flex-start;
 		margin-top: 10px;
+		margin-right: 5px;
 	}
 }
 
@@ -764,11 +773,11 @@ button.view-button.dropdown-toggle::after {
 .search-container-wrapper {
     gap: 15px;
     row-gap: 15px;
-    flex-wrap: nowrap; // prevent wrapping on iPad Pro
+    flex-wrap: nowrap; 
 
     .button-group {
         margin-top: 10px;
-        flex-shrink: 0; // prevent buttons from shrinking/wrapping
+        flex-shrink: 0; 
 
         @media (min-width: 576px) {
             margin-top: 6px;
@@ -784,8 +793,8 @@ button.view-button.dropdown-toggle::after {
             flex-direction: column !important;
             flex-shrink: 0;
             align-self: flex-start;
-            padding-top: 4px;
-            gap: 8px !important;
+            padding-top: 10px;
+            gap: 25px !important;
             margin-top: 1px !important;
 
             div {
