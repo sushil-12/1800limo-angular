@@ -2850,6 +2850,18 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
+	private extraStopAddressValidator(): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const group = control as FormGroup;
+			const address = String(group.get('address')?.value || '').trim();
+			const placeId = String(group.get('place_id')?.value || '').trim();
+			if (address && !placeId) {
+				return { invalidPlace: true };
+			}
+			return null;
+		};
+	}
+
 	addExtraStop(is_return: boolean = false) {
 		// console.log('Adding Extra Stop ...')
 		if (is_return) {
@@ -2861,7 +2873,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
 				booking_instructions: new FormControl('')
-			}))
+			}, { validators: this.extraStopAddressValidator() }))
 		}
 		else {
 			let index = Object.keys(this.ExtraStops).length + 1;
@@ -2872,7 +2884,7 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
 				booking_instructions: new FormControl('')
-			}))
+			}, { validators: this.extraStopAddressValidator() }))
 		}
 	}
 
