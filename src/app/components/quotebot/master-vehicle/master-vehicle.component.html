@@ -136,7 +136,7 @@
 													<input type="checkbox" class="custom-control-input"
 														[attr.id]="filter_text.dp + '_' + '_' + filter_index"
 														[attr.name]="filter_text.dp + '_' + '_' + filter_index"
-														(change)="filterSelection($event.target.checked, filter_text.rp, filter); getVehicleDetails(); openfilters=false"
+														(change)="filterSelection($event.target.checked, filter_text.rp, filter); openfilters=false"
 														[checked]="isFilterAlreadySelected(filter_text.rp, filter)" />
 													<label class="custom-control-label"
 														[attr.for]="filter_text.dp + '_' + '_' + filter_index">
@@ -235,7 +235,7 @@
 																	<input type="checkbox" class="custom-control-input"
 																		[attr.id]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
 																		[attr.name]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
-																		(change)="filterSelection($event.target.checked, inner_filter_text.rp, inner_filter); getVehicleDetails(); openfilters=false"
+																		(change)="filterSelection($event.target.checked, inner_filter_text.rp, inner_filter); openfilters=false"
 																		[checked]="isFilterAlreadySelected(inner_filter_text.rp, inner_filter)" />
 																	<label class="custom-control-label"
 																		[attr.for]="inner_filter_text.dp + '_' + '_' + inner_filter_index">
@@ -527,7 +527,7 @@
 								<p id="vehicle-name" class="vehicle-name-text-mobile">
 									{{ vehicle_obj?.name }}
 								</p>
-								<p id="vehicle-price" class="font-weight-bolder" style="font-size: 16px;"
+								<p id="vehicle-price" class="font-weight-bolder" style="font-size: 14px;"
 									*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
 									<span style="color: red;">(All Inclusive Rate including tip) </span> <br>
 									<span style="color: #c94505;font-weight: 500;">

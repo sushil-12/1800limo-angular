@@ -357,16 +357,22 @@ private subscription: Subscription;
 			window.scrollTo(0, 0);
 			this.isLoading = true;
 
+			// console.log("DEBUG AMENITIES SELECT VEHICLE INIT", this.amenitiesService.getCurrentValu )
+
 			try {
 				// 1. First, subscribe to amenities service (so that selectedAmenities is updated)
 				this.subscription = this.amenitiesService.selectedAmenities$.subscribe(amenities => {
-				console.log('[SelectVehicle] received amenities from service:', amenities);
-				this.selectedAmenities = amenities;
-				if (this.quotebot_form) {
-					this.quotebot_form.amenities = amenities;
-				}
+				// console.log('[SelectVehicle] received amenities from service:', amenities);
+				// this.selectedAmenities = amenities;
+				// if (this.quotebot_form) {
+				// 	this.quotebot_form.amenities = amenities;
+				// }
+				// });
+				console.log('[SelectVehicle] Subscribed to amenities. Current amenities:', amenities);
+					if (this.quotebot_form) {
+						this.quotebot_form.amenities = sessionStorage.getItem('filters') ? JSON.parse(sessionStorage.getItem('filters')).request.amenities : this.amenitiesService.getCurrentValue();
+					}
 				});
-
 				// 2. Now load quotebot_form from localStorage
 				if (!localStorage.getItem('quotebot_form')) {
 				this.$errorDialog.openDialog({
@@ -654,7 +660,7 @@ private subscription: Subscription;
 			...this.quotebot_form,
 			filters: this.filters.request,
 			user_id: this.currentUser?.id,
-			selected_amenities: this.amenitiesService.getCurrentValue() 
+			selected_amenities:  this.filters.request['amenities'] || []
 		};
 		
 		this.$spinner.show();

@@ -1255,7 +1255,7 @@ export class AdminService {
 	// 	.set('is_master_vehicle' , data?.is_master_vehicle);
 	fetchRatesByAffiliateVeh(vehicle_id, data) {
 		data['vehicle_id'] = vehicle_id
-		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
+		data['selected_amenities'] = sessionStorage.getItem('filters') ? JSON.parse(sessionStorage.getItem('filters')).request.amenities : [];
 		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`, data)
 	}
 	
