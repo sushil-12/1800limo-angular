@@ -721,12 +721,21 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			data?.vehicle_id === null ||
 			data?.vehicle_id === undefined ||
 			data?.vehicle_id === '';
+		
+		const hasAffiliateId =
+			data?.affiliate_id !== null &&
+			data?.affiliate_id !== undefined &&
+			data?.affiliate_id !== '';
+
 		const shouldUseMasterVehicle =
-			data?.is_master_vehicle === true ||
-			data?.is_master_vehicle === 'true' ||
-			data?.vehicle_id === 0 ||
-			data?.vehicle_id === '0' ||
-			hasEmptyVehicleId;
+			!hasAffiliateId && (
+				data?.is_master_vehicle === true ||
+				data?.is_master_vehicle === 'true' ||
+				data?.vehicle_id === 0 ||
+				data?.vehicle_id === '0' ||
+				hasEmptyVehicleId
+			);
+
 		if (data.vehicle_id !== undefined && data.vehicle_id !== null && data.vehicle_id !== '') {
 			vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 		}
