@@ -569,7 +569,7 @@
 										<div class="inselect pickupTime">
 											<select name="pickupTime" placeholder="Pickup Time" required
 												formControlName="pickup_time" class="font-weight-bolder" tabindex="1"
-												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%; padding: 0 4px 0 12px !important;"
+												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%; padding: 0 2px 0 8px !important;"
 												(change)="changeDetection.pickupTime($event, 'pickup_time')"
 												[class.errorValid]="submitted && QBForm?.pickup_time?.errors">
 												<option *ngFor="let time of time_values" [value]="time?.return_value">
