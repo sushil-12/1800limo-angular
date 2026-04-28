@@ -122,7 +122,7 @@
 				</ul>
 				<div class="tab-content" id="myTabContent">
 					<div>
-						<div class="tab_innerform">
+						<div [class.tab_innerform]="QBForm?.service_type?.value === 'round_trip' || QBForm?.service_type?.value === 'charter_tour'">
 
 							<form [formGroup]="quoteBotForm">
 
