@@ -5275,8 +5275,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 						return_susbcriber_name: this.BookingForm?.get('susbcriber_name')?.value,
 					})
 				}
-				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
-				this.SetFormValue('return_pickup_time', '12:00 pm')
+				this.SetFormValue('return_pickup_date', moment(this.BookingForm.get('return_pickup_date').value).format('YYYY-MM-DD'));
+				this.SetFormValue('return_pickup_time', this.FormatTime(this.BookingForm.get('return_pickup_time').value));
 				this.updateReturnLegValidators(this.BookingForm.get('return_transfer_type').value);
 			}
 			if (value != 'charter_tour') {
