@@ -547,8 +547,6 @@
 														style="height:30px; background-color: #fff !important;"
 														(dateChange)="changeDetection.pickupDate($event.target.value)"
 														(click)="picker1.open()" readonly>
-													<mat-datepicker-toggle matSuffix
-														[for]="picker1"></mat-datepicker-toggle>
 													<mat-datepicker #picker1></mat-datepicker>
 												</mat-form-field>
 											</ng-template>
@@ -571,7 +569,7 @@
 										<div class="inselect pickupTime">
 											<select name="pickupTime" placeholder="Pickup Time" required
 												formControlName="pickup_time" class="font-weight-bolder" tabindex="1"
-												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
+												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%; padding: 0 4px 0 12px !important;"
 												(change)="changeDetection.pickupTime($event, 'pickup_time')"
 												[class.errorValid]="submitted && QBForm?.pickup_time?.errors">
 												<option *ngFor="let time of time_values" [value]="time?.return_value">
@@ -1025,7 +1023,7 @@
 											<select name="returPickupTime" placeholder="Return Pickup Time" required=""
 												formControlName="return_pickup_time" class="font-weight-bolder"
 												tabindex="1"
-												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
+												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%; padding: 0 4px 0 12px !important;"
 												(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
 												[class.errorValid]="submitted && QBForm?.return_pickup_time?.errors">
 												<option *ngFor="let time of time_values" [value]="time?.return_value">
