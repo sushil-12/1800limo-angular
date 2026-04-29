@@ -910,10 +910,35 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		void this.searchAddress(nextValue, fieldName);
 	}
 
+	private isAirportTerminalAddress(address: any): boolean {
+		const name = String(address?.name || '').trim();
+		const description = String(address?.description || '').trim();
+		const combined = `${name} ${description}`.toLowerCase();
+
+		// Must contain 'terminal' or 'concourse'
+		const hasTerminalKeyword = /\b(terminal|concourse)\b/.test(combined);
+		if (!hasTerminalKeyword) {
+			return false;
+		}
+
+		const hasIataCode = /\b[A-Z]{3}\b/.test(`${name} ${description}`);
+		const hasAirportWord = combined.includes('airport');
+
+		return hasIataCode || hasAirportWord;
+    }
+
 	async selectAddressOption(address: any, fieldName: string): Promise<void> {
 		this.clearAddressDropdownBlurTimer();
 
-		if (address?.isAddressAirportResult) {
+		 const types: string[] = Array.isArray(address?.types) ? address.types : [];
+		const isTypedAsAirport = types.some((t) =>
+			['airport', 'aerodrome'].includes(String(t).toLowerCase())
+		);
+		const isAirportResult = address?.isAddressAirportResult
+			|| isTypedAsAirport
+			|| this.isAirportTerminalAddress(address); 
+
+		if (isAirportResult) {
 			const airportField = this.getCorrespondingAirportFieldName(fieldName);
 			const typeField = this.getAddressTypeFieldName(fieldName);
 
@@ -1133,7 +1158,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			headers: {
 				'Content-Type': 'application/json',
 				'X-Goog-Api-Key': apiKey,
-				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text'
+				'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat.mainText.text,suggestions.placePrediction.structuredFormat.secondaryText.text,suggestions.placePrediction.types'
 			},
 			body: JSON.stringify({
 				input: searchText,
@@ -1147,14 +1172,26 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return suggestions
 					.map((suggestion: any) => suggestion?.placePrediction)
 					.filter((prediction: any) => !!prediction?.placeId)
-					.map((prediction: any) => ({
-						placeId: prediction.placeId,
-						name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
-							|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
-							|| this.getPredictionTextValue(prediction?.text),
-						secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
-						description: this.getPredictionTextValue(prediction?.text)
-					}))
+					.map((prediction: any) => {
+						const types: string[] = Array.isArray(prediction?.types)
+							? prediction.types.map((t: string) => String(t).toLowerCase())
+							: [];
+
+						const isAirportResult = types.some((t) =>
+							['airport', 'aerodrome'].includes(t)
+						);
+
+						return {
+							placeId: prediction.placeId,
+							name: this.getPredictionTextValue(prediction?.structuredFormat?.mainText)
+								|| this.getPredictionTextValue(prediction?.text)?.split(',')[0]?.trim()
+								|| this.getPredictionTextValue(prediction?.text),
+							secondaryText: this.getPredictionTextValue(prediction?.structuredFormat?.secondaryText),
+							description: this.getPredictionTextValue(prediction?.text),
+							types,
+							isAddressAirportResult: isAirportResult
+						};
+					})
 					.slice(0, 8);
 			})
 			.catch(() => []);
@@ -2913,7 +2950,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	SetFormValue(
 		field_name: string,
-		value: string | number,
+		value: string | number, 
 		options: QuoteBotControlSyncOptions = {}
 	) {
 		console.log(`Filling ${value} into ${field_name}`)
