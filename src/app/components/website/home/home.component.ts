@@ -3056,7 +3056,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.persistQuoteBotState();
 	}
 
-
+	handleClearMouseDown(event: MouseEvent, input: HTMLInputElement) {
+		event.preventDefault();
+		input.focus(); 
+	}
 
 	/**
 	 * Change quotebot type

@@ -74,13 +74,13 @@
 
 					<div class="content-container">
 						<div class="release-text">
-							iOS Apps Now Live | Android Version Coming Soon
+							Install Our Applications Now 
 						</div>
 						<div class="store-icons">
 							<img src="../../../../assets/images/appstore.png" alt="App Store" class="store-img"
 								style="cursor: pointer;" data-toggle="modal" data-target="#appStorePopup">
 							<img style="filter: grayscale(1);" src="../../../../assets/images/googleplay.png"
-								alt="Google Play" class="store-img-android">
+								alt="Google Play" class="store-img store-img-android" style="cursor: pointer;" data-toggle="modal" data-target="#googlePlayPopup">
 						</div>
 					</div>
 				</div>
@@ -198,13 +198,16 @@
 													<i class="fa-solid fa-crosshairs"></i>
 												</button>
 
+
 												<div class="airport-clear-wrap address-clear-wrap"
 													*ngIf="shouldShowAddressClear(addressinput, 'pickup_address')">
-													<button type="button" class="airport-clear-btn"
-														(click)="reset('pickup_address')"
-														aria-label="Clear pickup address">
+														<button type="button"
+															class="airport-clear-btn"
+															(mousedown)="handleClearMouseDown($event, addressinput)"
+															(click)="reset('pickup_address')"
+															aria-label="Clear pickup address">
 														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-															<path fill="#1f1f1f" fill-rule="evenodd"
+															<path fill="#1f1f1f" fill-rule="evenodd"+
 																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
 																clip-rule="evenodd"></path>
 														</svg>
@@ -304,6 +307,7 @@
 														<div class="airport-clear-wrap address-clear-wrap"
 															*ngIf="stop.address || extraStopInputRef?.value">
 															<button type="button" class="airport-clear-btn"
+																(mousedown)="handleClearMouseDown($event, extraStopInputRef)"
 																(click)="clearExtraStopAddress(i, false, extraStopInputRef)"
 																aria-label="Clear stop address">
 																<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
@@ -396,6 +400,7 @@
 												<div class="airport-clear-wrap address-clear-wrap"
 													*ngIf="shouldShowAddressClear(dropaddressinput, 'dropoff_address')">
 													<button type="button" class="airport-clear-btn"
+													    (mousedown)="handleClearMouseDown($event, dropaddressinput)"
 														(click)="reset('dropoff_address')"
 														aria-label="Clear dropoff address">
 														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
@@ -478,7 +483,7 @@
 										<div class="add-stop-link d-flex mt-1 mb-2">
 											<a role="button" class="add-stop-btn fw-semibold small"
 												(click)="addExtraStop()">
-												<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop (optional)
+												<i class="bi bi-plus-circle-fill mr-1"></i> Add a stop
 											</a>
 										</div>
 
@@ -717,6 +722,7 @@
 												<div class="airport-clear-wrap address-clear-wrap"
 													*ngIf="shouldShowAddressClear(retaddressinput, 'return_pickup_address')">
 													<button type="button" class="airport-clear-btn"
+													    (mousedown)="handleClearMouseDown($event, retaddressinput)"
 														(click)="reset('return_pickup_address')"
 														aria-label="Clear return pickup address">
 														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
@@ -819,6 +825,7 @@
 															<div class="airport-clear-wrap address-clear-wrap"
 																*ngIf="stop.address || returnExtraStopInputRef?.value">
 																<button type="button" class="airport-clear-btn"
+														            (mousedown) = "handleClearMouseDown($event, returnExtraStopInputRef)"
 																	(click)="clearExtraStopAddress(i, true, returnExtraStopInputRef)"
 																	aria-label="Clear return stop address">
 																	<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
@@ -910,6 +917,7 @@
 												<div class="airport-clear-wrap address-clear-wrap"
 													*ngIf="shouldShowAddressClear(retdropaddressinput, 'return_dropoff_address')">
 													<button type="button" class="airport-clear-btn"
+													    (mousedown) = "handleClearButtonMouseDown($event,return_dropoff_address)"
 														(click)="reset('return_dropoff_address')"
 														aria-label="Clear return dropoff address">
 														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
@@ -992,8 +1000,7 @@
 											<a role="button" class="add-stop-btn fw-semibold small"
 												(click)="addExtraStop(true)">
 												<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop
-												(optional)
-											</a>
+											</a>  
 										</div>
 
 									</div>
@@ -1708,7 +1715,10 @@
 			</a>
             </div>
 
-            <h4>1800LIMO (passenger app)</h4>
+            <a href="https://apps.apple.com/in/app/1800limo/id6751568791" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:black">
+				<h4>1800LIMO (passenger app)</h4>
+			</a>
+
             <p>
               Premium movement at your fingertips. Book instantly,
               track in real-time, and experience the future of urban mobility.
@@ -1721,7 +1731,7 @@
 
             <a href="https://apps.apple.com/in/app/1800limo/id6751568791"
                target="_blank"
-               class="store-btn">
+               class="store-passenger-btn">
               <i class="fab fa-apple"></i> Download on App Store
             </a>
           </div>
@@ -1735,7 +1745,9 @@
 			  </a>
             </div>
 
-            <h4>1800LIMO Chauffeur</h4>
+            <a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:black">
+			   <h4>1800LIMO Chauffeur</h4>
+		    </a>
             <p>
               Maximum efficiency for modern professionals.
               Optimize your route, track every cent, and drive with precision.
@@ -1748,8 +1760,91 @@
 
             <a href="https://apps.apple.com/in/app/1800limo-chauffeur/id6748669445"
                target="_blank"
-               class="store-btn">
+               class="store-driver-btn">
               <i class="fab fa-apple"></i> Download on App Store
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Google Play Popup -->
+<div class="modal fade" id="googlePlayPopup" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered app-store-dialog">
+    <div class="modal-content app-store-modal">
+
+      <!-- Close -->
+	  <button type="button" class="app-store-close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+
+      <div class="app-store-body">
+
+        <h3 class="app-store-title">Download Our Apps</h3>
+
+        <div class="app-grid">
+
+          <!-- Passenger App -->
+          <div class="app-card">
+            <div class="app-header">
+              <img src="assets/app-store/Passenger.svg" class="app-icon" />
+            <a 
+				href="https://play.google.com/store/apps/details?id=com.limo1800.limouserapp&hl=en_IN" 
+				class="badge passenger"
+				target="_blank"
+				rel="noopener noreferrer">
+				Passenger App
+			</a>
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.limo1800.limouserapp&hl=en_IN" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:black">
+				<h4>1800LIMO (passenger app)</h4>
+			</a>
+
+            <p>
+              Premium movement at your fingertips. Book instantly,
+              track in real-time, and experience the future of urban mobility.
+            </p>
+
+            <div class="app-images">
+              <img src="assets/images/user-map.webp" />
+              <img src="assets/images/user.webp" />
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.limo1800.limouserapp&hl=en_IN"
+               target="_blank"
+               class="store-passenger-btn">
+              <i class="fab fa-google-play"></i> Download on Google Play
+            </a>
+          </div>
+
+          <!-- Chauffeur App -->
+          <div class="app-card">
+            <div class="app-header">
+              <img src="assets/app-store/Passenger.svg" class="app-icon" />
+              <a href="https://play.google.com/store/apps/details?id=com.limo1800driver.app&hl=en_IN" class="badge driver" target="_blank" rel="noopener noreferrer">
+				Driver App
+			  </a>
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.limo1800driver.app&hl=en_IN" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:black">
+			   <h4>1800LIMO Chauffeur</h4>
+		    </a>
+            <p>
+              Maximum efficiency for modern professionals.
+              Optimize your route, track every cent, and drive with precision.
+            </p>
+
+            <div class="app-images">
+              <img src="assets/images/driver-map.webp" />
+              <img src="assets/images/deiver.webp" />
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.limo1800driver.app&hl=en_IN"
+               target="_blank"
+               class="store-driver-btn">
+              <i class="fab fa-google-play"></i> Download on Google Play
             </a>
           </div>
 

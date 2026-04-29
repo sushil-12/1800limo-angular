@@ -6099,8 +6099,6 @@ header .navbar-toggler {
 	display: flex;
 	gap: 10px;
 	flex-wrap: wrap;
-	/* Prevents icons from breaking on small screens */
-	justify-content: center;
 }
 
 
@@ -6303,3 +6301,4 @@ gmp-place-autocomplete {
 		box-shadow: none !important;
 	}
 }
+
