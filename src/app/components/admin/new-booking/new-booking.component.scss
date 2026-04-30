@@ -589,6 +589,12 @@ ul {
 	font-weight: 500;
 }
 
+
+:host ::ng-deep #vehicle-type .ng-select .ng-value-label,
+:host ::ng-deep #vehicle-type .ng-select .ng-value {
+    font-weight: 500;
+}
+
 .required-field::after {
 	font-size: 19px !important;
 }
