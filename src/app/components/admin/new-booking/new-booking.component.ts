@@ -2948,7 +2948,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSelectionChangeServiceType(event: any) {
 		console.log("in service type change--->", event.value)
 		this.service_type = event.value;
-		this.buildBookingData()
+		// Patch to ensure all bound mat-select instances reflect the new value
+		this.BookingForm.get('service_type')?.setValue(event.value, { emitEvent: false });
+		this.buildBookingData();
 	}
 
 	changeReturnTransferType(event: any) {
