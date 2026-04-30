@@ -2217,8 +2217,10 @@ export class NewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	onSelectionChangeServiceType(event: any) {
+		console.log("in service type change--->", event.value)
 		this.service_type = event.value;
-		this.buildBookingData()
+		this.BookingForm.get('service_type')?.setValue(event.value, { emitEvent: false });
+		this.buildBookingData();
 	}
 
 	changeReturnTransferType(event: any) {
