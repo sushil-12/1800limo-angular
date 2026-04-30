@@ -6,15 +6,12 @@ export const environment = {
 	production: false,
 	environmentName: 'Development',
 	// serverUrl: "http://10.20.20.63:8000/api/",
-	accessKeyId: "AKIAZTOUHGGRSIV2GIVY",
-	secretAccessKey: "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",
 	mistralSecretKey: "WvrrM5g1bmpJZjb3Go4d8tnUfZkNogmP",
 	// recaptchaKey:"6Lcf2MYqAAAAAMPwdv97BZ_LBwX-1e9y2NcFsoIn",
-	serverUrl: "https://1800limoapi.infodevbox.com/api/"
-	// serverUrl: "http://10.20.20.154:8000/api/"
-
+	serverUrl: "https://1800limoapi.infodevbox.com/api/",
+	// serverUrl: "http://10.20.20.154:8000/api/",
+    encryptionKey:"BTEo5hJauptWuoKUqeTfVgEn1a6BOSXzNlSoN6SPQBI=",
 	// serverUrl: "https://api.1800limo.com/api/"
-
 };
 
 /*
