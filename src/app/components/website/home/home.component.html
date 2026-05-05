@@ -189,6 +189,7 @@
 														(blur)="onAddressFieldBlur('pickup_address')" tabindex="1" />
 												</div>
 
+
 												<button type="button" class="address-current-location-btn"
 													*ngIf="shouldShowCurrentLocationIcon(addressinput, 'pickup_address')"
 													(mousedown)="$event.preventDefault()"
@@ -207,7 +208,7 @@
 															(click)="reset('pickup_address')"
 															aria-label="Clear pickup address">
 														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-															<path fill="#1f1f1f" fill-rule="evenodd"+
+															<path fill="#1f1f1f" fill-rule="evenodd"
 																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
 																clip-rule="evenodd"></path>
 														</svg>
@@ -368,6 +369,7 @@
 												<img src="../../../../assets/images/swap_logo.svg" alt="swap">
 											</button>
 										</div>
+
 										<div class="errorMsg col-md-12">
 											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
 												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
@@ -388,14 +390,14 @@
 														(blur)="onAddressFieldBlur('dropoff_address')" tabindex="1" />
 												</div>
 
-												<button type="button" class="address-current-location-btn"
+												<!-- <button type="button" class="address-current-location-btn"
 													*ngIf="shouldShowCurrentLocationIcon(dropaddressinput, 'dropoff_address')"
 													(mousedown)="$event.preventDefault()"
 													(click)="useCurrentPickupLocation('dropoff_address')"
 													aria-label="Use current location for dropoff address"
 													title="Use Current Location">
 													<i class="fa-solid fa-crosshairs"></i>
-												</button>
+												</button> -->
 
 												<div class="airport-clear-wrap address-clear-wrap"
 													*ngIf="shouldShowAddressClear(dropaddressinput, 'dropoff_address')">
@@ -905,14 +907,14 @@
 														tabindex="1" />
 												</div>
 
-												<button type="button" class="address-current-location-btn"
+												<!-- <button type="button" class="address-current-location-btn"
 													*ngIf="shouldShowCurrentLocationIcon(retdropaddressinput, 'return_dropoff_address')"
 													(mousedown)="$event.preventDefault()"
 													(click)="useCurrentPickupLocation('return_dropoff_address')"
 													aria-label="Use current location for return dropoff address"
 													title="Use Current Location">
 													<i class="fa-solid fa-crosshairs"></i>
-												</button>
+												</button> -->
 
 												<div class="airport-clear-wrap address-clear-wrap"
 													*ngIf="shouldShowAddressClear(retdropaddressinput, 'return_dropoff_address')">
