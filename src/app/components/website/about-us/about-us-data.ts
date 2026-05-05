@@ -126,7 +126,7 @@ export const aboutUsData = {
             },
             {
                 icon: "bi-headset",
-                iconImage: "assets/images/24:7-Support.png",
+                iconImage: "assets/images/support.png",
                 title: "24/7 Support",
                 description: "Round-the-clock customer service and dispatch available"
             },
