@@ -4814,3 +4814,10 @@ span.qb-date-display-trigger__value {
 .address-current-location-btn {
     animation: pulseGlow 2s infinite;
 }
+
+.field-focused {
+  border: 2px solid #f3993D !important; 
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+  transition: border-color 0.15s ease, 
+  box-shadow 0.15s ease;
+}

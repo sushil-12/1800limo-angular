@@ -151,7 +151,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	progressWidth: number = 25; // Progress line width percentage
 	private quoteBotAutofillSyncInterval?: ReturnType<typeof setInterval>;
 	private quoteBotAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
-
+    private focusedField: string | null = null;
 
 	// Extra stops & amenities
 	amenitiesList: any[] = [];
@@ -820,14 +820,32 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
-	onAddressFieldFocus(fieldName: string, input?: HTMLInputElement): void {
-		if (!this.isTouchAirportInteraction()) {
-			input?.select();
+	isFieldFocused(fieldName: string): boolean {
+	  return this.focusedField === fieldName;
+	}
+
+	onAddressFieldTouchEnd(event: TouchEvent, inputEl: HTMLInputElement): void {
+		event.preventDefault();
+		// Focus the input (triggers keyboard on mobile)
+		inputEl.focus();
+		// Select all text on tap
+		inputEl.select();
+		// Also open the dropdown just like a click would
+		this.openAddressDropdown('dropoff_address');
+	}
+
+	onAddressFieldFocus(fieldName: string, inputEl: HTMLInputElement): void {
+		 this.focusedField = fieldName;
+
+		if (!('ontouchstart' in window)) {
+			inputEl.select();
 		}
+		
 		this.openAddressDropdown(fieldName);
 	}
 
 	onAddressFieldBlur(fieldName: string): void {
+		this.focusedField = null;
 		this.clearAddressDropdownBlurTimer();
 		this.addressDropdownBlurTimeout = setTimeout(() => {
 			this.closeAddressDropdown(fieldName);
