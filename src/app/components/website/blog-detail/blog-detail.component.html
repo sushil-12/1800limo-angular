@@ -1,247 +1,410 @@
-<div class="blog-detail-page bg-white pb-5" *ngIf="post">
+<div class="blog-detail-page bg-white pb-5">
+
+  <!-- =============================================
+       SKELETON LOADER - shown while post is loading
+       ============================================= -->
+  <ng-container *ngIf="!post">
+
+    <!-- Header Skeleton -->
+    <header class="detail-hero pt-5 pb-2 bg-white">
+      <div class="container max-w-content">
+
+        <!-- Back link -->
+        <div class="shimmer mb-4" style="height: 16px; width: 110px; border-radius: 4px;"></div>
+
+        <!-- Category badge -->
+        <div class="shimmer mb-4" style="height: 24px; width: 90px; border-radius: 20px;"></div>
+
+        <!-- Title -->
+        <div class="shimmer mb-2" style="height: 36px; width: 85%; border-radius: 4px;"></div>
+        <div class="shimmer mb-4" style="height: 36px; width: 60%; border-radius: 4px;"></div>
+
+        <!-- Subtitle / excerpt lines -->
+        <div class="shimmer mb-2" style="height: 16px; width: 100%; border-radius: 4px;"></div>
+        <div class="shimmer mb-2" style="height: 16px; width: 95%; border-radius: 4px;"></div>
+        <div class="shimmer mb-5" style="height: 16px; width: 70%; border-radius: 4px;"></div>
+
+        <hr class="my-4 border-light-divider">
+
+        <!-- Author bio row -->
+        <div class="d-flex align-items-center py-2">
+          <div class="shimmer mr-3" style="height: 48px; width: 48px; border-radius: 50%; flex-shrink: 0;"></div>
+          <div style="flex: 1;">
+            <div class="shimmer mb-2" style="height: 16px; width: 140px; border-radius: 4px;"></div>
+            <div class="shimmer" style="height: 13px; width: 220px; border-radius: 4px;"></div>
+          </div>
+        </div>
+
+        <hr class="my-4 border-light-divider">
+
+        <!-- Meta bottom row -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 pt-2 pb-3">
+          <!-- Left: date + read time -->
+          <div class="d-flex align-items-center" style="gap: 24px;">
+            <div class="shimmer" style="height: 14px; width: 100px; border-radius: 4px;"></div>
+            <div class="shimmer" style="height: 14px; width: 80px; border-radius: 4px;"></div>
+          </div>
+          <!-- Right: share icons -->
+          <div class="d-flex align-items-center" style="gap: 12px;">
+            <div class="shimmer" style="height: 20px; width: 20px; border-radius: 50%;"></div>
+            <div class="shimmer" style="height: 20px; width: 20px; border-radius: 50%;"></div>
+            <div class="shimmer" style="height: 20px; width: 20px; border-radius: 50%;"></div>
+            <div class="shimmer" style="height: 20px; width: 20px; border-radius: 50%;"></div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Article Body Skeleton -->
+    <main class="article-body bg-white">
+      <div class="container max-w-content">
+
+        <!-- Featured image -->
+        <div class="shimmer mb-5" style="height: 420px; width: 100%; border-radius: 12px;"></div>
+
+        <!-- Article content lines -->
+        <div class="shimmer mb-3" style="height: 15px; width: 100%; border-radius: 4px;"></div>
+        <div class="shimmer mb-3" style="height: 15px; width: 98%; border-radius: 4px;"></div>
+        <div class="shimmer mb-3" style="height: 15px; width: 95%; border-radius: 4px;"></div>
+        <div class="shimmer mb-3" style="height: 15px; width: 100%; border-radius: 4px;"></div>
+        <div class="shimmer mb-5" style="height: 15px; width: 60%; border-radius: 4px;"></div>
+
+        <!-- Subheading -->
+        <div class="shimmer mb-4" style="height: 22px; width: 45%; border-radius: 4px;"></div>
+
+        <div class="shimmer mb-3" style="height: 15px; width: 100%; border-radius: 4px;"></div>
+        <div class="shimmer mb-3" style="height: 15px; width: 97%; border-radius: 4px;"></div>
+        <div class="shimmer mb-3" style="height: 15px; width: 100%; border-radius: 4px;"></div>
+        <div class="shimmer mb-5" style="height: 15px; width: 75%; border-radius: 4px;"></div>
+
+        <!-- Block quote / callout -->
+        <div class="shimmer mb-5" style="height: 80px; width: 100%; border-radius: 8px;"></div>
+
+        <div class="shimmer mb-3" style="height: 15px; width: 100%; border-radius: 4px;"></div>
+        <div class="shimmer mb-3" style="height: 15px; width: 93%; border-radius: 4px;"></div>
+        <div class="shimmer mb-5" style="height: 15px; width: 55%; border-radius: 4px;"></div>
+
+        <!-- Tags row -->
+        <div class="d-flex align-items-center flex-wrap mt-5 py-4" style="gap: 8px;">
+          <div class="shimmer" style="height: 14px; width: 36px; border-radius: 4px;"></div>
+          <div class="shimmer" style="height: 28px; width: 70px; border-radius: 20px;"></div>
+          <div class="shimmer" style="height: 28px; width: 90px; border-radius: 20px;"></div>
+          <div class="shimmer" style="height: 28px; width: 60px; border-radius: 20px;"></div>
+        </div>
+
+        <!-- Share bottom box -->
+        <div class="shimmer my-5" style="height: 110px; width: 100%; border-radius: 12px;"></div>
+
+        <!-- Comments section -->
+        <div class="mt-5 mb-5 pt-4">
+          <div class="shimmer mb-4" style="height: 24px; width: 160px; border-radius: 4px;"></div>
+
+          <!-- Leave a comment box -->
+          <div class="bg-white p-4 mb-5 border rounded">
+            <div class="shimmer mb-3" style="height: 16px; width: 140px; border-radius: 4px;"></div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="shimmer" style="height: 46px; width: 100%; border-radius: 6px;"></div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="shimmer" style="height: 46px; width: 100%; border-radius: 6px;"></div>
+              </div>
+            </div>
+            <div class="shimmer mb-3" style="height: 80px; width: 100%; border-radius: 6px;"></div>
+            <div class="shimmer" style="height: 40px; width: 140px; border-radius: 30px;"></div>
+          </div>
+
+          <!-- Comment items -->
+          <div class="p-4 bg-white mb-4 border rounded" *ngFor="let c of [1, 2]">
+            <div class="d-flex align-items-center mb-3" style="gap: 12px;">
+              <div class="shimmer" style="height: 40px; width: 40px; border-radius: 50%; flex-shrink: 0;"></div>
+              <div>
+                <div class="shimmer mb-1" style="height: 14px; width: 120px; border-radius: 4px;"></div>
+                <div class="shimmer" style="height: 12px; width: 80px; border-radius: 4px;"></div>
+              </div>
+            </div>
+            <div class="shimmer mb-2" style="height: 13px; width: 100%; border-radius: 4px; margin-left: 52px; width: calc(100% - 52px);"></div>
+            <div class="shimmer" style="height: 13px; width: 70%; border-radius: 4px; margin-left: 52px;"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Related Articles Skeleton -->
+    <section class="related-articles py-5 bg-white">
+      <div class="container" style="max-width: 1000px;">
+        <div class="shimmer mb-4 py-3" style="height: 24px; width: 180px; border-radius: 4px;"></div>
+        <div class="row">
+          <div class="col-md-4 mb-4" *ngFor="let item of [1, 2, 3]">
+            <div class="d-flex flex-column h-100 bg-white shadow-sm border rounded"
+              style="border-radius: 12px; overflow: hidden;">
+              <!-- Card image -->
+              <div class="shimmer" style="height: 180px; width: 100%;"></div>
+              <div class="p-4 flex-grow-1 d-flex flex-column">
+                <!-- Category + read time -->
+                <div class="d-flex align-items-center mb-3" style="gap: 10px;">
+                  <div class="shimmer" style="height: 20px; width: 70px; border-radius: 20px;"></div>
+                  <div class="shimmer" style="height: 13px; width: 55px; border-radius: 4px;"></div>
+                </div>
+                <!-- Title -->
+                <div class="shimmer mb-2" style="height: 16px; width: 90%; border-radius: 4px;"></div>
+                <div class="shimmer mb-0" style="height: 16px; width: 65%; border-radius: 4px;"></div>
+                <!-- Read more -->
+                <div class="shimmer mt-auto pt-4" style="height: 14px; width: 80px; border-radius: 4px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </ng-container>
+
+
+  <!-- =============================================
+       ACTUAL CONTENT - shown once post is loaded
+       ============================================= -->
+  <ng-container *ngIf="post">
+
     <!-- Header Section -->
     <header class="detail-hero pt-5 pb-2 bg-white">
-        <div class="container max-w-content">
-            <a routerLink="/blog" class="back-link mb-4 d-inline-block text-decoration-none font-weight-bold"
-                style="margin-left: -5px;">
-                <i class="bi bi-arrow-left mr-1"></i> Back to Blog
-            </a>
+      <div class="container max-w-content">
+        <a routerLink="/blog" class="back-link mb-4 d-inline-block text-decoration-none font-weight-bold"
+          style="margin-left: -5px;">
+          <i class="bi bi-arrow-left mr-1"></i> Back to Blog
+        </a>
 
-            <div class="mb-4">
-                <span class="category-badge">{{post.category}}</span>
-            </div>
-
-            <h1 class="article-title font-weight-bold mb-4">{{post.title}}</h1>
-
-            <p class="article-subtitle text-muted mb-5">
-                {{getExcerpt(post.content)}}
-            </p>
-
-            <hr class="my-4 border-light-divider">
-
-            <!-- Author Bio Row -->
-            <div class="author-bio-row d-flex align-items-center py-2">
-                <div class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold shadow-sm"
-                    *ngIf="post.author.initials">
-                    {{post.author.initials}}
-                </div>
-                <img *ngIf="post.author.image" [src]="post.author.image" [alt]="post.author.name"
-                    class="author-avatar-img mr-3 shadow-sm"
-                    onerror="this.src='assets/images/user.png'; this.onerror=null;">
-
-                <div class="d-flex flex-column justify-content-center">
-                    <div class="author-name text-dark font-weight-bold mb-1" style="font-size: 16px;">
-                        {{post.author.name}}</div>
-                    <div class="author-bio-desc text-muted" *ngIf="post.author.bio">
-                        {{post.author.bio}}
-                    </div>
-                </div>
-            </div>
-
-            <hr class="my-4 border-light-divider">
-
-            <!-- Bottom Meta Row -->
-            <div
-                class="meta-bottom-row d-flex flex-wrap align-items-center justify-content-between mb-4 text-muted pt-2 pb-3">
-
-                <div class="meta-left d-flex align-items-center">
-                    <span class="mr-4 d-flex align-items-center"><i class="bi bi-calendar3 mr-2"></i>
-                        {{post.date}}</span>
-                    <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
-                        {{post.readTime}}</span>
-                </div>
-
-                <div class="meta-right d-flex align-items-center">
-                    <span class="mr-4 d-flex align-items-center"><i class="bi bi-chat-dots mr-2"></i>
-                        {{comments.length}}</span>
-                    <a [href]="shareLink('facebook')" (click)="openShare($event, 'facebook')" target="_blank"
-                        rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on Facebook"
-                        title="Share on Facebook"><i class="bi bi-facebook"></i></a>
-                    <a [href]="shareLink('twitter')" (click)="openShare($event, 'twitter')" target="_blank"
-                        rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on X"
-                        title="Share on X"><i class="bi bi-twitter-x"></i></a>
-                    <a [href]="shareLink('linkedin')" (click)="openShare($event, 'linkedin')" target="_blank"
-                        rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on LinkedIn"
-                        title="Share on LinkedIn"><i class="bi bi-linkedin"></i></a>
-                    <button type="button" (click)="copyLink()"
-                        class="text-muted share-icon-btn border-0 bg-transparent p-0"
-                        [attr.aria-label]="copyState === 'copied' ? 'Link copied' : 'Copy link'"
-                        [title]="copyState === 'copied' ? 'Link copied!' : 'Copy link'">
-                        <i class="bi" [class.bi-link-45deg]="copyState !== 'copied'"
-                            [class.bi-check2]="copyState === 'copied'"></i>
-                    </button>
-                </div>
-
-            </div>
+        <div class="mb-4">
+          <span class="category-badge">{{post.category}}</span>
         </div>
+
+        <h1 class="article-title font-weight-bold mb-4">{{post.title}}</h1>
+
+        <p class="article-subtitle text-muted mb-5">
+          {{getExcerpt(post.content)}}
+        </p>
+
+        <hr class="my-4 border-light-divider">
+
+        <!-- Author Bio Row -->
+        <div class="author-bio-row d-flex align-items-center py-2">
+          <div class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold shadow-sm"
+            *ngIf="post.author.initials">
+            {{post.author.initials}}
+          </div>
+          <img *ngIf="post.author.image" [src]="post.author.image" [alt]="post.author.name"
+            class="author-avatar-img mr-3 shadow-sm"
+            onerror="this.src='assets/images/user.png'; this.onerror=null;">
+
+          <div class="d-flex flex-column justify-content-center">
+            <div class="author-name text-dark font-weight-bold mb-1" style="font-size: 16px;">
+              {{post.author.name}}</div>
+            <div class="author-bio-desc text-muted" *ngIf="post.author.bio">
+              {{post.author.bio}}
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4 border-light-divider">
+
+        <!-- Bottom Meta Row -->
+        <div
+          class="meta-bottom-row d-flex flex-wrap align-items-center justify-content-between mb-4 text-muted pt-2 pb-3">
+
+          <div class="meta-left d-flex align-items-center">
+            <span class="mr-4 d-flex align-items-center"><i class="bi bi-calendar3 mr-2"></i>
+              {{post.date}}</span>
+            <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
+              {{post.readTime}}</span>
+          </div>
+
+          <div class="meta-right d-flex align-items-center">
+            <span class="mr-4 d-flex align-items-center"><i class="bi bi-chat-dots mr-2"></i>
+              {{comments.length}}</span>
+            <a [href]="shareLink('facebook')" (click)="openShare($event, 'facebook')" target="_blank"
+              rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on Facebook"
+              title="Share on Facebook"><i class="bi bi-facebook"></i></a>
+            <a [href]="shareLink('twitter')" (click)="openShare($event, 'twitter')" target="_blank"
+              rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on X"
+              title="Share on X"><i class="bi bi-twitter-x"></i></a>
+            <a [href]="shareLink('linkedin')" (click)="openShare($event, 'linkedin')" target="_blank"
+              rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on LinkedIn"
+              title="Share on LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <button type="button" (click)="copyLink()"
+              class="text-muted share-icon-btn border-0 bg-transparent p-0"
+              [attr.aria-label]="copyState === 'copied' ? 'Link copied' : 'Copy link'"
+              [title]="copyState === 'copied' ? 'Link copied!' : 'Copy link'">
+              <i class="bi" [class.bi-link-45deg]="copyState !== 'copied'"
+                [class.bi-check2]="copyState === 'copied'"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main class="article-body bg-white">
-        <div class="container max-w-content">
+      <div class="container max-w-content">
 
-            <div class="featured-image-wrapper mb-5">
-                <img [src]="post.image" [alt]="post.title" class="featured-img rounded w-100"
-                    onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
-            </div>
-
-            <!-- The actual blog content securely rendered -->
-            <div class="content-text" [innerHTML]="safeContent"></div>
-
-            <!-- Tags Section -->
-            <div class="tags-section mt-5 py-4 d-flex align-items-center flex-wrap">
-                <span class="text-muted mr-3 mb-2 small font-weight-bold">Tags:</span>
-                <span class="tag-pill mb-2 mr-2" *ngFor="let tag of post.tags">{{tag}}</span>
-            </div>
-
-            <!-- Share Bottom Section -->
-            <div class="share-bottom mb-5 mt-5">
-                <div class="text-center p-4 rounded bg-light border"
-                    style="border-radius: 12px !important; border-color: #F3F4F6 !important;">
-                    <p class="font-weight-bold mb-3 small text-dark" style="font-size: 15px;">Share this
-                        article
-                    </p>
-                    <div class="d-flex justify-content-center flex-wrap gap-2">
-                        <a [href]="shareLink('facebook')" (click)="openShare($event, 'facebook')" target="_blank"
-                            rel="noopener" class="social-share-btn facebook mx-1" aria-label="Share on Facebook"
-                            title="Share on Facebook"><i class="bi bi-facebook" style="font-size: 16px;"></i></a>
-                        <a [href]="shareLink('twitter')" (click)="openShare($event, 'twitter')" target="_blank"
-                            rel="noopener" class="social-share-btn twitter-x mx-1" aria-label="Share on X"
-                            title="Share on X"><i class="bi bi-twitter-x" style="font-size: 16px;"></i></a>
-                        <a [href]="shareLink('linkedin')" (click)="openShare($event, 'linkedin')" target="_blank"
-                            rel="noopener" class="social-share-btn linkedin mx-1" aria-label="Share on LinkedIn"
-                            title="Share on LinkedIn"><i class="bi bi-linkedin" style="font-size: 16px;"></i></a>
-                        <a [href]="shareLink('whatsapp')" (click)="openShare($event, 'whatsapp')" target="_blank"
-                            rel="noopener" class="social-share-btn whatsapp mx-1" aria-label="Share on WhatsApp"
-                            title="Share on WhatsApp"><i class="bi bi-whatsapp" style="font-size: 16px;"></i></a>
-                        <a [href]="shareLink('email')" class="social-share-btn link mx-1"
-                            aria-label="Share via Email" title="Share via Email"><i class="bi bi-envelope"
-                                style="font-size: 16px;"></i></a>
-                        <button type="button" (click)="copyLink()" class="social-share-btn link mx-1 border-0"
-                            [attr.aria-label]="copyState === 'copied' ? 'Link copied' : 'Copy link'"
-                            [title]="copyState === 'copied' ? 'Link copied!' : 'Copy link'">
-                            <i class="bi" [class.bi-link-45deg]="copyState !== 'copied'"
-                                [class.bi-check2]="copyState === 'copied'" style="font-size: 16px;"></i>
-                        </button>
-                        <button *ngIf="canNativeShare()" type="button" (click)="nativeShare()"
-                            class="social-share-btn link mx-1 border-0" aria-label="More share options"
-                            title="More share options"><i class="bi bi-three-dots"
-                                style="font-size: 16px;"></i></button>
-                    </div>
-                    <div class="mt-2 small text-success" *ngIf="copyState === 'copied'"
-                        style="font-size: 12px;">Link copied to clipboard</div>
-                    <div class="mt-2 small text-danger" *ngIf="copyState === 'error'"
-                        style="font-size: 12px;">Could not copy link</div>
-                </div>
-            </div>
-
-            <!-- Comments Section -->
-            <div class="comments-section mt-5 mb-5 pt-4">
-                <h4 class="font-weight-bold mb-4 related-title">
-                    Comments ({{comments.length}})
-                </h4>
-
-                <div class="leave-comment-box bg-white p-4 mb-5 border rounded">
-                    <h6 class="font-weight-bold mb-3" style="font-size: 15px;">Leave a Comment</h6>
-
-                    <div *ngIf="submitSuccess" class="alert alert-success py-2 mb-3" style="font-size: 13px;">
-                        {{submitSuccess}}
-                    </div>
-                    <div *ngIf="submitError" class="alert alert-danger py-2 mb-3" style="font-size: 13px;">
-                        {{submitError}}
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control p-3 rounded" placeholder="Your name *"
-                                [(ngModel)]="newComment.author_name" name="comment_author_name"
-                                [disabled]="submitting">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="email" class="form-control p-3 rounded" placeholder="Your email *"
-                                [(ngModel)]="newComment.author_email" name="comment_author_email"
-                                [disabled]="submitting">
-                        </div>
-                    </div>
-                    <textarea class="form-control mb-3 p-3 rounded" rows="3" placeholder="Share your thoughts..."
-                        [(ngModel)]="newComment.content" name="comment_content"
-                        [disabled]="submitting"></textarea>
-                    <button type="button" (click)="submitComment()" [disabled]="submitting"
-                        class="btn btn-warning text-white rounded-pill px-4 py-2 font-weight-bold shadow-sm d-inline-flex align-items-center"
-                        style="font-size: 13px;">
-                        <i class="bi bi-send mr-2" style="font-size: 12px;"></i>
-                        {{submitting ? 'Posting...' : 'Post Comment'}}
-                    </button>
-                </div>
-
-                <div *ngIf="commentsLoading" class="text-muted text-center py-4" style="font-size: 13px;">
-                    Loading comments...
-                </div>
-
-                <div *ngIf="!commentsLoading && comments.length === 0" class="text-muted text-center py-4"
-                    style="font-size: 14px;">
-                    No comments yet. Be the first to share your thoughts.
-                </div>
-
-                <div class="comment-item p-4 bg-white mb-4 border rounded" *ngFor="let c of comments">
-                    <div class="d-flex justify-content-between mb-2">
-                        <div class="d-flex align-items-center">
-                            <img *ngIf="c.authorAvatar" [src]="c.authorAvatar" [alt]="c.authorName"
-                                class="author-avatar-img mr-3 shadow-sm align-self-start mt-1"
-                                onerror="this.style.display='none'">
-                            <div *ngIf="!c.authorAvatar"
-                                class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
-                                {{c.authorInitials}}
-                            </div>
-                            <div>
-                                <div class="font-weight-bold text-dark" style="font-size: 14px; margin-bottom: 2px;">
-                                    {{c.authorName}}</div>
-                                <div class="text-muted" style="font-size: 12px;">{{c.date}}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-muted mb-0 mt-3 comment-body"
-                        style="font-size: 14px; margin-left: 52px; line-height: 1.6;"
-                        [innerHTML]="c.contentHtml"></div>
-                </div>
-            </div>
+        <div class="featured-image-wrapper mb-5">
+          <img [src]="post.image" [alt]="post.title" class="featured-img rounded w-100"
+            onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
         </div>
+
+        <div class="content-text" [innerHTML]="safeContent"></div>
+
+        <!-- Tags Section -->
+        <div class="tags-section mt-5 py-4 d-flex align-items-center flex-wrap">
+          <span class="text-muted mr-3 mb-2 small font-weight-bold">Tags:</span>
+          <span class="tag-pill mb-2 mr-2" *ngFor="let tag of post.tags">{{tag}}</span>
+        </div>
+
+        <!-- Share Bottom Section -->
+        <div class="share-bottom mb-5 mt-5">
+          <div class="text-center p-4 rounded bg-light border"
+            style="border-radius: 12px !important; border-color: #F3F4F6 !important;">
+            <p class="font-weight-bold mb-3 small text-dark" style="font-size: 15px;">Share this article</p>
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+              <a [href]="shareLink('facebook')" (click)="openShare($event, 'facebook')" target="_blank"
+                rel="noopener" class="social-share-btn facebook mx-1" aria-label="Share on Facebook"
+                title="Share on Facebook"><i class="bi bi-facebook" style="font-size: 16px;"></i></a>
+              <a [href]="shareLink('twitter')" (click)="openShare($event, 'twitter')" target="_blank"
+                rel="noopener" class="social-share-btn twitter-x mx-1" aria-label="Share on X"
+                title="Share on X"><i class="bi bi-twitter-x" style="font-size: 16px;"></i></a>
+              <a [href]="shareLink('linkedin')" (click)="openShare($event, 'linkedin')" target="_blank"
+                rel="noopener" class="social-share-btn linkedin mx-1" aria-label="Share on LinkedIn"
+                title="Share on LinkedIn"><i class="bi bi-linkedin" style="font-size: 16px;"></i></a>
+              <a [href]="shareLink('whatsapp')" (click)="openShare($event, 'whatsapp')" target="_blank"
+                rel="noopener" class="social-share-btn whatsapp mx-1" aria-label="Share on WhatsApp"
+                title="Share on WhatsApp"><i class="bi bi-whatsapp" style="font-size: 16px;"></i></a>
+              <a [href]="shareLink('email')" class="social-share-btn link mx-1"
+                aria-label="Share via Email" title="Share via Email"><i class="bi bi-envelope"
+                  style="font-size: 16px;"></i></a>
+              <button type="button" (click)="copyLink()" class="social-share-btn link mx-1 border-0"
+                [attr.aria-label]="copyState === 'copied' ? 'Link copied' : 'Copy link'"
+                [title]="copyState === 'copied' ? 'Link copied!' : 'Copy link'">
+                <i class="bi" [class.bi-link-45deg]="copyState !== 'copied'"
+                  [class.bi-check2]="copyState === 'copied'" style="font-size: 16px;"></i>
+              </button>
+              <button *ngIf="canNativeShare()" type="button" (click)="nativeShare()"
+                class="social-share-btn link mx-1 border-0" aria-label="More share options"
+                title="More share options"><i class="bi bi-three-dots" style="font-size: 16px;"></i></button>
+            </div>
+            <div class="mt-2 small text-success" *ngIf="copyState === 'copied'" style="font-size: 12px;">
+              Link copied to clipboard</div>
+            <div class="mt-2 small text-danger" *ngIf="copyState === 'error'" style="font-size: 12px;">
+              Could not copy link</div>
+          </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section mt-5 mb-5 pt-4">
+          <h4 class="font-weight-bold mb-4 related-title">
+            Comments ({{comments.length}})
+          </h4>
+
+          <div class="leave-comment-box bg-white p-4 mb-5 border rounded">
+            <h6 class="font-weight-bold mb-3" style="font-size: 15px;">Leave a Comment</h6>
+
+            <div *ngIf="submitSuccess" class="alert alert-success py-2 mb-3" style="font-size: 13px;">
+              {{submitSuccess}}
+            </div>
+            <div *ngIf="submitError" class="alert alert-danger py-2 mb-3" style="font-size: 13px;">
+              {{submitError}}
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control p-3 rounded" placeholder="Your name *"
+                  [(ngModel)]="newComment.author_name" name="comment_author_name" [disabled]="submitting">
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="email" class="form-control p-3 rounded" placeholder="Your email *"
+                  [(ngModel)]="newComment.author_email" name="comment_author_email" [disabled]="submitting">
+              </div>
+            </div>
+            <textarea class="form-control mb-3 p-3 rounded" rows="3" placeholder="Share your thoughts..."
+              [(ngModel)]="newComment.content" name="comment_content" [disabled]="submitting"></textarea>
+            <button type="button" (click)="submitComment()" [disabled]="submitting"
+              class="btn btn-warning text-white rounded-pill px-4 py-2 font-weight-bold shadow-sm d-inline-flex align-items-center"
+              style="font-size: 13px;">
+              <i class="bi bi-send mr-2" style="font-size: 12px;"></i>
+              {{submitting ? 'Posting...' : 'Post Comment'}}
+            </button>
+          </div>
+
+          <div *ngIf="commentsLoading" class="text-muted text-center py-4" style="font-size: 13px;">
+            Loading comments...
+          </div>
+
+          <div *ngIf="!commentsLoading && comments.length === 0" class="text-muted text-center py-4"
+            style="font-size: 14px;">
+            No comments yet. Be the first to share your thoughts.
+          </div>
+
+          <div class="comment-item p-4 bg-white mb-4 border rounded" *ngFor="let c of comments">
+            <div class="d-flex justify-content-between mb-2">
+              <div class="d-flex align-items-center">
+                <img *ngIf="c.authorAvatar" [src]="c.authorAvatar" [alt]="c.authorName"
+                  class="author-avatar-img mr-3 shadow-sm align-self-start mt-1"
+                  onerror="this.style.display='none'">
+                <div *ngIf="!c.authorAvatar"
+                  class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
+                  {{c.authorInitials}}
+                </div>
+                <div>
+                  <div class="font-weight-bold text-dark" style="font-size: 14px; margin-bottom: 2px;">
+                    {{c.authorName}}</div>
+                  <div class="text-muted" style="font-size: 12px;">{{c.date}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-muted mb-0 mt-3 comment-body"
+              style="font-size: 14px; margin-left: 52px; line-height: 1.6;"
+              [innerHTML]="c.contentHtml"></div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- Related Articles Footer -->
     <section class="related-articles py-5 bg-white">
-        <div class="container" style="max-width: 1000px;">
-            <h4 class="font-weight-bold py-3 mb-3 related-title">Related Articles</h4>
-            <div class="row">
-                <div class="col-md-4 mb-4" *ngFor="let rel of relatedArticles">
-                    <div class="article-card d-flex flex-column h-100 bg-white shadow-sm border rounded">
-                        <div class="card-image-wrapper">
-                            <img [src]="rel.image" [alt]="rel.title" class="card-img"
-                                onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
-                        </div>
-                        <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
-                            <div class="article-meta mb-3 text-muted d-flex align-items-center"
-                                style="font-size: 11px;">
-                                <span class="category-badge-small mr-3">{{rel.category}}</span>
-                                <span class="d-flex align-items-center font-weight-medium"><i
-                                        class="bi bi-clock mr-1 text-muted" style="margin-top: -1px;"></i>
-                                    {{rel.readTime}}</span>
-                            </div>
-                            <a [routerLink]="['/blog', rel.id]" class="text-decoration-none text-dark">
-                                <h6 class="article-title font-weight-bold mb-0"
-                                    style="line-height: 1.4; font-size: 16px;">
-                                    {{rel.title}}</h6>
-                            </a>
-                            <a [routerLink]="['/blog', rel.id]"
-                                class="mt-auto pt-4 text-warning font-weight-bold text-decoration-none d-flex align-items-center"
-                                style="font-size: 13px;">
-                                Read More <i class="bi bi-chevron-right ml-1 font-weight-bold"
-                                    style="font-size: 10px; padding-top: 1px;"></i>
-                            </a>
-                        </div>
-                    </div>
+      <div class="container" style="max-width: 1000px;">
+        <h4 class="font-weight-bold py-3 mb-3 related-title">Related Articles</h4>
+        <div class="row">
+          <div class="col-md-4 mb-4" *ngFor="let rel of relatedArticles">
+            <div class="article-card d-flex flex-column h-100 bg-white shadow-sm border rounded">
+              <div class="card-image-wrapper">
+                <img [src]="rel.image" [alt]="rel.title" class="card-img"
+                  onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+              </div>
+              <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
+                <div class="article-meta mb-3 text-muted d-flex align-items-center" style="font-size: 11px;">
+                  <span class="category-badge-small mr-3">{{rel.category}}</span>
+                  <span class="d-flex align-items-center font-weight-medium"><i
+                      class="bi bi-clock mr-1 text-muted" style="margin-top: -1px;"></i>
+                    {{rel.readTime}}</span>
                 </div>
+                <a [routerLink]="['/blog', rel.id]" class="text-decoration-none text-dark">
+                  <h6 class="article-title font-weight-bold mb-0" style="line-height: 1.4; font-size: 16px;">
+                    {{rel.title}}</h6>
+                </a>
+                <a [routerLink]="['/blog', rel.id]"
+                  class="mt-auto pt-4 text-warning font-weight-bold text-decoration-none d-flex align-items-center"
+                  style="font-size: 13px;">
+                  Read More <i class="bi bi-chevron-right ml-1 font-weight-bold"
+                    style="font-size: 10px; padding-top: 1px;"></i>
+                </a>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </section>
+
+  </ng-container>
+
 </div>

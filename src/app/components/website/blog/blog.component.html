@@ -29,150 +29,270 @@
       </div>
    </div>
 
-   <!-- Featured Articles -->
-   <section class="featured-section py-5">
-      <div class="container">
-         <div class="row justify-content-center">
-            <div class="col-lg-12 col-xl-12">
-               <h4 class="section-title mb-4 font-weight-bold d-flex align-items-center">
-                  <i class="bi bi-graph-up-arrow text-warning mr-2" style="font-size: 1.2rem;"></i> Featured Articles
-               </h4>
+  <!-- =============================================
+     FEATURED ARTICLES SECTION
+     ============================================= -->
+<section class="featured-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-xl-12">
+        <h4 class="section-title mb-4 font-weight-bold d-flex align-items-center">
+          <i class="bi bi-graph-up-arrow text-warning mr-2" style="font-size: 1.2rem;"></i> Featured Articles
+        </h4>
 
-               <div class="featured-list">
-                  <div class="article-card featured-horizontal-card shadow-sm mb-4"
-                     *ngFor="let article of featuredArticles">
-                     <div class="row no-gutters h-100">
+        <div class="featured-list">
 
-                        <!-- Left Image Side -->
-                        <div class="col-md-5 col-lg-6 position-relative image-side">
-                           <span class="category-pill-overlay">{{article.category}}</span>
-                           <img [src]="article.image" [alt]="article.title" class="featured-img-cover"
-                              onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
-                        </div>
+          <!-- SKELETON LOADER - Featured Articles -->
+          <ng-container *ngIf="loading">
+            <div class="article-card featured-horizontal-card shadow-sm mb-4"
+              *ngFor="let item of [1, 2]"
+              style="border-radius: 12px; overflow: hidden;">
+              <div class="row no-gutters h-100">
 
-                        <!-- Right Content Side -->
-                        <div class="col-md-7 col-lg-6 d-flex flex-column bg-white content-side">
-                           <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+                <!-- Left image skeleton -->
+                <div class="col-md-5 col-lg-6">
+                  <div class="shimmer" style="height: 280px; width: 100%;"></div>
+                </div>
 
-                              <div class="article-meta text-muted mb-3 d-flex align-items-center">
-                                 <span class="d-flex align-items-center mr-3"><i class="bi bi-calendar3 mr-2"></i>
-                                    {{article.date}}</span>
-                                 <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
-                                    {{article.readTime}}</span>
-                              </div>
+                <!-- Right content skeleton -->
+                <div class="col-md-7 col-lg-6 d-flex flex-column bg-white">
+                  <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
 
-                              <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
-                                 <h2 class="card-title font-weight-bold text-dark mb-3 article-title-hd">
-                                    {{article.title}}</h2>
-                              </a>
+                    <!-- Meta line -->
+                    <div class="d-flex mb-3" style="gap: 12px;">
+                      <div class="shimmer" style="height: 14px; width: 90px; border-radius: 4px;"></div>
+                      <div class="shimmer" style="height: 14px; width: 70px; border-radius: 4px;"></div>
+                    </div>
 
-                              <p class="card-text text-muted mb-4 article-excerpt-hd flex-grow-1">
-                                 {{getExcerpt(article.content)}}
-                              </p>
+                    <!-- Title -->
+                    <div class="shimmer mb-2" style="height: 22px; width: 90%; border-radius: 4px;"></div>
+                    <div class="shimmer mb-4" style="height: 22px; width: 65%; border-radius: 4px;"></div>
 
-                              <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="article.tags?.length">
-                                 <span class="hash-tag" *ngFor="let tag of article.tags">{{tag}}</span>
-                              </div>
+                    <!-- Excerpt lines -->
+                    <div class="shimmer mb-2" style="height: 14px; width: 100%; border-radius: 4px;"></div>
+                    <div class="shimmer mb-2" style="height: 14px; width: 100%; border-radius: 4px;"></div>
+                    <div class="shimmer mb-4" style="height: 14px; width: 75%; border-radius: 4px;"></div>
 
-                              <div
-                                 class="article-footer d-flex justify-content-between align-items-center py-3 border-top border-bottom border-light mb-4">
-                                 <div class="author-info d-flex align-items-center">
-                                    <div
-                                       class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small shadow-sm"
-                                       *ngIf="article.author.initials">
-                                       {{article.author.initials}}
-                                    </div>
-                                    <img *ngIf="article.author.image" [src]="article.author.image"
-                                       [alt]="article.author.name" class="author-avatar-img mr-2 shadow-sm"
-                                       onerror="this.src='assets/images/user.png'; this.onerror=null;">
-                                    <span
-                                       class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
-                                 </div>
-                                 <div class="engagement-stats text-muted d-flex align-items-center"
-                                    *ngIf="article.category">
-                                    <span class="d-flex align-items-center"><i class="bi bi-folder2 mr-1"></i>
-                                       {{article.category}}</span>
-                                 </div>
-                              </div>
+                    <!-- Tags -->
+                    <div class="d-flex mb-4" style="gap: 8px;">
+                      <div class="shimmer" style="height: 24px; width: 60px; border-radius: 20px;"></div>
+                      <div class="shimmer" style="height: 24px; width: 80px; border-radius: 20px;"></div>
+                      <div class="shimmer" style="height: 24px; width: 50px; border-radius: 20px;"></div>
+                    </div>
 
-                              <a [routerLink]="['/blog', article.id]"
-                                 class="read-more-link text-warning font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
-                                 Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
-                              </a>
+                    <!-- Author row -->
+                    <div class="d-flex align-items-center justify-content-between py-3"
+                      style="border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 16px;">
+                      <div class="d-flex align-items-center" style="gap: 8px;">
+                        <div class="shimmer" style="height: 36px; width: 36px; border-radius: 50%;"></div>
+                        <div class="shimmer" style="height: 14px; width: 100px; border-radius: 4px;"></div>
+                      </div>
+                      <div class="shimmer" style="height: 14px; width: 80px; border-radius: 4px;"></div>
+                    </div>
 
-                           </div>
-                        </div>
+                    <!-- Read more link -->
+                    <div class="shimmer mt-auto" style="height: 16px; width: 110px; border-radius: 4px;"></div>
 
-                     </div>
                   </div>
-               </div>
+                </div>
+
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- ACTUAL CONTENT - Featured Articles -->
+          <ng-container *ngIf="!loading">
+            <div class="article-card featured-horizontal-card shadow-sm mb-4"
+              *ngFor="let article of featuredArticles">
+              <div class="row no-gutters h-100">
+
+                <div class="col-md-5 col-lg-6 position-relative image-side">
+                  <span class="category-pill-overlay">{{article.category}}</span>
+                  <img [src]="article.image" [alt]="article.title" class="featured-img-cover"
+                    onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+                </div>
+
+                <div class="col-md-7 col-lg-6 d-flex flex-column bg-white content-side">
+                  <div class="card-body p-4 p-lg-5 d-flex flex-column h-100">
+
+                    <div class="article-meta text-muted mb-3 d-flex align-items-center">
+                      <span class="d-flex align-items-center mr-3"><i class="bi bi-calendar3 mr-2"></i>
+                        {{article.date}}</span>
+                      <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
+                        {{article.readTime}}</span>
+                    </div>
+
+                    <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
+                      <h2 class="card-title font-weight-bold text-dark mb-3 article-title-hd">
+                        {{article.title}}</h2>
+                    </a>
+
+                    <p class="card-text text-muted mb-4 article-excerpt-hd flex-grow-1">
+                      {{getExcerpt(article.content)}}
+                    </p>
+
+                    <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="article.tags?.length">
+                      <span class="hash-tag" *ngFor="let tag of article.tags">{{tag}}</span>
+                    </div>
+
+                    <div
+                      class="article-footer d-flex justify-content-between align-items-center py-3 border-top border-bottom border-light mb-4">
+                      <div class="author-info d-flex align-items-center">
+                        <div
+                          class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small shadow-sm"
+                          *ngIf="article.author.initials">
+                          {{article.author.initials}}
+                        </div>
+                        <img *ngIf="article.author.image" [src]="article.author.image"
+                          [alt]="article.author.name" class="author-avatar-img mr-2 shadow-sm"
+                          onerror="this.src='assets/images/user.png'; this.onerror=null;">
+                        <span
+                          class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
+                      </div>
+                      <div class="engagement-stats text-muted d-flex align-items-center"
+                        *ngIf="article.category">
+                        <span class="d-flex align-items-center"><i class="bi bi-folder2 mr-1"></i>
+                          {{article.category}}</span>
+                      </div>
+                    </div>
+
+                    <a [routerLink]="['/blog', article.id]"
+                      class="read-more-link text-warning font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
+                      Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
+                    </a>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================
+     LATEST ARTICLES SECTION
+     ============================================= -->
+<section class="latest-section py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="section-title font-weight-bold mb-0">Latest Articles</h4>
+      <span class="text-muted small font-weight-medium" *ngIf="!loading">
+        {{latestArticles.length}} articles
+      </span>
+    </div>
+
+    <div class="row">
+
+      <!-- SKELETON LOADER - Latest Articles -->
+      <ng-container *ngIf="loading">
+        <div class="col-lg-4 col-md-6 mb-4" *ngFor="let item of [1, 2, 3]">
+          <div class="article-card latest-card d-flex flex-column h-100 bg-white shadow-sm border-0"
+            style="border-radius: 12px; overflow: hidden;">
+
+            <!-- Image skeleton -->
+            <div class="shimmer" style="height: 200px; width: 100%;"></div>
+
+            <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
+
+              <!-- Meta line -->
+              <div class="d-flex mb-3" style="gap: 12px;">
+                <div class="shimmer" style="height: 13px; width: 85px; border-radius: 4px;"></div>
+                <div class="shimmer" style="height: 13px; width: 65px; border-radius: 4px;"></div>
+              </div>
+
+              <!-- Title -->
+              <div class="shimmer mb-2" style="height: 18px; width: 90%; border-radius: 4px;"></div>
+              <div class="shimmer mb-4" style="height: 18px; width: 60%; border-radius: 4px;"></div>
+
+              <!-- Excerpt lines -->
+              <div class="shimmer mb-2" style="height: 13px; width: 100%; border-radius: 4px;"></div>
+              <div class="shimmer mb-2" style="height: 13px; width: 100%; border-radius: 4px;"></div>
+              <div class="shimmer mb-4" style="height: 13px; width: 70%; border-radius: 4px;"></div>
+
+              <!-- Tags -->
+              <div class="d-flex mb-4" style="gap: 8px;">
+                <div class="shimmer" style="height: 22px; width: 55px; border-radius: 20px;"></div>
+                <div class="shimmer" style="height: 22px; width: 70px; border-radius: 20px;"></div>
+              </div>
+
+              <!-- Author row -->
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center" style="gap: 8px;">
+                  <div class="shimmer" style="height: 32px; width: 32px; border-radius: 50%;"></div>
+                  <div class="shimmer" style="height: 13px; width: 90px; border-radius: 4px;"></div>
+                </div>
+                <div class="shimmer" style="height: 13px; width: 70px; border-radius: 4px;"></div>
+              </div>
+
+              <!-- Read more -->
+              <div class="shimmer mt-auto" style="height: 14px; width: 100px; border-radius: 4px;"></div>
 
             </div>
-         </div>
-      </div>
-   </section>
+          </div>
+        </div>
+      </ng-container>
 
-   <!-- Latest Articles -->
-   <section class="latest-section py-5">
-      <div class="container">
-         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="section-title font-weight-bold mb-0">Latest Articles</h4>
-            <span class="text-muted small font-weight-medium">{{latestArticles.length}} articles</span>
-         </div>
+      <!-- ACTUAL CONTENT - Latest Articles -->
+      <ng-container *ngIf="!loading">
+        <div class="col-lg-4 col-md-6 mb-4" *ngFor="let article of latestArticles">
+          <div class="article-card latest-card d-flex flex-column h-100 bg-white shadow-sm border-0">
+            <div class="card-image-wrapper position-relative">
+              <span class="category-pill-overlay">{{article.category}}</span>
+              <img [src]="article.image" [alt]="article.title" class="card-img"
+                onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+            </div>
+            <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
+              <div class="article-meta text-muted mb-3 d-flex align-items-center">
+                <span class="d-flex align-items-center mr-3"><i class="bi bi-calendar3 mr-2"></i>
+                  {{article.date}}</span>
+                <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
+                  {{article.readTime}}</span>
+              </div>
+              <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
+                <h4 class="card-title font-weight-bold text-dark mb-3 latest-title">{{article.title}}</h4>
+              </a>
+              <p class="card-text text-muted mb-4 latest-excerpt flex-grow-1">
+                {{getExcerpt(article.content)}}
+              </p>
 
-         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4" *ngFor="let article of latestArticles">
-               <div class="article-card latest-card d-flex flex-column h-100 bg-white shadow-sm border-0">
-                  <div class="card-image-wrapper position-relative">
-                     <span class="category-pill-overlay">{{article.category}}</span>
-                     <!-- Assuming images exist, fallback if broken in CSS -->
-                     <img [src]="article.image" [alt]="article.title" class="card-img"
-                        onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+               <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="article.tags?.length">
+                  <span class="hash-tag" *ngFor="let tag of article.tags">{{tag}}</span>
+               </div>
+
+               <div class="article-footer d-flex justify-content-between align-items-center mb-4">
+                  <div class="author-info d-flex align-items-center">
+                     <div
+                     class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small shadow-sm"
+                     *ngIf="article.author.initials">
+                     {{article.author.initials}}
+                     </div>
+                     <img *ngIf="article.author.image" [src]="article.author.image" [alt]="article.author.name"
+                     class="author-avatar-img mr-2 shadow-sm"
+                     onerror="this.src='assets/images/user.png'; this.onerror=null;">
+                     <span class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
                   </div>
-                  <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
-                     <div class="article-meta text-muted mb-3 d-flex align-items-center">
-                        <span class="d-flex align-items-center mr-3"><i class="bi bi-calendar3 mr-2"></i>
-                           {{article.date}}</span>
-                        <span class="d-flex align-items-center"><i class="bi bi-clock mr-2"></i>
-                           {{article.readTime}}</span>
-                     </div>
-                     <a [routerLink]="['/blog', article.id]" class="text-decoration-none">
-                        <h4 class="card-title font-weight-bold text-dark mb-3 latest-title">{{article.title}}</h4>
-                     </a>
-                     <p class="card-text text-muted mb-4 latest-excerpt flex-grow-1">
-                        {{getExcerpt(article.content)}}
-                     </p>
-
-                     <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="article.tags?.length">
-                        <span class="hash-tag" *ngFor="let tag of article.tags">{{tag}}</span>
-                     </div>
-
-                     <div class="article-footer d-flex justify-content-between align-items-center mb-4">
-                        <div class="author-info d-flex align-items-center">
-                           <div
-                              class="author-avatar mr-2 d-flex align-items-center justify-content-center text-white font-weight-bold small shadow-sm"
-                              *ngIf="article.author.initials">
-                              {{article.author.initials}}
-                           </div>
-                           <img *ngIf="article.author.image" [src]="article.author.image" [alt]="article.author.name"
-                              class="author-avatar-img mr-2 shadow-sm"
-                              onerror="this.src='assets/images/user.png'; this.onerror=null;">
-                           <span class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
-                        </div>
-                        <div class="engagement-stats text-muted d-flex align-items-center"
-                           *ngIf="article.category">
-                           <span class="d-flex align-items-center"><i class="bi bi-folder2 mr-1"></i>
-                              {{article.category}}</span>
-                        </div>
-                     </div>
-                     <a [routerLink]="['/blog', article.id]"
-                        class="read-more-link text-warning font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
-                        Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
-                     </a>
+                  <div class="engagement-stats text-muted d-flex align-items-center"
+                     *ngIf="article.category">
+                     <span class="d-flex align-items-center"><i class="bi bi-folder2 mr-1"></i>
+                     {{article.category}}</span>
                   </div>
                </div>
+               <a [routerLink]="['/blog', article.id]"
+                  class="read-more-link text-warning font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
+                  Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
+               </a>
             </div>
-         </div>
-      </div>
-   </section>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</section>
 </div>
