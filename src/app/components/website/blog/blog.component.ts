@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { BLOG_POSTS, BlogPost } from './blog.data';
+import { BlogPost } from './blog.data';
+import { BlogService, BlogCategory } from './blog.service';
 
 @Component({
   selector: 'app-blog',
@@ -9,20 +10,17 @@ import { BLOG_POSTS, BlogPost } from './blog.data';
 })
 export class BlogComponent implements OnInit {
 
-  allPosts: BlogPost[] = BLOG_POSTS;
+  allPosts: BlogPost[] = [];
   featuredArticles: BlogPost[] = [];
   latestArticles: BlogPost[] = [];
+  categories: BlogCategory[] = [{ name: 'All Posts', count: 0, id: 'all', active: true }];
+  loading = true;
 
-  categories = [
-    { name: 'All Posts', count: 9, id: 'all', active: true },
-    { name: 'Travel Tips', count: 4, id: 'travel', active: false },
-    { name: 'Industry News', count: 1, id: 'industry', active: false },
-    { name: 'Company Updates', count: 2, id: 'company', active: false },
-    { name: 'Customer Stories', count: 1, id: 'customer', active: false },
-    { name: 'Luxury Lifestyle', count: 2, id: 'luxury', active: false }
-  ];
-
-  constructor(private titleService: Title, private metaService: Meta) { }
+  constructor(
+    private titleService: Title,
+    private metaService: Meta,
+    private blogService: BlogService
+  ) { }
 
   ngOnInit(): void {
     const title = 'Blog | 1-800-LIMO.COM';
@@ -31,25 +29,34 @@ export class BlogComponent implements OnInit {
     this.titleService.setTitle(title);
     this.metaService.updateTag({ name: 'description', content: description });
 
-    // Open Graph
     this.metaService.updateTag({ property: 'og:title', content: title });
     this.metaService.updateTag({ property: 'og:description', content: description });
     this.metaService.updateTag({ property: 'og:type', content: 'website' });
     this.metaService.updateTag({ property: 'og:site_name', content: '1-800-LIMO.COM' });
 
-    // Twitter Card
     this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.metaService.updateTag({ name: 'twitter:title', content: title });
     this.metaService.updateTag({ name: 'twitter:description', content: description });
 
-    // Based on the mockup, set the second and third items as featured
-    this.featuredArticles = [this.allPosts[1], this.allPosts[2]];
+    this.blogService.getPosts().subscribe({
+      next: posts => {
+        this.allPosts = posts;
+        this.featuredArticles = posts.slice(0, 2);
+        this.latestArticles = posts.slice(2);
+        this.loading = false;
+      },
+      error: () => { this.loading = false; }
+    });
 
-    // The rest go into latest articles
-    this.latestArticles = this.allPosts.filter(p => p.id !== this.featuredArticles[0].id && p.id !== this.featuredArticles[1].id);
+    this.blogService.getCategories().subscribe(cats => {
+      const total = cats.reduce((sum, c) => sum + c.count, 0);
+      this.categories = [
+        { name: 'All Posts', count: total, id: 'all', active: true },
+        ...cats
+      ];
+    });
   }
 
-  // Quick helper to strip HTML and get a clean excerpt
   getExcerpt(htmlContent: string): string {
     const tmp = document.createElement('DIV');
     tmp.innerHTML = htmlContent;

@@ -230,8 +230,14 @@
         background-color: #0A66C2;
     }
 
+    &.whatsapp {
+        background-color: #25D366;
+    }
+
     &.link {
         background-color: #4B5563;
+        border: none;
+        cursor: pointer;
     }
 }
 
