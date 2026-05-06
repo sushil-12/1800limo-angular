@@ -1,3 +1,9 @@
+// ============================================================
+// BOOKING PREVIEW COMPONENT - REDESIGNED STYLES
+// Replaces your existing component .scss file
+// All original class names preserved + new bp-* classes added
+// ============================================================
+
 .adminbox_shadow.user_information,
 .adminbox_shadow.user_information .mat-mdc-form-field,
 .mat-calendar {
@@ -131,7 +137,6 @@ table {
 	}
 }
 
-
 .custom-filled-button {
 	padding: 0.375rem 0.985rem;
 }
@@ -141,7 +146,6 @@ table {
 	height: 60px;
 	width: 100%;
 }
-
 
 .odd p {
 	cursor: pointer;
@@ -156,15 +160,813 @@ table {
 	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
+// ── Modal header ──────────────────────────────────────────────
 .modal-header {
+	justify-content: space-between !important;
+	border-bottom: 1px solid rgba(0,0,0,0.08);
+	padding: 14px 20px !important;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+} 
+
+.modal-title {
+	font-size: 1.1rem !important;
+	font-weight: 700;
+	color: #111;
+	margin: 0;
+}
+
+.booking-id-highlight {
+	color: #f29439;
+}
+
+// ── Modal body ────────────────────────────────────────────────
+.modal-body {
+	padding: 16px 14px !important;
+}
+
+// ── Close button ──────────────────────────────────────────────
+.x-circle-btn {
+	opacity: 1;
+	color: red;
+	font-size: 28px;
+	width: max-content;
+	background: none !important;
+	border: none !important;
+	padding: 4px !important;
+	line-height: 1 !important;
+}
+
+// ── Card base ────────────────────────────────────────────────
+.bp-card {
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+	padding: 14px 16px;
+	margin-bottom: 14px;
+	border: 1px solid rgba(0,0,0,0.07);
+}
+
+.bp-card-full {
+	width: 100%;
+}
+
+.bp-card-label {
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #888;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+
+// ── Summary grid ─────────────────────────────────────────────
+.bp-summary-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 14px;
+	margin-bottom: 14px;
+
+	@media (max-width: 576px) {
+		grid-template-columns: 1fr;
+	}
+}
+
+// ── Grand total ───────────────────────────────────────────────
+.bp-field-label {
+	font-size: 0.72rem;
+	color: #888;
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+.bp-grand-total {
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: #111;
+	line-height: 1.1;
+}
+
+.bp-refund-block {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px dashed rgba(0,0,0,0.1);
+}
+
+.refund-val {
+	color: #FF0000 !important;
+}
+
+.new-total-val {
+	color: #1e7500 !important;
+}
+
+.cancellation-val {
+	color: #FF0000 !important;
+}
+
+// ── Key-value rows ────────────────────────────────────────────
+.bp-kv {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	padding: 5px 0;
+
+	&:first-of-type {
+		border-top: none;
+	}
+}
+
+.bp-kv-label {
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: #666;
+	min-width: 120px;
+	flex-shrink: 0;
+}
+
+.bp-kv-value {
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #111;
+	word-break: break-word;
+}
+
+// ── Route timeline ────────────────────────────────────────────
+.bp-route-wrapper {
+	display: flex;
+	gap: 14px;
+	align-items: stretch;
+}
+
+.bp-route-line {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 6px;
+	flex-shrink: 0;
+}
+
+.bp-dot {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.bp-dot-pickup {
+	background: #111;
+	border: 2px solid #111;
+}
+
+.bp-dot-dropoff {
+	background: #FF0000;
+	border: 2px solid #FF0000;
+}
+
+.bp-route-connector {
+	width: 2px;
+	flex: 1;
+	min-height: 20px;
+	background: linear-gradient(to bottom, #aaa, #FF0000);
+	margin: 3px 0;
+}
+
+.bp-route-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+// ── Stop blocks ───────────────────────────────────────────────
+.bp-stop-block {
+	border-radius: 8px;
+	padding: 10px 12px;
+	border: 1px solid rgba(0,0,0,0.08);
+	background: #fafafa;
+}
+
+.bp-stop-pickup {
+	border-left: 3px solid #111;
+}
+
+.bp-stop-dropoff {
+	border-left: 3px solid #FF0000;
+}
+
+.bp-stop-extra {
+	border-left: 3px solid #f29439;
+}
+
+.bp-stop-tag {
+	font-size: 0.65rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-bottom: 4px;
+}
+
+.pickup-tag {
+	color: #111;
+}
+
+.dropoff-tag {
+	color: #FF0000;
+}
+
+.extra-tag {
+	color: #d97e20;
+}
+
+.bp-stop-datetime {
+	font-size: 0.75rem;
+	color: #555;
+	margin-bottom: 6px;
+	line-height: 1.5;
+}
+
+.bp-stop-address {
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: #111;
+	line-height: 1.4;
+}
+
+.bp-pin {
+	font-size: 18px;
+	color: #aaa;
+	cursor: pointer;
+	margin-left: 4px;
+	vertical-align: middle;
+	transition: color 0.15s;
+
+	&:hover {
+		color: #f29439;
+	}
+}
+
+// ── Flight chip ───────────────────────────────────────────────
+.bp-flight-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+	margin-top: 6px;
+}
+
+.bp-flight-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	background: #eef2ff;
+	border: 1px solid #c5d0f0;
+	border-radius: 20px;
+	padding: 3px 10px 3px 8px;
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: #00008B !important;
+	cursor: pointer;
+	transition: background 0.15s;
+
+	&:hover {
+		background: #dce4ff;
+	}
+}
+
+.dropoff-flight {
+	background: #fff0f0 !important;
+	border-color: #f0c0c0 !important;
+	color: #007500 !important;
+}
+
+.bp-vupdate {
+	color: blue;
+	text-decoration: underline;
+	font-weight: 700;
+	cursor: pointer;
+	font-size: 0.78rem;
+}
+
+// ── Cruise block ──────────────────────────────────────────────
+.bp-cruise-block {
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+// ── Metrics chips ─────────────────────────────────────────────
+.bp-metrics-row {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-top: 16px;
+}
+
+.bp-metric-chip {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: #f8f8f8;
+	border: 1px solid rgba(0,0,0,0.07);
+	border-radius: 8px;
+	padding: 10px 14px;
+	flex: 1;
+	min-width: 140px;
+
+	i {
+		font-size: 20px;
+		color: #f29439;
+	}
+}
+
+.bp-metric-label {
+	font-size: 0.65rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: #888;
+	line-height: 1;
+}
+
+.bp-metric-value {
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #111;
+	line-height: 1.3;
+	margin-top: 1px;
+}
+
+// ── Map ───────────────────────────────────────────────────────
+.bp-map-wrapper {
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid rgba(0,0,0,0.08);
+	margin-bottom: 14px;
+}
+
+// ── Passenger ─────────────────────────────────────────────────
+.bp-passenger-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 12px;
+}
+
+.bp-passenger-name {
+	font-size: 1rem;
+	font-weight: 700;
+	color: #111;
+	font-family: 'PT Serif', serif;
+}
+
+.bp-passenger-phone {
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #1e7500 !important;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+// ── Pax badges ────────────────────────────────────────────────
+.bp-pax-badges {
+	display: flex;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+.bp-badge {
+	text-align: center;
+	background: #f5f5f5;
+	border-radius: 8px;
+	padding: 6px 12px;
+	min-width: 50px;
+	border: 1px solid rgba(0,0,0,0.07);
+}
+
+.bp-badge-value {
+	font-size: 1.1rem;
+	font-weight: 800;
+	color: #111;
+	line-height: 1;
+}
+
+.bp-badge-label {
+	font-size: 0.62rem;
+	color: #888;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+// ── Special instruction ───────────────────────────────────────
+.bp-special-instruction {
+	background: #fffbf0;
+	border: 1px solid #f5dfa0;
+	border-left: 4px solid #f29439;
+	border-radius: 8px;
+	padding: 12px 14px;
+	margin-top: 10px;
+}
+
+.bp-special-title {
+	font-size: 0.68rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #d97e20;
+	margin-bottom: 6px;
+}
+
+.bp-special-body {
+	font-size: 0.85rem;
+	color: #333;
+	line-height: 1.5;
+}
+
+// ── Meet & greet ──────────────────────────────────────────────
+.bp-greet-box {
+	background: #f8f8f8;
+	border: 1px solid rgba(0,0,0,0.07);
+	border-radius: 8px;
+	padding: 10px 14px;
+	margin-top: 10px;
+}
+
+.bp-greet-label {
+	font-size: 0.68rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: #888;
+	margin-bottom: 3px;
+}
+
+.bp-greet-value {
+	font-size: 0.88rem;
+	font-weight: 600;
+	color: #111;
+}
+
+// ── Vehicle ───────────────────────────────────────────────────
+.bp-vehicle-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.bp-vehicle-icon {
+	font-size: 2rem;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.bp-vehicle-details {
+	flex: 1;
+}
+
+.bp-vehicle-name {
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: #111;
+	font-family: 'PT Serif', serif;
+}
+
+.bp-vehicle-sub {
+	font-size: 0.78rem;
+	color: #555;
+	margin-top: 1px;
+}
+
+.bp-vehicle-plate {
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: #333;
+	margin-top: 2px;
+	letter-spacing: 0.04em;
+}
+
+// ── Driver + Affiliate grid ───────────────────────────────────
+.bp-people-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 14px;
+
+	@media (max-width: 576px) {
+		grid-template-columns: 1fr;
+	}
+}
+
+// ── Person card ───────────────────────────────────────────────
+.bp-person-row {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+}
+
+.bp-avatar {
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
 	justify-content: center;
+	font-size: 0.75rem;
+	font-weight: 800;
+	color: #fff;
+	flex-shrink: 0;
+}
+
+.bp-avatar-driver {
+	background: #f29439;
+}
+
+.bp-avatar-affiliate {
+	background: #5373aa;
+}
+
+.bp-person-name {
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: #111;
+	line-height: 1.3;
+}
+
+.bp-person-email {
+	font-size: 0.75rem;
+	color: #0066cc;
+	word-break: break-all;
+	margin-top: 1px;
+}
+
+.bp-person-phone {
+	font-size: 0.78rem;
+	color: #444;
+	margin-top: 2px;
+}
+
+// ── Preserved original color classes ─────────────────────────
+// .preview-pickup-color {
+// 	color: #007500;
+// }
+
+.preview-dropoff-color {
+	color: #FF0000;
+	align-items: baseline;
+}
+
+.preview-airport-color {
+	color: #00008B !important;
+}
+
+// ── Misc preserved originals ──────────────────────────────────
+.disabled-btn {
+	pointer-events: none;
+	cursor: not-allowed !important;
+}
+
+.booking-id-font {
+	font-size: 20px;
+}
+
+.preview-output-field {
+	font-size: large;
+}
+
+.view-button {
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+}
+
+.x-cross-btn {
+	background: #fff !important;
+	color: #ff0000 !important;
+	top: 5px;
+	right: 15px;
+	border-radius: 20px;
+	width: 25px;
+	opacity: 1 !important;
+}
+
+.x-close-btn {
+	float: right;
+	font-size: 1.8rem;
+	font-weight: 700;
+	line-height: 1;
+	border: none;
+}
+
+.box-outline {
+	border: solid 3px;
+	border-radius: 4px;
+}
+
+.center {
+	margin: 0;
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.pin-icon-preview {
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px) {
+	.pin-icon-preview {
+		font-size: 34px;
+	}
+}
+
+a.dropdown-item {
+	padding: 0.5rem 1.4rem !important;
+	font-size: 18px;
+	font-weight: 500 !important;
+	font-family: "Roboto", sans-serif !important;
+}
+
+.google_map {
+	width: auto;
+	max-height: 300px;
+	height: 300px;
+
+	.map {
+		width: 100%;
+		height: 100%;
+		border-radius: 17px;
+	}
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+:host ::ng-deep.mat-checkbox-layout,
+.mat-checkbox-label {
+	white-space: normal !important;
+}
+
+.horizontal-scroll-container {
+	display: flex;
+	overflow-x: auto;
+	white-space: nowrap;
+	gap: 95px;
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f1f1f1;
+	max-width: 637px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+	height: 8px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+	background-color: #888;
+	border-radius: 4px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-track {
+	background-color: #f1f1f1;
+}
+
+.scroll-item {
+	min-width: 300px;
+}
+
+@media (max-width: 768px) {
+	.scroll-item {
+		min-width: 180px;
+	}
+
+	.horizontal-scroll-container {
+		gap: 20px;
+	}
+}
+
+.date-fields-wrapper {
+	flex-direction: row;
+	gap: 10px;
+	max-width: 520px;
+
+	@media (max-width: 575px) {
+		flex-direction: column;
+		max-width: 100%;
+	}
+}
+
+.search-container-wrapper {
+	gap: 15px;
+	row-gap: 15px;
+
+	.button-group {
+		margin-top: 10px;
+
+		@media (min-width: 576px) {
+			margin-top: 6px;
+		}
+	}
+}
+
+.trip-route-container {
+	display: block;
+	width: auto;
+
+	.route-icon-wrapper {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-right: 8px;
+
+		.connecting-line {
+			width: 2px;
+			background-color: #FF8C00;
+			margin: -2px 0;
+		}
+
+		.loc-logo {
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			line-height: 1;
+
+			i {
+				display: block;
+				line-height: 1;
+			}
+		}
+	}
+
+	.address-content-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.address-main-row {
+		gap: 0;
+		margin-bottom: 0px;
+	}
+
+	.address-content {
+		white-space: normal !important;
+		word-wrap: break-word !important;
+		word-break: break-word !important;
+		overflow-wrap: break-word !important;
+		line-height: 1.4;
+		display: block;
+		width: 30ch !important;
+		max-width: 30ch !important;
+	}
+}
+
+.table {
+	thead th {
+		background-color: #f29439;
+		border-color: #fff;
+	}
+}
+
+#farmout-modal {
+	.modal-footer {
+		justify-content: flex-end !important;
+
+		&>button {
+			padding: 0.7rem 1.95rem;
+			color: var(--orange);
+			border: 1.3px solid var(--orange);
+			margin: auto 15px;
+			border-radius: 15px;
+		}
+
+		#prim-btn:hover {
+			background-color: var(--orange);
+			color: #ffffff;
+			border-color: var(--orange)
+		}
+
+		#sec-btn:hover {
+			background-color: #616161;
+			border-color: #616161;
+			color: #ffffff
+		}
+	}
+}
+
+.asterisk {
+	font-size: 24px;
 }
 
 #sendEmailModal .modal-content hr {
 	border: 2px solid var(--orange-color);
 	width: 180px;
 	background-color: var(--orange-color);
-	// margin          : 10px 347px 20px 347px;
 	display: block;
 	margin-top: 0;
 	margin-bottom: 0;
@@ -218,7 +1020,6 @@ table {
 	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
-
 table {
 	width: 100;
 	white-space: break-spaces;
@@ -241,7 +1042,6 @@ table {
 
 a:hover {
 	text-decoration: none;
-	// color: unset !important;
 }
 
 input,
@@ -250,78 +1050,30 @@ input::-webkit-input-placeholder {
 	padding: 0 !important;
 }
 
-
-.booking-id-font {
-	font-size: 20px;
-}
-
-.preview-output-field {
-	font-size: large;
-}
-
-.view-button {
-	// background-color: #5373aa !important;
+button.view-button {
 	color: #fff !important;
-	padding: 5px 8px !important;
-	border-radius: 3rem !important;
+	background-color: #f29439 !important;
+	border: 2px solid #f29439 !important;
+	padding: 5px 14px !important;
+	border-radius: 6px !important;
+	font-size: 14px !important;
+	font-weight: bold !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 5px !important;
+	cursor: pointer !important;
+	outline: none !important;
+	transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
+
+	&:hover, &:focus, &:active {
+		background-color: #d97e20 !important;
+		border-color: #d97e20 !important;
+		box-shadow: 0px 4px 8px rgba(242, 148, 57, 0.4) !important;
+	}
 }
 
-.x-cross-btn {
-	background: #fff !important;
-	color: #ff0000 !important;
-	/* position: absolute; */
-	top: 5px;
-	right: 15px;
-	border-radius: 20px;
-	width: 25px;
-	opacity: 1 !important;
-}
-
-.x-close-btn {
-	float: right;
-	font-size: 1.8rem;
-	font-weight: 700;
-	line-height: 1;
-	border: none;
-}
-
-.x-circle-btn {
-	opacity: 1;
-	color: red;
-	font-size: 40px;
-	width: max-content;
-}
-
-.box-outline {
-	border: solid 3px;
-	border-radius: 4px;
-}
-
-.center {
-	margin: 0;
-	position: absolute;
-	top: 53%;
-	left: 50%;
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
-
-// .preview-pickup-color {
-// 	color: #007500;
-// }
-
-.preview-dropoff-color {
-	color: #FF0000;
-	align-items: baseline;
-}
-
-.preview-airport-color {
-	color: #00008B !important;
-}
-
-.disabled-btn {
-	pointer-events: none;
-	cursor: not-allowed !important;
+button.view-button.dropdown-toggle::after {
+	font-size: 17px !important;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
@@ -339,7 +1091,6 @@ input::-webkit-input-placeholder {
 	}
 
 	.btnclass {
-		// padding-right: 5px;
 		width: 100%;
 	}
 }
@@ -365,259 +1116,4 @@ input::-webkit-input-placeholder {
 		width: 100%;
 		margin: 1rem;
 	}
-
-	// .bottom-container{
-	// 	border:1px solid green !important;
-
-	// }
-
-	// .bottom-container > button{
-	// 	position: relative;
-	// 	border:1px solid pink;
-	// 	bottom: 10px
-	// }
-}
-
-.adminbox_shadow.user_information,
-.adminbox_shadow.user_information .mat-mdc-form-field,
-.mat-calendar {
-	font-family: 'PT Serif', serif !important;
-}
-
-.booking_status {
-	font-size: medium;
-	color: #fff;
-}
-
-.custom-filled-button {
-	padding: 0.375rem 0.985rem;
-}
-
-.table {
-	thead th {
-		background-color: #f29439;
-		border-color: #fff;
-	}
-}
-
-#farmout-modal {
-	.modal-footer {
-		justify-content: flex-end !important;
-
-		&>button {
-			padding: 0.7rem 1.95rem;
-			color: var(--orange);
-			border: 1.3px solid var(--orange);
-			margin: auto 15px;
-			border-radius: 15px;
-		}
-
-		#prim-btn:hover {
-			background-color: var(--orange);
-			color: #ffffff;
-			border-color: var(--orange)
-		}
-
-		#sec-btn:hover {
-			background-color: #616161;
-			border-color: #616161;
-			color: #ffffff
-		}
-	}
-}
-
-.asterisk {
-	font-size: 24px;
-}
-
-
-.pin-icon-preview {
-	font-size: 26px;
-}
-
-@media only screen and (max-width: 768px) {
-
-	.pin-icon-preview {
-		font-size: 34px;
-	}
-}
-
-a.dropdown-item {
-	padding: 0.5rem 1.4rem !important;
-	font-size: 18px;
-	font-weight: 500 !important;
-	font-family: "Roboto", sans-serif !important;
-}
-
-.google_map {
-	width: auto;
-	max-height: 300px;
-	height: 300px;
-
-	.map {
-		width: 100%;
-		height: 100%;
-		border-radius: 17px;
-	}
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-:host ::ng-deep.mat-checkbox-layout,
-.mat-checkbox-label {
-	white-space: normal !important;
-}
-
-
-.horizontal-scroll-container {
-	display: flex;
-	/* Arrange items in a row */
-	overflow-x: auto;
-	/* Enable horizontal scrolling */
-	white-space: nowrap;
-	/* Prevent items from wrapping */
-	gap: 95px;
-	/* Space between items */
-	scrollbar-width: thin;
-	/* Thin scrollbar for Firefox */
-	scrollbar-color: #888 #f1f1f1;
-	/* Custom colors for Firefox */
-	max-width: 637px;
-}
-
-.horizontal-scroll-container::-webkit-scrollbar {
-	height: 8px;
-	/* Height of the scrollbar */
-}
-
-.horizontal-scroll-container::-webkit-scrollbar-thumb {
-	background-color: #888;
-	/* Scrollbar thumb color */
-	border-radius: 4px;
-	/* Rounded corners for the scrollbar thumb */
-}
-
-.horizontal-scroll-container::-webkit-scrollbar-track {
-	background-color: #f1f1f1;
-	/* Scrollbar track color */
-}
-
-.scroll-item {
-	min-width: 300px;
-}
-
-@media (max-width: 768px) {
-	.scroll-item {
-		min-width: 180px;
-		/* Adjust item width for smaller screens */
-	}
-
-	.horizontal-scroll-container {
-		gap: 20px;
-	}
-
-}
-
-.date-fields-wrapper {
-	flex-direction: row;
-	gap: 10px;
-	max-width: 520px;
-
-	@media (max-width: 575px) {
-		flex-direction: column;
-		max-width: 100%;
-	}
-}
-
-.search-container-wrapper {
-	gap: 15px;
-	row-gap: 15px; // Ensure spacing when wrapped
-
-	.button-group {
-		margin-top: 10px; // Mobile spacing
-
-		@media (min-width: 576px) {
-			margin-top: 6px; // Visual alignment with form field input box
-		}
-	}
-}
-
-// Trip Route icon styling with connecting line
-.trip-route-container {
-	display: block;
-	width: auto; // Allow container to shrink to fit content width (20ch)
-
-	.route-icon-wrapper {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		margin-right: 8px;
-
-		.connecting-line {
-			width: 2px;
-			// height: 30px; // Dynamic height handled in HTML
-			background-color: #FF8C00;
-			margin: -2px 0;
-		}
-
-		.loc-logo {
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			line-height: 1;
-
-			i {
-				display: block;
-				line-height: 1;
-			}
-		}
-	}
-
-	.address-content-wrapper {
-		display: flex;
-		flex-direction: column;
-		gap: 18px;
-	}
-
-	.address-main-row {
-		gap: 0;
-		margin-bottom: 0px;
-	}
-
-	.address-content {
-		white-space: normal !important;
-		word-wrap: break-word !important;
-		word-break: break-word !important;
-		overflow-wrap: break-word !important;
-		line-height: 1.4;
-		display: block;
-		width: 30ch !important;
-		max-width: 30ch !important;
-	}
-}
-
-button.view-button {
-    color: #fff !important;
-    background-color: #f29439 !important;
-    border: 2px solid #f29439 !important;
-    padding: 5px 14px !important;
-    border-radius: 6px !important;  
-    font-size: 14px !important;
-    font-weight: bold !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 5px !important;
-    cursor: pointer !important;
-    outline: none !important;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
-
-    &:hover, &:focus, &:active {
-        background-color: #d97e20 !important;
-        border-color: #d97e20 !important;
-        box-shadow: 0px 4px 8px rgba(242, 148, 57, 0.4) !important;
-    }
-}
-
-button.view-button.dropdown-toggle::after {
-    font-size: 17px !important;
 }
