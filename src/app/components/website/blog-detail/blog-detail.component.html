@@ -32,11 +32,8 @@
                 <div class="d-flex flex-column justify-content-center">
                     <div class="author-name text-dark font-weight-bold mb-1" style="font-size: 16px;">
                         {{post.author.name}}</div>
-                    <div class="author-bio-desc text-muted">
-                        <!-- Mock bio mimicking the image -->
-                        {{post.author.name}} is a corporate event planning specialist with over 15 years of
-                        experience
-                        coordinating large-scale business events.
+                    <div class="author-bio-desc text-muted" *ngIf="post.author.bio">
+                        {{post.author.bio}}
                     </div>
                 </div>
             </div>
@@ -55,13 +52,24 @@
                 </div>
 
                 <div class="meta-right d-flex align-items-center">
-                    <span class="mr-4 d-flex align-items-center group-hover-toggle"><i class="bi bi-heart mr-2"></i>
-                        {{post.likes}}</span>
-                    <span class="mr-4 d-flex align-items-center group-hover-toggle"><i class="bi bi-chat-dots mr-2"></i>
-                        {{post.commentsCount}}</span>
-                    <a href="javascript:void(0)" class="text-muted share-icon-btn mr-3"><i
-                            class="bi bi-bookmark"></i></a>
-                    <a href="javascript:void(0)" class="text-muted share-icon-btn"><i class="bi bi-share"></i></a>
+                    <span class="mr-4 d-flex align-items-center"><i class="bi bi-chat-dots mr-2"></i>
+                        {{comments.length}}</span>
+                    <a [href]="shareLink('facebook')" (click)="openShare($event, 'facebook')" target="_blank"
+                        rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on Facebook"
+                        title="Share on Facebook"><i class="bi bi-facebook"></i></a>
+                    <a [href]="shareLink('twitter')" (click)="openShare($event, 'twitter')" target="_blank"
+                        rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on X"
+                        title="Share on X"><i class="bi bi-twitter-x"></i></a>
+                    <a [href]="shareLink('linkedin')" (click)="openShare($event, 'linkedin')" target="_blank"
+                        rel="noopener" class="text-muted share-icon-btn mr-3" aria-label="Share on LinkedIn"
+                        title="Share on LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <button type="button" (click)="copyLink()"
+                        class="text-muted share-icon-btn border-0 bg-transparent p-0"
+                        [attr.aria-label]="copyState === 'copied' ? 'Link copied' : 'Copy link'"
+                        [title]="copyState === 'copied' ? 'Link copied!' : 'Copy link'">
+                        <i class="bi" [class.bi-link-45deg]="copyState !== 'copied'"
+                            [class.bi-check2]="copyState === 'copied'"></i>
+                    </button>
                 </div>
 
             </div>
@@ -93,106 +101,108 @@
                     <p class="font-weight-bold mb-3 small text-dark" style="font-size: 15px;">Share this
                         article
                     </p>
-                    <div class="d-flex justify-content-center gap-2">
-                        <a href="javascript:void(0)" class="social-share-btn facebook mx-1"><i class="bi bi-facebook"
+                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                        <a [href]="shareLink('facebook')" (click)="openShare($event, 'facebook')" target="_blank"
+                            rel="noopener" class="social-share-btn facebook mx-1" aria-label="Share on Facebook"
+                            title="Share on Facebook"><i class="bi bi-facebook" style="font-size: 16px;"></i></a>
+                        <a [href]="shareLink('twitter')" (click)="openShare($event, 'twitter')" target="_blank"
+                            rel="noopener" class="social-share-btn twitter-x mx-1" aria-label="Share on X"
+                            title="Share on X"><i class="bi bi-twitter-x" style="font-size: 16px;"></i></a>
+                        <a [href]="shareLink('linkedin')" (click)="openShare($event, 'linkedin')" target="_blank"
+                            rel="noopener" class="social-share-btn linkedin mx-1" aria-label="Share on LinkedIn"
+                            title="Share on LinkedIn"><i class="bi bi-linkedin" style="font-size: 16px;"></i></a>
+                        <a [href]="shareLink('whatsapp')" (click)="openShare($event, 'whatsapp')" target="_blank"
+                            rel="noopener" class="social-share-btn whatsapp mx-1" aria-label="Share on WhatsApp"
+                            title="Share on WhatsApp"><i class="bi bi-whatsapp" style="font-size: 16px;"></i></a>
+                        <a [href]="shareLink('email')" class="social-share-btn link mx-1"
+                            aria-label="Share via Email" title="Share via Email"><i class="bi bi-envelope"
                                 style="font-size: 16px;"></i></a>
-                        <a href="javascript:void(0)" class="social-share-btn twitter-x mx-1"><i class="bi bi-twitter-x"
-                                style="font-size: 16px;"></i></a>
-                        <a href="javascript:void(0)" class="social-share-btn linkedin mx-1"><i class="bi bi-linkedin"
-                                style="font-size: 16px;"></i></a>
-                        <a href="javascript:void(0)" class="social-share-btn link mx-1"><i class="bi bi-envelope"
-                                style="font-size: 16px;"></i></a>
+                        <button type="button" (click)="copyLink()" class="social-share-btn link mx-1 border-0"
+                            [attr.aria-label]="copyState === 'copied' ? 'Link copied' : 'Copy link'"
+                            [title]="copyState === 'copied' ? 'Link copied!' : 'Copy link'">
+                            <i class="bi" [class.bi-link-45deg]="copyState !== 'copied'"
+                                [class.bi-check2]="copyState === 'copied'" style="font-size: 16px;"></i>
+                        </button>
+                        <button *ngIf="canNativeShare()" type="button" (click)="nativeShare()"
+                            class="social-share-btn link mx-1 border-0" aria-label="More share options"
+                            title="More share options"><i class="bi bi-three-dots"
+                                style="font-size: 16px;"></i></button>
                     </div>
+                    <div class="mt-2 small text-success" *ngIf="copyState === 'copied'"
+                        style="font-size: 12px;">Link copied to clipboard</div>
+                    <div class="mt-2 small text-danger" *ngIf="copyState === 'error'"
+                        style="font-size: 12px;">Could not copy link</div>
                 </div>
             </div>
 
             <!-- Comments Section -->
             <div class="comments-section mt-5 mb-5 pt-4">
-                <h4 class="font-weight-bold mb-4 related-title">Comments (3)</h4>
+                <h4 class="font-weight-bold mb-4 related-title">
+                    Comments ({{comments.length}})
+                </h4>
 
-                <div class="leave-comment-box bg-white p-4 mb-5">
+                <div class="leave-comment-box bg-white p-4 mb-5 border rounded">
                     <h6 class="font-weight-bold mb-3" style="font-size: 15px;">Leave a Comment</h6>
-                    <textarea class="form-control mb-3 p-3 rounded" rows="3"
-                        placeholder="Share your thoughts..."></textarea>
-                    <button
+
+                    <div *ngIf="submitSuccess" class="alert alert-success py-2 mb-3" style="font-size: 13px;">
+                        {{submitSuccess}}
+                    </div>
+                    <div *ngIf="submitError" class="alert alert-danger py-2 mb-3" style="font-size: 13px;">
+                        {{submitError}}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control p-3 rounded" placeholder="Your name *"
+                                [(ngModel)]="newComment.author_name" name="comment_author_name"
+                                [disabled]="submitting">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <input type="email" class="form-control p-3 rounded" placeholder="Your email *"
+                                [(ngModel)]="newComment.author_email" name="comment_author_email"
+                                [disabled]="submitting">
+                        </div>
+                    </div>
+                    <textarea class="form-control mb-3 p-3 rounded" rows="3" placeholder="Share your thoughts..."
+                        [(ngModel)]="newComment.content" name="comment_content"
+                        [disabled]="submitting"></textarea>
+                    <button type="button" (click)="submitComment()" [disabled]="submitting"
                         class="btn btn-warning text-white rounded-pill px-4 py-2 font-weight-bold shadow-sm d-inline-flex align-items-center"
                         style="font-size: 13px;">
-                        <i class="bi bi-send mr-2" style="font-size: 12px;"></i> Post Comment
+                        <i class="bi bi-send mr-2" style="font-size: 12px;"></i>
+                        {{submitting ? 'Posting...' : 'Post Comment'}}
                     </button>
                 </div>
 
-                <!-- Mock Comment 1 -->
-                <div class="comment-item p-4 bg-white mb-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <div class="d-flex align-items-center">
-                            <div
-                                class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
-                                JS</div>
-                            <div>
-                                <div class="font-weight-bold text-dark" style="font-size: 14px; margin-bottom: 2px;">
-                                    Jennifer Smith</div>
-                                <div class="text-muted" style="font-size: 12px;">Feb 21, 2026</div>
-                            </div>
-                        </div>
-                        <a href="javascript:void(0)"
-                            class="text-muted d-flex align-items-center group-hover-warning text-decoration-none"
-                            style="font-size: 11px; font-weight: 500;">
-                            <i class="bi bi-hand-thumbs-up mr-2" style="font-size: 14px;"></i> 12
-                        </a>
-                    </div>
-                    <p class="text-muted mb-0 mt-3" style="font-size: 14px; margin-left: 52px; line-height: 1.6;">This
-                        is incredibly helpful! We're planning a corporate retreat for 50 people and this
-                        guide
-                        answered
-                        all my questions. Thank you!</p>
+                <div *ngIf="commentsLoading" class="text-muted text-center py-4" style="font-size: 13px;">
+                    Loading comments...
                 </div>
 
-                <!-- Mock Comment 2 -->
-                <div class="comment-item p-4 bg-white mb-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <div class="d-flex align-items-center">
-                            <div
-                                class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
-                                MR</div>
-                            <div>
-                                <div class="font-weight-bold text-dark" style="font-size: 14px; margin-bottom: 2px;">
-                                    Michael Rodriguez</div>
-                                <div class="text-muted" style="font-size: 12px;">Feb 22, 2026</div>
-                            </div>
-                        </div>
-                        <a href="javascript:void(0)"
-                            class="text-muted d-flex align-items-center group-hover-warning text-decoration-none"
-                            style="font-size: 11px; font-weight: 500;">
-                            <i class="bi bi-hand-thumbs-up mr-2" style="font-size: 14px;"></i> 8
-                        </a>
-                    </div>
-                    <p class="text-muted mb-0 mt-3" style="font-size: 14px; margin-left: 52px; line-height: 1.6;">Great
-                        article! The timeline recommendations are spot-on. We followed this advice for
-                        our last
-                        conference and everything went smoothly.</p>
+                <div *ngIf="!commentsLoading && comments.length === 0" class="text-muted text-center py-4"
+                    style="font-size: 14px;">
+                    No comments yet. Be the first to share your thoughts.
                 </div>
 
-                <!-- Mock Comment 3 -->
-                <div class="comment-item p-4 bg-white mb-4">
+                <div class="comment-item p-4 bg-white mb-4 border rounded" *ngFor="let c of comments">
                     <div class="d-flex justify-content-between mb-2">
                         <div class="d-flex align-items-center">
-                            <div
+                            <img *ngIf="c.authorAvatar" [src]="c.authorAvatar" [alt]="c.authorName"
+                                class="author-avatar-img mr-3 shadow-sm align-self-start mt-1"
+                                onerror="this.style.display='none'">
+                            <div *ngIf="!c.authorAvatar"
                                 class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold small bg-warning align-self-start mt-1">
-                                EC</div>
+                                {{c.authorInitials}}
+                            </div>
                             <div>
                                 <div class="font-weight-bold text-dark" style="font-size: 14px; margin-bottom: 2px;">
-                                    Emily Chen</div>
-                                <div class="text-muted" style="font-size: 12px;">Feb 23, 2026</div>
+                                    {{c.authorName}}</div>
+                                <div class="text-muted" style="font-size: 12px;">{{c.date}}</div>
                             </div>
                         </div>
-                        <a href="javascript:void(0)"
-                            class="text-muted d-flex align-items-center group-hover-warning text-decoration-none"
-                            style="font-size: 11px; font-weight: 500;">
-                            <i class="bi bi-hand-thumbs-up mr-2" style="font-size: 14px;"></i> 5
-                        </a>
                     </div>
-                    <p class="text-muted mb-0 mt-3" style="font-size: 14px; margin-left: 52px; line-height: 1.6;">Love
-                        the checklist at the end. I'm sharing this with our event planning team!</p>
+                    <div class="text-muted mb-0 mt-3 comment-body"
+                        style="font-size: 14px; margin-left: 52px; line-height: 1.6;"
+                        [innerHTML]="c.contentHtml"></div>
                 </div>
             </div>
         </div>

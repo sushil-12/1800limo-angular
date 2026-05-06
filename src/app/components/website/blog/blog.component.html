@@ -70,11 +70,8 @@
                                  {{getExcerpt(article.content)}}
                               </p>
 
-                              <!-- Mock tags based on mockup -->
-                              <div class="hash-tags mb-4 d-flex flex-wrap gap-2">
-                                 <span class="hash-tag">#Corporate</span>
-                                 <span class="hash-tag">#Event Planning</span>
-                                 <span class="hash-tag">#Tips</span>
+                              <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="article.tags?.length">
+                                 <span class="hash-tag" *ngFor="let tag of article.tags">{{tag}}</span>
                               </div>
 
                               <div
@@ -91,11 +88,10 @@
                                     <span
                                        class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
                                  </div>
-                                 <div class="engagement-stats text-muted d-flex align-items-center">
-                                    <span class="mr-3 d-flex align-items-center"><i class="bi bi-heart mr-1"></i>
-                                       {{article.likes}}</span>
-                                    <span class="d-flex align-items-center"><i class="bi bi-chat-dots mr-1"></i>
-                                       {{article.commentsCount}}</span>
+                                 <div class="engagement-stats text-muted d-flex align-items-center"
+                                    *ngIf="article.category">
+                                    <span class="d-flex align-items-center"><i class="bi bi-folder2 mr-1"></i>
+                                       {{article.category}}</span>
                                  </div>
                               </div>
 
@@ -147,10 +143,8 @@
                         {{getExcerpt(article.content)}}
                      </p>
 
-                     <!-- Mock tags based on mockup -->
-                     <div class="hash-tags mb-4 d-flex flex-wrap gap-2">
-                        <span class="hash-tag">#Insights</span>
-                        <span class="hash-tag">#News</span>
+                     <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="article.tags?.length">
+                        <span class="hash-tag" *ngFor="let tag of article.tags">{{tag}}</span>
                      </div>
 
                      <div class="article-footer d-flex justify-content-between align-items-center mb-4">
@@ -165,11 +159,10 @@
                               onerror="this.src='assets/images/user.png'; this.onerror=null;">
                            <span class="author-name text-dark font-weight-bold small">{{article.author.name}}</span>
                         </div>
-                        <div class="engagement-stats text-muted d-flex align-items-center">
-                           <span class="mr-3 d-flex align-items-center"><i class="bi bi-heart mr-1"></i>
-                              {{article.likes}}</span>
-                           <span class="d-flex align-items-center"><i class="bi bi-chat-dots mr-1"></i>
-                              {{article.commentsCount}}</span>
+                        <div class="engagement-stats text-muted d-flex align-items-center"
+                           *ngIf="article.category">
+                           <span class="d-flex align-items-center"><i class="bi bi-folder2 mr-1"></i>
+                              {{article.category}}</span>
                         </div>
                      </div>
                      <a [routerLink]="['/blog', article.id]"
