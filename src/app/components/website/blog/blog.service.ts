@@ -5,6 +5,21 @@ import { map, catchError } from 'rxjs/operators';
 import { BlogPost, BlogComment } from './blog.data';
 
 const WP_API = 'https://blog.1800limo.com/wp-json/wp/v2';
+const WP_CUSTOM_API = 'https://blog.1800limo.com/wp-json/custom/v1';
+
+export interface WpStyleHandle {
+    handle: string;
+    src: string;
+    ver: string;
+    media: string;
+    before: string;
+    after: string;
+}
+
+export interface WpStyles {
+    links: string[];
+    items: WpStyleHandle[];
+}
 const PLACEHOLDER_IMG = 'assets/images/placeholder.jpg';
 
 interface WpRendered { rendered: string; }
@@ -52,6 +67,12 @@ export interface NewComment {
 export class BlogService {
 
    constructor(private http: HttpClient) { }
+
+   getBlockStyles(): Observable<WpStyles> {
+      return this.http
+         .get<WpStyles>(`${WP_CUSTOM_API}/styles`)
+         .pipe(catchError(() => of({ links: [], items: [] })));
+   }
 
    getPosts(): Observable<BlogPost[]> {
       return this.http
