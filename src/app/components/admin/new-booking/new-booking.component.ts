@@ -20,6 +20,7 @@ import { constant_data } from '../../../../assets/js/data';
 import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
 import { P } from '@angular/cdk/keycodes';
+import { NgIf } from '@angular/common';
 
 declare var $: any
 
@@ -5234,13 +5235,26 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	Subscriptions() {
-		//pickup time change 
-		this.BookingForm?.get('pickup_time')?.valueChanges.subscribe((value: string) => {
-			this.buildBookingData()
-		})
-		this.BookingForm?.get('return_pickup_time')?.valueChanges.subscribe((value: string) => {
-			this.buildBookingData()
-		})
+	    if (this.updateType=='edit') {
+			this.BookingForm?.get('pickup_time')?.valueChanges.subscribe((value: string) => {
+				if (!this.isManualRateEntered()) {
+					this.buildBookingData();
+				}
+			})
+			this.BookingForm?.get('return_pickup_time')?.valueChanges.subscribe((value: string) => {
+				if (!this.isManualRateEntered()) {
+					this.buildBookingData();
+				}
+			})
+	    } else {
+			//pickup time change 
+			this.BookingForm?.get('pickup_time')?.valueChanges.subscribe((value: string) => {
+				this.buildBookingData()
+			})
+			this.BookingForm?.get('return_pickup_time')?.valueChanges.subscribe((value: string) => {
+				this.buildBookingData()
+			})
+		}
 
 		// Service Type
 		this.BookingForm?.get('service_type')?.valueChanges.subscribe((value: string) => {
@@ -6397,6 +6411,17 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// })
 
 
+	}
+
+	private isManualRateEntered(): boolean {
+		if (!this.RatesForm) return false;
+
+		const baseRate = this.RatesForm?.all_inclusive_rates?.Base_Rate;
+		const baseRateValue = Number(baseRate?.baserate ?? 0);
+		const amountValue = Number(baseRate?.amount ?? 0);
+
+		// If admin has manually typed a base rate value, consider it manual
+		return baseRateValue > 0 || amountValue > 0;
 	}
 
 	resetDriverAndVehicle(affiliate_type: string) {
