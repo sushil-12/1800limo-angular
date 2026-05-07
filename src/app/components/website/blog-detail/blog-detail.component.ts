@@ -47,7 +47,13 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
         });
     }
 
+    private wpStyleObserver: MutationObserver | undefined;
+
     ngOnDestroy(): void {
+        if (this.wpStyleObserver) {
+            this.wpStyleObserver.disconnect();
+            this.wpStyleObserver = undefined;
+        }
         const link = document.getElementById(WP_BLOCK_CSS_ID);
         if (link && link.parentNode) {
             link.parentNode.removeChild(link);
@@ -55,12 +61,26 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     }
 
     private injectWpBlockStyles(): void {
-        if (document.getElementById(WP_BLOCK_CSS_ID)) return;
-        const link = document.createElement('link');
-        link.id = WP_BLOCK_CSS_ID;
-        link.rel = 'stylesheet';
-        link.href = WP_BLOCK_CSS_HREF;
+        let link = document.getElementById(WP_BLOCK_CSS_ID) as HTMLLinkElement | null;
+        if (!link) {
+            link = document.createElement('link');
+            link.id = WP_BLOCK_CSS_ID;
+            link.rel = 'stylesheet';
+            link.href = WP_BLOCK_CSS_HREF;
+        }
+        // Append to end of <head> so WP rules win cascade ties.
         document.head.appendChild(link);
+
+        // Angular adds component <style> nodes to <head> as new components mount,
+        // which would push WP CSS earlier in the cascade. Keep it last.
+        if (this.wpStyleObserver) this.wpStyleObserver.disconnect();
+        this.wpStyleObserver = new MutationObserver(() => {
+            const wp = document.getElementById(WP_BLOCK_CSS_ID);
+            if (wp && document.head.lastElementChild !== wp) {
+                document.head.appendChild(wp);
+            }
+        });
+        this.wpStyleObserver.observe(document.head, { childList: true });
     }
 
     loadPost(slug: string) {

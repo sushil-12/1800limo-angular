@@ -154,40 +154,9 @@
     }
 
     .content-text {
-        font-size: 16px; // Adjust to standard reading size
-        line-height: 1.8;
-        color: #374151;
-        font-weight: 400;
-
-        ::ng-deep {
-            p {
-                margin-bottom: 24px;
-            }
-
-            h2,
-            h3,
-            h4,
-            h5 {
-                color: #111827;
-                font-weight: 700;
-                margin-top: 40px;
-                margin-bottom: 20px;
-            }
-
-            ul,
-            ol {
-                margin-bottom: 24px;
-                padding-left: 24px;
-
-                li {
-                    margin-bottom: 12px;
-                }
-            }
-
-            strong {
-                color: #111827;
-            }
-        }
+        // Typography for the article body is owned by WordPress styles
+        // (block-library/common.min.css). Avoid local overrides here so WP
+        // rules win the cascade.
     }
 }
 
