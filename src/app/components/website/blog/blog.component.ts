@@ -39,12 +39,12 @@ export class BlogComponent implements OnInit {
     this.metaService.updateTag({ name: 'twitter:description', content: description });
 
     this.blogService.getPosts().subscribe({
-      next: posts => {
-        this.allPosts = posts;
-        this.featuredArticles = posts.slice(0, 2);
-        this.latestArticles = posts.slice(2);
-        this.loading = false;
-      },
+     next: posts => {
+      this.allPosts = posts;
+      this.featuredArticles = posts.slice(0, 2);
+      this.latestArticles = posts.slice(2);
+      this.loading = false;  
+    },
       error: () => { this.loading = false; }
     });
 
@@ -63,4 +63,20 @@ export class BlogComponent implements OnInit {
     const text = tmp.textContent || tmp.innerText || '';
     return text.substring(0, 150) + '...';
   }
+
+  onTab(category: BlogCategory): void {
+    this.categories = this.categories.map(cat => ({
+      ...cat,
+      active: cat.id === category.id
+    }));
+
+    if (category.id === 'all') {
+      this.featuredArticles = this.allPosts.slice(0, 2);
+      this.latestArticles = this.allPosts.slice(2);
+    } else {
+      const filtered = this.allPosts.filter(post => post.category === category.name);
+      this.featuredArticles = filtered.slice(0, 2);
+      this.latestArticles = filtered.slice(2);
+    }
+ }
 }

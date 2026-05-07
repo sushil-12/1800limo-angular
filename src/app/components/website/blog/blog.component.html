@@ -19,19 +19,17 @@
    </header>
 
    <!-- Filters Section -->
-   <div class="category-filters-container">
+    <div class="category-filters-container">
       <div class="container">
          <div class="d-flex align-items-center justify-content-center flex-wrap">
-            <button *ngFor="let cat of categories" class="filter-pill" [class.active]="cat.active">
+            <button *ngFor="let cat of categories" class="filter-pill" [class.active]="cat.active" (click)="onTab(cat)">
                {{cat.name}} <span class="badge ml-2" *ngIf="cat.count">{{cat.count}}</span>
             </button>
          </div>
       </div>
-   </div>
+    </div>
 
-  <!-- =============================================
-     FEATURED ARTICLES SECTION
-     ============================================= -->
+  <!-- ======== FEATURED ARTICLES SECTION ============== -->
 <section class="featured-section py-5">
   <div class="container">
     <div class="row justify-content-center">
@@ -295,4 +293,5 @@
     </div>
   </div>
 </section>
+
 </div>
