@@ -4,8 +4,6 @@ import { Title, Meta, DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BlogPost, BlogComment } from '../blog/blog.data';
 import { BlogService } from '../blog/blog.service';
 
-const WP_BLOCK_CSS_ID = 'wp-block-library-common-css';
-const WP_BLOCK_CSS_HREF = 'https://blog.1800limo.com/wp-includes/css/dist/block-library/common.min.css';
 
 @Component({
     selector: 'app-blog-detail',
@@ -35,8 +33,11 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
         private blogService: BlogService
     ) { }
 
+    private wpStyleObserver: MutationObserver | undefined;
+    private wpInjectedIds: string[] = [];
+
     ngOnInit(): void {
-        this.injectWpBlockStyles();
+        this.injectWpStyles();
         this.route.paramMap.subscribe(params => {
             const slug = params.get('id');
             if (slug) {
@@ -47,60 +48,93 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
         });
     }
 
-    private wpStyleObserver: MutationObserver | undefined;
-
     ngOnDestroy(): void {
         if (this.wpStyleObserver) {
             this.wpStyleObserver.disconnect();
             this.wpStyleObserver = undefined;
         }
-        const link = document.getElementById(WP_BLOCK_CSS_ID);
-        if (link && link.parentNode) {
-            link.parentNode.removeChild(link);
-        }
+        this.wpInjectedIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el?.parentNode) el.parentNode.removeChild(el);
+        });
+        this.wpInjectedIds = [];
     }
 
-    private injectWpBlockStyles(): void {
-        let link = document.getElementById(WP_BLOCK_CSS_ID) as HTMLLinkElement | null;
-        if (!link) {
-            link = document.createElement('link');
-            link.id = WP_BLOCK_CSS_ID;
-            link.rel = 'stylesheet';
-            link.href = WP_BLOCK_CSS_HREF;
-        }
-        // Append to end of <head> so WP rules win cascade ties.
-        document.head.appendChild(link);
+    private injectWpStyles(): void {
+        this.blogService.getBlockStyles().subscribe(({ links, items }) => {
+            // Inject linked stylesheets from `links`
+            links.forEach((href, i) => {
+                const id = `wp-link-${i}`;
+                if (!document.getElementById(id)) {
+                    const link = document.createElement('link');
+                    link.id = id;
+                    link.rel = 'stylesheet';
+                    link.href = href;
+                    document.head.appendChild(link);
+                    this.wpInjectedIds.push(id);
+                }
+            });
 
-        // Angular adds component <style> nodes to <head> as new components mount,
-        // which would push WP CSS earlier in the cascade. Keep it last.
+            // Inject per-handle inline CSS from `items` (before / after)
+            items.forEach(({ handle, media, before, after }) => {
+                if (before) this.injectInlineStyle(`wp-${handle}-before`, before, media);
+                if (after)  this.injectInlineStyle(`wp-${handle}-after`,  after,  media);
+            });
+
+            this.setupWpStyleObserver();
+        });
+    }
+
+    private injectInlineStyle(id: string, css: string, media = 'all'): void {
+        if (document.getElementById(id)) return;
+        const style = document.createElement('style');
+        style.id = id;
+        style.media = media;
+        style.textContent = css;
+        document.head.appendChild(style);
+        this.wpInjectedIds.push(id);
+    }
+
+    private setupWpStyleObserver(): void {
         if (this.wpStyleObserver) this.wpStyleObserver.disconnect();
         this.wpStyleObserver = new MutationObserver(() => {
-            const wp = document.getElementById(WP_BLOCK_CSS_ID);
-            if (wp && document.head.lastElementChild !== wp) {
-                document.head.appendChild(wp);
-            }
+            const last = document.head.lastElementChild;
+            const needsReorder = this.wpInjectedIds.some(id => {
+                const el = document.getElementById(id);
+                return el && el !== last;
+            });
+            if (!needsReorder) return;
+            this.wpStyleObserver!.disconnect();
+            this.wpInjectedIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) document.head.appendChild(el);
+            });
+            this.wpStyleObserver!.observe(document.head, { childList: true });
         });
         this.wpStyleObserver.observe(document.head, { childList: true });
     }
 
     loadPost(slug: string) {
-        this.blogService.getPostBySlug(slug).subscribe(post => {
-            if (!post) {
-                this.router.navigate(['/blog']);
-                return;
-            }
-            this.post = post;
-            this.setSeoTags(post);
-            this.safeContent = this.sanitizer.bypassSecurityTrustHtml(post.content);
+        this.blogService.getPostBySlug(slug).subscribe({
+            next: post => {
+                if (!post) {
+                    this.router.navigate(['/blog']);
+                    return;
+                }
+                this.post = post;
+                this.setSeoTags(post);
+                this.safeContent = this.sanitizer.bypassSecurityTrustHtml(post.content);
 
-            this.loadComments(post.wpId);
+                this.loadComments(post.wpId);
 
-            this.blogService.getPosts().subscribe(all => {
-                this.relatedArticles = all.filter(p => p.id !== slug).slice(0, 3);
-            });
+                this.blogService.getPosts().subscribe(all => {
+                    this.relatedArticles = all.filter(p => p.id !== slug).slice(0, 3);
+                });
 
-            window.scrollTo(0, 0);
-        }, () => this.router.navigate(['/blog']));
+                window.scrollTo(0, 0);
+            },
+            error: () => this.router.navigate(['/blog'])
+        });
     }
 
     private setSeoTags(post: BlogPost) {
@@ -137,10 +171,10 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
 
     loadComments(postId: number) {
         this.commentsLoading = true;
-        this.blogService.getComments(postId).subscribe(list => {
-            this.comments = list;
-            this.commentsLoading = false;
-        }, () => { this.commentsLoading = false; });
+        this.blogService.getComments(postId).subscribe({
+            next: list => { this.comments = list; this.commentsLoading = false; },
+            error: () => { this.commentsLoading = false; }
+        });
     }
 
     submitComment() {
@@ -239,7 +273,9 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
                 ta.style.opacity = '0';
                 document.body.appendChild(ta);
                 ta.select();
-                document.execCommand('copy');
+                // execCommand is deprecated but kept as a last-resort fallback
+                // for browsers without Clipboard API support
+                (document as any).execCommand('copy');
                 document.body.removeChild(ta);
                 done();
             } catch {
