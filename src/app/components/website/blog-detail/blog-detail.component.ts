@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title, Meta, DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BlogPost, BlogComment } from '../blog/blog.data';
 import { BlogService } from '../blog/blog.service';
+
+const WP_BLOCK_CSS_ID = 'wp-block-library-common-css';
+const WP_BLOCK_CSS_HREF = 'https://blog.1800limo.com/wp-includes/css/dist/block-library/common.min.css';
 
 @Component({
     selector: 'app-blog-detail',
     templateUrl: './blog-detail.component.html',
     styleUrls: ['./blog-detail.component.scss']
 })
-export class BlogDetailComponent implements OnInit {
+export class BlogDetailComponent implements OnInit, OnDestroy {
 
     post: BlogPost | undefined;
     safeContent: SafeHtml | undefined;
@@ -33,6 +36,7 @@ export class BlogDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.injectWpBlockStyles();
         this.route.paramMap.subscribe(params => {
             const slug = params.get('id');
             if (slug) {
@@ -41,6 +45,42 @@ export class BlogDetailComponent implements OnInit {
                 this.router.navigate(['/blog']);
             }
         });
+    }
+
+    private wpStyleObserver: MutationObserver | undefined;
+
+    ngOnDestroy(): void {
+        if (this.wpStyleObserver) {
+            this.wpStyleObserver.disconnect();
+            this.wpStyleObserver = undefined;
+        }
+        const link = document.getElementById(WP_BLOCK_CSS_ID);
+        if (link && link.parentNode) {
+            link.parentNode.removeChild(link);
+        }
+    }
+
+    private injectWpBlockStyles(): void {
+        let link = document.getElementById(WP_BLOCK_CSS_ID) as HTMLLinkElement | null;
+        if (!link) {
+            link = document.createElement('link');
+            link.id = WP_BLOCK_CSS_ID;
+            link.rel = 'stylesheet';
+            link.href = WP_BLOCK_CSS_HREF;
+        }
+        // Append to end of <head> so WP rules win cascade ties.
+        document.head.appendChild(link);
+
+        // Angular adds component <style> nodes to <head> as new components mount,
+        // which would push WP CSS earlier in the cascade. Keep it last.
+        if (this.wpStyleObserver) this.wpStyleObserver.disconnect();
+        this.wpStyleObserver = new MutationObserver(() => {
+            const wp = document.getElementById(WP_BLOCK_CSS_ID);
+            if (wp && document.head.lastElementChild !== wp) {
+                document.head.appendChild(wp);
+            }
+        });
+        this.wpStyleObserver.observe(document.head, { childList: true });
     }
 
     loadPost(slug: string) {
