@@ -16,6 +16,14 @@ export class BlogComponent implements OnInit {
   categories: BlogCategory[] = [{ name: 'All Posts', count: 0, id: 'all', active: true }];
   loading = true;
 
+  searchText: string = '';
+  suggestions: string[] = [];
+  searchChips: string[] = [];
+  showSuggestions: boolean = false;
+  sortOrder: string = 'newest';
+
+  private activeCategoryId: string = 'all';
+
   constructor(
     private titleService: Title,
     private metaService: Meta,
@@ -39,12 +47,11 @@ export class BlogComponent implements OnInit {
     this.metaService.updateTag({ name: 'twitter:description', content: description });
 
     this.blogService.getPosts().subscribe({
-     next: posts => {
-      this.allPosts = posts;
-      this.featuredArticles = posts.slice(0, 2);
-      this.latestArticles = posts.slice(2);
-      this.loading = false;  
-    },
+      next: posts => {
+        this.allPosts = posts;
+        this.applyFilter();
+        this.loading = false;
+      },
       error: () => { this.loading = false; }
     });
 
@@ -65,18 +72,88 @@ export class BlogComponent implements OnInit {
   }
 
   onTab(category: BlogCategory): void {
+    this.activeCategoryId = category.id;
     this.categories = this.categories.map(cat => ({
       ...cat,
       active: cat.id === category.id
     }));
+    this.applyFilter();
+  }
 
-    if (category.id === 'all') {
-      this.featuredArticles = this.allPosts.slice(0, 2);
-      this.latestArticles = this.allPosts.slice(2);
-    } else {
-      const filtered = this.allPosts.filter(post => post.category === category.name);
-      this.featuredArticles = filtered.slice(0, 2);
-      this.latestArticles = filtered.slice(2);
+  onSearchInput() {
+    if (!this.searchText.trim()) {
+      this.suggestions = [];
+      this.showSuggestions = false;
+      this.applyFilter();
+      return;
     }
- }
+
+    const query = this.searchText.toLowerCase().trim();
+    const matchingTitles = this.allPosts
+      .filter(p => p.title.toLowerCase().includes(query))
+      .map(p => p.title);
+
+    this.suggestions = Array.from(new Set(matchingTitles)).slice(0, 5);
+    this.showSuggestions = this.suggestions.length > 0;
+    this.applyFilter();
+  }
+
+  selectSuggestion(suggestion: string) {
+    this.searchText = suggestion;
+    this.showSuggestions = false;
+    this.executeSearch();
+  }
+
+  executeSearch() {
+    const trimmed = this.searchText.trim();
+    if (trimmed && !this.searchChips.includes(trimmed)) {
+      this.searchChips.push(trimmed);
+    }
+    this.searchText = '';
+    this.showSuggestions = false;
+    this.applyFilter();
+  }
+
+  removeChip(chip: string) {
+    this.searchChips = this.searchChips.filter(c => c !== chip);
+    this.applyFilter();
+  }
+
+  setSortOrder(order: string) {
+    this.sortOrder = order;
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    let filtered = [...this.allPosts];
+
+    if (this.activeCategoryId !== 'all') {
+      const activeCategory = this.categories.find(c => c.id === this.activeCategoryId);
+      if (activeCategory) {
+        filtered = filtered.filter(p => p.category === activeCategory.name);
+      }
+    }
+
+    const chips = this.searchChips.map(c => c.toLowerCase());
+    const currentSearch = this.searchText.trim().toLowerCase();
+    const searchTerms = [...chips];
+    if (currentSearch) searchTerms.push(currentSearch);
+
+    if (searchTerms.length > 0) {
+      filtered = filtered.filter(post =>
+        searchTerms.some(term =>
+          post.title.toLowerCase().includes(term) ||
+          (post.content && post.content.toLowerCase().includes(term))
+        )
+      );
+    }
+
+    this.featuredArticles = filtered.slice(0, 2);
+
+    let latest = filtered.slice(2);
+    if (this.sortOrder === 'oldest') {
+      latest = [...latest].reverse();
+    }
+    this.latestArticles = latest;
+  }
 }

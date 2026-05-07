@@ -182,14 +182,14 @@
 
         <h1 class="article-title font-weight-bold mb-4">{{post.title}}</h1>
 
-        <p class="article-subtitle text-muted mb-5">
+        <!-- <p class="article-subtitle text-muted mb-5">
           {{getExcerpt(post.content)}}
-        </p>
+        </p> -->
 
         <hr class="my-4 border-light-divider">
 
         <!-- Author Bio Row -->
-        <div class="author-bio-row d-flex align-items-center py-2">
+        <!-- <div class="author-bio-row d-flex align-items-center py-2">
           <div class="author-avatar mr-3 d-flex align-items-center justify-content-center text-white font-weight-bold shadow-sm"
             *ngIf="post.author.initials">
             {{post.author.initials}}
@@ -205,7 +205,7 @@
               {{post.author.bio}}
             </div>
           </div>
-        </div>
+        </div> -->
 
         <hr class="my-4 border-light-divider">
 
@@ -372,31 +372,33 @@
 
     <!-- Related Articles Footer -->
     <section class="related-articles py-5 bg-white">
-      <div class="container" style="max-width: 1000px;">
-        <h4 class="font-weight-bold py-3 mb-3 related-title">Related Articles</h4>
+      <div class="container">
+        <h4 class="section-title font-weight-bold mb-4">Related Articles</h4>
         <div class="row">
-          <div class="col-md-4 mb-4" *ngFor="let rel of relatedArticles">
-            <div class="article-card d-flex flex-column h-100 bg-white shadow-sm border rounded">
-              <div class="card-image-wrapper">
+          <div class="col-lg-4 col-md-6 mb-4" *ngFor="let rel of relatedArticles">
+            <div class="article-card latest-card d-flex flex-column h-100 bg-white shadow-sm border-0">
+              <div class="card-image-wrapper position-relative">
+                <span class="category-pill-overlay">{{rel.category}}</span>
                 <img [src]="rel.image" [alt]="rel.title" class="card-img"
                   onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
               </div>
               <div class="card-body-content p-4 flex-grow-1 d-flex flex-column">
-                <div class="article-meta mb-3 text-muted d-flex align-items-center" style="font-size: 11px;">
-                  <span class="category-badge-small mr-3">{{rel.category}}</span>
-                  <span class="d-flex align-items-center font-weight-medium"><i
-                      class="bi bi-clock mr-1 text-muted" style="margin-top: -1px;"></i>
-                    {{rel.readTime}}</span>
+                <div class="article-meta text-muted mb-3 d-flex align-items-center">
+                  <span class="d-flex align-items-center"><i class="bi bi-calendar3 mr-2"></i>
+                    {{rel.date}}</span>
                 </div>
-                <a [routerLink]="['/blog', rel.id]" class="text-decoration-none text-dark">
-                  <h6 class="article-title font-weight-bold mb-0" style="line-height: 1.4; font-size: 16px;">
-                    {{rel.title}}</h6>
+                <a [routerLink]="['/blog', rel.id]" class="text-decoration-none">
+                  <h4 class="card-title font-weight-bold text-dark mb-3 latest-title">{{rel.title}}</h4>
                 </a>
+                <p class="card-text text-muted mb-4 latest-excerpt flex-grow-1">
+                  {{getExcerpt(rel.content, 60)}}
+                </p>
+                <div class="hash-tags mb-4 d-flex flex-wrap gap-2" *ngIf="rel.tags?.length">
+                  <span class="hash-tag" *ngFor="let tag of rel.tags">{{tag}}</span>
+                </div>
                 <a [routerLink]="['/blog', rel.id]"
-                  class="mt-auto pt-4 text-warning font-weight-bold text-decoration-none d-flex align-items-center"
-                  style="font-size: 13px;">
-                  Read More <i class="bi bi-chevron-right ml-1 font-weight-bold"
-                    style="font-size: 10px; padding-top: 1px;"></i>
+                  class="read-more-link font-weight-bold text-decoration-none d-inline-flex align-items-center mt-auto">
+                  Read Article <i class="bi bi-arrow-right ml-2 transition-transform"></i>
                 </a>
               </div>
             </div>

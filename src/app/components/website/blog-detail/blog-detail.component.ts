@@ -115,6 +115,10 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     }
 
     loadPost(slug: string) {
+        this.post = undefined;
+        this.safeContent = undefined;
+        this.relatedArticles = [];
+        this.comments = [];
         this.blogService.getPostBySlug(slug).subscribe({
             next: post => {
                 if (!post) {
@@ -179,10 +183,18 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
 
     submitComment() {
         if (!this.post || this.submitting) return;
+
         if (!this.newComment.author_name.trim() || !this.newComment.author_email.trim() || !this.newComment.content.trim()) {
             this.submitError = 'Please fill in your name, email, and a comment.';
             return;
         }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(this.newComment.author_email.trim())) {
+            this.submitError = 'Please enter a valid email address (e.g. name@example.com).';
+            return;
+        }
+
         this.submitting = true;
         this.submitError = '';
         this.submitSuccess = '';
@@ -193,16 +205,19 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
             author_email: this.newComment.author_email.trim(),
             content: this.newComment.content.trim()
         }).subscribe({
-            next: c => {
+            next: () => {
                 this.submitting = false;
-                this.submitSuccess = 'Thanks! Your comment has been submitted and is awaiting moderation.';
+                this.submitSuccess = 'Thank you! Your comment has been submitted successfully. It will appear here once approved.';
                 this.newComment = { author_name: '', author_email: '', content: '' };
-                // Optimistically prepend if approved immediately
-                if (c && c.contentHtml) this.comments = [c, ...this.comments];
             },
             error: err => {
                 this.submitting = false;
-                this.submitError = err?.error?.message || 'Could not submit your comment. Please try again.';
+                const msg = err?.error?.message;
+                if (msg && typeof msg === 'string') {
+                    this.submitError = msg;
+                } else {
+                    this.submitError = 'Something went wrong while submitting your comment. Please check your details and try again.';
+                }
             }
         });
     }
@@ -284,10 +299,10 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
         }
     }
 
-    getExcerpt(htmlContent: string): string {
+    getExcerpt(htmlContent: string, maxLength = 160): string {
         const tmp = document.createElement('DIV');
         tmp.innerHTML = htmlContent;
-        const text = tmp.textContent || tmp.innerText || '';
-        return text.substring(0, 160) + '...';
+        const text = (tmp.textContent || tmp.innerText || '').trim();
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     }
 }
