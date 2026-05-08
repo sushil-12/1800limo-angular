@@ -65,10 +65,16 @@ export class BlogComponent implements OnInit {
   }
 
   getExcerpt(htmlContent: string): string {
+    if (!htmlContent) return '';
+  
     const tmp = document.createElement('DIV');
     tmp.innerHTML = htmlContent;
-    const text = tmp.textContent || tmp.innerText || '';
-    return text.substring(0, 150) + '...';
+    const text = (tmp.textContent || tmp.innerText || '').trim();
+
+    if (text.length <= 150) return text;
+    const slice = text.substring(0, 150);
+    const lastSpace = slice.lastIndexOf(' ');
+    return (lastSpace > 0 ? slice.substring(0, lastSpace) : slice) + '...';
   }
 
   onTab(category: BlogCategory): void {

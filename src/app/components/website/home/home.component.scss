@@ -1,3 +1,71 @@
+/* --- WHYCHOOSE CARDS FIX --- */
+.whychoose_no {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.whychoose_no img {
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.whychoose_no h3 {
+  font-size: 15px;
+  margin-bottom: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
+}
+
+.row.text-center {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.row.text-center > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.row.text-center > [class*="col-"] > .row {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.row.text-center > [class*="col-"] > .row > [class*="col-"] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 575.98px) {
+  .whychoose_no {
+    min-height: 140px;
+    justify-content: center;
+  }
+
+  .whychoose_no h3 {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 4;
+  }
+
+  .whychoose_no img {
+    max-height: 600px;
+  }
+}
+
 /* --- AMENITY CHECKBOXES --- */
 .amenity-checkbox-grid {
 	display: grid;
@@ -84,11 +152,8 @@
 	padding: 0px 0;
 	background-color: #ffffff;
 	overflow: hidden;
-	/* Prevents scrollbars if animations slide out */
 }
 
-/* Shimmer container (before owl loads) */
-/* Shimmer container (before owl loads) */
 .chk_vehicles.shimmer-wrapper {
 	display: flex;
 	flex-wrap: nowrap;
@@ -101,71 +166,50 @@
 	.shimmer-card {
 		flex-shrink: 0;
 		border-radius: 12px;
-		// Remove any default margins since we are using gap/spacing strategies
 		margin: 0;
 		box-sizing: border-box;
 	}
 }
 
-/* 📱 Mobile First (Base) – 1 item */
-/* Matches Owl Carousel generic mobile view */
 .chk_vehicles.shimmer-wrapper {
-	// Base styles for mobile
-	gap: 0; // No gap for single item usually, or specific if needed
+	gap: 0;
 
 	.shimmer-card {
 		width: 100%;
 	}
 
-	// 1 Item visible, hide others
 	.shimmer-card:nth-child(n+2) {
 		display: none;
 	}
 }
 
-/* 📱 Tablet – 2 items (>= 575px to < 992px) */
-/* Matches Owl: responsive: { 575: { items: 2, margin: 15 } } */
 @media (min-width: 575px) {
 	.chk_vehicles.shimmer-wrapper {
 		gap: 15px;
 
 		.shimmer-card {
-			// 2 items with 15px gap
 			width: calc((100% - 15px) / 2);
 		}
 
-		// Show 2nd item
 		.shimmer-card:nth-child(2) {
 			display: block;
 		}
-
-		// Hide 3rd+ items
-		// Note: Mobile rule hides n+2, so we need to override n+2 to show it, then hide n+3
-		// Actually cleaner to just reset display for the ones we want
 	}
 }
 
-/* 💻 Desktop – 3 items (>= 992px) */
-/* Matches Owl: responsive: { 992: { items: 3, margin: 20 } } */
 @media (min-width: 992px) {
 	.chk_vehicles.shimmer-wrapper {
 		gap: 20px;
 
 		.shimmer-card {
-			// 3 items with 20px gap (2 gaps total)
-			// Total width = 3 * card + 2 * 20px
-			// card = (100% - 40px) / 3
 			width: calc((100% - 40px) / 3);
 		}
 
-		// Show all 3 items (and potentially more if we had them)
 		.shimmer-card:nth-child(n+2) {
 			display: block;
 		}
 	}
 }
-
-
 
 .section-title {
 	font-weight: 800;
@@ -202,7 +246,6 @@
 
 .section-title span {
 	color: #F3933D;
-	/* Your Brand Color */
 	font-weight: 800;
 }
 
@@ -211,7 +254,6 @@
 	text-align: center;
 	position: relative;
 	z-index: 2;
-	/* Sits above the connector line */
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -225,13 +267,9 @@
 	padding-bottom: 6px;
 	border-radius: 12px;
 	box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08);
-	/* Soft professional shadow */
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	margin-bottom: 25px;
-	/* Space for the badge overlap */
 	width: 100%;
-
-	/* Ensure uniform height for all images if needed */
 	aspect-ratio: 16/9;
 	display: flex;
 	align-items: center;
@@ -246,12 +284,10 @@
 	height: 100%;
 }
 
-/* Hover Effect */
 .step-card:hover .img-box {
 	transform: translateY(-5px);
 	scale: 1.2;
 	box-shadow: 0px 19px 41px 0px rgba(18, 18, 18, 0.08);
-	/* Orange tinted shadow on hover */
 	border-color: rgba(243, 147, 61, 0.3);
 }
 
@@ -271,30 +307,18 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
-	/* Centering Logic */
 	margin-top: -48px;
-	/* Pulls badge UP to sit on the line/border of image */
 	margin-bottom: 10px;
 	position: relative;
 	z-index: 5;
-
-	/* White Ring around badge to separate it from line */
 	box-shadow: 0 0 0 6px #ffffff;
 }
 
 /* --- THE CONNECTOR LINE (Desktop) --- */
 .connector-line {
 	position: absolute;
-	/* This calculation aligns the line with the center of the badges 
-       Based on: Img aspect ratio + padding */
-	top: calc((100% - 100px) / 2);
-	/* Or more simply, we anchor it to the image box bottom area */
 	top: 55%;
-	/* Adjust this % to move the line up/down */
-
 	left: 15px;
-	/* Matches Bootstrap col padding */
 	right: 15px;
 	height: 3px;
 	background-color: #F3933D;
@@ -303,22 +327,14 @@
 	transform: translateY(-50%);
 }
 
-/* Refined Placement for Desktop Line */
 @media (min-width: 992px) {
 	.step-col {
-		/* Force equal height columns so line stays straight */
 		display: flex;
 		flex-direction: column;
 	}
 
-	/* Calculate Line Position precisely:
-       ImgBox is top. Badge is roughly at the bottom of ImgBox.
-       We want line to pass through Badge.
-    */
 	.connector-line {
 		top: 105px;
-		/* Adjust based on your Aspect Ratio height */
-		/* If aspect-ratio 16/9 on col-3 (approx 260px wide) -> height is ~146px */
 	}
 }
 
@@ -346,7 +362,6 @@
 	.img-box {
 		margin-bottom: 0;
 		aspect-ratio: auto;
-		/* Reset aspect ratio */
 	}
 
 	.step-badge {
@@ -369,13 +384,8 @@
 	}
 }
 
-/* --- MOBILE & TABLET OPTIMIZATIONS --- */
 @media (max-width: 600px) {
-
-	/* Further adjustments for smaller screens */
-	// ── ngx-daterangepicker-material panel overrides ──────────────────────────
 	::ng-deep .md-drppicker {
-		// min-width: 580px !important;
 		min-width: fit-content !important;
 		flex-wrap: wrap !important;
 		align-items: flex-start !important;
@@ -405,18 +415,10 @@ mat-form-field input {
 	margin-bottom: 0;
 }
 
-// *:focus {
-// 	border: 2px solid #f80000; /* Apply a blue border when focused */
-// 	box-shadow: 0 0 5px #f80000; /* Add a shadow effect (optional) */
-// 	scale: 1.05;
-//   }
 #google-translate {
 	display: none;
 }
 
-//   :host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{
-// 	display:none !important;
-// 	}
 :host ::ng-deep .owl-carousel .owl-nav button.owl-prev {
 	fill: #FFF !important;
 }
@@ -425,7 +427,6 @@ mat-form-field input {
 	fill: #FFF !important;
 }
 
-// .g-translator{position: absolute;right:0;left: auto;top:-6px;bottom: auto;z-index:9999}
 :host ::ng-deep .g-translator .goog-te-gadget .goog-te-combo {
 	margin: 0 !important;
 	border: none !important;
@@ -438,24 +439,17 @@ mat-form-field input {
 	color: #1a071a !important;
 	padding-left: 32px;
 	font-size: 15px;
-
 }
 
 .focus-border {
 	border: 2px solid #f3933d;
-	/* Apply a blue border when focused */
 	box-shadow: 0 0 5px #f3933d;
-	/* Add a shadow effect (optional) */
-	//   scale: 1.05;
 }
 
 #no_of_passenger:focus,
 #no_of_luggage:focus {
 	border: 2px solid #1600ff;
-	/* Apply a blue border when focused */
 	box-shadow: 0 0 5px #1600ff;
-	/* Add a shadow effect (optional) */
-	// scale: 1.05;
 	top: 5px;
 	height: 30px
 }
@@ -551,7 +545,6 @@ section {
 	right: -8px;
 	position: absolute;
 	top: 8px;
-	// transform: rotate(-90deg);
 }
 
 .after_icon_roundtrip::after {
@@ -561,7 +554,6 @@ section {
 	right: -7px;
 	position: absolute;
 	top: 8px;
-	// transform: rotate(90deg);
 }
 
 .swap_btn {
@@ -584,22 +576,6 @@ section {
 	padding: 0 !important;
 }
 
-// .swap_btn_roundtrip {
-// 	transform: rotate(90deg);
-// 	/* height: 30px; */
-// 	/* width: 30px; */
-// 	margin-top: 25px;
-// }
-
-// .swap_btn_oneway {
-// 	transform: rotate(-90deg);
-// 	height: 20px;
-// 	/* width: 30px; */
-// 	margin-top: 25px;
-// }
-
-
-
 .goog-te-gadget .goog-te-combo {
 	margin: 15px 0 0 15px !important;
 	cursor: pointer !important;
@@ -607,13 +583,6 @@ section {
 	color: #1a071a !important;
 }
 
-// img.swap_btn:hover {
-// 	transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-//   }
-
-// .container:not(.checkourveh_wrapper) {
-// 		max-width: 900px;
-//  	}
 @media (min-width: 1200px) {
 
 	.container,
@@ -677,7 +646,6 @@ section {
 .modal-dialog {
 	max-width: 600px;
 }
-
 
 @media only screen and (max-width: 1024px) {
 	.text_desktop br {
@@ -809,7 +777,6 @@ section {
 
 	.modal-dialog {
 		margin: 0rem !important;
-		// top: 20px;
 	}
 
 	.close {
@@ -820,7 +787,6 @@ section {
 		text-shadow: none;
 		font-size: 40px;
 	}
-
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
@@ -898,7 +864,6 @@ section {
 	.discover_diff_inner_columns {
 		min-height: 397px;
 	}
-
 }
 
 .modal-content {
@@ -1025,7 +990,6 @@ section {
 			margin-bottom: 1rem;
 		}
 	}
-
 }
 
 .img-fluid {
@@ -1033,7 +997,6 @@ section {
 }
 
 .logbutton {
-	// border            : 1px solid #5dbd8a !important;
 	width: 35% !important;
 	height: 50px !important;
 	margin: 20px auto;
@@ -1054,7 +1017,6 @@ section {
 	text-transform: none;
 }
 
-// Improved typography for banner section
 .bannertext {
 	h2 {
 		font-family: 'Arial', sans-serif;
@@ -1149,15 +1111,6 @@ a.user-profile:active::after {
 		display: none !important;
 	}
 
-	//right: 0;
-	//     margin: 0px;
-	//     color: #fff !important;
-	//     background-color: #fff !important;
-	//     border: 1px solid #5dbd8a;
-	//     top: -2px !important;
-	//     transform: translate3d(47px, 50px, 0px) !important;
-	//     left: -46px !important;
-
 	.dropdown-item {
 		white-space: normal !important;
 	}
@@ -1187,25 +1140,12 @@ a.user-profile:active::after {
 }
 
 @media (min-width: 361px) and (max-width: 381px) {
-
-	// .bannertext .dropdown-menu {
-	//     max-width: 90%;
-	//     right: 0;
-	//     margin: 0px;
-	//     color: #fff !important;
-	//     background-color: #fff !important;
-	//     border: 1px solid #5dbd8a;
-	//     top: -2px !important;
-	//     transform: translate3d(45px, 50px, 0px) !important;
-	//     left: -28px !important;
-	// }
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
 	}
 
 	.logbutton {
-		// border            : 1px solid #5dbd8a !important;
 		width: 90% !important;
 		height: 50px !important;
 		margin: 20px auto;
@@ -1225,18 +1165,6 @@ a.user-profile:active::after {
 }
 
 @media (min-width: 382px) and (max-width: 438px) {
-
-	// .bannertext .dropdown-menu {
-	//     max-width: 90%;
-	//     right: 0;
-	//     margin: 0px;
-	//     color: #fff !important;
-	//     background-color: #fff !important;
-	//     border: 1px solid #5dbd8a;
-	//     top: -2px !important;
-	//     transform: translate3d(47px, 50px, 0px) !important;
-	//     left: -28px !important;
-	// }
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -1263,18 +1191,6 @@ a.user-profile:active::after {
 }
 
 @media (min-width: 439px) and (max-width: 540px) {
-
-	// .bannertext .dropdown-menu {
-	//     max-width: 90%;
-	//     right: 0;v
-	//     margin: 0px;
-	//     color: #fff !important;
-	//     background-color: #fff !important;
-	//     border: 1px solid #5dbd8a;
-	//     top: -2px !important;
-	//     transform: translate3d(47px, 50px, 0px) !important;
-	//     left: -20px !important;
-	// }
 	.client_logo .client-logo-swiper-button-prev,
 	.client_logo .client-logo-swiper-button-next {
 		display: none !important;
@@ -1324,7 +1240,6 @@ a.user-profile:active::after {
 
 .input-contain {
 	width: 100%;
-	// margin-bottom: 10px !important;
 }
 
 .input-contain--address {
@@ -1387,7 +1302,6 @@ a.user-profile:active::after {
 	border-radius: 14px !important;
 }
 
-// Airport autocomplete rows: GMP field with internal plane icon + circular clear button
 .input-contain--airport {
 	position: relative;
 	background-color: #fff !important;
@@ -1530,14 +1444,9 @@ a.user-profile:active::after {
 .google_map_logos {
 	display: flex;
 	flex-direction: column;
-	// background-color: #f5f4fe;
 	border-radius: 18px;
 	padding: 5px;
 }
-
-/* ------------- TIME PICKER ------------------------ */
-@at-root
-/*-------------------------------time picker---------------------------------------*/
 
 .input-group-addon {
 	cursor: pointer;
@@ -1563,12 +1472,6 @@ a.user-profile:active::after {
 	border: 1px solid #34495e;
 }
 
-// .content {
-//     background: #fff;
-//     border-radius: 3px;
-//     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075), 0 2px 4px rgba(0, 0, 0, 0.0375);
-//     padding: 30px 30px 20px;
-// }
 .bootstrap-datetimepicker-widget.dropdown-menu {
 	border: 1px solid #34495e;
 	border-radius: 0;
@@ -1618,7 +1521,6 @@ a.user-profile:active::after {
 	padding: 0;
 	width: 40px;
 }
-
 
 .bootstrap-datetimepicker-widget.dropdown-menu table th.picker-switch {
 	width: auto;
@@ -1701,13 +1603,6 @@ a.user-profile:active::after {
 	color: #000;
 }
 
-// .bannerform_wrapper .quoteform_homewrapper .input-group input {
-// 	width          : auto !important;
-// 	display        : inline-flex;
-// 	justify-content: left !important;
-// 	justify-self   : left !important;
-// }
-
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append {
 	border: none;
 }
@@ -1739,7 +1634,6 @@ a.user-profile:active::after {
 	right: 6px;
 	width: 20px;
 	height: 20px;
-	// z-index   : 99;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .form-group .input-group {
@@ -1755,23 +1649,7 @@ a.user-profile:active::after {
 
 [type="time"] {
 	position: relative;
-	// z-index : 9
 }
-
-// [type="time"]:before {
-// 	position: absolute;
-// 	content: "";
-// 	right: 0;
-// 	left: auto;
-// 	top: 0;
-// 	bottom: 0;
-// 	height: 35px !important;
-// 	background-color: #fff;
-// 	color: #fff !important;
-// 	border: none;
-// 	width: 35px;
-// 	border-radius: 0px 5px 5px 0px
-// }
 
 [type="time"]::-webkit-inner-spin-button {
 	display: none;
@@ -1799,13 +1677,6 @@ a.user-profile:active::after {
 	margin-top: -10px;
 }
 
-// .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-addon {
-//     position: absolute;
-//     right: 0;
-//     left: auto;
-//     top: 0;
-//     bottom: auto;
-// }
 .dropdown-toggle::after {
 	border-top: 0.5em solid;
 	border-right: 0.5em solid transparent;
@@ -1876,7 +1747,6 @@ a.user-profile:active::after {
 	}
 }
 
-
 button.custom-filled-button {
 	padding: 0.475rem 1.358rem !important;
 	font-size: 14px !important;
@@ -1886,9 +1756,6 @@ button.custom-filled-button {
 	gap: 5px !important;
 }
 
-
-
-
 .gear-bg {
 	color: aliceblue !important;
 }
@@ -1897,12 +1764,10 @@ button.custom-filled-button {
 	background: #8080805c !important;
 }
 
-
 .three-d-button {
 	width: 319px;
 	height: 45px;
 	opacity: 1;
-	// border-radius: 6px;
 	background: var(--orange-color);
 	color: #ffffff;
 	font-weight: 600;
@@ -1929,9 +1794,7 @@ button.custom-filled-button {
 .pickup-label {
 	margin-top: -24px;
 	display: block;
-	/* Makes sure the label appears on its own line */
 }
-
 
 .contact-number {
 	font-weight: 500;
@@ -1948,7 +1811,6 @@ button.custom-filled-button {
 div#google_translate_element_home_mobile {
 	position: absolute;
 	top: -6px;
-	/* top: -15px; */
 	left: 50%;
 	transform: translate(-50%);
 }
@@ -1957,8 +1819,6 @@ div#google_translate_element_home_mobile {
 	border: none !important;
 }
 
-
-// Extra css added for quotebot form
 .quoteform_homewrapper {
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	border-radius: 12px;
@@ -1968,29 +1828,21 @@ div#google_translate_element_home_mobile {
 	-webkit-backdrop-filter: blur(5px);
 }
 
-
-/* home.component.scss */
-
-// Force a grid layout if Owl Carousel hasn't loaded yet (prevents vertical stacking)
 .chk_vehicles:not(.owl-loaded) {
 	display: flex;
 	overflow-x: auto;
 	gap: 20px;
 }
 
-// Constrain images so they never take up the full screen width
 .chk_vehicles .item img {
 	max-width: 100%;
 	height: 120px;
-	/* Fixed height to prevent jumping */
 	object-fit: contain;
-	/* Keeps aspect ratio */
 	width: auto;
 	display: block;
 	margin: 0 auto;
 }
 
-// Ensure the parent container doesn't collapse
 .chk_vehicles_parent {
 	min-height: 180px;
 	overflow: hidden;
@@ -2037,7 +1889,6 @@ div#google_translate_element_home_mobile {
 
 	li a.nav-link.active {
 		background-color: var(--orange-color) !important;
-		/* Orange background */
 		border-color: var(--orange-color) !important;
 		color: #fff !important;
 		font-weight: 600;
@@ -2047,7 +1898,6 @@ div#google_translate_element_home_mobile {
 
 .g-translator.d-flex.justify-content-center {
 	position: absolute;
-	translate: x;
 	position: absolute;
 	top: -6px;
 	left: 50%;
@@ -2058,41 +1908,30 @@ div#google_translate_element_home_mobile {
 	background: white !important;
 }
 
-
 /* --- Main Container (Flex Row) --- */
 .mobile-app-minimal {
 	margin-top: 60px;
 	display: flex;
 	flex-direction: row;
-	/* Puts Image Left, Content Right */
 	align-items: center;
-	/* Vertically centers them */
 	gap: 20px;
-	/* Space between the big icon and the text area */
 	text-align: left;
 }
 
-/* --- Left Side: The Icon --- */
 .announcement-icon {
 	width: 65px;
-	/* Much bigger now */
 	height: auto;
 	filter: brightness(0) invert(1);
-	/* Makes it white */
-
-	/* Animation */
 	animation: icon-tada 2s ease-in-out infinite;
 	transform-origin: center center;
 }
 
-/* --- Right Side: Content Wrapper --- */
 .content-container {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 }
 
-/* --- The Text --- */
 .release-text {
 	font-size: 14px;
 	font-weight: 700;
@@ -2101,7 +1940,6 @@ div#google_translate_element_home_mobile {
 	letter-spacing: 1px;
 }
 
-/* --- Store Icons Row --- */
 .store-icons {
 	display: flex;
 	gap: 12px;
@@ -2121,7 +1959,6 @@ div#google_translate_element_home_mobile {
 
 .store-img:hover {
 	opacity: 1;
-	// filter: grayscale(0%);
 	transform: translateY(-2px);
 	cursor: default;
 }
@@ -2133,53 +1970,22 @@ div#google_translate_element_home_mobile {
 	cursor: default;
 }
 
-/* --- Animation --- */
 @keyframes icon-tada {
-	0% {
-		transform: scale(1) rotate(0deg);
-	}
-
-	10% {
-		transform: scale(0.9) rotate(-3deg);
-	}
-
-	30% {
-		transform: scale(1.1) rotate(3deg);
-	}
-
-	50% {
-		transform: scale(1.1) rotate(-3deg);
-	}
-
-	70% {
-		transform: scale(1.1) rotate(3deg);
-	}
-
-	90% {
-		transform: scale(1.1) rotate(0deg);
-	}
-
-	100% {
-		transform: scale(1) rotate(0deg);
-	}
+	0% { transform: scale(1) rotate(0deg); }
+	10% { transform: scale(0.9) rotate(-3deg); }
+	30% { transform: scale(1.1) rotate(3deg); }
+	50% { transform: scale(1.1) rotate(-3deg); }
+	70% { transform: scale(1.1) rotate(3deg); }
+	90% { transform: scale(1.1) rotate(0deg); }
+	100% { transform: scale(1) rotate(0deg); }
 }
 
-/* --- Mobile Styling --- */
 @media (max-width: 767px) {
 	.mobile-app-minimal {
 		margin-top: 0px;
 		justify-content: center;
-		/* Centers the whole block */
 	}
 
-	/* Optional: On very small screens, stack them? */
-	/* Remove the lines below if you want them side-by-side on mobile too */
-	/* .mobile-app-minimal {
-        flex-direction: column;
-        text-align: center;
-    } */
-
-	// Extra css added for quotebot form
 	.quoteform_homewrapper {
 		border: none !important;
 	}
@@ -2196,7 +2002,6 @@ div#google_translate_element_home_mobile {
 		color: #1a071a !important;
 		padding-left: 8px !important;
 		font-size: 15px;
-
 	}
 
 	div#google_translate_element_home_mobile {
@@ -2215,7 +2020,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	// Ensure the parent container doesn't collapse
 	.chk_vehicles_parent {
 		overflow: visible !important;
 	}
@@ -2242,34 +2046,18 @@ div#google_translate_element_home_mobile {
 		padding-bottom: 20px !important;
 	}
 
-	.ourmisservice_wrap_content {
-		background: none !important;
-	}
-
-	.ourmisservice_wrap_content p {
-		padding: 0 !important;
-	}
-
-	/* Force Owl Carousel Dots to stay on one line */
 	::ng-deep .owl-carousel .owl-dots {
 		display: flex !important;
 		justify-content: center !important;
 		flex-wrap: nowrap !important;
-		/* The Key Fix */
 		white-space: nowrap !important;
 		width: 100%;
 		align-items: center;
-
-		/* Optional: If you have WAY too many dots, this prevents them 
-       from breaking the layout by allowing a subtle scroll or 
-       just hiding the excess */
 		overflow: hidden;
 	}
 
-	/* Optional: Tighten spacing if you have many dots */
 	::ng-deep .owl-carousel .owl-dots .owl-dot {
 		margin: 0 3px !important;
-		/* Reduce margin from default 5px/10px */
 	}
 
 	.discover_diff {
@@ -2281,10 +2069,8 @@ div#google_translate_element_home_mobile {
 	display: none;
 }
 
-/* --- Mobile Landscape Mode Optimizations --- */
 @media only screen and (max-width: 767px) and (orientation: landscape) {
 
-	/* Hero Section - Banner Text */
 	.bannertext {
 		margin-bottom: 0.5rem !important;
 
@@ -2301,20 +2087,17 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Booking Form Wrapper */
 	.quoteform_homewrapper {
 		padding: 15px !important;
 		margin-top: 10px !important;
 	}
 
-	/* Form Title */
 	.quoteform_homewrapper h3 {
 		font-size: 16px !important;
 		line-height: 1.3 !important;
 		margin-bottom: 10px !important;
 	}
 
-	/* Navigation Tabs */
 	#myTab {
 		margin-top: 8px !important;
 		margin-bottom: 8px !important;
@@ -2327,14 +2110,12 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Form Inputs and Selects */
 	.bannerform_wrapper .quoteform_homewrapper input,
 	.bannerform_wrapper .quoteform_homewrapper select {
 		font-size: 14px !important;
 		padding: 6px 10px !important;
 	}
 
-	/* Date Picker */
 	.bannerform_wrapper .quoteform_homewrapper .pickupdate mat-form-field {
 		.mat-mdc-text-field-wrapper {
 			height: 36px !important;
@@ -2346,13 +2127,11 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Time Picker */
 	.bannerform_wrapper .quoteform_homewrapper .time input {
 		height: 36px !important;
 		font-size: 14px !important;
 	}
 
-	/* Passenger and Luggage Inputs */
 	.passengers_qty input {
 		height: 36px !important;
 		font-size: 14px !important;
@@ -2364,7 +2143,6 @@ div#google_translate_element_home_mobile {
 		font-size: 20px !important;
 	}
 
-	/* Address Inputs */
 	.errorMsg {
 		height: 44px !important;
 
@@ -2374,7 +2152,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Search Button */
 	#search-button-container {
 		height: 50px !important;
 
@@ -2384,7 +2161,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Form Row Spacing */
 	.bannerform_wrapper .quoteform_homewrapper .row {
 		margin-top: 8px !important;
 		margin-bottom: 8px !important;
@@ -2394,7 +2170,6 @@ div#google_translate_element_home_mobile {
 		padding: 10px 0px 0px 0px !important;
 	}
 
-	/* Mobile App Section */
 	.mobile-app-minimal {
 		margin-top: 10px !important;
 		gap: 10px !important;
@@ -2412,13 +2187,11 @@ div#google_translate_element_home_mobile {
 		height: 36px !important;
 	}
 
-	/* Section Titles */
 	.section-title {
 		font-size: 1.4rem !important;
 		margin-bottom: 20px !important;
 	}
 
-	/* How It Works Section */
 	.how_works_wrapper {
 		padding: 20px 10px !important;
 	}
@@ -2439,7 +2212,6 @@ div#google_translate_element_home_mobile {
 		.text-wrapper {
 			.step-label {
 				display: none !important;
-				/* Hide step labels */
 			}
 
 			.step-desc {
@@ -2448,7 +2220,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Vehicle Carousel */
 	.chk_vehicles .item img {
 		height: 140px !important;
 	}
@@ -2457,7 +2228,6 @@ div#google_translate_element_home_mobile {
 		min-height: 160px !important;
 	}
 
-	/* Mission and Service Sections */
 	.ourmission_wrapper,
 	.ourservice_wrapper {
 		padding: 15px 0 !important;
@@ -2473,17 +2243,14 @@ div#google_translate_element_home_mobile {
 		padding-bottom: 15px !important;
 	}
 
-	/* General Section Padding Reduction */
 	section {
 		padding: 20px 0 !important;
 	}
 
-	/* Footer and Other Sections */
 	.telephone_mobile {
 		padding: 8px 0px 10px 0px !important;
 	}
 
-	/* Google Translate */
 	div#google_translate_element_home_mobile {
 		top: -15px !important;
 	}
@@ -2494,7 +2261,6 @@ div#google_translate_element_home_mobile {
 		width: 90px !important;
 	}
 
-	/* Login Button */
 	.logbutton {
 		height: 36px !important;
 		padding: 8px 15px !important;
@@ -2502,18 +2268,15 @@ div#google_translate_element_home_mobile {
 		margin: 10px auto !important;
 	}
 
-	/* Dropdown Menu */
 	.bannertext .dropdown-menu {
 		top: 40px !important;
 	}
 
-	/* Error Messages */
 	.text-danger {
 		font-size: 12px !important;
 		margin-top: 4px !important;
 	}
 
-	/* Input Group Adjustments */
 	.input-group {
 		height: 36px !important;
 	}
@@ -2523,7 +2286,6 @@ div#google_translate_element_home_mobile {
 		width: 28px !important;
 	}
 
-	/* Mat Form Field Adjustments */
 	:host ::ng-deep .mat-mdc-form-field {
 		.mat-mdc-text-field-wrapper {
 			height: 36px !important;
@@ -2534,11 +2296,9 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Client Wrapper Section */
 	.client_wrapper {
 		padding: 20px 0 !important;
 		overflow: hidden;
-		/* Prevent carousel from overflowing */
 		width: 100%;
 		max-width: 100%;
 
@@ -2555,7 +2315,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Discover Difference Section */
 	.discover_diff {
 		padding: 20px 0 !important;
 
@@ -2575,7 +2334,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Our Mission Section */
 	.ourmisservice_wrap_image img {
 		max-height: 250px !important;
 		object-fit: cover !important;
@@ -2595,15 +2353,12 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Container Padding */
 	.container-fluid {
 		padding-left: 15px !important;
 		padding-right: 15px !important;
 		overflow: hidden;
-		/* Prevent carousel from overflowing */
 	}
 
-	/* Row Margins */
 	.row {
 		margin-left: -8px !important;
 		margin-right: -8px !important;
@@ -2613,9 +2368,6 @@ div#google_translate_element_home_mobile {
 		padding-left: 8px !important;
 		padding-right: 8px !important;
 	}
-
-
-
 }
 
 @media(max-width: 600px) {
@@ -2647,7 +2399,6 @@ div#google_translate_element_home_mobile {
 	width: 100%;
 	overflow: hidden;
 	padding: 0 25px;
-	/* Add padding for navigation buttons on desktop */
 	max-width: 100%;
 	box-sizing: border-box;
 
@@ -2674,7 +2425,6 @@ div#google_translate_element_home_mobile {
 		max-width: 100%;
 		overflow: hidden;
 
-		// Ensure slides don't exceed container
 		&>* {
 			max-width: 100%;
 			width: 100%;
@@ -2713,7 +2463,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	/* Navigation buttons */
 	.client-logo-swiper-button-prev,
 	.client-logo-swiper-button-next {
 		position: absolute;
@@ -2774,7 +2523,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-/* Tablet responsive styles (iPad) */
 @media (max-width: 991px) and (min-width: 768px) {
 	.client_wrapper {
 		.container-fluid {
@@ -2820,7 +2568,6 @@ div#google_translate_element_home_mobile {
 		.client-logo-item {
 			padding: 12px 4px;
 			min-height: 100px;
-			;
 			width: 100%;
 			max-width: 100%;
 
@@ -2833,7 +2580,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-/* Mobile responsive styles */
 @media (max-width: 767px) {
 	.client_wrapper {
 		.container-fluid {
@@ -2866,17 +2612,6 @@ div#google_translate_element_home_mobile {
 			overflow: visible;
 		}
 
-		// .client-logo-swiper-button-prev,
-		// .client-logo-swiper-button-next {
-		// 	display: none !important;
-		// }
-
-		// .swiper-slide {
-		// 	max-width: 50% !important;
-		// 	width: 50% !important;
-		// 	flex-shrink: 0;
-		// }
-
 		.client-logo-item {
 			padding: 10px 5px;
 			min-height: 90px;
@@ -2895,7 +2630,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-/* Small mobile devices */
 @media (max-width: 480px) {
 
 	.client_logo .client-logo-swiper-button-prev,
@@ -2937,8 +2671,6 @@ div#google_translate_element_home_mobile {
 		}
 
 		.client-logo-item {
-			// padding: 8px 4px;
-			// min-height: 80px;
 			height: 100px;
 			width: 100%;
 			max-width: 100%;
@@ -2946,16 +2678,13 @@ div#google_translate_element_home_mobile {
 			border: none !important;
 
 			img {
-				// max-height: 80px;
-				// max-width: 80px;
 				width: 100%;
 				height: 100%;
-				border: none !important // margin: 0 25px 0 25px;
+				border: none !important;
 			}
 		}
 	}
 }
-
 
 .owl-carousel {
 	opacity: 0;
@@ -2976,7 +2705,6 @@ div#google_translate_element_home_mobile {
 	color: #f3933d !important;
 }
 
-// MISSION SECTION REORDERING (1024px Fix)
 .mission-mobile-heading {
 	display: none;
 }
@@ -2992,14 +2720,13 @@ div#google_translate_element_home_mobile {
 
 	.mission-mobile-heading {
 		display: block !important;
-		text-align: center; // Good practice for mobile headings
+		text-align: center;
 	}
 
 	.mission-desktop-heading {
 		display: none !important;
 	}
 
-	// Improve stacked spacing and force full width on tablet (overriding col-md-*)
 	.ourmisservice_wrap_image,
 	.ourmisservice_wrap_content {
 		margin-bottom: 20px;
@@ -3008,7 +2735,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// RIDE NOW SECTION REORDERING (1024px Fix)
 .ride-mobile-heading {
 	display: none;
 }
@@ -3031,8 +2757,6 @@ div#google_translate_element_home_mobile {
 		display: none !important;
 	}
 
-	// Ensure full width for Ride Now image/content on tablet
-	// Note: .ourmisservice_wrap_image is shared, but we ensure it covers Ride Now context too
 	.ride-nw-cl {
 		max-width: 100% !important;
 		flex: 0 0 100% !important;
@@ -3040,14 +2764,13 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// SKELETON STYLES
 .shimmer-wrapper {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 20px;
 	width: 100%;
-	flex-wrap: wrap; // Allow wrapping on smaller screens
+	flex-wrap: wrap;
 }
 
 .shimmer-card {
@@ -3055,7 +2778,7 @@ div#google_translate_element_home_mobile {
 	border-radius: 12px;
 	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
 	padding: 10px;
-	width: 300px; // Default width
+	width: 300px;
 }
 
 .shimmer {
@@ -3065,13 +2788,8 @@ div#google_translate_element_home_mobile {
 }
 
 @keyframes shimmer {
-	0% {
-		background-position: 200% 0;
-	}
-
-	100% {
-		background-position: -200% 0;
-	}
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
 }
 
 .shimmer-img {
@@ -3089,7 +2807,6 @@ div#google_translate_element_home_mobile {
 	width: 80%;
 }
 
-// App Store Popup Styles
 .app-store-dialog {
 	max-width: 900px;
 }
@@ -3100,16 +2817,6 @@ div#google_translate_element_home_mobile {
 	padding: 20px;
 	position: relative;
 }
-
-// .app-store-close {
-//   position: absolute;
-//   right: 20px;
-//   top: 15px;
-//   font-size: 28px;
-//   border: none;
-//   background: transparent;
-//   cursor: pointer;
-// }
 
 .app-store-close {
 	position: absolute;
@@ -3136,7 +2843,6 @@ div#google_translate_element_home_mobile {
 	margin-bottom: 20px;
 }
 
-/* GRID */
 .app-grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -3147,7 +2853,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-/* CARD */
 .app-card {
 	background: #fff;
 	border-radius: 16px;
@@ -3167,7 +2872,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-/* HEADER */
 .app-header {
 	display: flex;
 	justify-content: space-between;
@@ -3179,7 +2883,6 @@ div#google_translate_element_home_mobile {
 	height: 50px;
 }
 
-/* BADGES */
 .badge {
 	font-size: 17px;
 	padding: 5px 10px;
@@ -3232,7 +2935,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-/* BUTTON */
 .store-passenger-btn {
 	display: block;
 	text-align: center;
@@ -3273,7 +2975,6 @@ div#google_translate_element_home_mobile {
 
 /* ======= QUOTEBOT PROFESSIONAL REDESIGN ======= */
 
-// Field labels above inputs
 .qb-field-label {
 	font-size: 0.88rem;
 	font-weight: 600;
@@ -3292,7 +2993,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// Redesigned swap/flip button
 .qb-swap-row {
 	display: flex;
 	align-items: center;
@@ -3332,13 +3032,11 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// errorMsg wraps input-contain (which already has its own border) — remove the double border
 .errorMsg {
 	border: none !important;
 	padding: 0 !important;
 }
 
-// Improved return trip divider card
 .return-trip-card {
 	display: flex;
 	align-items: center;
@@ -3366,7 +3064,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// CTA button — full width, cleaner radius
 .qb-cta-btn {
 	width: max-content !important;
 	max-width: 360px;
@@ -3388,7 +3085,6 @@ div#google_translate_element_home_mobile {
 	transform: rotate(90deg) !important;
 }
 
-// Hint row below submit button
 .qb-hint-row {
 	display: flex;
 	align-items: center;
@@ -3414,7 +3110,6 @@ div#google_translate_element_home_mobile {
 			opacity: 1;
 			font-size: 0.95rem;
 		}
-
 	}
 
 	@media (max-width: 575.98px) {
@@ -3428,7 +3123,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// Inline error text — no white pill, just red text under the field
 .errorMsg .text-danger {
 	background-color: transparent !important;
 	padding: 4px 2px 0 !important;
@@ -3443,7 +3137,7 @@ div#google_translate_element_home_mobile {
 	gap: 6px;
 
 	&::before {
-		content: '\f06a'; // fa-exclamation-circle
+		content: '\f06a';
 		font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free', 'FontAwesome';
 		font-weight: 900;
 		font-size: 0.85rem;
@@ -3451,7 +3145,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// "Add a stop (optional)" — subtle pill-style action
 .add-stop-link {
 	margin: 6px 0 2px !important;
 
@@ -3482,7 +3175,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// Extra-stop fields — visually distinct from pickup/dropoff
 .extra-stops-section {
 	position: relative;
 
@@ -3527,7 +3219,6 @@ div#google_translate_element_home_mobile {
 
 /* ======= PROFESSIONAL FORM CONTROLS REDESIGN ======= */
 
-// --- Date Picker: Clean rounded card with subtle toggle ---
 .pickupdate {
 	position: relative;
 
@@ -3608,7 +3299,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// --- Time Picker: Matching clean select ---
 .pickupTime {
 	position: relative;
 	display: flex;
@@ -3660,7 +3350,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// --- Passenger & Luggage Stepper: Modern rounded controls ---
 .passengers_qty {
 	height: 42px !important;
 	border-radius: 10px !important;
@@ -3683,7 +3372,6 @@ div#google_translate_element_home_mobile {
 		}
 	}
 
-	// Hide the user_grp icon li
 	li.user_grp {
 		display: none !important;
 	}
@@ -3760,7 +3448,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// Override the global focus styles that look jarring
 #no_of_passenger:focus,
 #no_of_luggage:focus {
 	border: none !important;
@@ -3769,7 +3456,6 @@ div#google_translate_element_home_mobile {
 	height: 42px !important;
 }
 
-// --- Charter: dedicated Booking Hours pill row ---
 .charter-hours-row {
 	.charter-hours-card {
 		display: flex;
@@ -3851,7 +3537,6 @@ div#google_translate_element_home_mobile {
 	50%      { box-shadow: 0 6px 16px rgba(243, 147, 61, 0.34); }
 }
 
-// --- Booking Hours Select: Clean dropdown ---
 .selectHoursFields {
 	appearance: none;
 	-webkit-appearance: none;
@@ -3889,14 +3574,13 @@ div#google_translate_element_home_mobile {
 	border-radius: 0 !important;
 }
 
-// --- Responsive adjustments ---
 @media only screen and (max-width: 1024px) {
 	.pickupdate ::ng-deep .mat-mdc-text-field-wrapper {
 		height: 42px !important;
 	}
 
 	.pickupdate ::ng-deep input.mat-mdc-input-element {
-		height: 42spx !important;
+		height: 42px !important;
 		font-size: 13px !important;
 	}
 
@@ -3949,8 +3633,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// ── Round-trip calendar trigger ───────────────────────────────────────────
-// ── ngx-daterangepicker-material input trigger ────────────────────────────
 .qb-drp-input {
 	position: relative;
 	display: flex;
@@ -3988,7 +3670,6 @@ div#google_translate_element_home_mobile {
 	&:hover { border-color: #0d2a5c; }
 }
 
-// ── Round-trip date display wrapper (shows only start date) ──────────────
 .qb-date-display-trigger {
 	position: relative;
 	display: flex;
@@ -4048,7 +3729,6 @@ div#google_translate_element_home_mobile {
 	to   { opacity: 1; transform: translateY(0); }
 }
 
-// ── Round-trip picker modal ──────────────────────────────────────────────────
 .rt-picker-overlay {
 	position: fixed;
 	inset: 0;
@@ -4171,9 +3851,6 @@ div#google_translate_element_home_mobile {
 	}
 }
 
-// ── ngx-daterangepicker-material inside the modal ────────────────────────────
-// The picker is placed inside .rt-picker-modal so it flows as part of the card.
-// Since the modal is behind *ngIf, display:flex here can't cause ghost auto-open.
 ::ng-deep .rt-picker-modal .md-drppicker {
 	position: relative !important;
 	top: auto !important;
@@ -4309,7 +3986,6 @@ div#google_translate_element_home_mobile {
 
 	td.disabled span { color: #d0d5dd !important; font-weight: 400 !important; }
 	td.disabled { pointer-events: none !important; }
-	/* hide only other-month padding cells (.off.available); keep current-month disabled dates (.off.disabled without .available) visible */
 	td.off.available { visibility: hidden !important; pointer-events: none !important; background: transparent !important; }
 
 	.buttons {
@@ -4332,6 +4008,7 @@ div#google_translate_element_home_mobile {
 	.btn-default { background: transparent !important; color: #6b7280 !important; border: 1px solid #e0e4ed !important; }
 	.btn-primary { background: #0d2a5c !important; color: #fff !important; border: none !important; }
 }
+
 .qb-range-trigger {
 	position: relative;
 	display: flex;
@@ -4364,18 +4041,17 @@ div#google_translate_element_home_mobile {
 	&.errorValid { border-color: #e53935; box-shadow: 0 0 0 1px #e53935; }
 }
 
-// ── Calendar backdrop ─────────────────────────────────────────────────────
 .qb-cal-backdrop {
 	position: fixed;
 	inset: 0;
 	background: rgba(0,0,0,.4);
 	z-index: 1040;
 }
+
 span.qb-date-display-trigger__value.ng-star-inserted {
-    color: black;
+	color: black;
 }
 
-// ── Calendar panel ────────────────────────────────────────────────────────
 .qb-cal {
 	position: fixed;
 	top: 50%;
@@ -4411,7 +4087,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 		padding: 0 4px;
 	}
 
-	// Pickup / Return chips
 	&__chips {
 		display: flex;
 		align-items: stretch;
@@ -4461,7 +4136,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 		opacity: .6;
 	}
 
-	// Month area
 	&__body {
 		display: flex;
 		align-items: flex-start;
@@ -4549,28 +4223,23 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 		}
 
 		&--other { visibility: hidden; pointer-events: none; }
-
 		&--disabled .qb-cal__day-inner { color: #ccc !important; cursor: default; }
 
-		// In-range: full-width range highlight
 		&--in {
 			background: #e8edf7;
 			.qb-cal__day-inner { color: #0d2a5c; }
 		}
 
-		// Start: circle; no half-bg unless range is active
 		&--start .qb-cal__day-inner {
 			background: #0d2a5c;
 			color: #fff;
 			font-weight: 700;
 		}
 
-		// Start with an active range: right-half bg connects to range strip
 		&--start-connected {
 			background: linear-gradient(to right, transparent 50%, #e8edf7 50%);
 		}
 
-		// End: left-half bg connects from range strip, then circle
 		&--end {
 			background: linear-gradient(to left, transparent 50%, #e8edf7 50%);
 			.qb-cal__day-inner {
@@ -4580,7 +4249,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 			}
 		}
 
-		// Hover preview end — lighter circle, same half-bg
 		&--hover-end {
 			background: linear-gradient(to left, transparent 50%, #e8edf7 50%);
 			.qb-cal__day-inner {
@@ -4589,7 +4257,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 			}
 		}
 
-		// Same-day start and end: plain circle, no half-bg
 		&--start.qb-cal__day--end {
 			background: transparent !important;
 		}
@@ -4610,7 +4277,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 	}
 
 	.rt-picker-modal {
-		// border-radius: 20px 20px 0 0 !important;
 		width: 100vw !important;
 		max-width: 100vw !important;
 		max-height: 88vh !important;
@@ -4655,7 +4321,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 	::ng-deep .rt-picker-modal .md-drppicker {
 		padding: 12px 8px 20px !important;
 		border-radius: 0 !important;
-		// flex-direction: column !important;
 		flex-wrap: nowrap !important;
 
 		.calendar {
@@ -4696,7 +4361,6 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 			font-size: 15px !important;
 		}
 
-		/* collapse invisible other-month rows so they don't leave gaps */
 		td.off.available {
 			padding: 0 !important;
 			height: 0 !important;
@@ -4712,112 +4376,407 @@ span.qb-date-display-trigger__value.ng-star-inserted {
 	.rt-picker-modal .md-drppicker .calendar.left {
 		padding-right: 0px !important;
 	}
-	.rt-picker-modal .md-drppicker .calendar{
+	.rt-picker-modal .md-drppicker .calendar {
 		margin: auto !important;
 	}
- 
 }
 
 span.qb-date-display-trigger__value {
-    color: #1a1a2e !important;
+	color: #1a1a2e !important;
 }
 
 .bannerform_wrapper .quoteform_homewrapper span {
-    font-size: 14px;
+	font-size: 14px;
 }
 
-
 .address-current-location-btn[_ngcontent-ng-c432949901] {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    width: 32px;
-    height: 32px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 10px;
-    border: none;
-    background: rgba(76, 39, 214, 0.1); 
-    color: #4c27d6 !important;
-
-    font-size: 18px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 2;
+	width: 32px;
+	height: 32px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	border: none;
+	background: rgba(76, 39, 214, 0.1);
+	color: #4c27d6 !important;
+	font-size: 18px;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 .address-current-location-btn:hover {
-    background: rgba(76, 39, 214, 0.2);
-    transform: translateY(-50%) scale(1.05);
+	background: rgba(76, 39, 214, 0.2);
+	transform: translateY(-50%) scale(1.05);
 }
 
 @keyframes pulseGlow {
-    0% {
-        box-shadow: 0 0 0 0 rgba(76, 39, 214, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 8px rgba(76, 39, 214, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(76, 39, 214, 0);
-    }
-}
-
-.address-current-location-btn::before {
-    content: "Use current location";
-    position: absolute;
-
-    bottom: -38px; 
-    left: 50%;
-    transform: translateX(-50%);
-
-    background: #1f1f1f;
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: nowrap;
-
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s ease;
-
-    width: max-content; 
-    max-width: 180px; 
-    text-align: center;
+	0% { box-shadow: 0 0 0 0 rgba(76, 39, 214, 0.4); }
+	70% { box-shadow: 0 0 0 8px rgba(76, 39, 214, 0); }
+	100% { box-shadow: 0 0 0 0 rgba(76, 39, 214, 0); }
 }
 
 .address-current-location-btn::after {
-    content: "Use current location";
-    position: absolute;
-
-    top: calc(100% + 15px); 
-    left: 0%;
-    transform: translateX(-50%);
-
-    background: #fff;
-    color: #343a40 !important;
-    padding: 4px 8px;
-    border-radius: 6px;
-
-    font-size: 11px;
-    line-height: 1;
-    white-space: nowrap;
-
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+	content: "Use current location";
+	position: absolute;
+	top: calc(100% + 15px);
+	left: 0%;
+	transform: translateX(-50%);
+	background: #fff;
+	color: #343a40 !important;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-size: 11px;
+	line-height: 1;
+	white-space: nowrap;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
 }
 
 .address-current-location-btn {
-    animation: pulseGlow 2s infinite;
+	animation: pulseGlow 2s infinite;
 }
 
-.field-focused {
-  border: 2px solid #f3993D !important; 
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
-  transition: border-color 0.15s ease, 
-  box-shadow 0.15s ease;
+.ourmisservice_wrap_content {
+	justify-content: center;
+
+	h2.ride-desktop-heading {
+		margin-bottom: 8px !important;
+		font-size: 32px;
+		line-height: 1.2;
+	}
+}
+
+.ride-text-block {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 0 15px;
+
+	@media (max-width: 991px) {
+		padding: 0 10px;
+		text-align: center;
+	}
+
+	@media (max-width: 600px) {
+		padding: 0 6px;
+	}
+}
+
+.ride-subtitle {
+	margin: auto !important;
+	font-size: 17px;
+	font-weight: 700;
+	color: inherit;
+	line-height: 1.3;
+	text-align: justify;
+}
+
+.ride-body {
+	margin: 10px !important;
+	font-size: 17px;
+	font-weight: 400;
+	line-height: 1.7;
+	text-align: justify;
+	text-transform: none !important;
+}
+
+h2.ride-mobile-heading {
+	margin-top: 16px !important;
+	margin-bottom: 8px !important;
+	text-align: center;
+}
+
+
+/* ======= BLOG PREVIEW SLIDER SECTION ======= */
+
+.blog-preview-section {
+  background: #f8f9fb;
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+
+    span {
+      color: #f7941d;
+    }
+
+    @media (max-width: 600px) {
+      font-size: 22px;
+    }
+  }
+}
+
+/* View All button */
+.blog-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  background: #f7941d;
+  color: #fff !important;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #d97a0f;
+    transform: translateY(-2px);
+    color: #fff !important;
+  }
+
+  i { font-size: 13px; }
+}
+
+/* Slider layout */
+.blog-slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.blog-slider-overflow {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.blog-slider-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+}
+
+/* Each slide */
+.blog-slide-item {
+  flex: 0 0 calc(33.333% - 14px);
+  min-width: calc(33.333% - 14px);
+
+  @media (max-width: 991px) {
+    flex: 0 0 calc(50% - 10px);
+    min-width: calc(50% - 10px);
+  }
+
+  @media (max-width: 575px) {
+    flex: 0 0 calc(100% - 0px);
+    min-width: calc(100% - 0px);
+  }
+}
+
+/* Card */
+.blog-preview-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+  height: 460px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+  }
+
+  @media (max-width: 767px) {
+    height: 420px;
+  }
+}
+
+/* Card image */
+.blog-card-img-wrapper {
+  height: 185px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #E5E7EB;
+  position: relative;
+  width: 100%;
+}
+
+.blog-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+
+  .blog-preview-card:hover & {
+    transform: scale(1.05);
+  }
+}
+
+.blog-card-img-shimmer {
+  height: 185px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Category pill */
+.blog-category-pill {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #fff;
+  color: #f7941d;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Card body */
+.blog-card-body {
+  padding: 16px 18px 14px !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card-meta {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B7280;
+  margin-bottom: 9px;
+  flex-shrink: 0;
+
+  i { font-size: 11px; }
+}
+
+.blog-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: color 0.2s;
+
+  &:hover { color: #f7941d; }
+}
+
+.blog-card-excerpt {
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.55;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Tags */
+.blog-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.blog-hash-tag {
+  background: #F3F4F6;
+  color: #4B5563;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Read more */
+.blog-read-more {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f7941d !important;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s, gap 0.2s;
+  flex-shrink: 0;
+
+  &:hover {
+    color: #d97a0f !important;
+    gap: 8px;
+  }
+
+  i { font-size: 12px; }
+}
+
+/* Nav buttons */
+.blog-nav-btn {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(243, 147, 61, 0.35);
+  background: #fff;
+  color: #f7941d;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  z-index: 2;
+
+  &:hover:not(:disabled) {
+    background: #f7941d;
+    color: #fff;
+    border-color: #f7941d;
+    transform: scale(1.08);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+    transform: none;
+  }
+
+  &.blog-nav-prev { margin-right: 10px; }
+  &.blog-nav-next { margin-left: 10px; }
+
+  @media (max-width: 575px) {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+/* Dots */
+.blog-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.blog-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(243, 147, 61, 0.3);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+
+  &.active {
+    background: #f7941d;
+    transform: scale(1.3);
+  }
 }

@@ -22,6 +22,7 @@ const dayjs: (date?: any) => _dayjs.Dayjs = _dayjs as any;
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { Swiper } from 'swiper';
 import { Navigation, Autoplay, Pagination } from 'swiper/modules';
+import { BlogService } from '../blog/blog.service';
 
 type QuoteBotControlSyncOptions = {
 	markAsDirty?: boolean;
@@ -161,6 +162,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	returnExtraStops: Array<{ address: string; latitude: number; longitude: number }> = [];
 	extraStopAddressData: Record<string, any[]> = {};
 
+	// ── Blog slider 
+	blogPosts: any[] = [];
+	blogLoading = true;
+	blogSliderIndex = 0;
+	blogVisibleCount = 3;   // cards visible at once on desktop
+	blogSlideWidth = 0;
+
+    @ViewChild('blogSliderRef') blogSliderRef!: ElementRef;
+
+
 	constructor(
 		private ngZone: NgZone,
 		private formBuilder: FormBuilder,
@@ -176,7 +187,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private titleService: Title,
 		private metaService: Meta,
 		private airportIndex: AirportIndexService,
-		private amenitiesService: AmenitiesService 
+		private amenitiesService: AmenitiesService,
+		private blogService: BlogService
 	) { }
 
 	numberOnly(event: any): boolean {
@@ -207,6 +219,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	isVehicleLoading = true;
 
 	ngOnInit() {
+		this.loadBlogPosts();
 		this.spinner.hide();
 		this.spinner.hide('fetchspinner');
 		this.spinner.hide('normalspinner');
@@ -228,7 +241,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
 		this.metaService.updateTag({ name: 'twitter:title', content: '1800 Limo - Premium Chauffeur & Luxury Transportation Services' });
 		this.metaService.updateTag({ name: 'twitter:description', content: '1800 Limo offers premium chauffeur services, luxury vehicle hire, and airport transfers worldwide.' });
-
+    
 		this.isVehicleLoading = true;
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
@@ -4490,4 +4503,61 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	toggleAppStorePopup() {
 		this.showAppStorePopup = !this.showAppStorePopup;
 	}
+
+	get blogMaxIndex(): number {
+	return Math.max(0, this.blogPosts.length - this.blogVisibleCount);
+	}
+
+	get blogDots(): number[] {
+	return Array(this.blogMaxIndex + 1).fill(0);
+	}
+
+	// ── Call this inside ngOnInit ─────────────────────────────────
+	loadBlogPosts(): void {
+	this.blogLoading = true;
+	this.blogService.getPosts().subscribe({
+		next: (posts) => {
+		this.blogPosts = posts.slice(0, 9); // show up to 9 posts in slider
+		this.blogLoading = false;
+		setTimeout(() => this.updateSlideWidth(), 100);
+		},
+		error: () => { this.blogLoading = false; }
+	});
+	}
+
+	updateSlideWidth(): void {
+	if (this.blogSliderRef?.nativeElement) {
+		const w = this.blogSliderRef.nativeElement.offsetWidth;
+		const gap = 20;
+		const count = window.innerWidth <= 575 ? 1 : window.innerWidth <= 991 ? 2 : 3;
+		this.blogVisibleCount = count;
+		this.blogSlideWidth = (w + gap) / count;
+	}
+	}
+
+	blogSliderNext(): void {
+	if (this.blogSliderIndex < this.blogMaxIndex) this.blogSliderIndex++;
+	}
+
+	blogSliderPrev(): void {
+	if (this.blogSliderIndex > 0) this.blogSliderIndex--;
+	}
+
+	blogSliderGoTo(i: number): void {
+	this.blogSliderIndex = i;
+	}
+
+	@HostListener('window:resize')
+	onResizeBlog(): void {
+	this.blogSliderIndex = 0;
+	this.updateSlideWidth();
+	}
+
+	// Reuse from your blog component or copy here:
+	getExcerpt(html: string, maxLength = 100): string {
+	const text = html?.replace(/<[^>]+>/g, ' ').trim() || '';
+	return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+	}
 }
+
+

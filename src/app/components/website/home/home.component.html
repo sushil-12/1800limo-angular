@@ -375,27 +375,27 @@
 										</div>
 
 										<div class="errorMsg col-md-12">
-										<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
-											style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
+											<div class="input-contain input-contain--address qb-airport-field qb-address-field d-flex align-items-stretch"
+												style="position: relative; border-radius: 16px; overflow: visible; border: 1px solid #d7d7d7; background: #fff;"
 											[class.errorValid]="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_address_lat?.errors || QBForm?.dropoff_airport?.errors || QBForm?.dropoff_airport_lat?.errors)"
 											[class.field-focused]="isFieldFocused('dropoff_address')">
-											<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
-												style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
-											<div class="input-box">
-												<input type="text"
-													class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
-													style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
-													placeholder="Enter Dropoff address"
-													id="dropoff_address" #dropaddressinput
-													formControlName="dropoff_address" autocomplete="off"
-													autocorrect="off" autocapitalize="off" spellcheck="false"
-													(focus)="onAddressFieldFocus('dropoff_address', dropaddressinput)"
-													(click)="openAddressDropdown('dropoff_address')"
-													(input)="onAddressFieldInput($any($event.target).value, 'dropoff_address')"
+												<i class="fas fa-search qb-airport-field__icon qb-address-field__icon"
+													style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; z-index:2;"></i>
+												<div class="input-box">
+													<input type="text"
+														class="qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
+														style="font-size: 16px !important; background-color: #fff !important; color: #000 !important; padding-left: 42px !important; text-align: left !important;"
+														placeholder="Enter Dropoff address"
+														id="dropoff_address" #dropaddressinput
+														formControlName="dropoff_address" autocomplete="off"
+														autocorrect="off" autocapitalize="off" spellcheck="false"
+														(focus)="onAddressFieldFocus('dropoff_address', dropaddressinput)"
+														(click)="openAddressDropdown('dropoff_address')"
+														(input)="onAddressFieldInput($any($event.target).value, 'dropoff_address')"
 													(blur)="onAddressFieldBlur('dropoff_address')"
 													(touchend)="onAddressFieldTouchEnd($event, dropaddressinput)"
 													tabindex="1" />
-											</div>
+												</div>
 												<!-- <button type="button" class="address-current-location-btn"
 													*ngIf="shouldShowCurrentLocationIcon(dropaddressinput, 'dropoff_address')"
 													(mousedown)="$event.preventDefault()"
@@ -404,76 +404,79 @@
 													title="Use Current Location">
 													<i class="fa-solid fa-crosshairs"></i>
 												</button> -->
-											<div class="airport-clear-wrap address-clear-wrap"
-												*ngIf="shouldShowAddressClear(dropaddressinput, 'dropoff_address')">
-												<button type="button" class="airport-clear-btn"
-													(mousedown)="handleClearMouseDown($event, dropaddressinput)"
-													(click)="reset('dropoff_address')"
-													aria-label="Clear dropoff address">
-													<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-														<path fill="#1f1f1f" fill-rule="evenodd"
-															d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
-															clip-rule="evenodd"></path>
-													</svg>
-												</button>
+												<div class="airport-clear-wrap address-clear-wrap"
+													*ngIf="shouldShowAddressClear(dropaddressinput, 'dropoff_address')">
+													<button type="button" class="airport-clear-btn"
+													    (mousedown)="handleClearMouseDown($event, dropaddressinput)"
+														(click)="reset('dropoff_address')"
+														aria-label="Clear dropoff address">
+														<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+															<path fill="#1f1f1f" fill-rule="evenodd"
+																d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+																clip-rule="evenodd"></path>
+														</svg>
+													</button>
+												</div>
+
+												<div *ngIf="isAddressDropdownOpen('dropoff_address')"
+													class="qb-airport-field__dropdown qb-address-field__dropdown"
+													style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
+													<button type="button"
+														class="qb-airport-field__option qb-address-field__option"
+														*ngFor="let address of getAddressOptions('dropoff_address')"
+														(mousedown)="$event.preventDefault()"
+														(click)="selectAddressOption(address, 'dropoff_address')"
+														style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
+														<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
+															style="margin-top:4px; color:#111;"></i>
+														<span
+															class="qb-airport-field__option-content qb-address-field__option-content"
+															style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
+															<span
+																class="qb-airport-field__option-label qb-address-field__option-label"
+																style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
+																getAddressOptionLabel(address) }}</span>
+															<span
+																class="qb-airport-field__option-secondary qb-address-field__option-secondary"
+																style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
+																getAddressOptionSecondaryText(address) }}</span>
+														</span>
+													</button>
+													<div *ngIf="shouldShowAddressLoadingState('dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Loading Suggestions....
+													</div>
+													<div *ngIf="shouldShowAddressEmptyState('dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Result not found
+													</div>
+													<div *ngIf="shouldShowAddressPromptState('dropoff_address')"
+														class="qb-airport-field__empty qb-address-field__empty"
+														style="padding:2px 6px; color:#666; text-align:left;">
+														Enter address and select from suggestions
+													</div>
+												</div>
 											</div>
 
-											<div *ngIf="isAddressDropdownOpen('dropoff_address')"
-												class="qb-airport-field__dropdown qb-address-field__dropdown"
-												style="position:absolute; top:100%; left:0; right:0; z-index:30; max-height:260px; overflow:auto; background:#fff; border:1px solid #d9d9d9; border-radius:12px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,0.14);">
-												<button type="button"
-													class="qb-airport-field__option qb-address-field__option"
-													*ngFor="let address of getAddressOptions('dropoff_address')"
-													(mousedown)="$event.preventDefault()"
-													(click)="selectAddressOption(address, 'dropoff_address')"
-													style="display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; justify-content:flex-start; padding:12px 14px; border:none; border-bottom:1px solid #ececec; background:#fff; color:#111;">
-													<i class="fas fa-map-marker-alt qb-airport-field__option-icon qb-address-field__option-icon"
-														style="margin-top:4px; color:#111;"></i>
-													<span class="qb-airport-field__option-content qb-address-field__option-content"
-														style="display:flex; flex-direction:column; align-items:flex-start; text-align:left; flex:1;">
-														<span class="qb-airport-field__option-label qb-address-field__option-label"
-															style="display:block; width:100%; font-weight:400; line-height:1.2; text-align:left;">{{
-															getAddressOptionLabel(address) }}</span>
-														<span class="qb-airport-field__option-secondary qb-address-field__option-secondary"
-															style="display:block; width:100%; font-size:12px; color:#666; line-height:1.2; text-align:left;">{{
-															getAddressOptionSecondaryText(address) }}</span>
-													</span>
-												</button>
-												<div *ngIf="shouldShowAddressLoadingState('dropoff_address')"
-													class="qb-airport-field__empty qb-address-field__empty"
-													style="padding:2px 6px; color:#666; text-align:left;">
-													Loading Suggestions....
-												</div>
-												<div *ngIf="shouldShowAddressEmptyState('dropoff_address')"
-													class="qb-airport-field__empty qb-address-field__empty"
-													style="padding:2px 6px; color:#666; text-align:left;">
-													Result not found
-												</div>
-												<div *ngIf="shouldShowAddressPromptState('dropoff_address')"
-													class="qb-airport-field__empty qb-address-field__empty"
-													style="padding:2px 6px; color:#666; text-align:left;">
-													Enter address and select from suggestions
+											<div *ngIf="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_airport?.errors); else DropoffAddressError"
+												class="text-danger">
+												<div *ngIf="QBForm?.dropoff_address?.errors?.required || QBForm?.dropoff_airport?.errors?.required">
+									               Drop Off Address is required
 												</div>
 											</div>
-							</div>
-
-							<div *ngIf="submitted && (QBForm?.dropoff_address?.errors || QBForm?.dropoff_airport?.errors); else DropoffAddressError"
-								class="text-danger">
-								<div *ngIf="QBForm?.dropoff_address?.errors?.required || QBForm?.dropoff_airport?.errors?.required">
-									Drop Off Address is required
-								</div>
-							</div>
-							<input type="hidden" formControlName="dropoff_address_lat">
-							<input type="hidden" formControlName="dropoff_address_long">
-							<ng-template #DropoffAddressError>
-								<div *ngIf="submitted && (QBForm?.dropoff_address_lat?.errors || QBForm?.dropoff_airport_lat?.errors);"
-									class="text-danger">
-									<div *ngIf="QBForm?.dropoff_address_lat?.errors?.required || QBForm?.dropoff_airport_lat?.errors?.required">
-										{{ QBForm?.dropoff_type?.value === 'airport' ? 'Please select a valid Drop Off Airport' : 'Please enter valid Drop Off Address' }}
-									</div>
-								</div>
-							</ng-template>
-						</div>
+											<input type="hidden" formControlName="dropoff_address_lat">
+											<input type="hidden" formControlName="dropoff_address_long">
+											<ng-template #DropoffAddressError>
+												<div *ngIf="submitted && (QBForm?.dropoff_address_lat?.errors || QBForm?.dropoff_airport_lat?.errors);"
+													class="text-danger">
+													<div *ngIf="QBForm?.dropoff_address_lat?.errors?.required || QBForm?.dropoff_airport_lat?.errors?.required">
+														{{ QBForm?.dropoff_type?.value === 'airport' ? 'Please select a valid Drop Off Airport' : 'Please enter valid Drop Off Address' }}
+													</div>
+												</div>
+											</ng-template>
+										</div>
 
 										<!-- <div class="col-md-12 d-flex justify-content-end w-100 current_loc_button"
 											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
@@ -1168,7 +1171,7 @@
 								<div id="search-button-box" class="pb-3 pb-md-1">
 									<button type="submit" class="three-d-button qb-cta-btn" tabindex="1" (click)="fileTheQuote()"
 										(keyup.enter)="fileTheQuote()">
-										<i class="fas fa-search mr-2"></i> Get Instant Quotes
+										<i class="fas fa-search mr-2"></i> Select Vehicle / Instant Quotes
 									</button>
 								</div>
 							</div>
@@ -1187,7 +1190,7 @@
 							Policy</a>
 					</div>
 				</div>
-				<div class="text_mobile">
+				<!-- <div class="text_mobile">
 					<div class="quoteform_homewrapper telephone_mobile"
 						style="border-bottom: none !important; margin: 0 !important;">
 						<a href="tel:+18005466266" class="contact-number" tabindex="1" style="display: inline-block;">
@@ -1199,7 +1202,7 @@
 								style="color: #F3933D; font-weight: 500; font-size: 14px; display: inline-block; text-decoration: none;">1-800-LIMO.COM</a>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!-- <br> -->
@@ -1269,18 +1272,11 @@
 				<h2 style="margin-bottom: 20px;margin-top: 20px;" class="mission-desktop-heading">Our
 					<span>Mission</span>
 				</h2>
-				<p class="mb-4" style="text-align:justify;">At 1-800-LIMO<sub>&bull;</sub>COM, Our mission is to connect
-					exceptional drivers with valued customers. We understand that great drivers are essential for
-					providing excellent service while earning a living wage. Our goal is to create a partnership where
-					both drivers and customers support each other.</p>
-				<p class="mb-4" style="text-align:justify;">Our dedicated drivers ensure a safe and comfortable ride in
-					well-maintained vehicles. If you're not satisfied with your driver, Let us know, And we’ll find a
-					better match for your next trip. You can rate your experience with a thumbs up or down, And we
-					address concerns promptly.</p>
-				<p class="mb-4" style="text-align:justify;">We encourage our drivers to go the extra mile by assisting
-					with luggage, Opening doors, And sharing local tips. Regardless of your needs, Our drivers will
-					treat you with respect and courtesy, And all are insured as required by local regulations.
-				</p>
+				<p class="mb-4" style="text-align:justify;">1800LIMO.COM operates within the same premium ground transportation ecosystem as globally recognized brands, including Carey, Blacklane, Uber Black, Uber Lux, leading TNCs, and international brokerage platforms.</p>
+
+				<p class="mb-4" style="text-align:justify;">By fostering strategic connectivity across operators and markets worldwide, 1800LIMO.COM helps power a truly global network that enables the industry to share capacity efficiently, expand and strengthen service coverage, uphold the highest quality standards, and deliver consistent safety worldwide.</p>
+
+				<p class="mb-4" style="text-align:justify;">Together, we create seamless, reliable, and premium transportation experiences across cities and continents.</p>
 			</div>
 		</div>
 	</div>
@@ -1407,6 +1403,105 @@
 	</div>
 </section>
 
+<!-- ===== BLOG SLIDER SECTION ===== -->
+<section class="blog-preview-section py-5" *ngIf="blogPosts?.length > 0 || blogLoading">
+  <div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4" style="gap: 12px; padding:0px 48px;">
+      <h2 class="section-title mb-0 mt-3">Latest <span>Blog</span></h2>
+      <a routerLink="/blog" class="blog-view-all-btn">
+        View All <i class="fas fa-arrow-right ml-2"></i>
+      </a>
+    </div>
+
+    <!-- SHIMMER LOADER -->
+    <div class="blog-slider-track" *ngIf="blogLoading">
+      <div class="blog-slide-item" *ngFor="let i of [1,2,3]">
+        <div class="blog-preview-card d-flex flex-column h-100">
+          <div class="shimmer blog-card-img-shimmer"></div>
+          <div class="blog-card-body flex-grow-1 d-flex flex-column p-3">
+            <div class="shimmer mb-2" style="height:12px; width:80px; border-radius:4px;"></div>
+            <div class="shimmer mb-2" style="height:17px; width:90%; border-radius:4px;"></div>
+            <div class="shimmer mb-3" style="height:17px; width:60%; border-radius:4px;"></div>
+            <div class="shimmer mb-2" style="height:12px; width:100%; border-radius:4px;"></div>
+            <div class="shimmer mb-3" style="height:12px; width:75%; border-radius:4px;"></div>
+            <div class="d-flex mt-auto" style="gap:6px;">
+              <div class="shimmer" style="height:22px; width:55px; border-radius:20px;"></div>
+              <div class="shimmer" style="height:22px; width:70px; border-radius:20px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTUAL BLOG CARDS SLIDER -->
+    <div class="blog-slider-wrapper" *ngIf="!blogLoading && blogPosts?.length > 0">
+		
+      <button class="blog-nav-btn blog-nav-prev"
+              (click)="blogSliderPrev()"
+              [disabled]="blogSliderIndex === 0"
+              aria-label="Previous">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <div class="blog-slider-overflow" #blogSliderRef>
+        <div class="blog-slider-track" [style.transform]="'translateX(-' + (blogSliderIndex * blogSlideWidth) + 'px)'">
+          <div class="blog-slide-item" *ngFor="let post of blogPosts">
+            <div class="blog-preview-card d-flex flex-column h-100">
+
+              <!-- Image -->
+              <div class="blog-card-img-wrapper position-relative">
+                <span class="blog-category-pill">{{ post.category }}</span>
+                <img [src]="post.image" [alt]="post.title" class="blog-card-img"
+                     onerror="this.src='assets/images/placeholder.jpg'; this.onerror=null;">
+              </div>
+
+              <!-- Body -->
+              <div class="blog-card-body flex-grow-1 d-flex flex-column">
+                <div class="blog-card-meta">
+                  <i class="fas fa-calendar-alt mr-1"></i> {{ post.date }}
+                </div>
+
+                <a [routerLink]="['/blog', post.id]" class="text-decoration-none">
+                  <h5 class="blog-card-title">{{ post.title }}</h5>
+                </a>
+
+                <p class="blog-card-excerpt flex-grow-1">{{ getExcerpt(post.content) }}</p>
+
+                <div class="blog-card-tags" *ngIf="post.tags?.length">
+                  <span class="blog-hash-tag" *ngFor="let tag of post.tags | slice:0:3">{{ tag }}</span>
+                </div>
+
+                <a [routerLink]="['/blog', post.id]" class="blog-read-more mt-auto">
+                  Read Article <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="blog-nav-btn blog-nav-next"
+              (click)="blogSliderNext()"
+              [disabled]="blogSliderIndex >= blogMaxIndex"
+              aria-label="Next">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Dots -->
+    <div class="blog-slider-dots" *ngIf="!blogLoading && blogPosts?.length > blogVisibleCount">
+      <span class="blog-dot"
+            *ngFor="let dot of blogDots; let i = index"
+            [class.active]="i === blogSliderIndex"
+            (click)="blogSliderGoTo(i)">
+      </span>
+    </div>
+
+  </div>
+</section>
+
 <section class="how-it-works-section">
 	<div class="container-fluid">
 		<h2 class="section-title text-center mb-4">How <span>1-800-LIMO<sub>&bull;</sub>COM</span> Works</h2>
@@ -1440,8 +1535,7 @@
 					<div class="step-badge">2</div>
 					<div class="step-content">
 						<h5 class="fw-bold mt-3 mb-1">Choose Vehicle</h5>
-						<p class="text-muted mb-0" style="font-size: 18px;">Select the vehicle that meets your
-							requirements</p>
+						<p class="text-muted mb-0" style="font-size: 18px;">Choose a vehicle based on event, comfort, or luggage.</p>
 					</div>
 				</div>
 			</div>
@@ -1455,7 +1549,7 @@
 					<div class="step-badge">3</div>
 					<div class="step-content">
 						<h5 class="fw-bold mt-3 mb-1">Check Price</h5>
-						<p class="text-muted mb-0" style="font-size: 18px;">Check price according to Vehicle</p>
+						<p class="text-muted mb-0" style="font-size: 18px;">Choose your favorite Vehicle, Driver/ Chauffeur, and Rate.</p>
 					</div>
 				</div>
 			</div>
@@ -1602,25 +1696,25 @@
 		</div>
 	</div>
 </section>
+
 <!---------------RIDE NOW--------------------------->
 <section class="ourmisservice_wrap_ride my-4 ride-now-container"
 	*ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<div class="d-flex flex-column flex-md-row col-12 ride-flex-wrapper">
-			<h2 style="margin-top: 20px; margin-bottom:0 !important;" class="ride-mobile-heading"> Ride Later Today Or
-				<span>Anytime</span>
-			</h2>
+			 <h2 class="ride-mobile-heading"> Ride Later Today Or <span>Anytime</span> </h2>
 			<div class="ourmisservice_wrap_image col-12 col-md-6 p-0">
-				<img src="../../../../assets/images/new ride now.webp" />
+			  <img src="../../../../assets/images/new ride now.webp" />
 			</div>
 			<div class="ourmisservice_wrap_content d-flex flex-column col-12f col-md-6 remove_col_padding ride-nw-cl">
-				<h2 style="margin-top: 20px; margin-bottom:0 !important;" class="ride-desktop-heading"> Ride Later Today
-					Or <span>Anytime</span></h2>
-				<p class="ride-now-para" style="text-transform: none !important;">{{ fetchPageData('RIDE NOW OR RIDE
-					LATER')?.content }}</p>
+				<h2 class="ride-desktop-heading"> Ride Later Today Or <span>Anytime</span> </h2>
+				<div class="ride-text-block">
+					<p class="ride-subtitle">{{ fetchPageData('RIDE NOW OR RIDE LATER')?.subtitle }}</p>
+					<p class="ride-body">{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
+				</div>
 			</div>
 		</div>
-	</div>
+    </div>
 </section>
 
 <!-- Modal -->
