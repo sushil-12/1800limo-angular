@@ -27,6 +27,7 @@
 
 // ── Close button ────
 .x-circle-btn {
+	opacity: 1;
 	color: red;
 	font-size: 28px;
 	width: max-content;
@@ -67,6 +68,23 @@
 	}
 }
 
+.bp-badge-row {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 10px;
+}
+
+.bp-grand-total-badge {
+	background: #e6f4ea; // Light green
+	color: #1e7500; // Deep green text
+	padding: 8px 10px;
+	border-radius: 20px;
+	font-size: 14px;
+	font-weight: 800;
+	border: 1px solid #ceead6;
+	box-shadow: 0 2px 8px rgba(30, 117, 0, 0.08);
+}
+
 .bp-card {
 	background: #ffffff;
 	border-radius: 12px;
@@ -82,16 +100,6 @@
 	min-height: 0;
 }
 
-.bp-grand-total {
-	font-size: clamp(1rem, 2.8vw, 1.4rem);
-	font-weight: 700;
-	color: #111;
-	line-height: 1.1;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 .bp-refund-block {
 	margin-top: 6px;
 	padding-top: 6px;
@@ -102,7 +110,6 @@
 	}
 }
 
-// ── Grand total ────
 .bp-field-label {
 	font-size: clamp(0.65rem, 1.5vw, 0.75rem);
 	color: #888;
@@ -403,7 +410,6 @@
 	border-left: 4px solid #f29439;
 	border-radius: 8px;
 	padding: 12px 14px;
-	margin-top: 10px;
 }
 
 .bp-special-title {

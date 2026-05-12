@@ -7,6 +7,8 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { GoogleMap } from '@angular/google-maps';
 import { IndividualService } from 'src/app/services/individual.service';
+import { TravelAgentService } from 'src/app/services/travel-agent.service';
+
 
 declare var $: any;
 
@@ -31,6 +33,8 @@ export class BookingPreviewComponent implements OnInit {
   isLooseAffiliate: boolean = false;
   showRateDistribution: boolean = false;
   deducted_stripe_fee: number;
+  userRole: string;
+  isAdminView: boolean = false;
 
   constructor(
     private $affiliateService: AffiliateService,
@@ -38,6 +42,7 @@ export class BookingPreviewComponent implements OnInit {
     private $spinner: NgxSpinnerService,
     private stateManagementService: StateManagementService,
     private $individualService: IndividualService,
+    private $travelAgentService: TravelAgentService,
   ) { }
 
   ngOnInit(): void {
@@ -49,16 +54,20 @@ export class BookingPreviewComponent implements OnInit {
     }
   }
 
-  openPreview(booking_id: number, userRole: 'admin' | 'affiliate' | 'individual' = 'affiliate') {
+  openPreview(booking_id: number, userRole: 'admin' | 'affiliate' | 'individual' | 'travel_agent' = 'affiliate') {
     console.debug(`[BookingPreview] openPreview called — booking_id=${booking_id}, userRole=${userRole}`);
     this.$spinner.show();
+    this.userRole = userRole;
+    this.isAdminView = userRole === 'admin';
 
 
     const request = userRole === 'admin'
       ? this.$adminService.getBookingPreview(booking_id)
       : userRole === 'individual'
         ? this.$individualService.getBookingPreview(booking_id)
-        : this.$affiliateService.getBookingPreview(booking_id);
+        : userRole === 'travel_agent'
+          ? this.$travelAgentService.getBookingPreview(booking_id)
+          : this.$affiliateService.getBookingPreview(booking_id);
 
     request
       .pipe(
@@ -84,7 +93,7 @@ export class BookingPreviewComponent implements OnInit {
               !!this.bookingPreview &&
               this.bookingPreview.reservation_type !== 'farmout' &&
               this.bookingPreview?.payment_status != 'paid' &&
-              this.bookingPreview?.payment_status != 'transfer_failed');
+              this.bookingPreview?.payment_status != 'transfer_failed') || userRole === 'travel_agent';
 
           console.log('--- showRateDistribution Logic ---');
           console.log('userRole:', userRole);

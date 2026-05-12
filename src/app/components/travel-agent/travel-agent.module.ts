@@ -38,6 +38,8 @@ import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accoun
 import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
 import { PayoutsComponent } from './payouts/payouts.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { BookingPreviewModule } from '../affiliate/booking-preview/booking-preview.module';
+
 
 
 @NgModule({
@@ -81,7 +83,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		MatTableModule,
 		MatExpansionModule,
 		MatIconModule,
-		ClipboardModule
+		ClipboardModule,
+		BookingPreviewModule
 	],
 	exports: [
 		TravelAgentComponent,

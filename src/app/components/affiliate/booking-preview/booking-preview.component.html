@@ -13,36 +13,17 @@
 			<div class="modal-body">
 				<div class="container" *ngIf="bookingPreview">
 
+					<div class="bp-badge-row" *ngIf="bookingPreview?.grand_total">
+						<div class="bp-grand-total-badge">
+							<span>Grand Total :- </span> {{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)
+							}}
+						</div>
+					</div>
+
 					<!-- Replace bp-summary-grid + bp-people-grid with this -->
 					<div class="bp-four-card-grid">
 
-						<!-- Card 1: Rates / Taxes -->
-						<div class="bp-card">
-							<div class="bp-card-label">Rates / Taxes</div>
-							<div *ngIf="bookingPreview?.grand_total">
-								<div class="bp-field-label">Grand Total</div>
-								<div class="bp-grand-total">
-									{{currencySymbol}} {{ textFormatter(bookingPreview?.grand_total) }}
-								</div>
-							</div>
-							<div *ngIf="bookingPreview?.total_amount_refunded>0" class="bp-refund-block">
-								<div class="bp-kv">
-									<span class="bp-kv-label">Refund amount</span>
-									<span class="bp-kv-value refund-val">
-										{{currencySymbol}} {{-(bookingPreview?.total_amount_refunded)?.toFixed(2) }}
-									</span>
-								</div>
-								<div class="bp-kv">
-									<span class="bp-kv-label">New total</span>
-									<span class="bp-kv-value new-total-val">
-										{{currencySymbol}} {{(bookingPreview?.grand_total -
-										bookingPreview?.total_amount_refunded).toFixed(2) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Card 2: Booking Type -->
+						<!-- Card 1: Booking Type -->
 						<div class="bp-card">
 							<div class="bp-card-label">Booking Type</div>
 							<div class="bp-kv">
@@ -65,6 +46,54 @@
 								<span class="bp-kv-value cancellation-val">
 									{{ getCancellationTime(bookingPreview?.cancellation_hours) }}
 								</span>
+							</div>
+						</div>
+
+						<!-- Card 2: Rates / Taxes -->
+						<div class="bp-card">
+							<div class="bp-card-label">Passenger Information</div>
+							<!-- <div *ngIf="bookingPreview?.grand_total">
+								<div class="bp-field-label">Grand Total</div>
+								<div class="bp-grand-total">
+									{{currencySymbol}} {{ textFormatter(bookingPreview?.grand_total) }}
+								</div>
+							</div>
+							<div *ngIf="bookingPreview?.total_amount_refunded>0" class="bp-refund-block">
+								<div class="bp-kv">
+									<span class="bp-kv-label">Refund amount</span>
+									<span class="bp-kv-value refund-val">
+										{{currencySymbol}} {{-(bookingPreview?.total_amount_refunded)?.toFixed(2) }}
+									</span>
+								</div>
+								<div class="bp-kv">
+									<span class="bp-kv-label">New total</span>
+									<span class="bp-kv-value new-total-val">
+										{{currencySymbol}} {{(bookingPreview?.grand_total -
+										bookingPreview?.total_amount_refunded).toFixed(2) }}
+									</span>
+								</div>
+							</div> -->
+							<div class="bp-passenger-header">
+								<div>
+									<div class="bp-passenger-name">
+										{{ textFormatter(bookingPreview?.passenger_name) }}
+									</div>
+									<a class="bp-passenger-phone"
+										href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
+										({{ bookingPreview?.passenger_cell_isd }}) {{
+										textFormatter(bookingPreview?.passenger_cell) }}
+									</a>
+								</div>
+								<div class="bp-pax-badges">
+									<div class="bp-badge">
+										<div class="bp-badge-value">{{ bookingPreview?.total_passengers }}</div>
+										<div class="bp-badge-label">Passenger</div>
+									</div>
+									<div class="bp-badge">
+										<div class="bp-badge-value">{{ bookingPreview?.luggage_count }}</div>
+										<div class="bp-badge-label">Luggage</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -249,59 +278,8 @@
 					</div>
 					<!-- /travel card -->
 
-
-					<!-- ── Google Map ── -->
-					<div class="bp-card bp-card-full">
-						<div class="bp-map-wrapper">
-							<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
-						</div>
-
-						<div class="bp-metrics-row">
-							<div>
-								<span style="font-weight:700">Distance:</span>
-								<span>
-									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance) }}
-									Km
-								</span>
-							</div>
-
-							<div>
-								<span style="font-weight:700">Estimated Duration:</span>
-								<span>
-									{{ convertToMinutes(bookingPreview?.duration) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-
 					<!-- ── Passenger Information ── -->
 					<div class="bp-card bp-card-full">
-						<div class="bp-card-label">Passenger Information</div>
-
-						<div class="bp-passenger-header">
-							<div>
-								<div class="bp-passenger-name">
-									{{ textFormatter(bookingPreview?.passenger_name) }}
-								</div>
-								<a class="bp-passenger-phone"
-									href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
-									({{ bookingPreview?.passenger_cell_isd }}) {{
-									textFormatter(bookingPreview?.passenger_cell) }}
-								</a>
-							</div>
-							<div class="bp-pax-badges">
-								<div class="bp-badge">
-									<div class="bp-badge-value">{{ bookingPreview?.total_passengers }}</div>
-									<div class="bp-badge-label">Passenger</div>
-								</div>
-								<div class="bp-badge">
-									<div class="bp-badge-value">{{ bookingPreview?.luggage_count }}</div>
-									<div class="bp-badge-label">Luggage</div>
-								</div>
-							</div>
-						</div>
-
 						<!-- Special Instruction -->
 						<div class="bp-special-instruction">
 							<div class="bp-special-title">Special Instruction</div>
@@ -330,6 +308,30 @@
 					<!-- /passenger card -->
 
 
+					<!-- ── Google Map ── -->
+					<div class="bp-card bp-card-full">
+						<div class="bp-map-wrapper">
+							<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+						</div>
+
+						<div class="bp-metrics-row">
+							<div>
+								<span style="font-weight:700">Distance:</span>
+								<span>
+									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance) }}
+									Km
+								</span>
+							</div>
+
+							<div>
+								<span style="font-weight:700">Estimated Duration:</span>
+								<span>
+									{{ convertToMinutes(bookingPreview?.duration) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
 					<!-- ── Vehicle Type ── -->
 					<div class="bp-card bp-card-full">
 						<div class="bp-card-label">Vehicle Type</div>
@@ -353,7 +355,7 @@
 									<div class="bp-badge-label">Passenger</div>
 								</div>
 								<div class="bp-badge">
-									<div class="bp-badge-value">{{ bookingPreview?.vehicle_luggage }}</div>
+									<div class="bp-badge-value">{{ bookingPreview?.vehicle_luggage || '0' }}</div>
 									<div class="bp-badge-label">Luggage</div>
 								</div>
 							</div>
@@ -364,8 +366,10 @@
 					<!-- ── Rate Distribution  ── -->
 					<div class="bp-card bp-card-full" *ngIf="showRateDistribution">
 						<div>
-							<div class="bp-card-label">Rates Distribution {{this.userRole}}</div>
-							<div class="mx-2 mb-1" *ngIf="!isAdminView">
+							<div class="bp-card-label">Rates Distribution</div>
+
+							<div class="mx-2 mb-1"
+								*ngIf="!isAdminView && userRole !== 'travel_agent' && bookingPreview?.share_array?.affiliateShare">
 								<div class="row m-0">
 									<div class="col-md-4 key">
 										<span style="font-weight: 500 !important;">
@@ -384,6 +388,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="mx-2 mb-1">
 								<div class="row m-0">
 									<div class="col-md-4 key">
@@ -401,6 +406,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.adminShare != '0' ">
 								<div class="row m-0">
 									<div class="col-md-4 key">
@@ -421,6 +427,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.travelAgentShare">
 								<div class="row m-0">
 									<div class="col-md-4 key">
@@ -457,7 +464,7 @@
 								</div>
 							</div>
 
-							<div class="mx-2 mb-1" *ngIf="isAdminView">
+							<div class="mx-2 mb-1" *ngIf="isAdminView && bookingPreview?.share_array?.affiliateShare">
 								<div class="row m-0">
 									<div class="col-md-4 key">
 										<span style="font-weight: 500 !important;">
@@ -476,6 +483,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.farmoutShare">
 								<div class="row m-0">
 									<div class="col-md-4 key">
@@ -491,6 +499,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="mx-2 mb-1">
 								<div class="row m-0">
 									<div class="col-md-4 key">
