@@ -26,11 +26,11 @@ export class BookingComponent implements OnInit {
 	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
+	@ViewChild('bookingPreviewModal') bookingPreviewModal: any;
 
 
-	zoom = 7;
-	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
-	directionsRenderer!: google.maps.DirectionsRenderer;
+
+
 
 	exampleHeader = DatePickerComponent
 	color: ThemePalette = 'accent';
@@ -171,103 +171,7 @@ export class BookingComponent implements OnInit {
 	}
 
 
-	MapController() {
-		console.log('Map has been initialised.')
-		let origin: google.maps.LatLng;
-		let destination: google.maps.LatLng;
-		const waypoints: google.maps.DirectionsWaypoint[] = [];
 
-		// Base values
-		origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
-		destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
-
-
-		// Override based on transfer_type
-		if (this.bookingPreview.transfer_type?.includes('airport_')) {
-			origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
-		}
-
-		if (this.bookingPreview.transfer_type?.includes('_airport')) {
-			destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
-		}
-
-		if (Array.isArray(this.bookingPreview?.extra_stops) && this.bookingPreview.extra_stops.length > 0) {
-			for (const stop of this.bookingPreview.extra_stops) {
-				const stopCoords = this.resolveStopLatLng(stop);
-				if (stopCoords) {
-					waypoints.push({
-						location: stopCoords,
-						stopover: true
-					});
-					continue;
-				}
-
-				const stopAddress = String(
-					stop?.display_address
-					|| stop?.formatted_address
-					|| stop?.address
-					|| ''
-				).trim();
-
-				if (stopAddress) {
-					waypoints.push({
-						location: stopAddress,
-						stopover: true
-					});
-				}
-			}
-		}
-
-
-		setTimeout(() => {
-			this.drawMap({
-				origin,
-				destination,
-				waypoints,
-				optimizeWaypoints: false,
-				travelMode: google.maps.TravelMode.DRIVING
-			})
-		}, 100)
-
-	}
-
-	private resolveStopLatLng(stop: any): google.maps.LatLng | null {
-		const latitudeCandidates = [stop?.latitude, stop?.lat, stop?.pickup_latitude];
-		const longitudeCandidates = [stop?.longitude, stop?.lng, stop?.long, stop?.pickup_longitude];
-
-		for (let index = 0; index < latitudeCandidates.length; index++) {
-			const lat = Number(latitudeCandidates[index]);
-			const lng = Number(longitudeCandidates[index]);
-
-			if (Number.isFinite(lat) && Number.isFinite(lng) && !(lat === 0 && lng === 0)) {
-				return new google.maps.LatLng(lat, lng);
-			}
-		}
-
-		return null;
-	}
-
-	drawMap(request: google.maps.DirectionsRequest) {
-		const directionsService = new google.maps.DirectionsService();
-		this.directionsRenderer = new google.maps.DirectionsRenderer();
-
-		const mapInstance = this.map.googleMap;
-		if (!mapInstance) {
-			console.error('Map is not initialized yet');
-			return;
-		}
-
-		this.directionsRenderer.setMap(mapInstance);
-
-		directionsService.route(request, (response, status) => {
-			if (status === google.maps.DirectionsStatus.OK) {
-				console.log('Directions loaded:', response);
-				this.directionsRenderer.setDirections(response);
-			} else {
-				console.error('Directions request failed due to ' + status);
-			}
-		});
-	}
 
 
 	scroll(id) {
@@ -488,42 +392,8 @@ export class BookingComponent implements OnInit {
 		return (distance / 1000).toFixed(2);
 	}
 
-	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
-		console.log("hii im here")
-		this.spinner.show()
-		this.travelAgentService.getBookingPreview(booking_id)
-			.pipe(
-				catchError((err) => {
-					this.spinner.hide(); //hide spinner
-					return throwError(err);
-				})
-			).subscribe((response: any) => {
-				console.log("respinse", response.data)
-				this.bookingPreview = response.data;
-				this.MapController()
-				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
-					console.log("in if created by ta")
-					this.adminSharePercent = 15
-				}
-				else {
-					console.log("in if created by admin")
-					this.adminSharePercent = 25
-				}
-				if (this.bookingPreview?.payment_status == "unpaid") {
-
-					console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
-					this.shareArray = this?.bookingPreview?.share_array
-
-					this.rates_preview = this.bookingPreview?.rates_preview;
-				}
-				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
-				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
-				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
-				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
-				$('#previewBookingOnID').modal('show');
-			})
-		this.spinner.hide();
+		this.bookingPreviewModal.openPreview(booking_id, 'travel_agent');
 	}
 
 

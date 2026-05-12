@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from '../shared/shared.module';
+import { BookingPreviewModule } from '../affiliate/booking-preview/booking-preview.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -57,6 +58,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 		NgSelectModule,
 		MatRadioModule,
 		SharedModule,
+		BookingPreviewModule,
 		MatDialogModule,
 		MatFormFieldModule,
 		MatTabsModule,
