@@ -29,6 +29,7 @@ import { MapUtils } from '../../../utils/map-utils';
 	providers: [BsDatepickerConfig] // Optional: Provide config if customizing globally
 })
 export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy {
+	@ViewChild('bookingPreviewModal') bookingPreviewModal: any;
 	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 
 	// exampleHeader = DatePickerComponent; // Remove if not using Material
@@ -1473,43 +1474,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
-		// this.spinner.show();
-		this.adminService
-			.getBookingPreview(booking_id)
-			.subscribe((response: any) => {
-				this.spinner.hide();
-				this.bookingPreview = response.data;
-				this.previewCopyData = this.extractTextFromHtml(this.bookingPreview?.preview_data)
-				this.MapController()
-				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
-					this.adminSharePercent = 15
-				}
-				else if (this.bookingPreview?.share_array?.farmoutShare) {
-					this.adminSharePercent = 15
-				}
-				else {
-					this.adminSharePercent = 25
-				}
-
-				this.deducted_stripe_fee = ((this?.bookingPreview?.share_array?.grandTotal ? this?.bookingPreview?.share_array?.grandTotal : this?.bookingPreview?.share_array?.returnGrandTotal ? this?.bookingPreview?.share_array?.returnGrandTotal : this.bookingPreview?.rates_preview?.total_price) * 0.029) + 0.30
-				// if (this.bookingPreview?.payment_status == "unpaid") {
-				// 	console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
-				// 	if (this.bookingPreview?.share_array?.length != 0) {
-				// 		console.log("in shre array")
-				this.shareArray = this?.bookingPreview?.share_array
-				// }
-				this.rates_preview = this.bookingPreview?.rates_preview;
-				// }
-				// for(let i in this.bookingPreview?.rates_preview){
-				// 	if(!Array.isArray(this.bookingPreview?.rates_preview[i])){
-				// 	}
-				// }
-				this.bookingPreview["booking_instructions"] =
-					this.bookingPreview?.booking_instructions.replaceAll(
-						"<br />",
-						" "
-					);
-			});
+		this.bookingPreviewModal.openPreview(booking_id, 'admin');
 	}
 
 	// numbers in red and seperated to next line
@@ -1529,8 +1494,8 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		return formattedText;
 	}
 
-timer: any;
-runBookingsSearch(searchValue: string = this.searchText) {
+	timer: any;
+	runBookingsSearch(searchValue: string = this.searchText) {
 		if (!this.useDateFilter) {
 			return;
 		}

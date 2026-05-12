@@ -52,6 +52,7 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
 import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
+import { BookingPreviewModule } from './booking-preview/booking-preview.module';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -116,6 +117,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 		AffiliateRoutingModule,
 		NgxSpinnerModule,
 		AdminModule,
+		BookingPreviewModule,
 		NgxDaterangepickerMd.forRoot({
 			separator: ' - ',
 			applyLabel: 'Okay',

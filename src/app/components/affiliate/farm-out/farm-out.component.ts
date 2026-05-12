@@ -10,8 +10,6 @@ import { ThemePalette } from '@angular/material/core';
 import * as moment from 'moment';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
-import { GoogleMap } from '@angular/google-maps';
-
 
 
 declare var $: any
@@ -23,12 +21,7 @@ declare var $: any
 	styleUrls: ['./farm-out.component.scss']
 })
 export class FarmOutComponent implements OnInit {
-	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
-
-	zoom = 7;
-	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
-	directionsRenderer!: google.maps.DirectionsRenderer;
 
 	color: ThemePalette = 'accent';
 	outputDateFormat = 'YYYY-MM-DD';
@@ -72,11 +65,7 @@ export class FarmOutComponent implements OnInit {
 	cancelBookingId: any = null;
 	start_date: string
 	end_date: string
-	bookingPreview: any;
 	useDateFilter: boolean = false;
-	adminSharePercent: number;
-	rates_preview: any;
-	shareArray: any;
 	currencySymbol: any;
 	currentUser: any;
 
@@ -153,222 +142,6 @@ export class FarmOutComponent implements OnInit {
 		$("#search-field-farmout").addClass("box-outline")
 	}
 
-	mToMi(distance: number): string {
-		return (distance / 1609).toFixed(2);
-	}
-
-	mToKm(distance: number): string {
-		return (distance / 1000).toFixed(2);
-	}
-
-	MapController() {
-		console.log('farmout/preview MapController:start', {
-			reservation_id: this.bookingPreview?.reservation_id,
-			transferType: this.bookingPreview?.transfer_type,
-		})
-		const transferType = this.bookingPreview?.transfer_type || '';
-		let originCoords: google.maps.LatLng | null;
-		let destinationCoords: google.maps.LatLng | null;
-		const waypoints: google.maps.DirectionsWaypoint[] = [];
-
-		// Base values
-		originCoords = this.resolveLatLng([
-			['pickup_latitude', 'pickup_longitude'],
-			['pickup_address_lat', 'pickup_address_long'],
-			['pickup_lat', 'pickup_long'],
-		]);
-		destinationCoords = this.resolveLatLng([
-			['dropoff_latitude', 'dropoff_longitude'],
-			['dropoff_address_lat', 'dropoff_address_long'],
-			['dropoff_lat', 'dropoff_long'],
-		]);
-
-
-		// Override based on transfer_type
-		if (transferType.includes('airport_')) {
-			originCoords = this.resolveLatLng([
-				['pickup_airport_latitude', 'pickup_airport_longitude'],
-				['pickup_airport_lat', 'pickup_airport_long'],
-			]) || originCoords;
-		}
-
-		if (transferType.includes('_airport')) {
-			destinationCoords = this.resolveLatLng([
-				['dropoff_airport_latitude', 'dropoff_airport_longitude'],
-				['dropoff_airport_lat', 'dropoff_airport_long'],
-			]) || destinationCoords;
-		}
-
-		const origin = this.resolveRouteLocation(
-			originCoords,
-			transferType.includes('airport_')
-				? ['pickup_airport_name', 'pickup']
-				: ['pickup', 'pickup_airport_name']
-		);
-		const destination = this.resolveRouteLocation(
-			destinationCoords,
-			transferType.includes('_airport')
-				? ['dropoff_airport_name', 'dropoff']
-				: ['dropoff', 'dropoff_airport_name']
-		);
-
-		console.log('farmout/preview MapController:raw-fields', {
-			pickup: this.bookingPreview?.pickup,
-			dropoff: this.bookingPreview?.dropoff,
-			pickup_airport_name: this.bookingPreview?.pickup_airport_name,
-			dropoff_airport_name: this.bookingPreview?.dropoff_airport_name,
-			pickup_latitude: this.bookingPreview?.pickup_latitude,
-			pickup_longitude: this.bookingPreview?.pickup_longitude,
-			pickup_address_lat: this.bookingPreview?.pickup_address_lat,
-			pickup_address_long: this.bookingPreview?.pickup_address_long,
-			pickup_airport_latitude: this.bookingPreview?.pickup_airport_latitude,
-			pickup_airport_longitude: this.bookingPreview?.pickup_airport_longitude,
-			pickup_airport_lat: this.bookingPreview?.pickup_airport_lat,
-			pickup_airport_long: this.bookingPreview?.pickup_airport_long,
-			dropoff_latitude: this.bookingPreview?.dropoff_latitude,
-			dropoff_longitude: this.bookingPreview?.dropoff_longitude,
-			dropoff_address_lat: this.bookingPreview?.dropoff_address_lat,
-			dropoff_address_long: this.bookingPreview?.dropoff_address_long,
-			dropoff_airport_latitude: this.bookingPreview?.dropoff_airport_latitude,
-			dropoff_airport_longitude: this.bookingPreview?.dropoff_airport_longitude,
-			dropoff_airport_lat: this.bookingPreview?.dropoff_airport_lat,
-			dropoff_airport_long: this.bookingPreview?.dropoff_airport_long,
-		});
-
-		if (!origin || !destination) {
-			console.error('farmout/preview MapController:route-input-missing', {
-				transferType,
-				origin,
-				destination,
-			});
-			return;
-		}
-
-		if (originCoords) {
-			this.mapCenter = { lat: originCoords.lat(), lng: originCoords.lng() };
-		} else if (destinationCoords) {
-			this.mapCenter = { lat: destinationCoords.lat(), lng: destinationCoords.lng() };
-		}
-		console.log('farmout/preview MapController:resolved', {
-			transferType,
-			origin,
-			destination,
-			originCoords: originCoords ? { lat: originCoords.lat(), lng: originCoords.lng() } : null,
-			destinationCoords: destinationCoords ? { lat: destinationCoords.lat(), lng: destinationCoords.lng() } : null,
-		});
-
-		setTimeout(() => {
-			this.drawMap({
-				origin,
-				destination,
-				waypoints,
-				optimizeWaypoints: true,
-				travelMode: google.maps.TravelMode.DRIVING
-			})
-		}, 100)
-
-
-	}
-
-	drawMap(request: google.maps.DirectionsRequest) {
-		console.log('farmout/preview drawMap:request', {
-			origin: request.origin instanceof google.maps.LatLng
-				? { lat: request.origin.lat(), lng: request.origin.lng(), type: 'latlng' }
-				: { value: request.origin, type: typeof request.origin },
-			destination: request.destination instanceof google.maps.LatLng
-				? { lat: request.destination.lat(), lng: request.destination.lng(), type: 'latlng' }
-				: { value: request.destination, type: typeof request.destination },
-			waypointsCount: request.waypoints?.length || 0,
-			travelMode: request.travelMode,
-		});
-		const directionsService = new google.maps.DirectionsService();
-		this.directionsRenderer = new google.maps.DirectionsRenderer();
-
-		const mapInstance = this.map.googleMap;
-		if (!mapInstance) {
-			console.error('farmout/preview drawMap:map-missing');
-			return;
-		}
-
-		google.maps.event.trigger(mapInstance, 'resize');
-		mapInstance.setCenter(this.mapCenter);
-		this.directionsRenderer.setMap(mapInstance);
-
-		directionsService.route(request, (response, status) => {
-			if (status === google.maps.DirectionsStatus.OK) {
-				console.log('farmout/preview drawMap:success', {
-					status,
-					legs: response?.routes?.[0]?.legs?.length || 0,
-				});
-				this.directionsRenderer.setDirections(response);
-			} else {
-				console.error('farmout/preview drawMap:failure', {
-					status,
-					requestOrigin: request.origin instanceof google.maps.LatLng
-						? { lat: request.origin.lat(), lng: request.origin.lng(), type: 'latlng' }
-						: request.origin,
-					requestDestination: request.destination instanceof google.maps.LatLng
-						? { lat: request.destination.lat(), lng: request.destination.lng(), type: 'latlng' }
-						: request.destination,
-				});
-			}
-		});
-	}
-
-	private resolveCoordinate(...keys: string[]): number | null {
-		for (const key of keys) {
-			const rawValue = this.bookingPreview?.[key];
-			const parsedValue = Number(rawValue);
-			if (rawValue !== null && rawValue !== undefined && rawValue !== '' && Number.isFinite(parsedValue)) {
-				return parsedValue;
-			}
-		}
-
-		return null;
-	}
-
-	private resolveLatLng(keyPairs: Array<[string, string]>): google.maps.LatLng | null {
-		for (const [latKey, lngKey] of keyPairs) {
-			const lat = this.resolveCoordinate(latKey);
-			const lng = this.resolveCoordinate(lngKey);
-
-			if (lat !== null && lng !== null) {
-				// The preview API sometimes sends 0,0 for missing airport coordinates.
-				// Treat that sentinel as "no coordinates" so we can fall back to the address/airport label.
-				if (lat === 0 && lng === 0) {
-					console.warn('farmout/preview resolveLatLng:ignoring-zero-coordinates', {
-						latKey,
-						lngKey,
-						lat,
-						lng,
-					});
-					continue;
-				}
-
-				return new google.maps.LatLng(lat, lng);
-			}
-		}
-
-		return null;
-	}
-
-	private resolveRouteLocation(
-		coords: google.maps.LatLng | null,
-		textKeys: string[]
-	): string | google.maps.LatLng | null {
-		if (coords) {
-			return coords;
-		}
-
-		for (const key of textKeys) {
-			const rawValue = this.bookingPreview?.[key];
-			if (typeof rawValue === 'string' && rawValue.trim()) {
-				return rawValue.trim();
-			}
-		}
-
-		return null;
-	}
 
 	scroll(id) {
 		// let el = document.getElementById(id);
@@ -513,26 +286,7 @@ export class FarmOutComponent implements OnInit {
 		return moment(value, 'YYYY-MM-DD').format('ll')
 	}
 
-	convertToMinutes(value) {
-		const days = Math.floor(value / (24 * 60 * 60));
-		const remainingSeconds = value % (24 * 60 * 60);
-		const hours = Math.floor(remainingSeconds / (60 * 60));
-		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
 
-		let result = "";
-
-		if (days > 0) {
-			result += `${days} days, `;
-		}
-
-		if (hours > 0 || (days === 0 && hours === 0)) {
-			result += `${hours} hours, `;
-		}
-
-		result += `${remainingMinutes} minutes`;
-
-		return result;
-	}
 
 	dateFormat2(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('L')
@@ -593,14 +347,7 @@ export class FarmOutComponent implements OnInit {
 		return m.format("ll");
 	}
 
-	textFormatter(text: string) {
-		try {
-			return text.replace(/[\\\_$]+/g, ' ')
-		}
-		catch {
-			return text
-		}
-	}
+
 	timeFormat(value: any) {
 		if (value.toUpperCase() == '12:00 AM') {
 			return '0000 h'
@@ -675,22 +422,6 @@ export class FarmOutComponent implements OnInit {
 		}
 	}
 
-	// numbers in red and seperated to next line
-	highlightNumbers(text: string): string {
-		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
-
-		// Process parts and apply formatting
-		let formattedText = '';
-		for (let i = 0; i < parts.length; i++) {
-			if (i % 2 === 0) {
-				formattedText += parts[i]; // Regular text part
-			} else {
-				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-			}
-		}
-
-		return formattedText;
-	}
 
 	invoiceAction(bookingId) {
 		console.log("in nivoice")
@@ -752,44 +483,12 @@ export class FarmOutComponent implements OnInit {
 			});
 	}
 
+	@ViewChild('bookingPreviewModal') bookingPreviewModal: any;
+
 	showBookingPreviewModal(booking_id: number) {
-		console.log("hii im here")
-		this.$spinner.show()
-		this.$affiliateService.getBookingPreview(booking_id)
-			.pipe(
-				catchError((err) => {
-					this.$spinner.hide(); //hide spinner
-					return throwError(err);
-				})
-			).subscribe((response: any) => {
-				console.log("respinse", response.data)
-				this.bookingPreview = response.data;
-				this.MapController()
-				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
-					console.log("in if created by ta")
-					this.adminSharePercent = 15
-				}
-				else if (this.bookingPreview?.share_array?.farmoutShare) {
-					this.adminSharePercent = 15
-				}
-				else {
-					console.log("in if created by admin")
-					this.adminSharePercent = 25
-				}
-				if (this.bookingPreview?.payment_status == "unpaid") {
-
-					console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
-					this.shareArray = this?.bookingPreview?.share_array
-
-					this.rates_preview = this.bookingPreview?.rates_preview;
-				}
-				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
-				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
-				this.bookingPreview.booking_instructions = this.bookingPreview?.booking_instructions.replaceAll('<br />', '')
-				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
-				$('#previewBookingOnID').modal('show');
-			})
-		this.$spinner.hide();
+		if (this.bookingPreviewModal) {
+			this.bookingPreviewModal.openPreview(booking_id);
+		}
 	}
 
 	iOS() {
@@ -849,28 +548,6 @@ export class FarmOutComponent implements OnInit {
 		})
 	}
 
-	showLocationPointOnMapByAddress(address: any) {
-		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		console.log('isSafari', isSafari)
-		if (address) {
-			let googleDirectionUrl;
-			let iosDirectionUrl;
-			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-				encodeURIComponent(address) + '&travelmode=driving'
-			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-				encodeURIComponent(address)
-			if (this.iOS()) {
-				setTimeout(() => {
-					window.location.href = iosDirectionUrl;
-				})
-			}
-			else {
-				window.open(googleDirectionUrl, '_blank');
-			}
-		} else {
-			throw new Error('Error: Location Points Not Specified Properly. ');
-		}
-	}
 
 	submit(message, format) {
 		console.log('format', this.passengerDetails)
@@ -958,37 +635,6 @@ export class FarmOutComponent implements OnInit {
 			});
 	}
 
-	searchOnGoogle(query: string) {
-		console.log("in search google", query)
-		if (query) {
-			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-			window.open(url, '_blank'); // Opens the search in a new tab
-		}
-	}
-
-	formatBaseRate(baseRate: string | number): string {
-		// Convert baseRate to a number if it is a string
-		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
-
-		// Check if numericValue is a valid number
-		if (!isNaN(numericValue)) {
-			return numericValue.toFixed(2);
-		}
-
-		// Return a default value or an empty string if baseRate is not a valid number
-		return '0.00';
-	}
-
-	// Method to convert hours to days and hours
-	getCancellationTime(cancellationHours: number): string {
-		if (cancellationHours > 24) {
-			const days = Math.floor(cancellationHours / 24);
-			const remainingHours = cancellationHours % 24;
-			return `${days} days ${remainingHours} hours`;
-		} else {
-			return `${cancellationHours} hours`;
-		}
-	}
 
 	calculateConnectorHeight(address: string) {
 		if (!address) return '30px';

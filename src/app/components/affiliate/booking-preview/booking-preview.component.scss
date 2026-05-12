@@ -1,0 +1,659 @@
+// ── Modal header ───
+.modal-header {
+	justify-content: space-between !important;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	padding: 12px 16px !important;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.modal-title {
+	font-size: clamp(0.9rem, 2.5vw, 1.1rem) !important;
+	font-weight: 700;
+	color: #111;
+	margin: 0;
+}
+
+.booking-id-highlight {
+	color: #f29439;
+	font-weight: bold;
+}
+
+// ── Modal body ────
+.modal-body {
+	padding: clamp(10px, 2vw, 16px) clamp(8px, 2vw, 14px) !important;
+}
+
+// ── Close button ────
+.x-circle-btn {
+	color: red;
+	font-size: 28px;
+	width: max-content;
+	background: none !important;
+	border: none !important;
+	padding: 6px !important;
+	line-height: 1 !important;
+}
+
+.bp-card-full {
+	width: 100%;
+	margin-bottom: 14px;
+}
+
+.bp-card-label {
+	font-size: clamp(0.58rem, 1.2vw, 0.68rem);
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #888;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+	flex-shrink: 0;
+}
+
+.bp-four-card-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr; // ← KEY: forces BOTH rows to same height
+	align-items: stretch;
+	gap: 14px;
+	margin-bottom: 14px;
+
+	@media (max-width: 820px) {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+	}
+}
+
+.bp-card {
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+	padding: 14px 16px;
+	margin-bottom: 14px;
+	border: 1px solid rgba(0, 0, 0, 0.07);
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	min-height: 0;
+}
+
+.bp-grand-total {
+	font-size: clamp(1rem, 2.8vw, 1.4rem);
+	font-weight: 700;
+	color: #111;
+	line-height: 1.1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bp-refund-block {
+	margin-top: 6px;
+	padding-top: 6px;
+	border-top: 1px dashed rgba(0, 0, 0, 0.1);
+
+	.bp-kv {
+		padding: 2px 0;
+	}
+}
+
+// ── Grand total ────
+.bp-field-label {
+	font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+	color: #888;
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+.refund-val {
+	color: #FF0000 !important;
+}
+
+.new-total-val {
+	color: #1e7500 !important;
+}
+
+.cancellation-val {
+	color: #FF0000 !important;
+}
+
+// ── Key-value rows ────
+.bp-kv {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	padding: 5px 0;
+	flex-wrap: wrap;
+
+	&:first-of-type {
+		border-top: none;
+	}
+}
+
+.bp-kv-label {
+	font-size: clamp(0.68rem, 1.4vw, 0.75rem);
+	font-weight: 600;
+	color: #666;
+	min-width: 100px;
+	flex-shrink: 0;
+
+	@media (max-width: 480px) {
+		min-width: 80px;
+	}
+}
+
+.bp-kv-value {
+	font-size: clamp(0.75rem, 1.6vw, 0.85rem);
+	font-weight: 700;
+	color: #111;
+	word-break: break-word;
+}
+
+// ── Route Timeline ────────
+.bp-route-timeline {
+	display: flex;
+	flex-direction: column;
+}
+
+.bp-rt-row {
+	display: flex;
+	align-items: stretch;
+	gap: 12px;
+	min-height: 44px;
+}
+
+.bp-rt-row--last .bp-rt-indicator {
+	justify-content: flex-start;
+}
+
+.bp-rt-indicator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-shrink: 0;
+	width: 16px;
+	padding-top: 3px;
+}
+
+.bp-rt-dot {
+	flex-shrink: 0;
+	width: 12px;
+	height: 12px;
+}
+
+.bp-rt-dot--pickup {
+	border-radius: 50%;
+	background: #111;
+	border: 2px solid #111;
+}
+
+.bp-rt-dot--stop {
+	border-radius: 50%;
+	background: #f29439;
+	border: 2px solid #f29439;
+}
+
+.bp-rt-dot--dropoff {
+	border-radius: 2px;
+	background: #FF0000;
+	border: 2px solid #FF0000;
+}
+
+.bp-rt-line {
+	width: 2px;
+	flex: 1;
+	min-height: 14px;
+	background: #ccc;
+	margin: 3px 0 0;
+}
+
+.bp-rt-body {
+	flex: 1;
+	padding-bottom: 14px;
+	min-width: 0;
+}
+
+.bp-rt-row--last .bp-rt-body {
+	padding-bottom: 0;
+}
+
+.bp-rt-label {
+	display: block;
+	font-size: clamp(0.58rem, 1.2vw, 0.65rem);
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.09em;
+	color: #aaa;
+	margin-bottom: 3px;
+	line-height: 1;
+}
+
+.bp-rt-address {
+	display: flex;
+	align-items: flex-start;
+	gap: 5px;
+	font-size: clamp(0.78rem, 1.8vw, 0.85rem);
+	font-weight: 700;
+	color: #111;
+	line-height: 1.35;
+	cursor: pointer;
+	transition: color 0.15s;
+	word-break: break-word;
+
+	&--stop {
+		color: #333;
+	}
+}
+
+.bp-rt-pin {
+	font-size: 13px;
+	flex-shrink: 0;
+	margin-top: 2px;
+	color: inherit;
+	opacity: 0.6;
+}
+
+.bp-rt-meta-row {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 5px;
+}
+
+.bp-rt-flight-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #eef2ff;
+	border: 1px solid #c5d0f0;
+	border-radius: 20px;
+	padding: 2px 10px 2px 8px;
+	font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+	font-weight: 700;
+	color: #00008B;
+	cursor: pointer;
+	transition: background 0.15s;
+
+	&:hover {
+		background: #dce4ff;
+	}
+}
+
+.bp-rt-update-link {
+	font-size: clamp(0.65rem, 1.3vw, 0.72rem);
+	font-weight: 600;
+	color: #0055cc;
+	text-decoration: underline;
+	cursor: pointer;
+
+	&:hover {
+		color: #003899;
+	}
+}
+
+.bp-rt-cruise-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 5px;
+}
+
+.bp-rt-cruise-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #f0f7ff;
+	border: 1px solid #c0d8f0;
+	border-radius: 6px;
+	padding: 2px 8px;
+	font-size: clamp(0.62rem, 1.3vw, 0.72rem);
+	font-weight: 600;
+	color: #1a4a7a;
+}
+
+// ── Metrics row ─────
+.bp-metrics-row {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-bottom: 14px;
+	font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+	color: #111;
+	padding: 2px;
+}
+
+// ── Map ───────
+.bp-map-wrapper {
+	border-radius: 12px;
+	overflow: hidden;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	margin-bottom: 14px;
+}
+
+// ── Passenger ─────
+.bp-passenger-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 12px;
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+	}
+}
+
+.bp-passenger-name {
+	font-size: clamp(0.88rem, 2vw, 1rem);
+	font-weight: 700;
+	color: #111;
+	font-family: 'PT Serif', serif;
+}
+
+.bp-passenger-phone {
+	font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+	color: #0066cc !important;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+// ── Pax badges ───────
+.bp-pax-badges {
+	display: flex;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+.bp-badge {
+	text-align: center;
+	background: #f5f5f5;
+	border-radius: 8px;
+	padding: 6px 12px;
+	min-width: 50px;
+	border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.bp-badge-value {
+	font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+	font-weight: 800;
+	color: #111;
+	line-height: 1;
+}
+
+.bp-badge-label {
+	font-size: clamp(0.55rem, 1.2vw, 0.62rem);
+	color: #888;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+// ── Special instruction ─────
+.bp-special-instruction {
+	background: #fffbf0;
+	border: 1px solid #f5dfa0;
+	border-left: 4px solid #f29439;
+	border-radius: 8px;
+	padding: 12px 14px;
+	margin-top: 10px;
+}
+
+.bp-special-title {
+	font-size: clamp(0.6rem, 1.3vw, 0.68rem);
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #d97e20;
+	margin-bottom: 6px;
+}
+
+.bp-special-body {
+	font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+	color: #333;
+	line-height: 1.5;
+}
+
+// ── Meet & greet ────
+.bp-greet-box {
+	background: #f8f8f8;
+	border: 1px solid rgba(0, 0, 0, 0.07);
+	border-radius: 8px;
+	padding: 10px 14px;
+	margin-top: 10px;
+}
+
+.bp-greet-label {
+	font-size: clamp(0.6rem, 1.3vw, 0.68rem);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: #888;
+	margin-bottom: 3px;
+}
+
+.bp-greet-value {
+	font-size: clamp(0.78rem, 1.8vw, 0.88rem);
+	font-weight: 600;
+	color: #111;
+}
+
+// ── Vehicle ───
+.bp-vehicle-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 10px;
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+	}
+}
+
+.bp-vehicle-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.bp-vehicle-icon {
+	font-size: clamp(1.5rem, 3.5vw, 2rem);
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.bp-vehicle-details {
+	flex: 1;
+}
+
+.bp-vehicle-name {
+	font-size: clamp(0.85rem, 2vw, 0.95rem);
+	font-weight: 700;
+	color: #111;
+	font-family: 'PT Serif', serif;
+}
+
+.bp-vehicle-sub {
+	font-size: clamp(0.68rem, 1.5vw, 0.78rem);
+	color: #555;
+	margin-top: 1px;
+}
+
+.bp-vehicle-plate {
+	font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+	font-weight: 700;
+	color: #333;
+	margin-top: 2px;
+	letter-spacing: 0.04em;
+}
+
+// ── Person card ──
+.bp-person-row {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+}
+
+.bp-avatar {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+	font-weight: 800;
+	color: #fff;
+	flex-shrink: 0;
+}
+
+.bp-avatar-driver {
+	background: #f29439;
+}
+
+.bp-avatar-affiliate {
+	background: #5373aa;
+}
+
+.bp-person-name {
+	font-size: clamp(0.78rem, 1.8vw, 0.88rem);
+	font-weight: 700;
+	color: #111;
+	line-height: 1.3;
+}
+
+.bp-person-email {
+	font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+	color: #0066cc;
+	word-break: break-all;
+	margin-top: 2px;
+}
+
+.bp-person-phone {
+	font-size: clamp(0.68rem, 1.4vw, 0.78rem);
+	color: #444;
+	margin-top: 2px;
+}
+
+.preview-pickup-color {
+	color: #f29439;
+}
+
+.preview-dropoff-color {
+	color: #FF0000;
+	align-items: baseline;
+}
+
+.preview-airport-color {
+	color: #00008B !important;
+}
+
+.box-special-instruction {
+	overflow-y: auto;
+	max-height: 200px;
+}
+
+.google_map {
+	width: auto;
+	max-height: 300px;
+	height: 300px;
+
+	.map {
+		width: 100%;
+		height: 100%;
+		border-radius: 17px;
+	}
+}
+
+.preview-output-field {
+	font-size: 19px;
+}
+
+// ── Rate Distribution – responsive ─────
+@media (max-width: 768px) {
+	.bp-card-full .mx-2.mb-1 {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		padding: 6px 0;
+		border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		// Completely kill bootstrap row/col behavior
+		.row.m-0 {
+			display: flex !important;
+			flex-direction: row !important;
+			flex-wrap: nowrap !important;
+			align-items: baseline !important;
+			justify-content: space-between !important;
+			width: 100% !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			gap: 8px !important;
+		}
+
+		// Kill all bootstrap col classes
+		[class*="col-"] {
+			padding: 0 !important;
+			margin: 0 !important;
+			width: auto !important;
+			max-width: none !important;
+			flex: none !important;
+		}
+
+		// Label — left side
+		.col-md-4.key {
+			flex: 1 1 0% !important;
+			min-width: 0 !important;
+
+			span {
+				font-size: 0.75rem !important;
+				font-weight: 600 !important;
+				color: inherit;
+				display: block;
+				line-height: 1.3;
+			}
+		}
+
+		// Value — right side, stacks price then note
+		.col-md-8.value {
+			flex: 0 0 auto !important;
+			display: flex !important;
+			flex-direction: column !important;
+			align-items: flex-end !important;
+			text-align: right !important;
+			min-width: 0 !important;
+			max-width: 55% !important;
+		}
+
+		.preview-output-field {
+			font-size: 0.95rem !important;
+			font-weight: 700 !important;
+			white-space: nowrap !important;
+			display: block !important;
+			line-height: 1.2 !important;
+		}
+
+		.col-md-8.value>*:not(.preview-output-field),
+		.col-md-8.value>b {
+			font-size: 0.6rem !important;
+			color: #999 !important;
+			font-weight: 400 !important;
+			text-align: right !important;
+			line-height: 1.3 !important;
+			white-space: normal !important;
+			word-break: break-word !important;
+			display: block !important;
+			margin-top: 1px !important;
+		}
+	}
+}

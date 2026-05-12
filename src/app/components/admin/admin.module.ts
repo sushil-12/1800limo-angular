@@ -118,6 +118,7 @@ import { ReportsAdminVehicleAverageComponent } from './reports-admin-vehicle-ave
 import { ReportsAdminUsersComponent } from './reports-admin-users/reports-admin-users.component';
 import { LooseAffiliateVehiclesComponent } from './loose-affiliate-vehicles/loose-affiliate-vehicles.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { BookingPreviewModule } from '../affiliate/booking-preview/booking-preview.module';
 import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
@@ -239,6 +240,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 		ClipboardModule,
 		DragDropModule,
 		NgxChartsModule,
+		BookingPreviewModule,
 		NgxDaterangepickerMd.forRoot({
 			separator: ' - ',
 			applyLabel: 'Okay',

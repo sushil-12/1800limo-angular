@@ -25,13 +25,12 @@ declare var $: any;
 })
 export class BookingsComponent implements OnInit {
 	@ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
+	@ViewChild('bookingPreviewModal') bookingPreviewModal: any;
 
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
 
-	zoom = 7;
-	mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
-	directionsRenderer!: google.maps.DirectionsRenderer;
+
 
 	exampleHeader = DatePickerComponent
 
@@ -69,15 +68,12 @@ export class BookingsComponent implements OnInit {
 	noError: boolean = false;
 	searchText: string = "";
 	timer: any
-	isAffiliate: boolean = false
-	isLooseAffiliate: boolean = false;
+
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
 	useDateFilter: boolean = false;
-	shareArray: any;
-	rates_preview: any;
-	adminSharePercent: number;
+
 	currentUser: any;
 	cardDetails: any;
 	response: any;
@@ -167,149 +163,6 @@ export class BookingsComponent implements OnInit {
 	ngAfterViewInit(): void {
 		$("#search-field-my-booking").addClass("box-outline")
 	}
-
-	private toFiniteNumber(value: any): number | null {
-		const num = Number(value);
-		return Number.isFinite(num) ? num : null;
-	}
-
-	private buildLatLngFromValues(latValue: any, lngValue: any): google.maps.LatLng | null {
-		const lat = this.toFiniteNumber(latValue);
-		const lng = this.toFiniteNumber(lngValue);
-		if (lat === null || lng === null) {
-			return null;
-		}
-		return new google.maps.LatLng(lat, lng);
-	}
-
-	private getPreviewLocationValue(primaryLabel: any, fallbackLabel: any): string | null {
-		const primary = String(primaryLabel || '').trim();
-		if (primary) {
-			return primary;
-		}
-		const fallback = String(fallbackLabel || '').trim();
-		return fallback || null;
-	}
-
-	private resolvePreviewRoutePoint(kind: 'pickup' | 'dropoff'): google.maps.LatLng | string | null {
-		const transferType = String(this.bookingPreview?.transfer_type || '');
-		const usesAirportPoint = kind === 'pickup'
-			? transferType.includes('airport_')
-			: transferType.includes('_airport');
-
-		const airportPoint = this.buildLatLngFromValues(
-			this.bookingPreview?.[`${kind}_airport_latitude`],
-			this.bookingPreview?.[`${kind}_airport_longitude`]
-		);
-		const addressPoint = this.buildLatLngFromValues(
-			this.bookingPreview?.[`${kind}_latitude`],
-			this.bookingPreview?.[`${kind}_longitude`]
-		);
-
-		if (usesAirportPoint && airportPoint) {
-			return airportPoint;
-		}
-
-		if (addressPoint) {
-			return addressPoint;
-		}
-
-		if (airportPoint) {
-			return airportPoint;
-		}
-
-		if (usesAirportPoint) {
-			return this.getPreviewLocationValue(
-				this.bookingPreview?.[`${kind}_airport_name`],
-				this.bookingPreview?.[`${kind}`]
-			);
-		}
-
-		return this.getPreviewLocationValue(
-			this.bookingPreview?.[`${kind}`],
-			this.bookingPreview?.[`${kind}_airport_name`]
-		);
-	}
-
-	private resolvePreviewWaypoints(): google.maps.DirectionsWaypoint[] {
-		const stops = Array.isArray(this.bookingPreview?.extra_stops) ? this.bookingPreview.extra_stops : [];
-
-		return stops
-			.map((stop: any) => {
-				const stopPoint = this.buildLatLngFromValues(stop?.latitude, stop?.longitude);
-				const stopAddress = String(stop?.address || '').trim();
-				const location = stopPoint ?? stopAddress;
-
-				if (!location) {
-					return null;
-				}
-
-				return {
-					location,
-					stopover: true
-				} as google.maps.DirectionsWaypoint;
-			})
-			.filter((waypoint: google.maps.DirectionsWaypoint | null): waypoint is google.maps.DirectionsWaypoint => !!waypoint);
-	}
-
-	MapController() {
-		console.log('Map has been initialised.')
-		const origin = this.resolvePreviewRoutePoint('pickup');
-		const destination = this.resolvePreviewRoutePoint('dropoff');
-		const waypoints = this.resolvePreviewWaypoints();
-
-		if (!origin || !destination) {
-			console.error('Preview map route points are incomplete', {
-				transfer_type: this.bookingPreview?.transfer_type,
-				origin,
-				destination,
-				bookingPreview: this.bookingPreview
-			});
-			return;
-		}
-
-
-		setTimeout(() => {
-			this.drawMap({
-				origin,
-				destination,
-				waypoints,
-				optimizeWaypoints: true,
-				travelMode: google.maps.TravelMode.DRIVING
-			})
-		}, 100)
-
-
-	}
-
-	drawMap(request: google.maps.DirectionsRequest) {
-		const directionsService = new google.maps.DirectionsService();
-		if (this.directionsRenderer) {
-			this.directionsRenderer.setMap(null);
-		}
-		this.directionsRenderer = new google.maps.DirectionsRenderer({
-			suppressMarkers: false,
-			preserveViewport: false
-		});
-
-		const mapInstance = this.map.googleMap;
-		if (!mapInstance) {
-			console.error('Map is not initialized yet');
-			return;
-		}
-
-		this.directionsRenderer.setMap(mapInstance);
-
-		directionsService.route(request, (response, status) => {
-			if (status === google.maps.DirectionsStatus.OK) {
-				console.log('Directions loaded:', response);
-				this.directionsRenderer.setDirections(response);
-			} else {
-				console.error('Directions request failed due to ' + status);
-			}
-		});
-	}
-
 
 	scroll(id) {
 		let el = document.getElementById(id);
@@ -533,42 +386,8 @@ export class BookingsComponent implements OnInit {
 		return (distance / 1000).toFixed(2);
 	}
 
-	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
-		console.log("hii im here")
-		this.spinner.show()
-		this.individualService.getBookingPreview(booking_id)
-			.pipe(
-				catchError((err) => {
-					this.spinner.hide(); //hide spinner
-					return throwError(err);
-				})
-			).subscribe((response: any) => {
-				console.log("respinse", response.data)
-				this.bookingPreview = response.data;
-				this.MapController()
-				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
-					console.log("in if created by ta")
-					this.adminSharePercent = 15
-				}
-				else {
-					console.log("in if created by admin")
-					this.adminSharePercent = 25
-				}
-				if (this.bookingPreview?.payment_status == "unpaid") {
-
-					console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
-					this.shareArray = this?.bookingPreview?.share_array
-
-					this.rates_preview = this.bookingPreview?.rates_preview;
-				}
-				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
-				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
-				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
-				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
-				$('#previewBookingOnID').modal('show');
-				this.spinner.hide();
-			})
+		this.bookingPreviewModal.openPreview(booking_id, 'individual');
 	}
 
 

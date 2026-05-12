@@ -133,9 +133,9 @@
 				<div class="col-md-8 col-lg-9">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0 w-100">
-							<input matInput type="text" class="search-uppercase-input" (keypress)="handleKeypressEvents()"
-								(focus)="$event.target.select()" (input)="searchInBookings($event.target.value)"
-								[value]="searchText"
+							<input matInput type="text" class="search-uppercase-input"
+								(keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
+								(input)="searchInBookings($event.target.value)" [value]="searchText"
 								placeholder="Search by booking number, status, name, cell phone, vehicle type"
 								id="keyword" autofocus>
 						</mat-form-field>
@@ -186,10 +186,11 @@
 												<i class="fas fa-pencil-alt" style="font-size: 11px; color: white;"></i>
 											</div>
 										</div>
-										
-										<button class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
-											type="button" data-toggle="dropdown"
-											aria-haspopup="true" aria-expanded="false">
+
+										<button
+											class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
+											type="button" data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
 											<span>View</span>
 										</button>
 
@@ -344,8 +345,7 @@
 										</p>
 									</td>
 									<td class="text-left font-weight-bolder ">
-										<p data-toggle="modal" data-target="#previewBookingOnID"
-											(click)="showBookingPreviewModal(booking?.booking_id)"
+										<p (click)="showBookingPreviewModal(booking?.booking_id)"
 											class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"
 												style="font-weight: 600;"></span>
@@ -1047,7 +1047,8 @@
 
 
 <!-- booking periview -->
-<div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
+<div class="modal fade" id="oldPreviewBookingOnID_deleted" tabindex="-1" aria-labelledby="previewBookingLabel"
+	aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content" style="background: #f5f4fe;">
 			<div class="modal-header d-flex justify-content-between py-0">
@@ -2084,3 +2085,6 @@
 		</div>
 	</div>
 </div>
+
+<!-- booking preview -->
+<app-booking-preview #bookingPreviewModal></app-booking-preview>
