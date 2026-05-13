@@ -8,6 +8,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { GoogleMap } from '@angular/google-maps';
 import { IndividualService } from 'src/app/services/individual.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
+import moment from 'moment';
 
 
 declare var $: any;
@@ -445,12 +446,25 @@ export class BookingPreviewComponent implements OnInit {
     }
   }
 
+  formatDate(date: string): string {
+    const m = moment(date);
+    if (m.isSame(moment(), 'day')) {
+      return 'Today';
+    }
+    return `${m.format('MM/DD/YYYY')} | ${m.format('MMMM D, YYYY')} | ${m.format('dddd')}`;
+  }
+
+  formatTime(time: string): string {
+    const m = moment(time, 'HH:mm:ss');
+    return `${m.format('LT')} | ${m.format('HHmm')} h`;
+  }
+
   getCancellationTime(cancellationHours: number): string {
     try {
       if (cancellationHours > 24) {
         const days = Math.floor(cancellationHours / 24);
-        const remainingHours = cancellationHours % 24;
-        return `${days} days ${remainingHours} hours`;
+        // const remainingHours = cancellationHours % 24;
+        return `${days} days`;
       }
       return `${cancellationHours} hours`;
     } catch (err) {
@@ -459,22 +473,19 @@ export class BookingPreviewComponent implements OnInit {
     }
   }
 
-  highlightNumbers(text: any): string {
-    try {
-      const stringText = String(text || '');
-      const parts = stringText.split(/\b(\d+\.\s)/);
-      let formattedText = '';
-      for (let i = 0; i < parts.length; i++) {
-        if (i % 2 === 0) {
-          formattedText += parts[i];
-        } else {
-          formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`;
-        }
+  highlightNumbers(text: string): string {
+    const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+    // Process parts and apply formatting
+    let formattedText = '';
+    for (let i = 0; i < parts.length; i++) {
+      if (i % 2 === 0) {
+        formattedText += parts[i]; // Regular text part
+      } else {
+        formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
       }
-      return formattedText;
-    } catch (err) {
-      console.error('[BookingPreview] highlightNumbers: Error', { text, err });
-      return String(text || '');
     }
+
+    return formattedText;
   }
 }

@@ -20,12 +20,12 @@
 							</span>
 							<div class="bp-grand-total-content">
 								<span class="bp-grand-total-label">Booking Total</span>
-								<span class="bp-grand-total-amount">{{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)}}</span>
+								<span
+									class="bp-grand-total-amount">{{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)}}</span>
 							</div>
 						</div>
 					</div>
 
-					<!-- Replace bp-summary-grid + bp-people-grid with this -->
 					<div class="bp-four-card-grid">
 
 						<!-- Card 1: Booking Type -->
@@ -42,7 +42,7 @@
 									</span>
 								</span>
 							</div>
-							<div *ngIf="bookingPreview?.service_type == 'charter_tour'" class="bp-kv">
+							<div *ngIf="bookingPreview?.service_type == 'Charter Tour'" class="bp-kv">
 								<span class="bp-kv-label">Booking Hours</span>
 								<span class="bp-kv-value">{{ bookingPreview?.number_of_hours }}</span>
 							</div>
@@ -54,16 +54,10 @@
 							</div>
 						</div>
 
-						<!-- Card 2: Rates / Taxes -->
+						<!-- Card 2: Passenger Information -->
 						<div class="bp-card">
 							<div class="bp-card-label">Passenger Information</div>
-							<!-- <div *ngIf="bookingPreview?.grand_total">
-								<div class="bp-field-label">Grand Total</div>
-								<div class="bp-grand-total">
-									{{currencySymbol}} {{ textFormatter(bookingPreview?.grand_total) }}
-								</div>
-							</div>
-							<div *ngIf="bookingPreview?.total_amount_refunded>0" class="bp-refund-block">
+							<!-- <div *ngIf="bookingPreview?.total_amount_refunded>0" class="bp-refund-block">
 								<div class="bp-kv">
 									<span class="bp-kv-label">Refund amount</span>
 									<span class="bp-kv-value refund-val">
@@ -83,7 +77,11 @@
 									<div class="bp-passenger-name">
 										{{ textFormatter(bookingPreview?.passenger_name) }}
 									</div>
-									<a class="bp-passenger-phone"
+									<a class="bp-person-email" style="word-break:break-all;"
+										href="mailto:{{bookingPreview?.passenger_email}}">
+										{{ textFormatter(bookingPreview?.passenger_email) }}
+									</a>
+									<a class="bp-person-phone"
 										href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
 										({{ bookingPreview?.passenger_cell_isd }}) {{
 										textFormatter(bookingPreview?.passenger_cell) }}
@@ -102,8 +100,7 @@
 							</div>
 						</div>
 
-						<!-- Card 3: Driver -->
-						<div class="bp-card">
+						<div class="bp-card" *ngIf="bookingPreview?.booking_status !== 'driver_unassigned'">
 							<div class="bp-card-label">Driver Information</div>
 							<div class="bp-person-row">
 								<div class="bp-avatar bp-avatar-driver">
@@ -113,20 +110,25 @@
 									<div class="bp-person-name">
 										{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
 									</div>
-									<div class="bp-person-email" style="word-break:break-all;">
+									<a class="bp-person-email" style="word-break:break-all; display:block;"
+										href="mailto:{{bookingPreview?.driver_email}}"
+										*ngIf="bookingPreview?.driver_email">
 										{{ textFormatter(bookingPreview?.driver_email) }}
-									</div>
-									<div class="bp-person-phone">
+									</a>
+									<a class="bp-person-phone" style="display:block;"
+										href="tel:{{bookingPreview?.driver_cell_isd}}{{bookingPreview?.driver_cell}}"
+										*ngIf="bookingPreview?.driver_cell">
 										({{ bookingPreview?.driver_cell_isd }}) {{ bookingPreview?.driver_cell }}
-									</div>
+									</a>
 								</div>
 							</div>
 						</div>
 
-						<!-- Card 4: Affiliate -->
+						<!-- Card 4: Affiliate — always shown -->
 						<div class="bp-card">
 							<div class="bp-card-label">
-								{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose' }}
+								{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'Loose
+								Affiliate Information' }}
 							</div>
 							<div class="bp-person-row">
 								<div class="bp-avatar bp-avatar-affiliate">
@@ -138,24 +140,53 @@
 										{{ isAffiliate ? bookingPreview?.affiliate_name :
 										bookingPreview?.lose_affiliate_name }}
 									</div>
-									<div class="bp-person-email" style="word-break:break-all;">
+									<a class="bp-person-email" style="word-break:break-all; display:block;"
+										[href]="'mailto:' + (isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email)"
+										*ngIf="isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email">
 										{{ isAffiliate ? bookingPreview?.affiliate_email :
 										bookingPreview?.lose_affiliate_email }}
-									</div>
-									<div class="bp-person-phone">
-										{{ isAffiliate ? '(' + bookingPreview?.affiliate_phone_isd + ') ' +
-										bookingPreview?.affiliate_phone :
-										bookingPreview?.lose_affiliate_phone
+									</a>
+									<a class="bp-person-phone" style="display:block;" [href]="'tel:' + (isAffiliate
+                        ? (bookingPreview?.affiliate_phone_isd + bookingPreview?.affiliate_phone)
+                        : (bookingPreview?.lose_affiliate_phone_isd + bookingPreview?.lose_affiliate_phone))"
+										*ngIf="isAffiliate ? bookingPreview?.affiliate_phone : bookingPreview?.lose_affiliate_phone">
+										{{ isAffiliate
+										? ('(' + bookingPreview?.affiliate_phone_isd + ') ' +
+										bookingPreview?.affiliate_phone)
+										: ('(' + bookingPreview?.lose_affiliate_phone_isd + ') ' +
+										bookingPreview?.lose_affiliate_phone)
 										}}
-									</div>
+									</a>
 								</div>
 							</div>
 						</div>
+
+
 					</div>
+
 
 					<!-- ── Travel Information ── -->
 					<div class="bp-card bp-card-full">
-						<div class="bp-card-label">Travel Information</div>
+
+						<div class="bp-travel-header">
+							<div class="bp-card-label">Travel Information</div>
+
+							<div class="bp-travel-datetime"
+								*ngIf="bookingPreview?.pickup_date || bookingPreview?.pickup_time">
+								<span class="bp-travel-dt-item" *ngIf="bookingPreview?.pickup_date">
+									<i class="bi bi-calendar3 bp-travel-dt-icon"></i>
+									<span class="bp-travel-dt-value">{{ formatDate(bookingPreview?.pickup_date)
+										}}</span>
+								</span>
+								<span class="bp-travel-dt-sep"
+									*ngIf="bookingPreview?.pickup_date && bookingPreview?.pickup_time">|</span>
+								<span class="bp-travel-dt-item" *ngIf="bookingPreview?.pickup_time">
+									<i class="bi bi-clock bp-travel-time-icon"></i>
+									<span class="bp-travel-dt-value">{{ formatTime(bookingPreview?.pickup_time)
+										}}</span>
+								</span>
+							</div>
+						</div>
 
 						<div class="bp-route-timeline">
 
@@ -181,8 +212,11 @@
 										<div class="bp-rt-address bp-rt-address--airport"
 											(click)="showLocationPointOnMapByAddress(bookingPreview?.pickup_airport_name)">
 											<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
-											{{ textFormatter(bookingPreview?.pickup_airport_name) }}
+											{{ textFormatter(bookingPreview?.pickup_address ?
+											bookingPreview?.pickup_address
+											: bookingPreview?.pickup_airport_name) }}
 										</div>
+
 										<div class="bp-rt-meta-row">
 											<span class="bp-rt-flight-chip"
 												(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
@@ -250,7 +284,8 @@
 										<div class="bp-rt-address bp-rt-address--airport"
 											(click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_airport_name)">
 											<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
-											{{ textFormatter(bookingPreview?.dropoff_airport_name) }}
+											{{ textFormatter(bookingPreview?.dropoff_address ?
+											bookingPreview?.dropoff_address : bookingPreview?.dropoff_airport_name ) }}
 										</div>
 										<div class="bp-rt-meta-row">
 											<span class="bp-rt-flight-chip bp-rt-flight-chip--dropoff"
@@ -281,14 +316,13 @@
 
 						</div>
 					</div>
-					<!-- /travel card -->
 
 					<!-- ── Passenger Information ── -->
 					<div class="bp-card bp-card-full">
 						<!-- Special Instruction -->
 						<div class="bp-special-instruction">
 							<div class="bp-special-title">Special Instruction</div>
-							<div class="bp-special-body box-special-instruction"
+							<div class="bp-special-body box-special-instruction" style="white-space: pre-wrap;"
 								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
 							</div>
 						</div>
@@ -345,13 +379,19 @@
 								<div class="bp-vehicle-icon"><i class="bi bi-car-front-fill"></i></div>
 								<div class="bp-vehicle-details">
 									<div class="bp-vehicle-name">{{ bookingPreview?.vehicle_type_name }}</div>
-									<div class="bp-vehicle-sub">
+
+									<div class="bp-vehicle-sub" *ngIf="(bookingPreview?.vehicle_make && bookingPreview?.vehicle_make !== 'N/A') ||
+                                      (bookingPreview?.vehicle_model && bookingPreview?.vehicle_model !== 'N/A') ||
+                                      (bookingPreview?.vehicle_year  && bookingPreview?.vehicle_year  !== 'N/A') ||
+                                      (bookingPreview?.vehicle_color && bookingPreview?.vehicle_color !== 'N/A')">
 										{{ bookingPreview?.vehicle_make }} &nbsp;|&nbsp;
 										{{ bookingPreview?.vehicle_model }} &nbsp;|&nbsp;
 										{{ bookingPreview?.vehicle_year }} &nbsp;|&nbsp;
 										{{ bookingPreview?.vehicle_color }}
 									</div>
-									<div class="bp-vehicle-plate">{{ bookingPreview?.vehicle_license_plate }}</div>
+									<div class="bp-vehicle-plate"
+										*ngIf="bookingPreview?.vehicle_license_plate && bookingPreview?.vehicle_license_plate !== 'N/A'">
+										{{ bookingPreview?.vehicle_license_plate }}</div>
 								</div>
 							</div>
 							<div class="bp-pax-badges">

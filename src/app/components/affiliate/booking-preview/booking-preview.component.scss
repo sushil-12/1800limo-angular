@@ -208,6 +208,74 @@
 	word-break: break-word;
 }
 
+// ── Travel card header (label + datetime inline) ──
+.bp-travel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+
+	.bp-card-label {
+		margin-bottom: 0 !important;
+		padding-bottom: 0 !important;
+		border-bottom: none !important;
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+	}
+}
+
+.bp-travel-datetime {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.bp-travel-dt-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.bp-travel-dt-icon {
+	font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+	color: #5373aa;
+	flex-shrink: 0;
+}
+
+.bp-travel-time-icon {
+	font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+	color: #f29439;
+	flex-shrink: 0;
+}
+
+.bp-travel-dt-value {
+	font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+	font-weight: 700;
+	color: #2d2d2d;
+	white-space: nowrap;
+}
+
+.bp-travel-dt-sep {
+	color: #d0cfe8;
+	font-size: clamp(0.72rem, 1.8vw, 0.94rem);
+	line-height: 1;
+	flex-shrink: 0;
+
+	@media (max-width: 480px) {
+		display: none;
+	}
+}
+
 // ── Route Timeline ────────
 .bp-route-timeline {
 	display: flex;
@@ -399,7 +467,7 @@
 	margin-bottom: 12px;
 
 	// Name+phone side must shrink so badges never get pushed out
-	> div:first-child {
+	>div:first-child {
 		min-width: 0;
 		flex: 1 1 0%;
 	}
@@ -415,16 +483,6 @@
 	color: #111;
 	word-break: break-word;
 	overflow-wrap: break-word;
-}
-
-.bp-passenger-phone {
-	font-size: clamp(0.9rem, 2.2vw, 1rem);
-	color: #0066cc !important;
-	text-decoration: none;
-
-	&:hover {
-		text-decoration: none;
-	}
 }
 
 // ── Pax badges ───────
