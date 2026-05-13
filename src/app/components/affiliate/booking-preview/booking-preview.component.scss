@@ -1,3 +1,22 @@
+// ── Modal sizing – tablet / iPad ────────────────────────────
+// Bootstrap modal-lg is 800px on ≥992px but falls back to ~500px on tablets.
+// Force it wider on every tablet/iPad size so the content breathes.
+@media (min-width: 576px) and (max-width: 991px) {
+	#previewBookingOnID .modal-dialog {
+		max-width: 94vw !important;
+		width: 94vw !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+}
+
+// On large tablets / small laptops keep it at full modal-lg width
+@media (min-width: 992px) {
+	#previewBookingOnID .modal-dialog {
+		max-width: 860px !important;
+	}
+}
+
 // ── Modal header ───
 .modal-header {
 	justify-content: space-between !important;
@@ -379,6 +398,12 @@
 	gap: 10px;
 	margin-bottom: 12px;
 
+	// Name+phone side must shrink so badges never get pushed out
+	> div:first-child {
+		min-width: 0;
+		flex: 1 1 0%;
+	}
+
 	@media (max-width: 480px) {
 		flex-direction: column;
 	}
@@ -389,6 +414,8 @@
 	font-weight: 700;
 	color: #111;
 	font-family: 'PT Serif', serif;
+	word-break: break-word;
+	overflow-wrap: break-word;
 }
 
 .bp-passenger-phone {
@@ -406,6 +433,7 @@
 	display: flex;
 	gap: 8px;
 	flex-shrink: 0;
+	align-self: flex-start;
 }
 
 .bp-badge {
