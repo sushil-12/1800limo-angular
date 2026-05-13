@@ -15,8 +15,13 @@
 
 					<div class="bp-badge-row" *ngIf="bookingPreview?.grand_total">
 						<div class="bp-grand-total-badge">
-							<span>Grand Total :- </span> {{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)
-							}}
+							<span class="bp-grand-total-icon">
+								<i class="bi bi-receipt-cutoff"></i>
+							</span>
+							<div class="bp-grand-total-content">
+								<span class="bp-grand-total-label">Booking Total</span>
+								<span class="bp-grand-total-amount">{{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)}}</span>
+							</div>
 						</div>
 					</div>
 
