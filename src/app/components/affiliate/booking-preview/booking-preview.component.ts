@@ -448,10 +448,11 @@ export class BookingPreviewComponent implements OnInit {
 
   formatDate(date: string): string {
     const m = moment(date);
+    const dateStr = `${m.format('MM/DD/YYYY')} | ${m.format('MMMM D, YYYY')} | ${m.format('dddd')}`;
     if (m.isSame(moment(), 'day')) {
-      return 'Today';
+      return `Today | ${dateStr}`;
     }
-    return `${m.format('MM/DD/YYYY')} | ${m.format('MMMM D, YYYY')} | ${m.format('dddd')}`;
+    return dateStr;
   }
 
   formatTime(time: string): string {
@@ -474,15 +475,15 @@ export class BookingPreviewComponent implements OnInit {
   }
 
   highlightNumbers(text: string): string {
-    const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+    const parts = text.split(/\b(\d+\.\s)/);
 
     // Process parts and apply formatting
     let formattedText = '';
     for (let i = 0; i < parts.length; i++) {
       if (i % 2 === 0) {
-        formattedText += parts[i]; // Regular text part
+        formattedText += parts[i];
       } else {
-        formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+        formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`;
       }
     }
 
