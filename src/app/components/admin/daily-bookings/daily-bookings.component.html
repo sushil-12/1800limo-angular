@@ -151,7 +151,7 @@
 							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
 							<thead>
 								<tr role="row">
-									<th>Status</th>
+									<th>Actions</th>
 									<th (click)="handleSort('pickup_date')" style="cursor: pointer;">
 										Date
 										<i class="fa" style="font-size: 20px;"
@@ -174,36 +174,32 @@
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td class="text-center">
-										<div style="margin-bottom: 38px !important;" class="status-action-container">
-											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-												data-target="#change_status_booking_Modal"
-												class="status-pill {{ booking.booking_status }}"
-												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-												booking.booking_status | bookingStatusTextReplace :
-												'_' : ' ' |titlecase}}
-												<i class="fas fa-pencil-alt" style="font-size: 11px; color: white;"></i>
-											</div>
-										</div>
+									<td class="text-center d-flex"
+										style="gap: 18px; align-items: center; border: none;">
 
-										<button
-											class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
-											type="button" data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<span>View</span>
-										</button>
+										<a [routerLink]="['/admin/new-booking']"
+											*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) 
+                                         && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
+											[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
+											title="Edit">
+											<i class="fa fa-pencil" style="color: #000"></i>
+										</a>
+
+										<a title="Pin" (click)="togglePin(booking.booking_id)">
+											<i class="fa fa-thumb-tack"
+												[style.color]="pinnedBookingIds.includes(booking.booking_id) ? '#f57c00' : '#000'"
+												[style.transform]="pinnedBookingIds.includes(booking.booking_id) ? 'rotate(45deg)' : 'none'">
+											</i>
+										</a>
+
+										<a type="button" data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false" title="More options">
+											<i class="fa fa-ellipsis-v"></i>
+										</a>
 
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage"
 											style="min-height: 200px;max-height: 480px;overflow-y: scroll; z-index: 2;">
-											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
-
-												<div class="dropdown-item-icon"></div>
-												Edit / Change
-											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
 												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
@@ -274,7 +270,8 @@
 												data-toggle="modal" data-target="#emailModal"
 												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_affiliate')">
 												<div class="dropdown-item-icon"></div>
-												{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose Affiliate'
+												{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose
+												Affiliate'
 												}}
 											</a>
 											<a class="dropdown-item"
@@ -357,6 +354,17 @@
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? (booking.grand_total).toFixed(2) : 0 )"></span>
 										</p>
+										<div style="margin-bottom: 38px !important;" class="status-action-container">
+											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
+												data-target="#change_status_booking_Modal"
+												class="status-pill {{ booking.booking_status }}"
+												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+												booking.booking_status | bookingStatusTextReplace :
+												'_' : ' ' |titlecase}}
+												<i class="fas fa-pencil-alt" style="font-size: 11px; color: white;"></i>
+											</div>
+										</div>
 									</td>
 
 
