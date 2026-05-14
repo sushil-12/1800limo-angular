@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -20,6 +20,9 @@ declare var $: any;
 })
 export class BookingPreviewComponent implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
+  @ViewChild('specialInstructionBox') specialInstructionBox!: ElementRef;
+
+  isScrollable = false;
 
   zoom = 7;
   mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
@@ -53,6 +56,29 @@ export class BookingPreviewComponent implements OnInit {
     } catch (err) {
       console.error('[BookingPreview] ngOnInit: Failed to get currency symbol', err);
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.checkScrollable();
+  }
+
+  ngAfterViewChecked(): void {
+    this.checkScrollable();
+  }
+
+  checkScrollable(): void {
+    const el = this.specialInstructionBox?.nativeElement;
+    if (el) {
+      const scrollable = el.scrollHeight > el.clientHeight;
+      if (scrollable !== this.isScrollable) {
+        this.isScrollable = scrollable;
+      }
+    }
+  }
+
+  scrollInstruction(direction: 'up' | 'down'): void {
+    const el = this.specialInstructionBox.nativeElement;
+    el.scrollBy({ top: direction === 'down' ? 60 : -60, behavior: 'smooth' });
   }
 
   openPreview(booking_id: number, userRole: 'admin' | 'affiliate' | 'individual' | 'travel_agent' = 'affiliate') {

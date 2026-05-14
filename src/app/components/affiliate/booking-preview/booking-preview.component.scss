@@ -676,6 +676,51 @@
 .box-special-instruction {
 	overflow-y: auto;
 	max-height: 200px;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+// ── changed to row ──
+.bp-scroll-controls {
+	display: flex;
+	flex-direction: row; // inline side by side
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.bp-scroll-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	background: #fff;
+	color: #555;
+	font-size: 0.8rem;
+	cursor: pointer;
+	transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	padding: 0;
+	line-height: 1;
+
+	&:hover {
+		background: #f29439;
+		color: #fff;
+		border-color: #f29439;
+		box-shadow: 0 2px 8px rgba(242, 148, 57, 0.35);
+	}
+
+	&:active {
+		transform: scale(0.93);
+	}
 }
 
 .google_map {
