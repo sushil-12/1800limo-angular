@@ -1,3 +1,22 @@
+// ── Modal sizing – tablet / iPad ────────────────────────────
+// Bootstrap modal-lg is 800px on ≥992px but falls back to ~500px on tablets.
+// Force it wider on every tablet/iPad size so the content breathes.
+@media (min-width: 576px) and (max-width: 991px) {
+	#previewBookingOnID .modal-dialog {
+		max-width: 94vw !important;
+		width: 94vw !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+}
+
+// On large tablets / small laptops keep it at full modal-lg width
+@media (min-width: 992px) {
+	#previewBookingOnID .modal-dialog {
+		max-width: 860px !important;
+	}
+}
+
 // ── Modal header ───
 .modal-header {
 	justify-content: space-between !important;
@@ -9,7 +28,7 @@
 }
 
 .modal-title {
-	font-size: clamp(0.9rem, 2.5vw, 1.1rem) !important;
+	font-size: clamp(1rem, 2.8vw, 1.125rem) !important;
 	font-weight: 700;
 	color: #111;
 	margin: 0;
@@ -29,7 +48,7 @@
 .x-circle-btn {
 	opacity: 1;
 	color: red;
-	font-size: 28px;
+	font-size: 32px;
 	width: max-content;
 	background: none !important;
 	border: none !important;
@@ -43,7 +62,7 @@
 }
 
 .bp-card-label {
-	font-size: clamp(0.58rem, 1.2vw, 0.68rem);
+	font-size: clamp(0.72rem, 1.6vw, 0.85rem);
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
@@ -75,14 +94,42 @@
 }
 
 .bp-grand-total-badge {
-	background: #e6f4ea; // Light green
-	color: #1e7500; // Deep green text
-	padding: 8px 10px;
-	border-radius: 20px;
-	font-size: 14px;
-	font-weight: 800;
-	border: 1px solid #ceead6;
-	box-shadow: 0 2px 8px rgba(30, 117, 0, 0.08);
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	background: linear-gradient(135deg, #1e7500 0%, #2ea000 100%);
+	color: #fff;
+	padding: 10px 18px 10px 14px;
+	border-radius: 14px;
+	border: none;
+	box-shadow: 0 4px 14px rgba(30, 117, 0, 0.28);
+
+	.bp-grand-total-icon {
+		font-size: 22px;
+		line-height: 1;
+		opacity: 0.9;
+		flex-shrink: 0;
+	}
+
+	.bp-grand-total-content {
+		display: flex;
+		flex-direction: column;
+		line-height: 1.2;
+	}
+
+	.bp-grand-total-label {
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		opacity: 0.82;
+	}
+
+	.bp-grand-total-amount {
+		font-size: 1.125rem;
+		font-weight: 800;
+		letter-spacing: 0.01em;
+	}
 }
 
 .bp-card {
@@ -111,7 +158,7 @@
 }
 
 .bp-field-label {
-	font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+	font-size: clamp(0.8rem, 1.8vw, 0.92rem);
 	color: #888;
 	font-weight: 600;
 	margin-bottom: 2px;
@@ -143,7 +190,7 @@
 }
 
 .bp-kv-label {
-	font-size: clamp(0.68rem, 1.4vw, 0.75rem);
+	font-size: clamp(0.82rem, 1.8vw, 0.92rem);
 	font-weight: 600;
 	color: #666;
 	min-width: 100px;
@@ -155,10 +202,78 @@
 }
 
 .bp-kv-value {
-	font-size: clamp(0.75rem, 1.6vw, 0.85rem);
+	font-size: clamp(0.9rem, 2vw, 1rem);
 	font-weight: 700;
 	color: #111;
 	word-break: break-word;
+}
+
+// ── Travel card header (label + datetime inline) ──
+.bp-travel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+
+	.bp-card-label {
+		margin-bottom: 0 !important;
+		padding-bottom: 0 !important;
+		border-bottom: none !important;
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 480px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+	}
+}
+
+.bp-travel-datetime {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.bp-travel-dt-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.bp-travel-dt-icon {
+	font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+	color: #5373aa;
+	flex-shrink: 0;
+}
+
+.bp-travel-time-icon {
+	font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+	color: #f29439;
+	flex-shrink: 0;
+}
+
+.bp-travel-dt-value {
+	font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+	font-weight: 700;
+	color: #2d2d2d;
+	white-space: nowrap;
+}
+
+.bp-travel-dt-sep {
+	color: #d0cfe8;
+	font-size: clamp(0.72rem, 1.8vw, 0.94rem);
+	line-height: 1;
+	flex-shrink: 0;
+
+	@media (max-width: 480px) {
+		display: none;
+	}
 }
 
 // ── Route Timeline ────────
@@ -231,7 +346,7 @@
 
 .bp-rt-label {
 	display: block;
-	font-size: clamp(0.58rem, 1.2vw, 0.65rem);
+	font-size: clamp(0.72rem, 1.6vw, 0.82rem);
 	font-weight: 800;
 	text-transform: uppercase;
 	letter-spacing: 0.09em;
@@ -244,7 +359,7 @@
 	display: flex;
 	align-items: flex-start;
 	gap: 5px;
-	font-size: clamp(0.78rem, 1.8vw, 0.85rem);
+	font-size: clamp(0.92rem, 2.2vw, 1rem);
 	font-weight: 700;
 	color: #111;
 	line-height: 1.35;
@@ -258,7 +373,7 @@
 }
 
 .bp-rt-pin {
-	font-size: 13px;
+	font-size: 15px;
 	flex-shrink: 0;
 	margin-top: 2px;
 	color: inherit;
@@ -281,7 +396,7 @@
 	border: 1px solid #c5d0f0;
 	border-radius: 20px;
 	padding: 2px 10px 2px 8px;
-	font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+	font-size: clamp(0.8rem, 1.8vw, 0.92rem);
 	font-weight: 700;
 	color: #00008B;
 	cursor: pointer;
@@ -293,7 +408,7 @@
 }
 
 .bp-rt-update-link {
-	font-size: clamp(0.65rem, 1.3vw, 0.72rem);
+	font-size: clamp(0.8rem, 1.7vw, 0.9rem);
 	font-weight: 600;
 	color: #0055cc;
 	text-decoration: underline;
@@ -319,7 +434,7 @@
 	border: 1px solid #c0d8f0;
 	border-radius: 6px;
 	padding: 2px 8px;
-	font-size: clamp(0.62rem, 1.3vw, 0.72rem);
+	font-size: clamp(0.78rem, 1.7vw, 0.9rem);
 	font-weight: 600;
 	color: #1a4a7a;
 }
@@ -330,7 +445,7 @@
 	gap: 10px;
 	flex-wrap: wrap;
 	margin-bottom: 14px;
-	font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+	font-size: clamp(0.9rem, 2.2vw, 1.05rem);
 	color: #111;
 	padding: 2px;
 }
@@ -351,26 +466,23 @@
 	gap: 10px;
 	margin-bottom: 12px;
 
+	// Name+phone side must shrink so badges never get pushed out
+	>div:first-child {
+		min-width: 0;
+		flex: 1 1 0%;
+	}
+
 	@media (max-width: 480px) {
 		flex-direction: column;
 	}
 }
 
 .bp-passenger-name {
-	font-size: clamp(0.88rem, 2vw, 1rem);
+	font-size: clamp(1rem, 2.4vw, 1.125rem);
 	font-weight: 700;
 	color: #111;
-	font-family: 'PT Serif', serif;
-}
-
-.bp-passenger-phone {
-	font-size: clamp(0.75rem, 1.8vw, 0.85rem);
-	color: #0066cc !important;
-	text-decoration: none;
-
-	&:hover {
-		text-decoration: none;
-	}
+	word-break: break-word;
+	overflow-wrap: break-word;
 }
 
 // ── Pax badges ───────
@@ -378,6 +490,7 @@
 	display: flex;
 	gap: 8px;
 	flex-shrink: 0;
+	align-self: flex-start;
 }
 
 .bp-badge {
@@ -390,14 +503,14 @@
 }
 
 .bp-badge-value {
-	font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+	font-size: clamp(1rem, 2.4vw, 1.125rem);
 	font-weight: 800;
 	color: #111;
 	line-height: 1;
 }
 
 .bp-badge-label {
-	font-size: clamp(0.55rem, 1.2vw, 0.62rem);
+	font-size: clamp(0.7rem, 1.5vw, 0.78rem);
 	color: #888;
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
@@ -413,7 +526,7 @@
 }
 
 .bp-special-title {
-	font-size: clamp(0.6rem, 1.3vw, 0.68rem);
+	font-size: clamp(0.75rem, 1.6vw, 0.85rem);
 	font-weight: 800;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
@@ -422,7 +535,7 @@
 }
 
 .bp-special-body {
-	font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+	font-size: clamp(0.9rem, 2.2vw, 1rem);
 	color: #333;
 	line-height: 1.5;
 }
@@ -437,7 +550,7 @@
 }
 
 .bp-greet-label {
-	font-size: clamp(0.6rem, 1.3vw, 0.68rem);
+	font-size: clamp(0.75rem, 1.6vw, 0.85rem);
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.07em;
@@ -446,7 +559,7 @@
 }
 
 .bp-greet-value {
-	font-size: clamp(0.78rem, 1.8vw, 0.88rem);
+	font-size: clamp(0.92rem, 2.2vw, 1.05rem);
 	font-weight: 600;
 	color: #111;
 }
@@ -470,7 +583,7 @@
 }
 
 .bp-vehicle-icon {
-	font-size: clamp(1.5rem, 3.5vw, 2rem);
+	font-size: clamp(1.7rem, 4vw, 2.2rem);
 	line-height: 1;
 	flex-shrink: 0;
 }
@@ -480,20 +593,19 @@
 }
 
 .bp-vehicle-name {
-	font-size: clamp(0.85rem, 2vw, 0.95rem);
+	font-size: clamp(1rem, 2.4vw, 1.1rem);
 	font-weight: 700;
 	color: #111;
-	font-family: 'PT Serif', serif;
 }
 
 .bp-vehicle-sub {
-	font-size: clamp(0.68rem, 1.5vw, 0.78rem);
+	font-size: clamp(0.82rem, 1.8vw, 0.92rem);
 	color: #555;
 	margin-top: 1px;
 }
 
 .bp-vehicle-plate {
-	font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+	font-size: clamp(0.85rem, 1.8vw, 0.95rem);
 	font-weight: 700;
 	color: #333;
 	margin-top: 2px;
@@ -514,7 +626,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+	font-size: clamp(0.8rem, 1.7vw, 0.9rem);
 	font-weight: 800;
 	color: #fff;
 	flex-shrink: 0;
@@ -529,21 +641,21 @@
 }
 
 .bp-person-name {
-	font-size: clamp(0.78rem, 1.8vw, 0.88rem);
+	font-size: clamp(0.92rem, 2.2vw, 1.05rem);
 	font-weight: 700;
 	color: #111;
 	line-height: 1.3;
 }
 
 .bp-person-email {
-	font-size: clamp(0.65rem, 1.4vw, 0.75rem);
+	font-size: clamp(0.8rem, 1.7vw, 0.9rem);
 	color: #0066cc;
 	word-break: break-all;
 	margin-top: 2px;
 }
 
 .bp-person-phone {
-	font-size: clamp(0.68rem, 1.4vw, 0.78rem);
+	font-size: clamp(0.82rem, 1.7vw, 0.92rem);
 	color: #444;
 	margin-top: 2px;
 }
@@ -579,7 +691,7 @@
 }
 
 .preview-output-field {
-	font-size: 19px;
+	font-size: 18px;
 }
 
 // ── Rate Distribution – responsive ─────
@@ -622,7 +734,7 @@
 			min-width: 0 !important;
 
 			span {
-				font-size: 0.75rem !important;
+				font-size: 0.9rem !important;
 				font-weight: 600 !important;
 				color: inherit;
 				display: block;
@@ -642,7 +754,7 @@
 		}
 
 		.preview-output-field {
-			font-size: 0.95rem !important;
+			font-size: 1.1rem !important;
 			font-weight: 700 !important;
 			white-space: nowrap !important;
 			display: block !important;
@@ -651,7 +763,7 @@
 
 		.col-md-8.value>*:not(.preview-output-field),
 		.col-md-8.value>b {
-			font-size: 0.6rem !important;
+			font-size: 0.75rem !important;
 			color: #999 !important;
 			font-weight: 400 !important;
 			text-align: right !important;
