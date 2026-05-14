@@ -1388,7 +1388,7 @@ button.link {
 	// Promo Text: "All Inclusive Rate include gratuity *"
 	.promo-text {
 		font-size: 16px;
-		color: red; 
+		color: red;
 		font-weight: 700;
 		margin-bottom: 12px;
 	}
@@ -1712,7 +1712,7 @@ button.link {
 		max-width: calc(100% - 0.75rem);
 		border: 1px solid rgba(0, 0, 0, 0.04);
 		margin-bottom: 1rem !important;
-		
+
 		p {
 			display: flex;
 			align-items: center;
@@ -1848,6 +1848,180 @@ button.link {
 
 		.contact-action-card {
 			padding: 0 0.25rem;
+		}
+	}
+}
+
+
+// ==========================================
+// MOBILE CARD: Match master-vehicle horizontal row layout
+// ==========================================
+
+// ==========================================
+// MOBILE CARD: Match master-vehicle horizontal row layout
+// Targets same breakpoint as hideInDesktop (max-width: 1025px)
+// ==========================================
+
+@media only screen and (max-width: 760px) {
+
+	// Card outer: remove extra padding, no min-height
+	.vehicle-grid-card .card.vehicle-listing-card {
+		padding: 8px !important;
+		border: 2px solid white !important;
+		border-radius: 12px !important;
+		box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.12) !important;
+	}
+
+	// Switch layout from vertical column → horizontal row
+	.modern-vehicle-card-content.reference-layout {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: flex-start !important;
+		gap: 10px !important;
+		height: auto !important; // kill the height: 100% fighting layout
+		padding: 0 !important;
+	}
+
+	// LEFT: Image block — fixed width, fixed height, no aspect-ratio
+	.card-image-wrapper {
+		width: 110px !important;
+		min-width: 110px !important;
+		max-width: 110px !important;
+		height: 110px !important;
+		aspect-ratio: unset !important;
+		margin-bottom: 0 !important;
+		border-radius: 8px !important;
+		flex-shrink: 0 !important;
+		background-color: #f7f7f7;
+		overflow: hidden;
+
+		.vehicle-main-image {
+			width: 100% !important;
+			height: 100% !important;
+			object-fit: contain !important;
+			text-align: center;
+		}
+
+		// Kill hover zoom on touch
+		&:hover .vehicle-main-image {
+			transform: none !important;
+		}
+	}
+
+	// RIGHT: Body content
+	.card-body-content {
+		flex: 1 !important;
+		min-width: 0 !important; // prevents overflow past card edge
+		padding: 0 !important;
+		overflow: hidden;
+
+		// Price row: label + amount on same line, compact
+		.price-row {
+			flex-direction: row !important;
+			align-items: baseline !important;
+			flex-wrap: wrap;
+			margin-bottom: 3px !important;
+			gap: 4px;
+
+			.price-label {
+				font-size: 0.72rem !important;
+				color: #555 !important;
+				margin-right: 4px !important;
+				font-weight: 500;
+			}
+
+			.price-amount {
+				font-size: 0.95rem !important;
+				font-weight: 800 !important;
+			}
+		}
+
+		// Promo text: small red text
+		.promo-text {
+			font-size: 0.65rem !important;
+			margin-bottom: 4px !important;
+			line-height: 1.2 !important;
+			color: red;
+		}
+
+		// Vehicle name
+		.vehicle-name {
+			font-size: 0.85rem !important;
+			font-weight: 700 !important;
+			margin-bottom: 4px !important;
+			line-height: 1.2 !important;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		// Pax / Luggage badges
+		.passnger-luggage-div {
+			gap: 4px !important;
+			margin-bottom: 4px !important;
+			flex-wrap: wrap !important;
+
+			.icon-container-mobile {
+				padding: 1px 5px !important;
+				font-size: 0.7rem;
+
+				span {
+					font-size: 0.7rem !important;
+				}
+
+				img {
+					width: 12px !important;
+				}
+			}
+
+			// Amenities link inline
+			.amenities-link {
+				font-size: 0.7rem !important;
+				margin-left: auto !important;
+			}
+		}
+
+		// Year Make Model
+		.details-text {
+			font-size: 0.7rem !important;
+			font-weight: 600 !important;
+			margin-bottom: 3px !important;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		// Cancellation policy row
+		.meta-row {
+			margin-bottom: 6px !important;
+
+			.policy-text {
+				font-size: 0.65rem !important;
+				line-height: 1.2 !important;
+			}
+
+			i.bi-exclamation-circle-fill {
+				font-size: 0.65rem !important;
+			}
+		}
+
+		// Action buttons: side by side, compact
+		.actions-row {
+			gap: 5px !important;
+
+			.btn-reference {
+				padding: 6px 4px !important;
+				font-size: 0.68rem !important;
+				border-radius: 6px !important;
+				box-shadow: none !important;
+				font-weight: 700;
+				line-height: 1.2;
+
+				&:hover {
+					transform: none !important;
+					box-shadow: none !important;
+				}
+			}
 		}
 	}
 }

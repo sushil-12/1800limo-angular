@@ -515,6 +515,8 @@
 			</div>
 		</section>
 
+
+		<!-- VEHICLE LISTING SECTION IN MOBILE -->
 		<div id="vehicle-listing-container" class="hideInDesktop col-md-12 col-lg-9 col-xl-10"
 			[ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
 
@@ -568,7 +570,7 @@
 			</p>
 			<div class="vehicle-grid-card" style="grid-gap: 15px !important;">
 				<div id="vehicle-listing-card_{{ vehinfo_index }}" class="card vehicle-listing-card"
-					style="padding: 12px;" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
+					style="padding: 10px;" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
 					(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
@@ -927,8 +929,9 @@
 										<i class="fas fa-user-circle mr-2 modal-theme-icon"></i>
 										<span style="cursor:pointer; text-decoration: underline;">{{
 											passengerDetails?.affiliate_name }}<ng-container
-											*ngIf="passengerDetails?.affiliate_company">{{
-											' (' + passengerDetails?.affiliate_company + ')' }}</ng-container></span>
+												*ngIf="passengerDetails?.affiliate_company">{{
+												' (' + passengerDetails?.affiliate_company + ')'
+												}}</ng-container></span>
 									</p>
 									<p class="text-dark font-weight-500"
 										*ngIf="passengerDetails?.badge_city && passengerDetails?.badge_city != 'N/A'">

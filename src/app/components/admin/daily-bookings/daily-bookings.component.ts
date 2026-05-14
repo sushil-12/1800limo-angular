@@ -38,6 +38,8 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	@ViewChild("select") select: MatSelect;
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 
+	pinnedBookingIds: string[] = [];
+
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -191,6 +193,13 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			this.isCancelled = JSON.parse(localStorage.getItem('is_subscription_cancelled'))
 		}
 
+		const storedPins = localStorage.getItem('pinnedBookingIds');
+		if (storedPins) {
+			try {
+				this.pinnedBookingIds = JSON.parse(storedPins);
+			} catch (e) { this.pinnedBookingIds = []; }
+		}
+
 	}
 
 	ngAfterViewInit(): void {
@@ -212,6 +221,23 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	get printGeneratedAt(): string {
 		return moment().format('MM/DD/YYYY, HH:mm');
+	}
+
+	togglePin(bookingId: string): void {
+		const index = this.pinnedBookingIds.indexOf(bookingId);
+		if (index === -1) {
+			this.pinnedBookingIds.push(bookingId);
+		} else {
+			this.pinnedBookingIds.splice(index, 1);
+		}
+		localStorage.setItem('pinnedBookingIds', JSON.stringify(this.pinnedBookingIds));
+		this.filterBookingsByStatus();   // reorder table
+	}
+
+	unpinAll(): void {
+		this.pinnedBookingIds = [];
+		localStorage.removeItem('pinnedBookingIds');
+		this.filterBookingsByStatus();
 	}
 
 	printDailyBookings(): void {
@@ -509,6 +535,9 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		localStorage.removeItem("DBSearch");
 		localStorage.removeItem("useDateFilter");
 		localStorage.removeItem("DBS_Status");
+		// Clear pinned booking
+		this.pinnedBookingIds = [];
+		localStorage.removeItem('pinnedBookingIds');
 		this.useDateFilter = false;
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
@@ -527,6 +556,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			this.selectedStatus,
 			true
 		);
+
 	}
 
 	applyStatusFilter(status: any) {
@@ -539,14 +569,14 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.filterBookingsByStatus();
 	}
 
+
 	filterBookingsByStatus() {
-		if (this.selectedStatus && this.selectedStatus != "") {
-			this.bookings = this.bookings_Original.filter((booking: any) => {
-				return booking.booking_status == this.selectedStatus;
-			});
-		} else {
-			this.bookings = [...this.bookings_Original];
+		let unpinned = [...this.bookings_Original].filter(b => !this.pinnedBookingIds.includes(b.booking_id));
+		if (this.selectedStatus && this.selectedStatus !== "") {
+			unpinned = unpinned.filter(b => b.booking_status == this.selectedStatus);
 		}
+		const pinned = this.bookings_Original.filter(b => this.pinnedBookingIds.includes(b.booking_id));
+		this.bookings = [...pinned, ...unpinned];
 	}
 
 
