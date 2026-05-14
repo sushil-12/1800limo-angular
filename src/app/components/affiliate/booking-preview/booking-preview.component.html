@@ -319,11 +319,23 @@
 
 					<!-- ── Passenger Information ── -->
 					<div class="bp-card bp-card-full">
-						<!-- Special Instruction -->
+
+						<!--Special Information-->
 						<div class="bp-special-instruction">
 							<div class="bp-special-title">Special Instruction</div>
 							<div class="bp-special-body box-special-instruction" style="white-space: pre-wrap;"
+								#specialInstructionBox
 								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+							</div>
+
+							<!-- Scroll Controls – only shown when content overflows -->
+							<div class="bp-scroll-controls" *ngIf="isScrollable">
+								<button class="bp-scroll-btn" (click)="scrollInstruction('up')" title="Scroll Up">
+									<i class="bi bi-chevron-up"></i>
+								</button>
+								<button class="bp-scroll-btn" (click)="scrollInstruction('down')" title="Scroll Down">
+									<i class="bi bi-chevron-down"></i>
+								</button>
 							</div>
 						</div>
 
@@ -344,7 +356,6 @@
 							</div>
 						</div>
 					</div>
-					<!-- /passenger card -->
 
 
 					<!-- ── Google Map ── -->
