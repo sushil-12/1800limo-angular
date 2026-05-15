@@ -95,6 +95,7 @@ import { ClientTCComponent } from './components/website/client-t-c/client-t-c.co
 import { InvestorsComponent } from './components/website/investors/investors.component';
 import { BlogComponent } from './components/website/blog/blog.component';
 import { BlogDetailComponent } from './components/website/blog-detail/blog-detail.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
 	declarations: [
@@ -177,7 +178,13 @@ import { BlogDetailComponent } from './components/website/blog-detail/blog-detai
 		NgSelectModule,
 		NgxChartsModule,
 		BsDatepickerModule,
-		NgxDaterangepickerMd.forRoot()
+		NgxDaterangepickerMd.forRoot(),
+		ToastrModule.forRoot({
+			positionClass: 'toast-top-right',
+			timeOut: 3000,
+			closeButton: true,
+			progressBar: true,
+		})
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

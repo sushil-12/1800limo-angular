@@ -41,6 +41,7 @@
     "ngx-material-timepicker": "^13.1.1",
     "ngx-quill": "^26.0.0",
     "ngx-spinner": "^17.0.0",
+    "ngx-toastr": "^18.0.0",
     "quill": "^2.0.2",
     "rxjs": "^7.8.1",
     "screenfull": "^6.0.2",

@@ -21,6 +21,7 @@ import { UploadService } from "../../../services/upload.service";
 import { GoogleMap } from '@angular/google-maps';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker'; // Import for config if needed
 import { MapUtils } from '../../../utils/map-utils';
+import { ToastrService } from "ngx-toastr";
 
 
 @Component({
@@ -130,6 +131,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
 		private uploadService: UploadService,
+		private toastr: ToastrService,
 		private bsConfig: BsDatepickerConfig // Optional: Inject for custom config
 	) {
 		// Optional: Set global config for datepicker
@@ -249,19 +251,21 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	togglePin(bookingId: string): void {
 		const index = this.pinnedBookingIds.indexOf(bookingId);
+		let action: 'pinned' | 'unpinned';
 		if (index === -1) {
 			this.pinnedBookingIds.push(bookingId);
+			action = 'pinned';
 		} else {
 			this.pinnedBookingIds.splice(index, 1);
+			action = 'unpinned';
 		}
-		localStorage.setItem('pinnedBookingIds', JSON.stringify(this.pinnedBookingIds));
-		this.filterBookingsByStatus();   // reorder table
-	}
 
-	unpinAll(): void {
-		this.pinnedBookingIds = [];
-		localStorage.removeItem('pinnedBookingIds');
-		this.filterBookingsByStatus();
+		this.filterBookingsByStatus();   // reorder table
+		if (action === 'pinned') {
+			this.toastr.success(`Booking #${bookingId} pinned`);
+		} else {
+			this.toastr.success(`Booking #${bookingId} unpinned`);
+		}
 	}
 
 	printDailyBookings(): void {
