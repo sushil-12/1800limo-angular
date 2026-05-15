@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		applyLabel: 'Apply',
 		cancelLabel: 'Cancel',
 		daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-		monthNames: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+		monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		firstDay: 0
 	};
 
@@ -152,7 +152,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	progressWidth: number = 25; // Progress line width percentage
 	private quoteBotAutofillSyncInterval?: ReturnType<typeof setInterval>;
 	private quoteBotAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
-    private focusedField: string | null = null;
+	private focusedField: string | null = null;
 
 	// Extra stops & amenities
 	amenitiesList: any[] = [];
@@ -169,7 +169,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	blogVisibleCount = 3;   // cards visible at once on desktop
 	blogSlideWidth = 0;
 
-    @ViewChild('blogSliderRef') blogSliderRef!: ElementRef;
+
+	scIndex = 0;
+	scDots: number[] = [];
+	private scTimer: any;
+
+	@ViewChild('blogSliderRef') blogSliderRef!: ElementRef;
 
 
 	constructor(
@@ -190,6 +195,27 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private amenitiesService: AmenitiesService,
 		private blogService: BlogService
 	) { }
+
+	get scTotal(): number {
+		return this.fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')
+			?.slider_type_content?.length || 0;
+	}
+
+	initServiceCarousel() {
+		this.scDots = Array.from({ length: this.scTotal }, (_, i) => i);
+		this.scStartAuto();
+	}
+
+	scGoTo(i: number) { this.scIndex = Math.max(0, Math.min(i, this.scTotal - 1)); }
+	scNext() { this.scGoTo(this.scIndex + 1); }
+	scPrev() { this.scGoTo(this.scIndex - 1); }
+
+	scStartAuto() {
+		clearInterval(this.scTimer);
+		this.scTimer = setInterval(() => {
+			this.scGoTo(this.scIndex === this.scTotal - 1 ? 0 : this.scIndex + 1);
+		}, 3200);
+	}
 
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
@@ -241,7 +267,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
 		this.metaService.updateTag({ name: 'twitter:title', content: '1800 Limo - Premium Chauffeur & Luxury Transportation Services' });
 		this.metaService.updateTag({ name: 'twitter:description', content: '1800 Limo offers premium chauffeur services, luxury vehicle hire, and airport transfers worldwide.' });
-    
+
 		this.isVehicleLoading = true;
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
@@ -834,7 +860,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	isFieldFocused(fieldName: string): boolean {
-	  return this.focusedField === fieldName;
+		return this.focusedField === fieldName;
 	}
 
 	onAddressFieldTouchEnd(event: TouchEvent, inputEl: HTMLInputElement): void {
@@ -848,12 +874,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	onAddressFieldFocus(fieldName: string, inputEl: HTMLInputElement): void {
-		 this.focusedField = fieldName;
+		this.focusedField = fieldName;
 
 		if (!('ontouchstart' in window)) {
 			inputEl.select();
 		}
-		
+
 		this.openAddressDropdown(fieldName);
 	}
 
@@ -956,18 +982,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		const hasAirportWord = combined.includes('airport');
 
 		return hasIataCode || hasAirportWord;
-    }
+	}
 
 	async selectAddressOption(address: any, fieldName: string): Promise<void> {
 		this.clearAddressDropdownBlurTimer();
 
-		 const types: string[] = Array.isArray(address?.types) ? address.types : [];
+		const types: string[] = Array.isArray(address?.types) ? address.types : [];
 		const isTypedAsAirport = types.some((t) =>
 			['airport', 'aerodrome'].includes(String(t).toLowerCase())
 		);
 		const isAirportResult = address?.isAddressAirportResult
 			|| isTypedAsAirport
-			|| this.isAirportTerminalAddress(address); 
+			|| this.isAirportTerminalAddress(address);
 
 		if (isAirportResult) {
 			const airportField = this.getCorrespondingAirportFieldName(fieldName);
@@ -1815,106 +1841,106 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	private searchGoogleAirportPredictions(searchText: string, fieldName: string): Promise<Array<any>> {
-  const rawSearchText = String(searchText || '').trim();
-  if (!rawSearchText) {
-    return Promise.resolve([]);
-  }
-
-  const baseSearchText = this.getAirportBaseQuery(rawSearchText) || rawSearchText;
-  const terminalSearchText = `${baseSearchText} terminal`.trim();
-  const sessionToken = this.getOrCreateAirportSessionToken(fieldName);
-
-  return Promise.all([
-    this.fetchGooglePlaceAutocompleteSuggestions(baseSearchText, sessionToken),
-    this.fetchGooglePlaceAutocompleteSuggestions(terminalSearchText, sessionToken)
-  ])
-    .then(([airportSuggestionResponse, terminalSuggestionResponse]) => {
-
-      const airportPredictions = airportSuggestionResponse
-        .map((suggestion: any) => suggestion?.placePrediction)
-        .filter((prediction: any) => !!prediction?.placeId)
-        .filter((prediction: any) => this.getAirportPredictionType(prediction) === 'airport')
-        .map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText));
-
-      // 🚫 HARD NEGATIVE KEYWORDS
-      const HARD_NEGATIVE_KEYWORDS = [
-        'lab', 'laboratory', 'research', 'defence', 'defense',
-        'hospital', 'clinic', 'diagnostic', 'pharmacy',
-        'bus', 'metro', 'railway', 'train', 'station', 'port',
-        'cargo', 'container', 'logistics', 'freight',
-         'harbour', 'harbor', 'cruise', 'ferry',
-        'tower', 'business', 'park', 'office', 'complex',
-        'college', 'university', 'institute'
-      ];
-
-      const NON_AIRPORT_TYPES = new Set([
-        'health', 'doctor', 'hospital', 'dentist', 'pharmacy', 'drugstore',
-        'restaurant', 'food', 'cafe', 'lodging', 'store', 'school',
-        'university', 'bank', 'finance', 'real_estate_agency', 'medical_clinic', 'point_of_interest'
-      ]);
-
-      const STOPWORDS = new Set(['international', 'airport', 'terminal', 'the', 'and', 'for']);
-
-      const airportNameWords = baseSearchText
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((w) => w.length >= 4 && !STOPWORDS.has(w));
-
-      const terminalPredictions = terminalSuggestionResponse
-        .map((suggestion: any) => suggestion?.placePrediction)
-        .filter((prediction: any) => !!prediction?.placeId)
-        .filter((prediction: any) => {
-
-          const types: string[] = Array.isArray(prediction?.types)
-            ? prediction.types.map((t: any) => String(t).toLowerCase())
-            : [];
-
-          const desc = String(
-            prediction?.text?.text || prediction?.description || ''
-          ).toLowerCase();
-
-          // 🚫 1. Block non-airport Google types
-          if (types.some((t) => NON_AIRPORT_TYPES.has(t))) return false;
-
-        const matchedKeywords = HARD_NEGATIVE_KEYWORDS.filter((keyword) => {
-			const regex = new RegExp(`\\b${keyword}\\b`, 'i'); // exact word match
-			return regex.test(desc);
-		});
-
-			if (matchedKeywords) {
-			console.log(
-				`❌ Filtered due to keyword: "${matchedKeywords}" | Description: "${desc}"`
-			);
-			// return false;
+		const rawSearchText = String(searchText || '').trim();
+		if (!rawSearchText) {
+			return Promise.resolve([]);
 		}
 
-          // ✅ 3. Must contain "terminal"
-          if (!desc.includes('terminal')) return false;
+		const baseSearchText = this.getAirportBaseQuery(rawSearchText) || rawSearchText;
+		const terminalSearchText = `${baseSearchText} terminal`.trim();
+		const sessionToken = this.getOrCreateAirportSessionToken(fieldName);
 
-          // ✅ 4. Must be linked to airport context
-          const isAirportContext =
-            desc.includes('airport') ||
-            (airportNameWords.length > 0 &&
-              airportNameWords.some((w) => desc.includes(w)));
+		return Promise.all([
+			this.fetchGooglePlaceAutocompleteSuggestions(baseSearchText, sessionToken),
+			this.fetchGooglePlaceAutocompleteSuggestions(terminalSearchText, sessionToken)
+		])
+			.then(([airportSuggestionResponse, terminalSuggestionResponse]) => {
 
-          return isAirportContext;
-        })
-        .map((prediction: any) =>
-          this.mapAirportPrediction(prediction, baseSearchText)
-        );
+				const airportPredictions = airportSuggestionResponse
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.filter((prediction: any) => this.getAirportPredictionType(prediction) === 'airport')
+					.map((prediction: any) => this.mapAirportPrediction(prediction, baseSearchText));
 
-      if (!terminalPredictions.length) {
-        return this.dedupeAirportDropdownOptions(airportPredictions);
-      }
+				// 🚫 HARD NEGATIVE KEYWORDS
+				const HARD_NEGATIVE_KEYWORDS = [
+					'lab', 'laboratory', 'research', 'defence', 'defense',
+					'hospital', 'clinic', 'diagnostic', 'pharmacy',
+					'bus', 'metro', 'railway', 'train', 'station', 'port',
+					'cargo', 'container', 'logistics', 'freight',
+					'harbour', 'harbor', 'cruise', 'ferry',
+					'tower', 'business', 'park', 'office', 'complex',
+					'college', 'university', 'institute'
+				];
 
-      return this.mergeAirportAndTerminalPredictions(
-        airportPredictions,
-        terminalPredictions,
-        baseSearchText
-      );
-    })
-    .catch(() => []);
-}
+				const NON_AIRPORT_TYPES = new Set([
+					'health', 'doctor', 'hospital', 'dentist', 'pharmacy', 'drugstore',
+					'restaurant', 'food', 'cafe', 'lodging', 'store', 'school',
+					'university', 'bank', 'finance', 'real_estate_agency', 'medical_clinic', 'point_of_interest'
+				]);
+
+				const STOPWORDS = new Set(['international', 'airport', 'terminal', 'the', 'and', 'for']);
+
+				const airportNameWords = baseSearchText
+					.toLowerCase()
+					.split(/\s+/)
+					.filter((w) => w.length >= 4 && !STOPWORDS.has(w));
+
+				const terminalPredictions = terminalSuggestionResponse
+					.map((suggestion: any) => suggestion?.placePrediction)
+					.filter((prediction: any) => !!prediction?.placeId)
+					.filter((prediction: any) => {
+
+						const types: string[] = Array.isArray(prediction?.types)
+							? prediction.types.map((t: any) => String(t).toLowerCase())
+							: [];
+
+						const desc = String(
+							prediction?.text?.text || prediction?.description || ''
+						).toLowerCase();
+
+						// 🚫 1. Block non-airport Google types
+						if (types.some((t) => NON_AIRPORT_TYPES.has(t))) return false;
+
+						const matchedKeywords = HARD_NEGATIVE_KEYWORDS.filter((keyword) => {
+							const regex = new RegExp(`\\b${keyword}\\b`, 'i'); // exact word match
+							return regex.test(desc);
+						});
+
+						if (matchedKeywords) {
+							console.log(
+								`❌ Filtered due to keyword: "${matchedKeywords}" | Description: "${desc}"`
+							);
+							// return false;
+						}
+
+						// ✅ 3. Must contain "terminal"
+						if (!desc.includes('terminal')) return false;
+
+						// ✅ 4. Must be linked to airport context
+						const isAirportContext =
+							desc.includes('airport') ||
+							(airportNameWords.length > 0 &&
+								airportNameWords.some((w) => desc.includes(w)));
+
+						return isAirportContext;
+					})
+					.map((prediction: any) =>
+						this.mapAirportPrediction(prediction, baseSearchText)
+					);
+
+				if (!terminalPredictions.length) {
+					return this.dedupeAirportDropdownOptions(airportPredictions);
+				}
+
+				return this.mergeAirportAndTerminalPredictions(
+					airportPredictions,
+					terminalPredictions,
+					baseSearchText
+				);
+			})
+			.catch(() => []);
+	}
 
 	private fetchGoogleAirportDetails(placeId: string, fallbackName = ''): Promise<{ id: string; name: string; latitude: number; longitude: number } | null> {
 		const service = this.getAirportPlacesService();
@@ -2031,6 +2057,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.initClientCarousel();
 					this.initOtherCarousels();
 					this.initStepRotation(); // Initialize step rotation animation
+					this.initServiceCarousel()
 				}, 100);
 			})
 
@@ -2202,7 +2229,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		} else {
 			this.selectedAmenities.splice(idx, 1);
 		}
-		
+
 		this.amenitiesService.updateSelectedAmenities([...this.selectedAmenities]);
 	}
 
@@ -2981,7 +3008,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	SetFormValue(
 		field_name: string,
-		value: string | number, 
+		value: string | number,
 		options: QuoteBotControlSyncOptions = {}
 	) {
 		console.log(`Filling ${value} into ${field_name}`)
@@ -3089,7 +3116,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	handleClearMouseDown(event: MouseEvent, input: HTMLInputElement) {
 		event.preventDefault();
-		input.focus(); 
+		input.focus();
 	}
 
 	/**
@@ -3169,12 +3196,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	onRoundTripRangeChange(event: { startDate: any; endDate: any }) {
 		if (!event || !event.startDate || !event.endDate) return;
 		const startStr = event.startDate?.format ? event.startDate.format('YYYY-MM-DD') : dayjs(event.startDate).format('YYYY-MM-DD');
-		const endStr   = event.endDate?.format   ? event.endDate.format('YYYY-MM-DD')   : dayjs(event.endDate).format('YYYY-MM-DD');
+		const endStr = event.endDate?.format ? event.endDate.format('YYYY-MM-DD') : dayjs(event.endDate).format('YYYY-MM-DD');
 		this.SetFormValue('pickup_date', startStr);
 		this.SetFormValue('return_pickup_date', endStr);
 		this.roundTripRange = { startDate: event.startDate, endDate: event.endDate };
 		this.rtLiveStart = event.startDate;
-		this.rtLiveEnd   = event.endDate;
+		this.rtLiveEnd = event.endDate;
 		this.roundTripSelectionTarget = 'pickup';
 		this.roundTripPickerOpen = false;
 		this.scheduleRoundTripPickerPanelSync();
@@ -3267,7 +3294,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	openRoundTripRangePicker(target: 'pickup' | 'return' = 'pickup'): void {
 		this.rtLiveStart = this.roundTripRange?.startDate ?? null;
-		this.rtLiveEnd   = this.roundTripRange?.endDate ?? null;
+		this.rtLiveEnd = this.roundTripRange?.endDate ?? null;
 		this.roundTripPickerOpen = true;
 		// Wait one tick for *ngIf to render the modal and the input inside it
 		setTimeout(() => {
@@ -3281,7 +3308,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}, 0);
 	}
 
-	
+
 
 	onRoundTripPickerStartDateChanged(event: any): void {
 		const picker = this.roundTripRangePicker?.picker;
@@ -3303,7 +3330,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.scheduleRoundTripPickerPanelSync();
 	}
 
-	private scheduleRoundTripPickerPanelSync(): void {}
+	private scheduleRoundTripPickerPanelSync(): void { }
 
 	locationInfo(rows: Array<any>, index: number) {
 		let group = this.formBuilder.group({
@@ -3751,13 +3778,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.quoteBotForm.value['other_details'] = this.vars
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`, this.quoteBotForm.value)
-				const quotebotPayload = {
-					...this.quoteBotForm.value,
-					extra_stops: this.getPersistedExtraStops(),
-					return_extra_stops: this.QBForm.service_type.value === 'round_trip' ? this.getPersistedExtraStops(true) : [],
-					amenities: this.selectedAmenities,
-					chargedAmenities: []
-				};
+			const quotebotPayload = {
+				...this.quoteBotForm.value,
+				extra_stops: this.getPersistedExtraStops(),
+				return_extra_stops: this.QBForm.service_type.value === 'round_trip' ? this.getPersistedExtraStops(true) : [],
+				amenities: this.selectedAmenities,
+				chargedAmenities: []
+			};
 			localStorage.setItem('quotebot_form', JSON.stringify(quotebotPayload));
 			const hasAmenities = this.selectedAmenities.length > 0;
 			this.router.navigate(['quotebot/master-vehicle'], hasAmenities ? { queryParams: { autoApply: 1 } } : {});
@@ -3827,20 +3854,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				return_pickup_address_long: this.quoteBotForm.get('return_dropoff_address_long')?.value,
 				return_dropoff_airport_lat: this.quoteBotForm.get('return_pickup_airport_lat')?.value,
 				return_dropoff_airport_long: this.quoteBotForm.get('return_pickup_airport_long')?.value,
-					return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
-					return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
-				})
+				return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
+				return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
+			})
 
-				if (this.QBForm.service_type.value == 'round_trip') {
-					this.extraStops = currentReturnStops;
-					this.returnExtraStops = currentOutboundStops;
-					this.refreshExtraStopAutocompletes();
-					this.refreshExtraStopAutocompletes(true);
-				}
+			if (this.QBForm.service_type.value == 'round_trip') {
+				this.extraStops = currentReturnStops;
+				this.returnExtraStops = currentOutboundStops;
+				this.refreshExtraStopAutocompletes();
+				this.refreshExtraStopAutocompletes(true);
+			}
 
-			} catch (error) {
-				this.spinner.hide()
-				console.log(error)
+		} catch (error) {
+			this.spinner.hide()
+			console.log(error)
 		}
 		// need to set values of vars
 		this.vars = {
@@ -3849,14 +3876,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 		// if round trip selected
 
-			if (this.QBForm.service_type.value == 'round_trip') {
-				this.vars['return_dropoff_airport_name'] = this.vars['pickup_airport_name']
-				this.vars['return_pickup_airport_name'] = this.vars['dropoff_airport_name']
-			}
-			this.persistQuoteBotState();
-			this.spinner.hide()
-
+		if (this.QBForm.service_type.value == 'round_trip') {
+			this.vars['return_dropoff_airport_name'] = this.vars['pickup_airport_name']
+			this.vars['return_pickup_airport_name'] = this.vars['dropoff_airport_name']
 		}
+		this.persistQuoteBotState();
+		this.spinner.hide()
+
+	}
 	ReturnNameOfAirportById(id: any) {
 		let airport = this.airports_data?.find((item) => item.id == id)
 		console.log('airport found-->>>', id, airport)
@@ -4498,6 +4525,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.clientLogoSwiper.destroy(true, true);
 			this.clientLogoSwiper = null;
 		}
+		clearInterval(this.scTimer);
 	}
 
 	toggleAppStorePopup() {
@@ -4505,58 +4533,58 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	get blogMaxIndex(): number {
-	return Math.max(0, this.blogPosts.length - this.blogVisibleCount);
+		return Math.max(0, this.blogPosts.length - this.blogVisibleCount);
 	}
 
 	get blogDots(): number[] {
-	return Array(this.blogMaxIndex + 1).fill(0);
+		return Array(this.blogMaxIndex + 1).fill(0);
 	}
 
 	// ── Call this inside ngOnInit ─────────────────────────────────
 	loadBlogPosts(): void {
-	this.blogLoading = true;
-	this.blogService.getPosts().subscribe({
-		next: (posts) => {
-		this.blogPosts = posts.slice(0, 9); // show up to 9 posts in slider
-		this.blogLoading = false;
-		setTimeout(() => this.updateSlideWidth(), 100);
-		},
-		error: () => { this.blogLoading = false; }
-	});
+		this.blogLoading = true;
+		this.blogService.getPosts().subscribe({
+			next: (posts) => {
+				this.blogPosts = posts.slice(0, 9); // show up to 9 posts in slider
+				this.blogLoading = false;
+				setTimeout(() => this.updateSlideWidth(), 100);
+			},
+			error: () => { this.blogLoading = false; }
+		});
 	}
 
 	updateSlideWidth(): void {
-	if (this.blogSliderRef?.nativeElement) {
-		const w = this.blogSliderRef.nativeElement.offsetWidth;
-		const gap = 20;
-		const count = window.innerWidth <= 575 ? 1 : window.innerWidth <= 991 ? 2 : 3;
-		this.blogVisibleCount = count;
-		this.blogSlideWidth = (w + gap) / count;
-	}
+		if (this.blogSliderRef?.nativeElement) {
+			const w = this.blogSliderRef.nativeElement.offsetWidth;
+			const gap = 20;
+			const count = window.innerWidth <= 575 ? 1 : window.innerWidth <= 991 ? 2 : 3;
+			this.blogVisibleCount = count;
+			this.blogSlideWidth = (w + gap) / count;
+		}
 	}
 
 	blogSliderNext(): void {
-	if (this.blogSliderIndex < this.blogMaxIndex) this.blogSliderIndex++;
+		if (this.blogSliderIndex < this.blogMaxIndex) this.blogSliderIndex++;
 	}
 
 	blogSliderPrev(): void {
-	if (this.blogSliderIndex > 0) this.blogSliderIndex--;
+		if (this.blogSliderIndex > 0) this.blogSliderIndex--;
 	}
 
 	blogSliderGoTo(i: number): void {
-	this.blogSliderIndex = i;
+		this.blogSliderIndex = i;
 	}
 
 	@HostListener('window:resize')
 	onResizeBlog(): void {
-	this.blogSliderIndex = 0;
-	this.updateSlideWidth();
+		this.blogSliderIndex = 0;
+		this.updateSlideWidth();
 	}
 
 	// Reuse from your blog component or copy here:
 	getExcerpt(html: string, maxLength = 100): string {
-	const text = html?.replace(/<[^>]+>/g, ' ').trim() || '';
-	return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+		const text = html?.replace(/<[^>]+>/g, ' ').trim() || '';
+		return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 	}
 }
 
