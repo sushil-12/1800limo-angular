@@ -121,6 +121,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { BookingPreviewModule } from '../affiliate/booking-preview/booking-preview.module';
 import { CcoAccountsComponent } from './cco-accounts/cco-accounts.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { QuillModule } from 'ngx-quill';
+
 
 @NgModule({
 	declarations: [
@@ -245,6 +247,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 			separator: ' - ',
 			applyLabel: 'Okay',
 		}),
+		QuillModule,
 	],
 	exports: [BookingStatusTextReplacePipe, MatIconModule, AiRateScoreDialogComponent]
 })
