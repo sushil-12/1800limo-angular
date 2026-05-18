@@ -29,16 +29,35 @@
 
 .modal-body {
 	padding: 0 !important;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(17, 24, 39, 0.28) transparent;
+
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: rgba(17, 24, 39, 0.22);
+		border-radius: 999px;
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		background: rgba(17, 24, 39, 0.4);
+	}
 }
 
-// ── Close button ──
+// ── Close button (stays pinned over the sticky header) ──
 .rcpt-close {
 	position: absolute;
-	top: 10px;
-	right: 12px;
-	z-index: 20;
-	opacity: 0.55;
-	color: #111 !important;
+	top: 12px;
+	right: 14px;
+	z-index: 30;
+	opacity: 0.85;
+	color: #e11d1d !important;
 	font-size: 26px;
 	background: none !important;
 	border: none !important;
@@ -48,6 +67,7 @@
 
 	&:hover {
 		opacity: 1;
+		color: #c20d0d !important;
 	}
 }
 
@@ -62,12 +82,17 @@
 	padding-right: clamp(16px, 4vw, 32px);
 }
 
-// ── Title ──
+// ── Title (sticky header) ──
 .rcpt-head {
 	@extend %rcpt-pad;
+	position: sticky;
+	top: 0;
+	z-index: 15;
 	text-align: center;
-	padding-top: 32px;
-	padding-bottom: 18px;
+	padding-top: 18px;
+	padding-bottom: 14px;
+	background: #fff;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .rcpt-head-title {
