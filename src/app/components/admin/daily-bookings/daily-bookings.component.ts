@@ -1835,27 +1835,27 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	accpetChargeAction() {
 		this.spinner.show()
-		let data = {
-			reservation_id: this.accept_charge_id
-		}
+		let data = { reservation_id: this.accept_charge_id }
 		this.adminService
 			.acceptCharge(data)
-			.pipe(
-				catchError((err) => {
-					return throwError(err);
-				})
-			)
+			.pipe(catchError(err => throwError(err)))
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				$("#accept_charge_modal").modal("hide");
 				$('#successModal').modal('show')
 				this.successMessage = 'Half payment have been charged successfully'
-				setTimeout(() => {
-					$('#successModal').modal('hide')
-				}, 2000)
-				console.log("accept charge action", response);
-			});
+				setTimeout(() => { $('#successModal').modal('hide') }, 2000)
 
+				// ✅ Just assign booking_status from API response
+				const index = this.bookings_Original.findIndex(
+					b => b.booking_id == this.accept_charge_id
+				);
+				if (index !== -1) {
+					this.bookings_Original[index].booking_status = response?.data?.reservation_details?.booking_status;
+					this.bookings_Original[index].charged_amount = response?.data?.reservation_details?.charged_amount;
+				}
+				this.filterBookingsByStatus();
+			});
 	}
 
 	chargeBackAction() {
