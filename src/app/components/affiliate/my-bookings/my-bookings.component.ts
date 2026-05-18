@@ -57,7 +57,8 @@ export class MyBookingsComponent implements OnInit {
 	timer: any
 
 	audit_Trail: any;
-	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
+	current: any = JSON.parse(localStorage.getItem('currentUser'));
+	company_name: string = this.current?.affiliate_company || this.current?.name || '';
 	cancelBookingId: any = null
 	useDateFilter: boolean = false;
 	currencySymbol: any;

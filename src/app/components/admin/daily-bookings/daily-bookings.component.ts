@@ -21,6 +21,8 @@ import { UploadService } from "../../../services/upload.service";
 import { GoogleMap } from '@angular/google-maps';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker'; // Import for config if needed
 import { MapUtils } from '../../../utils/map-utils';
+import { ToastrService } from "ngx-toastr";
+
 
 @Component({
 	selector: "app-daily-bookings",
@@ -109,6 +111,18 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	selectedEmailBookingShowChangedFields: boolean = false;
 	selectedEmailBookingStatus: string = '';
 	private afterPrintHandler?: () => void;
+	editorContent: string = '';
+
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline', 'strike'],
+			[{ 'list': 'ordered' }, { 'list': 'bullet' }],
+			[{ 'size': ['small', false, 'large', 'huge'] }],
+			[{ 'color': [] }, { 'background': [] }],
+			['link'],
+			['clean']
+		]
+	};
 
 	constructor(
 		private adminService: AdminService,
@@ -117,6 +131,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
 		private uploadService: UploadService,
+		private toastr: ToastrService,
 		private bsConfig: BsDatepickerConfig // Optional: Inject for custom config
 	) {
 		// Optional: Set global config for datepicker
@@ -185,6 +200,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ["", Validators.required],
 			emailTarget: ["", Validators.required],
+			text_message: ["", Validators.required]
 		});
 
 		if (this.currentUser?.created_by_role == 'subscriber') {
@@ -219,25 +235,37 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		document.body.classList.remove('printing-daily-bookings');
 	}
 
+	getEditorContent(): string {
+		if (this.sendMessageField) {
+			// SMS: directly from textarea DOM element (no form control needed)
+			return this.message?.nativeElement?.value || '';
+		} else {
+			// Email: from Quill editor
+			return this.editorContent;
+		}
+	}
+
 	get printGeneratedAt(): string {
 		return moment().format('MM/DD/YYYY, HH:mm');
 	}
 
 	togglePin(bookingId: string): void {
 		const index = this.pinnedBookingIds.indexOf(bookingId);
+		let action: 'pinned' | 'unpinned';
 		if (index === -1) {
 			this.pinnedBookingIds.push(bookingId);
+			action = 'pinned';
 		} else {
 			this.pinnedBookingIds.splice(index, 1);
+			action = 'unpinned';
 		}
-		localStorage.setItem('pinnedBookingIds', JSON.stringify(this.pinnedBookingIds));
-		this.filterBookingsByStatus();   // reorder table
-	}
 
-	unpinAll(): void {
-		this.pinnedBookingIds = [];
-		localStorage.removeItem('pinnedBookingIds');
-		this.filterBookingsByStatus();
+		this.filterBookingsByStatus();   // reorder table
+		if (action === 'pinned') {
+			this.toastr.success(`Booking #${bookingId} pinned`);
+		} else {
+			this.toastr.success(`Booking #${bookingId} unpinned`);
+		}
 	}
 
 	printDailyBookings(): void {
@@ -591,24 +619,29 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		}
 	}
 
-	messageField(format) {
-		setTimeout(() => {
-			this.sendEmailModalFocus.nativeElement
-				.querySelector("textarea")
-				.focus();
-		}, 1000);
+	messageField(format: string) {
 		this.show = true;
-		switch (format) {
-			case "Phone": {
-				this.sendMessageField = true;
-				break;
+		this.sendMessageField = format === "Phone";
+
+		// Wait for Angular to render the new input (SMS textarea or Email editor)
+		setTimeout(() => {
+			if (this.sendMessageField) {
+				// SMS mode
+				const defaultSms = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
+				if (this.message?.nativeElement) {
+					this.message.nativeElement.value = defaultSms;
+					this.sendEmailForm.patchValue({ text_message: defaultSms });
+					this.message.nativeElement.focus();
+				}
+			} else {
+				// Email mode
+				this.editorContent = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
+				const quillEditor = document.querySelector('.ql-editor') as HTMLElement;
+				if (quillEditor) quillEditor.focus();
 			}
-			case "Email": {
-				this.sendMessageField = false;
-				break;
-			}
-		}
+		}, 50);
 	}
+
 	highlighText(args: string) {
 		if (!this.searchText) {
 			return args;
@@ -862,6 +895,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 				}, 2000)
 				console.log(message);
 				$("textarea").val("");
+				this.editorContent = '';
 			});
 
 		// Clear file input after success
@@ -920,6 +954,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.fileInput.nativeElement.value = '';
 		this.uploadedFile = null;
 		this.fileType = null;
+		this.editorContent = '';
 		this.fileUrl = null;
 		this.show = false;
 		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
@@ -1109,16 +1144,18 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	openModal(booking: any, selection_button: string) {
 		console.log('Double-click detected, opening modal for:', booking);
 		$("#sendEmailModal").modal("show");
-		try {
-			setTimeout(() => {
-				// $('textarea').attr('autofocus', 'autofocus');
-				this.sendEmailModalFocus.nativeElement.querySelector("textarea").focus();
-				//add default message in the textarea
-				this.message.nativeElement.value = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
-			}, 1000);
-		} catch (error) {
-			console.log("----------error------->>>>>> ", error);
-		}
+		// try {
+		// 	setTimeout(() => {
+		// 		// $('textarea').attr('autofocus', 'autofocus');
+		// 		this.sendEmailModalFocus.nativeElement.querySelector("textarea").focus();
+		// 		//add default message in the textarea
+		// 		this.message.nativeElement.value = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
+		// 		this.sendEmailForm.patchValue({ text_message: this.message.nativeElement.value });
+		// 		this.editorContent = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
+		// 	}, 1000);
+		// } catch (error) {
+		// 	console.log("----------error------->>>>>> ", error);
+		// }
 		console.log("passenger details", booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
@@ -1798,27 +1835,27 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	accpetChargeAction() {
 		this.spinner.show()
-		let data = {
-			reservation_id: this.accept_charge_id
-		}
+		let data = { reservation_id: this.accept_charge_id }
 		this.adminService
 			.acceptCharge(data)
-			.pipe(
-				catchError((err) => {
-					return throwError(err);
-				})
-			)
+			.pipe(catchError(err => throwError(err)))
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				$("#accept_charge_modal").modal("hide");
 				$('#successModal').modal('show')
 				this.successMessage = 'Half payment have been charged successfully'
-				setTimeout(() => {
-					$('#successModal').modal('hide')
-				}, 2000)
-				console.log("accept charge action", response);
-			});
+				setTimeout(() => { $('#successModal').modal('hide') }, 2000)
 
+				// ✅ Just assign booking_status from API response
+				const index = this.bookings_Original.findIndex(
+					b => b.booking_id == this.accept_charge_id
+				);
+				if (index !== -1) {
+					this.bookings_Original[index].booking_status = response?.data?.reservation_details?.booking_status;
+					this.bookings_Original[index].charged_amount = response?.data?.reservation_details?.charged_amount;
+				}
+				this.filterBookingsByStatus();
+			});
 	}
 
 	chargeBackAction() {

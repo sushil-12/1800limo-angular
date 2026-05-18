@@ -43,6 +43,12 @@ hr {
 	color: #fff;
 }
 
+.booking_title {
+	overflow: hidden;
+	word-break: break-word;
+	font-size: clamp(1.15rem, 2vw, 1.5rem);
+}
+
 .box-outline {
 	border: solid 3px;
 	border-radius: 4px;
@@ -406,7 +412,7 @@ input::-webkit-input-placeholder {
 	}
 
 	.three-d-button {
-	
+
 		font-size: 13px !important;
 		font-weight: 700 !important;
 		border-radius: 10px !important;
@@ -420,10 +426,10 @@ input::-webkit-input-placeholder {
 		padding: 5px 10px !important;
 	}
 
-	 svg {
-        height: 15px !important;  
-        margin-right: 5px !important;  
-    }
+	svg {
+		height: 15px !important;
+		margin-right: 5px !important;
+	}
 }
 
 .asterisk {
@@ -732,80 +738,82 @@ input::-webkit-input-placeholder {
 }
 
 button.view-button {
-    color: #fff !important;
-    background-color: #f29439 !important;
-    border: 2px solid #f29439 !important;
-    padding: 5px 14px !important;
-    border-radius: 6px !important;  
-    font-size: 14px !important;
-    font-weight: bold !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 5px !important;
-    cursor: pointer !important;
-    outline: none !important;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
+	color: #fff !important;
+	background-color: #f29439 !important;
+	border: 2px solid #f29439 !important;
+	padding: 5px 14px !important;
+	border-radius: 6px !important;
+	font-size: 14px !important;
+	font-weight: bold !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 5px !important;
+	cursor: pointer !important;
+	outline: none !important;
+	transition: background-color 0.2s ease, box-shadow 0.2s ease !important;
 
-    &:hover, &:focus, &:active {
-        background-color: #d97e20 !important;
-        border-color: #d97e20 !important;
-        box-shadow: 0px 4px 8px rgba(242, 148, 57, 0.4) !important;
-    }
+	&:hover,
+	&:focus,
+	&:active {
+		background-color: #d97e20 !important;
+		border-color: #d97e20 !important;
+		box-shadow: 0px 4px 8px rgba(242, 148, 57, 0.4) !important;
+	}
 }
 
 button.view-button.dropdown-toggle::after {
-    font-size: 17px !important;
+	font-size: 17px !important;
 }
 
 .date-fields-wrapper {
-    flex-direction: row;
-    gap: 10px;
-    max-width: 620px; // increased from 520px to fit iPad Pro
+	flex-direction: row;
+	gap: 10px;
+	max-width: 620px; // increased from 520px to fit iPad Pro
 
-    @media (max-width: 575px) {
-        flex-direction: column !important;
-        flex: 1;
-        max-width: unset;
-        gap: 0;
-    }
+	@media (max-width: 575px) {
+		flex-direction: column !important;
+		flex: 1;
+		max-width: unset;
+		gap: 0;
+	}
 }
 
 .search-container-wrapper {
-    gap: 15px;
-    row-gap: 15px;
-    flex-wrap: nowrap; 
+	gap: 15px;
+	row-gap: 15px;
+	flex-wrap: nowrap;
 
-    .button-group {
-        margin-top: 10px;
-        flex-shrink: 0; 
+	.button-group {
+		margin-top: 10px;
+		flex-shrink: 0;
 
-        @media (min-width: 576px) {
-            margin-top: 6px;
-        }
-    }
+		@media (min-width: 576px) {
+			margin-top: 6px;
+		}
+	}
 
-    // Mobile only
-    @media (max-width: 575px) {
-        flex-wrap: nowrap !important;
-        align-items: flex-start !important;
+	// Mobile only
+	@media (max-width: 575px) {
+		flex-wrap: nowrap !important;
+		align-items: flex-start !important;
 
-        .button-group {
-            flex-direction: column !important;
-            flex-shrink: 0;
-            align-self: flex-start;
-            padding-top: 10px;
-            gap: 25px !important;
-            margin-top: 1px !important;
+		.button-group {
+			flex-direction: column !important;
+			flex-shrink: 0;
+			align-self: flex-start;
+			padding-top: 10px;
+			gap: 25px !important;
+			margin-top: 1px !important;
 
-            div {
-                margin: 0 !important;
-            }
+			div {
+				margin: 0 !important;
+			}
 
-            button {
-                display: block;
-                width: 100%;
-                white-space: nowrap;
-            }
-        }
-    }
+			button {
+				display: block;
+				width: 100%;
+				white-space: nowrap;
+			}
+		}
+	}
 }

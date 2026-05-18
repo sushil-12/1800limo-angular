@@ -1,0 +1,175 @@
+================================================================================
+AIRPORT MAPPING — WEB (admin/new-booking) vs iOS (ComprehensiveBookingView)
+Goal: make the iOS Comprehensive Booking flow map airports the SAME way the web
+admin new-booking does, so the backend receives identical airport data.
+================================================================================
+
+--------------------------------------------------------------------------------
+1. WEB: FORM CONTROLS PER AIRPORT ENDPOINT
+--------------------------------------------------------------------------------
+There are 4 airport endpoints, each a "control" prefix:
+  pickup_airport, dropoff_airport, return_pickup_airport, return_dropoff_airport
+
+For every endpoint the form holds 5 values (see FormBuilder ~line 1569-1622):
+  {control}              -> INTERNAL airport DB id  (e.g. pickup_airport = 42)
+  {control}_option       -> human display label string
+  {control}_name         -> same display label string
+  {control}_latitude     -> latitude from the Google place
+  {control}_longitude    -> longitude from the Google place
+Plus a shared field:
+  origin_airport_city / departing_airport_city  (city text)
+
+KEY POINT: `{control}` is NOT the Google place id. It is the id of a matching
+record from the internal airports list (BigData.airportsData). The Google place
+only supplies the display label + lat/lng; the id is resolved locally.
+
+--------------------------------------------------------------------------------
+2. WEB: INTERNAL AIRPORT LIST (BigData.airportsData)
+--------------------------------------------------------------------------------
+fetchAirportsAndBigData() subscribes to $api.bigData$. BigData.airportsData is
+the master airport table. Each record: { id, code, name, formatted_name,
+city, country, lat/latitude, long/lng/longitude }.
+Used only to resolve a selected Google place -> internal id (and on edit, to
+turn a saved id back into a display label).
+
+--------------------------------------------------------------------------------
+3. WEB: SEARCH / AUTOCOMPLETE
+--------------------------------------------------------------------------------
+Source = Google Places Autocomplete (New) v1:
+  POST https://places.googleapis.com/v1/places:autocomplete
+  Header X-Goog-Api-Key (key scraped from the loaded maps script URL)
+  FieldMask: placeId, text.text, structuredFormat.mainText/secondaryText, types
+Behaviour (searchCustomAirport, ~line 1271):
+  - debounce 300ms, per-field session token, request-version guard
+  - getCustomAirportBaseQuery() strips a trailing "terminal"/partial word
+  - fires TWO parallel queries: base query  AND  "{base} terminal"
+  - isAirportPrediction(): keep predictions whose name/types/desc contain
+    airport|terminal|concourse|fbo|airfield|aerodrome|gate|parking|garage|
+    departures|arrivals
+  - airport-type predictions (types includes 'airport') vs terminal predictions
+  - mergeCustomAirportAndTerminalPredictions(): terminals are nested under
+    their parent airport (matched by 3/4-letter code or normalized name tokens)
+  - dedupe by placeId
+Place details for a chosen prediction = classic PlacesService.getDetails with
+fields: place_id, name, formatted_address, geometry, address_components, types.
+
+(The native <gmp-place-autocomplete> path initAirportAutocomplete() ~line 664
+is the same idea via attachPlaceAutocompleteElement with primaryTypes:['airport'].)
+
+--------------------------------------------------------------------------------
+4. WEB: SELECTION HANDLER  (handleAirportPlaceSelection ~line 2760)
+--------------------------------------------------------------------------------
+On a place pick:
+  displayValue = getAirportSelectionLabel(place)
+      -> "PrimaryName - <addressLabel>"   (primary = place.name/displayName;
+         addressLabel from getAirportDisplayValue: formatted_name ||
+         display_address || formattedAddress || formatted_address || name)
+  latitude/longitude = place.geometry.location.lat()/lng()
+  matchedAirport = resolveInternalAirportRecord(place, lat, lng):
+      a) if lat/lng present -> NEAREST internal airport by haversine distance
+         over BigData.airportsData
+      b) else text scoring: code+300, name+220, formatted_name+180,
+         city+40, country+20  (best score wins)
+  Then sets:
+      {control}_option   = displayValue
+      {control}_name     = displayValue
+      {control}_latitude = latitude            (Google place coord, NOT db coord)
+      {control}_longitude= longitude
+      {control}          = matchedAirport?.id ?? ''
+  If endpoint is dropoff_airport / return_dropoff_airport -> update currency
+  from the place's country (assets/json/currencyOptions.json).
+
+--------------------------------------------------------------------------------
+5. WEB: EDIT / PREFILL
+--------------------------------------------------------------------------------
+getEditAirportDisplayValue(airportId, savedLine) ~line 6634:
+  use the saved display line if present, else look up BigData.airportsData by
+  id and build the label via getAirportDisplayValue.
+normalizeAirportCoordinatesInPayload() re-pushes the 8 *_airport_latitude/
+longitude fields into the outgoing payload before submit.
+Transfer-type swaps copy all 5 airport sub-fields together (see ~line 5382+).
+
+--------------------------------------------------------------------------------
+6. iOS CURRENT STATE
+--------------------------------------------------------------------------------
+ComprehensiveBookingView.swift state per endpoint:
+  selectedPickupAirport (String label), selectedPickupAirportId (Int?),
+  pickupAirportCoordinate (LocationCoordinate), pickupAirportVM
+  (AddressAutocompleteViewModel mode = .airport), originAirportCity.
+  Same for dropoff / returnPickup / returnDropoff.
+
+AirportService.swift:
+  - Search now goes through GooglePlacesService.fetchAirportSuggestions
+    (Google Places) — single query, debounce 500ms.
+  - makeSyntheticAirport(): builds Airport with id = -1, code from
+    AirportMapping.getAirportCode(fromDescription:), name/city/country parsed
+    from the description string, lat/long nil.
+  - prefetchCoordinates(): Place Details by placeId -> fills lat/long.
+  - selectAirportSuggestion(): returns Airport whose displayName matches.
+Airport.displayName = code.isEmpty ? name : "CODE - name".
+ensureAirportIdsAreSet()/validateAirportDataConsistency() match by displayName
+against airportService.airports.
+
+--------------------------------------------------------------------------------
+7. GAPS — what iOS must change to match the web
+--------------------------------------------------------------------------------
+G1. INTERNAL ID RESOLUTION (most important).
+    Web sends `{control}` = internal DB airport id resolved from the master
+    list by NEAREST coordinate (haversine) with text-score fallback.
+    iOS currently sends id = -1 (synthetic). iOS needs the master airport
+    list (bigData equivalent) and a resolveInternalAirportRecord() port:
+      - nearest by haversine over (lat,long)
+      - fallback scoring code 300 / name 220 / formatted_name 180 /
+        city 40 / country 20.
+
+G2. DISPLAY LABEL FORMAT.
+    Web label = "PrimaryName - formatted_address" (getAirportSelectionLabel).
+    iOS label = "CODE - name" (Airport.displayName). Align iOS label building
+    to the web format so _option/_name stored values match.
+
+G3. PAYLOAD FIELDS.
+    iOS must emit, per endpoint, the same 5 keys the web sends:
+      pickup_airport (id), pickup_airport_option, pickup_airport_name,
+      pickup_airport_latitude, pickup_airport_longitude
+      (+ origin_airport_city / departing_airport_city)
+    using the Google place lat/lng (NOT the internal record's coordinate).
+
+G4. DUAL-QUERY + TERMINAL MERGE.
+    Web runs base query AND "{base} terminal" and nests terminal predictions
+    under their parent airport. iOS does a single query. Port the dual query
+    + isAirportPrediction keyword filter + terminal-under-airport merge for
+    parity (or at least the airport-type keyword filtering).
+
+G5. CURRENCY ON DROPOFF.
+    Web updates currency from the dropoff airport country. Confirm iOS does
+    the equivalent when a dropoff/return-dropoff airport is chosen.
+
+G6. EDIT/PREFILL.
+    On editing an existing reservation, web turns a saved id back into a label
+    via the master list when no saved label exists. iOS prefill currently
+    relies on the saved label only — add id->label lookup as fallback.
+
+--------------------------------------------------------------------------------
+8. RECOMMENDED iOS APPROACH (mirror web exactly)
+--------------------------------------------------------------------------------
+  1. Load the master airports list once (bigData/airports endpoint) into
+     AirportService alongside the Google-Places search results.
+  2. On Google place selection capture: place name, formatted address,
+     lat, lng. Build label "Name - formattedAddress".
+  3. Resolve internal id: nearest master airport by haversine(lat,lng);
+     fallback to text scoring. Store that id as selected*AirportId.
+  4. Persist all 5 per-endpoint values + origin_airport_city into the
+     create/update reservation payload with the same JSON keys as web.
+  5. Keep Google place coords for *_latitude/_longitude (do not substitute
+     the master record's coords).
+  6. Mirror the dropoff-country -> currency behaviour.
+
+Reference (web file: new-booking.component.ts):
+  initAirportAutocomplete 664 | searchGooglePredictions 1066 |
+  isAirportPrediction 1106 | searchCustomAirport 1271 |
+  mergeCustomAirportAndTerminalPredictions 1190 | fetchPlaceDetails 1229 |
+  selectCustomAirportOption 1344 | getAirportSelectionLabel 2610 |
+  resolveInternalAirportRecord 2662 | handleAirportPlaceSelection 2760 |
+  fetchAirportsAndBigData 2897 | getEditAirportDisplayValue 6634 |
+  normalizeAirportCoordinatesInPayload 6648
+================================================================================

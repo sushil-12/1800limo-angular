@@ -319,13 +319,6 @@
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
-											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
-
-												<div class="dropdown-item-icon"></div>
-												Edit / Change
-											</a>
 
 										</div>
 									</td>
@@ -366,7 +359,6 @@
 											</div>
 										</div>
 									</td>
-
 
 									<td>
 										<p style="white-space: pre" (click)="openModal(booking, 'Passenger')" id="box"
@@ -998,21 +990,32 @@
 						<div class="mt-2" style="margin-left: -100px;" *ngIf="!sendMessageField">
 							<input type="file" (change)="myUploader($event)" #fileInput multiple />
 						</div>
-						<mat-form-field class="example-full-width" appearance="outline">
-							<mat-label>
-								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
-							</mat-label>
 
-							<textarea matInput id="myTextarea" #inputmsg placeholder="Write a Message...."
-								id="clearField" (focus)="$event.target.select()"
-								style="white-space: pre-wrap; font-weight: 600; overflow: auto; resize: vertical;"
-								formControlName="text_message" (focus)="$event.target.select()" rows="5">
+						<!-- WYSIWYG Editor (Email mode) -->
+						<ng-container *ngIf="!sendMessageField">
+							<quill-editor [(ngModel)]="editorContent" [modules]="quillModules"
+								placeholder="Write a Message...."
+								[styles]="{'min-height': '150px', 'background': '#fff', 'border-radius': '4px'}">
+							</quill-editor>
+						</ng-container>
+
+						<!-- Plain textarea (SMS mode) -->
+						<ng-container *ngIf="sendMessageField">
+							<mat-form-field class="example-full-width" appearance="outline">
+								<mat-label>
+									{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
+								</mat-label>
+
+								<textarea matInput id="myTextarea" #inputmsg placeholder="Write a Message...."
+									id="clearField" (focus)="$event.target.select()"
+									style="white-space: pre-wrap; font-weight: 600; overflow: auto; resize: vertical;"
+									formControlName="text_message" (focus)="$event.target.select()" rows="5">
 							</textarea>
-						</mat-form-field>
+							</mat-form-field>
+						</ng-container>
+
 						<div class="d-flex justify-content-center mt-2">
-							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"
-								class="btn btnStyle">Close</button> -->
-							<button class="btn saveButtonModal" (click)="submit(inputmsg.value, sendMessageField)"
+							<button class="btn saveButtonModal" (click)="submit(getEditorContent(), sendMessageField)"
 								data-dismiss="modal">Send</button>
 						</div>
 					</div>
