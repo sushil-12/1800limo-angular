@@ -1,194 +1,125 @@
 <!-- booking preview -->
 <div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-		<div class="modal-content" style="background: #f5f4fe;">
-			<div class="modal-header d-flex justify-content-between align-items-center py-0">
-				<h3 class="modal-title">
-					Preview Booking <span class="booking-id-highlight">#{{bookingPreview?.reservation_id}}</span>
-				</h3>
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true" class="bi bi-x-circle"></span>
-				</button>
-			</div>
+		<div class="modal-content rcpt-shell">
+
+			<button type="button" class="close x-circle-btn rcpt-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="bi bi-x-circle"></span>
+			</button>
+
 			<div class="modal-body">
-				<div class="container" *ngIf="bookingPreview">
+				<div class="rcpt" *ngIf="bookingPreview">
 
-					<div class="bp-badge-row" *ngIf="bookingPreview?.grand_total">
-						<div class="bp-grand-total-badge">
-							<span class="bp-grand-total-icon">
-								<i class="bi bi-receipt-cutoff"></i>
+					<!-- ── Title ── -->
+					<div class="rcpt-head">
+						<h2 class="rcpt-head-title">Booking #{{ bookingPreview?.reservation_id }}</h2>
+						<!-- ── Action buttons ── -->
+					<div class="rcpt-actions mt-4">
+						<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onEdit()">
+							<i class="bi bi-pencil-square"></i> Edit
+						</button>
+						<button type="button" class="rcpt-btn" (click)="onShare()">
+							<i class="bi bi-share"></i> Share
+						</button>
+						<button type="button" class="rcpt-btn" (click)="copyDetails()">
+							<i class="bi bi-clipboard"></i> Copy
+						</button>
+						<button type="button" class="rcpt-btn" (click)="printReceipt()">
+							<i class="bi bi-printer"></i> Print
+						</button>
+					</div>
+					</div>
+
+					
+
+					<!-- ── Booking Date ── -->
+					<div class="rcpt-idrow" *ngIf="bookingPreview?.pickup_date">
+						<span class="rcpt-idrow-label">Booking Date</span>
+						<span class="rcpt-idrow-value">{{ formatDate(bookingPreview?.pickup_date) }}</span>
+					</div>
+
+					<!-- ── Status ── -->
+					<div class="rcpt-status">
+						<span class="rcpt-status-label">Status</span>
+						<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
+							{{ bookingPreview?.booking_status == 'driver_unassigned'
+								? 'Unassigned'
+								: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
+						</span>
+					</div>
+
+					<!-- ── Booking Type ── -->
+					<div class="rcpt-row rcpt-row--solo">
+						<span class="rcpt-row-label">Booking Type</span>
+						<span class="rcpt-row-value">
+							{{ textFormatter(bookingPreview?.service_type) | titlecase }}
+							/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
+							<span *ngIf="bookingPreview?.service_type == 'round_trip'">
+								/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
 							</span>
-							<div class="bp-grand-total-content">
-								<span class="bp-grand-total-label">Booking Total</span>
-								<span
-									class="bp-grand-total-amount">{{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)}}</span>
-							</div>
+						</span>
+					</div>
+					<div class="rcpt-row">
+							<span class="rcpt-row-label">Cancellation Period</span>
+							<span class="rcpt-row-value rcpt-danger">
+								<i class="bi bi-exclamation-circle"></i>
+								{{ getCancellationTime(bookingPreview?.cancellation_hours) }}
+							</span>
+						</div>
+
+					<!-- ── Passenger Information ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Passenger Information</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Name</span>
+							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.passenger_name) }}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.passenger_email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link" href="mailto:{{bookingPreview?.passenger_email}}">
+								<i class="bi bi-envelope"></i>
+								{{ textFormatter(bookingPreview?.passenger_email) }}
+							</a>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.passenger_cell">
+							<span class="rcpt-row-label">Phone</span>
+							<a class="rcpt-row-value rcpt-link"
+								href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
+								<i class="bi bi-telephone"></i>
+								({{ bookingPreview?.passenger_cell_isd }}) {{ textFormatter(bookingPreview?.passenger_cell) }}
+							</a>
+						</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Passengers</span>
+							<span class="rcpt-row-value">{{ bookingPreview?.total_passengers }}</span>
+						</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Luggage</span>
+							<span class="rcpt-row-value">{{ bookingPreview?.luggage_count }} pieces</span>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+							<span class="rcpt-row-label">Booking Hours</span>
+							<span class="rcpt-row-value">{{ bookingPreview?.number_of_hours }}</span>
 						</div>
 					</div>
 
-					<div class="bp-four-card-grid">
+					<!-- ── Trip Information ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Trip Information</div>
 
-						<!-- Card 1: Booking Type -->
-						<div class="bp-card">
-							<div class="bp-card-label">Booking Type</div>
-							<div class="bp-kv">
-								<span class="bp-kv-label">Booking Information</span>
-								<span class="bp-kv-value">
-									{{ textFormatter(bookingPreview?.service_type) | titlecase }}
-									/
-									{{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
-									<span *ngIf="bookingPreview?.service_type == 'round_trip'">
-										/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
-									</span>
-								</span>
-							</div>
-							<div *ngIf="bookingPreview?.service_type == 'Charter Tour'" class="bp-kv">
-								<span class="bp-kv-label">Booking Hours</span>
-								<span class="bp-kv-value">{{ bookingPreview?.number_of_hours }}</span>
-							</div>
-							<div *ngIf="bookingPreview?.cancellation_hours" class="bp-kv">
-								<span class="bp-kv-label">Cancellation Period</span>
-								<span class="bp-kv-value cancellation-val">
-									{{ getCancellationTime(bookingPreview?.cancellation_hours) }}
-								</span>
-							</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.pickup_date">
+							<span class="rcpt-row-label">Pickup Date</span>
+							<span class="rcpt-row-value">{{ formatDate(bookingPreview?.pickup_date) }}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.pickup_time">
+							<span class="rcpt-row-label">Pickup Time</span>
+							<span class="rcpt-row-value">
+								<i class="bi bi-clock rcpt-time-icon"></i>
+								{{ formatTime(bookingPreview?.pickup_time) }}
+							</span>
 						</div>
 
-						<!-- Card 2: Passenger Information -->
-						<div class="bp-card">
-							<div class="bp-card-label">Passenger Information</div>
-							<!-- <div *ngIf="bookingPreview?.total_amount_refunded>0" class="bp-refund-block">
-								<div class="bp-kv">
-									<span class="bp-kv-label">Refund amount</span>
-									<span class="bp-kv-value refund-val">
-										{{currencySymbol}} {{-(bookingPreview?.total_amount_refunded)?.toFixed(2) }}
-									</span>
-								</div>
-								<div class="bp-kv">
-									<span class="bp-kv-label">New total</span>
-									<span class="bp-kv-value new-total-val">
-										{{currencySymbol}} {{(bookingPreview?.grand_total -
-										bookingPreview?.total_amount_refunded).toFixed(2) }}
-									</span>
-								</div>
-							</div> -->
-							<div class="bp-passenger-header">
-								<div>
-									<div class="bp-passenger-name">
-										{{ textFormatter(bookingPreview?.passenger_name) }}
-									</div>
-									<a class="bp-person-email" style="word-break:break-all;"
-										href="mailto:{{bookingPreview?.passenger_email}}">
-										{{ textFormatter(bookingPreview?.passenger_email) }}
-									</a>
-									<a class="bp-person-phone"
-										href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
-										({{ bookingPreview?.passenger_cell_isd }}) {{
-										textFormatter(bookingPreview?.passenger_cell) }}
-									</a>
-								</div>
-								<div class="bp-pax-badges">
-									<div class="bp-badge">
-										<div class="bp-badge-value">{{ bookingPreview?.total_passengers }}</div>
-										<div class="bp-badge-label">Passenger</div>
-									</div>
-									<div class="bp-badge">
-										<div class="bp-badge-value">{{ bookingPreview?.luggage_count }}</div>
-										<div class="bp-badge-label">Luggage</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="bp-card" *ngIf="bookingPreview?.booking_status !== 'driver_unassigned'">
-							<div class="bp-card-label">Driver Information</div>
-							<div class="bp-person-row">
-								<div class="bp-avatar bp-avatar-driver">
-									{{ (textFormatter(bookingPreview?.driver_name) | titlecase)?.substring(0,2) }}
-								</div>
-								<div>
-									<div class="bp-person-name">
-										{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
-									</div>
-									<a class="bp-person-email" style="word-break:break-all; display:block;"
-										href="mailto:{{bookingPreview?.driver_email}}"
-										*ngIf="bookingPreview?.driver_email">
-										{{ textFormatter(bookingPreview?.driver_email) }}
-									</a>
-									<a class="bp-person-phone" style="display:block;"
-										href="tel:{{bookingPreview?.driver_cell_isd}}{{bookingPreview?.driver_cell}}"
-										*ngIf="bookingPreview?.driver_cell">
-										({{ bookingPreview?.driver_cell_isd }}) {{ bookingPreview?.driver_cell }}
-									</a>
-								</div>
-							</div>
-						</div>
-
-						<!-- Card 4: Affiliate — always shown -->
-						<div class="bp-card">
-							<div class="bp-card-label">
-								{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'Loose
-								Affiliate Information' }}
-							</div>
-							<div class="bp-person-row">
-								<div class="bp-avatar bp-avatar-affiliate">
-									{{ (isAffiliate ? bookingPreview?.affiliate_name :
-									bookingPreview?.lose_affiliate_name)?.substring(0,2) }}
-								</div>
-								<div>
-									<div class="bp-person-name">
-										{{ isAffiliate ? bookingPreview?.affiliate_name :
-										bookingPreview?.lose_affiliate_name }}
-									</div>
-									<a class="bp-person-email" style="word-break:break-all; display:block;"
-										[href]="'mailto:' + (isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email)"
-										*ngIf="isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email">
-										{{ isAffiliate ? bookingPreview?.affiliate_email :
-										bookingPreview?.lose_affiliate_email }}
-									</a>
-									<a class="bp-person-phone" style="display:block;" [href]="'tel:' + (isAffiliate
-                        ? (bookingPreview?.affiliate_phone_isd + bookingPreview?.affiliate_phone)
-                        : (bookingPreview?.lose_affiliate_phone_isd + bookingPreview?.lose_affiliate_phone))"
-										*ngIf="isAffiliate ? bookingPreview?.affiliate_phone : bookingPreview?.lose_affiliate_phone">
-										{{ isAffiliate
-										? ('(' + bookingPreview?.affiliate_phone_isd + ') ' +
-										bookingPreview?.affiliate_phone)
-										: ('(' + bookingPreview?.lose_affiliate_phone_isd + ') ' +
-										bookingPreview?.lose_affiliate_phone)
-										}}
-									</a>
-								</div>
-							</div>
-						</div>
-
-
-					</div>
-
-
-					<!-- ── Travel Information ── -->
-					<div class="bp-card bp-card-full">
-
-						<div class="bp-travel-header">
-							<div class="bp-card-label">Travel Information</div>
-
-							<div class="bp-travel-datetime"
-								*ngIf="bookingPreview?.pickup_date || bookingPreview?.pickup_time">
-								<span class="bp-travel-dt-item" *ngIf="bookingPreview?.pickup_date">
-									<i class="bi bi-calendar3 bp-travel-dt-icon"></i>
-									<span class="bp-travel-dt-value">{{ formatDate(bookingPreview?.pickup_date)
-										}}</span>
-								</span>
-								<span class="bp-travel-dt-sep"
-									*ngIf="bookingPreview?.pickup_date && bookingPreview?.pickup_time">|</span>
-								<span class="bp-travel-dt-item" *ngIf="bookingPreview?.pickup_time">
-									<i class="bi bi-clock bp-travel-time-icon"></i>
-									<span class="bp-travel-dt-value">{{ formatTime(bookingPreview?.pickup_time)
-										}}</span>
-								</span>
-							</div>
-						</div>
-
-						<div class="bp-route-timeline">
+						<div class="bp-route-timeline rcpt-timeline">
 
 							<!-- Pickup -->
 							<div class="bp-rt-row">
@@ -199,7 +130,6 @@
 								<div class="bp-rt-body">
 									<span class="bp-rt-label">Pickup</span>
 
-									<!-- City / Cruise pickup -->
 									<div *ngIf="bookingPreview?.transfer_type.includes('city_') || bookingPreview?.transfer_type.includes('cruise_')"
 										class="bp-rt-address"
 										(click)="showLocationPointOnMapByAddress(bookingPreview?.pickup)">
@@ -207,7 +137,6 @@
 										{{ textFormatter(bookingPreview?.pickup) }}
 									</div>
 
-									<!-- Airport pickup -->
 									<ng-container *ngIf="bookingPreview?.transfer_type.includes('airport_')">
 										<div class="bp-rt-address bp-rt-address--airport"
 											(click)="showLocationPointOnMapByAddress(bookingPreview?.pickup_airport_name)">
@@ -224,14 +153,9 @@
 												{{ textFormatter(bookingPreview?.pickup_airline_name) }} #{{
 												textFormatter(bookingPreview?.pickup_flight) }}
 											</span>
-											<span class="bp-rt-update-link"
-												(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
-												Update Arrival time
-											</span>
 										</div>
 									</ng-container>
 
-									<!-- Cruise pickup details -->
 									<div *ngIf="bookingPreview?.transfer_type.includes('cruise_')"
 										class="bp-rt-cruise-row">
 										<span class="bp-rt-cruise-chip"><i class="bi bi-anchor"></i> {{
@@ -271,7 +195,6 @@
 								<div class="bp-rt-body">
 									<span class="bp-rt-label">Drop Off</span>
 
-									<!-- City / Cruise dropoff -->
 									<div *ngIf="bookingPreview?.transfer_type.includes('_city') || bookingPreview?.transfer_type.includes('_cruise')"
 										class="bp-rt-address bp-rt-address--dropoff"
 										(click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff)">
@@ -279,7 +202,6 @@
 										{{ textFormatter(bookingPreview?.dropoff) }}
 									</div>
 
-									<!-- Airport dropoff -->
 									<ng-container *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 										<div class="bp-rt-address bp-rt-address--airport"
 											(click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_airport_name)">
@@ -294,14 +216,9 @@
 												{{ textFormatter(bookingPreview?.dropoff_airline_name) }} #{{
 												textFormatter(bookingPreview?.dropoff_flight) }}
 											</span>
-											<span class="bp-rt-update-link"
-												(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
-												Update Arrival time
-											</span>
 										</div>
 									</ng-container>
 
-									<!-- Cruise dropoff details -->
 									<div *ngIf="bookingPreview?.transfer_type.includes('_cruise')"
 										class="bp-rt-cruise-row">
 										<span class="bp-rt-cruise-chip"><i class="bi bi-anchor"></i> {{
@@ -317,269 +234,257 @@
 						</div>
 					</div>
 
-					<!-- ── Passenger Information ── -->
-					<div class="bp-card bp-card-full">
-
-						<!--Special Information-->
-						<div class="bp-special-instruction">
-							<div class="bp-special-title">Special Instruction</div>
-							<div class="bp-special-body box-special-instruction" style="white-space: pre-wrap;"
-								#specialInstructionBox
-								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
-							</div>
-
-							<!-- Scroll Controls – only shown when content overflows -->
-							<div class="bp-scroll-controls" *ngIf="isScrollable">
-								<button class="bp-scroll-btn" (click)="scrollInstruction('up')" title="Scroll Up">
-									<i class="bi bi-chevron-up"></i>
-								</button>
-								<button class="bp-scroll-btn" (click)="scrollInstruction('down')" title="Scroll Down">
-									<i class="bi bi-chevron-down"></i>
-								</button>
-							</div>
+					<!-- ── Driver Information ── -->
+					<div class="rcpt-section" *ngIf="bookingPreview?.booking_status !== 'driver_unassigned'">
+						<div class="rcpt-section-title">Driver Information</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Driver</span>
+							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.driver_name) | titlecase }}</span>
 						</div>
-
-						<!-- Meet & Greet -->
-						<div *ngIf="bookingPreview?.meet_greet_choice_name" class="bp-greet-box">
-							<div class="bp-greet-label">Meet and Greet</div>
-							<div class="bp-greet-value">
-								{{ textFormatter(bookingPreview?.meet_greet_choice_name) | titlecase }}
-							</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.driver_cell">
+							<span class="rcpt-row-label">Phone</span>
+							<a class="rcpt-row-value rcpt-link"
+								href="tel:{{bookingPreview?.driver_cell_isd}}{{bookingPreview?.driver_cell}}">
+								<i class="bi bi-telephone"></i>
+								({{ bookingPreview?.driver_cell_isd }}) {{ bookingPreview?.driver_cell }}
+							</a>
 						</div>
-
-						<!-- Return Meet & Greet -->
-						<div *ngIf="bookingPreview?.return_meet_greet_choice_name" class="bp-greet-box"
-							style="margin-top:8px;">
-							<div class="bp-greet-label">Return Meet and Greet</div>
-							<div class="bp-greet-value">
-								{{ textFormatter(bookingPreview?.return_meet_greet_choice_name) | titlecase }}
-							</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.driver_email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link" href="mailto:{{bookingPreview?.driver_email}}">
+								<i class="bi bi-envelope"></i>
+								{{ textFormatter(bookingPreview?.driver_email) }}
+							</a>
 						</div>
 					</div>
 
+					<!-- ── Affiliate Information ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">
+							{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'Loose Affiliate Information' }}
+						</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Name</span>
+							<span class="rcpt-row-value">
+								{{ isAffiliate ? bookingPreview?.affiliate_name : bookingPreview?.lose_affiliate_name }}
+							</span>
+						</div>
+						<div class="rcpt-row"
+							*ngIf="isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link"
+								[href]="'mailto:' + (isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email)">
+								<i class="bi bi-envelope"></i>
+								{{ isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email }}
+							</a>
+						</div>
+						<div class="rcpt-row"
+							*ngIf="isAffiliate ? bookingPreview?.affiliate_phone : bookingPreview?.lose_affiliate_phone">
+							<span class="rcpt-row-label">Phone</span>
+							<a class="rcpt-row-value rcpt-link" [href]="'tel:' + (isAffiliate
+								? (bookingPreview?.affiliate_phone_isd + bookingPreview?.affiliate_phone)
+								: (bookingPreview?.lose_affiliate_phone_isd + bookingPreview?.lose_affiliate_phone))">
+								<i class="bi bi-telephone"></i>
+								{{ isAffiliate
+								? ('(' + bookingPreview?.affiliate_phone_isd + ') ' + bookingPreview?.affiliate_phone)
+								: ('(' + bookingPreview?.lose_affiliate_phone_isd + ') ' + bookingPreview?.lose_affiliate_phone) }}
+							</a>
+						</div>
+					</div>
 
-					<!-- ── Google Map ── -->
-					<div class="bp-card bp-card-full">
-						<div class="bp-map-wrapper">
-							<google-map height="300px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+					<!-- ── Special Instruction / Meet & Greet ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Special Instruction</div>
+						<div class="bp-special-body box-special-instruction rcpt-special"
+							style="white-space: pre-wrap;" #specialInstructionBox
+							[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+						</div>
+						<div class="bp-scroll-controls" *ngIf="isScrollable">
+							<button class="bp-scroll-btn" (click)="scrollInstruction('up')" title="Scroll Up">
+								<i class="bi bi-chevron-up"></i>
+							</button>
+							<button class="bp-scroll-btn" (click)="scrollInstruction('down')" title="Scroll Down">
+								<i class="bi bi-chevron-down"></i>
+							</button>
 						</div>
 
-						<div class="bp-metrics-row">
-							<div>
-								<span style="font-weight:700">Distance:</span>
-								<span>
-									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance) }}
-									Km
+						<div class="rcpt-row" *ngIf="bookingPreview?.meet_greet_choice_name">
+							<span class="rcpt-row-label">Meet &amp; Greet</span>
+							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.meet_greet_choice_name) | titlecase }}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+							<span class="rcpt-row-label">Return Meet &amp; Greet</span>
+							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.return_meet_greet_choice_name) | titlecase }}</span>
+						</div>
+					</div>
+
+					<!-- ── Route Map ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Route Map</div>
+						<div class="bp-map-wrapper rcpt-map">
+							<google-map height="200px" width="100%" [center]="mapCenter" [zoom]="zoom"></google-map>
+						</div>
+						<div class="rcpt-metrics">
+							<div class="rcpt-metric">
+								<span class="rcpt-row-label">Distance</span>
+								<span class="rcpt-row-value">
+									{{ mToMi(bookingPreview?.distance) }} mi / {{ mToKm(bookingPreview?.distance) }} km
 								</span>
 							</div>
-
-							<div>
-								<span style="font-weight:700">Estimated Duration:</span>
-								<span>
-									{{ convertToMinutes(bookingPreview?.duration) }}
-								</span>
+							<div class="rcpt-metric">
+								<span class="rcpt-row-label">Est. Duration</span>
+								<span class="rcpt-row-value">{{ convertToMinutes(bookingPreview?.duration) }}</span>
 							</div>
 						</div>
 					</div>
 
 					<!-- ── Vehicle Type ── -->
-					<div class="bp-card bp-card-full">
-						<div class="bp-card-label">Vehicle Type</div>
-						<div class="bp-vehicle-header">
-							<div class="bp-vehicle-row">
-								<div class="bp-vehicle-icon"><i class="bi bi-car-front-fill"></i></div>
-								<div class="bp-vehicle-details">
-									<div class="bp-vehicle-name">{{ bookingPreview?.vehicle_type_name }}</div>
-
-									<div class="bp-vehicle-sub" *ngIf="(bookingPreview?.vehicle_make && bookingPreview?.vehicle_make !== 'N/A') ||
-                                      (bookingPreview?.vehicle_model && bookingPreview?.vehicle_model !== 'N/A') ||
-                                      (bookingPreview?.vehicle_year  && bookingPreview?.vehicle_year  !== 'N/A') ||
-                                      (bookingPreview?.vehicle_color && bookingPreview?.vehicle_color !== 'N/A')">
-										{{ bookingPreview?.vehicle_make }} &nbsp;|&nbsp;
-										{{ bookingPreview?.vehicle_model }} &nbsp;|&nbsp;
-										{{ bookingPreview?.vehicle_year }} &nbsp;|&nbsp;
-										{{ bookingPreview?.vehicle_color }}
-									</div>
-									<div class="bp-vehicle-plate"
-										*ngIf="bookingPreview?.vehicle_license_plate && bookingPreview?.vehicle_license_plate !== 'N/A'">
-										{{ bookingPreview?.vehicle_license_plate }}</div>
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Vehicle Type</div>
+						<div class="rcpt-vehicle">
+							<div class="rcpt-vehicle-icon"><i class="bi bi-car-front-fill"></i></div>
+							<div class="rcpt-vehicle-body">
+								<div class="rcpt-vehicle-name">{{ bookingPreview?.vehicle_type_name }}</div>
+								<div class="rcpt-vehicle-sub" *ngIf="(bookingPreview?.vehicle_make && bookingPreview?.vehicle_make !== 'N/A') ||
+									(bookingPreview?.vehicle_model && bookingPreview?.vehicle_model !== 'N/A') ||
+									(bookingPreview?.vehicle_year  && bookingPreview?.vehicle_year  !== 'N/A') ||
+									(bookingPreview?.vehicle_color && bookingPreview?.vehicle_color !== 'N/A')">
+									{{ bookingPreview?.vehicle_make }} · {{ bookingPreview?.vehicle_model }} ·
+									{{ bookingPreview?.vehicle_year }} · {{ bookingPreview?.vehicle_color }}
 								</div>
-							</div>
-							<div class="bp-pax-badges">
-								<div class="bp-badge">
-									<div class="bp-badge-value">{{ bookingPreview?.vehicle_seats }}</div>
-									<div class="bp-badge-label">Passenger</div>
+								<div class="rcpt-vehicle-meta">
+									<span><i class="bi bi-people"></i> Up to {{ bookingPreview?.vehicle_seats }} passengers</span>
+									<span><i class="bi bi-bag"></i> {{ bookingPreview?.vehicle_luggage || '0' }} bags</span>
 								</div>
-								<div class="bp-badge">
-									<div class="bp-badge-value">{{ bookingPreview?.vehicle_luggage || '0' }}</div>
-									<div class="bp-badge-label">Luggage</div>
+								<div class="rcpt-vehicle-plate"
+									*ngIf="bookingPreview?.vehicle_license_plate && bookingPreview?.vehicle_license_plate !== 'N/A'">
+									{{ bookingPreview?.vehicle_license_plate }}
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- /vehicle card -->
 
-					<!-- ── Rate Distribution  ── -->
-					<div class="bp-card bp-card-full" *ngIf="showRateDistribution">
-						<div>
-							<div class="bp-card-label">Rates Distribution</div>
+					<!-- ── Rates Distribution ── -->
+					<div class="rcpt-section bp-rate-card" *ngIf="showRateDistribution">
+						<div class="rcpt-section-title">Rates Distribution</div>
 
-							<div class="mx-2 mb-1"
-								*ngIf="!isAdminView && userRole !== 'travel_agent' && bookingPreview?.share_array?.affiliateShare">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Affliate Payout
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare
-											? bookingPreview?.share_array?.affiliateShare :
-											bookingPreview?.rates_preview?.affiliate_share
-											)}}
-										</span>
-										<span class="preview-output-desc">( Total Price - (Ride Base Rate + Other Taxes)
-											)</span>
-									</div>
+						<div class="mx-2 mb-1"
+							*ngIf="!isAdminView && userRole !== 'travel_agent' && bookingPreview?.share_array?.affiliateShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Affliate Payout</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare
+										? bookingPreview?.share_array?.affiliateShare :
+										bookingPreview?.rates_preview?.affiliate_share)}}
+									</span>
+									<span class="preview-output-desc">( Total Price - (Ride Base Rate + Other Taxes) )</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Base Rate
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate
-											? bookingPreview?.share_array?.baseRate :
-											bookingPreview?.rates_preview?.ride_base_rate)}}
-										</span>
-										<span class="preview-output-desc">(Fare Base Rate)</span>
-									</div>
+						<div class="mx-2 mb-1">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Base Rate</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate
+										? bookingPreview?.share_array?.baseRate :
+										bookingPreview?.rates_preview?.ride_base_rate)}}
+									</span>
+									<span class="preview-output-desc">(Fare Base Rate)</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.adminShare != '0' ">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important; color: #1e7500">
-											Admin Share
-										</span>
-									</div>
-									<div class="col-md-8 value" style="color: #1e7500">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate((bookingPreview?.share_array?.adminShare
-											? bookingPreview?.share_array?.adminShare :
-											bookingPreview?.rates_preview?.admin_share)
-											- deducted_stripe_fee)
-											}}
-										</span>
-										<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate -
-											deducted stripe fee)</span>
-									</div>
+						<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.adminShare != '0' ">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important; color: #1e7500">Admin Share</span></div>
+								<div class="col-md-8 value" style="color: #1e7500">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate((bookingPreview?.share_array?.adminShare
+										? bookingPreview?.share_array?.adminShare :
+										bookingPreview?.rates_preview?.admin_share) - deducted_stripe_fee)}}
+									</span>
+									<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate - deducted stripe fee)</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.travelAgentShare">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Travel Advisor Share
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.travelAgentShare)
-											}}
-										</span>
-										<span class="preview-output-desc">(10% of Base Rate)</span>
-									</div>
+						<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Travel Advisor Share</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.travelAgentShare)}}
+									</span>
+									<span class="preview-output-desc">(10% of Base Rate)</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Stripe fees
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee
-											? bookingPreview?.share_array?.stripeFee :
-											bookingPreview?.rates_preview?.stripe_fees)}}
-										</span>
-										<span class="preview-output-desc">(Platform fee 5% + 30 cents - <b>Paid from
-												Admin share</b>)</span>
-									</div>
+						<div class="mx-2 mb-1">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Stripe fees</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee
+										? bookingPreview?.share_array?.stripeFee :
+										bookingPreview?.rates_preview?.stripe_fees)}}
+									</span>
+									<span class="preview-output-desc">(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1" *ngIf="isAdminView && bookingPreview?.share_array?.affiliateShare">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Affliate Payout
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare
-											? bookingPreview?.share_array?.affiliateShare :
-											bookingPreview?.rates_preview?.affiliate_share
-											)}}
-										</span>
-										<span class="preview-output-desc">( Total Price - (Ride Base Rate + Other Taxes)
-											)</span>
-									</div>
+						<div class="mx-2 mb-1" *ngIf="isAdminView && bookingPreview?.share_array?.affiliateShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Affliate Payout</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare
+										? bookingPreview?.share_array?.affiliateShare :
+										bookingPreview?.rates_preview?.affiliate_share)}}
+									</span>
+									<span class="preview-output-desc">( Total Price - (Ride Base Rate + Other Taxes) )</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.farmoutShare">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Affliate Farm out share
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.farmoutShare)}}
-										</span>
-										<span class="preview-output-desc">( 10 % of Base Rate)</span>
-									</div>
+						<div class="mx-2 mb-1" *ngIf="bookingPreview?.share_array?.farmoutShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Affliate Farm out share</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.farmoutShare)}}
+									</span>
+									<span class="preview-output-desc">( 10 % of Base Rate)</span>
 								</div>
 							</div>
+						</div>
 
-							<div class="mx-2 mb-1">
-								<div class="row m-0">
-									<div class="col-md-4 key">
-										<span style="font-weight: 500 !important;">
-											Total Client Cost
-										</span>
-									</div>
-									<div class="col-md-8 value preview-airport-color">
-										<span class="preview-output-field">
-											{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal
-											?
-											formatBaseRate(bookingPreview?.share_array?.grandTotal) :
-											formatBaseRate(bookingPreview?.share_array?.returnGrandTotal ?
-											bookingPreview?.share_array?.returnGrandTotal :
-											bookingPreview?.rates_preview?.total_price)}}
-										</span>
-										<span class="preview-output-desc">(Actual Cost to Customer)</span>
-									</div>
+						<div class="mx-2 mb-1 bp-rate-total">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Total Client Cost</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal
+										? formatBaseRate(bookingPreview?.share_array?.grandTotal) :
+										formatBaseRate(bookingPreview?.share_array?.returnGrandTotal ?
+										bookingPreview?.share_array?.returnGrandTotal :
+										bookingPreview?.rates_preview?.total_price)}}
+									</span>
+									<span class="preview-output-desc">(Actual Cost to Customer)</span>
 								</div>
 							</div>
-
 						</div>
 					</div>
 
+					<!-- ── Total ── -->
+					<div class="rcpt-total" *ngIf="bookingPreview?.grand_total">
+						<span class="rcpt-total-label">Total Amount</span>
+						<span class="rcpt-total-amount">{{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)}}</span>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -40,6 +41,9 @@ export class BookingPreviewComponent implements OnInit {
   userRole: string;
   isAdminView: boolean = false;
 
+  @Output() editBooking = new EventEmitter<any>();
+  @Output() shareBooking = new EventEmitter<any>();
+
   constructor(
     private $affiliateService: AffiliateService,
     private $adminService: AdminService,
@@ -47,7 +51,59 @@ export class BookingPreviewComponent implements OnInit {
     private stateManagementService: StateManagementService,
     private $individualService: IndividualService,
     private $travelAgentService: TravelAgentService,
+    private toastr: ToastrService,
   ) { }
+
+  // ── Header actions ─────────────────────────────────────────────────
+  onEdit(): void {
+    this.editBooking.emit(this.bookingPreview);
+  }
+
+  onShare(): void {
+    this.shareBooking.emit(this.bookingPreview);
+  }
+
+  printReceipt(): void {
+    window.print();
+  }
+
+  copyDetails(): void {
+    const b = this.bookingPreview || {};
+    const lines = [
+      `Booking #${b.reservation_id ?? ''}`,
+      b.pickup_date ? `Date: ${this.formatDate(b.pickup_date)}` : '',
+      b.pickup_time ? `Pickup Time: ${this.formatTime(b.pickup_time)}` : '',
+      b.passenger_name ? `Passenger: ${b.passenger_name}` : '',
+      b.passenger_email ? `Email: ${b.passenger_email}` : '',
+      b.passenger_cell ? `Phone: (${b.passenger_cell_isd ?? ''}) ${b.passenger_cell}` : '',
+      b.pickup ? `Pickup: ${b.pickup}` : '',
+      b.dropoff ? `Drop Off: ${b.dropoff}` : '',
+      b.vehicle_type_name ? `Vehicle: ${b.vehicle_type_name}` : '',
+      b.grand_total ? `Total: ${this.currencySymbol ?? ''}${b.grand_total}` : '',
+    ].filter(Boolean);
+    const text = lines.join('\n');
+
+    const done = () => this.toastr.success('Booking details copied');
+    const fail = () => this.toastr.error('Could not copy details');
+
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fail);
+    } else {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      } catch {
+        fail();
+      }
+    }
+  }
 
   ngOnInit(): void {
     try {
@@ -474,16 +530,19 @@ export class BookingPreviewComponent implements OnInit {
 
   formatDate(date: string): string {
     const m = moment(date);
-    const dateStr = `${m.format('MM/DD/YYYY')} | ${m.format('MMMM D, YYYY')} | ${m.format('dddd')}`;
-    if (m.isSame(moment(), 'day')) {
-      return `Today | ${dateStr}`;
+    if (!m.isValid()) {
+      return '';
     }
-    return dateStr;
+    const formatted = m.format('ddd, MMM D, YYYY');
+    if (m.isSame(moment(), 'day')) {
+      return `Today · ${formatted}`;
+    }
+    return formatted;
   }
 
   formatTime(time: string): string {
-    const m = moment(time, 'HH:mm:ss');
-    return `${m.format('LT')} | ${m.format('HHmm')} h`;
+    const m = moment(time, ['HH:mm:ss', 'HH:mm']);
+    return m.isValid() ? m.format('h:mm A') : '';
   }
 
   getCancellationTime(cancellationHours: number): string {
