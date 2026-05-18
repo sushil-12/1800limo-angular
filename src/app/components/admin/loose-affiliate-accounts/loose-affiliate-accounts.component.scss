@@ -1,116 +1,143 @@
 .modal#messageModal {
-    .modal-body {
-        p {
-            font-size: 1rem;
-            font-weight: 500;
+  .modal-body {
+    p {
+      font-size: 1rem;
+      font-weight: 500;
 
-            span {
-                font-size: 1.1rem;
-            }
-        }
-
-        textarea#message {
-            width: 100%;
-            border-radius: 1rem;
-            padding: 1rem;
-            max-height: 15rem;
-        }
+      span {
+        font-size: 1.1rem;
+      }
     }
+
+    textarea#message {
+      width: 100%;
+      border-radius: 1rem;
+      padding: 1rem;
+      max-height: 15rem;
+    }
+  }
 }
 
 .clickable:hover {
-    text-decoration: underline;
-    cursor: pointer;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .x-cross-btn {
-	background: #fff !important;
-	color: #ff0000 !important;
-	/* position: absolute; */
-	top: 5px;
-	right: 15px;
-	border-radius: 20px;
-	width: 25px;
-	opacity: 1 !important;
+  background: #fff !important;
+  color: #ff0000 !important;
+  /* position: absolute; */
+  top: 5px;
+  right: 15px;
+  border-radius: 20px;
+  width: 25px;
+  opacity: 1 !important;
 }
 
 .x-close-btn {
-	float: right;
-	font-size: 1.8rem;
-	font-weight: 700;
-	line-height: 1;
-	border: none;
-	z-index: 10;
+  float: right;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  border: none;
+  z-index: 10;
 }
 
 .search-uppercase-input {
-	text-transform: none;
+  text-transform: none;
 }
 
 .search-uppercase-input::placeholder {
-	text-transform: none;
+  text-transform: none;
 }
 
 .uploadExcelFile {
-    position: sticky;
-    left: 50px;
-    color: #000;
-    text-transform: uppercase;
-    padding: 0.5rem 0.8rem;
-    border-radius: 10px;
-    font-size: 1.10rem;
-    margin: 0 10px;
-    font-weight: 700;
-    display: inline-block;
-    text-align: center;
-    border: 0;
-    overflow: hidden;
-    background-color: var(--green-color);
-    cursor: pointer;
-    box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.4);
+  position: sticky;
+  left: 50px;
+  color: #000;
+  text-transform: uppercase;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  font-size: 1.10rem;
+  margin: 0 10px;
+  font-weight: 700;
+  display: inline-block;
+  text-align: center;
+  border: 0;
+  overflow: hidden;
+  background-color: var(--green-color);
+  cursor: pointer;
+  box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.4);
+}
+
+.mb-search {
+  margin-bottom: -1rem;
+}
+
+@media only screen and (max-width: 767px) {
+  .mb-search {
+    margin-bottom: .5rem;
+  }
+}
+
+@media only screen and (min-width: 1199px) {
+  .uploadExcelFile:hover {
+    background-color: #28b24b;
   }
 
-  .mb-search{
-    margin-bottom: -1rem;
+  .uploadExcelFile:focus {
+    transform: scale(1.2, 1.2);
+    background-color: #28b24b;
+  }
+}
+
+.uploadExcelFile input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-size: 0;
+  cursor: pointer;
+}
+
+.uploadExcelFile svg {
+  height: 17px;
+  fill: #000;
+  margin-bottom: 2px;
+}
+
+.dropdown-item {
+  padding: .35rem 1.5rem !important;
+  font-size: 16px;
+  font-weight: 500 !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
+// Quill editor styles
+quill-editor {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+
+  .ql-container {
+    min-height: 150px;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
   }
 
-  @media only screen and (max-width: 767px) {
-    .mb-search{
-      margin-bottom: .5rem;
-    }
-  }
-  
-  @media only screen and (min-width: 1199px) {
-    .uploadExcelFile:hover {
-      background-color: #28b24b;
-    }
-  
-    .uploadExcelFile:focus {
-      transform: scale(1.2, 1.2);
-      background-color: #28b24b;
-    }
-  }
-  
-  .uploadExcelFile input[type="file"] {
-    position: absolute;
-    opacity: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    font-size: 0;
-    cursor: pointer;
-  }
-  
-  .uploadExcelFile svg {
-    height: 17px;
-    fill: #000;
-    margin-bottom: 2px;
+  .ql-toolbar {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background: #f8f8f8;
   }
 
-  .dropdown-item{
-    padding: .35rem 1.5rem !important;
-    font-size: 16px;
-    font-weight: 500 !important;
-    font-family: "Roboto", sans-serif !important;
+  .ql-editor {
+    min-height: 150px;
+    white-space: pre-wrap;
+    overflow-y: auto;
   }
+}
