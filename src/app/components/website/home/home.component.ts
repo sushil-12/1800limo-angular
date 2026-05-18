@@ -196,13 +196,30 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private blogService: BlogService
 	) { }
 
+	// Icons cycled across the service cards (no per-item icon in the API data)
+	private scIcons = [
+		'fas fa-plane-departure',
+		'fas fa-user-tie',
+		'fas fa-shield-alt',
+		'fas fa-clock',
+		'fas fa-route',
+		'fas fa-glass-cheers',
+		'fas fa-map-marked-alt',
+		'fas fa-star',
+	];
+
 	get scTotal(): number {
 		return this.fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')
-			?.slider_type_content?.length || 0;
+			?.other_listing_arr?.length || 0;
+	}
+
+	scIcon(i: number): string {
+		return this.scIcons[i % this.scIcons.length];
 	}
 
 	initServiceCarousel() {
 		this.scDots = Array.from({ length: this.scTotal }, (_, i) => i);
+		this.scIndex = 0;
 		this.scStartAuto();
 	}
 
@@ -212,9 +229,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	scStartAuto() {
 		clearInterval(this.scTimer);
+		if (this.scTotal <= 1) { return; }
 		this.scTimer = setInterval(() => {
 			this.scGoTo(this.scIndex === this.scTotal - 1 ? 0 : this.scIndex + 1);
 		}, 3200);
+	}
+
+	scStopAuto() {
+		clearInterval(this.scTimer);
 	}
 
 	numberOnly(event: any): boolean {

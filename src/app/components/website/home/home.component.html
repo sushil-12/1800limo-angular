@@ -70,16 +70,22 @@
 				<div class="service-carousel-wrap"
 					*ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable'">
 
+					<div class="sc-head">
+						<span class="sc-eyebrow"><i class="fas fa-gem"></i> Why ride with us</span>
+						<h4 class="sc-heading">The services we provide</h4>
+					</div>
+
 					<div class="sc-row">
 						<button class="sc-arrow" (click)="scPrev(); scStartAuto()" [disabled]="scIndex === 0"
 							aria-label="Previous">
 							<i class="fas fa-chevron-left"></i>
 						</button>
 
-						<div class="sc-overflow">
+						<div class="sc-overflow" (mouseenter)="scStopAuto()" (mouseleave)="scStartAuto()">
 							<div class="sc-track" [style.transform]="'translateX(-' + (scIndex * 100) + '%)'">
 								<div class="sc-card"
-									*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr">
+									*ngFor="let list1 of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.other_listing_arr; let i = index">
+									<div class="sc-icon"><i [class]="scIcon(i)"></i></div>
 									<div class="sc-body">
 										<div class="sc-title" [innerHTML]="convertTextToHtml(list1.list)"></div>
 										<div class="sc-desc">{{ list1?.content || 'Premium chauffeur service tailored to
@@ -94,6 +100,12 @@
 							aria-label="Next">
 							<i class="fas fa-chevron-right"></i>
 						</button>
+					</div>
+
+					<div class="sc-dots" *ngIf="scTotal > 1">
+						<button class="sc-dot" *ngFor="let d of scDots; let i = index"
+							[class.active]="i === scIndex" (click)="scGoTo(i); scStartAuto()"
+							[attr.aria-label]="'Go to slide ' + (i + 1)"></button>
 					</div>
 				</div>
 
