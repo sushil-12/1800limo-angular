@@ -264,7 +264,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		if (action === 'pinned') {
 			this.toastr.success(`Booking #${bookingId} pinned`);
 		} else {
-			this.toastr.success(`Booking #${bookingId} unpinned`);
+			this.toastr.error(`Booking #${bookingId} unpinned`);
 		}
 	}
 

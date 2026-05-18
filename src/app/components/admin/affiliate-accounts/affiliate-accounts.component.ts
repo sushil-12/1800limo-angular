@@ -77,6 +77,17 @@ export class AffiliateAccountsComponent implements OnInit {
 	uploadedFile: any;
 	successMessage: any;
 
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline', 'strike'],
+			[{ 'list': 'ordered' }, { 'list': 'bullet' }],
+			[{ 'size': ['small', false, 'large', 'huge'] }],
+			[{ 'color': [] }, { 'background': [] }],
+			['link'],
+			['clean']
+		]
+	};
+
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
