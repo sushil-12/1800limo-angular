@@ -70,7 +70,7 @@ export class BookingPreviewComponent implements OnInit {
     private toastr: ToastrService,
   ) { }
 
-  // ── Header actions ─────────────────────────────────────────────────
+  // ── Header actions ─────────────
   onEdit(): void {
     this.editBooking.emit(this.bookingPreview);
   }

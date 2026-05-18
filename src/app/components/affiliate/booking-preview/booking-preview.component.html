@@ -496,7 +496,7 @@
 					<div class="rcpt-total" *ngIf="bookingPreview?.grand_total">
 						<span class="rcpt-total-label">Total Amount</span>
 						<span
-							class="rcpt-total-amount">{{currencySymbol}}{{textFormatter(bookingPreview?.grand_total)}}</span>
+							class="rcpt-total-amount">{{currencySymbol}}{{formatBaseRate(bookingPreview?.grand_total)}}</span>
 					</div>
 				</div>
 			</div>
