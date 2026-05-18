@@ -694,19 +694,16 @@ export class BookingPreviewComponent implements OnInit {
 
   formatDate(date: string): string {
     const m = moment(date);
-    if (!m.isValid()) {
-      return '';
-    }
-    const formatted = m.format('ddd, MMM D, YYYY');
+    const dateStr = `${m.format('MM/DD/YYYY')} | ${m.format('MMMM D, YYYY')} | ${m.format('dddd')}`;
     if (m.isSame(moment(), 'day')) {
-      return `Today · ${formatted}`;
+      return `Today | ${dateStr}`;
     }
-    return formatted;
+    return dateStr;
   }
 
   formatTime(time: string): string {
-    const m = moment(time, ['HH:mm:ss', 'HH:mm']);
-    return m.isValid() ? m.format('h:mm A') : '';
+    const m = moment(time, 'HH:mm:ss');
+    return `${m.format('LT')} | ${m.format('HHmm')} h`;
   }
 
   getCancellationTime(cancellationHours: number): string {
