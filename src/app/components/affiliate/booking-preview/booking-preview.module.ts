@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { QuillModule } from 'ngx-quill';
 import { BookingPreviewComponent } from './booking-preview.component';
 
 @NgModule({
@@ -9,7 +11,9 @@ import { BookingPreviewComponent } from './booking-preview.component';
   ],
   imports: [
     CommonModule,
-    GoogleMapsModule
+    FormsModule,
+    GoogleMapsModule,
+    QuillModule
   ],
   exports: [
     BookingPreviewComponent
