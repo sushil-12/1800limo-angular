@@ -123,6 +123,11 @@
 		transform: translateY(1px);
 	}
 
+	&:disabled {
+		opacity: 0.6;
+		cursor: progress;
+	}
+
 	&--primary {
 		color: #fff;
 		background: #2563eb;
@@ -135,6 +140,15 @@
 			color: #fff;
 		}
 	}
+}
+
+.rcpt-spin {
+	display: inline-block;
+	animation: rcpt-spin 0.8s linear infinite;
+}
+
+@keyframes rcpt-spin {
+	to { transform: rotate(360deg); }
 }
 
 // ── Booking date ──
@@ -457,53 +471,78 @@
 }
 
 // ── Special instruction ──
-.rcpt-special {
-	font-size: 0.9rem;
-	color: #374151;
-	line-height: 1.5;
-	background: #fafafa;
-	border: 1px solid rgba(0, 0, 0, 0.07);
-	border-left: 3px solid #f59e0b;
-	border-radius: 6px;
-	padding: 10px 12px;
-}
-
-.box-special-instruction {
-	overflow-y: auto;
-	max-height: 160px;
-	scrollbar-width: none;
-
-	&::-webkit-scrollbar {
-		display: none;
-	}
-}
-
-.bp-scroll-controls {
+.rcpt-note {
 	display: flex;
-	justify-content: center;
-	gap: 6px;
-	margin-top: 8px;
+	gap: 10px;
+	background: #fffaf0;
+	border: 1px solid #fde8c4;
+	border-radius: 8px;
+	padding: 12px 14px;
+	margin-bottom: 4px;
 }
 
-.bp-scroll-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 26px;
-	height: 26px;
-	border-radius: 50%;
-	border: 1px solid rgba(0, 0, 0, 0.12);
-	background: #fff;
-	color: #555;
-	font-size: 0.8rem;
-	cursor: pointer;
-	padding: 0;
+.rcpt-note-icon {
+	flex-shrink: 0;
+	font-size: 1rem;
+	line-height: 1.55;
+	color: #d97706;
+}
 
-	&:hover {
-		background: #f59e0b;
-		color: #fff;
-		border-color: #f59e0b;
+.rcpt-note-body {
+	font-size: 0.9rem;
+	color: #3f3f46;
+	line-height: 1.55;
+	white-space: pre-wrap;
+	word-break: break-word;
+	flex: 1;
+	min-width: 0;
+
+	::ng-deep p:last-child {
+		margin-bottom: 0;
 	}
+}
+
+.rcpt-empty {
+	font-size: 0.88rem;
+	color: #9ca3af;
+	font-style: italic;
+	padding: 4px 0;
+}
+
+// ── Meet & Greet (highlighted) ──
+.rcpt-greet {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	background: #eff6ff;
+	border: 1px solid #c7dbff;
+	border-radius: 8px;
+	padding: 10px 14px;
+	margin-top: 10px;
+}
+
+.rcpt-greet-icon {
+	flex-shrink: 0;
+	font-size: 1rem;
+	color: #2563eb;
+	margin-top: 1px;
+}
+
+.rcpt-greet-label {
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #2563eb;
+	margin-bottom: 2px;
+}
+
+.rcpt-greet-value {
+	font-size: 0.92rem;
+	font-weight: 600;
+	color: #1e3a8a;
+	line-height: 1.4;
+	word-break: break-word;
 }
 
 // ── Map ──
@@ -747,5 +786,68 @@
 
 	.rcpt-shell {
 		box-shadow: none !important;
+	}
+}
+
+// ── Share booking modal ──
+.rcpt-share {
+	border: none;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 24px 60px rgba(17, 24, 39, 0.25);
+}
+
+.rcpt-share-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 18px 20px 14px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.rcpt-share-title {
+	font-size: 1.15rem;
+	font-weight: 800;
+	color: #111827;
+	margin: 0;
+}
+
+.rcpt-share-sub {
+	font-size: 0.84rem;
+	color: #6b7280;
+	margin: 4px 0 0;
+}
+
+.rcpt-share-header .rcpt-close {
+	position: static;
+	flex-shrink: 0;
+}
+
+.rcpt-share-body {
+	padding: 16px 20px !important;
+	background: #f9fafb;
+
+	::ng-deep .ql-toolbar {
+		border-radius: 6px 6px 0 0;
+		background: #fff;
+	}
+
+	::ng-deep .ql-container {
+		border-radius: 0 0 6px 6px;
+		font-size: 0.9rem;
+	}
+}
+
+.rcpt-share-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 14px 20px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+	.rcpt-btn {
+		flex: 0 0 auto;
+		min-width: 110px;
 	}
 }

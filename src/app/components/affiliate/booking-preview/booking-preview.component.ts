@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+// @ts-ignore - html2pdf.js ships no type definitions
+import html2pdf from 'html2pdf.js';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -22,6 +24,7 @@ declare var $: any;
 export class BookingPreviewComponent implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild('specialInstructionBox') specialInstructionBox!: ElementRef;
+  @ViewChild('receiptContent') receiptContent!: ElementRef;
 
   isScrollable = false;
 
@@ -44,6 +47,19 @@ export class BookingPreviewComponent implements OnInit {
   @Output() editBooking = new EventEmitter<any>();
   @Output() shareBooking = new EventEmitter<any>();
 
+  shareEditorContent: string = '';
+
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'color': [] }, { 'background': [] }],
+      ['link'],
+      ['clean'],
+    ],
+  };
+
   constructor(
     private $affiliateService: AffiliateService,
     private $adminService: AdminService,
@@ -60,11 +76,159 @@ export class BookingPreviewComponent implements OnInit {
   }
 
   onShare(): void {
+    this.shareEditorContent = this.buildShareMessage();
     this.shareBooking.emit(this.bookingPreview);
+    try {
+      $('#shareBookingModal').modal('show');
+    } catch (err) {
+      console.error('[BookingPreview] onShare: failed to open share modal', err);
+    }
   }
 
+  copyShareHtml(): void {
+    const html = this.shareEditorContent || '';
+    // Plain-text version: strip tags, turn block ends into newlines.
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    const plain = (tmp.innerText || tmp.textContent || '').trim();
+
+    const done = () => this.toastr.success('Copied to clipboard');
+    const fail = () => this.toastr.error('Could not copy');
+
+    const w = window as any;
+    if (navigator?.clipboard && w.ClipboardItem) {
+      // Rich copy: pasting into email/docs keeps the exact HTML formatting.
+      const item = new w.ClipboardItem({
+        'text/html': new Blob([html], { type: 'text/html' }),
+        'text/plain': new Blob([plain], { type: 'text/plain' }),
+      });
+      navigator.clipboard.write([item]).then(done).catch(() => {
+        navigator.clipboard.writeText(html).then(done).catch(fail);
+      });
+    } else if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(html).then(done).catch(fail);
+    } else {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = html;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      } catch {
+        fail();
+      }
+    }
+  }
+
+  private buildShareMessage(): string {
+    const b = this.bookingPreview || {};
+
+    const pickupAddress =
+      b.pickup_address || b.pickup || b.pickup_airport_name || '';
+    const dropoffAddress =
+      b.dropoff_address || b.dropoff || b.dropoff_airport_name || '';
+
+    const dateStr = b.pickup_date
+      ? `${moment(b.pickup_date).format('MM/DD/YYYY')} | ${moment(b.pickup_date).format('MMM D, YYYY')}`
+      : '';
+    const timeM = b.pickup_time ? moment(b.pickup_time, ['HH:mm:ss', 'HH:mm']) : null;
+    const timeStr = timeM && timeM.isValid()
+      ? `${timeM.format('h:mm a')} | ${timeM.format('HHmm')} h`
+      : '';
+
+    const bookingType = [
+      this.textFormatter(b.service_type),
+      b.transfer_type,
+    ].filter(Boolean).join('/');
+
+    const lines: (string | null)[] = [
+      'Hi, I need an all-inclusive rate, with tip, tax, and any tolls, for this booking.',
+      '',
+      bookingType ? `Booking Type: ${bookingType}` : null,
+      b.cancellation_hours
+        ? `Cancellation Period: ${this.getCancellationTime(b.cancellation_hours)}`
+        : null,
+      '',
+      b.vehicle_type_name || null,
+      b.total_passengers != null ? `${b.total_passengers} pax` : null,
+      b.luggage_count != null ? `${b.luggage_count} luggage` : null,
+      '',
+      'Travel Information',
+      '',
+      'Pickup Details:',
+      dateStr ? `Date: ${dateStr}` : null,
+      timeStr ? `Time: ${timeStr}` : null,
+      pickupAddress ? `Address: ${pickupAddress}` : null,
+      '',
+      'Drop Off Details:',
+      dropoffAddress ? `Address: ${dropoffAddress}` : null,
+      '',
+      b.distance != null
+        ? `Total Distance: ${this.mToMi(b.distance)} Miles / ${this.mToKm(b.distance)} Km`
+        : null,
+      b.duration != null
+        ? `Estimated Time: ${this.convertToMinutes(b.duration)}`
+        : null,
+    ];
+
+    // Quill stores content as <p> blocks; blank lines become empty paragraphs.
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return lines
+      .filter((l) => l !== null)
+      .map((l) => (l ? `<p>${esc(l as string)}</p>` : '<p><br></p>'))
+      .join('');
+  }
+
+  isGeneratingPdf = false;
+
   printReceipt(): void {
-    window.print();
+    const node = this.receiptContent?.nativeElement as HTMLElement;
+    if (!node || this.isGeneratingPdf) {
+      return;
+    }
+
+    this.isGeneratingPdf = true;
+
+    // Clone so we can strip the live map (cross-origin tiles taint the
+    // html2canvas snapshot) without touching the on-screen receipt.
+    const clone = node.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('google-map, .rcpt-map, .rcpt-actions, .rcpt-close')
+      .forEach((el) => el.remove());
+
+    const fileName = `Booking-${this.bookingPreview?.reservation_id || 'receipt'}.pdf`;
+
+    const opt = {
+      margin: [8, 8, 8, 8],
+      filename: fileName,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        windowWidth: node.scrollWidth,
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+    };
+
+    html2pdf()
+      .set(opt)
+      .from(clone)
+      .save()
+      .then(() => {
+        this.isGeneratingPdf = false;
+        this.toastr.success('Receipt downloaded');
+      })
+      .catch((err: any) => {
+        this.isGeneratingPdf = false;
+        console.error('[BookingPreview] printReceipt: PDF generation failed', err);
+        this.toastr.error('Could not generate PDF');
+      });
   }
 
   copyDetails(): void {
