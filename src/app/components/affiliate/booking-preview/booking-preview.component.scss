@@ -173,7 +173,9 @@
 }
 
 @keyframes rcpt-spin {
-	to { transform: rotate(360deg); }
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 // ── Booking date ──
@@ -185,7 +187,7 @@
 	gap: 16px;
 	padding-top: 14px;
 	padding-bottom: 16px;
-	border-bottom: 3px solid #111827;
+	border-bottom: 0.8px solid gray;
 }
 
 .rcpt-idrow-label {
@@ -232,22 +234,66 @@
 	letter-spacing: 0.03em;
 	background-color: #0474fc; // default / pending fallback
 
-	&.pending { background-color: #0474fc; }
-	&.rejection_requested { background-color: #dc3545; }
-	&.partial_paid { background-color: #00CCCC; }
-	&.partial_refund { background-color: #212529; }
+	&.pending {
+		background-color: #0474fc;
+	}
+
+	&.rejection_requested {
+		background-color: #dc3545;
+	}
+
+	&.partial_paid {
+		background-color: #00CCCC;
+	}
+
+	&.partial_refund {
+		background-color: #212529;
+	}
+
 	&.paid_cash,
-	&.paid { background-color: #D1B000; }
-	&.driver_unassigned { background-color: #dc3545; }
-	&.assigned { background-color: var(--green-color); }
-	&.rejected { background-color: #dc3545; }
-	&.cancelled { background-color: #FF69B4; }
-	&.en_route_pu { background-color: #6454ac; }
-	&.on_location { background-color: #7289da; }
-	&.en_route_do { background-color: #1abc9c; }
-	&.ended { background-color: #8cc43c; }
-	&.finalized { background-color: #71c5e8; }
-	&.non_payable { background-color: #ec4c8c; }
+	&.paid {
+		background-color: #D1B000;
+	}
+
+	&.driver_unassigned {
+		background-color: #dc3545;
+	}
+
+	&.assigned {
+		background-color: var(--green-color);
+	}
+
+	&.rejected {
+		background-color: #dc3545;
+	}
+
+	&.cancelled {
+		background-color: #FF69B4;
+	}
+
+	&.en_route_pu {
+		background-color: #6454ac;
+	}
+
+	&.on_location {
+		background-color: #7289da;
+	}
+
+	&.en_route_do {
+		background-color: #1abc9c;
+	}
+
+	&.ended {
+		background-color: #8cc43c;
+	}
+
+	&.finalized {
+		background-color: #71c5e8;
+	}
+
+	&.non_payable {
+		background-color: #ec4c8c;
+	}
 }
 
 // ── Generic label / value row ──
@@ -731,6 +777,8 @@
 		line-height: 1.3;
 		margin-top: 2px;
 		display: block;
+		overflow: hidden;
+		word-break: break-word;
 	}
 
 	.bp-rate-total {
@@ -752,10 +800,6 @@
 		.preview-output-field {
 			font-size: 1.3rem !important;
 			color: #15803d;
-		}
-
-		.preview-output-desc {
-			color: #4ade80 !important;
 		}
 	}
 }
