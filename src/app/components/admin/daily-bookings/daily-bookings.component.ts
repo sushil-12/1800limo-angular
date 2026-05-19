@@ -252,6 +252,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	togglePin(bookingId: string): void {
 		const index = this.pinnedBookingIds.indexOf(bookingId);
 		let action: 'pinned' | 'unpinned';
+
 		if (index === -1) {
 			this.pinnedBookingIds.push(bookingId);
 			action = 'pinned';
@@ -260,7 +261,10 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			action = 'unpinned';
 		}
 
-		this.filterBookingsByStatus();   // reorder table
+		// ✅ Persist to localStorage so pins survive refresh
+		localStorage.setItem('pinnedBookingIds', JSON.stringify(this.pinnedBookingIds));
+
+		this.filterBookingsByStatus();
 		if (action === 'pinned') {
 			this.toastr.success(`Booking #${bookingId} pinned`);
 		} else {
@@ -599,10 +603,21 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 	filterBookingsByStatus() {
-		let unpinned = [...this.bookings_Original].filter(b => !this.pinnedBookingIds.includes(b.booking_id));
+		const isSearching = this.searchText && this.searchText.trim() !== '';
+
+		let filtered = [...this.bookings_Original];
+
 		if (this.selectedStatus && this.selectedStatus !== "") {
-			unpinned = unpinned.filter(b => b.booking_status == this.selectedStatus);
+			filtered = filtered.filter(b => b.booking_status == this.selectedStatus);
 		}
+
+		// Only apply pinning when not in search mode
+		if (isSearching) {
+			this.bookings = filtered;
+			return;
+		}
+
+		const unpinned = filtered.filter(b => !this.pinnedBookingIds.includes(b.booking_id));
 		const pinned = this.bookings_Original.filter(b => this.pinnedBookingIds.includes(b.booking_id));
 		this.bookings = [...pinned, ...unpinned];
 	}
