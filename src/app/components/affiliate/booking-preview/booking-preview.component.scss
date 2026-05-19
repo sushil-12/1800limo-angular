@@ -898,6 +898,12 @@
 	padding: 16px 20px !important;
 	background: #f9fafb;
 
+	quill-editor,
+	::ng-deep quill-editor {
+		display: block;
+		width: 100%;
+	}
+
 	::ng-deep .ql-toolbar {
 		border-radius: 6px 6px 0 0;
 		background: #fff;
