@@ -200,6 +200,7 @@
 	font-size: 1rem;
 	font-weight: 700;
 	color: #111827;
+	text-align: right;
 }
 
 // ── Status strip ──
@@ -770,7 +771,7 @@
 	}
 
 	.preview-output-desc {
-		font-size: 0.72rem !important;
+		font-size: 0.7rem !important;
 		color: #9ca3af !important;
 		font-weight: 400 !important;
 		text-align: right;
@@ -816,7 +817,7 @@
 	align-items: center;
 	padding-top: 22px;
 	padding-bottom: 22px;
-	border-top: 3px solid #111827;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .rcpt-total-label {

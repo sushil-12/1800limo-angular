@@ -15,7 +15,8 @@
 						<h2 class="rcpt-head-title">Booking #{{ bookingPreview?.reservation_id }}</h2>
 						<!-- ── Action buttons ── -->
 						<div class="rcpt-actions mt-4">
-							<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onEdit()">
+							<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onEdit()"
+								*ngIf="(bookingPreview?.booking_status != 'paid' && bookingPreview?.booking_status != 'paid_cash') && !((userRole == 'individual' || userRole == 'travel_agent') && bookingPreview?.booking_status == 'cancelled')">
 								<i class="bi bi-pencil-square"></i> Edit
 							</button>
 							<button type="button" class="rcpt-btn" (click)="onShare()">
@@ -34,8 +35,10 @@
 
 					<!-- ── Booking Date ── -->
 					<div class="rcpt-idrow" *ngIf="bookingPreview?.pickup_date">
-						<span class="rcpt-idrow-label">Booking Date</span>
-						<span class="rcpt-idrow-value">{{ formatDate(bookingPreview?.pickup_date) }}</span>
+						<span class="rcpt-idrow-label">Booking Date & Time</span>
+						<span class="rcpt-idrow-value">{{ formatDate(bookingPreview?.pickup_date) }} | {{
+							formatTime(bookingPreview?.pickup_time) }}</span>
+
 					</div>
 
 					<!-- ── Status ── -->
@@ -58,6 +61,10 @@
 								/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
 							</span>
 						</span>
+					</div>
+					<div class="rcpt-row rcpt-row--solo" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+						<span class="rcpt-row-label">Booking Hours</span>
+						<span class="rcpt-row-value">{{ bookingPreview?.number_of_hours }}</span>
 					</div>
 					<div class="rcpt-row">
 						<span class="rcpt-row-label">Cancellation Period</span>
@@ -96,10 +103,6 @@
 						<div class="rcpt-row">
 							<span class="rcpt-row-label">Luggage</span>
 							<span class="rcpt-row-value">{{ bookingPreview?.luggage_count }}</span>
-						</div>
-						<div class="rcpt-row" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
-							<span class="rcpt-row-label">Booking Hours</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.number_of_hours }}</span>
 						</div>
 					</div>
 
@@ -226,9 +229,16 @@
 					<div class="rcpt-section" *ngIf="bookingPreview?.booking_status !== 'driver_unassigned'">
 						<div class="rcpt-section-title">Driver Information</div>
 						<div class="rcpt-row">
-							<span class="rcpt-row-label">Driver</span>
+							<span class="rcpt-row-label">Name</span>
 							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.driver_name) | titlecase
 								}}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.driver_email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link" href="mailto:{{bookingPreview?.driver_email}}">
+								<i class="bi bi-envelope"></i>
+								{{ textFormatter(bookingPreview?.driver_email) }}
+							</a>
 						</div>
 						<div class="rcpt-row" *ngIf="bookingPreview?.driver_cell">
 							<span class="rcpt-row-label">Phone</span>
@@ -236,13 +246,6 @@
 								href="tel:{{bookingPreview?.driver_cell_isd}}{{bookingPreview?.driver_cell}}">
 								<i class="bi bi-telephone"></i>
 								({{ bookingPreview?.driver_cell_isd }}) {{ bookingPreview?.driver_cell }}
-							</a>
-						</div>
-						<div class="rcpt-row" *ngIf="bookingPreview?.driver_email">
-							<span class="rcpt-row-label">Email</span>
-							<a class="rcpt-row-value rcpt-link" href="mailto:{{bookingPreview?.driver_email}}">
-								<i class="bi bi-envelope"></i>
-								{{ textFormatter(bookingPreview?.driver_email) }}
 							</a>
 						</div>
 					</div>
