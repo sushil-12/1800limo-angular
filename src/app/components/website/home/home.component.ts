@@ -181,72 +181,72 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		other_listing_arr: [
 			{
 				list: "Multi Mix Vehicle Transfers and Charters",
-				content: "Flexible fleet options for any group size — from sedans to coaches, tailored to your exact transfer or charter needs.",
+				content: "Sedans to coaches — right-sized fleet for any transfer or charter.",
 				icon: "fas fa-shuttle-van"
 			},
 			{
 				list: "NEMT (Non-Emergency Medical Transfers)",
-				content: "Safe, compassionate transportation for medical appointments and facility transfers, ensuring comfort every mile.",
+				content: "Compassionate, safe rides to medical appointments and facilities.",
 				icon: "fas fa-ambulance"
 			},
 			{
 				list: "Small and Large Group Transfers",
-				content: "Seamless coordination for groups of any size — punctual, organized, and stress-free from start to finish.",
+				content: "Punctual, organized transport for groups of any size.",
 				icon: "fas fa-users"
 			},
 			{
 				list: "Festivals, Excursions and Tours",
-				content: "Curated rides to festivals, local attractions, and guided tours, making every outing effortless and memorable.",
+				content: "Effortless rides to festivals, attractions, and guided tours.",
 				icon: "fas fa-map-marked-alt"
 			},
 			{
 				list: "Airport Transfers",
-				content: "On-time pickups and drop-offs at all major airports, with real-time flight tracking for zero wait-time stress.",
+				content: "On-time airport pickups with live flight tracking.",
 				icon: "fas fa-plane-departure"
 			},
 			{
 				list: "City to City Transfers",
-				content: "Comfortable, direct intercity rides with professional chauffeurs — arrive refreshed, no matter the distance.",
+				content: "Direct intercity rides with professional chauffeurs.",
 				icon: "fas fa-road"
 			},
 			{
 				list: "Conventions & Shopping",
-				content: "Reliable rides to convention centers and shopping destinations, keeping your schedule and luggage perfectly on track.",
+				content: "Reliable transport to convention centers and shopping destinations.",
 				icon: "fas fa-store"
 			},
 			{
 				list: "Corporate Accounts Welcome",
-				content: "Streamlined billing, priority booking, and dedicated account management for all your corporate travel needs.",
+				content: "Priority booking and streamlined billing for business travel.",
 				icon: "fas fa-briefcase"
 			},
 			{
 				list: "Individuals and Couples",
-				content: "Private, personalized rides for solo travelers and couples — discreet, elegant, and always on your terms.",
+				content: "Private, elegant rides tailored to solo travelers and couples.",
 				icon: "fas fa-heart"
 			},
 			{
 				list: "Memorial Services",
-				content: "Respectful and dignified transportation for families during memorial services, handled with the utmost care.",
+				content: "Dignified, respectful transport for families during services.",
 				icon: "fas fa-dove"
 			},
 			{
 				list: "Cruise Ports",
-				content: "Timely transfers to and from cruise ports, with ample luggage space and a relaxed, scenic journey.",
+				content: "Timely port transfers with ample space for luggage.",
 				icon: "fas fa-ship"
 			},
 			{
 				list: "Travel Agent Friendly",
-				content: "Easy booking tools, commission support, and reliable service that travel agents and their clients can count on.",
+				content: "Easy booking and commission support for travel agents.",
 				icon: "fas fa-globe"
 			},
 			{
 				list: "Handicap Accessible",
-				content: "Fully equipped accessible vehicles ensuring every passenger travels safely, comfortably, and with full dignity.",
+				content: "Fully equipped vehicles for safe, dignified accessible travel.",
 				icon: "fas fa-wheelchair"
 			},
 			{
 				list: "Multilingual Drivers",
-				content: "Fluent drivers in multiple languages, ensuring clear communication and a welcoming ride for international guests.",
+				content: "Fluent multilingual drivers for seamless international guest experiences.",
 				icon: "fas fa-language"
 			}
 		]

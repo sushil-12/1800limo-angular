@@ -190,7 +190,7 @@ export class BookingPreviewComponent implements OnInit {
     console.debug("BOKING", b)
     const bookingType = [
       this.textFormatter(b.service_type),
-      b.transfer_type,
+      this.textFormatter(b.transfer_type),
     ].filter(Boolean).join('/');
 
     const bookingHours = b.number_of_hours || null;
