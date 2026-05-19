@@ -171,7 +171,6 @@ export class BookingPreviewComponent implements OnInit {
       }
     }
   }
-
   private buildShareMessage(): string {
     const b = this.bookingPreview || {};
 
@@ -188,31 +187,39 @@ export class BookingPreviewComponent implements OnInit {
       ? `${timeM.format('h:mm a')} | ${timeM.format('HHmm')} h`
       : '';
 
+    console.debug("BOKING", b)
     const bookingType = [
       this.textFormatter(b.service_type),
       b.transfer_type,
     ].filter(Boolean).join('/');
 
+    const bookingHours = b.number_of_hours || null;
+
+    const esc = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const bold = (s: string) => `<strong>${esc(s)}</strong>`;
+
     const lines: (string | null)[] = [
       'Hi, I need an all-inclusive rate, with tip, tax, and any tolls, for this booking.',
       '',
-      bookingType ? `Booking Type: ${bookingType}` : null,
+      bookingType ? `${bold('Booking Type:')} ${bookingType}` : null,
+      b.service_type == "Charter Tour" && bookingHours ? `${bold('Booking Hours:')} ${bookingHours} hours` : null,
       b.cancellation_hours
-        ? `Cancellation Period: ${this.getCancellationTime(b.cancellation_hours)}`
+        ? `${bold('Cancellation Period:')} ${this.getCancellationTime(b.cancellation_hours)}`
         : null,
       '',
       b.vehicle_type_name || null,
       b.total_passengers != null ? `${b.total_passengers} pax` : null,
       b.luggage_count != null ? `${b.luggage_count} luggage` : null,
       '',
-      'Travel Information',
+      bold('Travel Information'),
       '',
-      'Pickup Details:',
+      bold('Pickup Details:'),
       dateStr ? `Date: ${dateStr}` : null,
       timeStr ? `Time: ${timeStr}` : null,
       pickupAddress ? `Address: ${pickupAddress}` : null,
       '',
-      'Drop Off Details:',
+      bold('Drop Off Details:'),
       dropoffAddress ? `Address: ${dropoffAddress}` : null,
       '',
       b.distance != null
@@ -223,12 +230,9 @@ export class BookingPreviewComponent implements OnInit {
         : null,
     ];
 
-    // Quill stores content as <p> blocks; blank lines become empty paragraphs.
-    const esc = (s: string) =>
-      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return lines
       .filter((l) => l !== null)
-      .map((l) => (l ? `<p>${esc(l as string)}</p>` : '<p><br></p>'))
+      .map((l) => (l ? `<p>${l.startsWith('<') ? l : esc(l as string)}</p>` : '<p><br></p>'))
       .join('');
   }
 

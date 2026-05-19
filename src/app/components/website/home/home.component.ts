@@ -174,6 +174,84 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	scDots: number[] = [];
 	private scTimer: any;
 
+	// ── Service carousel static data ─────────────────────────────────────────────
+	serviceInfo = {
+		title: "PERSONALIZED DESTINATIONS AND AMENITIES",
+		section_status: "enable",
+		other_listing_arr: [
+			{
+				list: "Multi Mix Vehicle Transfers and Charters",
+				content: "Flexible fleet options for any group size — from sedans to coaches, tailored to your exact transfer or charter needs.",
+				icon: "fas fa-shuttle-van"
+			},
+			{
+				list: "NEMT (Non-Emergency Medical Transfers)",
+				content: "Safe, compassionate transportation for medical appointments and facility transfers, ensuring comfort every mile.",
+				icon: "fas fa-ambulance"
+			},
+			{
+				list: "Small and Large Group Transfers",
+				content: "Seamless coordination for groups of any size — punctual, organized, and stress-free from start to finish.",
+				icon: "fas fa-users"
+			},
+			{
+				list: "Festivals, Excursions and Tours",
+				content: "Curated rides to festivals, local attractions, and guided tours, making every outing effortless and memorable.",
+				icon: "fas fa-map-marked-alt"
+			},
+			{
+				list: "Airport Transfers",
+				content: "On-time pickups and drop-offs at all major airports, with real-time flight tracking for zero wait-time stress.",
+				icon: "fas fa-plane-departure"
+			},
+			{
+				list: "City to City Transfers",
+				content: "Comfortable, direct intercity rides with professional chauffeurs — arrive refreshed, no matter the distance.",
+				icon: "fas fa-road"
+			},
+			{
+				list: "Conventions & Shopping",
+				content: "Reliable rides to convention centers and shopping destinations, keeping your schedule and luggage perfectly on track.",
+				icon: "fas fa-store"
+			},
+			{
+				list: "Corporate Accounts Welcome",
+				content: "Streamlined billing, priority booking, and dedicated account management for all your corporate travel needs.",
+				icon: "fas fa-briefcase"
+			},
+			{
+				list: "Individuals and Couples",
+				content: "Private, personalized rides for solo travelers and couples — discreet, elegant, and always on your terms.",
+				icon: "fas fa-heart"
+			},
+			{
+				list: "Memorial Services",
+				content: "Respectful and dignified transportation for families during memorial services, handled with the utmost care.",
+				icon: "fas fa-dove"
+			},
+			{
+				list: "Cruise Ports",
+				content: "Timely transfers to and from cruise ports, with ample luggage space and a relaxed, scenic journey.",
+				icon: "fas fa-ship"
+			},
+			{
+				list: "Travel Agent Friendly",
+				content: "Easy booking tools, commission support, and reliable service that travel agents and their clients can count on.",
+				icon: "fas fa-globe"
+			},
+			{
+				list: "Handicap Accessible",
+				content: "Fully equipped accessible vehicles ensuring every passenger travels safely, comfortably, and with full dignity.",
+				icon: "fas fa-wheelchair"
+			},
+			{
+				list: "Multilingual Drivers",
+				content: "Fluent drivers in multiple languages, ensuring clear communication and a welcoming ride for international guests.",
+				icon: "fas fa-language"
+			}
+		]
+	};
+
 	@ViewChild('blogSliderRef') blogSliderRef!: ElementRef;
 
 
@@ -196,25 +274,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private blogService: BlogService
 	) { }
 
-	// Icons cycled across the service cards (no per-item icon in the API data)
-	private scIcons = [
-		'fas fa-plane-departure',
-		'fas fa-user-tie',
-		'fas fa-shield-alt',
-		'fas fa-clock',
-		'fas fa-route',
-		'fas fa-glass-cheers',
-		'fas fa-map-marked-alt',
-		'fas fa-star',
-	];
+	scIcon(i: number): string {
+		return this.serviceInfo?.other_listing_arr?.[i]?.icon || 'fas fa-star';
+	}
 
 	get scTotal(): number {
 		return this.fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')
 			?.other_listing_arr?.length || 0;
-	}
-
-	scIcon(i: number): string {
-		return this.scIcons[i % this.scIcons.length];
 	}
 
 	initServiceCarousel() {
