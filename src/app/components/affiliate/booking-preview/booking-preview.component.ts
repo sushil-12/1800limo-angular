@@ -12,7 +12,7 @@ import { GoogleMap } from '@angular/google-maps';
 import { IndividualService } from 'src/app/services/individual.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import moment from 'moment';
-
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -27,6 +27,18 @@ export class BookingPreviewComponent implements OnInit {
   @ViewChild('receiptContent') receiptContent!: ElementRef;
 
   isScrollable = false;
+
+  mapOptions: google.maps.MapOptions = {
+    disableDefaultUI: true,
+    draggable: false,
+    zoomControl: false,
+    scrollwheel: false,
+    disableDoubleClickZoom: true,
+    streetViewControl: false,
+    fullscreenControl: false,
+    keyboardShortcuts: false,
+    gestureHandling: 'none',
+  };
 
   zoom = 7;
   mapCenter: google.maps.LatLngLiteral = { lat: 41.850033, lng: -87.6500523 };
@@ -59,6 +71,7 @@ export class BookingPreviewComponent implements OnInit {
       ['clean'],
     ],
   };
+  markers: any;
 
   constructor(
     private $affiliateService: AffiliateService,
@@ -68,11 +81,46 @@ export class BookingPreviewComponent implements OnInit {
     private $individualService: IndividualService,
     private $travelAgentService: TravelAgentService,
     private toastr: ToastrService,
+    private router: Router
   ) { }
 
   // ── Header actions ─────────────
   onEdit(): void {
-    this.editBooking.emit(this.bookingPreview);
+    const bookingId = this.bookingPreview?.reservation_id || this.bookingPreview?.id;
+    const updateType = 'edit';
+
+    try {
+      $('#previewBookingOnID').modal('hide');
+    } catch (e) { }
+
+    if (this.userRole === 'admin') {
+      this.router.navigate(['/admin/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+    }
+    else if (this.userRole === 'affiliate') {
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = currentUserStr ? JSON.parse(currentUserStr) : {};
+
+      if (currentUser?.roleName === 'sub_affiliate') {
+        this.router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+      } else {
+        this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+      }
+    }
+    else if (this.userRole === 'travel_agent') {
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = currentUserStr ? JSON.parse(currentUserStr) : {};
+
+      this.router.navigate([`/${currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+    }
+    else if (this.userRole === 'individual') {
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = currentUserStr ? JSON.parse(currentUserStr) : {};
+
+      this.router.navigate([`/${currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+    }
+    else {
+      this.editBooking.emit(this.bookingPreview);
+    }
   }
 
   onShare(): void {
@@ -188,47 +236,47 @@ export class BookingPreviewComponent implements OnInit {
 
   printReceipt(): void {
     const node = this.receiptContent?.nativeElement as HTMLElement;
-    if (!node || this.isGeneratingPdf) {
-      return;
-    }
+    if (!node || this.isGeneratingPdf) return;
 
+    // ✅ Set flag first — Angular renders the spinner on this tick
     this.isGeneratingPdf = true;
 
-    // Clone so we can strip the live map (cross-origin tiles taint the
-    // html2canvas snapshot) without touching the on-screen receipt.
-    const clone = node.cloneNode(true) as HTMLElement;
-    clone.querySelectorAll('google-map, .rcpt-map, .rcpt-actions, .rcpt-close')
-      .forEach((el) => el.remove());
+    // Defer the heavy work to the next tick so the button re-renders first
+    setTimeout(() => {
+      const clone = node.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll('google-map, .rcpt-map, .rcpt-actions, .rcpt-close')
+        .forEach((el) => el.remove());
 
-    const fileName = `Booking-${this.bookingPreview?.reservation_id || 'receipt'}.pdf`;
+      const fileName = `Booking-${this.bookingPreview?.reservation_id || 'receipt'}.pdf`;
 
-    const opt = {
-      margin: [8, 8, 8, 8],
-      filename: fileName,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        windowWidth: node.scrollWidth,
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-    };
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          windowWidth: node.scrollWidth,
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+      };
 
-    html2pdf()
-      .set(opt)
-      .from(clone)
-      .save()
-      .then(() => {
-        this.isGeneratingPdf = false;
-        this.toastr.success('Receipt downloaded');
-      })
-      .catch((err: any) => {
-        this.isGeneratingPdf = false;
-        console.error('[BookingPreview] printReceipt: PDF generation failed', err);
-        this.toastr.error('Could not generate PDF');
-      });
+      html2pdf()
+        .set(opt)
+        .from(clone)
+        .save()
+        .then(() => {
+          this.isGeneratingPdf = false;
+          this.toastr.success('Receipt downloaded');
+        })
+        .catch((err: any) => {
+          this.isGeneratingPdf = false;
+          console.error('[BookingPreview] printReceipt: PDF generation failed', err);
+          this.toastr.error('Could not generate PDF');
+        });
+    }, 0);
   }
 
   copyDetails(): void {
@@ -411,107 +459,193 @@ export class BookingPreviewComponent implements OnInit {
   }
 
   MapController() {
-    console.debug('[BookingPreview] MapController: start — bookingPreview =', this.bookingPreview);
-
-    const transferType = this.bookingPreview?.transfer_type || '';
-    console.debug('[BookingPreview] MapController: transferType =', transferType);
-
-    let originCoords: google.maps.LatLng | null;
-    let destinationCoords: google.maps.LatLng | null;
+    console.log('Map has been initialised.')
+    let origin: google.maps.LatLng;
+    let destination: google.maps.LatLng;
     const waypoints: google.maps.DirectionsWaypoint[] = [];
 
-    try {
-      originCoords = this.resolveLatLng([
-        ['pickup_latitude', 'pickup_longitude'],
-        ['pickup_address_lat', 'pickup_address_long'],
-        ['pickup_lat', 'pickup_long'],
-      ]);
-      console.debug('[BookingPreview] MapController: originCoords =', originCoords?.toString());
+    // Base values
+    origin = new google.maps.LatLng(this.bookingPreview.pickup_latitude, this.bookingPreview.pickup_longitude);
+    destination = new google.maps.LatLng(this.bookingPreview.dropoff_latitude, this.bookingPreview.dropoff_longitude);
 
-      destinationCoords = this.resolveLatLng([
-        ['dropoff_latitude', 'dropoff_longitude'],
-        ['dropoff_address_lat', 'dropoff_address_long'],
-        ['dropoff_lat', 'dropoff_long'],
-      ]);
-      console.debug('[BookingPreview] MapController: destinationCoords =', destinationCoords?.toString());
-    } catch (err) {
-      console.error('[BookingPreview] MapController: Failed to resolve base coordinates', err);
-      return;
+
+    // Override based on transfer_type
+    if (this.bookingPreview.transfer_type?.includes('airport_')) {
+      origin = new google.maps.LatLng(this.bookingPreview.pickup_airport_latitude, this.bookingPreview.pickup_airport_longitude);
     }
 
-    try {
-      if (transferType.includes('airport_')) {
-        originCoords = this.resolveLatLng([
-          ['pickup_airport_latitude', 'pickup_airport_longitude'],
-          ['pickup_airport_lat', 'pickup_airport_long'],
-        ]) || originCoords;
-        console.debug('[BookingPreview] MapController: airport_ override — originCoords =', originCoords?.toString());
+    if (this.bookingPreview.transfer_type?.includes('_airport')) {
+      destination = new google.maps.LatLng(this.bookingPreview.dropoff_airport_latitude, this.bookingPreview.dropoff_airport_longitude);
+    }
+
+    // Handle Extra Stops
+    if (this.bookingPreview?.extra_stops?.length > 0) {
+      console.log("Processing extra stops", this.bookingPreview.extra_stops);
+      for (let i = 0; i < this.bookingPreview.extra_stops.length; i++) {
+        const stop = this.bookingPreview.extra_stops[i];
+        if (stop.latitude && stop.longitude) {
+          console.log("Adding waypoint:", stop);
+          waypoints.push({
+            location: new google.maps.LatLng(
+              Number(stop.latitude),
+              Number(stop.longitude)
+            ),
+            stopover: true
+          });
+        }
       }
-
-      if (transferType.includes('_airport')) {
-        destinationCoords = this.resolveLatLng([
-          ['dropoff_airport_latitude', 'dropoff_airport_longitude'],
-          ['dropoff_airport_lat', 'dropoff_airport_long'],
-        ]) || destinationCoords;
-        console.debug('[BookingPreview] MapController: _airport override — destinationCoords =', destinationCoords?.toString());
-      }
-    } catch (err) {
-      console.error('[BookingPreview] MapController: Failed to resolve airport coordinate overrides', err);
     }
 
-    let origin: string | google.maps.LatLng | null;
-    let destination: string | google.maps.LatLng | null;
-
-    try {
-      origin = this.resolveRouteLocation(
-        originCoords,
-        transferType.includes('airport_')
-          ? ['pickup_airport_name', 'pickup']
-          : ['pickup', 'pickup_airport_name']
-      );
-      destination = this.resolveRouteLocation(
-        destinationCoords,
-        transferType.includes('_airport')
-          ? ['dropoff_airport_name', 'dropoff']
-          : ['dropoff', 'dropoff_airport_name']
-      );
-      console.debug('[BookingPreview] MapController: origin =', origin, ', destination =', destination);
-    } catch (err) {
-      console.error('[BookingPreview] MapController: Failed to resolve route locations', err);
-      return;
+    // Clear previous markers
+    if (this.markers) {
+      this.markers.forEach(m => m.setMap(null));
     }
+    this.markers = [];
 
-    if (!origin || !destination) {
-      console.warn('[BookingPreview] MapController: origin or destination is null — skipping map draw', { origin, destination });
-      return;
-    }
-
-    try {
-      if (originCoords) {
-        this.mapCenter = { lat: originCoords.lat(), lng: originCoords.lng() };
-      } else if (destinationCoords) {
-        this.mapCenter = { lat: destinationCoords.lat(), lng: destinationCoords.lng() };
-      }
-      console.debug('[BookingPreview] MapController: mapCenter =', this.mapCenter);
-    } catch (err) {
-      console.error('[BookingPreview] MapController: Failed to set mapCenter', err);
+    // Clear previous renderer
+    if (this.directionsRenderer) {
+      this.directionsRenderer.setMap(null);
     }
 
     setTimeout(() => {
-      try {
-        console.debug('[BookingPreview] MapController: calling drawMap');
-        this.drawMap({
-          origin,
-          destination,
-          waypoints,
-          optimizeWaypoints: true,
-          travelMode: google.maps.TravelMode.DRIVING
-        });
-      } catch (err) {
-        console.error('[BookingPreview] MapController: drawMap() threw inside setTimeout', err);
-      }
-    }, 100);
+      this.drawMap({
+        origin,
+        destination,
+        waypoints,
+        optimizeWaypoints: false, // DO NOT optimize so order is preserved for A,B,C labels
+        travelMode: google.maps.TravelMode.DRIVING
+      })
+    }, 100)
+
+
   }
+
+  // MapController() {
+  //   console.debug('[BookingPreview] MapController: start — bookingPreview =', this.bookingPreview);
+
+  //   const transferType = this.bookingPreview?.transfer_type || '';
+  //   console.debug('[BookingPreview] MapController: transferType =', transferType);
+
+  //   let originCoords: google.maps.LatLng | null;
+  //   let destinationCoords: google.maps.LatLng | null;
+  //   const waypoints: google.maps.DirectionsWaypoint[] = [];
+
+  //   try {
+  //     if (this.bookingPreview?.extra_stops && this.bookingPreview.extra_stops.length > 0) {
+  //       console.log(this.bookingPreview, "extra_stops>>>>>>>>>")
+  //       for (const stop of this.bookingPreview.extra_stops) {
+  //         const lat = Number(stop.latitude || stop.lat);
+  //         const lng = Number(stop.longitude || stop.lng);
+  //         if (lat && lng && !isNaN(lat) && !isNaN(lng) && (lat !== 0 || lng !== 0)) {
+  //           waypoints.push({
+  //             location: new google.maps.LatLng(lat, lng),
+  //             stopover: true
+  //           });
+  //         } else if (stop.address) {
+  //           waypoints.push({
+  //             location: stop.address,
+  //             stopover: true
+  //           });
+  //         }
+  //       }
+  //     }
+  //     console.debug('[BookingPreview] MapController: waypoints =', waypoints);
+  //   } catch (err) {
+  //     console.error('[BookingPreview] MapController: Failed to map extra_stops', err);
+  //   }
+
+  //   try {
+  //     originCoords = this.resolveLatLng([
+  //       ['pickup_latitude', 'pickup_longitude'],
+  //       ['pickup_address_lat', 'pickup_address_long'],
+  //       ['pickup_lat', 'pickup_long'],
+  //     ]);
+  //     console.debug('[BookingPreview] MapController: originCoords =', originCoords?.toString());
+
+  //     destinationCoords = this.resolveLatLng([
+  //       ['dropoff_latitude', 'dropoff_longitude'],
+  //       ['dropoff_address_lat', 'dropoff_address_long'],
+  //       ['dropoff_lat', 'dropoff_long'],
+  //     ]);
+  //     console.debug('[BookingPreview] MapController: destinationCoords =', destinationCoords?.toString());
+  //   } catch (err) {
+  //     console.error('[BookingPreview] MapController: Failed to resolve base coordinates', err);
+  //     return;
+  //   }
+
+  //   try {
+  //     if (transferType.includes('airport_')) {
+  //       originCoords = this.resolveLatLng([
+  //         ['pickup_airport_latitude', 'pickup_airport_longitude'],
+  //         ['pickup_airport_lat', 'pickup_airport_long'],
+  //       ]) || originCoords;
+  //       console.debug('[BookingPreview] MapController: airport_ override — originCoords =', originCoords?.toString());
+  //     }
+
+  //     if (transferType.includes('_airport')) {
+  //       destinationCoords = this.resolveLatLng([
+  //         ['dropoff_airport_latitude', 'dropoff_airport_longitude'],
+  //         ['dropoff_airport_lat', 'dropoff_airport_long'],
+  //       ]) || destinationCoords;
+  //       console.debug('[BookingPreview] MapController: _airport override — destinationCoords =', destinationCoords?.toString());
+  //     }
+  //   } catch (err) {
+  //     console.error('[BookingPreview] MapController: Failed to resolve airport coordinate overrides', err);
+  //   }
+
+  //   let origin: string | google.maps.LatLng | null;
+  //   let destination: string | google.maps.LatLng | null;
+
+  //   try {
+  //     origin = this.resolveRouteLocation(
+  //       originCoords,
+  //       transferType.includes('airport_')
+  //         ? ['pickup_airport_name', 'pickup']
+  //         : ['pickup', 'pickup_airport_name']
+  //     );
+  //     destination = this.resolveRouteLocation(
+  //       destinationCoords,
+  //       transferType.includes('_airport')
+  //         ? ['dropoff_airport_name', 'dropoff']
+  //         : ['dropoff', 'dropoff_airport_name']
+  //     );
+  //     console.debug('[BookingPreview] MapController: origin =', origin, ', destination =', destination);
+  //   } catch (err) {
+  //     console.error('[BookingPreview] MapController: Failed to resolve route locations', err);
+  //     return;
+  //   }
+
+  //   if (!origin || !destination) {
+  //     console.warn('[BookingPreview] MapController: origin or destination is null — skipping map draw', { origin, destination });
+  //     return;
+  //   }
+
+  //   try {
+  //     if (originCoords) {
+  //       this.mapCenter = { lat: originCoords.lat(), lng: originCoords.lng() };
+  //     } else if (destinationCoords) {
+  //       this.mapCenter = { lat: destinationCoords.lat(), lng: destinationCoords.lng() };
+  //     }
+  //     console.debug('[BookingPreview] MapController: mapCenter =', this.mapCenter);
+  //   } catch (err) {
+  //     console.error('[BookingPreview] MapController: Failed to set mapCenter', err);
+  //   }
+
+  //   setTimeout(() => {
+  //     try {
+  //       console.debug('[BookingPreview] MapController: calling drawMap');
+  //       this.drawMap({
+  //         origin,
+  //         destination,
+  //         waypoints,
+  //         optimizeWaypoints: true,
+  //         travelMode: google.maps.TravelMode.DRIVING
+  //       });
+  //     } catch (err) {
+  //       console.error('[BookingPreview] MapController: drawMap() threw inside setTimeout', err);
+  //     }
+  //   }, 100);
+  // }
 
   drawMap(request: google.maps.DirectionsRequest) {
     console.debug('[BookingPreview] drawMap: request =', request);
