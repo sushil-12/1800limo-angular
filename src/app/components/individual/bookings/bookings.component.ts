@@ -205,7 +205,137 @@ export class BookingsComponent implements OnInit {
 			this.cancelMessage = ''
 			this.spinner.hide()
 			this.bookingsRes = result;
-			this.bookings = this.bookingsRes?.data?.data;
+			this.bookings = (this.bookingsRes?.data?.data || []).map((booking: any) => {
+
+				return {
+					...booking,
+
+					affiliate_type:
+						typeof booking?.affiliate_type === 'string'
+							? booking.affiliate_type
+							: '',
+
+					company_name:
+						typeof booking?.company_name === 'string'
+							? booking.company_name
+							: '',
+
+					affiliate_dispatch_isd:
+						typeof booking?.affiliate_dispatch_isd === 'string'
+							? booking.affiliate_dispatch_isd
+							: '',
+
+					affiliate_dispatch_number:
+						typeof booking?.affiliate_dispatch_number === 'string'
+							? booking.affiliate_dispatch_number
+							: '',
+
+					dispatchEmail:
+						typeof booking?.dispatchEmail === 'string'
+							? booking.dispatchEmail
+							: '',
+
+					gig_cell_isd:
+						typeof booking?.gig_cell_isd === 'string'
+							? booking.gig_cell_isd
+							: '',
+
+					gig_cell_mobile:
+						typeof booking?.gig_cell_mobile === 'string'
+							? booking.gig_cell_mobile
+							: '',
+
+					gig_email:
+						typeof booking?.gig_email === 'string'
+							? booking.gig_email
+							: '',
+
+					driver_first_name:
+						typeof booking?.driver_first_name === 'string'
+							? booking.driver_first_name
+							: '',
+
+					driver_last_name:
+						typeof booking?.driver_last_name === 'string'
+							? booking.driver_last_name
+							: '',
+
+					driver_cell_isd:
+						typeof booking?.driver_cell_isd === 'string'
+							? booking.driver_cell_isd
+							: '',
+
+					driver_cell_number:
+						typeof booking?.driver_cell_number === 'string'
+							? booking.driver_cell_number
+							: '',
+
+					driver_name:
+						typeof booking?.driver_name === 'string'
+							? booking.driver_name
+							: '',
+
+					driver_tel:
+						typeof booking?.driver_tel === 'string'
+							? booking.driver_tel
+							: '',
+
+					loose_affiliate_name:
+						typeof booking?.loose_affiliate_name === 'string'
+							? booking.loose_affiliate_name
+							: '',
+
+					loose_affiliate_phone_isd:
+						typeof booking?.loose_affiliate_phone_isd === 'string'
+							? booking.loose_affiliate_phone_isd
+							: '',
+
+					loose_affiliate_phone:
+						typeof booking?.loose_affiliate_phone === 'string'
+							? booking.loose_affiliate_phone
+							: '',
+
+					loose_affiliate_email:
+						typeof booking?.loose_affiliate_email === 'string'
+							? booking.loose_affiliate_email
+							: '',
+
+					loose_aff_driver_name:
+						typeof booking?.loose_aff_driver_name === 'string'
+							? booking.loose_aff_driver_name
+							: '',
+
+					loose_aff_driver_cell:
+						typeof booking?.loose_aff_driver_cell === 'string'
+							? booking.loose_aff_driver_cell
+							: '',
+
+					loose_aff_driver_cell_isd:
+						typeof booking?.loose_aff_driver_cell_isd === 'string'
+							? booking.loose_aff_driver_cell_isd
+							: '',
+
+					payment_method:
+						typeof booking?.payment_method === 'string'
+							? booking.payment_method
+							: '',
+
+					currency:
+						typeof booking?.currency === 'string'
+							? booking.currency
+							: '',
+
+					currency_symbol:
+						typeof booking?.currency_symbol === 'string'
+							? booking.currency_symbol
+							: '',
+
+					grand_total:
+						typeof booking?.grand_total === 'number'
+							? booking.grand_total
+							: 0
+				};
+			});
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
