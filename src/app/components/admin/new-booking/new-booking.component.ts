@@ -4623,7 +4623,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				affiliateShare: returnGrandTotal - adminShare
 			}
 			// travelAgentShare : 
-			if (this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate') {
+			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10
@@ -5235,7 +5235,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	Subscriptions() {
-	    if (this.updateType=='edit') {
+		if (this.updateType == 'edit') {
 			this.BookingForm?.get('pickup_time')?.valueChanges.subscribe((value: string) => {
 				if (!this.isManualRateEntered()) {
 					this.buildBookingData();
@@ -5246,7 +5246,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					this.buildBookingData();
 				}
 			})
-	    } else {
+		} else {
 			//pickup time change 
 			this.BookingForm?.get('pickup_time')?.valueChanges.subscribe((value: string) => {
 				this.buildBookingData()
