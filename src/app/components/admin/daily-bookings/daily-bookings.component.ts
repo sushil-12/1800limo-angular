@@ -604,6 +604,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 	filterBookingsByStatus() {
 		const isSearching = this.searchText && this.searchText.trim() !== '';
+		const isFilteringByStatus = this.selectedStatus && this.selectedStatus !== '';  // ADD THIS
 
 		let filtered = [...this.bookings_Original];
 
@@ -611,8 +612,8 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			filtered = filtered.filter(b => b.booking_status == this.selectedStatus);
 		}
 
-		// Only apply pinning when not in search mode
-		if (isSearching) {
+		// Skip pinning when searching OR when status filter is active
+		if (isSearching || isFilteringByStatus) {
 			this.bookings = filtered;
 			return;
 		}
