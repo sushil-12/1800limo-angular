@@ -117,7 +117,6 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		toolbar: [
 			['bold', 'italic', 'underline', 'strike'],
 			[{ 'list': 'ordered' }, { 'list': 'bullet' }],
-			[{ 'size': ['small', false, 'large', 'huge'] }],
 			[{ 'color': [] }, { 'background': [] }],
 			['link'],
 			['clean']
