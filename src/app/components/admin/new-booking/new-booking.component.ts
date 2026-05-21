@@ -1879,7 +1879,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
-			this.SetFormValue('affiliate_type', response.data.affiliate_type)
+			// this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
@@ -1893,6 +1893,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 				if (editing_data[item] && item != "passenger_cell_isd" && typeof editing_data[item] !== 'object') {
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_id') continue;
+					if (this.updateType == 'reaffiliate' && item == 'affiliate_type') continue;
+
 					if (isNaN(Number(editing_data[item]))) {
 						this.SetFormValue(item, editing_data[item]);
 					} else {
