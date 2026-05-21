@@ -359,7 +359,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			numberOfVehicles: 1,
 			distance: this.distance,
 			return_distance: this.return_distance,
-			no_of_hours: this.number_of_hours,
+			no_of_hours: this.number_of_hours === 0 ? 2 : this.number_of_hours,
 			is_master_vehicle: isMasterVehiclePayload,
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
@@ -1458,7 +1458,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			service_type: ['one_way', Validators.required],
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
-			number_of_hours: ['0'],
+			number_of_hours: ['2'],
 			acc_id: [''],
 			account_type: ['individual'],
 			travel_client_id: [''],
@@ -1865,7 +1865,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.waiting_time_in_mins = this.bookingResponse?.waiting_time_in_mins
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
-			this.number_of_hours = response?.data?.number_of_hours
+			this.number_of_hours = response?.data?.number_of_hours === 0 ? 2 : response?.data?.number_of_hours
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
@@ -5266,7 +5266,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		// Service Type
 		this.BookingForm?.get('service_type')?.valueChanges.subscribe((value: string) => {
 			this.service_type = value;
-			this.syncNumberOfHoursValidation(value);
+			// this.syncNumberOfHoursValidation(value);
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				setTimeout(() => {
@@ -6706,7 +6706,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				console.log('response <><><><><', response.data)
 				let editing_data = response.data
 				delete editing_data.affiliate_id
-				this.number_of_hours = response?.data?.number_of_hours
+				this.number_of_hours = response?.data?.number_of_hours === 0 ? 2 : response?.data?.number_of_hours
 				this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 				if (response?.data?.account_type == 'travel_planner') {
 					this.getTravelClientAccounts(response?.data?.acc_id)
