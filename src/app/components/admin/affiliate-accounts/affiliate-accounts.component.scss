@@ -24,7 +24,6 @@
 }
 
 .mat-form-field-hide-placeholder {
-    border: solid 3px;
     border-radius: 4px;
 }
 
@@ -131,8 +130,8 @@ a.dropdown-item {
 
 .x-circle-btn {
     opacity: 1;
+    font-size: 30px;
     color: red;
-    font-size: 40px;
     width: max-content;
 }
 
@@ -212,7 +211,6 @@ a.dropdown-item {
 
 .x-close-btn {
     float: right;
-    font-size: 1.8rem;
     font-weight: 700;
     line-height: 1;
     border: none;
@@ -291,6 +289,7 @@ a.dropdown-item {
 }
 
 @media screen and (max-width:767px) {
+
     .headings_count {
         justify-content: center;
         gap: 10px;
@@ -305,7 +304,8 @@ a.dropdown-item {
         }
     }
 
-    .custom-btn {
+    /* Only search/action buttons full width */
+    .search-action-buttons .custom-btn {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
@@ -332,6 +332,8 @@ a.dropdown-item {
     }
 }
 
+
+
 // Quill editor styles
 quill-editor {
     display: block;
@@ -356,5 +358,51 @@ quill-editor {
         min-height: 150px;
         white-space: pre-wrap;
         overflow-y: auto;
+    }
+}
+
+/* Modal Responsive Fix */
+@media screen and (max-width: 1024px) {
+
+    /* Close icon */
+    .x-circle-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        font-size: 30px !important;
+        color: #ff0000 !important;
+        background: transparent !important;
+        border: none;
+        padding: 0;
+        opacity: 1 !important;
+        z-index: 10;
+    }
+
+    /* Submit button */
+    .modal-footer .custom-btn.add-button {
+        width: auto !important;
+        min-width: 120px;
+        margin-bottom: 0;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 420px) {
+
+    .modal-header {
+        padding: 18px 45px 10px 20px !important;
+        position: relative;
+    }
+
+    .modal-header h3 {
+        font-size: 22px !important;
+        line-height: 1.3;
+        margin: 0;
+    }
+
+    .x-circle-btn {
+        top: 12px;
+        right: 12px;
+        font-size: 26px !important;
     }
 }

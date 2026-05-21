@@ -29,16 +29,17 @@
         color: var(--blue);
     }
 }
-.mb-search{
-    margin-bottom: -1rem;
-  }
 
-  @media only screen and (max-width: 767px) {
-    .mb-search{
-      margin-bottom: .5rem;
+.mb-search {
+    margin-bottom: -1rem;
+}
+
+@media only screen and (max-width: 767px) {
+    .mb-search {
+        margin-bottom: .5rem;
     }
-  }
-  
+}
+
 .modal#messageModal {
     .modal-body {
         p {
@@ -59,9 +60,16 @@
     }
 }
 
-.dropdown-item{
+.dropdown-item {
     padding: .35rem 1.5rem !important;
-	font-size: 16px;
-	font-weight: 500 !important;
-	font-family: "Roboto", sans-serif !important;
-  }
+    font-size: 16px;
+    font-weight: 500 !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+.x-circle-btn {
+    opacity: 1;
+    font-size: 30px;
+    color: red;
+    width: max-content;
+}

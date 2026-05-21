@@ -23,6 +23,13 @@
   cursor: pointer;
 }
 
+.x-circle-btn {
+  opacity: 1;
+  font-size: 30px;
+  color: red;
+  width: max-content;
+}
+
 .x-cross-btn {
   background: #fff !important;
   color: #ff0000 !important;
@@ -36,7 +43,7 @@
 
 .x-close-btn {
   float: right;
-  font-size: 1.8rem;
+  font-size: 30px;
   font-weight: 700;
   line-height: 1;
   border: none;

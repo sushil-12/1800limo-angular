@@ -47,6 +47,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 	minDate = new Date();
+	private isPrefilling: boolean = false;
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport?", "cruise_to_city"],
@@ -1563,11 +1564,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	prefillViaBookingID(booking_id: number) {
+		this.isPrefilling = true;
 		console.log('Prefilling via Booking Id', booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
 			this.bookingResponse = response.data
 			this.SetFormValue('account_type', response?.data?.account_type)
+			if (response?.data?.acc_id && response?.data?.account_type != 'loose_customer') {
+				this.chooseUser(response.data.acc_id, false);  // ← don't autofill, just populate chosen_user for display
+			}
 			response.data.booking_instructions = response?.data?.booking_instructions?.replaceAll('<br />', '')
 			let currency = response?.data?.currency
 			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
@@ -1720,6 +1725,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.$spinner.hide('normalspinner')
 			this.scroll('booking_detail')
 			this.handleNoOfHours(this.number_of_hours)
+			this.isPrefilling = false;
 		})
 
 	}
@@ -2538,15 +2544,16 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 
 
-	chooseUser(account_id: number) {
+	chooseUser(account_id: number, autofill: boolean = true) {
 		this.$spinner.show()
 		this.chosen_user = {}
-		console.log('chooseUser---->>>', this.Form.account_type.value)
 		this.affiliateService.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-				this.autofillData('passenger', this.chosen_user);
+				if (autofill) {  // ← only autofill when flag is true
+					this.autofillData('passenger', this.chosen_user);
+				}
 			}
 			this.$spinner.hide();
 		})
@@ -2792,7 +2799,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	onSelectionChangeServiceType(event: any) {
 		console.log("in service type change--->", event.value)
 		this.service_type = event.value;
-		
+
 		this.BookingForm.get('service_type')?.setValue(event.value, { emitEvent: false });
 		this.buildBookingData();
 	}
@@ -3486,7 +3493,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		let total_time = 0
 		return new Promise((resolve) => {
 			data.routes[0].legs.forEach((item: any) => {
-				if (item.distance.value == 0&& this.BookingForm.get('service_type').value != 'charter_tour') {
+				if (item.distance.value == 0 && this.BookingForm.get('service_type').value != 'charter_tour') {
 					this.$errors.openDialog({
 						errors: {
 							error: 'Please select a valid location point.'
@@ -3897,8 +3904,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-			if (value) {
-				this.chooseUser(value)
+			if (value && !this.isPrefilling) {
+				this.chooseUser(value, true)   // manual selection → autofill passenger
+			} else if (value && this.isPrefilling) {
+				this.chooseUser(value, false)  // during prefill → just populate chosen_user display
 			}
 		})
 

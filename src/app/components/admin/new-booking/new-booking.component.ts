@@ -212,6 +212,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	userCreditCards: any[] = [];
 	isLoadingSavedCards: boolean = false;
 	private bookingAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
+	isPrefilling: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -3164,7 +3165,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('handleTravelStaffAccounts--->>>', value)
 		this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
 			console.log("detail ->>>>>>>", response)
-			this.autofillData('passenger', response?.data);
+			if (this.isPrefilling) {
+				this.autofillData('passenger', response?.data);
+
+			}
+			this.isPrefilling = true;
+
 		})
 		this.loadCombinedSavedCards(value?.id, this.Form.travel_client_acc?.value === 'travel_individual', this.Form?.acc_id?.value);
 	}
