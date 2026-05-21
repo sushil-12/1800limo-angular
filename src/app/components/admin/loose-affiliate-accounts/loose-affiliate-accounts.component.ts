@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -67,6 +67,8 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     ]
   };
 
+  selectedIds: Set<number> = new Set();
+
 
   constructor(
     private adminService: AdminService,
@@ -84,6 +86,33 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     })
     this.loadSubLooseAffiliateAcc();//load LooseAffiliateAcc
     this.buildSendEmailForm();
+  }
+
+
+  toggleSelect(id: number) {
+    if (this.selectedIds.has(id)) {
+      this.selectedIds.delete(id);
+    } else {
+      this.selectedIds.add(id);
+    }
+  }
+
+  toggleSelectAll(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.LooseAffiliateAcc?.forEach(item => this.selectedIds.add(item.id));
+    } else {
+      this.selectedIds.clear();
+    }
+  }
+
+  isSelected(id: number): boolean {
+    return this.selectedIds.has(id);
+  }
+
+  isAllSelected(): boolean {
+    return this.LooseAffiliateAcc?.length > 0 &&
+      this.LooseAffiliateAcc.every(item => this.selectedIds.has(item.id));
   }
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement) {
@@ -177,13 +206,29 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     return this.sendEmailForm.controls;
   }
 
+  getSelectedAccounts() {
+    return this.LooseAffiliateAcc?.filter(item => this.selectedIds.has(item.id)) ?? [];
+  }
+
 
   //build email modal
   buildSendEmailForm() {
     this.sendEmailForm = this.$form.group({
-      subject: [''],
-      text_message: ['']
-    })
+      subject: ['', Validators.required],
+      text_message: ['', Validators.required]
+    });
+
+    // Add validator for emails FormControl
+    this.emails.setValidators(Validators.required);
+
+    const selected = this.getSelectedAccounts();
+    // Only pre-select accounts that actually have an email
+    this.emails.setValue(
+      selected.filter(o => !!o.email).map(o => this.stringifyOption(o))
+    );
+    this.phone_numbers.setValue(
+      selected.map(o => this.stringifyOptionNumber(o))
+    );
   }
 
   //close email modal
@@ -207,11 +252,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
   selectAll() {
+    const selected = this.getSelectedAccounts();
     if (this.allSelected) {
       this.emails.patchValue('');
     } else {
-      const allValues = this.LooseAffiliateAcc.map(option => this.stringifyOption(option));
-      this.emails.setValue(allValues);
+      this.emails.setValue(selected.map(option => this.stringifyOption(option)));
     }
     this.allSelected = !this.allSelected;
   }
@@ -262,11 +307,29 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     this.phone_numbers.setValue('');
 
     $("#sendsmsModal").modal("hide");
+    this.selectedIds.clear();
 
   }
 
+  getSelectedAccountsMissingEmail(): any[] {
+    return this.getSelectedAccounts().filter(item => !item?.email);
+  }
+
+
   //submit email modal
   async sendEmail() {
+    this.sendEmailForm.markAllAsTouched();
+    this.emails.markAsTouched();
+
+    // Guard: stop if invalid
+    const allSelectedHaveNoEmail =
+      this.getSelectedAccounts().length > 0 &&
+      this.getSelectedAccountsMissingEmail().length === this.getSelectedAccounts().length;
+
+    if (this.sendEmailForm.invalid || !this.emails.value?.length || allSelectedHaveNoEmail) {
+      return;
+    }
+
     this.spinner.show()
     let fileData = []
     if (this.uploadedFile) {
@@ -295,6 +358,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       }, 2000)
       this.spinner.hide()
       console.log("response-------->", response)
+      this.selectedIds.clear();
     })
 
     this.show = false

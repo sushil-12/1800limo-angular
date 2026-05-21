@@ -148,3 +148,37 @@ quill-editor {
     overflow-y: auto;
   }
 }
+
+.send-email-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.email-field-wrapper {
+  position: relative;
+
+  .field-warning-icon {
+    position: absolute;
+    top: 35px;
+    right: 27px;
+    z-index: 10;
+    color: #e65c00;
+    font-size: 18px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .email-warning-hint {
+    font-size: 12.5px;
+    color: #c0392b;
+    margin-bottom: 10px;
+    padding-left: 2px;
+    line-height: 1.5;
+
+    i {
+      margin-right: 4px;
+      font-size: 13px;
+    }
+  }
+}
