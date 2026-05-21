@@ -1892,6 +1892,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					this.SetFormValue(item, value);
 				}
 				if (editing_data[item] && item != "passenger_cell_isd" && typeof editing_data[item] !== 'object') {
+					if (this.updateType == 'reaffiliate' && item == 'affiliate_id') continue;
 					if (isNaN(Number(editing_data[item]))) {
 						this.SetFormValue(item, editing_data[item]);
 					} else {
