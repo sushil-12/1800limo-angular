@@ -1,107 +1,112 @@
-.btnclass
-{
+.btnclass {
     margin-top: 25px;
     height: 60px;
     width: 100%;
 }
-.mat-form-field-hide-placeholder{
-	border: solid 3px;
+
+.mat-form-field-hide-placeholder {
     border-radius: 4px;
 }
- /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
- .mat-form-field-appearance-outline .mat-mdc-form-field-label {
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+.mat-form-field-appearance-outline .mat-mdc-form-field-label {
     top: 1.3675em !important;
 }
 
 table {
-	width: 100;
-	white-space: break-spaces;
-	padding: 10px;
-	min-width: 5rem;
+    width: 100;
+    white-space: break-spaces;
+    padding: 10px;
+    min-width: 5rem;
 
-	thead th {
-		color: #000000;
-		font-weight: 600;
-	}
+    thead th {
+        color: #000000;
+        font-weight: 600;
+    }
 
-	tbody td>p {
-		margin: 0;
-	}
+    tbody td>p {
+        margin: 0;
+    }
 }
 
-.mb-search{
+.mb-search {
     margin-bottom: -1rem;
-  }
+}
 
-  @media only screen and (max-width: 767px) {
-    .mb-search{
-      margin-bottom: .5rem;
+@media only screen and (max-width: 767px) {
+    .mb-search {
+        margin-bottom: .5rem;
     }
-  }
-  
+}
+
 
 .x-cross-btn {
-	background: #fff !important;
-	color: #ff0000 !important;
-	/* position: absolute; */
-	top: 5px;
-	right: 15px;
-	border-radius: 20px;
-	width: 25px;
-	opacity: 1 !important;
+    background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
 }
 
 .x-close-btn {
-	float: right;
-	font-size: 1.8rem;
-	font-weight: 700;
-	line-height: 1;
-	border: none;
-	z-index: 10;
+    float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    border: none;
+    z-index: 10;
 }
 
 a:hover {
-	text-decoration: none;
-	color: unset !important;
+    text-decoration: none;
+    color: unset !important;
 }
 
-.dropdown-item{
-	padding: 0.7rem 1.8rem !important;
-	font-size: 16px;
-	font-weight: 500 !important;
-	font-family: "Roboto", sans-serif !important;
+.dropdown-item {
+    padding: 0.7rem 1.8rem !important;
+    font-size: 16px;
+    font-weight: 500 !important;
+    font-family: "Roboto", sans-serif !important;
 }
-.clickable
-{
+
+.clickable {
     cursor: pointer;
     transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
     transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
     transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
-    &:hover
-    {
+
+    &:hover {
         text-decoration: underline;
         color: var(--blue);
     }
 }
-.modal#messageModal
-{
-    .modal-body
-    {
-        p
-        {
+
+.modal#messageModal {
+    .modal-body {
+        p {
             font-size: 1rem;
             font-weight: 500;
-            span
-            {
+
+            span {
                 font-size: 1.1rem;
             }
         }
-        textarea#message
-        {
+
+        textarea#message {
             width: 100%;
             border-radius: 1rem;
             padding: 1rem;
             max-height: 15rem;
         }
     }
+}
+
+.x-circle-btn {
+    opacity: 1;
+    font-size: 30px;
+    color: red;
+    width: max-content;
 }

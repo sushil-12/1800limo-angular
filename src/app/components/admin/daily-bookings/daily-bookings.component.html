@@ -174,153 +174,159 @@
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td class="text-center d-flex"
-										style="gap: 18px; align-items: center; border: none;">
+									<td class="text-center" style="border: none; vertical-align: middle;">
 
-										<a [routerLink]="['/admin/new-booking']"
-											*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) 
-                                         && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
-											[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
-											title="Edit">
-											<i class="fa fa-pencil" style="color: #000"></i>
-										</a>
+										<!-- Row 1: Three inline action icons -->
+										<div class="d-flex justify-content-center align-items-center"
+											style="gap: 18px;">
 
-										<a title="Pin" (click)="togglePin(booking.booking_id)">
-											<i class="fa fa-thumb-tack"
-												[style.color]="pinnedBookingIds.includes(booking.booking_id) ? '#f57c00' : '#000'"
-												[style.transform]="pinnedBookingIds.includes(booking.booking_id) ? 'rotate(45deg)' : 'none'">
-											</i>
-										</a>
+											<a [routerLink]="['/admin/new-booking']" *ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) 
+                && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
+												title="Edit">
+												<i class="fa fa-pencil" style="color: #000; font-size:18px"></i>
+											</a>
 
-										<a type="button" data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false" title="More options">
-											<i class="fa fa-ellipsis-v"></i>
-										</a>
+											<a title="Pin" (click)="togglePin(booking.booking_id)">
+												<i class="fa fa-thumb-tack" style="font-size:18px"
+													[style.color]="pinnedBookingIds.includes(booking.booking_id) ? '#f57c00' : '#000'"
+													[style.transform]="pinnedBookingIds.includes(booking.booking_id) ? 'rotate(45deg)' : 'none'">
+												</i>
+											</a>
 
-										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-											aria-labelledby="navbarDropdownUserImage"
-											style="min-height: 200px;max-height: 480px;overflow-y: scroll; z-index: 2;">
-											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
-												<div class="dropdown-item-icon"></div>
-												Finalize
-											</a>
-											<a class="dropdown-item" data-toggle="modal"
-												data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('repeat_booking')">
-												<div class="dropdown-item-icon" *></div>
-												Repeat
-											</a>
-											<a *ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status == 'pending'))"
-												class="dropdown-item" data-toggle="modal"
-												data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
-												<div class="dropdown-item-icon"></div>
-												Return
-											</a>
-											<a class="dropdown-item" data-toggle="modal"
-												data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'round'}"
-												*ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && booking?.service_type == 'oneway')">
-												<div class="dropdown-item-icon" *></div>
-												Round Trip
-											</a>
-											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
-												data-toggle="modal" data-target="#AuditTrailModal"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
-												<div class="dropdown-item-icon"></div>
-												Audit Trial
-											</a>
-											<!-- <a class="dropdown-item"
+											<a type="button" data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false" title="More options" style="position: relative;">
+												<i class="fa fa-ellipsis-v" style="font-size:18px"></i>
+
+												<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+													aria-labelledby="navbarDropdownUserImage"
+													style="min-height: 200px; max-height: 480px; overflow-y: scroll; z-index: 2;">
+													<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
+														[queryParams]="{bookingId: booking.booking_id}"
+														*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+														<div class="dropdown-item-icon"></div>
+														Finalize
+													</a>
+													<a class="dropdown-item" data-toggle="modal"
+														data-target="#return_repeat_booking_Modal"
+														[routerLink]="['/admin/new-booking']"
+														[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
+														*ngIf="currentUser?.roleName == 'admin' || subModules.includes('repeat_booking')">
+														<div class="dropdown-item-icon"></div>
+														Repeat
+													</a>
+													<a *ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status == 'pending'))"
+														class="dropdown-item" data-toggle="modal"
+														data-target="#return_repeat_booking_Modal"
+														[routerLink]="['/admin/new-booking']"
+														[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
+														<div class="dropdown-item-icon"></div>
+														Return
+													</a>
+													<a class="dropdown-item" data-toggle="modal"
+														data-target="#return_repeat_booking_Modal"
+														[routerLink]="['/admin/new-booking']"
+														[queryParams]="{bookingId: booking.booking_id, updateType: 'round'}"
+														*ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && booking?.service_type == 'oneway')">
+														<div class="dropdown-item-icon"></div>
+														Round Trip
+													</a>
+													<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+														data-toggle="modal" data-target="#AuditTrailModal"
+														*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
+														<div class="dropdown-item-icon"></div>
+														Audit Trial
+													</a>
+													<!-- <a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll', booking?.show_changed_fields)"
 												data-toggle="modal" data-target="#updatedEmailAll"
 												*ngIf="currentUser?.roleName == 'admin' && booking?.show_changed_fields">
 												<div class="dropdown-item-icon"></div>
 												Update Email to All
 											</a> -->
-											<a class="dropdown-item" data-toggle="modal"
-												data-target="#accept_charge_modal"
-												(click)="acceptChargeClick(booking.booking_id)"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled' && booking?.charged_amount == null) && booking?.created_by_role != 'subscriber')">
-												<div class="dropdown-item-icon"></div>
-												Accept & Charge (50%)
+													<a class="dropdown-item" data-toggle="modal"
+														data-target="#accept_charge_modal"
+														(click)="acceptChargeClick(booking.booking_id)"
+														*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled' && booking?.charged_amount == null) && booking?.created_by_role != 'subscriber')">
+														<div class="dropdown-item-icon"></div>
+														Accept & Charge (50%)
+													</a>
+													<a class="dropdown-item" data-toggle="modal"
+														data-target="#charge_back_modal"
+														(click)="acceptChargeClick(booking.booking_id)"
+														*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.affiliate_charged_amount != null && booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+														<div class="dropdown-item-icon"></div>
+														Charge Back
+													</a>
+													<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
+														[queryParams]="{bookingId: booking.booking_id}"
+														*ngIf="(booking.payment_status=='paid' || booking.payment_status=='rejection_requested' || booking.payment_status=='paid_cash' || booking.payment_status=='refund' || booking.payment_status=='partial_paid' || booking.payment_status=='transfer_failed') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
+														<div class="dropdown-item-icon"></div>
+														Invoice
+													</a>
+													<a class="dropdown-item"
+														(click)="sendEmailClicked(booking.booking_id,'affiliate')"
+														data-toggle="modal" data-target="#emailModal"
+														*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_affiliate')">
+														<div class="dropdown-item-icon"></div>
+														{{ booking.affiliate_id ? 'Email Affiliate' : 'Email Loose
+														Affiliate' }}
+													</a>
+													<a class="dropdown-item"
+														(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
+														data-toggle="modal" data-target="#emailPassenger"
+														*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_passenger')">
+														<div class="dropdown-item-icon"></div>
+														Email Passenger
+													</a>
+													<a class="dropdown-item"
+														(click)="sendEmailClicked(booking.booking_id,'emailAll', booking?.show_changed_fields, booking?.booking_status)"
+														data-toggle="modal" data-target="#emailAll"
+														*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_all')">
+														<div class="dropdown-item-icon"></div>
+														Email All
+													</a>
+													<a class="dropdown-item"
+														(click)="sendEmaiManuallClicked(booking.booking_id)"
+														data-toggle="modal" data-target="#sendEmailToAnyone"
+														*ngIf="currentUser?.roleName == 'admin'">
+														<div class="dropdown-item-icon"></div>
+														Send Email to Anyone
+													</a>
+													<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
+														*ngIf="booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'">
+														<div class="dropdown-item-icon"></div>
+														ReAffiliate
+													</a>
+													<a class="dropdown-item"
+														(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
+														*ngIf="currentUser?.roleName == 'admin'">
+														<div class="dropdown-item-icon"></div>
+														View Client Cards
+													</a>
+													<a class="dropdown-item"
+														(click)="refundAction(booking?.stripe_refund_url)"
+														*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
+														<div class="dropdown-item-icon"></div>
+														Refund
+													</a>
+												</div>
 											</a>
-											<a class="dropdown-item" data-toggle="modal"
-												data-target="#charge_back_modal"
-												(click)="acceptChargeClick(booking.booking_id)"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.affiliate_charged_amount != null && booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
-												<div class="dropdown-item-icon"></div>
-												Charge Back
-											</a>
-
-											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
-												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='rejection_requested' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid' || booking.payment_status=='transfer_failed') && (currentUser?.roleName == 'admin' || subModules.includes('invoice_booking'))">
-												<div class="dropdown-item-icon"></div>
-												Invoice
-											</a>
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
-												data-toggle="modal" data-target="#emailModal"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_affiliate')">
-												<div class="dropdown-item-icon"></div>
-												{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose
-												Affiliate'
-												}}
-											</a>
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
-												data-toggle="modal" data-target="#emailPassenger"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_passenger')">
-												<div class="dropdown-item-icon"></div>
-												Email Passenger
-											</a>
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'emailAll', booking?.show_changed_fields, booking?.booking_status)"
-												data-toggle="modal" data-target="#emailAll"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_all')">
-												<div class="dropdown-item-icon"></div>
-												Email All
-											</a>
-											<a class="dropdown-item"
-												(click)="sendEmaiManuallClicked(booking.booking_id)" data-toggle="modal"
-												data-target="#sendEmailToAnyone"
-												*ngIf="currentUser?.roleName == 'admin'">
-												<div class="dropdown-item-icon"></div>
-												Send Email to Anyone
-											</a>
-											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
-												*ngIf="booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'">
-												<div class="dropdown-item-icon"></div>
-												ReAffiliate
-											</a>
-
-											<a class="dropdown-item"
-												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
-												*ngIf="currentUser?.roleName == 'admin' ">
-												<div class="dropdown-item-icon"></div>
-												View Client Cards
-											</a>
-											<a class="dropdown-item" (click)="refundAction(booking?.stripe_refund_url)"
-												*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
-												<div class="dropdown-item-icon"></div>
-												Refund
-											</a>
-											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
-												<div class="dropdown-item-icon"></div>
-												Finalize
-											</a>
-
 										</div>
+
+										<!-- Row 2: Status pill below the icons -->
+										<div class="d-flex justify-content-center mt-4">
+											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
+												data-target="#change_status_booking_Modal"
+												class="status-pill {{ booking.booking_status }}"
+												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
+												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
+												booking.booking_status | bookingStatusTextReplace : '_' : ' ' |
+												titlecase}}
+												<i class="fas fa-pencil-alt" style="font-size: 14px; color: white;"></i>
+											</div>
+										</div>
+
 									</td>
 
 									<td class="sorting_1"
@@ -347,17 +353,6 @@
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? (booking.grand_total).toFixed(2) : 0 )"></span>
 										</p>
-										<div style="margin-bottom: 38px !important;" class="status-action-container">
-											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-												data-target="#change_status_booking_Modal"
-												class="status-pill {{ booking.booking_status }}"
-												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-												booking.booking_status | bookingStatusTextReplace :
-												'_' : ' ' |titlecase}}
-												<i class="fas fa-pencil-alt" style="font-size: 11px; color: white;"></i>
-											</div>
-										</div>
 									</td>
 
 									<td>

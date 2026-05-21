@@ -65,7 +65,6 @@ export class BookingPreviewComponent implements OnInit {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'size': ['small', false, 'large', 'huge'] }],
       [{ 'color': [] }, { 'background': [] }],
       ['link'],
       ['clean'],
