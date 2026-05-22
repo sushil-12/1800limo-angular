@@ -1163,8 +1163,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			if (formgroup == "all_inclusive_rates") {
 				let amount = 0;
 
-				// Hourly Rate - only in case of hours
-				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate) {
+				// Hourly Rate - only in case of charter_tour
+				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate && this.service_type === 'charter_tour') {
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
 				} else {
 					amount = baserate;
