@@ -7,3 +7,67 @@
         pointer-events: none;
     }
 }
+
+.guide-section { margin-bottom: 1rem; }
+
+.guide-section-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+}
+
+.angle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+
+    @media (max-width: 576px) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.angle-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: #f9f9f9;
+}
+
+.angle-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #f89b41;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.angle-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 3px;
+}
+
+.angle-tip {
+    font-size: 0.72rem;
+    color: #666;
+    line-height: 1.35;
+}
+
+.guide-list {
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+.guide-list-warning li { color: #b71c1c; }
+.guide-list-warning li::marker { color: #f44336; }

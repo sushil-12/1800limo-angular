@@ -1,27 +1,91 @@
 <div class="modal fade" id="photoInstructionsModal" tabindex="-1" role="dialog" aria-labelledby="photoInstructionsModal" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<div class="modal-body">
-				<ul class="mb-0">
-					<li>
-						Take exterior photos between 8 AM and 10 AM or between 2 PM and 4 PM when the sun is over your shoulder.
-					</li>
-					<li>
-						Choose attractive backgrounds and sell the experience (big homes, water, mountains, fancy hotels, or tourist hot spot).
-					</li>
-					<li>
-						Take interior pictures on a cloudy day - eliminate all shadows.
-					</li>
-					<li>
-						Take night shots of interiors with lights and lasers effects on.
-					</li>
-				</ul>
+			<div class="modal-header py-2">
+				<h5 class="modal-title font-weight-bold">Vehicle Photo Guide</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
-			<div class="modal-footer py-0">
-				<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+			<div class="modal-body">
+
+				<!-- Required angles -->
+				<div class="guide-section">
+					<h6 class="guide-section-title">6 Required Angles</h6>
+					<div class="angle-grid">
+						<div class="angle-card">
+							<div class="angle-num">1</div>
+							<div class="angle-label">Front View</div>
+							<div class="angle-tip">Stand directly in front, center the vehicle, keep full hood and bumper visible</div>
+						</div>
+						<div class="angle-card">
+							<div class="angle-num">2</div>
+							<div class="angle-label">Front Side Angle</div>
+							<div class="angle-tip">45° from front-left — shows front grille and driver's side profile</div>
+						</div>
+						<div class="angle-card">
+							<div class="angle-num">3</div>
+							<div class="angle-label">Rear Side Angle</div>
+							<div class="angle-tip">45° from rear-right — shows rear lights and passenger side</div>
+						</div>
+						<div class="angle-card">
+							<div class="angle-num">4</div>
+							<div class="angle-label">Rear View</div>
+							<div class="angle-tip">Square up with the rear bumper, full trunk and taillights visible</div>
+						</div>
+						<div class="angle-card">
+							<div class="angle-num">5</div>
+							<div class="angle-label">Interior Front</div>
+							<div class="angle-tip">From rear seat looking forward — dashboard, front console, and seats</div>
+						</div>
+						<div class="angle-card">
+							<div class="angle-num">6</div>
+							<div class="angle-label">Interior Rear</div>
+							<div class="angle-tip">From front seat looking back — passenger cabin and seating space</div>
+						</div>
+					</div>
+				</div>
+
+				<hr class="my-3" />
+
+				<!-- Lighting tips -->
+				<div class="guide-section">
+					<h6 class="guide-section-title">Lighting</h6>
+					<ul class="guide-list">
+						<li><strong>Exterior:</strong> Shoot between 8–10 AM or 2–4 PM with the sun behind you for even, shadow-free light.</li>
+						<li><strong>Interior:</strong> Shoot on a cloudy day or in open shade — avoid harsh shadows from direct sunlight through windows.</li>
+						<li><strong>Night shots:</strong> Turn on all interior lights, ambient lighting, and laser effects for dramatic effect.</li>
+						<li>Choose attractive backdrops — hotels, waterfront, scenic roads, or clean lots with clear sky.</li>
+					</ul>
+				</div>
+
+				<!-- Orientation & framing -->
+				<div class="guide-section">
+					<h6 class="guide-section-title">Orientation &amp; Framing</h6>
+					<ul class="guide-list">
+						<li><strong>Always use landscape mode</strong> (phone held horizontally). Portrait images will be rejected.</li>
+						<li>Keep the full vehicle in frame — no cut-off bumpers, wheels, or rooflines.</li>
+						<li>Hold the camera at door-handle height for the most flattering exterior angle.</li>
+						<li>Minimum image size: 800 × 600 pixels. Higher is better.</li>
+					</ul>
+				</div>
+
+				<!-- Common mistakes -->
+				<div class="guide-section">
+					<h6 class="guide-section-title">Avoid These Mistakes</h6>
+					<ul class="guide-list guide-list-warning">
+						<li>Blurry or out-of-focus images</li>
+						<li>Portrait (vertical) orientation for exterior shots</li>
+						<li>Partial vehicle — bumper, wheel, or roof cut off</li>
+						<li>Dark or underexposed photos</li>
+						<li>Dirty vehicle, garbage in background, or distracting clutter</li>
+						<li>Duplicate angles in multiple slots</li>
+					</ul>
+				</div>
+
+			</div>
+			<div class="modal-footer py-2">
+				<button type="button" class="custom-btn button2" data-dismiss="modal">Got it</button>
 			</div>
 		</div>
 	</div>

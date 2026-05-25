@@ -89,6 +89,23 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	isVehicleTypeSelected: boolean = true;
 	changeNonCharterCancelPolicy: boolean = false
 	changeCharterCancelPolicy: boolean = false
+	public imageValidationErrors: {[key: string]: string} = {};
+
+	get uploadedRequiredCount(): number {
+		const slots = [
+			this.vehicleImage1 && !this.vehicleImage1.includes('extint1'),
+			!!this.vehicleImage2,
+			!!this.vehicleImage3,
+			!!this.vehicleImage4,
+			!!this.vehicleImage5,
+			!!this.vehicleImage6,
+		];
+		return slots.filter(Boolean).length;
+	}
+
+	get uploadProgress(): number {
+		return Math.round((this.uploadedRequiredCount / 6) * 100);
+	}
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -646,9 +663,37 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	}
 
 
+	private validateVehicleImage(file: File): Promise<string | null> {
+		return new Promise((resolve) => {
+			const img = new Image();
+			const url = URL.createObjectURL(file);
+			img.onload = () => {
+				URL.revokeObjectURL(url);
+				if (img.height > img.width) {
+					resolve('Portrait orientation detected. Please rotate your photo to landscape mode (wider than tall).');
+				} else if (img.width < 600 || img.height < 400) {
+					resolve('Image resolution is too low. Please use a higher quality photo (minimum 600×400 px).');
+				} else {
+					resolve(null);
+				}
+			};
+			img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+			img.src = url;
+		});
+	}
+
 	async onFileChange(event, imageId, imageNumber) {
 		if (!await this.commonServices.handleFile(event)) {
 			return;
+		}
+		if (event.target.files && event.target.files.length) {
+			const file = event.target.files[0];
+			const validationError = await this.validateVehicleImage(file);
+			if (validationError) {
+				this.imageValidationErrors[imageNumber] = validationError;
+				return;
+			}
+			this.imageValidationErrors[imageNumber] = '';
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
