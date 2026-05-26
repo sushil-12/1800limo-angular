@@ -1384,21 +1384,34 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			});
 	}
 
-	sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatus = '') {
-		console.log('in func send email click', bookingId, emailTarget)
-		this.selectedEmailBookingShowChangedFields = !!showChangedFields;
-		this.selectedEmailBookingStatus = bookingStatus || '';
-		this.sendEmailForm.patchValue({
-			reservation_id: bookingId,
-			emailTarget: emailTarget,
-		});
-	}
+sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatus = '') {
+        console.log('in func send email click', bookingId, emailTarget)
+        this.selectedEmailBookingShowChangedFields = !!showChangedFields;
+        this.selectedEmailBookingStatus = bookingStatus || '';
+        this.sendEmailForm.patchValue({
+            reservation_id: bookingId,
+            emailTarget: emailTarget,
+        });
+        const modalMap = {
+            affiliate: '#emailModal',
+            emailPassenger: '#emailPassenger',
+            emailAll: '#emailAll',
+            updatedEmailAll: '#updatedEmailAll',
+
+        };
+        const modalId = modalMap[emailTarget];
+        if (modalId) {
+            $(modalId).modal('show');
+        }
+    }
 
 	sendEmaiManuallClicked(bookingId) {
 		console.log('in func send email click', bookingId)
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 		});
+		const modalId = '#sendEmailToAnyone';
+		$(modalId).modal('show');
 	}
 
 	get Form() {
