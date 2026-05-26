@@ -199,7 +199,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.sendEmailForm = this.formBuilder.group({
 			reservation_id: ["", Validators.required],
 			emailTarget: ["", Validators.required],
-			text_message: ["", Validators.required]
+			 text_message: [""] 
 		});
 
 		if (this.currentUser?.created_by_role == 'subscriber') {
