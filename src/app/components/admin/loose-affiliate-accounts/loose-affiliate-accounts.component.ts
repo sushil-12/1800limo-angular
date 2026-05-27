@@ -566,5 +566,6 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   reset() {
     this.searchText = ""
     localStorage.removeItem('looseAffiliateSearch')
+    this.selectedIds.clear();
   }
 }
