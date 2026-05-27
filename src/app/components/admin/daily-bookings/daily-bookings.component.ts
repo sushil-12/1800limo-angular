@@ -1392,6 +1392,16 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			reservation_id: bookingId,
 			emailTarget: emailTarget,
 		});
+		const modalMap = {
+			affiliate: '#emailModal',
+			emailPassenger: '#emailPassenger',
+			emailAll: '#emailAll',
+			updatedEmailAll: '#updatedEmailAll',
+		};
+		const modalId = modalMap[emailTarget];
+		if (modalId) {
+			$(modalId).modal('show');
+		}
 	}
 
 	sendEmaiManuallClicked(bookingId) {
@@ -1399,6 +1409,8 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 		});
+		const modalId = '#sendEmailToAnyone';
+		$(modalId).modal('show');
 	}
 
 	get Form() {
@@ -1925,7 +1937,9 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	}
 
 	sendEmailToAnyone() {
-		if (this.sendEmailForm.invalid) {
+		const emailTargetControl = this.sendEmailForm.get('emailTarget')!;
+		if (!emailTargetControl.value) {
+			emailTargetControl.markAsTouched();
 			return;
 		}
 

@@ -1,0 +1,139 @@
+export interface PhotoGuide {
+  slotKey: string;
+  label: string;
+  angleLabel: string;
+  cameraAngle: 'front-left' | 'rear-right' | 'side' | 'interior-front'
+               | 'interior-rear' | 'dashboard' | 'trunk' | 'detail' | 'doc';
+  instruction: string;
+  dos: string[];
+  donts: string[];
+}
+
+export const PHOTO_GUIDES: Record<string, PhotoGuide> = {
+  '1': {
+    slotKey: '1',
+    label: 'Primary Showcase Angle',
+    angleLabel: 'Front 3/4 Corner',
+    cameraAngle: 'front-left',
+    instruction: 'Stand at the front-left corner of the vehicle. The entire car must be visible from bumper to bumper.',
+    dos: ['Shoot in daylight (8–10 AM or 2–4 PM)', 'Full vehicle in frame', 'Clean background (hotel, landmark)'],
+    donts: ['No cut-off hood or trunk', 'No people in frame', 'Avoid direct midday sun (harsh shadows)'],
+  },
+  '2': {
+    slotKey: '2',
+    label: 'Vehicle Image 2 — Rear Angle',
+    angleLabel: 'Rear 3/4 Corner',
+    cameraAngle: 'rear-right',
+    instruction: 'Stand at the rear-right corner. Full vehicle visible, rear plate area clearly shown.',
+    dos: ['Capture full rear and one side', 'Show license plate area', 'Clean background'],
+    donts: ['No partial trunk cut-off', 'Avoid direct backlight (sun behind car)'],
+  },
+  '3': {
+    slotKey: '3',
+    label: 'Vehicle Image 3 — Side Profile',
+    angleLabel: 'Driver Side',
+    cameraAngle: 'side',
+    instruction: 'Stand directly to the side of the vehicle — driver side. Full length visible.',
+    dos: ['Level with the car', 'Full profile from front to rear bumper', 'Shoot on flat ground'],
+    donts: ['No angled or tilted shots', 'Do not crop the wheels'],
+  },
+  '4': {
+    slotKey: '4',
+    label: 'Vehicle Image 4 — Interior Front',
+    angleLabel: 'Front Cabin (from rear)',
+    cameraAngle: 'interior-front',
+    instruction: 'Sit in the rear seat, shoot forward toward the front cabin and dashboard.',
+    dos: ['Shoot on a cloudy day — no harsh shadows', 'Show all seats and headrests', 'Clean interior'],
+    donts: ['No flash (creates reflections)', 'Remove personal items', 'No dark images'],
+  },
+  '5': {
+    slotKey: '5',
+    label: 'Vehicle Image 5 — Interior Rear',
+    angleLabel: 'Rear Seating (from front)',
+    cameraAngle: 'interior-rear',
+    instruction: 'Shoot from the front seat area toward the rear passenger seats.',
+    dos: ['Show full rear bench/seats', 'Highlight premium features', 'Good lighting required'],
+    donts: ['Do not crop seat edges', 'No cluttered floor mats'],
+  },
+  '6': {
+    slotKey: '6',
+    label: 'Vehicle Image 6 — Dashboard',
+    angleLabel: 'Dashboard & Controls',
+    cameraAngle: 'dashboard',
+    instruction: 'Capture the dashboard and infotainment screen from the driver perspective.',
+    dos: ['Turn on screen/displays', 'Show steering wheel and cluster', 'Clean and tidy'],
+    donts: ['Do not include personal items', 'Avoid reflections on the screen'],
+  },
+  '7': {
+    slotKey: '7',
+    label: 'Vehicle Image 7 — Trunk / Cargo',
+    angleLabel: 'Trunk Open',
+    cameraAngle: 'trunk',
+    instruction: 'Open the trunk fully and photograph the cargo area from behind the vehicle.',
+    dos: ['Show full cargo depth', 'Empty trunk preferred', 'Good lighting inside trunk'],
+    donts: ['Do not photograph a full/messy trunk', 'No blurry dark shots'],
+  },
+  '8': {
+    slotKey: '8',
+    label: 'Vehicle Image 8 — Detail / Feature',
+    angleLabel: 'Special Feature Close-up',
+    cameraAngle: 'detail',
+    instruction: 'Highlight a unique feature — premium trim, logo, lighting bar, or special amenity.',
+    dos: ['Close-up and sharp focus', 'Good lighting', 'Showcase what makes your vehicle special'],
+    donts: ['No random unfocused shots', 'Avoid blurry or out-of-focus details'],
+  },
+  '9': {
+    slotKey: '9',
+    label: 'Vehicle Image 9 — Your Choice',
+    angleLabel: 'Additional Angle',
+    cameraAngle: 'detail',
+    instruction: 'Any additional angle that showcases your vehicle. Night shot with interior lights is popular.',
+    dos: ['Night shot with laser/LED effects ON', 'Or another exterior angle', 'High impact visual'],
+    donts: ['No duplicate of Image 1', 'No blurry night shots without stabilization'],
+  },
+  'rearPlate': {
+    slotKey: 'rearPlate',
+    label: 'Rear License Plate',
+    angleLabel: 'Plate Close-up',
+    cameraAngle: 'doc',
+    instruction: 'Photograph the rear license plate clearly. The expiry/registration decal MUST be visible.',
+    dos: ['Plate fully in frame', 'Expiry sticker visible and legible', 'Sharp focus'],
+    donts: ['No blurry or dark shots', 'Do not crop the decal area'],
+  },
+  'windowPermit': {
+    slotKey: 'windowPermit',
+    label: 'Window Permit',
+    angleLabel: 'Permit Sticker',
+    cameraAngle: 'doc',
+    instruction: 'Photograph the window permit sticker affixed to the vehicle window. All text must be legible.',
+    dos: ['All text readable', 'Shoot straight-on (no angle)', 'Good lighting — no glare on glass'],
+    donts: ['No reflections from glass', 'Do not crop permit edges'],
+  },
+  'windowPermit2': {
+    slotKey: 'windowPermit2',
+    label: 'Secretary of State Document',
+    angleLabel: 'Document — Flat Surface',
+    cameraAngle: 'doc',
+    instruction: 'Place the document on a flat, well-lit surface and photograph it from directly above.',
+    dos: ['Lay flat — no curled edges', 'All 4 corners visible', 'Shoot from directly above'],
+    donts: ['No wrinkled or folded documents', 'No shadows across text'],
+  },
+  'usdotPermit': {
+    slotKey: 'usdotPermit',
+    label: 'USDOT Permit',
+    angleLabel: 'Permit Sticker / Card',
+    cameraAngle: 'doc',
+    instruction: 'Photograph your USDOT permit sticker or card. Number and all details must be legible.',
+    dos: ['USDOT number clearly visible', 'All text sharp and in focus', 'No glare'],
+    donts: ['No partial or cropped permit number', 'No blurry or dark shots'],
+  },
+  'mc': {
+    slotKey: 'mc',
+    label: 'Vehicle Inspection Certificate',
+    angleLabel: 'Document — Flat Surface',
+    cameraAngle: 'doc',
+    instruction: 'Place the inspection certificate flat and photograph from directly above.',
+    dos: ['Entire document in frame', 'All text legible', 'Shoot in bright ambient light'],
+    donts: ['No handwriting obscuring printed text', 'Avoid creases covering key fields'],
+  },
+};

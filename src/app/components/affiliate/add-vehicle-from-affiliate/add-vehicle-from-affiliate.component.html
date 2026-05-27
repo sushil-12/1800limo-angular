@@ -1,4 +1,9 @@
 <form [formGroup]="addVehicleForm" class="step_form_wrapper" appInvalidControlScroll>
+	<!-- Shared hidden file input for photo guide modal -->
+	<input #sharedFileInput type="file" hidden
+		(change)="handleSharedFileChange($event)"
+		accept="image/jpeg, image/png" />
+
 	<!-- Main page content-->
 	<section class="user_information affiliateVehicle">
 		<h2 class="headinginfo">
@@ -681,20 +686,13 @@
 							</p>
 							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
 							<ul class="mt-3">
-								<li>
+								<li *ngIf="!vehicleImage1.includes('extint1')">
 									<a class="custom-arrow-clockwise-button"
 										(click)="fetchImageBlob(vehicleImage1 ,'1',vehicleImageId1)">
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId1,
-													'1'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('1')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -719,14 +717,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId2,
-													'2'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('2')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -762,14 +753,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId2,
-														'2'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('2')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -795,14 +779,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId3,
-													'3'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('3')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -838,14 +815,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId3,
-														'3'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('3')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -871,14 +841,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId4,
-													'4'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('4')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -914,14 +877,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId4,
-														'4'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('4')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -947,14 +903,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId5,
-													'5'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('5')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -990,14 +939,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId5,
-														'5'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('5')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1023,14 +965,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId6,
-													'6'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('6')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1066,14 +1001,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId6,
-														'6'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('6')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1099,14 +1027,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId7,
-													'7'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('7')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1142,14 +1063,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId7,
-														'7'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('7')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1175,14 +1089,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId8,
-													'8'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('8')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1218,14 +1125,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId8,
-														'8'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('8')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1251,14 +1151,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId9,
-													'9'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('9')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1294,14 +1187,7 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId9,
-														'9'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('9')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1338,14 +1224,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'rearPlate',
-														rearPlateId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('rearPlate')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1391,14 +1270,7 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'rearPlate',
-															rearPlateId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('rearPlate')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1431,14 +1303,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'windowPermit',
-														windowPermitId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('windowPermit')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1478,14 +1343,7 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'windowPermit',
-															windowPermitId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('windowPermit')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1524,14 +1382,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'windowPermit2',
-														windowPermit2Id
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('windowPermit2')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1578,14 +1429,7 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'windowPermit2',
-															windowPermit2Id
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('windowPermit2')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1625,14 +1469,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'usdotPermit',
-														usdotPermitId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('usdotPermit')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1679,14 +1516,7 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'usdotPermit',
-															usdotPermitId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('usdotPermit')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1723,14 +1553,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'mc',
-														mcId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('mc')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1772,14 +1595,7 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'mc',
-															mcId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('mc')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1853,3 +1669,11 @@
 
 <!-- Photo Instructions modal -->
 <app-photo-instructions></app-photo-instructions>
+
+<!-- Photo Guide modal -->
+<app-photo-guide-modal
+	[guide]="currentGuide"
+	[isVisible]="isGuideVisible"
+	(confirmed)="onGuideConfirmed()"
+	(dismissed)="onGuideDismissed()">
+</app-photo-guide-modal>
