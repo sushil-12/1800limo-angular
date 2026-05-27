@@ -800,6 +800,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 				this.spinner.hide();
 				console.log("audit trail --->>>>>>>>", response);
 				this.audit_Trail = response.data;
+				$("#AuditTrailModal").modal("show");
 				setTimeout(() => {
 					const modalBody = document.querySelector('#AuditTrailModal .modal-body');
 					if (modalBody) {
@@ -1859,6 +1860,7 @@ sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatu
 
 	acceptChargeClick(id) {
 		this.accept_charge_id = id
+		$("#accept_charge_modal").modal("show");
 	}
 
 	accpetChargeAction() {
