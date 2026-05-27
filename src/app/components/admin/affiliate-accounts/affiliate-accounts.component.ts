@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -9,12 +9,14 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { UploadService } from 'src/app/services/upload.service';
+import Quill from 'quill';
 declare var $: any;
 
 @Component({
 	selector: 'app-affiliate-accounts',
 	templateUrl: './affiliate-accounts.component.html',
-	styleUrls: ['./affiliate-accounts.component.scss']
+	styleUrls: ['./affiliate-accounts.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class AffiliateAccountsComponent implements OnInit {
 	private readonly affiliateSearchStorageKey = 'affiliateSearch';
@@ -77,6 +79,9 @@ export class AffiliateAccountsComponent implements OnInit {
 	uploadedFile: any;
 	successMessage: any;
 
+    @ViewChild('messageEditor') messageEditor: any;
+    private quillMessageInstance: Quill;
+
 	quillModules = {
 		toolbar: [
 			['bold', 'italic', 'underline', 'strike'],
@@ -116,6 +121,21 @@ export class AffiliateAccountsComponent implements OnInit {
 		// this.getEmailList()
 
 
+	}
+
+	onMessageEditorCreated(quill: Quill) {
+		this.quillMessageInstance = quill;
+		
+		const selectAllText = () => {
+		setTimeout(() => {
+			const textLength = quill.getText().trim().length;
+			if (textLength > 0) {
+			quill.setSelection(0, quill.getLength());
+			}
+		}, 10);
+		};
+		
+		quill.root.addEventListener('focus', selectAllText);
 	}
 
 	adjustTextareaHeight(textarea: HTMLTextAreaElement) {

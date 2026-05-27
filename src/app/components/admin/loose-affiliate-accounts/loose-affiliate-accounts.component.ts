@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,11 +9,13 @@ import { AdminService } from 'src/app/services/admin.service';
 import { UploadService } from 'src/app/services/upload.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
+import Quill from 'quill';
 
 @Component({
   selector: 'app-loose-affiliate-accounts',
   templateUrl: './loose-affiliate-accounts.component.html',
-  styleUrls: ['./loose-affiliate-accounts.component.scss']
+  styleUrls: ['./loose-affiliate-accounts.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class LooseAffiliateAccountsComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -56,6 +58,10 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   uploadedFile: any;
   successMessage: any;
 
+  @ViewChild('messageEditor') messageEditor: any;
+   private quillMessageInstance: Quill;
+
+
   quillModules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -86,7 +92,21 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     this.loadSubLooseAffiliateAcc();//load LooseAffiliateAcc
     this.buildSendEmailForm();
   }
-
+  
+  onMessageEditorCreated(quill: Quill) {
+    this.quillMessageInstance = quill;
+    
+    const selectAllText = () => {
+      setTimeout(() => {
+        const textLength = quill.getText().trim().length;
+        if (textLength > 0) {
+          quill.setSelection(0, quill.getLength());
+        }
+      }, 10);
+    };
+    
+    quill.root.addEventListener('focus', selectAllText);
+  }
 
   toggleSelect(id: number) {
     if (this.selectedIds.has(id)) {

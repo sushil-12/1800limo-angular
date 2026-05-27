@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy, ViewEncapsulation } from "@angular/core";
 import { AdminService } from "../../../services/admin.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -22,13 +22,15 @@ import { GoogleMap } from '@angular/google-maps';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker'; // Import for config if needed
 import { MapUtils } from '../../../utils/map-utils';
 import { ToastrService } from "ngx-toastr";
+import Quill from "quill";
 
 
 @Component({
 	selector: "app-daily-bookings",
 	templateUrl: "./daily-bookings.component.html",
 	styleUrls: ["./daily-bookings.component.scss"],
-	providers: [BsDatepickerConfig] // Optional: Provide config if customizing globally
+	providers: [BsDatepickerConfig], // Optional: Provide config if customizing globally
+    encapsulation: ViewEncapsulation.None
 })
 export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('bookingPreviewModal') bookingPreviewModal: any;
@@ -112,6 +114,9 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	selectedEmailBookingStatus: string = '';
 	private afterPrintHandler?: () => void;
 	editorContent: string = '';
+
+	@ViewChild('messageEditor') messageEditor: any;
+    private quillMessageInstance: Quill;
 
 	quillModules = {
 		toolbar: [
@@ -232,6 +237,21 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			window.removeEventListener('afterprint', this.afterPrintHandler);
 		}
 		document.body.classList.remove('printing-daily-bookings');
+	}
+
+	onMessageEditorCreated(quill: Quill) {
+		this.quillMessageInstance = quill;
+		
+		const selectAllText = () => {
+		setTimeout(() => {
+			const textLength = quill.getText().trim().length;
+			if (textLength > 0) {
+			quill.setSelection(0, quill.getLength());
+			}
+		}, 10);
+		};
+		
+		quill.root.addEventListener('focus', selectAllText);
 	}
 
 	getEditorContent(): string {
