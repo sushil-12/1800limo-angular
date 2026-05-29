@@ -1187,25 +1187,24 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	show = false;
 	openModal(booking: any, selection_button: string) {
 		console.log('Double-click detected, opening modal for:', booking);
-		
-		// Make sure to destroy any existing modal instance first
-		const modalElement = document.getElementById('sendEmailModal');
-		if (modalElement) {
-			// Remove any existing Bootstrap modal instance
-			(window as any).$(modalElement).modal('dispose');
-		}
-		
-		// Now open with explicit options
-		(window as any).$("#sendEmailModal").modal({
-			backdrop: 'static',
-			keyboard: false,
-			show: true
-		});
-		
+		$("#sendEmailModal").modal("show");
+		// try {
+		// 	setTimeout(() => {
+		// 		// $('textarea').attr('autofocus', 'autofocus');
+		// 		this.sendEmailModalFocus.nativeElement.querySelector("textarea").focus();
+		// 		//add default message in the textarea
+		// 		this.message.nativeElement.value = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
+		// 		this.sendEmailForm.patchValue({ text_message: this.message.nativeElement.value });
+		// 		this.editorContent = 'Hi, Please check your email for new bookings. Click Accept/Reject. Thanks, Text Joe at 7082056607 with any questions.';
+		// 	}, 1000);
+		// } catch (error) {
+		// 	console.log("----------error------->>>>>> ", error);
+		// }
+		console.log("passenger details", booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}
-
+	
 	async copyPreviewText() {
 		// 1) Prepare text: convert <br> to newlines, strip tags (or keep as needed)
 		const plainText = (this.previewCopyData || '')
