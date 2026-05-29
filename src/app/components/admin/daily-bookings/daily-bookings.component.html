@@ -178,17 +178,17 @@
 
 										<!-- Row 1: Three inline action icons -->
 										<div class="d-flex justify-content-center align-items-center"
-											style="gap: 18px;">
+											style="gap: 35px;">
 
 											<a [routerLink]="['/admin/new-booking']" *ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) 
-                && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
+                                              && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
 												title="Edit">
-												<i class="fa fa-pencil" style="color: #000; font-size:18px"></i>
+												<i class="fa fa-pencil" style="color: #000; font-size:20px"></i>
 											</a>
 
 											<a title="Pin" (click)="togglePin(booking.booking_id)">
-												<i class="fa fa-thumb-tack" style="font-size:18px"
+												<i class="fa fa-thumb-tack" style="font-size:20px"
 													[style.color]="pinnedBookingIds.includes(booking.booking_id) ? '#f57c00' : '#000'"
 													[style.transform]="pinnedBookingIds.includes(booking.booking_id) ? 'rotate(45deg)' : 'none'">
 												</i>
@@ -196,7 +196,7 @@
 
 											<a type="button" data-toggle="dropdown" aria-haspopup="true"
 												aria-expanded="false" title="More options" style="position: relative;">
-												<i class="fa fa-ellipsis-v" style="font-size:18px"></i>
+												<i class="fa fa-sliders" style="font-size:20px"></i>
 
 												<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 													aria-labelledby="navbarDropdownUserImage"

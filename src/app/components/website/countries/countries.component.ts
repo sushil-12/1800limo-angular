@@ -25,7 +25,7 @@ export interface Continent {
 export class CountriesComponent {
 
   stats = [
-    { value: '48',    label: 'Countries'    },
+    { value: '47',    label: 'Countries'    },
     { value: '5',     label: 'Continents'   },
     { value: '1,754', label: 'Cities'       },
     { value: '24/7',  label: 'Service'      },

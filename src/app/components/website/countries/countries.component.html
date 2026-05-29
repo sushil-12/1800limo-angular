@@ -8,8 +8,8 @@
       </span>
       <h1 class="font-weight-bold mb-3">Places Where We Are Available</h1>
       <p class="lead mx-auto">
-        Premium luxury transportation services spanning 48 countries across
-        6 continents — wherever you go, we're there.
+        Premium luxury transportation services spanning 47 countries across
+        5 continents — wherever you go, we're there.
       </p>
     </div>
   </header>
@@ -48,7 +48,8 @@
       <!-- Results Count -->
       <div class="results-header d-flex justify-content-between align-items-center mb-4 px-1">
         <p class="results-count mb-0">
-          Showing <strong>{{ getFilteredCount() }}</strong> countries
+          Showing <strong>{{ getFilteredCount() }}</strong>
+          {{ getFilteredCount() === 1 ? 'country' : 'countries' }}
         </p>
         <span class="region-tag" *ngIf="selectedContinent !== 'all'">
           <i class="bi bi-funnel mr-1"></i> {{ selectedContinent }}
