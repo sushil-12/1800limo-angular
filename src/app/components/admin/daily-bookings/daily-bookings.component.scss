@@ -200,6 +200,10 @@ button {
 	width: 48px;
 }
 
+.nav-link svg#Layer_1 {
+    height: 30px !important;
+}
+
 .mailBoxStyle svg {
 	width: 60px;
 	height: 60px;
@@ -1025,5 +1029,9 @@ quill-editor {
 		min-height: 150px;
 		white-space: pre-wrap;
 		overflow-y: auto;
+		font-size: 18px !important;
 	}
+}
+table thead th{
+	font-weight: 600 !important;
 }

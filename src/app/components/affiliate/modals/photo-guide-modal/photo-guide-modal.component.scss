@@ -92,16 +92,17 @@
   }
 }
 
+   
 .pg-diagram-panel {
-  width: 240px;
-  flex-shrink: 0;
-  background: #f7f7f7;
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  border-right: 1px solid #eee;
+   width: 45%;
+    flex-shrink: 0;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    gap: 12px;
+    border-right: 1px solid #eee;
 
   @media (max-width: 767px) {
     width: 100%;
@@ -112,13 +113,20 @@
 
 .pg-diagram {
   width: 100%;
-  max-width: 200px;
 
   .cad-svg {
     width: 100%;
     height: auto;
     display: block;
   }
+}
+
+.pg-placeholder-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .pg-angle-chip {

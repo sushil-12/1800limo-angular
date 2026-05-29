@@ -1,0 +1,78 @@
+<div class="countries-page-wrapper">
+
+  <!-- ───────────── Hero ───────────── -->
+  <header class="countries-hero">
+    <div class="container text-center py-3 py-md-4 py-lg-5">
+      <span class="hero-badge mx-auto">
+        <i class="bi bi-geo-alt-fill mr-1"></i> Global Coverage
+      </span>
+      <h1 class="font-weight-bold mb-3">Places Where We Are Available</h1>
+      <p class="lead mx-auto">
+        Premium luxury transportation services spanning 48 countries across
+        6 continents — wherever you go, we're there.
+      </p>
+    </div>
+  </header>
+
+  <!-- ───────────── Stats Bar ───────────── -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="d-flex justify-content-center flex-wrap">
+        <div class="stat-item text-center" *ngFor="let stat of stats">
+          <div class="stat-number">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── Countries Grid ───────────── -->
+  <section class="countries-grid-section bg-white">
+    <div class="container pb-5">
+
+      <!-- Continent Filter Pills -->
+      <div class="continent-filters-container mb-4">
+        <div class="d-flex align-items-center justify-content-center flex-wrap">
+          <button
+            *ngFor="let continent of continents"
+            class="filter-pill"
+            [class.active]="selectedContinent === continent.id"
+            (click)="setContinent(continent.id)"
+          >
+            <i [class]="'bi ' + continent.icon + ' mr-2'"></i>
+            {{ continent.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <div class="results-header d-flex justify-content-between align-items-center mb-4 px-1">
+        <p class="results-count mb-0">
+          Showing <strong>{{ getFilteredCount() }}</strong> countries
+        </p>
+        <span class="region-tag" *ngIf="selectedContinent !== 'all'">
+          <i class="bi bi-funnel mr-1"></i> {{ selectedContinent }}
+        </span>
+      </div>
+
+      <!-- Countries Grid -->
+      <div class="countries-grid">
+        <div
+          class="country-card"
+          *ngFor="let country of filteredCountries"
+        >
+          <span class="country-flag">{{ country.flag }}</span>
+          <div class="country-info">
+            <p class="country-name mb-0">{{ country.name }}</p>
+            <p class="country-region mb-1">{{ country.region }}</p>
+            <p class="country-cities mb-1">{{ country.cities }}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+</div>

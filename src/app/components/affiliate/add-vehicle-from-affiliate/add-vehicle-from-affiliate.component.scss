@@ -5,10 +5,37 @@
 
 .vehtype_extint .emptyImage {
 	height: 200px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 15px;
+
+	&::before {
+		content: "SAMPLE";
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.35);
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		color: #fff;
+		font-size: 22px;
+		font-weight: 700;
+		letter-spacing: 2px;
+
+		border-radius: 15px;
+		z-index: 1;
+		pointer-events: none;
+	}
 }
 
 .vehtype_extint .emptyImage img {
-	height: 195px;
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
+	border-radius: 15px;
+	display: block;
 }
 
 .camera-svg {

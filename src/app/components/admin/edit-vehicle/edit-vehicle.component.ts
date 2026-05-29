@@ -92,6 +92,16 @@ export class EditVehicleComponent implements OnInit {
 	public serviceType: string;
 	isVehicleTypeSelected: boolean = true;
 
+	// Add these properties
+	public vehicleTypeImages: string[] = [];
+	public showPhotoGuideModal: boolean = false;
+	public currentImageNumber: string = '';
+	public currentImageId: string = '';
+	public isOfficialImageType: boolean = false;
+	public currentOfficialImageType: string = '';
+	public currentOfficialImageId: string = '';
+	private vehicleTypesFormatted: any[] = [];
+
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
 	errorMsg1: boolean;
@@ -133,6 +143,8 @@ export class EditVehicleComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.spinner.show();
+		this.fetchVehicleTypeImages();
+
 		$('#vehicleTypeField').focusout(() => {
 			this.errorMsg = true;
 		})
@@ -464,6 +476,9 @@ export class EditVehicleComponent implements OnInit {
 			});
 		this.typeOfService // assign the global variable - service.
 		this.Subscriptions();
+
+		// In ngOnInit(), after spinner.show():
+		this.fetchVehicleTypeImages();
 	}
 
 	closeButton() {
@@ -788,10 +803,11 @@ export class EditVehicleComponent implements OnInit {
 		}
 		console.log('[DEBUG] setInteriors() completed');
 	}
-	handleChangeVehicleType(value) {
-		console.log('Selected Value:', value);
 
-		this.isVehicleTypeSelected = value ? true : false
+	// Update handleChangeVehicleType:
+	handleChangeVehicleType(value) {
+		this.isVehicleTypeSelected = value ? true : false;
+		this.updateVehicleTypeImages();
 	}
 
 	onAmenitiesCheckboxChange(val, ischecked) {
@@ -1288,5 +1304,65 @@ export class EditVehicleComponent implements OnInit {
 		this.addVehicleForm.patchValue({
 			charterCancelPolicy: event.value
 		})
+	}
+
+	fetchVehicleTypeImages(): void {
+		this.httpClient.get('https://api.1800limo.com/api/vehicle-types-formatted').subscribe((res: any) => {
+			if (res.success) {
+				this.vehicleTypesFormatted = res.data.vehicles;
+				this.updateVehicleTypeImages();
+			}
+		});
+	}
+
+	updateVehicleTypeImages(): void {
+		const selectedVehicleTypeId = this.addVehicleForm.get('vehicleType')?.value;
+		if (!selectedVehicleTypeId || !this.vehicleTypesFormatted.length) {
+			this.vehicleTypeImages = [];
+			return;
+		}
+
+		// Match by name — your internal vehicle_types have names matching the API
+		const selectedType = this.filteredVehicleTypes.find((vt: any) => vt.ID == selectedVehicleTypeId) as any;
+		if (!selectedType) {
+			this.vehicleTypeImages = [];
+			return;
+		}
+
+		const matched = this.vehicleTypesFormatted.find(v =>
+			v.name.toLowerCase().trim() === selectedType.name.toLowerCase().trim()
+		);
+		this.vehicleTypeImages = matched ? matched.images : [];
+	}
+
+	openPhotoGuideModal(imageNumber: string, imageId: string): void {
+		this.currentImageNumber = imageNumber;
+		this.currentImageId = imageId;
+		this.isOfficialImageType = false;
+		this.updateVehicleTypeImages();
+		this.showPhotoGuideModal = true;
+	}
+
+	openPhotoGuideModalOfficial(imageType: string, imageId: string): void {
+		this.currentOfficialImageType = imageType;
+		this.currentOfficialImageId = imageId;
+		this.isOfficialImageType = true;
+		this.updateVehicleTypeImages();
+		this.showPhotoGuideModal = true;
+	}
+
+	closePhotoGuideModal(): void {
+		this.showPhotoGuideModal = false;
+	}
+
+	triggerFileInput(): void {
+		const inputId = this.isOfficialImageType
+			? `fileInput_${this.currentOfficialImageType}`
+			: `fileInput_${this.currentImageNumber}`;
+		const fileInput = document.getElementById(inputId) as HTMLInputElement;
+		if (fileInput) {
+			fileInput.click();
+		}
+		this.closePhotoGuideModal();
 	}
 }

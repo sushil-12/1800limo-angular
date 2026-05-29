@@ -429,13 +429,10 @@
 			</span>
 			<div class="mt-4 vehtype_extintwrap">
 				<div class="row">
-					<div class="col-md-4" *ngIf="vehicleImage1">
+					<div class="col-md-4" *ngIf="vehicleImage1; else noVehicleImage1">
 						<div class="vehtype_extint">
 							<p>
-								<span class="text-danger">
-									{{ vehicleImage1.includes('extint1') ? 'Change' : '' }}
-								</span>
-								Vehicle Image 1 <span class="asterisk">*</span>
+								Primary Angle <span class="asterisk">*</span>
 							</p>
 							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
 							<ul class="mt-3">
@@ -465,10 +462,33 @@
 							</ul>
 						</div>
 					</div>
+					<ng-template #noVehicleImage1>
+						<div class="col-md-4">
+							<div class="vehtype_extint">
+								<p>Primary Angle <span class="asterisk">*</span></p>
+								<div class="emptyImage">
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
+								</div>
+								<ul class="mt-3">
+									<li>
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="onFileChange($event, vehicleImageId1, '1')" tabindex="-1" accept="image/jpeg, image/png" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
+											Add
+										</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</ng-template>
 
 					<div class="col-md-4" *ngIf="vehicleImage2; else noVehicleImage2">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 2</p>
+							<p>Side Angle</p>
 							<img src="{{ vehicleImage2 }}" (click)="showImageInModal(vehicleImage2)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -514,9 +534,9 @@
 					<ng-template #noVehicleImage2>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 2</p>
+								<p>Side Angle</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/side-profile.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -544,7 +564,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage3; else noVehicleImage3">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 3</p>
+							<p>Rear Angle</p>
 							<img src="{{ vehicleImage3 }}" (click)="showImageInModal(vehicleImage3)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -590,9 +610,9 @@
 					<ng-template #noVehicleImage3>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 3</p>
+								<p>Rear Angle</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/rear-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -620,7 +640,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage4; else noVehicleImage4">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 4</p>
+							<p>Interior Front</p>
 							<img src="{{ vehicleImage4 }}" (click)="showImageInModal(vehicleImage4)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -666,9 +686,9 @@
 					<ng-template #noVehicleImage4>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 4</p>
+								<p>Interior Front</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/interior-front.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -696,7 +716,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage5; else noVehicleImage5">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 5</p>
+							<p>Interior Rear</p>
 							<img src="{{ vehicleImage5 }}" (click)="showImageInModal(vehicleImage5)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -742,9 +762,9 @@
 					<ng-template #noVehicleImage5>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 5</p>
+								<p>Interior Rear</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/interior-rear.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -772,7 +792,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage6; else noVehicleImage6">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 6</p>
+							<p>Back Trunk</p>
 							<img src="{{ vehicleImage6 }}" (click)="showImageInModal(vehicleImage6)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -818,9 +838,9 @@
 					<ng-template #noVehicleImage6>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 6</p>
+								<p>Back Trunk</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/back-trunk.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -846,9 +866,10 @@
 						</div>
 					</ng-template>
 
+<!-- Vehicle Image 7 - commented out
 					<div class="col-md-4" *ngIf="vehicleImage7; else noVehicleImage7">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 7</p>
+							<p>Trunk / Cargo</p>
 							<img src="{{ vehicleImage7 }}" (click)="showImageInModal(vehicleImage7)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -894,9 +915,9 @@
 					<ng-template #noVehicleImage7>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 7</p>
+								<p>Trunk / Cargo</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -921,10 +942,12 @@
 							</div>
 						</div>
 					</ng-template>
+-->
 
+<!-- Vehicle Image 8 - commented out
 					<div class="col-md-4" *ngIf="vehicleImage8; else noVehicleImage8">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 8</p>
+							<p>Detail / Feature</p>
 							<img src="{{ vehicleImage8 }}" (click)="showImageInModal(vehicleImage8)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -970,9 +993,9 @@
 					<ng-template #noVehicleImage8>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 8</p>
+								<p>Detail / Feature</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -997,10 +1020,12 @@
 							</div>
 						</div>
 					</ng-template>
+-->
 
+<!-- Vehicle Image 9 - commented out
 					<div class="col-md-4" *ngIf="vehicleImage9; else noVehicleImage9">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 9</p>
+							<p>Your Choice</p>
 							<img src="{{ vehicleImage9 }}" (click)="showImageInModal(vehicleImage9)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -1046,9 +1071,9 @@
 					<ng-template #noVehicleImage9>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 9</p>
+								<p>Your Choice</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
@@ -1073,6 +1098,7 @@
 							</div>
 						</div>
 					</ng-template>
+-->
 				</div>
 
 				<hr />
@@ -1145,7 +1171,7 @@
 										<!-- <span class="asterisk">*</span> -->
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -1232,7 +1258,7 @@
 										<!-- <span *ngIf="affiliateType !='fleet_operator'" class="asterisk">*</span> -->
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -1332,7 +1358,7 @@
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -1433,7 +1459,7 @@
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -1526,7 +1552,7 @@
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>

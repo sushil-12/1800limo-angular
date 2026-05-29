@@ -50,6 +50,7 @@ import { AddDriverSubscriberComponent } from './components/subscription/add-driv
 // import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
+import { CountriesComponent } from './components/website/countries/countries.component';
 
 
 const routes: Routes = [
@@ -105,6 +106,10 @@ const routes: Routes = [
 			{
 				path: 'driver-faq',
 				component: DriverFaqComponent
+			},
+			{
+				path: 'countries',
+				component: CountriesComponent
 			},
 			{
 				path: 'cancellation-policy',

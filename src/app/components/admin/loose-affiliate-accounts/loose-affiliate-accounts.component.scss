@@ -146,6 +146,7 @@ quill-editor {
     min-height: 150px;
     white-space: pre-wrap;
     overflow-y: auto;
+    font-size: 18px !important;
   }
 }
 
@@ -179,6 +180,36 @@ quill-editor {
     i {
       margin-right: 4px;
       font-size: 13px;
+    }
+  }
+}
+
+// Add to your .scss file
+table {
+  td, th {
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: inline-block !important;
+      position: relative !important;
+      z-index: 1 !important;
+      -webkit-appearance: checkbox !important;
+      appearance: checkbox !important;
+    }
+  }
+}
+
+// For better mobile touch targets
+@media only screen and (max-width: 768px) {
+  table {
+    td, th {
+      input[type="checkbox"] {
+        transform: scale(1.2);
+        margin: 0 10px;
+      }
     }
   }
 }

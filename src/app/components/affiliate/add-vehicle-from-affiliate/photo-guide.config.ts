@@ -4,6 +4,7 @@ export interface PhotoGuide {
   angleLabel: string;
   cameraAngle: 'front-left' | 'rear-right' | 'side' | 'interior-front'
                | 'interior-rear' | 'dashboard' | 'trunk' | 'detail' | 'doc';
+  imagePath?: string;
   instruction: string;
   dos: string[];
   donts: string[];
@@ -12,57 +13,63 @@ export interface PhotoGuide {
 export const PHOTO_GUIDES: Record<string, PhotoGuide> = {
   '1': {
     slotKey: '1',
-    label: 'Primary Showcase Angle',
+    label: 'Primary Angle',
     angleLabel: 'Front 3/4 Corner',
     cameraAngle: 'front-left',
+    imagePath: 'assets/placeholders/primary-angle.png',
     instruction: 'Stand at the front-left corner of the vehicle. The entire car must be visible from bumper to bumper.',
     dos: ['Shoot in daylight (8–10 AM or 2–4 PM)', 'Full vehicle in frame', 'Clean background (hotel, landmark)'],
     donts: ['No cut-off hood or trunk', 'No people in frame', 'Avoid direct midday sun (harsh shadows)'],
   },
   '2': {
     slotKey: '2',
-    label: 'Vehicle Image 2 — Rear Angle',
-    angleLabel: 'Rear 3/4 Corner',
-    cameraAngle: 'rear-right',
-    instruction: 'Stand at the rear-right corner. Full vehicle visible, rear plate area clearly shown.',
-    dos: ['Capture full rear and one side', 'Show license plate area', 'Clean background'],
-    donts: ['No partial trunk cut-off', 'Avoid direct backlight (sun behind car)'],
-  },
-  '3': {
-    slotKey: '3',
-    label: 'Vehicle Image 3 — Side Profile',
+    label: 'Side Angle',
     angleLabel: 'Driver Side',
     cameraAngle: 'side',
+    imagePath: 'assets/placeholders/side-profile.png',
     instruction: 'Stand directly to the side of the vehicle — driver side. Full length visible.',
     dos: ['Level with the car', 'Full profile from front to rear bumper', 'Shoot on flat ground'],
     donts: ['No angled or tilted shots', 'Do not crop the wheels'],
   },
+  '3': {
+    slotKey: '3',
+    label: 'Rear Angle',
+    angleLabel: 'Rear 3/4 Corner',
+    cameraAngle: 'rear-right',
+    imagePath: 'assets/placeholders/rear-angle.png',
+    instruction: 'Stand at the rear-right corner. Full vehicle visible, rear plate area clearly shown.',
+    dos: ['Capture full rear and one side', 'Show license plate area', 'Clean background'],
+    donts: ['No partial trunk cut-off', 'Avoid direct backlight (sun behind car)'],
+  },
   '4': {
     slotKey: '4',
-    label: 'Vehicle Image 4 — Interior Front',
+    label: 'Interior Front',
     angleLabel: 'Front Cabin (from rear)',
     cameraAngle: 'interior-front',
+    imagePath: 'assets/placeholders/interior-front.png',
     instruction: 'Sit in the rear seat, shoot forward toward the front cabin and dashboard.',
     dos: ['Shoot on a cloudy day — no harsh shadows', 'Show all seats and headrests', 'Clean interior'],
     donts: ['No flash (creates reflections)', 'Remove personal items', 'No dark images'],
   },
   '5': {
     slotKey: '5',
-    label: 'Vehicle Image 5 — Interior Rear',
+    label: 'Interior Rear',
     angleLabel: 'Rear Seating (from front)',
     cameraAngle: 'interior-rear',
+    imagePath: 'assets/placeholders/interior-rear.png',
     instruction: 'Shoot from the front seat area toward the rear passenger seats.',
     dos: ['Show full rear bench/seats', 'Highlight premium features', 'Good lighting required'],
     donts: ['Do not crop seat edges', 'No cluttered floor mats'],
   },
   '6': {
     slotKey: '6',
-    label: 'Vehicle Image 6 — Dashboard',
-    angleLabel: 'Dashboard & Controls',
-    cameraAngle: 'dashboard',
-    instruction: 'Capture the dashboard and infotainment screen from the driver perspective.',
-    dos: ['Turn on screen/displays', 'Show steering wheel and cluster', 'Clean and tidy'],
-    donts: ['Do not include personal items', 'Avoid reflections on the screen'],
+    label: 'Back Trunk',
+    angleLabel: 'Trunk Open',
+    cameraAngle: 'trunk',
+    imagePath: 'assets/placeholders/back-trunk.png',
+    instruction: 'Open the trunk fully and photograph the cargo area from behind the vehicle.',
+    dos: ['Show full cargo depth', 'Empty trunk preferred', 'Good lighting inside trunk'],
+    donts: ['Do not photograph a full/messy trunk', 'No blurry dark shots'],
   },
   '7': {
     slotKey: '7',

@@ -275,15 +275,15 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 
-				this.vehicleImage1 = this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
-				this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
-				this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
-				this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
-				this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
-				this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
-				this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
-				this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
-				this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
+				this.vehicleImage1 = this.oldvehicleImage[0] = null;
+				this.vehicleImage2 = this.oldvehicleImage[1] = null;
+				this.vehicleImage3 = this.oldvehicleImage[2] = null;
+				this.vehicleImage4 = this.oldvehicleImage[3] = null;
+				this.vehicleImage5 = this.oldvehicleImage[4] = null;
+				this.vehicleImage6 = this.oldvehicleImage[5] = null;
+				this.vehicleImage7 = this.oldvehicleImage[6] = null;
+				this.vehicleImage8 = this.oldvehicleImage[7] = null;
+				this.vehicleImage9 = this.oldvehicleImage[8] = null;
 
 				this.vehicleImageId1 = this.response.data.vehicleImage1.id;
 				this.vehicleImageId2 = this.response.data.vehicleImage2.id;

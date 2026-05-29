@@ -11,12 +11,17 @@
     <!-- Body: two panels -->
     <div class="pg-body">
 
-      <!-- LEFT: angle diagram -->
+      <!-- LEFT: photo guide image -->
       <div class="pg-diagram-panel">
         <div class="pg-diagram">
-          <app-camera-angle-diagram [angle]="guide?.cameraAngle"></app-camera-angle-diagram>
+          <ng-container *ngIf="guide?.imagePath; else svgDiagram">
+            <img [src]="guide?.imagePath" [alt]="guide?.label" class="pg-placeholder-img" />
+          </ng-container>
+          <ng-template #svgDiagram>
+            <app-camera-angle-diagram [angle]="guide?.cameraAngle"></app-camera-angle-diagram>
+          </ng-template>
         </div>
-        <div class="pg-angle-chip">
+        <!-- <div class="pg-angle-chip">
           <svg class="pg-cam-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path fill="none" d="M0 0h24v24H0V0z"/>
             <circle cx="12" cy="12" r="3"/>
@@ -24,7 +29,7 @@
           </svg>
           {{ guide?.angleLabel }}
         </div>
-        <p class="pg-instruction">{{ guide?.instruction }}</p>
+        <p class="pg-instruction">{{ guide?.instruction }}</p> -->
       </div>
 
       <!-- RIGHT: dos/donts -->
