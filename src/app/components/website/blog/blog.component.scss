@@ -75,12 +75,31 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             width: 100%;
             border-radius: 50px;
             outline: none;
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: 400 !important;
             color: #333;
 
             &::placeholder {
                 color: #99A1AF;
+            }
+        }
+
+        .search-btn {
+            flex-shrink: 0;
+            background: $primary-color;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 4px;
+            white-space: nowrap;
+            transition: $transition-smooth;
+
+            &:hover {
+                background: darken($primary-color, 8%);
             }
         }
 
@@ -107,8 +126,6 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             padding: 12px 20px;
             cursor: pointer;
             text-align: left;
-            font-size: 1rem;
-            color: #333;
             transition: background 0.2s;
 
             &:hover {
@@ -117,6 +134,22 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
             &:not(:last-child) {
                 border-bottom: 1px solid #f1f1f1;
+            }
+
+            .suggestion-title {
+                font-size: 0.95rem;
+                font-weight: 500;
+                color: #333;
+            }
+
+            .suggestion-excerpt {
+                font-size: 0.8rem;
+                color: #888;
+                margin-top: 3px;
+                padding-left: 1.6rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }
@@ -779,6 +812,44 @@ $transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             max-width: 100% !important;
             flex: 0 0 100% !important;
             height: auto !important;
+        }
+    }
+}
+
+// =============================================
+// NO RESULTS
+// =============================================
+.no-results-section {
+    .no-results-box {
+        background: #f9f9f9;
+        border-radius: 16px;
+        border: 1px dashed #e0e0e0;
+
+        .no-results-icon {
+            font-size: 3.5rem;
+            color: #dee2e6;
+        }
+
+        h3 {
+            color: #1a1a2e;
+        }
+    }
+
+    .instead-heading {
+        color: #1a1a2e;
+        font-size: 1.15rem;
+        position: relative;
+        padding-bottom: 10px;
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: $primary-color;
+            border-radius: 2px;
         }
     }
 }
