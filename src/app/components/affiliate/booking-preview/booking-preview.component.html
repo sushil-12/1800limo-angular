@@ -523,15 +523,41 @@
 				</button>
 			</div>
 
+			<!-- Tabs -->
+			<div class="rcpt-share-tabs">
+				<button class="rcpt-share-tab" [class.active]="shareActiveTab === 'email'"
+					(click)="shareActiveTab = 'email'">
+					<i class="bi bi-envelope"></i> Email
+				</button>
+				<button class="rcpt-share-tab" [class.active]="shareActiveTab === 'sms'"
+					(click)="shareActiveTab = 'sms'">
+					<i class="bi bi-chat-dots"></i> SMS
+				</button>
+			</div>
+
 			<div class="modal-body rcpt-share-body">
-				<quill-editor [(ngModel)]="shareEditorContent" [modules]="quillModules"
-					[styles]="{'min-height': '320px', 'background': '#fff'}" placeholder="Booking receipt HTML…">
-				</quill-editor>
+				<!-- Email: rich text Quill editor -->
+				<ng-container *ngIf="shareActiveTab === 'email'">
+					<quill-editor [(ngModel)]="shareEditorContent" [modules]="quillModules"
+						[styles]="{'min-height': '320px', 'background': '#fff'}" placeholder="Booking receipt HTML…">
+					</quill-editor>
+				</ng-container>
+
+				<!-- SMS: plain text textarea -->
+				<ng-container *ngIf="shareActiveTab === 'sms'">
+					<textarea class="rcpt-share-sms-textarea" [(ngModel)]="shareSmsContent" rows="14"
+						placeholder="SMS message…"></textarea>
+				</ng-container>
 			</div>
 
 			<div class="rcpt-share-footer">
 				<button type="button" class="rcpt-btn" data-dismiss="modal">Close</button>
-				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="copyShareHtml()">
+				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="copyShareHtml()"
+					*ngIf="shareActiveTab === 'email'">
+					<i class="bi bi-clipboard-check"></i> Copy
+				</button>
+				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="copySmsText()"
+					*ngIf="shareActiveTab === 'sms'">
 					<i class="bi bi-clipboard-check"></i> Copy
 				</button>
 			</div>

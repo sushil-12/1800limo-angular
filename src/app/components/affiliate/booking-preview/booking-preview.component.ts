@@ -60,6 +60,8 @@ export class BookingPreviewComponent implements OnInit {
   @Output() shareBooking = new EventEmitter<any>();
 
   shareEditorContent: string = '';
+  shareSmsContent: string = '';
+  shareActiveTab: 'email' | 'sms' = 'email';
 
   quillModules = {
     toolbar: [
@@ -124,6 +126,8 @@ export class BookingPreviewComponent implements OnInit {
 
   onShare(): void {
     this.shareEditorContent = this.buildShareMessage();
+    this.shareSmsContent = this.buildSmsMessage();
+    this.shareActiveTab = 'email';
     this.shareBooking.emit(this.bookingPreview);
     try {
       $('#shareBookingModal').modal('show');
@@ -139,7 +143,11 @@ export class BookingPreviewComponent implements OnInit {
     tmp.innerHTML = html;
     const plain = (tmp.innerText || tmp.textContent || '').trim();
 
-    const done = () => this.toastr.success('Copied to clipboard');
+    const closeModals = () => {
+      try { $('#shareBookingModal').modal('hide'); } catch (e) {}
+      try { $('#previewBookingOnID').modal('hide'); } catch (e) {}
+    };
+    const done = () => { this.toastr.success('Copied to clipboard'); closeModals(); };
     const fail = () => this.toastr.error('Could not copy');
 
     const w = window as any;
@@ -233,6 +241,89 @@ export class BookingPreviewComponent implements OnInit {
       .filter((l) => l !== null)
       .map((l) => (l ? `<p>${l.startsWith('<') ? l : esc(l as string)}</p>` : '<p><br></p>'))
       .join('');
+  }
+
+  private buildSmsMessage(): string {
+    const b = this.bookingPreview || {};
+
+    const pickupAddress = b.pickup_address || b.pickup || b.pickup_airport_name || '';
+    const dropoffAddress = b.dropoff_address || b.dropoff || b.dropoff_airport_name || '';
+
+    const dateStr = b.pickup_date
+      ? `${moment(b.pickup_date).format('MM/DD/YYYY')} | ${moment(b.pickup_date).format('MMM D, YYYY')}`
+      : '';
+    const timeM = b.pickup_time ? moment(b.pickup_time, ['HH:mm:ss', 'HH:mm']) : null;
+    const timeStr = timeM && timeM.isValid()
+      ? `${timeM.format('h:mm a')} | ${timeM.format('HHmm')} h`
+      : '';
+
+    const bookingType = [
+      this.textFormatter(b.service_type),
+      this.textFormatter(b.transfer_type),
+    ].filter(Boolean).join('/');
+
+    const bookingHours = b.number_of_hours || null;
+
+    const lines: (string | null)[] = [
+      'Hi, I need an all-inclusive rate, with tip, tax, and any tolls, for this booking.',
+      '',
+      bookingType ? `Booking Type: ${bookingType}` : null,
+      b.service_type == 'Charter Tour' && bookingHours ? `Booking Hours: ${bookingHours} hours` : null,
+      b.cancellation_hours ? `Cancellation Period: ${this.getCancellationTime(b.cancellation_hours)}` : null,
+      '',
+      b.vehicle_type_name || null,
+      b.total_passengers != null ? `${b.total_passengers} pax` : null,
+      b.luggage_count != null ? `${b.luggage_count} luggage` : null,
+      '',
+      'Travel Information',
+      '',
+      'Pickup Details:',
+      dateStr ? `Date: ${dateStr}` : null,
+      timeStr ? `Time: ${timeStr}` : null,
+      pickupAddress ? `Address: ${pickupAddress}` : null,
+      '',
+      'Drop Off Details:',
+      dropoffAddress ? `Address: ${dropoffAddress}` : null,
+      '',
+      b.distance != null
+        ? `Total Distance: ${this.mToMi(b.distance)} Miles / ${this.mToKm(b.distance)} Km`
+        : null,
+      b.duration != null
+        ? `Estimated Time: ${this.convertToMinutes(b.duration)}`
+        : null,
+    ];
+
+    return lines
+      .filter((l) => l !== null)
+      .join('\n');
+  }
+
+  copySmsText(): void {
+    const text = this.shareSmsContent || '';
+    const closeModals = () => {
+      try { $('#shareBookingModal').modal('hide'); } catch (e) {}
+      try { $('#previewBookingOnID').modal('hide'); } catch (e) {}
+    };
+    const done = () => { this.toastr.success('Copied to clipboard'); closeModals(); };
+    const fail = () => this.toastr.error('Could not copy');
+
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fail);
+    } else {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      } catch {
+        fail();
+      }
+    }
   }
 
   isGeneratingPdf = false;
