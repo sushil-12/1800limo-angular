@@ -43,6 +43,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 
 	pinnedBookingIds: string[] = [];
+	pinnedBookings: any[] = [];
 
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
@@ -219,6 +220,12 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 				this.pinnedBookingIds = JSON.parse(storedPins);
 			} catch (e) { this.pinnedBookingIds = []; }
 		}
+		const storedPinnedBookings = localStorage.getItem('pinnedBookings');
+		if (storedPinnedBookings) {
+			try {
+				this.pinnedBookings = JSON.parse(storedPinnedBookings);
+			} catch (e) { this.pinnedBookings = []; }
+		}
 
 	}
 
@@ -274,14 +281,20 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 		if (index === -1) {
 			this.pinnedBookingIds.push(bookingId);
+			const bookingObj = this.bookings_Original.find((b: any) => b.booking_id === bookingId)
+				|| this.bookings.find((b: any) => b.booking_id === bookingId);
+			if (bookingObj) {
+				this.pinnedBookings.push(bookingObj);
+			}
 			action = 'pinned';
 		} else {
 			this.pinnedBookingIds.splice(index, 1);
+			this.pinnedBookings = this.pinnedBookings.filter((b: any) => b.booking_id !== bookingId);
 			action = 'unpinned';
 		}
 
-		// ✅ Persist to localStorage so pins survive refresh
 		localStorage.setItem('pinnedBookingIds', JSON.stringify(this.pinnedBookingIds));
+		localStorage.setItem('pinnedBookings', JSON.stringify(this.pinnedBookings));
 
 		this.filterBookingsByStatus();
 		if (action === 'pinned') {
@@ -502,6 +515,8 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		};
 		if (this.useDateFilter) {
 			this.runBookingsSearch();
+		} else {
+			this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.selectedStatus);
 		}
 	}
 	handleCheckboxSort(value: any) {
@@ -586,9 +601,11 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		localStorage.removeItem("DBSearch");
 		localStorage.removeItem("useDateFilter");
 		localStorage.removeItem("DBS_Status");
-		// Clear pinned booking
+		// Clear pinned bookings
 		this.pinnedBookingIds = [];
+		this.pinnedBookings = [];
 		localStorage.removeItem('pinnedBookingIds');
+		localStorage.removeItem('pinnedBookings');
 		this.useDateFilter = false;
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
@@ -622,24 +639,15 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
 	filterBookingsByStatus() {
-		const isSearching = this.searchText && this.searchText.trim() !== '';
-		const isFilteringByStatus = this.selectedStatus && this.selectedStatus !== '';  // ADD THIS
-
 		let filtered = [...this.bookings_Original];
 
 		if (this.selectedStatus && this.selectedStatus !== "") {
-			filtered = filtered.filter(b => b.booking_status == this.selectedStatus);
+			filtered = filtered.filter((b: any) => b.booking_status == this.selectedStatus);
 		}
 
-		// Skip pinning when searching OR when status filter is active
-		if (isSearching || isFilteringByStatus) {
-			this.bookings = filtered;
-			return;
-		}
-
-		const unpinned = filtered.filter(b => !this.pinnedBookingIds.includes(b.booking_id));
-		const pinned = this.bookings_Original.filter(b => this.pinnedBookingIds.includes(b.booking_id));
-		this.bookings = [...pinned, ...unpinned];
+		// Always keep pinned bookings at the top using stored objects (survive search API replacement)
+		const unpinned = filtered.filter((b: any) => !this.pinnedBookingIds.includes(b.booking_id));
+		this.bookings = [...this.pinnedBookings, ...unpinned];
 	}
 
 
