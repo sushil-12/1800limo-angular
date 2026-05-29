@@ -137,7 +137,7 @@
 								(keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
 								(input)="searchInBookings($event.target.value)" [value]="searchText"
 								placeholder="Search by booking number, status, name, cell phone, vehicle type"
-								id="keyword" autofocus>
+								id="keyword" autofocus style="font-size:18px !important">
 						</mat-form-field>
 					</div>
 				</div>
@@ -358,7 +358,7 @@
 									<td>
 										<p style="white-space: pre" (click)="openModal(booking, 'Passenger')" id="box"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
-											<span [innerHTML]="highlighText(booking.passenger_name)"></span> <br />
+											<span style="overflow: hidden;text-wrap: auto" [innerHTML]="highlighText(booking.passenger_name)"></span> <br />
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
 											<span class="font-weight-bolder"

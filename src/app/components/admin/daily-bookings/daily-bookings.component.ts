@@ -500,10 +500,11 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			startDate: dayjs(this.startDate),
 			endDate: dayjs(this.endDate)
 		};
-		if (this.useDateFilter) {
-			this.runBookingsSearch();
-		}
-	}
+		
+		// ALWAYS call search, regardless of checkbox state
+		this.runBookingsSearch();
+  }
+	
 	handleCheckboxSort(value: any) {
 		if (value) {
 			this.orderBy = "pickup_date_asc";
@@ -1612,9 +1613,6 @@ sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatu
 
 	timer: any;
 	runBookingsSearch(searchValue: string = this.searchText) {
-		if (!this.useDateFilter) {
-			return;
-		}
 		this.searchText = searchValue ?? "";
 		localStorage.setItem("DBSearch", this.searchText);
 		if (this.startDate) {
@@ -1630,7 +1628,7 @@ sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatu
 			this.searchText?.replace(/&/g, '%26'),
 			this.selectedStatus
 		);
-	}
+   }
 
 	searchInBookings(search_value: string) {
 		this.searchText = search_value ?? "";
