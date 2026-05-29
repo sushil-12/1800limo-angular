@@ -5,7 +5,6 @@
 }
 
 .mat-form-field-hide-placeholder {
-  border: solid 3px;
   border-radius: 4px;
 }
 
@@ -18,7 +17,6 @@
 }
 
 .mat-form-field-hide-placeholder {
-  border: solid 3px;
   border-radius: 4px;
 }
 
@@ -300,4 +298,14 @@ a:hover {
   font-size: 30px;
   color: red;
   width: max-content;
+}
+
+@media only screen and (max-width: 430px) {
+  .modal-header h3 {
+    font-size: 18px !important;
+    white-space: normal !important;
+    word-break: break-word;
+    padding-right: 30px; // space for close button
+    text-align: center;
+  }
 }
