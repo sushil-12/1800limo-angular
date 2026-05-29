@@ -121,14 +121,14 @@
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
 									<td class="text-center"
 										[ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
-										<div style="margin-bottom:38px !important" class="status-action-container">
+										<div style="margin-bottom:38px !important; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;" class="status-action-container">
 											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
 												data-target="#change_status_booking_Modal"
 												class="status-pill {{ booking.booking_status }}"
 												style="cursor: pointer;">
-												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-												booking.booking_status | bookingStatusTextReplace :
-												'_' : ' ' |titlecase}}
+												{{booking.booking_status == 'en_route_do' ? 'POB' : booking.booking_status == 'en_route_pu' ? 'En Route' : 
+												(booking.booking_status == 'driver_unassigned' ? 'Unassigned' : 
+												booking.booking_status | bookingStatusTextReplace : '_' : ' ' | titlecase)}}
 											</div>
 										</div>
 

@@ -320,9 +320,9 @@
 												data-target="#change_status_booking_Modal"
 												class="status-pill {{ booking.booking_status }}"
 												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
-												{{booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-												booking.booking_status | bookingStatusTextReplace : '_' : ' ' |
-												titlecase}}
+												 {{booking.booking_status == 'en_route_do' ? 'POB' : booking.booking_status == 'en_route_pu' ? 'En Route' : 
+													(booking.booking_status == 'driver_unassigned' ? 'Unassigned' : 
+													booking.booking_status | bookingStatusTextReplace : '_' : ' ' | titlecase)}}
 												<i class="fas fa-pencil-alt" style="font-size: 14px; color: white;"></i>
 											</div>
 										</div>
