@@ -1406,7 +1406,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				// Enrich with Google airport + terminal results
 				const airportField = this.getCorrespondingAirportFieldName(fieldName);
 				try {
-					const googleOptions = await this.searchGoogleAirportPredictions(googleAirportQuery, airportField);
+					const googleOptions = await this.searchGoogleAirportPredictions(googleAirportQuery, airportField, searchText);
 					if (this.isLatestAddressSearchVersion(fieldName, requestVersion)) {
 						const enriched = googleOptions.map((o: any) => ({ ...o, isAddressAirportResult: true }));
 						this.setAddressOptions(fieldName, enriched.length ? enriched : localAirportMatches);
@@ -1928,14 +1928,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			.catch(() => []);
 	}
 
-	private searchGoogleAirportPredictions(searchText: string, fieldName: string): Promise<Array<any>> {
+	private searchGoogleAirportPredictions(searchText: string, fieldName: string, terminalQueryOverride?: string): Promise<Array<any>> {
 		const rawSearchText = String(searchText || '').trim();
 		if (!rawSearchText) {
 			return Promise.resolve([]);
 		}
 
 		const baseSearchText = this.getAirportBaseQuery(rawSearchText) || rawSearchText;
-		const terminalSearchText = `${baseSearchText} terminal`.trim();
+		const terminalBase = terminalQueryOverride ? String(terminalQueryOverride).trim() : baseSearchText;
+		const terminalSearchText = `${terminalBase} terminal`.trim();
 		const sessionToken = this.getOrCreateAirportSessionToken(fieldName);
 
 		return Promise.all([
@@ -1991,23 +1992,24 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						if (types.some((t) => NON_AIRPORT_TYPES.has(t))) return false;
 
 						const matchedKeywords = HARD_NEGATIVE_KEYWORDS.filter((keyword) => {
-							const regex = new RegExp(`\\b${keyword}\\b`, 'i'); // exact word match
+							const regex = new RegExp(`\\b${keyword}\\b`, 'i');
 							return regex.test(desc);
 						});
 
-						if (matchedKeywords) {
-							console.log(
-								`❌ Filtered due to keyword: "${matchedKeywords}" | Description: "${desc}"`
-							);
-							// return false;
+						if (matchedKeywords.length > 0) {
+							return false;
 						}
 
 						// ✅ 3. Must contain "terminal"
 						if (!desc.includes('terminal')) return false;
 
 						// ✅ 4. Must be linked to airport context
+						// Also check the raw terminal query (e.g. IATA code "jfk") since terminal
+						// addresses like "JFK Terminal 1, Terminal Drive" won't mention "airport"
+						const terminalQueryLower = terminalBase.toLowerCase();
 						const isAirportContext =
 							desc.includes('airport') ||
+							(terminalQueryLower.length >= 2 && desc.includes(terminalQueryLower)) ||
 							(airportNameWords.length > 0 &&
 								airportNameWords.some((w) => desc.includes(w)));
 
