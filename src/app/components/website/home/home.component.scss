@@ -3827,12 +3827,16 @@ div#google_translate_element_home_mobile {
 	inset: 0;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 1060;
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
-	animation: qbFadeIn .15s ease;
 	backdrop-filter: blur(3px);
 	-webkit-backdrop-filter: blur(3px);
+
+	&--open {
+		display: flex;
+		animation: qbFadeIn .15s ease;
+	}
 }
 
 .rt-picker-modal {
@@ -3907,6 +3911,7 @@ div#google_translate_element_home_mobile {
 		background: #fff;
 		transition: border-color .15s, box-shadow .15s;
 		min-width: 0;
+		cursor: pointer;
 
 		&--active {
 			border-color: #0d2a5c;

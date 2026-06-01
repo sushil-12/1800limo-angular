@@ -2055,7 +2055,7 @@
 </div>
 
 <!-- ── Round-trip date picker modal (outside backdrop-filter parent for correct fixed positioning) ── -->
-<div *ngIf="roundTripPickerOpen" class="rt-picker-overlay" (click)="closeRoundTripPicker()">
+<div class="rt-picker-overlay" [class.rt-picker-overlay--open]="roundTripPickerOpen" (click)="closeRoundTripPicker()">
 	<div class="rt-picker-modal" (click)="$event.stopPropagation()">
 
 		<!-- Header -->
@@ -2071,6 +2071,7 @@
 		<!-- Summary chips -->
 		<div class="rt-picker-modal__chips">
 			<div class="rt-picker-modal__chip"
+				(click)="switchPickerTarget('pickup')"
 				[class.rt-picker-modal__chip--active]="roundTripSelectionTarget === 'pickup'">
 				<div class="rt-picker-modal__chip-label">Pickup Date</div>
 				<div class="rt-picker-modal__chip-value" [class.rt-picker-modal__chip-value--empty]="!rtLiveStart">
@@ -2081,6 +2082,7 @@
 				<i class="fas fa-long-arrow-alt-right"></i>
 			</div>
 			<div class="rt-picker-modal__chip"
+				(click)="switchPickerTarget('return')"
 				[class.rt-picker-modal__chip--active]="roundTripSelectionTarget === 'return'">
 				<div class="rt-picker-modal__chip-label">Return Date</div>
 				<div class="rt-picker-modal__chip-value" [class.rt-picker-modal__chip-value--empty]="!rtLiveEnd">

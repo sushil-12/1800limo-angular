@@ -3381,19 +3381,23 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	openRoundTripRangePicker(target: 'pickup' | 'return' = 'pickup'): void {
-		this.rtLiveStart = this.roundTripRange?.startDate ?? null;
-		this.rtLiveEnd = this.roundTripRange?.endDate ?? null;
+		if (!this.roundTripRange) {
+			this.syncRoundTripRangeFromForm();
+		}
+		this.rtLiveStart = this.roundTripRange?.startDate ?? this.getRoundTripPickupValue() ?? null;
+		this.rtLiveEnd = this.roundTripRange?.endDate ?? this.getRoundTripReturnValue() ?? null;
+		this.roundTripSelectionTarget = target;
 		this.roundTripPickerOpen = true;
-		// Wait one tick for *ngIf to render the modal and the input inside it
-		setTimeout(() => {
-			const pickerDirective = this.roundTripRangePicker;
-			if (!pickerDirective) return;
-			this.primeRoundTripPickerFromForm();
-			if (!pickerDirective.picker.isShown) {
-				pickerDirective.open();
-			}
-			this.applyRoundTripPickerTarget(target);
-		}, 0);
+		this.primeRoundTripPickerFromForm();
+		const pickerDirective = this.roundTripRangePicker;
+		if (pickerDirective && !pickerDirective.picker.isShown) {
+			pickerDirective.open();
+		}
+		this.applyRoundTripPickerTarget(target);
+	}
+
+	switchPickerTarget(target: 'pickup' | 'return'): void {
+		this.applyRoundTripPickerTarget(target);
 	}
 
 
