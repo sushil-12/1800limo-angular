@@ -1,3 +1,10 @@
+<head>
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"
+/>
+</head>
+
 <div class="countries-page-wrapper">
 
   <!-- ───────────── Hero ───────────── -->
@@ -62,7 +69,7 @@
           class="country-card"
           *ngFor="let country of filteredCountries"
         >
-          <span class="country-flag">{{ country.flag }}</span>
+        <span class="fi fi-{{ country.code }} country-flag"></span>
           <div class="country-info">
             <p class="country-name mb-0">{{ country.name }}</p>
             <p class="country-region mb-1">{{ country.region }}</p>

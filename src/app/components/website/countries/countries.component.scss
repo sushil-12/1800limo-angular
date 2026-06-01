@@ -395,3 +395,11 @@
 // ─── Utility ─────────────────────────────────────────────────────────────────
 
 .text-orange { color: #f7941d !important; }
+
+.country-flag {
+  width: 32px;
+  height: 24px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  display: inline-block;
+}
