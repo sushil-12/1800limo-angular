@@ -92,6 +92,12 @@ export class AddVehicleComponent implements OnInit {
 	public serviceType: string;
 	isVehicleTypeSelected: boolean = false
 
+	public vehicleId: string;
+	public isEditMode: boolean = false;
+	public isDuplicateMode: boolean = false;
+	public response2: any;
+	public originalNumberOfVehicles: number = 0;
+
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -148,13 +154,14 @@ export class AddVehicleComponent implements OnInit {
 			this.errorMsg4 = true;
 		})
 		//pick vehicle type id from query params
-		this.activatedroute.queryParamMap
-			.subscribe((params) => {
-				console.log('params--->>>', params)
-				this.paramResponse = { ...params.keys, ...params };
-				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
-			}
-			);
+		this.activatedroute.queryParamMap.subscribe((params) => {
+			console.log('params--->>>', params)
+			this.paramResponse = { ...params.keys, ...params };
+			this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
+			this.vehicleId = this.paramResponse.params.vehicleId;
+			this.isDuplicateMode = this.paramResponse.params.new === 'true';
+			this.isEditMode = !!this.vehicleId && !this.isDuplicateMode;
+		});
 		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
 			this.nonCharterCancelOptions = data;
 			this.charterCancelOptions = data;
@@ -175,6 +182,7 @@ export class AddVehicleComponent implements OnInit {
 
 		//add amenity form validation
 		this.addVehicleForm = this.formBuilder.group({
+			id: [''],
 			acc_id: [''],
 			vehicleType: ['', Validators.required],
 			make: ['', Validators.required],
@@ -322,11 +330,157 @@ export class AddVehicleComponent implements OnInit {
 					mcImage: this.mcId,
 				});
 				this.spinner.hide();
-				this.pushValuesTypeOfService(['local'])
+				if (this.isDuplicateMode || this.isEditMode) {
+				this.loadVehicleData();
+				} else {
+				this.pushValuesTypeOfService(['local']);
+				}
 			});
 		this.Subscriptions()
 
 	}
+
+	loadVehicleData() {
+  if (!this.vehicleId) return;
+  this.spinner.show();
+  this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
+    .pipe(catchError(err => { this.spinner.hide(); return throwError(err); }))
+    .subscribe(result2 => {
+      this.response2 = result2;
+      const data = this.response2.data;
+
+      // Vehicle images — for duplicate, only load image 1
+      if (data.vehicle_image_1) {
+        this.vehicleImage1 = data.vehicle_image_1.image;
+        this.vehicleImageId1 = data.vehicle_image_1.ID;
+        this.addVehicleForm.patchValue({ vehicle_image_1: this.vehicleImageId1 });
+      } else {
+        this.vehicleImage1 = '';
+        this.vehicleImageId1 = '';
+      }
+
+      const loadImg = (key: string, num: string) => {
+        if (data[key] && !this.isDuplicateMode) {
+          this[`vehicleImage${num}`] = data[key].image;
+          this[`vehicleImageId${num}`] = data[key].ID;
+          this.addVehicleForm.patchValue({ [`vehicle_image_${num}`]: data[key].ID });
+        } else {
+          this[`vehicleImage${num}`] = '';
+          this[`vehicleImageId${num}`] = '';
+        }
+      };
+
+      loadImg('vehicle_image_2', '2');
+      loadImg('vehicle_image_3', '3');
+      loadImg('vehicle_image_4', '4');
+      loadImg('vehicle_image_5', '5');
+      loadImg('vehicle_image_6', '6');
+      loadImg('vehicle_image_7', '7');
+      loadImg('vehicle_image_8', '8');
+      loadImg('vehicle_image_9', '9');
+
+      this.rearPlateImage = data.rear_plate_image?.image || '';
+      this.windowPermitImage = data.window_permitImage?.image || '';
+      this.windowPermit2Image = data.window_permitImage2?.image || '';
+      this.usdotPermitImage = data.usdot_permitImage?.image || '';
+      this.mcImage = data.mc_image?.image || '';
+
+      this.rearPlateId = data.rear_plate_image?.ID || '';
+      this.windowPermitId = data.window_permitImage?.ID || '';
+      this.windowPermit2Id = data.window_permitImage2?.ID || '';
+      this.usdotPermitId = data.usdot_permitImage?.ID || '';
+      this.mcId = data.mc_image?.ID || '';
+
+      this.addVehicleForm.patchValue({
+        rearPlateImage: this.rearPlateId,
+        windowPermitImage: this.windowPermitId,
+        windowPermit2Image: this.windowPermit2Id,
+        usdotPermitImage: this.usdotPermitId,
+        mcImage: this.mcId,
+      });
+
+      this.chargableAmenities = data.chargableAmenities;
+      this.nonChargableAmenities = data.nonChargableAmenities;
+
+      // Models for selected make
+      let models = JSON.parse(sessionStorage.getItem('models'));
+      this.filteredModel = this.model = models.filter(m => m.make_id == data.make);
+
+      this.addVehicleForm.patchValue({
+        vehicleType: parseInt(data.vehicle_type),
+        make: data.make,
+        model: data.model,
+        year: data.year,
+        color: data.color,
+        numberOfVehicles: data.numberOfVehicles,
+        licensePlate: data.license_plate,
+        seats: data.seats,
+        luggage: data.luggage,
+        charterCancelPolicy: data.charterCancelPolicy,
+        nonCharterCancelPolicy: data.nonCharterCancelPolicy,
+      });
+
+      // Only set id for edit, not duplicate
+      if (this.isEditMode) {
+        this.addVehicleForm.patchValue({ id: this.vehicleId });
+        this.originalNumberOfVehicles = data.numberOfVehicles || 0;
+      }
+
+      // Autocomplete display fields
+      const vehicleTypeField: any = document.getElementById('vehicleTypeField');
+      if (vehicleTypeField) vehicleTypeField.value = data.vehicle_typeName || '';
+      const makeField: any = document.getElementById('makeField');
+      if (makeField) makeField.value = data.makeName || '';
+      const modelField: any = document.getElementById('modelField');
+      if (modelField) modelField.value = data.modelName || '';
+      const yearField: any = document.getElementById('yearField');
+      if (yearField) yearField.value = data.yearName || '';
+      const colorField: any = document.getElementById('colorField');
+      if (colorField) colorField.value = data.colorName || '';
+
+      this.pushValuesTypeOfService(data.typeOfService || []);
+
+      // Amenities
+      const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+      for (const key in this.chargableAmenities) {
+        Object.values((this.chargableAmenities as any)[key]).forEach((a: any) => {
+          if (a.isSelected) this.onAmenitiesCheckboxChange(a.id, true);
+        });
+      }
+      for (const key in this.nonChargableAmenities) {
+        Object.values((this.nonChargableAmenities as any)[key]).forEach((a: any) => {
+          if (a.isSelected) this.onAmenitiesCheckboxChange(a.id, true);
+        });
+      }
+
+      // Special amenities
+      const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
+      (data.specialAmenities || []).forEach(id => specialAmenities.push(new FormControl(id)));
+
+      // Interiors
+      const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+      while (vehicleInterior.length) vehicleInterior.removeAt(0);
+      (data.vehicleInterior || []).forEach(id => vehicleInterior.push(new FormControl(id)));
+
+      this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
+        let numberOfVehiclesCanBeAdded;
+        if (this.affiliateType == 'fleet_operator') {
+          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+        } else if (this.affiliateType == 'black_limo_operator') {
+          const subtract = this.isEditMode ? data.numberOfVehicles : 0;
+          numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - subtract);
+          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+        } else {
+          const subtract = this.isEditMode ? data.numberOfVehicles : 0;
+          numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - subtract);
+          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+        }
+        this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
+      });
+
+      this.spinner.hide();
+    });
+}
 	closeButton() {
 		this.closeTab.emit();
 	}
@@ -888,39 +1042,56 @@ export class AddVehicleComponent implements OnInit {
 		return this.addVehicleForm.controls;
 	}
 
+	
 	submitForm() {
-		this.addVehicleForm.patchValue({
-			acc_id: this.affiliateId
-		});
-
-		this.pushValuesTypeOfService(this.service)
-
+		this.addVehicleForm.patchValue({ acc_id: this.affiliateId });
+		this.pushValuesTypeOfService(this.service);
 		this.submittedForm = true;
-		// stop here if form is invalid
-		if (this.addVehicleForm.invalid) {
-			return;
-		}
-		this.spinner.show(); // show spinner
-		this.disableSubmitButton = true; //disable submit button
-
-		this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
-			.pipe(
-				catchError(err => {
-					this.spinner.hide(); // hide spinner
-					this.disableSubmitButton = false; //enable submit button
-					return throwError(err);
-				})
-			)
+		
+		if (this.addVehicleForm.invalid) return;
+		
+		this.spinner.show();
+		this.disableSubmitButton = true;
+		
+		if (this.isDuplicateMode) {
+			this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
+			.pipe(catchError(err => { this.spinner.hide(); this.disableSubmitButton = false; return throwError(err); }))
 			.subscribe(result => {
 				this.response = result;
-				this.spinner.hide(); // hide spinner
-				this.disableSubmitButton = true; //enable submit button
-
+				this.spinner.hide();
+				this.disableSubmitButton = true;
 				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
-
-				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], { queryParams: { vehicleId: this.response.data.id } });
+				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], {
+				queryParams: { vehicleId: this.response.data.id, relativeVehicleId: this.vehicleId }
+				});
 			});
+		} else if (this.isEditMode) {
+			this.adminService.adminAffiliateEditVehicle(this.addVehicleForm.value)
+			.pipe(catchError(err => { this.spinner.hide(); this.disableSubmitButton = false; return throwError(err); }))
+			.subscribe(result => {
+				this.response = result;
+				this.spinner.hide();
+				this.disableSubmitButton = true;
+				this.stateManagementService.addNumberOfVehicles(
+				this.addVehicleForm.value.numberOfVehicles - this.originalNumberOfVehicles
+				);
+				this.router.navigate(['/admin/affiliate/step5']);
+			});
+		} else {
+			this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
+			.pipe(catchError(err => { this.spinner.hide(); this.disableSubmitButton = false; return throwError(err); }))
+			.subscribe(result => {
+				this.response = result;
+				this.spinner.hide();
+				this.disableSubmitButton = true;
+				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
+				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], {
+				queryParams: { vehicleId: this.response.data.id }
+				});
+			});
+		}
 	}
+
 	backButton() {
 		this.router.navigate(['/admin/affiliate/step5']);
 	}

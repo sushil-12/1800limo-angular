@@ -522,7 +522,7 @@
 					*ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue">
 					<!-- {{chargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.value.name }}"
-						[value]="chargableAmenity.value.id" (change)="
+						[value]="chargableAmenity.value.ID" [checked]="isChargableAmenitySelected(chargableAmenity.value.ID)" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked,
@@ -558,7 +558,8 @@
 					">
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input"
-						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.id"
+						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.ID"
+						[checked]="isNonChargableAmenitySelected(nonChargableAmenity.value.ID)"
 						(change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
@@ -590,7 +591,7 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
 					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{ specialAmenity.name }}"
-						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
+						[value]="specialAmenity.id" [checked]="isSpecialAmenitySelected(specialAmenity.id)" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
 					<label class="custom-control-label" for="specialAmenity_{{ specialAmenity.name }}">{{
 						specialAmenity.name }}</label>
 				</div>
@@ -618,7 +619,7 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
 					<input type="checkbox" class="custom-control-input" id="interior_{{ interior.name }}"
-						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1" />
+						[value]="interior.id" [checked]="isInteriorSelected(interior.id)" (change)="onInteriorsCheckboxChange($event)" tabindex="1" />
 					<label class="custom-control-label" for="interior_{{ interior.name }}">{{ interior.name }}</label>
 				</div>
 			</div>

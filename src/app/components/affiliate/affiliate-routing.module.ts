@@ -12,7 +12,6 @@ import { AffiliateComponent } from './affiliate.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
 import { DuplicateVehicleRatesComponent } from './duplicate-vehicle-rates/duplicate-vehicle-rates.component';
 import { DuplicateVehicleComponent } from './duplicate-vehicle/duplicate-vehicle.component';
-import { EditVehicleFromAffiliateComponent } from './edit-vehicle-from-affiliate/edit-vehicle-from-affiliate.component';
 import { EditVehicleRatesFromAffiliateComponent } from './edit-vehicle-rates-from-affiliate/edit-vehicle-rates-from-affiliate.component';
 import { MyBookingsComponent } from './my-bookings/my-bookings.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -94,7 +93,7 @@ const routes: Routes = [
 	{
 		path: 'step5/edit-vehicle',
 		canActivate: [AffiliateStepsGuard],
-		component: EditVehicleFromAffiliateComponent
+		component: AddVehicleFromAffiliateComponent
 	},
 	{
 		path: 'step5/edit-vehicle-rates',
@@ -104,7 +103,7 @@ const routes: Routes = [
 	{
 		path: 'step5/duplicate-vehicle',
 		canActivate: [AffiliateStepsGuard],
-		component: DuplicateVehicleComponent
+		component: AddVehicleFromAffiliateComponent
 	},
 	{
 		path: 'step5/duplicate-vehicle-rates',

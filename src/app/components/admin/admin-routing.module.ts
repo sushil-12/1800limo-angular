@@ -530,7 +530,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'step5/edit-vehicle',
-				component: EditVehicleComponent
+				component: AddVehicleComponent
 			},
 			{
 				path: 'step5/edit-vehicle-rates',
@@ -538,7 +538,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'step5/duplicate-vehicle',
-				component: EditVehicleComponent
+				component: AddVehicleComponent
 			},
 			{
 				path: 'step6',
