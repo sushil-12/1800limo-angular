@@ -1935,6 +1935,7 @@ h2.headinginfo .orangeHeading {
 
 .vehtype_extintwrap ul {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     padding: 0;
     width: 100%;

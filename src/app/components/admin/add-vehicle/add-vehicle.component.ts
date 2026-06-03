@@ -470,9 +470,9 @@ export class AddVehicleComponent implements OnInit {
     });
 }
 	closeButton() {
-		this.modalImage = '';
 		this.closeTab.emit();
 	}
+	
 	//Start of autocomplete search and selection
 	searchSorting(keyword, a, b) {
 		// Sort results by matching name with keyword position in name
@@ -983,7 +983,9 @@ export class AddVehicleComponent implements OnInit {
 	}
 
 	showImageInModal(imageUrl) {
-	 this.modalImage = imageUrl;
+		this.modalImage = imageUrl;
+		$("#imageModal").addClass("showImage");
+		$("#imageModal").removeClass("d-none");
 	}
 
 	deleteImage(id, imageType, imageNumber = null) {

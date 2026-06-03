@@ -41,71 +41,6 @@
 
 					</div>
 
-					<!-- ── Status ── -->
-					<div class="rcpt-status">
-						<span class="rcpt-status-label">Status</span>
-						<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
-							{{ bookingPreview?.booking_status == 'driver_unassigned'
-							? 'Unassigned'
-							: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
-						</span>
-					</div>
-
-					<!-- ── Booking Type ── -->
-					<div class="rcpt-row rcpt-row--solo">
-						<span class="rcpt-row-label">Booking Type</span>
-						<span class="rcpt-row-value">
-							{{ textFormatter(bookingPreview?.service_type) | titlecase }}
-							/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
-							<span *ngIf="bookingPreview?.service_type == 'round_trip'">
-								/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
-							</span>
-						</span>
-					</div>
-					<div class="rcpt-row rcpt-row--solo" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
-						<span class="rcpt-row-label">Booking Hours</span>
-						<span class="rcpt-row-value">{{ bookingPreview?.number_of_hours }}</span>
-					</div>
-					<div class="rcpt-row">
-						<span class="rcpt-row-label">Cancellation Period</span>
-						<span class="rcpt-row-value rcpt-danger">
-							{{ getCancellationTime(bookingPreview?.cancellation_hours) }}
-						</span>
-					</div>
-
-					<!-- ── Passenger Information ── -->
-					<div class="rcpt-section">
-						<div class="rcpt-section-title">Passenger Information</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Name</span>
-							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.passenger_name) }}</span>
-						</div>
-						<div class="rcpt-row" *ngIf="bookingPreview?.passenger_email">
-							<span class="rcpt-row-label">Email</span>
-							<a class="rcpt-row-value rcpt-link" href="mailto:{{bookingPreview?.passenger_email}}">
-								<i class="bi bi-envelope"></i>
-								{{ textFormatter(bookingPreview?.passenger_email) }}
-							</a>
-						</div>
-						<div class="rcpt-row" *ngIf="bookingPreview?.passenger_cell">
-							<span class="rcpt-row-label">Phone</span>
-							<a class="rcpt-row-value rcpt-link"
-								href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
-								<i class="bi bi-telephone"></i>
-								({{ bookingPreview?.passenger_cell_isd }}) {{
-								textFormatter(bookingPreview?.passenger_cell) }}
-							</a>
-						</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Passengers</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.total_passengers }}</span>
-						</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Luggage</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.luggage_count }}</span>
-						</div>
-					</div>
-
 					<!-- ── Trip Information ── -->
 					<div class="rcpt-section">
 						<div class="rcpt-section-title">Trip Information</div>
@@ -222,6 +157,71 @@
 								</div>
 							</div>
 
+						</div>
+					</div>
+
+					<!-- ── Status ── -->
+					<div class="rcpt-status">
+						<span class="rcpt-status-label">Status</span>
+						<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
+							{{ bookingPreview?.booking_status == 'driver_unassigned'
+							? 'Unassigned'
+							: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
+						</span>
+					</div>
+
+					<!-- ── Booking Type ── -->
+					<div class="rcpt-row rcpt-row--solo">
+						<span class="rcpt-row-label">Booking Type</span>
+						<span class="rcpt-row-value">
+							{{ textFormatter(bookingPreview?.service_type) | titlecase }}
+							/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
+							<span *ngIf="bookingPreview?.service_type == 'round_trip'">
+								/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
+							</span>
+						</span>
+					</div>
+					<div class="rcpt-row rcpt-row--solo" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+						<span class="rcpt-row-label">Booking Hours</span>
+						<span class="rcpt-row-value">{{ bookingPreview?.number_of_hours }}</span>
+					</div>
+					<div class="rcpt-row">
+						<span class="rcpt-row-label">Cancellation Period</span>
+						<span class="rcpt-row-value rcpt-danger">
+							{{ getCancellationTime(bookingPreview?.cancellation_hours) }}
+						</span>
+					</div>
+
+					<!-- ── Passenger Information ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Passenger Information</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Name</span>
+							<span class="rcpt-row-value">{{ textFormatter(bookingPreview?.passenger_name) }}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.passenger_email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link" href="mailto:{{bookingPreview?.passenger_email}}">
+								<i class="bi bi-envelope"></i>
+								{{ textFormatter(bookingPreview?.passenger_email) }}
+							</a>
+						</div>
+						<div class="rcpt-row" *ngIf="bookingPreview?.passenger_cell">
+							<span class="rcpt-row-label">Phone</span>
+							<a class="rcpt-row-value rcpt-link"
+								href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
+								<i class="bi bi-telephone"></i>
+								({{ bookingPreview?.passenger_cell_isd }}) {{
+								textFormatter(bookingPreview?.passenger_cell) }}
+							</a>
+						</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Passengers</span>
+							<span class="rcpt-row-value">{{ bookingPreview?.total_passengers }}</span>
+						</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Luggage</span>
+							<span class="rcpt-row-value">{{ bookingPreview?.luggage_count }}</span>
 						</div>
 					</div>
 
