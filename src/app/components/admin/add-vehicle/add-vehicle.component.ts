@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { CommonService } from 'src/app/services/common.service';
+import { PHOTO_GUIDES, PhotoGuide } from '../../affiliate/add-vehicle-from-affiliate/photo-guide.config';
 
 declare var $: any;
 
@@ -104,6 +105,12 @@ export class AddVehicleComponent implements OnInit {
 	public selectedInteriors = new Set<number>();
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+	@ViewChild('sharedFileInput') sharedFileInput!: ElementRef<HTMLInputElement>;
+
+	isGuideVisible = false;
+	currentGuide: PhotoGuide | null = null;
+	pendingSlot = '';
+
 	errorMsg: boolean;
 	errorMsg1: boolean;
 	errorMsg2: boolean;
@@ -469,6 +476,39 @@ export class AddVehicleComponent implements OnInit {
       this.spinner.hide();
     });
 }
+	openGuide(slotKey: string) {
+		this.currentGuide = PHOTO_GUIDES[slotKey] ?? null;
+		this.pendingSlot = slotKey;
+		this.isGuideVisible = true;
+	}
+
+	onGuideConfirmed() {
+		this.isGuideVisible = false;
+		this.sharedFileInput.nativeElement.click();
+	}
+
+	onGuideDismissed() {
+		this.isGuideVisible = false;
+	}
+
+	handleSharedFileChange(event: Event) {
+		const vehicleSlots = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+		const slot = this.pendingSlot;
+		if (vehicleSlots.includes(slot)) {
+			const imageId = (this as any)['vehicleImageId' + slot];
+			this.onFileChange(event, imageId, slot);
+		} else {
+			const idMap: Record<string, string> = {
+				rearPlate: this.rearPlateId,
+				windowPermit: this.windowPermitId,
+				windowPermit2: this.windowPermit2Id,
+				usdotPermit: this.usdotPermitId,
+				mc: this.mcId,
+			};
+			this.vehicleOfficialImagesChange(event, slot, idMap[slot]);
+		}
+	}
+
 	closeButton() {
 		this.closeTab.emit();
 	}
@@ -876,12 +916,14 @@ export class AddVehicleComponent implements OnInit {
 	}
 	async vehicleOfficialImagesChange(event, imageType, imageId) {
 		if (!await this.commonServices.handleFile(event)) {
+			if (event.target) event.target.value = '';
 			return;
 		}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
+			event.target.value = '';
 			reader.readAsDataURL(file);
 			reader.onload = () => {
 				this.imageSrc = reader.result as string;
@@ -897,48 +939,33 @@ export class AddVehicleComponent implements OnInit {
 
 						switch (imageType) {
 							case 'rearPlate': {
-								this.addVehicleForm.patchValue({
-									rearPlateImage: this.response.data.id,
-								});
-								// this.rearPlateUploaded=true;
+								this.addVehicleForm.patchValue({ rearPlateImage: this.response.data.id });
 								this.rearPlateImage = this.response.data.image;
-								// this.deleteImage(imageId,'rearPlate');//delete previous image
+								this.rearPlateId = this.response.data.id;
 								break;
 							}
 							case 'windowPermit': {
-								this.addVehicleForm.patchValue({
-									windowPermitImage: this.response.data.id,
-								});
-								// this.windowPermitUploaded=true;
+								this.addVehicleForm.patchValue({ windowPermitImage: this.response.data.id });
 								this.windowPermitImage = this.response.data.image;
-								// this.deleteImage(imageId,'windowPermit');//delete previous image
+								this.windowPermitId = this.response.data.id;
 								break;
 							}
 							case 'windowPermit2': {
-								this.addVehicleForm.patchValue({
-									windowPermit2Image: this.response.data.id,
-								});
-								// this.windowPermit2Uploaded=true;
+								this.addVehicleForm.patchValue({ windowPermit2Image: this.response.data.id });
 								this.windowPermit2Image = this.response.data.image;
-								// this.deleteImage(imageId,'windowPermit2');//delete previous image
+								this.windowPermit2Id = this.response.data.id;
 								break;
 							}
 							case 'usdotPermit': {
-								this.addVehicleForm.patchValue({
-									usdotPermitImage: this.response.data.id,
-								});
-								// this.usdotPermitUploaded=true;
+								this.addVehicleForm.patchValue({ usdotPermitImage: this.response.data.id });
 								this.usdotPermitImage = this.response.data.image;
-								// this.deleteImage(imageId,'usdotPermit');//delete previous image
+								this.usdotPermitId = this.response.data.id;
 								break;
 							}
 							case 'mc': {
-								// this.deleteImage(imageId,'mc');//delete previous image
-								this.addVehicleForm.patchValue({
-									mcImage: this.response.data.id,
-								});
-								// this.mcUploaded=true;
+								this.addVehicleForm.patchValue({ mcImage: this.response.data.id });
 								this.mcImage = this.response.data.image;
+								this.mcId = this.response.data.id;
 								break;
 							}
 							default: {
@@ -953,12 +980,14 @@ export class AddVehicleComponent implements OnInit {
 
 	async onFileChange(event, imageId, imageNumber) {
 		if (!await this.commonServices.handleFile(event)) {
+			if (event.target) event.target.value = '';
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
+			event.target.value = '';
 			reader.readAsDataURL(file);
 			reader.onload = () => {
 				this.imageSrc = reader.result as string;
@@ -975,6 +1004,7 @@ export class AddVehicleComponent implements OnInit {
 							["vehicle_image_" + imageNumber]: this.response.data.id,
 						});
 						this["vehicleImage" + imageNumber] = this.response.data.image;
+						(this as any)["vehicleImageId" + imageNumber] = this.response.data.id;
 
 						this.stateManagementService.setprogressBar(false);
 					});

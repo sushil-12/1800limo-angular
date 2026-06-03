@@ -1,6 +1,11 @@
 <!-- <ngx-spinner type="ball-scale-multiple"></ngx-spinner> -->
 <form [formGroup]="addVehicleForm" class="step_form_wrapper" appInvalidControlScroll>
 
+	<!-- Shared hidden file input for photo guide modal -->
+	<input #sharedFileInput type="file" hidden
+		(change)="handleSharedFileChange($event)"
+		accept="image/jpeg, image/png" />
+
 	<!-- Main page content-->
 	<section class="user_information">
 		<h2 class="headinginfo"> Vehicle Settings Edit<span>( Match Make and Model as close as possible )</span></h2>
@@ -446,20 +451,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId1,
-													'1'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('1')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -475,13 +473,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event, vehicleImageId1, '1')" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('1')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -501,20 +499,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId2,
-													'2'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('2')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -544,20 +535,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId2,
-														'2'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('2')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -577,20 +561,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId3,
-													'3'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('3')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -620,20 +597,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId3,
-														'3'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('3')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -653,20 +623,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId4,
-													'4'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('4')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -696,20 +659,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId4,
-														'4'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('4')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -729,20 +685,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId5,
-													'5'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('5')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -772,20 +721,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId5,
-														'5'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('5')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -805,20 +747,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId6,
-													'6'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('6')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -848,20 +783,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId6,
-														'6'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('6')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -882,20 +810,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId7,
-													'7'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('7')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -925,20 +846,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId7,
-														'7'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('7')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -960,20 +874,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId8,
-													'8'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('8')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -1003,20 +910,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId8,
-														'8'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('8')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -1038,20 +938,13 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId9,
-													'9'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
+									<button type="button" class="changeuploaded" (click)="openGuide('9')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
 										Change
 									</button>
 								</li>
@@ -1081,20 +974,13 @@
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId9,
-														'9'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="adduploaded" (click)="openGuide('9')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Add
 										</button>
 									</li>
@@ -1126,20 +1012,13 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'rearPlate',
-														rearPlateId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="changeuploaded" (click)="openGuide('rearPlate')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Change
 										</button>
 									</li>
@@ -1179,20 +1058,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'rearPlate',
-															rearPlateId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-												</svg>
+											<button type="button" class="adduploaded" (click)="openGuide('rearPlate')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													</svg>
 												Add
 											</button>
 										</li>
@@ -1219,20 +1091,13 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'windowPermit',
-														windowPermitId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="changeuploaded" (click)="openGuide('windowPermit')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Change
 										</button>
 									</li>
@@ -1266,20 +1131,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'windowPermit',
-															windowPermitId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-												</svg>
+											<button type="button" class="adduploaded" (click)="openGuide('windowPermit')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													</svg>
 												Add
 											</button>
 										</li>
@@ -1312,20 +1170,13 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'windowPermit2',
-														windowPermit2Id
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="changeuploaded" (click)="openGuide('windowPermit2')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Change
 										</button>
 									</li>
@@ -1366,20 +1217,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'windowPermit2',
-															windowPermit2Id
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-												</svg>
+											<button type="button" class="adduploaded" (click)="openGuide('windowPermit2')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													</svg>
 												Add
 											</button>
 										</li>
@@ -1413,20 +1257,13 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'usdotPermit',
-														usdotPermitId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="changeuploaded" (click)="openGuide('usdotPermit')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Change
 										</button>
 									</li>
@@ -1467,20 +1304,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'usdotPermit',
-															usdotPermitId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-												</svg>
+											<button type="button" class="adduploaded" (click)="openGuide('usdotPermit')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													</svg>
 												Add
 											</button>
 										</li>
@@ -1511,20 +1341,13 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'mc',
-														mcId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
-												<circle cx="12" cy="12" r="3" />
-												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-											</svg>
+										<button type="button" class="changeuploaded" (click)="openGuide('mc')" tabindex="1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+												</svg>
 											Change
 										</button>
 									</li>
@@ -1560,20 +1383,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'mc',
-															mcId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-												</svg>
+											<button type="button" class="adduploaded" (click)="openGuide('mc')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													</svg>
 												Add
 											</button>
 										</li>
@@ -1618,4 +1434,10 @@
 <!-- Photo Instructions modal -->
 <app-photo-instructions></app-photo-instructions>
 
-<app-photo-guide></app-photo-guide>
+<!-- Photo guide modal -->
+<app-photo-guide-modal
+	[guide]="currentGuide"
+	[isVisible]="isGuideVisible"
+	(confirmed)="onGuideConfirmed()"
+	(dismissed)="onGuideDismissed()">
+</app-photo-guide-modal>
