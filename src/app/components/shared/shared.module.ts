@@ -5,7 +5,9 @@ import { FloatIconsComponent } from './float-icons/float-icons.component';
 import { InvalidControlScrollDirective } from 'src/app/directives/scroll-to-invalid.directive';
 import { ImageModalComponent } from '../affiliate/modals/image-modal/image-modal.component';
 import { DeleteConfirmationComponent } from '../affiliate/modals/delete-confirmation/delete-confirmation.component';
-import { PhotoInstructionsComponent } from '../affiliate/modals/photo-instructions/photo-instructions.component'
+import { PhotoInstructionsComponent } from '../affiliate/modals/photo-instructions/photo-instructions.component';
+import { PhotoGuideModalComponent } from '../affiliate/modals/photo-guide-modal/photo-guide-modal.component';
+import { CameraAngleDiagramComponent } from '../affiliate/modals/photo-guide-modal/camera-angle-diagram.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
@@ -43,7 +45,7 @@ export const DATE_FORMATS = {
 
 
 @NgModule({
-	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent],
+	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent, PhotoGuideModalComponent, CameraAngleDiagramComponent],
 	imports: [
 		CommonModule,
 		MatAutocompleteModule,
@@ -69,6 +71,8 @@ export const DATE_FORMATS = {
 		ImageModalComponent,
 		DeleteConfirmationComponent,
 		PhotoInstructionsComponent,
+		PhotoGuideModalComponent,
+		CameraAngleDiagramComponent,
 		MatAutocompleteModule,
 		MatDatepickerModule,
 		MatNativeDateModule,

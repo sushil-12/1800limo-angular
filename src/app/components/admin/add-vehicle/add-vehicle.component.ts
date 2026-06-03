@@ -92,6 +92,16 @@ export class AddVehicleComponent implements OnInit {
 	public serviceType: string;
 	isVehicleTypeSelected: boolean = false
 
+	public vehicleId: string;
+	public isEditMode: boolean = false;
+	public isDuplicateMode: boolean = false;
+	public response2: any;
+	public originalNumberOfVehicles: number = 0;
+
+	public selectedChargableAmenities = new Set<number>();
+	public selectedNonChargableAmenities = new Set<number>();
+	public selectedSpecialAmenities = new Set<number>();
+	public selectedInteriors = new Set<number>();
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -148,13 +158,14 @@ export class AddVehicleComponent implements OnInit {
 			this.errorMsg4 = true;
 		})
 		//pick vehicle type id from query params
-		this.activatedroute.queryParamMap
-			.subscribe((params) => {
-				console.log('params--->>>', params)
-				this.paramResponse = { ...params.keys, ...params };
-				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
-			}
-			);
+		this.activatedroute.queryParamMap.subscribe((params) => {
+			console.log('params--->>>', params)
+			this.paramResponse = { ...params.keys, ...params };
+			this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
+			this.vehicleId = this.paramResponse.params.vehicleId;
+			this.isDuplicateMode = this.paramResponse.params.new === 'true';
+			this.isEditMode = !!this.vehicleId && !this.isDuplicateMode;
+		});
 		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
 			this.nonCharterCancelOptions = data;
 			this.charterCancelOptions = data;
@@ -175,6 +186,7 @@ export class AddVehicleComponent implements OnInit {
 
 		//add amenity form validation
 		this.addVehicleForm = this.formBuilder.group({
+			id: [''],
 			acc_id: [''],
 			vehicleType: ['', Validators.required],
 			make: ['', Validators.required],
@@ -263,15 +275,15 @@ export class AddVehicleComponent implements OnInit {
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 				console.log("<><><><><><><><><><><><><><><><><><>", this.response.data)
 
-				this.vehicleImage1 = this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
-				this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
-				this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
-				this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
-				this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
-				this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
-				this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
-				this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
-				this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
+				this.vehicleImage1 = this.oldvehicleImage[0] = null;
+				this.vehicleImage2 = this.oldvehicleImage[1] = null;
+				this.vehicleImage3 = this.oldvehicleImage[2] = null;
+				this.vehicleImage4 = this.oldvehicleImage[3] = null;
+				this.vehicleImage5 = this.oldvehicleImage[4] = null;
+				this.vehicleImage6 = this.oldvehicleImage[5] = null;
+				this.vehicleImage7 = this.oldvehicleImage[6] = null;
+				this.vehicleImage8 = this.oldvehicleImage[7] = null;
+				this.vehicleImage9 = this.oldvehicleImage[8] = null;
 
 				this.vehicleImageId1 = this.response.data.vehicleImage1.id;
 				this.vehicleImageId2 = this.response.data.vehicleImage2.id;
@@ -322,12 +334,143 @@ export class AddVehicleComponent implements OnInit {
 					mcImage: this.mcId,
 				});
 				this.spinner.hide();
-				this.pushValuesTypeOfService(['local'])
+				if (this.isDuplicateMode || this.isEditMode) {
+				this.loadVehicleData();
+				} else {
+				this.pushValuesTypeOfService(['local']);
+				}
 			});
 		this.Subscriptions()
 
 	}
+
+	loadVehicleData() {
+	if (!this.vehicleId) return;
+	this.spinner.show();
+	this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
+    .pipe(catchError(err => { this.spinner.hide(); return throwError(err); }))
+    .subscribe(result2 => {
+      this.response2 = result2;
+      const data = this.response2.data;
+
+      // Vehicle images — for duplicate, only load image 1
+      if (data.vehicle_image_1) {
+        this.vehicleImage1 = data.vehicle_image_1.image;
+        this.vehicleImageId1 = data.vehicle_image_1.ID;
+        this.addVehicleForm.patchValue({ vehicle_image_1: this.vehicleImageId1 });
+      } else {
+        this.vehicleImage1 = '';
+        this.vehicleImageId1 = '';
+      }
+
+      const loadImg = (key: string, num: string) => {
+        if (data[key] && !this.isDuplicateMode) {
+          this[`vehicleImage${num}`] = data[key].image;
+          this[`vehicleImageId${num}`] = data[key].ID;
+          this.addVehicleForm.patchValue({ [`vehicle_image_${num}`]: data[key].ID });
+        } else {
+          this[`vehicleImage${num}`] = '';
+          this[`vehicleImageId${num}`] = '';
+        }
+      };
+
+      loadImg('vehicle_image_2', '2');
+      loadImg('vehicle_image_3', '3');
+      loadImg('vehicle_image_4', '4');
+      loadImg('vehicle_image_5', '5');
+      loadImg('vehicle_image_6', '6');
+      loadImg('vehicle_image_7', '7');
+      loadImg('vehicle_image_8', '8');
+      loadImg('vehicle_image_9', '9');
+
+      this.rearPlateImage = data.rear_plate_image?.image || '';
+      this.windowPermitImage = data.window_permitImage?.image || '';
+      this.windowPermit2Image = data.window_permitImage2?.image || '';
+      this.usdotPermitImage = data.usdot_permitImage?.image || '';
+      this.mcImage = data.mc_image?.image || '';
+
+      this.rearPlateId = data.rear_plate_image?.ID || '';
+      this.windowPermitId = data.window_permitImage?.ID || '';
+      this.windowPermit2Id = data.window_permitImage2?.ID || '';
+      this.usdotPermitId = data.usdot_permitImage?.ID || '';
+      this.mcId = data.mc_image?.ID || '';
+
+      this.addVehicleForm.patchValue({
+        rearPlateImage: this.rearPlateId,
+        windowPermitImage: this.windowPermitId,
+        windowPermit2Image: this.windowPermit2Id,
+        usdotPermitImage: this.usdotPermitId,
+        mcImage: this.mcId,
+      });
+
+      this.chargableAmenities = data.chargableAmenities;
+      this.nonChargableAmenities = data.nonChargableAmenities;
+
+      // Models for selected make
+      let models = JSON.parse(sessionStorage.getItem('models'));
+      this.filteredModel = this.model = models.filter(m => m.make_id == data.make);
+
+      this.addVehicleForm.patchValue({
+        vehicleType: parseInt(data.vehicle_type),
+        make: data.make,
+        model: data.model,
+        year: data.year,
+        color: data.color,
+        numberOfVehicles: data.numberOfVehicles,
+        licensePlate: data.license_plate,
+        seats: data.seats,
+        luggage: data.luggage,
+        charterCancelPolicy: data.charterCancelPolicy,
+        nonCharterCancelPolicy: data.nonCharterCancelPolicy,
+      });
+
+      // Only set id for edit, not duplicate
+      if (this.isEditMode) {
+        this.addVehicleForm.patchValue({ id: this.vehicleId });
+        this.originalNumberOfVehicles = data.numberOfVehicles || 0;
+      }
+
+      // Autocomplete display fields
+      const vehicleTypeField: any = document.getElementById('vehicleTypeField');
+      if (vehicleTypeField) vehicleTypeField.value = data.vehicle_typeName || '';
+      const makeField: any = document.getElementById('makeField');
+      if (makeField) makeField.value = data.makeName || '';
+      const modelField: any = document.getElementById('modelField');
+      if (modelField) modelField.value = data.modelName || '';
+      const yearField: any = document.getElementById('yearField');
+      if (yearField) yearField.value = data.yearName || '';
+      const colorField: any = document.getElementById('colorField');
+      if (colorField) colorField.value = data.colorName || '';
+
+      this.pushValuesTypeOfService(data.typeOfService || []);
+
+      this.chargableAmenities = data.chargableAmenities;
+	  this.nonChargableAmenities = data.nonChargableAmenities;
+	  this.initializeSelectedAmenities();
+	  this.initializeSelectedSpecialAmenities(data.specialAmenities || []);
+	  this.initializeSelectedInteriors(data.vehicleInterior || []);
+
+      this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
+        let numberOfVehiclesCanBeAdded;
+        if (this.affiliateType == 'fleet_operator') {
+          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+        } else if (this.affiliateType == 'black_limo_operator') {
+          const subtract = this.isEditMode ? data.numberOfVehicles : 0;
+          numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - subtract);
+          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+        } else {
+          const subtract = this.isEditMode ? data.numberOfVehicles : 0;
+          numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - subtract);
+          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+        }
+        this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
+      });
+
+      this.spinner.hide();
+    });
+}
 	closeButton() {
+		this.modalImage = '';
 		this.closeTab.emit();
 	}
 	//Start of autocomplete search and selection
@@ -549,34 +692,48 @@ export class AddVehicleComponent implements OnInit {
 		})
 	}
 
-	onAmenitiesCheckboxChange(val, ischecked) {
+	onAmenitiesCheckboxChange(encodedId: string, ischecked: boolean, numericId: number, type = 'chargable') {
 		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+
 		if (ischecked) {
-			amenities.push(new FormControl(val));
+			const exists = amenities.controls.findIndex(x => x.value === encodedId) !== -1;
+			if (!exists) amenities.push(new FormControl(encodedId));
+			if (type === 'chargable') this.selectedChargableAmenities.add(numericId);
+			else this.selectedNonChargableAmenities.add(numericId);
 		} else {
-			const index = amenities.controls.findIndex(x => x.value === val);
-			amenities.removeAt(index);
+			const index = amenities.controls.findIndex(x => x.value === encodedId);
+			if (index !== -1) amenities.removeAt(index);
+			if (type === 'chargable') this.selectedChargableAmenities.delete(numericId);
+			else this.selectedNonChargableAmenities.delete(numericId);
 		}
 	}
+
 	onSpecialAmenitiesCheckboxChange(e) {
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
+		const value = Number(e.target.value);
 		if (e.target.checked) {
-			specialAmenities.push(new FormControl(e.target.value));
+			specialAmenities.push(new FormControl(value));
+			this.selectedSpecialAmenities.add(value);
 		} else {
-			const index = specialAmenities.controls.findIndex(x => x.value === e.target.value);
+			const index = specialAmenities.controls.findIndex(x => x.value === value);
 			specialAmenities.removeAt(index);
+			this.selectedSpecialAmenities.delete(value);
 		}
 	}
+
 	onInteriorsCheckboxChange(e) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		console.log('------>>>>>>', vehicleInterior)
+		const value = Number(e.target.value);
 		if (e.target.checked) {
-			vehicleInterior.push(new FormControl(e.target.value));
+			vehicleInterior.push(new FormControl(value));
+			this.selectedInteriors.add(value);
 		} else {
-			const index = vehicleInterior.controls.findIndex(x => x.value === e.target.value);
-			vehicleInterior.removeAt(index);
+			const index = vehicleInterior.controls.findIndex(x => x.value === value);
+			if (index !== -1) vehicleInterior.removeAt(index);
+			this.selectedInteriors.delete(value);
 		}
 	}
+
 	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
 
@@ -825,12 +982,8 @@ export class AddVehicleComponent implements OnInit {
 		}
 	}
 
-
-
 	showImageInModal(imageUrl) {
-		this.modalImage = imageUrl;
-		$("#imageModal").addClass("showImage");
-		$("#imageModal").removeClass("d-none");
+	 this.modalImage = imageUrl;
 	}
 
 	deleteImage(id, imageType, imageNumber = null) {
@@ -888,39 +1041,56 @@ export class AddVehicleComponent implements OnInit {
 		return this.addVehicleForm.controls;
 	}
 
+	
 	submitForm() {
-		this.addVehicleForm.patchValue({
-			acc_id: this.affiliateId
-		});
-
-		this.pushValuesTypeOfService(this.service)
-
+		this.addVehicleForm.patchValue({ acc_id: this.affiliateId });
+		this.pushValuesTypeOfService(this.service);
 		this.submittedForm = true;
-		// stop here if form is invalid
-		if (this.addVehicleForm.invalid) {
-			return;
-		}
-		this.spinner.show(); // show spinner
-		this.disableSubmitButton = true; //disable submit button
-
-		this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
-			.pipe(
-				catchError(err => {
-					this.spinner.hide(); // hide spinner
-					this.disableSubmitButton = false; //enable submit button
-					return throwError(err);
-				})
-			)
+		
+		if (this.addVehicleForm.invalid) return;
+		
+		this.spinner.show();
+		this.disableSubmitButton = true;
+		
+		if (this.isDuplicateMode) {
+			this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
+			.pipe(catchError(err => { this.spinner.hide(); this.disableSubmitButton = false; return throwError(err); }))
 			.subscribe(result => {
 				this.response = result;
-				this.spinner.hide(); // hide spinner
-				this.disableSubmitButton = true; //enable submit button
-
+				this.spinner.hide();
+				this.disableSubmitButton = true;
 				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
-
-				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], { queryParams: { vehicleId: this.response.data.id } });
+				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], {
+				queryParams: { vehicleId: this.response.data.id, relativeVehicleId: this.vehicleId }
+				});
 			});
+		} else if (this.isEditMode) {
+			this.adminService.adminAffiliateEditVehicle(this.addVehicleForm.value)
+			.pipe(catchError(err => { this.spinner.hide(); this.disableSubmitButton = false; return throwError(err); }))
+			.subscribe(result => {
+				this.response = result;
+				this.spinner.hide();
+				this.disableSubmitButton = true;
+				this.stateManagementService.addNumberOfVehicles(
+				this.addVehicleForm.value.numberOfVehicles - this.originalNumberOfVehicles
+				);
+				this.router.navigate(['/admin/affiliate/step5']);
+			});
+		} else {
+			this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
+			.pipe(catchError(err => { this.spinner.hide(); this.disableSubmitButton = false; return throwError(err); }))
+			.subscribe(result => {
+				this.response = result;
+				this.spinner.hide();
+				this.disableSubmitButton = true;
+				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
+				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], {
+				queryParams: { vehicleId: this.response.data.id }
+				});
+			});
+		}
 	}
+
 	backButton() {
 		this.router.navigate(['/admin/affiliate/step5']);
 	}
@@ -1031,5 +1201,65 @@ export class AddVehicleComponent implements OnInit {
 		this.addVehicleForm.patchValue({
 			charterCancelPolicy: event.value
 		})
+	}
+
+	isChargableAmenitySelected(id: number): boolean {
+	 return this.selectedChargableAmenities.has(Number(id));
+	}
+
+	isNonChargableAmenitySelected(id: number): boolean {
+	 return this.selectedNonChargableAmenities.has(Number(id));
+	}
+
+	isSpecialAmenitySelected(id: number): boolean {
+	 return this.selectedSpecialAmenities.has(Number(id));
+	}
+
+	isInteriorSelected(id: number): boolean {
+	 return this.selectedInteriors.has(Number(id));
+	}
+
+	private initializeSelectedAmenities() {
+		this.selectedChargableAmenities.clear();
+		this.selectedNonChargableAmenities.clear();
+		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+		while (amenities.length) amenities.removeAt(0);
+
+		Object.values(this.chargableAmenities || {}).forEach((group: any) => {
+			Object.values(group).forEach((amenity: any) => {
+			if (amenity.isSelected) {
+				this.onAmenitiesCheckboxChange(amenity.id, true, amenity.ID, 'chargable');
+			}
+			});
+		});
+		Object.values(this.nonChargableAmenities || {}).forEach((group: any) => {
+			(Array.isArray(group) ? group : Object.values(group)).forEach((amenity: any) => {
+			if (amenity.isSelected) {
+				this.onAmenitiesCheckboxChange(amenity.id, true, amenity.ID, 'nonChargable');
+			}
+			});
+		});
+	}
+
+	private initializeSelectedSpecialAmenities(selected: any[]) {
+		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
+		while (specialAmenities.length) specialAmenities.removeAt(0);
+		this.selectedSpecialAmenities.clear();
+		(selected || []).forEach((id: any) => {
+			const value = Number(id);
+			specialAmenities.push(new FormControl(value));
+			this.selectedSpecialAmenities.add(value);
+		});
+	}
+
+	private initializeSelectedInteriors(selected: any[]) {
+		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+		while (vehicleInterior.length) vehicleInterior.removeAt(0);
+		this.selectedInteriors.clear();
+		(selected || []).forEach((id: any) => {
+			const value = Number(id);
+			vehicleInterior.push(new FormControl(value));
+			this.selectedInteriors.add(value);
+		});
 	}
 }

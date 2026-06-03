@@ -1965,7 +1965,9 @@ sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatu
 	}
 
 	sendEmailToAnyone() {
-		if (this.sendEmailForm.invalid) {
+		const emailTargetControl = this.sendEmailForm.get('emailTarget')!;
+		if (!emailTargetControl.value) {
+			emailTargetControl.markAsTouched();
 			return;
 		}
 

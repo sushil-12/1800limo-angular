@@ -1,8 +1,13 @@
 <form [formGroup]="addVehicleForm" class="step_form_wrapper" appInvalidControlScroll>
+	<!-- Shared hidden file input for photo guide modal -->
+	<input #sharedFileInput type="file" hidden
+		(change)="handleSharedFileChange($event)"
+		accept="image/jpeg, image/png" />
+
 	<!-- Main page content-->
 	<section class="user_information affiliateVehicle">
 		<h2 class="headinginfo">
-			Vehicle Settings
+			Vehicle Settings (Affiliate)
 			<span style="color: red;">(Choose Correct Vehicle Type)</span>
 		</h2>
 		<div class="container mt-1">
@@ -517,7 +522,7 @@
 					*ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue">
 					<!-- {{chargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.value.name }}"
-						[value]="chargableAmenity.value.id" (change)="
+						[value]="chargableAmenity.value.ID" [checked]="isChargableAmenitySelected(chargableAmenity.value.ID)" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked,
@@ -553,7 +558,8 @@
 					">
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input"
-						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.id"
+						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.ID"
+						[checked]="isNonChargableAmenitySelected(nonChargableAmenity.value.ID)"
 						(change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
@@ -585,7 +591,7 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
 					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{ specialAmenity.name }}"
-						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
+						[value]="specialAmenity.id" [checked]="isSpecialAmenitySelected(specialAmenity.id)" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
 					<label class="custom-control-label" for="specialAmenity_{{ specialAmenity.name }}">{{
 						specialAmenity.name }}</label>
 				</div>
@@ -613,7 +619,7 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
 					<input type="checkbox" class="custom-control-input" id="interior_{{ interior.name }}"
-						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1" />
+						[value]="interior.id" [checked]="isInteriorSelected(interior.id)" (change)="onInteriorsCheckboxChange($event)" tabindex="1" />
 					<label class="custom-control-label" for="interior_{{ interior.name }}">{{ interior.name }}</label>
 				</div>
 			</div>
@@ -671,13 +677,10 @@
 			</span>
 			<div class="mt-4 vehtype_extintwrap">
 				<div class="row">
-					<div class="col-md-4" *ngIf="vehicleImage1">
+					<div class="col-md-4" *ngIf="vehicleImage1; else noVehicleImage1">
 						<div class="vehtype_extint">
 							<p>
-								<span class="text-danger">
-									{{ vehicleImage1.includes('extint1') ? 'Change' : '' }}
-								</span>
-								Vehicle Image 1 <span class="asterisk">*</span>
+								Primary Angle <span class="asterisk">*</span>
 							</p>
 							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
 							<ul class="mt-3">
@@ -687,14 +690,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId1,
-													'1'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('1')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -708,9 +704,32 @@
 						</div>
 					</div>
 
+					<ng-template #noVehicleImage1>
+						<div class="col-md-4">
+							<div class="vehtype_extint">
+								<p>Primary Angle <span class="asterisk">*</span></p>
+								<div class="emptyImage">
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
+								</div>
+								<ul class="mt-3">
+									<li>
+										<button type="button" class="adduploaded" (click)="openGuide('1')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
+												<circle cx="12" cy="12" r="3" />
+												<path d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+											</svg>
+											Add
+										</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</ng-template>
+
 					<div class="col-md-4" *ngIf="vehicleImage2; else noVehicleImage2">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 2</p>
+							<p>Side Angle</p>
 							<img src="{{ vehicleImage2 }}" (click)="showImageInModal(vehicleImage2)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -719,14 +738,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId2,
-													'2'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('2')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -756,20 +768,13 @@
 					<ng-template #noVehicleImage2>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 2</p>
+								<p>Side Angle</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/side-profile.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId2,
-														'2'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('2')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -786,7 +791,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage3; else noVehicleImage3">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 3</p>
+							<p>Rear Angle</p>
 							<img src="{{ vehicleImage3 }}" (click)="showImageInModal(vehicleImage3)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -795,14 +800,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId3,
-													'3'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('3')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -832,20 +830,13 @@
 					<ng-template #noVehicleImage3>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 3</p>
+								<p>Rear Angle</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/rear-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId3,
-														'3'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('3')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -862,7 +853,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage4; else noVehicleImage4">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 4</p>
+							<p>Interior Front</p>
 							<img src="{{ vehicleImage4 }}" (click)="showImageInModal(vehicleImage4)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -871,14 +862,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId4,
-													'4'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('4')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -908,20 +892,13 @@
 					<ng-template #noVehicleImage4>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 4</p>
+								<p>Interior Front</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/interior-front.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId4,
-														'4'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('4')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -938,7 +915,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage5; else noVehicleImage5">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 5</p>
+							<p>Interior Rear</p>
 							<img src="{{ vehicleImage5 }}" (click)="showImageInModal(vehicleImage5)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -947,14 +924,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId5,
-													'5'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('5')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -984,20 +954,13 @@
 					<ng-template #noVehicleImage5>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 5</p>
+								<p>Interior Rear</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/interior-rear.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId5,
-														'5'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('5')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1014,7 +977,7 @@
 
 					<div class="col-md-4" *ngIf="vehicleImage6; else noVehicleImage6">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 6</p>
+							<p>Back Trunk</p>
 							<img src="{{ vehicleImage6 }}" (click)="showImageInModal(vehicleImage6)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -1023,14 +986,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId6,
-													'6'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('6')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1060,20 +1016,13 @@
 					<ng-template #noVehicleImage6>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 6</p>
+								<p>Back Trunk</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/back-trunk.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId6,
-														'6'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('6')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1088,9 +1037,10 @@
 						</div>
 					</ng-template>
 
+<!-- Vehicle Image 7 - commented out
 					<div class="col-md-4" *ngIf="vehicleImage7; else noVehicleImage7">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 7</p>
+							<p>Trunk / Cargo</p>
 							<img src="{{ vehicleImage7 }}" (click)="showImageInModal(vehicleImage7)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -1099,14 +1049,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId7,
-													'7'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('7')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1136,20 +1079,13 @@
 					<ng-template #noVehicleImage7>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 7</p>
+								<p>Trunk / Cargo</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId7,
-														'7'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('7')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1163,10 +1099,12 @@
 							</div>
 						</div>
 					</ng-template>
+-->
 
+<!-- Vehicle Image 8 - commented out
 					<div class="col-md-4" *ngIf="vehicleImage8; else noVehicleImage8">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 8</p>
+							<p>Detail / Feature</p>
 							<img src="{{ vehicleImage8 }}" (click)="showImageInModal(vehicleImage8)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -1175,14 +1113,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId8,
-													'8'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('8')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1212,20 +1143,13 @@
 					<ng-template #noVehicleImage8>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 8</p>
+								<p>Detail / Feature</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId8,
-														'8'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('8')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1239,10 +1163,12 @@
 							</div>
 						</div>
 					</ng-template>
+-->
 
+<!-- Vehicle Image 9 - commented out
 					<div class="col-md-4" *ngIf="vehicleImage9; else noVehicleImage9">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 9</p>
+							<p>Your Choice</p>
 							<img src="{{ vehicleImage9 }}" (click)="showImageInModal(vehicleImage9)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
@@ -1251,14 +1177,7 @@
 										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
-									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="
-												onFileChange(
-													$event,
-													vehicleImageId9,
-													'9'
-												)
-											" tabindex="-1" accept="image/jpeg, image/png" />
+									<button type="button" class="changeuploaded" (click)="openGuide('9')" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1288,20 +1207,13 @@
 					<ng-template #noVehicleImage9>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
-								<p>Vehicle Image 9</p>
+								<p>Your Choice</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="
-													onFileChange(
-														$event,
-														vehicleImageId9,
-														'9'
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="adduploaded" (click)="openGuide('9')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1315,6 +1227,7 @@
 							</div>
 						</div>
 					</ng-template>
+-->
 				</div>
 
 				<hr />
@@ -1338,14 +1251,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'rearPlate',
-														rearPlateId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('rearPlate')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1387,18 +1293,11 @@
 										<!-- <span class="asterisk">*</span> -->
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'rearPlate',
-															rearPlateId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('rearPlate')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1431,14 +1330,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'windowPermit',
-														windowPermitId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('windowPermit')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1474,18 +1366,11 @@
 										<!-- <span *ngIf="affiliateType !='fleet_operator'" class="asterisk">*</span> -->
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'windowPermit',
-															windowPermitId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('windowPermit')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1524,14 +1409,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'windowPermit2',
-														windowPermit2Id
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('windowPermit2')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1574,18 +1452,11 @@
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'windowPermit2',
-															windowPermit2Id
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('windowPermit2')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1625,14 +1496,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'usdotPermit',
-														usdotPermitId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('usdotPermit')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1675,18 +1539,11 @@
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'usdotPermit',
-															usdotPermitId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('usdotPermit')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1723,14 +1580,7 @@
 											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
-										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'mc',
-														mcId
-													)
-												" tabindex="-1" accept="image/jpeg, image/png" />
+										<button type="button" class="changeuploaded" (click)="openGuide('mc')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1768,18 +1618,11 @@
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+										<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'mc',
-															mcId
-														)
-													" tabindex="-1" accept="image/jpeg, image/png" />
+											<button type="button" class="adduploaded" (click)="openGuide('mc')" tabindex="1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1853,3 +1696,11 @@
 
 <!-- Photo Instructions modal -->
 <app-photo-instructions></app-photo-instructions>
+
+<!-- Photo Guide modal -->
+<app-photo-guide-modal
+	[guide]="currentGuide"
+	[isVisible]="isGuideVisible"
+	(confirmed)="onGuideConfirmed()"
+	(dismissed)="onGuideDismissed()">
+</app-photo-guide-modal>
