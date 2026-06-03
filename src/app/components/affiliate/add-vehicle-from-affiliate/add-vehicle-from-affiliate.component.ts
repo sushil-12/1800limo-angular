@@ -310,11 +310,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				this.vehicleImageId9 = this.response.data.vehicleImage9.id;
 
 				if (this.affiliateType != 'fleet_operator') {
-					this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
-					this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
-					this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
-					this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
-					this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
+					this.rearPlateImage = this.oldvehicleImage[9] = '';
+					this.windowPermitImage = this.oldvehicleImage[10] = '';
+					this.windowPermit2Image = this.oldvehicleImage[11] = '';
+					this.usdotPermitImage = this.oldvehicleImage[12] = '';
+					this.mcImage = this.oldvehicleImage[13] = '';
 
 					this.rearPlateId = this.response.data.rear_plate.id;
 					this.windowPermitId = this.response.data.window_permit.id;
@@ -1068,7 +1068,12 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addVehicleForm.invalid) {
+		if (this.addVehicleForm.invalid || !this.vehicleImage1) {
+			if (!this.vehicleImage1) {
+				setTimeout(() => {
+					document.getElementById('primaryAngleSection')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 50);
+			}
 			return;
 		}
 		if (!this.isEditMode && !this.isDuplicateMode && this.addVehicleForm.get('vehicle_image_1').value == this.vehicleImageId1) {

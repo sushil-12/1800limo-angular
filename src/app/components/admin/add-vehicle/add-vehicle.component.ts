@@ -302,11 +302,11 @@ export class AddVehicleComponent implements OnInit {
 				this.vehicleImageId8 = this.response.data.vehicleImage8.id;
 				this.vehicleImageId9 = this.response.data.vehicleImage9.id;
 
-				this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
-				this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
-				this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
-				this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
-				this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
+				this.rearPlateImage = this.oldvehicleImage[9] = '';
+				this.windowPermitImage = this.oldvehicleImage[10] = '';
+				this.windowPermit2Image = this.oldvehicleImage[11] = '';
+				this.usdotPermitImage = this.oldvehicleImage[12] = '';
+				this.mcImage = this.oldvehicleImage[13] = '';
 
 				this.rearPlateId = this.response.data.rear_plate.id;
 				this.windowPermitId = this.response.data.window_permit.id;
@@ -360,26 +360,18 @@ export class AddVehicleComponent implements OnInit {
       this.response2 = result2;
       const data = this.response2.data;
 
-      // Vehicle images — for duplicate, only load image 1
-      if (data.vehicle_image_1) {
-        this.vehicleImage1 = data.vehicle_image_1.image;
-        this.vehicleImageId1 = data.vehicle_image_1.ID;
-        this.addVehicleForm.patchValue({ vehicle_image_1: this.vehicleImageId1 });
-      } else {
-        this.vehicleImage1 = '';
-        this.vehicleImageId1 = '';
-      }
-
       const loadImg = (key: string, num: string) => {
-        if (data[key] && !this.isDuplicateMode) {
-          this[`vehicleImage${num}`] = data[key].image;
-          this[`vehicleImageId${num}`] = data[key].ID;
+        if (data[key]) {
+          (this as any)[`vehicleImage${num}`] = data[key].image;
+          (this as any)[`vehicleImageId${num}`] = data[key].ID;
           this.addVehicleForm.patchValue({ [`vehicle_image_${num}`]: data[key].ID });
         } else {
-          this[`vehicleImage${num}`] = '';
-          this[`vehicleImageId${num}`] = '';
+          (this as any)[`vehicleImage${num}`] = '';
+          (this as any)[`vehicleImageId${num}`] = '';
         }
       };
+
+      loadImg('vehicle_image_1', '1');
 
       loadImg('vehicle_image_2', '2');
       loadImg('vehicle_image_3', '3');
@@ -390,11 +382,11 @@ export class AddVehicleComponent implements OnInit {
       loadImg('vehicle_image_8', '8');
       loadImg('vehicle_image_9', '9');
 
-      this.rearPlateImage = data.rear_plate_image?.image || '';
-      this.windowPermitImage = data.window_permitImage?.image || '';
-      this.windowPermit2Image = data.window_permitImage2?.image || '';
-      this.usdotPermitImage = data.usdot_permitImage?.image || '';
-      this.mcImage = data.mc_image?.image || '';
+      this.rearPlateImage = this.oldvehicleImage[9] = data.rear_plate_image?.image || '';
+      this.windowPermitImage = this.oldvehicleImage[10] = data.window_permitImage?.image || '';
+      this.windowPermit2Image = this.oldvehicleImage[11] = data.window_permitImage2?.image || '';
+      this.usdotPermitImage = this.oldvehicleImage[12] = data.usdot_permitImage?.image || '';
+      this.mcImage = this.oldvehicleImage[13] = data.mc_image?.image || '';
 
       this.rearPlateId = data.rear_plate_image?.ID || '';
       this.windowPermitId = data.window_permitImage?.ID || '';
@@ -1078,8 +1070,15 @@ export class AddVehicleComponent implements OnInit {
 		this.addVehicleForm.patchValue({ acc_id: this.affiliateId });
 		this.pushValuesTypeOfService(this.service);
 		this.submittedForm = true;
-		
-		if (this.addVehicleForm.invalid) return;
+
+		if (this.addVehicleForm.invalid || !this.vehicleImage1) {
+			if (!this.vehicleImage1) {
+				setTimeout(() => {
+					document.getElementById('primaryAngleSection')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 50);
+			}
+			return;
+		}
 		
 		this.spinner.show();
 		this.disableSubmitButton = true;

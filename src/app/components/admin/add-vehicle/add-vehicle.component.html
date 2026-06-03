@@ -437,7 +437,7 @@
 				Sell your unique features that travelers and party goers want!
 			</span>
 			<div class="mt-4 vehtype_extintwrap">
-				<div class="row">
+				<div class="row" id="primaryAngleSection">
 					<div class="col-md-4" *ngIf="vehicleImage1; else noVehicleImage1">
 						<div class="vehtype_extint">
 							<p>
@@ -466,7 +466,7 @@
 					</div>
 					<ng-template #noVehicleImage1>
 						<div class="col-md-4">
-							<div class="vehtype_extint">
+							<div class="vehtype_extint" [ngClass]="{'primary-angle-error': submittedForm && !vehicleImage1}">
 								<p>Primary Angle <span class="asterisk">*</span></p>
 								<div class="emptyImage">
 									<img src="../../../../assets/placeholders/primary-angle.png" tabindex="-1" />
@@ -484,6 +484,10 @@
 										</button>
 									</li>
 								</ul>
+							</div>
+							<div *ngIf="submittedForm && !vehicleImage1"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								The Primary Angle image is required
 							</div>
 						</div>
 					</ng-template>
