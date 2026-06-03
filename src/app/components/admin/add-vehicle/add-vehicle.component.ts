@@ -98,6 +98,10 @@ export class AddVehicleComponent implements OnInit {
 	public response2: any;
 	public originalNumberOfVehicles: number = 0;
 
+	public selectedChargableAmenities = new Set<number>();
+	public selectedNonChargableAmenities = new Set<number>();
+	public selectedSpecialAmenities = new Set<number>();
+	public selectedInteriors = new Set<number>();
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -341,9 +345,9 @@ export class AddVehicleComponent implements OnInit {
 	}
 
 	loadVehicleData() {
-  if (!this.vehicleId) return;
-  this.spinner.show();
-  this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
+	if (!this.vehicleId) return;
+	this.spinner.show();
+	this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
     .pipe(catchError(err => { this.spinner.hide(); return throwError(err); }))
     .subscribe(result2 => {
       this.response2 = result2;
@@ -440,27 +444,11 @@ export class AddVehicleComponent implements OnInit {
 
       this.pushValuesTypeOfService(data.typeOfService || []);
 
-      // Amenities
-      const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
-      for (const key in this.chargableAmenities) {
-        Object.values((this.chargableAmenities as any)[key]).forEach((a: any) => {
-          if (a.isSelected) this.onAmenitiesCheckboxChange(a.id, true);
-        });
-      }
-      for (const key in this.nonChargableAmenities) {
-        Object.values((this.nonChargableAmenities as any)[key]).forEach((a: any) => {
-          if (a.isSelected) this.onAmenitiesCheckboxChange(a.id, true);
-        });
-      }
-
-      // Special amenities
-      const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
-      (data.specialAmenities || []).forEach(id => specialAmenities.push(new FormControl(id)));
-
-      // Interiors
-      const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-      while (vehicleInterior.length) vehicleInterior.removeAt(0);
-      (data.vehicleInterior || []).forEach(id => vehicleInterior.push(new FormControl(id)));
+      this.chargableAmenities = data.chargableAmenities;
+	  this.nonChargableAmenities = data.nonChargableAmenities;
+	  this.initializeSelectedAmenities();
+	  this.initializeSelectedSpecialAmenities(data.specialAmenities || []);
+	  this.initializeSelectedInteriors(data.vehicleInterior || []);
 
       this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
         let numberOfVehiclesCanBeAdded;
@@ -482,6 +470,7 @@ export class AddVehicleComponent implements OnInit {
     });
 }
 	closeButton() {
+		this.modalImage = '';
 		this.closeTab.emit();
 	}
 	//Start of autocomplete search and selection
@@ -703,34 +692,48 @@ export class AddVehicleComponent implements OnInit {
 		})
 	}
 
-	onAmenitiesCheckboxChange(val, ischecked) {
+	onAmenitiesCheckboxChange(encodedId: string, ischecked: boolean, numericId: number, type = 'chargable') {
 		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+
 		if (ischecked) {
-			amenities.push(new FormControl(val));
+			const exists = amenities.controls.findIndex(x => x.value === encodedId) !== -1;
+			if (!exists) amenities.push(new FormControl(encodedId));
+			if (type === 'chargable') this.selectedChargableAmenities.add(numericId);
+			else this.selectedNonChargableAmenities.add(numericId);
 		} else {
-			const index = amenities.controls.findIndex(x => x.value === val);
-			amenities.removeAt(index);
+			const index = amenities.controls.findIndex(x => x.value === encodedId);
+			if (index !== -1) amenities.removeAt(index);
+			if (type === 'chargable') this.selectedChargableAmenities.delete(numericId);
+			else this.selectedNonChargableAmenities.delete(numericId);
 		}
 	}
+
 	onSpecialAmenitiesCheckboxChange(e) {
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
+		const value = Number(e.target.value);
 		if (e.target.checked) {
-			specialAmenities.push(new FormControl(e.target.value));
+			specialAmenities.push(new FormControl(value));
+			this.selectedSpecialAmenities.add(value);
 		} else {
-			const index = specialAmenities.controls.findIndex(x => x.value === e.target.value);
+			const index = specialAmenities.controls.findIndex(x => x.value === value);
 			specialAmenities.removeAt(index);
+			this.selectedSpecialAmenities.delete(value);
 		}
 	}
+
 	onInteriorsCheckboxChange(e) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		console.log('------>>>>>>', vehicleInterior)
+		const value = Number(e.target.value);
 		if (e.target.checked) {
-			vehicleInterior.push(new FormControl(e.target.value));
+			vehicleInterior.push(new FormControl(value));
+			this.selectedInteriors.add(value);
 		} else {
-			const index = vehicleInterior.controls.findIndex(x => x.value === e.target.value);
-			vehicleInterior.removeAt(index);
+			const index = vehicleInterior.controls.findIndex(x => x.value === value);
+			if (index !== -1) vehicleInterior.removeAt(index);
+			this.selectedInteriors.delete(value);
 		}
 	}
+
 	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
 
@@ -979,12 +982,8 @@ export class AddVehicleComponent implements OnInit {
 		}
 	}
 
-
-
 	showImageInModal(imageUrl) {
-		this.modalImage = imageUrl;
-		$("#imageModal").addClass("showImage");
-		$("#imageModal").removeClass("d-none");
+	 this.modalImage = imageUrl;
 	}
 
 	deleteImage(id, imageType, imageNumber = null) {
@@ -1202,5 +1201,65 @@ export class AddVehicleComponent implements OnInit {
 		this.addVehicleForm.patchValue({
 			charterCancelPolicy: event.value
 		})
+	}
+
+	isChargableAmenitySelected(id: number): boolean {
+	 return this.selectedChargableAmenities.has(Number(id));
+	}
+
+	isNonChargableAmenitySelected(id: number): boolean {
+	 return this.selectedNonChargableAmenities.has(Number(id));
+	}
+
+	isSpecialAmenitySelected(id: number): boolean {
+	 return this.selectedSpecialAmenities.has(Number(id));
+	}
+
+	isInteriorSelected(id: number): boolean {
+	 return this.selectedInteriors.has(Number(id));
+	}
+
+	private initializeSelectedAmenities() {
+		this.selectedChargableAmenities.clear();
+		this.selectedNonChargableAmenities.clear();
+		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
+		while (amenities.length) amenities.removeAt(0);
+
+		Object.values(this.chargableAmenities || {}).forEach((group: any) => {
+			Object.values(group).forEach((amenity: any) => {
+			if (amenity.isSelected) {
+				this.onAmenitiesCheckboxChange(amenity.id, true, amenity.ID, 'chargable');
+			}
+			});
+		});
+		Object.values(this.nonChargableAmenities || {}).forEach((group: any) => {
+			(Array.isArray(group) ? group : Object.values(group)).forEach((amenity: any) => {
+			if (amenity.isSelected) {
+				this.onAmenitiesCheckboxChange(amenity.id, true, amenity.ID, 'nonChargable');
+			}
+			});
+		});
+	}
+
+	private initializeSelectedSpecialAmenities(selected: any[]) {
+		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
+		while (specialAmenities.length) specialAmenities.removeAt(0);
+		this.selectedSpecialAmenities.clear();
+		(selected || []).forEach((id: any) => {
+			const value = Number(id);
+			specialAmenities.push(new FormControl(value));
+			this.selectedSpecialAmenities.add(value);
+		});
+	}
+
+	private initializeSelectedInteriors(selected: any[]) {
+		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+		while (vehicleInterior.length) vehicleInterior.removeAt(0);
+		this.selectedInteriors.clear();
+		(selected || []).forEach((id: any) => {
+			const value = Number(id);
+			vehicleInterior.push(new FormControl(value));
+			this.selectedInteriors.add(value);
+		});
 	}
 }

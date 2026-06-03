@@ -323,8 +323,9 @@
 					<!-- {{chargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.value.name}}"
 						[value]="chargableAmenity.value.id"
-						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1"
-						(focus)="$event.target.select()">
+						[checked]="isChargableAmenitySelected(chargableAmenity.value.ID)"
+						(change)="onAmenitiesCheckboxChange($event.target.value, $event.target.checked, chargableAmenity.value.ID, 'chargable')"
+						tabindex="1">
 					<label class="custom-control-label text-wrap" style="width: 100px;"
 						for="amenity_{{chargableAmenity.value.name}}">{{chargableAmenity.value.name}}</label>
 					<label *ngIf="chargableAmenity.value.chargeable==='yes'" class="amenity-dollar">$</label>
@@ -345,10 +346,11 @@
 				<div class="custom-control custom-checkbox"
 					*ngFor="let nonChargableAmenity of nonChargableAmenityGroup.value | keyvalue">
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
-					<input type="checkbox" class="custom-control-input" id="amenity_{{nonChargableAmenity.value.name}}"
-						[value]="nonChargableAmenity.value.id"
-						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1"
-						(focus)="$event.target.select()">
+				   <input type="checkbox" class="custom-control-input" id="amenity_{{nonChargableAmenity.value.name}}"
+					[value]="nonChargableAmenity.value.id"
+					[checked]="isNonChargableAmenitySelected(nonChargableAmenity.value.ID)"
+					(change)="onAmenitiesCheckboxChange($event.target.value, $event.target.checked, nonChargableAmenity.value.ID, 'nonChargable')"
+					tabindex="1">
 					<label class="custom-control-label"
 						for="amenity_{{nonChargableAmenity.value.name}}">{{nonChargableAmenity.value.name}}</label>
 					<label *ngIf="nonChargableAmenity.value.chargeable==='yes'" class="amenity-dollar">&nbsp;
@@ -368,8 +370,9 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
 					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{specialAmenity.name}}"
-						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1"
-						(focus)="$event.target.select()">
+					[value]="specialAmenity.id"
+					[checked]="isSpecialAmenitySelected(specialAmenity.id)"
+					(change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1">
 					<label class="custom-control-label"
 						for="specialAmenity_{{specialAmenity.name}}">{{specialAmenity.name}}</label>
 				</div>
@@ -387,8 +390,9 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
 					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
-						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1"
-						[checked]="interior.id=='1'" (focus)="$event.target.select()">
+						[value]="interior.id"
+						[checked]="isInteriorSelected(interior.id)"
+						(change)="onInteriorsCheckboxChange($event)" tabindex="1">
 					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
 			</div>
