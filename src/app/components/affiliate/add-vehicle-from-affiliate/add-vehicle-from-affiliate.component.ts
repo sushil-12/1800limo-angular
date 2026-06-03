@@ -813,12 +813,16 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 	async onFileChange(event, imageId, imageNumber) {
 		if (!await this.commonServices.handleFile(event)) {
+			if (event.target) {
+				event.target.value = '';
+			}
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
+			event.target.value = '';
 			reader.readAsDataURL(file);
 			reader.onload = () => {
 				this.imageSrc = reader.result as string;
@@ -914,12 +918,16 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 	async vehicleOfficialImagesChange(event, imageType, imageId) {
 		if (!await this.commonServices.handleFile(event)) {
+			if (event.target) {
+				event.target.value = '';
+			}
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
+			event.target.value = '';
 			reader.readAsDataURL(file);
 			reader.onload = () => {
 				this.imageSrc = reader.result as string;
