@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
-// import { ReCaptchaService } from '../../../services/re-captcha.service';
+import { ReCaptchaService } from '../../../services/re-captcha.service';
 
 import { environment } from 'src/environments/environment';
 import { CommonService } from 'src/app/services/common.service';
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	referralCode: string = null;
 
 	constructor(private formBuilder: FormBuilder,
-		// private recaptchaService: ReCaptchaService, 
+		private recaptchaService: ReCaptchaService,
 		private router: Router,
 		private authService: AuthService,
 		private changeDetectorRef: ChangeDetectorRef,
@@ -135,8 +135,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
-
-		// this.recaptchaService.load(environment.recaptchaKey);
 
 		this.loginForm = this.formBuilder.group({
 			phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern("^[0-9+]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
@@ -287,11 +285,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			this.loginForm.value.phone = this.loginForm.value.phone.substring(this.countryCode.length);
 		}
 
-		// this.recaptchaService.execute('login', recaptchaToken => {
-		// console.log("recaptcha token--->",recaptchaToken)
-		// this.loginForm.value.recaptchaToken = recaptchaToken;
-		console.log("login form", this.loginForm.value)
-		this.authService.login(this.loginForm.value)
+		this.recaptchaService.execute('login').then(recaptchaToken => {
+			this.loginForm.value.recaptchaToken = recaptchaToken;
+			console.log("login form", this.loginForm.value)
+			this.authService.login(this.loginForm.value)
 			.pipe(
 				catchError(err => {
 					this.disableSubmit = false; //enable submit button
@@ -326,6 +323,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 					this.router.navigateByUrl('/otp' + `?role=${this.Role}`);
 				}
 			});
+		}).catch(() => {
+			this.disableSubmit = false;
+			this.showProgressBar = false;
+		});
 	}
 	numberOnly(event: any): boolean {
 		const charCode = (event.which) ? event.which : event.keyCode;
