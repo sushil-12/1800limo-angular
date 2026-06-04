@@ -1249,6 +1249,18 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 				this.setVehicleImages(detail);
 
+				this.addVehicleForm.patchValue({
+					vehicle_image_1: this.vehicleImageId1,
+					vehicle_image_2: this.vehicleImageId2,
+					vehicle_image_3: this.vehicleImageId3,
+					vehicle_image_4: this.vehicleImageId4,
+					vehicle_image_5: this.vehicleImageId5,
+					vehicle_image_6: this.vehicleImageId6,
+					vehicle_image_7: this.vehicleImageId7,
+					vehicle_image_8: this.vehicleImageId8,
+					vehicle_image_9: this.vehicleImageId9,
+				});
+
 				this.chargableAmenities = detail.chargableAmenities || this.chargableAmenities;
 				this.nonChargableAmenities = detail.nonChargableAmenities || this.nonChargableAmenities;
 
@@ -1333,81 +1345,66 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	}
 
 	private setVehicleImages(detail: any) {
+		// ✅ Only update each slot if the API actually returned data for it.
+		// If the API returns nothing, leave the existing value untouched.
 		if (detail.vehicle_image_1) {
 			this.vehicleImage1 = detail.vehicle_image_1.image;
 			this.vehicleImageId1 = detail.vehicle_image_1.ID;
-		} else {
-			this.vehicleImage1 = '';
-			this.vehicleImageId1 = '';
 		}
 		if (detail.vehicle_image_2) {
 			this.vehicleImage2 = detail.vehicle_image_2.image;
 			this.vehicleImageId2 = detail.vehicle_image_2.ID;
-		} else {
-			this.vehicleImage2 = '';
-			this.vehicleImageId2 = '';
 		}
 		if (detail.vehicle_image_3) {
 			this.vehicleImage3 = detail.vehicle_image_3.image;
 			this.vehicleImageId3 = detail.vehicle_image_3.ID;
-		} else {
-			this.vehicleImage3 = '';
-			this.vehicleImageId3 = '';
 		}
 		if (detail.vehicle_image_4) {
 			this.vehicleImage4 = detail.vehicle_image_4.image;
 			this.vehicleImageId4 = detail.vehicle_image_4.ID;
-		} else {
-			this.vehicleImage4 = '';
-			this.vehicleImageId4 = '';
 		}
 		if (detail.vehicle_image_5) {
 			this.vehicleImage5 = detail.vehicle_image_5.image;
 			this.vehicleImageId5 = detail.vehicle_image_5.ID;
-		} else {
-			this.vehicleImage5 = '';
-			this.vehicleImageId5 = '';
 		}
 		if (detail.vehicle_image_6) {
 			this.vehicleImage6 = detail.vehicle_image_6.image;
 			this.vehicleImageId6 = detail.vehicle_image_6.ID;
-		} else {
-			this.vehicleImage6 = '';
-			this.vehicleImageId6 = '';
 		}
 		if (detail.vehicle_image_7) {
 			this.vehicleImage7 = detail.vehicle_image_7.image;
 			this.vehicleImageId7 = detail.vehicle_image_7.ID;
-		} else {
-			this.vehicleImage7 = '';
-			this.vehicleImageId7 = '';
 		}
 		if (detail.vehicle_image_8) {
 			this.vehicleImage8 = detail.vehicle_image_8.image;
 			this.vehicleImageId8 = detail.vehicle_image_8.ID;
-		} else {
-			this.vehicleImage8 = '';
-			this.vehicleImageId8 = '';
 		}
 		if (detail.vehicle_image_9) {
 			this.vehicleImage9 = detail.vehicle_image_9.image;
 			this.vehicleImageId9 = detail.vehicle_image_9.ID;
-		} else {
-			this.vehicleImage9 = '';
-			this.vehicleImageId9 = '';
 		}
 
-		this.rearPlateImage = detail.rear_plate_image?.image || '';
-		this.windowPermitImage = detail.window_permitImage?.image || '';
-		this.windowPermit2Image = detail.window_permitImage2?.image || '';
-		this.usdotPermitImage = detail.usdot_permitImage?.image || '';
-		this.mcImage = detail.mc_image?.image || '';
-
-		this.rearPlateId = detail.rear_plate_image?.ID || '';
-		this.windowPermitId = detail.window_permitImage?.ID || '';
-		this.windowPermit2Id = detail.window_permitImage2?.ID || '';
-		this.usdotPermitId = detail.usdot_permitImage?.ID || '';
-		this.mcId = detail.mc_image?.ID || '';
+		// ✅ Permit images: only overwrite if the API returned something
+		if (detail.rear_plate_image?.image) {
+			this.rearPlateImage = detail.rear_plate_image.image;
+			this.rearPlateId = detail.rear_plate_image.ID;
+		}
+		if (detail.window_permitImage?.image) {
+			this.windowPermitImage = detail.window_permitImage.image;
+			this.windowPermitId = detail.window_permitImage.ID;
+		}
+		if (detail.window_permitImage2?.image) {
+			this.windowPermit2Image = detail.window_permitImage2.image;
+			this.windowPermit2Id = detail.window_permitImage2.ID;
+		}
+		if (detail.usdot_permitImage?.image) {
+			this.usdotPermitImage = detail.usdot_permitImage.image;
+			this.usdotPermitId = detail.usdot_permitImage.ID;
+		}
+		if (detail.mc_image?.image) {
+			this.mcImage = detail.mc_image.image;
+			this.mcId = detail.mc_image.ID;
+		}
 	}
 
 	private initializeSelectedAmenities() {

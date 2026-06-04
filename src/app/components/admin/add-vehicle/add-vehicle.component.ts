@@ -352,122 +352,135 @@ export class AddVehicleComponent implements OnInit {
 	}
 
 	loadVehicleData() {
-	if (!this.vehicleId) return;
-	this.spinner.show();
-	this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
-    .pipe(catchError(err => { this.spinner.hide(); return throwError(err); }))
-    .subscribe(result2 => {
-      this.response2 = result2;
-      const data = this.response2.data;
+		if (!this.vehicleId) return;
+		this.spinner.show();
+		this.adminService.adminAffiliateGetVehicleData(this.vehicleId)
+		.pipe(catchError(err => { this.spinner.hide(); return throwError(err); }))
+		.subscribe(result2 => {
+		this.response2 = result2;
+		const data = this.response2.data;
 
-      const loadImg = (key: string, num: string) => {
-        if (data[key]) {
-          (this as any)[`vehicleImage${num}`] = data[key].image;
-          (this as any)[`vehicleImageId${num}`] = data[key].ID;
-          this.addVehicleForm.patchValue({ [`vehicle_image_${num}`]: data[key].ID });
-        } else {
-          (this as any)[`vehicleImage${num}`] = '';
-          (this as any)[`vehicleImageId${num}`] = '';
-        }
-      };
+		// ✅ Fixed helper: only update if data exists; never blank out in edit mode
+		const loadImg = (key: string, num: string) => {
+			if (data[key]) {
+			this[`vehicleImage${num}`] = data[key].image;
+			this[`vehicleImageId${num}`] = data[key].ID;
+			this.addVehicleForm.patchValue({ [`vehicle_image_${num}`]: data[key].ID });
+			}
+			// ✅ If data[key] is missing, leave the field as-is (don't blank it)
+		};
 
-      loadImg('vehicle_image_1', '1');
+		// Vehicle image 1 — always load for both edit and duplicate
+		if (data.vehicle_image_1) {
+			this.vehicleImage1 = data.vehicle_image_1.image;
+			this.vehicleImageId1 = data.vehicle_image_1.ID;
+			this.addVehicleForm.patchValue({ vehicle_image_1: this.vehicleImageId1 });
+		}
 
-      loadImg('vehicle_image_2', '2');
-      loadImg('vehicle_image_3', '3');
-      loadImg('vehicle_image_4', '4');
-      loadImg('vehicle_image_5', '5');
-      loadImg('vehicle_image_6', '6');
-      loadImg('vehicle_image_7', '7');
-      loadImg('vehicle_image_8', '8');
-      loadImg('vehicle_image_9', '9');
+		// ✅ Images 2–9: load for BOTH edit and duplicate (removed isDuplicateMode exclusion)
+		loadImg('vehicle_image_2', '2');
+		loadImg('vehicle_image_3', '3');
+		loadImg('vehicle_image_4', '4');
+		loadImg('vehicle_image_5', '5');
+		loadImg('vehicle_image_6', '6');
+		loadImg('vehicle_image_7', '7');
+		loadImg('vehicle_image_8', '8');
+		loadImg('vehicle_image_9', '9');
 
-      this.rearPlateImage = this.oldvehicleImage[9] = data.rear_plate_image?.image || '';
-      this.windowPermitImage = this.oldvehicleImage[10] = data.window_permitImage?.image || '';
-      this.windowPermit2Image = this.oldvehicleImage[11] = data.window_permitImage2?.image || '';
-      this.usdotPermitImage = this.oldvehicleImage[12] = data.usdot_permitImage?.image || '';
-      this.mcImage = this.oldvehicleImage[13] = data.mc_image?.image || '';
+		// Official permit images — load for both modes if present
+		if (data.rear_plate_image?.image) {
+			this.rearPlateImage = data.rear_plate_image.image;
+			this.rearPlateId = data.rear_plate_image.ID;
+			this.addVehicleForm.patchValue({ rearPlateImage: this.rearPlateId });
+		}
+		if (data.window_permitImage?.image) {
+			this.windowPermitImage = data.window_permitImage.image;
+			this.windowPermitId = data.window_permitImage.ID;
+			this.addVehicleForm.patchValue({ windowPermitImage: this.windowPermitId });
+		}
+		if (data.window_permitImage2?.image) {
+			this.windowPermit2Image = data.window_permitImage2.image;
+			this.windowPermit2Id = data.window_permitImage2.ID;
+			this.addVehicleForm.patchValue({ windowPermit2Image: this.windowPermit2Id });
+		}
+		if (data.usdot_permitImage?.image) {
+			this.usdotPermitImage = data.usdot_permitImage.image;
+			this.usdotPermitId = data.usdot_permitImage.ID;
+			this.addVehicleForm.patchValue({ usdotPermitImage: this.usdotPermitId });
+		}
+		if (data.mc_image?.image) {
+			this.mcImage = data.mc_image.image;
+			this.mcId = data.mc_image.ID;
+			this.addVehicleForm.patchValue({ mcImage: this.mcId });
+		}
 
-      this.rearPlateId = data.rear_plate_image?.ID || '';
-      this.windowPermitId = data.window_permitImage?.ID || '';
-      this.windowPermit2Id = data.window_permitImage2?.ID || '';
-      this.usdotPermitId = data.usdot_permitImage?.ID || '';
-      this.mcId = data.mc_image?.ID || '';
+		this.chargableAmenities = data.chargableAmenities;
+		this.nonChargableAmenities = data.nonChargableAmenities;
 
-      this.addVehicleForm.patchValue({
-        rearPlateImage: this.rearPlateId,
-        windowPermitImage: this.windowPermitId,
-        windowPermit2Image: this.windowPermit2Id,
-        usdotPermitImage: this.usdotPermitId,
-        mcImage: this.mcId,
-      });
+		// Models for selected make
+		let models = JSON.parse(sessionStorage.getItem('models'));
+		this.filteredModel = this.model = models.filter(m => m.make_id == data.make);
 
-      this.chargableAmenities = data.chargableAmenities;
-      this.nonChargableAmenities = data.nonChargableAmenities;
+		this.addVehicleForm.patchValue({
+			vehicleType: parseInt(data.vehicle_type),
+			make: data.make,
+			model: data.model,
+			year: data.year,
+			color: data.color,
+			numberOfVehicles: data.numberOfVehicles,
+			licensePlate: data.license_plate,
+			seats: data.seats,
+			luggage: data.luggage,
+			charterCancelPolicy: data.charterCancelPolicy,
+			nonCharterCancelPolicy: data.nonCharterCancelPolicy,
+		});
 
-      // Models for selected make
-      let models = JSON.parse(sessionStorage.getItem('models'));
-      this.filteredModel = this.model = models.filter(m => m.make_id == data.make);
+		// Only set id for edit, not duplicate
+		if (this.isEditMode) {
+			this.addVehicleForm.patchValue({ id: this.vehicleId });
+			this.originalNumberOfVehicles = data.numberOfVehicles || 0;
+		}
 
-      this.addVehicleForm.patchValue({
-        vehicleType: parseInt(data.vehicle_type),
-        make: data.make,
-        model: data.model,
-        year: data.year,
-        color: data.color,
-        numberOfVehicles: data.numberOfVehicles,
-        licensePlate: data.license_plate,
-        seats: data.seats,
-        luggage: data.luggage,
-        charterCancelPolicy: data.charterCancelPolicy,
-        nonCharterCancelPolicy: data.nonCharterCancelPolicy,
-      });
+		// Autocomplete display fields
+		const vehicleTypeField: any = document.getElementById('vehicleTypeField');
+		if (vehicleTypeField) vehicleTypeField.value = data.vehicle_typeName || '';
+		const makeField: any = document.getElementById('makeField');
+		if (makeField) makeField.value = data.makeName || '';
+		const modelField: any = document.getElementById('modelField');
+		if (modelField) modelField.value = data.modelName || '';
+		const yearField: any = document.getElementById('yearField');
+		if (yearField) yearField.value = data.yearName || '';
+		const colorField: any = document.getElementById('colorField');
+		if (colorField) colorField.value = data.colorName || '';
 
-      // Only set id for edit, not duplicate
-      if (this.isEditMode) {
-        this.addVehicleForm.patchValue({ id: this.vehicleId });
-        this.originalNumberOfVehicles = data.numberOfVehicles || 0;
-      }
+		this.pushValuesTypeOfService(data.typeOfService || []);
 
-      // Autocomplete display fields
-      const vehicleTypeField: any = document.getElementById('vehicleTypeField');
-      if (vehicleTypeField) vehicleTypeField.value = data.vehicle_typeName || '';
-      const makeField: any = document.getElementById('makeField');
-      if (makeField) makeField.value = data.makeName || '';
-      const modelField: any = document.getElementById('modelField');
-      if (modelField) modelField.value = data.modelName || '';
-      const yearField: any = document.getElementById('yearField');
-      if (yearField) yearField.value = data.yearName || '';
-      const colorField: any = document.getElementById('colorField');
-      if (colorField) colorField.value = data.colorName || '';
+		this.chargableAmenities = data.chargableAmenities;
+		this.nonChargableAmenities = data.nonChargableAmenities;
+		this.initializeSelectedAmenities();
+		this.initializeSelectedSpecialAmenities(data.specialAmenities || []);
+		this.initializeSelectedInteriors(data.vehicleInterior || []);
 
-      this.pushValuesTypeOfService(data.typeOfService || []);
+		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
+			let numberOfVehiclesCanBeAdded;
+			if (this.affiliateType == 'fleet_operator') {
+			this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+			} else if (this.affiliateType == 'black_limo_operator') {
+			const subtract = this.isEditMode ? data.numberOfVehicles : 0;
+			numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - subtract);
+			this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+			} else {
+			const subtract = this.isEditMode ? data.numberOfVehicles : 0;
+			numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - subtract);
+			this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+			}
+			this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
+		});
 
-      this.chargableAmenities = data.chargableAmenities;
-	  this.nonChargableAmenities = data.nonChargableAmenities;
-	  this.initializeSelectedAmenities();
-	  this.initializeSelectedSpecialAmenities(data.specialAmenities || []);
-	  this.initializeSelectedInteriors(data.vehicleInterior || []);
-
-      this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
-        let numberOfVehiclesCanBeAdded;
-        if (this.affiliateType == 'fleet_operator') {
-          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
-        } else if (this.affiliateType == 'black_limo_operator') {
-          const subtract = this.isEditMode ? data.numberOfVehicles : 0;
-          numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - subtract);
-          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
-        } else {
-          const subtract = this.isEditMode ? data.numberOfVehicles : 0;
-          numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - subtract);
-          this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
-        }
-        this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
-      });
-
-      this.spinner.hide();
-    });
-}
+		this.spinner.hide();
+		});
+    }
+	
 	openGuide(slotKey: string) {
 		this.currentGuide = PHOTO_GUIDES[slotKey] ?? null;
 		this.pendingSlot = slotKey;
