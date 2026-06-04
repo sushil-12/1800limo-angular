@@ -1,18 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../services/admin.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
 	selector: 'app-public-invoice-summary',
 	templateUrl: './public-invoice-summary.component.html',
-	styleUrls: ['./public-invoice-summary.component.scss']
+	styleUrls: ['./public-invoice-summary.component.scss'],
+	standalone: true,
+	imports:[CommonModule,NgxSpinnerModule,FormsModule,ReactiveFormsModule,   
+		MatFormFieldModule,    
+		MatInputModule,        
+		MatChipsModule   ]
 })
 export class PublicInvoiceSummaryComponent implements OnInit {
 
 	bookingId: string | null = null;
+	userType: string | null = null;
 	token: string | null = null;
 	invoiceData: any;
 	currencySymbol: string = '';
@@ -29,6 +40,7 @@ export class PublicInvoiceSummaryComponent implements OnInit {
 		this.spinner.show();
 		this.route.queryParamMap.subscribe((params) => {
 			this.bookingId = params.get('bookingId');
+			this.userType = params.get('userType');
 			this.token = params.get('token');
 
 			if (!this.bookingId || !this.token) {
@@ -37,7 +49,7 @@ export class PublicInvoiceSummaryComponent implements OnInit {
 				return;
 			}
 
-			this.adminService.getInvoiceDataWithToken(this.bookingId, this.token)
+			this.adminService.getInvoiceDataWithToken(this.bookingId,this.userType, this.token)
 				.pipe(
 					catchError(err => {
 						this.errorMessage = err?.error?.message || 'Unable to load invoice. The link may be invalid or expired.';
@@ -47,6 +59,7 @@ export class PublicInvoiceSummaryComponent implements OnInit {
 				)
 				.subscribe(({ data }: any) => {
 					this.invoiceData = data;
+					console.log(data,"Rechecking whyyyyyy")
 					this.currencySymbol = this.invoiceData?.currency_symbol || '';
 					this.spinner.hide();
 				});
@@ -114,5 +127,3 @@ export class PublicInvoiceSummaryComponent implements OnInit {
 		document.body.removeChild(textArea);
 	}
 }
-
-
