@@ -645,9 +645,22 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			filtered = filtered.filter((b: any) => b.booking_status == this.selectedStatus);
 		}
 
-		// Always keep pinned bookings at the top using stored objects (survive search API replacement)
+		// Refresh pinned booking objects from fresh API data when available,
+		// fall back to stored copy only when the booking isn't in the current result set
+		const freshPinnedBookings = this.pinnedBookingIds.map(id => {
+			const fresh = this.bookings_Original.find((b: any) => b.booking_id === id);
+			if (fresh) {
+				return fresh;
+			}
+			return this.pinnedBookings.find((b: any) => b.booking_id === id);
+		}).filter(Boolean);
+
+		// Keep pinnedBookings in sync so localStorage stays up to date
+		this.pinnedBookings = freshPinnedBookings;
+		localStorage.setItem('pinnedBookings', JSON.stringify(this.pinnedBookings));
+
 		const unpinned = filtered.filter((b: any) => !this.pinnedBookingIds.includes(b.booking_id));
-		this.bookings = [...this.pinnedBookings, ...unpinned];
+		this.bookings = [...freshPinnedBookings, ...unpinned];
 	}
 
 
