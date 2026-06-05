@@ -65,6 +65,10 @@ const routes: Routes = [
 		component: AddDriverSubscriberComponent,
 	},
 	{
+		path: 'public-invoice-summary',
+		component: PublicInvoiceSummaryComponent
+	},
+	{
 		path: '',
 		component: WebsiteTemplateComponent,
 		data: {
@@ -74,10 +78,6 @@ const routes: Routes = [
 			{
 				path: 'home',
 				component: HomeComponent
-			},
-			{
-				path: 'public-invoice-summary',
-				component: PublicInvoiceSummaryComponent
 			},
 			{
 				path: 'services',
