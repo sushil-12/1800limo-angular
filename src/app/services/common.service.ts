@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ErrorDialogService } from './error-dialog/errordialog.service';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class CommonService {
 
-	constructor(private errorModal: ErrorDialogService,) { }
+	private serverUrl = environment.serverUrl;
+	constructor(private errorModal: ErrorDialogService,private httpClient: HttpClient) { }
 	handleFile(event) {
 		console.log("in function handle file", event)
 		const [file] = event.target.files
@@ -71,5 +75,15 @@ export class CommonService {
 		}
 
 		return options;
+	}
+
+	getInvoiceDataWithToken(id: string,userType: string, token: string): Observable<any> {
+		const headers = new HttpHeaders({
+			'Authorization': `Bearer ${token}`
+		});
+		
+		return this.httpClient.get(`${this.serverUrl}${userType}/invoice-summary/${id}`, {
+			headers
+		});
 	}
 }

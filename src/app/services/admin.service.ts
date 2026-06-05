@@ -1095,15 +1095,6 @@ export class AdminService {
 
 		// return resp;
 	}
-	getInvoiceDataWithToken(id: string,userType: string, token: string): Observable<any> {
-		const headers = new HttpHeaders({
-			'Authorization': `Bearer ${token}`
-		});
-		
-		return this.httpClient.get(`${this.serverUrl}${userType}/invoice-summary/${id}`, {
-			headers
-		});
-	}
 	//invoices
 	getInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
