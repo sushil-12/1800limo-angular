@@ -41,9 +41,30 @@
 
 					</div>
 
+					<div class="rcpt-idrow" >
+						<span class="rcpt-idrow-label">Booking Type & Cancellation Period</span>
+						<span class="rcpt-idrow-value">{{ textFormatter(bookingPreview?.service_type) | titlecase }}
+							/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
+							<span *ngIf="bookingPreview?.service_type == 'round_trip'">
+								/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
+							</span> | <span style="color:red">{{ getCancellationTime(bookingPreview?.cancellation_hours) }}</span> </span>
+					</div>
+
+					<div class="rcpt-idrow" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+						<span class="rcpt-idrow-label">Booking Hours</span>
+						<span class="rcpt-idrow-value">{{ bookingPreview?.number_of_hours }}</span>
+					</div>
+
 					<!-- ── Trip Information ── -->
 					<div class="rcpt-section">
-						<div class="rcpt-section-title">Trip Information</div>
+						<div class="rcpt-section-title" style="display: flex; justify-content: space-between; align-items: center;">
+							Trip Information
+							<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
+								{{ bookingPreview?.booking_status == 'en_route_do' ? 'POB' : bookingPreview?.booking_status == 'en_route_pu' ? 'En Route' : bookingPreview?.booking_status == 'driver_unassigned'
+								? 'Unassigned'
+								: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
+							</span>
+						</div>
 
 						<div class="bp-route-timeline rcpt-timeline">
 
@@ -160,36 +181,36 @@
 						</div>
 					</div>
 
-					<!-- ── Status ── -->
-					<div class="rcpt-status">
-						<span class="rcpt-status-label">Status</span>
-						<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
-							{{ bookingPreview?.booking_status == 'driver_unassigned'
-							? 'Unassigned'
-							: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
-						</span>
-					</div>
+						<!-- ── Special Instruction / Meet & Greet ── -->
+					<div class="rcpt-section">
+						<div class="rcpt-section-title">Special Instruction</div>
 
-					<!-- ── Booking Type ── -->
-					<div class="rcpt-row rcpt-row--solo">
-						<span class="rcpt-row-label">Booking Type</span>
-						<span class="rcpt-row-value">
-							{{ textFormatter(bookingPreview?.service_type) | titlecase }}
-							/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
-							<span *ngIf="bookingPreview?.service_type == 'round_trip'">
-								/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }}
-							</span>
-						</span>
-					</div>
-					<div class="rcpt-row rcpt-row--solo" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
-						<span class="rcpt-row-label">Booking Hours</span>
-						<span class="rcpt-row-value">{{ bookingPreview?.number_of_hours }}</span>
-					</div>
-					<div class="rcpt-row">
-						<span class="rcpt-row-label">Cancellation Period</span>
-						<span class="rcpt-row-value rcpt-danger">
-							{{ getCancellationTime(bookingPreview?.cancellation_hours) }}
-						</span>
+						<div class="rcpt-note" *ngIf="bookingPreview?.booking_instructions?.trim(); else noInstruction">
+							<i class="bi bi-info-circle rcpt-note-icon"></i>
+							<div class="rcpt-note-body" #specialInstructionBox
+								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions)">
+							</div>
+						</div>
+						<ng-template #noInstruction>
+							<div class="rcpt-empty">No special instructions provided.</div>
+						</ng-template>
+
+						<div class="rcpt-greet" *ngIf="bookingPreview?.meet_greet_choice_name">
+							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
+							<div>
+								<div class="rcpt-greet-label">Meet &amp; Greet</div>
+								<div class="rcpt-greet-value">{{ textFormatter(bookingPreview?.meet_greet_choice_name) |
+									titlecase }}</div>
+							</div>
+						</div>
+						<div class="rcpt-greet" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
+							<div>
+								<div class="rcpt-greet-label">Return Meet &amp; Greet</div>
+								<div class="rcpt-greet-value">{{
+									textFormatter(bookingPreview?.return_meet_greet_choice_name) | titlecase }}</div>
+							</div>
+						</div>
 					</div>
 
 					<!-- ── Passenger Information ── -->
@@ -284,38 +305,6 @@
 								: ('(' + bookingPreview?.lose_affiliate_phone_isd + ') ' +
 								bookingPreview?.lose_affiliate_phone) }}
 							</a>
-						</div>
-					</div>
-
-					<!-- ── Special Instruction / Meet & Greet ── -->
-					<div class="rcpt-section">
-						<div class="rcpt-section-title">Special Instruction</div>
-
-						<div class="rcpt-note" *ngIf="bookingPreview?.booking_instructions?.trim(); else noInstruction">
-							<i class="bi bi-info-circle rcpt-note-icon"></i>
-							<div class="rcpt-note-body" #specialInstructionBox
-								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions)">
-							</div>
-						</div>
-						<ng-template #noInstruction>
-							<div class="rcpt-empty">No special instructions provided.</div>
-						</ng-template>
-
-						<div class="rcpt-greet" *ngIf="bookingPreview?.meet_greet_choice_name">
-							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
-							<div>
-								<div class="rcpt-greet-label">Meet &amp; Greet</div>
-								<div class="rcpt-greet-value">{{ textFormatter(bookingPreview?.meet_greet_choice_name) |
-									titlecase }}</div>
-							</div>
-						</div>
-						<div class="rcpt-greet" *ngIf="bookingPreview?.return_meet_greet_choice_name">
-							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
-							<div>
-								<div class="rcpt-greet-label">Return Meet &amp; Greet</div>
-								<div class="rcpt-greet-value">{{
-									textFormatter(bookingPreview?.return_meet_greet_choice_name) | titlecase }}</div>
-							</div>
 						</div>
 					</div>
 
@@ -525,11 +514,11 @@
 
 			<!-- Tabs -->
 			<div class="rcpt-share-tabs">
-				<button class="rcpt-share-tab" [class.active]="shareActiveTab === 'email'"
+				<button class="rcpt-share-email" [class.active]="shareActiveTab === 'email'"
 					(click)="shareActiveTab = 'email'">
 					<i class="bi bi-envelope"></i> Email
 				</button>
-				<button class="rcpt-share-tab" [class.active]="shareActiveTab === 'sms'"
+				<button class="rcpt-share-sms" [class.active]="shareActiveTab === 'sms'"
 					(click)="shareActiveTab = 'sms'">
 					<i class="bi bi-chat-dots"></i> SMS
 				</button>
@@ -552,11 +541,11 @@
 
 			<div class="rcpt-share-footer">
 				<button type="button" class="rcpt-btn" data-dismiss="modal">Close</button>
-				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="copyShareHtml()"
+				<button type="button" class="rcpt-btn rcpt-btn bg-danger text-white"  (click)="copyShareHtml()"
 					*ngIf="shareActiveTab === 'email'">
 					<i class="bi bi-clipboard-check"></i> Copy
 				</button>
-				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="copySmsText()"
+				<button type="button" class="rcpt-btn rcpt-btn bg-success text-white" (click)="copySmsText()"
 					*ngIf="shareActiveTab === 'sms'">
 					<i class="bi bi-clipboard-check"></i> Copy
 				</button>
