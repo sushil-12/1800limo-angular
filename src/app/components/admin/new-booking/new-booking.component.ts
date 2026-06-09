@@ -3534,6 +3534,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
 		this.SetFormValue('driver_id', selectedVehicle.associated_driver);
+		this.autofillData('driver', selectedVehicle.associated_driver);
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
@@ -4007,11 +4008,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 				if (!isValueSet) {
+					console.log('setting default driver')
 					const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
-                    const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
-                    const fallbackDriver = matchedDriver || this.DriverList[0]
-                    this.SetFormValue('driver_id', fallbackDriver.id)
-                    this.autofillData('driver', fallbackDriver)
+					const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
+					const fallbackDriver = matchedDriver || this.DriverList[0]
+					this.autofillData('driver', fallbackDriver)
+					setTimeout(() => { this.SetFormValue('driver_id', fallbackDriver.id) }, 0)
+					console.log('setting default driver', fallbackDriver)
 				}
 			}
 			
@@ -4043,8 +4046,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 				if (!isValueSet) {
-					this.SetFormValue('return_driver_id', this.return_DriverList[0].id)
-					this.autofillData('return_driver', this.return_DriverList[0])
+					const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
+					const matchedDriver = sessionDriverId ? this.return_DriverList.find(d => d.id == sessionDriverId) : null
+					const fallbackDriver = matchedDriver || this.return_DriverList[0]
+					this.autofillData('return_driver', fallbackDriver)
+					setTimeout(() => { this.SetFormValue('return_driver_id', fallbackDriver.id) }, 0)
 				}
 
 				// autofill data
