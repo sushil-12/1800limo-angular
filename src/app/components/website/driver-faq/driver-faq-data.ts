@@ -25,7 +25,7 @@ export const driverFaqData: FAQ[] = [
     {
         category: 'application',
         question: "How do I join 1-800-LIMO.COM and is there a cost?",
-        answer: "We are looking for only the best drivers with nicer, newer, larger vehicles. Our customers are looking for you! Keep your independence, set your own schedule and set your own rates. Keep your tips. You control your own rates and can change them in real-time depending on demand. There is no surge pricing. You can stay driving with us as long as you get a thumbs up rating from our travelers. 3 thumbs down ratings and you're out (or fix the problem). We earn a 25% commission on each booking and pay you direct deposit in 3 days. You can accept or reject any booking. You'll be able to do both on-demand and prearranged rides (you’ll earn more per ride) and see pickup and drop off locations when you get a new booking. There are no surprises working with 1-800-LIMO.COM. We’re all about keeping great drivers on the road doing what you do best! We’ll keep you happy and loyal."
+        answer: "We are looking for only the best drivers with nicer, newer, larger vehicles. Our customers are looking for you! Keep your independence, set your own schedule and set your own rates. Keep your tips. You control your own rates and can change them in real-time depending on demand. There is no surge pricing. You can stay driving with us as long as you get a thumbs up rating from our travelers. 3 thumbs down ratings and you're out (or fix the problem). You can accept or reject any booking. You'll be able to do both on-demand and prearranged rides (you’ll earn more per ride) and see pickup and drop off locations when you get a new booking. There are no surprises working with 1-800-LIMO.COM. We’re all about keeping great drivers on the road doing what you do best! We’ll keep you happy and loyal."
     },
     {
         category: 'application',
@@ -64,7 +64,6 @@ Fleet/Coach Operators
 <li>We’ll send you business that fits your schedule. Set your own hours and rates. We work as a team.</li>
 <li>You can accept or reject any booking.</li>
 <li>We add a 20% gratuity to every booking, so you can keep your tips. Our customers know a competitive rate and will tip extra if they like you. The best compliment is if they ask for you again.</li>
-<li>We take a 25% commission.</li>
 <li>Be as competitive as the market demands. You can change your rates in real time.</li>
 <li>You’ll get paid in 3 business days after funds are collected from the client.</li>
 <li>You’ll get a 1099 at the end of the year.</li>
@@ -120,7 +119,7 @@ Fleet/Coach Operators
     {
         category: 'earnings',
         question: "How much commission do I pay?",
-        answer: "We take a 25% commission – taxes, tolls, and any other expenses are paid by the client to you directly. You are responsible for paying all local, state and federal taxes."
+        answer: "We add 25% Premium – taxes, tolls, and any other expenses are paid by the client to you directly. You are responsible for paying all local, state and federal taxes."
     },
     {
         category: 'earnings',
