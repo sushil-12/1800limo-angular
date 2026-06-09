@@ -116,6 +116,10 @@ export class AddVehicleComponent implements OnInit {
 	errorMsg2: boolean;
 	errorMsg3: boolean;
 	errorMsg4: boolean;
+
+	public driverRes: any;
+    public driverList: any[] = [];
+
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
@@ -224,6 +228,7 @@ export class AddVehicleComponent implements OnInit {
 			windowPermit2Image: [''],
 			usdotPermitImage: [''],
 			mcImage: [''],
+			associatedDriver: [null],
 		});
 		//Put Black color value by default in Color
 		let colorField: any = document.getElementById('colorField');
@@ -348,7 +353,7 @@ export class AddVehicleComponent implements OnInit {
 				}
 			});
 		this.Subscriptions()
-
+        this.loadDriver();
 	}
 
 	loadVehicleData() {
@@ -433,6 +438,7 @@ export class AddVehicleComponent implements OnInit {
 			luggage: data.luggage,
 			charterCancelPolicy: data.charterCancelPolicy,
 			nonCharterCancelPolicy: data.nonCharterCancelPolicy,
+			associatedDriver: (data.associatedDriver !== undefined && data.associatedDriver !== null) ? Number(data.associatedDriver) : (data.driver ? Number(data.driver) : null),
 		});
 
 		// Only set id for edit, not duplicate
@@ -480,7 +486,16 @@ export class AddVehicleComponent implements OnInit {
 		this.spinner.hide();
 		});
     }
-	
+
+	loadDriver() {
+		this.adminService.driverList(this.affiliateId).then(result => {
+			this.driverRes = result;
+			this.driverList = this.driverRes.data.data;
+		}).catch(err => {
+			console.error(err);
+		});
+    }
+
 	openGuide(slotKey: string) {
 		this.currentGuide = PHOTO_GUIDES[slotKey] ?? null;
 		this.pendingSlot = slotKey;
@@ -1080,7 +1095,10 @@ export class AddVehicleComponent implements OnInit {
 
 	
 	submitForm() {
-		this.addVehicleForm.patchValue({ acc_id: this.affiliateId });
+		this.addVehicleForm.patchValue({ acc_id: this.affiliateId, associatedDriver: this.addVehicleForm.value.associatedDriver 
+            ? Number(this.addVehicleForm.value.associatedDriver) 
+            : null
+		 });
 		this.pushValuesTypeOfService(this.service);
 		this.submittedForm = true;
 

@@ -1162,11 +1162,10 @@
 						</mat-label>
 						<mat-select formControlName="driver_id" placholder="Choose Driver"
 							(selectionChange)="autofillData('driver', $event.value)" [disabled]="true">
-							<mat-option *ngFor="let driver of DriverList" [value]="driver.id">
-								{{ driver.FirstName }} {{ driver.MiddleName != null ?
-								driver.MiddleName : ''
-								}} {{ driver.LastName }}
-							</mat-option>
+						<mat-option *ngFor="let driver of DriverList" [value]="driver.id">
+							{{ driver.FirstName }} {{ driver.MiddleName != null ? driver.MiddleName : '' }} {{ driver.LastName }}
+						</mat-option>
+
 						</mat-select>
 					</mat-form-field>
 					<div class="error-box"></div>

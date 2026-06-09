@@ -3533,6 +3533,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
+		this.SetFormValue('driver_id', selectedVehicle.associated_driver);
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
@@ -3576,6 +3577,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
 		this.SetFormValue('return_vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType)
+		this.SetFormValue('return_driver_id', selectedVehicle.associated_driver);
 		this.SetFormValue('return_vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('return_vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('return_vehicle_model', selectedVehicle.model_id);
@@ -3983,7 +3985,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 	fetchAffiliateDrivers(affiliate_id: number) {
 		if (!affiliate_id) {
-			console.error('Invalid Paramater affiliate_data', affiliate_id)
+			console.error('Invalid Parameter affiliate_data', affiliate_id)
 			return
 		}
 
@@ -4005,16 +4007,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 				if (!isValueSet) {
-					this.SetFormValue('driver_id', this.DriverList[0].id)
-					this.autofillData('driver', this.DriverList[0])
+					const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
+                    const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
+                    const fallbackDriver = matchedDriver || this.DriverList[0]
+                    this.SetFormValue('driver_id', fallbackDriver.id)
+                    this.autofillData('driver', fallbackDriver)
 				}
-
-				// autofill data
-				// if (this.DriverList.length == 1) {
-				// 	this.SetFormValue('driver_id', this.DriverList[0].id)
-				// 	this.autofillData('driver', this.DriverList[0])
-				// }
 			}
+			
 			this.$spinner.hide();
 		})
 	}

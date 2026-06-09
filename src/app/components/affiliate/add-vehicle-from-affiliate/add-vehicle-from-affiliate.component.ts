@@ -117,6 +117,9 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public duplicateVehicleId: string;
     public isDuplicateMode: boolean = false;
 
+	public driverRes: any;
+    public driverList: any[] = [];
+
 	constructor(
 		private affiliateService: AffiliateService,
 		private stateManagementService: StateManagementService,
@@ -227,6 +230,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			windowPermit2Image: [''],
 			usdotPermitImage: [''],
 			mcImage: [''],
+			associatedDriver: [null],
 		});
 
 		//Put Black color value by default in Color
@@ -362,7 +366,17 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				this.spinner.hide() //hide spinner
 			});
 		this.pushValuesTypeOfService(['local'])
+		this.loadDriver();
 	}
+
+	loadDriver() {
+		this.affiliateService.driverList(this.affiliateId).then(result => {
+			this.driverRes = result;
+			this.driverList = this.driverRes.data.data;
+		}).catch(err => {
+			console.error(err);
+		});
+    }
 
 	loadDuplicateVehicleData() {
 	if (!this.duplicateVehicleId) return;
@@ -425,6 +439,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			luggage: detail.luggage,
 			charterCancelPolicy: detail.charterCancelPolicy,
 			nonCharterCancelPolicy: detail.nonCharterCancelPolicy,
+			associatedDriver: (detail.associatedDriver !== undefined && detail.associatedDriver !== null) ? Number(detail.associatedDriver) : (detail.driver ? Number(detail.driver) : null),
 		});
 
 		const vehicleTypeField: any = document.getElementById('vehicleTypeField');
@@ -1060,6 +1075,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	submitForm() {
 		this.addVehicleForm.patchValue({
 			acc_id: this.affiliateId,
+			associatedDriver: this.addVehicleForm.value.associatedDriver ? Number(this.addVehicleForm.value.associatedDriver) : null
 		});
 
 		this.pushValuesTypeOfService(this.service)
@@ -1291,6 +1307,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 					luggage: detail.luggage,
 					charterCancelPolicy: detail.charterCancelPolicy,
 					nonCharterCancelPolicy: detail.nonCharterCancelPolicy,
+					associatedDriver: (detail.associatedDriver !== undefined && detail.associatedDriver !== null) ? Number(detail.associatedDriver) : (detail.driver ? Number(detail.driver) : null),
 				});
 
 				if (this.affiliateType != 'fleet_operator') {
