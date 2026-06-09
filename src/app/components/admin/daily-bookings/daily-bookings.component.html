@@ -165,10 +165,10 @@
 
 									<th>Pax</th>
 									<th>Driver</th>
-									<th style="width: 60px; word-break: break-word;">Trip Route</th>
+									<th>Trip Route</th>
 									<th>Created By</th>
 									<th>Booking Type</th>
-									<th style="min-width: 220px;">Vehicle</th>
+									<th>Vehicle</th>
 									<!-- <th>Status</th> -->
 								</tr>
 							</thead>
@@ -423,7 +423,7 @@
 											</ng-template>
 										</ng-template>
 									</td>
-									<td style="width: 60px; word-break: break-word; white-space: normal !important;">
+									<td>
 										<div class="trip-route-container">
 											<div class="address-layout">
 												<div class="address-main-row d-flex align-items-start">
@@ -473,7 +473,7 @@
 											{{ textFormatter(booking?.transfer_type) | titlecase }}
 										</span>
 									</td>
-									<td style="min-width: 220px;">
+									<td>
 										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
 									</td>
 									<!-- <td>
