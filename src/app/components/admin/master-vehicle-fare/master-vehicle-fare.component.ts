@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
@@ -192,14 +193,29 @@ export class MasterVehicleFareComponent implements OnInit {
 	}
 
 	prefillTheForm(current_selected_vehicle: number = 0) {
-		this.VehicleRateSettingsForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
-			value => {
-				this.VehicleRateSettingsForm.patchValue({ minimum_airport_arrival_rate: value });
-				this.VehicleRateSettingsForm.patchValue({ minimum_city_rate: value });
-				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_arrival_rate: value });
-				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_departure_rate: value });
-			}
-		);
+		this.VehicleRateSettingsForm.get('minimum_airport_departure_rate').valueChanges.pipe(
+			debounceTime(500) 
+			).subscribe(value => {
+				console.log('minimum_airport_departure_rate value:', value);
+
+				const arrivalRate = this.VehicleRateSettingsForm.get('minimum_airport_arrival_rate').value;
+				const cityRate = this.VehicleRateSettingsForm.get('minimum_city_rate').value;
+				const cruiseArrivalRate = this.VehicleRateSettingsForm.get('minimum_cruise_port_arrival_rate').value;
+				const cruiseDepartureRate = this.VehicleRateSettingsForm.get('minimum_cruise_port_departure_rate').value;
+
+				if (arrivalRate === 0 || arrivalRate === undefined || arrivalRate === null) {
+					this.VehicleRateSettingsForm.patchValue({ minimum_airport_arrival_rate: value });
+				}
+				if (cityRate === 0 || cityRate === undefined || cityRate === null) {
+					this.VehicleRateSettingsForm.patchValue({ minimum_city_rate: value });
+				}
+				if (cruiseArrivalRate === 0 || cruiseArrivalRate === undefined || cruiseArrivalRate === null) {
+					this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_arrival_rate: value });
+				}
+				if (cruiseDepartureRate === 0 || cruiseDepartureRate === undefined || cruiseDepartureRate === null) {
+					this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_departure_rate: value });
+				}
+		});
 		this.VehicleRateSettingsForm.get('hourly_rate').valueChanges.subscribe(
 			value => {
 				this.VehicleRateSettingsForm.patchValue({ hourly_rate_after_five_hours: value });
