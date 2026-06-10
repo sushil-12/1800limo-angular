@@ -165,6 +165,10 @@ export class SubAffiliateAccountsComponent implements OnInit {
     });
   }
 
+  addSubAffiliate() {
+		this.router.navigate(['/affiliate/add-sub-affiliate']);
+	}
+
   //for paginator
   counter() {
     var currentPage;

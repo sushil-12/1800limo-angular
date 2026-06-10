@@ -3580,6 +3580,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('return_vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType)
 		this.SetFormValue('return_driver_id', selectedVehicle.associated_driver);
+		this.SetFormValue('return_driver', selectedVehicle.associated_driver);
 		this.SetFormValue('return_vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('return_vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('return_vehicle_model', selectedVehicle.model_id);
