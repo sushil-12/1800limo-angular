@@ -3533,8 +3533,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
-		this.SetFormValue('driver_id', selectedVehicle.associated_driver);
-		this.autofillData('driver', selectedVehicle.associated_driver);
+		const driverValue = selectedVehicle.associated_driver || this.DriverList?.[0]?.id;
+		this.SetFormValue('driver_id', driverValue);
+		this.autofillData('driver', driverValue);
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('vehicle_model', selectedVehicle.model_id);

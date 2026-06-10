@@ -496,7 +496,7 @@
 						<!-- Minimum Airport Rate - Departure -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>
+								<mat-label style="margin-left:15px;">
 									Minimum Airport Rate - Departure <span class="asterisk">*</span>
 								</mat-label>
 								<!-- <span matPrefix
@@ -508,7 +508,7 @@
 								<!-- </ng-template> -->
 								<input matInput placeholder="Minimum Airport Rate - Departure"
 									(focus)="$event.target.select()" formControlName="minimum_airport_departure_rate"
-									type="number" (change)="updateRateRangeObject()" tabindex="1" />
+									type="number" (change)="updateRateRangeObject()" tabindex="1"  />
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.minimum_airport_departure_rate.errors || form.minimum_airport_departure_rate.touched && form.minimum_airport_departure_rate.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -524,7 +524,7 @@
 						<!-- Minimum Airport Rate - Arrival -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>
+								<mat-label style="margin-left:15px">
 									Minimum Airport Rate - Arrival <span class="asterisk">*</span>
 								</mat-label>
 								<!-- <span matPrefix
@@ -557,7 +557,7 @@
 						<!-- Minimum City to Intercity rate -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>
+								<mat-label style="margin-left:15px;">
 									Minimum City to Intercity rate <span class="asterisk">*</span>
 								</mat-label>
 								<!-- <span matPrefix
@@ -586,7 +586,7 @@
 						<!-- MIN. CRUISE PORT ARRIVAL RATE -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>
+								<mat-label style="margin-left:15px;">
 									Minimum Cruise Port Rate - Arrival <span class="asterisk">*</span>
 								</mat-label>
 								<!-- <span matPrefix
@@ -624,7 +624,7 @@
 						<!-- MIN. CRUISE PORT DEPARTURE RATE -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>
+								<mat-label style="margin-left:15px;">
 									Minimum Cruise Port Rate - Departure <span class="asterisk">*</span>
 								</mat-label>
 								<!-- <span matPrefix
@@ -653,7 +653,7 @@
 						<!-- Hourly Rate -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>
+								<mat-label style="margin-left:15px;">
 									Hourly Rate <span class="asterisk">*</span>
 								</mat-label>
 								<!-- <span matPrefix
@@ -704,7 +704,7 @@
 						<!-- Hourly Rate After 5 Hours -->
 						<div class="col-md-6 col-12">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>Discount After 5 Hours? <span class="asterisk">*</span></mat-label>
+								<mat-label style="margin-left:15px">Discount After 5 Hours? <span class="asterisk">*</span></mat-label>
 								<!-- <span matPrefix
 							*ngIf="form.hourly_rate_after_five_hours.value == null || form.hourly_rate_after_five_hours.value == ''; else hideZero2">{{currency_symbol}}
 							0 &nbsp;</span>
@@ -915,7 +915,7 @@
 						</div>
 						<div class="col-md-6">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
-								<mat-label>Wait Time Rate - per 15 min <span class="asterisk">*</span></mat-label>
+								<mat-label style="margin-left:15px">Wait Time Rate - per 15 min <span class="asterisk">*</span></mat-label>
 								<span matPrefix>{{currency_symbol}} &nbsp;</span>
 								<input matInput type="number" placeholder="Wait Time Rate - per 15 min"
 									(change)="updateRateRangeObject()" formControlName="wait_time_cost" tabindex="1"
@@ -1034,12 +1034,12 @@
 					<!-- AIRPORT ARRIVAL TAX -->
 					<div class="col-md-3">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
-							<mat-label>
+							<mat-label style="margin-left:15px">
 								Airport Arrival Tax
 							</mat-label>
 							<span matPrefix
 								*ngIf="form.airport_arrival_tax_per_us.value == null || form.airport_arrival_tax_per_us.value == ''; else hideZero14">
-								{{currency_symbol}} 0 &nbsp;
+								{{currency_symbol}} &nbsp;
 							</span>
 							<ng-template #hideZero14>
 								<span matPrefix>
@@ -1060,12 +1060,12 @@
 					<!-- AIRPORT DEPARTURE TAX -->
 					<div class="col-md-3">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
-							<mat-label>
+							<mat-label style="margin-left:15px">
 								Airport Departure Tax
 							</mat-label>
 							<span matPrefix
 								*ngIf="form.airport_departure_tax_per_us.value == null || form.airport_departure_tax_per_us.value == ''; else hideZero15">
-								{{currency_symbol}} 0 &nbsp;
+								{{currency_symbol}} &nbsp;
 							</span>
 							<ng-template #hideZero15>
 								<span matPrefix>
@@ -1086,12 +1086,12 @@
 					<!-- SEA PORT TAX -->
 					<div class="col-md-3">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
-							<mat-label>
+							<mat-label style="margin-left:15px">
 								Sea Port Tax
 							</mat-label>
 							<span matPrefix
 								*ngIf="form.sea_port_tax_per_us.value == null || form.sea_port_tax_per_us.value == ''; else hideZero16">
-								{{currency_symbol}} 0 &nbsp;
+								{{currency_symbol}} &nbsp;
 							</span>
 							<ng-template #hideZero16>
 								<span matPrefix>
@@ -1112,12 +1112,12 @@
 					<!-- CITY CONGESSION TAX -->
 					<div class="col-md-3">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
-							<mat-label>
+							<mat-label style="margin-left:15px">
 								City Congestion Tax
 							</mat-label>
 							<span matPrefix
 								*ngIf="form.city_congestion_tax_per_us.value == null || form.city_congestion_tax_per_us.value == ''; else hideZero17">
-								{{currency_symbol}} 0 &nbsp;</span>
+								{{currency_symbol}} &nbsp;</span>
 							<ng-template #hideZero17>
 								<span matPrefix>
 									{{currency_symbol}} &nbsp;
@@ -1145,7 +1145,7 @@
 						<div class="row">
 							<div class="col-12 col-md-6 cityTaxErrorMsg order-2 order-md-1">
 								<mat-form-field class="mat-form-field-rates mt-3" appearance="outline" class="cityTax">
-									<mat-label>City Tax</mat-label>
+									<mat-label style="margin-left:15px">City Tax</mat-label>
 									<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 									<input matInput placeholder="City Tax" formControlName="city_tax" tabindex="1"
 										autocomplete="off" />
@@ -1190,7 +1190,7 @@
 						<div class="row">
 							<div class="col-12 col-md-6 cityTaxErrorMsg order-2 order-md-1">
 								<mat-form-field class="mat-form-field-rates mt-3" appearance="outline" class="cityTax">
-									<mat-label>State Tax</mat-label>
+									<mat-label style="margin-left:15px">State Tax</mat-label>
 									<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 									<input matInput placeholder="State Tax" formControlName="state_tax" tabindex="1">
 								</mat-form-field>
@@ -1234,7 +1234,7 @@
 						<div class="row">
 							<div class="col-12 col-md-6 cityTaxErrorMsg order-2 order-md-1">
 								<mat-form-field class="mat-form-field-rates mt-3" appearance="outline" class="cityTax">
-									<mat-label>VAT</mat-label>
+									<mat-label style="margin-left:15px">VAT</mat-label>
 									<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 									<input matInput placeholder="VAT" formControlName="vat" tabindex="1">
 								</mat-form-field>
@@ -1277,7 +1277,7 @@
 						<div class="row">
 							<div class="col-12 col-md-6 cityTaxErrorMsg order-2 order-md-1">
 								<mat-form-field class="mat-form-field-rates mt-3" appearance="outline" class="cityTax">
-									<mat-label>Workman's Comp</mat-label>
+									<mat-label style="margin-left:15px">Workman's Comp</mat-label>
 									<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 									<input matInput placeholder="Workman's Comp" formControlName="workmans_comp"
 										tabindex="1">
@@ -1323,7 +1323,7 @@
 						<div class="row">
 							<div class="col-12 col-md-6 cityTaxErrorMsg order-2 order-md-1">
 								<mat-form-field class="mat-form-field-rates mt-3" appearance="outline" class="cityTax">
-									<mat-label>Other Transportation Tax</mat-label>
+									<mat-label style="margin-left:15px">Other Transportation Tax</mat-label>
 									<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 									<input matInput placeholder="Other Transportation Tax"
 										formControlName="other_transportation_tax" tabindex="1">
