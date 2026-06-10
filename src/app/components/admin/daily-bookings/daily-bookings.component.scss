@@ -809,7 +809,7 @@ a.dropdown-item {
 
 .address-layout {
 	display: block;
-	max-width: 250px;
+	max-width: 420px;
 
 	.address-main-row {
 		display: flex;
@@ -824,6 +824,7 @@ a.dropdown-item {
 		line-height: 1.4;
 		font-size: 14px;
 		flex: 1;
+		min-width: 380px;
 	}
 
 	.toggle-link {
@@ -903,7 +904,7 @@ a.dropdown-item {
 // Trip Route icon styling with connecting line
 .trip-route-container {
 	display: block;
-	width: auto; // Allow container to shrink to fit content width (20ch)
+	min-width: 420px;
 
 	.route-icon-wrapper {
 		position: relative;
