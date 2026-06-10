@@ -63,11 +63,10 @@ Fleet/Coach Operators
 <li>With our free software and app, you can view your past, present and future bookings. You can also view your daily, weekly, monthly and annual income statement.</li>
 <li>We’ll send you business that fits your schedule. Set your own hours and rates. We work as a team.</li>
 <li>You can accept or reject any booking.</li>
-<li>We add a 20% gratuity to every booking, so you can keep your tips. Our customers know a competitive rate and will tip extra if they like you. The best compliment is if they ask for you again.</li>
+<li>Our customers know a competitive rate and will tip extra if they like you. The best compliment is if they ask for you again.</li>
 <li>We take a 25% commission.</li>
 <li>Be as competitive as the market demands. You can change your rates in real time.</li>
 <li>You’ll get paid in 3 business days after funds are collected from the client.</li>
-<li>You’ll get a 1099 at the end of the year.</li>
 <li>You are responsible for all local, state and federal taxes.</li>
 <li>Be friendly, stay in a good mood, be helpful with luggage and the door, appreciate their patronage, befriend the clients we send you and turn them into repeat customers.</li>
 </ul>`
@@ -117,20 +116,10 @@ Fleet/Coach Operators
         question: "Can I solicit the passenger for personal business?",
         answer: "No, drivers nor customers should solicit each other."
     },
-    {
+     {
         category: 'earnings',
         question: "How much commission do I pay?",
         answer: "We take a 25% commission – taxes, tolls, and any other expenses are paid by the client to you directly. You are responsible for paying all local, state and federal taxes."
-    },
-    {
-        category: 'earnings',
-        question: "Do I keep my tips?",
-        answer: "Yes, we automatically add a 20% gratuity to each booking. We will encourage our customers to hand tip extra for excellent service. Let your personality shine."
-    },
-    {
-        category: 'operations',
-        question: "How are driver and customer disputes handled?",
-        answer: "We are the mediator. We’ll look at both sides and decide. Email: Disputes@1800limo.com. We want quick action and expect any dispute to be resolved within 24 hours."
     },
     {
         category: 'earnings',
