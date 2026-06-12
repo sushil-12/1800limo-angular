@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { io, Socket } from 'socket.io-client';
+import { environment } from '../../../../environments/environment';
 
 declare var google: any;
 
@@ -132,7 +133,7 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
   private initializeSocket(): void {
     // Get tracking_id from route parameter (encoded customerId)
     const encodedUserId = this.route.snapshot.paramMap.get('tracking_id');
-    const userId = this.decodeId(encodedUserId);
+    const userId = encodedUserId;
 
     console.log('Initializing socket with tracking_id:', encodedUserId, 'decoded userId:', userId);
 
@@ -143,9 +144,10 @@ export class LiveRideTrackingComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     // Store userId for room joining (this is the customerId)
+    //@ts-ignore
     this.currentUserId = userId;
 
-    const socketUrl = 'https://limortservice.1800limo.com';
+    const socketUrl = environment.production ? 'https://limortservice.1800limo.com' : 'https://limortservice.infodevbox.com';
     console.log('Connecting to socket URL:', socketUrl);
 
     try {
