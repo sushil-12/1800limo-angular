@@ -133,6 +133,14 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 	distance_for_rates: string = ''
 	amenities: Array<string> = []
 
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline'],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			['clean']
+		]
+	};
+
 	init_rates: boolean = false
 	init_return_rates: boolean = false
 	is_loose_customer_unique: boolean = false
@@ -325,6 +333,11 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 			});
 		}
 
+	}
+
+	onInstructionsEditorCreated(editor: any): void {
+		// Optional: focus or configure editor instance
+		editor.focus();
 	}
 
 	initAutocomplete(input: ElementRef | HTMLInputElement, control: string, index?: number, is_return: boolean = false) {

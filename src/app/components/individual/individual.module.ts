@@ -35,9 +35,7 @@ import { FamilyMembersComponent } from './family-members/family-members.componen
 import { FamilyMemberAccountComponent } from './family-member-account/family-member-account.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
-
-
-
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
 	declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent, FamilyMemberAccountComponent],
@@ -70,6 +68,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 			separator: ' - ',
 			applyLabel: 'Okay',
 		}),
+		QuillModule
 	]
 })
 export class IndividualModule { }

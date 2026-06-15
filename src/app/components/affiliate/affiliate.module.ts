@@ -59,8 +59,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
-
+import { QuillModule } from 'ngx-quill';
 @NgModule({
 	declarations: [
 		AffiliateComponent,
@@ -122,6 +121,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 			separator: ' - ',
 			applyLabel: 'Okay',
 		}),
+		QuillModule
 	],
 	providers: [],
 	exports: [

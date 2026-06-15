@@ -95,6 +95,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	booking_id: number = 0
 	newBooking: boolean = false
 
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline'],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			['clean']
+		]
+	};
+
 	driver_image: Record<string, any> = {}
 	vehicle_image: Record<string, any> = {}
 
@@ -386,6 +394,12 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	getExtraStopFieldKey(isReturn: boolean, index: number): string {
 		return `${isReturn ? 'return_extra_stops' : 'extra_stops'}:${index}`;
+	}
+
+
+	onInstructionsEditorCreated(editor: any): void {
+		// Optional: focus or configure editor instance
+		editor.focus();
 	}
 
 	private parseExtraStopFieldKey(fieldName: string): { formArrayName: 'extra_stops' | 'return_extra_stops'; index: number } | null {
