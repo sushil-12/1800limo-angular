@@ -170,6 +170,15 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 	blockaddressfield: boolean = false;
 	previousBookingData: any = null;
 	numberOfHoursError: boolean = false;
+
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline'],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			['clean']
+		]
+	};
+
 	private isClearingSelection = false;
 	private bookingAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
 	constructor(
@@ -296,6 +305,10 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 		tryAttach(attempts);
 	}
 
+	onInstructionsEditorCreated(editor: any): void {
+	 // Optional: focus or configure editor instance
+	 editor.focus();
+	}
 
 	initphonefield() {
 		const getInitCountry = (group: string, controlName: string) => {

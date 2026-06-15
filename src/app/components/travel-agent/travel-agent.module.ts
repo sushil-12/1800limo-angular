@@ -39,8 +39,7 @@ import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub
 import { PayoutsComponent } from './payouts/payouts.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { BookingPreviewModule } from '../affiliate/booking-preview/booking-preview.module';
-
-
+import {QuillModule} from 'ngx-quill';
 
 @NgModule({
 	declarations: [
@@ -84,7 +83,8 @@ import { BookingPreviewModule } from '../affiliate/booking-preview/booking-previ
 		MatExpansionModule,
 		MatIconModule,
 		ClipboardModule,
-		BookingPreviewModule
+		BookingPreviewModule,
+		QuillModule
 	],
 	exports: [
 		TravelAgentComponent,

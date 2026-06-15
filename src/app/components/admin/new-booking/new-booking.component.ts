@@ -116,6 +116,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	driver_image: Record<string, any> = {}
 	vehicle_image: Record<string, any> = {}
 
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline'],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			['clean']
+		]
+	};
+
 	BigData: any
 	BigData_COPY: any
 	AffiliateInformation: Record<string, any> = {}
@@ -306,6 +314,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.booking_created_from = 'subscriber'
 		}
 
+	}
+
+	onInstructionsEditorCreated(editor: any): void {
+	 // Optional: focus or configure editor instance
+	 editor.focus();
 	}
 
 	ngOnDestroy(): void {

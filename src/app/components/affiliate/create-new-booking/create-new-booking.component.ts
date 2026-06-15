@@ -91,6 +91,14 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	booking_id: number = 0
 	affiliate_id: any = null;
 
+	quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline'],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			['clean']
+		]
+	};
+
 	driver_image: Record<string, any> = {}
 	vehicle_image: Record<string, any> = {}
 
@@ -434,6 +442,11 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 			return false;
 		}
 		return true;
+	}
+
+	onInstructionsEditorCreated(editor: any): void {
+	 // Optional: focus or configure editor instance
+	 editor.focus();
 	}
 
 	validatePhoneGeneric(control: any, telInputObject: any) {
