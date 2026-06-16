@@ -1,6 +1,6 @@
 import { MapUtils } from '../../../utils/map-utils';
 import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
-import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck, distinctUntilChanged } from 'rxjs/operators';
@@ -27,7 +27,8 @@ declare var $: any
 @Component({
 	selector: 'app-new-booking',
 	templateUrl: './new-booking.component.html',
-	styleUrls: ['./new-booking.component.scss']
+	styleUrls: ['./new-booking.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class NewBookingComponent implements OnInit, OnDestroy {
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
@@ -1674,8 +1675,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
-		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('booking_instructions', "");
+		this.SetFormValue('return_booking_instructions', "");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -5204,13 +5205,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.BookingForm.get('return_dropoff')?.updateValueAndValidity();
 
 			if (value.includes("city_")) {
-				this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+				this.SetFormValue('return_booking_instructions', "");
 			}
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
 				if (value.includes("cruise_")) {
-					this.SetFormValue('return_booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when ship has arrived.");
+					this.SetFormValue('return_booking_instructions', "");
 				}
 				this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
 				this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
@@ -5237,7 +5238,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 
 			if (value.includes('airport_')) {
-				this.SetFormValue('return_booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when plane has arrived.");
+				this.SetFormValue('return_booking_instructions', "");
 				this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
 				this.BookingForm.get('return_pickup_airline_option').setValidators([Validators.required]);
@@ -5529,13 +5530,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			this.transfer_type = value;
 			// this.initAllAutocompletes()
 			if (value.includes("city_")) {
-				this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+				this.SetFormValue('booking_instructions', "");
 			}
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
 				if (value.includes("cruise_")) {
-					this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when ship has arrived.");
+					this.SetFormValue('booking_instructions', "");
 				}
 				console.log("setting value of cruise port and name mandatory")
 				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
@@ -5571,7 +5572,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			}
 
 			if (value.includes('airport_')) {
-				this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when plane has arrived.");
 				console.log("setting value of pickup flight mandatory")
 				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('pickup_flight').updateValueAndValidity();
@@ -5664,13 +5664,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			// this.initAllAutocompletes()
 			if (this.BookingForm.get('service_type').value == 'round_trip') {
 				if (value.includes("city_")) {
-					this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+					this.SetFormValue('return_booking_instructions', "");
 				}
 
 				// set cruise ship name and cruise port mandatory
 				if (value.includes('_cruise') || value.includes('cruise_')) {
 					if (value.includes("cruise_")) {
-						this.SetFormValue('return_booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when ship has arrived.");
+						this.SetFormValue('return_booking_instructions', "");
 					}
 					console.log("setting value of return cruise port and name mandatory")
 					this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
@@ -5706,7 +5706,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 
 				if (value.includes('airport_')) {
-					this.SetFormValue('return_booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when plane has arrived.");
 					console.log("setting value of return pickup flight mandatory")
 					this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
 					this.BookingForm.get('return_pickup_flight').updateValueAndValidity();

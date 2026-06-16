@@ -1986,11 +1986,9 @@
 			<!-- Extra Stops -->
 			<div class="row mt-3">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-					<h4 class="m-0">
-						Extra Stops
-					</h4>
-					<div class="mx-4">
+					<div class="px-2">
 						<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
+							<i class="fa fa-plus" style="margin-right: 6px;"></i>
 							Add Stop
 						</button>
 					</div>
@@ -3032,11 +3030,9 @@
 			<!-- Extra Stops -->
 			<div class="row my-3 justify-items-end">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-					<h4 class="m-0">
-						Extra Stops
-					</h4>
-					<div class="mx-4">
+					<div class="px-2">
 						<button type="button" class="custom-filled-button" (click)="addExtraStop(true)">
+							<i class="fa fa-plus" style="margin-right: 6px;"></i>
 							Add Stop
 						</button>
 					</div>
@@ -3097,13 +3093,11 @@
 			</div>
 
 			<!-- Extra Stop Address Field Ends -->
-
-
 			<div class="col-md-12 my-2">
 			    <quill-editor
 					formControlName="return_booking_instructions"
 					[modules]="quillModules"
-					placeholder="Special Instructions / Exact Building Name"
+					placeholder="Return Special Instructions / Exact Building Name"
 					(onEditorCreated)="onInstructionsEditorCreated($event)"
 					[styles]="{'min-height': '150px', 'background': '#fff', 'border-radius': '4px'}">
 				</quill-editor>

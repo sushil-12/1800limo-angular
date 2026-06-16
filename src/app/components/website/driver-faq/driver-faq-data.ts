@@ -115,10 +115,10 @@ Fleet/Coach Operators
         question: "Can I solicit the passenger for personal business?",
         answer: "No, drivers nor customers should solicit each other."
     },
-     {
+    {
         category: 'earnings',
         question: "How much commission do I pay?",
-        answer: "We take a 25% commission – taxes, tolls, and any other expenses are paid by the client to you directly. You are responsible for paying all local, state and federal taxes."
+        answer: "We add 25% premium – taxes, tolls, and any other expenses are paid by the client to you directly. You are responsible for paying all local, state and federal taxes."
     },
     {
         category: 'earnings',
