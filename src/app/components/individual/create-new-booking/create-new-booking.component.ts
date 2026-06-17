@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, isDevMode, AfterViewInit, ViewChildren, QueryList, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode, AfterViewInit, ViewChildren, QueryList, OnDestroy} from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { AdminService } from '../../../services/admin.service';
@@ -20,8 +20,7 @@ declare var $: any
 @Component({
 	selector: 'app-create-new-booking',
 	templateUrl: './create-new-booking.component.html',
-	styleUrls: ['./create-new-booking.component.scss'],
-	encapsulation: ViewEncapsulation.None
+	styleUrls: ['./create-new-booking.component.scss']
 })
 export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('pickupInput') pickupInput!: ElementRef<HTMLInputElement>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, EventEmitter, isDevMode, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, EventEmitter, isDevMode, QueryList, ViewChildren } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,7 +23,6 @@ declare var $: any
 	selector: 'app-create-new-booking',
 	templateUrl: './create-new-booking.component.html',
 	styleUrls: ['./create-new-booking.component.scss'],
-	encapsulation: ViewEncapsulation.None
 })
 export class CreateNewBookingComponent implements OnInit, OnDestroy {
 	@ViewChild('pickupInput') pickupInput!: ElementRef;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +15,6 @@ import Quill from 'quill';
   selector: 'app-loose-affiliate-accounts',
   templateUrl: './loose-affiliate-accounts.component.html',
   styleUrls: ['./loose-affiliate-accounts.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class LooseAffiliateAccountsComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;

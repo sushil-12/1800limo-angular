@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, isDevMode } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { AdminService } from '../../../services/admin.service';
@@ -23,7 +23,6 @@ declare var $: any
 	selector: 'app-create-booking',
 	templateUrl: './create-booking.component.html',
 	styleUrls: ['./create-booking.component.scss'],
-	encapsulation: ViewEncapsulation.None
 })
 export class CreateBookingComponent implements OnInit, OnDestroy {
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;

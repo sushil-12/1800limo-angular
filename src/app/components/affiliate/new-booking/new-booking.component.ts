@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren,  isDevMode } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
@@ -23,7 +23,7 @@ declare var $: any
 	selector: 'app-new-booking',
 	templateUrl: './new-booking.component.html',
 	styleUrls: ['./new-booking.component.scss'],
-	encapsulation: ViewEncapsulation.None
+
 })
 export class NewBookingComponent implements OnInit, OnDestroy {
 

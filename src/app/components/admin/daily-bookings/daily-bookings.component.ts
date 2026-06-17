@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy, ViewEncapsulation } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from "@angular/core";
 import { AdminService } from "../../../services/admin.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -30,7 +30,6 @@ import Quill from "quill";
 	templateUrl: "./daily-bookings.component.html",
 	styleUrls: ["./daily-bookings.component.scss"],
 	providers: [BsDatepickerConfig], // Optional: Provide config if customizing globally
-    encapsulation: ViewEncapsulation.None
 })
 export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('bookingPreviewModal') bookingPreviewModal: any;

@@ -1,6 +1,6 @@
 import { MapUtils } from '../../../utils/map-utils';
 import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
-import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck, distinctUntilChanged } from 'rxjs/operators';
@@ -28,7 +28,6 @@ declare var $: any
 	selector: 'app-new-booking',
 	templateUrl: './new-booking.component.html',
 	styleUrls: ['./new-booking.component.scss'],
-	encapsulation: ViewEncapsulation.None
 })
 export class NewBookingComponent implements OnInit, OnDestroy {
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;

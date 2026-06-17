@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -16,7 +16,7 @@ declare var $: any;
 	selector: 'app-affiliate-accounts',
 	templateUrl: './affiliate-accounts.component.html',
 	styleUrls: ['./affiliate-accounts.component.scss'],
-	encapsulation: ViewEncapsulation.None
+	
 })
 export class AffiliateAccountsComponent implements OnInit {
 	private readonly affiliateSearchStorageKey = 'affiliateSearch';
