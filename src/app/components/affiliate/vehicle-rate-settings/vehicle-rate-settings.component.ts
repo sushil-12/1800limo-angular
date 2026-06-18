@@ -4,10 +4,10 @@ import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { StateManagementService } from '../../../services/statemanagement.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { AiRateScoreDialogComponent, AiRateScoreDialogData } from '../../admin/ai-rate-score-calculator/ai-rate-score-dialog.component';
+import { AiRateScoreService } from '../../../services/ai-rate-score.service';
 
 declare var $: any;
 
@@ -40,7 +40,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 		private $form: FormBuilder,
 		private $route: ActivatedRoute,
 		private $spinner: NgxSpinnerService,
-		private dialog: MatDialog
+		private dialog: MatDialog,
+		private aiRateScoreService: AiRateScoreService
 	) { }
 
 	ngOnInit(): void {
@@ -94,26 +95,66 @@ export class VehicleRateSettingsComponent implements OnInit {
 		return (isNaN(a) || a === 0) && (isNaN(d) || d === 0);
 	}
 
-	openAiRateScoreDialog(): void {
+	/** AI rate suggestions shown inline under each field + an accept bar. */
+	aiLoading = false;
+	aiError: string | null = null;
+	aiSuggestions: Record<string, number> | null = null;
+	aiNotes: Record<string, string> | null = null;
+	aiScore: number | null = null;
+	aiSummary = '';
+
+	/** Fetch AI-suggested rates for the current form values. */
+	getAiRates(): void {
 		if (!this.VehicleRateSettingsForm) return;
+		this.aiLoading = true;
+		this.aiError = null;
+		this.aiSuggestions = null;
+		this.aiNotes = null;
+		this.aiScore = null;
+		this.aiSummary = '';
+
 		const kmMile = this.VehicleRateSettingsForm.get('km_mile')?.value;
-		const unit = kmMile === 'kilometer' ? 'kilometer' : 'mile';
-		const data: AiRateScoreDialogData = {
-			ratesData: this.VehicleRateSettingsForm.value,
-			vehicleContext: {
-				vehicleType: this.vehicle_info?.vehicleType || 'Vehicle',
-				currency: this.VehicleRateSettingsForm.get('currency')?.value || 'USD',
-				currencySymbol: this.currency_symbol || '$',
-				unit,
-			},
+		const payload = {
+			rates: this.aiRateScoreService.sanitizeRates(this.VehicleRateSettingsForm.value),
+			vehicleType: this.vehicle_info?.vehicleType || 'Vehicle',
+			currency: this.VehicleRateSettingsForm.get('currency')?.value || 'USD',
+			unit: (kmMile === 'kilometer' ? 'kilometer' : 'mile') as 'mile' | 'kilometer',
 		};
-		this.dialog.open(AiRateScoreDialogComponent, {
-			width: 'min(560px, calc(100vw - 2rem))',
-			maxWidth: '95vw',
-			maxHeight: '95vh',
-			data,
-			panelClass: 'ai-rate-score-dialog-panel',
-		});
+
+		this.aiRateScoreService.calculateScore(payload)
+			.pipe(finalize(() => (this.aiLoading = false)))
+			.subscribe({
+				next: (res) => {
+					this.aiScore = res.score;
+					this.aiSummary = res.summary || '';
+					this.aiSuggestions = res.suggestedRates || {};
+					this.aiNotes = res.rateNotes || {};
+					if (!Object.keys(this.aiSuggestions).length) {
+						this.aiError = 'Your rates look competitive — no changes suggested.';
+					}
+				},
+				error: (err) => {
+					this.aiError = err?.message || 'Could not get AI suggestions. Please try again.';
+				},
+			});
+	}
+
+	/** Apply every AI-suggested rate to the form, then clear the bar. */
+	acceptAiRates(): void {
+		if (this.aiSuggestions && Object.keys(this.aiSuggestions).length) {
+			this.VehicleRateSettingsForm.patchValue(this.aiSuggestions);
+			this.VehicleRateSettingsForm.updateValueAndValidity();
+		}
+		this.dismissAiRates();
+	}
+
+	/** Clear the AI suggestions without applying them. */
+	dismissAiRates(): void {
+		this.aiSuggestions = null;
+		this.aiNotes = null;
+		this.aiScore = null;
+		this.aiSummary = '';
+		this.aiError = null;
 	}
 
 	/**

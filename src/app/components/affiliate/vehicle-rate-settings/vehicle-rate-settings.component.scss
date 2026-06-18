@@ -501,4 +501,41 @@ div#rate-manager-slider {
 			display: none;
 		}
 	}
+
+	&.active {
+		background: #4f46e5;
+	}
+}
+
+.ai-rate-score-inline {
+	position: relative;
+	max-width: 640px;
+	margin: 1.5rem auto 6rem;
+	padding: 1.25rem;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 16px;
+	box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+
+	.ai-inline-close {
+		position: absolute;
+		top: 0.75rem;
+		right: 0.75rem;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		background: #f3f4f6;
+		color: #374151;
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+		transition: background 0.2s;
+
+		&:hover {
+			background: #e5e7eb;
+		}
+	}
 }
