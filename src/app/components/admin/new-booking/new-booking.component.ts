@@ -3546,7 +3546,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
-		const driverValue = selectedVehicle.associated_driver || this.DriverList?.[0]?.id;
+		const isEditMode = ['edit', 'repeat', 'return', 'round'].includes(this.updateType);
+		const isOriginalVehicle = isEditMode && selectedVehicle.ID == this.firstLoadVehicleId;
+		console.log('[handleSelectVehicleType] updateType:', this.updateType, '| isOriginalVehicle:', isOriginalVehicle, '| firstLoadVehicleId:', this.firstLoadVehicleId, '| selectedVehicle.ID:', selectedVehicle.ID, '| bookingResponse?.driver_id:', this.bookingResponse?.driver_id, '| selectedVehicle.associated_driver:', selectedVehicle.associated_driver);
+		const driverValue = (isOriginalVehicle && this.bookingResponse?.driver_id)
+			? this.bookingResponse.driver_id
+			: (selectedVehicle.associated_driver || this.DriverList?.[0]?.id);
+		console.log('[handleSelectVehicleType] resolved driverValue:', driverValue);
 		this.SetFormValue('driver_id', driverValue);
 		this.autofillData('driver', driverValue);
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
@@ -3592,8 +3598,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
 		this.SetFormValue('return_vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType)
-		this.SetFormValue('return_driver_id', selectedVehicle.associated_driver);
-		this.SetFormValue('return_driver', selectedVehicle.associated_driver);
+		const isReturnEditMode = ['edit', 'repeat', 'return', 'round'].includes(this.updateType);
+		const isOriginalReturnVehicle = isReturnEditMode && selectedVehicle.ID == this.bookingResponse?.return_vehicle_id;
+		console.log('[handleReturnSelectVehicleType] updateType:', this.updateType, '| isOriginalReturnVehicle:', isOriginalReturnVehicle, '| bookingResponse?.return_vehicle_id:', this.bookingResponse?.return_vehicle_id, '| selectedVehicle.ID:', selectedVehicle.ID, '| bookingResponse?.return_driver_id:', this.bookingResponse?.return_driver_id, '| selectedVehicle.associated_driver:', selectedVehicle.associated_driver);
+		const returnDriverValue = (isOriginalReturnVehicle && this.bookingResponse?.return_driver_id)
+			? this.bookingResponse.return_driver_id
+			: selectedVehicle.associated_driver;
+		console.log('[handleReturnSelectVehicleType] resolved returnDriverValue:', returnDriverValue);
+		this.SetFormValue('return_driver_id', returnDriverValue);
+		this.SetFormValue('return_driver', returnDriverValue);
 		this.SetFormValue('return_vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('return_vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('return_vehicle_model', selectedVehicle.model_id);
