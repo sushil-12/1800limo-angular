@@ -740,7 +740,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Early AM / Late PM Surge Rate</mat-label>
+						<mat-label style="margin-left:15px">Early AM / Late PM Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<mat-select formControlName="early_late_charges" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
@@ -759,7 +759,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Friday/Saturday Night Surge Rate</mat-label>
+						<mat-label style="margin-left:15px">Friday/Saturday Night Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<mat-select formControlName="friday_saturday_charges" tabindex="1"
 							(onSelectionChange)="updateRateRangeObject()">
@@ -962,7 +962,7 @@
 			<div class="row ">
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Airport Arrival Tax</mat-label>
+						<mat-label style="margin-left:15px">Airport Arrival Tax</mat-label>
 						<span matPrefix
 							*ngIf="f.airport_arrival_tax_per_us.value == null || f.airport_arrival_tax_per_us.value == ''; else hideZero12">{{currencySymbol}}
 							&nbsp;</span>
@@ -979,7 +979,7 @@
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Airport Departure Tax</mat-label>
+						<mat-label style="margin-left:15px">Airport Departure Tax</mat-label>
 						<span matPrefix
 							*ngIf="f.airport_departure_tax_per_us.value == null || f.airport_departure_tax_per_us.value == ''; else hideZero13">{{currencySymbol}}
 							&nbsp;</span>
@@ -997,7 +997,7 @@
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Sea Port Tax</mat-label>
+						<mat-label style="margin-left:15px">Sea Port Tax</mat-label>
 						<span matPrefix
 							*ngIf="f.sea_port_tax_per_us.value == null || f.sea_port_tax_per_us.value == ''; else hideZero14">{{currencySymbol}}
 							&nbsp;</span>
@@ -1014,7 +1014,7 @@
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>City Congestion Tax</mat-label>
+						<mat-label style="margin-left:15px">City Congestion Tax</mat-label>
 						<span matPrefix
 							*ngIf="f.city_congestion_tax_per_us.value == null || f.city_congestion_tax_per_us.value == ''; else hideZero15">{{currencySymbol}}
 							&nbsp;</span>

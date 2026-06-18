@@ -658,33 +658,53 @@ export class EditVehicleRatesComponent implements OnInit {
 	}
 
 	resetForm() {
-		// this.addVehicleRatesForm.reset();
-		this.buildVehicleRateForm();
-		this.adminService.getVehicleInfo(this.vehicleId)
-			.pipe(
-				catchError(err => {
-					// this.stateManagementService.setprogressBar(false);
-					return throwError(err);
-				})
-			).subscribe(({ data }: any) => {
-				if (data.amenities) {
-					Object.entries(data.amenities).forEach(
-						([key, value]) => {
-							console.log(key, value)
-							this.amenites_rates.addControl(key, this.resetAmenties(value))
-						}
-					);
-				}
-			})
-		// this.SetFormValue("km_mile", "mile")
-	}
+    const keepValues = {
+        id: this.addVehicleRatesForm.get('id').value,
+        vehicle_id: this.addVehicleRatesForm.get('vehicle_id').value,
+    };
+
+    this.addVehicleRatesForm.reset();
+
+    this.addVehicleRatesForm.patchValue(keepValues);
+
+    // re-apply defaults that reset() wipes out (since most controls have no default in this form)
+    this.addVehicleRatesForm.patchValue({
+        km_mile: 'mile',
+        hours_day_rate: 8,
+        gratuity: '20',
+        is_gratuity: 'yes',
+        minimum_charter_hours: 2,
+        wait_time_cost: 0,
+        wait_time_unit: 'minute',
+        wait_time_value: '15',
+        city_tax_percent_flat: 'flat',
+        state_tax_percent_flat: 'flat',
+        vat_percent_flat: 'flat',
+        rate_range_percent_flat: 'flat',
+        workman_comp_percent_flat: 'flat',
+        other_transportation_tax_percent_flat: 'flat',
+    });
+
+    this.km_mile_switch('mile');
+    this.initRateRangeObject();
+
+    // re-fetch amenities into the SAME amenites_rates FormGroup, not a new one
+    this.adminService.getVehicleInfo(this.vehicleId)
+        .pipe(catchError(err => throwError(err)))
+        .subscribe(({ data }: any) => {
+            if (data.amenities) {
+                Object.entries(data.amenities).forEach(([key, value]) => {
+                    if (this.amenites_rates.contains(key)) {
+                        this.amenites_rates.get(key).patchValue({ ...(value as object), price: 0 });
+                    } else {
+                        this.amenites_rates.addControl(key, this.resetAmenties(value));
+                    }
+                });
+            }
+        });
+}
+
 	resetAmenties(e) {
 		return this.formBuilder.group({ ...e, price: 0 })
 	}
-
-
-	// SetFormValue(form_control: string, value: any) {
-	// 	this.addVehicleRatesForm.get(form_control).setValue(value)
-	// 	this.addVehicleRatesForm.updateValueAndValidity()
-	// }
 }
