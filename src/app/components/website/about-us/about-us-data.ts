@@ -174,7 +174,7 @@ export const aboutUsData = {
         title: "Our “UNIQUE SELLING PROPOSITION” (USP)",
         content: [
             "1-800-LIMO.COM enables drivers and Fleet/Coach operators to offer their services worldwide at the lowest available rates. Backed by over 30 years of livery experience, more than 1 million driven miles, and 17+ years online, we are a global dispatch company not a Technology Network Company, focused on personalized, accountable service. With over 900 affiliates and growing, travelers can easily search and book quality transportation in any city, for any vehicle type or group size.",
-            "We own each reservation and take full responsibility for every booking and your safety. Affiliates provide their lowest rates to stay competitive, while drivers can add up to 20% gratuity to ensure fair earnings and well-maintained vehicles. We prohibit illegal, uninsured, or uninspected operators and maintain one of the industry’s most extensive background check policies. Customers can rate and review drivers to uphold high standards. Our mobile app is coming soon, along with a 30% shared-ride discount and newer minivans and SUVs for added comfort and space. "
+            "We own each reservation and take full responsibility for every booking and your safety. Affiliates provide their lowest rates to stay competitive, while drivers ensure fair earnings and well-maintained vehicles. We prohibit illegal, uninsured, or uninspected operators and maintain one of the industry’s most extensive background check policies. Customers can rate and review drivers to uphold high standards. Our mobile apps are now live, offering shared rides in newer minivans and SUVs for enhanced comfort and extra luggage space."
         ],
         image: "assets/images/prearranged-about.png",
         buttonText: "Learn More"
@@ -182,8 +182,8 @@ export const aboutUsData = {
     personalDriver: {
         title: "“Your personal driver everywhere.”",
         content: [
-            "Our vision is to combine on-demand convenience with true reliability,no matter the vehicle or rate. We’re not a middleman; we take full responsibility for every reservation, client, and your safety. Affiliates submit their lowest rates to keep fleets operating efficiently, and drivers may add up to 20% gratuity to ensure fair earnings and well-maintained vehicles.",
-            "We offer full transparency: the rate you see is the rate the driver sees. We do not mark up all-inclusive rates. Customers have 24/7 access to their accounts and reports. We prohibit illegal or uninsured operators and uninspected vehicles, and we maintain one of the industry’s most extensive background check standards, including state certification. Riders can rate and review drivers to uphold top performance. Our mobile app is coming soon, featuring a 30% shared-ride discount and newer minivans and SUVs for added comfort and luggage space."
+            "Our vision is to combine on-demand convenience with true reliability,no matter the vehicle or rate. We’re not a middleman; we take full responsibility for every reservation, client, and your safety. Affiliates submit their lowest rates to keep fleets operating efficiently.",
+            "We offer full transparency: the rate you see is the rate the driver sees. We do not mark up all-inclusive rates. Customers have 24/7 access to their accounts and reports. We prohibit illegal or uninsured operators and uninspected vehicles, and we maintain one of the industry’s most extensive background check standards, including state certification. Riders can rate and review drivers to uphold top performance. Our mobile apps are now live, offering shared rides in newer minivans and SUVs for enhanced comfort and extra luggage space."
         ],
         image: "assets/images/personal_driver.jpg",
         buttonText: "Learn More"

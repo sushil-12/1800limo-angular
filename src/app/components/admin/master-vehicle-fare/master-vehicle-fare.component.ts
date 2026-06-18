@@ -93,6 +93,7 @@ export class MasterVehicleFareComponent implements OnInit {
 		console.log('Setting Value of ', form_control, ': ', value)
 		this.VehicleRateSettingsForm.get(form_control).setValue(value)
 		this.VehicleRateSettingsForm.updateValueAndValidity()
+
 	}
 
 
@@ -216,6 +217,24 @@ export class MasterVehicleFareComponent implements OnInit {
 					this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_departure_rate: value });
 				}
 		});
+		
+		// Add this subscription for minimum_cruise_port_arrival_rate
+		this.VehicleRateSettingsForm.get('minimum_cruise_port_arrival_rate').valueChanges.pipe(
+			debounceTime(500)
+		).subscribe(value => {
+			console.log('minimum_cruise_port_arrival_rate value:', value);
+			
+			const departureRate = this.VehicleRateSettingsForm.get('minimum_cruise_port_departure_rate').value;
+			
+			// Only update departure if it's 0 or null/undefined
+			if (departureRate === 0 || departureRate === undefined || departureRate === null) {
+				this.VehicleRateSettingsForm.patchValue({ 
+					minimum_cruise_port_departure_rate: value 
+				});
+			}
+			// If departure already has a value, do nothing
+		});
+
 		this.VehicleRateSettingsForm.get('hourly_rate').valueChanges.subscribe(
 			value => {
 				this.VehicleRateSettingsForm.patchValue({ hourly_rate_after_five_hours: value });
@@ -488,13 +507,6 @@ export class MasterVehicleFareComponent implements OnInit {
 		this.SetFormValue(form_control_target, this.VehicleRateSettingsForm.get(form_control_source).value)
 	}
 
-	handleChangeMCPAR(value: any) {
-		this.VehicleRateSettingsForm.patchValue({
-			minimum_cruise_port_departure_rate: value ? value : null
-		})
-	}
-
-
 	/**
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
@@ -615,17 +627,25 @@ export class MasterVehicleFareComponent implements OnInit {
 	/**
 	 * Resets the whole form to initial values i.e. when the form is newly built
 	 */
+
 	resetForm() {
 		const keepValues = [
 			this.VehicleRateSettingsForm.controls.acc_id.value,
 			this.VehicleRateSettingsForm.controls.id.value,
 		]
-
+		const amenitiesSnapshot = JSON.parse(JSON.stringify(this.AmenitiesRates.value));
 
 		this.VehicleRateSettingsForm.reset();
+
 		this.VehicleRateSettingsForm.controls.acc_id.patchValue(keepValues[0]);
 		this.VehicleRateSettingsForm.controls.id.patchValue(keepValues[1]);
 
-		console.log(this.VehicleRateSettingsForm.value)
-	}
+		// restore name/label for each amenity control (keep price reset if desired)
+		Object.keys(amenitiesSnapshot).forEach(key => {
+			this.AmenitiesRates.get(key)?.patchValue({
+				...amenitiesSnapshot[key],
+				price: null 
+			});
+		});
+    }
 }

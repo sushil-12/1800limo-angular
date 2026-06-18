@@ -83,6 +83,24 @@ export class EditVehicleRatesComponent implements OnInit {
 							this.addVehicleRatesForm.patchValue({ minimum_cruise_port_departure_rate: value });
 						}
 				});
+
+		// Add this subscription for minimum_cruise_port_arrival_rate
+		this.addVehicleRatesForm.get('minimum_cruise_port_arrival_rate').valueChanges.pipe(
+			debounceTime(1000)
+		).subscribe(value => {
+			console.log('minimum_cruise_port_arrival_rate value:', value);
+			
+			const departureRate = this.addVehicleRatesForm.get('minimum_cruise_port_departure_rate').value;
+			
+			// Only update departure if it's 0 or null/undefined
+			if (departureRate === 0 || departureRate === undefined || departureRate === null) {
+				this.addVehicleRatesForm.patchValue({ 
+					minimum_cruise_port_departure_rate: value 
+				});
+			}
+			// If departure already has a value, do nothing
+		});
+
 		this.addVehicleRatesForm.get('hourly_rate').valueChanges.subscribe(
 			value => {
 				this.addVehicleRatesForm.patchValue({ hourly_rate_after_five_hours: value });
@@ -342,15 +360,6 @@ export class EditVehicleRatesComponent implements OnInit {
 		const d = parseFloat(departure);
 		return (isNaN(a) || a === 0) && (isNaN(d) || d === 0);
 	}
-
-	handleChangeMCPAR(value) {
-
-		this.addVehicleRatesForm.patchValue({
-			minimum_cruise_port_departure_rate: value ? value : null
-		})
-	}
-
-
 	/**
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
