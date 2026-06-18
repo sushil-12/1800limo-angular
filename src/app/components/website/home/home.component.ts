@@ -932,6 +932,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	openAddressDropdown(fieldName: string, currentValue?: string): void {
 		this.clearAddressDropdownBlurTimer();
 		this.activeAddressDropdown = fieldName;
+		console.log("this.active", this.activeAddressDropdown)
 		const value = currentValue !== undefined
 			? currentValue
 			: this.isExtraStopField(fieldName)
@@ -957,8 +958,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		inputEl.focus();
 		// Select all text on tap
 		inputEl.select();
-		// Also open the dropdown just like a click would
-		this.openAddressDropdown('dropoff_address');
 	}
 
 	onAddressFieldFocus(fieldName: string, inputEl: HTMLInputElement): void {
