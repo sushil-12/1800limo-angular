@@ -30,7 +30,7 @@ export interface AiRateScoreBreakdown {
 	rationale?: string;
 }
 
-/** Structured response from the AI rate score (Mistral) */
+/** Structured response from the AI rate score backend */
 export interface AiRateScoreResponse {
 	/** Overall competitiveness score 0-100 */
 	score: number;
@@ -40,4 +40,12 @@ export interface AiRateScoreResponse {
 	suggestions: string[];
 	/** Optional brief summary */
 	summary?: string;
+	/**
+	 * AI-suggested rate values keyed by the form control name they belong to
+	 * (e.g. { milage_rate: 3.5, minimum_airport_departure_rate: 75 }). Only the
+	 * fields the AI recommends changing are present.
+	 */
+	suggestedRates?: Record<string, number>;
+	/** Short "why" note per suggested rate, same keys as suggestedRates. */
+	rateNotes?: Record<string, string>;
 }

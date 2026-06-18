@@ -32,7 +32,8 @@ import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { AmenitiesComponent } from './amenities/amenities.component';
 import { AddVehicleRatesComponent } from './add-vehicle-rates/add-vehicle-rates.component';
 import { AiRateScoreCalculatorComponent } from './ai-rate-score-calculator/ai-rate-score-calculator.component';
-import { AiRateScoreDialogComponent } from './ai-rate-score-calculator/ai-rate-score-dialog.component';
+import { AiRateHintComponent } from './ai-rate-suggestion/ai-rate-hint.component';
+import { AiRateAcceptBarComponent } from './ai-rate-suggestion/ai-rate-accept-bar.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { VehicleYearsComponent } from './vehicle-years/vehicle-years.component';
 import { VehicleColorComponent } from './vehicle-color/vehicle-color.component';
@@ -144,7 +145,8 @@ import { QuillModule } from 'ngx-quill';
 		AmenitiesComponent,
 		AddVehicleRatesComponent,
 		AiRateScoreCalculatorComponent,
-		AiRateScoreDialogComponent,
+		AiRateHintComponent,
+		AiRateAcceptBarComponent,
 		VehiclesComponent,
 		VehicleYearsComponent,
 		VehicleColorComponent,
@@ -249,6 +251,6 @@ import { QuillModule } from 'ngx-quill';
 		}),
 		QuillModule,
 	],
-	exports: [BookingStatusTextReplacePipe, MatIconModule, AiRateScoreDialogComponent]
+	exports: [BookingStatusTextReplacePipe, MatIconModule, AiRateHintComponent, AiRateAcceptBarComponent]
 })
 export class AdminModule { }
