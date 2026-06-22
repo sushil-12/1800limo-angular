@@ -771,9 +771,13 @@
 
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
-			<h4 class=" border-secondary">
-				Affiliate Details
-			</h4>
+			<div class="d-flex justify-content-between align-items-center flex-wrap">
+				<h4 class="border-secondary">Affiliate Details</h4>
+				<mat-checkbox formControlName="prevent_rate_override" class="text-sm font-weight-normal"
+					style="font-size: 0.85rem;">
+					Prevent System Rate Override
+				</mat-checkbox>
+			</div>
 			<!-- Affiliate Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
@@ -785,6 +789,8 @@
 					</mat-radio-group>
 				</div>
 			</div>
+
+			
 
 
 			<!-- Choose Affiliate -->
@@ -1295,10 +1301,18 @@
 
 		<!-- Section Booking details start -->
 		<div class="section-container mt-2" id="pickup_adress">
-			<h4 id="booking_detail_section" style="margin-bottom: 0;">
-				Booking Details <button type="submit" class="custom-filled-button mr-1 ml-3 mb-2"
-					(click)="submitForm(false)" *ngIf="updateType != 'create' ">Preview</button>
-			</h4>
+			<div id="booking_detail_section"
+				class="d-flex justify-content-between align-items-center flex-wrap"
+				style="margin-bottom: 0;">
+				<h4>
+					Booking Details <button type="submit" class="custom-filled-button mr-1 ml-3 mb-2"
+						(click)="submitForm(false)" *ngIf="updateType != 'create' ">Preview</button>
+				</h4>
+				<mat-checkbox formControlName="prevent_rate_override" class="text-sm font-weight-normal"
+					style="font-size: 0.85rem;">
+					Prevent System Rate Override
+				</mat-checkbox>
+			</div>
 			<div class="row px-4">
 				<!-- Service Type -->
 				<div class="flex-grow-1 ml-2 mr-2">
@@ -3709,7 +3723,7 @@
 
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
+			[preventRateOverride]="Form.prevent_rate_override.value" [return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
 			[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
 			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates"
 			(formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value"

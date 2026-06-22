@@ -161,6 +161,24 @@ export class HeaderComponent implements OnInit {
 		})
 	}
 
+	getDisplayName(fullName: string): string {
+		if (!fullName) return '';
+		
+		// If name is short enough, return as is
+		if (fullName.length <= 15) return fullName;
+		
+		// Try to get initials (e.g., "John Doe" -> "J. Doe")
+		const parts = fullName.trim().split(' ');
+		if (parts.length >= 2) {
+			const firstName = parts[0];
+			const lastName = parts[parts.length - 1];
+			return `${firstName.charAt(0)}. ${lastName}`;
+		}
+		
+		// If single name, truncate with ellipsis
+		return fullName.substring(0, 12) + '...';
+	}
+
 
 	ngAfterViewInit(): void {
 		// this.desktopWidth = window.innerWidth;

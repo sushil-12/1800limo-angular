@@ -77,13 +77,13 @@
 									id="navbarDropdownUserImage" href="#" role="button" data-toggle="dropdown"
 									aria-haspopup="true" aria-expanded="false"
 									*ngIf="(currentUser?.roleName != 'individual')">
-									{{ userDisplayName }}
+								 {{ getDisplayName(userDisplayName) }}
 								</a>
 								<a class="nav-link dropdown-toggle login-button" tabindex="1"
 									id="navbarDropdownUserImage" href="#" role="button" data-toggle="dropdown"
 									aria-haspopup="true" aria-expanded="false"
 									*ngIf="(currentUser?.roleName == 'individual')">
-									{{ userDisplayName }}
+								 {{ getDisplayName(userDisplayName) }}
 								</a>
 
 								<div class="logInDropdown dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -97,12 +97,12 @@
 										<div class="dropdown-user-details">
 											<div class="dropdown-user-details-name"
 												*ngIf="(currentUser?.roleName != 'individual')">
-												{{ userDisplayName }}
+												 {{ getDisplayName(userDisplayName) }}
 
 											</div>
 											<div class="dropdown-user-details-name"
 												*ngIf="(currentUser?.roleName == 'individual')">
-												{{ userDisplayName }}
+												 {{ getDisplayName(userDisplayName) }}
 											</div>
 
 										</div>

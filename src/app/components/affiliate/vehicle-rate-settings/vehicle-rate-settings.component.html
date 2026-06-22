@@ -484,54 +484,10 @@
 		</div>
 
 		<div class="row">
-			<!-- MIN. AIRPORT ARRIVAL RATE -->
+            <!-- MIN. AIRPORT DEPARTURE RATE -->
 			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>
-						Minimum Airport Rate - Arrival
-						<span class="asterisk">*</span>
-					</mat-label>
-					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<!-- <mat-select formControlName="minimum_airport_arrival_rate" tabindex="1"
-						(onSelectionChange)="updateRateRangeObject() ; cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate') ;cloneValue('minimum_airport_arrival_rate', 'minimum_city_rate');cloneValue('minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate');cloneValue('minimum_airport_arrival_rate', 'minimum_cruise_port_departure_rate')">
-						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
-							{{ value }}
-						</mat-option>
-					</mat-select> -->
-					<input type="number" matInput placeholder="Minimum Airport Rate - Arrival"
-						formControlName="minimum_airport_arrival_rate" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
-						tabindex="1" (focus)="$event.target.select()">
-				</mat-form-field>
-				<app-ai-rate-hint field="minimum_airport_arrival_rate" [suggestions]="aiSuggestions" [notes]="aiNotes" [symbol]="currency_symbol"></app-ai-rate-hint>
-				<div *ngIf="
-						(is_form_submitted &&
-							form.minimum_airport_arrival_rate.errors) ||
-						(form.minimum_airport_arrival_rate.touched &&
-							form.minimum_airport_arrival_rate.errors)
-					" class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="
-							form.minimum_airport_arrival_rate.errors.required
-						">
-						This field is required
-					</div>
-				</div>
-				<div *ngIf="
-						(is_form_submitted &&
-							form.minimum_airport_arrival_rate.errors) ||
-						(form.minimum_airport_arrival_rate.touched &&
-							form.minimum_airport_arrival_rate.errors)
-					" class="text-danger margin-bottom-thin my-mat-hint">
-					<div *ngIf="form.minimum_airport_arrival_rate.errors.pattern">
-						Enter Numbers only
-					</div>
-				</div>
-			</div>
-			
-			<!-- MIN. AIRPORT DEPARTURE RATE -->
-			<div class="col-md-6 col-12">
-				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>
+					<mat-label style="margin-left:15px">
 						Minimum Airport Rate - Departure
 						<span class="asterisk">*</span>
 					</mat-label>
@@ -573,10 +529,54 @@
 				</div>
 			</div>
 
+			<!-- MIN. AIRPORT ARRIVAL RATE -->
+			<div class="col-md-6 col-12">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label style="margin-left:15px">
+						Minimum Airport Rate - Arrival
+						<span class="asterisk">*</span>
+					</mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<!-- <mat-select formControlName="minimum_airport_arrival_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject() ; cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate') ;cloneValue('minimum_airport_arrival_rate', 'minimum_city_rate');cloneValue('minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate');cloneValue('minimum_airport_arrival_rate', 'minimum_cruise_port_departure_rate')">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select> -->
+					<input type="number" matInput placeholder="Minimum Airport Rate - Arrival"
+						formControlName="minimum_airport_arrival_rate" (focus)="$event.target.select()"
+						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
+						tabindex="1" (focus)="$event.target.select()">
+				</mat-form-field>
+				<app-ai-rate-hint field="minimum_airport_arrival_rate" [suggestions]="aiSuggestions" [notes]="aiNotes" [symbol]="currency_symbol"></app-ai-rate-hint>
+				<div *ngIf="
+						(is_form_submitted &&
+							form.minimum_airport_arrival_rate.errors) ||
+						(form.minimum_airport_arrival_rate.touched &&
+							form.minimum_airport_arrival_rate.errors)
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
+							form.minimum_airport_arrival_rate.errors.required
+						">
+						This field is required
+					</div>
+				</div>
+				<div *ngIf="
+						(is_form_submitted &&
+							form.minimum_airport_arrival_rate.errors) ||
+						(form.minimum_airport_arrival_rate.touched &&
+							form.minimum_airport_arrival_rate.errors)
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.minimum_airport_arrival_rate.errors.pattern">
+						Enter Numbers only
+					</div>
+				</div>
+			</div>
+
 			<!-- MIN. INTRACITY RATE -->
 			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>
+					<mat-label style="margin-left:15px">
 						Minimum City to Intercity rate <span class="asterisk">*</span>
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -609,7 +609,7 @@
 			<!-- MIN. CRUISE PORT ARRIVAL RATE -->
 			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>
+					<mat-label style="margin-left:15px">
 						Minimum Cruise Port Rate - Arrival
 						<!-- <span class="asterisk">*</span> -->
 					</mat-label>
@@ -653,14 +653,10 @@
 		</div>
 
 		<div class="row">
-
-
-
-
 			<!-- MIN. CRUISE PORT DEPARTURE RATE -->
 			<div class="col-md-6 col-12">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>
+					<mat-label style="margin-left:15px">
 						Minimum Cruise Port Rate - Departure
 						<!-- <span class="asterisk">*</span> -->
 					</mat-label>
@@ -1288,7 +1284,7 @@
 
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>City Tax</mat-label>
+								<mat-label style="margin-left:15px">City Tax</mat-label>
 								<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 								<input type="number" matInput placeholder="City Tax" (focus)="$event.target.select()"
 									formControlName="city_tax" tabindex="1" autocomplete="off" />
@@ -1355,7 +1351,7 @@
 
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>State Tax</mat-label>
+								<mat-label style="margin-left:15px">State Tax</mat-label>
 								<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 								<input type="number" matInput placeholder="State Tax" formControlName="state_tax"
 									tabindex="1" (focus)="$event.target.select()" />
@@ -1422,7 +1418,7 @@
 
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>VAT</mat-label>
+								<mat-label style="margin-left:15px">VAT</mat-label>
 								<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
 									(focus)="$event.target.select()" />
@@ -1486,7 +1482,7 @@
 
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>Workman's Comp</mat-label>
+								<mat-label style="margin-left:15px">Workman's Comp</mat-label>
 								<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 								<input type="number" matInput placeholder="Workman's Comp"
 									formControlName="workmans_comp" tabindex="1" (focus)="$event.target.select()" />
@@ -1553,7 +1549,7 @@
 
 						<div class="col-md-12 col-lg-4 col-12 pl-0 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>Other Transportation Tax</mat-label>
+								<mat-label style="margin-left:15px">Other Transportation Tax</mat-label>
 								<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 								<input type="number" matInput placeholder="Other Transportation Tax"
 									formControlName="other_transportation_tax" (focus)="$event.target.select()"

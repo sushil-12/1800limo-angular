@@ -13,6 +13,7 @@ import { AmenitiesService } from "src/app/services/amenities.service";
 })
 export class RatesFormComponent implements OnInit, OnChanges {
 	// Capture Events.
+	@Input("preventRateOverride") preventRateOverride: boolean = false;
 	@Input("initRates") init_rates: boolean = false;
 	@Input("initReturnRates") init_r_rates: boolean = false;
 	@Input("affiliate_type") affiliate_type: string = "";
@@ -293,6 +294,14 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 		}
 
+		if (changes?.book_data?.currentValue) {
+			if (!this.preventRateOverride) {
+				this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+			} else {
+				console.log('[rates-form] Skipping rate recalculation - prevent_rate_override is checked');
+			}
+        }
+
 	}
 
 	returnZero() {
@@ -565,11 +574,13 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	fillReturnRateForm(data) {
 		this.returnRatesdata.next({})
-		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
-			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-			this.returnRatesdata.next(this.resolveReturnRateArray(response))
-			this.initReturnRates()
-		});
+		if(!this.preventRateOverride){    
+			this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
+				this.returnRatesdata.next(this.resolveReturnRateArray(response))
+				this.initReturnRates()
+			});
+	    }
 	}
 
 	private getBaseRateValue(rateArray: any): number {
@@ -672,16 +683,18 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	private fetchDedicatedOutboundRates(data: any): void {
 		const outboundBookingData = this.buildDedicatedOutboundBookingData(data);
 		console.log('admin/rates-form dedicated outbound-rate payload', outboundBookingData);
-		this.$api.fetchRatesByAffiliateVeh(outboundBookingData.vehicle_id, outboundBookingData).subscribe((response: any) => {
-			console.log('admin/rates-form dedicated outbound-rate response', response);
-			const dedicatedOutboundRates = response?.data?.rateArray || {};
-			this.ratesdata.next({});
-			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false;
-			this.ratesdata.next(dedicatedOutboundRates);
-			this.initRates();
-		}, (error: any) => {
-			console.error('admin/rates-form dedicated outbound-rate error', error);
-		});
+		if(!this.preventRateOverride){    
+			this.$api.fetchRatesByAffiliateVeh(outboundBookingData.vehicle_id, outboundBookingData).subscribe((response: any) => {
+				console.log('admin/rates-form dedicated outbound-rate response', response);
+				const dedicatedOutboundRates = response?.data?.rateArray || {};
+				this.ratesdata.next({});
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false;
+				this.ratesdata.next(dedicatedOutboundRates);
+				this.initRates();
+			}, (error: any) => {
+				console.error('admin/rates-form dedicated outbound-rate error', error);
+			});
+	    }
 	}
 
 	fetchRatesArrayByAffiliateVehicle(data) {
@@ -743,6 +756,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 
+
+       if(!this.preventRateOverride){    
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			// && this.affiliate_type != 'loose_affiliate'
 			console.log("in this.$api.fetchRatesByAffiliateVeh", response)
@@ -776,6 +791,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		}, (error: any) => {
 			console.error('[buildBookingData] API error:', error);
 		});
+	  }
 	}
 
 	/**

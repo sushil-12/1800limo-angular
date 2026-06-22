@@ -1472,6 +1472,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['2'],
+			prevent_rate_override: [false],
 			acc_id: [''],
 			account_type: ['individual'],
 			travel_client_id: [''],
@@ -2570,7 +2571,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	get Form() {
 		return this.BookingForm.controls;
 	}
-
+	
 	get LooseCustomer() {
 		return (<FormGroup>this.BookingForm.get('loose_customer')).controls;
 	}

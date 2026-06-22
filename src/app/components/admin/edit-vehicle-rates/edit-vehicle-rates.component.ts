@@ -64,8 +64,6 @@ export class EditVehicleRatesComponent implements OnInit {
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.pipe(
 					debounceTime(500) 
 					).subscribe(value => {
-						console.log('minimum_airport_departure_rate value:', value);
-		
 						const arrivalRate = this.addVehicleRatesForm.get('minimum_airport_arrival_rate').value;
 						const cityRate = this.addVehicleRatesForm.get('minimum_city_rate').value;
 						const cruiseArrivalRate = this.addVehicleRatesForm.get('minimum_cruise_port_arrival_rate').value;
