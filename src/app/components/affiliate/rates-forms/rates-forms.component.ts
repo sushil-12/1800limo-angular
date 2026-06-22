@@ -524,59 +524,53 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	 * @returns true if data has changed, false otherwise
 	 */
 	private hasBookingDataChanged(currentBookingData: any): boolean {
-		// First call - no previous data, so consider it as changed
-		if (this.previousBookingData === null) {
-			console.log('[hasBookingDataChanged] First call - no previous data, considering as changed');
-			return true;
-		}
+    if (this.previousBookingData === null) {
+        console.log('[hasBookingDataChanged] First call - no previous data, considering as changed');
+        return true;
+    }
 
-		// Deep comparison of booking_data objects
-		const previous = this.previousBookingData;
-		const current = currentBookingData;
+    const previous = this.previousBookingData;
+    const current = currentBookingData;
 
-		// Compare all properties
-		const keysToCompare = [
-			'vehicle_id',
-			'transfer_type',
-			'service_type',
-			'numberOfVehicles',
-			'distance',
-			'return_distance',
-			'no_of_hours',
-			'is_master_vehicle',
-			'extra_stops',
-			'return_extra_stops',
-			'pickup_time',
-			'return_pickup_time',
-			'return_vehicle_id',
-			'return_affiliate_type'
-		];
+    const keysToCompare = [
+        'vehicle_id',
+        'transfer_type',
+        'service_type',
+        'numberOfVehicles',
+        'distance',
+        'return_distance',
+        'no_of_hours',
+        'is_master_vehicle',
+        'extra_stops',
+        'return_extra_stops',
+        'return_vehicle_id',
+        'return_affiliate_type'
+    ];
 
-		for (const key of keysToCompare) {
-			const previousValue = previous[key];
-			const currentValue = current[key];
+    for (const key of keysToCompare) {
+        const previousValue = previous[key];
+        const currentValue = current[key];
 
-			// Deep comparison for arrays/objects (extra_stops, return_extra_stops)
-			if (Array.isArray(previousValue) && Array.isArray(currentValue)) {
-				if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
-					console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
-						previous: previousValue,
-						current: currentValue
-					});
-					return true;
-				}
-			} else if (previousValue !== currentValue) {
-				console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
-					previous: previousValue,
-					current: currentValue
-				});
-				return true;
-			}
-		}
+        if (Array.isArray(previousValue) && Array.isArray(currentValue)) {
+            if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
+                console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+                    previous: previousValue,
+                    current: currentValue
+                });
+                return true;
+            }
+        } else if (previousValue !== currentValue) {
+            console.log(`[hasBookingDataChanged] Change detected in ${key}:`, {
+                previous: previousValue,
+                current: currentValue
+            });
+            return true;
+        }
+    }
 
-		console.log('[hasBookingDataChanged] No changes detected');
-		return false;
-	}
+    console.log('[hasBookingDataChanged] No changes detected');
+    return false;
+}
 
 	/**
 	 * Checks if booking_data is complete/valid (not initial/incomplete state)
