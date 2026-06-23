@@ -4994,8 +4994,6 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 			'is_master_vehicle',
 			'extra_stops',
 			'return_extra_stops',
-			'pickup_time',
-			'return_pickup_time',
 			'return_vehicle_id',
 			'return_affiliate_type'
 		];

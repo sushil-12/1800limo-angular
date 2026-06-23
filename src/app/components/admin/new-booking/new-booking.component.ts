@@ -1472,7 +1472,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['2'],
-			prevent_rate_override: [false],
+			prevent_rate_override: [true],
 			acc_id: [''],
 			account_type: ['individual'],
 			travel_client_id: [''],
