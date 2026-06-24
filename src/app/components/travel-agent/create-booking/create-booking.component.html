@@ -860,14 +860,7 @@
 			</div>
 
 			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
-				Pickup <h6 *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')"
-					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
-					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
-						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-						address in the next field.
-					</label>
-
-				</h6>
+				Pickup 
 			</h4>
 
 			<!-- Pickup - Address Field -->
@@ -929,7 +922,7 @@
 						<mat-form-field appearance="outline"
 							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup_airport_option.invalid) }">
-							<mat-label>Pickup Airport</mat-label>
+							<mat-label>Pickup Address</mat-label>
 							<i matPrefix
 								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #pickupAirportInput type="text" matInput
@@ -973,7 +966,7 @@
 						</div>
 						<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.pickup_airport_option.errors.required">Pickup airport is required</div>
+							<div *ngIf="Form.pickup_airport_option.errors.required">Pickup address is required</div>
 						</div>
 
 					</div>
@@ -1224,7 +1217,7 @@
 						<mat-form-field appearance="outline"
 							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff_airport_option.invalid) }">
-							<mat-label>Dropoff Airport</mat-label>
+							<mat-label>Dropoff Address</mat-label>
 							<i matPrefix
 								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #dropoffAirportInput type="text" matInput
@@ -1268,7 +1261,7 @@
 						</div>
 						<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.dropoff_airport_option.errors.required">Dropoff airport is required</div>
+							<div *ngIf="Form.dropoff_airport_option.errors.required">Dropoff address is required</div>
 						</div>
 					</div>
 
@@ -1657,14 +1650,7 @@
 			</div>
 
 			<h4 class="pl-2" style="margin-bottom: 0;">
-				Return Pickup <h6 *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')"
-					class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
-					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">
-						FBO Pickup instructions - Choose FBO (private plane) from the airport dropdown and add FBO
-						address in the next field.
-					</label>
-
-				</h6>
+				Return Pickup 
 			</h4>
 
 			<!-- Return Pickup - Address Field -->
@@ -1728,7 +1714,7 @@
 						<mat-form-field appearance="outline"
 							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup_airport_option.invalid) }">
-							<mat-label>Return Pickup Airport</mat-label>
+							<mat-label>Return Pickup Address</mat-label>
 							<i matPrefix
 								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #returnPickupAirportInput type="text" matInput
@@ -1774,7 +1760,7 @@
 						</div>
 						<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.return_pickup_airport_option.errors.required">Return pickup airport is
+							<div *ngIf="Form.return_pickup_airport_option.errors.required">Return pickup address is
 								required</div>
 						</div>
 					</div>
@@ -2034,7 +2020,7 @@
 						<mat-form-field appearance="outline"
 							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }">
-							<mat-label>Return Dropoff Airport</mat-label>
+							<mat-label>Return Dropoff Address</mat-label>
 							<i matPrefix
 								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
 							<input #returnDropoffAirportInput type="text" matInput
@@ -2080,7 +2066,7 @@
 						</div>
 						<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
 							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-							<div *ngIf="Form.return_dropoff_airport_option.errors.required">Return dropoff airport is
+							<div *ngIf="Form.return_dropoff_airport_option.errors.required">Return dropoff address is
 								required</div>
 						</div>
 					</div>

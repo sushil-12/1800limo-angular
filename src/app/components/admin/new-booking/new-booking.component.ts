@@ -2486,12 +2486,14 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	// drawMap.ts
-
-	drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
+    drawMap(map: google.maps.Map, request: google.maps.DirectionsRequest, is_return: boolean) {
 		if (!request.origin || !request.destination) {
 			console.error('Request object missing origin/destination');
 			return;
 		}
+
+		// Ensure we get multiple route options so we can pick the shortest
+		request.provideRouteAlternatives = true;
 
 		// Clean up previous renderer for this specific journey
 		if (is_return) {
@@ -2515,12 +2517,30 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK) {
 				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
+
+				// --- Pick the shortest route among the alternatives ---
+				let shortestIndex = 0;
+				let shortestDistanceMeters = this.getRouteDistanceMeters(response.routes[0]);
+
+				for (let i = 1; i < response.routes.length; i++) {
+					const distMeters = this.getRouteDistanceMeters(response.routes[i]);
+					if (distMeters < shortestDistanceMeters) {
+						shortestDistanceMeters = distMeters;
+						shortestIndex = i;
+					}
+				}
+
 				if (renderer) {
 					renderer.setDirections(response);
+					renderer.setRouteIndex(shortestIndex); // tell renderer to highlight the shortest one
 				}
+
 				this.renderCustomMarkers(map, response, is_return);
 
-				this.fetchDistanceAndTime(response).then((res: { distance: number; time: number }) => {
+				// Pass only the chosen route's legs so distance/time matches what's drawn
+				const chosenRoute = response.routes[shortestIndex];
+
+				this.fetchDistanceAndTime(chosenRoute).then((res: { distance: number; time: number }) => {
 					if (is_return) {
 						this.return_distance = res.distance;
 						if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
@@ -2545,6 +2565,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				console.error('Directions request failed due to', status);
 			}
 		});
+	}
+
+	// Helper: sum distance (in meters) across all legs of a route
+	private getRouteDistanceMeters(route: google.maps.DirectionsRoute): number {
+		return route.legs.reduce((sum, leg) => sum + (leg.distance?.value ?? 0), 0);
 	}
 
 
@@ -5158,11 +5183,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 
-	fetchDistanceAndTime(data: any): Promise<{ [key: string]: number }> {
+	fetchDistanceAndTime(route: any): Promise<{ [key: string]: number }> {
 		let total_distance = 0.0
 		let total_time = 0
 		return new Promise((resolve) => {
-			data.routes[0].legs.forEach((item: any) => {
+			route.legs.forEach((item: any) => {
 				console.log('cal distance--->> this.BookingForm.get', this.BookingForm.get('service_type').value)
 				if (item.distance.value == 0 && this.BookingForm.get('service_type').value != 'charter_tour') {
 					this.$errors.openDialog({
