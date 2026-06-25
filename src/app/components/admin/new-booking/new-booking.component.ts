@@ -252,6 +252,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				this.BookingForm.get('prevent_rate_override')?.setValue(this.updateType === 'edit');
 				this.checkAndPrefill();
 			}
 			else if (params && isNewBookingFlow) {
@@ -1472,7 +1473,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['2'],
-			prevent_rate_override: [true],
+			prevent_rate_override: this.updateType === "edit" ? [true] : [false],
 			acc_id: [''],
 			account_type: ['individual'],
 			travel_client_id: [''],

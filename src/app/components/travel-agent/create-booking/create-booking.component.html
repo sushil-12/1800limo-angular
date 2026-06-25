@@ -1437,6 +1437,9 @@
 
 
 			<!-- Extra Stop Address Field Ends -->
+           <h4 class="pl-2" style="margin-bottom: 0;">
+				Special Instructions
+			</h4>
 
 			<!-- Special Instructions -->
 			<div class="col-md-12 my-2">
@@ -1445,7 +1448,7 @@
 					[modules]="quillModules"
 					placeholder="Special Instructions / Exact Building Name"
 					(onEditorCreated)="onInstructionsEditorCreated($event)"
-					[styles]="{'min-height': '150px', 'background': '#fff', 'border-radius': '4px'}">
+					[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
 				</quill-editor>
 			</div>
 			<div class="row m-2">
@@ -1454,7 +1457,7 @@
 				</p>
 			</div>
 
-			<!-- Amenities -->
+		<!-- Amenities -->
 			<!-- <div id="amenities" class="section-container section-dropdown mt-2"
 				[ngClass]="booking_params.chevrons.amenities ? 'active' : ''"
 							*ngIf="Form.affiliate_type.value === 'loose_affiliate'"> -->
@@ -2176,13 +2179,16 @@
 				</div>
 			</div>
 
+			<h4 class="pl-2" style="margin-bottom: 0;">
+				Return Special Instructions
+			</h4>
 			<div class="col-md-12 my-2">
 				  <quill-editor
 					formControlName="return_booking_instructions"
 					[modules]="quillModules"
 					placeholder="Special Instructions / Exact Building Name"
 					(onEditorCreated)="onInstructionsEditorCreated($event)"
-					[styles]="{'min-height': '150px', 'background': '#fff', 'border-radius': '4px'}">
+					[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
 				</quill-editor>
 			</div>
 
