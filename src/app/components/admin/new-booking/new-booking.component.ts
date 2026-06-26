@@ -403,47 +403,118 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Map the booking form's pickup/dropoff/service fields into the quotebot payload
-	 * shape (the same object the standalone quotebot stores as `quotebot_form`).
-	 * The booking form uses `pickup`/`pickup_latitude`; quotebot expects
-	 * `pickup_address`/`pickup_address_lat`, so we translate here.
+	 * shape (the same object the standalone quotebot stores as `quotebot_form` and that
+	 * the home page builds). Mirrors home.component's payload: pickup_type/dropoff_type
+	 * come from the `<pickup>_to_<dropoff>` transfer_type, addresses are always carried,
+	 * and `location_info` (distance/duration) is included because the rate API needs it.
 	 */
 	private buildQuotePayload(): any {
-		const f = this.BookingForm;
-		const transferType = String(f.get('transfer_type')?.value || '');
-		const pickupIsAirport = transferType.includes('airport_');
-		const dropoffIsAirport = transferType.includes('_airport');
+		const transferType = this.Form.transfer_type.value || '';
+		const [pickupTypeRaw, dropoffTypeRaw] = transferType.split('_to_');
+		const pickupType = pickupTypeRaw || 'city';
+		const dropoffType = dropoffTypeRaw || 'city';
+
+		const returnTransferType = this.Form.return_transfer_type.value || '';
+		const [returnPickupTypeRaw, returnDropoffTypeRaw] = returnTransferType.split('_to_');
+
+		const isAirportPickup = pickupType === 'airport';
+		const isAirportDropoff = dropoffType === 'airport';
+		const isRoundTrip = this.Form.service_type.value === 'round_trip';
+
+		// distance/duration drives rate calculation on the backend
+		const location_info: any[] = [];
+		const dist = this.distance || 0;
+		const time = Number(this.Form.journeyTime.value) || 0;
+		if (dist > 0) {
+			location_info.push({
+				distance: { text: (dist / 1000).toFixed(1) + ' km', value: Math.round(dist) },
+				duration: { text: time > 0 ? Math.round(time / 60) + ' mins' : '0 mins', value: Math.round(time) }
+			});
+		}
+		if (isRoundTrip) {
+			const retDist = this.return_distance || 0;
+			const retTime = Number(this.Form.returnJourneyTime.value) || 0;
+			if (retDist > 0) {
+				location_info.push({
+					distance: { text: (retDist / 1000).toFixed(1) + ' km', value: Math.round(retDist) },
+					duration: { text: retTime > 0 ? Math.round(retTime / 60) + ' mins' : '0 mins', value: Math.round(retTime) }
+				});
+			}
+		}
+
+		const extraStops = this.Form.extra_stops.value || [];
+		const returnExtraStops = this.Form.return_extra_stops.value || [];
 
 		const payload: any = {
-			service_type: f.get('service_type')?.value,
-			transfer_type: transferType,
-			pickup_type: pickupIsAirport ? 'airport' : 'city',
-			dropoff_type: dropoffIsAirport ? 'airport' : 'city',
-			pickup_date: f.get('pickup_date')?.value,
-			pickup_time: f.get('pickup_time')?.value,
-			no_of_passenger: Number(f.get('total_passengers')?.value) || 1,
-			no_of_luggage: Number(f.get('luggage_count')?.value) || 0,
-			no_of_hours: this.number_of_hours === 0 ? 2 : this.number_of_hours,
-			extra_stops: f.get('extra_stops')?.value || [],
-			amenities: f.get('amenities')?.value || [],
-			chargedAmenities: f.get('chargedAmenities')?.value || [],
+			service_type: this.Form.service_type.value,
+			booking_hour: String(this.Form.number_of_hours.value ?? '2'),
+			pickup_type: pickupType,
+			dropoff_type: dropoffType,
+			pickup_date: this.Form.pickup_date.value,
+			pickup_time: this.Form.pickup_time.value,
 
-			// pickup
-			pickup_airport: pickupIsAirport ? f.get('pickup_airport')?.value : '',
-			pickup_airport_name: pickupIsAirport ? f.get('pickup_airport_name')?.value : '',
-			pickup_airport_lat: pickupIsAirport ? f.get('pickup_airport_latitude')?.value : '',
-			pickup_airport_long: pickupIsAirport ? f.get('pickup_airport_longitude')?.value : '',
-			pickup_address: pickupIsAirport ? '' : f.get('pickup')?.value,
-			pickup_address_lat: pickupIsAirport ? '' : f.get('pickup_latitude')?.value,
-			pickup_address_long: pickupIsAirport ? '' : f.get('pickup_longitude')?.value,
+			pickup_airport: isAirportPickup ? (this.Form.pickup_airport.value || null) : null,
+			pickup_airport_name: isAirportPickup ? (this.Form.pickup_airport_option.value || this.Form.pickup_airport_name.value || '') : '',
+			pickup_airport_lat: isAirportPickup ? (this.Form.pickup_airport_latitude.value || null) : null,
+			pickup_airport_long: isAirportPickup ? (this.Form.pickup_airport_longitude.value || null) : null,
 
-			// dropoff
-			dropoff_airport: dropoffIsAirport ? f.get('dropoff_airport')?.value : '',
-			dropoff_airport_name: dropoffIsAirport ? f.get('dropoff_airport_name')?.value : '',
-			dropoff_airport_lat: dropoffIsAirport ? f.get('dropoff_airport_latitude')?.value : '',
-			dropoff_airport_long: dropoffIsAirport ? f.get('dropoff_airport_longitude')?.value : '',
-			dropoff_address: dropoffIsAirport ? '' : f.get('dropoff')?.value,
-			dropoff_address_lat: dropoffIsAirport ? '' : f.get('dropoff_latitude')?.value,
-			dropoff_address_long: dropoffIsAirport ? '' : f.get('dropoff_longitude')?.value,
+			pickup_address: this.Form.pickup.value || '',
+			pickup_address_lat: this.Form.pickup_latitude.value || null,
+			pickup_address_long: this.Form.pickup_longitude.value || null,
+
+			dropoff_airport: isAirportDropoff ? (this.Form.dropoff_airport.value || null) : null,
+			dropoff_airport_name: isAirportDropoff ? (this.Form.dropoff_airport_option.value || this.Form.dropoff_airport_name.value || '') : '',
+			dropoff_airport_lat: isAirportDropoff ? (this.Form.dropoff_airport_latitude.value || null) : null,
+			dropoff_airport_long: isAirportDropoff ? (this.Form.dropoff_airport_longitude.value || null) : null,
+
+			dropoff_address: this.Form.dropoff.value || '',
+			dropoff_address_lat: this.Form.dropoff_latitude.value || null,
+			dropoff_address_long: this.Form.dropoff_longitude.value || null,
+
+			return_pickup_date: this.Form.return_pickup_date.value || this.Form.pickup_date.value,
+			return_pickup_time: this.Form.return_pickup_time.value,
+
+			return_pickup_airport: isRoundTrip && returnPickupTypeRaw === 'airport' ? (this.Form.return_pickup_airport.value || '') : '',
+			return_pickup_airport_name: isRoundTrip && returnPickupTypeRaw === 'airport' ? (this.Form.return_pickup_airport_option.value || '') : '',
+			return_pickup_airport_lat: isRoundTrip && returnPickupTypeRaw === 'airport' ? (this.Form.return_pickup_airport_latitude.value || '') : '',
+			return_pickup_airport_long: isRoundTrip && returnPickupTypeRaw === 'airport' ? (this.Form.return_pickup_airport_longitude.value || '') : '',
+
+			return_pickup_address: isRoundTrip ? (this.Form.return_pickup.value || '') : '',
+			return_pickup_address_lat: isRoundTrip ? (this.Form.return_pickup_latitude.value || '') : '',
+			return_pickup_address_long: isRoundTrip ? (this.Form.return_pickup_longitude.value || '') : '',
+
+			return_dropoff_airport: isRoundTrip && returnDropoffTypeRaw === 'airport' ? (this.Form.return_dropoff_airport.value || '') : '',
+			return_dropoff_airport_name: isRoundTrip && returnDropoffTypeRaw === 'airport' ? (this.Form.return_dropoff_airport_option.value || '') : '',
+			return_dropoff_airport_lat: isRoundTrip && returnDropoffTypeRaw === 'airport' ? (this.Form.return_dropoff_airport_latitude.value || '') : '',
+			return_dropoff_airport_long: isRoundTrip && returnDropoffTypeRaw === 'airport' ? (this.Form.return_dropoff_airport_longitude.value || '') : '',
+
+			return_dropoff_address: isRoundTrip ? (this.Form.return_dropoff.value || '') : '',
+			return_dropoff_address_lat: isRoundTrip ? (this.Form.return_dropoff_latitude.value || '') : '',
+			return_dropoff_address_long: isRoundTrip ? (this.Form.return_dropoff_longitude.value || '') : '',
+
+			no_of_passenger: this.Form.total_passengers.value || 1,
+			no_of_luggage: this.Form.luggage_count.value || 0,
+			return_no_of_passenger: this.Form.total_passengers.value || 1,
+			return_no_of_luggage: this.Form.luggage_count.value || 0,
+
+			location_info: location_info,
+			other_details: {},
+
+			extra_stops: extraStops.map((stop: any) => ({
+				address: stop.address || '',
+				latitude: stop.latitude || '',
+				longitude: stop.longitude || ''
+			})),
+			return_extra_stops: isRoundTrip
+				? returnExtraStops.map((stop: any) => ({
+					address: stop.address || '',
+					latitude: stop.latitude || '',
+					longitude: stop.longitude || ''
+				}))
+				: [],
+
+			amenities: this.Form.amenities.value || [],
+			chargedAmenities: this.Form.chargedAmenities.value || []
 		};
 
 		// keep the canonical quote store consistent for any code that reads it
@@ -454,8 +525,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	/** "Search vehicles" button: validate inputs and (re)build the quote payload. */
 	runEmbeddedQuote(): void {
 		const payload = this.buildQuotePayload();
-		const hasPickup = payload.pickup_type === 'airport' ? !!payload.pickup_airport_lat : !!payload.pickup_address_lat;
-		const hasDropoff = payload.dropoff_type === 'airport' ? !!payload.dropoff_airport_lat : !!payload.dropoff_address_lat;
+		const hasPickup = !!(payload.pickup_airport_lat || payload.pickup_address_lat);
+		const hasDropoff = !!(payload.dropoff_airport_lat || payload.dropoff_address_lat);
 
 		if (!payload.service_type) {
 			this.$errors.openDialog({ errors: { error: 'Please choose a service type first.' } });
