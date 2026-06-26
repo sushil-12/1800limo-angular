@@ -1,0 +1,35 @@
+<div class="states-test">
+	<header class="states-test__header">
+		<h1>States API — Test Page</h1>
+		<button type="button" (click)="fetch()" [disabled]="loading">
+			{{ loading ? 'Loading…' : 'Reload' }}
+		</button>
+	</header>
+
+	<p class="states-test__url"><code>{{ apiUrl }}</code></p>
+
+	<div *ngIf="loading" class="states-test__status">Loading states…</div>
+
+	<div *ngIf="error" class="states-test__error">{{ error }}</div>
+
+	<ng-container *ngIf="!loading && !error">
+		<p class="states-test__count">{{ rows.length }} record(s)</p>
+
+		<table *ngIf="columns.length" class="states-test__table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th *ngFor="let col of columns">{{ col }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let row of rows; let i = index">
+					<td>{{ i + 1 }}</td>
+					<td *ngFor="let col of columns">{{ cell(row, col) }}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<pre *ngIf="!columns.length && raw" class="states-test__raw">{{ rawJson }}</pre>
+	</ng-container>
+</div>

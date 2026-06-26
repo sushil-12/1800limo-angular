@@ -1,0 +1,100 @@
+<div class="embedded-quote">
+
+	<!-- No payload yet (host hasn't searched) -->
+	<p *ngIf="!quotePayload" class="eq-hint">
+		Enter pickup &amp; drop-off above, then search to see available vehicles.
+	</p>
+
+	<ng-container *ngIf="quotePayload">
+
+		<!-- ============ CLASSES VIEW ============ -->
+		<ng-container *ngIf="view === 'classes'">
+			<p class="eq-hint">Select a vehicle class to see available affiliate vehicles.</p>
+
+			<!-- skeletons -->
+			<div class="eq-grid" *ngIf="isLoading">
+				<div class="eq-card eq-skeleton" *ngFor="let s of skeletonItems">
+					<div class="eq-photo skeleton-box"></div>
+					<div class="eq-body">
+						<div class="skeleton-line w-75"></div>
+						<div class="skeleton-line w-50"></div>
+						<div class="skeleton-line w-100"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="eq-grid" *ngIf="!isLoading && masterVehicles.length">
+				<div class="eq-card" *ngFor="let m of masterVehicles" (click)="selectClass(m)">
+					<div class="eq-photo">
+						<img *ngIf="m?.cat_img" [src]="m.cat_img" [alt]="m?.name" />
+						<span *ngIf="!m?.cat_img" class="eq-photo-placeholder">vehicle photo</span>
+					</div>
+					<div class="eq-body">
+						<p class="eq-name">{{ m?.name }}</p>
+						<p class="eq-price"><span class="eq-from">From</span> {{ currencySymbol }} {{ rate(m) }}</p>
+						<div class="eq-specs">
+							<span class="eq-pill">Pax {{ m?.passenger }}</span>
+							<span class="eq-pill">Luggage {{ m?.luggage }}</span>
+						</div>
+						<button type="button" class="eq-view-more" (click)="selectClass(m); $event.stopPropagation()">
+							View More
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<p *ngIf="!isLoading && !masterVehicles.length" class="eq-empty">{{ noVehicleMsg }}</p>
+		</ng-container>
+
+		<!-- ============ VEHICLES VIEW ============ -->
+		<ng-container *ngIf="view === 'vehicles'">
+			<div class="eq-toolbar">
+				<button type="button" class="eq-back" (click)="backToClasses()">
+					&larr; Back to classes
+				</button>
+				<span class="eq-toolbar-title" *ngIf="selectedClass?.name">{{ selectedClass.name }}</span>
+			</div>
+
+			<!-- skeletons -->
+			<div class="eq-grid" *ngIf="isLoading">
+				<div class="eq-card eq-skeleton" *ngFor="let s of skeletonItems">
+					<div class="eq-photo skeleton-box"></div>
+					<div class="eq-body">
+						<div class="skeleton-line w-75"></div>
+						<div class="skeleton-line w-50"></div>
+						<div class="skeleton-line w-100"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="eq-grid" *ngIf="!isLoading && vehicles.length">
+				<div class="eq-card eq-vehicle" *ngFor="let v of vehicles">
+					<div class="eq-photo">
+						<img *ngIf="v?.vehicle_images?.length" [src]="v.vehicle_images[0]" [alt]="v?.name" />
+						<span *ngIf="!v?.vehicle_images?.length" class="eq-photo-placeholder">vehicle photo</span>
+						<span class="eq-badge" *ngIf="v?.is_master_vehicle">Category</span>
+					</div>
+					<div class="eq-body">
+						<p class="eq-affiliate" *ngIf="v?.affiliate_name || v?.affiliate_company">
+							{{ v?.affiliate_name || v?.affiliate_company }}
+							<ng-container *ngIf="v?.affiliate_phone"> / {{ v?.affiliate_phone }}</ng-container>
+						</p>
+						<p class="eq-price"><span class="eq-from">From</span> {{ currencySymbol }} {{ rate(v) }}</p>
+						<p class="eq-name">{{ v?.name }}</p>
+						<p class="eq-veh-meta" *ngIf="!v?.is_master_vehicle && v?.vehicle_details">
+							{{ v?.vehicle_details?.year }} {{ v?.vehicle_details?.make }} {{ v?.vehicle_details?.model }}
+						</p>
+						<div class="eq-specs">
+							<span class="eq-pill">Pax {{ v?.passenger }}</span>
+							<span class="eq-pill">Luggage {{ v?.luggage }}</span>
+						</div>
+						<button type="button" class="eq-select" (click)="choose(v)">Select</button>
+					</div>
+				</div>
+			</div>
+
+			<p *ngIf="!isLoading && !vehicles.length" class="eq-empty">{{ noVehicleMsg }}</p>
+		</ng-container>
+
+	</ng-container>
+</div>

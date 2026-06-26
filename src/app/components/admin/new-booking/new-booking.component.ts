@@ -189,6 +189,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '2';
+	// Embedded quote (Vehicle & Affiliate section): 'browse' uses the quotebot
+	// drill-down, 'manual' uses the existing affiliate/vehicle/driver dropdowns.
+	vehicleSelectionTab: 'browse' | 'manual' = 'browse';
+	quotePayload: any = null;
 	confirmMsg: any;
 	booking_data: any;
 	extraStops_rate: any = 0
@@ -253,6 +257,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 				this.BookingForm.get('prevent_rate_override')?.setValue(this.updateType === 'edit');
+				// arriving with an existing booking -> fields are prefilled, show manual tab
+				this.vehicleSelectionTab = 'manual';
 				this.checkAndPrefill();
 			}
 			else if (params && isNewBookingFlow) {
@@ -265,15 +271,20 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					this.route_is_master_vehicle = routeIsMasterVehicle;
 					this.is_master_vehicle = routeIsMasterVehicle;
 				}
+				// arrived from the standalone quotebot with a chosen vehicle -> show manual tab (prefilled)
+				this.vehicleSelectionTab = 'manual';
 			}
 			else if (params?.reaffiliate_book_id) {
 				this.updateType = params?.updateType
 				this.newBooking = true
 				console.log("in reaffiliate update type book id", params?.reaffiliate_book_id)
 				this.SetFormValue('reservation_id', params.reaffiliate_book_id)
+				this.vehicleSelectionTab = 'manual';
 				this.checkAndPrefill();
 			}
 			else {
+				// fresh booking -> default to the embedded quote browser
+				this.vehicleSelectionTab = 'browse';
 				this.resetFields()
 			}
 			// this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData')) ? JSON.parse(sessionStorage.getItem('currencyData')) : null
@@ -385,6 +396,109 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}
 		console.log('admin/new-booking booking_data payload', this.booking_data)
 	}
+
+	// ---------------------------------------------------------------------------
+	// Embedded quote ("Browse vehicles" tab)
+	// ---------------------------------------------------------------------------
+
+	/**
+	 * Map the booking form's pickup/dropoff/service fields into the quotebot payload
+	 * shape (the same object the standalone quotebot stores as `quotebot_form`).
+	 * The booking form uses `pickup`/`pickup_latitude`; quotebot expects
+	 * `pickup_address`/`pickup_address_lat`, so we translate here.
+	 */
+	private buildQuotePayload(): any {
+		const f = this.BookingForm;
+		const transferType = String(f.get('transfer_type')?.value || '');
+		const pickupIsAirport = transferType.includes('airport_');
+		const dropoffIsAirport = transferType.includes('_airport');
+
+		const payload: any = {
+			service_type: f.get('service_type')?.value,
+			transfer_type: transferType,
+			pickup_type: pickupIsAirport ? 'airport' : 'city',
+			dropoff_type: dropoffIsAirport ? 'airport' : 'city',
+			pickup_date: f.get('pickup_date')?.value,
+			pickup_time: f.get('pickup_time')?.value,
+			no_of_passenger: Number(f.get('total_passengers')?.value) || 1,
+			no_of_luggage: Number(f.get('luggage_count')?.value) || 0,
+			no_of_hours: this.number_of_hours === 0 ? 2 : this.number_of_hours,
+			extra_stops: f.get('extra_stops')?.value || [],
+			amenities: f.get('amenities')?.value || [],
+			chargedAmenities: f.get('chargedAmenities')?.value || [],
+
+			// pickup
+			pickup_airport: pickupIsAirport ? f.get('pickup_airport')?.value : '',
+			pickup_airport_name: pickupIsAirport ? f.get('pickup_airport_name')?.value : '',
+			pickup_airport_lat: pickupIsAirport ? f.get('pickup_airport_latitude')?.value : '',
+			pickup_airport_long: pickupIsAirport ? f.get('pickup_airport_longitude')?.value : '',
+			pickup_address: pickupIsAirport ? '' : f.get('pickup')?.value,
+			pickup_address_lat: pickupIsAirport ? '' : f.get('pickup_latitude')?.value,
+			pickup_address_long: pickupIsAirport ? '' : f.get('pickup_longitude')?.value,
+
+			// dropoff
+			dropoff_airport: dropoffIsAirport ? f.get('dropoff_airport')?.value : '',
+			dropoff_airport_name: dropoffIsAirport ? f.get('dropoff_airport_name')?.value : '',
+			dropoff_airport_lat: dropoffIsAirport ? f.get('dropoff_airport_latitude')?.value : '',
+			dropoff_airport_long: dropoffIsAirport ? f.get('dropoff_airport_longitude')?.value : '',
+			dropoff_address: dropoffIsAirport ? '' : f.get('dropoff')?.value,
+			dropoff_address_lat: dropoffIsAirport ? '' : f.get('dropoff_latitude')?.value,
+			dropoff_address_long: dropoffIsAirport ? '' : f.get('dropoff_longitude')?.value,
+		};
+
+		// keep the canonical quote store consistent for any code that reads it
+		localStorage.setItem('quotebot_form', JSON.stringify(payload));
+		return payload;
+	}
+
+	/** "Search vehicles" button: validate inputs and (re)build the quote payload. */
+	runEmbeddedQuote(): void {
+		const payload = this.buildQuotePayload();
+		const hasPickup = payload.pickup_type === 'airport' ? !!payload.pickup_airport_lat : !!payload.pickup_address_lat;
+		const hasDropoff = payload.dropoff_type === 'airport' ? !!payload.dropoff_airport_lat : !!payload.dropoff_address_lat;
+
+		if (!payload.service_type) {
+			this.$errors.openDialog({ errors: { error: 'Please choose a service type first.' } });
+			return;
+		}
+		if (!hasPickup || !hasDropoff) {
+			this.$errors.openDialog({ errors: { error: 'Please enter pickup and drop-off locations before searching for vehicles.' } });
+			return;
+		}
+
+		// fresh object reference so <app-embedded-quote> ngOnChanges fires
+		this.quotePayload = { ...payload };
+	}
+
+	/**
+	 * A vehicle was picked in the embedded quote. Reuse the same affiliate flow that
+	 * powers the standalone-quotebot arrival: set the IDs, then let
+	 * fetchQBAffiliateVehicles auto-select the matching vehicle (via QB_vehicle_id ->
+	 * handleSelectVehicleType) and prefill the editable manual fields.
+	 */
+	onQuoteVehicleSelected(vehicle: any): void {
+		if (!vehicle) {
+			return;
+		}
+		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle));
+		this.affiliate_id = vehicle.affiliate_id;
+		this.QB_vehicle_id = vehicle.id;
+		this.is_master_vehicle = !!vehicle.is_master_vehicle;
+
+		this.BookingForm.patchValue({
+			affiliate_type: 'affiliate',
+			affiliate_id: vehicle.affiliate_id
+		});
+
+		this.fetchAffiliateInformation(vehicle.affiliate_id);
+		this.fetchQBAffiliateVehicles(vehicle.affiliate_id);
+		this.fetchAffiliateDrivers(vehicle.affiliate_id);
+
+		// reveal the now-populated, still-editable manual fields
+		this.vehicleSelectionTab = 'manual';
+		this.buildBookingData();
+	}
+
 	ngAfterViewInit(): void {
 
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
