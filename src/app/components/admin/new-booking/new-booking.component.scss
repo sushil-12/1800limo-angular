@@ -713,14 +713,13 @@ quill-editor {
 
 /* Vehicle & Affiliate tab toggle (Browse vehicles / Assign manually) */
 .eq-tabs {
-	background: #f3f4f6;
 	border-radius: 10px;
 	display: inline-flex;
-	gap: 4px;
+	gap: 8px;
 	padding: 4px;
 
 	.eq-tab {
-		background: transparent;
+		background: #e2e2e2;
 		border: none;
 		border-radius: 8px;
 		color: #6b7280;
