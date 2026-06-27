@@ -174,6 +174,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	scDots: number[] = [];
 	private scTimer: any;
 
+	// ── Debug overlay (on-screen console for remote diagnosis) ──────────────
+	debugLogs: Array<{ type: string; msg: string; time: string }> = [];
+	showDebugPanel = false;
+	private _origConsoleError!: (...args: any[]) => void;
+	private _origConsoleWarn!: (...args: any[]) => void;
+	private _origConsoleLog!: (...args: any[]) => void;
+	private _windowErrorHandler!: OnErrorEventHandler;
+	private _unhandledRejectionHandler!: (e: PromiseRejectionEvent) => void;
+	private _resourceErrorHandler!: (e: Event) => void;
+
 	// ── Service carousel static data ─────────────────────────────────────────────
 	serviceInfo = {
 		title: "PERSONALIZED DESTINATIONS AND AMENITIES",
@@ -465,6 +475,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	// ngOnInit() ends
 	ngAfterViewInit(): void {
+		this.initDebugOverlay();
 		this.desktopWidth = window.innerWidth;
 		if (this.desktopWidth <= '767') {
 			//google translate
@@ -4595,7 +4606,75 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
+	// ── Debug overlay helpers ───────────────────────────────────────────────
+	initDebugOverlay(): void {
+		const push = (type: string, args: any[]) => {
+			const msg = args.map(a => {
+				try {
+					return (typeof a === 'object' && a !== null)
+						? (a instanceof Error ? `${a.name}: ${a.message}\n${a.stack || ''}` : JSON.stringify(a, null, 2))
+						: String(a);
+				} catch { return String(a); }
+			}).join(' ');
+			const time = new Date().toLocaleTimeString();
+			this.debugLogs.unshift({ type, msg, time });
+			if (this.debugLogs.length > 200) { this.debugLogs.length = 200; }
+		};
+
+		// Intercept console methods
+		this._origConsoleError = console.error.bind(console);
+		this._origConsoleWarn = console.warn.bind(console);
+		this._origConsoleLog = console.log.bind(console);
+
+		console.error = (...args: any[]) => { push('error', args); this._origConsoleError(...args); };
+		console.warn = (...args: any[]) => { push('warn', args); this._origConsoleWarn(...args); };
+		console.log = (...args: any[]) => { push('log', args); this._origConsoleLog(...args); };
+
+		// Intercept window errors (script errors, image load failures, etc.)
+		this._windowErrorHandler = (message, source, lineno, colno, error) => {
+			push('error', [`[window.onerror] ${message} | ${source}:${lineno}:${colno}${error ? ' | ' + error.stack : ''}`]);
+			return false;
+		};
+		window.onerror = this._windowErrorHandler as OnErrorEventHandler;
+
+		// Intercept unhandled promise rejections
+		this._unhandledRejectionHandler = (e: PromiseRejectionEvent) => {
+			const reason = e.reason instanceof Error
+				? `${e.reason.name}: ${e.reason.message}\n${e.reason.stack || ''}`
+				: String(e.reason);
+			push('error', [`[UnhandledRejection] ${reason}`]);
+		};
+		window.addEventListener('unhandledrejection', this._unhandledRejectionHandler);
+
+		// Intercept resource load errors (images, scripts, stylesheets) via capture phase
+		this._resourceErrorHandler = (e: Event) => {
+			const el = e.target as HTMLElement;
+			if (!el) { return; }
+			const tag = el.tagName || 'unknown';
+			const src = (el as any).src || (el as any).href || '(no src)';
+			push('error', [`[Resource Error] <${tag}> failed to load: ${src}`]);
+		};
+		window.addEventListener('error', this._resourceErrorHandler, true);
+
+		push('log', ['[Debug overlay started — all console output captured]']);
+	}
+
+	toggleDebugPanel(): void { this.showDebugPanel = !this.showDebugPanel; }
+	clearDebugLogs(): void { this.debugLogs = []; }
+
 	ngOnDestroy(): void {
+		// Restore original console methods
+		if (this._origConsoleError) { console.error = this._origConsoleError; }
+		if (this._origConsoleWarn) { console.warn = this._origConsoleWarn; }
+		if (this._origConsoleLog) { console.log = this._origConsoleLog; }
+		if (this._windowErrorHandler) { window.onerror = null; }
+		if (this._unhandledRejectionHandler) {
+			window.removeEventListener('unhandledrejection', this._unhandledRejectionHandler);
+		}
+		if (this._resourceErrorHandler) {
+			window.removeEventListener('error', this._resourceErrorHandler, true);
+		}
+
 		if (this.quoteBotAutofillSyncInterval) {
 			clearInterval(this.quoteBotAutofillSyncInterval);
 		}
