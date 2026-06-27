@@ -281,7 +281,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private airportIndex: AirportIndexService,
 		private amenitiesService: AmenitiesService,
 		private blogService: BlogService
-	) { }
+	) {
+		// Start the debug overlay as early as possible (constructor) so errors thrown
+		// during ngOnInit / first change-detection are captured. Doing this in
+		// ngAfterViewInit was too late — Angular aborts the lifecycle before reaching it.
+		this.initDebugOverlay();
+	}
 
 	scIcon(i: number): string {
 		return this.serviceInfo?.other_listing_arr?.[i]?.icon || 'fas fa-star';
@@ -474,9 +479,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	// ngOnInit() ends
 	ngAfterViewInit(): void {
-		this.initDebugOverlay();
 		this.desktopWidth = window.innerWidth;
-		if (this.desktopWidth <= '767') {
+		try {
+			if (this.desktopWidth <= '767') {
 			//google translate
 			console.log('-----google translate element for mobile view-------->>>>')
 			var v = document.createElement("script");
@@ -534,6 +539,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 			var myVar = setInterval(function () { myTimer() }, 0);
 
+		}
+		} catch (translateErr) {
+			// Don't let a Google Translate script error abort the rest of ngAfterViewInit
+			// (which sets up autocomplete sync, carousels, etc.). Log it so it surfaces in
+			// the debug overlay instead of disappearing.
+			console.error('[ngAfterViewInit google translate init]', translateErr);
 		}
 		this.retryGoogleAutocompleteInitialization()
 
