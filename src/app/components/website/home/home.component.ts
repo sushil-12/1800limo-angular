@@ -179,7 +179,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	showDebugPanel = false;
 	private _origConsoleError!: (...args: any[]) => void;
 	private _origConsoleWarn!: (...args: any[]) => void;
-	private _origConsoleLog!: (...args: any[]) => void;
 	private _windowErrorHandler!: OnErrorEventHandler;
 	private _unhandledRejectionHandler!: (e: PromiseRejectionEvent) => void;
 	private _resourceErrorHandler!: (e: Event) => void;
@@ -4621,14 +4620,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			if (this.debugLogs.length > 200) { this.debugLogs.length = 200; }
 		};
 
-		// Intercept console methods
+		// Intercept only errors and warnings (skip logs to avoid noisy API responses)
 		this._origConsoleError = console.error.bind(console);
 		this._origConsoleWarn = console.warn.bind(console);
-		this._origConsoleLog = console.log.bind(console);
 
 		console.error = (...args: any[]) => { push('error', args); this._origConsoleError(...args); };
 		console.warn = (...args: any[]) => { push('warn', args); this._origConsoleWarn(...args); };
-		console.log = (...args: any[]) => { push('log', args); this._origConsoleLog(...args); };
 
 		// Intercept window errors (script errors, image load failures, etc.)
 		this._windowErrorHandler = (message, source, lineno, colno, error) => {
@@ -4656,7 +4653,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		};
 		window.addEventListener('error', this._resourceErrorHandler, true);
 
-		push('log', ['[Debug overlay started — all console output captured]']);
+		push('warn', ['[Debug overlay started — capturing errors & warnings only]']);
 	}
 
 	toggleDebugPanel(): void { this.showDebugPanel = !this.showDebugPanel; }
@@ -4666,7 +4663,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		// Restore original console methods
 		if (this._origConsoleError) { console.error = this._origConsoleError; }
 		if (this._origConsoleWarn) { console.warn = this._origConsoleWarn; }
-		if (this._origConsoleLog) { console.log = this._origConsoleLog; }
 		if (this._windowErrorHandler) { window.onerror = null; }
 		if (this._unhandledRejectionHandler) {
 			window.removeEventListener('unhandledrejection', this._unhandledRejectionHandler);
