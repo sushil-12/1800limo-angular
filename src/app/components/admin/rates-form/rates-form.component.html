@@ -85,15 +85,15 @@
 
 			<!-- Hours -->
 			<div class="col-auto num-hours" *ngIf="service_type == 'charter_tour' && sub_item.key === 'Base_Rate'">
-				<div [class.error-field]="numberOfHoursError" style="position: relative;">
+				<div [class.error-field]="numberOfHoursError && !isDaysMode" style="position: relative;">
 					<mat-form-field appearance="outline" class="m-0" style="width: 100%;">
-						<mat-label>Number of Hours</mat-label>
-						<input type="number" matInput placeholder="2" [value]="hours" [readonly]="is_readonly_min_rate"
+						<mat-label>{{ isDaysMode ? 'Number of Days' : 'Number of Hours' }}</mat-label>
+						<input type="number" matInput placeholder="2" [value]="isDaysMode ? charterDays : hours" [readonly]="is_readonly_min_rate"
 							min="2" step="1" class="font-weight-bolder rate-input-field text-right"
 							(input)="handleHourChange($event)" (blur)="enforceMinimumHours($event)"
 							(keydown)="blockNegative($event)" (focus)="$event.target.select()" />
 					</mat-form-field>
-					<div *ngIf="numberOfHoursError" class="text-danger m-0"
+					<div *ngIf="numberOfHoursError && !isDaysMode" class="text-danger m-0"
 						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px !important; font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
 						number of hours should be a minimum of 2 hours
 					</div>

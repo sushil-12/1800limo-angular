@@ -29,6 +29,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { EmbeddedQuoteComponent } from './embedded-quote/embedded-quote.component';
 
 
 export const DATE_FORMATS = {
@@ -45,7 +46,7 @@ export const DATE_FORMATS = {
 
 
 @NgModule({
-	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent, PhotoGuideModalComponent, CameraAngleDiagramComponent],
+	declarations: [ScrollToTopComponent, FloatIconsComponent, SignatureDirectiveDirective, InvalidControlScrollDirective, ImageModalComponent, DeleteConfirmationComponent, PhotoInstructionsComponent, DateFormatDirective, DatePickerComponent, PhotoGuideModalComponent, CameraAngleDiagramComponent, EmbeddedQuoteComponent],
 	imports: [
 		CommonModule,
 		MatAutocompleteModule,
@@ -73,6 +74,7 @@ export const DATE_FORMATS = {
 		PhotoInstructionsComponent,
 		PhotoGuideModalComponent,
 		CameraAngleDiagramComponent,
+		EmbeddedQuoteComponent,
 		MatAutocompleteModule,
 		MatDatepickerModule,
 		MatNativeDateModule,

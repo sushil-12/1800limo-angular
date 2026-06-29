@@ -52,6 +52,7 @@ import { TutorialsComponent } from './components/website/tutorials/tutorials.com
 import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
 import { CountriesComponent } from './components/website/countries/countries.component';
 import { PublicInvoiceSummaryComponent } from './components/public/public-invoice-summary/public-invoice-summary.component';
+import { StatesTestComponent } from './components/public/states-test/states-test.component';
 
 
 const routes: Routes = [
@@ -67,6 +68,10 @@ const routes: Routes = [
 	{
 		path: 'public-invoice-summary',
 		component: PublicInvoiceSummaryComponent
+	},
+	{
+		path: 'states-test',
+		component: StatesTestComponent
 	},
 	{
 		path: '',

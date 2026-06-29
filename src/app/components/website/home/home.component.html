@@ -2140,7 +2140,7 @@
     <div *ngIf="debugLogs.length === 0" style="color:#666; padding:20px; text-align:center;">
       No issues yet. Errors and warnings will appear here.
     </div>
-    <ng-container *ngFor="let log of debugLogs">
+    <ng-container *ngFor="let log of debugLogs; trackBy: trackByDebugLog">
       <div [ngStyle]="{
         'margin-bottom': '6px',
         'padding': '6px 8px',

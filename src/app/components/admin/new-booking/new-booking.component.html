@@ -1557,6 +1557,33 @@
 			</div>
 		</div>
 
+		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
+		<div class="section-container mt-2">
+			<div class="d-flex justify-content-between align-items-center flex-wrap">
+				<h4 class="border-secondary">Vehicle &amp; Affiliate</h4>
+				<div class="eq-tabs">
+					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'browse'"
+						(click)="vehicleSelectionTab = 'browse'">Browse vehicles</button>
+					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'manual'"
+						(click)="vehicleSelectionTab = 'manual'">Assign manually</button>
+				</div>
+			</div>
+
+			<!-- Browse vehicles: embedded quotebot drill-down -->
+			<div *ngIf="vehicleSelectionTab === 'browse'">
+				<div class="d-flex justify-content-end m-3">
+					<button type="button" class="btn btn-warning eq-search-btn" (click)="runEmbeddedQuote()">
+						Search vehicles
+					</button>
+				</div>
+				<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
+					(vehicleSelected)="onQuoteVehicleSelected($event)">
+				</app-embedded-quote>
+			</div>
+		</div>
+
+		<!-- ============ Assign manually (existing affiliate / vehicle / driver) ============ -->
+		<ng-container *ngIf="vehicleSelectionTab === 'manual'">
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -2082,6 +2109,8 @@
 			</div>
 		</div>
 		<!-- Affiliate Driver Information Ends -->
+		</ng-container>
+		<!-- ============ Assign manually ends ============ -->
 
 		<!-- Section Special Instructions  start -->
 		<div class="section-container my-2" id="pickup_adress">

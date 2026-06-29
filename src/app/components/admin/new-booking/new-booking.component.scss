@@ -710,3 +710,32 @@ quill-editor {
 		color: #c20d0d !important;
 	}
 }
+
+/* Vehicle & Affiliate tab toggle (Browse vehicles / Assign manually) */
+.eq-tabs {
+	border-radius: 10px;
+	display: inline-flex;
+	gap: 8px;
+	padding: 4px;
+
+	.eq-tab {
+		background: #e2e2e2;
+		border: none;
+		border-radius: 8px;
+		color: #6b7280;
+		cursor: pointer;
+		font-weight: 600;
+		padding: 8px 18px;
+		transition: background 0.15s ease, color 0.15s ease;
+
+		&.active {
+			background: #fff;
+			box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
+			color: #c94505;
+		}
+	}
+}
+
+.eq-search-btn {
+	font-weight: 700;
+}
