@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -280,7 +280,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		private metaService: Meta,
 		private airportIndex: AirportIndexService,
 		private amenitiesService: AmenitiesService,
-		private blogService: BlogService
+		private blogService: BlogService,
+		private cdr: ChangeDetectorRef
 	) {
 		// Start the debug overlay as early as possible (constructor) so errors thrown
 		// during ngOnInit / first change-detection are captured. Doing this in
@@ -4617,18 +4618,38 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	// ── Debug overlay helpers ───────────────────────────────────────────────
+	private _debugPushInFlight = false;
 	initDebugOverlay(): void {
+		const MAX_MSG = 2000;
 		const push = (type: string, args: any[]) => {
-			const msg = args.map(a => {
-				try {
-					return (typeof a === 'object' && a !== null)
-						? (a instanceof Error ? `${a.name}: ${a.message}\n${a.stack || ''}` : JSON.stringify(a, null, 2))
-						: String(a);
-				} catch { return String(a); }
-			}).join(' ');
-			const time = new Date().toLocaleTimeString();
-			this.debugLogs.unshift({ type, msg, time });
-			if (this.debugLogs.length > 200) { this.debugLogs.length = 200; }
+			// Re-entrancy guard: if an error is thrown WHILE we're inside push (e.g. while
+			// the debug panel itself is rendering and throws), bail out to the original
+			// console. Without this, an error during render → console.error → push →
+			// mutate array during change-detection → another error → infinite loop that
+			// fills debugLogs to the cap and never paints the list.
+			if (this._debugPushInFlight) { return; }
+			this._debugPushInFlight = true;
+			try {
+				const msg = args.map(a => {
+					try {
+						let s = (typeof a === 'object' && a !== null)
+							? (a instanceof Error ? `${a.name}: ${a.message}\n${a.stack || ''}` : JSON.stringify(a, null, 2))
+							: String(a);
+						if (s.length > MAX_MSG) { s = s.slice(0, MAX_MSG) + ' …[truncated]'; }
+						return s;
+					} catch { return String(a); }
+				}).join(' ');
+				const time = new Date().toLocaleTimeString();
+				// Immutable update — new array reference so *ngFor reliably re-renders.
+				// Mutating the same array with unshift during change-detection does not
+				// reliably repaint the list (the badge count updates, but the rows don't).
+				this.debugLogs = [{ type, msg, time }, ...this.debugLogs].slice(0, 200);
+				// Errors can fire outside Angular's zone (raw JS, jQuery, google translate).
+				// Mark for check so the panel reflects them on the next change detection.
+				try { this.cdr.markForCheck(); } catch { /* component destroyed */ }
+			} finally {
+				this._debugPushInFlight = false;
+			}
 		};
 
 		// Intercept only errors and warnings (skip logs to avoid noisy API responses)
@@ -4669,6 +4690,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	toggleDebugPanel(): void { this.showDebugPanel = !this.showDebugPanel; }
 	clearDebugLogs(): void { this.debugLogs = []; }
+
+	trackByDebugLog(index: number, log: { type: string; msg: string; time: string }): string {
+		return index + ':' + log.time;
+	}
 
 	ngOnDestroy(): void {
 		// Restore original console methods
