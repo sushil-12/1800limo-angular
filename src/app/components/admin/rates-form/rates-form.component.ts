@@ -230,6 +230,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 		if (changes.nums) {
 			this.hours = Number(changes.nums.currentValue)
+			this.isDaysMode = this.hours >= 24;
+			this.charterDays = this.hours >= 24 ? this.hours / 24 : this.hours;
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 		}
 		if (changes.affiliate_type || changes.return_affiliate_type || changes.booking_created_from) {
@@ -1200,7 +1202,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 				// Hourly Rate - only in case of charter_tour
 				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate && this.service_type === 'charter_tour') {
-					amount = Number(Number(Number(multiplyHours) * baserate).toFixed(2));
+					amount = Number(Number(Number(multiplyHours) * baserate).toFixed(2))
 					
 				} else {
 					amount = baserate;
