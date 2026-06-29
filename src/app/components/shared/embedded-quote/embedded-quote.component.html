@@ -60,12 +60,6 @@
 					</svg>
 				</button>
 
-					<div class="eq-scroll-progress">
-						<div class="eq-scroll-progress__thumb"
-							[style.width.%]="eqScrollThumbWidth"
-							[style.left.%]="eqScrollThumbLeft">
-						</div>
-					</div>
 			</div>
 
 			<p *ngIf="!isLoading && !masterVehicles.length" class="eq-empty">{{ noVehicleMsg }}</p>
@@ -134,13 +128,6 @@
 						<path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 					</svg>
 				</button>
-
-				<div class="eq-scroll-progress">
-					<div class="eq-scroll-progress__thumb"
-						[style.width.%]="eqScrollThumbWidth"
-						[style.left.%]="eqScrollThumbLeft">
-					</div>
-				</div>
 			</div>
 
 			<p *ngIf="!isLoading && !vehicles.length" class="eq-empty">{{ noVehicleMsg }}</p>
