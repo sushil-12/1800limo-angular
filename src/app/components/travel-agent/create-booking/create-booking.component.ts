@@ -2107,6 +2107,8 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 	}
 
 	calculateRates(rateArray: any, min_rate_involved: boolean, isReturn: boolean = false) {
+		let multiplyHours = 1;
+		multiplyHours = this.number_of_hours >= 24 ? this.number_of_hours/24 : this.number_of_hours; 
 		let subtotal = 0;
 		let agentShare = 0;
 		let base_rate = 0;
@@ -2119,7 +2121,7 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 		
 		if (baseRateObj) {
 			if (serviceType === 'charter_tour' && !min_rate_involved) {
-				const multipliedBaseRate = (baseRateObj.baserate || 0) * (this.number_of_hours || 1);
+				const multipliedBaseRate = (baseRateObj.baserate || 0) * multiplyHours;
 				base_rate += multipliedBaseRate;
 				tax_base += multipliedBaseRate;
 			} else {
@@ -2149,7 +2151,7 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 					for (let innerKey in innerObject) {
 						if (innerObject.hasOwnProperty(innerKey)) {
 							if (innerKey === 'Base_Rate' && serviceType === 'charter_tour' && !min_rate_involved) {
-								subtotal += (innerObject[innerKey].baserate || 0) * (this.number_of_hours || 1);
+								subtotal += (innerObject[innerKey].baserate || 0) * multiplyHours;
 							} else {
 								subtotal += (innerObject[innerKey].baserate || 0);
 							}
@@ -4533,12 +4535,13 @@ export class CreateBookingComponent implements OnInit, OnDestroy {
 
 
 	createReservationShareArray() {
+		const multiplyHours = this.number_of_hours >= 24 ? this.number_of_hours/24 : this.number_of_hours; 
 		console.log('in function createReservationShareArray')
 		if (this.rateArray) {
 			console.log('in function createReservationShareArray iffffff', this.rateArray)
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
-				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * multiplyHours;
 			}
 			else {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate
