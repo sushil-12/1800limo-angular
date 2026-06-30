@@ -152,6 +152,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	progressWidth: number = 25; // Progress line width percentage
 	private quoteBotAutofillSyncInterval?: ReturnType<typeof setInterval>;
 	private quoteBotAutocompleteRetryTimeout?: ReturnType<typeof setTimeout>;
+	private translateObserver?: MutationObserver;
 	private focusedField: string | null = null;
 
 	// Extra stops & amenities
@@ -482,119 +483,54 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	ngAfterViewInit(): void {
 		this.desktopWidth = window.innerWidth;
 		try {
-			if (this.desktopWidth <= '767') {
-			//google translate
-			console.log('-----google translate element for mobile view-------->>>>')
-			var v = document.createElement("script");
-			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en',layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_home_mobile'); } ";
-			this.elementRef.nativeElement.appendChild(v);
-			var s = document.createElement("script");
-			s.type = "text/javascript";
-			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-			this.elementRef.nativeElement.appendChild(s);
-
-			$('.goog-te-gadget').html($('.goog-te-gadget').children());
-			$("#google-translate").fadeIn('1000');
-
-
-			function cleartimer() {
-				setTimeout(function () {
-					window.clearInterval(myVar);
-				}, 500);
-			}
-			function myTimer() {
-				if ($('.goog-te-combo option:first').length) {
-					$('.goog-te-combo option:first').html('English');
-					cleartimer();
-				}
-			}
-			var myVar = setInterval(function () { myTimer() }, 0);
-		}
-
-		if (this.desktopWidth > '767') {
-			//google translate
-			console.log('<<<<<<<-------select language------>>>>>>>>')
-			var v = document.createElement("script");
-			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false, layout: google.translate.TranslateElement.InlineLayout.VERTICAL }, 'google_translate_element_home_desktop'); } ";
-			this.elementRef.nativeElement.appendChild(v);
-			var s = document.createElement("script");
-			s.type = "text/javascript";
-			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-			this.elementRef.nativeElement.appendChild(s);
-			$('.goog-te-gadget').html($('.goog-te-gadget').children());
-			$("#google-translate").fadeIn('1000');
-
-
-			function cleartimer() {
-				setTimeout(function () {
-					window.clearInterval(myVar);
-				}, 500);
-			}
-			function myTimer() {
-				if ($('.goog-te-combo option:first').length) {
-					$('.goog-te-combo option:first').html('English');
-					cleartimer();
-				}
-			}
-			var myVar = setInterval(function () { myTimer() }, 0);
-
-		}
+			const isMobile = this.desktopWidth <= 767;
+			this.initGoogleTranslate(
+				isMobile ? 'google_translate_element_home_mobile' : 'google_translate_element_home_desktop',
+				!isMobile,
+			);
 		} catch (translateErr) {
-			// Don't let a Google Translate script error abort the rest of ngAfterViewInit
-			// (which sets up autocomplete sync, carousels, etc.). Log it so it surfaces in
-			// the debug overlay instead of disappearing.
 			console.error('[ngAfterViewInit google translate init]', translateErr);
 		}
-		this.retryGoogleAutocompleteInitialization()
+		this.retryGoogleAutocompleteInitialization();
 
-		// Fix for Browser Autofill suppressing events:
-		// Periodically check native inputs and sync with Angular Reactive Form if populated natively
+		// Periodically sync native input values into the Angular reactive form to
+		// handle browser autofill, which can populate inputs without firing Angular events.
 		this.ngZone.runOutsideAngular(() => {
 			this.quoteBotAutofillSyncInterval = setInterval(() => {
 				let changed = false;
 				const checkAndSync = (inputRef: ElementRef, controlName: string) => {
-					if (inputRef && inputRef.nativeElement) {
-						const control = this.quoteBotForm?.get(controlName);
-						const nativeVal = String(getPlaceAutocompleteDisplayValue(inputRef.nativeElement) || '');
-						const controlValue = String(control?.value || '');
-						if (!nativeVal.trim() && !controlValue.trim()) {
-							clearPlaceAutocompleteDisplay(inputRef.nativeElement);
-							return;
-						}
-
-						if (inputRef.nativeElement.value !== nativeVal) {
-							inputRef.nativeElement.value = nativeVal;
-							changed = true;
-						}
-
-						if (!control || controlValue === nativeVal) {
-							return;
-						}
-
-						this.ngZone.run(() => {
-							if (this.isQuoteBotAirportDisplayControl(controlName)) {
-								const airportFieldName = controlName.replace(/_name$/, '');
-								this.syncAirportDraftValue(airportFieldName, nativeVal, {
-									markAsDirty: true,
-									markAsTouched: true,
-								});
-							} else if (this.isQuoteBotSharedLocationControl(controlName)) {
-								this.syncSharedLocationInputValue(controlName, nativeVal, {
-									markAsDirty: true,
-									markAsTouched: true,
-								});
-							} else {
-								control.setValue(nativeVal);
-								control.markAsDirty();
-								control.markAsTouched();
-								control.updateValueAndValidity();
-								this.quoteBotForm.updateValueAndValidity();
-							}
-						});
+					if (!inputRef?.nativeElement) return;
+					const control = this.quoteBotForm?.get(controlName);
+					const nativeVal = String(getPlaceAutocompleteDisplayValue(inputRef.nativeElement) || '');
+					const controlValue = String(control?.value || '');
+					if (!nativeVal.trim() && !controlValue.trim()) {
+						clearPlaceAutocompleteDisplay(inputRef.nativeElement);
+						return;
+					}
+					if (inputRef.nativeElement.value !== nativeVal) {
+						inputRef.nativeElement.value = nativeVal;
 						changed = true;
 					}
+					if (!control || controlValue === nativeVal) return;
+					this.ngZone.run(() => {
+						if (this.isQuoteBotAirportDisplayControl(controlName)) {
+							this.syncAirportDraftValue(controlName.replace(/_name$/, ''), nativeVal, {
+								markAsDirty: true,
+								markAsTouched: true,
+							});
+						} else if (this.isQuoteBotSharedLocationControl(controlName)) {
+							this.syncSharedLocationInputValue(controlName, nativeVal, {
+								markAsDirty: true,
+								markAsTouched: true,
+							});
+						} else {
+							control.setValue(nativeVal);
+							control.markAsDirty();
+							control.markAsTouched();
+							control.updateValueAndValidity();
+						}
+					});
+					changed = true;
 				};
 
 				checkAndSync(this.addressinput, 'pickup_address');
@@ -607,12 +543,40 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				checkAndSync(this.retdropairportinput, 'return_dropoff_airport_name');
 
 				if (changed) {
-					this.ngZone.run(() => {
-						this.quoteBotForm.updateValueAndValidity();
-					});
+					this.ngZone.run(() => this.quoteBotForm.updateValueAndValidity());
 				}
 			}, 100);
 		});
+	}
+
+	private initGoogleTranslate(elementId: string, suppressAutoDisplay: boolean): void {
+		const opts = suppressAutoDisplay
+			? `{ pageLanguage: 'en', autoDisplay: false, layout: google.translate.TranslateElement.InlineLayout.VERTICAL }`
+			: `{ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL }`;
+
+		const initScript = document.createElement('script');
+		initScript.type = 'text/javascript';
+		initScript.innerHTML = `function googleTranslateElementInit() { new google.translate.TranslateElement(${opts}, '${elementId}'); }`;
+		this.elementRef.nativeElement.appendChild(initScript);
+
+		const loaderScript = document.createElement('script');
+		loaderScript.type = 'text/javascript';
+		loaderScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+		this.elementRef.nativeElement.appendChild(loaderScript);
+
+		$('#google-translate').fadeIn('1000');
+
+		// Wait for Google Translate to inject its DOM, then relabel the first dropdown option.
+		// MutationObserver is used instead of a setInterval busy-loop.
+		this.translateObserver = new MutationObserver(() => {
+			const firstOption = document.querySelector<HTMLOptionElement>('.goog-te-combo option:first-child');
+			if (firstOption) {
+				firstOption.textContent = 'English';
+				this.translateObserver?.disconnect();
+				this.translateObserver = undefined;
+			}
+		});
+		this.translateObserver.observe(document.body, { childList: true, subtree: true });
 	}
 
 	private retryGoogleAutocompleteInitialization(attempts = 8, delay = 250): void {
@@ -4707,6 +4671,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			window.removeEventListener('error', this._resourceErrorHandler, true);
 		}
 
+		if (this.translateObserver) {
+			this.translateObserver.disconnect();
+			this.translateObserver = undefined;
+		}
 		if (this.quoteBotAutofillSyncInterval) {
 			clearInterval(this.quoteBotAutofillSyncInterval);
 		}

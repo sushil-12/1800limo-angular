@@ -555,14 +555,27 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.QB_vehicle_id = vehicle.id;
 		this.is_master_vehicle = !!vehicle.is_master_vehicle;
 
-		this.BookingForm.patchValue({
-			affiliate_type: 'affiliate',
-			affiliate_id: vehicle.affiliate_id
-		});
-
-		this.fetchAffiliateInformation(vehicle.affiliate_id);
-		this.fetchQBAffiliateVehicles(vehicle.affiliate_id);
-		this.fetchAffiliateDrivers(vehicle.affiliate_id);
+		if (vehicle.is_master_vehicle) {
+			// Master vehicles have no affiliate — mirror the direct quotebot flow:
+			// use loose_affiliate type and prefill vehicle fields from master vehicle info.
+			this.BookingForm.patchValue({
+				affiliate_type: 'loose_affiliate',
+				affiliate_id: '',
+				loose_affiliate_id: ''
+			});
+			const masterVehicleId = Number(vehicle.id || vehicle.ID || 0);
+			if (masterVehicleId > 0) {
+				this.loadMasterVehicleInfoForQuoteBot(masterVehicleId);
+			}
+		} else {
+			this.BookingForm.patchValue({
+				affiliate_type: 'affiliate',
+				affiliate_id: vehicle.affiliate_id
+			});
+			this.fetchAffiliateInformation(vehicle.affiliate_id);
+			this.fetchQBAffiliateVehicles(vehicle.affiliate_id);
+			this.fetchAffiliateDrivers(vehicle.affiliate_id);
+		}
 
 		// reveal the now-populated, still-editable manual fields
 		this.vehicleSelectionTab = 'manual';
@@ -3730,6 +3743,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
+		if (!affiliate_id) {
+			console.error('Invalid Parameter affiliate_id', affiliate_id);
+			return;
+		}
 		console.log("in affiliate info")
 		this.$spinner.show('normalspinner');
 		this.$api.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe((response: any) => {

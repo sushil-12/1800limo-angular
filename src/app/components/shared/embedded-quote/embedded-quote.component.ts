@@ -99,6 +99,13 @@ export class EmbeddedQuoteComponent implements OnChanges {
 
 	/** Drill into a class and fetch its available affiliate vehicles. */
 	selectClass(master: any): void {
+		// Master vehicles have no affiliate backing — emit directly so the host
+		// applies loose-affiliate logic, same as the direct quotebot flow.
+		if (master?.is_master_vehicle) {
+			this.choose(master);
+			return;
+		}
+
 		this.selectedClass = master;
 		this.view = 'vehicles';
 		this.vehicles = [];
