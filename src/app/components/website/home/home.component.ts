@@ -8,7 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { AmenitiesService } from '../../../services/amenities.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
-import { throwError } from 'rxjs';
+import { throwError, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
 import { QuotebotService } from '../../../services/quotebot.service';
@@ -16,7 +16,7 @@ import { SharedModule } from '../../../components/shared/shared.module';
 import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getPlaceAutocompleteDisplayValue, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
 // data for select fields
 import { constant_data } from '../../../../assets/js/data.js'
-import * as moment from 'moment';
+import moment from 'moment';
 import * as _dayjs from 'dayjs';
 const dayjs: (date?: any) => _dayjs.Dayjs = _dayjs as any;
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	roundTripPickerOpen = false;
 	rtLiveStart: any = null;
 	rtLiveEnd: any = null;
-	minDateDayjs = dayjs().startOf('day');
+	minDateDayjs = moment().startOf('day');
 	readonly dateRangeLocale = {
 		format: 'MMM D, YYYY',
 		separator: ' → ',
@@ -183,6 +183,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	private _windowErrorHandler!: OnErrorEventHandler;
 	private _unhandledRejectionHandler!: (e: PromiseRejectionEvent) => void;
 	private _resourceErrorHandler!: (e: Event) => void;
+	private _subscriptions: Subscription[] = [];
 
 	// ── Service carousel static data ─────────────────────────────────────────────
 	serviceInfo = {
@@ -550,33 +551,39 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	private initGoogleTranslate(elementId: string, suppressAutoDisplay: boolean): void {
-		const opts = suppressAutoDisplay
-			? `{ pageLanguage: 'en', autoDisplay: false, layout: google.translate.TranslateElement.InlineLayout.VERTICAL }`
-			: `{ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL }`;
+		// Run entirely outside Angular's zone so Zone.js does not patch the Google
+		// Translate scripts' event listeners and internal callbacks.  This prevents
+		// the flood of TypeErrors from the widget (common in certain regions where
+		// the widget behaves unexpectedly) from ever reaching Angular's ErrorHandler.
+		this.ngZone.runOutsideAngular(() => {
+			const opts = suppressAutoDisplay
+				? `{ pageLanguage: 'en', autoDisplay: false, layout: google.translate.TranslateElement.InlineLayout.VERTICAL }`
+				: `{ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL }`;
 
-		const initScript = document.createElement('script');
-		initScript.type = 'text/javascript';
-		initScript.innerHTML = `function googleTranslateElementInit() { new google.translate.TranslateElement(${opts}, '${elementId}'); }`;
-		this.elementRef.nativeElement.appendChild(initScript);
+			const initScript = document.createElement('script');
+			initScript.type = 'text/javascript';
+			initScript.innerHTML = `function googleTranslateElementInit() { new google.translate.TranslateElement(${opts}, '${elementId}'); }`;
+			this.elementRef.nativeElement.appendChild(initScript);
 
-		const loaderScript = document.createElement('script');
-		loaderScript.type = 'text/javascript';
-		loaderScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-		this.elementRef.nativeElement.appendChild(loaderScript);
+			const loaderScript = document.createElement('script');
+			loaderScript.type = 'text/javascript';
+			loaderScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+			this.elementRef.nativeElement.appendChild(loaderScript);
 
-		$('#google-translate').fadeIn('1000');
+			$('#google-translate').fadeIn('1000');
 
-		// Wait for Google Translate to inject its DOM, then relabel the first dropdown option.
-		// MutationObserver is used instead of a setInterval busy-loop.
-		this.translateObserver = new MutationObserver(() => {
-			const firstOption = document.querySelector<HTMLOptionElement>('.goog-te-combo option:first-child');
-			if (firstOption) {
-				firstOption.textContent = 'English';
-				this.translateObserver?.disconnect();
-				this.translateObserver = undefined;
-			}
+			// Wait for Google Translate to inject its DOM, then relabel the first dropdown option.
+			// MutationObserver is used instead of a setInterval busy-loop.
+			this.translateObserver = new MutationObserver(() => {
+				const firstOption = document.querySelector<HTMLOptionElement>('.goog-te-combo option:first-child');
+				if (firstOption) {
+					firstOption.textContent = 'English';
+					this.translateObserver?.disconnect();
+					this.translateObserver = undefined;
+				}
+			});
+			this.translateObserver.observe(document.body, { childList: true, subtree: true });
 		});
-		this.translateObserver.observe(document.body, { childList: true, subtree: true });
 	}
 
 	private retryGoogleAutocompleteInitialization(attempts = 8, delay = 250): void {
@@ -2074,29 +2081,26 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	Subscriptions() {
-		this.quoteBotForm.get('service_type')?.valueChanges.subscribe(() => {
-			setTimeout(() => {
-				this.retryGoogleAutocompleteInitialization();
-			}, 200);
+		const serviceTypeSub = this.quoteBotForm.get('service_type')?.valueChanges.subscribe(() => {
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 200);
 		});
+		if (serviceTypeSub) { this._subscriptions.push(serviceTypeSub); }
 
-		this.quoteBotForm.get('pickup_type').valueChanges.subscribe((value: string) => {
+		const pickupTypeSub = this.quoteBotForm.get('pickup_type')?.valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
 			this.closeAirportDropdown();
 			this.closeAddressDropdown();
-			setTimeout(() => {
-				this.retryGoogleAutocompleteInitialization()
-			}, 200)
-		})
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 200);
+		});
+		if (pickupTypeSub) { this._subscriptions.push(pickupTypeSub); }
 
-		this.quoteBotForm.get('dropoff_type').valueChanges.subscribe((value: string) => {
+		const dropoffTypeSub = this.quoteBotForm.get('dropoff_type')?.valueChanges.subscribe((value: string) => {
 			console.log("in value chanes", value)
 			this.closeAirportDropdown();
 			this.closeAddressDropdown();
-			setTimeout(() => {
-				this.retryGoogleAutocompleteInitialization()
-			}, 200)
-		})
+			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 200);
+		});
+		if (dropoffTypeSub) { this._subscriptions.push(dropoffTypeSub); }
 	}
 	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
@@ -2114,7 +2118,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.isHomePageLoading = true;
 		// this.spinner.show()
 
-		this.websiteService.fetchHomePageData()
+		this._subscriptions.push(this.websiteService.fetchHomePageData()
 			.pipe(
 				catchError(err => {
 					this.isHomePageLoading = false;
@@ -2134,7 +2138,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.initStepRotation(); // Initialize step rotation animation
 					this.initServiceCarousel()
 				}, 100);
-			})
+			}));
 
 	}
 
@@ -2147,9 +2151,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.generateQBForm()) {
 			this.prefillQuotebot()
 		}
-		this.quotebotService.getAllFilters().subscribe((response: any) => {
+		this._subscriptions.push(this.quotebotService.getAllFilters().subscribe((response: any) => {
 			this.amenitiesList = response?.data?.amenities?.filter((a: any) => a.id !== 0) || [];
-		});
+		}));
 	}
 
 
@@ -2696,7 +2700,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.selectedAmenities = previous_quotebot.amenities;
 			}
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
-			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
+			this.quoteBotSwitch(previous_quotebot?.service_type?.length > 1 ? previous_quotebot?.service_type : "one_way")
 			this.scheduleQuoteBotAutocompleteDisplaySync()
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
 			this.autoPickLocationOnLoad();
@@ -3257,7 +3261,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		},
 
 		bookingHours: (event: any) => {
-			this.SetFormValue('booking_hours', event.target.value)
+			this.SetFormValue('booking_hour', event.target.value)
 		}
 	}
 
@@ -3286,7 +3290,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		const p = this.QBForm?.pickup_date?.value;
 		const r = this.QBForm?.return_pickup_date?.value;
 		if (p && r) {
-			this.roundTripRange = { startDate: dayjs(p), endDate: dayjs(r) };
+			this.roundTripRange = { startDate: moment(p), endDate: moment(r) };
 		} else {
 			this.roundTripRange = null;
 		}
@@ -3299,21 +3303,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return d.isValid() ? d.format('MMM D, YYYY') : '';
 	}
 
-	private getRoundTripPickerDate(value: any): _dayjs.Dayjs | null {
+	private getRoundTripPickerDate(value: any): moment.Moment | null {
 		if (!value) {
 			return null;
 		}
 
 		const raw = value?.toDate ? value.toDate() : value;
-		const parsed = dayjs(raw);
+		const parsed = moment(raw);
 		return parsed.isValid() ? parsed.startOf('day') : null;
 	}
 
-	private getRoundTripPickupValue(): _dayjs.Dayjs | null {
+	private getRoundTripPickupValue(): moment.Moment | null {
 		return this.getRoundTripPickerDate(this.QBForm?.pickup_date?.value) || this.getRoundTripPickerDate(this.roundTripRange?.startDate);
 	}
 
-	private getRoundTripReturnValue(): _dayjs.Dayjs | null {
+	private getRoundTripReturnValue(): moment.Moment | null {
 		return this.getRoundTripPickerDate(this.QBForm?.return_pickup_date?.value) || this.getRoundTripPickerDate(this.roundTripRange?.endDate);
 	}
 
@@ -3326,13 +3330,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 		const pickupDate = this.getRoundTripPickupValue() || this.minDateDayjs.clone();
-		picker.setStartDate(pickupDate);
+		picker.setStartDate(pickupDate as any);
 
 		console.log('FUNC: primeRoundTripPickerFromForm - ', pickupDate, this.getRoundTripPickupValue(), this.roundTripRange?.startDate);
 
 		const returnDate = this.getRoundTripReturnValue();
 		if (returnDate) {
-			picker.setEndDate(returnDate);
+			picker.setEndDate(returnDate as any);
 		} else {
 			picker.endDate = null;
 			picker.pickingDate = true;
@@ -3350,12 +3354,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 		if (!picker.startDate) {
-			picker.setStartDate(this.getRoundTripPickupValue() || this.minDateDayjs.clone());
+			picker.setStartDate((this.getRoundTripPickupValue() || this.minDateDayjs.clone()) as any);
 		}
 
 		if (target === 'pickup') {
 			if (!picker.endDate) {
-				picker.setEndDate(this.getRoundTripReturnValue() || picker.startDate.clone());
+				picker.setEndDate((this.getRoundTripReturnValue() || picker.startDate.clone()) as any);
 			}
 			this.roundTripSelectionTarget = 'pickup';
 		} else {
@@ -3866,12 +3870,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			};
 			localStorage.setItem('quotebot_form', JSON.stringify(quotebotPayload));
 			const hasAmenities = this.selectedAmenities.length > 0;
+			this.spinner.hide();
 			this.router.navigate(['quotebot/master-vehicle'], hasAmenities ? { queryParams: { autoApply: 1 } } : {});
-			return
 		}, (error) => {
 			console.group('Facing Some Issues while calculating distance .... Error fetched ->\n')
 			console.warn(error)
 			console.log('\n ------ Quote Bot Form ------- \n', this.quoteBotForm.value)
+			this.spinner.hide();
 			this.errorDialogService.openDialog({
 				errors: {
 					error: "Please provide valid location points."
@@ -3879,7 +3884,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 			console.groupEnd()
 		})
-		this.spinner.hide()
 
 
 
@@ -4660,6 +4664,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	ngOnDestroy(): void {
+		this._subscriptions.forEach(s => s.unsubscribe());
+		this._subscriptions = [];
+
 		// Restore original console methods
 		if (this._origConsoleError) { console.error = this._origConsoleError; }
 		if (this._origConsoleWarn) { console.warn = this._origConsoleWarn; }
@@ -4715,14 +4722,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// ── Call this inside ngOnInit ─────────────────────────────────
 	loadBlogPosts(): void {
 		this.blogLoading = true;
-		this.blogService.getPosts().subscribe({
+		this._subscriptions.push(this.blogService.getPosts().subscribe({
 			next: (posts) => {
 				this.blogPosts = posts.slice(0, 9); // show up to 9 posts in slider
 				this.blogLoading = false;
 				setTimeout(() => this.updateSlideWidth(), 100);
 			},
 			error: () => { this.blogLoading = false; }
-		});
+		}));
 	}
 
 	updateSlideWidth(): void {
