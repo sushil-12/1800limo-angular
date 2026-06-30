@@ -80,6 +80,12 @@ export class BlogService {
          .pipe(map(posts => posts.map(p => this.mapPost(p))));
    }
 
+   getHomePosts(): Observable<BlogPost[]> {
+      return this.http
+         .get<WpPost[]>(`${WP_API}/posts?per_page=10&_embed`)
+         .pipe(map(posts => posts.map(p => this.mapPost(p))));
+   }
+
    getPostBySlug(slug: string): Observable<BlogPost | undefined> {
       return this.http
          .get<WpPost[]>(`${WP_API}/posts?slug=${encodeURIComponent(slug)}&_embed`)

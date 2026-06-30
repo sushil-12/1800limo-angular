@@ -4722,7 +4722,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	// ── Call this inside ngOnInit ─────────────────────────────────
 	loadBlogPosts(): void {
 		this.blogLoading = true;
-		this._subscriptions.push(this.blogService.getPosts().subscribe({
+		this._subscriptions.push(this.blogService.getHomePosts().subscribe({
 			next: (posts) => {
 				this.blogPosts = posts.slice(0, 9); // show up to 9 posts in slider
 				this.blogLoading = false;
