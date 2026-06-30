@@ -1684,6 +1684,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 	}
 
 	calculateBookingTotal(rateArray: any, serviceType: string, numberOfVehicles: number = 1) {
+		const multiplyHours = this.number_of_hours >= 24 ? this.number_of_hours/24 : this.number_of_hours; 
 		console.log(this.number_of_hours, "fffffff----------", serviceType)
 		let subtotal = 0
 		let agentShare = 0
@@ -1698,7 +1699,7 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 			all_inclusive_total += rateArray.all_inclusive_rates[key]?.baserate || 0
 		}
 		if (serviceType == 'charter_tour' && !this.min_rate_involved) {
-			all_inclusive_total += (rateArray?.all_inclusive_rates?.Base_Rate?.baserate || 0) * this.number_of_hours
+			all_inclusive_total += (rateArray?.all_inclusive_rates?.Base_Rate?.baserate || 0) * multiplyHours;
 		}
 
 		/* -------- BASE RATE FOR SHARE (Inclusive + Amenities) -------- */
@@ -4350,12 +4351,13 @@ export class CreateNewBookingComponent implements OnInit, AfterViewInit, OnDestr
 	}
 
 	createReservationShareArray() {
+		const multiplyHours = this.number_of_hours >= 24 ? this.number_of_hours/24 : this.number_of_hours; 
 		console.log('in function createReservationShareArray')
 		if (this.rateArray) {
 			console.log('in function createReservationShareArray iffffff')
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
-				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * multiplyHours;
 			}
 			else {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate

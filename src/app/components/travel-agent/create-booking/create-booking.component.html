@@ -1369,13 +1369,11 @@
 			</div>
 
 			<!-- Extra Stops -->
-			<div class="row mt-3">
-				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-					<h4 class="m-0">
-						Extra Stops
-					</h4>
-					<div class="mx-4">
+			<div class="row m-3">
+				<div>
+					<div>
 						<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
+							<i class="fa fa-plus" style="margin-right: 6px;"></i>
 							Add Stop
 						</button>
 					</div>
@@ -2195,16 +2193,15 @@
 			<!-- Extra Stops -->
 			<div class="row my-3 justify-items-end">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-					<h4 class="m-0">
-						Extra Stops
-					</h4>
-					<div class="mx-4">
+					<div class="px-2">
 						<button type="button" class="custom-filled-button" (click)="addExtraStop(true)">
+							<i class="fa fa-plus" style="margin-right: 6px;"></i>
 							Add Stop
 						</button>
 					</div>
 				</div>
 			</div>
+            
 			<!-- Extra Stop Address Field -->
 			<!-- <div class="row my-2 align-items-center"
 				*ngFor="let extra_stop of ReturnExtraStops.controls; index as stop_index">
