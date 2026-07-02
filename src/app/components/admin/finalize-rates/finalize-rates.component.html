@@ -86,17 +86,30 @@
 
 			<!-- Hours -->
 			<div class="col-auto num-hours" *ngIf="service_type == 'charter_tour' && sub_item.key === 'Base_Rate'">
-				<div>
+				<div class="hours-input-wrapper d-flex align-items-start">
 					<mat-form-field appearance="outline" class="m-0">
-						<mat-label>Number of Hours</mat-label>
-						<input type="number" matInput placeholder="2" [value]="hours" [readonly]="is_readonly_min_rate"
-							min="2" step="1" class="font-weight-bolder rate-input-field text-right"
+						<mat-label>{{ isDaysMode ? 'Number of Days' : 'Number of Hours' }}</mat-label>
+						<input type="number" matInput [placeholder]="isDaysMode ? '1' : '2'"
+							[value]="isDaysMode ? charterDays : hours" [readonly]="is_readonly_min_rate"
+							[min]="isDaysMode ? 1 : 2" step="1" class="font-weight-bolder rate-input-field text-right"
 							(input)="handleHourChange($event)" (blur)="enforceMinimumHours($event)"
 							(keydown)="blockNegative($event)" (focus)="$event.target.select()" />
 					</mat-form-field>
-					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
-						issued</span>
+
+					 <!-- Hrs/Days dropdown -->
+					<select class="unit-dropdown" *ngIf="!is_readonly_min_rate" [value]="isDaysMode ? 'days' : 'hours'"
+						(change)="setUnitMode($event.target.value === 'days')">
+						<option value="hours">Hours</option>
+						<option value="days">Days</option>
+					</select>
 				</div>
+
+				<div *ngIf="isDaysMode" class="text-danger m-0"
+					style="font-weight:bold; position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px !important; font-size: 15px; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+					Day rate applies
+				</div>
+				<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
+					issued</span>
 			</div>
 
 			<!-- Admin Share -->

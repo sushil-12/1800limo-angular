@@ -39,6 +39,10 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
+	isDaysMode: boolean = false;
+	charterDays: number = 0;
+	unitModeManuallySet: boolean = false;  
+
 	ratesdata = new BehaviorSubject<any>({});
 	temp: any;
 	is_readonly_min_rate: boolean = false;
@@ -110,6 +114,10 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		console.warn("Change has been detected: ", changes);
 		this.currencySymbol = this.currencyObject?.symbol
 
+     if (!this.unitModeManuallySet) {
+       this.isDaysMode = this.hours >= 24;
+	 }
+	    this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
 
 		this.ratesform = changes.init_rates?.currentValue ?? this.ratesform;
 		this.returnratesform =
@@ -127,18 +135,21 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 		if (changes.nums) {
 			this.hours = Number(changes.nums.currentValue)
-			if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
-				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
-			}
-			else {
-				if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
-					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
+				if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
+					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 				}
-				if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
-					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
-				}
+				else {
+					if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
+						this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
+					}
+					if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
+						this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
+					}
 
 			}
+
+			this.isDaysMode = this.hours >= 24;
+		    this.charterDays = this.hours >= 24 ? this.hours/24 : this.hours;
 		}
 
 		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
@@ -183,6 +194,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			this.ReturnRatesForm = null
 			this.total = {}
 			this.r_total = {}
+			this.unitModeManuallySet = false;  
 			this.initRates()
 			this.calculateTotal('RatesForm')
 			this.calculateGrandTotal('RatesForm')
@@ -192,32 +204,68 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				this.calculateGrandTotal('ReturnRatesForm')
 			}
 		}
+
 	}
 
-	// Live update while typing (only when value is already 2 or more)
 	handleHourChange(event: any) {
 		const value = Number(event.target.value);
+		if (isNaN(value)) return;
 
-		// Only update if it's 2 or more (allows typing 10, 12, 15 etc.)
-		if (!isNaN(value) && value >= 2) {
+		if (this.isDaysMode) {
+			if (value >= 1) {
+				this.charterDays = value;
+				const hrs = value * 24;
+				this.returnNumberOfHr.emit(hrs);
+				this.changeInHours(hrs);
+			}
+		} else if (value >= 2) {
 			this.returnNumberOfHr.emit(value);
 			this.changeInHours(value);
 		}
 	}
 
-	// Force minimum 2 when user clicks away (blur)
 	enforceMinimumHours(event: any) {
 		let value = Number(event.target.value || 0);
 
-		// If 0, 1, empty or negative → make it 2
-		if (isNaN(value) || value < 2) {
-			value = 2;
-			event.target.value = 2;
+		if (this.isDaysMode) {
+			if (isNaN(value) || value < 1) {
+				value = 1;
+				event.target.value = 1;
+			}
+			this.charterDays = value;
+			const hrs = value * 24;
+			this.returnNumberOfHr.emit(hrs);
+			this.changeInHours(hrs);
+		} else {
+			if (isNaN(value) || value < 2) {
+				value = 2;
+				event.target.value = 2;
+			}
+			this.returnNumberOfHr.emit(value);
+			this.changeInHours(value);
+		}
+	}
+
+	setUnitMode(isDays: boolean) {
+		if (this.is_readonly_min_rate || isDays === this.isDaysMode) {
+			return;
 		}
 
-		this.returnNumberOfHr.emit(value);
-		this.changeInHours(value);
-	}
+		this.unitModeManuallySet = true;
+		this.isDaysMode = isDays;
+
+		if (isDays) {
+			// convert whatever hours we currently have into whole days (min 1)
+			this.charterDays = this.hours > 0 ? Math.max(1, Math.round(this.hours / 24)) : 1;
+			this.hours = this.charterDays * 24;
+		} else {
+			// coming back from days -> hours, enforce the 2hr minimum
+			this.hours = this.hours >= 2 ? this.hours : 2;
+		}
+
+		this.returnNumberOfHr.emit(this.hours);
+		this.changeInHours(this.hours);
+    }
 
 	// Block negative sign while typing
 	blockNegative(event: KeyboardEvent) {
@@ -545,10 +593,11 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 
 	calculateReturnBaseRateShare() {
+		const multiplyHours = this.isDaysMode ? this.charterDays : this.hours; 
 		try {
 			let baseRate = 0;
 			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * multiplyHours;
 			}
 			else {
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
@@ -583,11 +632,12 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 
 	calculateBaseRateShare() {
+		const multiplyHours = this.isDaysMode ? this.charterDays : this.hours; 
 		try {
 			let baseRate = 0;
 			console.log('in function calculateBaseRateShare', this.RatesForm)
 			if (this?.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * multiplyHours;
 			}
 			else {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
@@ -628,6 +678,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
+		const multiplyHours = this.isDaysMode ? this.charterDays : this.hours; 
 		console.log('in function calculateAmount --> subform', subform)
 		await this.calculateAdminShare()
 		await this.calculateTravelShare()
@@ -650,7 +701,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 				// Hourly Rate - only in case of hours
 				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate) {
-					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
+					amount = Number(Number(Number(multiplyHours) * baserate).toFixed(2));
 				} else {
 					amount = baserate;
 				}
@@ -707,7 +758,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
 				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * multiplyHours;
 				}
 				baseRateAmount += this.calc_admin_share
 				if (this.isTravelShare && !this.isCreatedByAdmin) {
@@ -831,7 +882,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
 				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * multiplyHours;
 				}
 				baseRateAmount += this.r_calc_admin_share
 				if (this.isTravelShare && !this.isCreatedByAdmin) {

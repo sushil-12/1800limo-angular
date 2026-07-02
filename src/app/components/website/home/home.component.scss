@@ -13,11 +13,12 @@
 	max-width: 100%;
 	object-fit: contain;
 	flex-shrink: 0;
+	margin-bottom: 0px !important;
 }
 
 .whychoose_no h3 {
 	font-size: 15px;
-	margin-bottom: 2px;
+	margin: 9px;
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
@@ -50,9 +51,26 @@
 	flex-direction: column;
 }
 
-@media (max-width: 575.98px) {
+/* --- iPad / tablet range fix --- */
+@media (min-width: 768px) and (max-width: 1024px) {
 	.whychoose_no {
-		min-height: 140px;
+		justify-content: flex-start;
+	}
+
+	.whychoose_no img {
+		height: 160px;  
+	}
+
+	.whychoose_no h3 {
+		font-size: 0.9rem;
+		margin: 8px 6px;
+	}
+}
+
+/* --- Mobile --- */
+@media (max-width: 767px) {
+	.whychoose_no {
+		min-height: 100px;
 		justify-content: center;
 	}
 
@@ -62,7 +80,8 @@
 	}
 
 	.whychoose_no img {
-		max-height: 600px;
+		height: auto;
+		max-height: 200px;   
 	}
 }
 

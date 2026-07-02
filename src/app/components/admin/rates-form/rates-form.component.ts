@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, OnChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, OnChanges, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { AdminService } from "src/app/services/admin.service";
 
@@ -11,7 +11,7 @@ import { AmenitiesService } from "src/app/services/amenities.service";
 	templateUrl: "./rates-form.component.html",
 	styleUrls: ["./rates-form.component.scss"],
 })
-export class RatesFormComponent implements OnInit, OnChanges {
+export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	// Capture Events.
 	@Input("preventRateOverride") preventRateOverride: boolean = false;
 	@Input("initRates") init_rates: boolean = false;
@@ -102,6 +102,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	previousBookingData: any = null;
 	numberOfHoursError: boolean = false;
 	private hasCapturedInitialBookingDataBaseline: boolean = false;
+	private numsChangeDebounce: ReturnType<typeof setTimeout> | null = null;
+	private readonly NUMS_DEBOUNCE_MS = 600; // enough time to type up to 3 digits
 
 	constructor(
 		private $form: FormBuilder,
@@ -130,6 +132,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 	}
 
+	ngOnDestroy(): void {
+		if (this.numsChangeDebounce) {
+			clearTimeout(this.numsChangeDebounce);
+		}
+	}
 
 	handleSubHeading(items: string) {
 		console.log(items, "check items")
@@ -228,12 +235,32 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		// 			this.fillReturnRateForm(data)
 		// }
 
+
 		if (changes.nums) {
-			this.hours = Number(changes.nums.currentValue)
-			this.isDaysMode = this.hours >= 24;
-			this.charterDays = this.hours >= 24 ? this.hours / 24 : this.hours;
-			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
-		}
+				const newHours = Number(changes.nums.currentValue);
+				console.log('Number of hours changed to: ', newHours);
+
+				// Echo guard: same days-value bounced back while in Days mode — ignore it
+				const isEchoOfSameDays = this.isDaysMode && newHours === this.hours / 24;
+
+				if (isEchoOfSameDays) {
+					console.log('Ignoring echoed days value, no label change needed');
+				} else {
+					// Debounce: wait till user finishes typing (up to 3 digits) before reacting
+					if (this.numsChangeDebounce) {
+						clearTimeout(this.numsChangeDebounce);
+					}
+
+					    this.numsChangeDebounce = setTimeout(() => {
+						this.hours = newHours;
+						this.isDaysMode = this.hours >= 24;
+						this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
+						this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+						this.numsChangeDebounce = null;
+					}, this.NUMS_DEBOUNCE_MS);
+				}
+			}
+
 		if (changes.affiliate_type || changes.return_affiliate_type || changes.booking_created_from) {
 			console.log("in chnage affiloate typre")
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');

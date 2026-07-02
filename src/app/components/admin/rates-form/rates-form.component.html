@@ -97,6 +97,10 @@
 						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px !important; font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
 						number of hours should be a minimum of 2 hours
 					</div>
+					<div *ngIf="isDaysMode" class="text-danger m-0"
+						style="font-weight:bold; position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px !important; font-size: 15px; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+						Day rate applies
+					</div>
 					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
 						issued</span>
 				</div>
