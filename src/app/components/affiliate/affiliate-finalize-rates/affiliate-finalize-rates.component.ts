@@ -40,6 +40,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	ratesdata = new BehaviorSubject<any>({});
 	temp: any;
 
+	isDaysMode: boolean = false;
+	charterDays: number = 0;
+	unitModeManuallySet: boolean = false;  
+
 	ratesform: boolean = false;
 	returnratesform: boolean = false;
 
@@ -111,7 +115,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
 
-
+		if (!this.unitModeManuallySet) {
+		 this.isDaysMode = this.hours >= 24;
+		}
+	    this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
 
 		this.ratesform = changes.init_rates?.currentValue ?? this.ratesform;
 		this.returnratesform =
@@ -181,6 +188,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			this.ReturnRatesForm = null
 			this.total = {}
 			this.r_total = {}
+			this.unitModeManuallySet = false; 
 			this.initRates()
 			this.calculateTotal('RatesForm')
 			this.calculateGrandTotal('RatesForm')
@@ -396,13 +404,22 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	getRatesData() {
 		return this.ratesdata.asObservable();
 	}
+
 	handleHourChange(event: any) {
-		console.log('------->>>>>>>', event.target.value)
-		if (event.target.value == '') {
-			let n_hr: any = 1
-			this.returnNumberOfHr.emit(n_hr)
+		const value = Number(event.target.value);
+		if (isNaN(value)) return;
+
+		if (this.isDaysMode) {
+			if (value >= 1) {
+				this.charterDays = value;
+				const hrs:any = value * 24;
+				this.returnNumberOfHr.emit(hrs);
+				this.changeInHours(hrs);
+			}
+		} else if (value >= 2) {
+		    this.returnNumberOfHr.emit(event.target.value)
+			this.changeInHours(value);
 		}
-		this.returnNumberOfHr.emit(event.target.value)
 	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
@@ -451,6 +468,27 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			}
 		}
 	}
+
+	setUnitMode(isDays: boolean) {
+		if (this.is_readonly_min_rate || isDays === this.isDaysMode) {
+			return;
+		}
+
+		this.unitModeManuallySet = true;
+		this.isDaysMode = isDays;
+
+		if (isDays) {
+			// convert whatever hours we currently have into whole days (min 1)
+			this.charterDays = this.hours > 0 ? Math.max(1, Math.round(this.hours / 24)) : 1;
+			this.hours = this.charterDays * 24;
+		} else {
+			// coming back from days -> hours, enforce the 2hr minimum
+			this.hours = this.hours >= 2 ? this.hours : 2;
+		}
+
+		this.returnNumberOfHr.emit(this.hours as any);
+		this.changeInHours(this.hours);
+    }
 
 
 	calculateTotal(form: "RatesForm" | "ReturnRatesForm") {
@@ -558,10 +596,11 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 
 	calculateReturnBaseRateShare() {
+		const multiplyHours = this.isDaysMode ? this.charterDays : this.hours; 
 		try {
 			let baseRate = 0;
 			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * multiplyHours
 			}
 			else {
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
@@ -595,11 +634,12 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	}
 
 	calculateBaseRateShare() {
+		const multiplyHours = this.isDaysMode ? this.charterDays : this.hours; 
 		try {
 			let baseRate = 0;
 			// console.log('in function calculateBaseRateShare', this.RatesForm)
 			if (this?.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * multiplyHours
 			}
 			else {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
@@ -640,6 +680,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	}
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
+		const multiplyHours = this.isDaysMode ? this.charterDays : this.hours; 
 		console.log('in function calculateAmount --> subform', subform)
 		await this.calculateAdminShare()
 		await this.calculateTravelShare()
@@ -662,7 +703,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 				// Hourly Rate - only in case of hours
 				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate) {
-					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
+					amount = Number(Number(Number(multiplyHours) * baserate).toFixed(2));
 				} else {
 					amount = baserate;
 				}
@@ -732,7 +773,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
 				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * multiplyHours
 				}
 				baseRateAmount += this.calc_admin_share
 				if (this.isTravelShare && !this.isCreatedByAdmin) {
@@ -853,7 +894,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
 				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
-					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * multiplyHours
 				}
 				baseRateAmount += this.r_calc_admin_share
 				if (this.isTravelShare && !this.isCreatedByAdmin) {

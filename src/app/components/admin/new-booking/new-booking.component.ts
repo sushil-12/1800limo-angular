@@ -3783,8 +3783,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			? this.bookingResponse.driver_id
 			: (selectedVehicle.associated_driver || this.DriverList?.[0]?.id);
 		console.log('[handleSelectVehicleType] resolved driverValue:', driverValue);
-		this.SetFormValue('driver_id', driverValue);
-		this.autofillData('driver', driverValue);
+		if (this.Form.affiliate_type.value !== 'loose_affiliate') {
+			this.SetFormValue('driver_id', driverValue);
+			this.autofillData('driver', driverValue);
+		}
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
@@ -4495,7 +4497,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 			}
-			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
+			const driverNameParts = [info?.FirstName, info?.MiddleName, info?.LastName].filter(Boolean);
+			if (driverNameParts.length > 0) {
+				this.SetFormValue('driver_name', driverNameParts.join(' '));
+			}
 			this.SetFormValue('driver_gender', info?.Gender)
 			this.SetFormValue('driver_cell', info?.CellNumber)
 			this.SetFormValue('driver_cell_isd', info?.CellIsd)
@@ -4516,7 +4521,10 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 					}
 				}
 			}
-			this.SetFormValue('return_driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
+			const returnDriverNameParts = [info?.FirstName, info?.MiddleName, info?.LastName].filter(Boolean);
+			if (returnDriverNameParts.length > 0) {
+				this.SetFormValue('return_driver_name', returnDriverNameParts.join(' '));
+			}
 			this.SetFormValue('return_driver_gender', info?.Gender)
 			this.SetFormValue('return_driver_cell', info?.CellNumber)
 			this.SetFormValue('return_driver_cell_isd', info?.CellIsd)

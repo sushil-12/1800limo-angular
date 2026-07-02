@@ -107,7 +107,7 @@
 							<mat-select formControlName="number_of_hours"
 								(selectionChange)="handleNoOfHours($event.value)">
 								<mat-option *ngFor="let hour of hour_values" [value]="hour.return_value">
-									{{ hour.display_value }}
+									{{ number_of_hours }}
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
@@ -1978,7 +1978,7 @@
 						<mat-select formControlName="driver_id" placholder="Choose Driver"
 							(selectionChange)="autofillData('driver', $event.value)" [disabled]="true">
 						<mat-option *ngFor="let driver of DriverList" [value]="driver.id">
-							{{ driver.FirstName }} {{ driver.MiddleName != null ? driver.MiddleName : '' }} {{ driver.LastName }}
+						 {{ driver.FirstName }} {{ driver.MiddleName != null ? driver.MiddleName : '' }} {{ driver.LastName }}
 						</mat-option>
 
 						</mat-select>

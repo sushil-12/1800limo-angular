@@ -336,9 +336,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	validateInputLimit(event: any) {
 		const value = parseInt(event.target.value);
-		if (value > 100) {
-			event.target.value = 100;
-			this.quoteBotForm.get(event.target.getAttribute('formControlName'))?.setValue(100);
+		if (value > 9999) {
+			event.target.value = 9999;
+			this.quoteBotForm.get(event.target.getAttribute('formControlName'))?.setValue(9999);
 		}
 	}
 	//google map autocomplete
@@ -4041,7 +4041,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	//increment/decrement in ONE WAY form
 	change(changeType: 'i' | 'd', fieldName: 'l' | 'p', isReturn: boolean = false) {
-		let max_length = 100
+		let max_length = 9999
 		const controlName = fieldName == 'p'
 			? (isReturn ? 'return_no_of_passenger' : 'no_of_passenger')
 			: (isReturn ? 'return_no_of_luggage' : 'no_of_luggage')

@@ -243,7 +243,7 @@
             </div>
             <!-- Col 2 -->
             <div class="vd-details-col">
-			  <div class="vd-detail-cell">
+			    <div class="vd-detail-cell">
                 <span class="vd-detail-cell__lbl">Time</span>
                 <span class="vd-detail-cell__val">{{ formatTime(quotebot_form.pickup_time) }}</span>
               </div>
@@ -266,13 +266,13 @@
             </div>
             <!-- Col 3 -->
             <div class="vd-details-col">
-			  <div class="vd-detail-cell">
+			        <div class="vd-detail-cell">
                 <span class="vd-detail-cell__lbl">Passengers</span>
                 <span class="vd-detail-cell__val">{{ quotebot_form.no_of_passenger }}</span>
               </div>
 
               <!-- Dropoff Airport or Address (hidden for charter — no fixed destination) -->
-              <ng-container *ngIf="quotebot_form?.service_type !== 'charter_tour'">
+              <ng-container>
                 <ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then sp_dropair; else sp_dropadd">
                 </ng-container>
                 <ng-template #sp_dropair>
