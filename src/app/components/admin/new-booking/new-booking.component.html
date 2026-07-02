@@ -107,7 +107,7 @@
 							<mat-select formControlName="number_of_hours"
 								(selectionChange)="handleNoOfHours($event.value)">
 								<mat-option *ngFor="let hour of hour_values" [value]="hour.return_value">
-									{{ number_of_hours }}
+									{{ hour.display_value }}
 								</mat-option>
 							</mat-select>
 						</mat-form-field>

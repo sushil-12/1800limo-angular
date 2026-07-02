@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -12,7 +12,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 	templateUrl: './rates-forms.component.html',
 	styleUrls: ['./rates-forms.component.scss']
 })
-export class RatesFormsComponent implements OnInit, OnChanges {
+export class RatesFormsComponent implements OnInit, OnChanges, OnDestroy {
 	private rateTypeSubscriptions = new Set<string>();
 	@Input("initRates") init_rates: boolean = false;
 	@Input("initReturnRates") init_r_rates: boolean = false;
@@ -96,6 +96,8 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	currencySymbol: any;
 	previousBookingData: any = null;
 	numberOfHoursError: boolean = false;
+	private numsChangeDebounce: ReturnType<typeof setTimeout> | null = null;
+	private readonly NUMS_DEBOUNCE_MS = 600; 
 
 	constructor(
 		private $form: FormBuilder,
@@ -172,11 +174,30 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 		}
 
 		if (changes.nums) {
-			this.hours = Number(changes.nums.currentValue)
-			this.isDaysMode = this.hours >= 24;
-			this.charterDays = this.hours >= 24 ? this.hours / 24 : this.hours;
-			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+				const newHours = Number(changes.nums.currentValue);
+				console.log('Number of hours changed to: ', newHours);
+
+				// Echo guard: same days-value bounced back while in Days mode — ignore it
+				const isEchoOfSameDays = this.isDaysMode && newHours === this.hours / 24;
+
+				if (isEchoOfSameDays) {
+					console.log('Ignoring echoed days value, no label change needed');
+				} else {
+					// Debounce: wait till user finishes typing (up to 3 digits) before reacting
+					if (this.numsChangeDebounce) {
+						clearTimeout(this.numsChangeDebounce);
+					}
+
+					    this.numsChangeDebounce = setTimeout(() => {
+						this.hours = newHours;
+						this.isDaysMode = this.hours >= 24;
+						this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
+						this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+						this.numsChangeDebounce = null;
+					}, this.NUMS_DEBOUNCE_MS);
+				}
 		}
+		
 		if (changes.isTravelShare) {
 			this.initRates();
 			if (this.ReturnRatesForm) {
@@ -232,6 +253,12 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 
 		this.isDaysMode = this.hours >= 24;
 		this.charterDays = this.hours >= 24 ? this.hours/24 : this.hours;
+	}
+
+	ngOnDestroy(): void {
+		if (this.numsChangeDebounce) {
+			clearTimeout(this.numsChangeDebounce);
+		}
 	}
 
 	returnZero() {
