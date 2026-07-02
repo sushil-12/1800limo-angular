@@ -901,6 +901,7 @@
 																	class="return-extra-stop-input qb-airport-field__input qb-address-field__input input-f font-weight-bolder"
 																	style="font-size:16px !important; background-color:#fff !important; color:#000 !important; padding-left:42px !important; text-align:left !important;"
 																	[placeholder]="'Return Stop ' + (i + 1) + ' address'"
+																	[placeholder]="i === 0 ? 'Enter First Return Stop' : 'Return Stop ' + (i + 1) + ' address'"
 																	[value]="stop.address" autocomplete="off"
 																	(focus)="onExtraStopAddressFocus(getExtraStopFieldName(i, true), returnExtraStopInputRef)"
 																	(click)="openAddressDropdown(getExtraStopFieldName(i, true), returnExtraStopInputRef.value)"
@@ -1103,7 +1104,7 @@
 											<div class="add-stop-link  d-flex mt-1 mb-2">
 												<a role="button" class="add-stop-btn fw-semibold small"
 													(click)="addExtraStop(true)">
-													<i class="bi bi-plus-circle-fill mr-1"></i> Add a return stop
+													<i class="bi bi-plus-circle-fill mr-1"></i>Add a return extra stop
 												</a>
 											</div>
 
