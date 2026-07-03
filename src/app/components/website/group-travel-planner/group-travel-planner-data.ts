@@ -27,11 +27,6 @@ export const groupTravelFaqData: GroupTravelFAQ[] = [
     },
     {
         category: 'requirements',
-        question: "How much of a deposit is required?",
-        answer: `<p>A 25% deposit is requested at the time of booking.</p>`
-    },
-    {
-        category: 'requirements',
         question: "When is the final payment due?",
         answer: `<p>Final payment is due 10 to 30 days before departure.</p>`
     },
@@ -48,7 +43,7 @@ export const groupTravelFaqData: GroupTravelFAQ[] = [
     {
         category: 'requirements',
         question: "Do I need to tip the driver?",
-        answer: `<p>We automatically add 20% gratuity for all our drivers. It is our goal to make sure all of our drivers earn a living wage and to insure we have the best drivers available for your pleasure and safety. We never want to hear of a bad review, but your tip will be reduced or returned at your request and we’ll make sure our driver gets extra training to insure future bookings are met to your satisfaction.</p>`
+        answer: `<p>It is our goal to make sure all of our drivers earn a living wage and to insure we have the best drivers available for your pleasure and safety. We never want to hear of a bad review, but your tip will be reduced or returned at your request and we’ll make sure our driver gets extra training to insure future bookings are met to your satisfaction.</p>`
     },
     {
         category: 'requirements',
@@ -103,7 +98,6 @@ export const groupTravelFaqData: GroupTravelFAQ[] = [
         <li>Hours of use - Local travel is most commonly based on a minimum of hours. Each company is different and requires a minimum 2 - 6 hours. The time of year or special events may cause the minimum number of hours to increase beyond 6 hours.</li>
         <li>Minimum Rates and Mileage – Distance and route changes or length of time of the charter, by you, may change the subTotal Cost on your invoice.</li>
         <li>Additional Charges – There may be additional charges added to your invoice for additional service or amenity requests while on the road.</li>
-        <li>Gratuity - We automatically add a 20% tip. The average wage of a bus driver is about $20 per hour.</li>
         <li>Sales Tax - Our Quotebot calculates all-inclusive rates including any city, state tax or VAT.</li>
         </ul>
         <h4>OTR Charters</h4>

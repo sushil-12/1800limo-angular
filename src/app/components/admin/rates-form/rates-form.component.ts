@@ -240,11 +240,11 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 				const newHours = Number(changes.nums.currentValue);
 				console.log('Number of hours changed to: ', newHours);
 
-				// Echo guard: same days-value bounced back while in Days mode — ignore it
-				const isEchoOfSameDays = this.isDaysMode && newHours === this.hours / 24;
+				// Echo guard: same value bounced back — ignore it
+				const isEchoOfSameDays = newHours === this.hours;
 
 				if (isEchoOfSameDays) {
-					console.log('Ignoring echoed days value, no label change needed');
+					console.log('Ignoring echoed hours value, no label change needed');
 				} else {
 					// Debounce: wait till user finishes typing (up to 3 digits) before reacting
 					if (this.numsChangeDebounce) {
@@ -969,40 +969,46 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	}
 	// Live update while typing (allows 10, 11, 12, 15 etc.)
 	handleHourChange(event: any) {
-	const value = Number(event.target.value);
+		let value = Number(event.target.value);
+		if (this.isDaysMode) {
+			value = value * 24;
+		}
 
-	// Reactive error flag update
-	if (this.service_type === 'charter_tour') {
-		if (!isNaN(value) && value < 2 && !this.isDaysMode) {
-			this.numberOfHoursError = true;
+		// Reactive error flag update
+		if (this.service_type === 'charter_tour') {
+			if (!isNaN(value) && value < 2) {
+				this.numberOfHoursError = true;
+			} else {
+				this.numberOfHoursError = false;
+			}
+			this.hoursErrorChange.emit(this.numberOfHoursError);
 		} else {
 			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
 		}
-		this.hoursErrorChange.emit(this.numberOfHoursError);
-	} else {
-		this.numberOfHoursError = false;
-		this.hoursErrorChange.emit(false);
-	}
 
-	if (!isNaN(value) && value >= 2) {
-		this.returnNumberOfHr.emit(value);
+		if (!isNaN(value) && value >= 2) {
+			this.returnNumberOfHr.emit(value);
+		}
 	}
-   }
 
 	// Force minimum 2 when user clicks away (perfect for 0, 1, empty)
 	enforceMinimumHours(event: any) {
-	let value = Number(event.target.value || 0);
+		let value = Number(event.target.value || 0);
+		if (this.isDaysMode) {
+			value = value * 24;
+		}
 
-	if (this.service_type == 'charter_tour' && !this.isDaysMode && (isNaN(value) || value < 2)) {
-		value = 2;
-		this.hours = 2;
-		event.target.value = 2;
-		this.numberOfHoursError = false;
-		this.hoursErrorChange.emit(false);
+		if (this.service_type == 'charter_tour' && (isNaN(value) || value < 2)) {
+			value = 2;
+			this.hours = 2;
+			event.target.value = 2;
+			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
+		}
+
+		this.returnNumberOfHr.emit(value);
 	}
-
-	this.returnNumberOfHr.emit(value);
-}
 
 	// Block negative sign while typing
 	blockNegative(event: KeyboardEvent) {

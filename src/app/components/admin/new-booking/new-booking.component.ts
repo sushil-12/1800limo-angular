@@ -1966,6 +1966,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 
 	handleNoOfHours(eventValue: any) {
 		const value = Number(eventValue);
+		this.number_of_hours = value;
+
+		if (Number(this.BookingForm?.get('number_of_hours')?.value) !== value) {
+			this.BookingForm?.get('number_of_hours')?.setValue(value);
+		}
 
 		// Reactive error flag update
 		if (this.Form.service_type.value == 'charter_tour') {
@@ -7070,6 +7075,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.affiliate_id = selected_vehicle?.affiliate_id
 		this.veh_created_by = selected_vehicle?.created_by
 		this.is_master_vehicle = this.route_is_master_vehicle ?? selected_vehicle?.is_master_vehicle ?? this.is_master_vehicle
+		this.number_of_hours = QB?.booking_hour ? Number(QB?.booking_hour) : 2
 
 		if (selected_vehicle?.created_by != 1) {
 			console.log("in affiliate info")
@@ -7108,8 +7114,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.service_type = QB?.service_type || 'one_way'
 		this.SetFormValue('service_type', this.service_type, false)
 		if (QB?.service_type == 'charter_tour') {
-			this.SetFormValue('number_of_hours', QB?.booking_hour, false)
-			this.number_of_hours = QB?.booking_hour
+			this.SetFormValue('number_of_hours', QB?.booking_hour ? Number(QB?.booking_hour) : 2, false)
+			this.number_of_hours = QB?.booking_hour ? Number(QB?.booking_hour) : 2
 		}
 
 		if (isMasterVehicleQuoteFlow) {

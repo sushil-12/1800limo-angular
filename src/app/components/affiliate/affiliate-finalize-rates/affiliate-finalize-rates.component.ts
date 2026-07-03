@@ -218,6 +218,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			}
 		}
 	}
+	
 	handleNegtiveValue(formgroup, subform, formcontrol, value) {
 		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
 		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
