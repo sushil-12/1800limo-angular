@@ -171,7 +171,7 @@ export class TutorialsComponent implements OnInit {
             "duration": "2:59",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Farmout+booking.mp4",
-            "content": "A guide on how to create a farmout booking and earn 10% commission."
+            "content": "A guide on how to create a farmout booking"
           },
           {
             "type": "travel_agent_tutorials",
@@ -189,7 +189,7 @@ export class TutorialsComponent implements OnInit {
             "duration": "2:35",
             "image": "assets/images/images_tutorial/updated-images/searchrnigne.png",
             "link": "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+Create+Booking+on+Travel+Agent+Account.mp4",
-            "content": "A guide on how to create a booking as a travel advisor and earn 10% commission."
+            "content": "A guide on how to create a booking as a travel advisor"
           },
 
           {
