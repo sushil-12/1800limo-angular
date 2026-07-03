@@ -255,11 +255,19 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 						this.hours = newHours;
 						this.isDaysMode = this.hours >= 24;
 						this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
+						// Recompute the error from the settled value so a stale
+						// flag (set while this.hours was still 0/old) can't stick
+						if (this.service_type === 'charter_tour') {
+							this.numberOfHoursError = isNaN(this.hours) || this.hours < 2;
+						} else {
+							this.numberOfHoursError = false;
+						}
+						this.hoursErrorChange.emit(this.numberOfHoursError);
 						this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 						this.numsChangeDebounce = null;
 					}, this.NUMS_DEBOUNCE_MS);
 				}
-			}
+		}
 
 		if (changes.affiliate_type || changes.return_affiliate_type || changes.booking_created_from) {
 			console.log("in chnage affiloate typre")
@@ -603,7 +611,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 				this.initRates();
 
 				// Instant error check on prefill
-				if (this.service_type === 'charter_tour' && this.hours < 2) {
+				if (this.service_type === 'charter_tour' && this.isHoursBelowMinimum()) {
 					this.numberOfHoursError = true;
 				} else {
 					this.numberOfHoursError = false;
@@ -819,7 +827,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			}
 
 			// Instant error check on prefill
-			if (this.service_type === 'charter_tour' && this.hours < 2) {
+			if (this.service_type === 'charter_tour' && this.isHoursBelowMinimum()) {
 				this.numberOfHoursError = true;
 			} else {
 				this.numberOfHoursError = false;
@@ -967,6 +975,14 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		console.log('admin/rates-form return rate source', 'empty');
 		return {};
 	}
+	// this.hours lags behind the parent value while the nums debounce is
+	// pending (it starts at 0), so prefer the parent-supplied hours
+	private isHoursBelowMinimum(): boolean {
+		const parentHours = Number(this.nums);
+		const effectiveHours = isNaN(parentHours) ? this.hours : parentHours;
+		return effectiveHours < 2;
+	}
+
 	// Live update while typing (allows 10, 11, 12, 15 etc.)
 	handleHourChange(event: any) {
 		let value = Number(event.target.value);
@@ -974,9 +990,9 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			value = value * 24;
 		}
 
-		// Reactive error flag update
+		// Reactive error flag update (days mode can never be under 2 hours)
 		if (this.service_type === 'charter_tour') {
-			if (!isNaN(value) && value < 2) {
+			if (!isNaN(value) && value < 2 && !this.isDaysMode) {
 				this.numberOfHoursError = true;
 			} else {
 				this.numberOfHoursError = false;
@@ -994,9 +1010,23 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 	// Force minimum 2 when user clicks away (perfect for 0, 1, empty)
 	enforceMinimumHours(event: any) {
+		const previousHours = this.hours;
 		let value = Number(event.target.value || 0);
 		if (this.isDaysMode) {
 			value = value * 24;
+			// Days mode: field holds days, so the floor is 1 day, not 2 hours
+			if (this.service_type == 'charter_tour' && (isNaN(value) || value < 24)) {
+				value = 24;
+				this.hours = 24;
+				event.target.value = 1;
+			}
+			this.numberOfHoursError = false;
+			this.hoursErrorChange.emit(false);
+			// Only notify the parent when the hours value actually changed
+			if (value !== previousHours) {
+				this.returnNumberOfHr.emit(value);
+			}
+			return;
 		}
 
 		if (this.service_type == 'charter_tour' && (isNaN(value) || value < 2)) {
@@ -1007,7 +1037,10 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			this.hoursErrorChange.emit(false);
 		}
 
-		this.returnNumberOfHr.emit(value);
+		// Only notify the parent when the hours value actually changed
+		if (value !== previousHours) {
+			this.returnNumberOfHr.emit(value);
+		}
 	}
 
 	// Block negative sign while typing
