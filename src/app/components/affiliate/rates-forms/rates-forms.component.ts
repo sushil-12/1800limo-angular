@@ -653,7 +653,12 @@ export class RatesFormsComponent implements OnInit, OnChanges, OnDestroy {
 		return this.returnRatesdata.asObservable();
 	}
 	handleHourChange(event: any) {
-		const value = Number(event.target.value);
+		let value = Number(event.target.value);
+
+		// The input displays days while in days mode — convert back to hours
+		if (this.isDaysMode && !isNaN(value)) {
+			value = value * 24;
+		}
 
 		if (this.service_type == 'charter_tour' || this.service_type == 'chartertour') {
 			if (!isNaN(value) && value < 2  && !this.isDaysMode) {
@@ -674,7 +679,14 @@ export class RatesFormsComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	enforceMinimumHours(event: any) {
+		const previousHours = this.hours;
 		let value = Number(event.target.value || 0);
+
+		// The input displays days while in days mode — convert back to hours
+		if (this.isDaysMode) {
+			value = value * 24;
+		}
+
 		if ((this.service_type == 'charter_tour' || this.service_type == 'chartertour') && !this.isDaysMode && (isNaN(value) || value < 2)) {
 			value = 2;
 			this.hours = 2;
@@ -682,7 +694,11 @@ export class RatesFormsComponent implements OnInit, OnChanges, OnDestroy {
 			this.numberOfHoursError = false;
 			this.hoursErrorChange.emit(false);
 		}
-		this.returnNumberOfHr.emit(value);
+
+		// Only notify the parent when the hours value actually changed
+		if (value !== previousHours) {
+			this.returnNumberOfHr.emit(value);
+		}
 	}
 
 	blockNegative(event: KeyboardEvent) {

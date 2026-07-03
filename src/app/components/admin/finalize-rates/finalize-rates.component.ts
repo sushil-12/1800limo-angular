@@ -135,6 +135,8 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 		if (changes.nums) {
 			this.hours = Number(changes.nums.currentValue)
+			this.isDaysMode = this.hours >= 24;
+			this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
 				if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
 					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 				}
@@ -147,9 +149,6 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 					}
 
 			}
-
-			this.isDaysMode = this.hours >= 24;
-		    this.charterDays = this.hours >= 24 ? this.hours/24 : this.hours;
 		}
 
 		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
@@ -218,6 +217,10 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				this.returnNumberOfHr.emit(hrs);
 				this.changeInHours(hrs);
 			}
+		} else if (value >= 24) {
+			// 24+ hours entered in hours mode -> auto-convert to days
+			this.hours = value;
+			this.setUnitMode(true);
 		} else if (value >= 2) {
 			this.returnNumberOfHr.emit(value);
 			this.changeInHours(value);
@@ -225,6 +228,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 
 	enforceMinimumHours(event: any) {
+		const previousHours = this.hours;
 		let value = Number(event.target.value || 0);
 
 		if (this.isDaysMode) {
@@ -234,15 +238,21 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			}
 			this.charterDays = value;
 			const hrs = value * 24;
-			this.returnNumberOfHr.emit(hrs);
-			this.changeInHours(hrs);
+			// Only notify the parent when the hours value actually changed
+			if (hrs !== previousHours) {
+				this.returnNumberOfHr.emit(hrs);
+				this.changeInHours(hrs);
+			}
 		} else {
 			if (isNaN(value) || value < 2) {
 				value = 2;
 				event.target.value = 2;
 			}
-			this.returnNumberOfHr.emit(value);
-			this.changeInHours(value);
+			// Only notify the parent when the hours value actually changed
+			if (value !== previousHours) {
+				this.returnNumberOfHr.emit(value);
+				this.changeInHours(value);
+			}
 		}
 	}
 

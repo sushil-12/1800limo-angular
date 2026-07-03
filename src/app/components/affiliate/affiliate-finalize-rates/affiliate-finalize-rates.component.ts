@@ -132,6 +132,8 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 		if (changes.nums) {
 			this.hours = Number(changes.nums.currentValue)
+			this.isDaysMode = this.hours >= 24;
+			this.charterDays = this.isDaysMode ? this.hours / 24 : this.hours;
 			if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
 				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 			}
@@ -407,19 +409,34 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	}
 
 	handleHourChange(event: any) {
-		const value = Number(event.target.value);
+		let value = Number(event.target.value);
 		if (isNaN(value)) return;
 
 		if (this.isDaysMode) {
-			if (value >= 1) {
-				this.charterDays = value;
-				const hrs:any = value * 24;
+			if (value < 1) {
+				value = 1;
+				event.target.value = 1;   // show 1 in the box
+			}
+			this.charterDays = value;
+			const hrs: any = value * 24;
+			// Only notify the parent when the hours value actually changed
+			if (hrs !== this.hours) {
 				this.returnNumberOfHr.emit(hrs);
 				this.changeInHours(hrs);
 			}
-		} else if (value >= 2) {
-		    this.returnNumberOfHr.emit(event.target.value)
-			this.changeInHours(value);
+		} else if (value >= 24) {
+			// 24+ hours entered in hours mode -> auto-convert to days
+			this.hours = value;
+			this.setUnitMode(true);
+		} else {
+			if (value < 2) {
+				value = 2;
+				event.target.value = 2;   // show 2 in the box
+			}
+			if (value !== this.hours) {
+				this.returnNumberOfHr.emit(value as any);
+				this.changeInHours(value);
+			}
 		}
 	}
 

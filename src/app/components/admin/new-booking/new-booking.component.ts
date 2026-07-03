@@ -2240,8 +2240,9 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				}
 			}
 
-			// Instant error display for prefilled values
-			if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
+			// Instant error display for prefilled values (day bookings arrive as 24/48/… hours)
+			const prefilledHours = Number(this.Form.number_of_hours.value);
+			if (this.Form.service_type.value == 'charter_tour' && (isNaN(prefilledHours) || prefilledHours < 2)) {
 				this.numberOfHoursError = true;
 			} else {
 				this.numberOfHoursError = false;
@@ -5238,7 +5239,8 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 		// Validate minimum number of hours for charter_tour
-		if (this.Form.service_type.value == 'charter_tour' && this.Form.number_of_hours.value < 2) {
+		const submitHours = Number(this.Form.number_of_hours.value);
+		if (this.Form.service_type.value == 'charter_tour' && (isNaN(submitHours) || submitHours < 2)) {
 			this.numberOfHoursError = true;
 			if (this.hourFields && this.hourFields.length > 0) {
 				const activeField = this.hourFields.find(field => field.nativeElement.offsetParent !== null);
