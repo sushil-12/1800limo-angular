@@ -60,6 +60,7 @@ import { AmenitiesSpecialComponent } from './amenities-special/amenities-special
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
+import { AdminBookingHostComponent } from './new-booking-v2/admin-booking-host.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
@@ -208,6 +209,11 @@ const routes: Routes = [
 		path: 'new-booking',
 		canActivate: [SubAdminGuard],
 		component: NewBookingComponent
+	},
+	{
+		path: 'new-booking-v2',
+		canActivate: [SubAdminGuard],
+		component: AdminBookingHostComponent
 	},
 	{
 		path: 'finalize-booking',
