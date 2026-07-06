@@ -23,6 +23,7 @@ import { P } from '@angular/cdk/keycodes';
 import { NgIf } from '@angular/common';
 
 declare var $: any
+console.log('BookingComponent new version form ,,,loaded');
 
 export type BookingComponentMode = 'admin' | 'individual';
 
