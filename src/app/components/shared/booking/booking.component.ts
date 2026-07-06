@@ -129,6 +129,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	driver_image: Record<string, any> = {}
 	vehicle_image: Record<string, any> = {}
+	driver_info: any = null;
+	driverImgUrl: string = '';
+	vehicleImgUrl: string = '';
+
 
 	quillModules = {
 		toolbar: [
@@ -566,12 +570,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.quotePayload = { ...payload };
 	}
 
-	/**
-	 * A vehicle was picked in the embedded quote. Reuse the same affiliate flow that
-	 * powers the standalone-quotebot arrival: set the IDs, then let
-	 * fetchQBAffiliateVehicles auto-select the matching vehicle (via QB_vehicle_id ->
-	 * handleSelectVehicleType) and prefill the editable manual fields.
-	 */
 	onQuoteVehicleSelected(vehicle: any): void {
 		if (!vehicle) {
 			return;
@@ -580,6 +578,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.affiliate_id = vehicle.affiliate_id;
 		this.QB_vehicle_id = vehicle.id;
 		this.is_master_vehicle = !!vehicle.is_master_vehicle;
+
+		this.populateDriverAndVehicleDetails(vehicle);
 
 		if (vehicle.is_master_vehicle) {
 			// Master vehicles have no affiliate — mirror the direct quotebot flow:
@@ -607,6 +607,83 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.vehicleSelectionTab = 'manual';
 		this.buildBookingData();
 	}
+
+	populateDriverAndVehicleDetails(vehicle: any): void {
+		if (!vehicle) {
+			this.driver_info = null;
+			this.driverImgUrl = '';
+			this.vehicleImgUrl = '';
+			return;
+		}
+
+		this.driverImgUrl = vehicle?.driverInformation?.imageUrl || vehicle?.driver_image || "../../../../assets/images/driverImg.jpg";
+		this.vehicleImgUrl = vehicle?.vehicle_images?.[0] || vehicle?.vehicle_image?.image || "";
+		this.driver_info = vehicle?.driverInformation || {};
+		
+		if (!this.driver_info.name && vehicle.driver_name) {
+			this.driver_info.name = vehicle.driver_name;
+			this.driver_info.phone = (vehicle.driver_cell_isd || '') + (vehicle.driver_cell || '');
+			this.driver_info.gender = vehicle.driver_gender;
+			this.driver_info.type = vehicle.vehicle_type_name;
+			this.driver_info.make = vehicle.vehicle_make_name;
+			this.driver_info.model = vehicle.vehicle_model_name;
+		} else {
+			this.driver_info['type'] = vehicle?.name || vehicle?.vehicle_type_name || "";
+			this.driver_info['make'] = vehicle?.vehicle_details?.make || vehicle?.vehicle_make_name || "";
+			this.driver_info['model'] = vehicle?.vehicle_details?.model || vehicle?.vehicle_model_name || "";
+			this.driver_info['year'] = vehicle?.vehicle_details?.year || vehicle?.vehicle_year_name || "";
+		}
+
+		if (this.isIndividualMode) {
+			let d_isd = vehicle?.driverInformation?.cell_isd || vehicle?.driver_cell_isd;
+			if (d_isd && !String(d_isd).startsWith('+')) {
+				d_isd = '+' + d_isd;
+			}
+			this.BookingForm.patchValue({
+				driver_id: vehicle?.driverInformation?.id || vehicle?.driver_id || '',
+				driver_name: vehicle?.driverInformation?.name || vehicle?.driver_name || '',
+				driver_email: vehicle?.driverInformation?.email || vehicle?.driver_email || '',
+				driver_cell: vehicle?.driverInformation?.cell_number || vehicle?.driver_cell || '',
+				driver_cell_isd: d_isd || '+1',
+				driver_cell_country: vehicle?.driverInformation?.cell_country || vehicle?.driver_cell_country || 'us',
+				driver_gender: vehicle?.driverInformation?.gender || vehicle?.driver_gender || '',
+				vehicle_id: vehicle?.id || vehicle?.vehicle_id || '',
+				vehicle_type: vehicle?.vehicle_type_id || vehicle?.vehicle_type || '',
+				vehicle_type_name: vehicle?.name || vehicle?.vehicle_type_name || '',
+				vehicle_make: vehicle?.vehicle_details?.make_id || vehicle?.vehicle_make || '',
+				vehicle_make_name: vehicle?.vehicle_details?.make || vehicle?.vehicle_make_name || '',
+				vehicle_model: vehicle?.vehicle_details?.model_id || vehicle?.vehicle_model || '',
+				vehicle_model_name: vehicle?.vehicle_details?.model || vehicle?.vehicle_model_name || '',
+				vehicle_year: vehicle?.vehicle_details?.year_id || vehicle?.vehicle_year || '',
+				vehicle_year_name: vehicle?.vehicle_details?.year || vehicle?.vehicle_year_name || '',
+				vehicle_seats: vehicle?.vehicle_details?.seats || vehicle?.vehicle_seats || '4'
+			});
+		}
+	}
+
+	resetSelectedVehicle(): void {
+		this.driver_info = null;
+		this.driverImgUrl = '';
+		this.vehicleImgUrl = '';
+		sessionStorage.removeItem('selected_vehicle');
+
+		const fieldsToReset = [
+			'vehicle_type', 'vehicle_type_name', 'vehicle_id', 'vehicle_make', 'vehicle_make_name',
+			'vehicle_model', 'vehicle_model_name', 'vehicle_year', 'vehicle_year_name',
+			'vehicle_color', 'vehicle_color_name', 'vehicle_license_plate', 'vehicle_seats',
+			'driver_id', 'driver_name', 'driver_gender', 'driver_cell', 'driver_email'
+		];
+		fieldsToReset.forEach((item: string) => {
+			const control = this.BookingForm.get(item);
+			if (control) {
+				control.reset();
+			}
+		});
+		this.SetFormValue('driver_cell_isd', '+1');
+		this.SetFormValue('driver_cell_country', 'us');
+		this.BookingForm.updateValueAndValidity();
+	}
+
 
 	ngAfterViewInit(): void {
 
@@ -2229,6 +2306,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			//  this.booking_params.client_account_types.pop()
 			// }
 			this.booking_id = this.Form.reservation_id.value;
+			if (this.isIndividualMode && (editing_data?.driver_name || editing_data?.driver_id)) {
+				this.populateDriverAndVehicleDetails(editing_data);
+			}
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			setTimeout(() => {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
@@ -3516,7 +3596,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate') {
+		
 		if (return_affiliate_type == 'loose_affiliate') {
+			if(this.isIndividualMode) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
 				this.Return_LooseAffiliateAccounts = response?.data
@@ -3718,6 +3800,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
+		if(this.isIndividualMode) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_id', affiliate_id);
 			return;
@@ -3921,9 +4004,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	private loadMasterVehicleInfoForQuoteBot(vehicleId: number, isReturn: boolean = false): void {
+		if(this.isIndividualMode) {
+			return;
+		}
 		if (!vehicleId) {
 			return;
 		}
+
 
 		this.$api.getMasterVehicleInfo(vehicleId).subscribe({
 			next: (response: any) => {
@@ -6936,6 +7023,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		
+		this.populateDriverAndVehicleDetails(selected_vehicle);
+
 		const isMasterVehicleQuoteFlow = this.route_is_master_vehicle === true || selected_vehicle?.is_master_vehicle === true;
 		const resolvedMasterVehicleId = Number(selected_vehicle?.id || selected_vehicle?.ID || this.route_vehicle_id || 0);
 		const normalizedSelectedVehicle = this.normalizeMasterVehicleForPrefill(selected_vehicle);

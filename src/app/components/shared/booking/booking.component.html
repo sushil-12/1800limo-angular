@@ -1576,7 +1576,7 @@
 			</div>
 
 			<!-- Browse vehicles: embedded quotebot drill-down -->
-			<div *ngIf="isIndividualMode || vehicleSelectionTab === 'browse'">
+			<div *ngIf="(isIndividualMode && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse')">
 				<div class="d-flex justify-content-end m-3">
 					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()">
 						<i class="bi bi-search" style="margin-right: 6px;"></i>
@@ -1586,6 +1586,80 @@
 				<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
 					(vehicleSelected)="onQuoteVehicleSelected($event)">
 				</app-embedded-quote>
+			</div>
+
+			<!-- Transportation Details: Individual Side -->
+			<div class="section-container mt-2" *ngIf="isIndividualMode && driver_info">
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<h4 style="margin-bottom: 0px !important;">
+						Transportation Details
+					</h4>
+					<button type="button" class="bk-btn bk-btn--secondary btn-sm" (click)="resetSelectedVehicle()">
+						<i class="bi bi-arrow-left-right" style="margin-right: 6px;"></i>
+						Change Vehicle
+					</button>
+				</div>
+				<div class="row px-4 mt-4">
+					<div class="col-md-6 mb-4">
+						<div class="card" style="background-color: #e2e2e2;">
+							<div class="row" style="align-items: center;">
+								<div class="col-sm-12 col-lg-6 col-md-6 player-holder">
+									<div><img class="player-thumb" src="{{driverImgUrl}}"></div>
+								</div>
+								<div class="col-sm-12 col-lg-6 col-md-6">
+									<div class="card-body">
+										<h5 class="card-title">Driver Details</h5>
+										<h6 class="card-subtitle mb-2 text-muted">Your Reliable Ride Partner!
+										</h6>
+										<p class="card-text">
+											<span>Driver Name:</span>
+											<strong class="ml-2">{{ driver_info["name"] | titlecase }}</strong>
+										</p>
+										<p class="card-text">
+											<span>Driver Phone:</span>
+											<strong class="ml-2">{{ driver_info["phone"] | titlecase }}</strong>
+										</p>
+										<p class="card-text">
+											<span>Driver Gender:</span>
+											<strong class="ml-2">{{ driver_info["gender"] | titlecase }}</strong>
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="card" style="background-color: #e2e2e2;">
+							<div class="row" style="align-items: center;">
+								<div class="col-sm-12 col-lg-6 col-md-6 player-holder">
+									<div><img class="player-thumb" src="{{vehicleImgUrl}}"></div>
+								</div>
+								<div class="col-sm-12 col-lg-6 col-md-6">
+									<div class="card-body">
+										<h5 class="card-title">Vehicle Details</h5>
+										<h6 class="card-subtitle mb-2 text-muted">Vehicle Specs at a Glance!
+										</h6>
+										<p class="card-text">
+											<span>Vehicle Type:</span>
+											<strong class="ml-2">{{ driver_info["type"] | titlecase }}</strong>
+										</p>
+										<p class="card-text">
+											<span>Vehicle Make:</span>
+											<strong class="ml-2">{{ driver_info["make"] | titlecase }}</strong>
+										</p>
+										<p class="card-text">
+											<span>Vehicle Model:</span>
+											<strong class="ml-2">{{ driver_info["model"] | titlecase }}</strong>
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
