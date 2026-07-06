@@ -28,6 +28,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { BookingsComponent } from './bookings/bookings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
+import { IndividualBookingHostComponent } from './create-new-booking-v2/individual-booking-host.component';
+import { BookingSharedModule } from '../shared/booking/booking-shared.module';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
@@ -38,7 +40,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-	declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent, FamilyMemberAccountComponent],
+	declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, IndividualBookingHostComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent, FamilyMemberAccountComponent],
 	imports: [
 		CommonModule,
 		IndividualRoutingModule,
@@ -56,6 +58,7 @@ import { QuillModule } from 'ngx-quill';
 		NgSelectModule,
 		MatRadioModule,
 		SharedModule,
+		BookingSharedModule,
 		BookingPreviewModule,
 		MatDialogModule,
 		MatFormFieldModule,

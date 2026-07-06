@@ -83,7 +83,8 @@ import { AmenitiesSpecialComponent } from './amenities-special/amenities-special
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
 import { BookingDetailsComponent } from './booking-details/booking-details.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
-import { RatesFormComponent } from './rates-form/rates-form.component';
+import { AdminBookingHostComponent } from './new-booking-v2/admin-booking-host.component';
+import { BookingSharedModule } from '../shared/booking/booking-shared.module';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
@@ -192,7 +193,7 @@ import { QuillModule } from 'ngx-quill';
 		MasterVehicleFareComponent,
 		BookingDetailsComponent,
 		NewBookingComponent,
-		RatesFormComponent,
+		AdminBookingHostComponent,
 		FinalizeBookingComponent,
 		FinalizeRatesComponent,
 		BadgeCitiesComponent,
@@ -234,6 +235,7 @@ import { QuillModule } from 'ngx-quill';
 		MatInputModule,
 		MatSelectModule,
 		SharedModule,
+		BookingSharedModule,
 		MatRadioModule,
 		NgSelectModule,
 		MatChipsModule,
