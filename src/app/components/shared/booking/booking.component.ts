@@ -25,7 +25,7 @@ import { NgIf } from '@angular/common';
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
 
-export type BookingComponentMode = 'admin' | 'individual';
+export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent';
 
 @Component({
 	selector: 'app-booking',
@@ -42,6 +42,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	get isIndividualMode(): boolean {
 		return this.mode === 'individual';
+	}
+
+	get isTravelAgentMode(): boolean {
+		return this.mode === 'travel-agent';
 	}
 
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;

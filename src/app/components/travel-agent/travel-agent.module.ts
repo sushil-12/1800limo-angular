@@ -40,6 +40,7 @@ import { PayoutsComponent } from './payouts/payouts.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { BookingPreviewModule } from '../affiliate/booking-preview/booking-preview.module';
 import {QuillModule} from 'ngx-quill';
+import { TravelAgentBookingHostModule } from './create-new-booking-v2/travel-agent-booking-host.module';
 
 @NgModule({
 	declarations: [
@@ -84,7 +85,8 @@ import {QuillModule} from 'ngx-quill';
 		MatIconModule,
 		ClipboardModule,
 		BookingPreviewModule,
-		QuillModule
+		QuillModule,
+		TravelAgentBookingHostModule
 	],
 	exports: [
 		TravelAgentComponent,

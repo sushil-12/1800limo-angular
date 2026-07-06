@@ -15,7 +15,7 @@ import { AddClientAccountComponent } from './add-client-account/add-client-accou
 import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accounts.component';
 import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
 import { PayoutsComponent } from './payouts/payouts.component';
-import { TravelAgentBookingHostComponent } from './new-booking-v2/travel-agent-booking-host.component';
+import { TravelAgentBookingHostComponent } from './create-new-booking-v2/travel-agent-booking-host.component';
 const routes: Routes = [
   {
 		path: '',
