@@ -898,11 +898,11 @@ private subscription: Subscription;
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				if (this.bookingId) {
-					this.$router.navigate(['/admin/new-booking'],
+					this.$router.navigate(['/admin/new-booking-v2'],
 						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: 'reaffiliate', is_master_vehicle: vehicle_selected?.is_master_vehicle, updateType: 'reaffiliate', reaffiliate_book_id: this.bookingId } })
 				}
 				else {
-					this.$router.navigate(['/admin/new-booking'],
+					this.$router.navigate(['/admin/new-booking-v2'],
 						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: (JSON.parse(localStorage.getItem('currentUser'))['created_by_role'] == 'admin' ? 'admin' : this.booking_created_from) } })
 				}
 			} else {
@@ -910,7 +910,7 @@ private subscription: Subscription;
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				this.$router.navigate([
-					'/' + user + '/create-new-booking'
+					'/' + user + '/create-new-booking-v2'
 				],
 					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
 			}

@@ -14,7 +14,7 @@
 	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index"
-		[ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
+		[ngStyle]="(hideBuckets || item.key == 'direct_taxes') ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
 			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
 				<h5>Vehicle Base Rates</h5>
@@ -151,7 +151,7 @@
 			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-amount text-2xl font-weight-bolder text-right">
 					<p class="m-0 m-lg-3">
-						<span style="color: #dc3545">{{currencySymbol}}</span> {{
+						<span class="bk-currency">{{currencySymbol}}</span> {{
 						sub_item?.value?.controls?.amount.value }}
 					</p>
 				</div>
@@ -161,23 +161,23 @@
 			<i class="bi bi-x fa-2x" (click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
 		</div>
 	</div>
-	<div class="row d-flex justify-content-end mx-2">
+	<div class="row d-flex justify-content-end mx-2" *ngIf="!hideBuckets">
 		<button class="closeAll-btn" id="closeAll-btn" (click)="closeAllChevrons()">Close all</button>
 	</div>
-	<hr style="border-top: 2.5px solid #000000; " />
+	<hr class="bk-totals-divider" />
 
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Sub Total
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ subtotal.toFixed(2) }}
+			<span class="bk-currency">{{currencySymbol}}</span> {{ subtotal.toFixed(2) }}
 		</div>
 	</div>
 	<!-- Number of Vehicles/Hours -->
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="vehicles !== 0">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row" *ngIf="vehicles !== 0">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Number of Vehicles
@@ -190,48 +190,48 @@
 	</div>
 
 	<!-- Total -->
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row bk-total-row--grand">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Grand Total
 			</p>
 		</div>
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ grandtotal.toFixed(2) }}
+			<span class="bk-currency">{{currencySymbol}}</span> {{ grandtotal.toFixed(2) }}
 		</div>
 	</div>
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
-		*ngIf="this.booking_created_from == 'admin' ">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row"
+		*ngIf="!hideBuckets && this.booking_created_from == 'admin' ">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Admin Share
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ vehicles != 0 ? calc_admin_share.toFixed(2) *
+			<span class="bk-currency">{{currencySymbol}}</span> {{ vehicles != 0 ? calc_admin_share.toFixed(2) *
 			vehicles : calc_admin_share.toFixed(2) }}
 		</div>
 	</div>
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
-		*ngIf="isTravelShare && !isCreatedByAdmin">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row"
+		*ngIf="!hideBuckets && isTravelShare && !isCreatedByAdmin">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Travel Advisor Share
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ vehicles != 0 ? travel_agent_share.toFixed(2) *
+			<span class="bk-currency">{{currencySymbol}}</span> {{ vehicles != 0 ? travel_agent_share.toFixed(2) *
 			vehicles : travel_agent_share.toFixed(2) }}
 		</div>
 	</div>
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row" *ngIf="!hideBuckets && isFarmoutBooking">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Farm out Share
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ farmoutShare.toFixed(2) }}
+			<span class="bk-currency">{{currencySymbol}}</span> {{ farmoutShare.toFixed(2) }}
 		</div>
 	</div>
 </div>
@@ -263,7 +263,7 @@
 	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
 		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index"
-		[ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
+		[ngStyle]="(hideBuckets || item.key == 'direct_taxes') ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading('r_'+item.key)">
 			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
 				<h5>Vehicle Base Rates</h5>
@@ -374,7 +374,7 @@
 			<!-- Rate Amount -->
 			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-amount text-2xl font-weight-bolder text-right">
-					<p class="m-0 m-lg-3"><span style="color: #dc3545">{{currencySymbol}}</span>
+					<p class="m-0 m-lg-3"><span class="bk-currency">{{currencySymbol}}</span>
 
 						{{ sub_item?.value?.controls?.amount.value }}
 					</p>
@@ -386,24 +386,24 @@
 				(click)="handleSubHeadingScroll('r_'+item.key,'ReturnRateFormItem-' + item_index)"></i>
 		</div>
 	</div>
-	<div class="row d-flex justify-content-end mx-2">
+	<div class="row d-flex justify-content-end mx-2" *ngIf="!hideBuckets">
 		<button class="closeAll-btn" id="closeAll-btn_r" (click)="closeReturnAllChevrons()">Close all</button>
 	</div>
 
-	<hr style="border-top: 2.5px solid #000000; " />
+	<hr class="bk-totals-divider" />
 
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Sub Total
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ r_subtotal.toFixed(2) }}
+			<span class="bk-currency">{{currencySymbol}}</span> {{ r_subtotal.toFixed(2) }}
 		</div>
 	</div>
 	<!-- Number of Vehicles/Hours -->
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="vehicles !== 0">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row" *ngIf="vehicles !== 0">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Number of Vehicles
@@ -416,48 +416,48 @@
 	</div>
 
 	<!-- Total -->
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row bk-total-row--grand">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Grand Total
 			</p>
 		</div>
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) }}
+			<span class="bk-currency">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) }}
 		</div>
 	</div>
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
-		*ngIf="currentUser?.created_by_role != 'subscriber' ">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row"
+		*ngIf="!hideBuckets && currentUser?.created_by_role != 'subscriber' ">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Admin Share
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ vehicles != 0 ? r_calc_admin_share.toFixed(2) *
+			<span class="bk-currency">{{currencySymbol}}</span> {{ vehicles != 0 ? r_calc_admin_share.toFixed(2) *
 			vehicles : r_calc_admin_share.toFixed(2) }}
 		</div>
 	</div>
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
-		*ngIf="isTravelShare && !isCreatedByAdmin">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row"
+		*ngIf="!hideBuckets && isTravelShare && !isCreatedByAdmin">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Travel Advisor Share
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ vehicles != 0 ? r_travel_agent_share.toFixed(2) *
+			<span class="bk-currency">{{currencySymbol}}</span> {{ vehicles != 0 ? r_travel_agent_share.toFixed(2) *
 			vehicles : r_travel_agent_share.toFixed(2) }}
 		</div>
 	</div>
-	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap bk-total-row" *ngIf="!hideBuckets && isFarmoutBooking">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Farm out Share
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<span style="color: #dc3545">{{currencySymbol}}</span> {{ r_farmoutShare.toFixed(2) }}
+			<span class="bk-currency">{{currencySymbol}}</span> {{ r_farmoutShare.toFixed(2) }}
 		</div>
 	</div>
 </div>

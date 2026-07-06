@@ -5,6 +5,7 @@ import { IndvOtherGuardGuard } from '../../guards/indv-other-guard.guard'
 import { BookingsComponent } from './bookings/bookings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
+import { IndividualBookingHostComponent } from './create-new-booking-v2/individual-booking-host.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
@@ -30,6 +31,11 @@ const routes: Routes = [
   {
     path: 'create-new-booking',
     component: CreateNewBookingComponent,
+    canActivate: [IndividualGuardGuard],
+  },
+  {
+    path: 'create-new-booking-v2',
+    component: IndividualBookingHostComponent,
     canActivate: [IndividualGuardGuard],
   },
   {
