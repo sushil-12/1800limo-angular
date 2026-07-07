@@ -1980,32 +1980,41 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 							prediction?.text?.text || prediction?.description || ''
 						).toLowerCase();
 
-						// 🚫 1. Block non-airport Google types
-						if (types.some((t) => NON_AIRPORT_TYPES.has(t))) return false;
-
-						const matchedKeywords = HARD_NEGATIVE_KEYWORDS.filter((keyword) => {
-							const regex = new RegExp(`\\b${keyword}\\b`, 'i');
-							return regex.test(desc);
-						});
-
-						if (matchedKeywords.length > 0) {
-							return false;
-						}
-
-						// ✅ 3. Must contain "terminal"
+						// ✅ 1. Must contain "terminal"
 						if (!desc.includes('terminal')) return false;
 
-						// ✅ 4. Must be linked to airport context
+						// ✅ 2. Must be linked to airport context
 						// Also check the raw terminal query (e.g. IATA code "jfk") since terminal
 						// addresses like "JFK Terminal 1, Terminal Drive" won't mention "airport"
 						const terminalQueryLower = terminalBase.toLowerCase();
+						const mentionsAirport = desc.includes('airport');
 						const isAirportContext =
-							desc.includes('airport') ||
+							mentionsAirport ||
 							(terminalQueryLower.length >= 2 && desc.includes(terminalQueryLower)) ||
 							(airportNameWords.length > 0 &&
 								airportNameWords.some((w) => desc.includes(w)));
 
-						return isAirportContext;
+						if (!isAirportContext) return false;
+
+						// 🚫 3. Block non-airport Google types, unless Google itself tags
+						// the prediction as an airport
+						if (!types.includes('airport') && types.some((t) => NON_AIRPORT_TYPES.has(t))) return false;
+
+						// 🚫 4. Hard negative keywords — skipped when the description
+						// explicitly mentions an airport, so airports named after harbors,
+						// parks, etc. ("Sky Harbor", "College Park") are not blocked
+						if (!mentionsAirport) {
+							const matchedKeywords = HARD_NEGATIVE_KEYWORDS.filter((keyword) => {
+								const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+								return regex.test(desc);
+							});
+
+							if (matchedKeywords.length > 0) {
+								return false;
+							}
+						}
+
+						return true;
 					})
 					.map((prediction: any) =>
 						this.mapAirportPrediction(prediction, baseSearchText)

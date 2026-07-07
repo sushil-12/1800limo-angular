@@ -1170,7 +1170,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	calculateAdminShare() {
 
 		let baseRate = this.calculateBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && this.affiliate_type == 'loose_affiliate') ? 0 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100 + (this.RatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
 		// console.log("extra gratuity",this.RatesForm.get('misc').get('Extra_Gratuity').get('amount').value)
 		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''

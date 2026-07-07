@@ -29,6 +29,7 @@ import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-final
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
 import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
+import { AffiliateBookingHostComponent } from './create-new-booking-v2/affiliate-booking-host.component';
 
 const routes: Routes = [
 	{
@@ -133,6 +134,11 @@ const routes: Routes = [
 		path: 'new-booking',
 		canActivate: [AffiliateOtherRouteGuard],
 		component: NewBookingComponent
+	},
+	{
+		path: 'create-new-booking-v2',
+		canActivate: [AffiliateOtherRouteGuard],
+		component: AffiliateBookingHostComponent,
 	},
 	{
 		path: 'invoice-summary',

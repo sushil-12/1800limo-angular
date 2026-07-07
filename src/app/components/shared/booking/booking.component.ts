@@ -7,6 +7,7 @@ import { pluck, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { AdminService } from '../../../services/admin.service';
 import { IndividualService } from '../../../services/individual.service';
+import { TravelAgentService } from '../../../services/travel-agent.service';
 import { SharedModule } from '../shared.module'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
@@ -25,7 +26,7 @@ import { NgIf } from '@angular/common';
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
 
-export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent';
+export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent' | 'affiliate';
 
 @Component({
 	selector: 'app-booking',
@@ -40,12 +41,20 @@ export class BookingComponent implements OnInit, OnDestroy {
 		return this.mode === 'admin';
 	}
 
+	get shouldBlockAdminApi(): boolean {
+		return this.mode === 'individual' || this.mode === 'travel-agent' || this.mode === 'affiliate';
+	}
+
 	get isIndividualMode(): boolean {
 		return this.mode === 'individual';
 	}
 
 	get isTravelAgentMode(): boolean {
 		return this.mode === 'travel-agent';
+	}
+
+	get isAffiliateMode(): boolean {
+		return this.mode === 'affiliate';
 	}
 
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
@@ -225,6 +234,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	route_is_master_vehicle: boolean | null = null
 	isTravelShare: boolean = false
 	travelStaffAccounts: any;
+	travelStaffAccounts_Original: any;
+	subAgentAccounts: any;
+	subAgentAccounts_Original: any;
 	manual_change_aff_veh: boolean = false;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
@@ -254,13 +266,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 	/** Tracks the countrychange handler per tel input so re-initialization replaces (not stacks) listeners. */
 	private countryChangeHandlers = new Map<HTMLElement, () => void>();
 	/** Route map panels start collapsed; the map only initializes when expanded. */
-	isRouteMapVisible = false;
-	isReturnRouteMapVisible = false;
+	isRouteMapVisible = true;
+	isReturnRouteMapVisible = true;
 
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
 		private individualService: IndividualService,
+		private TravelAgentService: TravelAgentService,
 		private $shared: SharedModule,
 		private $spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
@@ -273,9 +286,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit(): void {
-
-
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
+		if (this.isTravelAgentMode) {
+			this.isTravelShare = true;
+			this.isCreatedByAdmin = false;
+		}
 		// build the form first 
 		this.buildBookingForm()
 		this.queryParamsSubscription = this.$routeurl.queryParams.subscribe((params: any) => {
@@ -326,6 +341,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (this.isIndividualMode) {
 				// individual portal: the booking is always for the logged-in user's own account
 				this.loadIndividualAccount()
+			}
+			else if (this.isTravelAgentMode) {
+				this.getTravelClientAccounts()
 			}
 			else {
 				this.fetchClientAccounts('individual')
@@ -639,7 +657,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.driver_info['year'] = vehicle?.vehicle_details?.year || vehicle?.vehicle_year_name || "";
 		}
 
-		if (this.isIndividualMode) {
+		if (this.isIndividualMode || this.isTravelAgentMode) {
 			let d_isd = vehicle?.driverInformation?.cell_isd || vehicle?.driver_cell_isd;
 			if (d_isd && !String(d_isd).startsWith('+')) {
 				d_isd = '+' + d_isd;
@@ -687,6 +705,64 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('driver_cell_isd', '+1');
 		this.SetFormValue('driver_cell_country', 'us');
 		this.BookingForm.updateValueAndValidity();
+	}
+
+	handleChangeWithAgent(selectedAcc: any) {
+		console.log('handleChangeWithAgent-->>', selectedAcc);
+	}
+
+	handleSubAgentAccounts(value: any) {
+		console.log('handleSubAgentAccounts--->>>', value);
+	}
+
+	handleSubAgentSearch(event: any) {
+		const term = event.term;
+		if (!term) {
+			this.subAgentAccounts = [...this.subAgentAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.subAgentAccounts = [...this.subAgentAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	handleTravelStaffSearch(event: any) {
+		const term = event.term;
+		if (!term) {
+			this.travelStaffAccounts = [...this.travelStaffAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.travelStaffAccounts = [...this.travelStaffAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
+	}
+
+	private syncPrefilledTravelClientSelection() {
+		const currentTravelClientId = this.BookingForm?.get('travel_client_id')?.value;
+		if (!currentTravelClientId || !this.travelStaffAccounts?.length) {
+			return;
+		}
+
+		const matchedClient = this.travelStaffAccounts.find((client: any) => Number(client?.id) === Number(currentTravelClientId));
+		if (matchedClient) {
+			this.BookingForm.patchValue({
+				travel_client_id: matchedClient.id
+			}, { emitEvent: false });
+		}
 	}
 
 
@@ -897,6 +973,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			if (!isValid) {
 				const errorCode = telInputObject.getValidationError();
+				console.log(errorCode, "errorCode");
 				const errorMsg = ["Invalid phone number", "Invalid country code", "Invalid phone number", "Invalid phone number", "Invalid phone number"][errorCode] || "Invalid phone number";
 				const currentErrors = control.errors || {};
 				control.setErrors({ ...currentErrors, 'invalidIntl': errorMsg });
@@ -1784,9 +1861,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			number_of_hours: ['2'],
 			prevent_rate_override: this.updateType === "edit" ? [true] : [false],
 			acc_id: [''],
-			account_type: ['individual'],
+			account_type: [this.isTravelAgentMode ? 'travel_planner' : 'individual'],
 			travel_client_id: [''],
 			travel_client_acc: ['travel_individual'],
+			sub_account_type: ['travel_agent'],
+			sub_account_id: [''],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -2185,7 +2264,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours === 0 ? 2 : response?.data?.number_of_hours
-			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
+			this.isTravelShare = this.isTravelAgentMode || response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
@@ -2304,14 +2383,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
 			this.BookingForm.patchValue({
-				cancellation_hours: response?.data?.cancellation_hours.toString()
+				cancellation_hours: response?.data?.cancellation_hours?.toString() ?? '24'
 			})
 
 			// if (this.Form.updateType.value == 'edit') {
 			//  this.booking_params.client_account_types.pop()
 			// }
 			this.booking_id = this.Form.reservation_id.value;
-			if (this.isIndividualMode && (editing_data?.driver_name || editing_data?.driver_id)) {
+			if ((this.isIndividualMode || this.isTravelAgentMode) && (editing_data?.driver_name || editing_data?.driver_id)) {
 				this.populateDriverAndVehicleDetails(editing_data);
 			}
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
@@ -3238,7 +3317,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return
 		}
 		else {
-			if(this.isIndividualMode) {return;};
+			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
 			
 			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
@@ -3376,6 +3455,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	shouldRenderSavedCardsSection(): boolean {
+		if (this.isIndividualMode) {
+			return false;
+		}
 		const isDirectIndividual = this.Form?.account_type?.value === 'individual' && !!this.Form?.acc_id?.value;
 		const isTravelAdvisor = this.Form?.account_type?.value === 'travel_planner' && !!this.Form?.acc_id?.value;
 		const isTravelIndividual = this.Form?.account_type?.value === 'travel_planner'
@@ -3392,10 +3474,23 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.SetLCFormValue('email', choose_user?.email)
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
-	getTravelClientAccounts(id) {
-		this.$api.getTravelClientAccount(id).subscribe((response: any) => {
-			this.travelStaffAccounts = response?.data
-		})
+	getTravelClientAccounts(id?: any) {
+		if (this.isTravelAgentMode) {
+			this.TravelAgentService.getAllTravelClientAccountList('individual').then((result: any) => {
+				console.log("accounts->>>>>>>>>>", result);
+				this.travelStaffAccounts = result?.data;
+				this.travelStaffAccounts_Original = result?.data ? [...result.data] : [];
+				this.syncPrefilledTravelClientSelection();
+			})
+			.catch(err => {
+				this.$spinner.hide();
+			});
+		} else {
+			if(this.shouldBlockAdminApi) {return;};
+			this.$api.getTravelClientAccount(id).subscribe((response: any) => {
+				this.travelStaffAccounts = response?.data
+			})
+		}
 	}
 	handleClientAccChange(selectedAcc) {
 		this.isTravelShare = selectedAcc == 'travel_planner' ? true : false
@@ -3439,30 +3534,51 @@ export class BookingComponent implements OnInit, OnDestroy {
 				travel_client_id.updateValueAndValidity();
 			}
 			else {
+				if (this.isTravelAgentMode) {
+					setTimeout(() => {
+						this.initphonefield();
+						this.initAllAutocompletes();
+					}, 200);
+				}
 				travel_client_id.clearValidators();
 				travel_client_id.updateValueAndValidity();
 			}
 		}
 
-		const travelAdvisorId = this.Form?.acc_id?.value;
-		const travelClientId = this.Form?.travel_client_id?.value;
-		this.loadCombinedSavedCards(
-			travelClientId,
-			selectedAcc == 'travel_individual',
-			travelAdvisorId
-		);
+		if (!this.isTravelAgentMode) {
+			const travelAdvisorId = this.Form?.acc_id?.value;
+			const travelClientId = this.Form?.travel_client_id?.value;
+			this.loadCombinedSavedCards(
+				travelClientId,
+				selectedAcc == 'travel_individual',
+				travelAdvisorId
+			);
+		}
 
 	}
 	handleTravelStaffAccounts(value: any) {
-		this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
-			if (this.isPrefilling) {
-				this.autofillData('passenger', response?.data);
-
+		if (this.isTravelAgentMode) {
+			try {
+				console.log('handleTravelStaffAccounts--->>>', value);
+				this.TravelAgentService.getTravelClientDetailById(value.id).subscribe((response: any) => {
+					console.log("detail ->>>>>>>", response);
+					this.autofillData('passenger', response?.data);
+				});
+			} catch (error) {
+				console.log('error--->>>>', error);
 			}
-			this.isPrefilling = true;
+		} else {
+			if(this.shouldBlockAdminApi) {return;};
+			this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
+				if (this.isPrefilling) {
+					this.autofillData('passenger', response?.data);
 
-		})
-		this.loadCombinedSavedCards(value?.id, this.Form.travel_client_acc?.value === 'travel_individual', this.Form?.acc_id?.value);
+				}
+				this.isPrefilling = true;
+
+			})
+			this.loadCombinedSavedCards(value?.id, this.Form.travel_client_acc?.value === 'travel_individual', this.Form?.acc_id?.value);
+		}
 	}
 
 	/**
@@ -3565,18 +3681,25 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 
+	private appendOperatorToLooseAffiliates(data: any[]): any[] {
+		return (data || []).map((item) => ({
+			...item,
+			name: item?.operator_name ? `${item.name} / ${item.operator_name}` : item.name
+		}))
+	}
+
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
-			if(this.isIndividualMode) {return;};
+			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.LooseAffiliateAccounts = response?.data
+				this.LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
 		}
 		else {
 			this.AffiliateAccounts = []
-			if(this.isIndividualMode) {return;};
+			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
@@ -3603,16 +3726,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate') {
 		
 		if (return_affiliate_type == 'loose_affiliate') {
-			if(this.isIndividualMode) {return;};
+			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.Return_LooseAffiliateAccounts = response?.data
+				this.Return_LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
 		}
 		else {
 			this.Return_AffiliateAccounts = []
-			if(this.isIndividualMode) {return;};
+			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
@@ -3805,7 +3928,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
-		if(this.isIndividualMode) {return;};
+		if(this.shouldBlockAdminApi) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_id', affiliate_id);
 			return;
@@ -3823,6 +3946,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 	}
 	fetchReturnAffiliateInformation(return_affiliate_id: number) {
+		if(this.shouldBlockAdminApi) {return;};
 		this.$spinner.show('normalspinner');
 		this.$api.getAffiliateAccount(return_affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
 			isDevMode() && console.info('Affiliate Information', response);
@@ -3857,24 +3981,24 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (!this.booking_id) {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
 		else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
@@ -3906,24 +4030,24 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (!this.booking_id) {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
 		else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
@@ -4009,7 +4133,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	private loadMasterVehicleInfoForQuoteBot(vehicleId: number, isReturn: boolean = false): void {
-		if(this.isIndividualMode) {
+		if(this.shouldBlockAdminApi) {
 			return;
 		}
 		if (!vehicleId) {
@@ -4289,7 +4413,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 	}
 	fetchAffiliateDrivers(affiliate_id: number) {
-		if(this.isIndividualMode) {return;};
+		if(this.shouldBlockAdminApi) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_data', affiliate_id)
 			return
@@ -4329,7 +4453,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
 			return
 		}
-		if(this.isIndividualMode) {return;};
+		if(this.shouldBlockAdminApi) {return;};
 		this.$spinner.show()
 		this.$api.driverList(return_affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
@@ -4852,6 +4976,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	createReservationShareArray() {
 		const multiplyHours = this.number_of_hours >= 24 ? this.number_of_hours/24 : this.number_of_hours; 
 		if (this.RatesForm) {
+			this.adminSharePercent = 25;
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.RatesForm?.min_rate_involved) {
 				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * multiplyHours;
@@ -4895,12 +5020,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 				shareArray['farmoutShare'] = base_rate * 0.10
 				shareArray['affiliateShare'] = grandTotal - base_rate * 0.25
 			}
-			else if (this.booking_created_from == 'subscriber') {
-				this.adminSharePercent = 0
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
-				shareArray['deducted_admin_share'] = 0
-				shareArray['affiliateShare'] = grandTotal - stripeFee
-			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -4909,7 +5028,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 	createReservationReturnShareArray() {
 		if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-
+			this.adminSharePercent = 25;
 			let base_rate = 0
 			for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
 				base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
@@ -4945,12 +5064,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['farmoutShare'] = base_rate * 0.10
-			}
-			else if (this.booking_created_from == 'subscriber') {
-				this.adminSharePercent = 0
-				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
-				returnShareArray['deducted_admin_share'] = 0
-				returnShareArray['affiliateShare'] = returnGrandTotal - stripeFee
 			}
 
 			this.r_shareArray = returnShareArray
@@ -5223,11 +5336,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.BookingForm.get('loose_customer.phone') && this.BookingForm.get('loose_customer.phone').value && this.BookingForm.get('loose_customer.phone_isd') && this.BookingForm.get('loose_customer.phone_isd').value && this.BookingForm.get('loose_customer.phone').value.startsWith(this.BookingForm.get('loose_customer.phone_isd').value)) {
 			this.BookingForm.get('loose_customer.phone').setValue(this.BookingForm.get('loose_customer.phone').value.substring(this.BookingForm.get('loose_customer.phone_isd').value.length));
 		}
+		
 		if (this.BookingForm.invalid) {
 			Object.keys(this.BookingForm.controls).forEach(key => {
 				const controlErrors = this.BookingForm.get(key).errors;
 				if (controlErrors != null) {
 				}
+				console.log('controlErrors-->>' , key , controlErrors);
 			});
 			// Check nested loose_customer group
 			const lcGroup = this.BookingForm.get('loose_customer') as FormGroup;
@@ -5342,6 +5457,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isIndividualMode) {
 			return this.individualService.getBookingDataForEdit(booking_id, updateType) as Observable<any>
 		}
+		if (this.isTravelAgentMode) {
+			return this.TravelAgentService.getBookingDataForEdit(booking_id, updateType) as Observable<any>
+		}
 		return this.$api.getBookingDataForEdit(booking_id, updateType) as Observable<any>
 	}
 
@@ -5357,12 +5475,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 			}
 			return this.individualService.createBooking(payload, updateType) as Observable<any>
 		}
+		if (this.isTravelAgentMode) {
+			return this.TravelAgentService.createBooking(payload, updateType) as Observable<any>
+		}
 		return this.$api.createBooking(payload, updateType) as Observable<any>
 	}
 
 	/** Where to land after a successful save, per portal. */
 	private navigatePostSave() {
-		if (this.isIndividualMode) {
+		if (this.isIndividualMode || this.isTravelAgentMode) {
 			this.$router.navigate([`/${this.currentUser?.roleName}/bookings`])
 			return
 		}
@@ -5598,8 +5719,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 					this.MapController(true)
 				}, 2000)
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString(),
+					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
+					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
 					return_affiliate_id: this.BookingForm?.get('affiliate_id')?.value
 				})
 				if (this.booking_created_from == 'subscriber') {
@@ -5625,8 +5746,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (value != 'charter_tour') {
 				this.BookingForm.updateValueAndValidity()
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours.toString()
+					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours?.toString() ?? '24',
+					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			if (value == 'one_way') {
@@ -5649,8 +5770,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.BookingForm?.get('return_cruise_name')?.updateValueAndValidity();
 				this.BookingForm?.get('return_cruise_port')?.updateValueAndValidity();
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString()
+					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
+					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 
 				// Clear return leg address validators
@@ -6151,9 +6272,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.fetchAffiliates('loose_affiliate')
 
 				this.toggleDropdown(null)
-				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
-				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				if (!this.isIndividualMode && !this.isTravelAgentMode) {
+					this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
+					this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
+					this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				}
 				// this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
@@ -6215,9 +6338,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				})
 				this.fetchReturnAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
-				this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
-				this.BookingForm.get('return_lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				this.BookingForm.get('return_lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				if (!this.isIndividualMode && !this.isTravelAgentMode) {
+					this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
+					this.BookingForm.get('return_lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
+					this.BookingForm.get('return_lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				}
 				// this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
@@ -6677,6 +6802,54 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// 	this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 		// })
 
+		if (this.isTravelAgentMode) {
+			this.BookingForm.get('sub_account_type').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				if (value === 'sub_travel_agent') {
+					this.BookingForm.get('sub_account_id').setValidators([Validators.required]);
+					this.BookingForm.get('sub_account_id').updateValueAndValidity();
+					this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
+						console.log("accounts->>>>>>>>>>", result)
+						this.subAgentAccounts = result?.data
+						this.subAgentAccounts_Original = result?.data ? [...result.data] : []
+						if (this.BookingForm?.get('sub_account_id').value === '') {
+							this.BookingForm.patchValue({
+								travel_client_id: ''
+							})
+						}
+					})
+					.catch(err => {
+						this.$spinner.hide();
+					});
+				} else {
+					this.BookingForm.get('sub_account_id').clearValidators()
+					this.BookingForm.get('sub_account_id').updateValueAndValidity();
+					this.BookingForm.patchValue({
+						sub_account_id: ''
+					})
+					this.getTravelClientAccounts()
+				}
+			})
+
+			this.BookingForm.get('sub_account_id').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				console.log('valueeeee->', value, this.newBooking)
+				if (!this.newBooking) {
+					if (value !== this.bookingResponse?.sub_account_id) {
+						this.BookingForm.patchValue({
+							travel_client_id: ''
+						})
+					}
+				}
+				this.TravelAgentService.getAllTravelClientAccountList('individual', value).then((result: any) => {
+					console.log("accounts->>>>>>>>>>", result)
+					this.travelStaffAccounts = result?.data
+					this.travelStaffAccounts_Original = result?.data ? [...result.data] : []
+					this.syncPrefilledTravelClientSelection();
+				})
+				.catch(err => {
+					this.$spinner.hide();
+				});
+			})
+		}
 
 	}
 
@@ -6953,7 +7126,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				let editing_data = response.data
 				delete editing_data.affiliate_id
 				this.number_of_hours = response?.data?.number_of_hours === 0 ? 2 : response?.data?.number_of_hours
-				this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
+				this.isTravelShare = this.isTravelAgentMode || response?.data?.account_type == 'travel_planner' ? true : false
 				if (response?.data?.account_type == 'travel_planner') {
 					this.getTravelClientAccounts(response?.data?.acc_id)
 				}
