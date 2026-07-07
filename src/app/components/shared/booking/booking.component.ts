@@ -3565,12 +3565,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 
+	private appendOperatorToLooseAffiliates(data: any[]): any[] {
+		return (data || []).map((item) => ({
+			...item,
+			name: item?.operator_name ? `${item.name} / ${item.operator_name}` : item.name
+		}))
+	}
+
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
 			if(this.isIndividualMode) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.LooseAffiliateAccounts = response?.data
+				this.LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
 		}
@@ -3606,7 +3613,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if(this.isIndividualMode) {return;};
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.Return_LooseAffiliateAccounts = response?.data
+				this.Return_LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
 		}
