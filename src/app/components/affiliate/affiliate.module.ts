@@ -53,6 +53,7 @@ import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
 import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
 import { BookingPreviewModule } from './booking-preview/booking-preview.module';
+import { AffiliateBookingHostModule } from './create-new-booking-v2/affiliate-booking-host.module';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -121,7 +122,8 @@ import { QuillModule } from 'ngx-quill';
 			separator: ' - ',
 			applyLabel: 'Okay',
 		}),
-		QuillModule
+		QuillModule,
+		AffiliateBookingHostModule
 	],
 	providers: [],
 	exports: [

@@ -3715,7 +3715,7 @@
 		<!-- Affiliate Driver Information -->
 		<!-- && currentUser?.created_by_role != 'subscriber' -->
 		<div class="section-container mt-2"
-			*ngIf="Form.service_type.value == 'round_trip' && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
+			*ngIf="Form.service_type.value == 'round_trip' && isAdminMode && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
 			<h4 style="margin-bottom: 0;">
 				Driver Preferences
 			</h4>

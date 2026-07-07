@@ -26,7 +26,7 @@ import { NgIf } from '@angular/common';
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
 
-export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent';
+export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent' | 'affiliate';
 
 @Component({
 	selector: 'app-booking',
@@ -42,7 +42,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	get shouldBlockAdminApi(): boolean {
-		return this.mode === 'individual' || this.mode === 'travel-agent';
+		return this.mode === 'individual' || this.mode === 'travel-agent' || this.mode === 'affiliate';
 	}
 
 	get isIndividualMode(): boolean {
@@ -51,6 +51,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	get isTravelAgentMode(): boolean {
 		return this.mode === 'travel-agent';
+	}
+
+	get isAffiliateMode(): boolean {
+		return this.mode === 'affiliate';
 	}
 
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
@@ -262,8 +266,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 	/** Tracks the countrychange handler per tel input so re-initialization replaces (not stacks) listeners. */
 	private countryChangeHandlers = new Map<HTMLElement, () => void>();
 	/** Route map panels start collapsed; the map only initializes when expanded. */
-	isRouteMapVisible = false;
-	isReturnRouteMapVisible = false;
+	isRouteMapVisible = true;
+	isReturnRouteMapVisible = true;
 
 	constructor(
 		private $form: FormBuilder,
@@ -282,8 +286,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit(): void {
-
-
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 		if (this.isTravelAgentMode) {
 			this.isTravelShare = true;
@@ -2381,7 +2383,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
 			this.BookingForm.patchValue({
-				cancellation_hours: response?.data?.cancellation_hours.toString()
+				cancellation_hours: response?.data?.cancellation_hours?.toString() ?? '24'
 			})
 
 			// if (this.Form.updateType.value == 'edit') {
@@ -3453,6 +3455,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	shouldRenderSavedCardsSection(): boolean {
+		if (this.isIndividualMode) {
+			return false;
+		}
 		const isDirectIndividual = this.Form?.account_type?.value === 'individual' && !!this.Form?.acc_id?.value;
 		const isTravelAdvisor = this.Form?.account_type?.value === 'travel_planner' && !!this.Form?.acc_id?.value;
 		const isTravelIndividual = this.Form?.account_type?.value === 'travel_planner'
@@ -3481,6 +3486,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.$spinner.hide();
 			});
 		} else {
+			if(this.shouldBlockAdminApi) {return;};
 			this.$api.getTravelClientAccount(id).subscribe((response: any) => {
 				this.travelStaffAccounts = response?.data
 			})
@@ -3562,6 +3568,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				console.log('error--->>>>', error);
 			}
 		} else {
+			if(this.shouldBlockAdminApi) {return;};
 			this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
 				if (this.isPrefilling) {
 					this.autofillData('passenger', response?.data);
@@ -3939,6 +3946,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 	}
 	fetchReturnAffiliateInformation(return_affiliate_id: number) {
+		if(this.shouldBlockAdminApi) {return;};
 		this.$spinner.show('normalspinner');
 		this.$api.getAffiliateAccount(return_affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
 			isDevMode() && console.info('Affiliate Information', response);
@@ -3973,24 +3981,24 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (!this.booking_id) {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
 		else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
@@ -4022,24 +4030,24 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (!this.booking_id) {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
 		else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			else {
 				this.BookingForm.patchValue({
-					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+					return_cancellation_hours: selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 		}
@@ -5711,8 +5719,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 					this.MapController(true)
 				}, 2000)
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString(),
+					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
+					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
 					return_affiliate_id: this.BookingForm?.get('affiliate_id')?.value
 				})
 				if (this.booking_created_from == 'subscriber') {
@@ -5738,8 +5746,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (value != 'charter_tour') {
 				this.BookingForm.updateValueAndValidity()
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours.toString()
+					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours?.toString() ?? '24',
+					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
 			if (value == 'one_way') {
@@ -5762,8 +5770,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.BookingForm?.get('return_cruise_name')?.updateValueAndValidity();
 				this.BookingForm?.get('return_cruise_port')?.updateValueAndValidity();
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString()
+					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
+					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
 				})
 
 				// Clear return leg address validators
