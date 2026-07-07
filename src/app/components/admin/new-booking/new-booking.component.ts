@@ -3492,6 +3492,13 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			.join(' / ');
 	}
 
+	private appendOperatorToLooseAffiliates(data: any[]): any[] {
+		return (data || []).map((item) => ({
+			...item,
+			name: item?.operator_name ? `${item.name} / ${item.operator_name}` : item.name
+		}))
+	}
+
 	private getAffiliateSearchText(item: any): string {
 		return [
 			item?.name,
@@ -3511,7 +3518,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (affiliate_type == 'loose_affiliate') {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.LooseAffiliateAccounts = response?.data
+				this.LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
 		}
@@ -3545,7 +3552,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		if (return_affiliate_type == 'loose_affiliate') {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
-				this.Return_LooseAffiliateAccounts = response?.data
+				this.Return_LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
 		}
