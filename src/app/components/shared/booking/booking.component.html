@@ -147,28 +147,76 @@
 				</div>
 			</div>
 
+			<!-- Travel Agent Mode Account Selection -->
+			<div *ngIf="isTravelAgentMode">
+				<div class="row" *ngIf="currentUser?.roleName != 'sub_travel_agent'">
+					<div class="col-md-12 col-lg-10">
+						<mat-radio-group aria-label="Select an option" formControlName="sub_account_type">
+							<mat-radio-button [value]="'travel_agent'" class="my-2 ml-4 mr-3"
+								(change)="handleChangeWithAgent('travel_agent')">
+								Super Advisor
+							</mat-radio-button>
+							<mat-radio-button [value]="'sub_travel_agent'" class="my-2 ml-4 mr-3"
+								(change)="handleChangeWithAgent('sub_travel_agent')">
+								Sub Advisor
+							</mat-radio-button>
+						</mat-radio-group>
+					</div>
+				</div>
+				<div class="row px-4" *ngIf="Form['sub_account_type'].value != 'travel_agent'">
+					<div class="col-md-12">
+						<ng-select appearance="outline" [items]="subAgentAccounts" bindLabel="name" bindValue="id"
+							placeholder="Select Sub Advisor Account" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="sub_account_id"
+							(change)="handleSubAgentAccounts($event)" (search)="handleSubAgentSearch($event)"
+							style="padding-bottom: 0px;"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.sub_account_id.invalid) }">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.sub_account_id.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="Form.sub_account_id.errors.required">Select a sub advisor
+								account</div>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="Form['account_type'].value == 'travel_planner'">
+					<div class="row">
+						<div class="col-md-12 col-lg-10">
+							<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
+								<mat-radio-button [value]="'travel_individual'" class="my-2 ml-4 mr-3"
+									(change)="handleChangeTravelAccounts('travel_individual')">
+									Active Clients
+								</mat-radio-button>
+								<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
+									(change)="handleChangeTravelAccounts('travel_loose_customer')">
+									Create new client
+								</mat-radio-button>
+							</mat-radio-group>
+						</div>
+					</div>
+					<div class="row px-4">
+						<div class="col-md-12" *ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
+							<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
+								placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
+								[virtualScroll]="true" formControlName="travel_client_id"
+								(change)="handleTravelStaffAccounts($event)" (search)="handleTravelStaffSearch($event)"
+								style="padding-bottom: 0px;"
+								[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }">
+							</ng-select>
+							<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.travel_client_id.errors.required">Select a client
+									account</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<!-- Choose User -->
-			<div *ngIf="Form['account_type'].value != 'loose_customer'">
+			<div *ngIf="Form['account_type'].value != 'loose_customer' && (isAdminMode || isIndividualMode)">
 				<div class="row px-4" *ngIf="isAdminMode">
 					<div class="col-md-12">
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>Choose User</mat-label>
-							<input #searchInput type="text" id="userField" placeholder="Choose User"
-								(focus)="$event.target.select()" matInput
-								(click)="openAutoCompletePanel()"
-								(keyup)="searchAccountType($event.target.value)"
-								[value]="fillValue(filteredAccountTypes, 'acc_id', 'name')"
-								[matAutocomplete]="chooseuseratcmplt" />
-							<mat-autocomplete #chooseuseratcmplt="matAutocomplete">
-								<div>
-									<mat-option *ngFor="let user of filteredAccountTypes"
-										[value]="user.name" (click)="chooseUser(user.id)">
-										{{ user.name }}
-									</mat-option>
-								</div>
-							</mat-autocomplete>
-						</mat-form-field> -->
-
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
@@ -1576,7 +1624,7 @@
 			</div>
 
 			<!-- Browse vehicles: embedded quotebot drill-down -->
-			<div *ngIf="(isIndividualMode && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse')">
+			<div *ngIf="((isIndividualMode || isTravelAgentMode) && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse')">
 				<div class="d-flex justify-content-end m-3">
 					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()">
 						<i class="bi bi-search" style="margin-right: 6px;"></i>
@@ -1589,7 +1637,7 @@
 			</div>
 
 			<!-- Transportation Details: Individual Side -->
-			<div class="section-container mt-2" *ngIf="isIndividualMode && driver_info">
+			<div class="section-container mt-2" *ngIf="(isIndividualMode || isTravelAgentMode) && driver_info">
 				<div class="d-flex justify-content-between align-items-center mb-3">
 					<h4 style="margin-bottom: 0px !important;">
 						Transportation Details
@@ -2282,8 +2330,7 @@
 		<!-- Amenities -->
 		<div id="amenities" class="section-container section-dropdown"
 			[ngClass]="booking_params.chevrons.amenities ? 'active' : ''"
-			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
-
+			*ngIf="Form.affiliate_type.value === 'loose_affiliate' && !isIndividualMode && !isTravelAgentMode">
 			<!-- Amenities -->
 			<div class="row align-items-center m-0" (click)="toggleDropdown('amenities')">
 				<div class="col-10 col-md-11">
@@ -3828,9 +3875,7 @@
 			</div>
 		</div>
 		<!-- Section - Return Journey Details Ends -->
-
-
-		<app-rates-form class="d-flex flex-wrap" [hideBuckets]="isIndividualMode" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+		<app-rates-form class="d-flex flex-wrap" [hideBuckets]="isIndividualMode || isTravelAgentMode" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 			[preventRateOverride]="Form.prevent_rate_override.value" [return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
 			[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
 			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates"
