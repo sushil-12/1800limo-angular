@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, OnChanges, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { AdminService } from "src/app/services/admin.service";
+import { AffiliateService } from "src/app/services/affiliate.service";
 
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
@@ -34,6 +35,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() parentError: boolean = false;
 	/** Individual portal: hide the editable rate buckets and share rows, show totals only. */
 	@Input() hideBuckets: boolean = false;
+	@Input() isAffiliateMode: boolean = false;
 
 
 	// Throw Events.
@@ -111,7 +113,8 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		private $form: FormBuilder,
 		private $api: AdminService,
 		private $routeurl: ActivatedRoute,
-         private amenitiesService: AmenitiesService
+		private amenitiesService: AmenitiesService,
+		private affiliateService: AffiliateService
 	) { }
 
 	ngOnInit(): void {
@@ -591,7 +594,8 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		if (!bookingId && this.hideBuckets) {
 			return;
 		}
-		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
+
+		const handleResponse = (response: any) => {
 			if (response?.success && response?.data?.rateArray) {
 				this.emptyRateArray = response?.data?.rateArray
 				this.ratesdata.next({})
@@ -606,7 +610,13 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 					this.numberOfHoursError = false;
 				}
 			}
-		});
+		};
+
+		if (this.isAffiliateMode) {
+			this.affiliateService.fetchBookingRates(bookingId).subscribe(handleResponse);
+		} else {
+			this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe(handleResponse);
+		}
 	}
 
 	fillReturnRateForm(data) {

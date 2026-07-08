@@ -22,6 +22,7 @@ import { GoogleMap } from '@angular/google-maps';
 import * as intlTelInput from 'intl-tel-input';
 import { P } from '@angular/cdk/keycodes';
 import { NgIf } from '@angular/common';
+import { AffiliateService } from '../../../services/affiliate.service';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -174,6 +175,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	private customAirportAutocompleteSessionTokens: Record<string, string> = {};
 	ReturnAffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
+	ClientAccounts_Original: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
 	Return_AffiliateAccounts: Array<Record<string, any>> = []
@@ -283,6 +285,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		private customValidator: CustomvalidationService,
 		private el: ElementRef,
 		private httpClient: HttpClient,
+		private affiliateService: AffiliateService,
 	) { }
 
 	ngOnInit(): void {
@@ -290,6 +293,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isTravelAgentMode) {
 			this.isTravelShare = true;
 			this.isCreatedByAdmin = false;
+		}
+		if (this.isAffiliateMode) {
+			this.isCreatedByAdmin = false;
+			this.booking_params.client_account_types = ['individual', 'loose_customer'];
 		}
 		// build the form first 
 		this.buildBookingForm()
@@ -3310,26 +3317,60 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// corporate: 'corporate',
 			travel_planner: 'travel'
 		}
+		console.log("fetchClientAccounts", account_type, legend[account_type])
 
 		// fail-safe
 		if (!legend.hasOwnProperty(account_type)) {
-			// console.error('Invalid Account type: ', account_type)
+			console.error('Invalid Account type: ', account_type)
 			return
 		}
 		else {
-			if(this.shouldBlockAdminApi) {return;};
+			if(this.isIndividualMode || this.isTravelAgentMode) {return;};
 			this.$spinner.show()
-			
-			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
-				if (response.success && response.data.length > 0) {
-					this.ClientAccounts = response.data;
-				}
-				else {
-					this.ClientAccounts = []
-				}
-				this.$spinner.hide()
-			})
+			console.log("Fetching accounts for affiliate mode", this.isAffiliateMode);
+			if (this.isAffiliateMode) {
+				console.log("Fetching accounts for affiliate mode");
+				this.affiliateService.getAccountBytype(legend[account_type]).subscribe((response: any) => {
+					if (response.success && response.data.length > 0) {
+						this.ClientAccounts = response.data;
+						this.ClientAccounts_Original = [...this.ClientAccounts];
+					}
+					else {
+						this.ClientAccounts = [];
+						this.ClientAccounts_Original = [];
+					}
+					this.$spinner.hide()
+				})
+			} else {
+				this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
+					if (response.success && response.data.length > 0) {
+						this.ClientAccounts = response.data;
+					}
+					else {
+						this.ClientAccounts = []
+					}
+					this.$spinner.hide()
+				})
+			}
 		}
+	}
+
+	handleClientSearch(event: any) {
+		const term = event.term;
+		if (!term) {
+			this.ClientAccounts = [...this.ClientAccounts_Original];
+			return;
+		}
+		const lowerTerm = term.toLowerCase();
+		this.ClientAccounts = [...this.ClientAccounts_Original].sort((a, b) => {
+			const aName = a.name.toLowerCase();
+			const bName = b.name.toLowerCase();
+			const aStarts = aName.startsWith(lowerTerm);
+			const bStarts = bName.startsWith(lowerTerm);
+			if (aStarts && !bStarts) return -1;
+			if (!aStarts && bStarts) return 1;
+			return 0;
+		});
 	}
 
 	onSelectionChangeServiceType(event: any) {
@@ -3377,20 +3418,21 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.$spinner.show()
 		this.chosen_user = {}
 		let accType = account_type ? account_type : this.Form.account_type.value;
-		this.$api.chooseUser(account_id, accType).subscribe((response: any) => {
+		const handleResponse = (response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
 				if (autofill) {
 					this.autofillData('passenger', this.chosen_user);
 				}
-				// this.fillLCDetails(this.chosen_user)
-				if (!this.Form.reservation_id.value) {
-					// this.autofillData('passenger', this.chosen_user);
-				}
 			}
 			this.$spinner.hide();
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.chooseUser(account_id, accType).subscribe(handleResponse);
+		} else {
+			this.$api.chooseUser(account_id, accType).subscribe(handleResponse);
+		}
 		this.loadSavedCards(account_id, accType === 'individual');
 	}
 
@@ -3411,6 +3453,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	private loadCombinedSavedCards(accountId: number, shouldLoad: boolean, travelAdvisorId?: number) {
+		if(this.isAffiliateMode) {return;};
 		if ((!shouldLoad || !accountId) && !travelAdvisorId) {
 			this.userCreditCards = [];
 			this.isLoadingSavedCards = false;
@@ -3455,7 +3498,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	shouldRenderSavedCardsSection(): boolean {
-		if (this.isIndividualMode) {
+		if (this.isIndividualMode || this.isAffiliateMode) {
 			return false;
 		}
 		const isDirectIndividual = this.Form?.account_type?.value === 'individual' && !!this.Form?.acc_id?.value;
@@ -3699,45 +3742,71 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 		else {
 			this.AffiliateAccounts = []
-			if(this.shouldBlockAdminApi) {return;};
+			if(this.isIndividualMode || this.isTravelAgentMode) {return;};
 			this.$spinner.show()
-			this.$api.getAccountBytype('driver').subscribe((response: any) => {
-				if (response.success && response.data.length > 0) {
-					this.AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
-						return item
-					})
-					this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
-					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-					//lose all affiliate vehicle and driver data on change of affiliate type
-					// for (let key in this.Form)
-					// {
-					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-					// 	{
-					// 		this.BookingForm.get(key).reset()
-					// 	}
-					// }
-				}
-				this.$spinner.hide()
-			})
+			if(this.isAdminMode){
+					this.$api.getAccountBytype('driver').subscribe((response: any) => {
+					if (response.success && response.data.length > 0) {
+						this.AffiliateAccounts = response.data.map((item) => {
+							item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
+							return item
+						})
+						this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
+						this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
+						//lose all affiliate vehicle and driver data on change of affiliate type
+						// for (let key in this.Form)
+						// {
+						// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
+						// 	{
+						// 		this.BookingForm.get(key).reset()
+						// 	}
+						// }
+					}
+					this.$spinner.hide()
+				})
+			}else{
+				this.affiliateService.getAccountBytype('driver').subscribe((response: any) => {
+					if (response.success && response.data.length > 0) {
+						this.AffiliateAccounts = response.data.map((item) => {
+							item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
+							return item
+						})
+						this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
+						this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
+						//lose all affiliate vehicle and driver data on change of affiliate type
+						// for (let key in this.Form)
+						// {
+						// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
+						// 	{
+						// 		this.BookingForm.get(key).reset()
+						// 	}
+						// }
+					}
+					this.$spinner.hide()
+				})
+			}
 		}
 	}
 
 	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate') {
-		
 		if (return_affiliate_type == 'loose_affiliate') {
 			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
-			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
+			const handleResponse = (response: any) => {
 				this.Return_LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
-			})
+			};
+			if (this.isAffiliateMode) {
+				this.affiliateService.getAccountBytype('loose_affiliate').subscribe(handleResponse);
+			} else {
+				this.$api.getAccountBytype('loose_affiliate').subscribe(handleResponse);
+			}
 		}
 		else {
 			this.Return_AffiliateAccounts = []
 			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
-			this.$api.getAccountBytype('driver').subscribe((response: any) => {
+			const handleResponse = (response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.Return_AffiliateAccounts = response.data.map((item) => {
 						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
@@ -3754,7 +3823,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 					// }
 				}
 				this.$spinner.hide()
-			})
+			};
+			if (this.isAffiliateMode) {
+				this.affiliateService.getAccountBytype('driver').subscribe(handleResponse);
+			} else {
+				this.$api.getAccountBytype('driver').subscribe(handleResponse);
+			}
 		}
 	}
 
@@ -3928,31 +4002,42 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
-		if(this.shouldBlockAdminApi) {return;};
+		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_id', affiliate_id);
 			return;
 		}
 		this.$spinner.show('normalspinner');
-		this.$api.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
-			isDevMode() && console.info('Affiliate Information', response);
+		const handleResponse = (response: any) => {
+			console.info('Affiliate Information', response);
 			this.AffiliateInformation = response;
+			console.log('AffiliateInformation', this.AffiliateInformation, this.affiliate_id);
 			if (this.booking_created_from == 'admin') {
 				this.BookingForm.patchValue({
 					susbcriber_name: this.AffiliateInformation?.FirstName + ' ' + this.AffiliateInformation?.LastName
 				})
 			}
 			this.$spinner.hide('normalspinner');
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe(handleResponse);
+		} else {
+			this.$api.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe(handleResponse);
+		}
 	}
 	fetchReturnAffiliateInformation(return_affiliate_id: number) {
 		if(this.shouldBlockAdminApi) {return;};
 		this.$spinner.show('normalspinner');
-		this.$api.getAffiliateAccount(return_affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
+		const handleResponse = (response: any) => {
 			isDevMode() && console.info('Affiliate Information', response);
 			this.ReturnAffiliateInformation = response;
 			this.$spinner.hide('normalspinner');
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.getAffiliateAccount(return_affiliate_id).pipe(pluck('data')).subscribe(handleResponse);
+		} else {
+			this.$api.getAffiliateAccount(return_affiliate_id).pipe(pluck('data')).subscribe(handleResponse);
+		}
 	}
 	handleSelectVehicleType(selectedVehicle: any) {
 		this.selectedVehicle = selectedVehicle
@@ -4158,7 +4243,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id, false).then((response: any) => {
+		const handleResponse = (response: any) => {
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
@@ -4191,22 +4276,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 					}
 				}
-				// if (this.VehicleList.length == 1) {
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
-				// else if(this.VehicleList.length){
-				// 	// need to re-code this condition #just a patch
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
 			}
 			this.$spinner.hide()
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then(handleResponse);
+		} else {
+			this.$api.adminAffiliateVehicleList(affiliate_id, false).then(handleResponse);
+		}
 	}
 
 	fetchLooseAffiliateVehicles(affiliate_id: any) {
@@ -4248,19 +4325,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 					}
 				}
-				// if (this.VehicleList.length == 1) {
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
-				// else if(this.VehicleList.length){
-				// 	// need to re-code this condition #just a patch
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
 			}
 			this.$spinner.hide()
 		})
@@ -4272,7 +4336,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(return_affiliate_id, false).then((response: any) => {
+		const handleResponse = (response: any) => {
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.return_VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
@@ -4305,22 +4369,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 					}
 				}
-				// if (this.VehicleList.length == 1) {
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
-				// else if(this.VehicleList.length){
-				// 	// need to re-code this condition #just a patch
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
 			}
 			this.$spinner.hide()
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.getVehicleDataByAffiliateId(return_affiliate_id).then(handleResponse);
+		} else {
+			this.$api.adminAffiliateVehicleList(return_affiliate_id, false).then(handleResponse);
+		}
 	}
 
 	fetchReturnLooseAffiliateVehicles(return_affiliate_id: any) {
@@ -4362,19 +4418,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 					}
 				}
-				// if (this.VehicleList.length == 1) {
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
-				// else if(this.VehicleList.length){
-				// 	// need to re-code this condition #just a patch
-				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
-				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-				// 	this.autofillData('vehicle', this.VehicleList[0]);
-				// }
 			}
 			this.$spinner.hide()
 		})
@@ -4413,14 +4456,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 	}
 	fetchAffiliateDrivers(affiliate_id: number) {
-		if(this.shouldBlockAdminApi) {return;};
+		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_data', affiliate_id)
 			return
 		}
 
 		this.$spinner.show()
-		this.$api.driverList(affiliate_id).then((response: any) => {
+		const handleResponse = (response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				setTimeout(() => {
 					this.initphonefield()
@@ -4430,22 +4473,27 @@ export class BookingComponent implements OnInit, OnDestroy {
 				for (let i = 0; i < this.DriverList.length; i++) {
 					if (this.bookingResponse?.driver_id && this.DriverList[i]?.id == this.bookingResponse?.driver_id) {
 						this.SetFormValue('driver_id', this.DriverList[i]?.id)
-						this.autofillData('driver', this.DriverList[i])
 						isValueSet = true
-						break;
+						break
 					}
 				}
 				if (!isValueSet) {
-					const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
-					const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
-					const fallbackDriver = matchedDriver || this.DriverList[0]
-					this.autofillData('driver', fallbackDriver)
-					setTimeout(() => { this.SetFormValue('driver_id', fallbackDriver.id) }, 0)
+					this.SetFormValue('driver_id', this.DriverList[0]?.id)
 				}
+				const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
+				const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
+				const fallbackDriver = matchedDriver || this.DriverList[0]
+				this.autofillData('driver', fallbackDriver)
+				setTimeout(() => { this.SetFormValue('driver_id', fallbackDriver.id) }, 0)
 			}
 			
 			this.$spinner.hide();
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.driverList(affiliate_id).then(handleResponse);
+		} else {
+			this.$api.driverList(affiliate_id).then(handleResponse);
+		}
 	}
 
 	fetchReturnAffiliateDrivers(return_affiliate_id: number) {
@@ -4455,7 +4503,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 		if(this.shouldBlockAdminApi) {return;};
 		this.$spinner.show()
-		this.$api.driverList(return_affiliate_id).then((response: any) => {
+		const handleResponse = (response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				setTimeout(() => {
 					this.initphonefield()
@@ -4463,9 +4511,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.return_DriverList = response.data.data
 				let isValueSet = false
 				for (let i = 0; i < this.return_DriverList.length; i++) {
-					if (this.bookingResponse?.driver_id && this.return_DriverList[i]?.id == this.bookingResponse?.driver_id) {
+					if (this.bookingResponse?.return_driver_id && this.return_DriverList[i]?.id == this.bookingResponse?.return_driver_id) {
 						this.SetFormValue('return_driver_id', this.return_DriverList[i]?.id)
-						this.autofillData('return_driver', this.return_DriverList[i])
 						isValueSet = true
 						break;
 					}
@@ -4477,15 +4524,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 					this.autofillData('return_driver', fallbackDriver)
 					setTimeout(() => { this.SetFormValue('return_driver_id', fallbackDriver.id) }, 0)
 				}
-
-				// autofill data
-				// if (this.DriverList.length == 1) {
-				// 	this.SetFormValue('driver_id', this.DriverList[0].id)
-				// 	this.autofillData('driver', this.DriverList[0])
-				// }
 			}
+			
 			this.$spinner.hide();
-		})
+		};
+		if (this.isAffiliateMode) {
+			this.affiliateService.driverList(return_affiliate_id).then(handleResponse);
+		} else {
+			this.$api.driverList(return_affiliate_id).then(handleResponse);
+		}
 	}
 
 	chooseDriver(driver_data: any) {
@@ -5460,6 +5507,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isTravelAgentMode) {
 			return this.TravelAgentService.getBookingDataForEdit(booking_id, updateType) as Observable<any>
 		}
+		if(this.isAffiliateMode){
+			return this.affiliateService.getBookingDataForEdit(booking_id) as Observable<any>
+		}
 		return this.$api.getBookingDataForEdit(booking_id, updateType) as Observable<any>
 	}
 
@@ -5478,11 +5528,21 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isTravelAgentMode) {
 			return this.TravelAgentService.createBooking(payload, updateType) as Observable<any>
 		}
+		if (this.isAffiliateMode) {
+			return this.affiliateService.createBooking(payload) as Observable<any>
+		}
 		return this.$api.createBooking(payload, updateType) as Observable<any>
 	}
 
 	/** Where to land after a successful save, per portal. */
 	private navigatePostSave() {
+		if (this.isAffiliateMode) {
+			const targetPath = this.currentUser?.roleName == 'sub_affiliate' ? '/sub_affiliate/farm-out' : '/affiliate/farm-out';
+			this.$router.navigate([targetPath]).then(() => {
+				window.location.reload();
+			});
+			return;
+		}
 		if (this.isIndividualMode || this.isTravelAgentMode) {
 			this.$router.navigate([`/${this.currentUser?.roleName}/bookings`])
 			return
