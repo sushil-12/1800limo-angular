@@ -124,11 +124,11 @@
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2">
 			<h4 class="border-secondary">
-				{{ isAdminMode ? 'Client Accounts' : 'Accounts Information' }}
+				{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
 			</h4>
 
 			<!-- Account Type (admin only: individual portal always books for the logged-in user) -->
-			<div class="row" *ngIf="isAdminMode">
+			<div class="row" *ngIf="isAdminMode || (isAffiliateMode && (newBooking || isFarmoutBooking))">
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="account_type"
 						*ngIf="currentUser?.created_by_role != 'subscriber'">
@@ -214,8 +214,8 @@
 			</div>
 
 			<!-- Choose User -->
-			<div *ngIf="Form['account_type'].value != 'loose_customer' && (isAdminMode || isIndividualMode)">
-				<div class="row px-4" *ngIf="isAdminMode">
+			<div *ngIf="Form['account_type'].value != 'loose_customer' && (isAdminMode || isIndividualMode || isAffiliateMode)">
+				<div class="row px-4" *ngIf="isAdminMode || isAffiliateMode">
 					<div class="col-md-12">
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
@@ -1611,11 +1611,11 @@
 		</div>
 
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
-		<div class="section-container mt-2">
+		<div class="section-container mt-2"  *ngIf="isAffiliateMode && updateType !== 'edit'">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary">{{ isAdminMode ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
+				<h4 class="border-secondary">{{ isAdminMode || (isAffiliateMode && (newBooking)) ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
 				<!-- manual affiliate assignment is an admin-only capability -->
-				<div class="eq-tabs" *ngIf="isAdminMode">
+				<div class="eq-tabs" *ngIf="isAdminMode || (isAffiliateMode && (newBooking))">
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'browse'"
 						(click)="vehicleSelectionTab = 'browse'">Browse vehicles</button>
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'manual'"
@@ -1624,7 +1624,7 @@
 			</div>
 
 			<!-- Browse vehicles: embedded quotebot drill-down -->
-			<div *ngIf="((isIndividualMode || isTravelAgentMode) && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse')">
+			<div *ngIf="((isIndividualMode || isTravelAgentMode) && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse') || ((isAffiliateMode && (newBooking)) && vehicleSelectionTab === 'browse')">
 				<div class="d-flex justify-content-end m-3">
 					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()">
 						<i class="bi bi-search" style="margin-right: 6px;"></i>
@@ -1712,7 +1712,7 @@
 		</div>
 
 		<!-- ============ Assign manually (existing affiliate / vehicle / driver) — admin only ============ -->
-		<ng-container *ngIf="isAdminMode && vehicleSelectionTab === 'manual'">
+		<ng-container *ngIf="(isAdminMode && vehicleSelectionTab === 'manual') || (isAffiliateMode && (newBooking) && vehicleSelectionTab === 'manual')">
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -3878,7 +3878,7 @@
 		<app-rates-form class="d-flex flex-wrap" [hideBuckets]="isIndividualMode || isTravelAgentMode" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 			[preventRateOverride]="Form.prevent_rate_override.value" [return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
 			[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
-			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates"
+			[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates" [isAffiliateMode]="isAffiliateMode"
 			(formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value"
 			[isCreatedByAdmin]="isCreatedByAdmin" [parentError]="numberOfHoursError"
 			(hoursErrorChange)="numberOfHoursError = $event" [vehicles]="Form.number_of_vehicles?.value"
