@@ -530,7 +530,7 @@
 							<!-- Card Holder Name -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>
+									<mat-label class="required-field">
 										First & Last Name
 									</mat-label>
 									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
@@ -553,7 +553,7 @@
 							<!-- Card Number -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>
+									<mat-label class="required-field">
 										Card Number
 									</mat-label>
 									<input matInput placeholder="xxxxxxxxxxxxxxxx" type="text"
@@ -586,7 +586,9 @@
 							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>Expiry Month</mat-label>
+									<mat-label class="required-field">
+										Expiry Month
+									</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
 										(keyup)="handleChangeMonth($event.target.value)"
 										(focus)="$event.target.select()">
@@ -610,7 +612,7 @@
 							<!-- Expiry Year -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>
+									<mat-label class="required-field">
 										Expiry Year
 									</mat-label>
 									<mat-select formControlName="exp_year">
@@ -633,7 +635,7 @@
 							<!-- CVV -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>
+									<mat-label class="required-field">
 										CVV (3-4 digit code)
 									</mat-label>
 									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
@@ -658,9 +660,6 @@
 				</div>
 				<!-- Credit Card Details Ends -->
 			</ng-template>
-
-
-
 		</div>
 		<!-- Client Accounts Section Ends -->
 		<div class="section-container">
@@ -4778,8 +4777,9 @@
 						</div>
 						<hr>
 					</div>
+				</div>
 
-					<div class="distribution_rate" *ngIf="!isIndividualMode">
+				<div class="distribution_rate" *ngIf="!isIndividualMode">
 					<h4 class="font-weight-bolder m-0 my-3">
 						Rates Distribution
 					</h4>
@@ -4893,7 +4893,6 @@
 				</div>
 					
 					<hr>
-				</div>
 
 				<h4 class="font-weight-bolder m-0">
 					Vehicle Preferences
@@ -5423,7 +5422,7 @@
 					<hr>
 				</ng-template>
 
-				<div class="distribution_rate" *ngIf="!isIndividualMode">
+				<div class="distribution_rate" *ngIf="!isIndividualMode && Form.service_type.value == 'round_trip'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Return Rates Distribution
 						</h4>

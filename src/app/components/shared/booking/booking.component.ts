@@ -5430,6 +5430,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 		
 		if (this.BookingForm.invalid) {
+			this.BookingForm.markAllAsTouched();
 			Object.keys(this.BookingForm.controls).forEach(key => {
 				const controlErrors = this.BookingForm.get(key).errors;
 				if (controlErrors != null) {
@@ -5454,6 +5455,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 					});
 				}
 			}
+			setTimeout(() => {
+				const firstInvalid = document.querySelector('.ng-invalid, .mat-form-field-invalid');
+				if (firstInvalid) {
+					firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}
+			}, 100);
 			return;
 		}
 		// Validate minimum number of hours for charter_tour
@@ -6252,11 +6259,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 					}
 				}
 
-				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.pattern("^[0-9+]*$"), Validators.minLength(12), Validators.maxLength(20),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([]);
-				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.pattern("^[0-9+]*$")]);
-				(<FormGroup>loose_customer.get('card_details')).get('exp_month').setValidators([]);
-				(<FormGroup>loose_customer.get('card_details')).get('exp_year').setValidators([]);
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(12), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(4),]);
+				(<FormGroup>loose_customer.get('card_details')).get('exp_month').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('exp_year').setValidators([Validators.required]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
@@ -6323,11 +6330,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 					}
 				}
 
-				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.pattern("^[0-9+]*$"), Validators.minLength(12), Validators.maxLength(20),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([]);
-				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.pattern("^[0-9+]*$")]);
-				(<FormGroup>loose_customer.get('card_details')).get('exp_month').setValidators([]);
-				(<FormGroup>loose_customer.get('card_details')).get('exp_year').setValidators([]);
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(12), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(3), Validators.maxLength(4),]);
+				(<FormGroup>loose_customer.get('card_details')).get('exp_month').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('exp_year').setValidators([Validators.required]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
