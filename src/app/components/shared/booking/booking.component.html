@@ -1580,7 +1580,7 @@
 		</div>
 
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
-		<div class="section-container mt-2"  *ngIf="isAffiliateMode && updateType !== 'edit'">
+		<div class="section-container mt-2"  *ngIf="!isAffiliateMode || updateType !== 'edit'">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
 				<h4 class="border-secondary"><i class="bi bi-car-front-fill bk-section-icon"></i>{{ isAdminMode || (isAffiliateMode && (newBooking)) ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
 				<!-- manual affiliate assignment is an admin-only capability -->
@@ -3924,22 +3924,27 @@
 					<h5 class="font-weight-bolder m-0">
 						Travel Information
 					</h5>
-
-                           <div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(bookingPreview?.service_type) | titlecase }}
-									/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
-									<span *ngIf="bookingPreview?.service_type == 'round_trip'">
-										/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }} </span> 
+                    
+					<div class="row">
+						<div class="col-md-4 key">
+							<span style="font-weight: 550 !important;">Booking Type</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form?.service_type?.value) | titlecase }}
+								/ {{ textFormatter(Form?.transfer_type?.value) | titlecase }}
+								<span class="font-weight-bolder" *ngIf="Form?.service_type?.value == 'round_trip'">
+									/ {{ textFormatter(Form?.return_transfer_type?.value) | titlecase }}
 								</span>
-							</div>
-							
+							</span>
+						</div>
+					</div>
 
 					<!-- Number of Hours -->
 					<div *ngIf="Form.service_type.value == 'charter_tour'">
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Booking Hours
 								</span>
 							</div>
