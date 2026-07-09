@@ -245,6 +245,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	r_shareArray: any;
 	adminSharePercent: number = 25;
 	isFarmoutBooking: boolean = false;
+	private isPrefillingForm: boolean = false;
 	private isPrefillingTransferTypes: boolean = false;
 	AffiliateAccounts_copy: any;
 	private AffiliateAccounts_Original: Array<Record<string, any>> = [];
@@ -297,6 +298,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isAffiliateMode) {
 			this.isCreatedByAdmin = false;
 			this.booking_params.client_account_types = ['individual', 'loose_customer'];
+			this.isFarmoutBooking = true;
 		}
 		// build the form first 
 		this.buildBookingForm()
@@ -768,6 +770,20 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (matchedClient) {
 			this.BookingForm.patchValue({
 				travel_client_id: matchedClient.id
+			}, { emitEvent: false });
+		}
+	}
+
+	private syncPrefilledSubAgentSelection() {
+		const currentSubAccountId = this.BookingForm?.get('sub_account_id')?.value;
+		if (!currentSubAccountId || !this.subAgentAccounts?.length) {
+			return;
+		}
+
+		const matchedSub = this.subAgentAccounts.find((sub: any) => Number(sub?.id) === Number(currentSubAccountId));
+		if (matchedSub) {
+			this.BookingForm.patchValue({
+				sub_account_id: matchedSub.id
 			}, { emitEvent: false });
 		}
 	}
@@ -2220,6 +2236,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	prefillViaBookingID(booking_id: number) {
+		this.isPrefillingForm = true;
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
 		if (this.updateType == 'reaffiliate') {
@@ -2434,8 +2451,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 			} else {
 				this.numberOfHoursError = false;
 			}
-
-		})
+			this.isPrefillingForm = false;
+		}, (error: any) => {
+			this.isPrefillingForm = false;
+		});
 
 	}
 
@@ -3531,7 +3550,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		} else {
 			if(this.shouldBlockAdminApi) {return;};
 			this.$api.getTravelClientAccount(id).subscribe((response: any) => {
-				this.travelStaffAccounts = response?.data
+				console.log("getTravelClientAccount response:", response);
+				this.travelStaffAccounts = response?.data;
+				this.syncPrefilledTravelClientSelection();
 			})
 		}
 	}
@@ -3559,11 +3580,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	handleClientAccount(value: any) {
+		console.log("handleClientAccount", value);
 		this.chooseUser(value.id)
 		if (this.BookingForm.get('account_type').value == 'travel_planner') {
+				console.log("handleClientAccount travel_planner", value);
 			this.BookingForm.patchValue({
 				travel_client_id: ''
 			})
+			console.log("handleClientAccount travel_planner", value.id);
 			this.getTravelClientAccounts(value.id)
 		}
 
@@ -3571,6 +3595,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	handleChangeTravelAccounts(selectedAcc) {
 		const travel_client_id = this.BookingForm.get('travel_client_id');
+		console.log("handleChangeTravelAccounts", selectedAcc, travel_client_id);
 		if (travel_client_id) {
 			if (selectedAcc == 'travel_individual') {
 				travel_client_id.setValidators([Validators.required]);
@@ -6864,6 +6889,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (this.isTravelAgentMode) {
 			this.BookingForm.get('sub_account_type').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				if (this.isPrefillingForm) {
+					if (value === 'sub_travel_agent') {
+						this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
+							this.subAgentAccounts = result?.data
+							this.subAgentAccounts_Original = result?.data ? [...result.data] : []
+							this.syncPrefilledSubAgentSelection();
+						})
+					}
+					return;
+				}
 				if (value === 'sub_travel_agent') {
 					this.BookingForm.get('sub_account_id').setValidators([Validators.required]);
 					this.BookingForm.get('sub_account_id').updateValueAndValidity();
@@ -6891,6 +6926,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 			})
 
 			this.BookingForm.get('sub_account_id').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				if (this.isPrefillingForm) {
+					if (value) {
+						this.TravelAgentService.getAllTravelClientAccountList('individual', value).then((result: any) => {
+							this.travelStaffAccounts = result?.data
+							this.travelStaffAccounts_Original = result?.data ? [...result.data] : []
+							this.syncPrefilledTravelClientSelection();
+						})
+					}
+					return;
+				}
 				console.log('valueeeee->', value, this.newBooking)
 				if (!this.newBooking) {
 					if (value !== this.bookingResponse?.sub_account_id) {
