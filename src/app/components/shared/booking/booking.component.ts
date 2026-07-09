@@ -762,11 +762,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	private syncPrefilledTravelClientSelection() {
 		const currentTravelClientId = this.BookingForm?.get('travel_client_id')?.value;
+		console.log('[DEBUG] syncPrefilledTravelClientSelection currentTravelClientId:', currentTravelClientId, 'travelStaffAccounts length:', this.travelStaffAccounts?.length, 'ids:', this.travelStaffAccounts?.map((c: any) => c?.id));
 		if (!currentTravelClientId || !this.travelStaffAccounts?.length) {
 			return;
 		}
 
 		const matchedClient = this.travelStaffAccounts.find((client: any) => Number(client?.id) === Number(currentTravelClientId));
+		console.log('[DEBUG] syncPrefilledTravelClientSelection matchedClient:', matchedClient);
 		if (matchedClient) {
 			this.BookingForm.patchValue({
 				travel_client_id: matchedClient.id
@@ -2299,6 +2301,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
+			console.log('[DEBUG edit-load] account_type:', response?.data?.account_type, 'acc_id:', response?.data?.acc_id, 'travel_client_id (raw):', response?.data?.travel_client_id, 'typeof:', typeof response?.data?.travel_client_id);
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
@@ -2316,6 +2319,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_id') continue;
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_type') continue;
 
+					if (item === 'travel_client_id') {
+						console.log('[DEBUG edit-load] loop is about to SetFormValue travel_client_id ->', editing_data[item]);
+					}
 					if (isNaN(Number(editing_data[item]))) {
 						this.SetFormValue(item, editing_data[item]);
 					} else {
@@ -2323,6 +2329,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 					}
 				}
 			}
+			console.log('[DEBUG edit-load] after loop, travel_client_id control value:', this.BookingForm.get('travel_client_id')?.value);
 			// Handle field name mismatches
 			if (editing_data.meet_greet_choice_name) {
 				this.SetFormValue('meet_greet_choices_name', editing_data.meet_greet_choice_name);
@@ -2409,6 +2416,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.BookingForm.patchValue({
 				cancellation_hours: response?.data?.cancellation_hours?.toString() ?? '24'
 			})
+
+			if (editing_data?.pickup_time) {
+				this.SetFormValue('pickup_time', this.FormatTime(editing_data.pickup_time));
+			}
+			if (editing_data?.cruise_time) {
+				this.SetFormValue('cruise_time', this.FormatTime(editing_data.cruise_time));
+			}
+			if (editing_data?.return_pickup_time) {
+				this.SetFormValue('return_pickup_time', this.FormatTime(editing_data.return_pickup_time));
+			}
+			if (editing_data?.return_cruise_time) {
+				this.SetFormValue('return_cruise_time', this.FormatTime(editing_data.return_cruise_time));
+			}
 
 			// if (this.Form.updateType.value == 'edit') {
 			//  this.booking_params.client_account_types.pop()
@@ -5685,6 +5705,78 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.return_VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleReturnSelectVehicleType(i) : '')
 	}
 
+	updateOutboundLegValidators(value: string) {
+		// pickup address mandatory
+		if (!value.startsWith('airport_')) {
+			this.BookingForm?.get('pickup')?.setValidators([Validators.required]);
+		} else {
+			this.BookingForm?.get('pickup')?.clearValidators();
+		}
+		this.BookingForm?.get('pickup')?.updateValueAndValidity();
+
+		// dropoff address mandatory
+		if (!value.endsWith('_airport')) {
+			this.BookingForm?.get('dropoff')?.setValidators([Validators.required]);
+		} else {
+			this.BookingForm?.get('dropoff')?.clearValidators();
+		}
+		this.BookingForm?.get('dropoff')?.updateValueAndValidity();
+
+		if (value.includes("city_")) {
+			this.SetFormValue('booking_instructions', '<ol><li>Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route</li></ol>');
+		}
+
+		// set cruise ship name and cruise port mandatory
+		if (value.includes('_cruise') || value.includes('cruise_')) {
+			if (value.includes("cruise_")) {
+				this.SetFormValue('booking_instructions', '<ol><li>Pax - Text driver when docked.</li><li>Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when ship has arrived.</li></ol>');
+			}
+			this.BookingForm.get('cruise_name').setValidators([Validators.required]);
+			this.BookingForm.get('cruise_port').setValidators([Validators.required]);
+			this.BookingForm.get('cruise_name').updateValueAndValidity();
+			this.BookingForm.get('cruise_port').updateValueAndValidity();
+		} else {
+			this.BookingForm.get('cruise_name').clearValidators();
+			this.BookingForm.get('cruise_port').clearValidators();
+			this.BookingForm.get('cruise_name').updateValueAndValidity();
+			this.BookingForm.get('cruise_port').updateValueAndValidity();
+		}
+
+		// set flight number mandatory
+		if (value.includes('_airport')) {
+			this.BookingForm.get('dropoff_airline_option').setValidators([Validators.required]);
+			this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
+			this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
+			this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
+		} else {
+			this.BookingForm.get('dropoff_airline_option').clearValidators();
+			this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
+			this.BookingForm.get('dropoff_airport_option').clearValidators();
+			this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
+		}
+
+		if (value.includes('airport_')) {
+			this.SetFormValue('booking_instructions', '<ol><li>Pax - Text driver when landing.</li><li>Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when plane has arrived.</li></ol>');
+			this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
+			this.BookingForm.get('pickup_flight').updateValueAndValidity();
+			this.BookingForm.get('pickup_airline_option').setValidators([Validators.required]);
+			this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+			this.BookingForm.get('pickup_airport_option').setValidators([Validators.required]);
+			this.BookingForm.get('pickup_airport_option').updateValueAndValidity();
+			this.BookingForm.get('origin_airport_city').setValidators([Validators.required]);
+			this.BookingForm.get('origin_airport_city').updateValueAndValidity();
+		} else {
+			this.BookingForm.get('pickup_flight').clearValidators();
+			this.BookingForm.get('pickup_flight').updateValueAndValidity();
+			this.BookingForm.get('pickup_airline_option').clearValidators();
+			this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+			this.BookingForm.get('pickup_airport_option').clearValidators();
+			this.BookingForm.get('pickup_airport_option').updateValueAndValidity();
+			this.BookingForm.get('origin_airport_city').clearValidators();
+			this.BookingForm.get('origin_airport_city').updateValueAndValidity();
+		}
+	}
+
 	updateReturnLegValidators(value: string) {
 		if (this.BookingForm?.get('service_type')?.value == 'round_trip') {
 			// return pickup address mandatory
@@ -5870,21 +5962,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// Transfer Type
 		this.BookingForm?.get('transfer_type')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 
-			// pickup address mandatory
-			if (!value.startsWith('airport_')) {
-				this.BookingForm?.get('pickup')?.setValidators([Validators.required]);
-			} else {
-				this.BookingForm?.get('pickup')?.clearValidators();
-			}
-			this.BookingForm?.get('pickup')?.updateValueAndValidity();
-
-			// dropoff address mandatory
-			if (!value.endsWith('_airport')) {
-				this.BookingForm?.get('dropoff')?.setValidators([Validators.required]);
-			} else {
-				this.BookingForm?.get('dropoff')?.clearValidators();
-			}
-			this.BookingForm?.get('dropoff')?.updateValueAndValidity();
+			this.updateOutboundLegValidators(value);
 
 			// Store old value for comparison
 			const oldValue = this.transfer_type;
@@ -6021,65 +6099,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// Update transfer_type property
 			this.transfer_type = value;
 			// this.initAllAutocompletes()
-			if (value.includes("city_")) {
-				this.SetFormValue('booking_instructions', '<ol><li>Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route</li></ol>');
-			}
-
-			// set cruise ship name and cruise port mandatory
-			if (value.includes('_cruise') || value.includes('cruise_')) {
-				if (value.includes("cruise_")) {
-					this.SetFormValue('booking_instructions', '<ol><li>Pax - Text driver when docked.</li><li>Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when ship has arrived.</li></ol>');
-				}
-				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
-				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
-				this.BookingForm.get('cruise_name').updateValueAndValidity();
-				this.BookingForm.get('cruise_port').updateValueAndValidity();
-			} else {
-				this.BookingForm.get('cruise_name').clearValidators();
-				this.BookingForm.get('cruise_port').clearValidators();
-				this.BookingForm.get('cruise_name').updateValueAndValidity();
-				this.BookingForm.get('cruise_port').updateValueAndValidity();
-			}
-
-			// set flight number mandatory
-			if (value.includes('_airport')) {
-				// this.BookingForm.get('dropoff_flight').setValidators([Validators.required]);
-				// this.BookingForm.get('dropoff_flight').updateValueAndValidity();
-				this.BookingForm.get('dropoff_airline_option').setValidators([Validators.required]);
-				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
-				this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
-				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
-			} else {
-				// this.BookingForm.get('dropoff_flight').clearValidators();
-				// this.BookingForm.get('dropoff_flight').updateValueAndValidity();
-				this.BookingForm.get('dropoff_airline_option').clearValidators();
-				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
-				this.BookingForm.get('dropoff_airport_option').clearValidators();
-				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
-
-			}
-
-			if (value.includes('airport_')) {
-				this.SetFormValue('booking_instructions', '<ol><li>Pax - Text driver when landing.</li><li>Driver - Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route. Text pax with pickup instructions when plane has arrived.</li></ol>');
-				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
-				this.BookingForm.get('pickup_flight').updateValueAndValidity();
-				this.BookingForm.get('pickup_airline_option').setValidators([Validators.required]);
-				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
-				this.BookingForm.get('pickup_airport_option').setValidators([Validators.required]);
-				this.BookingForm.get('pickup_airport_option').updateValueAndValidity();
-				this.BookingForm.get('origin_airport_city').setValidators([Validators.required]);
-				this.BookingForm.get('origin_airport_city').updateValueAndValidity();
-			} else {
-				this.BookingForm.get('pickup_flight').clearValidators();
-				this.BookingForm.get('pickup_flight').updateValueAndValidity();
-				this.BookingForm.get('pickup_airline_option').clearValidators();
-				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
-				this.BookingForm.get('pickup_airport_option').clearValidators();
-				this.BookingForm.get('pickup_airport_option').updateValueAndValidity();
-				this.BookingForm.get('origin_airport_city').clearValidators();
-				this.BookingForm.get('origin_airport_city').updateValueAndValidity();
-
-			}
 
 			const reverseStringChars = (text: string) => {
 				let temp = text.split('_')
@@ -6275,6 +6294,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('travel_client_id').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
+			console.log('[DEBUG] travel_client_id valueChanges fired ->', value, 'shouldHandlePrefilledBookingAccount:', this.shouldHandlePrefilledBookingAccount(), 'updateType:', this.updateType);
 			if (value && this.shouldHandlePrefilledBookingAccount()) {
 				this.handleTravelStaffAccounts({ id: value })
 			}
@@ -7416,6 +7436,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('return_transfer_type', return_transfer_type_value, false)
 		this.changeTransferType(transfer_type_value)
 		this.changeReturnTransferType(return_transfer_type_value)
+		this.updateOutboundLegValidators(transfer_type_value);
 		if (this.service_type === 'round_trip') {
 			this.init_return_rates = false;
 			this.retryGoogleAutocompleteInitialization();
