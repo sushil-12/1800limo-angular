@@ -284,36 +284,34 @@
 					</ng-template>
 				</div>
 				<!-- Acc Type TA -->
-				 <div *ngIf="isAdminMode || (isAffiliateMode && (newBooking || isFarmoutBooking))">
-					<div *ngIf="Form['account_type'].value == 'travel_planner'" >
-						<div class="row">
-							<div class="col-md-12 col-lg-10 d-flex justify-content-center">
-								<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
-									<mat-radio-button [value]="'travel_individual'" class="my-2 ml-4 mr-3"
-										(change)="handleChangeTravelAccounts('travel_individual')">
-										Individual
-									</mat-radio-button>
-									<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
-										(change)="handleChangeTravelAccounts('travel_loose_customer')">
-										Loose customer
-									</mat-radio-button>
-								</mat-radio-group>
-							</div>
+				<div *ngIf="Form['account_type'].value == 'travel_planner'">
+					<div class="row">
+						<div class="col-md-12 col-lg-10 d-flex justify-content-center">
+							<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
+								<mat-radio-button [value]="'travel_individual'" class="my-2 ml-4 mr-3"
+									(change)="handleChangeTravelAccounts('travel_individual')">
+									Individual
+								</mat-radio-button>
+								<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
+									(change)="handleChangeTravelAccounts('travel_loose_customer')">
+									Loose customer
+								</mat-radio-button>
+							</mat-radio-group>
 						</div>
-						<div class="row px-4">
-							<div class="col-md-12" *ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
-								<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name"
-									bindValue="id" placeholder="Select Account" dropdownPosition="bottom" [markFirst]="true"
-									[virtualScroll]="true" formControlName="travel_client_id"
-									(change)="handleTravelStaffAccounts($event)" (search)="handleTravelStaffSearch($event)"
-									[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }"
-									style="height:66px;">
-								</ng-select>
-								<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="Form.travel_client_id.errors.required">Select a client
-										account</div>
-								</div>
+					</div>
+					<div class="row px-4">
+						<div class="col-md-12" *ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
+							<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name"
+								bindValue="id" placeholder="Select Account" dropdownPosition="bottom" [markFirst]="true"
+								[virtualScroll]="true" formControlName="travel_client_id"
+								(change)="handleTravelStaffAccounts($event)" (search)="handleTravelStaffSearch($event)"
+								[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }"
+								style="height:66px;">
+							</ng-select>
+							<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="Form.travel_client_id.errors.required">Select a client
+									account</div>
 							</div>
 						</div>
 					</div>
@@ -3926,6 +3924,17 @@
 					<h5 class="font-weight-bolder m-0">
 						Travel Information
 					</h5>
+
+                           <div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview?.service_type) | titlecase }}
+									/ {{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
+									<span *ngIf="bookingPreview?.service_type == 'round_trip'">
+										/ {{ textFormatter(bookingPreview?.return_transfer_type) | titlecase }} </span> 
+								</span>
+							</div>
+							
+
 					<!-- Number of Hours -->
 					<div *ngIf="Form.service_type.value == 'charter_tour'">
 						<div class="row">
@@ -4748,118 +4757,120 @@
 						</div>
 						<hr>
 					</div>
-					<div class="distribution_rate">
-						<h4 class="font-weight-bolder m-0 my-3">
-							Return Rates Distribution
-						</h4>
 
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Base Rate
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.baseRate.toFixed(2)}}
-									</span>
-									(Fare Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Admin Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.adminShare.toFixed(2) }}
-									</span>
-									({{adminSharePercent}}% of Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2" *ngIf="r_shareArray?.travelAgentShare">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Travel Advisor Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.travelAgentShare.toFixed(2) }}
-									</span>
-									(10% of Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Total Client Cost
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.returnGrandTotal.toFixed(2)}}
-									</span>
-									(Actual Cost to Customer)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Stripe fees
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.stripeFee.toFixed(2)}}
-									</span>
-									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
-								</div>
-							</div>
-						</div>
+					<div class="distribution_rate" *ngIf="!isIndividualMode">
+					<h4 class="font-weight-bolder m-0 my-3">
+						Rates Distribution
+					</h4>
 
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Payout
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.affiliateShare.toFixed(2)}}
-									</span>
-									( Total Price - (Ride Base Rate + Other Taxes) )
-								</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Base Rate
+								</span>
 							</div>
-						</div>
-						<div class="mx-2" *ngIf="isFarmoutBooking">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Farm out share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-field">
-										{{currencySymbol}}{{r_shareArray?.farmoutShare.toFixed(2)}}
-									</span>
-									( 10 % of Base Rate)
-								</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.baseRate.toFixed(2)}}
+								</span>
+								(Fare Base Rate)
 							</div>
 						</div>
 					</div>
+					<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Admin Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.adminShare.toFixed(2) }}
+								</span>
+								({{adminSharePercent}}% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Travel Advisor Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.travelAgentShare.toFixed(2) }}
+								</span>
+								(10% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Total Client Cost
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.grandTotal.toFixed(2)}}
+								</span>
+								(Actual Cost to Customer)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Stripe fees
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
+								</span>
+								(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+							</div>
+						</div>
+					</div>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Payout
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.affiliateShare.toFixed(2)}}
+								</span>
+								( Total Price - (Ride Base Rate + Other Taxes) )
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="isFarmoutBooking">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Farm out share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-field">
+									{{currencySymbol}}{{shareArray?.farmoutShare.toFixed(2)}}
+								</span>
+								( 10 % of Base Rate)
+							</div>
+						</div>
+					</div>
+				</div>
+					
 					<hr>
 				</div>
 
@@ -4948,17 +4959,17 @@
 						<span class="font-weight-bolder">
 							{{ Form.vehicle_seats.value}}
 						</span>
-					</div>
 				</div>
+              </div>
 
-				<hr>
+				<hr *ngIf="!isIndividualMode && !isTravelAgentMode">
 				<!-- Affiliate Information -->
 				<ng-container
 					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' then affiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
-				<ng-template #affiliateUser>
+				<ng-template #affiliateUser *ngIf="!isIndividualMode || !isTravelAgentMode">
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Affiliate Information
 					</h4>
@@ -5028,7 +5039,7 @@
 				</ng-container>
 
 				<!-- Affiliate -->
-				<ng-template #returnaffiliateUser>
+				<ng-template #returnaffiliateUser *ngIf="!isIndividualMode || !isTravelAgentMode">
 					<hr>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Affiliate Information
@@ -5098,7 +5109,7 @@
 				</ng-container>
 
 				<!-- Loose Affiliate -->
-				<ng-template #looseAffiliate>
+				<ng-template #looseAffiliate *ngIf="!isIndividualMode || !isTravelAgentMode">
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Loose Affiliate Information
 					</h4>
@@ -5152,7 +5163,7 @@
 						</div>
 					</div>
 				</ng-template>
-				<hr>
+				<hr *ngIf="!isIndividualMode || !isTravelAgentMode">
 
 				<!-- Return Loose Affiliate Information -->
 				<ng-container
@@ -5160,7 +5171,7 @@
 				</ng-container>
 
 				<!-- Loose Affiliate -->
-				<ng-template #returnlooseAffiliate>
+				<ng-template #returnlooseAffiliate *ngIf="!isIndividualMode || !isTravelAgentMode">
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Loose Affiliate Information
 					</h4>
@@ -5213,7 +5224,7 @@
 							</div>
 						</div>
 					</div>
-					<hr>
+				<hr *ngIf="!isIndividualMode && !isTravelAgentMode">
 				</ng-template>
 				<!-- Driver Information -->
 
@@ -5269,7 +5280,7 @@
 					</div>
 				</div>
 
-				<hr>
+				<hr *ngIf="!isIndividualMode || !isTravelAgentMode">
 
 				<div *ngIf="Form.service_type.value == 'round_trip' ">
 					<!-- Driver Information -->
@@ -5391,118 +5402,119 @@
 					<hr>
 				</ng-template>
 
-				<div class="distribution_rate">
-					<h4 class="font-weight-bolder m-0 my-3">
-						Rates Distribution
-					</h4>
+				<div class="distribution_rate" *ngIf="!isIndividualMode">
+						<h4 class="font-weight-bolder m-0 my-3">
+							Return Rates Distribution
+						</h4>
 
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Base Rate
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.baseRate.toFixed(2)}}
-								</span>
-								(Fare Base Rate)
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Admin Share
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.adminShare.toFixed(2) }}
-								</span>
-								({{adminSharePercent}}% of Base Rate)
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Base Rate
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.baseRate.toFixed(2)}}
+									</span>
+									(Fare Base Rate)
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Travel Advisor Share
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.travelAgentShare.toFixed(2) }}
-								</span>
-								(10% of Base Rate)
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Total Client Cost
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.grandTotal.toFixed(2)}}
-								</span>
-								(Actual Cost to Customer)
+						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Admin Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.adminShare.toFixed(2) }}
+									</span>
+									({{adminSharePercent}}% of Base Rate)
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Stripe fees
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
-								</span>
-								(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+						<div class="mx-2" *ngIf="r_shareArray?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Travel Advisor Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.travelAgentShare.toFixed(2) }}
+									</span>
+									(10% of Base Rate)
+								</div>
 							</div>
 						</div>
-					</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Total Client Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.returnGrandTotal.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.stripeFee.toFixed(2)}}
+									</span>
+									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+								</div>
+							</div>
+						</div>
 
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Affliate Payout
-								</span>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Payout
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.affiliateShare.toFixed(2)}}
+									</span>
+									( Total Price - (Ride Base Rate + Other Taxes) )
+								</div>
 							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.affiliateShare.toFixed(2)}}
-								</span>
-								( Total Price - (Ride Base Rate + Other Taxes) )
+						</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farm out share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-field">
+										{{currencySymbol}}{{r_shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="isFarmoutBooking">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span class="">
-									Affliate Farm out share
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-field">
-									{{currencySymbol}}{{shareArray?.farmoutShare.toFixed(2)}}
-								</span>
-								( 10 % of Base Rate)
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				<hr>
 				<div class="row preview-dropoff-color align-items-center flex-wrap flex-md-nowrap"
 					*ngIf="Form?.cancellation_hours">
