@@ -4778,7 +4778,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+					<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber'  && isAdminMode ">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="">
@@ -4793,7 +4793,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+					<div class="mx-2" *ngIf="shareArray?.travelAgentShare && isAdminMode && isTravelAgentMode">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="">
@@ -5422,7 +5422,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber'  && isAdminMode">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
@@ -5437,7 +5437,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="r_shareArray?.travelAgentShare">
+						<div class="mx-2" *ngIf="r_shareArray?.travelAgentShare  && isAdminMode && isTravelAgentMode">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">

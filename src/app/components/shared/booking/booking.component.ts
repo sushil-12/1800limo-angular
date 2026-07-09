@@ -298,6 +298,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isAffiliateMode) {
 			this.isCreatedByAdmin = false;
 			this.booking_params.client_account_types = ['individual', 'loose_customer'];
+			this.isFarmoutBooking = true;
 		}
 		// build the form first 
 		this.buildBookingForm()
