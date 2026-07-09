@@ -120,9 +120,9 @@
 			</div>
 		</div>
 		<!-- Section - Booking Type Ends -->
-
+	
 		<!-- Client Accounts Section -->
-		<div class="section-container mt-2">
+		<div class="section-container mt-2"  *ngIf="!isAffiliateMode || isFarmoutBooking">
 			<h4 class="border-secondary">
 				<i class="bi bi-people-fill bk-section-icon"></i>{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
 			</h4>
@@ -319,7 +319,7 @@
 			</div>
 
 			<ng-container
-				*ngIf="Form['account_type'].value == 'loose_customer' || (Form['travel_client_acc'].value == 'travel_loose_customer' && Form['account_type'].value == 'travel_planner') then LooseCustomerSection;">
+				*ngIf="Form['account_type'].value == 'loose_customer' || (Form['travel_client_acc'].value == 'travel_loose_customer' && Form['account_type'].value == 'travel_planner' && isAdminMode && isTravelAgentMode) then LooseCustomerSection;">
 			</ng-container>
 			<!-- Loose Customer -->
 			<ng-template #LooseCustomerSection>
@@ -755,8 +755,15 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>No. of Passengers <span class="asterisk"></span></mat-label>
-							<input type="number" matInput formControlName="total_passengers" [matAutocomplete]="auto"
+							<input #passengerAutoInput type="number" matInput formControlName="total_passengers"
+								[matAutocomplete]="auto" #passengerAutoTrigger="matAutocompleteTrigger"
 								(keyup)="handleChangeNoPasengers($event.target.value)" (focus)="$event.target.select()">
+							<button matSuffix type="button" class="select-arrow-btn" tabindex="-1"
+								aria-label="Toggle passenger options" (click)="passengerAutoTrigger.openPanel(); passengerAutoInput.focus()">
+								<svg viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true">
+									<path d="M7 10l5 5 5-5z"></path>
+								</svg>
+							</button>
 							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
 									{{option}}
@@ -770,9 +777,16 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
-							<input type="number" matInput formControlName="luggage_count"
-								[matAutocomplete]="luggage_auto" (keyup)="handleChangeLuggaeCOunt($event.target.value)"
+							<input #luggageAutoInput type="number" matInput formControlName="luggage_count"
+								[matAutocomplete]="luggage_auto" #luggageAutoTrigger="matAutocompleteTrigger"
+								(keyup)="handleChangeLuggaeCOunt($event.target.value)"
 								(focus)="$event.target.select()">
+							<button matSuffix type="button" class="select-arrow-btn" tabindex="-1"
+								aria-label="Toggle luggage options" (click)="luggageAutoTrigger.openPanel(); luggageAutoInput.focus()">
+								<svg viewBox="0 0 24 24" width="24px" height="24px" focusable="false" aria-hidden="true">
+									<path d="M7 10l5 5 5-5z"></path>
+								</svg>
+							</button>
 							<mat-autocomplete autoActiveFirstOption #luggage_auto="matAutocomplete">
 								<mat-option *ngFor="let option of luggage_options" [value]="option">
 									{{option}}
@@ -889,17 +903,7 @@
 			<!-- </div> -->
 			<div class="row px-3">
 				<!-- Number Of Vehicles -->
-				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Number of Vehicles
-						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles"
-							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
-							(focus)="$event.target.select()"
-							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
-					</mat-form-field>
-				</div>
+				
 
 				<!-- Travel Date -->
 				<div class="col-md-4" id="travel_date">
@@ -925,6 +929,18 @@
 						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
 					</mat-form-field>
 					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
+				</div>
+
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Number of Vehicles
+						</mat-label>
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
+							(focus)="$event.target.select()"
+							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
+					</mat-form-field>
 				</div>
 
 				<!-- Meet Greet Choices -->
