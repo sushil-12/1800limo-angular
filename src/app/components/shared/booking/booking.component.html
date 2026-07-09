@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary">{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
+				<h4 class="border-secondary"><i class="bi bi-signpost-split bk-section-icon"></i>{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
 					<mat-checkbox  *ngIf="updateType === 'edit'"  formControlName="prevent_rate_override" class="text-sm font-weight-bold"
 						style="font-size: 0.85rem;">
 						Prevent System Rate Override
@@ -124,7 +124,7 @@
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2">
 			<h4 class="border-secondary">
-				{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
+				<i class="bi bi-people-fill bk-section-icon"></i>{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
 			</h4>
 
 			<!-- Account Type (admin only: individual portal always books for the logged-in user) -->
@@ -243,47 +243,16 @@
 							</div>
 						</div>
 					</div>
-					<style>
-						#info-container {
-							width: 100%;
-						}
-
-						#info-container .info {
-							width: 100%;
-						}
-
-						@media only screen and (min-width: 767px) {
-							#info-container {
-								width: 75%;
-							}
-
-							#info-container .info {
-								width: 43%;
-							}
-						}
-
-						@media only screen and (min-width: 1200px) {
-							#info-container {
-								width: 85%;
-							}
-						}
-
-						@media only screen and (min-width: 1500px) {
-							#info-container .info {
-								width: 35%;
-							}
-						}
-					</style>
 				</div>
 				<!-- Saved Credit Cards -->
 				<div *ngIf="shouldRenderSavedCardsSection()" class="mt-3 px-4 pb-3">
-					<h5 class="mb-3">Saved Credit Cards</h5>
+					<h5 class="mb-3"><i class="bi bi-credit-card-fill bk-section-icon"></i>Saved Credit Cards</h5>
 					<div *ngIf="isLoadingSavedCards" class="text-muted py-2">
 						Loading saved credit cards...
 					</div>
 					<div class="table-responsive"
 						*ngIf="!isLoadingSavedCards && userCreditCards && userCreditCards.length > 0; else noSavedCards">
-						<table class="table table-hover table-bordered shadow-sm">
+						<table class="table table-hover table-bordered shadow-sm bk-table">
 							<thead class="thead-light">
 								<tr>
 									<th class="text-center">Card Owner</th>
@@ -698,7 +667,7 @@
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="border-secondary">
 				<h4 style="margin-bottom: 0px !important;">
-					Passenger Information
+					<i class="bi bi-person-vcard bk-section-icon"></i>Passenger Information
 				</h4>
 				<!-- <p class="ml-2" style="color: #dc4335;">*All Field are required</p> -->
 				<div class="row px-4">
@@ -825,7 +794,7 @@
 				class="d-flex justify-content-between align-items-center flex-wrap"
 				style="margin-bottom: 0;">
 				<h4>
-					Booking Details <button type="submit" class="bk-btn bk-btn--primary mr-1 ml-3 mb-2"
+					<i class="bi bi-geo-alt-fill bk-section-icon"></i>Booking Details <button type="submit" class="bk-btn bk-btn--primary mr-1 ml-3 mb-2"
 						(click)="submitForm(false)" *ngIf="updateType != 'create' ">Preview</button>
 				</h4>
 			</div>
@@ -1613,7 +1582,7 @@
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
 		<div class="section-container mt-2"  *ngIf="isAffiliateMode && updateType !== 'edit'">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary">{{ isAdminMode || (isAffiliateMode && (newBooking)) ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
+				<h4 class="border-secondary"><i class="bi bi-car-front-fill bk-section-icon"></i>{{ isAdminMode || (isAffiliateMode && (newBooking)) ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
 				<!-- manual affiliate assignment is an admin-only capability -->
 				<div class="eq-tabs" *ngIf="isAdminMode || (isAffiliateMode && (newBooking))">
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'browse'"
@@ -1640,7 +1609,7 @@
 			<div class="section-container mt-2" *ngIf="(isIndividualMode || isTravelAgentMode) && driver_info">
 				<div class="d-flex justify-content-between align-items-center mb-3">
 					<h4 style="margin-bottom: 0px !important;">
-						Transportation Details
+						<i class="bi bi-truck bk-section-icon"></i>Transportation Details
 					</h4>
 					<button type="button" class="bk-btn bk-btn--secondary btn-sm" (click)="resetSelectedVehicle()">
 						<i class="bi bi-arrow-left-right" style="margin-right: 6px;"></i>
@@ -1716,7 +1685,7 @@
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary">Affiliate Details</h4>
+				<h4 class="border-secondary"><i class="bi bi-briefcase-fill bk-section-icon"></i>Affiliate Details</h4>
 			</div>
 			<!-- Affiliate Type -->
 			<div class="row">
@@ -1866,7 +1835,7 @@
 		<!-- New section conatiner for Vehicle details -->
 		<div class="section-container mt-2">
 			<h4>
-				Vehicle Preferences
+				<i class="bi bi-stars bk-section-icon"></i>Vehicle Preferences
 			</h4>
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<!-- Vehicle Type -->
@@ -2097,7 +2066,7 @@
 		<div class="section-container mt-2"
 			*ngIf="(Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value) ">
 			<h4 style="margin-bottom: 0;">
-				Driver Preferences
+				<i class="bi bi-person-badge-fill bk-section-icon"></i>Driver Preferences
 			</h4>
 			<div class="row px-4">
 				<!-- Affiliate Driver Name -->
@@ -2247,7 +2216,7 @@
 				class="d-flex justify-content-between align-items-center flex-wrap"
 				style="margin-bottom: 0;">
 				<h4>
-					Special Instructions 
+					<i class="bi bi-chat-left-text-fill bk-section-icon"></i>Special Instructions
 				</h4>
 			</div>
 
@@ -2506,7 +2475,7 @@
 		<!-- Section - Return Journey Details -->
 		<div class="section-container" *ngIf="Form.service_type.value == 'round_trip'">
 			<h2 style="margin-bottom: 0;">
-				Return Booking
+				<i class="bi bi-arrow-repeat bk-section-icon"></i>Return Booking
 			</h2>
 			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
 				<!-- Service Type -->
@@ -3326,7 +3295,7 @@
 		<!-- IF ROUND TRIP Section - Return Affiliate/Loose Details (admin only) -->
 		<div class="section-container mt-2" *ngIf="isAdminMode && Form.service_type.value == 'round_trip' ">
 			<h4 class=" border-secondary">
-				Return Affiliate Details
+				<i class="bi bi-briefcase-fill bk-section-icon"></i>Return Affiliate Details
 			</h4>
 			<!-- Affiliate Type -->
 			<div class="row">
@@ -3483,7 +3452,7 @@
 		<div class="section-container mt-2"
 			*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
 			<h4>
-				Vehicle Preferences
+				<i class="bi bi-stars bk-section-icon"></i>Vehicle Preferences
 			</h4>
 			<div class="row px-4">
 				<!-- Vehicle Type -->
@@ -3717,7 +3686,7 @@
 		<div class="section-container mt-2"
 			*ngIf="Form.service_type.value == 'round_trip' && isAdminMode && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
 			<h4 style="margin-bottom: 0;">
-				Driver Preferences
+				<i class="bi bi-person-badge-fill bk-section-icon"></i>Driver Preferences
 			</h4>
 			<div class="row px-4">
 				<!-- Affiliate Driver Name -->
@@ -3906,19 +3875,13 @@
 				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 					Reset
 				</button> -->
-				<button type="submit" class="custom-filled-button mr-1 m-3" (click)="submitForm(false)">
+				<button type="submit" class="bk-btn bk-btn--primary bk-btn--lg mr-1 m-3" (click)="submitForm(false)">
 					Preview
 				</button>
 			</div>
 		</div>
 	</div>
 </form>
-
-<style>
-	.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
-		padding-left: 10px !important;
-	}
-</style>
 
 
 
@@ -3931,9 +3894,9 @@
 				<h6 class="mb-0 ">{{confirmMsg}}</h6>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn resetbutton" data-dismiss="modal"
+				<button type="button" class="bk-btn bk-btn--secondary" data-dismiss="modal"
 					(click)="navigateToDailyBooking()">Cancel</button>
-				<button type="button" class="custom-btn savebutton" data-dismiss="modal"
+				<button type="button" class="bk-btn bk-btn--primary" data-dismiss="modal"
 					(click)="proceed=false;submitForm(true)">
 					Confirm</button>
 			</div>
@@ -5563,10 +5526,10 @@
 
 
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
+				<button type="button" class="bk-btn bk-btn--secondary" data-dismiss="modal">
 					Close
 				</button>
-				<button type="submit" class="custom-filled-button" data-dismiss="modal" (click)="submitForm(true)">
+				<button type="submit" class="bk-btn bk-btn--primary" data-dismiss="modal" (click)="submitForm(true)">
 					Save
 				</button>
 			</div>

@@ -3,8 +3,9 @@
    One place to change the page's visual system: a single primary
    accent, neutral grays, and consistent radii/shadows/spacing.
    ============================================================ */
-$bk-primary: #1a7f37; // reserved for primary actions (Preview / Save / Confirm)
-$bk-primary-hover: #166b2f;
+$bk-primary: #f3933d; // brand orange (matches var(--orange) used app-wide) — reserved for primary actions (Preview / Save / Confirm)
+$bk-primary-hover: #d97a1f;
+$bk-primary-soft: rgba(243, 147, 61, 0.12);
 $bk-text: #111827;
 $bk-text-muted: #6b7280;
 $bk-border: #d1d5db;
@@ -13,6 +14,10 @@ $bk-surface: #ffffff;
 $bk-surface-subtle: #f8fafc;
 $bk-info-bg: #eff6ff;
 $bk-info-border: #3b82f6;
+$bk-danger: #dc2626;
+$bk-danger-bg: #fef2f2;
+$bk-danger-border: #fca5a5;
+$bk-table-header-bg: #f8fafc;
 $bk-radius: 10px;
 $bk-card-radius: 12px;
 $bk-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
@@ -39,7 +44,7 @@ $bk-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.
 	transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 
 	&:focus-visible {
-		outline: 2px solid rgba(26, 127, 55, 0.4);
+		outline: 2px solid rgba(243, 147, 61, 0.45);
 		outline-offset: 2px;
 	}
 }
@@ -69,17 +74,34 @@ $bk-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.
 .bk-btn--tertiary {
 	background: transparent;
 	border: 1px solid transparent;
-	color: $bk-primary;
+	color: $bk-primary-hover;
 	padding: 6px 10px;
 
 	&:hover {
-		background-color: rgba(26, 127, 55, 0.08);
+		background-color: $bk-primary-soft;
 	}
 }
 
 .bk-btn--lg {
 	padding: 10px 28px;
 	font-size: 1rem;
+}
+
+.bk-btn--sm {
+	padding: 5px 12px;
+	font-size: 0.82rem;
+	border-radius: 7px;
+}
+
+.bk-btn--danger-text {
+	background: transparent;
+	border: 1px solid transparent;
+	color: $bk-danger;
+	padding: 6px 10px;
+
+	&:hover {
+		background-color: $bk-danger-bg;
+	}
 }
 
 /* ---------- Info callout (replaces the raw yellow-highlight note) ---------- */
@@ -688,6 +710,10 @@ ul {
 	border-radius: $bk-radius;
 }
 
+:host ::ng-deep .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+	padding-left: 10px !important;
+}
+
 :host ::ng-deep .ng-select .ng-has-value .ng-placeholder,
 .ng-select.ng-select-opened .ng-placeholder {
 	transform: translateY(-0.68125em) scale(0.7) perspective(100px) translateZ(0.001px);
@@ -757,6 +783,33 @@ ul {
     font-weight: 500;
 }
 
+/* ---------- Validation / error states ---------- */
+.text-danger {
+	color: $bk-danger !important;
+	font-weight: 500;
+}
+
+.error-message {
+	margin-top: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.error-message p.text-danger,
+.error-message > .text-danger {
+	margin: 0;
+	padding-left: 10px;
+	border-left: 2px solid $bk-danger-border;
+	line-height: 1.35;
+}
+
+.my-mat-hint.text-danger,
+div.text-danger.margin-bottom-thin {
+	padding-left: 10px;
+	border-left: 2px solid $bk-danger-border;
+}
+
 .required-field::after {
 	font-size: 19px !important;
 }
@@ -764,6 +817,7 @@ ul {
 .asterisk {
 	font-size: 19px;
 	margin-left: 2px;
+	color: $bk-danger;
 }
 
 .border-red {
@@ -915,4 +969,133 @@ quill-editor {
 	background-size: cover;
 	background-position: center;
 	object-fit: contain;
+}
+
+/* ---------- Chosen user info card (migrated from the template's inline <style>) ---------- */
+#user-info {
+	margin-top: 0.75rem;
+}
+
+#info-container {
+	width: 100%;
+	background-color: $bk-surface-subtle;
+	border: 1px solid $bk-border-light;
+	border-radius: $bk-card-radius;
+	padding: 14px 15px;
+}
+
+#info-container .info {
+	width: 100%;
+}
+
+#info-container .info label {
+	font-size: 0.92rem;
+}
+
+#info-container .info label:first-child {
+	color: $bk-text-muted;
+	font-weight: 500;
+}
+
+#info-container .info label:last-child {
+	color: $bk-text;
+}
+
+@media only screen and (min-width: 767px) {
+	#info-container {
+		width: 75%;
+	}
+
+	#info-container .info {
+		width: 43%;
+	}
+}
+
+@media only screen and (min-width: 1200px) {
+	#info-container {
+		width: 85%;
+	}
+}
+
+@media only screen and (min-width: 1500px) {
+	#info-container .info {
+		width: 35%;
+	}
+}
+
+/* ---------- Saved credit cards table ---------- */
+.bk-table {
+	border-radius: $bk-card-radius;
+	overflow: hidden;
+
+	thead.thead-light th {
+		background-color: $bk-table-header-bg !important;
+		color: $bk-text;
+		font-weight: 600;
+		font-size: 0.85rem;
+		text-transform: uppercase;
+		letter-spacing: 0.3px;
+		border-color: $bk-border-light;
+	}
+
+	tbody tr:hover {
+		background-color: $bk-surface-subtle;
+	}
+
+	td,
+	th {
+		vertical-align: middle;
+	}
+}
+
+/* ---------- Modals ---------- */
+#confirmationModal .modal-content,
+#previewBooking .modal-content {
+	border-radius: $bk-card-radius;
+	border: none;
+	box-shadow: 0 12px 32px rgba(16, 24, 40, 0.18);
+}
+
+#confirmationModal .modal-header,
+#previewBooking .modal-header {
+	border-bottom: 1px solid $bk-border-light;
+	padding: 16px 20px;
+}
+
+#confirmationModal .modal-footer,
+#previewBooking .modal-footer {
+	border-top: 1px solid $bk-border-light;
+	padding: 14px 20px;
+	gap: 10px;
+}
+
+#previewBooking .modal-title {
+	font-weight: 700;
+	color: $bk-text;
+}
+
+/* ---------- Section header icons (decorative, added alongside existing text) ---------- */
+.bk-section-icon {
+	color: $bk-primary;
+	margin-right: 8px;
+	font-size: 0.95em;
+}
+
+/* ---------- Spacing rhythm inside section cards ---------- */
+.section-container .row {
+	row-gap: 0.25rem;
+}
+
+/* ---------- Driver/vehicle image upload buttons: retint to match the brand accent
+   (structural position/overflow rules stay in custom-admin.css untouched — the
+   file input's click-through overlay depends on them) ---------- */
+.changeuploaded {
+	background-color: $bk-primary;
+}
+
+@media only screen and (min-width: 1199px) {
+	.changeuploaded:hover,
+	.changeuploaded:focus {
+		background-color: $bk-primary-hover;
+	}
 }
