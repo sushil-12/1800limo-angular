@@ -2410,6 +2410,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 				cancellation_hours: response?.data?.cancellation_hours?.toString() ?? '24'
 			})
 
+			if (editing_data?.pickup_time) {
+				this.SetFormValue('pickup_time', this.FormatTime(editing_data.pickup_time));
+			}
+			if (editing_data?.cruise_time) {
+				this.SetFormValue('cruise_time', this.FormatTime(editing_data.cruise_time));
+			}
+			if (editing_data?.return_pickup_time) {
+				this.SetFormValue('return_pickup_time', this.FormatTime(editing_data.return_pickup_time));
+			}
+			if (editing_data?.return_cruise_time) {
+				this.SetFormValue('return_cruise_time', this.FormatTime(editing_data.return_cruise_time));
+			}
+
 			// if (this.Form.updateType.value == 'edit') {
 			//  this.booking_params.client_account_types.pop()
 			// }
