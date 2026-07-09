@@ -879,6 +879,21 @@ gmp-place-autocomplete {
 	cursor: pointer;
 }
 
+.select-arrow-btn {
+	background: transparent;
+	border: 0;
+	padding: 0;
+	margin-right: 4px;
+	cursor: pointer;
+	color: rgba(0, 0, 0, 0.54);
+	display: flex;
+	align-items: center;
+
+	svg {
+		fill: currentColor;
+	}
+}
+
 quill-editor {
 	display: block;
 	width: 100%;
