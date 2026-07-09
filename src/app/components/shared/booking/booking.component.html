@@ -4970,11 +4970,11 @@
 				<hr *ngIf="!isIndividualMode && !isTravelAgentMode">
 				<!-- Affiliate Information -->
 				<ng-container
-					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' then affiliateUser">
+					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' && !isIndividualMode && !isTravelAgentMode then affiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
-				<ng-template #affiliateUser *ngIf="!isIndividualMode || !isTravelAgentMode">
+				<ng-template #affiliateUser>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Affiliate Information
 					</h4>
@@ -5040,11 +5040,11 @@
 
 				<!--Return Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' && !isIndividualMode && !isTravelAgentMode then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
-				<ng-template #returnaffiliateUser *ngIf="!isIndividualMode || !isTravelAgentMode">
+				<ng-template #returnaffiliateUser>
 					<hr>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Affiliate Information
@@ -5110,11 +5110,11 @@
 				</ng-template>
 
 				<!-- Loose Affiliate Information -->
-				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
+				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' && !isIndividualMode && !isTravelAgentMode then looseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
-				<ng-template #looseAffiliate *ngIf="!isIndividualMode || !isTravelAgentMode">
+				<ng-template #looseAffiliate>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Loose Affiliate Information
 					</h4>
@@ -5172,11 +5172,11 @@
 
 				<!-- Return Loose Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' then returnlooseAffiliate">
+					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' && !isIndividualMode && !isTravelAgentMode then returnlooseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
-				<ng-template #returnlooseAffiliate *ngIf="!isIndividualMode || !isTravelAgentMode">
+				<ng-template #returnlooseAffiliate>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Loose Affiliate Information
 					</h4>
