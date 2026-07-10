@@ -651,10 +651,10 @@ export class MyBookingsComponent implements OnInit {
 
 	editAction(bookingId, updateType) {
 		if (this.currentUser.roleName == 'sub_affiliate') {
-			this.router.navigate(['/sub_affiliate/new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate(['/sub_affiliate/create-new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 		else {
-			this.router.navigate(['/affiliate/new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate(['/affiliate/create-new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 	}
 
