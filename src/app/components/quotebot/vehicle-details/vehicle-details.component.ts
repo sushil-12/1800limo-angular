@@ -449,10 +449,10 @@ export class VehicleDetailsComponent implements OnInit {
 				// this._router.navigate(['/admin/new-booking'])
 				// console.log('navigate to new booking----')
 				if (this.bookingId) {
-					this._router.navigate(['/admin/new-booking'],
+					this._router.navigate(['/admin/new-booking-v2'],
 						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: 'reaffiliate', updateType: 'reaffiliate', reaffiliate_book_id: this.bookingId } })
 				} else {
-					this._router.navigate(['/admin/new-booking'],
+					this._router.navigate(['/admin/new-booking-v2'],
 						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, created_by: (JSON.parse(localStorage.getItem('currentUser'))['created_by_role'] == 'admin' ? 'admin' : this.booking_created_from) } })
 				}
 			} else {
@@ -463,7 +463,7 @@ export class VehicleDetailsComponent implements OnInit {
 
 				// navigate to farm in bookings page
 				this._router.navigate([
-					'/' + user + '/create-new-booking'
+					'/' + user + '/create-new-booking-v2'
 				],
 					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, created_by: this.booking_created_from } }
 				)

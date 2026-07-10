@@ -796,7 +796,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	ngAfterViewInit(): void {
 
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
-			this.scroll('pickup_adress')
+			window.scrollTo({ top: 0 })
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 
@@ -2452,12 +2452,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			this.$spinner.hide('normalspinner')
 			if (this.updateType == 'edit') {
-				this.scroll('pickup_adress')
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
 			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round' || this.updateType == 'edit') {
-				this.scroll('pickup_adress')
 				if (new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime() && this.updateType != 'edit') {
 					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				}
@@ -5480,7 +5478,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		if (this.booking_created_from == 'subscriber') {
+		// Master vehicles have no affiliate — keep affiliate_id empty (set by
+		// onQuoteVehicleSelected/setValueByBookNow) instead of stamping the
+		// subscriber's own account_id on the booking.
+		if (this.booking_created_from == 'subscriber' && !this.is_master_vehicle) {
 			this.BookingForm.patchValue({
 				affiliate_id: this.currentUser?.account_id
 			})
@@ -5500,6 +5501,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		value['proceed'] = this.proceed
 		value['currency'] = this.currencyObj?.currency
 		value['platform_type'] = 'web'
+		value['is_master_vehicle'] = this.is_master_vehicle
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']
@@ -5530,6 +5532,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			}
 			else {
 				this.$spinner.show()
+				console.log('Booking Payload-->>' , value)
 				this.createBookingByMode(value, this.Form.updateType.value).subscribe((response: any) => {
 					// this.$errors.openDialog({
 					// 	errors: {
@@ -6504,9 +6507,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (value && this.booking_created_from == 'admin') {
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
-				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
-					this.scroll('booking_detail_section')
-				}
 				if (this.BookingForm.get('service_type').value == 'round_trip') {
 					this.BookingForm.patchValue({
 						return_affiliate_id: value
@@ -6534,9 +6534,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (value && this.booking_created_from == 'admin') {
 				this.chooseReturnAffiliate()
 				this.fetchReturnAffiliateInformation(value)
-				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
-					this.scroll('booking_detail_section')
-				}
 			}
 		})
 
@@ -6544,9 +6541,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (value && this.booking_created_from == 'admin') {
 				this.chooseReturnLooseAffiliate()
 				// this.fetchReturnAffiliateInformation(value)
-				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
-					this.scroll('booking_detail_section')
-				}
 			}
 		})
 
@@ -7318,12 +7312,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 				this.$spinner.hide('normalspinner')
 				if (this.updateType == 'edit') {
-					this.scroll('pickup_adress')
 					// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					this.SetFormValue('pickup_date', editing_data?.pickup_date)
 				}
 				if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
-					this.scroll('pickup_adress')
 					if (new Date(editing_data?.pickup_date).getTime() < new Date().getTime()) {
 						this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					}

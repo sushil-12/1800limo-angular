@@ -180,7 +180,7 @@
 										<div class="d-flex justify-content-center align-items-center"
 											style="gap: 35px;">
 
-											<a [routerLink]="['/admin/new-booking']" *ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) 
+											<a [routerLink]="['/admin/new-booking-v2']" *ngIf="((currentUser?.roleName == 'admin' || subModules.includes('edit_booking')) 
                                               && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
 												title="Edit">
@@ -209,7 +209,7 @@
 													</a>
 													<a class="dropdown-item" data-toggle="modal"
 														data-target="#return_repeat_booking_Modal"
-														[routerLink]="['/admin/new-booking']"
+														[routerLink]="['/admin/new-booking-v2']"
 														[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
 														*ngIf="currentUser?.roleName == 'admin' || subModules.includes('repeat_booking')">
 														<div class="dropdown-item-icon"></div>
@@ -218,14 +218,14 @@
 													<a *ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status == 'pending'))"
 														class="dropdown-item" data-toggle="modal"
 														data-target="#return_repeat_booking_Modal"
-														[routerLink]="['/admin/new-booking']"
+														[routerLink]="['/admin/new-booking-v2']"
 														[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
 														<div class="dropdown-item-icon"></div>
 														Return
 													</a>
 													<a class="dropdown-item" data-toggle="modal"
 														data-target="#return_repeat_booking_Modal"
-														[routerLink]="['/admin/new-booking']"
+														[routerLink]="['/admin/new-booking-v2']"
 														[queryParams]="{bookingId: booking.booking_id, updateType: 'round'}"
 														*ngIf="(currentUser?.roleName == 'admin' || subModules.includes('repeat_booking') && booking?.service_type == 'oneway')">
 														<div class="dropdown-item-icon"></div>

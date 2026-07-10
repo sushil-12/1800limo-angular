@@ -760,19 +760,19 @@ export class BookingComponent implements OnInit {
 
 	editAction(bookingId, updateType) {
 		if (updateType == 'change') {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 		else if (updateType == 'cancel') {
 			this.cancelBookingId = bookingId
 		}
 		else {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 	}
 
 	editActionCancelModal() {
 		$("#cancel_booking_modal").modal("hide");
-		this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: this.cancelBookingId, updateType: 'edit', nav: 'true' } });
+		this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: this.cancelBookingId, updateType: 'edit', nav: 'true' } });
 	}
 
 	finalizeAction(bookingId) {
@@ -820,13 +820,13 @@ export class BookingComponent implements OnInit {
 		console.log(actionType, bookingId,);
 
 		if (actionType == 'return') {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
 		}
 		else if (actionType == 'round') {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'round' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: 'round' } });
 		}
 		else {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
 		}
 	}
 
