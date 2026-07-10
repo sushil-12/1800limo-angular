@@ -6434,3 +6434,7 @@ gmp-place-autocomplete {
   border-radius: 0 0 14px 14px !important;
   padding: 10px 16px !important;
 }
+
+.ql-container.ql-snow {
+   background-color: #FFF !important;
+}

@@ -49,38 +49,8 @@ $bk-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.
 	}
 }
 
-.bk-btn--primary {
-	background-color: $bk-primary;
-	border: 1px solid $bk-primary;
-	color: #fff;
-
-	&:hover {
-		background-color: $bk-primary-hover;
-		border-color: $bk-primary-hover;
-	}
-}
-
-.bk-btn--secondary {
-	background-color: $bk-surface;
-	border: 1px solid $bk-border;
-	color: $bk-text;
-
-	&:hover {
-		background-color: $bk-surface-subtle;
-		border-color: #9ca3af;
-	}
-}
-
-.bk-btn--tertiary {
-	background: transparent;
-	border: 1px solid transparent;
-	color: $bk-primary-hover;
-	padding: 6px 10px;
-
-	&:hover {
-		background-color: $bk-primary-soft;
-	}
-}
+/* .bk-btn--primary / --secondary / --tertiary color treatment now lives in
+   the "BUTTONS" block near the end of this file, on the --brand-orange tokens. */
 
 .bk-btn--lg {
 	padding: 10px 28px;
@@ -117,23 +87,16 @@ $bk-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.
 	line-height: 1.4;
 }
 
+/* .bk-callout--info color treatment now lives in the "CALLOUTS" block near
+   the end of this file, on the --brand-orange tokens. */
 .bk-callout--info {
-	background-color: $bk-info-bg;
-	border: 1px solid rgba(59, 130, 246, 0.25);
-	border-left: 3px solid $bk-info-border;
-	color: #1e3a8a;
-
 	.bk-callout__icon {
-		color: $bk-info-border;
 		line-height: 1.4;
 	}
 }
 
 /* ---------- Route summary bar + collapsible map ---------- */
 .bk-route-panel {
-	border: 1px solid $bk-border-light;
-	border-radius: $bk-radius;
-	background: $bk-surface-subtle;
 	margin: 0.75rem 0.5rem;
 
 	.bk-route-panel__summary {
@@ -158,11 +121,6 @@ $bk-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.
 		gap: 7px;
 		font-size: 0.95rem;
 		font-weight: 600;
-		color: $bk-text;
-
-		i {
-			color: $bk-text-muted;
-		}
 	}
 
 	.bk-route-panel__map {
@@ -190,16 +148,14 @@ hr {
 }
 
 /* ---------- Section cards: one consistent surface treatment ---------- */
+/* background-color / border / border-radius / box-shadow / padding / margin-bottom
+   now live in the "CARD SURFACES" block near the end of this file, on the
+   --brand-orange tokens. */
 .section-container {
-	background-color: $bk-surface;
 	color: $bk-text;
-	border: 1px solid $bk-border-light;
-	border-radius: $bk-card-radius;
-	padding: 18px 20px;
 	width: 100%;
 	font-size: 1rem;
 	margin: 1rem auto;
-	box-shadow: $bk-card-shadow;
 
 	> h4,
 	h4.border-secondary {
@@ -1089,11 +1045,11 @@ quill-editor {
 	color: $bk-text;
 }
 
-/* ---------- Section header icons (decorative, added alongside existing text) ---------- */
+/* ---------- Section header icons (decorative, added alongside existing text) ----------
+   color / font-size now live in the "HEADINGS" block near the end of this
+   file, on the --brand-orange tokens. */
 .bk-section-icon {
-	color: $bk-primary;
 	margin-right: 8px;
-	font-size: 0.95em;
 }
 
 /* ---------- Spacing rhythm inside section cards ---------- */
@@ -1114,3 +1070,193 @@ quill-editor {
 		background-color: $bk-primary-hover;
 	}
 }
+
+/* =========================================================
+   1. DESIGN TOKENS — darker, cohesive theme
+   ========================================================= */
+:host {
+  --brand-orange:        #F0883E;
+  --brand-orange-dark:   #D9721F;
+  --brand-orange-light:  #FFF3E8;
+
+  --ink-900: #111827;
+  --ink-700: #374151;
+  --ink-500: #6B7280;
+
+  --border:        #D8DBE0;
+  --surface:        #FFFFFF;
+  --surface-muted:  #E7E9EC;   /* darker page background, was #F7F8FA */
+  --surface-sunken: #DCDFE4;   /* for nested/accordion rows */
+
+  --radius: 10px;
+  --shadow-sm: 0 1px 3px rgba(16,24,40,.08), 0 2px 6px rgba(16,24,40,.06);
+}
+
+/* =========================================================
+   2. PAGE SHELL — darken everything to one neutral family
+   ========================================================= */
+body,
+/* Kill the leftover Bootstrap blue and tie nav to the brand accent */
+.navbar-brand,
+.sidenav a.active,
+.sidenav a:hover,
+a.active {
+  color: var(--brand-orange) !important;
+}
+.sidenav a.active {
+  background-color: var(--brand-orange-light) !important;
+  border-radius: 6px;
+}
+
+/* =========================================================
+   3. CARD SURFACES — more contrast against the darker page
+   ========================================================= */
+.section-container {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 20px 24px !important;
+  margin-bottom: 20px !important;
+}
+
+/* =========================================================
+   4. HEADINGS — one system, no orange giant headers
+   ========================================================= */
+h4.border-secondary,
+.section-dropdown-header,
+.section-dropdown-header h5 {
+  color: var(--ink-900) !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+//   border-bottom: 1px solid var(--border) !important;
+//   padding-bottom: 12px;
+//   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bk-section-icon {
+  color: var(--brand-orange) !important;
+  font-size: 15px !important;
+}
+
+/* Rates accordion rows sit on the sunken tone so they read as "inset" */
+.rateSubSection > .section-dropdown-header,
+.section-dropdown.mt-2 {
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  transition: background .15s ease, border-color .15s ease;
+}
+.rateSubSection > .section-dropdown-header:hover,
+.section-dropdown.mt-2:hover {
+  background: var(--brand-orange-light);
+  border-color: var(--brand-orange);
+}
+.section-dropdown-header i,
+.section-dropdown-header .bi-chevron-down,
+.section-dropdown-header .bi-chevron-up {
+  color: var(--brand-orange) !important;
+}
+
+/* =========================================================
+   5. BUTTONS — one hierarchy, all on brand
+   ========================================================= */
+.bk-btn {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+  box-shadow: none !important;
+  transition: all .15s ease;
+}
+
+.bk-btn--primary {
+  background-color: var(--brand-orange) !important;
+  border: 1px solid var(--brand-orange) !important;
+  color: #fff !important;
+}
+.bk-btn--primary:hover {
+  background-color: var(--brand-orange-dark) !important;
+  border-color: var(--brand-orange-dark) !important;
+}
+
+.bk-btn--secondary {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-700) !important;
+}
+.bk-btn--secondary:hover {
+  border-color: var(--brand-orange) !important;
+  color: var(--brand-orange) !important;
+}
+
+.bk-btn--tertiary,
+.closeAll-btn {
+  background-color: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: var(--ink-500) !important;
+  border-radius: 8px !important;
+  padding: 6px 16px !important;
+  font-weight: 600 !important;
+}
+.bk-btn--tertiary:hover,
+.closeAll-btn:hover {
+  color: var(--brand-orange) !important;
+  border-color: var(--brand-orange) !important;
+  background-color: var(--brand-orange-light) !important;
+}
+
+/* =========================================================
+   6. CALLOUTS / ROUTE PANEL / MAP — same family, no blue
+   ========================================================= */
+.bk-callout--info {
+  background-color: var(--brand-orange-light) !important;
+  border: 1px solid rgba(240,136,62,.3) !important;
+  color: var(--ink-700) !important;
+  border-radius: 8px;
+}
+.bk-callout__icon { color: var(--brand-orange) !important; }
+
+.bk-route-panel {
+  background-color: var(--surface-sunken) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+.bk-route-panel__stat { color: var(--ink-700); }
+.bk-route-panel__stat i { color: var(--brand-orange) !important; }
+
+/* =========================================================
+   7. FORM FIELDS — darker resting border, orange focus
+   (place in global styles.scss if component encapsulation blocks it)
+   ========================================================= */
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--border);
+  --mdc-outlined-text-field-hover-outline-color: var(--ink-500);
+  --mdc-outlined-text-field-focus-outline-color: var(--brand-orange);
+  --mdc-outlined-text-field-label-text-color: var(--ink-500);
+  --mdc-outlined-text-field-focus-label-text-color: var(--brand-orange);
+}
+
+.mat-mdc-radio-button {
+  --mdc-radio-selected-icon-color: var(--brand-orange);
+  --mdc-radio-selected-focus-icon-color: var(--brand-orange);
+  --mdc-radio-selected-hover-icon-color: var(--brand-orange-dark);
+  --mdc-radio-selected-pressed-icon-color: var(--brand-orange-dark);
+  --mat-mdc-radio-checked-ripple-color: var(--brand-orange);
+}
+
+/* =========================================================
+   8. TOTALS — Grand Total gets real visual weight
+   ========================================================= */
+.section-container .row.d-flex.justify-content-end {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.ql-container.ql-snow {
+    background: white !important;
+}
+

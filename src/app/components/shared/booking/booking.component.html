@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary"><i class="bi bi-signpost-split bk-section-icon"></i>{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
+				<h4 class="border-0"><i class="bi bi-signpost-split bk-section-icon"></i>{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
 					<mat-checkbox  *ngIf="updateType === 'edit'"  formControlName="prevent_rate_override" class="text-sm font-weight-bold"
 						style="font-size: 0.85rem;">
 						Prevent System Rate Override
@@ -123,7 +123,7 @@
 	
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2"  *ngIf="!isAffiliateMode || isFarmoutBooking">
-			<h4 class="border-secondary">
+			<h4 class="border-0">
 				<i class="bi bi-people-fill bk-section-icon"></i>{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
 			</h4>
 
@@ -664,7 +664,7 @@
 		<!-- Client Accounts Section Ends -->
 		<div class="section-container">
 			<!-- Passenger Information -->
-			<div id="passenger-information" class="border-secondary">
+			<div id="passenger-information" class="border-0">
 				<h4 style="margin-bottom: 0px !important;">
 					<i class="bi bi-person-vcard bk-section-icon"></i>Passenger Information
 				</h4>
@@ -959,7 +959,7 @@
 			</div>
 
 
-			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
+			<h4 class="border-0 pl-2 mt-2" id="pickup_adress">
 				Pickup
 			</h4>
 
@@ -1265,7 +1265,7 @@
 			</div>
 
 
-			<h4 class="border-secondary pl-2 mt-3">
+			<h4 class="border-0 pl-2 mt-3">
 				Dropoff
 			</h4>
 
@@ -1597,7 +1597,7 @@
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
 		<div class="section-container mt-2"  *ngIf="!isAffiliateMode || updateType !== 'edit'">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary"><i class="bi bi-car-front-fill bk-section-icon"></i>{{ isAdminMode || (isAffiliateMode && (newBooking)) ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
+				<h4 class="border-0"><i class="bi bi-car-front-fill bk-section-icon"></i>{{ isAdminMode || (isAffiliateMode && (newBooking)) ? 'Vehicle & Affiliate' : 'Vehicle' }}</h4>
 				<!-- manual affiliate assignment is an admin-only capability -->
 				<div class="eq-tabs" *ngIf="isAdminMode || (isAffiliateMode && (newBooking))">
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'browse'"
@@ -1700,7 +1700,7 @@
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-secondary"><i class="bi bi-briefcase-fill bk-section-icon"></i>Affiliate Details</h4>
+				<h4 class="border-0"><i class="bi bi-briefcase-fill bk-section-icon"></i>Affiliate Details</h4>
 			</div>
 			<!-- Affiliate Type -->
 			<div class="row">
@@ -3309,7 +3309,7 @@
 		</div>
 		<!-- IF ROUND TRIP Section - Return Affiliate/Loose Details (admin only) -->
 		<div class="section-container mt-2" *ngIf="isAdminMode && Form.service_type.value == 'round_trip' ">
-			<h4 class=" border-secondary">
+			<h4 class=" border-0">
 				<i class="bi bi-briefcase-fill bk-section-icon"></i>Return Affiliate Details
 			</h4>
 			<!-- Affiliate Type -->
