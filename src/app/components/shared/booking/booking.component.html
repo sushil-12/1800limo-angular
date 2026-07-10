@@ -901,19 +901,6 @@
 			</div>
 			<!-- </div> -->
 			<div class="row px-3">
-				<!-- Number Of Vehicles -->
-				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Number of Vehicles
-						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles"
-							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
-							(focus)="$event.target.select()"
-							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
-					</mat-form-field>
-				</div>
-
 				<!-- Travel Date -->
 				<div class="col-md-4" id="travel_date">
 					<mat-form-field appearance="outline">
@@ -938,6 +925,19 @@
 						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
 					</mat-form-field>
 					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
+				</div>
+
+				<!-- Number of vehicles -->
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Number of Vehicles
+						</mat-label>
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
+							(focus)="$event.target.select()"
+							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
+					</mat-form-field>
 				</div>
 
 				<!-- Meet Greet Choices -->
@@ -3375,7 +3375,7 @@
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
-							Name <span class="asterisk">*</span>
+							New Affiliate Name <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
 							formControlName="return_lose_affiliate_name" (keyup)="handleLooseAffiliateName()" />
@@ -3463,7 +3463,7 @@
 		<!-- Affiliate Vehicle Information -->
 		<!-- New section conatiner for Vehicle details -->
 		<div class="section-container mt-2"
-			*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate'">
+			*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate' && isAdminMode">
 			<h4>
 				<i class="bi bi-stars bk-section-icon"></i>Vehicle Preferences
 			</h4>
@@ -5053,7 +5053,7 @@
 
 				<!--Return Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' && !isIndividualMode && !isTravelAgentMode then returnaffiliateUser">
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' && isAdminMode then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -5300,7 +5300,7 @@
 
 				<hr *ngIf="!isIndividualMode || !isTravelAgentMode">
 
-				<div *ngIf="Form.service_type.value == 'round_trip' ">
+				<div *ngIf="Form.service_type.value == 'round_trip' && isAdminMode">
 					<!-- Driver Information -->
 
 					<h4 class="font-weight-bolder m-0 mt-3">
