@@ -319,7 +319,7 @@
 			</div>
 
 			<ng-container
-				*ngIf="Form['account_type'].value == 'loose_customer' || (Form['travel_client_acc'].value == 'travel_loose_customer' && Form['account_type'].value == 'travel_planner' && isAdminMode && isTravelAgentMode) then LooseCustomerSection;">
+				*ngIf="Form['account_type'].value == 'loose_customer' || (Form['travel_client_acc'].value == 'travel_loose_customer' && Form['account_type'].value == 'travel_planner') then LooseCustomerSection;">
 			</ng-container>
 			<!-- Loose Customer -->
 			<ng-template #LooseCustomerSection>
