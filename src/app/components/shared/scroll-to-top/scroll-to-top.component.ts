@@ -7,7 +7,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 })
 export class ScrollToTopComponent implements OnInit
 {
-	showScrollTop: boolean = false;
+	showScrollTop: boolean = true;
 	showScrollDown: boolean = true;
 
 	scrollTop()
@@ -66,7 +66,6 @@ export class ScrollToTopComponent implements OnInit
 		);
 		const threshold = 160;
 
-		this.showScrollTop = scrollTop > threshold;
 		this.showScrollDown = (scrollTop + viewportHeight) < (documentHeight - threshold);
 	}
 }
