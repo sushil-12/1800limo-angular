@@ -249,12 +249,16 @@ export class VehicleDetailsComponent implements OnInit {
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK && response) {
 				directionsRenderer.setDirections(response);
+				let totalDistance = 0;
+				let totalDuration = 0;
 				response.routes.forEach(route => {
 					route.legs.forEach(leg => {
-						this.distance += leg.distance?.value || 0;
-						this.duration += leg.duration?.value || 0;
+						totalDistance += leg.distance?.value || 0;
+						totalDuration += leg.duration?.value || 0;
 					});
 				});
+				this.distance = totalDistance;
+				this.duration = totalDuration;
 			} else {
 				console.error('Directions request failed due to', status);
 			}
@@ -289,12 +293,16 @@ export class VehicleDetailsComponent implements OnInit {
 		directionsService.route(request, (response, status) => {
 			if (status === google.maps.DirectionsStatus.OK && response) {
 				directionsRenderer.setDirections(response);
+				let totalDistance = 0;
+				let totalDuration = 0;
 				response.routes.forEach(route => {
 					route.legs.forEach(leg => {
-						this.returnDistance += leg.distance?.value || 0;
-						this.returnDuration += leg.duration?.value || 0;
+						totalDistance += leg.distance?.value || 0;
+						totalDuration += leg.duration?.value || 0;
 					});
 				});
+				this.returnDistance = totalDistance;
+				this.returnDuration = totalDuration;
 			} else {
 				console.error('Return directions request failed due to', status);
 			}

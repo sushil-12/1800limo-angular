@@ -902,7 +902,17 @@
 			<!-- </div> -->
 			<div class="row px-3">
 				<!-- Number Of Vehicles -->
-				
+				<div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Number of Vehicles
+						</mat-label>
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
+							(focus)="$event.target.select()"
+							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
+					</mat-form-field>
+				</div>
 
 				<!-- Travel Date -->
 				<div class="col-md-4" id="travel_date">
@@ -928,18 +938,6 @@
 						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
 					</mat-form-field>
 					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
-				</div>
-
-				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Number of Vehicles
-						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles"
-							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
-							(focus)="$event.target.select()"
-							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
-					</mat-form-field>
 				</div>
 
 				<!-- Meet Greet Choices -->
@@ -1765,7 +1763,7 @@
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
-							Name <span class="asterisk">*</span>
+							New Affiliate Name <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" #lose_aff_name_input matInput placeholder="Full Name"
 							(focus)="$event.target.select()" formControlName="lose_affiliate_name"
