@@ -145,6 +145,12 @@ export class Step2Component implements OnInit, AfterViewInit {
 		private errors: ErrorDialogService
 	) { }
 
+	public tutorialVideoUrl = "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
+
 	ngOnInit(): void {
 		$('.HeadingH1').css({ display: "block" })
 		//code related to autocomplete and ma

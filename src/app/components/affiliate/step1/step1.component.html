@@ -1,17 +1,18 @@
 <form [formGroup]="addAffiliateAccountForm" class="step_form_wrapper" appInvalidControlScroll>
 	<section class="user_information">
-		<h2 class="headinginfo" id="owner_info">Owner Information</h2>
+		<div class="section-header">
+			<h2 class="headinginfo" id="owner_info">Owner Information</h2>
+			<button type="button"
+			(click)="openTutorial()"
+			title="View Tutorial"
+			class="watch-tutorial-btn">
+			   <i class="bi bi-camera-video mr-1"></i> Watch Tutorial
+			</button>
+        </div>
+	
 		<div class="container">
 			<!-- RADIO TILES HEADING -->
 			<div class="row">
-				<div class="col-12" style="font-size: 20px; margin-top: 15px;">
-					Click icon
-					<a href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4"
-						target="_blank" title="View Tutorial"><img
-							src="../../../../assets/images/images_tutorial/updated-images/step-1.png" height="40"
-							style="width: 30px !important;" /></a>
-					to view STEP 1 tutorials
-				</div>
 				<div class="col-12">
 					<h3 class="headinginfoH3">
 						Choose one<span class="asterisk">*</span>

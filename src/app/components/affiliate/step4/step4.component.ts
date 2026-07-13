@@ -49,6 +49,12 @@ export class Step4Component implements OnInit {
 		private stateManagementService: StateManagementService,
 		private activatedroute: ActivatedRoute) { }
 
+	public tutorialVideoUrl = "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
+
 	ngOnInit(): void {
 		$('.HeadingH1').css({ display: "block" })
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
