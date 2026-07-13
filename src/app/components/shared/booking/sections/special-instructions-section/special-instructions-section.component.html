@@ -1,0 +1,33 @@
+<div *ngIf="variant === 'card'" class="section-container my-2" id="pickup_adress" [formGroup]="group">
+	<div id="booking_detail_section"
+		class="d-flex justify-content-between align-items-center flex-wrap"
+		style="margin-bottom: 0;">
+		<h4>
+			<i class="bi bi-chat-left-text-fill bk-section-icon"></i>{{ heading }}
+		</h4>
+	</div>
+
+	<quill-editor
+		[formControlName]="controlName"
+		[modules]="quillModules"
+		[placeholder]="placeholder"
+		(onEditorCreated)="editorCreated.emit($event)"
+		[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
+	</quill-editor>
+</div>
+
+<ng-container *ngIf="variant === 'inline'">
+	<h4 class="pl-2" style="margin-bottom: 0;">
+		{{ heading }}
+	</h4>
+
+	<div class="col-md-12 my-2" [formGroup]="group">
+		<quill-editor
+			[formControlName]="controlName"
+			[modules]="quillModules"
+			[placeholder]="placeholder"
+			(onEditorCreated)="editorCreated.emit($event)"
+			[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
+		</quill-editor>
+	</div>
+</ng-container>

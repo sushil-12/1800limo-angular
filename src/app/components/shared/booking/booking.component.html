@@ -1608,9 +1608,9 @@
 			<!-- Browse vehicles: embedded quotebot drill-down -->
 			<div *ngIf="((isIndividualMode || isTravelAgentMode) && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse') || ((isAffiliateMode && (newBooking)) && vehicleSelectionTab === 'browse')">
 				<div class="d-flex justify-content-end m-3">
-					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()">
-						<i class="bi bi-search" style="margin-right: 6px;"></i>
-						Search vehicles
+					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()" [disabled]="quoteLoading">
+						<i class="bi" [ngClass]="quoteLoading ? 'bi-arrow-repeat' : 'bi-search'" style="margin-right: 6px;"></i>
+						{{ quoteLoading ? 'Calculating route…' : 'Search vehicles' }}
 					</button>
 				</div>
 				<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
