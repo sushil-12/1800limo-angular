@@ -27,6 +27,8 @@ export class EmbeddedQuoteComponent implements OnChanges {
 	/** quotebot-shaped payload (service_type, pickup/dropoff, passengers, amenities, ...) */
 	@Input() quotePayload: any = null;
 	@Input() currencySymbol = '$';
+	@Input() selectedVehicleId: any = null;
+	@Input() selectedVehicleTypeId: any = null;
 
 	/** emits the chosen affiliate-vehicle object from getVehicleDetails */
 	@Output() vehicleSelected = new EventEmitter<any>();
@@ -150,5 +152,21 @@ export class EmbeddedQuoteComponent implements OnChanges {
 
 	choose(vehicle: any): void {
 		this.vehicleSelected.emit(vehicle);
+	}
+
+	isClassSelected(m: any): boolean {
+		if (!m) return false;
+		if (this.selectedVehicleId && m.id == this.selectedVehicleId) {
+			return true;
+		}
+		if (this.selectedVehicleTypeId && this.vehicleTypeMap[m?.name] != undefined && this.vehicleTypeMap[m?.name] == this.selectedVehicleTypeId) {
+			return true;
+		}
+		return false;
+	}
+
+	isVehicleSelected(v: any): boolean {
+		if (!v) return false;
+		return !!(this.selectedVehicleId && v.id == this.selectedVehicleId);
 	}
 }

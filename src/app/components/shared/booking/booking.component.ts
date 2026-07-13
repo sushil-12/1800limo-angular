@@ -601,9 +601,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		// distance/time normally arrive via the debounced MapController -> Directions API chain
-		// (e.g. after admin edit-load prefills addresses programmatically). If that hasn't
-		// resolved yet, compute it directly now so location_info isn't sent empty.
 		const isRoundTrip = payload.service_type === 'round_trip';
 		if (this.distance <= 0 || (isRoundTrip && this.return_distance <= 0)) {
 			this.quoteLoading = true;
@@ -621,7 +618,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			payload = this.buildQuotePayload();
 		}
 
-		// fresh object reference so <app-embedded-quote> ngOnChanges fires
 		this.quotePayload = { ...payload };
 	}
 
@@ -716,28 +712,28 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	resetSelectedVehicle(): void {
-		this.driver_info = null;
-		this.driverImgUrl = '';
-		this.vehicleImgUrl = '';
-		sessionStorage.removeItem('selected_vehicle');
+	// resetSelectedVehicle(): void {
+	// 	this.driver_info = null;
+	// 	this.driverImgUrl = '';
+	// 	this.vehicleImgUrl = '';
+	// 	sessionStorage.removeItem('selected_vehicle');
 
-		const fieldsToReset = [
-			'vehicle_type', 'vehicle_type_name', 'vehicle_id', 'vehicle_make', 'vehicle_make_name',
-			'vehicle_model', 'vehicle_model_name', 'vehicle_year', 'vehicle_year_name',
-			'vehicle_color', 'vehicle_color_name', 'vehicle_license_plate', 'vehicle_seats',
-			'driver_id', 'driver_name', 'driver_gender', 'driver_cell', 'driver_email'
-		];
-		fieldsToReset.forEach((item: string) => {
-			const control = this.BookingForm.get(item);
-			if (control) {
-				control.reset();
-			}
-		});
-		this.SetFormValue('driver_cell_isd', '+1');
-		this.SetFormValue('driver_cell_country', 'us');
-		this.BookingForm.updateValueAndValidity();
-	}
+	// 	const fieldsToReset = [
+	// 		'vehicle_type', 'vehicle_type_name', 'vehicle_id', 'vehicle_make', 'vehicle_make_name',
+	// 		'vehicle_model', 'vehicle_model_name', 'vehicle_year', 'vehicle_year_name',
+	// 		'vehicle_color', 'vehicle_color_name', 'vehicle_license_plate', 'vehicle_seats',
+	// 		'driver_id', 'driver_name', 'driver_gender', 'driver_cell', 'driver_email'
+	// 	];
+	// 	fieldsToReset.forEach((item: string) => {
+	// 		const control = this.BookingForm.get(item);
+	// 		if (control) {
+	// 			control.reset();
+	// 		}
+	// 	});
+	// 	this.SetFormValue('driver_cell_isd', '+1');
+	// 	this.SetFormValue('driver_cell_country', 'us');
+	// 	this.BookingForm.updateValueAndValidity();
+	// }
 
 	handleChangeWithAgent(selectedAcc: any) {
 		console.log('handleChangeWithAgent-->>', selectedAcc);
@@ -2493,6 +2489,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.numberOfHoursError = false;
 			}
 			this.isPrefillingForm = false;
+			this.runEmbeddedQuote();
 		}, (error: any) => {
 			this.isPrefillingForm = false;
 		});
@@ -7574,6 +7571,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.fetchAffiliateDrivers(this.affiliate_id)
 			}
 		}, 5000)
+			this.runEmbeddedQuote();
 	}
 
 	// numbers in red and seperated to next line
