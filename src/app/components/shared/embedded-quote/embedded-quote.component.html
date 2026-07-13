@@ -33,20 +33,22 @@
 				</button>
 
 				<div class="eq-grid eq-grid--scroll" #eqClassesTrack>
-					<div class="eq-card" *ngFor="let m of masterVehicles" (click)="selectClass(m)">
+					<div class="eq-card" *ngFor="let m of masterVehicles" (click)="selectClass(m)"
+						[style.border]="isClassSelected(m) ? '1px solid red' : ''">
 						<div class="eq-photo">
 							<img *ngIf="m?.cat_img" [src]="m.cat_img" [alt]="m?.name" />
 							<span *ngIf="!m?.cat_img" class="eq-photo-placeholder">vehicle photo</span>
 						</div>
 						<div class="eq-body">
 							<p class="eq-name">{{ m?.name }}</p>
-							<p class="eq-price"><span class="eq-from">From</span> {{ currencySymbol }} {{ rate(m) }}</p>
 							<div class="eq-specs">
 								<span class="eq-pill">Pax {{ m?.passenger }}</span>
 								<span class="eq-pill">Luggage {{ m?.luggage }}</span>
 							</div>
-							<button type="button" class="eq-view-more" (click)="selectClass(m); $event.stopPropagation()">
-								View More
+							<button type="button" class="eq-view-more" (click)="selectClass(m); $event.stopPropagation()"
+								[style.background]="isClassSelected(m) ? '#16a34a' : ''"
+								[style.color]="isClassSelected(m) ? '#fff' : ''">
+								{{ isClassSelected(m) ? 'Selected' : 'View More' }}
 							</button>
 						</div>
 					</div>
@@ -96,7 +98,8 @@
 				</button>
 
 				<div class="eq-grid eq-grid--scroll" #eqVehiclesTrack>
-					<div class="eq-card eq-vehicle" *ngFor="let v of vehicles">
+					<div class="eq-card eq-vehicle" *ngFor="let v of vehicles"
+						[style.border]="isVehicleSelected(v) ? '1px solid red' : ''">
 						<div class="eq-photo">
 							<img *ngIf="v?.vehicle_images?.length" [src]="v.vehicle_images[0]" [alt]="v?.name" />
 							<span *ngIf="!v?.vehicle_images?.length" class="eq-photo-placeholder">vehicle photo</span>
@@ -116,7 +119,10 @@
 								<span class="eq-pill">Pax {{ v?.passenger }}</span>
 								<span class="eq-pill">Luggage {{ v?.luggage }}</span>
 							</div>
-							<button type="button" class="eq-select" (click)="choose(v)">Select</button>
+							<button type="button" class="eq-view-more " (click)="choose(v)" [style.background]="isVehicleSelected(v) ? '#16a34a' : ''"
+								[style.color]="isVehicleSelected(v) ? '#fff' : ''">
+								{{ isVehicleSelected(v) ? 'Selected' : 'Select' }}
+							</button>
 						</div>
 					</div>
 				</div>

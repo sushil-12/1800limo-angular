@@ -1610,10 +1610,12 @@
 				<div class="d-flex justify-content-end m-3">
 					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()" [disabled]="quoteLoading">
 						<i class="bi" [ngClass]="quoteLoading ? 'bi-arrow-repeat' : 'bi-search'" style="margin-right: 6px;"></i>
-						{{ quoteLoading ? 'Calculating route…' : 'Search vehicles' }}
+						{{ quoteLoading ? 'Calculating route…' : 'Refresh Results' }}
 					</button>
 				</div>
 				<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
+					[selectedVehicleId]="QB_vehicle_id"
+					[selectedVehicleTypeId]="Form.vehicle_type.value"
 					(vehicleSelected)="onQuoteVehicleSelected($event)">
 				</app-embedded-quote>
 			</div>
@@ -1624,10 +1626,10 @@
 					<h4 style="margin-bottom: 0px !important;">
 						<i class="bi bi-truck bk-section-icon"></i>Transportation Details
 					</h4>
-					<button type="button" class="bk-btn bk-btn--secondary btn-sm" (click)="resetSelectedVehicle()">
+					<!-- <button type="button" class="bk-btn bk-btn--secondary btn-sm" (click)="resetSelectedVehicle()">
 						<i class="bi bi-arrow-left-right" style="margin-right: 6px;"></i>
 						Change Vehicle
-					</button>
+					</button> -->
 				</div>
 				<div class="row px-4 mt-4">
 					<div class="col-md-6 mb-4">
@@ -1689,6 +1691,22 @@
 
 						</div>
 					</div>
+				</div>
+
+				<!-- Available Vehicles Embedded Quote -->
+				<div class="mt-4 border-top pt-4">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h5 class="mb-0">Available Vehicles</h5>
+						<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()">
+							<i class="bi bi-search" style="margin-right: 6px;"></i>
+							Search vehicles
+						</button>
+					</div>
+					<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
+						[selectedVehicleId]="QB_vehicle_id"
+						[selectedVehicleTypeId]="Form.vehicle_type.value"
+						(vehicleSelected)="onQuoteVehicleSelected($event)">
+					</app-embedded-quote>
 				</div>
 			</div>
 		</div>
