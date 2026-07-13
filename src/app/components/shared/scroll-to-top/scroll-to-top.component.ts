@@ -57,15 +57,10 @@ export class ScrollToTopComponent implements OnInit
 	updateScrollButtons()
 	{
 		const scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-		const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-		const documentHeight = Math.max(
-			document.body.scrollHeight,
-			document.documentElement.scrollHeight,
-			document.body.offsetHeight,
-			document.documentElement.offsetHeight
-		);
 		const threshold = 160;
 
-		this.showScrollDown = (scrollTop + viewportHeight) < (documentHeight - threshold);
+		// Single toggling button: down arrow near the top, up arrow once scrolled past the threshold.
+		this.showScrollTop = scrollTop > threshold;
+		this.showScrollDown = !this.showScrollTop;
 	}
 }
