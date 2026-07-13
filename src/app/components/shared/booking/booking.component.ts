@@ -228,6 +228,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	// drill-down, 'manual' uses the existing affiliate/vehicle/driver dropdowns.
 	vehicleSelectionTab: 'browse' | 'manual' = 'browse';
 	quotePayload: any = null;
+	quoteLoading: boolean = false;
 	confirmMsg: any;
 	booking_data: any;
 	extraStops_rate: any = 0
@@ -586,8 +587,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	/** "Search vehicles" button: validate inputs and (re)build the quote payload. */
-	runEmbeddedQuote(): void {
-		const payload = this.buildQuotePayload();
+	async runEmbeddedQuote(): Promise<void> {
+		let payload = this.buildQuotePayload();
 		const hasPickup = !!(payload.pickup_airport_lat || payload.pickup_address_lat);
 		const hasDropoff = !!(payload.dropoff_airport_lat || payload.dropoff_address_lat);
 
@@ -598,6 +599,26 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (!hasPickup || !hasDropoff) {
 			this.$errors.openDialog({ errors: { error: 'Please enter pickup and drop-off locations before searching for vehicles.' } });
 			return;
+		}
+
+		// distance/time normally arrive via the debounced MapController -> Directions API chain
+		// (e.g. after admin edit-load prefills addresses programmatically). If that hasn't
+		// resolved yet, compute it directly now so location_info isn't sent empty.
+		const isRoundTrip = payload.service_type === 'round_trip';
+		if (this.distance <= 0 || (isRoundTrip && this.return_distance <= 0)) {
+			this.quoteLoading = true;
+			try {
+				if (this.distance <= 0) {
+					await this._MapController(false);
+				}
+				if (isRoundTrip && this.return_distance <= 0) {
+					await this._MapController(true);
+				}
+			} finally {
+				this.quoteLoading = false;
+			}
+			// rebuild so location_info reflects the distance/time we just resolved
+			payload = this.buildQuotePayload();
 		}
 
 		// fresh object reference so <app-embedded-quote> ngOnChanges fires
@@ -2585,7 +2606,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	async _MapController(is_return: boolean = false) {
+	async _MapController(is_return: boolean = false): Promise<{ distance: number; time: number } | null> {
 		try {
 			let waypoints: google.maps.DirectionsWaypoint[] = []
 			let origin: google.maps.LatLng
@@ -2668,9 +2689,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 				travelMode: google.maps.TravelMode.DRIVING
 			};
 
-			this.drawMap(map, request, is_return);
+			return await this.drawMap(map, request, is_return);
 		} catch (error) {
 			console.error('Error initializing MapController:', error);
+			return null;
 		}
 	}
 
@@ -2886,10 +2908,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 	// drawMap.ts
 	// `map` may be null when the route-map panel is collapsed: directions are still
 	// requested (distance/time feed the rate calculation) but nothing is rendered.
-    drawMap(map: google.maps.Map | null, request: google.maps.DirectionsRequest, is_return: boolean) {
+    drawMap(map: google.maps.Map | null, request: google.maps.DirectionsRequest, is_return: boolean): Promise<{ distance: number; time: number } | null> {
 		if (!request.origin || !request.destination) {
 			console.error('Request object missing origin/destination');
-			return;
+			return Promise.resolve(null);
 		}
 
 		// Ensure we get multiple route options so we can pick the shortest
@@ -2918,56 +2940,60 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		const directionsService = new google.maps.DirectionsService();
 
-		directionsService.route(request, (response, status) => {
-			if (status === google.maps.DirectionsStatus.OK) {
-				const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
+		return new Promise<{ distance: number; time: number } | null>((resolve) => {
+			directionsService.route(request, (response, status) => {
+				if (status === google.maps.DirectionsStatus.OK && response) {
+					const renderer = is_return ? this.returnDirectionsRenderer : this.pickupDirectionsRenderer;
 
-				// --- Pick the shortest route among the alternatives ---
-				let shortestIndex = 0;
-				let shortestDistanceMeters = this.getRouteDistanceMeters(response.routes[0]);
+					// --- Pick the shortest route among the alternatives ---
+					let shortestIndex = 0;
+					let shortestDistanceMeters = this.getRouteDistanceMeters(response.routes[0]);
 
-				for (let i = 1; i < response.routes.length; i++) {
-					const distMeters = this.getRouteDistanceMeters(response.routes[i]);
-					if (distMeters < shortestDistanceMeters) {
-						shortestDistanceMeters = distMeters;
-						shortestIndex = i;
-					}
-				}
-
-				if (renderer) {
-					renderer.setDirections(response);
-					renderer.setRouteIndex(shortestIndex); // tell renderer to highlight the shortest one
-				}
-
-				this.renderCustomMarkers(map, response, is_return);
-
-				// Pass only the chosen route's legs so distance/time matches what's drawn
-				const chosenRoute = response.routes[shortestIndex];
-
-				this.fetchDistanceAndTime(chosenRoute).then((res: { distance: number; time: number }) => {
-					if (is_return) {
-						this.return_distance = res.distance;
-						if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
-							this.buildBookingData();
+					for (let i = 1; i < response.routes.length; i++) {
+						const distMeters = this.getRouteDistanceMeters(response.routes[i]);
+						if (distMeters < shortestDistanceMeters) {
+							shortestDistanceMeters = distMeters;
+							shortestIndex = i;
 						}
-						this.BookingForm.patchValue({
-							returnJourneyDistance: res.distance,
-							returnJourneyTime: res.time
-						});
-					} else {
-						this.distance = res.distance;
-						if (!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length) {
-							this.buildBookingData();
-						}
-						this.BookingForm.patchValue({
-							journeyDistance: res.distance,
-							journeyTime: res.time
-						});
 					}
-				});
-			} else {
-				console.error('Directions request failed due to', status);
-			}
+
+					if (renderer) {
+						renderer.setDirections(response);
+						renderer.setRouteIndex(shortestIndex); // tell renderer to highlight the shortest one
+					}
+
+					this.renderCustomMarkers(map, response, is_return);
+
+					// Pass only the chosen route's legs so distance/time matches what's drawn
+					const chosenRoute = response.routes[shortestIndex];
+
+					this.fetchDistanceAndTime(chosenRoute).then((res) => {
+						if (is_return) {
+							this.return_distance = res.distance;
+							if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
+								this.buildBookingData();
+							}
+							this.BookingForm.patchValue({
+								returnJourneyDistance: res.distance,
+								returnJourneyTime: res.time
+							});
+						} else {
+							this.distance = res.distance;
+							if (!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length) {
+								this.buildBookingData();
+							}
+							this.BookingForm.patchValue({
+								journeyDistance: res.distance,
+								journeyTime: res.time
+							});
+						}
+						resolve({ distance: res.distance, time: res.time });
+					});
+				} else {
+					console.error('Directions request failed due to', status);
+					resolve(null);
+				}
+			});
 		});
 	}
 
