@@ -314,7 +314,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
-				this.BookingForm.get('prevent_rate_override')?.setValue(this.updateType === 'edit');
+				this.isAdminMode && this.BookingForm.get('prevent_rate_override')?.setValue(this.updateType === 'edit');
 				// arriving with an existing booking -> fields are prefilled, show manual tab
 				this.vehicleSelectionTab = 'manual';
 				this.checkAndPrefill();
@@ -1913,7 +1913,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['2'],
-			prevent_rate_override: this.updateType === "edit" ? [true] : [false],
+			prevent_rate_override: this.isAdminMode && this.updateType === "edit" ? [true] : [false],
 			acc_id: [''],
 			account_type: [this.isTravelAgentMode ? 'travel_planner' : 'individual'],
 			travel_client_id: [''],

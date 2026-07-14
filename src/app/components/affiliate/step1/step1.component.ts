@@ -106,6 +106,12 @@ export class Step1Component implements OnInit, AfterViewInit {
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
+	public tutorialVideoUrl = "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
+
 	ngOnInit(): void {
 
 

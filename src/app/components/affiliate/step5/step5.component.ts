@@ -39,6 +39,11 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		private adminService: AdminService,
 		private activatedroute: ActivatedRoute) { }
 
+	public tutorialVideoUrl = "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
 
 	ngAfterViewChecked() {
 		$(".dropdown-toggle").tooltip({

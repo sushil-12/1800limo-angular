@@ -96,6 +96,12 @@ export class Step3Component implements OnInit, AfterViewInit {
 		private customValidator: CustomvalidationService
 	) { }
 
+	public tutorialVideoUrl = "https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
+
 	ngAfterViewInit() {
 
 		// init flag

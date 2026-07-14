@@ -751,10 +751,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		}
 
 		// If no changes detected (and not first time), skip processing
-		if (!bookingDataChanged) {
-			return;
-		}
-
+		if (!bookingDataChanged) { return;  }
 
 		let vehicle_id = ''
 		const hasEmptyVehicleId =
@@ -779,6 +776,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		if (data.vehicle_id !== undefined && data.vehicle_id !== null && data.vehicle_id !== '') {
 			vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 		}
+		console.log('fetchRatesArrayByAffiliateVehicle data:', data, 'vehicle_id:', vehicle_id, 'shouldUseMasterVehicle:', shouldUseMasterVehicle);
 		data['is_master_vehicle'] = shouldUseMasterVehicle;
 
 
@@ -786,6 +784,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
     //    if(this.preventRateOverride){    
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+			console.log('fetchRatesArrayByAffiliateVehicle date:', data, 'response:', response);
 			// && this.affiliate_type != 'loose_affiliate'
 			this.ratesdata.next({})
 			this.calc_admin_share = 0
