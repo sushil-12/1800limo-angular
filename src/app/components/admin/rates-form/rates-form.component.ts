@@ -784,7 +784,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 
-    //    if(this.preventRateOverride){    
+       if(!this.preventRateOverride){    
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			// && this.affiliate_type != 'loose_affiliate'
 			this.ratesdata.next({})
@@ -816,7 +816,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		}, (error: any) => {
 			console.error('[buildBookingData] API error:', error);
 		});
-	//   }
+	  }
 	}
 
 	/**
