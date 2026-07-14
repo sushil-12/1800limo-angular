@@ -434,8 +434,19 @@
 																style="color: #FF8C00; font-size: 14px;"></i>
 														</span>
 														<div class="connecting-line"
+															[class.connecting-line--stop]="booking.extra_stops?.length > 0"
 															[style.height]="calculateConnectorHeight(booking.pickup_address)">
 														</div>
+														<ng-container *ngFor="let stop of booking.extra_stops; let last = last">
+															<span class="loc-logo stop-logo"
+																(click)="showLocationPointOnMapByAddress(stop.address)">
+																<i class="bi bi-circle" style="font-size: 10px;"></i>
+															</span>
+															<div class="connecting-line"
+																[class.connecting-line--stop]="!last"
+																[style.height]="calculateConnectorHeight(stop.address)">
+															</div>
+														</ng-container>
 														<span class="loc-logo"
 															(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
 															<i class="bi bi-square-fill"
@@ -447,6 +458,11 @@
 															<span style="cursor: pointer; text-decoration: underline;"
 																(click)="showLocationPointOnMap(booking.booking_id, 'pickup')"
 																[innerHTML]="highlighText(booking.pickup_address)"></span>
+														</div>
+														<div class="address-content address-content--stop" *ngFor="let stop of booking.extra_stops">
+															<span style="cursor: pointer; text-decoration: underline;"
+																(click)="showLocationPointOnMapByAddress(stop.address)"
+																[innerHTML]="highlighText(stop.address)"></span>
 														</div>
 														<div class="address-content">
 															<span style="cursor: pointer; text-decoration: underline;"

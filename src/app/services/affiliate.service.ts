@@ -373,10 +373,10 @@ export class AffiliateService {
 	loadBookings(url, keyword, startDate, endDate, useDateFilter) {
 		var path;
 		if (url) {
-			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time + '&v1=1';
 		}
 		else {
-			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time + '&v1=1';
 		}
 		return this.httpClient.get(path).toPromise();
 	}

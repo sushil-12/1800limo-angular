@@ -640,8 +640,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.QB_vehicle_id = vehicle.id;
 		this.is_master_vehicle = !!vehicle.is_master_vehicle;
 
-		this.populateDriverAndVehicleDetails(vehicle);
-
+		// affiliate_type must be set BEFORE populateDriverAndVehicleDetails patches
+		// vehicle_type below. The 'vehicle_type' valueChanges listener re-resolves
+		// vehicle_id from VehicleList whenever affiliate_type == 'affiliate' — if it's
+		// still the stale value from the edit-loaded booking at that point, it clobbers
+		// the correct vehicle_id we're about to set with an old affiliate vehicle's id.
 		if (vehicle.is_master_vehicle) {
 			// Master vehicles have no affiliate — mirror the direct quotebot flow:
 			// use loose_affiliate type and prefill vehicle fields from master vehicle info.
@@ -650,15 +653,26 @@ export class BookingComponent implements OnInit, OnDestroy {
 				affiliate_id: '',
 				loose_affiliate_id: ''
 			});
-			const masterVehicleId = Number(vehicle.id || vehicle.ID || 0);
-			if (masterVehicleId > 0) {
-				this.loadMasterVehicleInfoForQuoteBot(masterVehicleId);
-			}
 		} else {
 			this.BookingForm.patchValue({
 				affiliate_type: 'affiliate',
 				affiliate_id: vehicle.affiliate_id
 			});
+		}
+
+		// keep the form's vehicle_id in sync with the freshly picked vehicle for every
+		// mode — otherwise buildBookingData() prioritizes the stale value loaded from
+		// the edit response over QB_vehicle_id and resends the old vehicle on first submit
+		this.BookingForm.patchValue({ vehicle_id: vehicle?.id || vehicle?.vehicle_id || '' });
+
+		this.populateDriverAndVehicleDetails(vehicle);
+
+		if (vehicle.is_master_vehicle) {
+			const masterVehicleId = Number(vehicle.id || vehicle.ID || 0);
+			if (masterVehicleId > 0) {
+				this.loadMasterVehicleInfoForQuoteBot(masterVehicleId);
+			}
+		} else {
 			this.fetchAffiliateInformation(vehicle.affiliate_id);
 			this.fetchQBAffiliateVehicles(vehicle.affiliate_id);
 			this.fetchAffiliateDrivers(vehicle.affiliate_id);
@@ -4232,7 +4246,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.BookingForm.get(`${prefix}${controlName}`)?.setValue(value, { emitEvent: false });
 		};
 
-		setVehicleValue('vehicle_id', selectedVehicle?.ID || selectedVehicle?.id);
+		// NOTE: deliberately not writing vehicle_id here. selectedVehicle is a
+		// representative real vehicle returned by getMasterVehicleInfo purely to prefill
+		// make/model/color/etc. for a master-vehicle-type booking; its id is not the
+		// master-vehicle-type id that must stay in vehicle_id (set by onQuoteVehicleSelected).
 		setVehicleValue('vehicle_type', selectedVehicle?.vehicleType_id);
 		setVehicleValue('vehicle_type_name', selectedVehicle?.vehicleType);
 		setVehicleValue('vehicle_make', selectedVehicle?.make_id);

@@ -1018,10 +1018,10 @@ export class AdminService {
 	loadBookings(url, startDate, endDate, useDateFilter, keyword = '', orderBy, status = '') {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time + '&booking_status=' + status;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time + '&booking_status=' + status + '&v1=1';
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time + '&booking_status=' + status;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time + '&booking_status=' + status + '&v1=1';
 		}
 		return this.httpClient.get(path).toPromise();
 	}
