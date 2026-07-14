@@ -376,8 +376,9 @@
                                 Requirements
                             </button>
                         </div>
-                        <ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice ">
-                            <li>{{item.choice }}</li>
+                        <ul>
+                            <li *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice ">
+                                {{item.choice }}</li>
                         </ul>
                     </div>
                 </div>
@@ -400,8 +401,9 @@
                                 Requirements
                             </button>
                         </div>
-                        <ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice ">
-                            <li>{{ item.choice }}</li>
+                        <ul>
+                            <li *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice ">
+                                {{ item.choice }}</li>
                         </ul>
                     </div>
                 </div>

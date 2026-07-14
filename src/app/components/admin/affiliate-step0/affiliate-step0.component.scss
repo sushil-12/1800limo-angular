@@ -62,7 +62,8 @@ p {
 .step-points {
     margin-left: 15px;
     margin-top : 15px;
-    width      : 100%
+    width      : 100%;
+    align-items: flex-start;
 }
 
 .step-points svg {
