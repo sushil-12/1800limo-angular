@@ -170,7 +170,6 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		// }
 		if (changes?.book_data?.currentValue) {
-
 			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		}
 		// if (changes?.QB_vehicle_id?.currentValue) {
@@ -732,7 +731,6 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	fetchRatesArrayByAffiliateVehicle(data) {
-
 		// Check if booking_data has changed
 		const bookingDataChanged = this.hasBookingDataChanged(data);
 		const isFirstTime = this.previousBookingData === null;
@@ -781,8 +779,8 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		console.log('fetchRatesArrayByAffiliateVehicle data:', data, 'vehicle_id:', vehicle_id, 'shouldUseMasterVehicle:', shouldUseMasterVehicle);
 		data['is_master_vehicle'] = shouldUseMasterVehicle;
 
-		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 
+		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 
        if(!this.preventRateOverride){    
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {

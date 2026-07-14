@@ -20,7 +20,7 @@
 		<div class="section-container mt-0">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
 				<h4 class="border-0"><i class="bi bi-signpost-split bk-section-icon"></i>{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
-					<mat-checkbox *ngIf="updateType === 'edit'" formControlName="prevent_rate_override" class="text-sm font-weight-bold"
+					<mat-checkbox  *ngIf="isAdminMode && updateType === 'edit'"  formControlName="prevent_rate_override" class="text-sm font-weight-bold"
 						style="font-size: 0.85rem;">
 						Prevent System Rate Override
 					</mat-checkbox>

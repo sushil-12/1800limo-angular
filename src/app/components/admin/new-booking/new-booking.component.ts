@@ -363,7 +363,17 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 			hasEmptyVehicleId ||
 			this.is_master_vehicle === true;
 		const vehicleTypeId = this.BookingForm.get('vehicle_type').value;
-		const effectiveVehicleId = vehicleId || this.QB_vehicle_id || this.route_vehicle_id || this.firstLoadVehicleId || vehicleTypeId || '';
+		// master-vehicle bookings must not fall back to the vehicle-type id
+		const effectiveVehicleId = vehicleId || this.QB_vehicle_id || this.route_vehicle_id || this.firstLoadVehicleId || (isMasterVehiclePayload ? '' : vehicleTypeId) || '';
+		console.log('[buildBookingData] vehicle_id sources', {
+			formVehicleId: vehicleId,
+			QB_vehicle_id: this.QB_vehicle_id,
+			route_vehicle_id: this.route_vehicle_id,
+			firstLoadVehicleId: this.firstLoadVehicleId,
+			vehicleTypeId,
+			effectiveVehicleId,
+			booking_id: this.booking_id
+		});
 		const returnVehicleId = this.BookingForm.get('return_vehicle_id').value;
 		const returnVehicleTypeId = this.BookingForm.get('return_vehicle_type').value;
 		const effectiveReturnVehicleId = returnVehicleId || returnVehicleTypeId || effectiveVehicleId;
