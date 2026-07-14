@@ -731,6 +731,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	fetchRatesArrayByAffiliateVehicle(data) {
+		
 		// Check if booking_data has changed
 		const bookingDataChanged = this.hasBookingDataChanged(data);
 		const isFirstTime = this.previousBookingData === null;
@@ -749,10 +750,12 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			}
 			return;
 		}
-
 		// If no changes detected (and not first time), skip processing
-		if (!bookingDataChanged) { return;  }
-
+		if(data?.is_master_vehicle != true){
+			if (  !bookingDataChanged) { return;  }
+		}
+		
+	
 		let vehicle_id = ''
 		const hasEmptyVehicleId =
 			data?.vehicle_id === null ||
