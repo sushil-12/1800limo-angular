@@ -154,6 +154,28 @@ export class EmbeddedQuoteComponent implements OnChanges {
 		this.vehicleSelected.emit(vehicle);
 	}
 
+	/** masterVehicles with the currently selected class (if any) moved to the front. */
+	get sortedMasterVehicles(): Array<any> {
+		return this.moveSelectedToFront(this.masterVehicles, (m) => this.isClassSelected(m));
+	}
+
+	/** vehicles with the currently selected vehicle (if any) moved to the front. */
+	get sortedVehicles(): Array<any> {
+		return this.moveSelectedToFront(this.vehicles, (v) => this.isVehicleSelected(v));
+	}
+
+	private moveSelectedToFront(list: Array<any>, isSelected: (item: any) => boolean): Array<any> {
+		if (!list?.length) {
+			return list;
+		}
+		const selected = list.filter(isSelected);
+		if (!selected.length) {
+			return list;
+		}
+		const rest = list.filter((item) => !isSelected(item));
+		return [...selected, ...rest];
+	}
+
 	isClassSelected(m: any): boolean {
 		if (!m) return false;
 		if (this.selectedVehicleId && m.id == this.selectedVehicleId) {

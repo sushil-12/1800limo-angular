@@ -1610,7 +1610,7 @@
 				<div class="d-flex justify-content-end m-3">
 					<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()" [disabled]="quoteLoading">
 						<i class="bi" [ngClass]="quoteLoading ? 'bi-arrow-repeat' : 'bi-search'" style="margin-right: 6px;"></i>
-						{{ quoteLoading ? 'Calculating route…' : 'Refresh Results' }}
+						{{ quoteLoading ? 'Fetching route…' : 'Refresh Results' }}
 					</button>
 				</div>
 				<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
@@ -2330,7 +2330,7 @@
 		<!-- Amenities -->
 		<div id="amenities" class="section-container section-dropdown"
 			[ngClass]="booking_params.chevrons.amenities ? 'active' : ''"
-			*ngIf="Form.affiliate_type.value === 'loose_affiliate' && !isIndividualMode && !isTravelAgentMode">
+			*ngIf="Form.affiliate_type.value === 'loose_affiliate' && isAdminMode">
 			<!-- Amenities -->
 			<div class="row align-items-center m-0" (click)="toggleDropdown('amenities')">
 				<div class="col-10 col-md-11">

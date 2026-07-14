@@ -95,29 +95,29 @@ export class BookingPreviewComponent implements OnInit {
     } catch (e) { }
 
     if (this.userRole === 'admin') {
-      this.router.navigate(['/admin/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+      this.router.navigate(['/admin/new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
     }
     else if (this.userRole === 'affiliate') {
       const currentUserStr = localStorage.getItem('currentUser');
       const currentUser = currentUserStr ? JSON.parse(currentUserStr) : {};
 
       if (currentUser?.roleName === 'sub_affiliate') {
-        this.router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+        this.router.navigate(['/sub_affiliate/create-new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
       } else {
-        this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+        this.router.navigate(['/affiliate/create-new-booking-v2'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
       }
     }
     else if (this.userRole === 'travel_agent') {
       const currentUserStr = localStorage.getItem('currentUser');
       const currentUser = currentUserStr ? JSON.parse(currentUserStr) : {};
 
-      this.router.navigate([`/${currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+      this.router.navigate([`/${currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
     }
     else if (this.userRole === 'individual') {
       const currentUserStr = localStorage.getItem('currentUser');
       const currentUser = currentUserStr ? JSON.parse(currentUserStr) : {};
 
-      this.router.navigate([`/${currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+      this.router.navigate([`/${currentUser?.roleName}/create-new-booking-v2`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
     }
     else {
       this.editBooking.emit(this.bookingPreview);

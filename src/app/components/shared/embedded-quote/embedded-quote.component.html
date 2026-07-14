@@ -33,7 +33,7 @@
 				</button>
 
 				<div class="eq-grid eq-grid--scroll" #eqClassesTrack>
-					<div class="eq-card" *ngFor="let m of masterVehicles" (click)="selectClass(m)"
+					<div class="eq-card" *ngFor="let m of sortedMasterVehicles" (click)="selectClass(m)"
 						[style.border]="isClassSelected(m) ? '1px solid red' : ''">
 						<div class="eq-photo">
 							<img *ngIf="m?.cat_img" [src]="m.cat_img" [alt]="m?.name" />
@@ -98,12 +98,11 @@
 				</button>
 
 				<div class="eq-grid eq-grid--scroll" #eqVehiclesTrack>
-					<div class="eq-card eq-vehicle" *ngFor="let v of vehicles"
+					<div class="eq-card eq-vehicle" *ngFor="let v of sortedVehicles"
 						[style.border]="isVehicleSelected(v) ? '1px solid red' : ''">
 						<div class="eq-photo">
 							<img *ngIf="v?.vehicle_images?.length" [src]="v.vehicle_images[0]" [alt]="v?.name" />
 							<span *ngIf="!v?.vehicle_images?.length" class="eq-photo-placeholder">vehicle photo</span>
-							<span class="eq-badge" *ngIf="v?.is_master_vehicle">Category</span>
 						</div>
 						<div class="eq-body">
 							<p class="eq-affiliate" *ngIf="v?.affiliate_name || v?.affiliate_company">
