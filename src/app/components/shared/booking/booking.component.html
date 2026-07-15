@@ -1616,6 +1616,8 @@
 				<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
 					[selectedVehicleId]="QB_vehicle_id"
 					[selectedVehicleTypeId]="Form.vehicle_type.value"
+					[isIndividual]="isIndividualMode"
+					[isTravelAgent]="isTravelAgentMode"
 					(vehicleSelected)="onQuoteVehicleSelected($event)">
 				</app-embedded-quote>
 			</div>
@@ -1705,6 +1707,8 @@
 					<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
 						[selectedVehicleId]="QB_vehicle_id"
 						[selectedVehicleTypeId]="Form.vehicle_type.value"
+						[isIndividual]="isIndividualMode"
+						[isTravelAgent]="isTravelAgentMode"
 						(vehicleSelected)="onQuoteVehicleSelected($event)">
 					</app-embedded-quote>
 				</div>

@@ -329,6 +329,12 @@ a.dropdown-item {
 			width: 2px;
 			background-color: #FF8C00;
 			margin: -2px 0;
+
+			&--stop {
+				width: 0;
+				border-left: 2px dashed #E0A868;
+				background-color: transparent;
+			}
 		}
 
 		.loc-logo {
@@ -340,6 +346,10 @@ a.dropdown-item {
 			i {
 				display: block;
 				line-height: 1;
+			}
+
+			&.stop-logo i {
+				color: #E0A868;
 			}
 		}
 	}
@@ -364,6 +374,13 @@ a.dropdown-item {
 		display: block;
 		width: 30ch !important;
 		max-width: 30ch !important;
+
+		&--stop span {
+			color: #000;
+			font-size: 14px;
+			font-style: italic;
+			text-decoration-color: #c9c9c9 !important;
+		}
 	}
 }
 

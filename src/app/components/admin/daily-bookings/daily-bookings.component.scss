@@ -906,18 +906,29 @@ a.dropdown-item {
 	display: block;
 	min-width: 420px;
 
+	// Each pickup/stop/dropoff is its own row so the connecting line
+	// stretches (via flex) to the actual rendered height of its address
+	// text instead of being guessed from the address string length.
+	.route-point {
+		align-items: stretch;
+
+		&:not(:last-child) .address-content {
+			padding-bottom: 18px;
+		}
+	}
+
 	.route-icon-wrapper {
-		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		flex: 0 0 auto;
 		margin-right: 8px;
 
 		.connecting-line {
+			flex: 1 1 auto;
 			width: 2px;
-			// height: 30px; // Dynamic height handled in HTML
 			background-color: #FF8C00;
-			margin: -2px 0;
+			margin: 0;
 
 			&--stop {
 				width: 0;
@@ -931,6 +942,7 @@ a.dropdown-item {
 			display: flex;
 			align-items: center;
 			line-height: 1;
+			flex: 0 0 auto;
 
 			i {
 				display: block;
@@ -941,17 +953,6 @@ a.dropdown-item {
 				color: #E0A868;
 			}
 		}
-	}
-
-	.address-content-wrapper {
-		display: flex;
-		flex-direction: column;
-		gap: 18px;
-	}
-
-	.address-main-row {
-		gap: 0;
-		margin-bottom: 0px;
 	}
 
 	.address-content {
