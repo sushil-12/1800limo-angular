@@ -431,9 +431,13 @@
 							</div>
 							<div class="d-flex justify-content-end"
 								style="position: absolute; bottom: 0;right: 15px;margin-bottom: 15px;">
-								<button type="button" class="view-more-circle-button"
+								<button *ngIf="vehicle_obj?.vehicle_count>0" type="button" class="view-more-circle-button"
 									(click)="selectCategory(vehicle_obj?.name)">
-									View More
+									{{ vehicle_obj?.vehicle_count }} Options
+								</button>
+								<button  *ngIf="vehicle_obj?.vehicle_count===0" type="button"
+									(click)="bookNow(vehicle_obj)" class="view-more-circle-button">
+									Book Now
 								</button>
 							</div>
 						</div>
@@ -561,7 +565,7 @@
 								<div class="d-flex justify-content-end mb-1">
 									<button type="button" class="view-more-circle-button"
 										(click)="selectCategory(vehicle_obj?.name)">
-										View More
+										View More 2
 									</button>
 								</div>
 							</div>

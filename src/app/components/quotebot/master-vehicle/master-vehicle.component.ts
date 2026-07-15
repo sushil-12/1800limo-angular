@@ -193,6 +193,8 @@ export class MasterVehicleComponent implements OnInit {
 	vehicleDetails: Array<any> = []
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
+	booking_created_from: string = 'admin';
+	bookingId: any = null;
 
 	// Filters
 	filters: Filters = {
@@ -341,6 +343,9 @@ export class MasterVehicleComponent implements OnInit {
 		}
 
 		this.$activatedRoute.queryParams.subscribe((params: any) => {
+			if (params?.id) {
+				this.bookingId = params?.id;
+			}
 			if (params?.list == 'master') {
 				this.vehicleDetails = []
 			}
@@ -777,30 +782,35 @@ export class MasterVehicleComponent implements OnInit {
 	 */
 	bookNow(vehicle_selected: any) {
 		// // console.log('Will navigate to Book Now Page ...')
+		vehicle_selected.is_master_vehicle = true;
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
+		// if (vehicle_selected?.created_by != 1) {
+		// 	this.booking_created_from = 'subscriber'
+		// }
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
-				this.$router.navigate(['/admin/new-booking'],
-					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
+				if (this.bookingId) {
+					this.$router.navigate(['/admin/new-booking-v2'],
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: 'reaffiliate', is_master_vehicle: vehicle_selected?.is_master_vehicle, updateType: 'reaffiliate', reaffiliate_book_id: this.bookingId } })
+				}
+				else {
+					this.$router.navigate(['/admin/new-booking-v2'],
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: (JSON.parse(localStorage.getItem('currentUser'))['created_by_role'] == 'admin' ? 'admin' : this.booking_created_from) } })
+				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				this.$router.navigate([
-					'/' + user + '/create-new-booking'
+					'/' + user + '/create-new-booking-v2'
 				],
-					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
 			}
 		} else {
-			// this.$errorDialog.openDialog({
-			// 	errors: {
-			// 		error: 'Please open an account or login to proceed.'
-			// 	}
-			// })
-			localStorage.setItem('QB_redirectUrl', 'true')
-			this.$router.navigate(['/login/driver'], {
-				skipLocationChange: true
-			})
+			this.$router.navigate([
+				'/quotebot/new-booking'
+			],
+				{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 		}
 	}
 

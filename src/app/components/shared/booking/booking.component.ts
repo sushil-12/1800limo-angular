@@ -6492,7 +6492,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				})
 				this.fetchReturnAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
-				if (!this.isIndividualMode && !this.isTravelAgentMode) {
+				if (this.service_type == 'round_trip') {
 					this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
 					this.BookingForm.get('return_lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 					this.BookingForm.get('return_lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
