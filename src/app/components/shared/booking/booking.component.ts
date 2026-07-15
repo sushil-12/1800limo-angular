@@ -5531,7 +5531,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		let value = this.BookingForm.value
 		value = this.normalizeAirportCoordinatesInPayload(value)
-		if (this.isFarmoutBooking && this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber') {
+		if (this.isFarmoutBooking && this.booking_created_from == 'admin') {
 			value["reservation_type"] = 'farmout'
 		}
 		value["booking_created_from"] = this.booking_created_from
