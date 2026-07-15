@@ -7281,7 +7281,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		event && this.SetFormValue(form_control, event.id);
 	}
 	FormatTime(time: string) {
-		return moment(time, "HH:mm:ss").format("LT");
+		return moment(time, ["HH:mm:ss", "hh:mm A", "HH:mm"]).format("LT");
 	}
 
 	setValueByBookNow() {
