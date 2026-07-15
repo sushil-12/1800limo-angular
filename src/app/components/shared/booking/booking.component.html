@@ -1734,9 +1734,7 @@
 				</div>
 			</div>
 
-			
-
-
+		
 			<!-- Choose Affiliate -->
 			<!-- Only Visible in affiliate section -->
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
@@ -1773,7 +1771,7 @@
 
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
-			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' && isAdminMode">
 				<div class="col-md-12">
 					<ng-select appearance="outline" [searchable]="true" [searchFn]="onSearchLooseAffiliateId"
 						[items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
@@ -4899,7 +4897,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="">
-									Affliate Farm out share
+									Affliate Farm out income
 								</span>
 							</div>
 							<div class="col-md-8 value preview-airport-color">
@@ -5542,7 +5540,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Affliate Farm out share
+										Affliate Farm out income
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">

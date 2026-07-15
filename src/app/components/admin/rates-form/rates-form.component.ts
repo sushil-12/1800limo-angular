@@ -750,9 +750,10 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			}
 			return;
 		}
+
 		// If no changes detected (and not first time), skip processing
-		if(data?.is_master_vehicle != true){
-			if (  !bookingDataChanged) { return;  }
+		if (!bookingDataChanged) {
+			return;
 		}
 		
 	
