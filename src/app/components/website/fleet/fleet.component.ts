@@ -22,7 +22,7 @@ interface Vehicle {
 	category: string;
 	badge?: string;
 	description: string;
-	price?: string;
+	price?: { hourly_rate?: number | string; milage_rate?: number | string };
 	images: string[];
 	specifications: VehicleSpecs;
 	features: string[];

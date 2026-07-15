@@ -29,6 +29,8 @@ export class EmbeddedQuoteComponent implements OnChanges {
 	@Input() currencySymbol = '$';
 	@Input() selectedVehicleId: any = null;
 	@Input() selectedVehicleTypeId: any = null;
+	@Input() isIndividual = false;
+	@Input() isTravelAgent = false;
 
 	/** emits the chosen affiliate-vehicle object from getVehicleDetails */
 	@Output() vehicleSelected = new EventEmitter<any>();
