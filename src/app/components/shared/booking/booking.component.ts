@@ -648,7 +648,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// Master vehicles have no affiliate — mirror the direct quotebot flow:
 			// use loose_affiliate type and prefill vehicle fields from master vehicle info.
 			this.BookingForm.patchValue({
-				affiliate_type: 'loose_affiliate',
+				affiliate_type: this.isAffiliateMode ? 'affiliate' : 'loose_affiliate',
 				affiliate_id: '',
 				loose_affiliate_id: ''
 			});
@@ -7421,10 +7421,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (isMasterVehicleQuoteFlow) {
 			this.BookingForm.patchValue({
-				affiliate_type: 'loose_affiliate',
+				affiliate_type: this.isAffiliateMode ? 'affiliate' : 'loose_affiliate',
 				affiliate_id: '',
 				loose_affiliate_id: '',
-				return_affiliate_type: 'loose_affiliate',
+				return_affiliate_type: this.isAffiliateMode ? 'affiliate' : 'loose_affiliate',
 				return_affiliate_id: '',
 				return_loose_affiliate_id: ''
 			});
