@@ -5631,7 +5631,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	/** Where to land after a successful save, per portal. */
 	private navigatePostSave() {
 		if (this.isAffiliateMode) {
-			const targetPath = this.currentUser?.roleName == 'sub_affiliate' ? '/sub_affiliate/farm-out' : '/affiliate/farm-out';
+			const targetPath = this.currentUser?.roleName == 'sub_affiliate' ? '/sub_affiliate/my-bookings' : '/affiliate/my-bookings';
 			this.$router.navigate([targetPath]).then(() => {
 				window.location.reload();
 			});
