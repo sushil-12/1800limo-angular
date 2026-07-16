@@ -231,6 +231,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	quoteLoading: boolean = false;
 	confirmMsg: any;
 	booking_data: any;
+	// Bumped on explicit vehicle/affiliate picks so rates-form re-fetches even when
+	// every other booking_data field is unchanged (e.g. re-selecting the same vehicle).
+	rateRefreshToken: number = 0;
 	extraStops_rate: any = 0
 	selectedVehicle: any;
 	return_selectedVehicle: any;
@@ -467,7 +470,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			pickup_time: this.BookingForm.get('pickup_time').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
 			affiliate_type: affiliateType,
-			return_affiliate_type: returnAffiliateType
+			return_affiliate_type: returnAffiliateType,
+			rate_refresh_token: this.rateRefreshToken
 		}
 	}
 
@@ -668,6 +672,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		// reveal the now-populated, still-editable manual fields
 		this.vehicleSelectionTab = 'manual';
+		this.rateRefreshToken++;
 		this.buildBookingData();
 	}
 
@@ -3997,6 +4002,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 		return isWordThere.every(all_words);
 	}
 	handleAffiliateChange(value) {
+		// User picked an affiliate from the dropdown: rebuild booking_data so
+		// rates-form recalculates. The token bump marks this as an explicit pick,
+		// which bypasses rates-form's unchanged-data / hydration-baseline guards.
+		if (value?.id) {
+			this.rateRefreshToken++;
+			this.buildBookingData();
+		}
 	}
 	handleLooseAffiliateChange(looseAffData) {
 		if (looseAffData) {
