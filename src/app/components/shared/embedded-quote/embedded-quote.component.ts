@@ -183,6 +183,12 @@ export class EmbeddedQuoteComponent implements OnChanges {
 		if (this.selectedVehicleId && m.id == this.selectedVehicleId) {
 			return true;
 		}
+		// The vehicle-type fallback exists for selections whose id isn't a class id
+		// (affiliate vehicles). When another class already matches the selected id,
+		// skip it — otherwise a stale vehicle_type highlights a second card.
+		if (this.selectedVehicleId && (this.masterVehicles || []).some((item: any) => item?.id == this.selectedVehicleId)) {
+			return false;
+		}
 		if (this.selectedVehicleTypeId && this.vehicleTypeMap[m?.name] != undefined && this.vehicleTypeMap[m?.name] == this.selectedVehicleTypeId) {
 			return true;
 		}

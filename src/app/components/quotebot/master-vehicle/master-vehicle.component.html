@@ -393,7 +393,8 @@
 				<ng-container *ngIf="!isLoading && master_vehicles.length > 0">
 					<div id="master-vehicle-box" class="card mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 						*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
-						(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
+						(click)="vehicle_obj?.vehicle_count === 0 ? bookNow(vehicle_obj) : selectCategory(vehicle_obj?.name)"
+						style="position: relative !important;">
 						<div id="vehicle-image" class="imageStyle bg-white d-flex justify-content-center">
 							<img [src]="vehicle_obj.cat_img" class="img-fluid"
 								[attr.id]="'vehicle_' + vehicle_obj_index" />
@@ -432,11 +433,11 @@
 							<div class="d-flex justify-content-end"
 								style="position: absolute; bottom: 0;right: 15px;margin-bottom: 15px;">
 								<button *ngIf="vehicle_obj?.vehicle_count>0" type="button" class="view-more-circle-button"
-									(click)="selectCategory(vehicle_obj?.name)">
-									{{ vehicle_obj?.vehicle_count }} Options
+									(click)="$event.stopPropagation(); selectCategory(vehicle_obj?.name)">
+									{{ vehicle_obj?.vehicle_count }} {{ vehicle_obj?.vehicle_count === 1 ? 'Choice Available' : 'Choices Available' }}
 								</button>
 								<button  *ngIf="vehicle_obj?.vehicle_count===0" type="button"
-									(click)="bookNow(vehicle_obj)" class="view-more-circle-button">
+									(click)="$event.stopPropagation(); bookNow(vehicle_obj)" class="view-more-circle-button">
 									Book Now
 								</button>
 							</div>
@@ -521,7 +522,8 @@
 				*ngIf="!isLoading && master_vehicles.length > 0" style="grid-gap: 15px !important;">
 				<div id="master-vehicle-box" class="card mb-1 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
-					(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
+					(click)="vehicle_obj?.vehicle_count === 0 ? bookNow(vehicle_obj) : selectCategory(vehicle_obj?.name)"
+					style="position: relative !important;">
 					<div id="vehicle-image" class="bg-white d-flex">
 						<div class="col-sm-3 imageStyle-mobile">
 							<img [src]="vehicle_obj.cat_img" [attr.id]="'vehicle_' + vehicle_obj_index" />
@@ -564,8 +566,8 @@
 								</div>
 								<div class="d-flex justify-content-end mb-1">
 									<button type="button" class="view-more-circle-button"
-										(click)="selectCategory(vehicle_obj?.name)">
-										View More 2
+										(click)="$event.stopPropagation(); vehicle_obj?.vehicle_count === 0 ? bookNow(vehicle_obj) : selectCategory(vehicle_obj?.name)">
+										{{ vehicle_obj?.vehicle_count === 0 ? 'Book Now' : 'View More' }}
 									</button>
 								</div>
 							</div>
