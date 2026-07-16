@@ -576,7 +576,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_no_of_luggage: this.Form.luggage_count.value || 0,
 
 			location_info: location_info,
-			other_details: {},
+			// carry the airport display names: home's prefill and setValueByBookNow
+			// read them from other_details, so writing {} here loses the airports
+			// when the user navigates back to the quotebot and books again
+			other_details: {
+				pickup_airport_name: isAirportPickup ? (this.Form.pickup_airport_option.value || this.Form.pickup_airport_name.value || '') : '',
+				dropoff_airport_name: isAirportDropoff ? (this.Form.dropoff_airport_option.value || this.Form.dropoff_airport_name.value || '') : '',
+				return_pickup_airport_name: isRoundTrip && returnPickupTypeRaw === 'airport' ? (this.Form.return_pickup_airport_option.value || this.Form.return_pickup_airport_name.value || '') : '',
+				return_dropoff_airport_name: isRoundTrip && returnDropoffTypeRaw === 'airport' ? (this.Form.return_dropoff_airport_option.value || this.Form.return_dropoff_airport_name.value || '') : ''
+			},
 
 			extra_stops: extraStops.map((stop: any) => ({
 				address: stop.address || '',
@@ -7517,8 +7525,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.isPrefillingTransferTypes = false;
 			this.logTransferTypeState('post-prefill-render');
 		}, 0)
-		this.SetFormValue('total_passengers', QB?.no_of_luggage)
-		this.SetFormValue('luggage_count', QB?.no_of_passenger)
+		this.SetFormValue('total_passengers', QB?.no_of_passenger)
+		this.SetFormValue('luggage_count', QB?.no_of_luggage)
 		//vehicle id when chossing vehicle from Quote bot screen
 		this.QB_vehicle_id = normalizedSelectedVehicle?.id || this.route_vehicle_id || null
 		//pickup

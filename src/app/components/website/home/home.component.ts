@@ -2695,6 +2695,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 			this.syncPrefilledAirportSelections()
 			this.vars = { ...previousOtherDetails }
+			// other_details can come back empty when the stored form was rewritten by
+			// the booking page; rebuild the airport display names from the top-level
+			// fields so the next fileTheQuote() still carries them in other_details.
+			;['pickup_airport_name', 'dropoff_airport_name', 'return_pickup_airport_name', 'return_dropoff_airport_name'].forEach((key: string) => {
+				if (!this.vars[key] && previous_quotebot?.[key]) {
+					this.vars[key] = previous_quotebot[key];
+				}
+			});
 
 			// Restore extra stops and selected amenities from previous session
 			if (Array.isArray(previous_quotebot?.extra_stops)) {
