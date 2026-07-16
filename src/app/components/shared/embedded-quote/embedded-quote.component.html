@@ -105,7 +105,7 @@
 							<span *ngIf="!v?.vehicle_images?.length" class="eq-photo-placeholder">vehicle photo</span>
 						</div>
 						<div class="eq-body">
-							<p class="eq-affiliate" *ngIf="v?.affiliate_name || v?.affiliate_company">
+							<p class="eq-affiliate" *ngIf="!isIndividual && !isTravelAgent && (v?.affiliate_name || v?.affiliate_company)">
 								{{ v?.affiliate_name || v?.affiliate_company }}
 								<ng-container *ngIf="v?.affiliate_phone"> / {{ v?.affiliate_phone }}</ng-container>
 							</p>

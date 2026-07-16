@@ -1142,7 +1142,7 @@ button.link {
 
 .view-more-circle-button {
 	font-size: 0.9rem;
-	padding: 0.195rem 0.5rem;
+	padding: 0.195rem 1rem;
 	transition: box-shadow 0.1s ease-in-out;
 	color: #000;
 	background-color: #F2C449;
@@ -1155,7 +1155,7 @@ button.link {
 	appearance: button;
 	-moz-appearance: button;
 	-webkit-appearance: button;
-	width: 105px;
+	width: max-content;
 	height: 32px;
 }
 
