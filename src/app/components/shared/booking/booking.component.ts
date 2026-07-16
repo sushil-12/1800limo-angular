@@ -4637,7 +4637,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
 			return
 		}
-		if(this.shouldBlockAdminApi) {return;};
+		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
 		this.$spinner.show()
 		const handleResponse = (response: any) => {
 			if (response.success && response.data?.data.length > 0) {
@@ -6595,7 +6595,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('affiliate_id').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
-			if (value && this.booking_created_from == 'admin') {
+			// Affiliate portal farm-outs are booking_created_from 'subscriber', but picking
+			// an affiliate must still load that affiliate's vehicles/drivers.
+			if (value && (this.booking_created_from == 'admin' || this.isAffiliateMode)) {
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
 				if (this.BookingForm.get('service_type').value == 'round_trip') {
@@ -6622,7 +6624,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('return_affiliate_id').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
-			if (value && this.booking_created_from == 'admin') {
+			if (value && (this.booking_created_from == 'admin' || this.isAffiliateMode)) {
 				this.chooseReturnAffiliate()
 				this.fetchReturnAffiliateInformation(value)
 			}
