@@ -434,7 +434,7 @@
 								style="position: absolute; bottom: 0;right: 15px;margin-bottom: 15px;">
 								<button *ngIf="vehicle_obj?.vehicle_count>0" type="button" class="view-more-circle-button"
 									(click)="$event.stopPropagation(); selectCategory(vehicle_obj?.name)">
-									{{ vehicle_obj?.vehicle_count }} {{ vehicle_obj?.vehicle_count === 1 ? 'Choice Available' : 'Choices Available' }}
+									{{ vehicle_obj?.vehicle_count }} {{ vehicle_obj?.vehicle_count === 1 ? 'Choice' : 'Choices' }}
 								</button>
 								<button  *ngIf="vehicle_obj?.vehicle_count===0" type="button"
 									(click)="$event.stopPropagation(); bookNow(vehicle_obj)" class="view-more-circle-button">

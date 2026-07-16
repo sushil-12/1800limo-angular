@@ -783,6 +783,42 @@ export class MasterVehicleComponent implements OnInit {
 	bookNow(vehicle_selected: any) {
 		// // console.log('Will navigate to Book Now Page ...')
 		vehicle_selected.is_master_vehicle = true;
+
+		// The master vehicle card has no driverInformation on it. Fetch the vehicle listing
+		// (same API as select-vehicle) to attach driver details before the booking form reads
+		// selected_vehicle from sessionStorage.
+		const originalFilters = this.filters.original as any
+		const requestFilters = this.filters.request as any
+		const vehicleTypeId = originalFilters['vehicle-type']?.find((item: any) => item.name == vehicle_selected.name)?.id
+
+		const payload = {
+			...this.quotebot_form,
+			filters: vehicleTypeId ? { ...requestFilters, 'vehicle-type': [vehicleTypeId] } : requestFilters,
+			user_id: this.currentUser?.id,
+			selected_amenities: requestFilters['amenities'] || []
+		}
+
+		this.$spinner.show()
+		this.$quotebotService.getVehicleDetails(payload).subscribe({
+			next: (response: any) => {
+				const match = (response.data || []).find((v: any) => v.id == vehicle_selected.id && v.affiliate_id == vehicle_selected.affiliate_id)
+					|| (response.data || []).find((v: any) => v.id == vehicle_selected.id)
+				if (match?.driverInformation) {
+					vehicle_selected.driverInformation = match.driverInformation
+				}
+				this.$spinner.hide()
+				this.navigateToBooking(vehicle_selected)
+			},
+			error: (err) => {
+				console.error(err)
+				this.$spinner.hide()
+				// proceed without driver info rather than blocking the booking
+				this.navigateToBooking(vehicle_selected)
+			}
+		})
+	}
+
+	private navigateToBooking(vehicle_selected: any) {
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
 		// if (vehicle_selected?.created_by != 1) {
 		// 	this.booking_created_from = 'subscriber'

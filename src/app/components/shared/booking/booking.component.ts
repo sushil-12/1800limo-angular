@@ -4637,7 +4637,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
 			return
 		}
-		if(this.shouldBlockAdminApi) {return;};
+		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
 		this.$spinner.show()
 		const handleResponse = (response: any) => {
 			if (response.success && response.data?.data.length > 0) {
@@ -6547,9 +6547,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.fetchReturnAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
 				if (this.service_type == 'round_trip') {
-					this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
-					this.BookingForm.get('return_lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
-					this.BookingForm.get('return_lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+					this.BookingForm.get('return_lose_affiliate_name')
+					this.BookingForm.get('return_lose_affiliate_phone')
+					this.BookingForm.get('return_lose_affiliate_email')
+					// this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
+					// this.BookingForm.get('return_lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
+					// this.BookingForm.get('return_lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				}
 				// this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
 				this.BookingForm.updateValueAndValidity()
@@ -6595,7 +6598,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('affiliate_id').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
-			if (value && this.booking_created_from == 'admin') {
+			// Affiliate portal farm-outs are booking_created_from 'subscriber', but picking
+			// an affiliate must still load that affiliate's vehicles/drivers.
+			if (value && (this.booking_created_from == 'admin' || this.isAffiliateMode)) {
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
 				if (this.BookingForm.get('service_type').value == 'round_trip') {
@@ -6622,7 +6627,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('return_affiliate_id').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
-			if (value && this.booking_created_from == 'admin') {
+			if (value && (this.booking_created_from == 'admin' || this.isAffiliateMode)) {
 				this.chooseReturnAffiliate()
 				this.fetchReturnAffiliateInformation(value)
 			}
