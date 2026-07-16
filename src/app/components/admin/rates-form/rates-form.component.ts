@@ -740,15 +740,28 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 		const shouldPreserveInitialReservationRates = ['edit', 'repeat', 'return', 'round'].includes(this.bookingType);
 
+		// A bumped rate_refresh_token marks an explicit user pick (quote vehicle,
+		// affiliate dropdown). Those must always recalculate — never swallow them
+		// as the hydration baseline below.
+		const currentRefreshToken = Number(data?.rate_refresh_token) || 0;
+		const previousRefreshToken = Number(this.previousBookingData?.rate_refresh_token) || 0;
+		const isExplicitSelection = currentRefreshToken > previousRefreshToken;
+
 		// On edit/repeat/return/round screens, preserve saved reservation rates during initial hydration.
 		// We only start live recalculation after a complete booking-data baseline has been captured.
-		if (shouldPreserveInitialReservationRates && !this.hasCapturedInitialBookingDataBaseline) {
+		if (shouldPreserveInitialReservationRates && !this.hasCapturedInitialBookingDataBaseline && !isExplicitSelection) {
 			this.previousBookingData = JSON.parse(JSON.stringify(data));
 			if (isDataComplete) {
 				this.hasCapturedInitialBookingDataBaseline = true;
 			} else {
 			}
 			return;
+		}
+
+		// An explicit pick ends the hydration-preserve phase: from here on,
+		// implicit rebuilds are compared against the normal baseline.
+		if (isExplicitSelection) {
+			this.hasCapturedInitialBookingDataBaseline = true;
 		}
 
 		// If no changes detected (and not first time), skip processing
@@ -786,7 +799,11 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 
-       if(!this.preventRateOverride){    
+       if(!this.preventRateOverride){
+		// Stamp the baseline before the request goes out so the second
+		// fetchRatesArrayByAffiliateVehicle call in the same ngOnChanges pass
+		// dedupes instead of firing a duplicate request.
+		this.previousBookingData = JSON.parse(JSON.stringify(data));
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			console.log('fetchRatesArrayByAffiliateVehicle date:', data, 'response:', response);
 			// && this.affiliate_type != 'loose_affiliate'
@@ -813,9 +830,6 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			} else {
 				this.numberOfHoursError = false;
 			}
-
-			// Store current booking_data as previous for next comparison
-			this.previousBookingData = JSON.parse(JSON.stringify(data));
 		}, (error: any) => {
 			console.error('[buildBookingData] API error:', error);
 		});
@@ -855,7 +869,8 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			'pickup_time',
 			'return_pickup_time',
 			'return_vehicle_id',
-			'return_affiliate_type'
+			'return_affiliate_type',
+			'rate_refresh_token'
 		];
 
 		for (const key of keysToCompare) {

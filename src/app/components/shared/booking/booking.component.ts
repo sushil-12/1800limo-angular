@@ -231,6 +231,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	quoteLoading: boolean = false;
 	confirmMsg: any;
 	booking_data: any;
+	// Bumped on explicit vehicle/affiliate picks so rates-form re-fetches even when
+	// every other booking_data field is unchanged (e.g. re-selecting the same vehicle).
+	rateRefreshToken: number = 0;
 	extraStops_rate: any = 0
 	selectedVehicle: any;
 	return_selectedVehicle: any;
@@ -467,7 +470,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			pickup_time: this.BookingForm.get('pickup_time').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
 			affiliate_type: affiliateType,
-			return_affiliate_type: returnAffiliateType
+			return_affiliate_type: returnAffiliateType,
+			rate_refresh_token: this.rateRefreshToken
 		}
 	}
 
@@ -572,7 +576,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_no_of_luggage: this.Form.luggage_count.value || 0,
 
 			location_info: location_info,
-			other_details: {},
+			// carry the airport display names: home's prefill and setValueByBookNow
+			// read them from other_details, so writing {} here loses the airports
+			// when the user navigates back to the quotebot and books again
+			other_details: {
+				pickup_airport_name: isAirportPickup ? (this.Form.pickup_airport_option.value || this.Form.pickup_airport_name.value || '') : '',
+				dropoff_airport_name: isAirportDropoff ? (this.Form.dropoff_airport_option.value || this.Form.dropoff_airport_name.value || '') : '',
+				return_pickup_airport_name: isRoundTrip && returnPickupTypeRaw === 'airport' ? (this.Form.return_pickup_airport_option.value || this.Form.return_pickup_airport_name.value || '') : '',
+				return_dropoff_airport_name: isRoundTrip && returnDropoffTypeRaw === 'airport' ? (this.Form.return_dropoff_airport_option.value || this.Form.return_dropoff_airport_name.value || '') : ''
+			},
 
 			extra_stops: extraStops.map((stop: any) => ({
 				address: stop.address || '',
@@ -640,26 +652,45 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.QB_vehicle_id = vehicle.id;
 		this.is_master_vehicle = !!vehicle.is_master_vehicle;
 
-		this.prefillVehiclePreferencesFromMasterVehicle(this.normalizeMasterVehicleForPrefill(vehicle));
+		const normalizedVehicle = this.normalizeMasterVehicleForPrefill(vehicle);
+		const isRoundTrip = this.Form.service_type.value === 'round_trip';
+		this.prefillVehiclePreferencesFromMasterVehicle(normalizedVehicle);
+		if (isRoundTrip) {
+			// round trip: the quote selection drives both legs — refresh the return
+			// vehicle too, otherwise it keeps the edit response's stale vehicle id
+			this.prefillVehiclePreferencesFromMasterVehicle(normalizedVehicle, true);
+		}
 
 		this.populateDriverAndVehicleDetails(vehicle);
 
+		// NOTE: in these patchValue objects the affiliate ids must come BEFORE the
+		// affiliate types: patching affiliate_type fires its valueChanges handler
+		// (even when the value is unchanged), which calls chooseAffiliate() — if the
+		// old affiliate_id is still in the form, that fetches the old vehicle list
+		// and its auto-select re-applies the stale edit vehicle over this selection.
 		if (vehicle.is_master_vehicle) {
 			// Master vehicles have no affiliate — mirror the direct quotebot flow:
 			// use loose_affiliate type and prefill vehicle fields from master vehicle info.
 			this.BookingForm.patchValue({
-				affiliate_type: this.isAffiliateMode ? 'affiliate' : 'loose_affiliate',
 				affiliate_id: '',
-				loose_affiliate_id: ''
+				loose_affiliate_id: '',
+				...(isRoundTrip ? { return_affiliate_id: '', return_loose_affiliate_id: '' } : {}),
+				affiliate_type: this.isAffiliateMode ? 'affiliate' : 'loose_affiliate',
+				...(isRoundTrip ? { return_affiliate_type: this.isAffiliateMode ? 'affiliate' : 'loose_affiliate' } : {})
 			});
 			const masterVehicleId = Number(vehicle.id || vehicle.ID || 0);
 			if (masterVehicleId > 0) {
 				this.loadMasterVehicleInfoForQuoteBot(masterVehicleId);
+				if (isRoundTrip) {
+					this.loadMasterVehicleInfoForQuoteBot(masterVehicleId, true);
+				}
 			}
 		} else {
 			this.BookingForm.patchValue({
+				affiliate_id: vehicle.affiliate_id,
+				...(isRoundTrip ? { return_affiliate_id: vehicle.affiliate_id } : {}),
 				affiliate_type: 'affiliate',
-				affiliate_id: vehicle.affiliate_id
+				...(isRoundTrip ? { return_affiliate_type: 'affiliate' } : {})
 			});
 			this.fetchAffiliateInformation(vehicle.affiliate_id);
 			this.fetchQBAffiliateVehicles(vehicle.affiliate_id);
@@ -668,6 +699,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		// reveal the now-populated, still-editable manual fields
 		this.vehicleSelectionTab = 'manual';
+		this.rateRefreshToken++;
 		this.buildBookingData();
 	}
 
@@ -720,7 +752,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				vehicle_year: vehicle?.vehicle_details?.year_id || vehicle?.vehicle_year || '',
 				vehicle_year_name: vehicle?.vehicle_details?.year || vehicle?.vehicle_year_name || '',
 				vehicle_seats: vehicle?.vehicle_details?.seats || vehicle?.vehicle_seats || '4'
-			});
+			}, { emitEvent: false });
+			// emitEvent: false — emitting vehicle_type here re-enters its valueChanges
+			// handler while affiliate_type is still the previous value, and on edit
+			// bookings that handler re-selects the OLD vehicle (unique_key match on the
+			// stale VehicleList), clobbering the vehicle_id we just set from the quote.
 		}
 	}
 
@@ -3997,6 +4033,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 		return isWordThere.every(all_words);
 	}
 	handleAffiliateChange(value) {
+		// User picked an affiliate from the dropdown: rebuild booking_data so
+		// rates-form recalculates. The token bump marks this as an explicit pick,
+		// which bypasses rates-form's unchanged-data / hydration-baseline guards.
+		if (value?.id) {
+			this.rateRefreshToken++;
+			this.buildBookingData();
+		}
 	}
 	handleLooseAffiliateChange(looseAffData) {
 		if (looseAffData) {
@@ -4018,6 +4061,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
 			this.loseAffiliateTelInput.setCountry(looseAffData?.driver_phone_country);
+
+			// Round trip: carry the picked loose affiliate over to the return journey,
+			// same as the regular-affiliate flow mirrors affiliate_id to return_affiliate_id.
+			if (this.BookingForm.get('service_type').value == 'round_trip') {
+				if (this.BookingForm.get('return_affiliate_type').value != 'loose_affiliate') {
+					this.BookingForm.patchValue({ return_affiliate_type: 'loose_affiliate' })
+				}
+				this.handleReturnLooseAffiliateChange(looseAffData)
+			}
 		}
 		else {
 			this.BookingForm?.patchValue({
@@ -4037,7 +4089,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 				return_driver_cell: looseAffData?.driver_phone,
 				return_driver_email: looseAffData?.driver_email,
 				return_loose_affiliate_id: looseAffData?.id,
-				return_is_old_loose_affiliate: true
+				return_is_old_loose_affiliate: true,
+				return_driver_cell_isd: looseAffData?.driver_isd,
+				return_driver_cell_country: looseAffData?.driver_phone_country
 			})
 			this.SetFormValue('return_lose_affiliate_name', looseAffData?.driver_name)
 			this.SetFormValue('return_lose_affiliate_phone', looseAffData?.driver_phone)
@@ -7494,8 +7548,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.isPrefillingTransferTypes = false;
 			this.logTransferTypeState('post-prefill-render');
 		}, 0)
-		this.SetFormValue('total_passengers', QB?.no_of_luggage)
-		this.SetFormValue('luggage_count', QB?.no_of_passenger)
+		this.SetFormValue('total_passengers', QB?.no_of_passenger)
+		this.SetFormValue('luggage_count', QB?.no_of_luggage)
 		//vehicle id when chossing vehicle from Quote bot screen
 		this.QB_vehicle_id = normalizedSelectedVehicle?.id || this.route_vehicle_id || null
 		//pickup
