@@ -4030,6 +4030,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
 			this.loseAffiliateTelInput.setCountry(looseAffData?.driver_phone_country);
+
+			// Round trip: carry the picked loose affiliate over to the return journey,
+			// same as the regular-affiliate flow mirrors affiliate_id to return_affiliate_id.
+			if (this.BookingForm.get('service_type').value == 'round_trip') {
+				if (this.BookingForm.get('return_affiliate_type').value != 'loose_affiliate') {
+					this.BookingForm.patchValue({ return_affiliate_type: 'loose_affiliate' })
+				}
+				this.handleReturnLooseAffiliateChange(looseAffData)
+			}
 		}
 		else {
 			this.BookingForm?.patchValue({
@@ -4049,7 +4058,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 				return_driver_cell: looseAffData?.driver_phone,
 				return_driver_email: looseAffData?.driver_email,
 				return_loose_affiliate_id: looseAffData?.id,
-				return_is_old_loose_affiliate: true
+				return_is_old_loose_affiliate: true,
+				return_driver_cell_isd: looseAffData?.driver_isd,
+				return_driver_cell_country: looseAffData?.driver_phone_country
 			})
 			this.SetFormValue('return_lose_affiliate_name', looseAffData?.driver_name)
 			this.SetFormValue('return_lose_affiliate_phone', looseAffData?.driver_phone)
