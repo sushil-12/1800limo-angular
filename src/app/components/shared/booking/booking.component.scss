@@ -1260,3 +1260,33 @@ h4.border-secondary,
     background: white !important;
 }
 
+
+/* iPad Pro specific fixes */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+  
+  /* Force all large columns to behave like medium */
+  [class*="col-lg-"] {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+  
+  /* But keep full-width for these specific cases */
+  .col-lg-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Fix extra stops layout */
+  .extra-stop-field {
+    flex: 0 0 91.666667% !important;
+    max-width: 91.666667% !important;
+  }
+  
+  /* Ensure fields don't overflow */
+  mat-form-field, ng-select {
+    width: 100% !important;
+  }
+}
