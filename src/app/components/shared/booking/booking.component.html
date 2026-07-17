@@ -399,7 +399,7 @@
 							</div>
 
 							<!-- Email -->
-							<div class="col-md-4 looseError">
+							<div class="col-md-6 col-lg-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Email
@@ -465,7 +465,7 @@
 							</div>
 
 							<!-- Address -->
-							<div class="col-md-4 looseError quote-ui-dropdown-host">
+							<div class="col-md-6 col-lg-4 looseError quote-ui-dropdown-host">
 								<mat-form-field appearance="outline" class="m-0 quote-ui-field quote-ui-field--address">
 									<mat-label>
 										Address
@@ -671,7 +671,7 @@
 				<!-- <p class="ml-2" style="color: #dc4335;">*All Field are required</p> -->
 				<div class="row px-4">
 					<!-- Passenger Name -->
-					<div class="col-md-4">
+					<div class="col-md-6 col-lg-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Passenger Name <span class="asterisk">*</span>
@@ -751,7 +751,7 @@
 					</div>
 
 					<!-- Passenger Count -->
-					<div class="col-md-4">
+					<div class="col-md-6 col-lg-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>No. of Passengers <span class="asterisk"></span></mat-label>
 							<input #passengerAutoInput type="number" matInput formControlName="total_passengers"
@@ -773,7 +773,7 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-4">
+					<div class="col-md-6 col-lg-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
 							<input #luggageAutoInput type="number" matInput formControlName="luggage_count"
@@ -1780,7 +1780,7 @@
 						(change)="handleLooseAffiliateChange($event)" (search)="handleLooseAffiliateSearch($event)">
 					</ng-select>
 				</div>
-				<div class="col-md-4 col-lg-4">
+				<div class="col-md-6 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							New Affiliate Name <span class="asterisk">*</span>
@@ -1802,7 +1802,7 @@
 					</div>
 				</div>
 				<!-- Phone -->
-				<div class="col-md-4">
+				<div class="col-md-6 col-lg-4">
 					<mat-form-field appearance="outline" class="mobileField m-0"
 						[class.is-invalid-input]="Form.lose_affiliate_phone.invalid && (Form.lose_affiliate_phone.touched || Form.lose_affiliate_phone.dirty)">
 						<mat-label>Phone <span class="asterisk">*</span>
@@ -1839,7 +1839,7 @@
 				</div>
 
 				<!-- Email -->
-				<div class="col-md-4 col-lg-4">
+				<div class="col-md-6 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email <span class="asterisk">*</span>
@@ -2103,7 +2103,7 @@
 			</h4>
 			<div class="row px-4">
 				<!-- Affiliate Driver Name -->
-				<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+				<div id="driver" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Choose Driver
@@ -2212,7 +2212,7 @@
 				</div>
 
 				<!-- Affiliate Diver Gender -->
-				<div id="driver-gender" class="col-md-3 mb-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+				<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Gender
@@ -2224,7 +2224,7 @@
 				</div>
 
 				<!-- Loose Affiliate Diver Gender -->
-				<div id="driver-gender" class="col-md-3 mb-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Gender
@@ -3845,7 +3845,7 @@
 				</div>
 
 				<!-- Affiliate Diver Gender -->
-				<div id="driver-gender" class="col-md-3 mb-3"
+				<div id="driver-gender" class="col-md-6 col-lg-3 mb-3"
 					*ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -3860,7 +3860,7 @@
 				</div>
 
 				<!-- Loose Affiliate Diver Gender -->
-				<div id="driver-gender" class="col-md-3 mb-3"
+				<div id="driver-gender" class="col-md-6 col-lg-3 mb-3"
 					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
