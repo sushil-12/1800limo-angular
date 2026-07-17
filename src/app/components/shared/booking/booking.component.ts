@@ -1,6 +1,6 @@
 import { MapUtils } from '../../../utils/map-utils';
 import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBookingAddressSyncControl, syncPlaceAutocompleteDisplay } from '../../../utils/google-place-autocomplete';
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild, NgZone, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -85,6 +85,29 @@ export class BookingComponent implements OnInit, OnDestroy {
 	@ViewChild('return_lose_affiliate_phoneInput') return_lose_affiliate_phoneInput!: ElementRef;
 	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
 	@ViewChild('return_loose_driver_cellInput') return_loose_driver_cellInput!: ElementRef;
+
+	/* ---------- Section navigator (fixed "On this page" panel) ---------- */
+	sectionNavOpen = false;
+	visibleSections: { key: string; label: string }[] = [];
+	activeSectionIndex = 0;
+	
+	private readonly sectionNavDefs: { key: string; label: () => string }[] = [
+		{ key: 'client-accounts', label: () => this.isAdminMode || this.isAffiliateMode ? 'Client Accounts' : 'Accounts Information' },
+		{ key: 'passenger-information', label: () => 'Passenger Information' },
+		{ key: 'booking-details', label: () => 'Booking Details' },
+		{ key: 'vehicle-affiliate', label: () => this.isAdminMode || (this.isAffiliateMode && this.newBooking) ? 'Vehicle & Affiliate' : 'Vehicle' },
+		{ key: 'transportation-details', label: () => 'Transportation Details' },
+		{ key: 'affiliate-details', label: () => 'Affiliate Details' },
+		{ key: 'vehicle-preferences', label: () => 'Vehicle Preferences' },
+		{ key: 'driver-preferences', label: () => 'Driver Preferences' },
+		{ key: 'return-booking', label: () => 'Return Booking' },
+		{ key: 'return-affiliate-details', label: () => 'Return Affiliate Details' },
+		{ key: 'return-vehicle-preferences', label: () => 'Return Vehicle Preferences' },
+		{ key: 'return-driver-preferences', label: () => 'Return Driver Preferences' },
+		{ key: 'rates', label: () => 'Rates' },
+	];
+	private sectionNavRafId: number | null = null;
+	private sectionNavScrollListener = () => this.scheduleSectionNavUpdate();
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 	time_values: Array<any> = constant_data.time_values
@@ -292,6 +315,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		private el: ElementRef,
 		private httpClient: HttpClient,
 		private affiliateService: AffiliateService,
+		private zone: NgZone,
 	) { }
 
 	ngOnInit(): void {
@@ -413,6 +437,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.formSubscriptionsReset$.complete();
 		this.countryChangeHandlers.forEach((handler, element) => element.removeEventListener('countrychange', handler));
 		this.countryChangeHandlers.clear();
+		window.removeEventListener('scroll', this.sectionNavScrollListener, true);
+		window.removeEventListener('resize', this.sectionNavScrollListener);
+		if (this.sectionNavRafId !== null) {
+			cancelAnimationFrame(this.sectionNavRafId);
+		}
 	}
 
 	change2() {
@@ -878,6 +907,90 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		this.initphonefield()
 
+		// Section navigator: capture-phase listener so scrolls on window or any
+		// inner scroll container both drive the scroll-spy. Registered outside
+		// the zone — change detection runs only when the nav state changes.
+		this.zone.runOutsideAngular(() => {
+			window.addEventListener('scroll', this.sectionNavScrollListener, true);
+			window.addEventListener('resize', this.sectionNavScrollListener);
+		});
+		setTimeout(() => this.refreshSectionNav());
+	}
+
+	/* ---------- Section navigator ---------- */
+
+	openSectionNav(): void {
+		this.sectionNavOpen = true;
+		this.refreshSectionNav();
+	}
+
+	scrollToSection(key: string): void {
+		const el = document.querySelector<HTMLElement>(`[data-bksec="${key}"]`);
+		if (el) {
+			el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	}
+
+	/** Close the navigator when clicking anywhere outside of it. */
+	@HostListener('document:click', ['$event'])
+	onDocumentClickForSectionNav(event: MouseEvent): void {
+		if (!this.sectionNavOpen) {
+			return;
+		}
+		const target = event.target as HTMLElement;
+		// Change detection can remove the clicked element (e.g. the "Sections"
+		// tab, which has *ngIf) before this bubbled handler runs; a detached
+		// target has no ancestors, so closest() would misreport an outside click.
+		if (!target || !target.isConnected) {
+			return;
+		}
+		if (!target.closest('.bk-secnav')) {
+			this.sectionNavOpen = false;
+		}
+	}
+
+	private scheduleSectionNavUpdate(): void {
+		if (this.sectionNavRafId !== null) {
+			return;
+		}
+		this.sectionNavRafId = requestAnimationFrame(() => {
+			this.sectionNavRafId = null;
+			this.refreshSectionNav();
+		});
+	}
+
+	/** Rebuilds the visible-section list from the DOM and computes the active
+	 *  section (last one whose top has crossed the spy line). */
+	private refreshSectionNav(): void {
+		const spyLine = 140; // px from viewport top; a section is "current" once its top passes this
+		const sections: { key: string; label: string; top: number }[] = [];
+		for (const def of this.sectionNavDefs) {
+			const el = document.querySelector<HTMLElement>(`[data-bksec="${def.key}"]`);
+			// offsetParent is null for hidden/removed elements
+			if (el && el.offsetParent !== null) {
+				sections.push({ key: def.key, label: def.label(), top: el.getBoundingClientRect().top });
+			}
+		}
+
+		let active = 0;
+		for (let i = 0; i < sections.length; i++) {
+			if (sections[i].top <= spyLine) {
+				active = i;
+			}
+		}
+
+		const listChanged =
+			sections.length !== this.visibleSections.length ||
+			sections.some((s, i) => s.key !== this.visibleSections[i]?.key || s.label !== this.visibleSections[i]?.label);
+		if (!listChanged && active === this.activeSectionIndex) {
+			return;
+		}
+		this.zone.run(() => {
+			if (listChanged) {
+				this.visibleSections = sections.map(({ key, label }) => ({ key, label }));
+			}
+			this.activeSectionIndex = active;
+		});
 	}
 
 	private retryGoogleAutocompleteInitialization(attempts = 10, delay = 250): void {

@@ -1260,3 +1260,220 @@ h4.border-secondary,
     background: white !important;
 }
 
+/* =========================================================
+   9. SECTION NAVIGATOR — fixed "On this page" panel (right)
+   ========================================================= */
+$secnav-green: #21a45d;
+
+/* Room for fixed headers when a section is scrolled into view */
+[data-bksec] {
+	scroll-margin-top: 90px;
+}
+
+.bk-secnav {
+	position: fixed;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+	z-index: 1040;
+	font-family: "Roboto", sans-serif;
+}
+
+/* ---- Collapsed state: vertical "SECTIONS" tab on the right edge ---- */
+.bk-secnav__tab {
+	position: relative;
+	display: block;
+	border: none;
+	background: var(--brand-orange, $bk-primary);
+	color: #fff;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	writing-mode: vertical-rl;
+	padding: 16px 9px;
+	border-radius: 8px 0 0 8px;
+	box-shadow: 0 4px 14px rgba(16, 24, 40, 0.22);
+	cursor: pointer;
+	transition: background-color 0.15s ease, padding-right 0.15s ease;
+
+	&:hover {
+		background: var(--brand-orange-dark, $bk-primary-hover);
+		padding-right: 12px;
+	}
+
+	&:focus-visible {
+		outline: 2px solid rgba(243, 147, 61, 0.45);
+		outline-offset: 2px;
+	}
+}
+
+/* ---- Expanded state: "On this page" panel ---- */
+.bk-secnav__panel {
+	width: 252px;
+	max-width: calc(100vw - 24px);
+	margin-right: 12px;
+	background: $bk-surface;
+	border: 1px solid $bk-border-light;
+	border-radius: 14px;
+	box-shadow: 0 10px 30px rgba(16, 24, 40, 0.16);
+	padding: 14px 12px 16px;
+	display: flex;
+	flex-direction: column;
+	max-height: min(76vh, 620px);
+}
+
+.bk-secnav__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 6px 8px;
+}
+
+.bk-secnav__title {
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	color: $bk-text-muted;
+}
+
+.bk-secnav__close {
+	border: none;
+	background: transparent;
+	color: $bk-danger;
+	font-size: 1.15rem;
+	line-height: 1;
+	padding: 3px 5px;
+	border-radius: 6px;
+	cursor: pointer;
+
+	i {
+		-webkit-text-stroke: 1px currentColor; /* thicken the icon glyph */
+	}
+
+	&:hover {
+		color: #b91c1c;
+		background: $bk-danger-bg;
+	}
+}
+
+.bk-secnav__list {
+	list-style: none;
+	margin: 0;
+	padding: 2px 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.bk-secnav__item {
+	position: relative;
+
+	/* Breathing room so the active/hover pills of adjacent items never touch */
+	&:not(:last-child) {
+		margin-bottom: 6px;
+	}
+
+	/* Timeline connector: centered on the dots (dot center = 8px link padding
+	   + 6px half-dot = 14px; 2px line → left 13px), running vertically from
+	   below this dot to behind the next one (dots are opaque and sit above). */
+	&:not(:last-child)::after {
+		content: "";
+		position: absolute;
+		left: 13px;
+		top: 22px;
+		bottom: -16px;
+		width: 2px;
+		background: $bk-border-light;
+	}
+
+	&.bk-secnav__item--done:not(:last-child)::after {
+		background: rgba($secnav-green, 0.45);
+	}
+}
+
+.bk-secnav__link {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	border: none;
+	background: transparent;
+	text-align: left;
+	padding: 7px 8px;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+
+	&:hover {
+		background: $bk-surface-subtle;
+	}
+}
+
+.bk-secnav__dot {
+	flex: 0 0 auto;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: 2px solid $bk-border;
+	background: $bk-surface;
+	position: relative;
+	z-index: 1;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.bk-secnav__label {
+	font-size: 0.84rem;
+	font-weight: 500;
+	color: $bk-text;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Completed sections: solid green dot */
+.bk-secnav__item--done {
+	.bk-secnav__dot {
+		background: $secnav-green;
+		border-color: $secnav-green;
+	}
+}
+
+/* Active section: orange dot + light-orange highlight pill */
+.bk-secnav__item--active {
+	.bk-secnav__link {
+		background: var(--brand-orange-light, $bk-primary-soft);
+	}
+
+	.bk-secnav__dot {
+		background: var(--brand-orange, $bk-primary);
+		border-color: var(--brand-orange, $bk-primary);
+	}
+
+	.bk-secnav__label {
+		color: var(--brand-orange, $bk-primary);
+		font-weight: 700;
+	}
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+	.bk-secnav__panel {
+		width: 232px;
+		max-height: 64vh;
+	}
+
+	.bk-secnav__tab {
+		font-size: 0.66rem;
+		padding: 12px 7px;
+	}
+}
+
+@media (max-width: 576px) {
+	/* Keep the splitter vertically centered on mobile, same as desktop */
+	.bk-secnav__panel {
+		width: min(252px, calc(100vw - 24px));
+		max-height: 56vh;
+	}
+}
+
