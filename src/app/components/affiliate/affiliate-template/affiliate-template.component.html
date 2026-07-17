@@ -1,10 +1,8 @@
 <div class="affilate-wrapper admin-wrapper">
 	<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 	<nav id="sidenavAccordion" class="topnav navbar navbar-expand">
-		<a class="navbar-brand active" routerLink="/" tabindex="-1">
-			<img src="assets/images/limo-home-new-black-logo.png">
-		</a>
-		<button class="btn btn-icon btn-transparent-dark mr-lg-2" id="sidebarToggle" tabindex="-1"
+	
+		<button class="btn btn-icon btn-transparent-dark mr-3" id="sidebarToggle" tabindex="-1"
 			style="background: none !important;">
 			<!-- <svg *ngIf="showSidebar; else hideSidebar" (click)="showSidebarFunc(false)"
 				xmlns="http://www.w3.org/2000/svg" width="24" height="24" data-name="Layer 1" viewBox="0 0 64 64">
@@ -58,6 +56,11 @@
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
 			</svg> -->
 		</button>
+
+		<a class="navbar-brand active" routerLink="/" tabindex="-1">
+			<img src="assets/images/limo-home-new-black-logo.png">
+		</a>
+
 		<ul class="navbar-nav align-items-center ml-auto">
 			<li *ngIf="bkpData">
 				<button class="custom-filled-button orange-button hideDesktop"

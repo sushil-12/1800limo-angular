@@ -1,10 +1,8 @@
 <div class="affilate-wrapper admin-wrapper">
 	<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 	<nav id="sidenavAccordion" class="topnav navbar navbar-expand">
-		<a class="navbar-brand active" routerLink="/" tabindex="-1">
-			<img src="assets/images/limo-home-new-black-logo.png">
-		</a>
-		<button class="btn btn-icon btn-transparent-dark mr-lg-2" id="sidebarToggle" tabindex="-1"
+	
+		<button class="btn btn-icon btn-transparent-dark mr-3" id="sidebarToggle" tabindex="-1"
 			style="background: none !important;">
 
 			<div class="hamburger" *ngIf="showSidebar===true" (click)="showSidebarFunc(false)">
@@ -31,9 +29,14 @@
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
 			</svg> -->
 		</button>
+
+		<a class="navbar-brand active" routerLink="/" tabindex="-1">
+			<img src="assets/images/limo-home-new-black-logo.png">
+		</a>
+
 		<div class="btn btn-icon btn-transparent-dark referral_code"
 			*ngIf="this.currentUser?.is_profile_complete && accountStatus == 'accepted' ">
-			<span class="badge badge-warning" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em;">
+			<span class="badge badge-warning" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em; margin-left:40px;">
 				{{referral_code}}
 			</span>
 			<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="referral_code" hidden></textarea>

@@ -181,8 +181,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 
 #sidenavAccordion.navbar button {
     background-color: #66b3ff;
-    padding: 2px;
-    margin-left: 40px;
+    margin-left: 5px;
 }
 
 .mat-mdc-autocomplete-panel.mat-mdc-autocomplete-visible {
