@@ -421,7 +421,7 @@
 							</div>
 
 							<!-- Phone -->
-							<div class="col-md-4 looseError">
+							<div class="col-md-6 col-lg-4 looseError">
 								<mat-form-field appearance="outline" class="mobileField m-0"
 									[class.is-invalid-input]="(submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched || LooseCustomer.phone.dirty)">
 									<mat-label>Phone</mat-label>
@@ -693,7 +693,7 @@
 					</div>
 
 					<!-- Passenger Email -->
-					<div class="col-md-4">
+					<div class="col-md-6 col-lg-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Passenger Email
@@ -715,7 +715,7 @@
 					</div>
 
 					<!-- Passenger Cell -->
-					<div class="col-md-4">
+					<div class="col-md-6 col-lg-4">
 						<mat-form-field appearance="outline" class="mobileField m-0"
 							[class.is-invalid-input]="Form.passenger_cell.invalid && (Form.passenger_cell.touched || Form.passenger_cell.dirty)">
 							<mat-label>Passenger Cell <span class="asterisk">*</span>
@@ -2120,7 +2120,7 @@
 				</div>
 
 				<!-- Loose Affiliate Driver Name -->
-				<div id="driver-name" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-name" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Driver Name
@@ -2139,7 +2139,7 @@
 				</div>
 
 				<!-- Affiliate Driver Email -->
-				<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+				<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email
@@ -2158,7 +2158,7 @@
 				</div>
 
 				<!--  Loose Affiliate Driver Email -->
-				<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email
@@ -2177,7 +2177,7 @@
 				</div>
 
 				<!-- Affiliate Driver Cell -->
-				<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+				<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="mobileField m-0">
 						<mat-label>
 							Phone
@@ -2190,7 +2190,7 @@
 				</div>
 
 				<!-- Loose Affiliate Driver Cell -->
-				<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="mobileField m-0">
 						<mat-label>Phone
 						</mat-label>
@@ -3723,7 +3723,7 @@
 			</h4>
 			<div class="row px-4">
 				<!-- Affiliate Driver Name -->
-				<div id="driver" class="col-md-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+				<div id="driver" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Choose Driver
@@ -3741,7 +3741,7 @@
 				</div>
 
 				<!-- Loose Affiliate Driver Name -->
-				<div id="driver-name" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-name" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Driver Name
@@ -3760,7 +3760,7 @@
 				</div>
 
 				<!-- Affiliate Driver Email -->
-				<div id="driver-email" class="col-md-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+				<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email
@@ -3779,7 +3779,7 @@
 				</div>
 
 				<!--  Loose Affiliate Driver Email -->
-				<div id="driver-email" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email
@@ -3798,7 +3798,7 @@
 				</div>
 
 				<!-- Affiliate Driver Cell -->
-				<div id="driver-cell" class="col-md-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+				<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="mobileField m-0">
 						<mat-label>
 							Phone
@@ -3811,7 +3811,7 @@
 				</div>
 
 				<!-- Loose Affiliate Driver Cell -->
-				<div id="driver-cell" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+				<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="mobileField m-0">
 						<mat-label>Phone
 						</mat-label>
