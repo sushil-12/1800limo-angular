@@ -90,7 +90,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	sectionNavOpen = false;
 	visibleSections: { key: string; label: string }[] = [];
 	activeSectionIndex = 0;
-	
+	/** Ignores scroll-spy active updates until this time (ms, performance.now). */
+	private sectionNavClickLockUntil = 0;
+
 	private readonly sectionNavDefs: { key: string; label: () => string }[] = [
 		{ key: 'client-accounts', label: () => this.isAdminMode || this.isAffiliateMode ? 'Client Accounts' : 'Accounts Information' },
 		{ key: 'passenger-information', label: () => 'Passenger Information' },
@@ -925,6 +927,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	scrollToSection(key: string): void {
+		const idx = this.visibleSections.findIndex((s) => s.key === key);
+		if (idx >= 0) {
+			this.activeSectionIndex = idx;
+			// Keep highlight on the clicked section while smooth-scroll runs.
+			// Last sections (e.g. Rates with only totals) often can't reach the spy line.
+			this.sectionNavClickLockUntil = performance.now() + 900;
+		}
 		const el = document.querySelector<HTMLElement>(`[data-bksec="${key}"]`);
 		if (el) {
 			el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -966,10 +975,30 @@ export class BookingComponent implements OnInit, OnDestroy {
 		const sections: { key: string; label: string; top: number }[] = [];
 		for (const def of this.sectionNavDefs) {
 			const el = document.querySelector<HTMLElement>(`[data-bksec="${def.key}"]`);
-			// offsetParent is null for hidden/removed elements
+			// offsetParent is null for hidden/removed elements; skip collapsed hosts.
 			if (el && el.offsetParent !== null) {
-				sections.push({ key: def.key, label: def.label(), top: el.getBoundingClientRect().top });
+				const rect = el.getBoundingClientRect();
+				if (rect.height < 24) {
+					continue;
+				}
+				sections.push({ key: def.key, label: def.label(), top: rect.top });
 			}
+		}
+
+		const listChanged =
+			sections.length !== this.visibleSections.length ||
+			sections.some((s, i) => s.key !== this.visibleSections[i]?.key || s.label !== this.visibleSections[i]?.label);
+
+		// During programmatic scroll, still refresh the list but keep the clicked active item.
+		const clickLocked = performance.now() < this.sectionNavClickLockUntil;
+		if (clickLocked) {
+			if (!listChanged) {
+				return;
+			}
+			this.zone.run(() => {
+				this.visibleSections = sections.map(({ key, label }) => ({ key, label }));
+			});
+			return;
 		}
 
 		let active = 0;
@@ -979,9 +1008,18 @@ export class BookingComponent implements OnInit, OnDestroy {
 			}
 		}
 
-		const listChanged =
-			sections.length !== this.visibleSections.length ||
-			sections.some((s, i) => s.key !== this.visibleSections[i]?.key || s.label !== this.visibleSections[i]?.label);
+		// Last short sections (Rates totals with buckets hidden) often can't scroll
+		// up to the spy line. If the previous section has left the viewport and the
+		// last section is on screen, treat it as active.
+		const lastIdx = sections.length - 1;
+		if (lastIdx > 0) {
+			const last = sections[lastIdx];
+			const prev = sections[lastIdx - 1];
+			if (last.top > spyLine && prev.top < 0 && last.top < window.innerHeight) {
+				active = lastIdx;
+			}
+		}
+
 		if (!listChanged && active === this.activeSectionIndex) {
 			return;
 		}
