@@ -1479,6 +1479,7 @@ $secnav-green: #21a45d;
 
 
 /* iPad Pro specific fixes */
+/* iPad Pro specific fixes - refined */
 @media only screen 
   and (min-device-width: 1024px) 
   and (max-device-width: 1366px) 
@@ -1505,5 +1506,36 @@ $secnav-green: #21a45d;
   /* Ensure fields don't overflow */
   mat-form-field, ng-select {
     width: 100% !important;
+  }
+  
+  /* ===== CRITICAL FIX: Keep radio buttons inline ===== */
+  /* Radio button groups should stay on one line */
+  .col-md-12.col-lg-10,
+  .col-lg-10 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Make radio buttons display inline with proper spacing */
+  mat-radio-group {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+  
+  mat-radio-button {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    max-width: none !important;
+    margin-right: 8px !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Override the 50% width for radio button containers */
+  .col-md-12.col-lg-10 mat-radio-button,
+  .col-lg-10 mat-radio-button,
+  .col-md-12 mat-radio-button {
+    flex: 0 0 auto !important;
+    max-width: none !important;
   }
 }
