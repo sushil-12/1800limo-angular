@@ -372,7 +372,7 @@
                                     <!-- Add Select All option -->
                                     <mat-option (click)="selectAllNumbers()">Select All</mat-option>
                                     <mat-option *ngFor="let option of LooseAffiliateAcc"
-                                        [value]="stringifyOptionNumber(option)">{{option.name}}</mat-option>
+                                        [value]="stringifyOptionNumber(option)">{{option.name ? option.name : (option.phone_isd + option.phone)}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
