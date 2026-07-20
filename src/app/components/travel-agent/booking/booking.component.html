@@ -283,6 +283,14 @@
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( formatPhoneNumber(booking?.pax_isd + booking?.pax_tel))"></span>
 										</p>
+										<div class="pax-luggage-badges" *ngIf="booking?.total_passengers || booking?.luggage_count">
+											<span class="badge-pill pax-badge" *ngIf="booking?.total_passengers" title="Passengers">
+												<i class="fa fa-user"></i>&nbsp;{{booking?.total_passengers}}
+											</span>
+											<span class="badge-pill luggage-badge" *ngIf="booking?.luggage_count" title="Luggage">
+												<i class="fa fa-suitcase"></i>&nbsp;{{booking?.luggage_count}}
+											</span>
+										</div>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"

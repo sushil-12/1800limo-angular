@@ -418,8 +418,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	onInstructionsEditorCreated(editor: any): void {
-	 // Optional: focus or configure editor instance
-	 editor.focus();
 	}
 
 	ngOnDestroy(): void {
