@@ -884,7 +884,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	ngAfterViewInit(): void {
 
-		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
+		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round' || this) {
 			window.scrollTo({ top: 0 })
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
@@ -6617,9 +6617,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (value == 'loose_affiliate') {
 				setTimeout(() => {
 					this.initphonefield()
-					if (this.lose_aff_name_input) {
-						this.lose_aff_name_input.nativeElement.focus()
-					}
+					// if (this.lose_aff_name_input) {
+					// 	this.lose_aff_name_input.nativeElement.focus()
+					// }
 				}, 200)
 				this.fetchAffiliates('loose_affiliate')
 
