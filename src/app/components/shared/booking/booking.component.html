@@ -218,7 +218,7 @@
 				<div class="row px-4" *ngIf="isAdminMode || isAffiliateMode">
 					<div class="col-md-12">
 						<!-- Ng-Select -->
-						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
+						<ng-select  [searchable]="true" appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="acc_id" (change)="handleClientAccount($event)"
 							(search)="handleClientSearch($event)">

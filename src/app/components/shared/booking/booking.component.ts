@@ -3601,9 +3601,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
 					if (response.success && response.data.length > 0) {
 						this.ClientAccounts = response.data;
+						this.ClientAccounts_Original = [...this.ClientAccounts];
 					}
 					else {
-						this.ClientAccounts = []
+						this.ClientAccounts = [];
+						this.ClientAccounts_Original = [];
 					}
 					this.$spinner.hide()
 				})
@@ -3789,6 +3791,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.$api.getTravelClientAccount(id).subscribe((response: any) => {
 				console.log("getTravelClientAccount response:", response);
 				this.travelStaffAccounts = response?.data;
+				this.travelStaffAccounts_Original = response?.data ? [...response.data] : [];
 				this.syncPrefilledTravelClientSelection();
 			})
 		}
