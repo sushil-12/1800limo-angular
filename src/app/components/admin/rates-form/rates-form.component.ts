@@ -202,6 +202,29 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			}
 		}
 
+		// Unchecking "Prevent System Rate Override" hands control back to the system,
+		// so pull the current system rates immediately instead of waiting for the
+		// next booking-data change to trigger a recalculation.
+		if (changes.preventRateOverride
+			&& !changes.preventRateOverride.firstChange
+			&& changes.preventRateOverride.previousValue === true
+			&& changes.preventRateOverride.currentValue === false) {
+			// book_data can be a stale snapshot at this point. Overlay the live
+			// booking-form values (bound to this component's own inputs) so the
+			// rate request carries the actual current form state.
+			const payload = {
+				...this.book_data,
+				vehicle_id: this.QB_vehicle_id || this.book_data?.vehicle_id,
+				service_type: this.service_type || this.book_data?.service_type,
+				affiliate_type: this.affiliate_type || this.book_data?.affiliate_type,
+				return_affiliate_type: this.return_affiliate_type || this.book_data?.return_affiliate_type,
+				distance: this.distance || this.book_data?.distance,
+				numberOfVehicles: this.vehs || this.book_data?.numberOfVehicles,
+				no_of_hours: this.nums || this.book_data?.no_of_hours
+			};
+			this.fetchRatesArrayByAffiliateVehicle(payload);
+		}
+
 		if (shouldShowReturnRates && !this.ReturnRatesForm) {
 			const seededReturnRates = this.resolveReturnRateArray({
 				data: {
