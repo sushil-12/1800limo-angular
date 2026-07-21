@@ -23,6 +23,7 @@ import * as intlTelInput from 'intl-tel-input';
 import { P } from '@angular/cdk/keycodes';
 import { NgIf } from '@angular/common';
 import { AffiliateService } from '../../../services/affiliate.service';
+import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -59,6 +60,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
+	/** Owns "scroll to the first invalid field"; also triggers itself on ngSubmit. */
+	@ViewChild(InvalidControlScrollDirective) invalidControlScroll!: InvalidControlScrollDirective;
 	@ViewChild('lose_aff_name_input') lose_aff_name_input: ElementRef;
 	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
 	@ViewChild('pickupInput') pickupInput!: ElementRef;
@@ -5693,12 +5696,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 					});
 				}
 			}
-			setTimeout(() => {
-				const firstInvalid = document.querySelector('.ng-invalid, .mat-form-field-invalid');
-				if (firstInvalid) {
-					firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				}
-			}, 100);
+			// Deferred so the validation messages are rendered before we measure
+			// which fields are actually on screen.
+			setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
 			return;
 		}
 		// Validate minimum number of hours for charter_tour
