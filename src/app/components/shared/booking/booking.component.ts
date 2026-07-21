@@ -97,15 +97,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 		{ key: 'client-accounts', label: () => this.isAdminMode || this.isAffiliateMode ? 'Client Accounts' : 'Accounts Information' },
 		{ key: 'passenger-information', label: () => 'Passenger Information' },
 		{ key: 'booking-details', label: () => 'Booking Details' },
-		{ key: 'vehicle-affiliate', label: () => this.isAdminMode || (this.isAffiliateMode && this.newBooking) ? 'Vehicle & Affiliate' : 'Vehicle' },
+		{ key: 'vehicle-affiliate', label: () => 'Vehicle & Affiliate' },
 		{ key: 'transportation-details', label: () => 'Transportation Details' },
-		{ key: 'affiliate-details', label: () => 'Affiliate Details' },
-		{ key: 'vehicle-preferences', label: () => 'Vehicle Preferences' },
-		{ key: 'driver-preferences', label: () => 'Driver Preferences' },
 		{ key: 'return-booking', label: () => 'Return Booking' },
-		{ key: 'return-affiliate-details', label: () => 'Return Affiliate Details' },
-		{ key: 'return-vehicle-preferences', label: () => 'Return Vehicle Preferences' },
-		{ key: 'return-driver-preferences', label: () => 'Return Driver Preferences' },
+		{ key: 'return-affiliate-details', label: () => 'Return Vehicle & Affiliate' },
 		{ key: 'rates', label: () => 'Rates' },
 	];
 	private sectionNavRafId: number | null = null;
