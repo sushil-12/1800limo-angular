@@ -1282,20 +1282,35 @@ $secnav-green: #21a45d;
 /* ---- Collapsed state: vertical "SECTIONS" tab on the right edge ---- */
 .bk-secnav__tab {
 	position: relative;
-	display: block;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	border: none;
+	-webkit-appearance: none;
+	appearance: none;
 	background: var(--brand-orange, $bk-primary);
 	color: #fff;
 	font-size: 0.72rem;
 	font-weight: 700;
 	letter-spacing: 1.5px;
 	text-transform: uppercase;
-	writing-mode: vertical-rl;
 	padding: 16px 9px;
 	border-radius: 8px 0 0 8px;
 	box-shadow: 0 4px 14px rgba(16, 24, 40, 0.22);
 	cursor: pointer;
 	transition: background-color 0.15s ease, padding-right 0.15s ease;
+
+	span {
+		-webkit-writing-mode: vertical-rl;
+		writing-mode: vertical-rl;
+		text-orientation: mixed;
+		white-space: nowrap;
+		display: inline-block;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
+	}
 
 	&:hover {
 		background: var(--brand-orange-dark, $bk-primary-hover);
