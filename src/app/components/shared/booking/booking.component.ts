@@ -631,7 +631,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		};
 
 		// keep the canonical quote store consistent for any code that reads it
-		localStorage.setItem('quotebot_form', JSON.stringify(payload));
+		if (!this.is_booking_edit_case) {
+			localStorage.setItem('quotebot_form', JSON.stringify(payload));
+		}
 		return payload;
 	}
 
