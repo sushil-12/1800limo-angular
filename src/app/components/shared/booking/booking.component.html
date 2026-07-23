@@ -896,9 +896,9 @@
 				</div>
 			</div>
 			<!-- </div> -->
-			<div class="row px-3">
+			<div class="row px-3" style="position: relative;">
 				<!-- Travel Date -->
-				<div class="col-md-4" id="travel_date">
+				<div class="col-md-4" id="travel_date" style="position: relative;">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Travel Date
@@ -910,10 +910,14 @@
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
 						<mat-datepicker #onwy_dt></mat-datepicker>
 					</mat-form-field>
+					<div *ngIf="Form.pickup_date.hasError('pastDate')" class="text-danger m-0"
+						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+						Pickup date can not be in the past.
+					</div>
 				</div>
 
 				<!-- Travel Time -->
-				<div class="col-md-4" id="travel_time">
+				<div class="col-md-4" id="travel_time" style="position: relative;">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Pickup Time
@@ -921,6 +925,10 @@
 						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
 					</mat-form-field>
 					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
+					<div *ngIf="Form.pickup_time.hasError('pastTime')" class="text-danger m-0"
+						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+						Pickup time can not be in the past.
+					</div>
 				</div>
 
 				<!-- Number of vehicles -->

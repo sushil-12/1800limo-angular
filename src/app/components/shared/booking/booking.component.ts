@@ -11,7 +11,7 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import { SharedModule } from '../shared.module'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable, of, Subject, Subscription } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { param } from 'jquery';
@@ -2671,13 +2671,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round' || this.updateType == 'edit') {
-				if (new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime() && this.updateType != 'edit') {
-					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
-				}
-				else {
-					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
-				}
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
+				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
+				this.resetPastPickupDateTimeToNow()
 			}
 
 			// Instant error display for prefilled values (day bookings arrive as 24/48/… hours)
@@ -5491,6 +5487,18 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity({ emitEvent: false });
 	}
 
+	clearPastDateTimeError() {
+		const ctrl1 = this.BookingForm?.get('pickup_date');
+		const ctrl2 = this.BookingForm?.get('pickup_time');
+		if (ctrl1?.hasError('pastDate')) {
+			const { pastDate, ...rest } = ctrl1.errors || {};
+			ctrl1.setErrors(Object.keys(rest).length ? rest : null);
+		}
+		if (ctrl2?.hasError('pastTime')) {
+			const { pastTime, ...rest } = ctrl2.errors || {};
+			ctrl2.setErrors(Object.keys(rest).length ? rest : null);
+		}
+	}
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
@@ -5703,6 +5711,32 @@ export class BookingComponent implements OnInit, OnDestroy {
 			setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
 			return;
 		}
+
+		
+		const pickupDateCtrl = this.BookingForm.get('pickup_date');
+		const pickupTimeCtrl = this.BookingForm.get('pickup_time');
+		this.clearPastDateTimeError();
+		const pickupDate = this.Form.pickup_date.value;
+		const pickupTime = this.Form.pickup_time.value;
+		if (pickupDate) {
+			const pickupDay = moment(pickupDate, 'YYYY-MM-DD').startOf('day');
+			if (pickupDay.isValid() && pickupDay.isBefore(moment().startOf('day'))) {
+				pickupDateCtrl?.setErrors({ ...(pickupDateCtrl.errors || {}), pastDate: true });
+				pickupDateCtrl?.markAsTouched();
+				setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
+				return;
+			}
+			if (pickupTime) {
+				const pickupDateTime = moment(`${pickupDate} ${pickupTime}`, ['YYYY-MM-DD hh:mm A', 'YYYY-MM-DD HH:mm']);
+				if (pickupDateTime.isValid() && pickupDateTime.isBefore(moment())) {
+					pickupTimeCtrl?.setErrors({ ...(pickupTimeCtrl.errors || {}), pastTime: true });
+					pickupTimeCtrl?.markAsTouched();
+					setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
+					return;
+				}
+			}
+		}
+
 		// Validate minimum number of hours for charter_tour
 		const submitHours = Number(this.Form.number_of_hours.value);
 		if (this.Form.service_type.value == 'charter_tour' && (isNaN(submitHours) || submitHours < 2)) {
@@ -6114,6 +6148,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.formSubscriptionsReset$.next();
 		if (this.updateType == 'edit') {
 			this.BookingForm?.get('pickup_time')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				this.clearPastDateTimeError();
 				if (!this.isManualRateEntered()) {
 					this.buildBookingData();
 				}
@@ -6124,14 +6159,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			})
 		} else {
-			//pickup time change 
+			//pickup time change
 			this.BookingForm?.get('pickup_time')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				this.clearPastDateTimeError();
 				this.buildBookingData()
 			})
 			this.BookingForm?.get('return_pickup_time')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 				this.buildBookingData()
 			})
 		}
+		// Clear the past date & time error as soon as the travel date is changed.
+		this.BookingForm?.get('pickup_date')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe(() => {
+			this.clearPastDateTimeError();
+		})
 
 		// Service Type
 		this.BookingForm?.get('service_type')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
@@ -7492,6 +7532,37 @@ export class BookingComponent implements OnInit, OnDestroy {
 		return moment(time, ["HH:mm:ss", "hh:mm A", "HH:mm"]).format("LT");
 	}
 
+	/**
+	 * Repeat/return/round-trip actions carry the original reservation's date & time
+	 * forward. When that source booking is already in the past, default the pickup
+	 * (and the return leg for round trips) to today's date and the current time so
+	 * the user starts from a valid, present-day slot instead of a stale one.
+	 */
+	private resetPastPickupDateTimeToNow() {
+		const now = moment();
+		const parseFormats = ['YYYY-MM-DD hh:mm A', 'YYYY-MM-DD HH:mm', 'YYYY-MM-DD HH:mm:ss'];
+
+		// Outbound leg
+		const pickupDate = this.Form.pickup_date.value;
+		const pickupTime = this.Form.pickup_time.value;
+		const pickupDateTime = moment(`${pickupDate} ${pickupTime}`, parseFormats);
+		if (pickupDateTime.isValid() && pickupDateTime.isBefore(now)) {
+			this.SetFormValue('pickup_date', now.format('YYYY-MM-DD'));
+			this.SetFormValue('pickup_time', now.format('LT'));
+		}
+
+		// Return leg (round trip only)
+		if (this.Form.service_type.value == 'round_trip') {
+			const returnDate = this.Form.return_pickup_date.value;
+			const returnTime = this.Form.return_pickup_time.value;
+			const returnDateTime = moment(`${returnDate} ${returnTime}`, parseFormats);
+			if (returnDateTime.isValid() && returnDateTime.isBefore(now)) {
+				this.SetFormValue('return_pickup_date', now.format('YYYY-MM-DD'));
+				this.SetFormValue('return_pickup_time', now.format('LT'));
+			}
+		}
+	}
+
 	setValueByBookNow() {
 		if (this.updateType == 'reaffiliate') {
 			this.fetchBookingDataForEdit(this.Form.reservation_id.value, this.updateType).subscribe((response: any) => {
@@ -7561,12 +7632,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 					this.SetFormValue('pickup_date', editing_data?.pickup_date)
 				}
 				if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
-					if (new Date(editing_data?.pickup_date).getTime() < new Date().getTime()) {
-						this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
-					}
-					else {
-						this.SetFormValue('pickup_date', editing_data?.pickup_date)
-					}
+					this.SetFormValue('pickup_date', editing_data?.pickup_date)
+					this.resetPastPickupDateTimeToNow()
 				}
 			})
 		}

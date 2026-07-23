@@ -60,7 +60,7 @@
 						<div class="rcpt-section-title" style="display: flex; justify-content: space-between; align-items: center;">
 							Trip Information
 							<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
-								{{ bookingPreview?.booking_status == 'en_route_do' ? 'POB' : bookingPreview?.booking_status == 'en_route_pu' ? 'En Route' : bookingPreview?.booking_status == 'driver_unassigned'
+								{{ bookingPreview?.booking_status == 'driver_unassigned'
 								? 'Unassigned'
 								: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
 							</span>

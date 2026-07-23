@@ -166,7 +166,7 @@
 											<div data-toggle="modal" data-target="#change_status_booking_Modal"
 												class="status-pill {{ (booking?.booking_status == 'rejection_requested' ? 'pending' : booking?.booking_status) }}"
 												style="cursor: pointer;">
-												{{textFormatter(booking.booking_status == 'en_route_do' ? 'POB' : booking.booking_status == 'en_route_pu' ? 'En Route' : booking.booking_status == 'driver_unassigned' ? 'Unassigned' : (booking.booking_status == 'rejection_requested' ? 'Pending' :
+												{{textFormatter(booking.booking_status == 'driver_unassigned' ? 'Unassigned' : (booking.booking_status == 'rejection_requested' ? 'Pending' :
 												booking.booking_status)) |titlecase}}
 											</div>
 										</div>
@@ -178,7 +178,7 @@
 										</button>
 										
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-											aria-labelledby="navbarDropdownUserImage" style="margin-top: 10px;">
+											aria-labelledby="nav+barDropdownUserImage" style="margin-top: 10px;">
 											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')"
 												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
 												<div class="dropdown-item-icon"></div>

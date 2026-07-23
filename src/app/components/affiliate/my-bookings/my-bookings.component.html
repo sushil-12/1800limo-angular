@@ -117,9 +117,8 @@
 												data-target="#change_status_booking_Modal"
 												class="status-pill {{ booking.booking_status }}"
 												style="cursor: pointer;">
-												{{booking.booking_status == 'en_route_do' ? 'POB' : booking.booking_status == 'en_route_pu' ? 'En Route' : 
-												(booking.booking_status == 'driver_unassigned' ? 'Unassigned' : 
-												booking.booking_status | bookingStatusTextReplace : '_' : ' ' | titlecase)}}
+												{{ (booking.booking_status == 'driver_unassigned' ? 'Unassigned' : 
+												booking.booking_status | bookingStatusTextReplace : '_' : ' ' | titlecase) }}
 											</div>
 										</div>
 
