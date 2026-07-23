@@ -903,7 +903,7 @@
 						<mat-label>
 							Travel Date
 						</mat-label>
-						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt" [min]="minDate"
 							placeholder="Travel Date"
 							(dateChangeWithFormat)="SetFormValue('pickup_date', $event);SetFormValue('return_pickup_date', $event)"
 							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
@@ -2606,22 +2606,26 @@
 			<div class="row px-3">
 
 				<!-- Travel Date -->
-				<div class="col-md-4">
+				<div class="col-md-4" style="position: relative;">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Arrival Date
 						</mat-label>
-						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="retn_dt"
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="retn_dt" [min]="minDate"
 							placeholder="Arrival Date"
 							(dateChangeWithFormat)="SetFormValue('return_pickup_date', $event)"
 							formControlName="return_pickup_date" (click)="retn_dt.open()" />
 						<mat-datepicker-toggle matSuffix [for]="retn_dt"></mat-datepicker-toggle>
 						<mat-datepicker #retn_dt></mat-datepicker>
 					</mat-form-field>
+					<div *ngIf="Form.return_pickup_date.hasError('pastDate')" class="text-danger m-0"
+						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+						Arrival date can not be in the past.
+					</div>
 				</div>
 
 				<!-- Travel Time -->
-				<div class="col-md-4">
+				<div class="col-md-4" style="position: relative;">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Arrival Time
@@ -2631,6 +2635,10 @@
 					</mat-form-field>
 					<ngx-material-timepicker #rt_onwy_tm
 						[defaultTime]="Form.return_pickup_time.value"></ngx-material-timepicker>
+					<div *ngIf="Form.return_pickup_time.hasError('pastTime')" class="text-danger m-0"
+						style="position: absolute; top: 100%; left: 0; right: 0; margin-top: -8px !important; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 10px;">
+						Arrival time can not be in the past.
+					</div>
 				</div>
 
 				<!-- Meet Greet Choices -->

@@ -352,6 +352,8 @@
 											<span class="currency">{{booking?.currency_symbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total ? (booking.grand_total).toFixed(2) : 0 )"></span>
 										</p>
+                                         
+										<div *ngIf="booking.created_by_role != 'admin'">{{ booking?.created_by_name}}</div>
 									</td>
 
 									<td>

@@ -912,7 +912,7 @@ private subscription: Subscription;
 				this.$router.navigate([
 					'/' + user + '/create-new-booking-v2'
 				],
-					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: user } })
 			}
 		} else {
 			// this.$errorDialog.openDialog({

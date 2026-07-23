@@ -557,3 +557,35 @@ button.view-button.dropdown-toggle::after {
 		margin: 1rem;
 	}
 }
+
+
+.pax-luggage-badges {
+	display: flex;
+	gap: 6px;
+	margin-top: 6px;
+	flex-wrap: wrap;
+
+	.badge-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 3px 10px;
+		border-radius: 12px;
+		font-size: 13px;
+		font-weight: 600;
+		color: #fff;
+		white-space: nowrap;
+
+		i {
+			font-size: 12px;
+		}
+	}
+
+	.pax-badge {
+		background-color: #B5BDC7;
+	}
+
+	.luggage-badge {
+		background-color: #B5BDC7;
+	}
+}

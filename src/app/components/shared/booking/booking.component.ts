@@ -5487,16 +5487,60 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity({ emitEvent: false });
 	}
 
-	clearPastDateTimeError() {
-		const ctrl1 = this.BookingForm?.get('pickup_date');
-		const ctrl2 = this.BookingForm?.get('pickup_time');
-		if (ctrl1?.hasError('pastDate')) {
-			const { pastDate, ...rest } = ctrl1.errors || {};
-			ctrl1.setErrors(Object.keys(rest).length ? rest : null);
+	/** Remove a manually-set error key from a control without clobbering its other errors. */
+	private clearControlError(controlName: string, errorKey: string) {
+		const ctrl = this.BookingForm?.get(controlName);
+		if (ctrl?.hasError(errorKey)) {
+			const { [errorKey]: _removed, ...rest } = ctrl.errors || {};
+			ctrl.setErrors(Object.keys(rest).length ? rest : null);
 		}
-		if (ctrl2?.hasError('pastTime')) {
-			const { pastTime, ...rest } = ctrl2.errors || {};
-			ctrl2.setErrors(Object.keys(rest).length ? rest : null);
+	}
+
+	/** Clear the manual "past date"/"past time" errors from both the outbound and return pickup fields. */
+	clearPastDateTimeError() {
+		this.clearControlError('pickup_date', 'pastDate');
+		this.clearControlError('pickup_time', 'pastTime');
+		this.clearControlError('return_pickup_date', 'pastDate');
+		this.clearControlError('return_pickup_time', 'pastTime');
+	}
+
+	/**
+	 * Stamp "past date"/"past time" errors onto the pickup fields (outbound plus the
+	 * return leg for round trips) so they surface alongside every other form error in
+	 * a single validation pass, rather than only after the rest of the form is valid.
+	 */
+	private validatePastDateTime() {
+		this.clearPastDateTimeError();
+		const now = moment();
+		const startOfToday = moment().startOf('day');
+		const timeFormats = ['YYYY-MM-DD hh:mm A', 'YYYY-MM-DD HH:mm', 'YYYY-MM-DD HH:mm:ss'];
+
+		const flagLeg = (dateControl: string, timeControl: string) => {
+			const dateValue = this.BookingForm.get(dateControl)?.value;
+			const timeValue = this.BookingForm.get(timeControl)?.value;
+			if (!dateValue) {
+				return;
+			}
+			const day = moment(dateValue, 'YYYY-MM-DD').startOf('day');
+			if (day.isValid() && day.isBefore(startOfToday)) {
+				const ctrl = this.BookingForm.get(dateControl);
+				ctrl?.setErrors({ ...(ctrl.errors || {}), pastDate: true });
+				ctrl?.markAsTouched();
+				return;
+			}
+			if (timeValue) {
+				const dateTime = moment(`${dateValue} ${timeValue}`, timeFormats);
+				if (dateTime.isValid() && dateTime.isBefore(now)) {
+					const ctrl = this.BookingForm.get(timeControl);
+					ctrl?.setErrors({ ...(ctrl.errors || {}), pastTime: true });
+					ctrl?.markAsTouched();
+				}
+			}
+		};
+
+		flagLeg('pickup_date', 'pickup_time');
+		if (this.Form.service_type.value == 'round_trip') {
+			flagLeg('return_pickup_date', 'return_pickup_time');
 		}
 	}
 
@@ -5680,6 +5724,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.BookingForm.get('loose_customer.phone').setValue(this.BookingForm.get('loose_customer.phone').value.substring(this.BookingForm.get('loose_customer.phone_isd').value.length));
 		}
 		
+		// Flag past pickup date/time before the invalid check so these errors are
+		// reported together with any other form errors in the same pass.
+		this.validatePastDateTime();
+
 		if (this.BookingForm.invalid) {
 			this.BookingForm.markAllAsTouched();
 			Object.keys(this.BookingForm.controls).forEach(key => {
@@ -5710,31 +5758,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// which fields are actually on screen.
 			setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
 			return;
-		}
-
-		
-		const pickupDateCtrl = this.BookingForm.get('pickup_date');
-		const pickupTimeCtrl = this.BookingForm.get('pickup_time');
-		this.clearPastDateTimeError();
-		const pickupDate = this.Form.pickup_date.value;
-		const pickupTime = this.Form.pickup_time.value;
-		if (pickupDate) {
-			const pickupDay = moment(pickupDate, 'YYYY-MM-DD').startOf('day');
-			if (pickupDay.isValid() && pickupDay.isBefore(moment().startOf('day'))) {
-				pickupDateCtrl?.setErrors({ ...(pickupDateCtrl.errors || {}), pastDate: true });
-				pickupDateCtrl?.markAsTouched();
-				setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
-				return;
-			}
-			if (pickupTime) {
-				const pickupDateTime = moment(`${pickupDate} ${pickupTime}`, ['YYYY-MM-DD hh:mm A', 'YYYY-MM-DD HH:mm']);
-				if (pickupDateTime.isValid() && pickupDateTime.isBefore(moment())) {
-					pickupTimeCtrl?.setErrors({ ...(pickupTimeCtrl.errors || {}), pastTime: true });
-					pickupTimeCtrl?.markAsTouched();
-					setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
-					return;
-				}
-			}
 		}
 
 		// Validate minimum number of hours for charter_tour
@@ -6154,6 +6177,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			})
 			this.BookingForm?.get('return_pickup_time')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				this.clearPastDateTimeError();
 				if (!this.isManualRateEntered()) {
 					this.buildBookingData();
 				}
@@ -6165,11 +6189,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.buildBookingData()
 			})
 			this.BookingForm?.get('return_pickup_time')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+				this.clearPastDateTimeError();
 				this.buildBookingData()
 			})
 		}
-		// Clear the past date & time error as soon as the travel date is changed.
+		// Clear the past date & time errors as soon as either pickup date is changed.
 		this.BookingForm?.get('pickup_date')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe(() => {
+			this.clearPastDateTimeError();
+		})
+		this.BookingForm?.get('return_pickup_date')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe(() => {
 			this.clearPastDateTimeError();
 		})
 
