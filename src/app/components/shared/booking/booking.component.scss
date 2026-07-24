@@ -333,11 +333,6 @@ mat-form-field {
 	text-align: left;
 }
 
-.quote-ui-dropdown-option__icon {
-	margin-top: 4px;
-	color: #111;
-}
-
 .quote-ui-dropdown-option__content {
 	display: flex;
 	flex: 1;
@@ -902,6 +897,9 @@ quill-editor {
 
 /* Vehicle & Affiliate tab toggle (Browse vehicles / Assign manually) */
 .eq-tabs {
+	position: absolute;
+    right: 0;
+    top: 10px;
 	background: #f1f3f5;
 	border: 1px solid $bk-border-light;
 	border-radius: $bk-radius;
@@ -949,10 +947,6 @@ quill-editor {
 
 #info-container {
 	width: 100%;
-	background-color: $bk-surface-subtle;
-	border: 1px solid $bk-border-light;
-	border-radius: $bk-card-radius;
-	padding: 14px 15px;
 }
 
 #info-container .info {
@@ -984,7 +978,7 @@ quill-editor {
 
 @media only screen and (min-width: 1200px) {
 	#info-container {
-		width: 85%;
+		width: 95%;
 	}
 }
 
@@ -1112,12 +1106,12 @@ a.active {
    3. CARD SURFACES — more contrast against the darker page
    ========================================================= */
 .section-container {
-  background-color: var(--surface) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  box-shadow: var(--shadow-sm) !important;
-  padding: 20px 24px !important;
-  margin-bottom: 20px !important;
+    background-color: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow-sm) !important;
+    padding: 12px 20px !important;
+    margin-bottom: 10px !important;
 }
 
 /* =========================================================

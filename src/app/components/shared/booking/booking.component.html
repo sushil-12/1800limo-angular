@@ -120,7 +120,7 @@
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2" data-bksec="client-accounts" *ngIf="!isAffiliateMode || isFarmoutBooking">
 			<h4 class="border-0">
-				<i class="bi bi-people-fill bk-section-icon"></i>{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
+				{{ isAdminMode || isAffiliateMode ? 'Client Accounts' : 'Accounts Information' }}
 			</h4>
 
 			<!-- Account Type (admin only: individual portal always books for the logged-in user) -->
@@ -229,7 +229,7 @@
 							class="d-flex flex-wrap justify-content-center justify-content-md-start"
 							style="gap: 15px; padding: 0 15px;">
 							<div id="info" class="info mx-2 d-flex"
-								*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
+								*ngFor="let item of ['name', 'mobile', 'email', 'address']">
 								<label class="text-lg m-0 mx-2">
 									{{ item | titlecase }}:
 								</label>
@@ -242,7 +242,7 @@
 				</div>
 				<!-- Saved Credit Cards -->
 				<div *ngIf="shouldRenderSavedCardsSection()" class="mt-3 px-4 pb-3">
-					<h5 class="mb-3"><i class="bi bi-credit-card-fill bk-section-icon"></i>Saved Credit Cards</h5>
+					<h5 class="mb-3">Saved Credit Cards</h5>
 					<div *ngIf="isLoadingSavedCards" class="text-muted py-2">
 						Loading saved credit cards...
 					</div>
@@ -466,8 +466,7 @@
 									<mat-label>
 										Address
 									</mat-label>
-									<i matPrefix
-										class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+									
 									<input #loosecustomerInput type="text" matInput placeholder="Type your address"
 										[value]="LooseCustomer.address.value" autocomplete="off" autocorrect="off"
 										autocapitalize="off" spellcheck="false"
@@ -496,7 +495,6 @@
 										*ngFor="let option of getCustomAddressOptions('loose_customer_address')"
 										(mousedown)="$event.preventDefault()"
 										(click)="selectCustomAddressOption('loose_customer_address', option)">
-										<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 										<span class="quote-ui-dropdown-option__content">
 											<span class="quote-ui-dropdown-option__label">{{
 												getCustomOptionLabel(option) }}</span>
@@ -662,7 +660,7 @@
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="border-0">
 				<h4 style="margin-bottom: 0px !important;">
-					<i class="bi bi-person-vcard bk-section-icon"></i>Passenger Information
+					Passenger Information
 				</h4>
 				<!-- <p class="ml-2" style="color: #dc4335;">*All Field are required</p> -->
 				<div class="row px-4">
@@ -803,7 +801,7 @@
 				class="d-flex justify-content-between align-items-center flex-wrap"
 				style="margin-bottom: 0;">
 				<h4>
-					<i class="bi bi-geo-alt-fill bk-section-icon"></i>Booking Details <button type="submit" class="bk-btn bk-btn--primary mr-1 ml-3 mb-2"
+					Booking Details <button type="submit" class="bk-btn bk-btn--primary mr-1 ml-3 mb-2"
 						(click)="submitForm(false)" *ngIf="updateType != 'create' ">Preview</button>
 				</h4>
 			</div>
@@ -972,8 +970,7 @@
 						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup.invalid) }">
 							<mat-label> Pickup Address </mat-label>
-							<i matPrefix
-								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							
 							<input #pickupInput type="text" matInput placeholder="Type your address"
 								[value]="fillValue(null, 'pickup', null)" autocomplete="off" autocorrect="off"
 								autocapitalize="off" spellcheck="false"
@@ -1004,7 +1001,7 @@
 								*ngFor="let option of getCustomAddressOptions('pickup')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAddressOption('pickup', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+								
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
 										}}</span>
@@ -1033,8 +1030,7 @@
 							class="airport-autocomplete-field quote-ui-field quote-ui-field--airport"
 							[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup_airport_option.invalid) }">
 							<mat-label>Pickup Address</mat-label>
-							<i matPrefix
-								class="fas fa-plane quote-ui-field__prefix quote-ui-field__prefix--airport"></i>
+							
 							<input #pickupAirportInput type="text" matInput
 								placeholder="Select Airport (Search by airport code or name)" autocomplete="off"
 								autocorrect="off" autocapitalize="off" spellcheck="false"
@@ -1058,8 +1054,7 @@
 								*ngFor="let option of getVisibleCustomAirportOptions('pickup_airport')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAirportOption('pickup_airport', option)">
-								<i
-									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
+								
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label"
 										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
@@ -1088,8 +1083,7 @@
 							<mat-label>
 								Enter FBO address
 							</mat-label>
-							<i matPrefix
-								class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+							
 							<input type="text" matInput placeholder="Enter FBO address" aria-label="FBOaddress"
 								#fboAddressInput formControlName="fbo_address" autocomplete="off" autocorrect="off"
 								autocapitalize="off" spellcheck="false"
@@ -1112,7 +1106,7 @@
 								*ngFor="let option of getCustomAddressOptions('fbo_address')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAddressOption('fbo_address', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
+								
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
 										}}</span>
@@ -1310,7 +1304,6 @@
 								*ngFor="let option of getCustomAddressOptions('dropoff')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAddressOption('dropoff', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
 										}}</span>
@@ -1364,8 +1357,6 @@
 								*ngFor="let option of getVisibleCustomAirportOptions('dropoff_airport')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAirportOption('dropoff_airport', option)">
-								<i
-									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label"
 										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
@@ -1534,7 +1525,6 @@
 							*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(false, stop_index))"
 							(mousedown)="$event.preventDefault()"
 							(click)="selectCustomAddressOption(getExtraStopFieldKey(false, stop_index), option)">
-							<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 							<span class="quote-ui-dropdown-option__content">
 								<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
 								<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
@@ -1598,8 +1588,7 @@
 
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
 		<div class="section-container mt-2" data-bksec="vehicle-affiliate" *ngIf="!isAffiliateMode || updateType !== 'edit'">
-			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-0"><i class="bi bi-car-front-fill bk-section-icon"></i> Vehicle & Affiliate </h4>
+			<div class="d-flex justify-content-between align-items-center flex-wrap position-relative">
 				<!-- manual affiliate assignment is an admin-only capability -->
 				<div class="eq-tabs" *ngIf="isAdminMode || (isAffiliateMode && (newBooking))">
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'browse'"
@@ -1723,7 +1712,7 @@
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="mt-2" data-bksec="affiliate-details">
 			<div class="d-flex justify-content-between align-items-center flex-wrap mt-4">
-				<h4 class="border-0"><i class="bi bi-briefcase-fill bk-section-icon"></i>Affiliate Details</h4>
+				<h4 class="border-0">Affiliate Details</h4>
 			</div>
 			<!-- Affiliate Type -->
 			<div class="row">
@@ -2702,7 +2691,6 @@
 								*ngFor="let option of getCustomAddressOptions('return_pickup')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAddressOption('return_pickup', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
 										}}</span>
@@ -2758,8 +2746,6 @@
 								*ngFor="let option of getVisibleCustomAirportOptions('return_pickup_airport')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAirportOption('return_pickup_airport', option)">
-								<i
-									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label"
 										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
@@ -2813,7 +2799,6 @@
 								*ngFor="let option of getCustomAddressOptions('return_fbo_address')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAddressOption('return_fbo_address', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
 										}}</span>
@@ -3014,7 +2999,6 @@
 								*ngFor="let option of getCustomAddressOptions('return_dropoff')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAddressOption('return_dropoff', option)">
-								<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option)
 										}}</span>
@@ -3070,8 +3054,6 @@
 								*ngFor="let option of getVisibleCustomAirportOptions('return_dropoff_airport')"
 								(mousedown)="$event.preventDefault()"
 								(click)="selectCustomAirportOption('return_dropoff_airport', option)">
-								<i
-									[class]="isCustomAirportTerminalOption(option) ? 'fas fa-door-open quote-ui-dropdown-option__icon' : 'fas fa-plane quote-ui-dropdown-option__icon'"></i>
 								<span class="quote-ui-dropdown-option__content">
 									<span class="quote-ui-dropdown-option__label"
 										[style.paddingLeft]="isCustomAirportTerminalOption(option) ? '0px' : '0'">{{
@@ -3240,7 +3222,6 @@
 							*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(true, stop_index))"
 							(mousedown)="$event.preventDefault()"
 							(click)="selectCustomAddressOption(getExtraStopFieldKey(true, stop_index), option)">
-							<i class="fas fa-map-marker-alt quote-ui-dropdown-option__icon"></i>
 							<span class="quote-ui-dropdown-option__content">
 								<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
 								<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
