@@ -369,7 +369,7 @@
 									<td>
 										<p style="white-space: pre" (click)="openModal(booking, 'Passenger')" id="box"
 											[ngClass]="currentUser?.roleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
-											<span style="overflow: hidden;text-wrap: auto" [innerHTML]="highlighText(booking.passenger_name)"></span> <br />
+											<span  [innerHTML]="highlighText(booking.passenger_name)"></span> <br />
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
 											<span class="font-weight-bolder"
