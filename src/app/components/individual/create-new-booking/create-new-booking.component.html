@@ -557,9 +557,9 @@
                             </button>
                             <div *ngIf="shouldShowCustomPrompt('address', 'pickup')" class="quote-ui-dropdown-empty">
                                 Enter address and select from suggestions</div>
-                            <div *ngIf="isCustomSearchLoading('address', 'pickup')" class="quote-ui-dropdown-empty">
+                            <div *ngIf="isCustomSearchLoading('address', 'pickup')" class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">
                                 Loading Suggestions...</div>
-                            <div *ngIf="shouldShowCustomEmpty('address', 'pickup')" class="quote-ui-dropdown-empty">
+                            <div *ngIf="shouldShowCustomEmpty('address', 'pickup')" class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">
                                 Result not found</div>
                         </div>
                     </div>
@@ -612,9 +612,9 @@
                             <div *ngIf="shouldShowCustomPrompt('airport', 'pickup_airport')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'pickup_airport')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'pickup_airport')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                         <div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
                             class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -665,9 +665,9 @@
                             <div *ngIf="shouldShowCustomPrompt('address', 'fbo_address')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'fbo_address')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'fbo_address')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                     </div>
 
@@ -858,9 +858,9 @@
                             </button>
                             <div *ngIf="shouldShowCustomPrompt('address', 'dropoff')" class="quote-ui-dropdown-empty">
                                 Enter address and select from suggestions</div>
-                            <div *ngIf="isCustomSearchLoading('address', 'dropoff')" class="quote-ui-dropdown-empty">
+                            <div *ngIf="isCustomSearchLoading('address', 'dropoff')" class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">
                                 Loading Suggestions...</div>
-                            <div *ngIf="shouldShowCustomEmpty('address', 'dropoff')" class="quote-ui-dropdown-empty">
+                            <div *ngIf="shouldShowCustomEmpty('address', 'dropoff')" class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">
                                 Result not found</div>
                         </div>
                     </div>
@@ -913,9 +913,9 @@
                             <div *ngIf="shouldShowCustomPrompt('airport', 'dropoff_airport')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'dropoff_airport')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'dropoff_airport')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                         <div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
                             class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -1082,9 +1082,9 @@
                         <div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))"
                             class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                         <div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(false, stop_index))"
-                            class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                            class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                         <div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))"
-                            class="quote-ui-dropdown-empty">Result not found</div>
+                            class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                     </div>
                 </div>
                 <div class="col-1 p-0 p-md-3">
@@ -1360,9 +1360,9 @@
                             <div *ngIf="shouldShowCustomPrompt('address', 'return_pickup')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'return_pickup')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'return_pickup')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                     </div>
                 </div>
@@ -1418,9 +1418,9 @@
                             <div *ngIf="shouldShowCustomPrompt('airport', 'return_pickup_airport')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'return_pickup_airport')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'return_pickup_airport')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                         <div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
                             class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -1471,9 +1471,9 @@
                             <div *ngIf="shouldShowCustomPrompt('address', 'return_fbo_address')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'return_fbo_address')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'return_fbo_address')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                     </div>
 
@@ -1670,9 +1670,9 @@
                             <div *ngIf="shouldShowCustomPrompt('address', 'return_dropoff')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('address', 'return_dropoff')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('address', 'return_dropoff')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                     </div>
                 </div>
@@ -1728,9 +1728,9 @@
                             <div *ngIf="shouldShowCustomPrompt('airport', 'return_dropoff_airport')"
                                 class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                             <div *ngIf="isCustomSearchLoading('airport', 'return_dropoff_airport')"
-                                class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                             <div *ngIf="shouldShowCustomEmpty('airport', 'return_dropoff_airport')"
-                                class="quote-ui-dropdown-empty">Result not found</div>
+                                class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                         </div>
                         <div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
                             class="text-danger my-mat-hint" style="margin-bottom: 10px;">
@@ -1916,9 +1916,9 @@
                         <div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))"
                             class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
                         <div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(true, stop_index))"
-                            class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+                            class="quote-ui-dropdown-empty quote-ui-dropdown-empty--loading">Loading Suggestions...</div>
                         <div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))"
-                            class="quote-ui-dropdown-empty">Result not found</div>
+                            class="quote-ui-dropdown-empty quote-ui-dropdown-empty--notfound">Result not found</div>
                     </div>
                 </div>
                 <div class="col-md-1">

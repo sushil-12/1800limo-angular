@@ -5203,3 +5203,68 @@ h2.ride-mobile-heading {
 		display: none;
 	}
 }
+
+.qb-address-field__empty,
+.qb-airport-field__empty {
+	display: flex;
+	width: fit-content;
+	align-items: center;
+	gap: 6px;
+	margin: 0 auto 0 0;
+	padding: 4px 8px;
+	background: #f2f6fd;
+	border-radius: 8px;
+	color: #000000;
+	font-size: 15px;
+	line-height: 1;
+	text-align: left;
+
+	&::before {
+		content: "\f05a"; // info-circle (default: prompt)
+		font-family: "Font Awesome 5 Free";
+		font-weight: 900;
+		flex-shrink: 0;
+		font-size: 15px;
+		line-height: 1;
+		color: #4a7bd0;
+	}
+
+	// Loading state — animated spinner, neutral tint
+	&--loading {
+		background: #f4f5f7;
+		color: #424851;
+
+		&::before {
+			content: "\f110"; // spinner
+			color: #424851;
+			animation: qb-empty-spin 0.7s linear infinite;
+		}
+	}
+
+	// No results — amber warning tint
+	&--notfound {
+		background: #fdf6ec;
+		color: #5f4b2a;
+
+		&::before {
+			content: "\f071"; // exclamation-triangle
+			color: #e0a648;
+		}
+	}
+}
+
+@keyframes qb-empty-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+// When the dropdown only holds the info message (no address options),
+// drop the white panel box so just the compact message shows.
+.qb-address-field__dropdown:has(.qb-address-field__empty):not(:has(.qb-address-field__option)),
+.qb-airport-field__dropdown:has(.qb-airport-field__empty):not(:has(.qb-airport-field__option)) {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	overflow: visible !important;
+}

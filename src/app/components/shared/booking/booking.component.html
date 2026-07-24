@@ -233,7 +233,18 @@
 								<label class="text-lg m-0 mx-2">
 									{{ item | titlecase }}:
 								</label>
-								<label class="text-lg m-0 font-weight-bolder">
+								<a *ngIf="item === 'mobile' && getUserValue(item)"
+									class="text-lg m-0 font-weight-bolder"
+									[href]="'tel:' + getUserValue('mobileIsd') + getUserValue(item)">
+									{{ getUserValue('mobileIsd') + getUserValue(item) }}
+								</a>
+								<a *ngIf="item === 'email' && getUserValue(item)"
+									class="text-lg m-0 font-weight-bolder"
+									[href]="'mailto:' + getUserValue(item)">
+									{{ getUserValue(item) }}
+								</a>
+								<label *ngIf="item !== 'mobile' && item !== 'email'"
+									class="text-lg m-0 font-weight-bolder">
 									{{ getUserValue(item) | titlecase }}
 								</label>
 							</div>

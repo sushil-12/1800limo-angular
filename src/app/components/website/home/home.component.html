@@ -274,19 +274,19 @@
 															</span>
 														</button>
 														<div *ngIf="shouldShowAddressLoadingState('pickup_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--loading"
+															>
 															Loading Suggestions....
 														</div>
 														<div *ngIf="shouldShowAddressEmptyState('pickup_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--notfound"
+															>
 															No Result found
 														</div>
 														<div *ngIf="shouldShowAddressPromptState('pickup_address')"
 															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
-															Enter address and select from suggestions
+															>
+															Enter & select an address
 														</div>
 													</div>
 												</div>
@@ -386,17 +386,17 @@
 																	</span>
 																</button>
 																<div *ngIf="shouldShowAddressLoadingState(getExtraStopFieldName(i, false))"
-																	class="qb-airport-field__empty qb-address-field__empty"
-																	style="padding:2px 6px; color:#666; text-align:left;">
+																	class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--loading"
+																	>
 																	Loading Suggestions....</div>
 																<div *ngIf="shouldShowAddressEmptyState(getExtraStopFieldName(i, false))"
-																	class="qb-airport-field__empty qb-address-field__empty"
-																	style="padding:2px 6px; color:#666; text-align:left;">
+																	class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--notfound"
+																	>
 																	No Result found</div>
 																<div *ngIf="shouldShowAddressPromptState(getExtraStopFieldName(i, false))"
 																	class="qb-airport-field__empty qb-address-field__empty"
-																	style="padding:2px 6px; color:#666; text-align:left;">
-																	Enter address and select from suggestions</div>
+																	>
+																	Enter & select an address</div>
 															</div>
 														</div>
 														<button type="button" class="btn btn-link text-warning p-0 ml-2"
@@ -491,19 +491,19 @@
 															</span>
 														</button>
 														<div *ngIf="shouldShowAddressLoadingState('dropoff_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--loading"
+															>
 															Loading Suggestions....
 														</div>
 														<div *ngIf="shouldShowAddressEmptyState('dropoff_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--notfound"
+															>
 															Result not found
 														</div>
 														<div *ngIf="shouldShowAddressPromptState('dropoff_address')"
 															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
-															Enter address and select from suggestions
+															>
+															Enter & select an address
 														</div>
 													</div>
 												</div>
@@ -837,19 +837,19 @@
 															</span>
 														</button>
 														<div *ngIf="shouldShowAddressLoadingState('return_pickup_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--loading"
+															>
 															Loading Suggestions....
 														</div>
 														<div *ngIf="shouldShowAddressEmptyState('return_pickup_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--notfound"
+															>
 															Result not found
 														</div>
 														<div *ngIf="shouldShowAddressPromptState('return_pickup_address')"
 															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
-															Enter address and select from suggestions
+															>
+															Enter & select an address
 														</div>
 													</div>
 												</div>
@@ -948,17 +948,17 @@
 																	</span>
 																</button>
 																<div *ngIf="shouldShowAddressLoadingState(getExtraStopFieldName(i, true))"
-																	class="qb-airport-field__empty qb-address-field__empty"
-																	style="padding:2px 6px; color:#666; text-align:left;">
+																	class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--loading"
+																	>
 																	Loading Suggestions....</div>
 																<div *ngIf="shouldShowAddressEmptyState(getExtraStopFieldName(i, true))"
-																	class="qb-airport-field__empty qb-address-field__empty"
-																	style="padding:2px 6px; color:#666; text-align:left;">
+																	class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--notfound"
+																	>
 																	No Result found</div>
 																<div *ngIf="shouldShowAddressPromptState(getExtraStopFieldName(i, true))"
 																	class="qb-airport-field__empty qb-address-field__empty"
-																	style="padding:2px 6px; color:#666; text-align:left;">
-																	Enter address and select from suggestions</div>
+																	>
+																	Enter & select an address</div>
 															</div>
 														</div>
 														<button type="button" class="btn btn-link text-warning p-0 ml-2"
@@ -1052,19 +1052,19 @@
 															</span>
 														</button>
 														<div *ngIf="shouldShowAddressLoadingState('return_dropoff_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--loading"
+															>
 															Loading Suggestions....
 														</div>
 														<div *ngIf="shouldShowAddressEmptyState('return_dropoff_address')"
-															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
+															class="qb-airport-field__empty qb-address-field__empty qb-address-field__empty--notfound"
+															>
 															Result not found
 														</div>
 														<div *ngIf="shouldShowAddressPromptState('return_dropoff_address')"
 															class="qb-airport-field__empty qb-address-field__empty"
-															style="padding:2px 6px; color:#666; text-align:left;">
-															Enter address and select from suggestions
+															>
+															Enter & select an address
 														</div>
 													</div>
 												</div>
