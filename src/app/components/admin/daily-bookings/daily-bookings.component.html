@@ -372,7 +372,24 @@
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
-										<div *ngIf="booking.created_by_role != 'admin'">{{ booking?.created_by_name}}</div>
+										<div *ngIf="booking.created_by_role != 'admin'">
+											<span
+													*ngIf="booking?.affiliate_id && booking?.affiliate_id != 0 && booking?.company_name"
+													(click)="
+															booking.created_by_role == 'individual'
+																? navigateToIndividualAccounts(booking.created_by_name)
+																: booking.created_by_role == 'travel_agent' ||  booking.created_by_role == 'travel_planner'
+																? navigateToTravelAgentAccounts(booking.created_by_name)
+																: navigateToAffiliates(booking.created_by_name);
+															$event.stopPropagation()
+															"
+															style="cursor: pointer; text-decoration: underline;">
+													<i class="fa fa-person"></i>
+													<span class="font-weight-bolder" style="margin-left:5px;"
+														[innerHTML]="highlighText(booking?.created_by_name)"></span>
+											</span>
+
+										</div>
 										
 									</td>
 									<td>

@@ -1068,7 +1068,7 @@ table thead th{
 	display: flex;
 	gap: 6px;
 	margin-top: 6px;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 
 	.badge-pill {
 		display: inline-flex;
@@ -1078,7 +1078,7 @@ table thead th{
 		border-radius: 12px;
 		font-size: 13px;
 		font-weight: 600;
-		color: #fff;
+		color: #3a3a3a;
 		white-space: nowrap;
 
 		i {
@@ -1087,10 +1087,10 @@ table thead th{
 	}
 
 	.pax-badge {
-		background-color: #B5BDC7;
+		background-color: #f3e6db;
 	}
 
 	.luggage-badge {
-		background-color: #B5BDC7;
+		background-color: #f3e6db;
 	}
 }

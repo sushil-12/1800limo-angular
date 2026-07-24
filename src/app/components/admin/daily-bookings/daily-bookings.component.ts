@@ -875,6 +875,17 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		}
 	}
 
+	navigateToTravelAgentAccounts(taName: string) {
+		if (this.currentUser?.roleName !== 'admin') return;
+		console.log("tA", taName)
+		if (taName) {
+			$('#previewBookingOnID').modal('hide');
+			$('#sendEmailModal').modal('hide');
+			localStorage.setItem('TravelAgentSearch', taName);
+			this.router.navigate(['/admin/travel-planner-account-admin']);
+		}
+	}
+
 	navigateToLooseAffiliates(companyName: string) {
 		if (companyName) {
 			$('#previewBookingOnID').modal('hide');
