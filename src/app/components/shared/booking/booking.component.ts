@@ -347,6 +347,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.checkAndPrefill();
 			}
 			else if (params && isNewBookingFlow) {
+				// coming from edit -> create should not retain edit state
+				this.updateType = 'create'
+				this.SetFormValue('updateType', 'create')
+				this.BookingForm.get('prevent_rate_override')?.setValue(false);
 				this.newBooking = true
 				this.affiliate_id = parseInt(params?.affiliate_id)
 				const routeVehicleId = Number(params?.vehicle_id);
@@ -368,6 +372,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			}
 			else {
 				// fresh booking -> default to the embedded quote browser
+				this.updateType = 'create'
+				this.SetFormValue('updateType', 'create')
+				this.BookingForm.get('prevent_rate_override')?.setValue(false);
 				this.vehicleSelectionTab = 'browse';
 				this.resetFields()
 			}
