@@ -375,7 +375,7 @@
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
-										<div *ngIf="booking.created_by_role != 'admin'">
+										<div *ngIf="booking.created_by_role != 'admin'" style="margin-top: 23px">
 											<span
 													*ngIf="booking?.affiliate_id && booking?.affiliate_id != 0 && booking?.company_name"
 													(click)="
