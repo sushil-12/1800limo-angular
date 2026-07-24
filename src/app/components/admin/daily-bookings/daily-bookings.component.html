@@ -163,7 +163,7 @@
 											[ngClass]="{'fa-sort-up': orderBy === 'booking_id_asc', 'fa-sort-down': orderBy === 'booking_id_desc', 'fa-sort': !orderBy.startsWith('booking_id')}"></i>
 									</th>
 
-									<th>Pax</th>
+									<th id="pax-column">Pax</th>
 									<th>Driver</th>
 									<th>Trip Route</th>
 									<th>Created By</th>
@@ -316,13 +316,16 @@
 
 										<!-- Row 2: Status pill below the icons -->
 										<div class="d-flex justify-content-center mt-4">
-											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-												data-target="#change_status_booking_Modal"
+											<div [attr.data-toggle]="(booking.booking_status != 'paid' && booking.booking_status != 'paid_cash') ? 'modal' : null"
+												[attr.data-target]="(booking.booking_status != 'paid' && booking.booking_status != 'paid_cash') ? '#change_status_booking_Modal' : null"
+												(click)="changeBookingStatus(booking.booking_id, booking.booking_status)"
 												class="status-pill {{ booking.booking_status }}"
-												style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
-												 {{(booking.booking_status == 'driver_unassigned' ? 'Unassigned' : 
+												[style.cursor]="(booking.booking_status != 'paid' && booking.booking_status != 'paid_cash') ? 'pointer' : 'default'"
+												style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;">
+												 {{(booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
 													booking.booking_status | bookingStatusTextReplace : '_' : ' ' | titlecase)}}
-												<i class="fas fa-pencil-alt" style="font-size: 14px; color: white;"></i>
+												<i *ngIf="booking.booking_status != 'paid' && booking.booking_status != 'paid_cash'"
+													class="fas fa-pencil-alt" style="font-size: 14px; color: white;"></i>
 											</div>
 										</div>
 
@@ -384,7 +387,7 @@
 															$event.stopPropagation()
 															"
 															style="cursor: pointer; text-decoration: underline;">
-													<i class="fa fa-person"></i>
+													<i class="fas fa-user-edit" style="font-size: 12px;"></i>
 													<span class="font-weight-bolder" style="margin-left:5px;"
 														[innerHTML]="highlighText(booking?.created_by_name)"></span>
 											</span>

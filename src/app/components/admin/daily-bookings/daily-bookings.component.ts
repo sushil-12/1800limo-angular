@@ -1382,7 +1382,11 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		return this.changeStatusForm.controls;
 	}
 
-	changeBookingStatus(bookingId) {
+	changeBookingStatus(bookingId, bookingStatus?: string) {
+		// Booking status cannot be updated once it is Paid or Paid Cash.
+		if (bookingStatus === "paid" || bookingStatus === "paid_cash") {
+			return;
+		}
 		this.changeStatusForm.patchValue({
 			reservation_id: bookingId,
 		});

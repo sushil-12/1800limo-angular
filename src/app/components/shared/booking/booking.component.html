@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<div class="d-flex justify-content-between align-items-center flex-wrap">
-				<h4 class="border-0"><i class="bi bi-signpost-split bk-section-icon"></i>{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
+				<h4 class="border-0">{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
 			</div>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -1871,7 +1871,7 @@
 		<!-- New section conatiner for Vehicle details -->
 		<div class="mt-2" data-bksec="vehicle-preferences">
 			<h4>
-				<i class="bi bi-stars bk-section-icon"></i>Vehicle Preferences
+				Vehicle Preferences
 			</h4>
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<!-- Vehicle Type -->
@@ -2102,7 +2102,7 @@
 		<div class="mt-2" data-bksec="driver-preferences"
 			*ngIf="(Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value) ">
 			<h4 style="margin-bottom: 0;">
-				<i class="bi bi-person-badge-fill bk-section-icon"></i>Driver Preferences
+				Driver Preferences
 			</h4>
 			<div class="row px-4">
 				<!-- Affiliate Driver Name -->
@@ -2253,7 +2253,7 @@
 				class="d-flex justify-content-between align-items-center flex-wrap"
 				style="margin-bottom: 0;">
 				<h4>
-					<i class="bi bi-chat-left-text-fill bk-section-icon"></i>Special Instructions
+					Special Instructions
 				</h4>
 			</div>
 
@@ -2512,7 +2512,7 @@
 		<!-- Section - Return Journey Details -->
 		<div class="section-container" data-bksec="return-booking" *ngIf="Form.service_type.value == 'round_trip'">
 			<h2 style="margin-bottom: 0;">
-				<i class="bi bi-arrow-repeat bk-section-icon"></i>Return Booking
+				Return Booking
 			</h2>
 			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
 				<!-- Service Type -->
@@ -3332,7 +3332,7 @@
 		<!-- IF ROUND TRIP Section - Return Affiliate/Loose Details (admin only) -->
 		<div class="section-container mt-2" data-bksec="return-affiliate-details" *ngIf="isAdminMode && Form.service_type.value == 'round_trip' ">
 			<h4 class=" border-0">
-				<i class="bi bi-briefcase-fill bk-section-icon"></i>Return Vehicle & Affiliate
+				Return Vehicle & Affiliate
 			</h4>
 			<!-- Affiliate Type -->
 			<div class="row">
@@ -3488,7 +3488,7 @@
 				<div class="mt-2" data-bksec="return-vehicle-preferences"
 					*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate' && isAdminMode">
 					<h4>
-						<i class="bi bi-stars bk-section-icon"></i>Vehicle Preferences
+						Vehicle Preferences
 					</h4>
 					<div class="row px-4">
 						<!-- Vehicle Type -->
@@ -3722,7 +3722,7 @@
 				<div class="mt-2" data-bksec="return-driver-preferences"
 					*ngIf="Form.service_type.value == 'round_trip' && isAdminMode && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
 					<h4 style="margin-bottom: 0;">
-						<i class="bi bi-person-badge-fill bk-section-icon"></i>Driver Preferences
+						Driver Preferences
 					</h4>
 					<div class="row px-4">
 						<!-- Affiliate Driver Name -->
