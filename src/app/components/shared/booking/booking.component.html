@@ -3883,7 +3883,7 @@
 
 
 		<div class="section-container my-2" id="pickup_adress">
-			<div id="booking_detail_section"
+			<div id="booking_detail_section"  data-bksec="rates" 
 				class="d-flex justify-content-end align-items-center flex-wrap"
 				style="margin-bottom: 0;">
 				<mat-checkbox  *ngIf="isAdminMode && updateType === 'edit'"  formControlName="prevent_rate_override" class="text-sm font-weight-bold"
@@ -3893,7 +3893,7 @@
 			</div>
 
 			<!-- Section - Return Journey Details Ends -->
-			<app-rates-form class="d-flex flex-wrap" data-bksec="rates" [hideBuckets]="isIndividualMode || isTravelAgentMode" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			<app-rates-form class="d-flex flex-wrap gap-4" [hideBuckets]="isIndividualMode || isTravelAgentMode" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 				[preventRateOverride]="Form.prevent_rate_override.value" [return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
 				[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
 				[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates" [isAffiliateMode]="isAffiliateMode"
@@ -3902,7 +3902,7 @@
 				(hoursErrorChange)="numberOfHoursError = $event" [vehicles]="Form.number_of_vehicles?.value"
 				[book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking" [service_type]="Form.service_type.value"
 				[currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
-				(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+				(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)" style="gap:10px">
 			</app-rates-form>
 		</div>
 		
