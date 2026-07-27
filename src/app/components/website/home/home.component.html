@@ -1237,7 +1237,7 @@
 											style="font-size:0.75rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;">
 											Extra Cost Amenities
 										</span>
-										<a *ngIf="amenitiesList.length > 6" role="button"
+										<a *ngIf="amenitiesList.length > 4" role="button"
 											(click)="showAllAmenities = !showAllAmenities"
 											class="text-decoration-none small font-weight-bold"
 											style="color:#f8931f; cursor:pointer; white-space:nowrap;">
@@ -1246,7 +1246,7 @@
 									</div>
 									<div class="amenity-checkbox-grid">
 										<label *ngFor="let amenity of amenitiesList; let i = index"
-											class="amenity-checkbox-item" [hidden]="i >= 6 && !showAllAmenities">
+											class="amenity-checkbox-item" [hidden]="i >= 4 && !showAllAmenities">
 											<input type="checkbox" class="amenity-real-checkbox"
 												[checked]="isAmenitySelected(amenity.id)"
 												(change)="toggleAmenity(amenity.id)" />
@@ -1518,7 +1518,7 @@
 		</div>
 
 		<!-- SHIMMER LOADER -->
-		<div class="blog-slider-track" *ngIf="blogLoading">
+		<div class="blog-slider-track isLoadingBlog " *ngIf="blogLoading">
 			<div class="blog-slide-item" *ngFor="let i of [1,2,3]">
 				<div class="blog-preview-card d-flex flex-column h-100">
 					<div class="shimmer blog-card-img-shimmer"></div>

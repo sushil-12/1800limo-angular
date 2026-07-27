@@ -1597,6 +1597,27 @@
 			</div>
 		</div>
 
+			<!-- Section Special Instructions  start -->
+		<div class="section-container my-2" id="pickup_adress">
+			<div id="booking_detail_section"
+				class="d-flex justify-content-between align-items-center flex-wrap"
+				style="margin-bottom: 0;">
+				<h4>
+					Special Instructions
+				</h4>
+			</div>
+
+			<!-- Special Instructions -->
+				<quill-editor
+					formControlName="booking_instructions"
+					[modules]="quillModules"
+					placeholder="Special Instructions / Exact Building Name"
+					(onEditorCreated)="onInstructionsEditorCreated($event)"
+					[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
+				</quill-editor>
+		</div>
+		<!-- Section - Affiliate/Loose Details Ends -->
+
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->
 		<div class="section-container mt-2" data-bksec="vehicle-affiliate" *ngIf="!isAffiliateMode || updateType !== 'edit'">
 			<div class="d-flex justify-content-between align-items-center flex-wrap position-relative">
@@ -2246,27 +2267,6 @@
 		</ng-container>
 		<!-- ============ Assign manually ends ============ -->
 		</div>
-
-		<!-- Section Special Instructions  start -->
-		<div class="section-container my-2" id="pickup_adress">
-			<div id="booking_detail_section"
-				class="d-flex justify-content-between align-items-center flex-wrap"
-				style="margin-bottom: 0;">
-				<h4>
-					Special Instructions
-				</h4>
-			</div>
-
-			<!-- Special Instructions -->
-				<quill-editor
-					formControlName="booking_instructions"
-					[modules]="quillModules"
-					placeholder="Special Instructions / Exact Building Name"
-					(onEditorCreated)="onInstructionsEditorCreated($event)"
-					[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
-				</quill-editor>
-		</div>
-		<!-- Section - Affiliate/Loose Details Ends -->
 
 
 		<!-- Driver Languages -->
