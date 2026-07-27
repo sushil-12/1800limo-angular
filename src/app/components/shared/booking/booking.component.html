@@ -1595,27 +1595,29 @@
 					</div>
 				</div>
 			</div>
-		</div>
+
 
 			<!-- Section Special Instructions  start -->
-		<div class="section-container my-2" id="pickup_adress">
-			<div id="booking_detail_section"
-				class="d-flex justify-content-between align-items-center flex-wrap"
-				style="margin-bottom: 0;">
-				<h4>
-					Special Instructions
-				</h4>
-			</div>
+			<div class="my-2" id="pickup_adress">
+				<div id="booking_detail_section"
+					class="d-flex justify-content-between align-items-center flex-wrap"
+					style="margin-bottom: 0;">
+					<h4>
+						Special Instructions
+					</h4>
+				</div>
 
-			<!-- Special Instructions -->
-				<quill-editor
-					formControlName="booking_instructions"
-					[modules]="quillModules"
-					placeholder="Special Instructions / Exact Building Name"
-					(onEditorCreated)="onInstructionsEditorCreated($event)"
-					[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
-				</quill-editor>
+				<!-- Special Instructions -->
+					<quill-editor
+						formControlName="booking_instructions"
+						[modules]="quillModules"
+						placeholder="Special Instructions / Exact Building Name"
+						(onEditorCreated)="onInstructionsEditorCreated($event)"
+						[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
+					</quill-editor>
+			</div>
 		</div>
+
 		<!-- Section - Affiliate/Loose Details Ends -->
 
 		<!-- Section - Vehicle & Affiliate (Browse quote vs Assign manually) -->

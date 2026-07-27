@@ -4,12 +4,12 @@
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'lg:w-50 md:w-100': ratesform && returnratesform}">
 	<!-- [ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" -->
 	<!-- <div class="row cursor-pointer" (click)="toggleDropdown('section')" id="rate-heading">
-		<div class="col-12 col-md-12">
+		<div class="col-12 col-md-12"> -->
 			<h4 class="section-dropdown-header m-0">
 				Rates
 			</h4>
-		</div>
-	</div> -->
+		<!-- </div> -->
+	<!-- </div> -->
 
 	<div [attr.id]="'RateFormItem-' + item_index" class="my-2 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
@@ -84,7 +84,7 @@
 			</div>
 
 			<!-- Hours -->
-			<div class="col-auto num-hours" *ngIf="service_type == 'charter_tour' && sub_item.key === 'Base_Rate'">
+			<div class="col-6 col-sm-4 col-md-5 num-hours" *ngIf="service_type == 'charter_tour' && sub_item.key === 'Base_Rate'">
 				<div [class.error-field]="numberOfHoursError && !isDaysMode" style="position: relative;">
 					<mat-form-field appearance="outline" class="m-0" style="width: 100%;">
 						<mat-label>{{ isDaysMode ? 'Number of Days' : 'Number of Hours' }}</mat-label>
@@ -242,12 +242,12 @@
 	[ngClass]="{'lg:w-50 md:w-100': returnratesform}">
 	<!-- [ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" -->
 	<!-- <div class="row cursor-pointer" (click)="toggleDropdown('r_section')" id="rate-heading_r">
-		<div class="col-12 col-md-12">
+		<div class="col-12 col-md-12"> -->
 			<h4 class="section-dropdown-header m-0">
 				Return Rates
 			</h4>
-		</div>
-	</div> -->
+		<!-- </div> -->
+	<!-- </div>  -->
 
 	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-2 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
