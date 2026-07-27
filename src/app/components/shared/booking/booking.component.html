@@ -912,7 +912,7 @@
 						<mat-label>
 							Travel Date
 						</mat-label>
-						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt" [min]="minDate"
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt" [min]="isAdminMode ? null : minDate"
 							placeholder="Travel Date"
 							(dateChangeWithFormat)="SetFormValue('pickup_date', $event);SetFormValue('return_pickup_date', $event)"
 							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
@@ -2611,7 +2611,7 @@
 						<mat-label>
 							Arrival Date
 						</mat-label>
-						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="retn_dt" [min]="minDate"
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="retn_dt" [min]="isAdminMode ? null : minDate"
 							placeholder="Arrival Date"
 							(dateChangeWithFormat)="SetFormValue('return_pickup_date', $event)"
 							formControlName="return_pickup_date" (click)="retn_dt.open()" />

@@ -5518,6 +5518,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	 */
 	private validatePastDateTime() {
 		this.clearPastDateTimeError();
+		if (this.isAdminMode) {
+			return;
+		}
 		const now = moment();
 		const startOfToday = moment().startOf('day');
 		const timeFormats = ['YYYY-MM-DD hh:mm A', 'YYYY-MM-DD HH:mm', 'YYYY-MM-DD HH:mm:ss'];

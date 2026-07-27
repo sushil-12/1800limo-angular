@@ -377,7 +377,6 @@
 										</p>
 										<div *ngIf="booking.created_by_role != 'admin'" style="margin-top: 23px">
 											<span
-													*ngIf="booking?.affiliate_id && booking?.affiliate_id != 0 && booking?.company_name"
 													(click)="
 															booking.created_by_role == 'individual'
 																? navigateToIndividualAccounts(booking.created_by_name)
@@ -391,7 +390,6 @@
 													<span class="font-weight-bolder" style="margin-left:5px;"
 														[innerHTML]="highlighText(booking?.created_by_name)"></span>
 											</span>
-
 										</div>
 										
 									</td>
