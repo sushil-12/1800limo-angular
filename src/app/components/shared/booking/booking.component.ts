@@ -246,10 +246,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
-	number_of_hours: any = '2';
+	number_of_hours: any = 2;
 	// Embedded quote (Vehicle & Affiliate section): 'browse' uses the quotebot
 	// drill-down, 'manual' uses the existing affiliate/vehicle/driver dropdowns.
-	vehicleSelectionTab: 'browse' | 'manual' = 'browse';
+	vehicleSelectionTab: 'browse' | 'manual' = 'manual';
 	quotePayload: any = null;
 	quoteLoading: boolean = false;
 	confirmMsg: any;
@@ -375,7 +375,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.updateType = 'create'
 				this.SetFormValue('updateType', 'create')
 				this.BookingForm.get('prevent_rate_override')?.setValue(false);
-				this.vehicleSelectionTab = 'browse';
+				this.vehicleSelectionTab = 'manual';
 				this.resetFields()
 			}
 			// this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData')) ? JSON.parse(sessionStorage.getItem('currencyData')) : null
@@ -2106,7 +2106,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			service_type: ['one_way', Validators.required],
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
-			number_of_hours: ['2'],
+			number_of_hours: [2],
 			prevent_rate_override: this.isAdminMode && this.updateType === "edit" ? [true] : [false],
 			acc_id: [''],
 			account_type: [this.isTravelAgentMode ? 'travel_planner' : 'individual'],
@@ -3644,6 +3644,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// Patch to ensure all bound mat-select instances reflect the new value
 		this.BookingForm.get('service_type')?.setValue(event.value, { emitEvent: false });
 		this.buildBookingData();
+	}
+
+	selectBrowseTab() {
+		this.vehicleSelectionTab = 'browse';
+		const hasPickup = !!(this.BookingForm.get('pickup_latitude')?.value || this.BookingForm.get('pickup_airport_latitude')?.value);
+		const hasDropoff = !!(this.BookingForm.get('dropoff_latitude')?.value || this.BookingForm.get('dropoff_airport_latitude')?.value);
+		if (hasPickup && hasDropoff) {
+			this.runEmbeddedQuote();
+		}
 	}
 
 	changeReturnTransferType(event: any) {
@@ -6257,7 +6266,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 					return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
 				})
 			}
-			if (value == 'one_way') {
+			if (value == 'one_way' || value == 'charter_tour') {
 				this.BookingForm?.get('return_cruise_name')?.clearValidators();
 				this.BookingForm?.get('return_cruise_port')?.clearValidators();
 				// this.BookingForm.get('return_dropoff_flight').clearValidators();
@@ -6276,10 +6285,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.BookingForm?.get('departing_airport_city')?.updateValueAndValidity();
 				this.BookingForm?.get('return_cruise_name')?.updateValueAndValidity();
 				this.BookingForm?.get('return_cruise_port')?.updateValueAndValidity();
-				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
-					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
-				})
+				if (value == 'one_way') {
+					this.BookingForm.patchValue({
+						cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
+						return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24'
+					})
+				} else {
+					this.BookingForm.patchValue({
+						cancellation_hours: this.selectedVehicle?.charter_cancellation_hours?.toString() ?? '24',
+						return_cancellation_hours: this.return_selectedVehicle?.charter_cancellation_hours?.toString() ?? '24'
+					})
+				}
 
 				// Clear return leg address validators
 				this.BookingForm?.get('return_pickup')?.clearValidators();
@@ -7302,6 +7318,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			})
 		}
 
+		// Trigger initial valueChanges to set validators on pickup/dropoff
+		this.BookingForm.get('transfer_type')?.setValue(this.BookingForm.get('transfer_type')?.value, { emitEvent: true });
+		if (this.BookingForm?.get('service_type')?.value === 'round_trip') {
+			this.BookingForm.get('return_transfer_type')?.setValue(this.BookingForm.get('return_transfer_type')?.value, { emitEvent: true });
+		}
 	}
 
 	private isManualRateEntered(): boolean {

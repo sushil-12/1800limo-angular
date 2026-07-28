@@ -1626,7 +1626,7 @@
 				<!-- manual affiliate assignment is an admin-only capability -->
 				<div class="eq-tabs" *ngIf="isAdminMode || (isAffiliateMode && (newBooking))">
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'browse'"
-						(click)="vehicleSelectionTab = 'browse'">Select/Change vehicle</button>
+						(click)="selectBrowseTab()">Select/Change vehicle</button>
 					<button type="button" class="eq-tab" [class.active]="vehicleSelectionTab === 'manual'"
 						(click)="vehicleSelectionTab = 'manual'">Assign manually</button>
 				</div>
