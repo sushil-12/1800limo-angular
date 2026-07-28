@@ -172,7 +172,8 @@ export class InvoiceDashComponent implements OnInit {
     if (!searchText) { return args; }
     if (args) {
       args = args.toString()
-      var re = new RegExp(searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+      const escapedSearchText = searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var re = new RegExp(escapedSearchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
       return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
     }
   }

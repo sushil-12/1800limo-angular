@@ -331,7 +331,8 @@ export class SubscribersListComponent implements OnInit {
 		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll(",", ", ") : "N/A"; }
 		if (args) {
 			args = args.toString().replaceAll(",", ", ")
-			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			const escapedSearchText = this.searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			var re = new RegExp(escapedSearchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 
@@ -350,7 +351,8 @@ export class SubscribersListComponent implements OnInit {
 		if (!this.searchText) { return args; }
 		if (args) {
 			args = args.toString()
-			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			const escapedSearchText = this.searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			var re = new RegExp(escapedSearchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
