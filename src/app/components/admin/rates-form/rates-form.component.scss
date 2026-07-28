@@ -9,7 +9,10 @@
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 
-@media screen and (max-width:1024px){
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1300px) 
+  and (-webkit-min-device-pixel-ratio: 2){
 	.section-dropdown {
 		width:100%;
 		border-radius: 12px;
@@ -118,7 +121,7 @@
 
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 1302px) {
 	.section-dropdown {
 		width: 49%;
 	}
