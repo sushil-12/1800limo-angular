@@ -156,15 +156,21 @@
 	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking" [currencyObject]="currencyObj"
 	[vehicle_created_by]="vehicle_created_by" [booking_created_from]="booking_created_from"
 	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
-	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type">
+	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type"
+	[isFinalizeButton]="isFinalizeButton" (finalize)="submitForm()">
 </app-finalize-rates>
-<div class="row" id="submitForm">
-	<div class="col-md-12 text-right">
-		<button type="button" class="custom-filled-button ratesButton m-3"
-			[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="submitForm()">
-			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
+
+<div class="container mt-3" *ngIf="showAlertMessage">
+	<div class="alert alert-primary alert-dismissible fade show" role="alert">
+		Your booking has been finalized. Please complete the payment at your earliest convenience.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="showAlertMessage = false">
+			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
+</div>
+<div id="nextSection"></div>
+
+<div class="row" id="submitForm">
 	<!-- <p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
 			<span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span>
 		</p> -->
@@ -232,9 +238,9 @@
 					<thead class="bg-transparent">
 						<tr>
 							<th scope="col"></th>
-							<th scope="col">Name on Card</th>
-							<th scope="col">Card Number</th>
-							<th scope="col">Expires on</th>
+							<th scope="col">Name </th>
+							<th scope="col">Card No</th>
+							<th scope="col">Expiry</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>

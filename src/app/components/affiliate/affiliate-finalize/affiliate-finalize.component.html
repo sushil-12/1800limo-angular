@@ -389,15 +389,11 @@
 		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 		[isCreatedByAdmin]="isCreatedByAdmin" [isFarmoutBooking]="isFarmoutBooking" [service_type]="service_type"
-		[waiting_time_in_mins]="f.waiting_time_in_mins.value" [wait_time_cost]="wait_time_cost">
+		[waiting_time_in_mins]="f.waiting_time_in_mins.value" [wait_time_cost]="wait_time_cost"
+		[isFinalizeButton]="isFinalizeButton" [paymentStatus]="BookingDetail?.payment_status" [editRate]="editRate"
+		(finalize)="submitForm()">
 	</app-affiliate-finalize-rates>
 	<div class="row" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
-		<div class="col-md-12 text-right">
-			<button type="button" class="custom-filled-button ratesButton m-3"
-				[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="submitForm()">
-				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
-			</button>
-		</div>
 		<div class="col-md-12">
 			<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this
 				booking: <span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
@@ -427,8 +423,8 @@
 	<table class="table table-borderless">
 		<thead class="bg-transparent">
 			<tr>
-				<th scope="col">Name on Card</th>
-				<th scope="col">Card Number</th>
+				<th scope="col">Name</th>
+				<th scope="col">Card No</th>
 				<th scope="col" *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">Transfer Amount</th>
 				<th scope="col">Recipt</th>
 			</tr>
@@ -649,7 +645,13 @@
 
 	</div>
 </section> -->
-<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'" style="padding: 0;">
+<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'" style="padding: 0;" id="paymentOptionsDiv">
+	<div class="col-md-12 p-3 pb-0" *ngIf="showAlert">
+		<div class="alert alert-primary m-0" role="alert">
+		   Your booking has been finalized. Please complete the payment at your earliest convenience.
+		</div>
+	</div>
+	
 	<div class="col-md-12 paymentOptionsDiv mr-4">
 		<h4 class="section-dropdown-header mb-0">
 			Payment Options
