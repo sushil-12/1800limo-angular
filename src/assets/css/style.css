@@ -6438,3 +6438,11 @@ gmp-place-autocomplete {
 .ql-container.ql-snow {
    background-color: #FFF !important;
 }
+
+#layoutSidenav_content {
+  overflow: visible !important;
+}
+.section-container.position-sticky {
+  top: 90px;
+  z-index: 4 !important; 
+}

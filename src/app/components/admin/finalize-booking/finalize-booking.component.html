@@ -1,5 +1,15 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <ngx-spinner type="ball-scale-multiple" name="normalspinner"></ngx-spinner>
+
+<div class="sticky-alert-container" *ngIf="showAlertMessage">
+	<div class="alert alert-primary alert-dismissible fade show m-0" role="alert">
+		Your booking has been finalized. Please complete the payment at your earliest convenience.
+		<button type="button" class="close"  data-dismiss="alert" aria-label="Close" (click)="showAlertMessage = false">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
 <section class="section-container" *ngIf="BookingDetail">
 	<div class="container" id="print-section">
 		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
@@ -149,6 +159,7 @@
 		</div>
 	</div>
 </section>
+
 <!-- Rates Section -->
 <app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates" [isTravelShare]="isTravelShare"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
@@ -159,16 +170,6 @@
 	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type"
 	[isFinalizeButton]="isFinalizeButton" (finalize)="submitForm()">
 </app-finalize-rates>
-
-<div class="container mt-3" *ngIf="showAlertMessage">
-	<div class="alert alert-primary alert-dismissible fade show" role="alert">
-		Your booking has been finalized. Please complete the payment at your earliest convenience.
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="showAlertMessage = false">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
-</div>
-<div id="nextSection"></div>
 
 <div class="row" id="submitForm">
 	<!-- <p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
@@ -191,8 +192,8 @@
 	<table class="table table-borderless">
 		<thead class="bg-transparent">
 			<tr>
-				<th scope="col">Name on Card</th>
-				<th scope="col">Card Number</th>
+				<th scope="col">Name</th>
+				<th scope="col">Card No</th>
 				<th scope="col" *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">Transfer Amount</th>
 				<th scope="col">Recipt</th>
 			</tr>
@@ -225,7 +226,7 @@
 		</h4>
 		<p [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></p>
 	</div> -->
-	<div class="row" *ngIf="paymentSection">
+	<div class="row" *ngIf="paymentSection" id="nextSection">
 
 		<!-- RADIO BUTTONS -->
 		<div class="col-md-12 cardSection">

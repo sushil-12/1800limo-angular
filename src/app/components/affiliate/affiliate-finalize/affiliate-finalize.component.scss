@@ -756,3 +756,25 @@ tbody {
         flex-direction: column;
     }
 }
+
+.sticky-alert-container {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    .alert {
+        border-radius: 8px;
+        font-weight: 500;
+    }
+}
+
+#layoutSidenav_content {
+  overflow: visible !important;
+}
+.section-container.position-sticky {
+  top: 80px;
+  z-index: 4 !important; 
+}

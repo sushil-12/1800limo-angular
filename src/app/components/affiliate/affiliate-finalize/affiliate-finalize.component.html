@@ -1,4 +1,13 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+
+<div class="sticky-alert-container" *ngIf="showAlert">
+	<div class="alert alert-primary alert-dismissible fade show m-0" role="alert">
+		Your booking has been finalized. Please complete the payment at your earliest convenience.
+		<button type="button" class="close" (click)="showAlert = false" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
 <section class="section-container">
 	<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
 	<hr>
@@ -646,12 +655,6 @@
 	</div>
 </section> -->
 <section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'" style="padding: 0;" id="paymentOptionsDiv">
-	<div class="col-md-12 p-3 pb-0" *ngIf="showAlert">
-		<div class="alert alert-primary m-0" role="alert">
-		   Your booking has been finalized. Please complete the payment at your earliest convenience.
-		</div>
-	</div>
-	
 	<div class="col-md-12 paymentOptionsDiv mr-4">
 		<h4 class="section-dropdown-header mb-0">
 			Payment Options
