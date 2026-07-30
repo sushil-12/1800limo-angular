@@ -147,19 +147,20 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr role="row" class="odd" *ngFor="let blackCarLimoBus of affiliate_accounts">
+							<tr role="row" class="odd"
+								*ngFor="let blackCarLimoBus of affiliate_accounts; trackBy: trackByAffiliate">
 								<td>
 									<a [ngClass]="(blackCarLimoBus?.at_step == 'step1') ? 'disabled user-profileded btn btn-icon btn-transparent-dark dropdown-toggle' : 'user-profileded btn btn-icon btn-transparent-dark dropdown-toggle'"
-										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+										[id]="blackCarLimoBus?._toggleId" href="javascript:void(0);" role="button"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										<span>View</span>
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-										aria-labelledby="navbarDropdownUserImage">
+										[attr.aria-labelledby]="blackCarLimoBus?._toggleId">
 										<a class="dropdown-item" *ngIf="blackCarLimoBus?.id"
 											(click)="editAffiliateAccount(blackCarLimoBus?.id, blackCarLimoBus?.AffiliateType , blackCarLimoBus)">
 											<div class="dropdown-item-icon"></div>
-											Edit {{formatter(blackCarLimoBus?.AffiliateType) |
+											Edit {{blackCarLimoBus?._editLabel |
 											titlecase }} Account
 										</a>
 										<!-- <a class="dropdown-item" [routerLink]="['/admin/booking-list']" *ngIf="blackCarLimoBus?.id"
@@ -208,11 +209,10 @@
 								</td>
 								<td class="clickable" (dblclick)="sendMessage('sms', blackCarLimoBus)"
 									data-messagetype="sms">
-									<span
-										[innerHTML]="highlighText(blackCarLimoBus?.CellIsd+blackCarLimoBus?.CellNumber+' '+'('+blackCarLimoBus?.CellNumberCountry.toUpperCase()+')')"></span>
+									<span [innerHTML]="blackCarLimoBus?._cellHtml"></span>
 								</td>
 								<td>
-									<span [innerHTML]="highlighTextSteps(blackCarLimoBus?.at_step_nmae)"></span>
+									<span [innerHTML]="blackCarLimoBus?._stepHtml"></span>
 								</td>
 								<td>
 									<mat-slide-toggle class="example-margin" [color]="color"
@@ -221,28 +221,27 @@
 									</mat-slide-toggle>
 								</td>
 								<td>
-									<span [innerHTML]="highlighText(blackCarLimoBus?.AffiliateTypeName)"></span>
+									<span [innerHTML]="blackCarLimoBus?._affiliateTypeHtml"></span>
 									<span style="font-weight: 600;">
 										{{'('+(blackCarLimoBus?.number_of_vehicles)+')'}}</span>
 								</td>
 
 								<td>
 									<span *ngIf="blackCarLimoBus?.id; else noId"
-										[innerHTML]="highlighText(blackCarLimoBus?.FirstName + ' ' + (blackCarLimoBus?.MiddleName ? blackCarLimoBus?.MiddleName : '') + ' ' + blackCarLimoBus?.LastName )"></span>
+										[innerHTML]="blackCarLimoBus?._nameHtml"></span>
 									<ng-template #noId>
 										<span>N/A</span>
 									</ng-template>
 								</td>
 								<td>
-									<ng-container
-										*ngIf="getDriverListItems(blackCarLimoBus?.driver_list).length; else noDrivers">
+									<ng-container *ngIf="blackCarLimoBus?._driverItems?.length; else noDrivers">
 										<div class="driver-list-cell">
 											<button
-												*ngFor="let driver of getDriverListItems(blackCarLimoBus?.driver_list); index as driverIndex"
+												*ngFor="let driver of blackCarLimoBus?._driverItems; index as driverIndex; trackBy: trackByDriver"
 												type="button" class="driver-list-link"
 												(click)="openDriverProfile(driver, blackCarLimoBus, $event)">
 												{{ driverIndex + 1 }}. <span
-													[innerHTML]="highlighText(driver?.displayName)"></span>
+													[innerHTML]="driver?._displayNameHtml"></span>
 											</button>
 										</div>
 									</ng-container>
@@ -252,35 +251,34 @@
 								</td>
 								<td class="clickable" (dblclick)="sendMessage('email', blackCarLimoBus)"
 									data-messagetype="email">
-									<span [innerHTML]="highlighText(blackCarLimoBus?.Email)"></span>
+									<span [innerHTML]="blackCarLimoBus?._emailHtml"></span>
 								</td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus?.badge_city_name)"></span></td>
+								<td><span [innerHTML]="blackCarLimoBus?._badgeCityHtml"></span></td>
 
-								<td><span [innerHTML]="highlighText(blackCarLimoBus?.CompanyName)"></span></td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus?.DBA)"></span></td>
+								<td><span [innerHTML]="blackCarLimoBus?._companyHtml"></span></td>
+								<td><span [innerHTML]="blackCarLimoBus?._dbaHtml"></span></td>
 
 								<td>
 									<div *ngIf="blackCarLimoBus?.readMore">
-										<span
-											[innerHTML]="teset(blackCarLimoBus?.LanguagesSpoken?.toString().slice(0,20))">
+										<span [innerHTML]="blackCarLimoBus?._languagesShortHtml">
 										</span>
 										<button class="showMoreButton"
 											(click)="toggleShowMore(blackCarLimoBus , false)">...more</button>
 									</div>
 									<div *ngIf="!blackCarLimoBus?.readMore">
-										<span [innerHTML]="teset(blackCarLimoBus?.LanguagesSpoken)"></span>
+										<span [innerHTML]="blackCarLimoBus?._languagesHtml"></span>
 										<button class="showMoreButton"
 											*ngIf="blackCarLimoBus?.LanguagesSpoken?.length > 2"
 											(click)="toggleShowMore(blackCarLimoBus , true)">...less</button>
 									</div>
 								</td>
 								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus?.Associations)"></span></td> -->
-								<td><span [innerHTML]="highlighText(blackCarLimoBus?.Address)"></span></td>
+								<td><span [innerHTML]="blackCarLimoBus?._addressHtml"></span></td>
 								<td>
 									<ul
 										style="flex-direction: column !important; padding: 0px !important; margin: 0px !important;">
-										<li *ngFor="let vehcile of blackCarLimoBus?.vehicles"><span
-												[innerHTML]="teset(vehcile)"></span></li>
+										<li *ngFor="let vehcile of blackCarLimoBus?._vehicleHtml; trackBy: trackByIndex">
+											<span [innerHTML]="vehcile"></span></li>
 									</ul>
 
 								</td>
@@ -304,7 +302,7 @@
 								<span class="sr-only">Previous</span>
 							</a>
 						</li>
-						<li *ngFor="let in of counter() ;let i = index"
+						<li *ngFor="let in of pages ;let i = index; trackBy: trackByIndex"
 							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
 							(click)="loadAffiliateOperators(path+'?page='+in)"
 							[disabled]="(in==currentPage)?true:false">

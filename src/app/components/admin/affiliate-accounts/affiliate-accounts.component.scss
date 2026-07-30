@@ -128,6 +128,50 @@ a.dropdown-item {
     font-family: "Roboto", sans-serif !important;
 }
 
+/*
+ * iOS/iPadOS only synthesises a bubbling click for elements Safari considers
+ * "clickable" (native controls, anchors with href, or anything with
+ * cursor:pointer). Every tap target below is an <a> without href, an <li> or a
+ * <div>, so without this rule their taps never reach the document-level
+ * handlers Bootstrap uses to close dropdowns — which is what leaves menus stuck
+ * open over the rows underneath them on iPad.
+ */
+a.dropdown-item,
+.pagination .page-item,
+.pagination .page-link,
+.approval_status {
+    cursor: pointer;
+}
+
+/*
+ * On a touch device Safari withholds the click from the first tap when the
+ * element's rendering changes on :hover — the tap is spent revealing the hover
+ * state instead, and only the second tap activates. Every interactive element in
+ * this table had a hover rule, so neutralise them where there is no real pointer.
+ * `hover: none` matches iPad and never matches a desktop browser, so the desktop
+ * hover affordances are untouched.
+ */
+@media (hover: none) {
+
+    .clickable:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .status-badge:hover {
+        transform: none;
+    }
+
+    .driver-list-link:hover {
+        color: #000;
+    }
+
+    a.dropdown-item:hover,
+    a.dropdown-item:focus {
+        background-color: transparent;
+    }
+}
+
 .x-circle-btn {
     opacity: 1;
     font-size: 30px;
