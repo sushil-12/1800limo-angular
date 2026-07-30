@@ -181,14 +181,17 @@
 						</div>
 					</div>
 
-						<!-- ── Special Instruction / Meet & Greet ── -->
+					<!-- ── Special Instruction / Meet & Greet ── -->
 					<div class="rcpt-section">
-						<div class="rcpt-section-title">Special Instruction</div>
+						<div class="rcpt-section-title">Meet &amp; Greet</div>
 
 						<div class="rcpt-note" *ngIf="bookingPreview?.booking_instructions?.trim(); else noInstruction">
 							<i class="bi bi-info-circle rcpt-note-icon"></i>
-							<div class="rcpt-note-body" #specialInstructionBox
-								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions)">
+							<div>
+								<div class="rcpt-greet-label" style="color:#d97706">Special Instruction</div>
+								<div class="rcpt-note-body" #specialInstructionBox
+									[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions)">
+								</div>
 							</div>
 						</div>
 						<ng-template #noInstruction>
@@ -198,7 +201,7 @@
 						<div class="rcpt-greet" *ngIf="bookingPreview?.meet_greet_choice_name">
 							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
 							<div>
-								<div class="rcpt-greet-label">Meet &amp; Greet</div>
+								<div class="rcpt-greet-label">Arrival Instruction</div>
 								<div class="rcpt-greet-value">{{ textFormatter(bookingPreview?.meet_greet_choice_name) |
 									titlecase }}</div>
 							</div>
@@ -206,7 +209,7 @@
 						<div class="rcpt-greet" *ngIf="bookingPreview?.return_meet_greet_choice_name">
 							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
 							<div>
-								<div class="rcpt-greet-label">Return Meet &amp; Greet</div>
+								<div class="rcpt-greet-label">Departure Instruction</div>
 								<div class="rcpt-greet-value">{{
 									textFormatter(bookingPreview?.return_meet_greet_choice_name) | titlecase }}</div>
 							</div>
