@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -18,7 +18,7 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss'],
 	
 })
-export class AffiliateAccountsComponent implements OnInit {
+export class AffiliateAccountsComponent implements OnInit, OnDestroy {
 	private readonly affiliateSearchStorageKey = 'affiliateSearch';
 	private readonly affiliateFilterStorageKey = 'affiliateFilterType';
 	private readonly affiliateOperatorStorageKey = 'affiliateOperatorSelect';
@@ -78,6 +78,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	fileType: String;
 	uploadedFile: any;
 	successMessage: any;
+	pages: number[] = [];
 
     @ViewChild('messageEditor') messageEditor: any;
     private quillMessageInstance: Quill;
@@ -101,6 +102,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private uploadService: UploadService,
 		private affiliateService: AffiliateService,
+		private zone: NgZone,
 		private activatedRoute: ActivatedRoute) { }
 
 	ngOnInit(): void {
@@ -118,9 +120,94 @@ export class AffiliateAccountsComponent implements OnInit {
 			reject_cause: ['', Validators.required],
 		});
 
+		this.zone.runOutsideAngular(() => {
+			document.addEventListener('touchend', this.dismissDropdownsOnTouch, true);
+		});
+
 		// this.getEmailList()
 
 
+	}
+
+	ngOnDestroy(): void {
+		clearTimeout(this.timer);
+		document.removeEventListener('touchend', this.dismissDropdownsOnTouch, true);
+		this.closeTransientPopups();
+	}
+
+	/**
+	 * Why the row menu eats the first tap.
+	 *
+	 * Bootstrap only detaches its iOS `mouseover` shims from inside
+	 * `_clearMenus`, which is a handler delegated on `document`. Dismissing a
+	 * dropdown by tapping empty space on the page does not reach `document` on
+	 * iOS — Safari refuses to bubble a click from a <td>, a <div> or whitespace,
+	 * none of which it treats as clickable — so `_clearMenus` never runs and the
+	 * shims stay attached to <body>'s children for as long as you sit on the
+	 * page.
+	 *
+	 * Those shims are what costs you the first tap: once an ancestor of the
+	 * whole app carries a `mouseover` handler, Safari treats the next tap as a
+	 * hover-reveal and withholds the click. Tap again and it works. That is why
+	 * the symptom is "first click sometimes does nothing" and why "sometimes"
+	 * means "any time after you have opened a View menu".
+	 *
+	 * `touchend` fires no matter what Safari decides to do about the click, so
+	 * this closes the menu and strips the shims on the dismissal tap itself.
+	 * Bound outside the Angular zone: it runs on every tap and must not drag a
+	 * change-detection pass along with it.
+	 */
+	private dismissDropdownsOnTouch = (event: Event): void => {
+		const target = event.target as HTMLElement;
+		if (!target || !target.closest) {
+			return;
+		}
+		// Taps on the toggle or inside the menu are Bootstrap's to handle.
+		if (target.closest('.dropdown-menu, [data-toggle="dropdown"]')) {
+			return;
+		}
+		if (!document.querySelector('.dropdown-menu.show')) {
+			return;
+		}
+		this.closeActionsDropdown();
+	}
+
+	/**
+	 * While a dropdown is open on a touch device, Bootstrap 4 attaches no-op
+	 * `mouseover` handlers to every direct child of <body> so that taps bubble to
+	 * its document-level handlers. It only detaches them from inside
+	 * `_clearMenus`, which walks `[data-toggle="dropdown"]` elements that are
+	 * still in the DOM. Every action in the row menu navigates away, so Angular
+	 * has already destroyed those toggles by then and the handlers are orphaned —
+	 * one more set per dropdown used, accumulating for the whole session. iOS
+	 * treats an element carrying a `mouseover` handler as hover-first, so taps
+	 * inside the app start getting swallowed as hover taps and links stop
+	 * responding. Desktop never sees this: the Bootstrap branch is gated on
+	 * `'ontouchstart' in document.documentElement`.
+	 *
+	 * Modal backdrops get the same treatment — a leftover `.modal-backdrop`
+	 * without `.show` is transparent but still covers the viewport at z-index
+	 * 1040, which kills every link on the page with no visual clue.
+	 */
+	private closeTransientPopups(): void {
+		$('.dropdown-menu.show').removeClass('show').parent().removeClass('show');
+		$('[data-toggle="dropdown"]').attr('aria-expanded', 'false');
+		$(document.body).children().off('mouseover', null, $.noop);
+
+		$('#rejectCauseModal, #messageModal, #sendEmailModal, #sendsmsModal, #AuditTrailModal, #successModal')
+			.modal('hide');
+		$('.modal-backdrop').remove();
+		$('body').removeClass('modal-open').css('padding-right', '');
+	}
+
+	/**
+	 * Called before any row-menu action navigates away, so the menu is closed
+	 * while its toggle still exists and Bootstrap's own bookkeeping stays sane.
+	 */
+	private closeActionsDropdown(): void {
+		$('.dropdown-menu.show').removeClass('show').parent().removeClass('show');
+		$('[data-toggle="dropdown"]').attr('aria-expanded', 'false');
+		$(document.body).children().off('mouseover', null, $.noop);
 	}
 
 	onMessageEditorCreated(quill: Quill) {
@@ -204,6 +291,9 @@ export class AffiliateAccountsComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem(this.affiliateSearchStorageKey, this.searchText || '')
+			// Highlights depend on searchText, so refresh the cached markup here
+			// rather than letting the template recompute it every CD pass.
+			this.applyRowProjections()
 			// this.loadAffiliateOperators()
 			// this.getEmailList()
 		}, 700)
@@ -284,9 +374,88 @@ export class AffiliateAccountsComponent implements OnInit {
 			this.lastPageUrl = result.data.last_page_url;
 			this.prevPageUrl = result.data.prev_page_url;
 			this.nextPageUrl = result.data.next_page_url;
+			this.applyRowProjections();
+			this.pages = this.counter();
 			// sessionStorage.setItem('blackCarLimoBus',JSON.stringify(this.blackCarLimoBus));
 			this.spinner.hide();//hide spinner
+		}).catch((err) => {
+			// Without this the full-screen spinner stays up forever when the
+			// request is aborted — routine on iPad, where Safari kills in-flight
+			// XHRs as soon as the tab is backgrounded.
+			console.log('Failed to load affiliate operators: ', err);
+			this.spinner.hide();
 		})
+	}
+
+	/**
+	 * Caches everything the row template used to recompute on every change
+	 * detection pass.
+	 *
+	 * `getDriverListItems()` and `counter()` each build a brand-new array (of
+	 * brand-new objects) per call, and the template called them from inside
+	 * *ngFor. With no stable identity and no trackBy, Angular tore down and
+	 * rebuilt every driver button and every pagination link on *every* pass. On
+	 * iOS a single tap fires touchstart, touchend, mouseover, mousemove,
+	 * mousedown, mouseup and click — zone.js runs change detection after each —
+	 * so one tap triggered that rebuild six or seven times. When the node you
+	 * touched is replaced between touchstart and the synthesised click, Safari
+	 * has nothing left to dispatch to and silently drops the click. That is the
+	 * "link does nothing" symptom, and it gets worse the more rows are loaded.
+	 *
+	 * The highlight markup is cached in the same pass; it was compiling a fresh
+	 * RegExp per cell (~12 per row) on every pass as well.
+	 */
+	private applyRowProjections(): void {
+		if (!Array.isArray(this.affiliate_accounts)) {
+			return;
+		}
+
+		for (const account of this.affiliate_accounts) {
+			const cellCountry = account?.CellNumberCountry
+				? ' (' + account.CellNumberCountry.toUpperCase() + ')'
+				: '';
+			account._cellHtml = this.highlighText(
+				(account?.CellIsd || '') + (account?.CellNumber || '') + cellCountry
+			);
+			account._stepHtml = this.highlighTextSteps(account?.at_step_nmae);
+			account._affiliateTypeHtml = this.highlighText(account?.AffiliateTypeName);
+			account._nameHtml = this.highlighText(
+				account?.FirstName + ' ' + (account?.MiddleName ? account?.MiddleName : '') + ' ' + account?.LastName
+			);
+			account._emailHtml = this.highlighText(account?.Email);
+			account._badgeCityHtml = this.highlighText(account?.badge_city_name);
+			account._companyHtml = this.highlighText(account?.CompanyName);
+			account._dbaHtml = this.highlighText(account?.DBA);
+			account._addressHtml = this.highlighText(account?.Address);
+			account._languagesShortHtml = this.teset(account?.LanguagesSpoken?.toString().slice(0, 20));
+			account._languagesHtml = this.teset(account?.LanguagesSpoken);
+			account._vehicleHtml = Array.isArray(account?.vehicles)
+				? account.vehicles.map((vehicle: any) => this.teset(vehicle))
+				: [];
+			account._editLabel = account?.AffiliateType ? this.formatter(account.AffiliateType) : '';
+			// Was a hardcoded id repeated on every row (and on other screens) —
+			// invalid HTML, and it pointed every menu's aria-labelledby at the
+			// first row's toggle.
+			account._toggleId = 'affiliateActions' + (account?.id ?? '');
+
+			const drivers = this.getDriverListItems(account?.driver_list);
+			drivers.forEach((driver: any) => {
+				driver._displayNameHtml = this.highlighText(driver?.displayName);
+			});
+			account._driverItems = drivers;
+		}
+	}
+
+	trackByAffiliate(index: number, account: any): any {
+		return account?.id ?? index;
+	}
+
+	trackByDriver(index: number, driver: any): any {
+		return driver?.id ?? index;
+	}
+
+	trackByIndex(index: number): number {
+		return index;
 	}
 
 	private filterAffiliateAccounts(accounts: any[] = []) {
@@ -419,6 +588,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	editAffiliateAccount(affiliate_id: number, affiliate_type: string, affiliateUserData) {
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
+		this.closeActionsDropdown();
 		sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
 		sessionStorage.setItem("affiliateType", affiliate_type);
 		sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
@@ -440,6 +610,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	viewAffiliateCreditCards(affiliate_id: number) {
+		this.closeActionsDropdown();
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: 'blackCarLimoBus', accountId: affiliate_id } });
 	}
 
@@ -609,12 +780,11 @@ export class AffiliateAccountsComponent implements OnInit {
 			}
 			this.adminService.sendAffiliateMessage(type, affiliate['id'], body).subscribe((response: any) => {
 				this.spinner.hide()
-				$('#successModal').modal('show')
-				this.successMessage = response?.message
-				setTimeout(() => {
-					$('#successModal').modal('hide')
-				}, 1500)
+				this.showSuccessModal(response?.message)
 				console.log("response-------->", response)
+			}, (err) => {
+				this.spinner.hide()
+				console.log('Failed to send affiliate message: ', err)
 			})
 
 			// Clear file input after success
@@ -630,6 +800,36 @@ export class AffiliateAccountsComponent implements OnInit {
 
 			$("#messageModal").modal("hide");
 		}
+	}
+
+	/**
+	 * Bootstrap 4 does not support two modals being open at once. Showing the
+	 * success modal while the form modal is still transitioning out leaves a
+	 * second `.modal-backdrop` behind, and a backdrop without `.show` is fully
+	 * transparent while still covering the viewport at z-index 1040 — every link
+	 * on the page goes dead with nothing on screen to explain it. iPad hits this
+	 * far more often because Safari drops the `transitionend` that Bootstrap
+	 * waits on before removing a backdrop whenever the tab is suspended.
+	 */
+	private showSuccessModal(message: string): void {
+		this.successMessage = message;
+		$('#messageModal, #sendEmailModal, #sendsmsModal').modal('hide');
+		// 400ms clears Bootstrap's 300ms modal transition.
+		setTimeout(() => {
+			$('#successModal').modal('show');
+			setTimeout(() => {
+				$('#successModal').modal('hide');
+				setTimeout(() => this.sweepOrphanedBackdrops(), 500);
+			}, 1500);
+		}, 400);
+	}
+
+	private sweepOrphanedBackdrops(): void {
+		if ($('.modal.show').length) {
+			return;
+		}
+		$('.modal-backdrop').remove();
+		$('body').removeClass('modal-open').css('padding-right', '');
 	}
 
 	get Form() {
@@ -693,11 +893,13 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	auditTrail(id: any) {
 		console.log("In function audit trail", id);
+		this.closeActionsDropdown();
 		this.spinner.show();
 		this.adminService
 			.communicationLogs(id)
 			.pipe(
 				catchError((err) => {
+					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
 			)
@@ -756,12 +958,11 @@ export class AffiliateAccountsComponent implements OnInit {
 			// 	}
 			// })
 			this.spinner.hide()
-			$('#successModal').modal('show')
-			this.successMessage = response?.message
-			setTimeout(() => {
-				$('#successModal').modal('hide')
-			}, 1500)
+			this.showSuccessModal(response?.message)
 			console.log("response-------->", response)
+		}, (err) => {
+			this.spinner.hide()
+			console.log('Failed to send affiliate email: ', err)
 		})
 
 		this.show = false
@@ -810,6 +1011,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	loginAsUser(id) {
+		this.closeActionsDropdown();
 		this.spinner.show()
 		this.adminService.loginAsUser(id).pipe(
 			catchError(err => {
@@ -910,12 +1112,11 @@ export class AffiliateAccountsComponent implements OnInit {
 
 		this.adminService.sendSmsAffiliate(body).subscribe((response: any) => {
 			this.spinner.hide()
-			$('#successModal').modal('show')
-			this.successMessage = response?.message
-			setTimeout(() => {
-				$('#successModal').modal('hide')
-			}, 1500)
+			this.showSuccessModal(response?.message)
 			console.log("response-------->", response)
+		}, (err) => {
+			this.spinner.hide()
+			console.log('Failed to send affiliate sms: ', err)
 		})
 
 		this.show = false
