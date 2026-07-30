@@ -101,6 +101,7 @@ export class FinalizeBookingComponent implements OnInit {
 	service_type: any;
 	isFarmoutBooking: boolean = false;
 	isFinalizeButton: boolean = false;
+	showAlertMessage: boolean = false;
 	currencyObj: any;
 	currencySymbol: any;
 	vehicle_created_by: any;
@@ -255,8 +256,11 @@ export class FinalizeBookingComponent implements OnInit {
 				this.booking_created_from = response?.data?.created_by_role
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				setTimeout(() => {
-					this.scroll('submitForm')
-
+					if (this.showAlertMessage) {
+						this.scroll('nextSection');
+					} else {
+						this.scroll('submitForm');
+					}
 				}, 600)
 			});
 		// api for card detailss
@@ -414,6 +418,7 @@ export class FinalizeBookingComponent implements OnInit {
 			console.log('response-->>', response)
 			this.$spinner.hide()
 			this.finalize_btn = "Finalized"
+			this.showAlertMessage = true;
 			this.getReservationDetails(this.bookingId);
 		})
 

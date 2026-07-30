@@ -36,6 +36,8 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
+	@Input("isFinalizeButton") isFinalizeButton: boolean = false;
+	@Output("finalize") finalize = new EventEmitter<void>();
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -916,6 +918,10 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		'ELH_Charges',
 		'Holiday_Charge',
     ];
+
+    onFinalizeClick() {
+		this.finalize.emit();
+	}
 
     sortVehicleBaseRates = (a: any, b: any) => {
 		const getPriority = (item: any) => {

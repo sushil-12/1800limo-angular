@@ -345,3 +345,16 @@
 .hours-input-wrapper {
     gap: 6px;
 }
+
+.color-grey {
+    border: 2px solid #a2a3a2 !important;
+    background-color: #a2a3a2 !important;
+    color: #fff !important;
+    pointer-events: none;
+}
+
+.color-green-finalize {
+    border: 2px solid #a2a3a2 !important;
+    background-color: var(--green-color) !important;
+    color: #fff !important;
+}

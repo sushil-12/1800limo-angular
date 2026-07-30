@@ -340,3 +340,27 @@
 .finalizeRates {
 	padding-bottom: 80px !important;
 }
+
+.color-grey {
+    border: 2px solid #a2a3a2 !important;
+    background-color: #a2a3a2 !important;
+    color: #fff !important;
+    pointer-events: none;
+}
+
+.color-green-finalize {
+    border: 2px solid #a2a3a2 !important;
+    background-color: var(--green-color) !important;
+    color: #fff !important;
+}
+
+.ratesButton {
+	padding: 7px 20px;
+	border-radius: 0.895rem;
+	font-size: 0.98rem;
+	font-weight: 700;
+	font-family: "Roboto", sans-serif;
+	letter-spacing: 1px;
+	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
+	cursor: pointer;
+}

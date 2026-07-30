@@ -29,13 +29,19 @@ p {
     border: 2px solid #a2a3a2;
     background-color: var(--green-color);
     color: #fff;
-    animation: blink-animation 2s steps(3, start) infinite;
+    animation: pulse-glow 2s ease-in-out infinite;
 }
 
-@keyframes blink-animation {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0px 5px 20px -6px rgba(0, 0, 0, 0.6), 0 0 0 0 rgba(51, 198, 88, 0.7);
+    }
+    70% {
+        box-shadow: 0px 5px 20px -6px rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(51, 198, 88, 0);
+    }
+    100% {
+        box-shadow: 0px 5px 20px -6px rgba(0, 0, 0, 0.6), 0 0 0 0 rgba(51, 198, 88, 0);
+    }
 }
 
 .container {
@@ -541,4 +547,16 @@ tbody {
     position: absolute;
     right: 10px;
     top: -110px;
+}
+
+.sticky-alert-container {
+    position: sticky;
+    top: 3.625rem;
+    z-index: 1050;
+    margin-bottom: 1.2rem;
+    
+    .alert {
+        border-radius: 8px;
+        font-weight: 500;
+    }
 }

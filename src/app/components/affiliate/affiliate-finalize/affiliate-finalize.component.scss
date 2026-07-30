@@ -27,25 +27,20 @@ p {
 
 .color-green {
     border: 2px solid #a2a3a2;
-    // background-color: var(--green-color);
+    background-color: var(--green-color);
     color: #fff;
-    animation: blink-animation 2s steps(3, start) infinite;
+    animation: pulse-glow 2s ease-in-out infinite;
 }
 
-@keyframes blink-animation {
+@keyframes pulse-glow {
     0% {
-        background-color: var(--green-color);
-        /* Green */
+        box-shadow: 0px 5px 20px -6px rgba(0, 0, 0, 0.6), 0 0 0 0 rgba(51, 198, 88, 0.7);
     }
-
-    50% {
-        background-color: red;
-        /* Red */
+    70% {
+        box-shadow: 0px 5px 20px -6px rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(51, 198, 88, 0);
     }
-
     100% {
-        background-color: var(--green-color);
-        /* Green */
+        box-shadow: 0px 5px 20px -6px rgba(0, 0, 0, 0.6), 0 0 0 0 rgba(51, 198, 88, 0);
     }
 }
 
@@ -755,5 +750,17 @@ tbody {
     .paymentOptionsDiv {
         display: flex;
         flex-direction: column;
+    }
+}
+
+.sticky-alert-container {
+    position: sticky;
+    top: 3.625rem;
+    z-index: 1050;
+    margin-bottom: 1.2rem;
+    
+    .alert {
+        border-radius: 8px;
+        font-weight: 500;
     }
 }

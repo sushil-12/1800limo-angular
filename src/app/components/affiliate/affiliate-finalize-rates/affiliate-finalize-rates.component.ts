@@ -28,11 +28,15 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	@Input('waiting_time_in_mins') waiting_time_in_mins: any;
 	@Input('wait_time_cost') wait_time_cost: any;
+	@Input('isFinalizeButton') isFinalizeButton: boolean = false;
+	@Input('paymentStatus') paymentStatus: string = "";
+	@Input('editRate') editRate: any;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
+	@Output("finalize") finalize = new EventEmitter<void>();
 
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
@@ -107,6 +111,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		//save currency symbol
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
+	}
+	onFinalizeClick(event: Event) {
+		event.stopPropagation();
+		this.finalize.emit();
 	}
 	ngAfterViewInit() {
 		this.scroll('grandTotal')

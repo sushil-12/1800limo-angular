@@ -74,6 +74,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	finalizeDataForm: FormGroup;
 	submittedForm: boolean;
 	wait_time_cost: any;
+	showAlert: boolean = false;
 
 	constructor(
 		private $api: AdminService,
@@ -397,6 +398,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 			console.log('response-->>', response)
 			this.finalize_btn = "Finalized"
 			this.getBookingData(this.bookingId)
+			this.showAlert = true;
+			setTimeout(() => {
+				this.scroll('paymentOptionsDiv');
+			}, 600);
 			$('#clickchargeModal').modal('show')
 			setTimeout(() => {
 				$('#clickchargeModal').modal('hide')

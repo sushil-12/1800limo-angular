@@ -3,11 +3,17 @@
 <div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown finalizeRates mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
-	<div class="row cursor-pointer" (click)="toggleDropdown('section')" id="rate-heading">
-		<div class="col-12 col-md-12">
+	<div class="row cursor-pointer align-items-center justify-content-between mx-0 position-sticky sticky-top" (click)="toggleDropdown('section')" id="rate-heading">
+		<div class="col-auto pl-0">
 			<h4 class="m-0">
 				Rates
 			</h4>
+		</div>
+		<div class="col-auto pr-0" *ngIf="paymentStatus=='unpaid' && !editRate">
+			<button type="button" class="custom-filled-button ratesButton"
+				[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="onFinalizeClick($event)">
+				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
+			</button>
 		</div>
 	</div>
 
