@@ -96,7 +96,7 @@
 }
 
 .section-dropdown {
-	overflow: hidden;
+	overflow: visible;
 	cursor: pointer;
 	height: fit-content;
 	transition: height 0.17s ease-in-out;
@@ -112,6 +112,28 @@
 @media only screen and (min-width: 1024px) {
 	.section-dropdown {
 		width: 47.5%;
+	}
+}
+
+.sticky-rates-header {
+	position: sticky;
+	top: 3.625rem;
+	z-index: 1050;
+	background-color: #f5f4fe;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: -12px;
+	margin-left: -12px;
+	margin-right: -12px;
+	padding-left: 12px;
+	padding-right: 12px;
+	border-bottom: 1px solid #e2e2e2;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+
+
+	&.with-alert {
+		top: 7.25rem;
 	}
 }
 
@@ -338,9 +360,9 @@
 	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
 }
 
-.finalizeRates {
-	padding-bottom: 100px !important;
-}
+// .finalizeRates {
+	// padding-bottom: 100px !important;
+// }
 
 .hours-input-wrapper {
     gap: 6px;

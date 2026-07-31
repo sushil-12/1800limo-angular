@@ -14,20 +14,20 @@
 
 	<form class="container-fluid position-relative" [formGroup]="BookingForm" appInvalidControlScroll>
 
-		<div class="d-flex  mb-2 section-container position-sticky justify-content-between align-items-center flex-wrap" style="z-index:9999">  
+		<div class="d-flex  mb-2 section-container position-sticky justify-content-between align-items-center flex-wrap" style="border-radius:0px !important; margin-bottom: 0px !important; box-shadow: none !important; z-index:9999">  
 				<div>
 				   <h4 class="border-0 m-0 mr-3">{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
 				</div>
-				<div class="d-flex align-items-center" *ngIf="updateType=='edit'">
-					<h3 class="m-0"> <span class="badge badge-secondary">Booking #{{booking_id}}</span></h3>
+				<div class="d-flex align-items-center">
+					<h3 *ngIf="updateType=='edit'" class="m-0"> <span class="badge badge-secondary">Booking #{{booking_id}}</span></h3>
 					<button type="submit" class="bk-btn bk-btn--primary mr-4 ml-3" style="padding:6px 10px !important"
-					(click)="submitForm(false)" *ngIf="updateType != 'create' ">Preview</button>
+					(click)="submitForm(false)">Preview</button>
 				</div>
 		</div>
 
 		<div id="page-container">
 			<!-- Section - Booking Type -->
-			<div class="section-container mt-0">
+			<div class="section-container mt-0" style="border-radius:0px 0px 10px 10px !important; margin-bottom: 0px !important; box-shadow: none !important; border-top: 0px !important">
 				<div>
 					<h4 class="border-0">Service & Transfer Type</h4>
 				</div>
