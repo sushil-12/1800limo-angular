@@ -440,3 +440,11 @@ quill-editor {
     text-align: center;
   }
 }
+
+.viewButton{
+    background-color: var(--orange-color);
+    border-color: var(--orange-color);
+    color: #000;
+    padding: 8px 15px !important;
+    border-radius: 3rem !important;
+}
