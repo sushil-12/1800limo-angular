@@ -255,7 +255,7 @@
 		</div>
 		<div class="col-md-12" *ngIf="BookingDetail.booking_instructions">
 			<p> Special Instructions: </p>
-			<strong> {{BookingDetail.booking_instructions}} </strong>
+			<strong [innerHTML]="BookingDetail.booking_instructions"></strong>
 		</div>
 	</div>
 	<hr>
@@ -425,16 +425,19 @@
 			<p class="alert alert-danger">Note- 25% of extra tip will be added to admin share</p>
 		</div>
 	</div>
-	<div class="row" *ngIf="BookingDetail?.payment_status=='unpaid' && editRate" style="margin: -80px 0px 0px 0px;">
+	<div class="row" *ngIf="BookingDetail?.payment_status=='unpaid' && editRate">
 		<div class="col-md-12 accpt_reject_div">
-			<button type="button" class="custom-filled-button green-button accpt_reject_button"
-				(click)="acceptRejectButton('accept')">
-				Accept
-			</button>
+
 			<button type="button" class="custom-filled-button red-button accpt_reject_button"
 				(click)="acceptRejectButton('reject')">
 				Reject
 			</button>
+
+			<button type="button" class="custom-filled-button green-button accpt_reject_button"
+				(click)="acceptRejectButton('accept')">
+				Accept
+			</button>
+			
 		</div>
 	</div>
 </section>

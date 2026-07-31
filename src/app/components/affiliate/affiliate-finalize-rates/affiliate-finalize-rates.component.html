@@ -1,6 +1,6 @@
 <!-- Rates and Taxes -->
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown finalizeRates mt-2"
+<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
 	<div class="row cursor-pointer align-items-center justify-content-between mx-0" (click)="toggleDropdown('section')" id="rate-heading">
@@ -9,12 +9,7 @@
 				Rates
 			</h4>
 		</div>
-		<div class="col-auto pr-0" *ngIf="paymentStatus=='unpaid' && !editRate">
-			<button type="button" class="custom-filled-button ratesButton"
-				[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="onFinalizeClick($event)">
-				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
-			</button>
-		</div>
+		
 	</div>
 
 	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
@@ -249,5 +244,11 @@
 		<div class="col-md-4 text-3xl text-right">
 			<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ farmoutShare.toFixed(2) }}
 		</div>
+	</div>
+	<div class="col-auto pr-0 float-right my-2" *ngIf="paymentStatus=='unpaid' && !editRate">
+			<button type="button" class="custom-filled-button ratesButton"
+				[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="onFinalizeClick($event)">
+				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
+			</button>
 	</div>
 </div>
