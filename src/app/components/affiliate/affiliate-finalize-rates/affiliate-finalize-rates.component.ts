@@ -31,6 +31,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input('isFinalizeButton') isFinalizeButton: boolean = false;
 	@Input('paymentStatus') paymentStatus: string = "";
 	@Input('editRate') editRate: any;
+	@Input('showAlert') showAlert: boolean = false;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();

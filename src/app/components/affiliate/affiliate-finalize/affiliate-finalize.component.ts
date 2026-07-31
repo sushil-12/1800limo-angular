@@ -131,7 +131,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 	scroll(id) {
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView();
+		el?.scrollIntoView({ behavior: 'smooth' });
+	}
+
+	get canCharge(): boolean {
+		return this.BookingDetail?.payment_status == 'unpaid'
 	}
 
 	get f() {
@@ -397,15 +401,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>', response)
 			this.finalize_btn = "Finalized"
+			this.isFinalizeButton = true;
 			this.getBookingData(this.bookingId)
 			this.showAlert = true;
 			setTimeout(() => {
 				this.scroll('paymentOptionsDiv');
 			}, 600);
-			$('#clickchargeModal').modal('show')
-			setTimeout(() => {
-				$('#clickchargeModal').modal('hide')
-			}, 2500)
 		})
 
 

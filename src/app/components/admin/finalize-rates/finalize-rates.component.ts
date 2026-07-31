@@ -37,6 +37,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<number>();
 	@Input("isFinalizeButton") isFinalizeButton: boolean = false;
+	@Input('showAlertMessage') showAlertMessage: boolean = false;
 	@Output("finalize") finalize = new EventEmitter<void>();
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;

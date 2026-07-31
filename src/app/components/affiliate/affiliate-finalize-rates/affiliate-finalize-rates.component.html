@@ -3,7 +3,7 @@
 <div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown finalizeRates mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
-	<div class="row cursor-pointer align-items-center justify-content-between mx-0 position-sticky sticky-top" (click)="toggleDropdown('section')" id="rate-heading">
+	<div class="row cursor-pointer align-items-center justify-content-between mx-0 sticky-rates-header" [class.with-alert]="showAlert" (click)="toggleDropdown('section')" id="rate-heading">
 		<div class="col-auto pl-0">
 			<h4 class="m-0">
 				Rates
