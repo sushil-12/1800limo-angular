@@ -234,6 +234,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 	reset_button: boolean = false
 	submitBookingForm: boolean;
 	numberOfHoursError: boolean = false;
+	/** Set when the last outbound route contained a zero-distance leg on a non-charter booking. */
+	hasInvalidRoutePoint: boolean = false;
+	/** Set when the last return route contained a zero-distance leg on a non-charter booking. */
+	hasInvalidReturnRoutePoint: boolean = false;
 	affiliate_id: any;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
@@ -1673,6 +1677,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	onCustomAddressInput(fieldName: string, value: string): void {
 		this.clearCustomAddressDropdownBlurTimer();
+		this.clearSameLocationErrors();
 		if (fieldName === 'loose_customer_address') {
 			this.setCustomAddressFieldValue(fieldName, value || '');
 		} else {
@@ -1691,6 +1696,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	onCustomAirportInput(fieldName: string, value: string): void {
 		this.clearCustomAirportDropdownBlurTimer();
+		this.clearSameLocationErrors();
 		this.BookingForm.get(fieldName)?.setValue('', { emitEvent: false });
 		this.BookingForm.get(`${fieldName}_name`)?.setValue('', { emitEvent: false });
 		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('', { emitEvent: false });
@@ -1961,6 +1967,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	async selectCustomAddressOption(fieldName: string, option: any): Promise<void> {
 		this.clearCustomAddressDropdownBlurTimer();
+		this.clearSameLocationErrors();
 		const place = await this.fetchPlaceDetails(option?.placeId);
 		if (place?.geometry?.location) {
 			const formattedAddress = place.formatted_address ?? '';
@@ -1992,6 +1999,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	async selectCustomAirportOption(fieldName: string, option: any): Promise<void> {
 		this.clearCustomAirportDropdownBlurTimer();
+		this.clearSameLocationErrors();
 		const place = await this.fetchPlaceDetails(option?.placeId);
 		if (place?.geometry?.location) {
 			this.handleAirportPlaceSelection(fieldName, place);
@@ -3213,7 +3221,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 					// Pass only the chosen route's legs so distance/time matches what's drawn
 					const chosenRoute = response.routes[shortestIndex];
 
-					this.fetchDistanceAndTime(chosenRoute).then((res) => {
+					this.fetchDistanceAndTime(chosenRoute, is_return).then((res) => {
 						if (is_return) {
 							this.return_distance = res.distance;
 							if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
@@ -3491,6 +3499,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	clearAddressField(formControl: string) {
+		this.clearSameLocationErrors();
 		this.closeCustomAddressDropdown(formControl);
 		this.closeCustomAirportDropdown();
 		this.BookingForm.get(formControl)?.setValue('');
@@ -3557,6 +3566,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	clearExtraStopAddress(isReturn: boolean, stopIndex: number, input?: HTMLInputElement) {
+		this.clearSameLocationErrors();
 		this.closeCustomAddressDropdown(this.getExtraStopFieldKey(isReturn, stopIndex));
 		const formArrayName = isReturn ? 'return_extra_stops' : 'extra_stops';
 		const stopGroup = (this.BookingForm.get(formArrayName) as FormArray)?.at(stopIndex);
@@ -5123,6 +5133,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	deleteExtraStop(is_return: boolean, stop_index: number) {
+		this.clearSameLocationErrors();
 		if (is_return) {
 			(<FormArray>this.BookingForm.get('return_extra_stops')).removeAt(stop_index)
 			this.MapController(true)
@@ -5616,6 +5627,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 
+		// Drop the previous run's same-location flags so the check below re-evaluates
+		// the current addresses instead of the form staying invalid from the last attempt.
+		this.clearSameLocationErrors();
+
 		// Sync Pax Country Data
 		if (this.PaxTelObject) {
 			const countryData = this.PaxTelObject.getSelectedCountryData();
@@ -5844,6 +5859,26 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return;
 		}
 
+		// Same pickup / drop-off / stop locations are only valid for a charter tour. Re-check
+		// here because the service type may have been switched away from charter after the
+		// route was built, which would otherwise leave the charter allowance in place.
+		const sameLocationError = this.getSameLocationError();
+		if (sameLocationError) {
+			this.reportSameLocationError(sameLocationError);
+			return;
+		}
+
+		// A previously computed route flagged a zero-distance leg on a non-charter booking.
+		if (this.Form.service_type.value != 'charter_tour'
+			&& (this.hasInvalidRoutePoint || (this.Form.service_type.value == 'round_trip' && this.hasInvalidReturnRoutePoint))) {
+			this.$errors.openDialog({
+				errors: {
+					error: 'Please select a valid location point.'
+				}
+			})
+			return;
+		}
+
 		// Master vehicles have no affiliate — keep affiliate_id empty (set by
 		// onQuoteVehicleSelected/setValueByBookNow) instead of stamping the
 		// subscriber's own account_id on the booking.
@@ -6046,29 +6081,309 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 
-	fetchDistanceAndTime(route: any): Promise<{ [key: string]: number }> {
+	fetchDistanceAndTime(route: any, is_return: boolean = false): Promise<{ [key: string]: number }> {
 		let total_distance = 0.0
 		let total_time = 0
+		// A zero-length leg means two consecutive points resolve to the same place. That is
+		// only acceptable on a charter tour; for one-way / round trip it is a hard error.
+		const allowsSameLocations = this.BookingForm.get('service_type').value == 'charter_tour'
+		const hasZeroDistanceLeg = (route?.legs || []).some((item: any) => Number(item?.distance?.value) === 0)
+		const invalidRoute = hasZeroDistanceLeg && !allowsSameLocations
+
+		if (is_return) {
+			this.hasInvalidReturnRoutePoint = invalidRoute
+		} else {
+			this.hasInvalidRoutePoint = invalidRoute
+		}
+
 		return new Promise((resolve) => {
-			route.legs.forEach((item: any) => {
-				if (item.distance.value == 0 && this.BookingForm.get('service_type').value != 'charter_tour') {
-					this.$errors.openDialog({
-						errors: {
-							error: 'Please select a valid location point.'
-						}
-					})
-					return
-				}
-				else {
-					total_distance += item.distance.value
-					total_time += item.duration.value
-				}
+			if (invalidRoute) {
+				this.$errors.openDialog({
+					errors: {
+						error: 'Please select a valid location point.'
+					}
+				})
+				// Resolve with zeroed totals so the caller never hangs, but keep the
+				// invalid-route flag set so submitForm() can block the booking.
+				resolve({
+					distance: 0,
+					time: 0
+				})
+				return
+			}
+
+			(route?.legs || []).forEach((item: any) => {
+				total_distance += item.distance.value
+				total_time += item.duration.value
 			})
 			resolve({
 				distance: total_distance,
 				time: total_time
 			})
 		})
+	}
+
+	/** Normalized text form of an address used when comparing two locations. */
+	private normalizeLocationText(value: any): string {
+		return String(value ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
+	}
+
+	/**
+	 * Builds a comparable identity for a location. Coordinates win when both are
+	 * resolved; otherwise the typed address text is used so unresolved duplicates
+	 * are still caught.
+	 */
+	private getLocationIdentity(value: any, lat: any, long: any): string {
+		const normalizedValue = this.normalizeLocationText(value);
+		const latitude = Number(lat);
+		const longitude = Number(long);
+
+		if (lat !== '' && lat != null && long !== '' && long != null && Number.isFinite(latitude) && Number.isFinite(longitude)) {
+			return `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+		}
+
+		return normalizedValue;
+	}
+
+	/**
+	 * Identity of a booking leg endpoint, honouring the airport override the map
+	 * controller applies for `airport_*` / `*_airport` transfer types.
+	 */
+	private getBookingLegLocationIdentity(leg: 'pickup' | 'dropoff', is_return: boolean = false): string {
+		const prefix = is_return ? 'return_' : '';
+
+		if (this.isAirportLeg(leg, is_return)) {
+			return this.getLocationIdentity(
+				this.Form[`${prefix}${leg}_airport_name`]?.value || this.Form[`${prefix}${leg}_airport`]?.value,
+				this.Form[`${prefix}${leg}_airport_latitude`]?.value,
+				this.Form[`${prefix}${leg}_airport_longitude`]?.value
+			);
+		}
+
+		return this.getLocationIdentity(
+			this.Form[`${prefix}${leg}`]?.value,
+			this.Form[`${prefix}${leg}_latitude`]?.value,
+			this.Form[`${prefix}${leg}_longitude`]?.value
+		);
+	}
+
+	/** True when the transfer type makes this endpoint an airport rather than a street address. */
+	private isAirportLeg(leg: 'pickup' | 'dropoff', is_return: boolean = false): boolean {
+		const transferType = String((is_return ? this.Form.return_transfer_type?.value : this.Form.transfer_type?.value) || '');
+		return leg === 'pickup' ? transferType.includes('airport_') : transferType.includes('_airport');
+	}
+
+	/**
+	 * Name of the *visible* control for a leg endpoint — the airport picker when the
+	 * transfer type is airport-based, the address input otherwise. This is what gets
+	 * the red border and the scroll.
+	 */
+	private getBookingLegFieldKey(leg: 'pickup' | 'dropoff', is_return: boolean = false): string {
+		const prefix = is_return ? 'return_' : '';
+		return this.isAirportLeg(leg, is_return)
+			? `${prefix}${leg}_airport_option`
+			: `${prefix}${leg}`;
+	}
+
+	/** Identities of every extra stop on a leg, in order (blank slots keep their index). */
+	private getExtraStopIdentities(is_return: boolean = false): string[] {
+		const formArray = this.BookingForm.get(is_return ? 'return_extra_stops' : 'extra_stops') as FormArray | null;
+		if (!formArray) {
+			return [];
+		}
+
+		return formArray.controls
+			.map((control) => (control as FormGroup).getRawValue())
+			.map((stop: any) => this.getLocationIdentity(stop?.address, stop?.latitude, stop?.longitude));
+	}
+
+	/**
+	 * One-way and round trip bookings must visit distinct places. Only charter tours
+	 * may reuse the same pickup / drop-off / stop location, so this re-runs on every
+	 * submit — the service type can change after a charter route was already built.
+	 *
+	 * Returns the message to show plus the field keys to highlight, so the user is
+	 * taken straight to the offending inputs when they dismiss the dialog.
+	 */
+	private getSameLocationError(): { message: string; fields: string[] } | null {
+		const serviceType = this.Form.service_type?.value;
+		if (serviceType != 'one_way' && serviceType != 'round_trip') {
+			return null;
+		}
+
+		const legs: Array<boolean> = serviceType == 'round_trip' ? [false, true] : [false];
+
+		for (const isReturn of legs) {
+			const pickup = this.getBookingLegLocationIdentity('pickup', isReturn);
+			const dropoff = this.getBookingLegLocationIdentity('dropoff', isReturn);
+
+			if (pickup && dropoff && pickup === dropoff) {
+				return {
+					message: 'Pickup and drop-off locations must be different for One Way and Round Trip bookings.',
+					fields: [
+						this.getBookingLegFieldKey('pickup', isReturn),
+						this.getBookingLegFieldKey('dropoff', isReturn)
+					]
+				};
+			}
+
+			// Walk pickup → stops → drop-off and flag the first point that repeats an earlier one.
+			const points: Array<{ identity: string; field: string }> = [
+				{ identity: pickup, field: this.getBookingLegFieldKey('pickup', isReturn) },
+				...this.getExtraStopIdentities(isReturn).map((identity, index) => ({
+					identity,
+					field: this.getExtraStopFieldKey(isReturn, index)
+				})),
+				{ identity: dropoff, field: this.getBookingLegFieldKey('dropoff', isReturn) }
+			].filter((point) => !!point.identity);
+
+			for (let i = 0; i < points.length; i++) {
+				const duplicateOf = points.findIndex((point, index) => index < i && point.identity === points[i].identity);
+				if (duplicateOf !== -1) {
+					return {
+						message: 'Extra stop locations must be different from the pickup, drop-off and each other for One Way and Round Trip bookings.',
+						fields: [points[duplicateOf].field, points[i].field]
+					};
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/** Field keys currently flagged by the same-location check, used for the red border. */
+	sameLocationFields: string[] = [];
+
+	/** Template helper: does this field carry the same-location error? */
+	isSameLocationField(field: string): boolean {
+		return this.sameLocationFields.includes(field);
+	}
+
+	/** Template helper: does this extra stop carry the same-location error? */
+	isSameLocationStop(is_return: boolean, index: number): boolean {
+		return this.isSameLocationField(this.getExtraStopFieldKey(is_return, index));
+	}
+
+	/**
+	 * Mark the offending inputs so they render with a red border, and stamp a
+	 * `sameLocation` error on the backing controls where one exists.
+	 */
+	private flagSameLocationFields(fields: string[]): void {
+		this.sameLocationFields = [...fields];
+		fields.forEach((field) => {
+			const control = this.resolveSameLocationControl(field);
+			if (!control) {
+				return;
+			}
+			control.setErrors({ ...(control.errors || {}), sameLocation: true });
+			control.markAsTouched();
+		});
+	}
+
+	/** Drop the same-location flags so a corrected form can be resubmitted. */
+	private clearSameLocationErrors(): void {
+		this.sameLocationFields.forEach((field) => {
+			const control = this.resolveSameLocationControl(field);
+			if (control?.hasError('sameLocation')) {
+				const { sameLocation: _removed, ...rest } = control.errors || {};
+				control.setErrors(Object.keys(rest).length ? rest : null);
+			}
+		});
+		this.sameLocationFields = [];
+	}
+
+	/** Backing control for a same-location field key (extra stops resolve to their address control). */
+	private resolveSameLocationControl(field: string): AbstractControl | null {
+		const extraStopField = this.parseExtraStopFieldKey(field);
+		if (extraStopField) {
+			const formArray = this.BookingForm.get(extraStopField.formArrayName) as FormArray | null;
+			return (formArray?.at(extraStopField.index) as FormGroup | undefined)?.get('address') ?? null;
+		}
+		return this.BookingForm.get(field);
+	}
+
+	/** The input element rendering a same-location field key, if it is on screen. */
+	private getSameLocationFieldInput(field: string): ElementRef | null {
+		const extraStopField = this.parseExtraStopFieldKey(field);
+		if (extraStopField) {
+			const inputs = extraStopField.formArrayName === 'return_extra_stops'
+				? this.returnExtraStopInputs
+				: this.extraStopInputs;
+			return inputs?.toArray()[extraStopField.index] ?? null;
+		}
+
+		const inputsByField: { [key: string]: ElementRef } = {
+			pickup: this.pickupInput,
+			dropoff: this.dropoffInput,
+			return_pickup: this.return_pickupInput,
+			return_dropoff: this.return_dropoffInput,
+			pickup_airport_option: this.pickupAirportInput,
+			dropoff_airport_option: this.dropoffAirportInput,
+			return_pickup_airport_option: this.returnPickupAirportInput,
+			return_dropoff_airport_option: this.returnDropoffAirportInput
+		};
+		return inputsByField[field] ?? null;
+	}
+
+	/**
+	 * Bring the first flagged location field into view and focus it. Runs once the
+	 * error dialog has closed so the modal backdrop is no longer covering the form.
+	 */
+	private scrollToSameLocationField(fields: string[]): void {
+		for (const field of fields) {
+			const input = this.getSameLocationFieldInput(field)?.nativeElement as HTMLElement | undefined;
+			if (!input || !(input.offsetParent || input.getClientRects().length)) {
+				continue;
+			}
+			input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			setTimeout(() => input.focus({ preventScroll: true }), 350);
+			return;
+		}
+	}
+
+	/**
+	 * Show the same-location error, highlight the offending inputs, and jump to the
+	 * first of them as soon as the user dismisses the dialog.
+	 */
+	private reportSameLocationError(error: { message: string; fields: string[] }): void {
+		this.flagSameLocationFields(error.fields);
+
+		const opened = this.$errors.openDialog({
+			errors: {
+				error: error.message
+			}
+		}) !== false;
+
+		if (!opened) {
+			// Dialog was suppressed (already open) — jump to the field straight away.
+			this.scrollToSameLocationField(error.fields);
+			return;
+		}
+
+		// Wait for the modal to close so the backdrop isn't covering the field we scroll to.
+		// Namespaced + `one` so repeated submits never stack handlers.
+		$('#globalErrorModal')
+			.off('hidden.bs.modal.sameLocationScroll')
+			.one('hidden.bs.modal.sameLocationScroll', () => {
+				this.zone.run(() => this.scrollToSameLocationField(error.fields));
+			});
+	}
+
+	/**
+	 * Re-runs the route/location validation after the service type changes so a
+	 * charter route that was allowed to reuse locations is re-checked as soon as
+	 * the booking becomes One Way or Round Trip.
+	 */
+	private revalidateRouteForServiceType(): void {
+		this.hasInvalidRoutePoint = false;
+		this.hasInvalidReturnRoutePoint = false;
+		this.clearSameLocationErrors();
+		if (this.hasValidRouteCoordinates(false)) {
+			this.MapController();
+		}
+		if (this.Form.service_type.value == 'round_trip' && this.hasValidRouteCoordinates(true)) {
+			this.MapController(true);
+		}
 	}
 
 
@@ -6353,6 +6668,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.BookingForm?.get('return_pickup')?.updateValueAndValidity();
 				this.BookingForm?.get('return_dropoff')?.updateValueAndValidity();
 			}
+
+			// The charter allowance for identical pickup / drop-off / stop locations must not
+			// survive a switch to One Way or Round Trip, so re-run the route validation for the
+			// new service type instead of relying on the route built under the previous one.
+			this.revalidateRouteForServiceType();
 		})
 
 		// Transfer Type

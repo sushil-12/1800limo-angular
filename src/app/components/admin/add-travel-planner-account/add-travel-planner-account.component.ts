@@ -91,6 +91,7 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 	addressSearchLoading: boolean = false;
 	private customPlacesService: google.maps.places.PlacesService | null = null;
 	private addressSearchVersion = 0;
+	private savedAddress: string = '';
 
 	ngOnInit(): void {
 		const currentYear = (new Date()).getFullYear();
@@ -606,9 +607,11 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 					companyName: this.response?.data?.company_name,
 					department: this.response?.data?.department,
 					businessDescription: this.response?.data?.zip,
-					// latitude:this.response.data.latitude,
-					// longitude:this.response.data.longitude,
+					latitude: this.response?.data?.latitude ?? '',
+					longitude: this.response?.data?.longitude ?? '',
 				});
+				// remember the stored address so an untouched one isn't asked to be re-picked from the dropdown
+				this.savedAddress = String(this.response?.data?.Address || '').trim();
 				this.spinner.hide();//hide spinner
 				this.MobileObject.setCountry(this.response?.data?.mobileCountry);
 				this.OfficeObject.setCountry(this.response?.data?.officeCountry);
@@ -695,7 +698,10 @@ export class AddTravelPlannerAccountComponent implements OnInit, AfterViewInit {
 		}
 
 
-		if (this.addTravelPlannerAccountForm.get('address').value != '' && this.addTravelPlannerAccountForm.get('latitude').value == '') {
+		const currentAddress = String(this.addTravelPlannerAccountForm.get('address').value || '').trim();
+		const addressUnchanged = !!this.savedAddress && currentAddress === this.savedAddress;
+
+		if (currentAddress != '' && !addressUnchanged && this.addTravelPlannerAccountForm.get('latitude').value == '') {
 			this.errors.openDialog({
 				errors: {
 					error: `<spanclass="text-danger font-weight-bolder text-xl">Please choose the correct address from the dropdown.</span>`
