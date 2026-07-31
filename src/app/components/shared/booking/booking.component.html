@@ -1008,8 +1008,11 @@
 											clip-rule="evenodd"></path>
 									</svg>
 								</button>
+								<mat-error *ngIf="Form.pickup.errors?.sameLocation">
+									Pickup, drop-off and stop locations must be different
+								</mat-error>
 								<mat-error
-									*ngIf="(submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.errors?.required)">
+									*ngIf="!Form.pickup.errors?.sameLocation && ((submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.errors?.required))">
 									Pickup address is required
 								</mat-error>
 								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -1094,6 +1097,7 @@
 							<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.pickup_airport_option.errors.required">Pickup address is required</div>
+								<div *ngIf="Form.pickup_airport_option.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
 							</div>
 						</div>
 
@@ -1311,8 +1315,11 @@
 											clip-rule="evenodd"></path>
 									</svg>
 								</button>
+								<mat-error *ngIf="Form.dropoff.errors?.sameLocation">
+									Pickup, drop-off and stop locations must be different
+								</mat-error>
 								<mat-error
-									*ngIf="(submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.errors?.required)">
+									*ngIf="!Form.dropoff.errors?.sameLocation && ((submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.errors?.required))">
 									Dropoff address is required
 								</mat-error>
 								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -1396,6 +1403,7 @@
 							<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.dropoff_airport_option.errors.required">Dropoff address is required</div>
+								<div *ngIf="Form.dropoff_airport_option.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
 							</div>
 						</div>
 
@@ -1519,7 +1527,8 @@
 				<div class="row mt-2 mb-4 align-items-center m-0"
 					*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
 					<div class="extra-stop-field col-11 quote-ui-dropdown-host">
-						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address">
+						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+							[ngClass]="{ 'error-field': isSameLocationStop(false, stop_index) }">
 							<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 							<input #extraStopInput type="text" matInput placeholder="Type your address"
@@ -1559,6 +1568,8 @@
 							<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))"
 								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
+						<div *ngIf="isSameLocationStop(false, stop_index)"
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
 					</div>
 					<div class="col-1 p-0 p-md-3">
 						<div class="delete-icon">
@@ -2700,8 +2711,11 @@
 											clip-rule="evenodd"></path>
 									</svg>
 								</button>
+								<mat-error *ngIf="Form.return_pickup.errors?.sameLocation">
+									Pickup, drop-off and stop locations must be different
+								</mat-error>
 								<mat-error
-									*ngIf="(submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.errors?.required)">
+									*ngIf="!Form.return_pickup.errors?.sameLocation && ((submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.errors?.required))">
 									Return pickup address is required
 								</mat-error>
 								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -2788,6 +2802,7 @@
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.return_pickup_airport_option.errors.required">Return pickup address is
 									required</div>
+								<div *ngIf="Form.return_pickup_airport_option.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
 							</div>
 						</div>
 
@@ -3008,8 +3023,11 @@
 											clip-rule="evenodd"></path>
 									</svg>
 								</button>
+								<mat-error *ngIf="Form.return_dropoff.errors?.sameLocation">
+									Pickup, drop-off and stop locations must be different
+								</mat-error>
 								<mat-error
-									*ngIf="(submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.errors?.required)">
+									*ngIf="!Form.return_dropoff.errors?.sameLocation && ((submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.errors?.required))">
 									Return dropoff address is required
 								</mat-error>
 								<!-- <input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -3096,6 +3114,7 @@
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
 								<div *ngIf="Form.return_dropoff_airport_option.errors.required">Return dropoff address is
 									required</div>
+								<div *ngIf="Form.return_dropoff_airport_option.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
 							</div>
 						</div>
 
@@ -3218,7 +3237,8 @@
 				<div class="row my-2 align-items-center"
 					*ngFor="let extra_stop of ReturnExtraStops.controls; let stop_index = index">
 					<div class="extra-stop-field col-md-11 quote-ui-dropdown-host">
-						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address">
+						<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+							[ngClass]="{ 'error-field': isSameLocationStop(true, stop_index) }">
 							<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
 							<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 							<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
@@ -3258,6 +3278,8 @@
 							<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))"
 								class="quote-ui-dropdown-empty">No Result found</div>
 						</div>
+						<div *ngIf="isSameLocationStop(true, stop_index)"
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
 					</div>
 					<div class="col-md-1">
 						<div class="delete-icons">
