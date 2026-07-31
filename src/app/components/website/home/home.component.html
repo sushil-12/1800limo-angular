@@ -648,7 +648,7 @@
 													style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%; padding: 0 2px 0 8px !important;"
 													(change)="changeDetection.pickupTime($event, 'pickup_time')"
 													[class.errorValid]="submitted && QBForm?.pickup_time?.errors">
-													<option *ngFor="let time of time_values"
+													<option *ngFor="let time of pickupTimeOptions"
 														[value]="time?.return_value">
 														{{ time?.display_value }}
 													</option>
@@ -1143,7 +1143,7 @@
 													style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%; padding: 0 4px 0 12px !important;"
 													(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
 													[class.errorValid]="submitted && QBForm?.return_pickup_time?.errors">
-													<option *ngFor="let time of time_values"
+													<option *ngFor="let time of returnTimeOptions"
 														[value]="time?.return_value">
 														{{ time?.display_value }}
 													</option>
@@ -2086,7 +2086,7 @@
 		<!-- Daterangepicker input — inside the modal so picker renders here -->
 		<input type="text" #roundTripRangeInput ngxDaterangepickerMd [(ngModel)]="roundTripRange"
 			[ngModelOptions]="{standalone: true}" [autoApply]="true" [alwaysShowCalendars]="true" [showDropdowns]="true"
-			[linkedCalendars]="true" [minDate]="minDateDayjs" [locale]="dateRangeLocale" startKey="startDate"
+			[linkedCalendars]="true" [minDate]="roundTripPickerMinDate" [locale]="dateRangeLocale" startKey="startDate"
 			endKey="endDate" (datesUpdated)="onRoundTripRangeChange($event)"
 			(startDateChanged)="onRoundTripPickerStartDateChanged($event)"
 			(endDateChanged)="onRoundTripPickerEndDateChanged($event)" class="rt-picker-modal__hidden-input" readonly />

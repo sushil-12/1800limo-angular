@@ -900,8 +900,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	ngAfterViewInit(): void {
 
-		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round' || this) {
-			window.scrollTo({ top: 0 })
+		window.scrollTo({ top: 0 })
+
+		// Keep whatever the prefill already put in. setValueByBookNow() runs
+		// synchronously from the cached bigData$ when arriving from the quotebot,
+		// so stamping today's date here used to wipe the pickup date carried over
+		// from the quote (pickup time and the return leg were never touched, which
+		// is why only the pickup date was lost). Fall back to today only when no
+		// date has been set at all.
+		if (!this.Form.pickup_date.value) {
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 

@@ -94,6 +94,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	hour_values: Array<any> = constant_data.hour_values
 	time_values: Array<any> = constant_data.time_values
 
+	// time dropdown options, trimmed of slots that already passed for the selected date
+	pickupTimeOptions: Array<any> = constant_data.time_values
+	returnTimeOptions: Array<any> = constant_data.time_values
+
 	// PersonalilzedList
 	PersonalilzedList1: Array<String>;
 	PersonalilzedList2: Array<String>;
@@ -2752,6 +2756,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			setTimeout(() => this.retryGoogleAutocompleteInitialization(), 0);
 			this.autoPickLocationOnLoad();
 		}
+
+		// drop any restored/default slot that has already passed
+		this.refreshTimeSlots()
 	}
 
 	/**
@@ -3226,6 +3233,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.fillReturnDetails()
 			this.refreshExtraStopAutocompletes(true);
 		}
+		this.refreshTimeSlots()
 	}
 
 
@@ -3251,10 +3259,170 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		return `${formattedHours}:${minutes.toString().padStart(2, '0')}:00`;
 	}
+
+	// ── Past date/time guards ───────────────────────────────────────────────
+	// A quote can only be filed for the future, so the time dropdowns list just
+	// the slots that are still ahead of "now" for the date currently selected.
+
+	private readonly timeSlotMinutes = 15;
+
+	private parseTimeToMinutes(value: any): number | null {
+		const parts = String(value ?? '').split(':')
+		if (parts.length < 2) return null
+		const hours = parseInt(parts[0], 10)
+		const minutes = parseInt(parts[1], 10)
+		if (isNaN(hours) || isNaN(minutes)) return null
+		return hours * 60 + minutes
+	}
+
+	private toDateOnly(value: any): moment.Moment | null {
+		if (!value) return null
+		const raw = value?.toDate ? value.toDate() : value
+		const parsed = moment(raw)
+		return parsed.isValid() ? parsed.startOf('day') : null
+	}
+
+	/**
+	 * Minutes from midnight of the first slot still bookable today
+	 * (current time rounded up to the next 15 minute slot).
+	 */
+	private getFirstSlotMinutesForToday(): number {
+		const now = new Date()
+		return Math.ceil((now.getHours() * 60 + now.getMinutes()) / this.timeSlotMinutes) * this.timeSlotMinutes
+	}
+
+	private getMinimumSlotMinutes(date: moment.Moment | null, floorMinutes: number = 0): number {
+		const today = moment().startOf('day')
+		// future dates keep the full day, today (or a stale past date) starts from now
+		const base = date && date.isAfter(today) ? 0 : this.getFirstSlotMinutesForToday()
+		return Math.max(base, floorMinutes)
+	}
+
+	private filterTimeOptions(minMinutes: number): Array<any> {
+		if (minMinutes <= 0) return this.time_values
+		return this.time_values.filter((time: any) => {
+			const minutes = this.parseTimeToMinutes(time?.return_value)
+			return minutes !== null && minutes >= minMinutes
+		})
+	}
+
+	private setDateControlValue(field_name: string, date: moment.Moment) {
+		const control = this.quoteBotForm?.get(field_name)
+		const formatted = date.format('YYYY-MM-DD')
+		if (!control || control.value === formatted) return
+		control.setValue(formatted, { emitEvent: false })
+		control.updateValueAndValidity({ emitEvent: false })
+	}
+
+	private applyEarliestValidTime(field_name: string, options: Array<any>, minMinutes: number) {
+		const control = this.quoteBotForm?.get(field_name)
+		if (!control) return
+		const current = this.parseTimeToMinutes(control.value)
+		const stillSelectable = current !== null && current >= minMinutes
+			&& options.some((time: any) => time?.return_value === control.value)
+		if (stillSelectable) return
+		control.setValue(options[0]?.return_value ?? '', { emitEvent: false })
+		control.updateValueAndValidity({ emitEvent: false })
+	}
+
+	/**
+	 * Rebuild the pickup / return time dropdowns so past slots are never offered,
+	 * moving the date forward when the selected day has no slot left.
+	 * Applies to every service type (one way, round trip and charter tour).
+	 */
+	refreshTimeSlots() {
+		if (!this.quoteBotForm) return
+
+		const today = moment().startOf('day')
+		// keep the calendar minimums fresh when the page has been open past midnight
+		if (!this.minDateDayjs.isSame(today, 'day')) {
+			this.minDateDayjs = today.clone()
+			this.minDate = today.toDate()
+		}
+
+		let pickupDate = this.toDateOnly(this.QBForm.pickup_date.value)
+		if (!pickupDate || pickupDate.isBefore(today)) {
+			pickupDate = today.clone()
+			this.setDateControlValue('pickup_date', pickupDate)
+		}
+
+		let pickupMinutes = this.getMinimumSlotMinutes(pickupDate)
+		if (pickupMinutes >= 24 * 60) {
+			// nothing left today, roll over to tomorrow
+			pickupDate = today.clone().add(1, 'day')
+			this.setDateControlValue('pickup_date', pickupDate)
+			pickupMinutes = 0
+		}
+		this.pickupTimeOptions = this.filterTimeOptions(pickupMinutes)
+		this.applyEarliestValidTime('pickup_time', this.pickupTimeOptions, pickupMinutes)
+
+		if (this.QBForm.service_type.value != 'round_trip') {
+			this.returnTimeOptions = this.time_values
+			return
+		}
+
+		let returnDate = this.toDateOnly(this.QBForm.return_pickup_date.value)
+		if (!returnDate || returnDate.isBefore(pickupDate)) {
+			returnDate = pickupDate.clone()
+			this.setDateControlValue('return_pickup_date', returnDate)
+		}
+
+		// on a same day round trip the return can only start after the pickup itself
+		const pickupTimeMinutes = this.parseTimeToMinutes(this.QBForm.pickup_time.value)
+		const sameDayFloor = returnDate.isSame(pickupDate, 'day') && pickupTimeMinutes !== null
+			? pickupTimeMinutes + this.timeSlotMinutes
+			: 0
+
+		let returnMinutes = this.getMinimumSlotMinutes(returnDate, sameDayFloor)
+		if (returnMinutes >= 24 * 60) {
+			returnDate = returnDate.clone().add(1, 'day')
+			this.setDateControlValue('return_pickup_date', returnDate)
+			returnMinutes = 0
+		}
+		this.returnTimeOptions = this.filterTimeOptions(returnMinutes)
+		this.applyEarliestValidTime('return_pickup_time', this.returnTimeOptions, returnMinutes)
+
+		this.syncRoundTripRangeFromForm()
+		this.rtLiveStart = this.roundTripRange?.startDate ?? null
+		this.rtLiveEnd = this.roundTripRange?.endDate ?? null
+	}
+
+	private getSelectedDateTime(date_field: string, time_field: string): moment.Moment | null {
+		const date = this.toDateOnly(this.quoteBotForm?.get(date_field)?.value)
+		const minutes = this.parseTimeToMinutes(this.quoteBotForm?.get(time_field)?.value)
+		if (!date || minutes === null) return null
+		return date.clone().add(minutes, 'minutes')
+	}
+
+	/**
+	 * Last line of defence at submit time, catches a page that has been sitting
+	 * open long enough for the picked slot to fall into the past.
+	 */
+	private getScheduleError(): string | null {
+		const now = moment()
+		const pickup = this.getSelectedDateTime('pickup_date', 'pickup_time')
+		if (!pickup || pickup.isBefore(now)) {
+			return 'Pickup date and time cannot be in the past. Please select a later date and time.'
+		}
+
+		if (this.QBForm.service_type.value == 'round_trip') {
+			const returnPickup = this.getSelectedDateTime('return_pickup_date', 'return_pickup_time')
+			if (!returnPickup || returnPickup.isBefore(now)) {
+				return 'Return date and time cannot be in the past. Please select a later date and time.'
+			}
+			if (!returnPickup.isAfter(pickup)) {
+				return 'Return date and time must be after the pickup date and time.'
+			}
+		}
+
+		return null
+	}
+
 	changeDetection = {
 		pickupDate: (value: any) => {
 			console.log('timeeee--->>>>', value.format("YYYY-MM-DD"))
 			this.SetFormValue('pickup_date', value.format("YYYY-MM-DD"))
+			this.refreshTimeSlots()
 		},
 		// pickupTime: (event: any = null, form_control: string) => {
 		// 	if (event == null) {
@@ -3272,9 +3440,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			console.log('Rounded Time:', roundedTime);
 
 			this.SetFormValue(form_control, roundedTime);
+			this.refreshTimeSlots();
 		},
 		return_pickup_date: (value: any) => {
 			this.SetFormValue('return_pickup_date', value.format("YYYY-MM-DD"))
+			this.refreshTimeSlots()
 		},
 
 		bookingHours: (event: any) => {
@@ -3300,6 +3470,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.rtLiveEnd = event.endDate;
 		this.roundTripSelectionTarget = 'pickup';
 		this.roundTripPickerOpen = false;
+		this.refreshTimeSlots();
 		this.scheduleRoundTripPickerPanelSync();
 	}
 
@@ -3338,6 +3509,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		return this.getRoundTripPickerDate(this.QBForm?.return_pickup_date?.value) || this.getRoundTripPickerDate(this.roundTripRange?.endDate);
 	}
 
+	/**
+	 * ngx-daterangepicker's minDate setter only keeps a Dayjs instance or a
+	 * 'YYYY-MM-DD' string, anything else (a moment) is silently stored as null.
+	 */
+	private toPickerDate(value: any): string {
+		return (value?.format ? value : moment(value)).format('YYYY-MM-DD');
+	}
+
+	/** Lower bound of the round-trip calendar, read by the [minDate] binding. */
+	get roundTripPickerMinDate(): string {
+		return this.toPickerDate(this.minDateDayjs);
+	}
+
 	private primeRoundTripPickerFromForm(): void {
 		const picker = this.roundTripRangePicker?.picker;
 		console.log('FUNC: primeRoundTripPickerFromForm - Priming round trip picker from form with picker', picker);
@@ -3345,6 +3529,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			console.log('FUNC: primeRoundTripPickerFromForm - No picker instance available, cannot prime RETURNING');
 			return;
 		}
+
+		// drop a return-leg minimum left over from a previous session before
+		// seeding the range, setStartDate() clamps to whatever minDate holds
+		picker.minDate = this.roundTripPickerMinDate as any;
 
 		const pickupDate = this.getRoundTripPickupValue() || this.minDateDayjs.clone();
 		picker.setStartDate(pickupDate as any);
@@ -3370,6 +3558,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return;
 		}
 
+		// the pickup can move anywhere from today, so start from the plain minimum
+		picker.minDate = this.roundTripPickerMinDate as any;
+
 		if (!picker.startDate) {
 			picker.setStartDate((this.getRoundTripPickupValue() || this.minDateDayjs.clone()) as any);
 		}
@@ -3380,6 +3571,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 			this.roundTripSelectionTarget = 'pickup';
 		} else {
+			// the return leg can never start before the outbound pickup day. Without
+			// this the left calendar still offers earlier days, and clicking one
+			// silently drags the pickup date back instead of setting the return.
+			picker.minDate = this.toPickerDate(picker.startDate || this.getRoundTripPickupValue() || this.minDateDayjs) as any;
 			picker.endDate = null;
 			picker.pickingDate = true;
 			this.roundTripSelectionTarget = 'return';
@@ -3781,6 +3976,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			console.log('invalid controls:', invalidControls);
 			console.log('full form value:', this.quoteBotForm.value);
 			console.groupEnd();
+			return
+		}
+
+		// block quotes for a slot that already passed (e.g. page left open for a while)
+		const scheduleError = this.getScheduleError()
+		if (scheduleError) {
+			this.refreshTimeSlots()
+			this.errorDialogService.openDialog({
+				errors: {
+					error: scheduleError
+				}
+			})
 			return
 		}
 
