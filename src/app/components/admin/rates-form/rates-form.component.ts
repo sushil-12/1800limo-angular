@@ -6,6 +6,7 @@ import { AffiliateService } from "src/app/services/affiliate.service";
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { AmenitiesService } from "src/app/services/amenities.service";
+import { param } from "jquery";
 
 @Component({
 	selector: "app-rates-form",
@@ -119,7 +120,9 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 	ngOnInit(): void {
 		this.$routeurl.queryParams.subscribe((params: any) => {
+			console.log("DEBUGRATES - NO VEHICLE ID FROM PARAMS", JSON.stringify(params))
 			if (!params?.vehicle_id) {
+				console.log("DEBUGRATES - GOT VEHICLE ID FROM PARAMS")
 				this.fetchRates('');
 			}
 			if (params && params.new == 'true') {
@@ -317,6 +320,9 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 			this.vehicles = 1;
 		}
 
+		if (changes.bookingId) {
+			console.log('DEBUGRATES - RATESFORM GOT bookingId CHANGE | previous:', changes.bookingId.previousValue, '| current:', changes.bookingId.currentValue, '| type:', typeof changes.bookingId.currentValue);
+		}
 		if (changes.bookingId && changes.bookingId.currentValue !== 0) {
 			this.fetchRates("", changes.bookingId?.currentValue)
 
@@ -610,6 +616,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	fetchRates(affiliate: string, bookingId: number = 0) {
+		console.log("DEBUGRATES - UNDER FETCHRATES METHOD --- ", affiliate, bookingId)
 		// Without a bookingId this hits GET admin/booking-rates (blank rate template),
 		// which the individual portal is not permitted to call. Individual mode
 		// (hideBuckets) gets its rates from booking-rates-vehicle / reservation-rates instead.
@@ -618,6 +625,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		}
 
 		const handleResponse = (response: any) => {
+			console.log('DEBUGRATES - FETCHRATES RESPONSE | bookingId:', bookingId, '| success:', response?.success, '| has rateArray:', !!response?.data?.rateArray);
 			if (response?.success && response?.data?.rateArray) {
 				this.emptyRateArray = response?.data?.rateArray
 				this.ratesdata.next({})
@@ -635,9 +643,14 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		};
 
 		if (this.isAffiliateMode) {
-			this.affiliateService.fetchBookingRates(bookingId).subscribe(handleResponse);
+			console.log("DEBUGRATES - AFFILIATE MODE -  Fetch REservation rates | calling reservation-rates/" + bookingId)
+			this.affiliateService.fetchBookingRates(bookingId).subscribe(handleResponse, (error: any) => {
+				console.log('DEBUGRATES - FETCHRATES API ERROR | reservation-rates/' + bookingId + ' | status:', error?.status, '| error:', error);
+			});
 		} else {
-			this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe(handleResponse);
+			this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe(handleResponse, (error: any) => {
+				console.log('DEBUGRATES - FETCHRATES API ERROR | booking-rates | status:', error?.status, '| error:', error);
+			});
 		}
 	}
 

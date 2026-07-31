@@ -2469,8 +2469,31 @@ export class BookingComponent implements OnInit, OnDestroy {
 				updateType: 'reaffiliate'
 			})
 		}
+		console.log('DEBUGRATES - PREFILL START | booking_id:', booking_id, '| updateType:', this.Form.updateType.value);
 		this.fetchBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
+			try {
+			console.log('DEBUGRATES - PREFILL RESPONSE ARRIVED | suspect field types:', {
+				booking_instructions: typeof response?.data?.booking_instructions,
+				booking_instructions_value: response?.data?.booking_instructions,
+				currency: typeof response?.data?.currency,
+				currency_value: response?.data?.currency,
+				passenger_cell_isd: typeof response?.data?.passenger_cell_isd,
+				passenger_cell_isd_value: response?.data?.passenger_cell_isd,
+				extra_stops: typeof response?.data?.extra_stops,
+				return_extra_stops: typeof response?.data?.return_extra_stops,
+				share_array: typeof response?.data?.share_array,
+				pickup_time: response?.data?.pickup_time,
+				return_pickup_time: response?.data?.return_pickup_time,
+				cruise_time: response?.data?.cruise_time,
+				return_cruise_time: response?.data?.return_cruise_time,
+				service_type: response?.data?.service_type,
+				account_type: response?.data?.account_type,
+				reservation_type: response?.data?.reservation_type,
+				vehicle_id: response?.data?.vehicle_id,
+				affiliate_id: response?.data?.affiliate_id
+			});
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
+			console.log('DEBUGRATES - PREFILL CP1 booking_instructions ok');
 			let editing_data = response.data
 
 			// Parse JSON strings if necessary
@@ -2499,6 +2522,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			}
 
+			console.log('DEBUGRATES - PREFILL CP2 json parses ok');
 			let currency = editing_data?.currency
 			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 				for (const key of Object.keys(data)) {
@@ -2529,14 +2553,22 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
 			// this.SetFormValue('affiliate_type', response.data.affiliate_type)
+			console.log('DEBUGRATES - PREFILL CP3 flags/chooseUser ok');
 			this.autofillData('cruise', editing_data);
+			console.log('DEBUGRATES - PREFILL CP4 autofillData ok');
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses') || item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
 				}
 				if (item == "passenger_cell_isd") {
-					let value = editing_data[item].includes('+') ? editing_data[item] : '+'.concat(editing_data[item])
-					this.SetFormValue(item, value);
+					// can come back null/numeric from the API — a raw .includes() here
+					// threw and aborted the whole prefill, leaving booking_id unset
+					const isd = editing_data[item] === null || editing_data[item] === undefined
+						? ''
+						: String(editing_data[item]);
+					if (isd) {
+						this.SetFormValue(item, isd.includes('+') ? isd : '+'.concat(isd));
+					}
 				}
 				if (editing_data[item] && item != "passenger_cell_isd" && typeof editing_data[item] !== 'object') {
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_id') continue;
@@ -2557,6 +2589,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (editing_data.meet_greet_choice_name) {
 				this.SetFormValue('meet_greet_choices_name', editing_data.meet_greet_choice_name);
 			}
+			console.log('DEBUGRATES - PREFILL CP5 SetFormValue loop ok');
 			const pickupLine = editing_data.pickup || editing_data.pickup_address;
 			if (pickupLine) {
 				this.SetFormValue('pickup', pickupLine);
@@ -2597,6 +2630,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			//      console.log('error--->>>>>>', error)
 			//  }
 			// }
+			console.log('DEBUGRATES - PREFILL CP6 address lines ok | BigData:', !!this.BigData, '| airlinesData:', Array.isArray(this.BigData?.airlinesData));
 			this.SetFormValue('pickup_airport_option', this.getEditAirportDisplayValue(this.Form.pickup_airport.value, editing_data.pickup_address));
 			this.SetFormValue('pickup_airport_name', this.getEditAirportDisplayValue(this.Form.pickup_airport.value, editing_data.pickup_address));
 			this.SetFormValue('pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.pickup_airline.value));
@@ -2611,6 +2645,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
 			this.SetFormValue('origin_airport_city', editing_data?.origin_airport_city ? editing_data?.origin_airport_city : editing_data?.departing_airport_city)
 
+			console.log('DEBUGRATES - PREFILL CP7 airport/airline block ok');
 			if (editing_data.driver_image) {
 				this.SetFormValue('driver_image_id', editing_data.driver_image.id);
 				this.driver_image['image'] = editing_data.driver_image.image;
@@ -2628,8 +2663,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			})
 
+			console.log('DEBUGRATES - PREFILL CP8 images/amenities ok');
 			this.prefillExtraStops(editing_data.extra_stops);
 			this.prefillExtraStops(editing_data.return_extra_stops, true);
+			console.log('DEBUGRATES - PREFILL CP9 extra stops ok');
 			this.BookingForm.updateValueAndValidity()
 
 			// override specific value
@@ -2640,6 +2677,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				cancellation_hours: response?.data?.cancellation_hours?.toString() ?? '24'
 			})
 
+			console.log('DEBUGRATES - PREFILL CP10 patchValue ok');
 			if (editing_data?.pickup_time) {
 				this.SetFormValue('pickup_time', this.FormatTime(editing_data.pickup_time));
 			}
@@ -2656,7 +2694,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// if (this.Form.updateType.value == 'edit') {
 			//  this.booking_params.client_account_types.pop()
 			// }
+			console.log('DEBUGRATES - PREFILL CP11 time formatting ok | about to set booking_id from reservation_id:', this.Form.reservation_id.value);
 			this.booking_id = this.Form.reservation_id.value;
+			console.log('DEBUGRATES - PREFILL BOOKING_ID SET ->', this.booking_id, '| this is what the rates form receives');
 			if ((this.isIndividualMode || this.isTravelAgentMode) && (editing_data?.driver_name || editing_data?.driver_id)) {
 				// editing_data is the reservation, so its `id` is the booking id —
 				// remap it to the vehicle id before reusing the vehicle-shaped prefill
@@ -2692,7 +2732,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 			}
 			this.isPrefillingForm = false;
 			this.runEmbeddedQuote();
+			console.log('DEBUGRATES - PREFILL CP12 COMPLETE (no throw)');
+			} catch (e) {
+				console.log('DEBUGRATES - PREFILL THREW | message:', e?.message);
+				console.log('DEBUGRATES - PREFILL THREW | stack:', e?.stack);
+				this.isPrefillingForm = false;
+			}
 		}, (error: any) => {
+			console.log('DEBUGRATES - PREFILL API ERROR | status:', error?.status, '| error:', error);
 			this.isPrefillingForm = false;
 		});
 
@@ -3569,8 +3616,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	checkAndPrefill() {
+		console.log('DEBUGRATES - CHECKANDPREFILL | BigData loaded:', !!this.BigData, '| reservation_id:', this.Form.reservation_id.value, '| current booking_id:', this.booking_id);
 		if (this.BigData && this.Form.reservation_id.value) {
 			this.prefillViaBookingID(this.Form.reservation_id.value);
+		} else {
+			console.log('DEBUGRATES - CHECKANDPREFILL SKIPPED (no prefill will run from this call)');
 		}
 	}
 
