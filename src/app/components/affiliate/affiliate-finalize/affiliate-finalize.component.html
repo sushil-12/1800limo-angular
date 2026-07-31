@@ -1,11 +1,30 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 
-<div class="sticky-alert-container" *ngIf="BookingDetail?.booking_status == 'finalized'">
-	<div class="alert alert-primary alert-dismissible fade show m-0" role="alert">
-		Your booking has been finalized. Please complete the payment at your earliest convenience.
-		<button type="button" class="close" (click)="showAlert = false" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
+<div class="sticky-alert-container" *ngIf="canCharge && !editRate">
+	<div class="finalize-progress" [class.finalized]="isFinalizeButton">
+		<div class="fp-steps">
+			<div class="fp-step" [class.done]="isFinalizeButton" [class.active]="!isFinalizeButton">
+				<span class="fp-circle">
+					<i class="bi bi-check-lg" *ngIf="isFinalizeButton"></i>
+					<ng-container *ngIf="!isFinalizeButton">1</ng-container>
+				</span>
+				<span class="fp-label">Finalize Rates</span>
+			</div>
+			<div class="fp-connector" [class.done]="isFinalizeButton"></div>
+			<div class="fp-step" [class.active]="isFinalizeButton">
+				<span class="fp-circle">2</span>
+				<span class="fp-label">Get Paid</span>
+			</div>
+		</div>
+		<div class="fp-hint" *ngIf="!isFinalizeButton">
+			Review the rates below, then tap <strong>Finalize</strong>
+		</div>
+		<div class="fp-action" *ngIf="isFinalizeButton">
+			<span class="fp-hint-done">Booking finalized — charge now to get paid</span>
+			<button type="button" class="fp-charge-btn" (click)="scroll('paymentOptionsDiv')">
+				Charge Now <i class="bi bi-arrow-down-short"></i>
+			</button>
+		</div>
 	</div>
 </div>
 <section class="section-container">
@@ -396,7 +415,7 @@
 		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 		[isCreatedByAdmin]="isCreatedByAdmin" [isFarmoutBooking]="isFarmoutBooking" [service_type]="service_type"
 		[waiting_time_in_mins]="f.waiting_time_in_mins.value" [wait_time_cost]="wait_time_cost"
-		[isFinalizeButton]="isFinalizeButton"  [showAlert]="showAlert" [paymentStatus]="BookingDetail?.payment_status" [editRate]="editRate"
+		[isFinalizeButton]="isFinalizeButton"  [showAlert]="canCharge && !editRate" [paymentStatus]="BookingDetail?.payment_status" [editRate]="editRate"
 		(finalize)="submitForm()">
 	</app-affiliate-finalize-rates>
 	<div class="row" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
@@ -651,11 +670,21 @@
 
 	</div>
 </section> -->
-<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'" style="padding: 0;" id="paymentOptionsDiv">
+<section class="section-container mt-2 charge-section" [class.charge-ready]="isFinalizeButton"
+	*ngIf="BookingDetail?.payment_status=='unpaid'" style="padding: 0;" id="paymentOptionsDiv">
 	<div class="col-md-12 paymentOptionsDiv mr-4">
-		<h4 class="section-dropdown-header mb-0">
-			Payment Options
-		</h4>
+		<div class="py-2">
+			<h4 class="section-dropdown-header mb-0">
+				{{ isFinalizeButton ? 'Step 2 · Get Paid' : 'Payment Options' }}
+			</h4>
+			<p class="charge-subtext ready m-0" *ngIf="isFinalizeButton">
+				Booking finalized — tap <strong>Charge</strong> to collect
+				<strong>{{currencySymbol}}{{quoteAmount}}</strong>, or mark it as paid in cash.
+			</p>
+			<p class="charge-subtext m-0" *ngIf="!isFinalizeButton">
+				Finalize the rates above to unlock these buttons.
+			</p>
+		</div>
 		<div class="d-flex align-items-center mr-4">
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-blue' : 'color-grey' " (click)="makePayment('cash')">
@@ -663,7 +692,7 @@
 			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " (click)="makePayment('card')">
-				Charge
+				Charge<span *ngIf="isFinalizeButton && quoteAmount"> {{currencySymbol}}{{quoteAmount}}</span>
 			</button>
 		</div>
 	</div>
@@ -705,17 +734,3 @@
 	</div>
 </div>
 
-<div class="modal fade" id="clickchargeModal" tabindex="-1" role="dialog" aria-labelledby="clickchargeModal"
-	aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header pb-0 mb-1 d-flex justify-content-center text-danger">
-				<h4 class="mb-1" style="font-weight: 600;font-size: 23px;">Please click charge button to get paid !</h4>
-			</div>
-			<!-- <div class="modal-footer">
-				<button type="button" class="custom-btn savebutton" (click)="redirecttodailybooking()">
-					Okay</button>
-			</div> -->
-		</div>
-	</div>
-</div>

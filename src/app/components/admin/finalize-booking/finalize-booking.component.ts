@@ -173,8 +173,13 @@ export class FinalizeBookingComponent implements OnInit {
 	scroll(id) {
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView();
+		el?.scrollIntoView({ behavior: 'smooth' });
 	}
+
+	get canCharge(): boolean {
+		return this.BookingDetail?.payment_status == 'unpaid' || this.BookingDetail?.payable_amount > 0
+	}
+
 	handleCardForm() {
 		console.log(this.isCardFormOpen)
 		this.isCardFormOpen = !this.isCardFormOpen
@@ -418,6 +423,7 @@ export class FinalizeBookingComponent implements OnInit {
 			console.log('response-->>', response)
 			this.$spinner.hide()
 			this.finalize_btn = "Finalized"
+			this.isFinalizeButton = true;
 			this.showAlertMessage = true;
 			this.getReservationDetails(this.bookingId);
 		})

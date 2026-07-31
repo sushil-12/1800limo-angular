@@ -1,12 +1,31 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <ngx-spinner type="ball-scale-multiple" name="normalspinner"></ngx-spinner>
 
-<div class="sticky-alert-container" *ngIf="BookingDetail?.booking_status == 'finalized'">
-	<div class="alert alert-primary alert-dismissible fade show m-0" role="alert">
-		Your booking has been finalized. Please complete the payment at your earliest convenience.
-		<button type="button" class="close"  data-dismiss="alert" aria-label="Close" (click)="showAlertMessage = false">
-			<span aria-hidden="true">&times;</span>
-		</button>
+<div class="sticky-alert-container" *ngIf="canCharge">
+	<div class="finalize-progress" [class.finalized]="isFinalizeButton">
+		<div class="fp-steps">
+			<div class="fp-step" [class.done]="isFinalizeButton" [class.active]="!isFinalizeButton">
+				<span class="fp-circle">
+					<i class="bi bi-check-lg" *ngIf="isFinalizeButton"></i>
+					<ng-container *ngIf="!isFinalizeButton">1</ng-container>
+				</span>
+				<span class="fp-label">Finalize Rates</span>
+			</div>
+			<div class="fp-connector" [class.done]="isFinalizeButton"></div>
+			<div class="fp-step" [class.active]="isFinalizeButton">
+				<span class="fp-circle">2</span>
+				<span class="fp-label">Charge Payment</span>
+			</div>
+		</div>
+		<div class="fp-hint" *ngIf="!isFinalizeButton">
+			Review the rates below, then tap <strong>Finalize</strong>
+		</div>
+		<div class="fp-action" *ngIf="isFinalizeButton">
+			<span class="fp-hint-done">Booking finalized — charge now to get paid</span>
+			<button type="button" class="fp-charge-btn" (click)="scroll('nextSection')">
+				Charge Now <i class="bi bi-arrow-down-short"></i>
+			</button>
+		</div>
 	</div>
 </div>
 
@@ -165,7 +184,7 @@
 	[vehicle_created_by]="vehicle_created_by" [booking_created_from]="booking_created_from"
 	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type"
-	[isFinalizeButton]="isFinalizeButton" [showAlertMessage]="showAlertMessage" (finalize)="submitForm()">
+	[isFinalizeButton]="isFinalizeButton" [showAlertMessage]="canCharge" (finalize)="submitForm()">
 </app-finalize-rates>
 
 <div class="row" id="submitForm">
@@ -215,14 +234,17 @@
 	</table>
 </section>
 <!-- Payment Section -->
-<section class="section-container"
+<section class="section-container charge-section" [class.charge-ready]="isFinalizeButton"
 	*ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
-	<!-- <div class="col-md-12 p-0" (click)="handlePaymentSection()">
+	<div class="charge-section-header">
 		<h4 class="section-dropdown-header mb-0">
-			Payment
+			{{ isFinalizeButton ? 'Step 2 · Charge Payment' : 'Payment' }}
 		</h4>
-		<p [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></p>
-	</div> -->
+		<span class="charge-due" *ngIf="isFinalizeButton && (payableAmount - paidAmount) > 0">
+			Balance due <strong>{{currencySymbol}}{{(payableAmount - paidAmount).toFixed(2)}}</strong>
+		</span>
+	</div>
+	<p class="charge-subtext" *ngIf="!isFinalizeButton">Finalize the rates above to unlock the charge button.</p>
 	<div class="row" *ngIf="paymentSection" id="nextSection">
 
 		<!-- RADIO BUTTONS -->
@@ -398,7 +420,8 @@
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " data-toggle="modal"
 				data-target="#paymentModal">
-				Charge
+				Charge<span *ngIf="isFinalizeButton && (payableAmount - paidAmount) > 0">
+					{{currencySymbol}}{{(payableAmount - paidAmount).toFixed(2)}}</span>
 			</button>
 		</div>
 	</div>
