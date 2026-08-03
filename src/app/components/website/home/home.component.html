@@ -664,7 +664,7 @@
 
 									<div class="row mt-3">
 										<div class="col-6 col-md-6">
-											<div class="qb-field-label"><i class="fas fa-user"></i> Passengers</div>
+											<div class="qb-field-label"><i class="fas fa-user"></i> Passengers </div>
 											<div>
 												<ul class="number passengers_qty" id="no_of_passenger_ul">
 
@@ -704,6 +704,12 @@
 												<div *ngIf="QBForm?.no_of_passenger?.errors?.required"># of Passengers
 													is
 													required
+												</div>
+												<div *ngIf="QBForm?.no_of_passenger?.errors?.min">
+													# of Passengers must be at least 1
+												</div>
+												<div *ngIf="QBForm?.no_of_passenger?.errors?.max">
+													# of Passengers cannot exceed 9999
 												</div>
 											</div>
 										</div>
@@ -746,6 +752,12 @@
 											<div *ngIf="submitted && QBForm?.no_of_luggage?.errors" class="text-danger">
 												<div *ngIf="QBForm?.no_of_luggage?.errors?.required">
 													# of Luggage is required
+												</div>
+												<div *ngIf="QBForm?.no_of_luggage?.errors?.min">
+													# of Luggage cannot be negative
+												</div>
+												<div *ngIf="QBForm?.no_of_luggage?.errors?.max">
+													# of Luggage cannot exceed 9999
 												</div>
 											</div>
 										</div>
@@ -1403,7 +1415,7 @@
 			<div class="client-logo-swiper-button-next"></div>
 			<div class="swiper-pagination">
 				<span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
-			  </div>
+			</div>
 		</div>
 	</div>
 </section> -->

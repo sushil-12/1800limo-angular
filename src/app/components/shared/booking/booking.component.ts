@@ -1605,6 +1605,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (!fieldName || this.activeCustomAddressDropdown === fieldName) {
 			this.activeCustomAddressDropdown = null;
 		}
+		this.validateAddressSuggestions();
 	}
 
 	openCustomAirportDropdown(fieldName: string): void {
@@ -1623,6 +1624,108 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.clearCustomAirportDropdownBlurTimer();
 		if (!fieldName || this.activeCustomAirportDropdown === fieldName) {
 			this.activeCustomAirportDropdown = null;
+		}
+		this.validateAddressSuggestions();
+	}
+
+	validateAddressSuggestions(): void {
+		if (!this.BookingForm) return;
+
+		const checkField = (controlName: string, latControlName: string) => {
+			const ctrl = this.BookingForm.get(controlName);
+			if (ctrl) {
+				const errors = ctrl.errors ? { ...ctrl.errors } : null;
+				if (errors) {
+					delete errors['suggestionRequired'];
+				}
+				ctrl.setErrors(errors && Object.keys(errors).length ? errors : null);
+
+				const val = String(ctrl.value || '').trim();
+				const latCtrl = this.BookingForm.get(latControlName);
+				const latVal = latCtrl ? String(latCtrl.value || '').trim() : '';
+
+				if (val && !latVal) {
+					ctrl.setErrors({ ...(ctrl.errors || {}), suggestionRequired: true });
+					ctrl.markAsTouched();
+				}
+			}
+		};
+
+		// 1. Pickup
+		const transferType = this.Form?.transfer_type?.value || '';
+		if (transferType.startsWith('airport_')) {
+			checkField('pickup_airport_option', 'pickup_airport_latitude');
+		} else {
+			checkField('pickup', 'pickup_latitude');
+		}
+
+		// 2. Dropoff
+		if (transferType.endsWith('_airport')) {
+			checkField('dropoff_airport_option', 'dropoff_airport_latitude');
+		} else {
+			checkField('dropoff', 'dropoff_latitude');
+		}
+
+		// 3. Return Pickup & Dropoff
+		if (this.Form?.service_type?.value === 'round_trip') {
+			const returnTransferType = this.Form?.return_transfer_type?.value || '';
+			if (returnTransferType.startsWith('airport_')) {
+				checkField('return_pickup_airport_option', 'return_pickup_airport_latitude');
+			} else {
+				checkField('return_pickup', 'return_pickup_latitude');
+			}
+
+			if (returnTransferType.endsWith('_airport')) {
+				checkField('return_dropoff_airport_option', 'return_dropoff_airport_latitude');
+			} else {
+				checkField('return_dropoff', 'return_dropoff_latitude');
+			}
+		}
+
+		// 4. Extra stops
+		const extraStops = this.BookingForm.get('extra_stops') as FormArray;
+		if (extraStops) {
+			extraStops.controls.forEach((group) => {
+				const addrCtrl = group.get('address');
+				if (addrCtrl) {
+					const errors = addrCtrl.errors ? { ...addrCtrl.errors } : null;
+					if (errors) {
+						delete errors['suggestionRequired'];
+					}
+					addrCtrl.setErrors(errors && Object.keys(errors).length ? errors : null);
+
+					const val = String(addrCtrl.value || '').trim();
+					const latVal = String(group.get('latitude')?.value || '').trim();
+					if (val && !latVal) {
+						addrCtrl.setErrors({ ...(addrCtrl.errors || {}), suggestionRequired: true });
+						addrCtrl.markAsTouched();
+					}
+				}
+			});
+		}
+
+		// 5. Return Extra stops
+		if (this.Form?.service_type?.value === 'round_trip') {
+			const returnExtraStops = this.BookingForm.get('return_extra_stops') as FormArray;
+			if (returnExtraStops) {
+				returnExtraStops.controls.forEach((group) => {
+					const addrCtrl = group.get('address');
+					if (addrCtrl) {
+						const errors = addrCtrl.errors ? { ...addrCtrl.errors } : null;
+						if (errors) {
+							delete errors['suggestionRequired'];
+						}
+						addrCtrl.setErrors(errors && Object.keys(errors).length ? errors : null);
+
+						const val = String(addrCtrl.value || '').trim();
+						const latVal = String(group.get('latitude')?.value || '').trim();
+						if (val && !latVal) {
+							addrCtrl.setErrors({ ...(addrCtrl.errors || {}), suggestionRequired: true });
+							addrCtrl.markAsTouched();
+						}
+					}
+				});
+			}
 		}
 	}
 
@@ -5818,6 +5921,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// Flag past pickup date/time before the invalid check so these errors are
 		// reported together with any other form errors in the same pass.
 		this.validatePastDateTime();
+		this.validateAddressSuggestions();
 
 		if (this.BookingForm.invalid) {
 			this.BookingForm.markAllAsTouched();
