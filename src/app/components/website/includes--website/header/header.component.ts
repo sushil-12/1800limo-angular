@@ -255,11 +255,9 @@ export class HeaderComponent implements OnInit {
 			})
 			return
 		}
-		//navigate to login screen
-		// this.router.navigate(['/login/' + role]);
-		this.router.navigateByUrl('/login/' + role).then(() => {
-			window.location.reload()
-		});
+		//navigate to login screen (role is kept in session, not in the url)
+		sessionStorage.setItem('clicked_login_role', role);
+		this.router.navigateByUrl('/login');
 	}
 
 	openLogoutModal() {

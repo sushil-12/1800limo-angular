@@ -575,7 +575,7 @@
 											</div>
 											<div *ngIf="submitted && QBForm?.booking_hour?.errors"
 												class="text-danger mt-1">
-												<div *ngIf="QBForm?.booking_hour?.errors?.required">
+												<div *ngIf="QBForm?.booking_hour?.errors?.required" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
 													Booking Hours is required
 												</div>
 											</div>
@@ -632,7 +632,7 @@
 													Pickup Date is not valid
 												</div>
 												<ng-template #pickupDateError>
-													<div *ngIf="QBForm?.pickup_date?.errors?.required">
+													<div *ngIf="QBForm?.pickup_date?.errors?.required" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
 														Pickup Date is required
 													</div>
 												</ng-template>
@@ -655,8 +655,8 @@
 												</select>
 											</div>
 											<div *ngIf="submitted && QBForm?.pickup_time?.errors" class="text-danger">
-												<div *ngIf="QBForm?.pickup_time?.errors?.required">Pickup Time is
-													required
+												<div *ngIf="QBForm?.pickup_time?.errors?.required" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
+													Pickup Time is required
 												</div>
 											</div>
 										</div>
@@ -701,15 +701,14 @@
 											</div>
 											<div *ngIf="submitted && QBForm?.no_of_passenger?.errors"
 												class="text-danger">
-												<div *ngIf="QBForm?.no_of_passenger?.errors?.required"># of Passengers
-													is
-													required
+												<div *ngIf="QBForm?.no_of_passenger?.errors?.required" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
+													Passenger count is required
 												</div>
-												<div *ngIf="QBForm?.no_of_passenger?.errors?.min">
-													# of Passengers must be at least 1
+												<div *ngIf="QBForm?.no_of_passenger?.errors?.min" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
+												    Enter at least 1 passenger
 												</div>
-												<div *ngIf="QBForm?.no_of_passenger?.errors?.max">
-													# of Passengers cannot exceed 9999
+												<div *ngIf="QBForm?.no_of_passenger?.errors?.max" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
+													Passenger count cannot exceed 9999
 												</div>
 											</div>
 										</div>
@@ -720,7 +719,7 @@
 												<ul class="number passengers_qty" id="no_of_luggage_ul">
 
 													<li>
-														<div class="input-group  ">
+														<div class="input-group">
 															<div class="input-group-prepend">
 																<button style="min-width: 2.5rem"
 																	class="btn btn-decrement btn-outline-secondary"
@@ -750,21 +749,18 @@
 												</ul>
 											</div>
 											<div *ngIf="submitted && QBForm?.no_of_luggage?.errors" class="text-danger">
-												<div *ngIf="QBForm?.no_of_luggage?.errors?.required">
-													# of Luggage is required
+												<div *ngIf="QBForm?.no_of_luggage?.errors?.required" style="color: #ff6b6b; font-size: 0.78rem; margin:2px;">
+													Luggage count is required
 												</div>
-												<div *ngIf="QBForm?.no_of_luggage?.errors?.min">
-													# of Luggage cannot be negative
+												<div *ngIf="QBForm?.no_of_luggage?.errors?.min" style="color: #ff6b6b; font-size: 0.78rem; margin:2px;">
+													Luggage count cannot be negative
 												</div>
-												<div *ngIf="QBForm?.no_of_luggage?.errors?.max">
-													# of Luggage cannot exceed 9999
+												<div *ngIf="QBForm?.no_of_luggage?.errors?.max" style="color: #ff6b6b; font-size: 0.78rem; margin:2px;">
+													Luggage count cannot exceed 9999
 												</div>
 											</div>
 										</div>
 									</div>
-
-
-
 
 								</div>
 
@@ -1163,7 +1159,7 @@
 											</div>
 											<div *ngIf="submitted && QBForm?.return_pickup_time?.errors"
 												class="text-danger">
-												<div *ngIf="QBForm?.return_pickup_time?.errors?.required">
+												<div *ngIf="QBForm?.return_pickup_time?.errors?.required" style="color: #ff6b6b; font-size: 0.78rem; margin:1px;">
 													Return Pickup Time is required
 												</div>
 											</div>

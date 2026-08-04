@@ -115,7 +115,8 @@ export class PaymentDetailsComponent implements OnInit {
                 if (success == true) {
                   this.stateManagementService.removeUser();
                 }
-                this.router.navigate(['/login/driver'])
+                sessionStorage.setItem('clicked_login_role', 'driver');
+                this.router.navigate(['/login'])
               });
           }, 5000)
           this.spinner.hide();
@@ -144,7 +145,8 @@ export class PaymentDetailsComponent implements OnInit {
         .subscribe(result => {
           this.spinner.hide();
           this.response = result;
-          this.router.navigate(['/login/driver'])
+          sessionStorage.setItem('clicked_login_role', 'driver');
+          this.router.navigate(['/login'])
         });
     }
 

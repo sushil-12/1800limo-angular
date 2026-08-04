@@ -44,7 +44,7 @@ input[type=radio] {
 }
 
 input[type=radio]:checked+label {
-	color: lighten($bg, 60%);
+    font-weight:600;
 	background: $bg;
 }
 
@@ -61,7 +61,7 @@ label+input[type=radio]+label {
 	border: solid 1px $bg;
 	display: inline-block;
 	border-radius: 10px;
-	overflow: hidden;
+	overflow: hidden; 
 	background-color: #FFF;
 	margin-left: 2px;
 }
@@ -129,4 +129,45 @@ label+input[type=radio]+label {
 // Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
 .phoneNumberClass {
 	padding-left: 80px !important;
+}
+
+/* Role Radio Group Styling */
+.role-radio-group {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 20px;
+	margin: 20px auto;
+	padding: 0 15px;
+}
+
+.role-radio-option {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.role-radio-option input[type="radio"] {
+	position: static !important;
+	visibility: visible !important;
+	display: inline-block !important;
+	width: 18px;
+	height: 18px;
+	margin-right: 8px !important;
+	cursor: pointer;
+}
+
+.role-radio-option label {
+	font-size: 15px;
+	font-weight: 500;
+	color: #1a202c;
+	cursor: pointer;
+	margin: 0;
+	user-select: none;
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	text-align: left !important;
 }

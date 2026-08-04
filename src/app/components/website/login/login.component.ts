@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { catchError } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 import { ReCaptchaService } from '../../../services/re-captcha.service';
 
 import { environment } from 'src/environments/environment';
+import { Location } from '@angular/common';
 import { CommonService } from 'src/app/services/common.service';
 import * as intlTelInput from 'intl-tel-input';
 
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	alert_corporate: boolean = false;
 	alert_travel_agent: boolean = false;
 	referralCode: string = null;
+	private readonly existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual', 'sub_affiliate', 'subscriber'];
 
 	constructor(private formBuilder: FormBuilder,
 		private recaptchaService: ReCaptchaService,
@@ -43,8 +45,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		private errorDialogService: ErrorDialogService,
 		private customValidator: CustomvalidationService,
 		private commonServices: CommonService,
+		private location: Location,
 		private route: ActivatedRoute) {
-		if (this.authService.currentUserValue) {
+			    console.log('constructor');
+
+			if (this.authService.currentUserValue) {
 			switch (this.authService.currentUserValue.roleName) {
 				case 'admin': {
 					this.router.navigateByUrl('/admin');
@@ -59,6 +64,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 					break;
 				}
 				case 'driver': {
+					console.log('driver login')
 					switch (localStorage.getItem("account_approval")) {
 						case 'accepted': {
 							this.router.navigateByUrl('/affiliate/my-bookings');
@@ -135,6 +141,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
+    console.log('ngonInit');
 
 		this.loginForm = this.formBuilder.group({
 			phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern("^[0-9+]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
@@ -162,51 +169,41 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			})
 		})
 
-		this.route.params.subscribe((params: Params) => {
-			const role = params['role'];
-			console.log('Role:', role, params);
-
-			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual', 'sub_affiliate', 'subscriber']
-
-			console.log('Role:', role);
-			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]
-			if (!existRoles.includes(role)) {
-				this.router.navigate(['/login/driver']).then(() => {
-					window.location.reload()
-				});
+		// The role is not part of the url anymore, '/login' is the only login route.
+		// Old '/login/:role' links keep working: the role is picked up and the url is cleaned up.
+		const urlRole = this.route.snapshot.params['role'];
+		if (urlRole) {
+			if (this.existRoles.includes(urlRole)) {
+				sessionStorage.setItem('clicked_login_role', urlRole);
 			}
-		});
-		console.log('LOGIN fORM VALUE->:', this.loginForm.value);
-
-		const pageUrl = this.router.parseUrl(this.router.url);
-		try {
-			console.log('>>>>>>>>>>', pageUrl)
-			this.Role = pageUrl.root.children.primary.segments[1].path
-			this.loginForm.patchValue({
-				role: this.Role,
-			})
-		} catch (err) {
-			// this.Role = sessionStorage.getItem('clicked_login_role');
-			if (sessionStorage.getItem('clicked_login_role') !== null) {
-				this.loginButtons(sessionStorage.getItem('clicked_login_role'))
-			} else {
-				this.router.navigateByUrl('/login/driver')
-			}
+			this.location.replaceState('/login', window.location.search.replace('?', ''));
 		}
+
+		const storedRole = sessionStorage.getItem('clicked_login_role') || '';
+		this.setRole(this.existRoles.includes(storedRole) ? storedRole : 'driver');
+
+		console.log('LOGIN fORM VALUE->:', this.loginForm.value);
 	}
 
 	loginSubTravelAgent() {
-		this.router.navigate(['/login/sub_travel_agent']).then(() => {
-			window.location.reload()
-		})
-
+		this.setRole('sub_travel_agent');
 	}
 	loginSubAffiliate() {
-		this.router.navigate(['/login/sub_affiliate']).then(() => {
-			window.location.reload()
-		})
-
+		this.setRole('sub_affiliate');
 	}
+	onRoleChange(role: string) {
+		this.setRole(role);
+	}
+
+	// keeps the selected role in the component/session only, never in the url
+	private setRole(role: string) {
+		this.Role = role;
+		sessionStorage.setItem('clicked_login_role', role);
+		this.loginForm.patchValue({
+			role: role
+		});
+	}
+
 	// loginbuttons
 	loginButtons(role: string) {
 		if (role != 'driver' && role != 'sub_admin') {
@@ -218,14 +215,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			return
 		}
 		//navigate to login screen
-		this.router.navigate(['/login/' + role]).then(() => {
-			window.location.reload()
-		});
-		// this.router.navigateByUrl('/login/' + role).then(()=>{
-		// 	this.router.navigate(['/login/' + role]).then(()=>{
-		// 	console.log(`After navigation I am on:${this.router.url}`)
-		// 	})
-		// 	})
+		this.setRole(role);
 	}
 	telInputObjectCell(obj) {
 		this.countryChangeObject = obj;

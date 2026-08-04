@@ -19,7 +19,7 @@ import { FleetComponent } from './components/website/fleet/fleet.component';
 import { AboutUsComponent } from './components/website/about-us/about-us.component';
 import { HomeComponent } from './components/website/home/home.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, UrlSegment } from '@angular/router';
 import { InsuranceLicensingComponent } from './components/website/insurance-licensing/insurance-licensing.component';
 import { FailedQuoteRequestConfirmationComponent } from './components/email_templates/failed-quote-request-confirmation/failed-quote-request-confirmation.component';
 import { ClientEmailConfirmationComponent } from './components/email_templates/client-email-confirmation/client-email-confirmation.component';

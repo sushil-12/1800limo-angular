@@ -155,8 +155,9 @@ export class FooterComponent implements OnInit {
 			})
 			return
 		}
-		//navigate to login screen
-		this.router.navigateByUrl('/login/' + role);
+		//navigate to login screen (role is kept in session, not in the url)
+		sessionStorage.setItem('clicked_login_role', role);
+		this.router.navigateByUrl('/login');
 	}
 
 	dashboard(role) {
