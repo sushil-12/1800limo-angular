@@ -172,30 +172,85 @@ label+input[type=radio]+label {
 	text-align: left !important;
 }
 
+/* Login wrapper override to prevent vertical overlaps and position children */
+.loginwrapper {
+	min-height: 100vh !important;
+	height: auto !important;
+	position: relative !important;
+	padding: 100px 20px 40px 20px !important;
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	align-items: center !important;
+}
+
 /* Corporate Announcement News Banner */
 .corporate-announcement-bar {
-	width: 100%;
-    position: absolute;
-    top: 0px;
-    display: flex;
-    gap: 13px;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px auto;
-    background-color: #ebf8ff !important;
-    color: #2b6cb0 !important;
-    border: 1px solid #bee3f8 !important;
-    border-radius: 12px !important;
-    padding: 12px 18px !important;
-    font-size: 14.5px !important;
-    line-height: 1.5 !important;
-    box-shadow: 0 4px 12px rgba(43, 108, 176, 0.08);
+	position: absolute !important;
+	top: 20px !important;
+	left: 50% !important;
+	transform: translateX(-50%) !important;
+	width: calc(100% - 40px) !important;
+	display: flex !important;
+	gap: 12px !important;
+	align-items: center !important;
+	justify-content: center !important;
+	margin: 0 !important;
+	background-color: #ebf8ff !important;
+	color: #2b6cb0 !important;
+	border: 1px solid #bee3f8 !important;
+	border-radius: 12px !important;
+	padding: 12px 18px !important;
+	font-size: 14.5px !important;
+	font-weight: 500 !important;
+	line-height: 1.5 !important;
+	box-shadow: 0 4px 12px rgba(43, 108, 176, 0.08) !important;
+	z-index: 10 !important;
 
-	strong {
-		color: #2c5282;
+	.announcement-text {
+	    flex-grow: 0;
+		text-align: center;
+
+		strong {
+			font-weight: 700;
+			color: #2c5282;
+			display: inline;
+		}
 	}
 
 	i {
-		color: #3182ce;
+		color: #3182ce !important;
+		font-size: 16px !important;
+		margin-top: 0px !important;
+		flex-shrink: 0 !important;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.loginwrapper {
+		padding-top: 110px !important;
+	}
+	
+	.corporate-announcement-bar {
+		top: 16px !important;
+		padding: 10px 14px !important;
+		font-size: 13px !important;
+		gap: 10px !important;
+		align-items: flex-start !important;
+	    justify-content: flex-start !important;
+
+		.announcement-text {
+			flex-grow: 1;
+		    text-align: left;
+			strong {
+				display: block;
+				margin-bottom: 3px;
+			}
+		}
+		
+		i {
+			font-size: 14px !important;
+			margin-top: 2px !important;
+		}
 	}
 }
