@@ -1,113 +1,406 @@
-#radio-tiles-container {
-	.radio-tiles {
-		.tile {
-			position: relative;
-			width: 12rem;
-			height: 4em;
-			margin: .5rem;
-			/* border-radius: 1rem; */
-			border: 2px solid #5dbd8a;
-			/* padding: 1rem; */
-			/* min-height: 7rem; */
-			/* flex-basis: 10rem; */
-			box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-			transform: scale(1);
-			/* transition: box-shadow 0.25s ease, background-color 0.25s ease; */
+/* ==========================================================================
+   Step 1 — Business details
 
-			#check-icon {
-				position: absolute;
-				margin: 0 auto;
-				transform: translate(-2px, -21px);
+   Shared wizard chrome (tokens, section headers, choice cards, form fields,
+   modals, checkbox grids) lives in ../affiliate-registration-style.css, which
+   this component loads FIRST. Only step-1-specific rules belong here:
 
-				i {
-					padding: 3px;
-					border-radius: 50%;
-					color: #000000;
-					background-color: var(--orange);
-					font-weight: 700;
-					font-size: 1.2rem
-				}
-			}
+     · the business-card scanner (scan-cta / scan-review / scan-row)
+     · the email verify + edit affordances
+     · a handful of per-step nudges to shared rules
 
-			#tile-name {
-				p {
-					text-align: center;
-					font-size: 0.70rem;
-					font-weight: 500;
-					text-transform: uppercase;
-					letter-spacing: 1px;
-					color: #000;
-					/* margin-bottom: 25px; */
-					margin-top: 10px;
-				}
+   Tokens (--afr-*) come from the shared file's :host block.
+   ========================================================================== */
 
-				.active-tile {
-					color: #fff;
-					/* White text for active/selected tile */
-				}
-			}
-		}
+/* --------------------------------------------------------------------------
+   Business-card scanner
+   -------------------------------------------------------------------------- */
 
-		.tile.active {
-			background-color: #5dbd8a;
-			box-shadow: 0 6px 20px -6px rgba(0, 0, 0, .6);
+.scan-cta {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	width: 100%;
+	padding: 22px 24px;
+	margin: 0;
+	border-radius: var(--afr-r-md);
+	background: linear-gradient(135deg, var(--afr-accent-wash), #ffffff 58%);
+	/* A real dashed border keeps the dash rhythm crisp at every radius. */
+	border: 1.5px dashed var(--afr-accent-line);
+	cursor: pointer;
+	overflow: hidden;
+	transition: border-color .2s var(--afr-ease), box-shadow .2s var(--afr-ease),
+		transform .2s var(--afr-ease);
+
+	&:hover {
+		border-color: var(--afr-accent);
+		box-shadow: var(--afr-shadow-md);
+		transform: translateY(-2px);
+
+		.scan-cta__chevron { transform: translateX(3px); }
+	}
+
+	&:focus-within {
+		outline: none;
+		border-color: var(--afr-accent);
+		box-shadow: var(--afr-ring);
+	}
+
+	&.is-busy {
+		cursor: progress;
+		border-style: solid;
+		border-color: var(--afr-accent);
+		transform: none;
+	}
+
+	input[type="file"] {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	&__icon {
+		flex: 0 0 54px;
+		width: 54px;
+		height: 54px;
+		border-radius: 16px;
+		background: linear-gradient(145deg, var(--afr-accent), var(--afr-accent-deep));
+		color: #ffffff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 23px;
+		box-shadow: 0 10px 20px -10px rgba(217, 115, 22, .95);
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		min-width: 0;
+	}
+
+	&__title {
+		font-size: 17px;
+		font-weight: 700;
+		letter-spacing: -.01em;
+		color: var(--afr-ink);
+	}
+
+	&__hint {
+		font-size: 13.5px;
+		line-height: 1.45;
+		color: var(--afr-ink-soft);
+	}
+
+	&__chevron {
+		margin-left: auto;
+		flex: 0 0 auto;
+		color: var(--afr-accent-deep);
+		font-size: 20px;
+		transition: transform .2s var(--afr-ease);
+	}
+
+	/* Indeterminate sweep along the bottom edge while the card is being read. */
+	&__progress {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 3px;
+		background: rgba(243, 147, 61, .18);
+		overflow: hidden;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0 auto 0 0;
+			width: 38%;
+			background: linear-gradient(90deg, transparent, var(--afr-accent), var(--afr-accent-deep));
+			animation: scan-sweep 1.15s var(--afr-ease) infinite;
 		}
 	}
 }
 
-.section-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+.scan-spin {
+	display: inline-block;
+	animation: scan-spin 1s linear infinite;
+}
 
-	.watch-tutorial-btn {
-		background: #FFEDD4;
-		color: #F54900;
-		padding: 8px 15px;
-		border-radius: 50px;
+@keyframes scan-spin {
+	to { transform: rotate(360deg); }
+}
+
+@keyframes scan-sweep {
+	0%   { transform: translateX(-100%); }
+	100% { transform: translateX(365%); }
+}
+
+.scan-review {
+	position: relative;
+	margin-top: 16px;
+	padding: 22px 24px;
+	border-radius: var(--afr-r-md);
+	background: var(--afr-surface);
+	box-shadow: inset 0 0 0 1px var(--afr-line), var(--afr-shadow-md);
+
+	&--error {
+		background: var(--afr-danger-wash);
+		box-shadow: inset 0 0 0 1px var(--afr-danger-line), var(--afr-shadow-sm);
+	}
+
+	/* Accent rail so a result panel reads as an answer to the scan above. */
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 16px;
+		bottom: 16px;
+		width: 3px;
+		border-radius: 0 3px 3px 0;
+		background: var(--afr-accent);
+	}
+
+	&--error::before { background: var(--afr-danger-ink); }
+
+	&__head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 6px;
+	}
+
+	&__title {
+		font-size: 17px;
+		font-weight: 700;
+		letter-spacing: -.01em;
+		color: var(--afr-ink);
+		margin: 0;
+	}
+
+	&__badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: .01em;
+		color: var(--afr-ok-ink);
+		background: var(--afr-ok-wash);
+		border: 1px solid var(--afr-ok-line);
+		border-radius: 999px;
+		padding: 4px 11px;
+		white-space: nowrap;
+
+		&::before {
+			content: '';
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: currentColor;
+		}
+	}
+
+	&__note {
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--afr-ink-soft);
+		margin: 0 0 14px;
+	}
+
+	&__error {
+		display: flex;
+		align-items: flex-start;
+		gap: 9px;
+		font-size: 15px;
+		font-weight: 700;
+		letter-spacing: -.005em;
+		line-height: 1.45;
+		color: var(--afr-danger-ink);
+		margin: 0 0 6px;
+
+		i {
+			flex: 0 0 auto;
+			font-size: 16px;
+			line-height: 1.35;
+		}
+
+		/* Neutral tone for the "nothing found" case — not an error, just news. */
+		&--muted {
+			color: var(--afr-ink);
+
+			i { color: var(--afr-accent-deep); }
+		}
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px;
+		margin-top: 20px;
+		padding-top: 18px;
+		border-top: 1px solid var(--afr-line);
+
+		/* Bring the shared green CTA into this panel's shape language. */
+		.custom-filled-button {
+			border-radius: 999px;
+			padding: 9px 22px;
+			font-size: 14.5px;
+			box-shadow: 0 10px 20px -12px rgba(18, 18, 23, .7);
+		}
+	}
+
+	&__ghost {
+		padding: 9px 16px;
+		border-radius: 999px;
+		border: 1px solid var(--afr-line-strong);
+		background: transparent;
+		font-size: 14.5px;
 		font-weight: 600;
-		font-size: 16px;
-		display: inline-block;
-		margin: 13px 5px 5px 8px;
-		letter-spacing: 0.5px;
-		border: 1px solid #F54900;
-	}
-}
+		color: var(--afr-ink-mid);
+		cursor: pointer;
+		transition: background-color .18s var(--afr-ease), border-color .18s var(--afr-ease),
+			color .18s var(--afr-ease);
 
-.border-red {
-	border: 3px solid red;
-	border-radius: 10px;
-}
+		&:hover {
+			background: var(--afr-surface-sunk);
+			border-color: var(--afr-ink-soft);
+			color: var(--afr-ink);
+		}
 
-.selectStyle {
-	color: #000;
-
-	select {
-		color: #000;
-
-		option {
-			color: #000;
+		&:focus-visible {
+			outline: none;
+			box-shadow: var(--afr-ring);
 		}
 	}
 }
 
-.vehtype_extint img {
-	height: 225px;
-	border-radius: 15px;
+.scan-row {
+	display: grid;
+	grid-template-columns: 22px minmax(120px, 1fr) minmax(0, 1.9fr);
+	align-items: center;
+	gap: 14px;
+	padding: 11px 10px;
+	margin: 0 -10px;
+	border-radius: var(--afr-r-sm);
+	border-top: 1px solid var(--afr-line);
+	transition: background-color .15s linear;
+
+	&:hover { background: var(--afr-surface-sunk); }
+
+	/* Custom checkbox — square, brand-filled, SVG tick. */
+	&__check {
+		appearance: none;
+		-webkit-appearance: none;
+		width: 20px;
+		height: 20px;
+		margin: 0;
+		border-radius: 6px;
+		border: 1.5px solid var(--afr-line-strong);
+		background: var(--afr-surface);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 15px 15px;
+		cursor: pointer;
+		transition: background-color .15s var(--afr-ease), border-color .15s var(--afr-ease);
+
+		&:checked {
+			background-color: var(--afr-accent);
+			border-color: var(--afr-accent);
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.4l3 3 6-6'/%3E%3C/svg%3E");
+		}
+
+		&:focus-visible {
+			outline: none;
+			box-shadow: var(--afr-ring);
+		}
+	}
+
+	&__label {
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: .02em;
+		text-transform: uppercase;
+		color: var(--afr-ink-soft);
+		margin: 0;
+		cursor: pointer;
+	}
+
+	&__value {
+		width: 100%;
+		padding: 10px 13px;
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--afr-ink);
+		border: 1px solid var(--afr-line);
+		border-radius: var(--afr-r-sm);
+		background: var(--afr-surface);
+		transition: border-color .15s var(--afr-ease), box-shadow .15s var(--afr-ease);
+
+		&:hover { border-color: var(--afr-line-strong); }
+
+		&:focus {
+			outline: none;
+			border-color: var(--afr-accent);
+			box-shadow: var(--afr-ring);
+		}
+	}
 }
 
-.vehtype_extint .emptyImage {
-	height: 225px;
+@media (max-width: 600px) {
+	.scan-cta {
+		align-items: flex-start;
+		gap: 14px;
+		padding: 18px;
+
+		&__icon { flex-basis: 46px; width: 46px; height: 46px; font-size: 20px; }
+
+		&__chevron { display: none; }
+	}
+
+	.scan-review {
+		padding: 18px 16px;
+	}
+
+	.scan-row {
+		grid-template-columns: 22px 1fr;
+		row-gap: 8px;
+
+		&__value {
+			grid-column: 2 / -1;
+		}
+	}
 }
 
-.vehtype_extint .emptyImage img {
-	height: 220px;
+/* The shared file already quiets its own surfaces; these are step 1's. */
+@media (prefers-reduced-motion: reduce) {
+	.scan-cta,
+	.scan-cta__chevron,
+	.scan-review__ghost,
+	.scan-row,
+	.scan-row__check,
+	.scan-row__value {
+		transition: none !important;
+	}
+
+	.scan-cta:hover {
+		transform: none !important;
+	}
+
+	.scan-spin,
+	.scan-cta__progress::after {
+		animation: none !important;
+	}
 }
 
-#instructionsModal .modal-dialog {
-	max-width: 710px;
-}
+/* --------------------------------------------------------------------------
+   Email verification + edit
+   -------------------------------------------------------------------------- */
 
 .edit-email {
 	text-transform: uppercase;
@@ -133,22 +426,14 @@
 	fill: #fff;
 }
 
-.edit-email:hover {
-	border: 1px solid var(--orange-color);
-	background-color: transparent;
-	color: var(--orange-color);
-}
-
+.edit-email:hover,
 .edit-email:focus {
 	border: 1px solid var(--orange-color);
 	background-color: transparent;
 	color: var(--orange-color);
 }
 
-.edit-email:hover svg path {
-	fill: var(--orange-color);
-}
-
+.edit-email:hover svg path,
 .edit-email:focus svg path {
 	fill: var(--orange-color);
 }
@@ -161,10 +446,6 @@
 	bottom: 12px;
 }
 
-.emailText {
-	color: red;
-}
-
 .email-not-verified {
 	height: 35px;
 	position: absolute;
@@ -173,8 +454,12 @@
 	fill: #ea4444;
 }
 
-.modal-header {
-	display: block;
+.emailText {
+	color: red;
+}
+
+.emailErrorMsgs {
+	font-size: 90%;
 }
 
 .security-p {
@@ -189,280 +474,57 @@
 	color: var(--orange-color);
 }
 
-.modal-title {
-	margin-bottom: 0 !important;
-	text-align: center;
-	font-weight: 600;
-	padding: 10px 30px;
+/* Step 1's OTP dialogs stack their header, unlike the shared centred one. */
+.modal-header {
+	display: block;
 }
 
-.modal-body {
-	padding-top: 0 !important;
-	padding-bottom: 0 !important;
+/* --------------------------------------------------------------------------
+   Instructions modal
+   -------------------------------------------------------------------------- */
+
+#instructionsModal .modal-dialog {
+	max-width: 710px;
 }
 
-.emailErrorMsgs {
-	font-size: 90%;
+#instructionsModal .modal-content li {
+	line-height: 25px;
+	padding-bottom: 15px;
 }
 
-.errorColor {
-	color: #dc3545 !important;
+.headingH6 {
+	color: var(--orange-color);
+	font-size: 18px;
 }
 
-// radio button css
-* {
-	box-sizing: border-box;
+/* --------------------------------------------------------------------------
+   Per-step nudges to shared form-field rules
+   -------------------------------------------------------------------------- */
+
+/* Shared sets everything but `top`; the offset is step-specific. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
+	top: 1.75em;
 }
 
-
-.radio-tile-group {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
+/* Step 1 is the only step with a gender select, and its year select sits
+   tighter than the shared floated-label position. */
+:host ::ng-deep .select-gender-label,
+:host ::ng-deep .select-year-label {
+	transform: translateY(0.4em) scale(1) !important;
 }
 
-.input-container {
-	position: relative;
-	height: 4em;
-	width: 12rem;
-	margin: 0.5rem;
+:host ::ng-deep .select-year-label {
+	transform: translateY(0.8em) translateX(-0.8em) scale(0.9) !important;
+	opacity: 0.8;
+	font-size: 13px !important;
+	background: none !important;
 }
 
-.radio-button {
-	opacity: 0;
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	cursor: pointer;
-}
-
-.radio-tile {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 100%;
-	border: 2px solid var(--green-color);
-	border-radius: 5px;
-	padding: 1rem;
-	transition: transform 300ms ease;
-}
-
-
-.radio-tile-label {
-	text-align: center;
-	font-size: 0.85rem !important;
-	font-weight: 700 !important;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: #000;
-	margin-bottom: 30px;
-
-}
-
-.radio-button:checked+.radio-tile {
-	background-color: var(--green-color);
-	border: 2px solid var(--green-color);
-	color: white;
-	transform: scale(1, 1);
-
-	.radio-tile-label {
-		color: white;
-		background-color: var(--green-color);
-	}
-
-	.check {
-		width: 30px;
-		// margin-top: -25px !important;
-		margin-bottom: 5px !important;
-	}
-}
-
-@media only screen and (min-width:1199px) {
-	.input-container:focus {
-		outline: none;
-		background-color: var(--green-color);
-		border: 2px solid var(--green-color);
-		border-radius: 5px;
-		transform: scale(1.1, 1.1);
-	}
-}
-
-@media only screen and (max-width:767px) {
-	.input-container {
-		position: relative;
-		height: 4em;
-		width: 100%;
-		margin: 0.5rem;
-	}
-
-	#radio-tiles-container {
-		.radio-tiles {
-			.tile {
-				width: 100%;
-			}
-		}
-	}
-
-	.radio-tile-label {
-		text-align: center;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: #000;
-		margin-bottom: 35px;
-		margin-top: 5px;
-	}
-}
-
-@media (min-width:768px) and (max-width:991px) {
-	.input-container {
-		position: relative;
-		height: 4em;
-		width: 12rem;
-		margin: 0 !important;
-	}
-
-	.radio-tile-label {
-		text-align: center;
-		font-size: 0.75rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: #000;
-		margin-bottom: 35px;
-		margin-top: 5px;
-	}
-
-	.blacklimo .radio-tile-label {
-		text-align: center;
-		font-size: 0.75rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: #000;
-		margin-bottom: 25px !important;
-		margin-top: 0px !important;
-	}
-}
-
-@media (min-width:992px) and (max-width:1199px) {
-	.input-container {
-		position: relative;
-		height: 5em;
-		width: 12rem;
-		margin: 0 !important;
-		margin-top: 15px !important;
-	}
-
-	.radio-tile-label {
-		text-align: center;
-		font-size: 0.85rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: #000;
-		margin-bottom: 35px;
-		margin-top: 5px;
-	}
-
-	.blacklimo .radio-tile-label {
-		text-align: center;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: #000;
-		margin-bottom: 25px !important;
-		margin-top: 0px !important;
-	}
-
-	.GigOperator .radio-tile-label {
-		text-align: center;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		color: #000;
-		margin-bottom: 45px !important;
-		margin-top: 10px !important;
-	}
-}
-
-
-
-
-div#imageModal {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	z-index: 9999;
-
-	button.close {
-		background-color: #fff;
-		position: absolute;
-		z-index: 999;
-		right: 4px;
-		top: 5px;
-		width: 24px;
-	}
-
-	pinch-zoom {
-		width: 100%;
-		height: 100%;
-
-		img {
-			max-width: 100%;
-			max-height: 100%;
-			-o-object-fit: contain;
-			object-fit: contain;
-			height: 100%;
-			width: 100%;
-			position: absolute;
-			top: 0;
-		}
-
-	}
-
-
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-	#editAffiliateEmailModal .modal-dialog {
-		position: relative;
-		width: auto;
-		margin: 0.5rem auto;
-		margin-top: 2.5rem !important;
-		pointer-events: none;
-	}
-
-	#editDispatchEmailModal .modal-dialog {
-		position: relative;
-		width: auto;
-		margin: 0.5rem auto;
-		margin-top: 2.5rem !important;
-		pointer-events: none;
-	}
-
-	#affiliateInstructionsModal .modal-dialog {
-		position: relative;
-		width: auto;
-		margin: 0.5rem auto;
-		margin-top: 2.5rem !important;
-		pointer-events: none;
-	}
-
-	#instructionsModal .modal-dialog {
-		position: relative;
-		width: auto;
-		margin: 0.5rem auto;
-		margin-top: 2.5rem !important;
-		pointer-events: none;
-	}
+:host ::ng-deep .select-gender-label {
+	transform: translateY(0.8em) translateX(-0.2em) scale(0.9) !important;
+	opacity: 0.8;
+	font-size: 13px !important;
+	background: none !important;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
@@ -475,308 +537,13 @@ div#imageModal {
 	top: 33px;
 }
 
-.headingH6 {
-	color: var(--orange-color);
-	font-size: 18px;
-}
-
-#instructionsModal .modal-content li {
-	line-height: 25px;
-	padding-bottom: 15px;
-}
-
-.select-year-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-.select-gender-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-	border-top-color: #f44336 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
-	border-top-color: #3f51b5 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .12) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
-	border-top-color: #3f51b5 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .87) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
-	border-top-color: #f44336 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
-	border-top-color: #3f51b5 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .12) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .87) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
-	font-weight: normal !important;
-	font-size: 14px !important;
-	color: #191919;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
-	top: 1.3675em
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
-	font-weight: normal !important;
-	font-size: 14px !important;
-	color: #191919;
-	top: 1.75em
-}
-
-:host ::ng-deep .mat-mdc-form-field {
-	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-	.mat-form-field-outline {
-		&-end {
-			border-radius: 0 10px 10px 0 !important;
-		}
-
-		&-start {
-			border-radius: 10px 0 0 10px !important;
-			flex-grow: 1;
-		}
-	}
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
-	border-radius: 10px;
-	background-color: rgb(226, 226, 226, 1);
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
-	top: -12px
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
-	transform: translateY(-0.8em) scale(0.85) !important;
-	width: 133.3333333333%
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-	border-top-color: #b2b2b2 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .selectInputStyle,
-mat-mdc-form-field-label {
-	background-color: rgb(226, 226, 226, 1) !important;
-}
-
-:host ::ng-deep .select-gender-label,
-.select-year-label {
-	background-color: rgb(226, 226, 226, 1) !important;
-	transform: translateY(0.4em) scale(1) !important;
-}
-
-:host ::ng-deep .select-year-label {
-	transform: translateY(0.8em) translateX(-0.8em) scale(0.9) !important;
-	opacity: 0.8;
-	font-size: 13px !important;
-	background: none !important;
-}
-
-
-.mat-mdc-option {
-	background-color: rgb(226, 226, 226, 1) !important;
-}
-
-:host ::ng-deep .ng-option {
-	background-color: rgb(226, 226, 226, 1) !important;
-}
-
-:host ::ng-deep .select-gender-label {
-	transform: translateY(0.8em) translateX(-0.2em) scale(0.9) !important;
-	opacity: 0.8;
-	font-size: 13px !important;
-	background: none !important;
-}
-
-// :host ::ng-deep .iti__selected-flag {
-// 	transform: translateY(5px);
-// }
-
-
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label {
 	text-align: start;
 	padding-left: 8px;
 }
 
-:host ::ng-deep .mat-mdc-input-element {
-	font-weight: 500;
-}
-
-:host ::ng-deep .selectStyle select {
-	font-weight: 400;
-}
-
+/* Larger than the shared 19px — step 1's labels run bigger. */
 .asterisk {
 	font-size: 21px;
-	margin-left: 2px;
-}
-
-.asterisk1 {
-	font-size: 19px !important;
-	margin-left: 2px;
-	color: #ff0000 !important;
-	background: none !important;
-}
-
-.user_information .selectInputStyle {
-	height: 58px !important;
-}
-
-// tooltip css 
-.wrapper .tooltip {
-	background: #fb904b;
-	bottom: 100%;
-	color: #fff;
-	border-radius: 5%;
-	display: block;
-	left: -20px;
-	margin-bottom: 15px;
-	opacity: 0;
-	padding: 14px;
-	pointer-events: none;
-	position: absolute;
-	width: 100%;
-	font-weight: 600;
-	-webkit-transform: translateY(10px);
-	-moz-transform: translateY(10px);
-	-ms-transform: translateY(10px);
-	-o-transform: translateY(10px);
-	transform: translateY(10px);
-	-webkit-transition: all .25s ease-out;
-	-moz-transition: all .25s ease-out;
-	-ms-transition: all .25s ease-out;
-	-o-transition: all .25s ease-out;
-	transition: all .25s ease-out;
-	-webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	-moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	-ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	-o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-}
-
-.wrapper .tooltip:before {
-	bottom: -20px;
-	content: " ";
-	display: block;
-	height: 20px;
-	left: 0;
-	position: absolute;
-	width: 100%;
-}
-
-.wrapper .tooltip:after {
-	border-left: solid transparent 10px;
-	border-right: solid transparent 10px;
-	border-top: solid #fb904b 10px;
-	bottom: -10px;
-	content: " ";
-	height: 0;
-	left: 50%;
-	margin-left: -13px;
-	position: absolute;
-	width: 0;
-}
-
-.wrapper:hover .tooltip {
-	opacity: 1;
-	pointer-events: auto;
-	-webkit-transform: translateY(0px);
-	-moz-transform: translateY(0px);
-	-ms-transform: translateY(0px);
-	-o-transform: translateY(0px);
-	transform: translateY(0px);
-}
-
-@media only screen and (max-width: 768px) {
-	.tooltip {
-		display: none !important;
-	}
-}
-
-.choose_ameniteslist {
-	flex-direction: column !important;
-	height: 38vh !important;
-}
-
-@media (min-width: 767px) and (max-width:821px) {
-	.choose_ameniteslist {
-		height: 38vh !important;
-	}
-}
-
-@media screen and (max-width: 767px) {
-	.choose_ameniteslist {
-		height: auto !important;
-	}
-}
-
-.red-placeholder ::placeholder {
-	color: red !important;
-	font-size: 15px !important;
-	/* Red color for the placeholder */
-}
-
-.red-placeholder {
-	color: red !important;
-	font-weight: 500 !important;
-	font-size: 15px !important;
 }

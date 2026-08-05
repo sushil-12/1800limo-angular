@@ -1,28 +1,9 @@
-.section-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+/* ==========================================================================
+   Step 3 — Licensing + insurance
 
-	.watch-tutorial-btn {
-		background: #FFEDD4;
-		color: #F54900;
-		padding: 8px 18px;
-		border-radius: 50px;
-		font-weight: 600;
-		font-size: 16px;
-		display: inline-block;
-		margin-bottom: 25px;
-		margin-right: 5px;
-		letter-spacing: 0.5px;
-		border: 1px solid #F54900;
-	}
-}
-
-.vehtype_extint img {
-	height: 225px;
-	border-radius: 15px;
-}
+   Shared wizard chrome lives in ../affiliate-registration-style.css, loaded
+   first by this component. Only step-3-specific rules belong here.
+   ========================================================================== */
 
 .modal-header {
 	h5 {
@@ -35,14 +16,6 @@
 		font-weight: 600;
 		opacity: 1;
 	}
-}
-
-.vehtype_extint .emptyImage {
-	height: 225px;
-}
-
-.vehtype_extint .emptyImage img {
-	height: 220px;
 }
 
 .policyMonth {
@@ -71,76 +44,6 @@
 	padding: 0 50px !important;
 }
 
-/* Red border for invalid fields - using custom class for immediate update */
-:host ::ng-deep .is-invalid-input .mdc-notched-outline,
-:host ::ng-deep .is-invalid-input .mdc-notched-outline *,
-:host ::ng-deep .is-invalid-input .mat-mdc-text-field-wrapper,
-:host ::ng-deep .is-invalid-input .mat-mdc-form-field-flex,
-:host ::ng-deep .is-invalid-input .mat-form-field-outline {
-	border-color: red !important;
-	border-width: 3px !important;
-	box-shadow: none !important;
-	outline: none !important;
-}
-
-:host ::ng-deep .is-invalid-input .mdc-notched-outline__leading,
-:host ::ng-deep .is-invalid-input .mdc-notched-outline__notch,
-:host ::ng-deep .is-invalid-input .mdc-notched-outline__trailing {
-	border-color: red !important;
-	border-top: 3px solid red !important;
-	border-bottom: 3px solid red !important;
-	border-left: 0px none !important;
-	/* Start with clean slate for segments */
-	border-right: 0px none !important;
-}
-
-:host ::ng-deep .is-invalid-input .mdc-notched-outline__leading {
-	border-left: 3px solid red !important;
-}
-
-:host ::ng-deep .is-invalid-input .mdc-notched-outline__trailing {
-	border-right: 3px solid red !important;
-}
-
-:host ::ng-deep .is-invalid-input .mat-mdc-form-field-label,
-:host ::ng-deep .is-invalid-input .mat-form-field-label,
-:host ::ng-deep .is-invalid-input .mat-mdc-floating-label,
-:host ::ng-deep .is-invalid-input .asterisk {
-	color: red !important;
-}
-
-/* Ensure the red border remains even on hover/focus */
-:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__leading,
-:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__notch,
-:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__trailing,
-:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__leading,
-:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__notch,
-:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__trailing {
-	border-color: red !important;
-	border-width: 3px !important;
-}
-
-.selectInsuranceLabel {
-	position: relative;
-	top: 43px;
-	left: 8px;
-	background: #fff;
-	color: #808080 !important;
-	padding: 0 3px;
-	font-size: 16px !important;
-}
-
-.select-insurance-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	// background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
 #insurance-limits {
 	option span.red-dollar {
 		color: red;
@@ -153,140 +56,13 @@
 
 
 
-@media only screen and (max-width: 1200px) {}
-
-
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-	border-top-color: #f44336 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
-	border-top-color: #3f51b5 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .12) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
-	border-top-color: #3f51b5 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .87) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
-	border-top-color: #f44336 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
-	border-top-color: #3f51b5 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .12) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
-	border-top-color: rgba(0, 0, 0, .87) !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
-	font-weight: normal !important;
-	font-size: 14px !important;
-	color: #191919;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
-	top: 1.3675em
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+/* Shared sets everything but `top`; the offset is step-specific. */
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
-	font-weight: normal !important;
-	font-size: 14px !important;
-	color: #191919;
-	top: 1.65em
+	top: 1.65em;
 }
 
-:host ::ng-deep .mat-mdc-form-field {
-
-	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-	.mat-form-field-outline {
-		&-end {
-			border-radius: 0 10px 10px 0 !important;
-		}
-
-		&-start {
-			border-radius: 10px 0 0 10px !important;
-			flex-grow: 1;
-		}
-	}
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
-	border-radius: 10px;
-	background-color: rgb(226, 226, 226, 1);
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+/* Step 3's phone field uses the shorter label offset, so the flag sits higher
+   than the shared -12px. */
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
-	top: -2px
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
-	transform: translateY(-0.8em) scale(0.85) !important;
-	width: 133.3333333333%
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-	border-top-color: #b2b2b2 !important;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .selectInputStyle,
-mat-mdc-form-field-label {
-	background-color: rgb(226, 226, 226, 1) !important;
-}
-
-
-:host ::ng-deep .mat-mdc-input-element {
-	font-weight: 500;
-}
-
-:host ::ng-deep .selectStyle select {
-	font-weight: 400;
-}
-
-.asterisk {
-	font-size: 19px;
-	margin-left: 2px;
-}
-
-.asterisk1 {
-	font-size: 19px !important;
-	margin-left: 2px;
-	color: #ff0000 !important;
-	background: none !important;
-}
-
-.user_information .selectInputStyle {
-	height: 58px !important;
+	top: -2px;
 }

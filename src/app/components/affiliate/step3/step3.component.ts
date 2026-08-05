@@ -51,7 +51,7 @@ export function pastDateValidator(): any {
 @Component({
 	selector: "app-step3",
 	templateUrl: "./step3.component.html",
-	styleUrls: ["./step3.component.scss"],
+	styleUrls: ["../affiliate-registration-style.css", "./step3.component.scss"],
 	providers: [
 		{
 			provide: DateAdapter,

@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef } from "@angular/core";
+import { animate, style, transition, trigger } from "@angular/animations";
 import { AuthService } from "../../../services/auth.service";
 import { AffiliateService } from "../../../services/affiliate.service";
+import { AffiliateAiService } from "../../../services/affiliate-ai.service";
 import { StateManagementService } from "../../../services/statemanagement.service";
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -11,21 +13,88 @@ import { CustomvalidationService } from "../../../services/customvalidation.serv
 import { HttpClient } from "@angular/common/http";
 import { AdminService } from "src/app/services/admin.service";
 import { CommonService } from "src/app/services/common.service";
+import {
+	AffiliateTypeKey,
+	ExtractedFieldSuggestion,
+} from "../../../interfaces/affiliate-ai.interface";
 import * as intlTelInput from "intl-tel-input";
 declare var $: any;
+
+/** Which of the four intl-tel-input fields a country code applies to. */
+type PhoneFieldKey = "CellNumber" | "Dispatch" | "CompanyCellNumber" | "Fax";
+
+/** Answer to "What best describes your business?" (step 1 card question). */
+type OperatorAnswer = "own_vehicle" | "company" | "taxi";
+
+/** Answer to the follow-up "How do you operate?" card question. */
+type DriverStyle = "black_car" | "gig";
 
 @Component({
 	selector: "app-step1",
 	templateUrl: "./step1.component.html",
-	styleUrls: ["./step1.component.scss"],
+	styleUrls: ["../affiliate-registration-style.css", "./step1.component.scss"],
+	animations: [
+		// Sections are revealed progressively as the user answers the card
+		// questions. Height animates from 0 so nothing jumps on screen.
+		trigger("expandSection", [
+			transition(":enter", [
+				style({ height: 0, opacity: 0, transform: "translateY(-8px)", overflow: "hidden" }),
+				animate(
+					"260ms cubic-bezier(.4, 0, .2, 1)",
+					style({ height: "*", opacity: 1, transform: "translateY(0)" })
+				),
+			]),
+			transition(":leave", [
+				style({ overflow: "hidden" }),
+				animate(
+					"180ms cubic-bezier(.4, 0, .2, 1)",
+					style({ height: 0, opacity: 0, transform: "translateY(-8px)" })
+				),
+			]),
+		]),
+	],
 })
 export class Step1Component implements OnInit, AfterViewInit {
 	@ViewChild("resetImages")
 	imagesVariable: ElementRef;
-	@ViewChild('cellInput') cellInput!: ElementRef;
-	@ViewChild('dispatchInput') dispatchInput!: ElementRef;
-	@ViewChild('companyCellNumberInput') companyCellNumberInput!: ElementRef;
-	@ViewChild('FaxInput') FaxInput!: ElementRef;
+
+	/*
+	 * Phone inputs live inside sections that are added/removed by *ngIf as the
+	 * user answers the card questions, so they cannot be grabbed once in
+	 * ngAfterViewInit. These setters initialize intl-tel-input the moment the
+	 * element enters the DOM and drop the instance when it leaves, so the field
+	 * re-initializes cleanly if the section comes back.
+	 */
+	@ViewChild("cellInput") set cellInputRef(el: ElementRef) {
+		this.bindPhoneInput(el, "CellNumber");
+	}
+	@ViewChild("dispatchInput") set dispatchInputRef(el: ElementRef) {
+		this.bindPhoneInput(el, "Dispatch");
+	}
+	@ViewChild("companyCellNumberInput") set companyCellNumberInputRef(el: ElementRef) {
+		this.bindPhoneInput(el, "CompanyCellNumber");
+	}
+	@ViewChild("FaxInput") set faxInputRef(el: ElementRef) {
+		this.bindPhoneInput(el, "Fax");
+	}
+
+	/* --- Progressive disclosure: card question answers --- */
+
+	/** "What best describes your business?" — null until the user picks a card. */
+	public operatorAnswer: OperatorAnswer | null = null;
+	/** "How do you operate?" — only asked on the own_vehicle branch. */
+	public driverStyle: DriverStyle | null = null;
+
+	/* --- Business card scanning --- */
+
+	public scanInProgress: boolean = false;
+	public scanError: string = "";
+	/** Extracted values awaiting the user's review; empty hides the panel. */
+	public scanSuggestions: ExtractedFieldSuggestion[] = [];
+	public scanConfidence: number = 0;
+	public scanNotes: string = "";
+	/** True once a scan returned but had nothing new to offer. */
+	public scanFoundNothing: boolean = false;
 
 	public addAffiliateAccountForm: FormGroup;
 	public updateAffiliateEmailForm: FormGroup;
@@ -81,12 +150,16 @@ export class Step1Component implements OnInit, AfterViewInit {
 	errorMsg2: boolean;
 	public filteredGender: Array<any>;
 	public isBadgeCity: boolean = false;
-	public tooltipText: string;
 
 
 
 
 	private subs: Subscription = new Subscription()
+	/**
+	 * Country flags requested for phone fields that have not been rendered yet
+	 * (their section is still collapsed). Drained by bindPhoneInput on init.
+	 */
+	private pendingCountry: Partial<Record<PhoneFieldKey, string>> = {};
 	affiliateDetail: any;
 	badgeOptions: any;
 	filteredOptions: any;
@@ -94,6 +167,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 
 	constructor(
 		private affiliateService: AffiliateService,
+		private affiliateAiService: AffiliateAiService,
 		private adminService: AdminService,
 		private stateManagementService: StateManagementService,
 		private authService: AuthService,
@@ -238,7 +312,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 							}
 
 							//set country flag in phone number fields
-							this.CellNumberObject.setCountry(
+							this.setPhoneCountry(
+								"CellNumber",
 								data.CellNumberCountry
 							);
 							if (data.AffiliateType != "gig_operator") {
@@ -264,15 +339,19 @@ export class Step1Component implements OnInit, AfterViewInit {
 									BusinessBackPhoto:
 										data.BusinessBackPhoto.ID,
 								});
-								this.CompanyCellNumberObject.setCountry(
+								this.setPhoneCountry(
+									"CompanyCellNumber",
 									data.CompanyCellNumberCountry
 								);
-								this.DispatchObject.setCountry(
+								this.setPhoneCountry(
+									"Dispatch",
 									data.DispatchCountry
 								);
-								this.FaxObject.setCountry(data.FaxCountry);
+								this.setPhoneCountry("Fax", data.FaxCountry);
 							}
 
+							//preselect the card questions from the saved type
+							this.deriveAnswersFromType(data.AffiliateType);
 							this.affiliateTypeSwitch(
 								data.AffiliateType,
 								"onRefresh"
@@ -402,9 +481,13 @@ export class Step1Component implements OnInit, AfterViewInit {
 						],
 					});
 				} else {
-					this.addAffiliateAccountForm.patchValue({
-						AffiliateType: AffiliateType ? AffiliateType : "black_limo_operator",
-					});
+					// A brand new affiliate answers the card questions first —
+					// no type is preselected, so nothing below them is rendered.
+					// If step 0 already recorded a type, honour it and open up.
+					if (AffiliateType) {
+						this.deriveAnswersFromType(AffiliateType);
+						this.affiliateTypeSwitch(AffiliateType, "onRefresh");
+					}
 					this.stateManagementService.setprogressBar(false);
 					$("#instructionsModal").modal("show");
 
@@ -417,61 +500,79 @@ export class Step1Component implements OnInit, AfterViewInit {
 
 
 	ngAfterViewInit() {
-		this.initallphonefields()
+		// Phone fields bind themselves via the @ViewChild setters above, because
+		// their sections are revealed progressively and may not exist yet.
 	}
 
-	initallphonefields() {
+	/**
+	 * Attach (or detach) intl-tel-input for one phone field as its element enters
+	 * or leaves the DOM. Called from the @ViewChild setters, so it must be cheap
+	 * and must not write to form state synchronously.
+	 */
+	private bindPhoneInput(el: ElementRef, key: PhoneFieldKey) {
+		if (!el || !el.nativeElement) {
+			// Section was collapsed — drop the instance so it rebuilds next time.
+			this.setPhoneObject(key, null);
+			return;
+		}
+
+		if (this.getPhoneObject(key)) {
+			return; // already initialized for this element
+		}
+
 		const userCountry = this.currentUser?.phoneCountry || this.currentUser?.country || 'auto';
 		const telOptions: any = this.commonServices.getTelInputOptions(userCountry);
+		const instance = (intlTelInput as any)(el.nativeElement, telOptions);
+		this.setPhoneObject(key, instance);
 
-		if (this.cellInput) {
-			this.CellNumberObject = intlTelInput(this.cellInput.nativeElement, telOptions);
+		this.addCustomCountrySearch(el.nativeElement);
+		el.nativeElement.addEventListener('countrychange', () => {
+			const countryData = instance.getSelectedCountryData();
+			this.onCountryChange(countryData, key);
+		});
 
-			this.addCustomCountrySearch(this.cellInput.nativeElement);
-			this.cellInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.CellNumberObject.getSelectedCountryData();
-				console.log("in country chnage", countryData)
-				this.onCountryChange(countryData, 'CellNumber');
-			});
+		// Apply the country this field was asked for before it existed (saved
+		// account data, or the current user's default). Deferred a microtask so
+		// we never mutate state in the middle of change detection.
+		const pending = this.pendingCountry[key] || this.currentUser?.phoneCountry;
+		delete this.pendingCountry[key];
+		if (pending) {
+			Promise.resolve().then(() => instance.setCountry(pending));
 		}
+	}
 
-		if (this.dispatchInput) {
-			this.DispatchObject = intlTelInput(this.dispatchInput.nativeElement, telOptions);
-
-			this.addCustomCountrySearch(this.dispatchInput.nativeElement);
-			this.dispatchInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.DispatchObject.getSelectedCountryData();
-				console.log("in country chnage", countryData)
-				this.onCountryChange(countryData, 'Dispatch');
-			});
+	/**
+	 * Set the country flag on a phone field, queueing it when the field has not
+	 * been rendered yet (its section is still collapsed).
+	 */
+	private setPhoneCountry(key: PhoneFieldKey, iso2: string) {
+		if (!iso2) {
+			return;
 		}
-
-		if (this.FaxInput) {
-			this.FaxObject = intlTelInput(this.FaxInput.nativeElement, telOptions);
-
-			this.addCustomCountrySearch(this.FaxInput.nativeElement);
-			this.FaxInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.FaxObject.getSelectedCountryData();
-				console.log("in country chnage", countryData)
-				this.onCountryChange(countryData, 'Fax');
-			});
+		const instance = this.getPhoneObject(key);
+		if (instance) {
+			instance.setCountry(iso2);
+		} else {
+			this.pendingCountry[key] = iso2;
 		}
-		if (this.companyCellNumberInput) {
-			this.CompanyCellNumberObject = intlTelInput(this.companyCellNumberInput.nativeElement, telOptions);
+	}
 
-			this.addCustomCountrySearch(this.companyCellNumberInput.nativeElement);
-			this.companyCellNumberInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.CompanyCellNumberObject.getSelectedCountryData();
-				console.log("in country chnage", countryData)
-				this.onCountryChange(countryData, 'CompanyCellNumber');
-			});
+	private getPhoneObject(key: PhoneFieldKey): any {
+		switch (key) {
+			case 'CellNumber': return this.CellNumberObject;
+			case 'Dispatch': return this.DispatchObject;
+			case 'CompanyCellNumber': return this.CompanyCellNumberObject;
+			case 'Fax': return this.FaxObject;
 		}
+	}
 
-		//set current user country as default in phone number
-		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
-		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
-		this.FaxObject.setCountry(this.currentUser.phoneCountry);
-		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
+	private setPhoneObject(key: PhoneFieldKey, value: any) {
+		switch (key) {
+			case 'CellNumber': this.CellNumberObject = value; break;
+			case 'Dispatch': this.DispatchObject = value; break;
+			case 'CompanyCellNumber': this.CompanyCellNumberObject = value; break;
+			case 'Fax': this.FaxObject = value; break;
+		}
 	}
 
 
@@ -571,6 +672,128 @@ export class Step1Component implements OnInit, AfterViewInit {
 	SetFormValue(form_control: string, value: any) {
 		this.addAffiliateAccountForm.get(form_control).setValue(value)
 		this.addAffiliateAccountForm.updateValueAndValidity()
+	}
+
+	/* ------------------------------------------------------------------ *
+	 * Card questions -> affiliate type
+	 *
+	 * Two plain-language questions replace the old affiliate-type tiles. The
+	 * mapping is pure conditional logic (no AI), and the resolved type is fed
+	 * to the existing affiliateTypeSwitch(), which owns the guard modals,
+	 * instruction modals and conditional validators.
+	 * ------------------------------------------------------------------ */
+
+	/** Answer to question 1. Resolves immediately unless it needs question 2. */
+	selectOperator(answer: OperatorAnswer) {
+		if (this.operatorAnswer === answer) {
+			return;
+		}
+
+		const previousOperator = this.operatorAnswer;
+		const previousStyle = this.driverStyle;
+
+		this.operatorAnswer = answer;
+		// Question 2 only applies to the own-vehicle branch.
+		this.driverStyle = answer === "own_vehicle" ? this.driverStyle : null;
+
+		const resolved = this.resolveAffiliateType();
+		if (!resolved) {
+			return; // waiting on question 2
+		}
+
+		if (!this.applyAffiliateType(resolved)) {
+			this.operatorAnswer = previousOperator;
+			this.driverStyle = previousStyle;
+		}
+	}
+
+	/** Answer to question 2 (own-vehicle branch only). */
+	selectDriverStyle(style: DriverStyle) {
+		if (this.driverStyle === style) {
+			return;
+		}
+
+		const previousStyle = this.driverStyle;
+		this.driverStyle = style;
+
+		const resolved = this.resolveAffiliateType();
+		if (resolved && !this.applyAffiliateType(resolved)) {
+			this.driverStyle = previousStyle;
+		}
+	}
+
+	/**
+	 * Hand the resolved type to the existing switch. Returns false when that
+	 * switch blocked the change (illegal type change on an existing account —
+	 * it shows #affiliateAlertMessageModal), so the cards can snap back.
+	 */
+	private applyAffiliateType(type: AffiliateTypeKey): boolean {
+		const accepted = this.affiliateTypeSwitch(type) !== false;
+		if (accepted) {
+			// A type change can invalidate what the card scan offered.
+			this.dismissScanReview();
+		}
+		return accepted;
+	}
+
+	/** Pure mapping from the card answers to one of the four affiliate types. */
+	private resolveAffiliateType(): AffiliateTypeKey | null {
+		if (this.operatorAnswer === "company") {
+			return "fleet_operator";
+		}
+		if (this.operatorAnswer === "taxi") {
+			return "taxi_operator";
+		}
+		if (this.operatorAnswer === "own_vehicle") {
+			if (this.driverStyle === "black_car") {
+				return "black_limo_operator";
+			}
+			if (this.driverStyle === "gig") {
+				return "gig_operator";
+			}
+		}
+		return null;
+	}
+
+	/** Inverse mapping, so a returning affiliate sees their cards preselected. */
+	private deriveAnswersFromType(affiliateType: string) {
+		switch (affiliateType) {
+			case "fleet_operator":
+				this.operatorAnswer = "company";
+				this.driverStyle = null;
+				break;
+			case "taxi_operator":
+				this.operatorAnswer = "taxi";
+				this.driverStyle = null;
+				break;
+			case "black_limo_operator":
+				this.operatorAnswer = "own_vehicle";
+				this.driverStyle = "black_car";
+				break;
+			case "gig_operator":
+				this.operatorAnswer = "own_vehicle";
+				this.driverStyle = "gig";
+				break;
+			default:
+				this.operatorAnswer = null;
+				this.driverStyle = null;
+		}
+	}
+
+	/* --- Section visibility (single source of truth for the template) --- */
+
+	/** True once the card answers resolve to an affiliate type. */
+	get affiliateTypeChosen(): boolean {
+		return !!this.addAffiliateAccountForm?.get("AffiliateType")?.value;
+	}
+
+	/**
+	 * Company / dispatch / business-card sections. `showCompanyInformation` is
+	 * the flag affiliateTypeSwitch already maintains (false only for gig), so
+	 * visibility can never disagree with conditionalValidations().
+	 */
+	get showCompanySection(): boolean {
+		return this.affiliateTypeChosen && this.showCompanyInformation;
 	}
 
 	closeButton() {
@@ -727,7 +950,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 	}
 
-	affiliateTypeSwitch(affiliateType: number | string, onRefresh = null) {
+	affiliateTypeSwitch(affiliateType: number | string, onRefresh: string | null = null) {
 		const legend = {
 			0: 'black_limo_operator',
 			1: 'fleet_operator',
@@ -1181,6 +1404,153 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}, 5000);
 	}
 
+	/* ------------------------------------------------------------------ *
+	 * Scan Business Card
+	 *
+	 * One photo does two jobs: it is uploaded as the (required) Business Card
+	 * Front Photo, and it is sent to the backend OpenAI Vision feature
+	 * (document_extract) to pre-fill the company fields. Nothing is written to
+	 * the form until the user reviews and confirms — every value stays editable.
+	 * ------------------------------------------------------------------ */
+
+	async onScanBusinessCard(event: any) {
+		if (!await this.commonServices.handleFile(event)) {
+			return;
+		}
+		if (!event.target.files || !event.target.files.length) {
+			return;
+		}
+
+		this.scanError = "";
+		this.scanFoundNothing = false;
+		this.scanSuggestions = [];
+		this.scanInProgress = true;
+
+		const [file] = event.target.files;
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => {
+			const dataUrl = reader.result as string;
+			// Allow re-scanning the same file straight after a failure.
+			event.target.value = "";
+			this.uploadScannedCard(dataUrl);
+			this.extractScannedCard(dataUrl);
+		};
+		reader.onerror = () => {
+			this.scanInProgress = false;
+			this.scanError = "We could not read that file. Please try another photo.";
+		};
+	}
+
+	/** Store the scanned image as the Business Card Front Photo. */
+	private uploadScannedCard(dataUrl: string) {
+		this.imageSrc = dataUrl;
+		this.affiliateService
+			.uploadVehicleImage(dataUrl)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
+				this.addAffiliateAccountForm.patchValue({
+					BusinessFrontPhoto: data.id,
+				});
+				this.BusinessFrontPhoto = data.image;
+				this.BusinessFrontPhotoId = data.id;
+			});
+	}
+
+	/** Ask the backend vision feature to read the card, then build the review list. */
+	private extractScannedCard(dataUrl: string) {
+		this.affiliateAiService.extractBusinessCard(dataUrl).subscribe({
+			next: (result) => {
+				this.scanInProgress = false;
+				this.scanConfidence = result.confidence;
+				this.scanNotes = result.notes;
+				this.scanSuggestions = this.buildScanSuggestions(result.fields);
+				this.scanFoundNothing = this.scanSuggestions.length === 0;
+			},
+			error: (err: Error) => {
+				this.scanInProgress = false;
+				this.scanError = err.message;
+			},
+		});
+	}
+
+	/**
+	 * Map extracted fields onto the form controls they would populate, dropping
+	 * anything empty or identical to what the user already has.
+	 */
+	private buildScanSuggestions(fields: any): ExtractedFieldSuggestion[] {
+		const candidates: Array<{ control: string; label: string; value: string }> = [
+			{ control: "CompanyName", label: "Company name", value: fields.company_name },
+			{ control: "DBA", label: "Doing business as", value: fields.dba },
+			{ control: "FirstName", label: "First name", value: fields.first_name },
+			{ control: "LastName", label: "Last name", value: fields.last_name },
+			{ control: "Dispatch", label: "24 hr dispatch cell", value: this.toPhoneDigits(fields.phone) },
+		];
+
+		// The owner e-mail is verified through an OTP flow — never overwrite a
+		// verified address; offer the card's e-mail as the dispatch e-mail instead.
+		if (fields.email) {
+			if (this.affiliateEmailStatus === "yes") {
+				candidates.push({ control: "dispatchEmail", label: "24 hr dispatch e-mail", value: fields.email });
+			} else {
+				candidates.push({ control: "Email", label: "Owner / admin e-mail", value: fields.email });
+			}
+		}
+
+		return candidates
+			.filter((c) => {
+				if (!c.value) {
+					return false;
+				}
+				const control = this.addAffiliateAccountForm.get(c.control);
+				return !!control && control.value !== c.value;
+			})
+			.map((c) => ({ ...c, apply: true }));
+	}
+
+	/** Keep only digits so the value satisfies the existing phone validators. */
+	private toPhoneDigits(value: string): string {
+		const digits = (value || "").replace(/\D/g, "");
+		// The control allows 4-15 digits; anything longer is not a usable number.
+		return digits.length >= 4 && digits.length <= 15 ? digits : "";
+	}
+
+	/** Write the checked (and possibly edited) values into the form. */
+	applyScanSuggestions() {
+		const patch: Record<string, string> = {};
+		this.scanSuggestions
+			.filter((s) => s.apply && (s.value || "").trim())
+			.forEach((s) => {
+				patch[s.control] = s.value.trim();
+			});
+
+		if (Object.keys(patch).length) {
+			this.addAffiliateAccountForm.patchValue(patch);
+			Object.keys(patch).forEach((control) => {
+				this.addAffiliateAccountForm.get(control)?.markAsTouched();
+			});
+			// Re-run intl validation for any phone we just filled in.
+			if (patch["Dispatch"]) {
+				this.validateDispatchPhone();
+			}
+		}
+
+		this.dismissScanReview();
+	}
+
+	/** Close the review panel without touching the form. */
+	dismissScanReview() {
+		this.scanSuggestions = [];
+		this.scanError = "";
+		this.scanFoundNothing = false;
+		this.scanConfidence = 0;
+		this.scanNotes = "";
+	}
+
 	async businessCardImageChange(event, imageType, imageId = null) {
 		if (!await this.commonServices.handleFile(event)) {
 			return;
@@ -1499,21 +1869,6 @@ export class Step1Component implements OnInit, AfterViewInit {
 			behavior: 'smooth'
 		});
 	}
-	changeTooltipText(value) {
-		if (value == "black_limo_operator") {
-			this.tooltipText = "Black Car can advertise only two vehicles, or change to Fleet/Coach Operator."
-		}
-		else if (value == "fleet_operator") {
-			this.tooltipText = "Fleet/Coach Operators can advertise unlimited vehicles"
-		}
-		else if (value == "taxi_operator") {
-			this.tooltipText = "Taxi can only advertise one vehicle."
-		}
-		else {
-			this.tooltipText = "Gig/Uber Black Driver can only advertise one vehicle."
-		}
-	}
-
 	resetForm() {
 		console.log('this.affiliateDetail?.acc_id--->>', this.affiliateDetail)
 		// this.addAffiliateAccountForm.reset();
@@ -1620,6 +1975,9 @@ export class Step1Component implements OnInit, AfterViewInit {
 				dispatchEmail: this.affiliateDetail.dispatchEmail,
 			});
 		}
+		// Keep the card questions in step with the freshly rebuilt form.
+		this.deriveAnswersFromType(this.affiliateDetail.AffiliateType);
+		this.dismissScanReview();
 		this.addAffiliateAccountForm.updateValueAndValidity()
 		this.scroll('owner_info')
 	}

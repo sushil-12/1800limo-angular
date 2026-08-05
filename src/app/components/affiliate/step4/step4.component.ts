@@ -11,7 +11,7 @@ declare var $: any;
 @Component({
 	selector: 'app-step4',
 	templateUrl: './step4.component.html',
-	styleUrls: ['./step4.component.scss']
+	styleUrls: ['../affiliate-registration-style.css', './step4.component.scss']
 })
 export class Step4Component implements OnInit {
 

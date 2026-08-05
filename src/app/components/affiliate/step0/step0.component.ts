@@ -9,7 +9,7 @@ declare var $: any;
 @Component({
 	selector: 'app-step0',
 	templateUrl: './step0.component.html',
-	styleUrls: ['./step0.component.scss']
+	styleUrls: ['../affiliate-registration-style.css', './step0.component.scss']
 })
 export class Step0Component implements OnInit {
 	content_data: any

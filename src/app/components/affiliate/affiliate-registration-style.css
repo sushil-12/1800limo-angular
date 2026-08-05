@@ -1,0 +1,1112 @@
+/* ==========================================================================
+   affiliate-registration-style.css
+   The single shared stylesheet for the affiliate registration wizard
+   (step0 → step6). Every step component lists this file FIRST in its
+   `styleUrls`, so anything a step still declares in its own .scss overrides
+   what is here at equal specificity.
+
+   Angular scopes this per component (it is compiled with each component's
+   own styles), so `:host` and `::ng-deep` behave exactly as they do in a
+   component stylesheet — the rules never leak to the rest of the app.
+
+   Plain CSS on purpose: no nesting, no SCSS features, so the file stays
+   readable and can be dropped into any of the seven components as-is.
+
+   Contents
+     1. Design tokens
+     2. Section chrome (headers, eyebrows, actions)
+     3. Selection cards
+     4. Form labels, asterisks, native selects
+     5. Angular Material (MDC) form-field overrides
+     6. Photo / document tiles
+     7. Checkbox grids (languages, amenities)
+     8. Modals + pinch-zoom viewer
+     9. Utilities
+    10. Reduced motion
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+   Change a value here and every step follows. Accent is the app brand
+   orange (--orange-color, #f3933d).
+   -------------------------------------------------------------------------- */
+
+:host {
+	/* brand */
+	--afr-accent: #f3933d;
+	--afr-accent-deep: #d97316;
+	--afr-accent-ink: #9a4d06;
+	--afr-accent-wash: #fff7ef;
+	--afr-accent-line: #f7cb9c;
+
+	/* neutrals */
+	--afr-ink: #1b1b1f;
+	--afr-ink-mid: #4a4a52;
+	--afr-ink-soft: #71717a;
+	--afr-line: #e7e7ec;
+	--afr-line-strong: #d2d2da;
+	--afr-surface: #ffffff;
+	--afr-surface-sunk: #fafafa;
+	--afr-field: rgb(226, 226, 226);
+
+	/* status */
+	--afr-ok-ink: #0a6c4e;
+	--afr-ok-wash: #e7f5ef;
+	--afr-ok-line: #b6e0cd;
+	--afr-danger-ink: #b3261e;
+	--afr-danger-wash: #fdf4f3;
+	--afr-danger-line: #f0c5c1;
+
+	/* shape + depth */
+	--afr-r-sm: 10px;
+	--afr-r-md: 14px;
+	--afr-r-lg: 20px;
+	--afr-shadow-sm: 0 1px 2px rgba(18, 18, 23, .05);
+	--afr-shadow-md: 0 12px 28px -16px rgba(18, 18, 23, .32), 0 2px 6px rgba(18, 18, 23, .05);
+	--afr-shadow-lg: 0 26px 52px -24px rgba(18, 18, 23, .38), 0 3px 10px rgba(18, 18, 23, .06);
+	--afr-ring: 0 0 0 4px rgba(243, 147, 61, .26);
+
+	--afr-ease: cubic-bezier(.2, .7, .3, 1);
+	--afr-measure: 780px;
+
+	--brand-orange:#f2811d;
+--brand-orange-dark:#d96c0c;
+--brand-orange-light:#fff1e2;
+--ink-900:#1f2430;
+--ink-600:#5b6472;
+--ink-400:#8a93a2;
+--surface:#ffffff;
+--page-bg:#f2f4f7;
+--border:#e7e9ee;
+--radius-lg:18px;
+--radius-md:12px;
+--shadow-sm:0 1px 2px rgba(16,24,40,.06);
+--shadow-md:0 8px 24px rgba(16,24,40,.08);
+--shadow-lg:0 20px 40px rgba(16,24,40,.12);
+}
+
+
+body, body.mat-typography{
+  font-family:'Inter','Poppins',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  background:var(--page-bg) !important;
+}
+.allinner_wrapper, .affilate-wrapper.admin-wrapper{
+  background:var(--page-bg) !important;
+}
+
+/* ---- Top nav ---- */
+.topnav.navbar{
+  background:var(--surface) !important;
+  box-shadow:var(--shadow-sm) !important;
+  border-bottom:1px solid var(--border) !important;
+  padding:.6rem 1.5rem !important;
+}
+.topnav .navbar-brand img{ filter:drop-shadow(0 1px 1px rgba(0,0,0,.05)); }
+.topnav .btn-icon{ border-radius:10px !important; transition:background .15s ease; }
+.topnav .btn-icon:hover{ background:var(--brand-orange-light) !important; }
+
+/* ---- Sidebar ---- */
+.sidenav.shadow-right{
+  box-shadow:1px 0 0 var(--border) !important;
+  background:var(--surface) !important;
+}
+.sidebar.sidebar-dark, ul.navbar-nav.sidebar{
+  background:var(--surface) !important;
+}
+.sidenav .nav-link{
+  color:var(--ink-900) !important;
+  font-weight:600 !important;
+  border-radius:var(--radius-md);
+  margin:2px 10px;
+}
+.sidenav .collapse-inner{
+  background:transparent !important;
+  padding-left:6px !important;
+}
+.sidenav .collapse-item{
+  display:flex !important;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px !important;
+  margin:3px 10px !important;
+  border-radius:var(--radius-md) !important;
+  color:var(--ink-600) !important;
+  font-weight:500 !important;
+  font-size:.92rem !important;
+  transition:all .15s ease !important;
+}
+.sidenav .collapse-item svg{ width:20px; height:20px; flex-shrink:0; }
+.sidenav .collapse-item.completed{ color:#1aa971 !important; }
+.sidenav .collapse-item.completed svg path,
+.sidenav .collapse-item.completed svg ellipse{ fill:#1aa971 !important; }
+.sidenav .collapse-item.uncompleted{ color:var(--ink-400) !important; }
+.sidenav .collapse-item.uncompleted svg path,
+.sidenav .collapse-item.uncompleted svg ellipse{ fill:var(--ink-400) !important; }
+.sidenav .collapse-item.active{
+  background:var(--brand-orange-light) !important;
+  color:var(--brand-orange-dark) !important;
+  font-weight:700 !important;
+  box-shadow:inset 3px 0 0 var(--brand-orange);
+}
+.sidenav .collapse-item.active svg path,
+.sidenav .collapse-item.active svg ellipse{ fill:var(--brand-orange) !important; }
+.sidenav .collapse-item:hover{ background:#f6f7fa !important; }
+.sidebar-divider{ border-color:var(--border) !important; margin:12px 16px !important; }
+.sidenav-footer{ padding:14px 16px !important; }
+.logout-link{ color:var(--ink-600) !important; font-weight:600 !important; border-radius:var(--radius-md); margin:2px 10px; }
+.logout-link:hover{ background:#fdeeee !important; color:#d9534f !important; }
+
+/* ---- Page header (step number + title) ---- */
+.HeadingH1{
+  display:block !important;
+  font-family:'Poppins','Inter',sans-serif !important;
+  font-weight:700 !important;
+  font-size:1.55rem !important;
+  color:var(--ink-900) !important;
+  background:var(--surface) !important;
+  border-radius:var(--radius-lg) !important;
+  padding:22px 28px !important;
+  margin:0 0 18px 0 !important;
+  box-shadow:var(--shadow-sm) !important;
+  border:1px solid var(--border);
+}
+.HeadingH1 .collapse-item{
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+  width:auto !important;
+  height:auto !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  color:var(--ink-900) !important;
+  font-family:'Poppins','Inter',sans-serif !important;
+  font-weight:700 !important;
+  font-size:1.55rem !important;
+  white-space:normal !important;
+}
+.HeadingH1 .collapse-item svg{
+  width:20px !important;
+  height:20px !important;
+  min-width:20px !important;
+  padding:9px !important;
+  box-sizing:content-box !important;
+  background:var(--brand-orange) !important;
+  border-radius:50% !important;
+  box-shadow:0 4px 10px rgba(242,129,29,.35);
+  flex-shrink:0 !important;
+}
+.HeadingH1 .collapse-item svg path,
+.HeadingH1 .collapse-item svg ellipse,
+.HeadingH1 .collapse-item svg rect{ fill:#fff !important; }
+
+/* ---- Step section card ---- */
+.step-section{
+  background:var(--surface) !important;
+  border-radius:var(--radius-lg) !important;
+  box-shadow:var(--shadow-sm) !important;
+  border:1px solid var(--border);
+  padding:30px 32px !important;
+}
+.step-section__head{
+  display:flex !important;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  border-bottom:1px solid var(--border);
+  padding-bottom:22px;
+  margin-bottom:28px !important;
+}
+.step-section__eyebrow{
+  color:var(--brand-orange) !important;
+  font-weight:700 !important;
+  letter-spacing:.08em !important;
+  font-size:.75rem !important;
+  text-transform:uppercase;
+}
+.step-section__title{
+  font-family:'Poppins','Inter',sans-serif !important;
+  font-weight:700 !important;
+  font-size:1.6rem !important;
+  color:var(--ink-900) !important;
+  margin:6px 0 8px !important;
+}
+.step-section__sub{
+  color:var(--ink-600) !important;
+  font-size:.95rem !important;
+  margin:0 !important;
+}
+.watch-tutorial-btn{
+  background:var(--surface) !important;
+  border:1.5px solid var(--brand-orange) !important;
+  color:var(--brand-orange-dark) !important;
+  font-weight:600 !important;
+  border-radius:999px !important;
+  padding:9px 20px !important;
+  font-size:.88rem !important;
+  transition:all .18s ease !important;
+  white-space:nowrap;
+}
+.watch-tutorial-btn:hover{
+  background:var(--brand-orange) !important;
+  color:#fff !important;
+  box-shadow:0 6px 16px rgba(242,129,29,.3);
+  transform:translateY(-1px);
+}
+
+/* ---- Choice cards ---- */
+.choice-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)) !important;
+  gap:20px !important;
+}
+.choice-card{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+  background:var(--surface) !important;
+  border:2px solid var(--border) !important;
+  border-radius:var(--radius-lg) !important;
+  padding:28px 24px !important;
+  cursor:pointer;
+  transition:all .2s ease !important;
+  box-shadow:var(--shadow-sm);
+}
+.choice-card:hover{
+  border-color:var(--brand-orange) !important;
+  box-shadow:var(--shadow-md) !important;
+  transform:translateY(-3px);
+}
+.choice-card.is-selected{
+  border-color:var(--brand-orange) !important;
+  background:var(--brand-orange-light) !important;
+  box-shadow:0 10px 24px rgba(242,129,29,.22) !important;
+}
+.choice-card__icon{
+  width:52px; height:52px;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem !important;
+  color:var(--brand-orange) !important;
+  background:var(--brand-orange-light) !important;
+  border-radius:14px !important;
+  margin-bottom:18px !important;
+  transition:all .2s ease;
+}
+.choice-card.is-selected .choice-card__icon{
+  background:var(--brand-orange) !important;
+  color:#fff !important;
+}
+.choice-card__title{
+  font-weight:700 !important;
+  font-size:1.05rem !important;
+  color:var(--ink-900) !important;
+  margin-bottom:8px !important;
+}
+.choice-card__desc{
+  font-size:.88rem !important;
+  color:var(--ink-600) !important;
+  line-height:1.5 !important;
+}
+.choice-card__check{
+  position:absolute !important;
+  top:16px; right:16px;
+  width:26px; height:26px;
+  border-radius:50% !important;
+  background:var(--brand-orange) !important;
+  color:#fff !important;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  font-size:.8rem;
+  opacity:0;
+  transform:scale(.6);
+  transition:all .18s ease !important;
+}
+.choice-card.is-selected .choice-card__check{
+  opacity:1 !important;
+  transform:scale(1) !important;
+}
+
+/* ---- Footer ---- */
+.admin-footer{
+  color:var(--ink-400) !important;
+  font-size:.82rem !important;
+  padding:24px 0 !important;
+  text-align:center;
+}
+
+/* ---- Scroll buttons ---- */
+.scrollButton:hover{ transform:scale(1.08); }
+
+@media (max-width:768px){
+  .step-section{ padding:22px 18px !important; }
+  .HeadingH1{ font-size:1.25rem !important; padding:16px 18px !important; }
+  .choice-grid{ grid-template-columns:1fr !important; }
+}
+/* --------------------------------------------------------------------------
+   2. Section chrome
+   -------------------------------------------------------------------------- */
+
+.step-section {
+	margin: 0 auto 40px;
+	padding: 0 16px;
+}
+
+/* Hairline between revealed sections — reads as one continuous flow instead
+   of a stack of unrelated blocks. */
+.step-section + .step-section::before {
+	content: '';
+	display: block;
+	height: 1px;
+	margin: 0 0 40px;
+	background: linear-gradient(90deg, transparent, var(--afr-line) 12%, var(--afr-line) 88%, transparent);
+}
+
+.step-section__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px 20px;
+}
+
+.step-section__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin-bottom: 10px;
+	font-size: 11.5px;
+	font-weight: 700;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	color: var(--afr-accent-ink);
+}
+
+.step-section__eyebrow::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--afr-accent);
+	box-shadow: 0 0 0 3px rgba(243, 147, 61, .2);
+}
+
+.step-section__title {
+	font-size: clamp(22px, 2.4vw, 27px);
+	line-height: 1.22;
+	font-weight: 700;
+	letter-spacing: -.015em;
+	color: var(--afr-ink);
+	margin: 0 0 8px;
+}
+
+.step-section__sub {
+	font-size: 15px;
+	line-height: 1.55;
+	color: var(--afr-ink-soft);
+	margin: 0 0 26px;
+	max-width: 60ch;
+}
+
+.step-actions {
+	max-width: var(--afr-measure);
+}
+
+/* The legacy header used on steps 2–5. Same row, same button. */
+.section-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.watch-tutorial-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	flex: 0 0 auto;
+	padding: 9px 17px;
+	border-radius: 999px;
+	border: 1px solid var(--afr-accent-line);
+	background: var(--afr-accent-wash);
+	color: var(--afr-accent-ink);
+	font-weight: 600;
+	font-size: 14.5px;
+	letter-spacing: .01em;
+	white-space: nowrap;
+	transition: background-color .18s var(--afr-ease), border-color .18s var(--afr-ease),
+		box-shadow .18s var(--afr-ease), transform .18s var(--afr-ease);
+}
+
+.watch-tutorial-btn:hover {
+	background: #ffefdf;
+	border-color: var(--afr-accent);
+	transform: translateY(-1px);
+	box-shadow: var(--afr-shadow-sm);
+}
+
+.watch-tutorial-btn:focus-visible {
+	outline: none;
+	box-shadow: var(--afr-ring);
+}
+
+/* Inside the legacy header the button needs the old spacing back. */
+.section-header .watch-tutorial-btn {
+	margin-bottom: 25px;
+	margin-right: 5px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Selection cards
+   Big tappable answers used in place of radio tiles.
+   -------------------------------------------------------------------------- */
+
+.choice-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+	gap: 16px;
+}
+
+.choice-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+	width: 100%;
+	min-height: 178px;
+	padding: 22px 22px 24px;
+	text-align: left;
+	background: var(--afr-surface);
+	/* Border lives in an inset ring so the selected 2px state never reflows. */
+	border: 0;
+	box-shadow: inset 0 0 0 1px var(--afr-line), var(--afr-shadow-sm);
+	border-radius: var(--afr-r-md);
+	cursor: pointer;
+	overflow: hidden;
+	transition: box-shadow .2s var(--afr-ease), transform .2s var(--afr-ease),
+		background-color .2s var(--afr-ease);
+}
+
+/* Warm wash that fades in on hover / selection. */
+.choice-card::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(160deg, var(--afr-accent-wash), transparent 62%);
+	opacity: 0;
+	transition: opacity .2s var(--afr-ease);
+	pointer-events: none;
+}
+
+.choice-card:hover {
+	transform: translateY(-3px);
+	box-shadow: inset 0 0 0 1px var(--afr-accent-line), var(--afr-shadow-md);
+}
+
+.choice-card:hover::before {
+	opacity: .7;
+}
+
+.choice-card:active {
+	transform: translateY(-1px);
+}
+
+.choice-card:focus-visible {
+	outline: none;
+	box-shadow: inset 0 0 0 2px var(--afr-accent), var(--afr-ring);
+}
+
+.choice-card.is-selected {
+	background: var(--afr-accent-wash);
+	box-shadow: inset 0 0 0 2px var(--afr-accent), var(--afr-shadow-md);
+}
+
+.choice-card.is-selected::before {
+	opacity: 1;
+}
+
+.choice-card__icon {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	margin-bottom: 12px;
+	border-radius: 13px;
+	border: 1px solid var(--afr-line);
+	background: var(--afr-surface-sunk);
+	color: var(--afr-accent-deep);
+	font-size: 21px;
+	line-height: 1;
+	transition: background-color .2s var(--afr-ease), color .2s var(--afr-ease),
+		box-shadow .2s var(--afr-ease), border-color .2s var(--afr-ease);
+}
+
+.choice-card:hover .choice-card__icon {
+	background: var(--afr-accent);
+	color: #ffffff;
+	border-color: transparent;
+}
+
+.choice-card.is-selected .choice-card__icon {
+	background: var(--afr-accent);
+	color: #ffffff;
+	border-color: transparent;
+	box-shadow: 0 6px 14px -6px rgba(217, 115, 22, .8);
+}
+
+.choice-card__title {
+	position: relative;
+	font-size: 16.5px;
+	font-weight: 700;
+	letter-spacing: -.01em;
+	color: var(--afr-ink);
+	line-height: 1.3;
+}
+
+.choice-card__desc {
+	position: relative;
+	font-size: 13.5px;
+	line-height: 1.5;
+	color: var(--afr-ink-soft);
+}
+
+.choice-card__check {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: var(--afr-accent);
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	box-shadow: 0 4px 10px -4px rgba(217, 115, 22, .9);
+	transform: scale(.4);
+	opacity: 0;
+	transition: transform .2s var(--afr-ease), opacity .15s linear;
+}
+
+.choice-card.is-selected .choice-card__check {
+	transform: scale(1);
+	opacity: 1;
+}
+
+@media (max-width: 600px) {
+	.step-section {
+		margin-bottom: 32px;
+	}
+
+	.step-section + .step-section::before {
+		margin-bottom: 32px;
+	}
+
+	.step-section__head {
+		flex-direction: column;
+	}
+
+	.choice-card {
+		min-height: 0;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		padding: 18px 56px 18px 18px;
+		column-gap: 14px;
+	}
+
+	.choice-card__icon {
+		width: 42px;
+		height: 42px;
+		margin-bottom: 0;
+		font-size: 19px;
+	}
+
+	.choice-card__title {
+		flex: 1;
+	}
+
+	.choice-card__desc {
+		flex: 1 0 100%;
+		margin-top: 4px;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   4. Form labels, asterisks, native selects
+   The `.select-*-label` floating labels sit above a native <select> styled to
+   match the Material outline fields around them.
+   -------------------------------------------------------------------------- */
+
+.asterisk {
+	font-size: 19px;
+	margin-left: 2px;
+}
+
+.asterisk1 {
+	font-size: 19px !important;
+	margin-left: 2px;
+	color: #ff0000 !important;
+	background: none !important;
+}
+
+.selectStyle,
+.selectStyle select,
+.selectStyle select option {
+	color: #000;
+}
+
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}
+
+.user_information .selectInputStyle {
+	height: 58px !important;
+}
+
+/* Resting (unfloated) label — sits inside the field. */
+.selectAccountLabel,
+.selectCountryLabel,
+.selectCurrencyLabel,
+.selectDayLabel,
+.selectExMonthLabel,
+.selectExYearLabel,
+.selectInsuranceLabel,
+.selectMonthLabel,
+.selectStateLabel,
+.selectYearLabel {
+	position: relative;
+	top: 43px;
+	left: 8px;
+	background: #fff;
+	color: #808080 !important;
+	padding: 0 3px;
+	font-size: 16px !important;
+}
+
+/* Floated label — the small caption above a filled field. */
+.select-account-label,
+.select-country-label,
+.select-currency-label,
+.select-day-label,
+.select-ex-month-label,
+.select-ex-year-label,
+.select-gender-label,
+.select-insurance-label,
+.select-month-label,
+.select-state-label,
+.select-year-label {
+	position: relative;
+	top: 15px;
+	left: 8px;
+	background: #fff;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
+	transition: 0.3s;
+}
+
+:host ::ng-deep .select-account-label,
+:host ::ng-deep .select-country-label,
+:host ::ng-deep .select-currency-label,
+:host ::ng-deep .select-day-label,
+:host ::ng-deep .select-ex-month-label,
+:host ::ng-deep .select-ex-year-label,
+:host ::ng-deep .select-gender-label,
+:host ::ng-deep .select-insurance-label,
+:host ::ng-deep .select-month-label,
+:host ::ng-deep .select-state-label,
+:host ::ng-deep .select-year-label {
+	background-color: var(--afr-field) !important;
+	transform: translateY(0.8em) scale(1) !important;
+	opacity: 0.7;
+	background: none !important;
+}
+
+.red-placeholder {
+	color: red !important;
+	font-weight: 500 !important;
+	font-size: 15px !important;
+}
+
+.red-placeholder ::placeholder {
+	color: red !important;
+	font-size: 15px !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Angular Material (MDC) form-field overrides
+   Carried over from the pre-MDC theme so the outline fields keep the rounded,
+   grey-filled look used across the whole wizard.
+   TODO(mdc-migration): these target internal MDC classes and should be
+   replaced with theme tokens when Material is next upgraded.
+   -------------------------------------------------------------------------- */
+
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+	border-radius: 10px;
+	background-color: var(--afr-field);
+}
+
+:host ::ng-deep .mat-mdc-form-field .mat-form-field-outline-end {
+	border-radius: 0 10px 10px 0 !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field .mat-form-field-outline-start {
+	border-radius: 10px 0 0 10px !important;
+	flex-grow: 1;
+}
+
+:host ::ng-deep .selectInputStyle,
+mat-mdc-form-field-label {
+	background-color: var(--afr-field) !important;
+}
+
+:host ::ng-deep .mat-mdc-input-element {
+	font-weight: 500;
+}
+
+.mat-mdc-option {
+	background-color: var(--afr-field) !important;
+}
+
+:host ::ng-deep .ng-option {
+	background-color: var(--afr-field) !important;
+}
+
+.mat-mdc-form-field.read-only {
+	border-radius: 10px;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label {
+	top: 1.3675em;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label {
+	font-weight: normal !important;
+	font-size: 14px !important;
+	color: #191919;
+}
+
+/* Each step nudges `top` on this one — see the per-step stylesheets. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
+	font-weight: normal !important;
+	font-size: 14px !important;
+	color: #191919;
+}
+
+/* Intl-tel-input flag sitting next to a floated label. Step 3 overrides `top`
+   because its phone field uses the shorter label offset. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
+	top: -12px;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label {
+	transform: translateY(-0.8em) scale(0.85) !important;
+	width: 133.3333333333%;
+}
+
+/* --- outline gap colours, one state per rule --- */
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: #b2b2b2 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+/* Invalid field: a hard red outline that survives hover and focus. */
+:host ::ng-deep .is-invalid-input .mdc-notched-outline,
+:host ::ng-deep .is-invalid-input .mdc-notched-outline *,
+:host ::ng-deep .is-invalid-input .mat-mdc-text-field-wrapper,
+:host ::ng-deep .is-invalid-input .mat-mdc-form-field-flex,
+:host ::ng-deep .is-invalid-input .mat-form-field-outline {
+	border-color: red !important;
+	border-width: 3px !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__leading,
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__notch,
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__trailing {
+	border-color: red !important;
+	border-top: 3px solid red !important;
+	border-bottom: 3px solid red !important;
+	border-left: 0 none !important;
+	border-right: 0 none !important;
+}
+
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__leading {
+	border-left: 3px solid red !important;
+}
+
+:host ::ng-deep .is-invalid-input .mdc-notched-outline__trailing {
+	border-right: 3px solid red !important;
+}
+
+:host ::ng-deep .is-invalid-input .mat-mdc-form-field-label,
+:host ::ng-deep .is-invalid-input .mat-form-field-label,
+:host ::ng-deep .is-invalid-input .mat-mdc-floating-label,
+:host ::ng-deep .is-invalid-input .asterisk {
+	color: red !important;
+}
+
+:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__leading,
+:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__notch,
+:host ::ng-deep .is-invalid-input:hover .mdc-notched-outline__trailing,
+:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__notch,
+:host ::ng-deep .is-invalid-input.mat-focused .mdc-notched-outline__trailing {
+	border-color: red !important;
+	border-width: 3px !important;
+}
+
+/* Disabled selects stay readable. */
+.mat-select-disabled .mat-select-value,
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-mdc-form-field-label {
+	color: #000;
+}
+
+/* --------------------------------------------------------------------------
+   6. Photo / document tiles
+   Used by the business-card, licence, insurance and vehicle uploads.
+   -------------------------------------------------------------------------- */
+
+.vehtype_extint img {
+	height: 225px;
+	border-radius: 15px;
+}
+
+.vehtype_extint .emptyImage {
+	height: 225px;
+}
+
+.vehtype_extint .emptyImage img {
+	height: 220px;
+}
+
+/* --------------------------------------------------------------------------
+   7. Checkbox grids (languages, amenities)
+   A grid rather than a fixed-height column flexbox: wrapping a column flex
+   creates *extra columns*, which overflowed the container. Track count now
+   follows the available width, so it can never spill.
+   -------------------------------------------------------------------------- */
+
+.choose_ameniteslist {
+	display: grid !important;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 2px 16px;
+	height: auto !important;
+	margin-top: 10px;
+}
+
+.choose_ameniteslist .custom-control {
+	width: 100% !important;
+	min-width: 0;
+	margin: 0;
+	padding: 7px 10px 7px 34px;
+	border-radius: var(--afr-r-sm);
+	transition: background-color .15s linear;
+}
+
+.choose_ameniteslist .custom-control:hover {
+	background: var(--afr-accent-wash);
+}
+
+.choose_ameniteslist .custom-control-label {
+	display: block;
+	font-size: 14.5px;
+	line-height: 1.4;
+	color: var(--afr-ink-mid);
+	cursor: pointer;
+	overflow-wrap: anywhere;
+}
+
+.choose_ameniteslist .custom-control-input:checked ~ .custom-control-label {
+	color: var(--afr-ink);
+	font-weight: 600;
+}
+
+@media screen and (max-width: 767px) {
+	.choose_ameniteslist {
+		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	}
+}
+
+/* --------------------------------------------------------------------------
+   8. Modals + pinch-zoom viewer
+   -------------------------------------------------------------------------- */
+
+.modal-title {
+	margin-bottom: 0 !important;
+	text-align: center;
+	font-weight: 600;
+	padding: 10px 30px;
+}
+
+.modal-body {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+div#imageModal {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+}
+
+div#imageModal button.close {
+	background-color: #fff;
+	position: absolute;
+	z-index: 999;
+	right: 4px;
+	top: 5px;
+	width: 24px;
+}
+
+div#imageModal pinch-zoom {
+	width: 100%;
+	height: 100%;
+}
+
+div#imageModal pinch-zoom img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+}
+
+/* Material overlays have to clear the Bootstrap modal backdrop. */
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+	z-index: 10000 !important;
+}
+
+/* Tablet: let tall dialogs scroll from the top instead of centring. */
+@media (min-width: 768px) and (max-width: 991px) {
+	#affiliateInstructionsModal .modal-dialog,
+	#editAffiliateEmailModal .modal-dialog,
+	#editDispatchEmailModal .modal-dialog,
+	#instructionsModal .modal-dialog,
+	#requestAddressChangeModal .modal-dialog {
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
+		pointer-events: none;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   9. Utilities
+   -------------------------------------------------------------------------- */
+
+.border-red {
+	border: 3px solid red;
+	border-radius: 10px;
+}
+
+.errorColor {
+	color: #dc3545 !important;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.pointer a {
+	text-decoration: none;
+	color: #000;
+}
+
+.table-responsive i,
+.table-responsive svg {
+	cursor: pointer;
+}
+
+.vehicleFontDesign {
+	font-weight: 500 !important;
+	font-size: 17px;
+}
+
+.fakeLink {
+	cursor: pointer;
+	color: #007bff;
+}
+
+@media only screen and (max-width: 767px) {
+	.mobilePadding {
+		padding: 0 15px !important;
+	}
+
+	.borderright .radio-tile {
+		border-right: 2px solid #52a87a;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   10. Reduced motion
+   Respect the OS setting on every animated surface in the wizard.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.choice-card,
+	.choice-card::before,
+	.choice-card__icon,
+	.choice-card__check,
+	.choose_ameniteslist .custom-control,
+	.watch-tutorial-btn {
+		transition: none !important;
+	}
+
+	.choice-card:hover,
+	.watch-tutorial-btn:hover {
+		transform: none !important;
+	}
+}

@@ -1,44 +1,13 @@
-.section-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+/* ==========================================================================
+   Step 4 — Drivers
 
-	.watch-tutorial-btn {
-		background: #FFEDD4;
-		color: #F54900;
-		padding: 8px 18px;
-		border-radius: 50px;
-		font-weight: 600;
-		font-size: 16px;
-		display: inline-block;
-		margin-bottom: 25px;
-		margin-right: 5px;
-		letter-spacing: 0.5px;
-		border: 1px solid #F54900;
-	}
-}
+   Shared wizard chrome lives in ../affiliate-registration-style.css, loaded
+   first by this component. Only step-4-specific rules belong here.
+   ========================================================================== */
 
 .tableWidth .dropdown-menu {
 	width: 0 !important;
 	left : 15px !important;
-}
-
-.pointer {
-	cursor: pointer;
-}
-
-.pointer a {
-	text-decoration: none;
-	color          : #000;
-}
-
-.table-responsive i {
-	cursor: pointer;
-}
-
-.table-responsive svg {
-	cursor: pointer;
 }
 
 .status-btn{
@@ -57,17 +26,8 @@
 .box-shadow{
 	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 100%);
 }
-// toggle button css
-body,
-html {
-	background     : #efefef;
-	display        : flex;
-	justify-content: center;
-	align-items    : center;
-	min-height     : 100%;
-	z-index        : -1;
-}
 
+// toggle button css
 .continueLabel {
 	border    : 2px solid var(--green-color);
 	display   : inline-block;
@@ -142,9 +102,4 @@ html {
 .btn-shadow{
 	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
     transition: box-shadow 0.1s ease-in-out;
-}
-
-.vehicleFontDesign{
-	font-weight: 500 !important;
-	font-size: 17px;
 }

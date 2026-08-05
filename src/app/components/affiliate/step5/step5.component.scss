@@ -1,23 +1,9 @@
-.section-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+/* ==========================================================================
+   Step 5 — Vehicles
 
-	.watch-tutorial-btn {
-		background: #FFEDD4;
-		color: #F54900;
-		padding: 8px 18px;
-		border-radius: 50px;
-		font-weight: 600;
-		font-size: 16px;
-		display: inline-block;
-		margin-bottom: 25px;
-		margin-right: 5px;
-		letter-spacing: 0.5px;
-		border: 1px solid #F54900;
-	}
-}
+   Shared wizard chrome lives in ../affiliate-registration-style.css, loaded
+   first by this component. Only step-5-specific rules belong here.
+   ========================================================================== */
 
 a.dropdown-toggle.notCompleted {
 	background-color: var(--orange) !important;
@@ -27,10 +13,6 @@ a.dropdown-toggle.notCompleted {
 
 a.dropdown-item.notCompleted {
 	background-color: #f8f87c !important;
-}
-
-.table-responsive i {
-	cursor: pointer;
 }
 
 @media only screen and (min-width:1199px) {
@@ -77,10 +59,6 @@ table.dataTable
 	border-radius: 1rem;
 	padding: 0.6rem 1rem;
 	letter-spacing: 0.5px;
-}
-.vehicleFontDesign{
-	font-weight: 500 !important;
-	font-size: 17px;
 }
 
 .affiliate-step5-row {

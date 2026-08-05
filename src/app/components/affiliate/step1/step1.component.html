@@ -1,56 +1,83 @@
 <form [formGroup]="addAffiliateAccountForm" class="step_form_wrapper" appInvalidControlScroll>
-	<section class="user_information">
-		<div class="section-header">
-			<h2 class="headinginfo" id="owner_info">Owner Information</h2>
-			<button type="button"
-			(click)="openTutorial()"
-			title="View Tutorial"
-			class="watch-tutorial-btn">
-			   <i class="bi bi-camera-video mr-1"></i> Watch Tutorial
+
+	<!-- ================= QUESTION 1 — what kind of business ================= -->
+	<section class="step-section">
+		<div class="step-section__head">
+			<div>
+				<span class="step-section__eyebrow">Business type</span>
+				<h2 class="step-section__title">Let's start with your business</h2>
+				<p class="step-section__sub">
+					Pick what fits best. We'll only ask for the details that apply to you.
+				</p>
+			</div>
+			<button type="button" (click)="openTutorial()" title="View Tutorial" class="watch-tutorial-btn">
+				<i class="bi bi-camera-video mr-1"></i> Watch Tutorial
 			</button>
-        </div>
-	
+		</div>
+
+		<div class="choice-grid">
+			<button type="button" class="choice-card" [class.is-selected]="operatorAnswer === 'own_vehicle'"
+				[attr.aria-pressed]="operatorAnswer === 'own_vehicle'" (click)="selectOperator('own_vehicle')">
+				<span class="choice-card__check"><i class="bi bi-check-lg"></i></span>
+				<i class="bi bi-person-badge choice-card__icon"></i>
+				<span class="choice-card__title">I drive my own vehicle</span>
+				<span class="choice-card__desc">One or two cars, and I'm the one behind the wheel.</span>
+			</button>
+
+			<button type="button" class="choice-card" [class.is-selected]="operatorAnswer === 'company'"
+				[attr.aria-pressed]="operatorAnswer === 'company'" (click)="selectOperator('company')">
+				<span class="choice-card__check"><i class="bi bi-check-lg"></i></span>
+				<i class="bi bi-building choice-card__icon"></i>
+				<span class="choice-card__title">I run a transportation company</span>
+				<span class="choice-card__desc">Multiple vehicles, chauffeurs or a dispatch team.</span>
+			</button>
+
+			<button type="button" class="choice-card" [class.is-selected]="operatorAnswer === 'taxi'"
+				[attr.aria-pressed]="operatorAnswer === 'taxi'" (click)="selectOperator('taxi')">
+				<span class="choice-card__check"><i class="bi bi-check-lg"></i></span>
+				<i class="bi bi-taxi-front choice-card__icon"></i>
+				<span class="choice-card__title">I operate a taxi</span>
+				<span class="choice-card__desc">Licensed taxi, single vehicle operation.</span>
+			</button>
+		</div>
+	</section>
+
+	<!-- ================= QUESTION 2 — only for own-vehicle drivers ================= -->
+	<section class="step-section" *ngIf="operatorAnswer === 'own_vehicle'" [@expandSection]>
+		<span class="step-section__eyebrow">Your setup</span>
+		<h2 class="step-section__title">How do you operate?</h2>
+		<p class="step-section__sub">This decides the licensing and insurance we'll ask for later.</p>
+
+		<div class="choice-grid">
+			<button type="button" class="choice-card" [class.is-selected]="driverStyle === 'black_car'"
+				[attr.aria-pressed]="driverStyle === 'black_car'" (click)="selectDriverStyle('black_car')">
+				<span class="choice-card__check"><i class="bi bi-check-lg"></i></span>
+				<i class="bi bi-car-front choice-card__icon"></i>
+				<span class="choice-card__title">Black car / limo owner-operator</span>
+				<span class="choice-card__desc">
+					City and state licensed, $500k/$500k minimum insurance, up to 2 vehicles.
+				</span>
+			</button>
+
+			<button type="button" class="choice-card" [class.is-selected]="driverStyle === 'gig'"
+				[attr.aria-pressed]="driverStyle === 'gig'" (click)="selectDriverStyle('gig')">
+				<span class="choice-card__check"><i class="bi bi-check-lg"></i></span>
+				<i class="bi bi-phone choice-card__icon"></i>
+				<span class="choice-card__title">Rideshare driver</span>
+				<span class="choice-card__desc">
+					UberX, Comfort, XL or Black/SUV. Mid-size sedan or larger, $500k insurance.
+				</span>
+			</button>
+		</div>
+	</section>
+
+	<!-- ================= OWNER INFORMATION ================= -->
+	<section class="step-section user_information" *ngIf="affiliateTypeChosen" [@expandSection]>
+		<span class="step-section__eyebrow">Owner details</span>
+		<h2 class="step-section__title" id="owner_info">About you</h2>
+		<p class="step-section__sub">The person who will manage this account.</p>
+
 		<div class="container">
-			<!-- RADIO TILES HEADING -->
-			<div class="row">
-				<div class="col-12">
-					<h3 class="headinginfoH3">
-						Choose one<span class="asterisk">*</span>
-					</h3>
-				</div>
-			</div>
-
-			<!-- RADIO TILES -->
-			<div class="row">
-				<div class="col-md-12">
-					<div id="radio-tiles-container" class="w-auto">
-						<div class="radio-tiles d-flex flex-wrap align-items-center justify-content-around">
-							<div class="wrapper tile text-center" id="tile_{{ tile_index }}"
-								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
-								(click)="affiliateTypeSwitch(tile_index)"
-								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
-								<div id="check-icon" class="w-100" *ngIf="f.AffiliateType.value===tile">
-									<i class="bi bi-check-lg"></i>
-								</div>
-								<input type="radio" (mouseover)="changeTooltipText(tile)"
-									id="radio-button_{{ tile_index }}" class="radio-button" />
-								<div id="tile-name">
-									<p id="tooltip" [ngClass]="{'active-tile': f.AffiliateType.value == tile}">
-										{{ tile.includes('black') ? 'Blk Car / 1 Vehicle Owner Op' :
-										tile.includes('fleet')?
-										'Fleet Operator / 2 or More' : tile.includes('taxi') ? 'Taxi Operator' :
-										'UberX • Comfort • XL• Black/SUV (Casual Dress) Driver' }}
-									</p>
-									<div class="tooltip">{{tooltipText}}</div>
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- RADIO TILES ENDS -->
-
 			<div class="row">
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
@@ -351,11 +378,12 @@
 			</div>
 		</div>
 	</section>
-	<section class="user_information" [hidden]="!showCompanyInformation">
-		<h2 class="headinginfo">
-			Company Information
-			<span class="spanText">(Enter Company Address on Bank Setting Step)</span>
-		</h2>
+
+	<!-- ================= COMPANY INFORMATION ================= -->
+	<section class="step-section user_information" *ngIf="showCompanySection" [@expandSection]>
+		<span class="step-section__eyebrow">Company</span>
+		<h2 class="step-section__title">Your company</h2>
+		<p class="step-section__sub">Company address is collected later, on the Bank Settings step.</p>
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-6">
@@ -388,6 +416,109 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline" class="mobileField">
+						<mat-label>Business Telephone</mat-label>
+						<input pattern="[0-9+]*" maxlength="16" matInput #companyCellNumberInput
+							placeholder="1234567890" formControlName="CompanyCellNumber" class="phoneNumberClass"
+							tabindex="1" (focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCompanyCellPhone()" (blur)="validateCompanyCellPhone()" />
+
+					</mat-form-field>
+					<div *ngIf="
+							(submittedForm && f.CompanyCellNumber.errors) ||
+							(f.CompanyCellNumber.touched &&
+								f.CompanyCellNumber.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.CompanyCellNumber.errors.required">
+							This field is required
+						</div>
+					</div>
+					<div *ngIf="f.CompanyCellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
+								f.CompanyCellNumber.errors?.invalid_Pattern;
+								else plusError
+							">
+							Do not add Dashes with numbers
+						</div>
+						<ng-template #plusError>
+							<div *ngIf="
+									f.CompanyCellNumber.errors?.invalidPattern;
+									else allErrors
+								">
+								Do not enter + sign
+							</div>
+							<ng-template #allErrors>
+								<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">
+									{{f.CompanyCellNumber.errors?.invalidIntl}}
+								</div>
+							</ng-template>
+						</ng-template>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline" class="mobileField">
+						<mat-label>FAX </mat-label>
+						<input pattern="[0-9+]*" maxlength="16" matInput #FaxInput placeholder="1234567890"
+							formControlName="Fax" class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
+							(keypress)="numberOnly($event)" (input)="validateFax()" (blur)="validateFax()" />
+					</mat-form-field>
+					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
+								f.Fax.errors?.invalid_Pattern;
+								else plusError
+							">
+							Do not add Dashes with numbers
+						</div>
+						<ng-template #plusError>
+							<div *ngIf="
+									f.Fax.errors?.invalidPattern;
+									else allErrors
+								">
+								Do not enter + sign
+							</div>
+							<ng-template #allErrors>
+								<div *ngIf="f.Fax.errors?.invalidIntl">
+									{{f.Fax.errors?.invalidIntl}}
+								</div>
+							</ng-template>
+						</ng-template>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>City/State/Permit/License #</mat-label>
+						<input matInput placeholder="City/State/Permit/License #" formControlName="cpcn_tpc"
+							tabIndex="1" />
+					</mat-form-field>
+					<div *ngIf="f.cpcn_tpc.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
+								f.cpcn_tpc.errors?.invalid_Pattern;
+								else plusError
+							">
+							Do not add Dashes with numbers
+						</div>
+						<ng-template #plusError>
+							<div *ngIf="
+									f.cpcn_tpc.errors?.invalidPattern;
+									else allErrors
+								">
+								Do not enter + sign
+							</div>
+						</ng-template>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= 24-HOUR DISPATCH ================= -->
+	<section class="step-section user_information" *ngIf="showCompanySection" [@expandSection]>
+		<span class="step-section__eyebrow">Dispatch</span>
+		<h2 class="step-section__title">24-hour dispatch</h2>
+		<p class="step-section__sub">Where we reach you about a booking, any time of day.</p>
+		<div class="container mt-1">
+			<div class="row">
 				<div class="col-md-6" *ngIf="!affiliateId; else showEditDispatchEmailButton">
 					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': f.dispatchEmail?.value == '' }">
 						<mat-label>24 Hr Dispatch E-mail
@@ -524,105 +655,15 @@
 						</ng-template>
 					</div>
 				</div>
-				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mobileField">
-						<mat-label>Business Telephone</mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #companyCellNumberInput
-							placeholder="1234567890" formControlName="CompanyCellNumber" class="phoneNumberClass"
-							tabindex="1" (focus)="$event.target.select()" (keypress)="numberOnly($event)"
-							(input)="validateCompanyCellPhone()" (blur)="validateCompanyCellPhone()" />
-
-					</mat-form-field>
-					<div *ngIf="
-							(submittedForm && f.CompanyCellNumber.errors) ||
-							(f.CompanyCellNumber.touched &&
-								f.CompanyCellNumber.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CompanyCellNumber.errors.required">
-							This field is required
-						</div>
-					</div>
-					<div *ngIf="f.CompanyCellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="
-								f.CompanyCellNumber.errors?.invalid_Pattern;
-								else plusError
-							">
-							Do not add Dashes with numbers
-						</div>
-						<ng-template #plusError>
-							<div *ngIf="
-									f.CompanyCellNumber.errors?.invalidPattern;
-									else allErrors
-								">
-								Do not enter + sign
-							</div>
-							<ng-template #allErrors>
-								<div *ngIf="f.CompanyCellNumber.errors?.invalidIntl">
-									{{f.CompanyCellNumber.errors?.invalidIntl}}
-								</div>
-							</ng-template>
-						</ng-template>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mobileField">
-						<mat-label>FAX </mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #FaxInput placeholder="1234567890"
-							formControlName="Fax" class="phoneNumberClass" tabindex="1" (focus)="$event.target.select()"
-							(keypress)="numberOnly($event)" (input)="validateFax()" (blur)="validateFax()" />
-					</mat-form-field>
-					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="
-								f.Fax.errors?.invalid_Pattern;
-								else plusError
-							">
-							Do not add Dashes with numbers
-						</div>
-						<ng-template #plusError>
-							<div *ngIf="
-									f.Fax.errors?.invalidPattern;
-									else allErrors
-								">
-								Do not enter + sign
-							</div>
-							<ng-template #allErrors>
-								<div *ngIf="f.Fax.errors?.invalidIntl">
-									{{f.Fax.errors?.invalidIntl}}
-								</div>
-							</ng-template>
-						</ng-template>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field appearance="outline">
-						<mat-label>City/State/Permit/License #</mat-label>
-						<input matInput placeholder="City/State/Permit/License #" formControlName="cpcn_tpc"
-							tabIndex="1" />
-					</mat-form-field>
-					<div *ngIf="f.cpcn_tpc.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="
-								f.cpcn_tpc.errors?.invalid_Pattern;
-								else plusError
-							">
-							Do not add Dashes with numbers
-						</div>
-						<ng-template #plusError>
-							<div *ngIf="
-									f.cpcn_tpc.errors?.invalidPattern;
-									else allErrors
-								">
-								Do not enter + sign
-							</div>
-							<!-- <ng-template #allErrors>
-								<div *ngIf="f.cpcn_tpc.errors?.pattern">
-									Enter Numbers Without Spaces or Dashes
-								</div>
-							</ng-template> -->
-						</ng-template>
-					</div>
-				</div>
 			</div>
 		</div>
+	</section>
+
+	<!-- ================= BUSINESS CARD PHOTOS ================= -->
+	<section class="step-section user_information" *ngIf="showCompanySection" [@expandSection]>
+		<span class="step-section__eyebrow">Documents</span>
+		<h2 class="step-section__title">Business card photos</h2>
+		<p class="step-section__sub">The front is required — scanning above already adds it for you.</p>
 		<div class="container mt-3">
 			<div class="vehtype_extintwrap">
 				<div class="row">
@@ -816,11 +857,13 @@
 			</div>
 		</div>
 	</section>
-	<section class="user_information">
-		<h2 class="headinginfo">
-			Choose Language(s) <span class="asterisk">*</span>
-			<span class="spanText">(Choose Each)</span>
+	<!-- ================= LANGUAGES ================= -->
+	<section class="step-section user_information" *ngIf="affiliateTypeChosen" [@expandSection]>
+		<span class="step-section__eyebrow">Service</span>
+		<h2 class="step-section__title">
+			Languages you speak <span class="asterisk">*</span>
 		</h2>
+		<p class="step-section__sub">Choose every language you can serve a passenger in.</p>
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-12" id="LanguagesSpoken">
@@ -899,7 +942,7 @@
 			</div>
 		</div>
 	</section> -->
-	<div class="container">
+	<div class="container step-actions" *ngIf="affiliateTypeChosen" [@expandSection]>
 		<div class="row py-4">
 			<div class="col-md-12">
 				<div class="d-flex justify-content-center">

@@ -1,3 +1,12 @@
+/* ==========================================================================
+   Step 6 — Agreement + signature
+
+   Shared wizard chrome lives in ../affiliate-registration-style.css, loaded
+   first by this component. Only step-6-specific rules belong here — note the
+   oversized agreement checkbox below is deliberately NOT shared: it would
+   blow up the compact checkbox grids on steps 1 and 2.
+   ========================================================================== */
+
 .agreement_step0 p,
 .custom-list span,
 li {
@@ -182,19 +191,11 @@ canvas {
 	max-width: 100%;
 }
 
-.vehtype_extint img {
-	height       : 225px;
-	border-radius: 15px;
-}
-
+/* Shared sets the height; step 6 adds the outline around the empty state. */
 .vehtype_extint .emptyImage {
 	position     : relative;
 	border       : 1px solid #717171;
 	border-radius: 15px;
-}
-
-.vehtype_extint .emptyImage {
-	height: 225px;
 }
 
 .vehtype_extint ul {
@@ -208,16 +209,6 @@ canvas {
 .vehtype_extint ul li {
 	list-style-type: none;
 	margin         : 0px 2px;
-}
-
-@media only screen and (max-width:767px) {
-	.mobilePadding {
-		padding: 0px 15px !important;
-	}
-
-	.borderright .radio-tile {
-		border-right: 2px solid #52a87a;
-	}
 }
 
 @media only screen and (max-width:420px) {
