@@ -251,7 +251,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			},
 			{
 				list: "Travel Agent Friendly",
-				content: "Easy booking and commission support for travel agents.",
+				content: "Easy booking and commission support for travel advisors.",
 				icon: "fas fa-globe"
 			},
 			{

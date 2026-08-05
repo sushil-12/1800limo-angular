@@ -27,7 +27,7 @@
 				</ng-template>
 			</div>
 			<div class="d-flex justify-content-center" *ngIf="Role == 'travel_agent' ">
-				<a class="sign-in-sub-ta-button my-3" (click)="loginSubTravelAgent()">Sign In as Sub Agent</a>
+				<a class="sign-in-sub-ta-button my-3" (click)="loginSubTravelAgent()">Sign In as Sub Advisor</a>
 			</div>
 			<div class="d-flex justify-content-center" *ngIf="Role == 'driver' ">
 				<a class="sign-in-sub-ta-button my-3" (click)="loginSubAffiliate()">Sign In as Sub Affiliate</a>
@@ -46,7 +46,7 @@
 				<div class="role-radio-option">
 					<input type="radio" id="role-travel-agent" name="role" value="travel_agent"
 						formControlName="role" (change)="onRoleChange('travel_agent')">
-					<label for="role-travel-agent">Travel Agent</label>
+					<label for="role-travel-agent">Travel Advisor</label>
 				</div>
 				<!-- <div class="role-radio-option">
 					<input type="radio" id="role-sub-admin" name="role" value="sub_admin" 
