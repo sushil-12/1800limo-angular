@@ -171,3 +171,31 @@ label+input[type=radio]+label {
 	padding: 0 !important;
 	text-align: left !important;
 }
+
+/* Corporate Announcement News Banner */
+.corporate-announcement-bar {
+	width: 100%;
+    position: absolute;
+    top: 0px;
+    display: flex;
+    gap: 13px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+    background-color: #ebf8ff !important;
+    color: #2b6cb0 !important;
+    border: 1px solid #bee3f8 !important;
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+    font-size: 14.5px !important;
+    line-height: 1.5 !important;
+    box-shadow: 0 4px 12px rgba(43, 108, 176, 0.08);
+
+	strong {
+		color: #2c5282;
+	}
+
+	i {
+		color: #3182ce;
+	}
+}
