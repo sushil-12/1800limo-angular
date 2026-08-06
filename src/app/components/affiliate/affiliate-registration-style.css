@@ -207,7 +207,7 @@ body, body.mat-typography{
   border-radius:var(--radius-lg) !important;
   box-shadow:var(--shadow-sm) !important;
   border:1px solid var(--border);
-  padding:30px 32px !important;
+  padding:10px 15px !important;
 }
 .step-section__head{
   display:flex !important;
@@ -215,7 +215,7 @@ body, body.mat-typography{
   justify-content:space-between;
   gap:20px;
   flex-wrap:wrap;
-  padding-bottom:22px;
+  padding-bottom:20px;
 }
 .step-section__eyebrow{
   color:var(--brand-orange) !important;
@@ -269,7 +269,7 @@ body, body.mat-typography{
   background:var(--surface) !important;
   border:2px solid var(--border) !important;
   border-radius:var(--radius-lg) !important;
-  padding:28px 24px !important;
+  padding:10px 20px !important;
   cursor:pointer;
   transition:all .2s ease !important;
   box-shadow:var(--shadow-sm);
@@ -352,18 +352,15 @@ body, body.mat-typography{
    -------------------------------------------------------------------------- */
 
 .step-section {
-	margin: 0 auto 40px;
+	margin: 0 auto 30px;
 	padding: 0 16px;
 }
 
 /* Hairline between revealed sections — reads as one continuous flow instead
    of a stack of unrelated blocks. */
 .step-section + .step-section::before {
-	content: '';
-	display: block;
-	height: 1px;
-	margin: 0 0 40px;
-	background: linear-gradient(90deg, transparent, var(--afr-line) 12%, var(--afr-line) 88%, transparent);
+	/* Hairline between sections removed per request. */
+	display: none;
 }
 
 .step-section__head {
