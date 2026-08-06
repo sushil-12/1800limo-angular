@@ -215,9 +215,7 @@ body, body.mat-typography{
   justify-content:space-between;
   gap:20px;
   flex-wrap:wrap;
-  border-bottom:1px solid var(--border);
   padding-bottom:22px;
-  margin-bottom:28px !important;
 }
 .step-section__eyebrow{
   color:var(--brand-orange) !important;
@@ -411,7 +409,6 @@ body, body.mat-typography{
 	line-height: 1.55;
 	color: var(--afr-ink-soft);
 	margin: 0 0 26px;
-	max-width: 60ch;
 }
 
 .step-actions {
