@@ -1062,7 +1062,8 @@ export class AddDriverSubscriberComponent implements OnInit, AfterViewInit {
         this.spinner.hide();// hide spinner
         this.disableSubmitButton = true; //enable submit button
         if (this.invite_acc_id) {
-          this.router.navigate(['/login/driver'])
+          sessionStorage.setItem('clicked_login_role', 'driver');
+          this.router.navigate(['/login'])
         } else {
           this.router.navigate(['/admin/driver-details'])
         }

@@ -356,20 +356,50 @@ a.user-profile:active::after {
 	.dropdown-item.nav-disabled {
 		opacity: 0.6;
 		cursor: default;
-		background-color: #FFF;
 	}
 
 	.dropdown-item {
 		display: block;
 		border-radius: 8px;
-		background-color: var(--orange-color);
 		margin: 14px 15px;
 		width: auto;
 		padding: 8px 15px;
+		color: #fff !important;
+		font-size: 20px;
+		font-weight: 500;
+		box-shadow: 0 5px 10px -6px rgb(0 0 0);
 
 		&:hover:not(.dropdown-item.nav-disabled) {
 			background-color: #be691d;
 		}
+
+	}
+
+	.dropdown-item:hover {
+		background-color: transparent !important;
+		color: #000 !important;
+	}
+
+	.dropdown-item-value {
+		color: #000;
+		font-size: 16px;
+		font-weight: 500;
+	}
+
+	.indv-btn {
+		background-color: #f44336 !important;
+		color: #fff !important;
+	}
+
+
+	.ta-btn {
+		background-color: #0766cc !important;
+		color: #fff !important;
+	}
+
+	.driver-btn {
+		background-color: var(--green) !important;
+		color: #fff !important;
 	}
 
 	.sub-admin-btn {
@@ -381,7 +411,6 @@ a.user-profile:active::after {
 		}
 
 		&:hover {
-			background-color: transparent !important;
 			color: #000 !important;
 
 			svg {
@@ -390,14 +419,22 @@ a.user-profile:active::after {
 		}
 	}
 
-	.driver-dropdown {
-		background-color: var(--green);
-	}
+	.btn-sub-admin {
+		background-color: rgba(243, 147, 61, 1) !important;
+		color: #fff !important;
 
-	.driver-dropdown:hover {
-		color: #000 !important;
-	}
+		svg {
+			stroke: #fff;
+		}
 
+		&:hover {
+			color: #000 !important;
+
+			svg {
+				stroke: #000;
+			}
+		}
+	}
 
 	.dropdown-item:not(.dropdown-item.nav-disabled) {
 		box-shadow: 0 3px 10px -6px rgba(0, 0, 0, 0.6);
@@ -406,19 +443,15 @@ a.user-profile:active::after {
 	.dropdown-item:active {
 		box-shadow: none;
 	}
+
+	.logout-btn {
+		background: #8080805c !important;
+	}
+
 }
 
 .gear-bg {
 	color: aliceblue !important;
-}
-
-
-.logout-background {
-	background: #8080805c !important;
-}
-
-.sub-admin-dropdown:hover {
-	background-color: #FFF !important;
 }
 
 

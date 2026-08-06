@@ -251,7 +251,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			},
 			{
 				list: "Travel Agent Friendly",
-				content: "Easy booking and commission support for travel agents.",
+				content: "Easy booking and commission support for travel advisors.",
 				icon: "fas fa-globe"
 			},
 			{
@@ -2383,10 +2383,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			return_dropoff_address: ['',],
 			return_dropoff_address_lat: ['',],
 			return_dropoff_address_long: ['',],
-			no_of_passenger: [1,],
-			no_of_luggage: [0,],
-			return_no_of_passenger: [1,],
-			return_no_of_luggage: [0,],
+			no_of_passenger: [1, [Validators.required, Validators.min(1), Validators.max(9999)]],
+			no_of_luggage: [0, [Validators.required, Validators.min(0), Validators.max(9999)]],
+			return_no_of_passenger: [1, [Validators.required, Validators.min(1), Validators.max(9999)]],
+			return_no_of_luggage: [0, [Validators.required, Validators.min(0), Validators.max(9999)]],
 			location_info: this.formBuilder.array([],),
 		});
 
@@ -4275,11 +4275,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		setTimeout(() => {
 			$(elementId).removeClass('highlight-text')
 		}, 1000)
-		const currentValue = this.quoteBotForm.value[controlName]
+		const currentValue = parseInt(this.quoteBotForm.value[controlName], 10)
+
+		// field was cleared (or holds junk) — snap back to the lowest allowed value
+		if (isNaN(currentValue)) {
+			this.quoteBotForm.get(controlName).setValue(minValue)
+			return
+		}
+
 		if (changeType == 'i' && currentValue < max_length) {
-			this.quoteBotForm.get(controlName).setValue(parseInt(currentValue) + 1)
+			this.quoteBotForm.get(controlName).setValue(Math.max(currentValue + 1, minValue))
 		} else if (changeType == 'd' && currentValue > minValue) {
-			this.quoteBotForm.get(controlName).setValue(parseInt(currentValue) - 1)
+			this.quoteBotForm.get(controlName).setValue(currentValue - 1)
+		} else if (currentValue < minValue) {
+			this.quoteBotForm.get(controlName).setValue(minValue)
 		}
 	}
 
@@ -4294,8 +4303,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 			return
 		}
-		//navigate to login screen
-		this.router.navigateByUrl('/login/' + role);
+		//navigate to login screen (role is kept in session, not in the url)
+		sessionStorage.setItem('clicked_login_role', role);
+		this.router.navigateByUrl('/login');
 	}
 
 	get fGetInTouch() { return this.getInTouchForm.controls; }

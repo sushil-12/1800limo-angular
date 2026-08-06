@@ -71,7 +71,8 @@ export class SubscriptionPlansComponent implements OnInit {
   submitPlan(plan) {
     console.log("plan", plan)
     if (plan?.id == 1) {
-      this.router.navigate(['/login/driver'])
+      sessionStorage.setItem('clicked_login_role', 'driver');
+      this.router.navigate(['/login'])
     }
     else if (this.currentUser) {
       console.log("in if affiliate")
