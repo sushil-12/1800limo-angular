@@ -16,7 +16,10 @@ declare var $: any;
 @Component({
 	selector: 'app-vehicle-rate-settings',
 	templateUrl: './vehicle-rate-settings.component.html',
-	styleUrls: ['./vehicle-rate-settings.component.scss']
+	styleUrls: [
+		'../affiliate-registration-style.css',
+		'./vehicle-rate-settings.component.scss'
+	]
 })
 export class VehicleRateSettingsComponent implements OnInit {
 

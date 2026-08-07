@@ -1007,12 +1007,6 @@
 									</svg>
 								</button>
 							</mat-form-field>
-							<div *ngIf="((submitBookingForm || Form.pickup.touched) && Form.pickup.invalid)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.pickup.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
-								<div *ngIf="Form.pickup.errors?.suggestionRequired">Please select an address from the suggestions list</div>
-								<div *ngIf="!Form.pickup.errors?.sameLocation && !Form.pickup.errors?.suggestionRequired && Form.pickup.errors?.required">Pickup address is required</div>
-							</div>
 							<div *ngIf="isCustomAddressDropdownOpen('pickup')" class="quote-ui-dropdown-panel">
 								<button type="button" class="quote-ui-dropdown-option"
 									*ngFor="let option of getCustomAddressOptions('pickup')"
@@ -1032,6 +1026,12 @@
 									Loading Suggestions...</div>
 								<div *ngIf="shouldShowCustomEmpty('address', 'pickup')" class="quote-ui-dropdown-empty">No
 									Result found</div>
+							</div>
+							<div *ngIf="((submitBookingForm || Form.pickup.touched) && Form.pickup.invalid)"
+								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+								<div *ngIf="Form.pickup.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
+								<div *ngIf="Form.pickup.errors?.suggestionRequired">Please select an address from the suggestions list</div>
+								<div *ngIf="!Form.pickup.errors?.sameLocation && !Form.pickup.errors?.suggestionRequired && Form.pickup.errors?.required">Pickup address is required</div>
 							</div>
 						</div>
 					</div>
@@ -1315,12 +1315,6 @@
 									(onAutocompleteSelected)="fillAddress('dropoff', $event)"
 									(onLocationSelected)="fillLocationPoints('dropoff', $event)" /> -->
 							</mat-form-field>
-							<div *ngIf="((submitBookingForm || Form.dropoff.touched) && Form.dropoff.invalid)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.dropoff.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
-								<div *ngIf="Form.dropoff.errors?.suggestionRequired">Please select an address from the suggestions list</div>
-								<div *ngIf="!Form.dropoff.errors?.sameLocation && !Form.dropoff.errors?.suggestionRequired && Form.dropoff.errors?.required">Dropoff address is required</div>
-							</div>
 							<div *ngIf="isCustomAddressDropdownOpen('dropoff')" class="quote-ui-dropdown-panel">
 								<button type="button" class="quote-ui-dropdown-option"
 									*ngFor="let option of getCustomAddressOptions('dropoff')"
@@ -1339,6 +1333,12 @@
 									Loading Suggestions...</div>
 								<div *ngIf="shouldShowCustomEmpty('address', 'dropoff')" class="quote-ui-dropdown-empty">No
 									Result found</div>
+							</div>
+							<div *ngIf="((submitBookingForm || Form.dropoff.touched) && Form.dropoff.invalid)"
+								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+								<div *ngIf="Form.dropoff.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
+								<div *ngIf="Form.dropoff.errors?.suggestionRequired">Please select an address from the suggestions list</div>
+								<div *ngIf="!Form.dropoff.errors?.sameLocation && !Form.dropoff.errors?.suggestionRequired && Form.dropoff.errors?.required">Dropoff address is required</div>
 							</div>
 						</div>
 					</div>
@@ -2709,12 +2709,6 @@
 									</svg>
 								</button>
 							</mat-form-field>
-							<div *ngIf="((submitBookingForm || Form.return_pickup.touched) && Form.return_pickup.invalid)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.return_pickup.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
-								<div *ngIf="Form.return_pickup.errors?.suggestionRequired">Please select an address from the suggestions list</div>
-								<div *ngIf="!Form.return_pickup.errors?.sameLocation && !Form.return_pickup.errors?.suggestionRequired && Form.return_pickup.errors?.required">Return pickup address is required</div>
-							</div>
 							<div *ngIf="isCustomAddressDropdownOpen('return_pickup')" class="quote-ui-dropdown-panel">
 								<button type="button" class="quote-ui-dropdown-option"
 									*ngFor="let option of getCustomAddressOptions('return_pickup')"
@@ -2733,6 +2727,12 @@
 									class="quote-ui-dropdown-empty">Loading Suggestions...</div>
 								<div *ngIf="shouldShowCustomEmpty('address', 'return_pickup')"
 									class="quote-ui-dropdown-empty">No Result found</div>
+							</div>
+							<div *ngIf="((submitBookingForm || Form.return_pickup.touched) && Form.return_pickup.invalid)"
+								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+								<div *ngIf="Form.return_pickup.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
+								<div *ngIf="Form.return_pickup.errors?.suggestionRequired">Please select an address from the suggestions list</div>
+								<div *ngIf="!Form.return_pickup.errors?.sameLocation && !Form.return_pickup.errors?.suggestionRequired && Form.return_pickup.errors?.required">Return pickup address is required</div>
 							</div>
 						</div>
 					</div>
@@ -3016,12 +3016,6 @@
 									</svg>
 								</button>
 							</mat-form-field>
-							<div *ngIf="((submitBookingForm || Form.return_dropoff.touched) && Form.return_dropoff.invalid)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
-								<div *ngIf="Form.return_dropoff.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
-								<div *ngIf="Form.return_dropoff.errors?.suggestionRequired">Please select an address from the suggestions list</div>
-								<div *ngIf="!Form.return_dropoff.errors?.sameLocation && !Form.return_dropoff.errors?.suggestionRequired && Form.return_dropoff.errors?.required">Return dropoff address is required</div>
-							</div>
 							<div *ngIf="isCustomAddressDropdownOpen('return_dropoff')" class="quote-ui-dropdown-panel">
 								<button type="button" class="quote-ui-dropdown-option"
 									*ngFor="let option of getCustomAddressOptions('return_dropoff')"
@@ -3040,6 +3034,12 @@
 									class="quote-ui-dropdown-empty">Loading Suggestions...</div>
 								<div *ngIf="shouldShowCustomEmpty('address', 'return_dropoff')"
 									class="quote-ui-dropdown-empty">No Result found</div>
+							</div>
+							<div *ngIf="((submitBookingForm || Form.return_dropoff.touched) && Form.return_dropoff.invalid)"
+								class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+								<div *ngIf="Form.return_dropoff.errors?.sameLocation">Pickup, drop-off and stop locations must be different</div>
+								<div *ngIf="Form.return_dropoff.errors?.suggestionRequired">Please select an address from the suggestions list</div>
+								<div *ngIf="!Form.return_dropoff.errors?.sameLocation && !Form.return_dropoff.errors?.suggestionRequired && Form.return_dropoff.errors?.required">Return dropoff address is required</div>
 							</div>
 						</div>
 					</div>

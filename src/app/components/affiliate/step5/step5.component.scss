@@ -5,6 +5,15 @@
    first by this component. Only step-5-specific rules belong here.
    ========================================================================== */
 
+/* Row of table-level actions (Add Vehicle) between the notice and the table. */
+.table-toolbar {
+	display    : flex;
+	flex-wrap  : wrap;
+	gap        : 12px;
+	align-items: center;
+	margin     : 0 0 18px;
+}
+
 a.dropdown-toggle.notCompleted {
 	background-color: var(--orange) !important;
 	color           : white;

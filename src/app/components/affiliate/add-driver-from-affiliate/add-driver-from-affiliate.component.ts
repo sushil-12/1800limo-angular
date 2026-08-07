@@ -34,7 +34,10 @@ declare var $: any;
 @Component({
 	selector: "app-add-driver-from-affiliate",
 	templateUrl: "./add-driver-from-affiliate.component.html",
-	styleUrls: ["./add-driver-from-affiliate.component.scss"],
+	styleUrls: [
+		"../affiliate-registration-style.css",
+		"./add-driver-from-affiliate.component.scss",
+	],
 })
 export class AddDriverFromAffiliateComponent
 	implements OnInit, AfterViewInit, AfterViewChecked {

@@ -229,6 +229,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
 		return null;
 	}
 	format(value) {
+		if (value === 'travel_agent') {
+			return 'travel advisor';
+		}
+		if (value === 'sub_travel_agent') {
+			return 'sub travel advisor';
+		}
 		return value ? value.replaceAll('_', ' ') : ''
 	}
 

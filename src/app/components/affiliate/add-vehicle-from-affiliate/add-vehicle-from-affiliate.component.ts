@@ -16,7 +16,10 @@ declare var $: any;
 @Component({
 	selector: 'app-add-vehicle-from-affiliate',
 	templateUrl: './add-vehicle-from-affiliate.component.html',
-	styleUrls: ['./add-vehicle-from-affiliate.component.scss']
+	styleUrls: [
+		'../affiliate-registration-style.css',
+		'./add-vehicle-from-affiliate.component.scss'
+	]
 })
 export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecked {
 

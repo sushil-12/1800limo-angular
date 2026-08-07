@@ -4,7 +4,7 @@
 		<div>
 			<span class="step-section__eyebrow">Payouts</span>
 			<h2 class="step-section__title">Bank account status</h2>
-			<p class="step-section__sub">
+			<p class="field-group__hint">
 				Stripe verification can take up to 24 hours. Fix any errors below so payouts can go through.
 			</p>
 		</div>
@@ -196,27 +196,13 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-account-label">Account Type <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownAccount()" formControlName="AccountType"
-							tabindex="1">
-							<option value="individual">Personal</option>
-							<option value="company">Business</option>
-						</select>
-						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px" y="0px" viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+					<mat-form-field appearance="outline">
+						<mat-label>Account Type <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="AccountType" tabindex="1">
+							<mat-option value="individual">Personal</mat-option>
+							<mat-option value="company">Business</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.AccountType?.errors) ||
 							(f?.AccountType?.touched && f?.AccountType?.errors)
@@ -225,43 +211,44 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<span class="dob-group__caption">Date of birth <span class="asterisk1">*</span></span>
-					<p class="dob-group__hint">Of the account holder — required by Stripe.</p>
-					<div class="dob-group" [class.is-invalid]="dobErrorMessage">
-						<div class="dob-group__cell">
-							<label class="dob-group__label" for="dobMonth">Month</label>
-							<select id="dobMonth" class="dob-group__select" (click)="selectDropdownMonth()"
-								formControlName="dobMonth" tabindex="1">
-								<option value="">MM</option>
-								<option value="01">01</option>
-								<option value="02">02</option>
-								<option value="03">03</option>
-								<option value="04">04</option>
-								<option value="05">05</option>
-								<option value="06">06</option>
-								<option value="07">07</option>
-								<option value="08">08</option>
-								<option value="09">09</option>
-								<option value="10">10</option>
-								<option value="11">11</option>
-								<option value="12">12</option>
-							</select>
+					<div class="row">
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>Month of Birth <span class="asterisk">*</span></mat-label>
+								<mat-select id="dobMonth" formControlName="dobMonth" tabindex="1">
+									<mat-option value="">MM</mat-option>
+									<mat-option value="01">01</mat-option>
+									<mat-option value="02">02</mat-option>
+									<mat-option value="03">03</mat-option>
+									<mat-option value="04">04</mat-option>
+									<mat-option value="05">05</mat-option>
+									<mat-option value="06">06</mat-option>
+									<mat-option value="07">07</mat-option>
+									<mat-option value="08">08</mat-option>
+									<mat-option value="09">09</mat-option>
+									<mat-option value="10">10</mat-option>
+									<mat-option value="11">11</mat-option>
+									<mat-option value="12">12</mat-option>
+								</mat-select>
+							</mat-form-field>
 						</div>
-						<div class="dob-group__cell">
-							<label class="dob-group__label" for="dobDay">Day</label>
-							<select id="dobDay" class="dob-group__select" (click)="selectDropdownDay()"
-								formControlName="dobDay" tabindex="1">
-								<option value="">DD</option>
-								<option *ngFor="let day of dobDay" value="{{ day }}">{{ day }}</option>
-							</select>
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>Day of Birth <span class="asterisk">*</span></mat-label>
+								<mat-select id="dobDay" formControlName="dobDay" tabindex="1">
+									<mat-option value="">DD</mat-option>
+									<mat-option *ngFor="let day of dobDay" value="{{ day }}">{{ day }}</mat-option>
+								</mat-select>
+							</mat-form-field>
 						</div>
-						<div class="dob-group__cell">
-							<label class="dob-group__label" for="dobYear">Year</label>
-							<select id="dobYear" class="dob-group__select" (click)="selectDropdownYear()"
-								formControlName="dobYear" tabindex="1">
-								<option value="">YYYY</option>
-								<option *ngFor="let year of dobYear" value="{{ year }}">{{ year }}</option>
-							</select>
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>Year of Birth <span class="asterisk">*</span></mat-label>
+								<mat-select id="dobYear" formControlName="dobYear" tabindex="1">
+									<mat-option value="">YYYY</mat-option>
+									<mat-option *ngFor="let year of dobYear" value="{{ year }}">{{ year }}</mat-option>
+								</mat-select>
+							</mat-form-field>
 						</div>
 					</div>
 					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
@@ -290,18 +277,17 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<label class="select-currency-label">Currency <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownCurrency()" formControlName="currency"
-							tabindex="1">
-							<option value="">Choose Currency</option>
-							<option *ngFor="let currencyOption of currencyOptions" [value]="
+					<mat-form-field appearance="outline">
+						<mat-label>Currency <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="currency" tabindex="1">
+							<mat-option value="">Choose Currency</mat-option>
+							<mat-option *ngFor="let currencyOption of currencyOptions" [value]="
 									currencyOption?.currency + '-' + currencyOption?.currencyCountry
 								">
 								{{ currencyOption?.countryName }} — {{ currencyOption?.symbol }}
-							</option>
-						</select>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.currency?.errors) ||
 							(f?.currency?.touched && f?.currency?.errors)
@@ -377,7 +363,7 @@
 					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="{
 							'red-placeholder': !f?.badge_city_name?.value,
 							'border-red': !isBadgeCity
-						}">
+						}" style="margin-top: 0 !important">
 						<mat-label [ngClass]="(f?.badge_city_name?.value) ? '' : 'red-placeholder'">
 							Badge city (largest major city you service)
 						</mat-label>
@@ -403,7 +389,7 @@
 			<div>
 				<span class="step-section__eyebrow">Verification</span>
 				<h2 class="step-section__title">Owner / company identification</h2>
-				<p class="step-section__sub">
+				<p class="field-group__hint">
 					Upload a clear photo of the ID. The name must match the bank account holder.
 				</p>
 			</div>
@@ -613,7 +599,7 @@
 	<section class="step-section user_information">
 		<span class="step-section__eyebrow">Location</span>
 		<h2 class="step-section__title">Company address</h2>
-		<p class="step-section__sub">Search and pick from the dropdown so Stripe gets a verified business address.</p>
+		<p class="field-group__hint">Search and pick from the dropdown so Stripe gets a verified business address.</p>
 
 		<div class="step-notice step-notice--warn">
 			Enter the business address and choose from the drop-down suggestions.
@@ -676,30 +662,17 @@
 					</ng-template>
 				</div>
 				<div class="col-md-6">
-					<label class="select-country-label">Country <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownCountry()" formControlName="country"
-							(change)="changeCountry($any($event.target).value)" tabindex="1">
-							<option value="">Choose Country</option>
-							<option *ngFor="let countryOption of countryOptions"
+					<mat-form-field appearance="outline">
+						<mat-label>Country <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="country" (selectionChange)="changeCountry($event.value)"
+							tabindex="1">
+							<mat-option value="">Choose Country</mat-option>
+							<mat-option *ngFor="let countryOption of countryOptions"
 								[value]="countryOption?.countryShortCode">
 								{{ countryOption?.countryName }}
-							</option>
-						</select>
-						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px" y="0px" viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.country?.errors) ||
 							(f?.country?.touched && f?.country?.errors)
@@ -708,29 +681,15 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-state-label">State/Province <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownState()" formControlName="state"
-							tabindex="1">
-							<option value="">Choose State/Province</option>
-							<option *ngFor="let stateOption of stateOptions" [value]="stateOption?.shortCode">
+					<mat-form-field appearance="outline">
+						<mat-label>State/Province <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="state" tabindex="1">
+							<mat-option value="">Choose State/Province</mat-option>
+							<mat-option *ngFor="let stateOption of stateOptions" [value]="stateOption?.shortCode">
 								{{ stateOption?.name }}
-							</option>
-						</select>
-						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px" y="0px" viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.state?.errors) ||
 							(f?.state?.touched && f?.state?.errors)
@@ -926,11 +885,22 @@
 
 	<ng-template #stepNotCompleted>
 		<section class="step-section user_information">
-			<span class="step-section__eyebrow">Optional</span>
-			<h2 class="step-section__title">Farm-out booking payments</h2>
-			<p class="step-section__sub">
-				Add a debit/credit card to pay farm-out bookings and earn a 10% Travel Advisor commission.
-			</p>
+			<div class="step-section__head">
+				<div>
+					<span class="step-section__eyebrow">Optional</span>
+			        <h2 class="step-section__title">Farm-out booking payments</h2>
+				</div>
+                <button class="custom-btn add-button" (click)="addCardClick(accountId)" tabindex="-1">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+						viewBox="0 0 16 16">
+						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+						<path
+							d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+					</svg>
+					Add Debit / Credit card
+				</button>
+			</div>
+			
 
 			<div class="step-notice step-notice--info">
 				Add a debit/credit card to pay farm-out bookings and earn a 10% Travel Advisor commission. (Optional)
@@ -942,19 +912,7 @@
 				<span>Enable to accept 25% advance for charter bookings and refund if the booking is cancelled.</span>
 			</div>
 
-			<div class="mb-3">
-				<button class="custom-btn add-button" (click)="addCardClick(accountId)" tabindex="-1">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
-						viewBox="0 0 16 16">
-						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-						<path
-							d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-					</svg>
-					Add Debit / Credit card
-				</button>
-			</div>
-
-			<div class="driverside_table">
+			<div class="driverside_table" *ngIf="response?.data?.cardsListing?.length > 0">
 				<div class="custom_table table-responsive">
 					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
 						aria-describedby="dataTable_info" style="width: 100%" width="100%" cellspacing="0"
@@ -969,26 +927,17 @@
 							</tr>
 						</thead>
 						<tbody>
-							<ng-container *ngIf="response">
-								<ng-container *ngIf="response?.data?.cardsListing">
-									<tr role="row" class="odd" *ngFor="let card of response?.data?.cardsListing">
-										<td class="text-capitalize">{{ card?.name }}</td>
-										<td>{{ card?.last4 }}</td>
-										<td>{{ card?.exp_month + "/" + card?.exp_year }}</td>
-										<td class="text-capitalize">{{ card?.card_type }}</td>
-										<td>
-											<i class="fa fa-trash" style="font-size: x-large; color: #d64646;"
-												(click)="enableDisableClicked(card?.id)" data-toggle="modal"
-												data-target="#deleteConfirmationModal"></i>
-										</td>
-									</tr>
-								</ng-container>
-							</ng-container>
-							<ng-container *ngIf="!response">
-								<tr>
-									<td colspan="6">No Card found!</td>
-								</tr>
-							</ng-container>
+							<tr role="row" class="odd" *ngFor="let card of response?.data?.cardsListing">
+								<td class="text-capitalize">{{ card?.name }}</td>
+								<td>{{ card?.last4 }}</td>
+								<td>{{ card?.exp_month + "/" + card?.exp_year }}</td>
+								<td class="text-capitalize">{{ card?.card_type }}</td>
+								<td>
+									<i class="fa fa-trash" style="font-size: x-large; color: #d64646;"
+										(click)="enableDisableClicked(card?.id)" data-toggle="modal"
+										data-target="#deleteConfirmationModal"></i>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

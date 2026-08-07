@@ -12,30 +12,21 @@
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
 								style="background-color: #F3933E !important;color: #fff !important;">Login /
 								Create</button>
-							<div class=" dropdown-menu" aria-labelledby="dropdownFooter">
-								<a class="dropdown-item indv-btn font-weight-bolder"
-									(click)="loginButtons('individual')"
-									style="color: #fff !important;opacity: 1;font-size: 21px;">Individual/Corp Accts</a>
-								<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
-									style="color: #fff !important;opacity: 1;font-size: 21px;"
-									(click)="loginButtons('travel_agent')">Travel
-									Agent Account</a>
-								<!-- <a class="dropdown-item nav-disabled font-weight-bolder" (click)="loginButtons('corporate')"
-									style="font-size: 21px;">Corporate</a> -->
-								<!-- <hr> -->
-								<a class="dropdown-item driver-dropdown font-weight-bolder"
-									style="color: #fff !important;opacity: 1;font-size: 21px;"
-									(click)="loginButtons('driver')">
-									Chauffeur/Driver/Fleet Ops</a>
+							<div class="dropdown-menu" aria-labelledby="dropdownFooter">
+								<a class="dropdown-item indv-btn" (click)="loginButtons('individual')">
+									Individual/Corp Accts
+								</a>
+								<a class="dropdown-item ta-btn" (click)="loginButtons('travel_agent')">
+									Travel Advisor Account
+								</a>
+								<a class="dropdown-item driver-btn" (click)="loginButtons('driver')">
+									Chauffeur/Driver/Fleet Ops
+								</a>
 								<hr>
-								<a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
-									style="color: #fff !important;opacity: 1;font-size: 21px;"
+								<a class="dropdown-item sub-admin-btn btn-sub-admin"
 									(click)="loginButtons('sub_admin')">
-									Sub Admin</a>
-								<!-- <a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
-									style="color: #fff !important;opacity: 1;font-size: 21px;"
-									(click)="loginButtons('subscriber')">
-									Partner Login</a> -->
+									Sub Admin
+								</a>
 							</div>
 						</div>
 						<ng-template #loggedInUser>
@@ -100,7 +91,7 @@
 													Dashboard</span>
 											</div>
 										</ng-template>
-										<div class="dropdown-item logout-background font-weight-bolder"
+										<div class="dropdown-item logout-btn"
 											(click)="openLogoutModal()">
 											<div class="dropdown-item-icon">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -113,7 +104,7 @@
 													<line x1="21" y1="12" x2="9" y2="12"></line>
 												</svg>
 											</div>
-											Logout
+											<span class="dropdown-item-value">Logout</span>
 										</div>
 									</div>
 								</li>
