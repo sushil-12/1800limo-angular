@@ -293,27 +293,16 @@
 							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
 						</mat-select>
 					</mat-form-field> -->
-					<label class="select-gender-label">Gender <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" formControlName="Gender" tabindex="1">
-							<option value="male">Male</option>
-							<option value="female">Female</option>
-							<option value="lgbtq+">Non-Binary</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+					<mat-form-field appearance="outline">
+						<mat-label>Gender
+							<span class="asterisk">*</span>
+						</mat-label>
+						<mat-select formControlName="Gender" tabIndex="1">
+							<mat-option value="male">Male</mat-option>
+							<mat-option value="female">Female</mat-option>
+							<mat-option value="lgbtq+">Non-Binary</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.Gender.errors) ||
 							(f.Gender.touched && f.Gender.errors)
@@ -324,30 +313,18 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-year-label">Start Business Years - Pro Driver
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" formControlName="FirstYearBusiness" tabindex="1">
-							<option *ngFor="
+					<mat-form-field appearance="outline">
+						<mat-label>Start Business Years - Pro Driver
+							<span class="asterisk">*</span>
+						</mat-label>
+						<mat-select formControlName="FirstYearBusiness" tabIndex="1">
+							<mat-option *ngFor="
 									let startBusinessYear of startBusinessYears
 								" [value]="startBusinessYear.value">
 								{{ startBusinessYear.label }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.FirstYearBusiness.errors) ||
 							(f.FirstYearBusiness.touched &&
