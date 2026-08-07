@@ -1,198 +1,197 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
-<section class="driverbooking_top user_information">
-	
-	<div class="section-header">
-		<h2 class="headinginfo">Add Vehicle (s)</h2>
-		<button type="button"
-			(click)="openTutorial()"
-			title="View Tutorial"
-			class="watch-tutorial-btn">
+
+<!-- ================= VEHICLES ================= -->
+<section class="step-section user_information">
+	<div class="step-section__head">
+		<div>
+			<span class="step-section__eyebrow">Vehicles</span>
+			<h2 class="step-section__title">Add vehicle(s)</h2>
+			<p class="field-group__hint">
+				Good photos sell. Add one vehicle now — you can add the rest after approval.
+			</p>
+		</div>
+		<button type="button" (click)="openTutorial()" title="View Tutorial" class="watch-tutorial-btn">
 			<i class="bi bi-camera-video mr-1"></i> Watch Tutorial
 		</button>
-    </div>
-
-	<div class="containeredd">
-		<div class="row mt-3">
-			<div class="col-md-12 mb-2">
-				<ol class="alert alert-danger">
-					<li> After Admin review and activation. You will be notified ASAP.</li>
-					<li *ngIf="is_account_accepted"> Click + Add vehicle, if a different Make and Model. </li>
-					<li *ngIf="is_account_accepted"> Click the View button and click Duplicate and change Year, Color,
-						Amenities, or Rates.
-					</li>
-					<li>Click and drag each vehicle to change their order.</li>
-				</ol>
-			</div>
-		</div>
-		<div class="row mb-4" *ngIf="canAddVehicle">
-			<div class="col-md-12">
-				<button style="color:#fff !important;" type="button" class="custom-filled-button" (click)="addVehicleClick(vehicleTypeId)"
-					tabindex="1">
-					<i class="bi bi-plus-lg" style="font-size: 1.2rem"></i>
-					Add Vehicle
-				</button>
-			</div>
-		</div>
 	</div>
-	<div class="containeredd driverside_table">
-		<div class="row">
-			<div class="col-md-12 custom_table">
-				<div class="table-responsive">
-					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
-						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
-						<thead>
-							<tr role="row">
-								<th style="width: 48px;"></th>
-								<th>Actions</th>
-								<th>Image</th>
-								<th>Vehicle Type</th>
-								<th># of Vehicles</th>
-								<th>Seats</th>
-								<th>Year</th>
-								<th>Make</th>
-								<th>Model</th>
-								<th>Color</th>
-								<th>Amenities</th>
-								<th>Plate #</th>
-								<th>Delete</th>
-							</tr>
-						</thead>
-						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
-							<ng-container *ngIf="vehicles">
-								<tr *ngFor="let vehicle of vehicles;index as vehicle_index"
-									[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd affiliate-step5-row"
-									cdkDrag cdkDragLockAxis="y">
-									<td cdkDragHandle class="affiliate-step5-drag-handle-cell">
-										<span class="affiliate-step5-drag-grip-icon"><svg width="24" height="24"
-												viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
-												<circle cx="5" cy="5" r="1.5" />
-												<circle cx="12" cy="5" r="1.5" />
-												<circle cx="19" cy="5" r="1.5" />
 
-												<circle cx="5" cy="12" r="1.5" />
-												<circle cx="12" cy="12" r="1.5" />
-												<circle cx="19" cy="12" r="1.5" />
+	<div class="step-notice step-notice--warn">
+		<ol class="mb-0 pl-3">
+			<li>After Admin review and activation. You will be notified ASAP.</li>
+			<li *ngIf="is_account_accepted">Click + Add vehicle, if a different Make and Model.</li>
+			<li *ngIf="is_account_accepted">Click the View button and click Duplicate and change Year, Color,
+				Amenities, or Rates.</li>
+			<li>Click and drag each vehicle to change their order.</li>
+		</ol>
+	</div>
 
-												<circle cx="5" cy="19" r="1.5" />
-												<circle cx="12" cy="19" r="1.5" />
-												<circle cx="19" cy="19" r="1.5" />
-											</svg></span>
-									</td>
-									<td>
-										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-											data-toggle="dropdown"
-											[ngClass]="!vehicle?.isRatesCompleted ? 'notCompleted' : ''"
-											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-											aria-haspopup="true" aria-expanded="false" tabindex="1">
-											<span>View</span>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="clickEditVehicle(vehicle?.ID)"
-												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;">
-												<div class="dropdown-item-icon"></div>
-												Edit Vehicle
-											</a>
-											<a class="dropdown-item"
-												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
-												[ngClass]="{notCompleted: !vehicle?.isRatesCompleted}"
-												(click)="clickEditVehicleRates(vehicle?.ID)">
-												<div class="dropdown-item-icon"></div>
-												{{ vehicle?.isRatesCompleted ? 'Edit' : 'Add'}} Rates
-											</a>
-											<a *ngIf="canAddVehicle" class="dropdown-item"
-												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
-												(click)="clickDuplicateVehicle(vehicle?.ID)">
-												<div class="dropdown-item-icon"></div>
-												Duplicate Vehicle
-											</a>
-										</div>
-									</td>
-									<td><img src="{{vehicle?.vehicleImage}}"></td>
-									<td class="vehicleFontDesign">{{vehicle?.vehicleType}}</td>
-									<td class="vehicleFontDesign">{{vehicle?.numberOfVehicles}}</td>
-									<td class="vehicleFontDesign">{{vehicle?.seats}}</td>
-									<td class="vehicleFontDesign">{{vehicle?.year}}</td>
-									<td class="vehicleFontDesign">{{vehicle?.make}}</td>
-									<td class="vehicleFontDesign">{{vehicle?.model}}</td>
-									<td class="vehicleFontDesign">{{vehicle?.color}}</td>
-									<td>
-										<button style="color: #fff !important;" (click)="updateAmenityList(vehicle?.amenities)"
-											class="custom-filled-button" tabindex="1">
-											Amenities
-										</button>
-									</td>
-									<td class="vehicleFontDesign">{{vehicle?.licensePlate}}</td>
-									<td>
-										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
-											(click)="enableDisableClicked(vehicle?.id)" data-toggle="modal"
-											data-target="#deleteConfirmationModal"></i>
-									</td>
-									<ng-template cdkDragPreview [matchSize]="true">
-										<table class="affiliate-step5-drag-preview-table">
-											<tbody>
-												<tr class="affiliate-step5-drag-preview-row">
-													<td class="affiliate-step5-drag-handle-cell">
-														<div class="affiliate-step5-drag-preview__handle">
-															<svg width="24" height="24" viewBox="0 0 24 24" fill="black"
-																xmlns="http://www.w3.org/2000/svg">
-																<circle cx="5" cy="5" r="1.5" />
-																<circle cx="12" cy="5" r="1.5" />
-																<circle cx="19" cy="5" r="1.5" />
+	<div class="table-toolbar" *ngIf="canAddVehicle">
+		<button type="button" class="custom-btn add-button" (click)="addVehicleClick(vehicleTypeId)" tabindex="1">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+				<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+				<path
+					d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+			</svg>
+			Add Vehicle
+		</button>
+	</div>
 
-																<circle cx="5" cy="12" r="1.5" />
-																<circle cx="12" cy="12" r="1.5" />
-																<circle cx="19" cy="12" r="1.5" />
+	<div class="driverside_table" *ngIf="vehicles?.length > 0">
+		<div class="custom_table">
+			<div class="table-responsive">
+				<table class="table dataTable dt-responsive" id="dataTable" role="grid"
+					aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+					<thead>
+						<tr role="row">
+							<th style="width: 48px;"></th>
+							<th>Actions</th>
+							<th>Image</th>
+							<th>Vehicle Type</th>
+							<th># of Vehicles</th>
+							<th>Seats</th>
+							<th>Year</th>
+							<th>Make</th>
+							<th>Model</th>
+							<th>Color</th>
+							<th>Amenities</th>
+							<th>Plate #</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody cdkDropList (cdkDropListDropped)="drop($event)">
+						<tr *ngFor="let vehicle of vehicles;index as vehicle_index"
+							[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd affiliate-step5-row" cdkDrag
+							cdkDragLockAxis="y">
+							<td cdkDragHandle class="affiliate-step5-drag-handle-cell">
+								<span class="affiliate-step5-drag-grip-icon"><svg width="24" height="24"
+										viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+										<circle cx="5" cy="5" r="1.5" />
+										<circle cx="12" cy="5" r="1.5" />
+										<circle cx="19" cy="5" r="1.5" />
 
-																<circle cx="5" cy="19" r="1.5" />
-																<circle cx="12" cy="19" r="1.5" />
-																<circle cx="19" cy="19" r="1.5" />
-															</svg>
-														</div>
-													</td>
-													<td>
-														<span
-															class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-															[ngClass]="!vehicle?.isRatesCompleted ? 'notCompleted' : ''">
-															<span>View</span>
-														</span>
-													</td>
-													<td><img [src]="vehicle?.vehicleImage" [alt]="vehicle?.vehicleType">
-													</td>
-													<td class="vehicleFontDesign">{{vehicle?.vehicleType}}</td>
-													<td class="vehicleFontDesign">{{vehicle?.numberOfVehicles}}</td>
-													<td class="vehicleFontDesign">{{vehicle?.seats}}</td>
-													<td class="vehicleFontDesign">{{vehicle?.year}}</td>
-													<td class="vehicleFontDesign">{{vehicle?.make}}</td>
-													<td class="vehicleFontDesign">{{vehicle?.model}}</td>
-													<td class="vehicleFontDesign">{{vehicle?.color}}</td>
-													<td>
-														<button style="color: #fff !important;" type="button" class="custom-filled-button affiliate-step5-preview-button">
-															Amenities
-														</button>
-													</td>
-													<td class="vehicleFontDesign">{{vehicle?.licensePlate}}</td>
-													<td><i class="fa fa-trash affiliate-step5-preview-delete-icon"></i>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</ng-template>
-									<ng-template cdkDragPlaceholder>
+										<circle cx="5" cy="12" r="1.5" />
+										<circle cx="12" cy="12" r="1.5" />
+										<circle cx="19" cy="12" r="1.5" />
+
+										<circle cx="5" cy="19" r="1.5" />
+										<circle cx="12" cy="19" r="1.5" />
+										<circle cx="19" cy="19" r="1.5" />
+									</svg></span>
+							</td>
+							<td>
+								<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+									data-toggle="dropdown" [ngClass]="!vehicle?.isRatesCompleted ? 'notCompleted' : ''"
+									id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+									aria-haspopup="true" aria-expanded="false" tabindex="1">
+									<span>View</span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+									aria-labelledby="navbarDropdownUserImage">
+									<a class="dropdown-item" (click)="clickEditVehicle(vehicle?.ID)"
+										style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;">
+										<div class="dropdown-item-icon"></div>
+										Edit Vehicle
+									</a>
+									<a class="dropdown-item"
+										style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
+										[ngClass]="{notCompleted: !vehicle?.isRatesCompleted}"
+										(click)="clickEditVehicleRates(vehicle?.ID)">
+										<div class="dropdown-item-icon"></div>
+										{{ vehicle?.isRatesCompleted ? 'Edit' : 'Add'}} Rates
+									</a>
+									<a *ngIf="canAddVehicle" class="dropdown-item"
+										style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
+										(click)="clickDuplicateVehicle(vehicle?.ID)">
+										<div class="dropdown-item-icon"></div>
+										Duplicate Vehicle
+									</a>
+								</div>
+							</td>
+							<td><img src="{{vehicle?.vehicleImage}}"></td>
+							<td class="vehicleFontDesign">{{vehicle?.vehicleType}}</td>
+							<td class="vehicleFontDesign">{{vehicle?.numberOfVehicles}}</td>
+							<td class="vehicleFontDesign">{{vehicle?.seats}}</td>
+							<td class="vehicleFontDesign">{{vehicle?.year}}</td>
+							<td class="vehicleFontDesign">{{vehicle?.make}}</td>
+							<td class="vehicleFontDesign">{{vehicle?.model}}</td>
+							<td class="vehicleFontDesign">{{vehicle?.color}}</td>
+							<td>
+								<button style="color: #fff !important;" (click)="updateAmenityList(vehicle?.amenities)"
+									class="custom-filled-button" tabindex="1">
+									Amenities
+								</button>
+							</td>
+							<td class="vehicleFontDesign">{{vehicle?.licensePlate}}</td>
+							<td>
+								<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+									(click)="enableDisableClicked(vehicle?.id)" data-toggle="modal"
+									data-target="#deleteConfirmationModal"></i>
+							</td>
+							<ng-template cdkDragPreview [matchSize]="true">
+								<table class="affiliate-step5-drag-preview-table">
+									<tbody>
+										<tr class="affiliate-step5-drag-preview-row">
+											<td class="affiliate-step5-drag-handle-cell">
+												<div class="affiliate-step5-drag-preview__handle">
+													<svg width="24" height="24" viewBox="0 0 24 24" fill="black"
+														xmlns="http://www.w3.org/2000/svg">
+														<circle cx="5" cy="5" r="1.5" />
+														<circle cx="12" cy="5" r="1.5" />
+														<circle cx="19" cy="5" r="1.5" />
+
+														<circle cx="5" cy="12" r="1.5" />
+														<circle cx="12" cy="12" r="1.5" />
+														<circle cx="19" cy="12" r="1.5" />
+
+														<circle cx="5" cy="19" r="1.5" />
+														<circle cx="12" cy="19" r="1.5" />
+														<circle cx="19" cy="19" r="1.5" />
+													</svg>
+												</div>
+											</td>
+											<td>
+												<span
+													class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+													[ngClass]="!vehicle?.isRatesCompleted ? 'notCompleted' : ''">
+													<span>View</span>
+												</span>
+											</td>
+											<td><img [src]="vehicle?.vehicleImage" [alt]="vehicle?.vehicleType">
+											</td>
+											<td class="vehicleFontDesign">{{vehicle?.vehicleType}}</td>
+											<td class="vehicleFontDesign">{{vehicle?.numberOfVehicles}}</td>
+											<td class="vehicleFontDesign">{{vehicle?.seats}}</td>
+											<td class="vehicleFontDesign">{{vehicle?.year}}</td>
+											<td class="vehicleFontDesign">{{vehicle?.make}}</td>
+											<td class="vehicleFontDesign">{{vehicle?.model}}</td>
+											<td class="vehicleFontDesign">{{vehicle?.color}}</td>
+											<td>
+												<button style="color: #fff !important;" type="button"
+													class="custom-filled-button affiliate-step5-preview-button">
+													Amenities
+												</button>
+											</td>
+											<td class="vehicleFontDesign">{{vehicle?.licensePlate}}</td>
+											<td><i class="fa fa-trash affiliate-step5-preview-delete-icon"></i>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</ng-template>
+							<ng-template cdkDragPlaceholder>
 								<tr class="affiliate-step5-drag-placeholder">
 									<td colspan="13"></td>
 								</tr>
-								</ng-template>
-								</tr>
-								<tr *ngIf="!vehicles?.length">
-									<td colspan="13">No vehicle found!</td>
-								</tr>
-							</ng-container>
-						</tbody>
-					</table>
-				</div>
+							</ng-template>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
+	</div>
+
+	<div class="step-notice step-notice--info" *ngIf="vehicles && !vehicles.length">
+		No vehicles yet. Use <strong>Add Vehicle</strong> above to add your first one.
 	</div>
 </section>
 

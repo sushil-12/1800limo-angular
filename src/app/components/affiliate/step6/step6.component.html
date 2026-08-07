@@ -1,21 +1,31 @@
-<section class="user_information">
-	<div class="agreement_step0" *ngIf="step6Data.length > 0">
+<!-- ================= AFFILIATE AGREEMENT ================= -->
+<section class="step-section user_information" *ngIf="step6Data.length > 0">
+	<div class="step-section__head">
+		<div>
+			<span class="step-section__eyebrow">Agreement</span>
+			<h2 class="step-section__title">Affiliate agreement</h2>
+			<p class="field-group__hint">
+				Please read the terms below, then accept at the bottom of the page.
+			</p>
+		</div>
+	</div>
+
+	<div class="agreement_step0">
 		<div *ngFor="let step_data of step6Data; index as i">
-			<div class="step0Div" *ngIf="step_data.id != 25 && step_data.content">
-				<p *ngIf="step_data.id == 24">
-					{{step_data.content }}
-				</p>
+			<!-- Intro copy — sits above the numbered clauses. -->
+			<div class="step-notice step-notice--info" *ngIf="step_data.id != 25 && step_data.content && step_data.id == 24">
+				{{ step_data.content }}
 			</div>
 
-			<!-- -->
-			<div *ngIf="step_data.id != 24">
-				<h2 class="headinginfo pl-0" *ngIf="step_data.title">
+			<!-- Numbered clauses -->
+			<div class="field-group" *ngIf="step_data.id != 24">
+				<span class="field-group__title" *ngIf="step_data.title">
 					{{ i + 1 }}. {{ step_data.title }}
-				</h2>
+				</span>
 				<p *ngIf="step_data.content" [innerHTML]="step_data.content"></p>
 
 				<!-- other_listing_arr -->
-				<ul *ngIf="step_data.other_listing_arr.length > 0">
+				<ul class="agreement-list" *ngIf="step_data.other_listing_arr.length > 0">
 					<li *ngFor="let point of step_data.other_listing_arr">
 						{{ point }}
 					</li>
@@ -23,211 +33,65 @@
 
 				<!-- title_content_list_arr -->
 				<div *ngIf="step_data.title_content_list_arr.length > 0">
-					<ul *ngFor="let obj of step_data.title_content_list_arr; index as j">
-						<h3 class="headinginfoH3" *ngIf="obj.list_title">
+					<div class="agreement-subgroup" *ngFor="let obj of step_data.title_content_list_arr">
+						<span class="agreement-subgroup__title" *ngIf="obj.list_title">
 							{{ obj.list_title }}
-						</h3>
-						<div *ngIf="obj.list_points.length > 0">
-							<ul *ngFor="let list_point of obj.list_points">
-								<li>
+						</span>
+						<ng-container *ngIf="obj.list_points.length > 0">
+							<ul class="agreement-list">
+								<li *ngFor="let list_point of obj.list_points">
 									{{ list_point }}
 								</li>
 							</ul>
 							<p *ngIf="obj.list_subcontent" class="mt-3">
 								{{ obj.list_subcontent }}
 							</p>
-						</div>
+						</ng-container>
 						<p *ngIf="obj.list_content" class="mt-3">
 							{{ obj.list_content }}
 						</p>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-		<div class="row" *ngIf="account_approval!='accepted'">
-			<div class="col-md-12">
-				<div id="button-container" class="w-100">
-					<button class="custom-filled-button green-button mx-auto d-block" (click)="submitForm()">
-						Accept
-					</button>
-				</div>
-			</div>
-		</div>
-		<div class="row" *ngIf="account_approval=='accepted'">
-			<div class="col-md-12">
-				<div id="button-container" class="w-100">
-					<button class="custom-filled-button gray-color mx-auto d-block">
-						Accepted
-					</button>
-				</div>
-			</div>
-		</div>
-		<!--
-
-		<!- DIGITAL SIGNATURE ->
-		<div class="row px-4">
-			<div class="col-md-3 pr-0 borderright mobilePadding">
-				<div class="form-group radio-tile-group">
-					<div class="custom-radio input-container" tabIndex="1">
-						<input class="radio-button" type="radio" id="digitalSign" value="digitalSign" checked=""
-							name="signature" tabIndex="-1" (click)="signature('digitalSign')">
-						<div class="radio-tile">
-							<label class="radio-tile-label" for="digitalSign"
-								[ngClass]="!signatureImage ? 'radio-active' : ''">Digital Signature</label>
-						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3 pl-0 mobilePadding">
-				<div class="form-group radio-tile-group">
-					<div class="custom-radio input-container" tabIndex="1">
-						<input class="radio-button" type="radio" id="uploadSign" value="uploadSign" name="signature"
-							tabIndex="-1" (click)="signature('uploadSign')">
-						<div class="radio-tile">
-							<label class="radio-tile-label" for="uploadSign"
-								[ngClass]="signatureImage ? 'radio-active' : ''">Upload Signature Image</label>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!- DIGITAL SIGNATURE PAD ->
-		<div class="row px-3 align-items-center" [hidden]="signatureImage">
-			<div class="col-md-auto">
-				<!- <div class="wrapper">
-                            <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-                        </div> ->
-				<!- <div class="wrapper">
-                            <canvas *ngIf="!signatureImg" signature="signature" id="signature-pad" class="signature-pad" [clear]="clearMe" [options]="{color: '#000'}" (imgSrc)="srcChange($event)" #signaturepad>
-                                <div *ngIf="signatureImg">
-                                    <img class="signature w-100" src="{{signatureImg}}" />
-                                </div>
-                            </canvas>
-                        </div> ->
-
-
-				<canvas *ngIf="!signatureImg" signature="signature" id="responsive-canvas" [clear]="clearMe"
-					[options]="{color: '#000'}" (imgSrc)="srcChange($event)">
-				</canvas>
-				<div *ngIf="signatureImg">
-					<img class="signature w-100" src="{{signatureImg}}" />
-				</div>
-
-				<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-					xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="122.881px" height="122.88px"
-					viewBox="0 0 122.881 122.88" enable-background="new 0 0 122.881 122.88" xml:space="preserve"
-					*ngIf="!signatureImg" (click)="clear()">
-					<g>
-						<path
-							d="M61.44,0c16.966,0,32.326,6.877,43.445,17.996c11.119,11.118,17.996,26.479,17.996,43.444 c0,16.967-6.877,32.326-17.996,43.444C93.766,116.003,78.406,122.88,61.44,122.88c-16.966,0-32.326-6.877-43.444-17.996 C6.877,93.766,0,78.406,0,61.439c0-16.965,6.877-32.326,17.996-43.444C29.114,6.877,44.474,0,61.44,0L61.44,0z M80.16,37.369 c1.301-1.302,3.412-1.302,4.713,0c1.301,1.301,1.301,3.411,0,4.713L65.512,61.444l19.361,19.362c1.301,1.301,1.301,3.411,0,4.713 c-1.301,1.301-3.412,1.301-4.713,0L60.798,66.157L41.436,85.52c-1.301,1.301-3.412,1.301-4.713,0c-1.301-1.302-1.301-3.412,0-4.713 l19.363-19.362L36.723,42.082c-1.301-1.302-1.301-3.412,0-4.713c1.301-1.302,3.412-1.302,4.713,0l19.363,19.362L80.16,37.369 L80.16,37.369z M100.172,22.708C90.26,12.796,76.566,6.666,61.44,6.666c-15.126,0-28.819,6.13-38.731,16.042 C12.797,32.62,6.666,46.314,6.666,61.439c0,15.126,6.131,28.82,16.042,38.732c9.912,9.911,23.605,16.042,38.731,16.042 c15.126,0,28.82-6.131,38.732-16.042c9.912-9.912,16.043-23.606,16.043-38.732C116.215,46.314,110.084,32.62,100.172,22.708 L100.172,22.708z" />
-					</g>
-				</svg>
-			</div>
-
-
-
-
-
-
-
-
-			<!- Signature Text ->
-			<div class="col-md-auto">
-				<p class="text-orange" style="font-size: 1.2rem">
-					Initial (Signature) required
-				</p>
-			</div>
-		</div>
-
-		<div class="row" [hidden]="!signatureImage">
-			<div class="col-md-6" *ngIf="signatureImg; else no_signature_image">
-				<div class="vehtype_extint">
-					<div>
-						<img src="{{signatureImg}}" (click)="showImageInModal(signatureImg)" tabindex="-1"
-							class="img-fluid">
-						<ul class="mt-3">
-							<li>
-								<button class="changeuploaded" tabindex="1">
-									<input type="file" (change)="signImageChange($event,'signatureImg',signature_id)"
-										tabindex="-1">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-										<path fill="none" d="M0 0h24v24H0V0z" />
-										<circle cx="12" cy="12" r="3" />
-										<path
-											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-									</svg>
-									Change
-								</button>
-							</li>
-							<li>
-								<a class="delete-btn" (click)="deleteImage(signature_id,'signatureImg')" tabindex="1">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-										<path
-											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
-									</svg> Delete
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<ng-template #no_signature_image>
-				<div class="col-md-5">
-					<div class="vehtype_extint">
-						<div>
-							<div class="emptyImage">
-								<img src="../../../../assets/images/empty-image.png" tabindex="-1" class="img-fluid">
-							</div>
-							<ul class="mt-3">
-								<li>
-									<button class="adduploaded" tabindex="1">
-										<input type="file"
-											(change)="signImageChange($event,'signatureImg',signature_id)"
-											tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
-										Add
-									</button>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</ng-template>
-		</div>
-		<!- <a (click)="save()">Save</a> ->
-		<div class="row justify-content-center my-4">
-			<button class="forstep_booknow custom-btn savebutton" (click)="submitForm()">Accept</button>
 		</div>
 	</div>
-
 </section>
-<!- Image modal ->
-<app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
--->
-		<div class="modal fade" tabindex="-1" id="thankYouModal" aria-labelledby="thankYouModal" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4>Thanks for registering!</h4>
-					</div>
-					<div class="modal-header">
-						<h4 style="font-size:17px;">Please wait for approval. Once approved you can enter more vehicles.
-							Also, Please use quote to check your rates.
-						</h4>
-					</div>
 
-					<div class="modal-footer justify-content-end">
-						<button class="custom-filled-button" data-dismiss="modal" (click)="thankYouModalButton()">
-							OKAY
-						</button>
-					</div>
-				</div>
+<div class="container step-actions" *ngIf="step6Data.length > 0">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="d-flex justify-content-center flex-wrap">
+				<button *ngIf="account_approval != 'accepted'" class="custom-filled-button green-button m-2"
+					(click)="submitForm()" tabIndex="1">
+					ACCEPT
+				</button>
+				<button *ngIf="account_approval == 'accepted'" class="custom-filled-button gray-color m-2" disabled
+					tabIndex="-1">
+					ACCEPTED
+				</button>
 			</div>
 		</div>
+	</div>
+</div>
+
+<!-- Thank you modal -->
+<div class="modal fade" tabindex="-1" id="thankYouModal" aria-labelledby="thankYouModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4>Thanks for registering!</h4>
+			</div>
+			<div class="modal-header">
+				<h4 style="font-size:17px;">Please wait for approval. Once approved you can enter more vehicles.
+					Also, Please use quote to check your rates.
+				</h4>
+			</div>
+
+			<div class="modal-footer justify-content-end">
+				<button class="custom-filled-button" data-dismiss="modal" (click)="thankYouModalButton()">
+					OKAY
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

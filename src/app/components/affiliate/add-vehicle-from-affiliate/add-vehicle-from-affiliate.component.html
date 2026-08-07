@@ -4,12 +4,13 @@
 		(change)="handleSharedFileChange($event)"
 		accept="image/jpeg, image/png" />
 
-	<!-- Main page content-->
-	<section class="user_information affiliateVehicle">
-		<h2 class="headinginfo">
-			Vehicle Settings (Affiliate)
-			<span style="color: red;">(Choose Correct Vehicle Type)</span>
-		</h2>
+	<!-- ================= VEHICLE SETTINGS ================= -->
+	<section class="step-section user_information affiliateVehicle">
+		<span class="step-section__eyebrow">Vehicle</span>
+		<h2 class="step-section__title">Vehicle settings</h2>
+		<p class="field-group__hint">
+			Choose the correct vehicle type — it decides which rates and bookings you are matched with.
+		</p>
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-6 mb-2">
@@ -482,15 +483,11 @@
 			</div>
 		</div>
 	</section>
-	<section class="user_information my-2">
-		<div class="row">
-			<div class="col-md-12">
-				<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
-					<label class="alert alert-danger" style="padding :0.25rem 1.25rem;">
-						Choose all that apply.</label>
-				</h3>
-			</div>
-		</div>
+	<!-- ================= SERVICE TYPES ================= -->
+	<section class="step-section user_information">
+		<span class="step-section__eyebrow">Service</span>
+		<h2 class="step-section__title">Service types</h2>
+		<p class="step-section__sub">Choose all that apply.</p>
 		<div class="container mt-1">
 			<div class="row mt-3">
 				<div class="col-md-4">
@@ -521,12 +518,11 @@
 		</div>
 	</section>
 
-	<section class="user_information">
-		<h2 class="headinginfo">
-			Choose Chargable Amenities
-			<!-- <span class="asterisk">* </span> -->
-			<span class="spanText">(Choose each chargable amenity you supply or provide)</span>
-		</h2>
+	<!-- ================= AMENITIES ================= -->
+	<section class="step-section user_information">
+		<span class="step-section__eyebrow">Amenities</span>
+		<h2 class="step-section__title">Chargeable amenities</h2>
+		<p class="step-section__sub">Choose each chargeable amenity you supply or provide.</p>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist mt-3" *ngFor="let chargableAmenityGroup of chargableAmenities | keyvalue">
 				<div class="custom-control custom-checkbox"
@@ -554,10 +550,11 @@
 			</div> -->
 		</div>
 
-		<h2 class="headinginfo topMargin">
-			Choose Non Chargable Amenities <span class="asterisk">* </span>
-			<span class="spanText">(Choose each non chargable amenity you supply or provide)</span>
-		</h2>
+		<div class="field-group__divider"></div>
+		<span class="field-group__title">
+			Non-chargeable amenities <span class="asterisk">*</span>
+		</span>
+		<p class="field-group__hint">Choose each non-chargeable amenity you supply or provide.</p>
 		<div class="container mt-1 non-chargable-amenity">
 			<div class="choose_ameniteslist mt-3" *ngFor="
 					let nonChargableAmenityGroup of nonChargableAmenities
@@ -591,13 +588,10 @@
 				</div>
 			</div>
 		</div>
-	</section>
 
-	<section class="user_information">
-		<h2 class="headinginfo">
-			Choose Special Amenities
-			<span class="spanText">(Choose each special amenity you supply or provide)</span>
-		</h2>
+		<div class="field-group__divider"></div>
+		<span class="field-group__title">Special amenities</span>
+		<p class="field-group__hint">Choose each special amenity you supply or provide.</p>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
@@ -613,18 +607,13 @@
 				</div>
 			</div>
 		</div>
-	</section>
 
-	<section class="user_information">
-		<h2 class="headinginfo">
-			Choose Interiors
-			<span class="asterisk">* </span>
-			<span class="spanText">
-				(Choose each interior option for this vehicle)
-			</span>
-		</h2>
-		<p style="margin: 8px 1rem 12px" class="text-orange">
-			Please select at least one interior
+		<div class="field-group__divider"></div>
+		<span class="field-group__title">
+			Interiors <span class="asterisk">*</span>
+		</span>
+		<p class="field-group__hint">
+			Choose each interior option for this vehicle. At least one is required.
 		</p>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist">
@@ -642,12 +631,13 @@
 		</div>
 	</section>
 
-	<!-- Main page content-->
-	<section class="user_information">
-		<h2 class="headinginfo">
-			Exterior and Interior
+	<!-- ================= PHOTOS ================= -->
+	<section class="step-section user_information">
+		<span class="step-section__eyebrow">Photos</span>
+		<h2 class="step-section__title">
+			Exterior and interior
 			<span class="spanText">
-				(Exterior And Interior – Photo Tip –
+				(Photo Tip –
 				<svg data-toggle="modal" data-placement="top" class="camera-svg" viewBox="0 0 297.88 216"
 					xml:space="preserve" tabindex="1">
 					<style type="text/css">
@@ -669,23 +659,22 @@
 				Take Interior Pix On Cloudy Days)
 			</span>
 		</h2>
-		<h6 class="m-2 ml-3" style="color: red;">
-			(iPhone users only take photos by portrait view.)
-		</h6>
+		<p class="field-group__hint">
+			Take interior photos on cloudy days. iPhone users, shoot in portrait view only.
+		</p>
+
+		<div class="step-notice step-notice--warn">
+			<ul class="mb-0 pl-3">
+				<li class="d-lg-none">All photos to be uploaded from Desktop or File.</li>
+				<li>Upload pictures of the interior and exterior of the vehicle, and delete the unchanged sample
+					images.</li>
+				<li>The samples are a guide to good picture taking — sell the unique features travellers and party
+					goers want.</li>
+				<li>Please upload clear, undistorted images from a proper angle.</li>
+			</ul>
+		</div>
+
 		<div class="container mt-1">
-			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2 d-lg-none">
-				All Photos to be uploaded from Desktop or File.
-			</span>
-			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2">
-				Upload the pictures of Interior and Exterior of the vehicle. Delete the unchanged sample images.
-			</span>
-			<span class="alert alert-danger row ml-2 mr-2">
-				These are sample images as a guide to good picture taking. Sell your unique features that travelers and
-				party goers want!
-			</span>
-			<span class="alert alert-danger row ml-2 mr-2">
-				Please upload clear and undistorted images from proper angle!
-			</span>
 			<div class="mt-4 vehtype_extintwrap">
 				<div class="row" id="primaryAngleSection">
 					<div class="col-md-4" *ngIf="vehicleImage1; else noVehicleImage1">
@@ -1245,7 +1234,7 @@
 -->
 				</div>
 
-				<hr />
+				<div class="field-group__divider"></div>
 
 				<div class="row" *ngIf="affiliateType != 'fleet_operator'">
 					<div class="col-md-4" *ngIf="rearPlateImage; else noRearPlateImage">
@@ -1656,49 +1645,24 @@
 			</div>
 		</div>
 	</section>
-	<div class="container">
-		<div class="col-md-12">
-			<div class="billing_inforamtion">
-				<ul class="d-flex justify-content-center">
-					<li>
-						<button class="custom-filled-back-button" routerLink="/affiliate/step5">
-							<svg width="41" height="16" viewBox="0 0 41 16" fill="#fff"
-								xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M37.963 0.500001H0.5L0.5 2H19.7407H36.963C37.7914 2 38.463 2.67157 38.463 3.5V9C38.463 9.82843 37.7914 10.5 36.963 10.5H19.7407H19.2407V10V6.59305L14.4313 10.75L19.2407 14.907V13V12.5H19.7407H37.963C38.6378 12.5 39.2838 12.2351 39.7591 11.7656C40.2342 11.2963 40.5 10.661 40.5 10V2.5C40.5 1.82723 40.2315 1.35011 39.8074 1.0275C39.3675 0.692862 38.7244 0.500001 37.963 0.500001Z"
-									fill="#fff" stroke="#fff" />
-							</svg>
-						</button>
-					</li>
-					<!-- <li>
-						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
-							RESET
-						</button>
-					</li> -->
-					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
-							SAVE
-						</button>
-					</li>
-				</ul>
+	<div class="container step-actions">
+		<div class="row py-4">
+			<div class="col-md-12">
+				<div class="d-flex justify-content-center flex-wrap">
+					<button class="custom-filled-back-button m-2" routerLink="/affiliate/step5" tabIndex="2">
+						<svg width="41" height="16" viewBox="0 0 41 16" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M37.963 0.500001H0.5L0.5 2H19.7407H36.963C37.7914 2 38.463 2.67157 38.463 3.5V9C38.463 9.82843 37.7914 10.5 36.963 10.5H19.7407H19.2407V10V6.59305L14.4313 10.75L19.2407 14.907V13V12.5H19.7407H37.963C38.6378 12.5 39.2838 12.2351 39.7591 11.7656C40.2342 11.2963 40.5 10.661 40.5 10V2.5C40.5 1.82723 40.2315 1.35011 39.8074 1.0275C39.3675 0.692862 38.7244 0.500001 37.963 0.500001Z"
+								fill="#fff" stroke="#fff" />
+						</svg>
+					</button>
+					<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+						SAVE
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
-	<!-- <div class="row d-flex justify-content-between">
-		<div class="billing_inforamtion">
-			<button class="custom-filled-back-button" routerLink="/affiliate/step5">
-				BACK
-			</button>
-		</div>
-
-		<div class="billing_inforamtion">
-			<button class=" custom-filled-reset-button" (click)=" resetForm()" tabIndex="2">
-				RESET
-			</button>
-			<button type="submit" class="custom-filled-button" (click)="submitForm()" tabIndex="1">
-				SAVE
-			</button>
-		</div>
-	</div> -->
 </form>
 
 

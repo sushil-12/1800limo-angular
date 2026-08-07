@@ -10,74 +10,40 @@
 	left : 15px !important;
 }
 
+/* Row of table-level actions (Add Driver) sitting between the notice and the
+   table itself. */
+.table-toolbar {
+	display    : flex;
+	flex-wrap  : wrap;
+	gap        : 12px;
+	align-items: center;
+	margin     : 0 0 18px;
+}
+
+.status-toggle {
+	display  : flex;
+	flex-wrap: wrap;
+	gap      : 8px;
+}
+
 .status-btn{
 	padding: 8px 10px;
 	border-radius: 16px;
 }
 .btn-ctn{
 	color: green;
-    border: 1px solid #33c658; 
+    border: 1px solid #33c658;
 }
 .btn-suspend{
 	color: red;
     border: 1px solid red;
 }
 
-.box-shadow{
-	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 100%);
-}
-
-// toggle button css
-.continueLabel {
-	border    : 2px solid var(--green-color);
-	display   : inline-block;
-	padding   : 10px;
-	position  : relative;
-	text-align: center;
-	color     : var(--green-color);
-}
-
-.suspendLabel {
-	border    : 2px solid #dc3545;
-	display   : inline-block;
-	padding   : 10px;
-	position  : relative;
-	text-align: center;
-	color     : #dc3545;
-}
-
-.toggle-left {
-	border-right             : 0;
-	border-bottom-left-radius: 25px;
-	border-top-left-radius   : 25px;
-
-	&:after {
-		left: 100%
-	}
-}
-
-.toggle-right {
-	margin-left               : -5px;
-	border-top-right-radius   : 25px;
-	border-bottom-right-radius: 25px;
-
-
-	&:after {
-		left: -100%;
-	}
-}
-
 .checkedContinueLabel {
 	cursor          : default;
 	color           : #fff !important;
 	background-color: var(--green-color);
-	z-index         : 1;
-	width           : 85px;
 	transition      : color 200ms;
-
-	&:after {
-		left: 0;
-	}
 }
 
 .checkedSuspendLabel {
@@ -85,10 +51,6 @@
 	color           : #fff !important;
 	background-color: #dc3545;
 	transition      : color 200ms;
-
-	&:after {
-		left: 0;
-	}
 }
 
 .custom-filled-button

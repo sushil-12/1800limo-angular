@@ -455,6 +455,96 @@ body, body.mat-typography{
 	margin-right: 5px;
 }
 
+/* ---- Field groups ----
+   Airbnb-style subsections inside a step card. A step reads as one card made
+   of labelled groups rather than one long undifferentiated form. */
+
+.field-group {
+	padding: 15px 0;
+}
+
+.field-group:first-of-type {
+	border-top: 0;
+	padding-top: 0;
+}
+
+.field-group--last {
+	padding-bottom: 0;
+}
+
+.field-group__title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 18px;
+	font-weight: 700;
+	letter-spacing: -.01em;
+	color: var(--afr-ink);
+	margin: 0 0 4px;
+}
+
+.field-group__hint {
+	font-size: 14px;
+	line-height: 1.45;
+	color: var(--afr-ink-soft);
+}
+
+/* Hairline between groups that share one card — replaces the old <hr>. */
+.field-group__divider {
+	height: 1px;
+	margin: 26px 0 22px;
+	background: var(--afr-line);
+}
+
+.step-link {
+	color: var(--afr-accent-ink);
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.step-link:hover {
+	color: var(--afr-accent-deep);
+}
+
+/* ---- Soft notices ----
+   Replace the heavy red bootstrap alerts. Warn is the default for "read this
+   before you fill the field", info for neutral guidance, danger for errors
+   the user must resolve. */
+
+.step-notice {
+	display: block;
+	padding: 14px 16px;
+	margin: 0 0 18px;
+	border-radius: var(--afr-r-sm);
+	font-size: 14px;
+	line-height: 1.5;
+	font-weight: 500;
+}
+
+.step-notice--warn {
+	background: var(--afr-accent-wash);
+	color: var(--afr-accent-ink);
+	box-shadow: inset 0 0 0 1px var(--afr-accent-line);
+}
+
+.step-notice--info {
+	background: var(--afr-surface-sunk);
+	color: var(--afr-ink-mid);
+	box-shadow: inset 0 0 0 1px var(--afr-line);
+}
+
+.step-notice--danger {
+	background: var(--afr-danger-wash);
+	color: var(--afr-danger-ink);
+	box-shadow: inset 0 0 0 1px var(--afr-danger-line);
+}
+
+.step-notice ol,
+.step-notice ul {
+	margin-bottom: 0;
+}
+
 /* --------------------------------------------------------------------------
    3. Selection cards
    Big tappable answers used in place of radio tiles.

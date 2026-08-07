@@ -28,10 +28,6 @@
 	width: 260px;
 }
 
-hr {
-	margin-top: 0;
-}
-
 .custom-check-row {
 	line-height: 2;
 }
@@ -40,12 +36,20 @@ hr {
 	justify-content: inherit;
 }
 
-.choose-all {
-	font-weight: 600;
-}
-
 .custom-check-row .custom-checkbox {
 	padding-left: 0;
+}
+
+/* One credential toggle plus the panel it reveals. The hairline replaces the
+   <hr> that used to separate each block. */
+.toggle-block + .toggle-block {
+	margin-top: 18px;
+	padding-top: 18px;
+	border-top: 1px solid var(--afr-line, #e7e7ec);
+}
+
+.optionalText {
+	color: var(--orange-color);
 }
 
 .vehtype_extint .my-mat-hint {
@@ -73,95 +77,6 @@ hr {
 		margin-top: -5px;
 	}
 }
-
-.selectGenderLabel {
-	position: relative;
-	top: 43px;
-	left: 8px;
-	background: #fff;
-	color: #808080 !important;
-	padding: 0 3px;
-	font-size: 16px !important;
-}
-
-.select-gender-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-.selectDressLabel {
-	position: relative;
-	top: 43px;
-	left: 8px;
-	background: #fff;
-	color: #808080 !important;
-	padding: 0 3px;
-	font-size: 16px !important;
-}
-
-.select-dress-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-.selectYearBusinessLabel {
-	position: relative;
-	top: 43px;
-	left: 8px;
-	background: #fff;
-	color: #808080 !important;
-	padding: 0 3px;
-	font-size: 16px !important;
-}
-
-.select-year-business-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-.select-state-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-.select-country-label {
-	position: relative;
-	top: 15px;
-	left: 8px;
-	background: #fff;
-	color: #000 !important;
-	padding: 0 3px;
-	font-size: 12px !important;
-	transition: 0.3s;
-}
-
-
-
-
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
@@ -271,26 +186,8 @@ hr {
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep .selectInputStyle,
-mat-mdc-form-field-label,
-.selectGenderLabel {
-	background-color: rgb(226, 226, 226, 1) !important;
-}
-
-:host ::ng-deep .select-gender-label,
-.select-dress-label {
-	background-color: rgb(226, 226, 226, 1) !important;
-	transform: translateY(0.9em) scale(1) !important;
-	opacity: 0.7;
-	background: none !important;
-}
-
 :host ::ng-deep .mat-mdc-input-element {
 	font-weight: 500;
-}
-
-:host ::ng-deep .selectStyle select {
-	font-weight: 400;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
@@ -308,10 +205,6 @@ mat-mdc-form-field-label,
 	margin-left: 2px;
 	color: #ff0000 !important;
 	background: none !important;
-}
-
-.user_information .selectInputStyle {
-	height: 58px !important;
 }
 
 .choose_ameniteslist {

@@ -166,18 +166,6 @@ div#rate-manager-slider {
 		font-size: 18px;
 		font-weight: 600;
 	}
-
-	.billing_inforamtion ul {
-		justify-content: center;
-		/* Keep buttons centered */
-		gap: 10px;
-		/* Smaller gap for mobile */
-	}
-
-	.billing_inforamtion li {
-		flex: 0 1 auto;
-		/* Allow the buttons to stay in one row */
-	}
 }
 
 
@@ -405,15 +393,7 @@ div#rate-manager-slider {
 }
 
 
-.billing_inforamtion ul {
-	display: flex;
-	flex-wrap: nowrap;
-	/* Prevent wrapping */
-	justify-content: center;
-	/* Center align the buttons */
-	gap: 30px;
-	/* Adjust spacing between buttons */
-}
+/* The action row now uses the shared `.step-actions` layout. */
 
 // Fix for overlapping radio buttons. Overrides global sticky styles.
 :host ::ng-deep .assment_radio .input-container {

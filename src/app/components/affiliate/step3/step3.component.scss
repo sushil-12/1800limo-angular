@@ -5,86 +5,13 @@
    first by this component. Only step-3-specific rules belong here.
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Field groups — Airbnb-style subsections inside a step card
-   (mirrors step 1 / step 2)
-   -------------------------------------------------------------------------- */
+/* `.field-group*`, `.step-notice*` and `.step-link` now live in the shared
+   ../affiliate-registration-style.css — steps 2, 3 and 6 all use them. */
 
+/* Step 3's groups carry no title or hint, so they need no vertical rhythm of
+   their own — the fields alone provide the spacing. */
 .field-group {
-
-	&:first-of-type {
-		border-top: 0;
-		padding-top: 0;
-	}
-
-	&--last {
-		padding-bottom: 0;
-	}
-}
-
-.field-group__title {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	font-size: 18px;
-	font-weight: 700;
-	letter-spacing: -.01em;
-	color: var(--afr-ink, #1b1b1f);
-	margin: 0 0 4px;
-}
-
-.field-group__hint {
-	font-size: 14px;
-	line-height: 1.45;
-	color: var(--afr-ink-soft, #71717a);
-}
-
-.step-link {
-	color: var(--afr-accent-ink, #9a4d06);
-	font-weight: 600;
-	text-decoration: underline;
-	text-underline-offset: 2px;
-
-	&:hover {
-		color: var(--afr-accent-deep, #d97316);
-	}
-}
-
-/* --------------------------------------------------------------------------
-   Soft notices (replace heavy red alert banners)
-   -------------------------------------------------------------------------- */
-
-.step-notice {
-	display: block;
-	padding: 14px 16px;
-	margin: 0 0 18px;
-	border-radius: var(--afr-r-sm, 10px);
-	font-size: 14px;
-	line-height: 1.5;
-	font-weight: 500;
-
-	&--warn {
-		background: var(--afr-accent-wash, #fff7ef);
-		color: var(--afr-accent-ink, #9a4d06);
-		box-shadow: inset 0 0 0 1px var(--afr-accent-line, #f7cb9c);
-	}
-
-	&--info {
-		background: var(--afr-surface-sunk, #fafafa);
-		color: var(--afr-ink-mid, #4a4a52);
-		box-shadow: inset 0 0 0 1px var(--afr-line, #e7e7ec);
-	}
-
-	&--danger {
-		background: var(--afr-danger-wash, #fdf4f3);
-		color: var(--afr-danger-ink, #b3261e);
-		box-shadow: inset 0 0 0 1px var(--afr-danger-line, #f0c5c1);
-	}
-
-	ol,
-	ul {
-		margin-bottom: 0;
-	}
+	padding: 0;
 }
 
 .optionalText {
