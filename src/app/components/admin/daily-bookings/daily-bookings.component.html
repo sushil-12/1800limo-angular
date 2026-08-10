@@ -316,16 +316,68 @@
 
 										<!-- Row 2: Status pill below the icons -->
 										<div class="d-flex justify-content-center mt-4">
-											<div [attr.data-toggle]="(booking.booking_status != 'paid' && booking.booking_status != 'paid_cash') ? 'modal' : null"
-												[attr.data-target]="(booking.booking_status != 'paid' && booking.booking_status != 'paid_cash') ? '#change_status_booking_Modal' : null"
-												(click)="changeBookingStatus(booking.booking_id, booking.booking_status)"
+											<div
+												[attr.data-toggle]="
+													(booking.booking_status != 'paid' &&
+													booking.booking_status != 'paid_cash' &&
+													!booking.booking_status.startsWith('passenger_'))
+														? 'modal'
+														: null
+												"
+												[attr.data-target]="
+													(booking.booking_status != 'paid' &&
+													booking.booking_status != 'paid_cash' &&
+													!booking.booking_status.startsWith('passenger_'))
+														? '#change_status_booking_Modal'
+														: null
+												"
+												(click)="
+													!booking.booking_status.startsWith('passenger_') &&
+													changeBookingStatus(booking.booking_id, booking.booking_status)
+												"
 												class="status-pill {{ booking.booking_status }}"
-												[style.cursor]="(booking.booking_status != 'paid' && booking.booking_status != 'paid_cash') ? 'pointer' : 'default'"
-												style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;">
-												 {{(booking.booking_status == 'driver_unassigned' ? 'Unassigned' :
-													booking.booking_status | bookingStatusTextReplace : '_' : ' ' | titlecase)}}
-												<i *ngIf="booking.booking_status != 'paid' && booking.booking_status != 'paid_cash'"
-													class="fas fa-pencil-alt" style="font-size: 14px; color: white;"></i>
+												[class.passenger-status]="booking.booking_status.startsWith('passenger_')"
+												[style.cursor]="
+													(booking.booking_status != 'paid' &&
+													booking.booking_status != 'paid_cash' &&
+													!booking.booking_status.startsWith('passenger_'))
+														? 'pointer'
+														: 'default'
+												"
+												style="
+													display: inline-flex;
+													align-items: center;
+													justify-content: center;
+													gap: 6px;
+													white-space: nowrap;
+												"
+											>
+												{{
+  booking.booking_status.startsWith('passenger_')
+    ? (
+        booking.booking_status_label
+          | bookingStatusTextReplace : '_' : ' '
+          | titlecase
+      )
+    : (
+        booking.booking_status === 'driver_unassigned'
+          ? 'Unassigned'
+          : (
+              booking.booking_status
+                | bookingStatusTextReplace : '_' : ' '
+                | titlecase
+            )
+      )
+}}
+												<i
+													*ngIf="
+														booking.booking_status != 'paid' &&
+														booking.booking_status != 'paid_cash' &&
+														!booking.booking_status.startsWith('passenger_')
+													"
+													class="fas fa-pencil-alt"
+													style="font-size: 14px; color: white;"
+												></i>
 											</div>
 										</div>
 

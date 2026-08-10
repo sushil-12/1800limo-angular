@@ -166,7 +166,7 @@ body, body.mat-typography{
   background:var(--surface) !important;
   border-radius:var(--radius-lg) !important;
   padding:22px 28px !important;
-  margin:0 0 18px 0 !important;
+  margin:10px !important;
   box-shadow:var(--shadow-sm) !important;
   border:1px solid var(--border);
 }
@@ -292,7 +292,6 @@ body, body.mat-typography{
   color:var(--brand-orange) !important;
   background:var(--brand-orange-light) !important;
   border-radius:14px !important;
-  margin-bottom:18px !important;
   transition:all .2s ease;
 }
 .choice-card.is-selected .choice-card__icon{
@@ -303,7 +302,6 @@ body, body.mat-typography{
   font-weight:700 !important;
   font-size:1.05rem !important;
   color:var(--ink-900) !important;
-  margin-bottom:8px !important;
 }
 .choice-card__desc{
   font-size:.88rem !important;
@@ -351,7 +349,7 @@ body, body.mat-typography{
    -------------------------------------------------------------------------- */
 
 .step-section {
-	margin: 0 auto 30px;
+	margin: 10px;
 	padding: 0 16px;
 }
 
@@ -563,7 +561,7 @@ body, body.mat-typography{
 	align-items: flex-start;
 	gap: 6px;
 	width: 100%;
-	min-height: 178px;
+	min-height: 130px;
 	padding: 22px 22px 24px;
 	text-align: left;
 	background: var(--afr-surface);
@@ -622,7 +620,6 @@ body, body.mat-typography{
 	justify-content: center;
 	width: 46px;
 	height: 46px;
-	margin-bottom: 12px;
 	border-radius: 13px;
 	border: 1px solid var(--afr-line);
 	background: var(--afr-surface-sunk);
@@ -674,7 +671,7 @@ body, body.mat-typography{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 14px;
+	font-size: 16px;
 	box-shadow: 0 4px 10px -4px rgba(217, 115, 22, .9);
 	transform: scale(.4);
 	opacity: 0;
@@ -1192,4 +1189,8 @@ div#imageModal pinch-zoom img {
 	.watch-tutorial-btn:hover {
 		transform: none !important;
 	}
+}
+
+:host ::ng-deep .mat-mdc-form-field-infix {
+    background-color: #eeeeee !important;
 }
