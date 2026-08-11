@@ -547,3 +547,9 @@
 .asterisk {
 	font-size: 21px;
 }
+
+@media (max-width:600px){
+	.edit-email {
+		margin-top:22px !important;
+	}
+}

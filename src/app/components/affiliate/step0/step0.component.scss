@@ -282,10 +282,6 @@ p {
     left: -3rem;
 }
 
-.modal-body:not(#photoTipModal .modal-body) {
-    text-align: center !important;
-}
-
 .custom-filled-button.green-button:not(#btn-agree) {
     padding: 0.275rem 0.5rem;
     font-size: 0.835rem;
@@ -308,31 +304,6 @@ div#imageModal button.close {
 
 .contact-us a:focus {
     text-decoration: underline;
-}
-
-.modal-content:not(#photoTipModal .modal-content) {
-    background-color: var(--orange-color);
-
-    .modal-header {
-        justify-content: center;
-        text-transform: uppercase;
-
-        h3 {
-            font-size: 32px;
-        }
-    }
-
-    hr {
-        border: 2px solid #fff !important;
-        background-color: #fff !important;
-        width: 100px;
-        margin: 5px auto;
-        display: block;
-    }
-
-    .modal-title {
-        font-size: 18px;
-    }
 }
 
 #photo-capturing-instructions {
