@@ -324,7 +324,7 @@ export class Step2Component implements OnInit, AfterViewInit {
 								this.canChangeAddress = true;
 							}
 							else {
-								this.canChangeAddress = false;
+								this.canChangeAddress = true;
 							}
 							this.syncAddressControlState();
 							setTimeout(() => this.mapFunction());
