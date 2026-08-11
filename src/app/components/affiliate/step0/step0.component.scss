@@ -1,3 +1,12 @@
+/* ==========================================================================
+   Step 0 — Welcome + requirements
+
+   Shared wizard chrome lives in ../affiliate-registration-style.css, loaded
+   first by this component. Only step-0-specific rules belong here — note the
+   oversized agreement checkbox below is deliberately NOT shared: it would
+   blow up the compact checkbox grids on steps 1 and 2.
+   ========================================================================== */
+
 .agreement_step0 p,
 .custom-list span,
 li {
@@ -24,11 +33,38 @@ li {
     color: #000;
 }
 
-.why_collaborate_box{
-    border: 1px solid lightgray;
-    border-radius: 10px;
-    background-color: #fff;
+/* Features / Advantages / Benefits — three equal cards that stack on mobile. */
+.collab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.why_collaborate_box {
+    border: 1px solid var(--afr-line, lightgray);
+    border-radius: var(--afr-r-md, 10px);
+    background-color: var(--afr-surface, #fff);
     padding: 20px;
+    box-shadow: var(--afr-shadow-sm, none);
+}
+
+.why_collaborate_box__title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin-bottom: 12px;
+}
+
+.why_collaborate_box__title--features {
+    color: #1d4ed8;
+}
+
+.why_collaborate_box__title--advantages {
+    color: #0a6c4e;
+}
+
+.why_collaborate_box__title--benefits {
+    color: #b3261e;
 }
 
 .requirement-list {
@@ -36,7 +72,7 @@ li {
 }
 
 .requirement-list li {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
 .requirement-list a {
@@ -61,43 +97,164 @@ p {
     margin-bottom: 1rem;
 }
 
-.step-list {
+/* --------------------------------------------------------------------------
+   Getting started — the six tutorial cards
+
+   One auto-fitting grid: three-up on a wide desktop, two-up on an iPad, and
+   one-up on a phone, with no per-breakpoint overrides. The thumbnail is a
+   normal flex child rather than an absolutely-positioned image in a
+   fixed-height box, so a card grows to fit whatever copy the CMS returns.
+   -------------------------------------------------------------------------- */
+
+.steps-hint {
     display: flex;
-    padding-bottom: 15px;
+    align-items: center;
+    gap: 10px;
 }
 
-.step-points {
-    margin-left: 15px;
-    margin-top: 15px;
-    width: 100%
+.steps-hint__icon {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
 }
 
-.step-points svg {
-    height: 20px;
-    margin-top: -1px;
+.steps-grid {
+    display: grid;
+    /* `1fr` columns give every card the same width; `grid-auto-rows: 1fr`
+       makes every row as tall as the tallest card, so all six match
+       regardless of how much copy the CMS returns for each one. */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 16px;
+    align-items: stretch;
 }
 
-.step-points li {
-    padding-right: 20px;
+.step-card {
+    display: flex;
+    gap: 14px;
+    height: 100%;
+    padding: 16px;
+    border-radius: var(--afr-r-md, 14px);
+    background: var(--afr-surface, #fff);
+    box-shadow: inset 0 0 0 1px var(--afr-line, #e7e7ec), var(--afr-shadow-sm, none);
+    transition: box-shadow .2s var(--afr-ease, ease), transform .2s var(--afr-ease, ease);
 }
 
-.img-wrapper {
+.step-card:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 0 0 1px var(--afr-accent-line, #f7cb9c), var(--afr-shadow-md, none);
+}
+
+.step-card__thumb {
     position: relative;
-    background: #e9e9e9;
-    min-width: 100px;
+    flex: 0 0 92px;
+    width: 92px;
+    height: 92px;
+    display: grid;
+    place-items: center;
+    padding: 10px;
+    border-radius: var(--afr-r-sm, 10px);
+    background: var(--afr-surface-sunk, #f4f4f5);
+    overflow: hidden;
 }
 
-.step-list img {
+.step-card__thumb img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Play badge — makes it obvious the thumbnail opens a video. */
+.step-card__play {
     position: absolute;
-    width: 100px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    right: 4px;
+    bottom: 4px;
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--afr-accent, #f3933d);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1;
+    box-shadow: 0 1px 4px rgba(18, 18, 23, .35);
 }
 
-.step-list ul {
+.step-card__body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.step-card__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.step-card__title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--afr-ink, #1b1b1f);
+}
+
+.step-card__req {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    border: 1px solid var(--afr-accent-line, #f7cb9c);
+    border-radius: 999px;
+    background: var(--afr-accent-wash, #fff7ef);
+    color: var(--afr-accent-ink, #9a4d06);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color .18s ease, border-color .18s ease;
+}
+
+.step-card__req:hover {
+    background: #ffefdf;
+    border-color: var(--afr-accent, #f3933d);
+}
+
+.step-card__req:focus-visible {
+    outline: none;
+    box-shadow: var(--afr-ring, 0 0 0 3px rgba(243, 147, 61, .3));
+}
+
+.step-card__list {
     margin: 0;
-    padding: 5px 0 10px 20px;
+    padding-left: 18px;
+}
+
+.step-card__list li {
+    margin-bottom: 6px;
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+
+.step-card__list li:last-child {
+    margin-bottom: 0;
+}
+
+/* Very narrow phones: stack the thumbnail above the copy so neither is
+   squeezed. */
+@media only screen and (max-width: 400px) {
+    .step-card {
+        flex-direction: column;
+    }
+
+    .step-card__thumb {
+        flex: 0 0 auto;
+        width: 72px;
+        height: 72px;
+    }
 }
 
 .custom-checkbox {
@@ -125,10 +282,6 @@ p {
     left: -3rem;
 }
 
-.step-list {
-    height: 100%;
-}
-
 .modal-body:not(#photoTipModal .modal-body) {
     text-align: center !important;
 }
@@ -142,43 +295,10 @@ p {
     box-shadow: 0 2px 8px 1px rgba(66, 66, 66, 0.4);
 }
 
-// pinch zoom css
-div#imageModal {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-
-    button.close {
-        background-color: #fff;
-        position: absolute;
-        z-index: 999;
-        right: 15px;
-        top: 12px;
-        width: 24px;
-    }
-
-    pinch-zoom {
-        width: 100%;
-        height: 100%;
-
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            top: 0;
-        }
-    }
-}
-
-.fakeLink {
-    cursor: pointer;
-    color: #007bff;
+/* Shared styles the viewer; step 0's close button sits further in. */
+div#imageModal button.close {
+    right: 15px;
+    top: 12px;
 }
 
 .contact-us a {
@@ -188,38 +308,6 @@ div#imageModal {
 
 .contact-us a:focus {
     text-decoration: underline;
-}
-
-@media only screen and (min-width:1199px) {
-    .previewSvg a:focus {
-        transform: scale(1.2, 1.2);
-        background-color: #28b24b;
-    }
-}
-
-@media only screen and (max-width:767px) {
-    .previewSvg {
-        left: 6px;
-        margin-top: 5px;
-        margin-left: 14px !important;
-    }
-
-    .imageTutorials {
-        margin-left: 58px !important;
-    }
-
-    .stepClass {
-        padding: 0;
-        margin-bottom: 10px;
-    }
-
-    .step-points {
-        margin-left: 12px;
-    }
-
-    .margin-bottom-mobile{
-        margin-bottom: 20px;
-    }
 }
 
 .modal-content:not(#photoTipModal .modal-content) {
@@ -260,8 +348,6 @@ div#imageModal {
     padding: 15px 40px;
 }
 
-@media (min-width: 768px) and (max-width: 1024px){
-    .margin-bottom-mobile{
-        margin-bottom: 70px;
-    }
+.step-notice {
+    padding:5px 10px !important; 
 }

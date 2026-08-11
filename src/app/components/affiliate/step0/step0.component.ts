@@ -9,7 +9,7 @@ declare var $: any;
 @Component({
 	selector: 'app-step0',
 	templateUrl: './step0.component.html',
-	styleUrls: ['./step0.component.scss']
+	styleUrls: ['../affiliate-registration-style.css', './step0.component.scss']
 })
 export class Step0Component implements OnInit {
 	content_data: any
@@ -129,6 +129,12 @@ export class Step0Component implements OnInit {
 	) { }
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+
+	public tutorialVideoUrl = "/tutorials?tab=registration";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
 
 	ngOnInit(): void {
 		$('.HeadingH1').css({display: "block"})

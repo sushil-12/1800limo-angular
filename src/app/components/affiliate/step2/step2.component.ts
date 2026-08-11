@@ -34,7 +34,7 @@ export const MY_FORMATS = {
 @Component({
 	selector: 'app-step2',
 	templateUrl: './step2.component.html',
-	styleUrls: ['./step2.component.scss'],
+	styleUrls: ['../affiliate-registration-style.css', './step2.component.scss'],
 	providers: [
 		{
 			provide: DateAdapter,

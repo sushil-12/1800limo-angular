@@ -51,7 +51,7 @@ export function pastDateValidator(): any {
 @Component({
 	selector: "app-step3",
 	templateUrl: "./step3.component.html",
-	styleUrls: ["./step3.component.scss"],
+	styleUrls: ["../affiliate-registration-style.css", "./step3.component.scss"],
 	providers: [
 		{
 			provide: DateAdapter,
@@ -610,12 +610,6 @@ export class Step3Component implements OnInit, AfterViewInit {
 		this.insCertificateImage = "";
 		this.insuranceCardImage = "";
 	}
-	selectDropdownInsurance() {
-		$(".selectInsuranceLabel")
-			.removeClass("selectInsuranceLabel ")
-			.addClass("select-insurance-label");
-	}
-
 	chosenYearHandler(normalizedYear: moment.Moment) {
 		const ctrlValue = this.addInsuranceForm.get('policyExpiredDate').value ? moment(this.addInsuranceForm.get('policyExpiredDate').value) : moment();
 		ctrlValue.year(normalizedYear.year());

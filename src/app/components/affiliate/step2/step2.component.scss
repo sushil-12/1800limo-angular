@@ -1,23 +1,160 @@
-.section-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+/* ==========================================================================
+   Step 2 — Bank settings + identity + address
 
-	.watch-tutorial-btn {
-		background: #FFEDD4;
-		color: #F54900;
-		padding: 8px 18px;
-		border-radius: 50px;
+   Shared wizard chrome lives in ../affiliate-registration-style.css, loaded
+   first by this component. Only step-2-specific rules belong here.
+   ========================================================================== */
+
+/* `.field-group*`, `.step-notice*` and `.step-link` now live in the shared
+   ../affiliate-registration-style.css — steps 2, 3 and 6 all use them. */
+
+/* --------------------------------------------------------------------------
+   Stripe status chips
+   -------------------------------------------------------------------------- */
+
+.status-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+}
+
+.status-chip {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 16px 18px;
+	border-radius: var(--afr-r-md, 14px);
+	background: #101110;
+	color: #fff;
+	box-shadow: var(--afr-shadow-sm, 0 1px 2px rgba(18, 18, 23, .05));
+
+	&__label {
+		font-size: 12px;
 		font-weight: 600;
-		font-size: 16px;
-		display: inline-block;
-		margin-bottom: 25px;
-		margin-right: 5px;
-		letter-spacing: 0.5px;
-		border: 1px solid #F54900;
+		letter-spacing: .04em;
+		text-transform: uppercase;
+		opacity: .72;
+	}
+
+	&__value {
+		font-size: 15px;
+		font-weight: 700;
+		text-transform: capitalize;
+	}
+
+	&.valid,
+	&.verified,
+	&.active {
+		background: var(--green-color, #1aa971) !important;
+	}
+
+	&.invalid,
+	&.unverified,
+	&.inactive {
+		background: #dc3545 !important;
+	}
+
+	&.pending {
+		background: var(--orange-color, #f3933d) !important;
 	}
 }
+
+.status-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+}
+
+/* Keep legacy class hooks working if anything still references them */
+.defaultStatus {
+	background-color: #101110 !important;
+	color: #fff;
+	padding: 10px;
+	border-radius: 10px;
+	margin: 1rem 0;
+}
+
+.valid,
+.verified,
+.active {
+	background-color: var(--green-color) !important;
+}
+
+.invalid,
+.unverified,
+.inactive {
+	background-color: #dc3545 !important;
+}
+
+.pending {
+	background-color: var(--orange-color) !important;
+}
+
+.text-capitalize {
+	text-transform: capitalize !important;
+	font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Toggle pair (EIN / card type)
+   -------------------------------------------------------------------------- */
+
+.toggle-pair,
+#ein-container,
+#card-type-container {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+	width: 100%;
+	padding: 4px 0 0;
+	gap: 8px;
+}
+
+.toggle-pair__option,
+#ein-container .ein,
+#card-type-container .card-type,
+.toggle-pair .ein,
+.toggle-pair .card-type {
+	flex: 1 1 48%;
+	width: 48%;
+	padding: 1rem 12px;
+	text-align: center;
+	border-radius: var(--afr-r-md, 14px);
+	height: fit-content;
+	line-height: 1.4;
+	background: var(--afr-surface, #fff);
+	box-shadow: inset 0 0 0 1px var(--afr-line, #e7e7ec), var(--afr-shadow-sm);
+	margin: 0;
+	cursor: pointer;
+	transition: box-shadow .2s var(--afr-ease, ease), background-color .2s ease,
+		transform .2s ease;
+
+	label {
+		margin: 0;
+		cursor: pointer;
+		font-weight: 600;
+		color: var(--afr-ink-mid, #4a4a52);
+	}
+
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: inset 0 0 0 1px var(--afr-accent-line, #f7cb9c), var(--afr-shadow-md);
+	}
+
+	&.active {
+		background-color: var(--green-color, #1aa971);
+		box-shadow: 0 8px 18px -10px rgba(26, 169, 113, .55);
+
+		label {
+			color: #fff;
+		}
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Address / map / form helpers
+   -------------------------------------------------------------------------- */
 
 .map-wrapper {
 	margin-top: 15px;
@@ -31,23 +168,109 @@ agm-map {
 	color: var(--orange-color);
 }
 
-.vehtype_extint img {
-	height       : 225px;
-	border-radius: 15px;
-}
-
-.vehtype_extint .emptyImage {
-	height: 225px;
-}
-.disableSsn{
+.disableSsn {
 	pointer-events: none;
 }
-.border-red1{
+
+.border-red1 {
 	border: 2px solid red;
 	border-radius: 6px;
 }
-.vehtype_extint .emptyImage img {
-	height: 220px;
+
+/* --------------------------------------------------------------------------
+   DOB segmented control — Airbnb-style single box (Month | Day | Year)
+   -------------------------------------------------------------------------- */
+
+.dob-group__caption {
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--afr-ink, #1b1b1f);
+	margin: 8px 0 2px;
+}
+
+.dob-group__hint {
+	font-size: 12.5px;
+	line-height: 1.4;
+	color: var(--afr-ink-soft, #71717a);
+	margin: 0 0 10px;
+}
+
+.dob-group {
+	display: flex;
+	align-items: stretch;
+	width: 100%;
+	min-height: 58px;
+	margin-top: 4px;
+	background: var(--afr-field, rgb(226, 226, 226));
+	border: 1px solid #d7d7d7;
+	border-radius: 10px;
+	overflow: hidden;
+	transition: border-color .18s ease, box-shadow .18s ease;
+
+	&:focus-within {
+		border-color: var(--afr-accent, #f3933d);
+		box-shadow: 0 0 0 3px rgba(243, 147, 61, .22);
+	}
+
+	&.is-invalid {
+		border-color: #dc3545;
+		box-shadow: 0 0 0 3px rgba(220, 53, 69, .15);
+	}
+}
+
+.dob-group__cell {
+	flex: 1 1 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 8px 12px 10px;
+	min-width: 0;
+	position: relative;
+
+	&:not(:last-child)::after {
+		content: '';
+		position: absolute;
+		top: 10px;
+		bottom: 10px;
+		right: 0;
+		width: 1px;
+		background: #cfcfcf;
+	}
+}
+
+.dob-group__label {
+	display: block;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .04em;
+	text-transform: uppercase;
+	color: var(--afr-ink-soft, #71717a);
+	margin: 0 0 2px;
+	line-height: 1.2;
+}
+
+.dob-group__select {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 100%;
+	border: 0;
+	outline: none;
+	background: transparent
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23555555' d='M6 8L0 0h12z'/%3E%3C/svg%3E")
+		no-repeat right 2px center / 10px 6px;
+	padding: 0 16px 0 0;
+	margin: 0;
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--afr-ink, #1b1b1f);
+	line-height: 1.3;
+	cursor: pointer;
+	min-height: 24px;
+
+	&:focus {
+		outline: none;
+	}
 }
 
 .birthDay {
@@ -63,22 +286,22 @@ agm-map {
 }
 
 .adressChangeButton {
-	text-transform  : uppercase;
-	text-decoration : none;
-	margin          : 25px 0;
-	border-radius   : 0.5rem;
-	border          : 1px solid var(--orange-color);
+	text-transform: uppercase;
+	text-decoration: none;
+	margin: 25px 0;
+	border-radius: 0.5rem;
+	border: 1px solid var(--orange-color);
 	background-color: var(--orange-color);
-	color           : #fff;
-	width           : 100%;
-	padding         : 10px 40px !important;
+	color: #fff;
+	width: 100%;
+	padding: 10px 40px !important;
 	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
 
 .adressChangeButton svg {
 	margin-bottom: 10px;
-	margin-right : 10px;
-	height       : 30px;
+	margin-right: 10px;
+	height: 30px;
 }
 
 .adressChangeButton svg path {
@@ -86,19 +309,15 @@ agm-map {
 }
 
 .adressChangeButton:hover {
-	border          : 1px solid var(--orange-color);
+	border: 1px solid var(--orange-color);
 	background-color: transparent;
-	color           : var(--orange-color);
+	color: var(--orange-color);
 }
 
 .adressChangeButton:active {
-	border          : 1px solid var(--orange-color);
+	border: 1px solid var(--orange-color);
 	background-color: transparent;
-	color           : var(--orange-color);
-}
-
-.border-red{
-	border: 3px solid red;border-radius: 10px;
+	color: var(--orange-color);
 }
 
 .address-clear-btn {
@@ -258,25 +477,30 @@ agm-map {
 }
 
 @media (max-width: 767.98px) {
-
 	.adressChangeButton {
-		padding    : 10px !important;
+		padding: 10px !important;
 		line-height: 1.4;
+	}
+
+	.toggle-pair,
+	#ein-container,
+	#card-type-container {
+		flex-direction: column;
+	}
+
+	.toggle-pair__option,
+	#ein-container .ein,
+	#card-type-container .card-type {
+		width: 100%;
 	}
 }
 
 @media (min-width: 1200px) {
-
 	.adressChangeButton {
-		width     : fit-content;
-		float     : right;
+		width: fit-content;
+		float: right;
 		margin-top: -42px;
 	}
-}
-
-.cdk-global-overlay-wrapper,
-.cdk-overlay-container {
-	z-index: 10000 !important;
 }
 
 #verificationDocumentModal .mat-mdc-form-field {
@@ -292,145 +516,37 @@ agm-map {
 }
 
 .identityDocuments {
-	margin       : 2rem 0;
+	margin: 2rem 0;
 	border-bottom: 1px solid #c1bcbc;
 }
 
 .identityDocuments p {
 	border-bottom: 2px solid #c1bcbc;
-	display      : inline-block;
+	display: inline-block;
 	margin-bottom: 0;
-	padding      : 5px;
-	font-weight  : 500;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version. */
-.mat-select-disabled .mat-select-value {
-	color: #000;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-.mat-form-field-appearance-outline.mat-form-field-disabled .mat-mdc-form-field-label {
-	color: #000;
-}
-
-.defaultStatus {
-	background-color: #101110 !important;
-	color           : #fff;
-	padding         : 10px;
-	border-radius   : 10px;
-	margin          : 1rem 0;
-}
-
-.valid,
-.verified,
-.active {
-	background-color: var(--green-color) !important;
-}
-
-.text-capitalize {
-	text-transform: capitalize !important;
-	font-weight   : 600;
-}
-
-.invalid,
-.unverified,
-.inactive {
-	background-color: #dc3545 !important;
-}
-
-.pending {
-	background-color: var(--orange-color) !important;
+	padding: 5px;
+	font-weight: 500;
 }
 
 .adressChangeBtn {
-	float      : right;
-	color      : #000;
-	font-size  : 1rem;
+	float: right;
+	color: #000;
+	font-size: 1rem;
 	line-height: 2;
-	cursor     : pointer;
+	cursor: pointer;
 }
 
 .radio-active {
 	color: var(--orange-color);
 }
 
-@media only screen and (max-width:767px) {
-	.mobilePadding {
-		padding: 0px 15px !important;
-	}
-
-	.borderright .radio-tile {
-		border-right: 2px solid #52a87a;
-	}
-}
-
 @media (min-width: 768px) and (max-width: 991px) {
-	#requestAddressChangeModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
-		pointer-events: none;
-	}
-
 	#verificationDocumentModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 2.5rem;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 2.5rem;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
-	}
-
-	#requestAddressChangeModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
-		pointer-events: none;
-	}
-}
-
-@media only screen and (min-width:1199px) {
-	.input-container:focus {
-		outline: none;
-
-		.radio-button:checked+.radio-tile {
-			color    : #000 !important;
-			transform: scale(1, 1);
-
-			.radio-tile-label {
-				color: #000 !important;
-			}
-		}
-
-		.radio-tile-label {
-			color: #000 !important;
-		}
-	}
-}
-
-.stripe_list {
-	display   : flex !important;
-	list-style: none !important;
-	margin    : 15px 0 -40px 0;
-	padding   : 0 30em;
-}
-
-.stripe_list li {
-	padding: 0 10px;
-}
-
-@media only screen and (max-width:1024px) {
-	.stripe_list {
-		display   : flex !important;
-		list-style: none !important;
-		margin    : 0 0 15px 0;
-		padding   : 0;
-	}
-
-	.stripe_list li {
-		padding: 0 10px;
 	}
 }
 
@@ -438,362 +554,22 @@ agm-map {
 	color: var(--orange-color);
 }
 
-.selectAccountLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-account-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectDayLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-day-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectMonthLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-month-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectYearLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-year-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectCurrencyLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-currency-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectCountryLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-country-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectStateLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-state-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectExMonthLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-ex-month-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-.selectExYearLabel {
-	position  : relative;
-	top       : 43px;
-	left      : 8px;
-	background: #fff;
-	color     : #808080 !important;
-	padding   : 0 3px;
-	font-size : 16px !important;
-}
-
-.select-ex-year-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
-	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
-	transition: 0.3s;
-}
-
-#ein-container, #card-type-container
-{
-	padding: 12px 0 0 0;
-	.ein,.card-type {
-		width: 48%;
-		padding: 1rem;
-		text-align: center;
-		border-radius: 1rem;
-		height: fit-content;
-		line-height: 2.7rem;
-		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-		margin: 0 3px;
-		cursor: pointer;
-		transition: box-shadow 0.25s ease, background-color 0.25s ease;
-	}
-	.ein.active, .card-type.active{
-		background-color: var(--green-color);
-		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
-	}
-}
-
-.custom-filled-button.orange-button
-{
-	padding: 0.235 0.775rem;
+.custom-filled-button.orange-button {
+	padding: 0.235rem 0.775rem;
 	border-radius: 0.7rem;
 }
-#updateStripe{
-		box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
-		border-radius:0.7rem;
+
+#updateStripe {
+	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
+	border-radius: 0.7rem;
 }
 
-
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-mdc-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-mdc-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix mat-label{
-	font-weight: normal!important;
-	font-size: 14px!important;
-	color: #191919;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline .mat-mdc-form-field-label{top:1.3675em}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass{font-weight: normal!important;
-	font-size: 14px!important;
-	color: #191919;
-top:2.05em}
-:host ::ng-deep .mat-mdc-form-field {
-	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-	.mat-form-field-outline {
-	  &-end {
-		border-radius: 0 10px 10px 0 !important;
-	  }
-  
-	  &-start {
-		border-radius: 10px 0 0 10px !important;
-		flex-grow: 1;
-	  }
-	}
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-  :host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper{
-		border-radius: 10px;
-		background-color: rgb(226, 226, 226,1);
-  } 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-mdc-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+mat-mdc-form-field-label-wrapper .mat-mdc-form-field-label{transform:translateY(-0.8em) scale(0.85)!important;width:133.3333333333%}
-
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-    border-top-color: #b2b2b2 !important;
+.creditcard_pay {
+	height: 22px;
+	margin-left: 4px;
 }
 
-:host ::ng-deep .selectInputStyle{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-
-:host ::ng-deep .select-month-label,.select-day-label,.select-year-label,.select-account-label,.select-currency-label,.select-country-label,.select-state-label,.select-ex-month-label,.select-ex-year-label{
-	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.8em) scale(1) !important;
-	opacity: 0.7;
-	background: none !important;
-}
-
-.mat-mdc-option{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-:host ::ng-deep .ng-option{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-
-.mat-mdc-form-field.read-only {
-    border-radius: 10px;
-}
-:host ::ng-deep .mat-mdc-input-element{
-	font-weight: 500;
-}
-
-:host ::ng-deep .selectStyle select {
-	font-weight: 400;
-}
-.asterisk{
-	font-size: 19px;
-	margin-left: 2px;
-}
-.asterisk1{
-	font-size: 19px !important;
-    margin-left: 2px;
-    color: #ff0000 !important;
-    background: none !important;
-}
-.user_information .selectInputStyle{
-	height: 58px !important;
-}
-
-.red-placeholder ::placeholder {
-	color: red !important;
-	font-size: 15px !important;
-	/* Red color for the placeholder */
-}
-
-.red-placeholder {
-	color: red !important;
-	font-weight: 500 !important;
-	font-size: 15px !important;
-}
-
-.address-clear-btn {
-	background: transparent;
-	border: 0;
-	padding: 0;
-	margin-right: 8px;
-	line-height: 0;
-	cursor: pointer;
+/* Shared sets everything but `top`; the offset is step-specific. */
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {
+	top: 2.05em;
 }
