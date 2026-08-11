@@ -60,6 +60,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import { QuillModule } from 'ngx-quill';
 @NgModule({
 	declarations: [
@@ -113,6 +114,7 @@ import { QuillModule } from 'ngx-quill';
 		MatButtonModule,
 		MatDatepickerModule,
 		MatCheckboxModule,
+		MatChipsModule,
 		MatProgressBarModule,
 		AffiliateRoutingModule,
 		NgxSpinnerModule,

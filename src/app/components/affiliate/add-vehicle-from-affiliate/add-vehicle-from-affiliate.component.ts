@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { MatChipSelectionChange } from '@angular/material/chips';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -717,11 +718,14 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			}
 		}
 	}
-	onSpecialAmenitiesCheckboxChange(e) {
+	onSpecialAmenitiesCheckboxChange(val: any, ischecked: boolean) {
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
-		const value = Number(e.target.value);
-		if (e.target.checked) {
-			specialAmenities.push(new FormControl(value));
+		const value = Number(val);
+		if (ischecked) {
+			const exists = specialAmenities.controls.findIndex(x => x.value === value) !== -1;
+			if (!exists) {
+				specialAmenities.push(new FormControl(value));
+			}
 			this.selectedSpecialAmenities.add(value);
 		} else {
 			const index = specialAmenities.controls.findIndex(x => x.value === value);
@@ -730,6 +734,58 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			}
 			this.selectedSpecialAmenities.delete(value);
 		}
+	}
+
+	/**
+	 * Chip bridges — `mat-chip-option` owns its own selected state, so the
+	 * template hands us the chip's value + new state instead of a DOM event.
+	 * Programmatic changes (the `[selected]` binding re-syncing after we update
+	 * the form) also fire `selectionChange`, hence the `isUserInput` guard.
+	 */
+	onAmenityChipChange(event: MatChipSelectionChange, type: 'chargable' | 'nonChargable') {
+		if (!event.isUserInput) {
+			return;
+		}
+		this.onAmenitiesCheckboxChange(event.source.value, event.selected, type);
+	}
+
+	onSpecialAmenityChipChange(event: MatChipSelectionChange) {
+		if (!event.isUserInput) {
+			return;
+		}
+		this.onSpecialAmenitiesCheckboxChange(event.source.value, event.selected);
+	}
+
+	onInteriorChipChange(event: MatChipSelectionChange) {
+		if (!event.isUserInput) {
+			return;
+		}
+		this.onInteriorsCheckboxChange(event.source.value, event.selected);
+	}
+
+	/** Amenities arrive grouped by category; numeric keys are ids, not labels. */
+	isNamedAmenityGroup(key: any): boolean {
+		return typeof key === 'string' && key.trim() !== '' && isNaN(Number(key));
+	}
+
+	clearAmenities(type: 'chargable' | 'nonChargable') {
+		const controlName = type === 'chargable' ? 'chargableAmenitiesArray' : 'nonChargableAmenitiesArray';
+		(this.addVehicleForm.get(controlName) as FormArray).clear();
+		if (type === 'chargable') {
+			this.selectedChargableAmenities.clear();
+		} else {
+			this.selectedNonChargableAmenities.clear();
+		}
+	}
+
+	clearSpecialAmenities() {
+		(this.addVehicleForm.get('specialAmenities') as FormArray).clear();
+		this.selectedSpecialAmenities.clear();
+	}
+
+	clearInteriors() {
+		(this.addVehicleForm.get('vehicleInterior') as FormArray).clear();
+		this.selectedInteriors.clear();
 	}
 	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
@@ -742,11 +798,14 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.changeCharterCancelPolicy = true
 	}
 
-	onInteriorsCheckboxChange(e) {
+	onInteriorsCheckboxChange(val: any, ischecked: boolean) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		const value = Number(e.target.value);
-		if (e.target.checked) {
-			vehicleInterior.push(new FormControl(value));
+		const value = Number(val);
+		if (ischecked) {
+			const exists = vehicleInterior.controls.findIndex(x => x.value === value) !== -1;
+			if (!exists) {
+				vehicleInterior.push(new FormControl(value));
+			}
 			this.selectedInteriors.add(value);
 		} else {
 			const index = vehicleInterior.controls.findIndex(x => x.value === value);

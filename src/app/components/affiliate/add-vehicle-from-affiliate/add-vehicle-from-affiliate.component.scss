@@ -335,3 +335,173 @@ top:2.05em}
 
 
 /* The action row now uses the shared `.step-actions` layout. */
+
+/* ==========================================================================
+   Amenity chip pickers
+   Chargeable / non-chargeable / special amenities + interiors. Material's
+   `mat-chip-listbox` re-skinned with the wizard's --afr-* tokens so the chips
+   read as part of the form rather than as stock Material. Everything is a
+   token override where MDC exposes one, so we fight the internals as little
+   as possible.
+   ========================================================================== */
+
+.amenity-picker {
+	margin-top: 14px;
+}
+
+.amenity-picker__bar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 28px;
+	margin-bottom: 12px;
+}
+
+.amenity-picker__count {
+	display: inline-flex;
+	align-items: center;
+	height: 26px;
+	padding: 0 11px;
+	border-radius: 999px;
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--afr-accent-ink);
+	background: var(--afr-accent-wash);
+	border: 1px solid var(--afr-accent-line);
+}
+
+.amenity-picker__count.is-empty {
+	font-weight: 600;
+	color: var(--afr-ink-soft);
+	background: var(--afr-surface-sunk);
+	border-color: var(--afr-line);
+}
+
+.amenity-picker__clear {
+	margin-left: auto;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--afr-ink-soft);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
+}
+
+.amenity-picker__clear:hover {
+	color: var(--afr-accent-deep);
+}
+
+.amenity-picker__clear:focus-visible {
+	outline: 2px solid var(--afr-accent);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+.amenity-group + .amenity-group {
+	margin-top: 16px;
+}
+
+.amenity-group__label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 11.5px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: .08em;
+	color: var(--afr-ink-soft);
+}
+
+/* The "$" marker on chargeable chips. */
+.amenity-chip__tag {
+	margin-right: 5px;
+	font-weight: 800;
+	color: var(--afr-accent-deep);
+}
+
+:host ::ng-deep .amenity-chips.mat-mdc-chip-set {
+	--mdc-chip-container-height: 38px;
+	--mdc-chip-container-shape-radius: 999px;
+	--mdc-chip-outline-width: 1px;
+	--mdc-chip-outline-color: var(--afr-line-strong);
+	--mdc-chip-elevated-container-color: var(--afr-surface);
+	--mdc-chip-elevated-selected-container-color: var(--afr-accent-wash);
+	--mdc-chip-flat-selected-outline-width: 1.5px;
+	--mdc-chip-label-text-color: var(--afr-ink-mid);
+	--mdc-chip-selected-label-text-color: var(--afr-accent-ink);
+	--mdc-chip-label-text-size: 14px;
+	--mdc-chip-label-text-weight: 500;
+	--mdc-chip-with-icon-icon-size: 18px;
+	--mdc-chip-with-icon-selected-icon-color: var(--afr-accent-deep);
+
+	/* The chips carry their own hover/selected treatment; MDC's grey state
+	   layer only muddies it. */
+	--mdc-chip-hover-state-layer-opacity: 0;
+	--mdc-chip-focus-state-layer-opacity: 0;
+	--mdc-chip-selected-hover-state-layer-opacity: 0;
+	--mdc-chip-selected-focus-state-layer-opacity: 0;
+
+	/* Swap MDC's negative-margin gutter for a real gap. */
+	.mdc-evolution-chip-set__chips {
+		margin-left: 0;
+		gap: 8px;
+	}
+
+	.mdc-evolution-chip {
+		margin: 0;
+	}
+
+	.mat-mdc-chip {
+		box-shadow: var(--afr-shadow-sm);
+		transition: background-color .15s var(--afr-ease, ease), box-shadow .15s var(--afr-ease, ease);
+	}
+
+	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) {
+		--mdc-chip-elevated-container-color: var(--afr-accent-wash);
+		--mdc-chip-outline-color: var(--afr-accent-line);
+		--mdc-chip-label-text-color: var(--afr-accent-ink);
+	}
+
+	.mdc-evolution-chip--selected {
+		--mdc-chip-outline-color: var(--afr-accent);
+		box-shadow: var(--afr-shadow-sm), inset 0 0 0 1px rgba(243, 147, 61, .12);
+	}
+
+	.mdc-evolution-chip--selected .mdc-evolution-chip__text-label {
+		font-weight: 600;
+	}
+
+	.mdc-evolution-chip--selected .amenity-chip__tag {
+		color: var(--afr-accent-ink);
+	}
+
+	/* Keyboard focus has to stay obvious now that the state layer is off. */
+	.mat-mdc-chip-focus-overlay {
+		display: none;
+	}
+
+	.mdc-evolution-chip__action--primary:focus-visible {
+		outline: 2px solid var(--afr-accent);
+		outline-offset: 2px;
+		border-radius: 999px;
+	}
+
+	.mat-mdc-chip-action-label {
+		display: inline-flex;
+		align-items: center;
+		overflow-wrap: anywhere;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	:host ::ng-deep .amenity-chips.mat-mdc-chip-set {
+		--mdc-chip-container-height: 36px;
+		--mdc-chip-label-text-size: 13.5px;
+
+		.mdc-evolution-chip-set__chips {
+			gap: 7px;
+		}
+	}
+}

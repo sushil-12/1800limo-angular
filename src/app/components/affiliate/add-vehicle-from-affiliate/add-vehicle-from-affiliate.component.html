@@ -522,64 +522,61 @@
 	<section class="step-section user_information">
 		<span class="step-section__eyebrow">Amenities</span>
 		<h2 class="step-section__title">Chargeable amenities</h2>
-		<p class="step-section__sub">Choose each chargeable amenity you supply or provide.</p>
-		<div class="container mt-1">
-			<div class="choose_ameniteslist mt-3" *ngFor="let chargableAmenityGroup of chargableAmenities | keyvalue">
-				<div class="custom-control custom-checkbox"
-					*ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue">
-					<!-- {{chargableAmenity.value | json}}<br> -->
-					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.value.name }}"
-						[value]="chargableAmenity.value.ID" [checked]="isChargableAmenitySelected(chargableAmenity.value.ID)" (change)="
-							onAmenitiesCheckboxChange(
-								$event.target.value,
-								$event.target.checked,
-								'chargable'
-							)
-						" tabindex="1" />
-					<label class="custom-control-label" for="amenity_{{ chargableAmenity.value.name }}">
-						<span *ngIf="chargableAmenity.value.chargeable === 'yes'" class="amenity-dollar">&nbsp; $</span>
-						{{ chargableAmenity.value.name }}
-					</label>
-				</div>
+		<p class="step-section__sub">Tap every chargeable amenity you supply or provide.</p>
+		<div class="amenity-picker">
+			<div class="amenity-picker__bar">
+				<span class="amenity-picker__count" [class.is-empty]="selectedChargableAmenities.size === 0">
+					{{ selectedChargableAmenities.size }} selected
+				</span>
+				<button type="button" class="amenity-picker__clear" *ngIf="selectedChargableAmenities.size"
+					(click)="clearAmenities('chargable')">
+					Clear all
+				</button>
 			</div>
-			<!-- <div *ngIf="submittedForm && f.chargableAmenitiesArray.errors"
-				class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f.chargableAmenitiesArray.errors.required">
-					Please select atleast one Chargable Amenity.
-				</div>
-			</div> -->
+			<div class="amenity-group" *ngFor="let chargableAmenityGroup of chargableAmenities | keyvalue">
+				<span class="amenity-group__label" *ngIf="isNamedAmenityGroup(chargableAmenityGroup.key)">
+					{{ chargableAmenityGroup.key }}
+				</span>
+				<mat-chip-listbox multiple class="amenity-chips" aria-label="Chargeable amenities">
+					<mat-chip-option *ngFor="let chargableAmenity of chargableAmenityGroup.value | keyvalue"
+						[value]="chargableAmenity.value.ID"
+						[selected]="isChargableAmenitySelected(chargableAmenity.value.ID)"
+						(selectionChange)="onAmenityChipChange($event, 'chargable')" disableRipple>
+						<span class="amenity-chip__tag" *ngIf="chargableAmenity.value.chargeable === 'yes'">$</span>
+						{{ chargableAmenity.value.name }}
+					</mat-chip-option>
+				</mat-chip-listbox>
+			</div>
 		</div>
 
 		<div class="field-group__divider"></div>
 		<span class="field-group__title">
 			Non-chargeable amenities <span class="asterisk">*</span>
 		</span>
-		<p class="field-group__hint">Choose each non-chargeable amenity you supply or provide.</p>
-		<div class="container mt-1 non-chargable-amenity">
-			<div class="choose_ameniteslist mt-3" *ngFor="
-					let nonChargableAmenityGroup of nonChargableAmenities
-						| keyvalue
-				">
-				<div class="custom-control custom-checkbox" *ngFor="
-						let nonChargableAmenity of nonChargableAmenityGroup.value
-							| keyvalue
-					">
-					<!-- {{nonChargableAmenity.value | json}}<br> -->
-					<input type="checkbox" class="custom-control-input"
-						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.ID"
-						[checked]="isNonChargableAmenitySelected(nonChargableAmenity.value.ID)"
-						(change)="
-							onAmenitiesCheckboxChange(
-								$event.target.value,
-								$event.target.checked,
-								'nonChargable'
-							)
-						" tabindex="1" />
-					<label class="custom-control-label" for="amenity_{{ nonChargableAmenity.value.name }}">{{
-						nonChargableAmenity.value.name }}</label>
-					<label *ngIf="nonChargableAmenity.value.chargeable === 'yes'" class="amenity-dollar">&nbsp;
-						$</label>
-				</div>
+		<p class="field-group__hint">Tap every non-chargeable amenity you supply or provide.</p>
+		<div class="amenity-picker non-chargable-amenity">
+			<div class="amenity-picker__bar">
+				<span class="amenity-picker__count" [class.is-empty]="selectedNonChargableAmenities.size === 0">
+					{{ selectedNonChargableAmenities.size }} selected
+				</span>
+				<button type="button" class="amenity-picker__clear" *ngIf="selectedNonChargableAmenities.size"
+					(click)="clearAmenities('nonChargable')">
+					Clear all
+				</button>
+			</div>
+			<div class="amenity-group" *ngFor="let nonChargableAmenityGroup of nonChargableAmenities | keyvalue">
+				<span class="amenity-group__label" *ngIf="isNamedAmenityGroup(nonChargableAmenityGroup.key)">
+					{{ nonChargableAmenityGroup.key }}
+				</span>
+				<mat-chip-listbox multiple class="amenity-chips" aria-label="Non-chargeable amenities">
+					<mat-chip-option *ngFor="let nonChargableAmenity of nonChargableAmenityGroup.value | keyvalue"
+						[value]="nonChargableAmenity.value.ID"
+						[selected]="isNonChargableAmenitySelected(nonChargableAmenity.value.ID)"
+						(selectionChange)="onAmenityChipChange($event, 'nonChargable')" disableRipple>
+						<span class="amenity-chip__tag" *ngIf="nonChargableAmenity.value.chargeable === 'yes'">$</span>
+						{{ nonChargableAmenity.value.name }}
+					</mat-chip-option>
+				</mat-chip-listbox>
 			</div>
 			<div *ngIf="submittedForm && f.nonChargableAmenitiesArray.errors"
 				class="text-danger margin-bottom-thin my-mat-hint">
@@ -591,16 +588,24 @@
 
 		<div class="field-group__divider"></div>
 		<span class="field-group__title">Special amenities</span>
-		<p class="field-group__hint">Choose each special amenity you supply or provide.</p>
-		<div class="container mt-1">
-			<div class="choose_ameniteslist">
-				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
-					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{ specialAmenity.name }}"
-						[value]="specialAmenity.id" [checked]="isSpecialAmenitySelected(specialAmenity.id)" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
-					<label class="custom-control-label" for="specialAmenity_{{ specialAmenity.name }}">{{
-						specialAmenity.name }}</label>
-				</div>
+		<p class="field-group__hint">Tap every special amenity you supply or provide.</p>
+		<div class="amenity-picker">
+			<div class="amenity-picker__bar">
+				<span class="amenity-picker__count" [class.is-empty]="selectedSpecialAmenities.size === 0">
+					{{ selectedSpecialAmenities.size }} selected
+				</span>
+				<button type="button" class="amenity-picker__clear" *ngIf="selectedSpecialAmenities.size"
+					(click)="clearSpecialAmenities()">
+					Clear all
+				</button>
 			</div>
+			<mat-chip-listbox multiple class="amenity-chips" aria-label="Special amenities">
+				<mat-chip-option *ngFor="let specialAmenity of specialAmenities" [value]="specialAmenity.id"
+					[selected]="isSpecialAmenitySelected(specialAmenity.id)"
+					(selectionChange)="onSpecialAmenityChipChange($event)" disableRipple>
+					{{ specialAmenity.name }}
+				</mat-chip-option>
+			</mat-chip-listbox>
 			<div *ngIf="submittedForm && f.specialAmenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.specialAmenities.errors.required">
 					Please select atleast one Special Amenity.
@@ -613,16 +618,25 @@
 			Interiors <span class="asterisk">*</span>
 		</span>
 		<p class="field-group__hint">
-			Choose each interior option for this vehicle. At least one is required.
+			Tap every interior option for this vehicle. At least one is required.
 		</p>
-		<div class="container mt-1">
-			<div class="choose_ameniteslist">
-				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
-					<input type="checkbox" class="custom-control-input" id="interior_{{ interior.name }}"
-						[value]="interior.id" [checked]="isInteriorSelected(interior.id)" (change)="onInteriorsCheckboxChange($event)" tabindex="1" />
-					<label class="custom-control-label" for="interior_{{ interior.name }}">{{ interior.name }}</label>
-				</div>
+		<div class="amenity-picker">
+			<div class="amenity-picker__bar">
+				<span class="amenity-picker__count" [class.is-empty]="selectedInteriors.size === 0">
+					{{ selectedInteriors.size }} selected
+				</span>
+				<button type="button" class="amenity-picker__clear" *ngIf="selectedInteriors.size"
+					(click)="clearInteriors()">
+					Clear all
+				</button>
 			</div>
+			<mat-chip-listbox multiple class="amenity-chips" aria-label="Interiors">
+				<mat-chip-option *ngFor="let interior of interiors" [value]="interior.id"
+					[selected]="isInteriorSelected(interior.id)" (selectionChange)="onInteriorChipChange($event)"
+					disableRipple>
+					{{ interior.name }}
+				</mat-chip-option>
+			</mat-chip-listbox>
 			<div *ngIf="submittedForm && f.vehicleInterior.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.vehicleInterior.errors.required">
 					Please select atleast one Interior.
