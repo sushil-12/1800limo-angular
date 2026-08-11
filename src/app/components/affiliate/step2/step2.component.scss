@@ -96,61 +96,8 @@
 	font-weight: 600;
 }
 
-/* --------------------------------------------------------------------------
-   Toggle pair (EIN / card type)
-   -------------------------------------------------------------------------- */
-
-.toggle-pair,
-#ein-container,
-#card-type-container {
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: center;
-	width: 100%;
-	padding: 4px 0 0;
-	gap: 8px;
-}
-
-.toggle-pair__option,
-#ein-container .ein,
-#card-type-container .card-type,
-.toggle-pair .ein,
-.toggle-pair .card-type {
-	flex: 1 1 48%;
-	width: 48%;
-	padding: 1rem 12px;
-	text-align: center;
-	border-radius: var(--afr-r-md, 14px);
-	height: fit-content;
-	line-height: 1.4;
-	background: var(--afr-surface, #fff);
-	box-shadow: inset 0 0 0 1px var(--afr-line, #e7e7ec), var(--afr-shadow-sm);
-	margin: 0;
-	cursor: pointer;
-	transition: box-shadow .2s var(--afr-ease, ease), background-color .2s ease,
-		transform .2s ease;
-
-	label {
-		margin: 0;
-		cursor: pointer;
-		font-weight: 600;
-		color: var(--afr-ink-mid, #4a4a52);
-	}
-
-	&:hover {
-		transform: translateY(-1px);
-		box-shadow: inset 0 0 0 1px var(--afr-accent-line, #f7cb9c), var(--afr-shadow-md);
-	}
-
-	&.active {
-		background-color: var(--green-color, #1aa971);
-		box-shadow: 0 8px 18px -10px rgba(26, 169, 113, .55);
-
-		label {
-			color: #fff;
-		}
-	}
-}
+/* `.toggle-pair*` now lives in the shared ../affiliate-registration-style.css —
+   step 2 and add-card both use it. */
 
 /* --------------------------------------------------------------------------
    Address / map / form helpers
@@ -482,17 +429,6 @@ agm-map {
 		line-height: 1.4;
 	}
 
-	.toggle-pair,
-	#ein-container,
-	#card-type-container {
-		flex-direction: column;
-	}
-
-	.toggle-pair__option,
-	#ein-container .ein,
-	#card-type-container .card-type {
-		width: 100%;
-	}
 }
 
 @media (min-width: 1200px) {

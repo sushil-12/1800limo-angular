@@ -1,21 +1,29 @@
 <main>
-    <!-- Main page content-->
-    <form [formGroup]="addCardForm" appInvalidControlScroll>
-        <!-----BILLING INFO-------------->
-        <section class="user_information">
-            <h2 class="headinginfo"> Billing Information</h2>
-            <div class="container py-2" id="accordionSidebar1">
-                <h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
-                        src="assets/admin/images/creditcard_pay.png" tabindex="-1"></h3>
+    <form [formGroup]="addCardForm" class="step_form_wrapper" appInvalidControlScroll>
+
+        <!-- ================= BILLING INFORMATION ================= -->
+        <section class="step-section user_information">
+            <span class="step-section__eyebrow">Billing</span>
+            <h2 class="step-section__title">Billing information</h2>
+            <p class="step-section__sub">
+                The card used to pay farm-out bookings. Details go straight to Stripe.
+            </p>
+
+            <div class="field-group field-group--last">
+                <span class="field-group__title">
+                    Credit card
+                    <img class="creditcard_pay" src="assets/admin/images/creditcard_pay.png" tabindex="-1" alt="" />
+                </span>
+
                 <div class="row">
                     <div class="col-md-6">
-                        <div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
-                            <div id="cd-personal" class="card-type"
+                        <div id="card-type-container" class="toggle-pair">
+                            <div id="cd-personal" class="toggle-pair__option"
                                 [ngClass]="f.card_type.value == 'personal' ? 'active' : ''"
                                 (click)="changeRadio('card_type', 'personal')">
                                 <label>Personal</label>
                             </div>
-                            <div id="cd-business" class="card-type"
+                            <div id="cd-business" class="toggle-pair__option"
                                 [ngClass]="f.card_type.value == 'business' ? 'active' : ''"
                                 (click)="changeRadio('card_type', 'business')">
                                 <label>Business</label>
@@ -23,10 +31,11 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>First & Last Name <span class="asterisk">*</span></mat-label>
+                            <mat-label>First &amp; Last Name <span class="asterisk">*</span></mat-label>
                             <input matInput placeholder="First & Last Name" formControlName="name" tabindex="1">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
@@ -64,8 +73,8 @@
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Expiration date <span class="asterisk">*</span></mat-label>
-                            <input matInput [matDatepicker]="dp" [formControl]="expiryDateControl" [min]="minExpiryDate" placeholder="MM/YYYY"
-                                (click)="dp.open()" readonly>
+                            <input matInput [matDatepicker]="dp" [formControl]="expiryDateControl"
+                                [min]="minExpiryDate" placeholder="MM/YYYY" (click)="dp.open()" readonly>
                             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                             <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
                                 (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
@@ -90,15 +99,15 @@
                             <div *ngIf="f.cvc.errors.required">This field is required</div>
                         </div>
                         <div *ngIf="f.cvc.errors" class="text-danger margin-bottom-thin my-mat-hint">
-                            <div *ngIf="f.cvc.errors?.invalid_Pattern;else plusError">Do not add Dashes
+                            <div *ngIf="f.cvc.errors?.invalid_Pattern;else plusErrorCvv">Do not add Dashes
                                 with numbers</div>
-                            <ng-template #plusError>
-                                <div *ngIf="f.cvc.errors?.invalidPattern;else allErrors">Do not enter +
+                            <ng-template #plusErrorCvv>
+                                <div *ngIf="f.cvc.errors?.invalidPattern;else allErrorsCvv">Do not enter +
                                     sign</div>
-                                <ng-template #allErrors>
-                                    <div *ngIf="f.cvc.errors?.pattern;else numberLength">Enter Numbers Only
+                                <ng-template #allErrorsCvv>
+                                    <div *ngIf="f.cvc.errors?.pattern;else numberLengthCvv">Enter Numbers Only
                                     </div>
-                                    <ng-template #numberLength>
+                                    <ng-template #numberLengthCvv>
                                         <div *ngIf="f.cvc.errors.minlength">Minimum length should be 3</div>
                                         <div *ngIf="f.cvc.errors.maxlength">Maximum length should be 3</div>
                                     </ng-template>
@@ -109,26 +118,26 @@
                 </div>
             </div>
         </section>
-        <div class="container">
-            <div class="row py-4">
-                <div class="col-md-6">
 
-                </div>
-                <div class="col-md-6 ">
-                    <div class="billing_inforamtion">
-                        <ul class="d-flex justify-content-center" style="gap:30px;">
-                            <li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()"
-                                    [disabled]="disableSubmitButton" tabindex="-1">SAVE</button> </li>
-                            <li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()"
-                                    tabindex="-1">RESET</button> </li>
-                            <li><button class="custom-btn backbutton btn-shadow" (click)="backButton()" tabindex="-1">
-                                    <svg width="41" height="16" viewBox="0 0 41 16" fill="#fff"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M37.963 0.500001H0.5L0.5 2H19.7407H36.963C37.7914 2 38.463 2.67157 38.463 3.5V9C38.463 9.82843 37.7914 10.5 36.963 10.5H19.7407H19.2407V10V6.59305L14.4313 10.75L19.2407 14.907V13V12.5H19.7407H37.963C38.6378 12.5 39.2838 12.2351 39.7591 11.7656C40.2342 11.2963 40.5 10.661 40.5 10V2.5C40.5 1.82723 40.2315 1.35011 39.8074 1.0275C39.3675 0.692862 38.7244 0.500001 37.963 0.500001Z"
-                                            fill="#fff" stroke="#fff" />
-                                    </svg></button> </li>
-                        </ul>
+        <div class="container step-actions">
+            <div class="row py-4">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <button class="custom-filled-back-button m-2" (click)="backButton()" tabindex="3">
+                            <svg width="41" height="16" viewBox="0 0 41 16" fill="#fff"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M37.963 0.500001H0.5L0.5 2H19.7407H36.963C37.7914 2 38.463 2.67157 38.463 3.5V9C38.463 9.82843 37.7914 10.5 36.963 10.5H19.7407H19.2407V10V6.59305L14.4313 10.75L19.2407 14.907V13V12.5H19.7407H37.963C38.6378 12.5 39.2838 12.2351 39.7591 11.7656C40.2342 11.2963 40.5 10.661 40.5 10V2.5C40.5 1.82723 40.2315 1.35011 39.8074 1.0275C39.3675 0.692862 38.7244 0.500001 37.963 0.500001Z"
+                                    fill="#fff" stroke="#fff" />
+                            </svg>
+                        </button>
+                        <button class="custom-filled-reset-button m-2" (click)="resetForm()" tabindex="2">
+                            RESET
+                        </button>
+                        <button type="submit" class="custom-filled-button m-2" (click)="submitForm()"
+                            [disabled]="disableSubmitButton" tabindex="1">
+                            SAVE
+                        </button>
                     </div>
                 </div>
             </div>

@@ -28,7 +28,10 @@ export const MY_FORMATS = {
 @Component({
 	selector: 'app-add-card',
 	templateUrl: './add-card.component.html',
-	styleUrls: ['./add-card.component.scss'],
+	styleUrls: [
+		'../affiliate-registration-style.css',
+		'./add-card.component.scss'
+	],
 	providers: [
 		{
 			provide: DateAdapter,

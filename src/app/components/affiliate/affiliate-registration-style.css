@@ -547,6 +547,92 @@ body, body.mat-typography{
 	margin-bottom: 0;
 }
 
+/* ---- Toggle pair ----
+   Two mutually exclusive tappable options (EIN yes/no, personal/business card).
+   The legacy `#ein-container .ein` / `#card-type-container .card-type` selectors
+   are kept so markup that has not been renamed yet still picks up the styling. */
+
+.toggle-pair,
+#ein-container,
+#card-type-container {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+	width: 100%;
+	padding: 4px 0 0;
+	gap: 8px;
+}
+
+.toggle-pair__option,
+#ein-container .ein,
+#card-type-container .card-type,
+.toggle-pair .ein,
+.toggle-pair .card-type {
+	flex: 1 1 48%;
+	width: 48%;
+	padding: 1rem 12px;
+	text-align: center;
+	border-radius: var(--afr-r-md);
+	height: fit-content;
+	line-height: 1.4;
+	background: var(--afr-surface);
+	box-shadow: inset 0 0 0 1px var(--afr-line), var(--afr-shadow-sm);
+	margin: 0;
+	cursor: pointer;
+	transition: box-shadow .2s var(--afr-ease), background-color .2s ease, transform .2s ease;
+}
+
+.toggle-pair__option label,
+#ein-container .ein label,
+#card-type-container .card-type label,
+.toggle-pair .ein label,
+.toggle-pair .card-type label {
+	margin: 0;
+	cursor: pointer;
+	font-weight: 600;
+	color: var(--afr-ink-mid);
+}
+
+.toggle-pair__option:hover,
+#ein-container .ein:hover,
+#card-type-container .card-type:hover,
+.toggle-pair .ein:hover,
+.toggle-pair .card-type:hover {
+	transform: translateY(-1px);
+	box-shadow: inset 0 0 0 1px var(--afr-accent-line), var(--afr-shadow-md);
+}
+
+.toggle-pair__option.active,
+#ein-container .ein.active,
+#card-type-container .card-type.active,
+.toggle-pair .ein.active,
+.toggle-pair .card-type.active {
+	background-color: var(--green-color, #1aa971);
+	box-shadow: 0 8px 18px -10px rgba(26, 169, 113, .55);
+}
+
+.toggle-pair__option.active label,
+#ein-container .ein.active label,
+#card-type-container .card-type.active label,
+.toggle-pair .ein.active label,
+.toggle-pair .card-type.active label {
+	color: #fff;
+}
+
+@media (max-width: 767.98px) {
+	.toggle-pair,
+	#ein-container,
+	#card-type-container {
+		flex-direction: column;
+	}
+
+	.toggle-pair__option,
+	#ein-container .ein,
+	#card-type-container .card-type {
+		width: 100%;
+	}
+}
+
 /* --------------------------------------------------------------------------
    3. Selection cards
    Big tappable answers used in place of radio tiles.
