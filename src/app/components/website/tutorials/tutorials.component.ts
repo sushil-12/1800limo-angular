@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -39,7 +40,8 @@ export class TutorialsComponent implements OnInit {
     private websiteService: WebsiteService,
     private sanitizer: DomSanitizer,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -61,10 +63,36 @@ export class TutorialsComponent implements OnInit {
 
     this.initTutorialData();
 
+    this.route.queryParams.subscribe(params => {
+      const tabParam = params['tab'] || params['category'];
+      if (tabParam) {
+        this.selectCategoryFromQueryParam(tabParam);
+      }
+    });
+
     // Simulate initial loading for skeleton demo
     setTimeout(() => {
       this.isLoading = false;
     }, 1500);
+  }
+
+  selectCategoryFromQueryParam(tabParam: string) {
+    if (!tabParam) return;
+
+    const normalizedParam = tabParam.trim().toLowerCase().replace(/[-_]/g, ' ');
+
+    const matchedCategory = this.categories.find(cat => {
+      const normalizedCat = cat.name.trim().toLowerCase().replace(/[-_]/g, ' ');
+      return normalizedCat === normalizedParam || normalizedCat.includes(normalizedParam) || normalizedParam.includes(normalizedCat);
+    });
+
+    if (matchedCategory) {
+      this.selectedCategory = matchedCategory.name;
+    } else if (normalizedParam === 'registration') {
+      this.selectedCategory = 'Registration';
+    }
+
+    this.applyFilter();
   }
 
 

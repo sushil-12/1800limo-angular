@@ -130,6 +130,12 @@ export class Step0Component implements OnInit {
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
+	public tutorialVideoUrl = "/tutorials?tab=registration";
+
+	openTutorial(): void {
+		window.open(this.tutorialVideoUrl, "_blank");
+	}
+
 	ngOnInit(): void {
 		$('.HeadingH1').css({display: "block"})
 		const stepCompleted = this.affiliateService.getLocalStepCompleted();

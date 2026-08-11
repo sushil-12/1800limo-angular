@@ -1,10 +1,17 @@
 <!-- ================= WHY COLLABORATE ================= -->
 <section class="step-section user_information">
-    <span class="step-section__eyebrow">Overview</span>
-    <h2 class="step-section__title">Why collaborate / advertise with 1800limo.com?</h2>
-    <p class="field-group__hint">
-        We are your local advertising channel and global affiliate directory — not a broker.
-    </p>
+    <div class="step-section__head">
+        <div>
+            <span class="step-section__eyebrow">Overview</span>
+            <h2 class="step-section__title">Why collaborate / advertise with 1800limo.com?</h2>
+            <p class="field-group__hint">
+                We are your local advertising channel and global affiliate directory — not a broker.
+            </p>
+        </div>
+        <button type="button" (click)="openTutorial()" title="View Tutorial" class="watch-tutorial-btn">
+			<i class="bi bi-camera-video mr-1"></i> Watch Tutorial
+		</button>
+    </div>
 
     <div class="collab-grid">
         <div class="why_collaborate_box">
@@ -241,147 +248,22 @@
             </div>
         </div>
     </div>
-</section>
 
-<!-- ================= THE 7 STEPS (CMS) ================= -->
-<section class="step-section user_information">
-    <span class="step-section__eyebrow">Getting started</span>
-    <h2 class="step-section__title">{{ fetchContentData(6)?.title }}</h2>
-    <p class="field-group__hint">{{ fetchContentData(6)?.subtitle }}</p>
-
-    <div class="step-notice step-notice--info steps-hint">
-        <img src="../../../../assets/images/images_tutorial/updated-images/searchrnigne.png" class="steps-hint__icon"
-            alt="" />
-        <span>Click a step thumbnail to watch its short tutorial, or <strong>Requirements</strong> to see what you
-            need.</span>
-    </div>
-
-    <div class="agreement_step0">
-        <div class="steps-grid">
-            <article class="step-card">
-                <a class="step-card__thumb" href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+1+to+register+as+affiliate.mp4" target="_blank" rel="noopener" title="View Tutorial">
-                    <img src="../../../../assets/images/images_tutorial/updated-images/step-1.png" alt="" />
-                    <span class="step-card__play"><i class="bi bi-play-fill"></i></span>
-                </a>
-                <div class="step-card__body">
-                    <div class="step-card__head">
-                        <strong class="step-card__title">{{ fetchContentData(6)?.other_group_listing_arr[0].title }}</strong>
-                        <button type="button" class="step-card__req" (click)="modalSwitch('step_1')" tabindex="1">
-                            Requirements
-                        </button>
-                    </div>
-                    <ul class="step-card__list">
-                        <li *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice">{{ item.choice }}</li>
-                    </ul>
-                </div>
-            </article>
-            <article class="step-card">
-                <a class="step-card__thumb" href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+2+to+register+as+affiliate.mp4" target="_blank" rel="noopener" title="View Tutorial">
-                    <img src="../../../../assets/images/images_tutorial/updated-images/step-2.png" alt="" />
-                    <span class="step-card__play"><i class="bi bi-play-fill"></i></span>
-                </a>
-                <div class="step-card__body">
-                    <div class="step-card__head">
-                        <strong class="step-card__title">{{ fetchContentData(6)?.other_group_listing_arr[1].title }}</strong>
-                        <button type="button" class="step-card__req" (click)="modalSwitch('step_2')" tabindex="1">
-                            Requirements
-                        </button>
-                    </div>
-                    <ul class="step-card__list">
-                        <li *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice">{{ item.choice }}</li>
-                    </ul>
-                </div>
-            </article>
-            <article class="step-card">
-                <a class="step-card__thumb" href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+3+to+register+as+affiliate.mp4" target="_blank" rel="noopener" title="View Tutorial">
-                    <img src="../../../../assets/images/images_tutorial/updated-images/step-3.png" alt="" />
-                    <span class="step-card__play"><i class="bi bi-play-fill"></i></span>
-                </a>
-                <div class="step-card__body">
-                    <div class="step-card__head">
-                        <strong class="step-card__title">STEP 3</strong>
-                        <button type="button" class="step-card__req" (click)="modalSwitch('step_3')" tabindex="1">
-                            Requirements
-                        </button>
-                    </div>
-                    <ul class="step-card__list">
-                        <li>Insurance Documents – (add 1-800-LIMO.COM as additionally insured)</li>
-                    </ul>
-                </div>
-            </article>
-            <article class="step-card">
-                <a class="step-card__thumb" href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+4+to+register+as+affiliate.mp4" target="_blank" rel="noopener" title="View Tutorial">
-                    <img src="../../../../assets/images/images_tutorial/updated-images/step-4.png" alt="" />
-                    <span class="step-card__play"><i class="bi bi-play-fill"></i></span>
-                </a>
-                <div class="step-card__body">
-                    <div class="step-card__head">
-                        <strong class="step-card__title">STEP 4</strong>
-                        <button type="button" class="step-card__req" (click)="modalSwitch('step_4')" tabindex="1">
-                            Requirements
-                        </button>
-                    </div>
-                    <ul class="step-card__list">
-                        <li>Driver(s) Info and IDs – (license, background check optional – get one if you don’t have one)</li>
-                        <li>Head and Shoulder Driver Pix – (smile and wear your everyday attire – Dress for Success!)</li>
-                    </ul>
-                </div>
-            </article>
-            <article class="step-card">
-                <a class="step-card__thumb" href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/How+to+complete+step+5+to+register+as+affiliate.mp4" target="_blank" rel="noopener" title="View Tutorial">
-                    <img src="../../../../assets/images/images_tutorial//updated-images/step-5.png" alt="" />
-                    <span class="step-card__play"><i class="bi bi-play-fill"></i></span>
-                </a>
-                <div class="step-card__body">
-                    <div class="step-card__head">
-                        <strong class="step-card__title">STEP 5</strong>
-                        <button type="button" class="step-card__req" (click)="modalSwitch('step_5')" tabindex="1">
-                            Requirements
-                        </button>
-                    </div>
-                    <ul class="step-card__list">
-                        <li>Pix of Window or Other Permits</li>
-                        <li>Pix of vehicle interior and exterior</li>
-                        <li>Choose Amenities</li>
-                        <li>Enter rates</li>
-                    </ul>
-                </div>
-            </article>
-            <article class="step-card">
-                <a class="step-card__thumb" href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Affiliate+registration+step+6.mp4" target="_blank" rel="noopener" title="View Tutorial">
-                    <img src="../../../../assets/images/images_tutorial/updated-images/searchrnigne.png" alt="" />
-                    <span class="step-card__play"><i class="bi bi-play-fill"></i></span>
-                </a>
-                <div class="step-card__body">
-                    <div class="step-card__head">
-                        <strong class="step-card__title">STEP 6</strong>
-                        <button type="button" class="step-card__req" (click)="modalSwitch('step_6')" tabindex="1">
-                            Requirements
-                        </button>
-                    </div>
-                    <ul class="step-card__list">
-                        <li>Agree to Terms &amp; Conditions</li>
-                    </ul>
-                </div>
-            </article>
-        </div>
-
-        <div class="custom-control custom-checkbox mt-4">
-            <input type="checkbox" class="custom-control-input" id="agreement" [checked]="agreement"
-                (change)="onCheckboxChange($event)" tabindex="1">
-            <label class="custom-control-label" for="agreement">I AGREE (clicking AGREE allows you to begin the
+    <div class="custom-control custom-checkbox mt-4">
+        <input type="checkbox" class="custom-control-input" id="agreement" [checked]="agreement"
+            (change)="onCheckboxChange($event)" tabindex="1">
+        <label class="custom-control-label" for="agreement">I AGREE (clicking AGREE allows you to begin the
                 registering process.) Please follow the simple 7 step process and enter Company Profile, Document
                 Images and One Drive Profile, Vehicle Profile and Rate/Taxes for Network Approval</label>
             <span *ngIf="agreementValidation" class="text-danger d-block">
                 Please agree to Affiliate Agreement.
             </span>
-        </div>
+    </div>
 
-        <div class="mt-3 mb-4">
-            <strong class="thankyou">
-                THANK YOU FOR ADHERING TO OUR HIGH STANDARDS AND WANTING TO WORK WITH THE BEST.
-            </strong>
-        </div>
+    <div class="mt-3 mb-4">
+        <strong class="thankyou">
+            THANK YOU FOR ADHERING TO OUR HIGH STANDARDS AND WANTING TO WORK WITH THE BEST.
+        </strong>
     </div>
 </section>
 
