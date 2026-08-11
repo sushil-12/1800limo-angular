@@ -869,7 +869,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     transition: transform 0.15s ease-in-out;
     z-index: 1038;
     transform: translateX(-22rem);
-    padding: 0 1rem;
+    padding: 0rem;
 }
 
 #layoutSidenav #layoutSidenav_content {
@@ -1079,7 +1079,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         transition: transform 0.15s ease-in-out;
         z-index: 1038;
         transform: translateX(-22rem);
-        padding: 0 1rem;
+        padding: 0rem;
         visibility: hidden;
         opacity: 0;
     }

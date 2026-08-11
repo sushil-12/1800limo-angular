@@ -18,9 +18,6 @@
 			*ngIf="response?.data?.stripeDetail?.transfer_status != 'active'">
 			Stripe activation can take up to 24 hours.
 		</div>
-		<div class="step-notice step-notice--danger" *ngIf="response?.data?.stripeDetail?.stripe_errors">
-			{{ TaxIdMatch }}
-		</div>
 
 		<div class="status-grid">
 			<div class="status-chip" [ngClass]="response?.data?.stripeDetail?.additional_doc_verification_status">
@@ -697,20 +694,6 @@
 						<div *ngIf="f?.state?.errors?.required">This field is required</div>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<div class="field-group field-group--last">
-			<span class="field-group__title">Confirm address details</span>
-			<div class="step-notice step-notice--info">
-				<ol type="1" class="mb-0 pl-3">
-					<li>Complete and verify each address field below.</li>
-					<li>The address from the drop-down (above) and the address you enter manually (below) should match.
-					</li>
-					<li>Enter a credit card (optional) for paying Affiliate Farm Outs, then click SAVE.</li>
-				</ol>
-			</div>
-			<div class="row">
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Unit#</mat-label>

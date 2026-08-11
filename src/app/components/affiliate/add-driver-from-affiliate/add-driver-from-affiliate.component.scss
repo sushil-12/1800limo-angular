@@ -1,33 +1,3 @@
-.vehtype_extint img {
-	height: 200px;
-	border-radius: 15px;
-}
-
-.vehtype_extint .emptyImage {
-	height: 200px;
-}
-
-.vehtype_extint .emptyImage img {
-	height: 195px;
-}
-
-.vehtype_extint_potrait img {
-	height: 380px;
-	width: 300px;
-	margin-left: 20px;
-	border-radius: 15px;
-}
-
-.vehtype_extint_potrait .emptyImage {
-	height: 380px;
-	width: 300px;
-}
-
-.vehtype_extint_potrait .emptyImage img {
-	height: 360px;
-	width: 260px;
-}
-
 .custom-check-row {
 	line-height: 2;
 }
@@ -262,4 +232,8 @@
 // Force padding on the input to override intl-tel-input JS calculation (fixes Safari 186px issue)
 .phoneNumberClass {
 	padding-left: 80px !important;
+}
+
+.vehtype_extintwrap .row{
+	align-items: center !important;
 }

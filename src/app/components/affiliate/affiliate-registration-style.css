@@ -215,6 +215,7 @@ body, body.mat-typography{
   justify-content:space-between;
   gap:20px;
   flex-wrap:wrap;
+  position:relative;
 }
 .step-section__eyebrow{
   color:var(--brand-orange) !important;
@@ -245,6 +246,9 @@ body, body.mat-typography{
   font-size:.88rem !important;
   transition:all .18s ease !important;
   white-space:nowrap;
+  position:absolute;
+  top: -6px;
+  right: -4px;
 }
 .watch-tutorial-btn:hover{
   background:var(--brand-orange) !important;
@@ -1191,6 +1195,6 @@ div#imageModal pinch-zoom img {
 	}
 }
 
-:host ::ng-deep .mat-mdc-form-field-infix {
+:host ::ng-deep .mat-mdc-form-field-infix, :host ::ng-deep .mat-mdc-form-field-flex {
     background-color: #eeeeee !important;
 }
