@@ -426,15 +426,15 @@ top:2.05em}
 	--mdc-chip-container-shape-radius: 999px;
 	--mdc-chip-outline-width: 1px;
 	--mdc-chip-outline-color: var(--afr-line-strong);
-	--mdc-chip-elevated-container-color: var(--afr-surface);
-	--mdc-chip-elevated-selected-container-color: var(--afr-accent-wash);
+	--mdc-chip-elevated-container-color: #eeeeee;
+	--mdc-chip-elevated-selected-container-color: var(--orange-color);
 	--mdc-chip-flat-selected-outline-width: 1.5px;
 	--mdc-chip-label-text-color: var(--afr-ink-mid);
-	--mdc-chip-selected-label-text-color: var(--afr-accent-ink);
+	--mdc-chip-selected-label-text-color: #fff;
 	--mdc-chip-label-text-size: 14px;
 	--mdc-chip-label-text-weight: 500;
 	--mdc-chip-with-icon-icon-size: 18px;
-	--mdc-chip-with-icon-selected-icon-color: var(--afr-accent-deep);
+	--mdc-chip-with-icon-selected-icon-color: #fff;
 
 	/* The chips carry their own hover/selected treatment; MDC's grey state
 	   layer only muddies it. */
@@ -458,23 +458,34 @@ top:2.05em}
 		transition: background-color .15s var(--afr-ease, ease), box-shadow .15s var(--afr-ease, ease);
 	}
 
+	.mat-mdc-chip:not(.mdc-evolution-chip--selected) {
+		background-color: #eeeeee;
+	}
+
 	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) {
-		--mdc-chip-elevated-container-color: var(--afr-accent-wash);
-		--mdc-chip-outline-color: var(--afr-accent-line);
-		--mdc-chip-label-text-color: var(--afr-accent-ink);
+		background-color: #ffe6d0 !important;
+		--mdc-chip-outline-color: var(--orange-color);
+	}
+
+	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) .mdc-evolution-chip__text-label,
+	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) .amenity-chip__tag {
+		color: var(--orange-color) !important;
 	}
 
 	.mdc-evolution-chip--selected {
-		--mdc-chip-outline-color: var(--afr-accent);
+		--mdc-chip-outline-color: var(--orange-color);
+		background-color: var(--orange-color) !important;
+		color: #fff !important;
 		box-shadow: var(--afr-shadow-sm), inset 0 0 0 1px rgba(243, 147, 61, .12);
 	}
 
 	.mdc-evolution-chip--selected .mdc-evolution-chip__text-label {
 		font-weight: 600;
+		color: #fff !important;
 	}
 
 	.mdc-evolution-chip--selected .amenity-chip__tag {
-		color: var(--afr-accent-ink);
+		color: #fff !important;
 	}
 
 	/* Keyboard focus has to stay obvious now that the state layer is off. */
