@@ -1,0 +1,32 @@
+<section class="booking_confirmation_wrapper">
+	<div class="container">
+		<div class="confirmation_card">
+			<div class="confirmation_icon">
+				<i class="bi bi-check-circle-fill"></i>
+			</div>
+
+			<h2>Your booking request is in</h2>
+			<p class="lead">{{ message || 'Thanks for booking with us. Your reservation has been received and is being confirmed.' }}</p>
+
+			<div class="confirmation_reference" *ngIf="reference">
+				<span class="label">Reservation reference</span>
+				<strong>{{ reference }}</strong>
+			</div>
+
+			<p class="confirmation_email" *ngIf="email">
+				A confirmation has been sent to <strong>{{ email }}</strong>.
+			</p>
+
+			<p class="confirmation_note">
+				We have created an account for you using the details you entered. Check your
+				email for sign-in instructions so you can track this reservation.
+			</p>
+
+			<div class="confirmation_actions">
+				<button type="button" class="btn btn-primary" (click)="startNewQuote()">
+					Book another ride
+				</button>
+			</div>
+		</div>
+	</div>
+</section>

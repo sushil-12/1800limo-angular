@@ -14,7 +14,7 @@
 
 	<form class="container-fluid position-relative" [formGroup]="BookingForm" appInvalidControlScroll>
 
-		<div class="d-flex  mb-2 section-container position-sticky justify-content-between align-items-center flex-wrap" style="border-radius:0px !important; margin-bottom: 0px !important; box-shadow: none !important; z-index:9999">  
+		<div class="d-flex  mb-2 section-container justify-content-between align-items-center flex-wrap" [class.position-sticky]="!isGuestMode" style="border-radius:0px !important; margin-bottom: 0px !important; box-shadow: none !important; z-index:9999">
 				<div>
 				   <h4 class="border-0 m-0 mr-3">{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
 				</div>
@@ -344,6 +344,8 @@
 							<h4 style="margin-bottom: 0px !important;">
 								Personal Information
 							</h4>
+							<div class="row mx-1 note" *ngIf="isGuestMode">Note : An account will be created for this
+								Account information</div>
 							<div class="row margin-bottom-minus-20">
 								<!-- First Name -->
 								<div class="col-md-4 looseError">
@@ -1651,7 +1653,7 @@
 				</div>
 
 				<!-- Browse vehicles: embedded quotebot drill-down -->
-				<div *ngIf="((isIndividualMode || isTravelAgentMode) && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse') || ((isAffiliateMode && (newBooking)) && vehicleSelectionTab === 'browse')">
+				<div *ngIf="(usesQuoteFlow && !driver_info) || (isAdminMode && vehicleSelectionTab === 'browse') || ((isAffiliateMode && (newBooking)) && vehicleSelectionTab === 'browse')">
 					<div class="d-flex justify-content-end m-3">
 						<button type="button" class="bk-btn bk-btn--secondary" (click)="runEmbeddedQuote()" [disabled]="quoteLoading">
 							<i class="bi" [ngClass]="quoteLoading ? 'bi-arrow-repeat' : 'bi-search'" style="margin-right: 6px;"></i>
@@ -1661,14 +1663,14 @@
 					<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
 						[selectedVehicleId]="QB_vehicle_id"
 						[selectedVehicleTypeId]="Form.vehicle_type.value"
-						[isIndividual]="isIndividualMode"
+						[isIndividual]="isIndividualMode || isGuestMode"
 						[isTravelAgent]="isTravelAgentMode"
 						(vehicleSelected)="onQuoteVehicleSelected($event)">
 					</app-embedded-quote>
 				</div>
 
 				<!-- Transportation Details: Individual Side -->
-				<div class="section-container mt-2" data-bksec="transportation-details" *ngIf="(isIndividualMode || isTravelAgentMode) && driver_info">
+				<div class="section-container mt-2" data-bksec="transportation-details" *ngIf="usesQuoteFlow && driver_info">
 					<div class="d-flex justify-content-between align-items-center mb-3">
 						<h4 style="margin-bottom: 0px !important;">
 							<i class="bi bi-truck bk-section-icon"></i>Transportation Details
@@ -1752,7 +1754,7 @@
 						<app-embedded-quote [quotePayload]="quotePayload" [currencySymbol]="currencySymbol"
 							[selectedVehicleId]="QB_vehicle_id"
 							[selectedVehicleTypeId]="Form.vehicle_type.value"
-							[isIndividual]="isIndividualMode"
+							[isIndividual]="isIndividualMode || isGuestMode"
 							[isTravelAgent]="isTravelAgentMode"
 							(vehicleSelected)="onQuoteVehicleSelected($event)">
 						</app-embedded-quote>
@@ -3916,7 +3918,7 @@
 				</div>
 
 				<!-- Section - Return Journey Details Ends -->
-				<app-rates-form class="d-flex flex-wrap gap-4" [hideBuckets]="isIndividualMode || isTravelAgentMode" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+				<app-rates-form class="d-flex flex-wrap gap-4" [hideBuckets]="usesQuoteFlow" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 					[preventRateOverride]="Form.prevent_rate_override.value" [return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
 					[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
 					[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates" [isAffiliateMode]="isAffiliateMode"
@@ -4866,7 +4868,7 @@
 					</div>
 				</div>
 
-				<div class="distribution_rate" *ngIf="!isIndividualMode">
+				<div class="distribution_rate" *ngIf="!usesQuoteFlow">
 					<h4 class="font-weight-bolder m-0 my-3">
 						Rates Distribution
 					</h4>
@@ -5069,10 +5071,10 @@
 				</div>
               </div>
 
-				<hr *ngIf="!isIndividualMode && !isTravelAgentMode">
+				<hr *ngIf="!usesQuoteFlow">
 				<!-- Affiliate Information -->
 				<ng-container
-					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' && !isIndividualMode && !isTravelAgentMode then affiliateUser">
+					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' && !usesQuoteFlow then affiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -5212,7 +5214,7 @@
 				</ng-template>
 
 				<!-- Loose Affiliate Information -->
-				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' && !isIndividualMode && !isTravelAgentMode then looseAffiliate">
+				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' && !usesQuoteFlow then looseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
@@ -5274,7 +5276,7 @@
 
 				<!-- Return Loose Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' && !isIndividualMode && !isTravelAgentMode then returnlooseAffiliate">
+					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' && !usesQuoteFlow then returnlooseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
@@ -5331,7 +5333,7 @@
 							</div>
 						</div>
 					</div>
-				<hr *ngIf="!isIndividualMode && !isTravelAgentMode">
+				<hr *ngIf="!usesQuoteFlow">
 				</ng-template>
 				<!-- Driver Information -->
 
@@ -5509,7 +5511,7 @@
 					<hr>
 				</ng-template>
 
-				<div class="distribution_rate" *ngIf="!isIndividualMode && Form.service_type.value == 'round_trip'">
+				<div class="distribution_rate" *ngIf="!usesQuoteFlow && Form.service_type.value == 'round_trip'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Return Rates Distribution
 						</h4>

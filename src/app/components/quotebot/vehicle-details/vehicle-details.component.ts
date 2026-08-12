@@ -479,7 +479,7 @@ export class VehicleDetailsComponent implements OnInit {
 			// })
 			console.log("TESTTTTTT1")
 			this._router.navigate([
-				'/quotebot/new-booking'
+				'/quotebot/new-booking-v2'
 			],
 				{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 		}

@@ -6,6 +6,8 @@ import { FailedQuoteRequestComponent } from './failed-quote-request/failed-quote
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 import { MasterVehicleComponent } from './master-vehicle/master-vehicle.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
+import { GuestBookingHostComponent } from './new-booking-v2/guest-booking-host.component';
+import { BookingConfirmationComponent } from './booking-confirmation/booking-confirmation.component';
 
 const routes: Routes = [
 	{
@@ -25,8 +27,17 @@ const routes: Routes = [
 		component: FailedQuoteRequestComponent
 	},
 	{
+		// legacy standalone guest form — superseded by new-booking-v2, retire once verified
 		path: 'new-booking',
 		component: NewBookingComponent
+	},
+	{
+		path: 'new-booking-v2',
+		component: GuestBookingHostComponent
+	},
+	{
+		path: 'booking-confirmation',
+		component: BookingConfirmationComponent
 	}
 ];
 

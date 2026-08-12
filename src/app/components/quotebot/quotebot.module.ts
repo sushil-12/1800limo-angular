@@ -24,6 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { GuestBookingHostModule } from './new-booking-v2/guest-booking-host.module';
+import { BookingConfirmationComponent } from './booking-confirmation/booking-confirmation.component';
 
 
 @NgModule({
@@ -36,12 +38,14 @@ import { GoogleMapsModule } from '@angular/google-maps';
 		VehicleDetailsComponent,
 		MasterVehicleComponent,
 		NewBookingComponent,
+		BookingConfirmationComponent,
 
 	],
 
 	imports: [
 		CommonModule,
 		SharedModule,
+		GuestBookingHostModule,
 		QuotebotRoutingModule,
 		NgxSpinnerModule,
 		FormsModule,

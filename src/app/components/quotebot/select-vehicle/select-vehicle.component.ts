@@ -922,7 +922,7 @@ private subscription: Subscription;
 			// })
 			// window.alert('Creating booking without logged In')
 			this.$router.navigate([
-				'/quotebot/new-booking'
+				'/quotebot/new-booking-v2'
 			],
 				{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 			//  Redirecting to create new booking without login 

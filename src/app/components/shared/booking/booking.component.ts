@@ -23,12 +23,13 @@ import * as intlTelInput from 'intl-tel-input';
 import { P } from '@angular/cdk/keycodes';
 import { NgIf } from '@angular/common';
 import { AffiliateService } from '../../../services/affiliate.service';
+import { QuotebotService } from '../../../services/quotebot.service';
 import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
 
-export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent' | 'affiliate';
+export type BookingComponentMode = 'admin' | 'individual' | 'travel-agent' | 'affiliate' | 'guest';
 
 @Component({
 	selector: 'app-booking',
@@ -44,7 +45,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	get shouldBlockAdminApi(): boolean {
-		return this.mode === 'individual' || this.mode === 'travel-agent' || this.mode === 'affiliate';
+		return this.mode !== 'admin';
 	}
 
 	get isIndividualMode(): boolean {
@@ -57,6 +58,29 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	get isAffiliateMode(): boolean {
 		return this.mode === 'affiliate';
+	}
+
+	/** Unauthenticated quotebot visitor. No currentUser, no portal APIs. */
+	get isGuestMode(): boolean {
+		return this.mode === 'guest';
+	}
+
+	/**
+	 * loose_customer controls that must never be auto-marked required.
+	 * country/state/city/zipCode have no input in the template — they are only
+	 * ever filled as a side effect of picking a Google Places suggestion for the
+	 * address — so requiring them makes the form permanently invalid with no
+	 * visible error to correct.
+	 */
+	private readonly looseCustomerOptionalFields = ['middle_name', 'address', 'country', 'state', 'city', 'zipCode'];
+
+	/**
+	 * Modes that pick a vehicle through the embedded quote instead of assigning an
+	 * affiliate/vehicle/driver manually. These have no access to the admin account
+	 * lookups and never see affiliate internals or the rate distribution.
+	 */
+	get usesQuoteFlow(): boolean {
+		return this.isIndividualMode || this.isTravelAgentMode || this.isGuestMode;
 	}
 
 	// @ViewChildren('autoInput') autoInputs!: QueryList<ElementRef>;
@@ -319,6 +343,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		private el: ElementRef,
 		private httpClient: HttpClient,
 		private affiliateService: AffiliateService,
+		private $quotebot: QuotebotService,
 		private zone: NgZone,
 	) { }
 
@@ -334,9 +359,22 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.booking_params.affiliate_accounts = ["affiliate"];
 			this.isFarmoutBooking = true;
 		}
-		// build the form first 
+		if (this.isGuestMode) {
+			// an unregistered visitor has no account to book against — always a new
+			// loose customer, and the backend creates the account from those details
+			this.isCreatedByAdmin = false;
+			this.booking_params.client_account_types = ['loose_customer'];
+		}
+		// build the form first
 		this.buildBookingForm()
 		this.queryParamsSubscription = this.$routeurl.queryParams.subscribe((params: any) => {
+			// Guests have no reservation-read endpoint, so edit/repeat/return/reaffiliate
+			// can only half-load. Send them back to the quote instead of rendering a
+			// form that silently drops the booking they think they are editing.
+			if (this.isGuestMode && (params?.bookingId || params?.reaffiliate_book_id)) {
+				this.$router.navigate(['/quotebot/select-vehicle']);
+				return;
+			}
 			const isNewBookingFlow = params?.new === true || params?.new === 'true';
 			const hasMasterVehicleParam = params?.is_master_vehicle !== undefined;
 			const routeIsMasterVehicle = params?.is_master_vehicle === true || params?.is_master_vehicle === 'true';
@@ -394,6 +432,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			}
 			else if (this.isTravelAgentMode) {
 				this.getTravelClientAccounts()
+			}
+			else if (this.isGuestMode) {
+				// no account/affiliate lookups exist for an unauthenticated visitor;
+				// the vehicle already came from the public quote flow
+				this.SetFormValue('account_type', 'loose_customer')
 			}
 			else {
 				this.fetchClientAccounts('individual')
@@ -769,7 +812,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.driver_info['year'] = vehicle?.vehicle_details?.year || vehicle?.vehicle_year_name || "";
 		}
 
-		if (this.isIndividualMode || this.isTravelAgentMode) {
+		if (this.usesQuoteFlow) {
 			let d_isd = vehicle?.driverInformation?.cell_isd || vehicle?.driver_cell_isd;
 			if (d_isd && !String(d_isd).startsWith('+')) {
 				d_isd = '+' + d_isd;
@@ -2227,7 +2270,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			number_of_hours: [2],
 			prevent_rate_override: this.isAdminMode && this.updateType === "edit" ? [true] : [false],
 			acc_id: [''],
-			account_type: [this.isTravelAgentMode ? 'travel_planner' : 'individual'],
+			account_type: [this.isTravelAgentMode ? 'travel_planner' : this.isGuestMode ? 'loose_customer' : 'individual'],
 			travel_client_id: [''],
 			travel_client_acc: ['travel_individual'],
 			sub_account_type: ['travel_agent'],
@@ -3759,7 +3802,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return
 		}
 		else {
-			if(this.isIndividualMode || this.isTravelAgentMode) {return;};
+			if(this.usesQuoteFlow) {return;};
 			this.$spinner.show()
 			console.log("Fetching accounts for affiliate mode", this.isAffiliateMode);
 			if (this.isAffiliateMode) {
@@ -3860,6 +3903,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	chooseUser(account_id: number, autofill: boolean = true, account_type: string = '') {
+		if (this.isGuestMode) {return;};
 		this.$spinner.show()
 		this.chosen_user = {}
 		let accType = account_type ? account_type : this.Form.account_type.value;
@@ -3898,7 +3942,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	private loadCombinedSavedCards(accountId: number, shouldLoad: boolean, travelAdvisorId?: number) {
-		if(this.isAffiliateMode) {return;};
+		if(this.isAffiliateMode || this.isGuestMode) {return;};
 		if ((!shouldLoad || !accountId) && !travelAdvisorId) {
 			this.userCreditCards = [];
 			this.isLoadingSavedCards = false;
@@ -3943,7 +3987,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	shouldRenderSavedCardsSection(): boolean {
-		if (this.isIndividualMode || this.isAffiliateMode) {
+		if (this.isIndividualMode || this.isAffiliateMode || this.isGuestMode) {
 			return false;
 		}
 		const isDirectIndividual = this.Form?.account_type?.value === 'individual' && !!this.Form?.acc_id?.value;
@@ -4194,7 +4238,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 		else {
 			this.AffiliateAccounts = []
-			if(this.isIndividualMode || this.isTravelAgentMode) {return;};
+			if(this.usesQuoteFlow) {return;};
 			this.$spinner.show()
 			if(this.isAdminMode){
 					this.$api.getAccountBytype('driver').subscribe((response: any) => {
@@ -4472,7 +4516,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
-		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
+		if(this.usesQuoteFlow) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_id', affiliate_id);
 			return;
@@ -4708,6 +4752,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateVehicles(affiliate_id: any) {
+		// the manual affiliate/vehicle assignment UI these lists feed is never rendered
+		// for a guest, and the endpoint is admin-only
+		if (this.isGuestMode) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
 			return
@@ -4757,6 +4804,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchLooseAffiliateVehicles(affiliate_id: any) {
+		// the manual affiliate/vehicle assignment UI these lists feed is never rendered
+		// for a guest, and the endpoint is admin-only
+		if (this.isGuestMode) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
 			return
@@ -4801,6 +4851,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchReturnAffiliateVehicles(return_affiliate_id: any) {
+		// the manual affiliate/vehicle assignment UI these lists feed is never rendered
+		// for a guest, and the endpoint is admin-only
+		if (this.isGuestMode) {return;};
 		if (!return_affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
 			return
@@ -4850,6 +4903,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchReturnLooseAffiliateVehicles(return_affiliate_id: any) {
+		// the manual affiliate/vehicle assignment UI these lists feed is never rendered
+		// for a guest, and the endpoint is admin-only
+		if (this.isGuestMode) {return;};
 		if (!return_affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
 			return
@@ -4926,7 +4982,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 	}
 	fetchAffiliateDrivers(affiliate_id: number) {
-		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
+		if(this.usesQuoteFlow) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_data', affiliate_id)
 			return
@@ -4971,7 +5027,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.error('Invalid Paramater affiliate_data', return_affiliate_id)
 			return
 		}
-		if(this.isIndividualMode || this.isTravelAgentMode) {return;};
+		if(this.usesQuoteFlow) {return;};
 		this.$spinner.show()
 		const handleResponse = (response: any) => {
 			if (response.success && response.data?.data.length > 0) {
@@ -5734,6 +5790,65 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Every reason the preview/submit can bail out, logged with the vehicle context.
+	 * Master-vehicle quotes carry no concrete vehicle_id, so that state is included
+	 * on every stop to make "preview does nothing" diagnosable from the console.
+	 */
+	private logPreviewBlocked(reason: string, extra: Record<string, any> = {}) {
+		console.warn('[booking] preview blocked:', reason, {
+			mode: this.mode,
+			is_master_vehicle: this.is_master_vehicle,
+			route_is_master_vehicle: this.route_is_master_vehicle,
+			form_vehicle_id: this.BookingForm.get('vehicle_id')?.value,
+			return_vehicle_id: this.BookingForm.get('return_vehicle_id')?.value,
+			QB_vehicle_id: this.QB_vehicle_id,
+			route_vehicle_id: this.route_vehicle_id,
+			firstLoadVehicleId: this.firstLoadVehicleId,
+			vehicle_type: this.BookingForm.get('vehicle_type')?.value,
+			return_vehicle_type: this.BookingForm.get('return_vehicle_type')?.value,
+			service_type: this.BookingForm.get('service_type')?.value,
+			affiliate_id: this.BookingForm.get('affiliate_id')?.value,
+			...extra
+		});
+		// flat lines so the paths are readable without expanding the console group
+		if (Array.isArray(extra?.invalidControls)) {
+			extra.invalidControls.forEach((c: any) => console.warn(
+				`[booking]   invalid: ${c.path} -> ${Object.keys(c.errors || {}).join(', ')} (value: ${JSON.stringify(c.value)})`
+			));
+		}
+	}
+
+	/**
+	 * Walks the form tree and returns the dotted path of every invalid leaf.
+	 * A FormGroup/FormArray reports `errors === null` while its children are the
+	 * ones failing, so iterating only the top level hides nested failures.
+	 */
+	private collectInvalidControlPaths(control: AbstractControl, path: string = ''): Array<{ path: string; errors: any; value: any }> {
+		const found: Array<{ path: string; errors: any; value: any }> = [];
+		if (!control || control.valid) {
+			return found;
+		}
+		if (control instanceof FormGroup || control instanceof FormArray) {
+			const children: Record<string, AbstractControl> = control instanceof FormGroup
+				? control.controls
+				: (control.controls as AbstractControl[]).reduce((acc, child, i) => {
+					acc[String(i)] = child;
+					return acc;
+				}, {} as Record<string, AbstractControl>);
+			Object.keys(children).forEach((key) => {
+				found.push(...this.collectInvalidControlPaths(children[key], path ? `${path}.${key}` : key));
+			});
+			// a group can also fail its own cross-field validator with valid children
+			if (control.errors) {
+				found.push({ path: path || '<form>', errors: control.errors, value: '<group>' });
+			}
+			return found;
+		}
+		found.push({ path, errors: control.errors, value: control.value });
+		return found;
+	}
+
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 
@@ -5925,30 +6040,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (this.BookingForm.invalid) {
 			this.BookingForm.markAllAsTouched();
-			Object.keys(this.BookingForm.controls).forEach(key => {
-				const controlErrors = this.BookingForm.get(key).errors;
-				if (controlErrors != null) {
-				}
-				console.log('controlErrors-->>' , key , controlErrors);
+			this.logPreviewBlocked('form invalid', {
+				invalidControls: this.collectInvalidControlPaths(this.BookingForm)
 			});
-			// Check nested loose_customer group
-			const lcGroup = this.BookingForm.get('loose_customer') as FormGroup;
-			if (lcGroup && lcGroup.invalid) {
-				Object.keys(lcGroup.controls).forEach(key => {
-					const controlErrors = lcGroup.get(key).errors;
-					if (controlErrors != null) {
-					}
-				});
-				// Check nested card_details
-				const cdGroup = lcGroup.get('card_details') as FormGroup;
-				if (cdGroup && cdGroup.invalid) {
-					Object.keys(cdGroup.controls).forEach(key => {
-						const controlErrors = cdGroup.get(key).errors;
-						if (controlErrors != null) {
-						}
-					});
-				}
-			}
 			// Deferred so the validation messages are rendered before we measure
 			// which fields are actually on screen.
 			setTimeout(() => this.invalidControlScroll?.scrollToFirstInvalidControl(), 100);
@@ -5959,6 +6053,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		const submitHours = Number(this.Form.number_of_hours.value);
 		if (this.Form.service_type.value == 'charter_tour' && (isNaN(submitHours) || submitHours < 2)) {
 			this.numberOfHoursError = true;
+			this.logPreviewBlocked('charter tour needs at least 2 hours', { submitHours });
 			if (this.hourFields && this.hourFields.length > 0) {
 				const activeField = this.hourFields.find(field => field.nativeElement.offsetParent !== null);
 				if (activeField) {
@@ -5975,6 +6070,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// route was built, which would otherwise leave the charter allowance in place.
 		const sameLocationError = this.getSameLocationError();
 		if (sameLocationError) {
+			this.logPreviewBlocked('duplicate pickup/drop-off location', { sameLocationError });
 			this.reportSameLocationError(sameLocationError);
 			return;
 		}
@@ -5982,6 +6078,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// A previously computed route flagged a zero-distance leg on a non-charter booking.
 		if (this.Form.service_type.value != 'charter_tour'
 			&& (this.hasInvalidRoutePoint || (this.Form.service_type.value == 'round_trip' && this.hasInvalidReturnRoutePoint))) {
+			this.logPreviewBlocked('zero-distance leg on a non-charter booking', {
+				hasInvalidRoutePoint: this.hasInvalidRoutePoint,
+				hasInvalidReturnRoutePoint: this.hasInvalidReturnRoutePoint
+			});
 			this.$errors.openDialog({
 				errors: {
 					error: 'Please select a valid location point.'
@@ -6036,6 +6136,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (preview) {
 			if (this.RatesForm.all_inclusive_rates["Base_Rate"].baserate <= 0) {
+				this.logPreviewBlocked('base rate is empty — rates never resolved for this vehicle', {
+					baserate: this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
+				});
 				this.$errors.openDialog({
 					errors: {
 						error: 'Base rate can not be empty.'
@@ -6057,7 +6160,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 						$('#confirmationModal').modal('show')
 					}
 					else {
-						this.navigatePostSave()
+						this.navigatePostSave(response)
 					}
 				})
 			}
@@ -6100,11 +6203,33 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isAffiliateMode) {
 			return this.affiliateService.createBooking(payload) as Observable<any>
 		}
+		if (this.isGuestMode) {
+			// public quotebot endpoint; there is no logged-in creator to attribute
+			delete payload['booking_created_from']
+			return this.$quotebot.createBooking(payload, updateType) as Observable<any>
+		}
 		return this.$api.createBooking(payload, updateType) as Observable<any>
 	}
 
 	/** Where to land after a successful save, per portal. */
-	private navigatePostSave() {
+	private navigatePostSave(response?: any) {
+		// submitForm() shows the spinner before createBookingByMode(); only the
+		// "needs confirmation" branch hides it, so the success path has to clear it
+		// here or the destination page renders behind a stuck overlay.
+		this.$spinner.hide()
+		if (this.isGuestMode) {
+			// guests have no bookings list to land on — carry the reference through
+			// router state so the public confirmation page can show it
+			this.$router.navigate(['/quotebot/booking-confirmation'], {
+				state: {
+					reservation_id: response?.data?.reservation_id ?? response?.data?.id ?? null,
+					confirmation_number: response?.data?.confirmation_number ?? null,
+					email: this.BookingForm.get('loose_customer.email')?.value ?? null,
+					message: response?.message ?? null
+				}
+			})
+			return
+		}
 		if (this.isAffiliateMode) {
 			const targetPath = this.currentUser?.roleName == 'sub_affiliate' ? '/sub_affiliate/my-bookings' : '/affiliate/my-bookings';
 			this.$router.navigate([targetPath]).then(() => {
@@ -7074,7 +7199,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 						}
 					}
 
-					if (item != 'middle_name' && item != 'address') {
+					if (!this.looseCustomerOptionalFields.includes(item)) {
 						loose_customer.get(item).setValidators([Validators.required]);
 					}
 				}
@@ -7145,7 +7270,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 						}
 					}
 
-					if (item != 'middle_name' && item != 'address') {
+					if (!this.looseCustomerOptionalFields.includes(item)) {
 						loose_customer.get(item).setValidators([Validators.required]);
 					}
 				}
@@ -7204,7 +7329,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.fetchAffiliates('loose_affiliate')
 
 				this.toggleDropdown(null)
-				if (!this.isIndividualMode && !this.isTravelAgentMode) {
+				if (!this.usesQuoteFlow) {
 					this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 					this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15)])
 					this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
