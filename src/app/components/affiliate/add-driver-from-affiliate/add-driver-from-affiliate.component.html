@@ -66,39 +66,6 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline" class="mobileField"
-						[class.is-invalid-input]="(submittedForm && f?.CellNumber?.errors) || ((f?.CellNumber?.touched || f?.CellNumber?.dirty) && f?.CellNumber?.errors)">
-						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
-						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890"
-							formControlName="CellNumber" class="phoneNumberClass" tabindex="1"
-							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
-							(input)="validateCellNumber()" (blur)="validateCellNumber()" />
-					</mat-form-field>
-					<div *ngIf="
-							(submittedForm && f?.CellNumber?.errors) ||
-							((f?.CellNumber?.touched || f?.CellNumber?.dirty) && f?.CellNumber?.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f?.CellNumber?.errors?.required">This field is required</div>
-						<div *ngIf="f.CellNumber.errors?.invalidIntl">{{f.CellNumber.errors?.invalidIntl}}</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>Driver E-mail <span class="optionalText">(Optional)</span></mat-label>
-						<input matInput placeholder="Driver E-mail (Optional)" (focus)="$event.target.select()"
-							formControlName="Email" tabindex="1">
-					</mat-form-field>
-					<div *ngIf="
-							(submittedForm && f.Email.errors) ||
-							(f.Email.touched && f.Email.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Email.errors.required">This field is required</div>
-					</div>
-					<div *ngIf="f.Email.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Email.errors.pattern">Email format should be valid</div>
-					</div>
-				</div>
-				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Dress <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="Dress" tabindex="1">
@@ -129,6 +96,39 @@
 							(f.StartDate.touched && f.StartDate.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.StartDate.errors.required">This field is required</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline" class="mobileField"
+						[class.is-invalid-input]="(submittedForm && f?.CellNumber?.errors) || ((f?.CellNumber?.touched || f?.CellNumber?.dirty) && f?.CellNumber?.errors)">
+						<mat-label>Cell<span class="asterisk"> *</span></mat-label>
+						<input pattern="[0-9+]*" maxlength="16" matInput #cellInput placeholder="1234567890"
+							formControlName="CellNumber" class="phoneNumberClass" tabindex="1"
+							(focus)="$event.target.select()" (keypress)="numberOnly($event)"
+							(input)="validateCellNumber()" (blur)="validateCellNumber()" />
+					</mat-form-field>
+					<div *ngIf="
+							(submittedForm && f?.CellNumber?.errors) ||
+							((f?.CellNumber?.touched || f?.CellNumber?.dirty) && f?.CellNumber?.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f?.CellNumber?.errors?.required">This field is required</div>
+						<div *ngIf="f.CellNumber.errors?.invalidIntl">{{f.CellNumber.errors?.invalidIntl}}</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>Driver E-mail <span class="optionalText">(Optional)</span></mat-label>
+						<input matInput placeholder="Driver E-mail (Optional)" (focus)="$event.target.select()"
+							formControlName="Email" tabindex="1">
+					</mat-form-field>
+					<div *ngIf="
+							(submittedForm && f.Email.errors) ||
+							(f.Email.touched && f.Email.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.Email.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.Email.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.Email.errors.pattern">Email format should be valid</div>
 					</div>
 				</div>
 			</div>
