@@ -476,6 +476,11 @@ top:2.05em}
 	--mdc-chip-with-icon-icon-size: 18px;
 	--mdc-chip-with-icon-selected-icon-color: #fff;
 
+	--mdc-chip-focus-state-layer-color: transparent;
+	--mdc-chip-hover-state-layer-color: transparent;
+	--mdc-chip-selected-focus-state-layer-color: transparent;
+	--mdc-chip-selected-hover-state-layer-color: transparent;
+
 	/* The chips carry their own hover/selected treatment; MDC's grey state
 	   layer only muddies it. */
 	--mdc-chip-hover-state-layer-opacity: 0;
@@ -491,40 +496,77 @@ top:2.05em}
 
 	.mdc-evolution-chip {
 		margin: 0;
+		-webkit-tap-highlight-color: transparent !important;
 	}
 
 	.mat-mdc-chip {
 		box-shadow: var(--afr-shadow-sm);
 		transition: background-color .15s var(--afr-ease, ease), box-shadow .15s var(--afr-ease, ease);
+		-webkit-tap-highlight-color: transparent !important;
 	}
 
-	.mat-mdc-chip:not(.mdc-evolution-chip--selected) {
+	.mdc-evolution-chip__action {
+		-webkit-tap-highlight-color: transparent !important;
+	}
+
+	.mdc-evolution-chip__state-layer,
+	.mat-mdc-chip-focus-overlay {
+		display: none !important;
+		opacity: 0 !important;
+		background-color: transparent !important;
+	}
+
+	.mat-mdc-chip:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) {
 		background-color: #eeeeee;
 	}
 
-	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) {
+	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected),
+	.mat-mdc-chip:active:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected),
+	.mat-mdc-chip:focus:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected),
+	.mat-mdc-chip.mat-mdc-chip-focused:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) {
 		background-color: #ffe6d0 !important;
 		--mdc-chip-outline-color: var(--orange-color);
+		--mdc-chip-elevated-container-color: #ffe6d0;
 	}
 
-	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) .mdc-evolution-chip__text-label,
-	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected) .amenity-chip__tag {
+	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) .mdc-evolution-chip__text-label,
+	.mat-mdc-chip:hover:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) .amenity-chip__tag,
+	.mat-mdc-chip:active:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) .mdc-evolution-chip__text-label,
+	.mat-mdc-chip:active:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) .amenity-chip__tag,
+	.mat-mdc-chip:focus:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) .mdc-evolution-chip__text-label,
+	.mat-mdc-chip:focus:not(.mdc-evolution-chip--selected):not(.mat-mdc-chip-selected) .amenity-chip__tag {
 		color: var(--orange-color) !important;
 	}
 
-	.mdc-evolution-chip--selected {
+	.mdc-evolution-chip--selected,
+	.mat-mdc-chip-selected,
+	.mat-mdc-chip.mat-primary.mat-mdc-chip-selected,
+	.mdc-evolution-chip--selected:hover,
+	.mdc-evolution-chip--selected:active,
+	.mdc-evolution-chip--selected:focus,
+	.mdc-evolution-chip--selected.mat-mdc-chip-focused,
+	.mdc-evolution-chip--selected.cdk-focused {
 		--mdc-chip-outline-color: var(--orange-color);
+		--mdc-chip-elevated-selected-container-color: var(--orange-color);
 		background-color: var(--orange-color) !important;
 		color: #fff !important;
 		box-shadow: var(--afr-shadow-sm), inset 0 0 0 1px rgba(243, 147, 61, .12);
 	}
 
-	.mdc-evolution-chip--selected .mdc-evolution-chip__text-label {
+	.mdc-evolution-chip--selected .mdc-evolution-chip__text-label,
+	.mat-mdc-chip-selected .mdc-evolution-chip__text-label,
+	.mdc-evolution-chip--selected:hover .mdc-evolution-chip__text-label,
+	.mdc-evolution-chip--selected:active .mdc-evolution-chip__text-label,
+	.mdc-evolution-chip--selected:focus .mdc-evolution-chip__text-label {
 		font-weight: 600;
 		color: #fff !important;
 	}
 
-	.mdc-evolution-chip--selected .amenity-chip__tag {
+	.mdc-evolution-chip--selected .amenity-chip__tag,
+	.mat-mdc-chip-selected .amenity-chip__tag,
+	.mdc-evolution-chip--selected:hover .amenity-chip__tag,
+	.mdc-evolution-chip--selected:active .amenity-chip__tag,
+	.mdc-evolution-chip--selected:focus .amenity-chip__tag {
 		color: #fff !important;
 	}
 

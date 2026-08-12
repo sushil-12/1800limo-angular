@@ -150,7 +150,7 @@
 			<span class="field-group__title">Account, routing & date of birth</span>
 			<p class="field-group__hint">Enter account numbers without dashes. Date of birth is of the account holder.</p>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-5">
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Account / IBAN <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Number" (focus)="$event?.target?.select()"
@@ -174,7 +174,7 @@
 						</ng-template>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-7">
 					<mat-form-field appearance="outline"
 						[ngClass]="{ 'border-red': routingErrorMessage || !isRoutingSelected }">
 						<mat-label>Check Routing # / Bank Branch # <span class="asterisk">*</span></mat-label>
@@ -192,7 +192,7 @@
 						<div *ngIf="f?.Routing?.errors?.required">This field is required</div>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-5">
 					<mat-form-field appearance="outline">
 						<mat-label>Account Type <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="AccountType" tabindex="1">
@@ -207,11 +207,11 @@
 						<div *ngIf="f?.AccountType?.errors?.required">This field is required</div>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-7">
 					<div class="row">
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
-								<mat-label>Month of Birth <span class="asterisk">*</span></mat-label>
+								<mat-label>MM<span class="asterisk">*</span></mat-label>
 								<mat-select id="dobMonth" formControlName="dobMonth" tabindex="1">
 									<mat-option value="">MM</mat-option>
 									<mat-option value="01">01</mat-option>
@@ -231,7 +231,7 @@
 						</div>
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
-								<mat-label>Day of Birth <span class="asterisk">*</span></mat-label>
+								<mat-label>DD<span class="asterisk">*</span></mat-label>
 								<mat-select id="dobDay" formControlName="dobDay" tabindex="1">
 									<mat-option value="">DD</mat-option>
 									<mat-option *ngFor="let day of dobDay" value="{{ day }}">{{ day }}</mat-option>
@@ -240,7 +240,7 @@
 						</div>
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
-								<mat-label>Year of Birth <span class="asterisk">*</span></mat-label>
+								<mat-label>YY<span class="asterisk">*</span></mat-label>
 								<mat-select id="dobYear" formControlName="dobYear" tabindex="1">
 									<mat-option value="">YYYY</mat-option>
 									<mat-option *ngFor="let year of dobYear" value="{{ year }}">{{ year }}</mat-option>
