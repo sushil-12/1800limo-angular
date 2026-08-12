@@ -14,146 +14,78 @@
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-6 mb-2">
-					<!-- <mat-form-field appearance="outline" [ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg && f.vehicleType.errors) ||
 							(submittedForm && f.vehicleType.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
 						">
-						<mat-label>Vehicle Type
-							<span class="asterisk">*</span>
-						</mat-label>
-						<input type="text" id="vehicleTypeField" placeholder="Choose One"
-							(focus)="$event.target.select()" aria-label="Number" matInput
-							(keyup)="searchVehicleType($event.target.value)" [matAutocomplete]="auto1" tabindex="1" />
-						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-						<mat-autocomplete #auto1="matAutocomplete">
-							<mat-option *ngFor="let vehicleType of filteredVehicleTypes" [value]="vehicleType.name"
-								(onSelectionChange)="
-									selectVehicleType(
-										vehicleType.ID,
-										$event.isUserInput
-									)
-								">
+						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
+						<mat-select id="vehicleTypeField" formControlName="vehicleType" [compareWith]="compareOptionValue"
+							(selectionChange)="handleChangeVehicleType($event.value)" tabindex="1">
+							<mat-option *ngFor="let vehicleType of filteredVehicleTypes" [value]="vehicleType.ID">
 								{{ vehicleType.name }}
 							</mat-option>
-						</mat-autocomplete>
-					</mat-form-field> -->
-					<!-- [ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }" -->
-					<ng-select appearance="outline" id="vehicle_type" [items]="filteredVehicleTypes"
-						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true" bindLabel="name"
-						bindValue="ID" placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField"
-						(change)="handleChangeVehicleType($event)"
-						[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
-					</ng-select>
-
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="
+							(errorMsg && f.vehicleType.errors) ||
+							(submittedForm && f.vehicleType.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.vehicleType.errors.required">
+							The Vehicle Type is required
+						</div>
+					</div>
 				</div>
 				<div class="col-md-6">
-					<!-- <mat-form-field appearance="outline" [ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
 						">
-						<mat-label>Enter Make
-							<span class="asterisk">*</span>
-						</mat-label>
-						<input type="search" id="makeField" placeholder="Type First Letters of Make" aria-label="Number"
-							matInput (focus)="$event.target.select()" (keyup)="searchMake($event.target.value)"
-							[matAutocomplete]="auto2" tabindex="1" />
-						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-						<mat-autocomplete #auto2="matAutocomplete">
-							<mat-option *ngFor="let m of filteredMake" [value]="m.name" (onSelectionChange)="
-									selectMake(m.ID, $event.isUserInput)
-								">
+						<mat-label>Make <span class="asterisk">*</span></mat-label>
+						<mat-select id="makeField" formControlName="make" [compareWith]="compareOptionValue"
+							(selectionChange)="handleSelectMake()" tabindex="1">
+							<mat-option *ngFor="let m of filteredMake" [value]="m.ID">
 								{{ m.name }}
 							</mat-option>
-						</mat-autocomplete>
-					</mat-form-field> -->
-					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" bindLabel="name" bindValue="ID" placeholder="Make" formControlName="make"
-						id="makeField" (change)="handleSelectMake()">
-					</ng-select>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint" style="margin-top: -20px; margin-bottom: 20px;">
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.make.errors.required">
 							The Make and Model is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<!-- <mat-form-field appearance="outline" [ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
 						">
 						<mat-label>Model <span class="asterisk">*</span></mat-label>
-						<input type="search" id="modelField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchModel($event.target.value)" (focus)="$event.target.select()"
-							[matAutocomplete]="auto3" tabindex="1" />
-						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-						<mat-autocomplete #auto3="matAutocomplete">
-							<mat-option *ngFor="let m of filteredModel" [value]="m.name" (onSelectionChange)="
-									selectModel(m.ID, $event.isUserInput)
-								">
+						<mat-select id="modelField" formControlName="model" [compareWith]="compareOptionValue" tabindex="1">
+							<mat-option *ngFor="let m of filteredModel" [value]="m.ID">
 								{{ m.name }}
 							</mat-option>
-						</mat-autocomplete>
-					</mat-form-field> -->
-					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" bindLabel="name" bindValue="ID" placeholder="Model"
-						formControlName="model" id="modelField">
-					</ng-select>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint" style="margin-top: -20px; margin-bottom: 20px;">
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.model.errors.required">
 							The Make and Model is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" style="margin-top: 0px;">
+					<mat-form-field appearance="outline">
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
@@ -193,31 +125,13 @@
 							(submittedForm && f.year.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						" style="margin-top: 0px;">
+						">
 						<mat-label>Year <span class="asterisk">*</span></mat-label>
-						<input type="search" id="yearField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()"
-							[matAutocomplete]="auto4" tabindex="1" />
-						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-						<mat-autocomplete #auto4="matAutocomplete">
-							<mat-option *ngFor="let year of filteredYear" [value]="year.name" (onSelectionChange)="
-									selectYear(year.ID, $event.isUserInput)
-								">
+						<mat-select id="yearField" formControlName="year" [compareWith]="compareOptionValue" tabindex="1">
+							<mat-option *ngFor="let year of filteredYear" [value]="year.ID">
 								{{ year.name }}
 							</mat-option>
-						</mat-autocomplete>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="
 							(errorMsg3 && f.year.errors) ||
@@ -234,31 +148,13 @@
 							(submittedForm && f.color.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						" style="margin-top: 0px;">
+						">
 						<mat-label>Color <span class="asterisk">*</span></mat-label>
-						<input type="search" id="colorField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()"
-							[matAutocomplete]="auto5" tabindex="1" />
-						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-						<mat-autocomplete #auto5="matAutocomplete">
-							<mat-option *ngFor="let color of filteredColor" [value]="color.name" (onSelectionChange)="
-									selectColor(color.ID, $event.isUserInput)
-								">
+						<mat-select id="colorField" formControlName="color" [compareWith]="compareOptionValue" tabindex="1">
+							<mat-option *ngFor="let color of filteredColor" [value]="color.ID">
 								{{ color.name }}
 							</mat-option>
-						</mat-autocomplete>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="(errorMsg4 && f.color.errors) || (submittedForm && f.color.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -268,31 +164,15 @@
 
 				<!-- Number of Seats -->
 				<div class="col-md-6">
-					<label class="select-seat-label">Number of Pax Seats / Seat Belts
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" formControlName="seats" tabindex="1">
-							<option value="">
-								Choose Pax Seats / Seat Belts
-							</option>
-							<option *ngFor="let seatOption of seatOptions" [value]="seatOption">
+					<mat-form-field appearance="outline">
+						<mat-label>Number of Pax Seats / Seat Belts <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="seats" [compareWith]="compareOptionValue" tabindex="1">
+							<mat-option value="">Choose Pax Seats / Seat Belts</mat-option>
+							<mat-option *ngFor="let seatOption of seatOptions" [value]="seatOption">
 								{{ seatOption }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.seats.errors) ||
 							(f.seats.touched && f.seats.errors)
@@ -310,31 +190,18 @@
 
 				<!-- Number of Pax -->
 				<div class="col-md-6">
-					<label class="select-luggage-label">Number of Luggage
-						<span class="theme-color">(2 carry on = 1 large suitcase)
-						</span>
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" formControlName="luggage" tabindex="1">
-							<option value="">Choose Luggage</option>
-							<option *ngFor="let luggageOption of luggageOptions" [value]="luggageOption">
+					<mat-form-field appearance="outline">
+						<mat-label>Number of Luggage
+							<span class="theme-color">(2 carry on = 1 large suitcase)</span>
+							<span class="asterisk">*</span>
+						</mat-label>
+						<mat-select formControlName="luggage" [compareWith]="compareOptionValue" tabindex="1">
+							<mat-option value="">Choose Luggage</mat-option>
+							<mat-option *ngFor="let luggageOption of luggageOptions" [value]="luggageOption">
 								{{ luggageOption }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.luggage.errors) ||
 							(f.luggage.touched && f.luggage.errors)
@@ -352,34 +219,17 @@
 
 				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-cancel-label">Airport / City / Cruise Port Cancel Policy
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle" [ngClass]="changeNonCharterCancelPolicy ? '' : 'border-red'">
-						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy"
-							(change)="handleNonCharterCancelPolicy($event)" tabindex="1">
-							<option value="">
-								Choose Airport / City / Cruise Port Cancel Policy
-							</option>
-							<option *ngFor="
-									let nonCharterCancelOption of nonCharterCancelOptions
-								" [value]="nonCharterCancelOption.value">
+					<mat-form-field appearance="outline" [ngClass]="changeNonCharterCancelPolicy ? '' : 'border-red'">
+						<mat-label>Airport / City / Cruise Port Cancel Policy <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="nonCharterCancelPolicy" [compareWith]="compareOptionValue"
+							(selectionChange)="handleNonCharterCancelPolicy($event)" tabindex="1">
+							<mat-option value="">Choose Airport / City / Cruise Port Cancel Policy</mat-option>
+							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
+								[value]="nonCharterCancelOption.value">
 								{{ nonCharterCancelOption.label }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm &&
 								f.nonCharterCancelPolicy.errors) ||
@@ -399,34 +249,17 @@
 
 				<!-- Charter Cancel Policy -->
 				<div class="col-md-6">
-					<label class="select-charter-cancel-label">Charter Cancel Policy
-						<span class="asterisk1">*</span></label>
-					<div class="selectStyle" [ngClass]="changeCharterCancelPolicy ? '' : 'border-red'">
-						<select class="selectInputStyle" formControlName="charterCancelPolicy"
-							(change)="handleChangeCharterCancelPolicy($event)" tabindex="1">
-							<option value="">
-								Choose Charter Cancel Policy
-							</option>
-							<option *ngFor="
-									let charterCancelOption of charterCancelOptions
-								" [value]="charterCancelOption.value">
+					<mat-form-field appearance="outline" [ngClass]="changeCharterCancelPolicy ? '' : 'border-red'">
+						<mat-label>Charter Cancel Policy <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="charterCancelPolicy" [compareWith]="compareOptionValue"
+							(selectionChange)="handleChangeCharterCancelPolicy($event)" tabindex="1">
+							<mat-option value="">Choose Charter Cancel Policy</mat-option>
+							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
+								[value]="charterCancelOption.value">
 								{{ charterCancelOption.label }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.charterCancelPolicy.errors) ||
 							(f.charterCancelPolicy.touched &&
@@ -472,7 +305,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Assign Driver </mat-label>
-						<mat-select formControlName="associatedDriver" tabindex="1">
+						<mat-select formControlName="associatedDriver" [compareWith]="compareOptionValue" tabindex="1">
 							<mat-option value="">Select Driver</mat-option>
 							<mat-option *ngFor="let driver of driverList" [value]="+driver.id">
 								{{ driver.FirstName }} {{driver.MiddleName}} {{ driver.LastName }}

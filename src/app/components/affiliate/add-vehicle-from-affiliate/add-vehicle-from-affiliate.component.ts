@@ -540,6 +540,18 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.isVehicleTypeSelected = value ? true : false
 	}
 
+	/**
+	 * Used by the mat-select dropdowns: option values come from the API as
+	 * strings while the form is patched with numbers (and vice versa), so
+	 * compare them loosely instead of by identity.
+	 */
+	compareOptionValue = (optionValue: any, controlValue: any): boolean => {
+		if (optionValue === null || optionValue === undefined || controlValue === null || controlValue === undefined) {
+			return optionValue === controlValue;
+		}
+		return String(optionValue) === String(controlValue);
+	}
+
 	selectVehicleType(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
@@ -590,8 +602,6 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	handleSelectMake() {
 		console.log('in function handle select make->>', this.addVehicleForm.controls['make'].value)
 		this.changeMake(this.addVehicleForm.controls['make'].value);
-		let modelField: any = document.getElementById('modelField');
-		modelField.value = '';
 	}
 
 	searchModel(keyword) {
@@ -790,7 +800,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.addVehicleForm.patchValue({
-			charterCancelPolicy: event.target.value
+			charterCancelPolicy: event.value
 		})
 		this.changeNonCharterCancelPolicy = true
 	}
