@@ -6446,3 +6446,6 @@ gmp-place-autocomplete {
   top: 80px;
   z-index: 4 !important; 
 }
+button.mdc-evolution-chip__action.mat-mdc-chip-action.mdc-evolution-chip__action--primary:hover {
+    background: none !important;
+}

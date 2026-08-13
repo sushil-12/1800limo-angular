@@ -1791,7 +1791,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 		this.announcedVerificationEmails.push(email.toLowerCase());
 
 		this.verificationEmailSent = email;
-		$("#emailVerificationSentModal").modal("show");
+		// $("#emailVerificationSentModal").modal("show");
 	}
 
 	/**

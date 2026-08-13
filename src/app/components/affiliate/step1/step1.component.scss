@@ -412,7 +412,7 @@
 	color: #fff;
 	width: 100%;
 	line-height: 41px;
-	height: calc(100% - 85px);
+	height: calc(100% - 25px);
 }
 
 .edit-email svg {
@@ -651,6 +651,7 @@
 }
 
 .verify-note--ok {
+	display:none !important;
 	background: var(--afr-ok-wash);
 	box-shadow: inset 0 0 0 1px var(--afr-ok-line);
 	color: var(--afr-ok-ink);
@@ -659,3 +660,5 @@
 		color: var(--afr-ok-ink);
 	}
 }
+
+
