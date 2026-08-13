@@ -50,6 +50,17 @@
 							</span> | <span style="color:red">{{ getCancellationTime(bookingPreview?.cancellation_hours) }}</span> </span>
 					</div>
 
+					<div class="rcpt-idrow" *ngIf="bookingPreview?.vehicle_type_name">
+						<span class="rcpt-idrow-label">Vehicle Type</span>
+						<span class="rcpt-idrow-value">{{ bookingPreview?.vehicle_type_name }} | {{ bookingPreview?.vehicle_make }} · {{ bookingPreview?.vehicle_model }} ·
+								{{ bookingPreview?.vehicle_year }} · {{ bookingPreview?.vehicle_color }}</span>
+					</div>
+
+					<div class="rcpt-idrow">
+						<span class="rcpt-idrow-label">Passenger & Luggage</span>
+						<span class="rcpt-idrow-value">{{ bookingPreview?.total_passengers }} Passengers / {{ bookingPreview?.luggage_count }} Luggage</span>
+					</div>
+
 					<div class="rcpt-idrow" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
 						<span class="rcpt-idrow-label">Booking Hours</span>
 						<span class="rcpt-idrow-value">{{ bookingPreview?.number_of_hours }}</span>
@@ -331,33 +342,7 @@
 						</div>
 					</div>
 
-					<!-- ── Vehicle Type ── -->
-					<div class="rcpt-section">
-						<div class="rcpt-section-title">Vehicle Type</div>
-						<div class="rcpt-vehicle">
-							<div class="rcpt-vehicle-icon"><i class="bi bi-car-front-fill"></i></div>
-							<div class="rcpt-vehicle-body">
-								<div class="rcpt-vehicle-name">{{ bookingPreview?.vehicle_type_name }}</div>
-								<div class="rcpt-vehicle-sub" *ngIf="(bookingPreview?.vehicle_make && bookingPreview?.vehicle_make !== 'N/A') ||
-									(bookingPreview?.vehicle_model && bookingPreview?.vehicle_model !== 'N/A') ||
-									(bookingPreview?.vehicle_year  && bookingPreview?.vehicle_year  !== 'N/A') ||
-									(bookingPreview?.vehicle_color && bookingPreview?.vehicle_color !== 'N/A')">
-									{{ bookingPreview?.vehicle_make }} · {{ bookingPreview?.vehicle_model }} ·
-									{{ bookingPreview?.vehicle_year }} · {{ bookingPreview?.vehicle_color }}
-								</div>
-								<div class="rcpt-vehicle-meta">
-									<span><i class="bi bi-people"></i> Up to {{ bookingPreview?.vehicle_seats }}
-										passengers</span>
-									<span><i class="bi bi-bag"></i> {{ bookingPreview?.vehicle_luggage || '0' }}
-										bags</span>
-								</div>
-								<div class="rcpt-vehicle-plate"
-									*ngIf="bookingPreview?.vehicle_license_plate && bookingPreview?.vehicle_license_plate !== 'N/A'">
-									{{ bookingPreview?.vehicle_license_plate }}
-								</div>
-							</div>
-						</div>
-					</div>
+
 
 					<!-- ── Rates Distribution ── -->
 					<div class="rcpt-section bp-rate-card" *ngIf="showRateDistribution">
