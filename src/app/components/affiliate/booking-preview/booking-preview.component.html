@@ -52,8 +52,11 @@
 
 					<div class="rcpt-idrow" *ngIf="bookingPreview?.vehicle_type_name">
 						<span class="rcpt-idrow-label">Vehicle Type</span>
-						<span class="rcpt-idrow-value">{{ bookingPreview?.vehicle_type_name }} | {{ bookingPreview?.vehicle_make }} · {{ bookingPreview?.vehicle_model }} ·
-								{{ bookingPreview?.vehicle_year }} · {{ bookingPreview?.vehicle_color }}</span>
+						<span class="rcpt-idrow-value">{{ bookingPreview?.vehicle_type_name }} | <span lass="rcpt-idrow-value" *ngIf="(bookingPreview?.vehicle_make && bookingPreview?.vehicle_make !== 'N/A') ||
+									(bookingPreview?.vehicle_model && bookingPreview?.vehicle_model !== 'N/A') ||
+									(bookingPreview?.vehicle_year  && bookingPreview?.vehicle_year  !== 'N/A') ||
+									(bookingPreview?.vehicle_color && bookingPreview?.vehicle_color !== 'N/A')"> {{ bookingPreview?.vehicle_make }} · {{ bookingPreview?.vehicle_model }} ·
+								{{ bookingPreview?.vehicle_year }} · {{ bookingPreview?.vehicle_color }} </span> </span>
 					</div>
 
 					<div class="rcpt-idrow">

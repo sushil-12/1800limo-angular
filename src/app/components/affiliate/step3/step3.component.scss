@@ -52,10 +52,6 @@
 // 	left: -6px;
 // }
 
-.vehtype_extintwrap .row {
-	justify-content: space-between !important;
-}
-
 
 /* Shared sets everything but `top`; the offset is step-specific. */
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .labelClass {

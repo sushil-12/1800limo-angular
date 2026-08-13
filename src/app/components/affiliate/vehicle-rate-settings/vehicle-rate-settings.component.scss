@@ -34,7 +34,7 @@
 	height: 200px;
 	max-width: 100%;
 	border-radius: 20px;
-	object-fit: cover;
+	object-fit: contain;
 }
 
 .taxesStyle .input-container {
@@ -191,7 +191,6 @@ div#rate-manager-slider {
 @media only screen and (max-width:991px) {
 	.vehicleImage img {
 		width: 100%;
-		height: auto;
 	}
 }
 
@@ -209,8 +208,26 @@ div#rate-manager-slider {
 		margin-top: 0px;
 	}
 
-	.vehicleData li {
+	.vehicleData {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
 		margin-top: 10px;
+
+		li {
+			display: inline-flex;
+			align-items: center;
+			margin-top: 0;
+			margin-bottom: 4px;
+			font-size: 14px;
+
+			&:not(:last-child)::after {
+				content: "|";
+				margin: 0 8px;
+				color: #6c757d;
+				font-weight: normal;
+			}
+		}
 	}
 
 	.card-type {
@@ -226,18 +243,8 @@ div#rate-manager-slider {
 }
 
 @media only screen and (max-width:575px) {
-	.vehicleData li:first-child {
-		margin-top: 0px;
-	}
-
-	.vehicleData li {
-		margin-top: 0px;
-		font-size: 14px;
-	}
-
 	.vehicleImage img {
 		width: 100%;
-		height: auto;
 	}
 
 	.card-type {

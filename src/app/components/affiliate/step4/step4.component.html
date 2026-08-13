@@ -57,7 +57,7 @@
 						</td>
 						<td><img class="rounded-circle" src="{{driver.DriverImage.image}}"></td>
 						<td class="vehicleFontDesign">{{driver.FirstName}}
-							<span *ngIf="driver.MiddleName" style="font-weight: 100;">
+							<span *ngIf="driver.MiddleName">
 								{{driver.MiddleName}}</span> {{driver.LastName}}
 						</td>
 						<td class="pointer vehicleFontDesign"><a href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
