@@ -941,9 +941,9 @@ mat-mdc-form-field-label {
 	background-color: var(--afr-field) !important;
 }
 
-:host ::ng-deep .mat-mdc-input-element {
+/* :host ::ng-deep .mat-mdc-input-element {
 	font-weight: 500;
-}
+} */
 
 .mat-mdc-option {
 	background-color: var(--afr-field) !important;
