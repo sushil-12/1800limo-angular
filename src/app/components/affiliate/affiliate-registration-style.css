@@ -905,7 +905,7 @@ body, body.mat-typography{
 
 .red-placeholder {
 	color: red !important;
-	/* font-weight: 500 !important; */
+	font-weight: 500 !important;
 	font-size: 15px !important;
 }
 
