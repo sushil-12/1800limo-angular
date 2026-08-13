@@ -145,6 +145,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 	public modalAlertMessage: string;
 	public selectedAffiliate: string;
 	public modalImage: string;
+	/** Address shown in the "check your inbox" popup. */
+	public verificationEmailSent: string;
+	/** Addresses we have already popped the verification notice for. */
+	private announcedVerificationEmails: Array<string> = [];
 	public startBusinessYears: Array<Object>;
 	public filterGender: Array<Object>;
 	errorMsg2: boolean;
@@ -1734,23 +1738,67 @@ export class Step1Component implements OnInit, AfterViewInit {
 					if (success == true) {
 						this.affiliateService.updateStepsLocal("1");
 					}
-
-					this.router
-						.navigateByUrl("/RefreshComponent", {
-							skipLocationChange: true,
-						})
-						.then(() => {
-							this.router.navigate(["/affiliate/step2"]);
-						});
 				} else {
 					console.log("Id get");
-					this.router.navigate(["/affiliate/step1"]);
 				}
-				//save value in session storage to show email sent modal on next step
-				if (!this.addAffiliateAccountForm.value.acc_id) {
-					sessionStorage.setItem("showEmailVerificationAlert", "yes");
-				}
+
+				this.goToNextStep();
 			});
+	}
+
+	/**
+	 * Moves on once step 1 is saved.
+	 */
+	goToNextStep() {
+		if (!this.addAffiliateAccountForm.value.id) {
+			this.router
+				.navigateByUrl("/RefreshComponent", {
+					skipLocationChange: true,
+				})
+				.then(() => {
+					this.router.navigate(["/affiliate/step2"]);
+				});
+		} else {
+			this.router.navigate(["/affiliate/step1"]);
+		}
+	}
+
+	/**
+	 * Fired when the owner / dispatch e-mail field loses focus. The first time a
+	 * valid address is entered we tell the user a verification link is on its way,
+	 * so the "not verified yet" line under the field makes sense to them.
+	 */
+	onEmailEntered(controlName: "Email" | "dispatchEmail") {
+		const control = this.addAffiliateAccountForm.get(controlName);
+		if (!control || control.invalid) {
+			return;
+		}
+
+		const email = (control.value || "").trim();
+		//already-verified addresses go through the OTP flow instead, nothing to announce
+		const status =
+			controlName === "Email"
+				? this.affiliateEmailStatus
+				: this.dispatchEmailStatus;
+		if (!email || status === "yes") {
+			return;
+		}
+
+		//one announcement per address, so tabbing back through the form stays quiet
+		if (this.announcedVerificationEmails.indexOf(email.toLowerCase()) > -1) {
+			return;
+		}
+		this.announcedVerificationEmails.push(email.toLowerCase());
+
+		this.verificationEmailSent = email;
+		$("#emailVerificationSentModal").modal("show");
+	}
+
+	/**
+	 * "Got it" on the e-mail verification popup.
+	 */
+	closeEmailVerificationSentModal() {
+		$("#emailVerificationSentModal").modal("hide");
 	}
 	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);

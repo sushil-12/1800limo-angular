@@ -22,8 +22,6 @@ declare var $: any;
 })
 export class AddDriverComponent implements OnInit, AfterViewInit {
 	@ViewChild('cellInput') cellInput!: ElementRef;
-	@ViewChild('backgroundCompanyTelInput') backgroundCompanyTelInput!: ElementRef;
-	@ViewChild('policeTelInput') policeTelInput!: ElementRef;
 
 
 	globalFunctions = this.globals
@@ -56,6 +54,10 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 	public schoolBusCertificateImageId: string = '';
 	public FoidCardImageId: string = '';
 	public BackgroundCheckerIDId: string = '';
+	// Ex/Police credential image - the LastPoliceDepartment column stores the
+	// image id, matching the mobile optionalCertification.ex_police mapping.
+	public LastPoliceDepartment: string = '';
+	public LastPoliceDepartmentId: string = '';
 	public VaccinationCardImageId: string = '';
 	public languages: any;
 	public languagesFormControl: any;
@@ -71,14 +73,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 	public ExPoliceCheck: boolean = false;
 	public SchoolBusCertifiedCheck: boolean = false;
 	public CellNumberObject: any;
-	public BackgroundCompanyTelNumberObject: any;
-	public BackgroundCompanyTelNumber: any;
-	public PoliceForceTelephoneObject: any;
-	public PoliceForceTelephone: any;
 	public currentDate: string = '';
 	public modalImage: string = '';
-	public countryOptions: any = [];
-	public stateOptions: any = [];
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	proDriverYears: any;
@@ -147,20 +143,9 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			DoDImage: [''],
 			FoidCardImage: [''],
 			BackgroundCheckerID: [''],
-			CheckerID: [''],
-			BackgroundCompanyTelNumber: [''],
-			BackgroundCompanyTelIsd: ['+1'],
-			BackgroundCompanyTelNumberCountry: ['us'],
 			VaccinationCardImage: [''],
 			schoolBusCertificateImage: [''],
-			PoliceForceTelephone: ['', [Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			PoliceForceTelephoneIsd: ['+1'],
-			PoliceForceTelephoneCountry: ['us'],
 			LastPoliceDepartment: [''],
-			Country: [''],
-			State: [''],
-			City: [''],
-			ZipCode: [''],
 		});
 
 		if (this.affiliateType != 'fleet_operator') {
@@ -199,25 +184,9 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 								//if background certified is checked
 								if (data.BackgroundCertified == 'yes') {
 									this.onChildVeteranDoDChange(true, 'BackgroundCertificate')
-									this.BackgroundCompanyTelNumberObject.setCountry(data.BackgroundCompanyTelNumberCountry);
-									this.addDriverForm.patchValue({
-										BackgroundCompanyTelNumber: data.BackgroundCompanyTelNumber,
-										BackgroundCompanyTelIsd: data.BackgroundCompanyTelIsd,
-										CheckerID: data.CheckerID
-									});
 								}
 								if (data.ExPolice == 'yes') {
 									this.onChildVeteranDoDChange(true, 'ExPolice');
-									this.addDriverForm.patchValue({
-										LastPoliceDepartment: data.LastPoliceDepartment,
-										PoliceForceTelephone: data.PoliceForceTelephone,
-										PoliceForceIsd: data.PoliceForceIsd,
-										Country: data.Country,
-										State: data.State,
-										City: data.City,
-										ZipCode: data.ZipCode
-									});
-									this.PoliceForceTelephoneObject.setCountry(data.PoliceForceTelephoneCountry);
 								}
 
 								//show images in case of edit
@@ -270,6 +239,13 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 									this.BackgroundCheckerID = data.BackgroundCheckerID.image;
 									this.BackgroundCheckerIDId = data.BackgroundCheckerID.ID;
 								}
+								if (data.LastPoliceDepartment) {
+									this.addDriverForm.patchValue({
+										LastPoliceDepartment: data.LastPoliceDepartment.ID,
+									});
+									this.LastPoliceDepartment = data.LastPoliceDepartment.image;
+									this.LastPoliceDepartmentId = data.LastPoliceDepartment.ID;
+								}
 								if (data.VaccinationCardImage) {
 									this.addDriverForm.patchValue({
 										VaccinationCardImage: data.VaccinationCardImage.ID,
@@ -298,10 +274,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 									this.Covid19VaccinationCheck = true;
 								if (data.BackgroundCertified == 'yes')
 									this.BackgroundCertificateCheck = true;
-								if (data.ExPolice == 'yes') {
+								if (data.ExPolice == 'yes')
 									this.ExPoliceCheck = true;
-									this.changeCountry(data.Country);//for selected country
-								}
 
 								//Patch values of all fields
 								this.addDriverForm.patchValue({
@@ -316,9 +290,6 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 									Dress: data.Dress,
 									StartDate: data.StartDate,
 									starRatingValue: data.starRatingValue,
-									CheckerID: data.CheckerID,
-									BackgroundCompanyTelNumber: data.BackgroundCompanyTelNumber,
-									BackgroundCompanyTelIsd: data.BackgroundCompanyTelIsd,
 									Veteran: data.Veteran,
 									DoD: data.DoD,
 									FoidCard: data.FoidCard,
@@ -439,50 +410,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			});
 		}
 
-		if (this.backgroundCompanyTelInput) {
-			console.log('onput', this.backgroundCompanyTelInput, this.backgroundCompanyTelInput.nativeElement)
-			const existing = (window as any).intlTelInputGlobals?.getInstance(this.backgroundCompanyTelInput.nativeElement);
-			if (existing) existing.destroy();
-
-			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, telOptions);
-
-			this.addCustomCountrySearch(this.backgroundCompanyTelInput.nativeElement);
-
-			this.backgroundCompanyTelInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
-				console.log("in change", countryData)
-				this.onCountryChange(countryData, 'background');
-				this.validateBackgroundCompanyTelNumber();
-			});
-		}
-
-		if (this.policeTelInput) {
-			console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
-			const existing = (window as any).intlTelInputGlobals?.getInstance(this.policeTelInput.nativeElement);
-			if (existing) existing.destroy();
-
-			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, telOptions);
-
-			this.addCustomCountrySearch(this.policeTelInput.nativeElement);
-
-			this.policeTelInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
-				console.log("in change", countryData)
-				this.onCountryChange(countryData, 'PoliceForceTelephone');
-				this.validatePoliceForceTelephone();
-			});
-		}
-
 		//set current user country as default in phone number
 		// this.CellNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		// this.BackgroundCompanyTelNumberObject.setCountry(this.currentUser.CellNumberCountry);
-		// this.PoliceForceTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
-		if (this.currentUser?.CellNumberCountry) {
-			this.changeCountry(this.currentUser.CellNumberCountry.toUpperCase());
-			this.addDriverForm.patchValue({
-				Country: this.currentUser.CellNumberCountry.toUpperCase()
-			});
-		}
 	}
 
 	closeButton() {
@@ -494,18 +423,6 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			this.addDriverForm.patchValue({
 				CellIsd: '+' + event.dialCode,
 				CellNumberCountry: event.iso2
-			});
-		}
-		else if (type == 'PoliceForceTelephone') {
-			this.addDriverForm.patchValue({
-				PoliceForceIsd: '+' + event.dialCode,
-				PoliceForceTelephoneCountry: event.iso2
-			});
-		}
-		else {
-			this.addDriverForm.patchValue({
-				BackgroundCompanyTelIsd: '+' + event.dialCode,
-				BackgroundCompanyTelNumberCountry: event.iso2
 			});
 		}
 	}
@@ -551,36 +468,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		this.validatePhoneGeneric(this.f.CellNumber, this.CellNumberObject);
 	}
 
-	validateBackgroundCompanyTelNumber() {
-		this.validatePhoneGeneric(this.f.BackgroundCompanyTelNumber, this.BackgroundCompanyTelNumberObject);
-	}
-
-	validatePoliceForceTelephone() {
-		this.validatePhoneGeneric(this.f.PoliceForceTelephone, this.PoliceForceTelephoneObject);
-	}
-
 	telInputObjectCell(obj) {
 		this.CellNumberObject = obj;
-	}
-	telInputObjectBackgroundCompanyTelNumber(obj) {
-		this.BackgroundCompanyTelNumberObject = obj;
-	}
-	telInputObjectPoliceForceTelephone(obj) {
-		this.PoliceForceTelephoneObject = obj;
-	}
-
-	changeCountry(selectedCountryCode) {
-		let selectedCountryData: any;
-
-		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
-			this.countryOptions = data;
-			selectedCountryData = this.countryOptions.filter(function (countryOption) {
-				return countryOption.countryShortCode == selectedCountryCode;
-			});
-			if (selectedCountryData) {
-				this.stateOptions = selectedCountryData[0].regions;
-			}
-		});
 	}
 
 	fetchImageBlob(url, key, id) {
@@ -698,6 +587,13 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 						this.BackgroundCheckerID = data.image;
 						break;
 					}
+					case "LastPoliceDepartment": {
+						this.addDriverForm.patchValue({
+							LastPoliceDepartment: data.id,
+						});
+						this.LastPoliceDepartment = data.image;
+						break;
+					}
 					case "VaccinationCardImage": {
 						this.addDriverForm.patchValue({
 							VaccinationCardImage: data.id,
@@ -791,6 +687,13 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 								this.BackgroundCheckerID = data.image;
 								break;
 							}
+							case 'LastPoliceDepartment': {
+								this.addDriverForm.patchValue({
+									LastPoliceDepartment: data.id,
+								});
+								this.LastPoliceDepartment = data.image;
+								break;
+							}
 							case 'VaccinationCardImage': {
 								this.addDriverForm.patchValue({
 									VaccinationCardImage: data.id,
@@ -864,6 +767,13 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 					BackgroundCheckerID: '',
 				});
 				this.BackgroundCheckerID = '';
+				break;
+			}
+			case 'LastPoliceDepartment': {
+				this.addDriverForm.patchValue({
+					LastPoliceDepartment: '',
+				});
+				this.LastPoliceDepartment = '';
 				break;
 			}
 			case 'VaccinationCardImage': {
@@ -959,24 +869,15 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 					BackgroundCertified: 'yes'
 				});
 				this.BackgroundCertificateCheck = true;
-				this.addDriverForm.controls['BackgroundCompanyTelNumber'].setValidators([Validators.required, Validators.pattern("^[0-9+]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
-				this.addDriverForm.controls['BackgroundCompanyTelNumberCountry'].setValidators([Validators.required]);
-				this.addDriverForm.controls['BackgroundCompanyTelIsd'].setValidators([Validators.required]);
-				this.addDriverForm.controls['CheckerID'].setValidators([Validators.required]);
+				this.addDriverForm.controls['BackgroundCheckerID'].setValidators([Validators.required]);
 			} else {
 				this.addDriverForm.patchValue({
 					BackgroundCertified: 'no'
 				});
 				this.BackgroundCertificateCheck = false;
-				this.addDriverForm.controls['BackgroundCompanyTelNumber'].clearValidators();
-				this.addDriverForm.controls['BackgroundCompanyTelNumberCountry'].clearValidators();
-				this.addDriverForm.controls['BackgroundCompanyTelIsd'].clearValidators();
-				this.addDriverForm.controls['CheckerID'].clearValidators();
+				this.addDriverForm.controls['BackgroundCheckerID'].clearValidators();
 			}
-			this.addDriverForm.controls['BackgroundCompanyTelNumber'].updateValueAndValidity();
-			this.addDriverForm.controls['BackgroundCompanyTelNumberCountry'].updateValueAndValidity();
-			this.addDriverForm.controls['BackgroundCompanyTelIsd'].updateValueAndValidity();
-			this.addDriverForm.controls['CheckerID'].updateValueAndValidity();
+			this.addDriverForm.controls['BackgroundCheckerID'].updateValueAndValidity();
 		}
 		else if (type == 'ExPolice') {
 			if (isChecked) {
@@ -985,26 +886,14 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 				});
 				this.ExPoliceCheck = true;
 				this.addDriverForm.controls['LastPoliceDepartment'].setValidators([Validators.required]);
-				this.addDriverForm.controls['Country'].setValidators([Validators.required]);
-				this.addDriverForm.controls['State'].setValidators([Validators.required]);
-				this.addDriverForm.controls['City'].setValidators([Validators.required]);
-				this.addDriverForm.controls['ZipCode'].setValidators([Validators.required]);
 			} else {
 				this.addDriverForm.patchValue({
 					ExPolice: 'no'
 				});
 				this.ExPoliceCheck = false;
 				this.addDriverForm.controls['LastPoliceDepartment'].clearValidators();
-				this.addDriverForm.controls['Country'].clearValidators();
-				this.addDriverForm.controls['State'].clearValidators();
-				this.addDriverForm.controls['City'].clearValidators();
-				this.addDriverForm.controls['ZipCode'].clearValidators();
 			}
 			this.addDriverForm.controls['LastPoliceDepartment'].updateValueAndValidity();
-			this.addDriverForm.controls['Country'].updateValueAndValidity();
-			this.addDriverForm.controls['State'].updateValueAndValidity();
-			this.addDriverForm.controls['City'].updateValueAndValidity();
-			this.addDriverForm.controls['ZipCode'].updateValueAndValidity();
 		}
 		else {
 			if (isChecked) {
@@ -1057,28 +946,6 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			}
 		}
 
-		// Sync BackgroundCompanyTelNumber Country Data
-		if (this.BackgroundCompanyTelNumberObject) {
-			const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
-			if (countryData && countryData.dialCode) {
-				this.addDriverForm.patchValue({
-					BackgroundCompanyTelIsd: '+' + countryData.dialCode,
-					BackgroundCompanyTelNumberCountry: countryData.iso2
-				});
-			}
-		}
-
-		// Sync PoliceForceTelephone Country Data
-		if (this.PoliceForceTelephoneObject) {
-			const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
-			if (countryData && countryData.dialCode) {
-				this.addDriverForm.patchValue({
-					PoliceForceTelephoneIsd: '+' + countryData.dialCode,
-					PoliceForceTelephoneCountry: countryData.iso2
-				});
-			}
-		}
-
 		// stop here if form is invalid
 		console.log(this.addDriverForm)
 		// Sanitize CellNumber
@@ -1089,28 +956,6 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			const isd = String(cellIsd.value);
 			if (val.startsWith(isd)) {
 				cell.setValue(val.substring(isd.length));
-			}
-		}
-
-		// Sanitize BackgroundCompanyTelNumber
-		const bgTel = this.addDriverForm.get('BackgroundCompanyTelNumber');
-		const bgIsd = this.addDriverForm.get('BackgroundCompanyTelIsd');
-		if (bgTel && bgTel.value && bgIsd && bgIsd.value) {
-			const val = String(bgTel.value);
-			const isd = String(bgIsd.value);
-			if (val.startsWith(isd)) {
-				bgTel.setValue(val.substring(isd.length));
-			}
-		}
-
-		// Sanitize PoliceForceTelephone
-		const polTel = this.addDriverForm.get('PoliceForceTelephone');
-		const polIsd = this.addDriverForm.get('PoliceForceTelephoneIsd');
-		if (polTel && polTel.value && polIsd && polIsd.value) {
-			const val = String(polTel.value);
-			const isd = String(polIsd.value);
-			if (val.startsWith(isd)) {
-				polTel.setValue(val.substring(isd.length));
 			}
 		}
 
@@ -1172,15 +1017,8 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 			DoDImage: "",
 			FoidCardImage: "",
 			BackgroundCheckerID: "",
-			CheckerID: "",
-			BackgroundCompanyTelNumber: "",
 			VaccinationCardImage: "",
-			PoliceForceTelephone: "",
 			LastPoliceDepartment: "",
-			Country: "",
-			State: "",
-			City: "",
-			ZipCode: "",
 		});
 		this.DriverImage = "";
 		this.DriverLicense = "";
@@ -1188,6 +1026,7 @@ export class AddDriverComponent implements OnInit, AfterViewInit {
 		this.VeteranIdCard = "";
 		this.FoidCardImage = "";
 		this.BackgroundCheckerID = "";
+		this.LastPoliceDepartment = "";
 		this.schoolBusCertificateImage = "";
 		this.VaccinationCardImage = "";
 		this.DoDImage = "";

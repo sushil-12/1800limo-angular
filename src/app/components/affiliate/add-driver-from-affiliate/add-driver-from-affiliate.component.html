@@ -858,7 +858,7 @@
 									">
 									<div class="vehtype_extint">
 										<div>
-											<p>Background ID Image</p>
+											<p>Background ID Image <span class="asterisk">*</span></p>
 											<img src="{{BackgroundCheckerID}}"
 												(click)="showImageInModal(BackgroundCheckerID)" tabindex="-1">
 											<ul class="mt-3 mb-0">
@@ -902,7 +902,11 @@
 									<div class="col-md-4">
 										<div class="vehtype_extint">
 											<div>
-												<p>Background ID Image</p>
+												<div *ngIf="f.BackgroundCheckerID.errors">
+													<p
+														[class.ng-invalid]="submittedForm && f.BackgroundCheckerID.errors.required">
+														Background ID Image <span class="asterisk">*</span></p>
+												</div>
 												<div class="emptyImage">
 													<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 												</div>
@@ -927,6 +931,12 @@
 													</li>
 												</ul>
 											</div>
+											<div *ngIf="submittedForm && f.BackgroundCheckerID.errors"
+												class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
+												<div *ngIf="f.BackgroundCheckerID.errors.required">The Background ID
+													Image is required.
+												</div>
+											</div>
 										</div>
 									</div>
 								</ng-template>
@@ -945,7 +955,87 @@
 						<label class="ml-3" for="ExPolice">Ex / Police</label>
 					</div>
 					<div [hidden]="!ExPoliceCheck" #policetarget>
-						
+						<div class="vehtype_extintwrap single-image">
+							<div class="row">
+								<div class="col-md-4" *ngIf="LastPoliceDepartment; else noLastPoliceDepartment">
+									<div class="vehtype_extint">
+										<div>
+											<p>Ex / Police ID <span class="asterisk">*</span></p>
+											<img src="{{LastPoliceDepartment}}"
+												(click)="showImageInModal(LastPoliceDepartment)" tabindex="-1">
+											<ul class="mt-3 mb-0">
+												<li>
+													<a class="custom-arrow-clockwise-button"
+														(click)="fetchImageBlob(LastPoliceDepartment ,'LastPoliceDepartment',LastPoliceDepartmentId)">
+														<i class="bi bi-arrow-clockwise"></i>rotate</a>
+												</li>
+												<li>
+													<button class="changeuploaded" tabindex="1">
+														<input type="file"
+															(change)="vehicleOfficialImagesChange($event,'LastPoliceDepartment',LastPoliceDepartmentId)"
+															tabindex="-1" accept="image/jpeg, image/png" />
+														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+															<path fill="none" d="M0 0h24v24H0V0z" />
+															<circle cx="12" cy="12" r="3" />
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+														</svg>
+														Change
+													</button>
+												</li>
+												<li><a class="delete-btn"
+														(click)="deleteImage(LastPoliceDepartmentId,'LastPoliceDepartment')"
+														tabindex="1">
+														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+															<path
+																d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+														</svg>
+														Delete</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<ng-template #noLastPoliceDepartment>
+									<div class="col-md-4">
+										<div class="vehtype_extint">
+											<div>
+												<div *ngIf="f.LastPoliceDepartment.errors">
+													<p
+														[class.ng-invalid]="submittedForm && f.LastPoliceDepartment.errors.required">
+														Ex / Police ID <span class="asterisk">*</span></p>
+												</div>
+												<div class="emptyImage">
+													<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
+												</div>
+												<ul class="mt-3 mb-0">
+													<li>
+														<button class="adduploaded" tabindex="1">
+															<input type="file"
+																(change)="vehicleOfficialImagesChange($event,'LastPoliceDepartment',LastPoliceDepartmentId)"
+																tabindex="-1" accept="image/jpeg, image/png" />
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+																<path fill="none" d="M0 0h24v24H0V0z" />
+																<circle cx="12" cy="12" r="3" />
+																<path
+																	d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															</svg>
+															Add
+														</button>
+													</li>
+												</ul>
+											</div>
+											<div *ngIf="submittedForm && f.LastPoliceDepartment.errors"
+												class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
+												<div *ngIf="f.LastPoliceDepartment.errors.required">The Ex / Police ID is
+													required.
+												</div>
+											</div>
+										</div>
+									</div>
+								</ng-template>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

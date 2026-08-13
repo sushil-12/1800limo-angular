@@ -43,8 +43,6 @@ export class AddDriverFromAffiliateComponent
 	implements OnInit, AfterViewInit, AfterViewChecked {
 
 	@ViewChild('cellInput') cellInput!: ElementRef;
-	@ViewChild('backgroundCompanyTelInput') backgroundCompanyTelInput!: ElementRef;
-	@ViewChild('policeTelInput') policeTelInput!: ElementRef;
 
 
 	globalFunctions = this.globals;
@@ -77,6 +75,10 @@ export class AddDriverFromAffiliateComponent
 	public DoDImageId: string;
 	public FoidCardImageId: string;
 	public BackgroundCheckerIDId: string;
+	// Ex/Police credential image - the LastPoliceDepartment column stores the
+	// image id, matching the mobile optionalCertification.ex_police mapping.
+	public LastPoliceDepartment: string;
+	public LastPoliceDepartmentId: string;
 	public VaccinationCardImageId: string;
 	public languages: any;
 	public languagesFormControl: any;
@@ -94,14 +96,8 @@ export class AddDriverFromAffiliateComponent
 	public BackgroundCertificateCheck: boolean = false;
 	public ExPoliceCheck: boolean = false;
 	public CellNumberObject: any;
-	public BackgroundCompanyTelNumberObject: any;
-	public BackgroundCompanyTelNumber: any;
-	public PoliceForceTelephoneObject: any;
-	public PoliceForceTelephone: any;
 	public currentDate: string;
 	public modalImage: string;
-	public countryOptions: any = [];
-	public stateOptions: any = [];
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	constructor(
@@ -185,28 +181,8 @@ export class AddDriverFromAffiliateComponent
 			DoDImage: [""],
 			FoidCardImage: [""],
 			BackgroundCheckerID: [""],
-			CheckerID: [""],
-			BackgroundCompanyTelNumber: [""],
-			BackgroundCompanyTelIsd: ["+1", Validators.required],
-			BackgroundCompanyTelNumberCountry: ["us", Validators.required],
 			VaccinationCardImage: [""],
-			PoliceForceTelephone: [
-				"",
-				[
-					Validators.pattern("^[0-9+]*$"),
-					Validators.minLength(4),
-					Validators.maxLength(15),
-					this.customValidator.dashValidator(),
-					this.customValidator.plusValidator(),
-				],
-			],
-			PoliceForceTelephoneIsd: ["+1", Validators.required],
-			PoliceForceTelephoneCountry: ["us", Validators.required],
 			LastPoliceDepartment: [""],
-			Country: [""],
-			State: [""],
-			City: [""],
-			ZipCode: [""],
 			FirstYearBusiness: ["6 mos", Validators.required],
 		});
 
@@ -262,35 +238,11 @@ export class AddDriverFromAffiliateComponent
 										true,
 										"BackgroundCertificate"
 									);
-									this.BackgroundCompanyTelNumberObject.setCountry(
-										data.BackgroundCompanyTelNumberCountry
-									);
-									this.addDriverForm.patchValue({
-										BackgroundCompanyTelNumber:
-											data.BackgroundCompanyTelNumber,
-										BackgroundCompanyTelIsd:
-											data.BackgroundCompanyTelIsd,
-										CheckerID: data.CheckerID,
-									});
 								}
 								if (data.ExPolice == "yes") {
 									this.onChildVeteranDoDChange(
 										true,
 										"ExPolice"
-									);
-									this.addDriverForm.patchValue({
-										LastPoliceDepartment:
-											data.LastPoliceDepartment,
-										PoliceForceTelephone:
-											data.PoliceForceTelephone,
-										PoliceForceIsd: data.PoliceForceIsd,
-										Country: data.Country,
-										State: data.State,
-										City: data.City,
-										ZipCode: data.ZipCode,
-									});
-									this.PoliceForceTelephoneObject.setCountry(
-										data.PoliceForceTelephoneCountry
 									);
 								}
 
@@ -356,6 +308,16 @@ export class AddDriverFromAffiliateComponent
 									this.BackgroundCheckerIDId =
 										data.BackgroundCheckerID.ID;
 								}
+								if (data.LastPoliceDepartment) {
+									this.addDriverForm.patchValue({
+										LastPoliceDepartment:
+											data.LastPoliceDepartment.ID,
+									});
+									this.LastPoliceDepartment =
+										data.LastPoliceDepartment.image;
+									this.LastPoliceDepartmentId =
+										data.LastPoliceDepartment.ID;
+								}
 								if (data.VaccinationCardImage) {
 									this.addDriverForm.patchValue({
 										VaccinationCardImage:
@@ -386,10 +348,8 @@ export class AddDriverFromAffiliateComponent
 									this.SchoolBusCertifiedCheck = true;
 								if (data.BackgroundCertified == "yes")
 									this.BackgroundCertificateCheck = true;
-								if (data.ExPolice == "yes") {
+								if (data.ExPolice == "yes")
 									this.ExPoliceCheck = true;
-									this.changeCountry(data.Country); //for selected country
-								}
 
 								//Patch values of all fields
 								this.addDriverForm.patchValue({
@@ -404,11 +364,6 @@ export class AddDriverFromAffiliateComponent
 									Dress: data.Dress,
 									StartDate: data.StartDate,
 									starRatingValue: data.starRatingValue,
-									CheckerID: data.CheckerID,
-									BackgroundCompanyTelNumber:
-										data.BackgroundCompanyTelNumber,
-									BackgroundCompanyTelIsd:
-										data.BackgroundCompanyTelIsd,
 									Veteran: data.Veteran,
 									DoD: data.DoD,
 									SchoolBusCertified: data.SchoolBusCertified,
@@ -551,41 +506,6 @@ export class AddDriverFromAffiliateComponent
 			});
 		}
 
-		if (this.backgroundCompanyTelInput) {
-			console.log('onput', this.backgroundCompanyTelInput, this.backgroundCompanyTelInput.nativeElement)
-			this.BackgroundCompanyTelNumberObject = intlTelInput(this.backgroundCompanyTelInput.nativeElement, telOptions);
-
-			this.addCustomCountrySearch(this.backgroundCompanyTelInput.nativeElement);
-
-			this.backgroundCompanyTelInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
-				console.log("in change", countryData)
-				this.onCountryChange(countryData, 'background');
-				this.validateBackgroundCompanyTelNumber();
-			});
-		}
-
-		if (this.policeTelInput) {
-			console.log('onput', this.policeTelInput, this.policeTelInput.nativeElement)
-			this.PoliceForceTelephoneObject = intlTelInput(this.policeTelInput.nativeElement, telOptions);
-
-			this.addCustomCountrySearch(this.policeTelInput.nativeElement);
-
-			this.policeTelInput.nativeElement.addEventListener('countrychange', () => {
-				const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
-				console.log("in change", countryData)
-				this.onCountryChange(countryData, 'PoliceForceTelephone');
-				this.validatePoliceForceTelephone();
-			});
-		}
-
-		//set current user country as default in phone number
-		if (this.currentUser && this.currentUser.phoneCountry) {
-			// this.changeCountry(this.currentUser.phoneCountry.toUpperCase());
-			this.addDriverForm.patchValue({
-				Country: this.currentUser.phoneCountry.toUpperCase(),
-			});
-		}
 	}
 
 	SetFormValue(form_control: string, value: any) {
@@ -603,26 +523,10 @@ export class AddDriverFromAffiliateComponent
 				CellIsd: "+" + event.dialCode,
 				CellNumberCountry: event.iso2,
 			});
-		} else if (type == "PoliceForceTelephone") {
-			this.addDriverForm.patchValue({
-				PoliceForceIsd: "+" + event.dialCode,
-				PoliceForceTelephoneCountry: event.iso2,
-			});
-		} else {
-			this.addDriverForm.patchValue({
-				BackgroundCompanyTelIsd: "+" + event.dialCode,
-				BackgroundCompanyTelNumberCountry: event.iso2,
-			});
 		}
 	}
 	telInputObjectCell(obj) {
 		this.CellNumberObject = obj;
-	}
-	telInputObjectBackgroundCompanyTelNumber(obj) {
-		this.BackgroundCompanyTelNumberObject = obj;
-	}
-	telInputObjectPoliceForceTelephone(obj) {
-		this.PoliceForceTelephoneObject = obj;
 	}
 
 	numberOnly(event: any): boolean {
@@ -666,34 +570,6 @@ export class AddDriverFromAffiliateComponent
 		this.validatePhoneGeneric(this.f.CellNumber, this.CellNumberObject);
 	}
 
-	validateBackgroundCompanyTelNumber() {
-		this.validatePhoneGeneric(this.f.BackgroundCompanyTelNumber, this.BackgroundCompanyTelNumberObject);
-	}
-
-	validatePoliceForceTelephone() {
-		this.validatePhoneGeneric(this.f.PoliceForceTelephone, this.PoliceForceTelephoneObject);
-	}
-
-
-	changeCountry(selectedCountryCode) {
-		let selectedCountryData: any;
-
-		this.httpClient
-			.get("assets/json/countryStateList.json")
-			.subscribe((data) => {
-				this.countryOptions = data;
-				selectedCountryData = this.countryOptions.filter(function (
-					countryOption
-				) {
-					return (
-						countryOption.countryShortCode == selectedCountryCode
-					);
-				});
-				if (selectedCountryData) {
-					this.stateOptions = selectedCountryData[0].regions;
-				}
-			});
-	}
 	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
 
@@ -809,6 +685,13 @@ export class AddDriverFromAffiliateComponent
 						this.BackgroundCheckerID = data.image;
 						break;
 					}
+					case "LastPoliceDepartment": {
+						this.addDriverForm.patchValue({
+							LastPoliceDepartment: data.id,
+						});
+						this.LastPoliceDepartment = data.image;
+						break;
+					}
 					case "VaccinationCardImage": {
 						this.addDriverForm.patchValue({
 							VaccinationCardImage: data.id,
@@ -903,6 +786,13 @@ export class AddDriverFromAffiliateComponent
 								this.BackgroundCheckerID = data.image;
 								break;
 							}
+							case "LastPoliceDepartment": {
+								this.addDriverForm.patchValue({
+									LastPoliceDepartment: data.id,
+								});
+								this.LastPoliceDepartment = data.image;
+								break;
+							}
 							case "VaccinationCardImage": {
 								this.addDriverForm.patchValue({
 									VaccinationCardImage: data.id,
@@ -976,6 +866,13 @@ export class AddDriverFromAffiliateComponent
 					BackgroundCheckerID: "",
 				});
 				this.BackgroundCheckerID = "";
+				break;
+			}
+			case "LastPoliceDepartment": {
+				this.addDriverForm.patchValue({
+					LastPoliceDepartment: "",
+				});
+				this.LastPoliceDepartment = "";
 				break;
 			}
 			case "VaccinationCardImage": {
@@ -1082,23 +979,7 @@ export class AddDriverFromAffiliateComponent
 					BackgroundCertified: "yes",
 				});
 				this.BackgroundCertificateCheck = true;
-				this.addDriverForm.controls[
-					"BackgroundCompanyTelNumber"
-				].setValidators([
-					Validators.required,
-					Validators.pattern("^[0-9+]*$"),
-					Validators.minLength(4),
-					Validators.maxLength(15),
-					this.customValidator.dashValidator(),
-					this.customValidator.plusValidator(),
-				]);
-				this.addDriverForm.controls[
-					"BackgroundCompanyTelNumberCountry"
-				].setValidators([Validators.required]);
-				this.addDriverForm.controls[
-					"BackgroundCompanyTelIsd"
-				].setValidators([Validators.required]);
-				this.addDriverForm.controls["CheckerID"].setValidators([
+				this.addDriverForm.controls["BackgroundCheckerID"].setValidators([
 					Validators.required,
 				]);
 			} else {
@@ -1107,26 +988,12 @@ export class AddDriverFromAffiliateComponent
 				});
 				this.BackgroundCertificateCheck = false;
 				this.addDriverForm.controls[
-					"BackgroundCompanyTelNumber"
+					"BackgroundCheckerID"
 				].clearValidators();
-				this.addDriverForm.controls[
-					"BackgroundCompanyTelNumberCountry"
-				].clearValidators();
-				this.addDriverForm.controls[
-					"BackgroundCompanyTelIsd"
-				].clearValidators();
-				this.addDriverForm.controls["CheckerID"].clearValidators();
 			}
 			this.addDriverForm.controls[
-				"BackgroundCompanyTelNumber"
+				"BackgroundCheckerID"
 			].updateValueAndValidity();
-			this.addDriverForm.controls[
-				"BackgroundCompanyTelNumberCountry"
-			].updateValueAndValidity();
-			this.addDriverForm.controls[
-				"BackgroundCompanyTelIsd"
-			].updateValueAndValidity();
-			this.addDriverForm.controls["CheckerID"].updateValueAndValidity();
 		} else if (type == "ExPolice") {
 			if (isChecked) {
 				this.addDriverForm.patchValue({
@@ -1136,21 +1003,6 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls[
 					"LastPoliceDepartment"
 				].setValidators([Validators.required]);
-				this.addDriverForm.controls["Country"].setValidators([
-					Validators.required,
-				]);
-				this.addDriverForm.controls["State"].setValidators([
-					Validators.required,
-				]);
-				this.addDriverForm.controls["City"].setValidators([
-					Validators.required,
-				]);
-				this.addDriverForm.controls["ZipCode"].setValidators([
-					Validators.required,
-					Validators.pattern("^[0-9+]*$"),
-					this.customValidator.dashValidator(),
-					this.customValidator.plusValidator(),
-				]);
 			} else {
 				this.addDriverForm.patchValue({
 					ExPolice: "no",
@@ -1159,18 +1011,10 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls[
 					"LastPoliceDepartment"
 				].clearValidators();
-				this.addDriverForm.controls["Country"].clearValidators();
-				this.addDriverForm.controls["State"].clearValidators();
-				this.addDriverForm.controls["City"].clearValidators();
-				this.addDriverForm.controls["ZipCode"].clearValidators();
 			}
 			this.addDriverForm.controls[
 				"LastPoliceDepartment"
 			].updateValueAndValidity();
-			this.addDriverForm.controls["Country"].updateValueAndValidity();
-			this.addDriverForm.controls["State"].updateValueAndValidity();
-			this.addDriverForm.controls["City"].updateValueAndValidity();
-			this.addDriverForm.controls["ZipCode"].updateValueAndValidity();
 		} else {
 			if (isChecked) {
 				this.addDriverForm.patchValue({
@@ -1219,20 +1063,6 @@ export class AddDriverFromAffiliateComponent
 				CellNumberCountry: countryData.iso2,
 			});
 		}
-		if (this.BackgroundCompanyTelNumberObject) {
-			const countryData = this.BackgroundCompanyTelNumberObject.getSelectedCountryData();
-			this.addDriverForm.patchValue({
-				BackgroundCompanyTelIsd: "+" + countryData.dialCode,
-				BackgroundCompanyTelNumberCountry: countryData.iso2,
-			});
-		}
-		if (this.PoliceForceTelephoneObject) {
-			const countryData = this.PoliceForceTelephoneObject.getSelectedCountryData();
-			this.addDriverForm.patchValue({
-				PoliceForceIsd: "+" + countryData.dialCode,
-				PoliceForceTelephoneCountry: countryData.iso2,
-			});
-		}
 
 		console.log(this.addDriverForm);
 		this.submittedForm = true;
@@ -1241,25 +1071,11 @@ export class AddDriverFromAffiliateComponent
 			return;
 		}
 
-		// Sanitize PoliceForceTelephone (remove Country Code if present)
-		if (this.addDriverForm.value.PoliceForceTelephone && this.addDriverForm.value.PoliceForceTelephoneIsd && this.addDriverForm.value.PoliceForceTelephone.startsWith(this.addDriverForm.value.PoliceForceTelephoneIsd)) {
-			this.addDriverForm.value.PoliceForceTelephone = this.addDriverForm.value.PoliceForceTelephone.substring(this.addDriverForm.value.PoliceForceTelephoneIsd.length);
-		}
-
 		// Sanitize Cell (remove Country Code if present)
 		if (this.addDriverForm.value.Cell && this.addDriverForm.value.CellIsd && this.addDriverForm.value.Cell.startsWith(this.addDriverForm.value.CellIsd)) {
 			this.addDriverForm.value.Cell = this.addDriverForm.value.Cell.substring(this.addDriverForm.value.CellIsd.length);
 		}
 
-		// Sanitize PoliceForce (remove Country Code if present)
-		if (this.addDriverForm.value.PoliceForce && this.addDriverForm.value.PoliceForceIsd && this.addDriverForm.value.PoliceForce.startsWith(this.addDriverForm.value.PoliceForceIsd)) {
-			this.addDriverForm.value.PoliceForce = this.addDriverForm.value.PoliceForce.substring(this.addDriverForm.value.PoliceForceIsd.length);
-		}
-
-		// Sanitize BackgroundCompanyTel (remove Country Code if present)
-		if (this.addDriverForm.value.BackgroundCompanyTel && this.addDriverForm.value.BackgroundCompanyTelIsd && this.addDriverForm.value.BackgroundCompanyTel.startsWith(this.addDriverForm.value.BackgroundCompanyTelIsd)) {
-			this.addDriverForm.value.BackgroundCompanyTel = this.addDriverForm.value.BackgroundCompanyTel.substring(this.addDriverForm.value.BackgroundCompanyTelIsd.length);
-		}
 		this.addDriverForm.value.stepCompleted =
 			this.affiliateService.getUpdatedStepsLocal("4");
 		this.spinner.show(); // show spinner
@@ -1313,15 +1129,8 @@ export class AddDriverFromAffiliateComponent
 			DoDImage: "",
 			FoidCardImage: "",
 			BackgroundCheckerID: "",
-			CheckerID: "",
-			BackgroundCompanyTelNumber: "",
 			VaccinationCardImage: "",
-			PoliceForceTelephone: "",
 			LastPoliceDepartment: "",
-			Country: "",
-			State: "",
-			City: "",
-			ZipCode: "",
 			FirstYearBusiness: "6 mos",
 		});
 		this.DriverImage = "";
@@ -1331,6 +1140,7 @@ export class AddDriverFromAffiliateComponent
 		this.schoolBusCertificateImage = "";
 		this.FoidCardImage = "";
 		this.BackgroundCheckerID = "";
+		this.LastPoliceDepartment = "";
 		this.VaccinationCardImage = "";
 		this.DoDImage = "",
 			window.scrollTo({
