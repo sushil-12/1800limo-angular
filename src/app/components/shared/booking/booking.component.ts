@@ -243,6 +243,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 	return_vehicleYear_arr: any;
 	return_vehicleColor_arr: any;
 	firstLoadVehicleId: any;
+	isUserManualSelection: boolean = false;
+	isUserManualReturnSelection: boolean = false;
 	proceed: boolean = true
 	chosen_user: Record<string, any>
 
@@ -2696,6 +2698,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.bookingResponse = response.data
 			this.waiting_time_in_mins = this.bookingResponse?.waiting_time_in_mins
 			this.firstLoadVehicleId = response.data.vehicle_id
+			this.isUserManualSelection = false;
+			this.isUserManualReturnSelection = false;
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours === 0 ? 2 : response?.data?.number_of_hours
 			this.isTravelShare = this.isTravelAgentMode || response?.data?.account_type == 'travel_planner' ? true : false
@@ -4555,13 +4559,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 	handleSelectVehicleType(selectedVehicle: any) {
 		this.selectedVehicle = selectedVehicle
+		console.log("selecf", this.selectedVehicle)
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
 		const isEditMode = ['edit', 'repeat', 'return', 'round'].includes(this.updateType);
-		const isOriginalVehicle = isEditMode && selectedVehicle.ID == this.firstLoadVehicleId;
-		const driverValue = (isOriginalVehicle && this.bookingResponse?.driver_id)
-			? this.bookingResponse.driver_id
-			: (selectedVehicle.associated_driver || this.DriverList?.[0]?.id);
+		const isOriginalVehicle = isEditMode && selectedVehicle.ID == (this.firstLoadVehicleId || this.bookingResponse?.vehicle_id);
+		let driverValue;
+		if (!this.isUserManualSelection && isOriginalVehicle && this.bookingResponse?.driver_id) {
+			driverValue = this.bookingResponse.driver_id;
+		} else {
+			driverValue = (selectedVehicle.associated_driver || this.DriverList?.[0]?.id);
+		}
 		if (this.Form.affiliate_type.value !== 'loose_affiliate') {
 			this.SetFormValue('driver_id', driverValue);
 			this.autofillData('driver', driverValue);
@@ -4610,9 +4618,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.SetFormValue('return_vehicle_type_name', selectedVehicle.vehicleType)
 		const isReturnEditMode = ['edit', 'repeat', 'return', 'round'].includes(this.updateType);
 		const isOriginalReturnVehicle = isReturnEditMode && selectedVehicle.ID == this.bookingResponse?.return_vehicle_id;
-		const returnDriverValue = (isOriginalReturnVehicle && this.bookingResponse?.return_driver_id)
-			? this.bookingResponse.return_driver_id
-			: selectedVehicle.associated_driver;
+		let returnDriverValue;
+		if (!this.isUserManualReturnSelection && isOriginalReturnVehicle && this.bookingResponse?.return_driver_id) {
+			returnDriverValue = this.bookingResponse.return_driver_id;
+		} else {
+			returnDriverValue = (selectedVehicle.associated_driver || this.return_DriverList?.[0]?.id);
+		}
 		this.SetFormValue('return_driver_id', returnDriverValue);
 		this.SetFormValue('return_driver', returnDriverValue);
 		this.SetFormValue('return_vehicle_make', selectedVehicle.make_id);
@@ -4996,21 +5007,22 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}, 200)
 				this.DriverList = response.data.data
 				let isValueSet = false
+				const targetDriverId = this.bookingResponse?.driver_id || this.BookingForm?.get('driver_id')?.value
 				for (let i = 0; i < this.DriverList.length; i++) {
-					if (this.bookingResponse?.driver_id && this.DriverList[i]?.id == this.bookingResponse?.driver_id) {
+					if (targetDriverId && this.DriverList[i]?.id == targetDriverId) {
 						this.SetFormValue('driver_id', this.DriverList[i]?.id)
+						this.autofillData('driver', this.DriverList[i])
 						isValueSet = true
 						break
 					}
 				}
 				if (!isValueSet) {
-					this.SetFormValue('driver_id', this.DriverList[0]?.id)
+					const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
+					const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
+					const fallbackDriver = matchedDriver || this.DriverList[0]
+					this.autofillData('driver', fallbackDriver)
+					setTimeout(() => { this.SetFormValue('driver_id', fallbackDriver.id) }, 0)
 				}
-				const sessionDriverId = JSON.parse(sessionStorage.getItem('selected_vehicle') || 'null')?.driverInformation?.id
-				const matchedDriver = sessionDriverId ? this.DriverList.find(d => d.id == sessionDriverId) : null
-				const fallbackDriver = matchedDriver || this.DriverList[0]
-				this.autofillData('driver', fallbackDriver)
-				setTimeout(() => { this.SetFormValue('driver_id', fallbackDriver.id) }, 0)
 			}
 			
 			this.$spinner.hide();
@@ -5036,9 +5048,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}, 200)
 				this.return_DriverList = response.data.data
 				let isValueSet = false
+				const targetReturnDriverId = this.bookingResponse?.return_driver_id || this.BookingForm?.get('return_driver_id')?.value
 				for (let i = 0; i < this.return_DriverList.length; i++) {
-					if (this.bookingResponse?.return_driver_id && this.return_DriverList[i]?.id == this.bookingResponse?.return_driver_id) {
+					if (targetReturnDriverId && this.return_DriverList[i]?.id == targetReturnDriverId) {
 						this.SetFormValue('return_driver_id', this.return_DriverList[i]?.id)
+						this.autofillData('return_driver', this.return_DriverList[i])
 						isValueSet = true
 						break;
 					}
@@ -6628,9 +6642,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
 	handleChangeVehicleType(event) {
+		this.isUserManualSelection = true;
 		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
 	}
 	handleReturnChangeVehicleType(event) {
+		this.isUserManualReturnSelection = true;
 		this.return_VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleReturnSelectVehicleType(i) : '')
 	}
 
