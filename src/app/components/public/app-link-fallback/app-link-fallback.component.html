@@ -1,0 +1,36 @@
+<div class="app-link-fallback">
+	<div class="card">
+		<img src="assets/images/logo.png" alt="1800Limo" class="logo"
+			*ngIf="!logoFailed" (error)="logoFailed = true">
+
+		<h1>Open in the {{ config.name }} app</h1>
+		<p class="tagline">{{ config.tagline }}</p>
+
+		<p class="deep-link" *ngIf="deepLinkPath">
+			<span class="label">Link</span>
+			<code>{{ deepLinkPath }}</code>
+		</p>
+
+		<div class="actions">
+			<button type="button" class="btn btn-primary" (click)="openInApp()">
+				Open in app
+			</button>
+
+			<a class="btn btn-outline" *ngIf="!isAndroid" [href]="config.appStoreUrl" rel="noopener">
+				Download on the App Store
+			</a>
+			<a class="btn btn-outline" *ngIf="!isIos" [href]="config.playStoreUrl" rel="noopener">
+				Get it on Google Play
+			</a>
+		</div>
+
+		<p class="redirect-note" *ngIf="redirecting">
+			Taking you to the store&hellip;
+			<button type="button" class="link-btn" (click)="cancelRedirect()">Stay here</button>
+		</p>
+
+		<p class="switch">
+			<a routerLink="/home">Continue to 1800limo.com</a>
+		</p>
+	</div>
+</div>

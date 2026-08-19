@@ -53,7 +53,22 @@ import { LiveRideTrackingComponent } from './components/public/live-ride-trackin
 import { CountriesComponent } from './components/website/countries/countries.component';
 import { PublicInvoiceSummaryComponent } from './components/public/public-invoice-summary/public-invoice-summary.component';
 import { StatesTestComponent } from './components/public/states-test/states-test.component';
+import { AppLinkFallbackComponent } from './components/public/app-link-fallback/app-link-fallback.component';
 
+
+/**
+ * Matches a Universal Link / App Link prefix and every path underneath it,
+ * e.g. `/passenger`, `/passenger/booking/123`. Angular's `**` wildcard only
+ * works as a whole path, so a custom matcher is needed to swallow the rest of
+ * the segments while still keeping the route at the top level.
+ */
+export function appLinkMatcher(prefix: string) {
+	return (segments: UrlSegment[]) =>
+		segments.length > 0 && segments[0].path === prefix ? { consumed: segments } : null;
+}
+
+export const passengerAppLinkMatcher = appLinkMatcher('passenger');
+export const driverAppLinkMatcher = appLinkMatcher('driver');
 
 const routes: Routes = [
 	{
@@ -72,6 +87,24 @@ const routes: Routes = [
 	{
 		path: 'states-test',
 		component: StatesTestComponent
+	},
+	// Universal Link / App Link web fallback. iOS and Android hand these URLs to
+	// the native app when it is installed; this page only renders when it is not.
+	{
+		matcher: passengerAppLinkMatcher,
+		component: AppLinkFallbackComponent,
+		data: {
+			title: 'Open in the 1800Limo app',
+			appTarget: 'passenger'
+		}
+	},
+	{
+		matcher: driverAppLinkMatcher,
+		component: AppLinkFallbackComponent,
+		data: {
+			title: 'Open in the 1800Limo Chauffeur app',
+			appTarget: 'driver'
+		}
 	},
 	{
 		path: '',
