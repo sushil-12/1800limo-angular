@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { SharedModule } from '../shared.module';
 import { BookingComponent } from './booking.component';
@@ -41,6 +42,7 @@ import { RatesFormComponent } from '../../admin/rates-form/rates-form.component'
 		MatRadioModule,
 		MatDialogModule,
 		GoogleMapsModule,
+		DragDropModule,
 		SharedModule,
 	],
 	exports: [

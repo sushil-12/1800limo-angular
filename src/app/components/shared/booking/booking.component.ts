@@ -25,6 +25,7 @@ import { NgIf } from '@angular/common';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -288,6 +289,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 	// every other booking_data field is unchanged (e.g. re-selecting the same vehicle).
 	rateRefreshToken: number = 0;
 	extraStops_rate: any = 0
+	/** Outbound stops beyond this count make the trip charter work rather than a transfer. */
+	private readonly charterTourStopThreshold: number = 2;
+	/** Set when the stop count promoted the service type on its own, so the UI can explain it. */
+	autoConvertedToCharterTour: boolean = false;
 	selectedVehicle: any;
 	return_selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
@@ -2896,6 +2901,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.numberOfHoursError = false;
 			}
 			this.isPrefillingForm = false;
+			// The loaded stop list is subject to the same rule as a manually added one, so a
+			// booking that arrives with more than two stops opens as a Charter/Tour.
+			this.enforceCharterTourForExtraStops();
 			this.runEmbeddedQuote();
 			console.log('DEBUGRATES - PREFILL CP12 COMPLETE (no throw)');
 			} catch (e) {
@@ -3858,6 +3866,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	onSelectionChangeServiceType(event: any) {
 		this.service_type = event.value;
+		// A manual pick owns the field from here on, so stop explaining the automatic switch.
+		this.autoConvertedToCharterTour = false;
 		// Patch to ensure all bound mat-select instances reflect the new value
 		this.BookingForm.get('service_type')?.setValue(event.value, { emitEvent: false });
 		this.buildBookingData();
@@ -5310,6 +5320,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				booking_instructions: new FormControl('')
 			}))
 		}
+		this.enforceCharterTourForExtraStops();
 	}
 
 	deleteExtraStop(is_return: boolean, stop_index: number) {
@@ -5322,7 +5333,281 @@ export class BookingComponent implements OnInit, OnDestroy {
 			(<FormArray>this.BookingForm.get('extra_stops')).removeAt(stop_index)
 			this.MapController()
 		}
+		if (this.outboundExtraStopsCount() <= this.charterTourStopThreshold) {
+			// The stop count no longer explains the service type, so drop the notice. The
+			// service type itself stays put - reverting it would undo a deliberate choice.
+			this.autoConvertedToCharterTour = false;
+		}
 		this.buildBookingData()
+	}
+
+	private outboundExtraStopsCount(): number {
+		return (this.BookingForm?.get('extra_stops') as FormArray | null)?.length ?? 0;
+	}
+
+	/**
+	 * Everything an endpoint owns, as `<prefix><leg><suffix>` control names. An airport
+	 * transfer keeps its address in the `_airport_*` controls and leaves the plain address
+	 * blank, so all of these have to travel together or an `airport_to_airport` reorder
+	 * moves nothing but two empty strings.
+	 */
+	private static readonly ROUTE_ENDPOINT_FIELDS: Array<[string, string]> = [
+		['', 'address'],
+		['_latitude', 'latitude'],
+		['_longitude', 'longitude'],
+		['_airport', 'airport'],
+		['_airport_option', 'airport_option'],
+		['_airport_name', 'airport_name'],
+		['_airport_latitude', 'airport_latitude'],
+		['_airport_longitude', 'airport_longitude'],
+		['_airline', 'airline'],
+		['_airline_option', 'airline_option'],
+		['_airline_name', 'airline_name'],
+		['_flight', 'flight'],
+	];
+
+	/**
+	 * Controls that only the pickup end of a leg has - the FBO details shown for private
+	 * aviation and the originating city. They travel with whatever sits in the pickup
+	 * slot; a pickup dragged to the drop-off has nowhere to put them.
+	 */
+	private routePickupOnlyFields(is_return: boolean): Array<[string, string]> {
+		return is_return
+			? [['return_fbo_address', 'fbo_address'], ['return_fbo_name', 'fbo_name'], ['departing_airport_city', 'origin_city']]
+			: [['fbo_address', 'fbo_address'], ['fbo_name', 'fbo_name'], ['origin_airport_city', 'origin_city']];
+	}
+
+	/** What each end of a leg currently is, read off `<from>_to_<to>`. */
+	private routeEndpointKinds(is_return: boolean): string[] {
+		const transferType = String(this.BookingForm?.get(is_return ? 'return_transfer_type' : 'transfer_type')?.value || '');
+		const [from, to] = transferType.split('_to_');
+		return [from || 'city', to || 'city'];
+	}
+
+	/**
+	 * The route points a leg exposes to drag and drop, in the order they appear on
+	 * screen: the pickup, the drop-off, then every extra stop. Each point carries its
+	 * `kind` (city / airport / cruise) so the transfer type can be rebuilt from wherever
+	 * the points end up. `rate` and `booking_instructions` only exist on stops.
+	 */
+	private readRoutePoints(is_return: boolean): Array<Record<string, any>> {
+		const prefix = is_return ? 'return_' : '';
+		const stops = (this.BookingForm.get(`${prefix}extra_stops`) as FormArray | null)?.controls ?? [];
+		const kinds = this.routeEndpointKinds(is_return);
+
+		const endpoint = (leg: 'pickup' | 'dropoff', kind: string) => {
+			const point: Record<string, any> = { kind, rate: '', booking_instructions: '' };
+			BookingComponent.ROUTE_ENDPOINT_FIELDS.forEach(([suffix, key]) => {
+				point[key] = this.BookingForm.get(`${prefix}${leg}${suffix}`)?.value ?? '';
+			});
+			if (leg === 'pickup') {
+				this.routePickupOnlyFields(is_return).forEach(([control, key]) => {
+					point[key] = this.BookingForm.get(control)?.value ?? '';
+				});
+			}
+			return point;
+		};
+
+		return [
+			endpoint('pickup', kinds[0]),
+			endpoint('dropoff', kinds[1]),
+			...stops.map((stop) => ({
+				// A stop is always a plain street address - there is nowhere on it to put a
+				// flight number or a ship name.
+				kind: 'city',
+				address: stop.get('address')?.value ?? '',
+				latitude: stop.get('latitude')?.value ?? '',
+				longitude: stop.get('longitude')?.value ?? '',
+				rate: stop.get('rate')?.value ?? '',
+				booking_instructions: stop.get('booking_instructions')?.value ?? ''
+			}))
+		];
+	}
+
+	/**
+	 * Write a reordered route back onto the form. The first two positions are the pickup
+	 * and the drop-off, so a stop dragged over either one is promoted to that endpoint and
+	 * whatever it displaced shifts down.
+	 *
+	 * The whole endpoint payload moves, airport and airline details included, and
+	 * `transfer_type` is rebuilt from where the two endpoint kinds land - swapping the ends
+	 * of an `airport_to_city` booking makes it `city_to_airport`. Anything an endpoint has
+	 * and a stop does not (flight, airline, FBO) is dropped when that point becomes a stop,
+	 * as are a promoted stop's rate and per-stop instructions.
+	 *
+	 * `SetFormValue` is deliberately not used here - it ignores empty values, and a swap
+	 * with a blank endpoint has to be able to clear the other side.
+	 */
+	private writeRoutePoints(points: Array<Record<string, any>>, is_return: boolean): void {
+		const prefix = is_return ? 'return_' : '';
+		const setEndpoint = (leg: 'pickup' | 'dropoff', point: Record<string, any>) => {
+			BookingComponent.ROUTE_ENDPOINT_FIELDS.forEach(([suffix, key]) => {
+				this.BookingForm.get(`${prefix}${leg}${suffix}`)?.setValue(point?.[key] ?? '', { emitEvent: false });
+			});
+			if (leg === 'pickup') {
+				this.routePickupOnlyFields(is_return).forEach(([control, key]) => {
+					this.BookingForm.get(control)?.setValue(point?.[key] ?? '', { emitEvent: false });
+				});
+			}
+		};
+
+		setEndpoint('pickup', points[0]);
+		setEndpoint('dropoff', points[1]);
+
+		// A move never changes how many points there are, so the stop array keeps its
+		// length and every slot can be patched in place.
+		const stops = this.BookingForm.get(`${prefix}extra_stops`) as FormArray | null;
+		points.slice(2).forEach((point, index) => {
+			stops?.at(index)?.patchValue({
+				address: point?.address ?? '',
+				latitude: point?.latitude ?? '',
+				longitude: point?.longitude ?? '',
+				rate: point?.rate ?? '',
+				booking_instructions: point?.booking_instructions ?? ''
+			}, { emitEvent: false });
+		});
+
+		this.applyReorderedTransferType(points, is_return);
+		this.BookingForm.updateValueAndValidity();
+	}
+
+	/**
+	 * Point the transfer type at whatever now sits on each end of the leg.
+	 *
+	 * The value is set without emitting: the `transfer_type` subscription swaps pickup and
+	 * drop-off itself whenever a round trip moves between complementary types, which would
+	 * undo the reorder that just ran. The validators it would have refreshed are applied
+	 * here instead. The opposite leg's transfer type is deliberately left alone - each leg
+	 * is reordered on its own.
+	 */
+	private applyReorderedTransferType(points: Array<Record<string, any>>, is_return: boolean): void {
+		const from = points[0]?.kind || 'city';
+		let to = points[1]?.kind || 'city';
+
+		// Only one end of a leg can be a cruise - there is a single set of cruise controls
+		// per leg and no `cruise_to_cruise` transfer type - so treat the second as an address.
+		if (from === 'cruise' && to === 'cruise') {
+			to = 'city';
+		}
+
+		const transferType = `${from}_to_${to}`;
+		const control = this.BookingForm.get(is_return ? 'return_transfer_type' : 'transfer_type');
+		if (!control || control.value === transferType) {
+			return;
+		}
+
+		control.setValue(transferType, { emitEvent: false });
+		if (is_return) {
+			this.return_transfer_type = transferType;
+			this.updateReturnLegValidators(transferType);
+		} else {
+			this.transfer_type = transferType;
+			this.updateOutboundLegValidators(transferType);
+		}
+	}
+
+	/**
+	 * The endpoint address inputs sit on top of a Google place autocomplete element, so a
+	 * programmatic swap has to push the new text through the same sync helper
+	 * `clearAddressField` uses or the overlay keeps showing the old address. Airport legs
+	 * display through their own inputs, which `resyncAirportAutocompleteDisplays` owns.
+	 */
+	private syncRouteEndpointInputs(is_return: boolean): void {
+		const prefix = is_return ? 'return_' : '';
+
+		const sync = () => {
+			const inputMap: Record<string, ElementRef | undefined> = {
+				[`${prefix}pickup`]: is_return ? this.return_pickupInput : this.pickupInput,
+				[`${prefix}dropoff`]: is_return ? this.return_dropoffInput : this.dropoffInput,
+			};
+
+			Object.entries(inputMap).forEach(([formControl, inputRef]) => {
+				const nativeInput = inputRef?.nativeElement as HTMLInputElement | undefined;
+				if (!nativeInput) {
+					return;
+				}
+
+				nativeInput.value = this.BookingForm.get(formControl)?.value ?? '';
+				syncPlaceAutocompleteDisplay(nativeInput);
+			});
+
+			this.resyncAirportAutocompleteDisplays();
+		};
+
+		// A reorder can flip which end is the airport, which swaps out the markup for both
+		// endpoints. Run once now for the inputs that are already there, and again after the
+		// re-render for the ones the new transfer type has just produced.
+		sync();
+		setTimeout(sync, 0);
+	}
+
+	/**
+	 * Reordering the route is a data move, not a DOM move: the template renders from
+	 * `pickup` / `extra_stops` / `dropoff`, so the dropped position is written back to
+	 * those controls and the view re-renders from them. The map, the distance and the
+	 * rate payload all follow the new order.
+	 */
+	dropRoutePoint(event: CdkDragDrop<any[]>, is_return: boolean = false): void {
+		if (event.previousIndex === event.currentIndex) {
+			return;
+		}
+
+		this.clearSameLocationErrors();
+		this.closeCustomAddressDropdown();
+
+		const points = this.readRoutePoints(is_return);
+		moveItemInArray(points, event.previousIndex, event.currentIndex);
+		this.writeRoutePoints(points, is_return);
+
+		this.syncRouteEndpointInputs(is_return);
+		this.MapController(is_return);
+		this.buildBookingData();
+	}
+
+	/**
+	 * True while the outbound stop count forces charter/tour, so One Way and Round Trip are
+	 * offered as not applicable. Applies to edit as well - the rule is about the trip itself,
+	 * not about how the booking was reached.
+	 */
+	get isTransferServiceTypeBlocked(): boolean {
+		return this.outboundExtraStopsCount() > this.charterTourStopThreshold;
+	}
+
+	/**
+	 * More than two stops on the outbound leg is charter work rather than a point-to-point
+	 * transfer, so promote the service type as soon as the extra stop is added. Only the
+	 * outbound leg is counted: return stops exist only while the booking is a round trip,
+	 * and that leg is dropped the moment it becomes a charter/tour.
+	 */
+	private enforceCharterTourForExtraStops(): void {
+		// Prefill pushes the stops one by one; wait for it to finish, then run once against
+		// the settled list rather than flipping the service type mid-load.
+		if (this.isPrefillingForm) {
+			return;
+		}
+
+		const serviceTypeControl = this.BookingForm?.get('service_type');
+		if (!serviceTypeControl || serviceTypeControl.value == 'charter_tour') {
+			return;
+		}
+
+		if (this.outboundExtraStopsCount() <= this.charterTourStopThreshold) {
+			return;
+		}
+
+		this.service_type = 'charter_tour';
+		this.autoConvertedToCharterTour = true;
+		// Emits, so the service_type subscription re-runs the charter validators and rates.
+		serviceTypeControl.setValue('charter_tour');
+
+		// Charter/Tour is priced by the hour and never accepts less than two.
+		if (isNaN(Number(this.BookingForm.get('number_of_hours')?.value)) || Number(this.BookingForm.get('number_of_hours')?.value) < 2) {
+			this.number_of_hours = 2;
+			this.SetFormValue('number_of_hours', 2);
+		}
+		this.numberOfHoursError = false;
+
+		this.buildBookingData();
 	}
 
 	private normalizeExtraStopsForPrefill(extraStops: any): Array<Record<string, any>> {

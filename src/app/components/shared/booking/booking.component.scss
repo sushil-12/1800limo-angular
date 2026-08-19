@@ -1548,3 +1548,78 @@ $secnav-green: #21a45d;
     max-width: none !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Route reordering (pickup / drop-off / extra stops share one cdkDropList)
+
+   Deliberately adds no chrome: there is no drag handle and no grip icon, so the
+   layout is byte-for-byte what it was. Only the drag preview and the drop gap
+   are styled, and both exist only while a section is actually being dragged.
+   --------------------------------------------------------------------------- */
+
+.bk-route-list {
+	display: block;
+}
+
+.bk-route-point {
+	position: relative;
+}
+
+/* The section heading is the grab area for pickup and drop-off - no icon is added,
+   the existing "Pickup" / "Dropoff" text simply becomes draggable. */
+.bk-route-point > h4[cdkDragHandle] {
+	cursor: move;
+	user-select: none;
+}
+
+/* A stop row is short and has no heading, so the row itself is the grab area. The
+   address input keeps its own text cursor and stays clickable. */
+.bk-route-point.row {
+	cursor: move;
+}
+
+.bk-route-point.row input,
+.bk-route-point.row .address-clear-btn,
+.bk-route-point.row .delete-icon,
+.bk-route-point.row .quote-ui-dropdown-panel {
+	cursor: auto;
+}
+
+.bk-route-point.row .address-clear-btn,
+.bk-route-point.row .delete-icon,
+.bk-route-point.row .quote-ui-dropdown-option {
+	cursor: pointer;
+}
+
+/* Compact stand-in for the dragged block - cloning a pickup section verbatim
+   would drag a full screen of inputs around with the pointer. */
+.bk-route-drag-preview {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	max-width: 520px;
+	padding: 12px 16px;
+	background: #fff;
+	border: 1px solid rgba(249, 156, 52, 0.35);
+	border-radius: 8px;
+	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+	pointer-events: none;
+}
+
+.bk-route-drag-preview__label {
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.bk-route-drag-preview__address {
+	overflow: hidden;
+	color: #6b6b6b;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+.cdk-drag-animating,
+.bk-route-list.cdk-drop-list-dragging .bk-route-point:not(.cdk-drag-placeholder) {
+	transition: transform 220ms cubic-bezier(0, 0, 0.2, 1);
+}
