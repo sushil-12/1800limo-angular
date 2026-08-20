@@ -1544,7 +1544,7 @@
 					<div class="row mt-3">
 						<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
 							<div class="px-2">
-								<button type="button" class="bk-btn bk-btn--secondary" (click)="addExtraStop(false)">
+								<button type="button" class="bk-btn bk-btn--primary" (click)="addExtraStop(false)">
 									<i class="fa fa-plus" style="margin-right: 6px;"></i>
 									Add Stop
 								</button>
@@ -1563,7 +1563,7 @@
 						cdkDrag>
 						<div class="extra-stop-field col-11 quote-ui-dropdown-host">
 							<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
-								[ngClass]="{ 'error-field': isSameLocationStop(false, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.errors?.suggestionRequired) }">
+								[ngClass]="{ 'error-field': isSameLocationStop(false, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
 								<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
 								<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 								<input #extraStopInput type="text" matInput placeholder="Type your address"
@@ -1607,6 +1607,8 @@
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
 							<div *ngIf="extra_stop.get('address')?.errors?.suggestionRequired && (submitBookingForm || extra_stop.get('address')?.touched)"
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Please select an address from the suggestions list</div>
+							<div *ngIf="!isSameLocationStop(false, stop_index) && !extra_stop.get('address')?.errors?.suggestionRequired && (extra_stop.get('address')?.errors?.required || extra_stop.get('address')?.errors?.whitespace) && (submitBookingForm || extra_stop.get('address')?.touched)"
+								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Extra stop address is required</div>
 						</div>
 						<div class="col-1 p-0 p-md-3">
 							<div class="delete-icon">
@@ -3285,7 +3287,7 @@
 					<div class="row my-3 justify-items-end">
 						<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
 							<div class="px-2">
-								<button type="button" class="bk-btn bk-btn--secondary" (click)="addExtraStop(true)">
+								<button type="button" class="bk-btn bk-btn--primary" (click)="addExtraStop(true)">
 									<i class="fa fa-plus" style="margin-right: 6px;"></i>
 									Add Stop
 								</button>
@@ -3298,7 +3300,7 @@
 						cdkDrag>
 						<div class="extra-stop-field col-md-11 quote-ui-dropdown-host">
 							<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
-								[ngClass]="{ 'error-field': isSameLocationStop(true, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.errors?.suggestionRequired) }">
+								[ngClass]="{ 'error-field': isSameLocationStop(true, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
 								<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
 								<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
 								<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
@@ -3342,6 +3344,8 @@
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
 							<div *ngIf="extra_stop.get('address')?.errors?.suggestionRequired && (submitBookingForm || extra_stop.get('address')?.touched)"
 								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Please select an address from the suggestions list</div>
+							<div *ngIf="!isSameLocationStop(true, stop_index) && !extra_stop.get('address')?.errors?.suggestionRequired && (extra_stop.get('address')?.errors?.required || extra_stop.get('address')?.errors?.whitespace) && (submitBookingForm || extra_stop.get('address')?.touched)"
+								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Return extra stop address is required</div>
 						</div>
 						<div class="col-md-1">
 							<div class="delete-icons">

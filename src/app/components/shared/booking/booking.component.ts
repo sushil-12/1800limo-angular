@@ -5303,7 +5303,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (is_return) {
 			let index = Object.keys(this.ReturnExtraStops).length + 1;
 			(<FormArray>this.BookingForm.get('return_extra_stops')).push(new FormGroup({
-				address: new FormControl(''),
+				address: new FormControl('', [Validators.required, this.customValidator.whitespace()]),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
@@ -5313,7 +5313,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		else {
 			let index = Object.keys(this.ExtraStops).length + 1;
 			(<FormArray>this.BookingForm.get('extra_stops')).push(new FormGroup({
-				address: new FormControl(''),
+				address: new FormControl('', [Validators.required, this.customValidator.whitespace()]),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
