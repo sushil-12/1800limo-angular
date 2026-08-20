@@ -24,7 +24,12 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": "/.well-known"
+              }
             ],
             "styles": [
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
@@ -126,7 +131,12 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": "/.well-known"
+              }
             ],
             "styles": [
               "src/styles.scss"

@@ -1,0 +1,37 @@
+{
+	"applinks": {
+		"apps": [],
+		"details": [
+			{
+				"appID": "JFCY24UU7R.com.Limo.-1800LimoUserApp",
+				"appIDs": ["JFCY24UU7R.com.Limo.-1800LimoUserApp"],
+				"paths": ["/passenger", "/passenger/*"],
+				"components": [
+					{
+						"/": "/passenger",
+						"comment": "Passenger app landing"
+					},
+					{
+						"/": "/passenger/*",
+						"comment": "All passenger deep links, e.g. /passenger/booking/123"
+					}
+				]
+			},
+			{
+				"appID": "JFCY24UU7R.com.1800limous.app",
+				"appIDs": ["JFCY24UU7R.com.1800limous.app"],
+				"paths": ["/driver", "/driver/*"],
+				"components": [
+					{
+						"/": "/driver",
+						"comment": "Driver app landing"
+					},
+					{
+						"/": "/driver/*",
+						"comment": "All driver deep links, e.g. /driver/booking/123"
+					}
+				]
+			}
+		]
+	}
+}

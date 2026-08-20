@@ -86,6 +86,7 @@ import { FarmOutBookingsComponent } from './components/subscription/farm-out-boo
 import { TutorialsComponent } from './components/website/tutorials/tutorials.component';
 import { LiveRideTrackingComponent } from './components/public/live-ride-tracking/live-ride-tracking.component';
 import { StatesTestComponent } from './components/public/states-test/states-test.component';
+import { AppLinkFallbackComponent } from './components/public/app-link-fallback/app-link-fallback.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -152,6 +153,7 @@ import { ToastrModule } from 'ngx-toastr';
 		TutorialsComponent,
 		LiveRideTrackingComponent,
 		StatesTestComponent,
+		AppLinkFallbackComponent,
 		PrivacyPolicyComponent,
 		DeliveryMembershipTCComponent,
 		ClientTCComponent,

@@ -1,0 +1,36 @@
+# ---------------------------------------------------------------------------
+# /.well-known/  —  Apple Universal Links (AASA) + future well-known files
+#
+# Two things must be true for iOS to accept the AASA file:
+#   1. https://1800limo.com/.well-known/apple-app-site-association returns the
+#      raw JSON (NOT the Angular index.html SPA fallback) with no redirect.
+#   2. It is served as Content-Type: application/json.
+#
+# The file has no extension, so Apache cannot infer a type for it; without the
+# ForceType below Apache 2.4 sends no Content-Type at all and iOS rejects it.
+# ---------------------------------------------------------------------------
+
+# Serve everything in this directory as-is. This cancels the SPA rewrite that
+# the document-root .htaccess applies (". -> index.html"), so a missing file
+# here returns a real 404 instead of the Angular shell.
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^ - [L]
+</IfModule>
+
+<Files "apple-app-site-association">
+	ForceType application/json
+	<IfModule mod_headers.c>
+		Header set Content-Type "application/json"
+		Header set Cache-Control "public, max-age=3600"
+		Header set Access-Control-Allow-Origin "*"
+	</IfModule>
+</Files>
+
+# Android App Links, if/when assetlinks.json is added here.
+<Files "assetlinks.json">
+	ForceType application/json
+	<IfModule mod_headers.c>
+		Header set Content-Type "application/json"
+	</IfModule>
+</Files>
