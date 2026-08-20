@@ -365,10 +365,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 		}
 
 		if (changes?.book_data?.currentValue) {
-			if (!this.preventRateOverride) {
-				this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
-			} else {
-			}
+			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue);
         }
 		
 		this.isDaysMode = this.hours >= 24;
@@ -835,7 +832,18 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 		data['selected_amenities'] = this.amenitiesService.getCurrentValue();
 
-       if(!this.preventRateOverride){
+		const previousServiceType = this.previousBookingData?.service_type;
+		const currentServiceType = data?.service_type;
+		const previousStops = JSON.stringify(this.previousBookingData?.extra_stops || []);
+		const currentStops = JSON.stringify(data?.extra_stops || []);
+		const previousReturnStops = JSON.stringify(this.previousBookingData?.return_extra_stops || []);
+		const currentReturnStops = JSON.stringify(data?.return_extra_stops || []);
+		const isServiceTypeOrStopsChanged =
+			(previousServiceType && previousServiceType !== currentServiceType) ||
+			(previousStops !== currentStops) ||
+			(previousReturnStops !== currentReturnStops);
+
+		if (!this.preventRateOverride || isServiceTypeOrStopsChanged) {
 		// Stamp the baseline before the request goes out so the second
 		// fetchRatesArrayByAffiliateVehicle call in the same ngOnChanges pass
 		// dedupes instead of firing a duplicate request.
