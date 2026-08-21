@@ -697,6 +697,15 @@ a.dropdown-item {
 		padding: 6px !important;
 		vertical-align: top;
 	}
+
+	// Printed reports always list every stop, never the collapsed chip
+	.trip-route-container .route-point--collapsed {
+		display: flex !important;
+	}
+
+	.trip-route-container .stops-toggle-row {
+		display: none !important;
+	}
 }
 
 :host ::ng-deep body.printing-daily-bookings * {
@@ -968,6 +977,37 @@ a.dropdown-item {
 			font-size: 14px;
 			font-style: italic;
 			text-decoration-color: #c9c9c9 !important;
+		}
+	}
+
+	// Extra stops stay hidden until the "N Stops" chip is clicked
+	.route-point--collapsed {
+		display: none !important;
+	}
+
+	.stops-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 2px 12px;
+		border: 1px dashed #E0A868;
+		border-radius: 12px;
+		background-color: #fdf3e7;
+		color: #b96b12;
+		font-size: 13px;
+		font-weight: 600;
+		font-style: normal;
+		line-height: 1.6;
+		white-space: nowrap;
+		cursor: pointer;
+		user-select: none;
+
+		i {
+			font-size: 10px;
+		}
+
+		&:hover {
+			background-color: #f8e6cf;
 		}
 	}
 }

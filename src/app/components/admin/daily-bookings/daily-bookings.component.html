@@ -522,7 +522,29 @@
 															[innerHTML]="highlighText(booking.pickup_address)"></span>
 													</div>
 												</div>
-												<div class="route-point d-flex align-items-stretch" *ngFor="let stop of booking.extra_stops; let last = last">
+												<div class="route-point stops-toggle-row d-flex align-items-stretch"
+													*ngIf="booking.extra_stops?.length">
+													<div class="route-icon-wrapper">
+														<span class="loc-logo stop-logo">
+															<i class="bi bi-circle" style="font-size: 10px;"></i>
+														</span>
+														<div class="connecting-line"
+															[class.connecting-line--stop]="isStopsExpanded(booking.booking_id)">
+														</div>
+													</div>
+													<div class="address-content">
+														<span class="stops-toggle"
+															(click)="toggleStops(booking.booking_id, $event)">
+															{{ booking.extra_stops.length }} {{ booking.extra_stops.length
+															=== 1 ? 'Stop' : 'Stops' }}
+															<i class="fa"
+																[ngClass]="isStopsExpanded(booking.booking_id) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+														</span>
+													</div>
+												</div>
+												<div class="route-point d-flex align-items-stretch"
+													*ngFor="let stop of booking.extra_stops; let last = last"
+													[class.route-point--collapsed]="!isStopsExpanded(booking.booking_id)">
 													<div class="route-icon-wrapper">
 														<span class="loc-logo stop-logo"
 															(click)="showLocationPointOnMapByAddress(stop.address)">
