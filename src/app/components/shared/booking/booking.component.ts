@@ -506,6 +506,25 @@ export class BookingComponent implements OnInit, OnDestroy {
 	change2() {
 	}
 
+	/**
+	 * Extra stops carry a `kind`/`airport_*` set purely so a drag-and-drop reorder can
+	 * promote/demote them correctly (see readRoutePoints/writeRoutePoints) - the backend has
+	 * never known about that shape, so it's stripped back down to what it already expects
+	 * before the stop list goes out in the booking payload.
+	 */
+	private stripInternalStopFields(stops: any): Array<Record<string, any>> {
+		if (!Array.isArray(stops)) {
+			return [];
+		}
+		return stops.map((stop: any) => ({
+			address: stop?.address ?? '',
+			latitude: stop?.latitude ?? '',
+			longitude: stop?.longitude ?? '',
+			rate: stop?.rate ?? '',
+			booking_instructions: stop?.booking_instructions ?? ''
+		}));
+	}
+
 	buildBookingData() {
 		const vehicleId = this.BookingForm.get('vehicle_id').value;
 		const hasEmptyVehicleId =
@@ -552,8 +571,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_distance: this.return_distance,
 			no_of_hours: this.number_of_hours === 0 ? 2 : this.number_of_hours,
 			is_master_vehicle: isMasterVehiclePayload,
-			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
+			extra_stops: this.stripInternalStopFields(this.BookingForm.get('extra_stops').value),
+			return_extra_stops: this.stripInternalStopFields(this.BookingForm.get('return_extra_stops').value),
 			manual_change_aff_veh: this.manual_change_aff_veh,
 			pickup_time: this.BookingForm.get('pickup_time').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
@@ -2125,11 +2144,73 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Whether a place selected in the plain (non-airport) address field is actually an
+	 * airport. Deliberately conservative - unlike `isAirportPrediction` (used for the
+	 * dedicated airport search, where every candidate is already airport-related and loose
+	 * keywords like "parking"/"garage"/"gate" are safe), this only trusts the place's own
+	 * `types` or a terminal keyword paired with an IATA code / the word "airport", mirroring
+	 * home.component.ts's `isAirportTerminalAddress`/`isTypedAsAirport` heuristic so an
+	 * ordinary street address never gets misclassified.
+	 */
+	private isAirportAddressSelection(option: any, place: google.maps.places.PlaceResult): boolean {
+		const types = [...(place?.types || []), ...(option?.types || [])].map((t) => String(t).toLowerCase());
+		if (types.some((t) => t === 'airport' || t === 'aerodrome')) {
+			return true;
+		}
+
+		const combined = [option?.name, option?.description, option?.secondaryText, place?.name, place?.formatted_address]
+			.filter(Boolean)
+			.join(' ')
+			.toLowerCase();
+		const hasTerminalKeyword = /\b(terminal|concourse)\b/.test(combined);
+		if (!hasTerminalKeyword) {
+			return false;
+		}
+
+		const hasIataCode = /\b[A-Z]{3}\b/.test([option?.name, option?.description, place?.name].filter(Boolean).join(' '));
+		return hasIataCode || combined.includes('airport');
+	}
+
+	/**
+	 * Flips the leg's transfer type to `airport` on this end once an airport has been
+	 * detected in the plain address field, so the existing `transfer_type`/
+	 * `return_transfer_type` valueChanges pipeline (validators, return-leg mirroring,
+	 * round-trip swap detection) takes over exactly as it would for a manual dropdown pick.
+	 */
+	private promoteAddressFieldToAirport(fieldName: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff'): void {
+		const controlName = fieldName.startsWith('return_') ? 'return_transfer_type' : 'transfer_type';
+		const control = this.BookingForm.get(controlName);
+		const [from, to] = String(control?.value || 'city_to_city').split('_to_');
+		const isPickupEnd = fieldName === 'pickup' || fieldName === 'return_pickup';
+		const nextType = isPickupEnd ? `airport_to_${to || 'city'}` : `${from || 'city'}_to_airport`;
+
+		this.BookingForm.get(fieldName)?.setValue('');
+		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('');
+		this.BookingForm.get(`${fieldName}_longitude`)?.setValue('');
+
+		if (control && nextType !== control.value) {
+			control.setValue(nextType);
+		}
+	}
+
 	async selectCustomAddressOption(fieldName: string, option: any): Promise<void> {
 		this.clearCustomAddressDropdownBlurTimer();
 		this.clearSameLocationErrors();
 		const place = await this.fetchPlaceDetails(option?.placeId);
 		if (place?.geometry?.location) {
+			const isRouteEndpoint = fieldName === 'pickup' || fieldName === 'dropoff'
+				|| fieldName === 'return_pickup' || fieldName === 'return_dropoff';
+			const extraStopField = this.parseExtraStopFieldKey(fieldName);
+			const isAirport = this.isAirportAddressSelection(option, place);
+
+			if (isRouteEndpoint && isAirport) {
+				this.handleAirportPlaceSelection(`${fieldName}_airport`, place);
+				this.promoteAddressFieldToAirport(fieldName as 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff');
+				this.closeCustomAddressDropdown(fieldName);
+				return;
+			}
+
 			const formattedAddress = place.formatted_address ?? '';
 			const placeName = place.name ?? '';
 			const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
@@ -2138,7 +2219,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 				formatted_address: formattedAddress,
 				display_address: displayAddress
 			};
-			const extraStopField = this.parseExtraStopFieldKey(fieldName);
 			if (fieldName === 'loose_customer_address') {
 				this.fillLooseCustomerAddress(addressPayload);
 			} else if (extraStopField) {
@@ -2146,6 +2226,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 					latitude: place.geometry.location.lat(),
 					longitude: place.geometry.location.lng()
 				});
+				// A stop has no dedicated airport UI of its own, but it still needs to
+				// remember whether the address it holds is an airport so a later drag into
+				// Pickup/Dropoff can promote it correctly (see readRoutePoints/writeRoutePoints).
+				const stopGroup = this.getExtraStopGroup(fieldName);
+				if (stopGroup) {
+					if (isAirport) {
+						this.applyExtraStopAirportSelection(stopGroup, place);
+					} else {
+						this.clearExtraStopAirportSelection(stopGroup);
+					}
+				}
 			} else {
 				this.fillAddress(fieldName, addressPayload);
 				this.fillLocationPoints(fieldName, {
@@ -3640,27 +3731,72 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 	}
 
-	handleAirportPlaceSelection(formControl: string, place: google.maps.places.PlaceResult) {
-		const displayValue = this.getAirportSelectionLabel(place);
+	/** Shared by any control that resolves a Google place into an airport identity - a
+	 * dedicated airport field, a plain address field detected as an airport, or a stop. */
+	private computeAirportFieldsFromPlace(place: google.maps.places.PlaceResult): { option: string; name: string; latitude: number; longitude: number; id: string } | null {
 		const location = place.geometry?.location;
 		if (!location) {
-			return;
+			return null;
 		}
+		const displayValue = this.getAirportSelectionLabel(place);
 		const latitude = location.lat();
 		const longitude = location.lng();
 		const matchedAirport = this.resolveInternalAirportRecord(place, latitude, longitude);
 
-		this.BookingForm.get(`${formControl}_option`)?.setValue(displayValue);
-		this.BookingForm.get(`${formControl}_name`)?.setValue(displayValue);
-		this.BookingForm.get(`${formControl}_latitude`)?.setValue(latitude);
-		this.BookingForm.get(`${formControl}_longitude`)?.setValue(longitude);
-		this.BookingForm.get(formControl)?.setValue(matchedAirport?.id ?? '');
+		return {
+			option: displayValue,
+			name: displayValue,
+			latitude,
+			longitude,
+			id: matchedAirport?.id ?? ''
+		};
+	}
+
+	handleAirportPlaceSelection(formControl: string, place: google.maps.places.PlaceResult) {
+		const airportFields = this.computeAirportFieldsFromPlace(place);
+		if (!airportFields) {
+			return;
+		}
+
+		this.BookingForm.get(`${formControl}_option`)?.setValue(airportFields.option);
+		this.BookingForm.get(`${formControl}_name`)?.setValue(airportFields.name);
+		this.BookingForm.get(`${formControl}_latitude`)?.setValue(airportFields.latitude);
+		this.BookingForm.get(`${formControl}_longitude`)?.setValue(airportFields.longitude);
+		this.BookingForm.get(formControl)?.setValue(airportFields.id);
 		this.BookingForm.updateValueAndValidity();
 
 
 		if (formControl === 'dropoff_airport' || formControl === 'return_dropoff_airport') {
 			this.updateCurrencyFromAirportPlace(place);
 		}
+	}
+
+	/** Flags an extra stop as an airport so a later reorder can promote it correctly. */
+	private applyExtraStopAirportSelection(stopGroup: FormGroup, place: google.maps.places.PlaceResult): void {
+		const airportFields = this.computeAirportFieldsFromPlace(place);
+		if (!airportFields) {
+			return;
+		}
+		stopGroup.patchValue({
+			kind: 'airport',
+			airport: airportFields.id,
+			airport_option: airportFields.option,
+			airport_name: airportFields.name,
+			airport_latitude: airportFields.latitude,
+			airport_longitude: airportFields.longitude
+		});
+	}
+
+	/** Un-flags an extra stop's airport identity once a non-airport address replaces it. */
+	private clearExtraStopAirportSelection(stopGroup: FormGroup): void {
+		stopGroup.patchValue({
+			kind: 'city',
+			airport: '',
+			airport_option: '',
+			airport_name: '',
+			airport_latitude: '',
+			airport_longitude: ''
+		});
 	}
 
 	clearAddressField(formControl: string) {
@@ -5307,7 +5443,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
-				booking_instructions: new FormControl('')
+				booking_instructions: new FormControl(''),
+				// Set when the selected address is itself an airport, so a drag/reorder that
+				// promotes this stop to pickup/dropoff can restore it as an airport leg instead
+				// of a plain address. Never sent to the backend - stripped before submission.
+				kind: new FormControl('city'),
+				airport: new FormControl(''),
+				airport_option: new FormControl(''),
+				airport_name: new FormControl(''),
+				airport_latitude: new FormControl(''),
+				airport_longitude: new FormControl('')
 			}))
 		}
 		else {
@@ -5317,7 +5462,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
 				rate: new FormControl(''),
-				booking_instructions: new FormControl('')
+				booking_instructions: new FormControl(''),
+				kind: new FormControl('city'),
+				airport: new FormControl(''),
+				airport_option: new FormControl(''),
+				airport_name: new FormControl(''),
+				airport_latitude: new FormControl(''),
+				airport_longitude: new FormControl('')
 			}))
 		}
 		this.enforceCharterTourForExtraStops();
@@ -5412,12 +5563,18 @@ export class BookingComponent implements OnInit, OnDestroy {
 			endpoint('pickup', kinds[0]),
 			endpoint('dropoff', kinds[1]),
 			...stops.map((stop) => ({
-				// A stop is always a plain street address - there is nowhere on it to put a
-				// flight number or a ship name.
-				kind: 'city',
+				// A stop still has nowhere to put a flight/airline number or a ship name, but
+				// it can carry the identity of an airport it was selected as, so promoting it
+				// to an endpoint restores that instead of treating it as a plain address.
+				kind: stop.get('kind')?.value || 'city',
 				address: stop.get('address')?.value ?? '',
 				latitude: stop.get('latitude')?.value ?? '',
 				longitude: stop.get('longitude')?.value ?? '',
+				airport: stop.get('airport')?.value ?? '',
+				airport_option: stop.get('airport_option')?.value ?? '',
+				airport_name: stop.get('airport_name')?.value ?? '',
+				airport_latitude: stop.get('airport_latitude')?.value ?? '',
+				airport_longitude: stop.get('airport_longitude')?.value ?? '',
 				rate: stop.get('rate')?.value ?? '',
 				booking_instructions: stop.get('booking_instructions')?.value ?? ''
 			}))
@@ -5429,11 +5586,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 	 * and the drop-off, so a stop dragged over either one is promoted to that endpoint and
 	 * whatever it displaced shifts down.
 	 *
-	 * The whole endpoint payload moves, airport and airline details included, and
-	 * `transfer_type` is rebuilt from where the two endpoint kinds land - swapping the ends
-	 * of an `airport_to_city` booking makes it `city_to_airport`. Anything an endpoint has
-	 * and a stop does not (flight, airline, FBO) is dropped when that point becomes a stop,
-	 * as are a promoted stop's rate and per-stop instructions.
+	 * The whole endpoint payload moves, airport details included, and `transfer_type` is
+	 * rebuilt from where the two endpoint kinds land - swapping the ends of an
+	 * `airport_to_city` booking makes it `city_to_airport`. A stop still has nowhere to put
+	 * airline/flight/FBO details, so those are dropped when an endpoint becomes a stop, as
+	 * are a promoted stop's rate and per-stop instructions - but the stop keeps the airport's
+	 * identity so it can be promoted back correctly later.
 	 *
 	 * `SetFormValue` is deliberately not used here - it ignores empty values, and a swap
 	 * with a blank endpoint has to be able to clear the other side.
@@ -5441,8 +5599,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 	private writeRoutePoints(points: Array<Record<string, any>>, is_return: boolean): void {
 		const prefix = is_return ? 'return_' : '';
 		const setEndpoint = (leg: 'pickup' | 'dropoff', point: Record<string, any>) => {
+			// An airport endpoint's plain address/lat/long controls stay blank by convention -
+			// its location lives in `_airport_name`/`_airport_latitude` etc. A promoted stop
+			// carries all three populated (that's how it displays and maps as a stop), so
+			// that has to be suppressed here rather than at the source.
+			const isAirportPoint = point?.kind === 'airport';
+			const plainLocationKeys = ['address', 'latitude', 'longitude'];
 			BookingComponent.ROUTE_ENDPOINT_FIELDS.forEach(([suffix, key]) => {
-				this.BookingForm.get(`${prefix}${leg}${suffix}`)?.setValue(point?.[key] ?? '', { emitEvent: false });
+				const value = (isAirportPoint && plainLocationKeys.includes(key)) ? '' : (point?.[key] ?? '');
+				this.BookingForm.get(`${prefix}${leg}${suffix}`)?.setValue(value, { emitEvent: false });
 			});
 			if (leg === 'pickup') {
 				this.routePickupOnlyFields(is_return).forEach(([control, key]) => {
@@ -5458,10 +5623,25 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// length and every slot can be patched in place.
 		const stops = this.BookingForm.get(`${prefix}extra_stops`) as FormArray | null;
 		points.slice(2).forEach((point, index) => {
+			// A demoted airport endpoint leaves its plain address/lat/long blank (see above),
+			// so the stop - which has no separate airport display, and needs real coordinates
+			// to map and rate regardless of kind - falls back to the airport's own location.
+			const isAirportPoint = point?.kind === 'airport';
+			const stopAddress = isAirportPoint
+				? (point?.airport_name || point?.airport_option || point?.address || '')
+				: (point?.address ?? '');
+			const stopLatitude = isAirportPoint ? (point?.airport_latitude ?? point?.latitude ?? '') : (point?.latitude ?? '');
+			const stopLongitude = isAirportPoint ? (point?.airport_longitude ?? point?.longitude ?? '') : (point?.longitude ?? '');
 			stops?.at(index)?.patchValue({
-				address: point?.address ?? '',
-				latitude: point?.latitude ?? '',
-				longitude: point?.longitude ?? '',
+				address: stopAddress,
+				latitude: stopLatitude,
+				longitude: stopLongitude,
+				kind: point?.kind || 'city',
+				airport: point?.airport ?? '',
+				airport_option: point?.airport_option ?? '',
+				airport_name: point?.airport_name ?? '',
+				airport_latitude: point?.airport_latitude ?? '',
+				airport_longitude: point?.airport_longitude ?? '',
 				rate: point?.rate ?? '',
 				booking_instructions: point?.booking_instructions ?? ''
 			}, { emitEvent: false });

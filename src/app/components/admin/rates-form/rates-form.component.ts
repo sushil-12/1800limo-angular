@@ -834,16 +834,12 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 
 		const previousServiceType = this.previousBookingData?.service_type;
 		const currentServiceType = data?.service_type;
-		const previousStops = JSON.stringify(this.previousBookingData?.extra_stops || []);
-		const currentStops = JSON.stringify(data?.extra_stops || []);
-		const previousReturnStops = JSON.stringify(this.previousBookingData?.return_extra_stops || []);
-		const currentReturnStops = JSON.stringify(data?.return_extra_stops || []);
-		const isServiceTypeOrStopsChanged =
-			(previousServiceType && previousServiceType !== currentServiceType) ||
-			(previousStops !== currentStops) ||
-			(previousReturnStops !== currentReturnStops);
+		// Only a service_type change (e.g. one_way -> round_trip) forces a refetch while
+		// locked - it changes what rate structure even applies. Extra-stop edits must NOT
+		// bypass the lock: "Prevent System Rate Override" means stops can't change rates.
+		const isServiceTypeChanged = !!previousServiceType && previousServiceType !== currentServiceType;
 
-		if (!this.preventRateOverride || isServiceTypeOrStopsChanged) {
+		if (!this.preventRateOverride || isServiceTypeChanged) {
 		// Stamp the baseline before the request goes out so the second
 		// fetchRatesArrayByAffiliateVehicle call in the same ngOnChanges pass
 		// dedupes instead of firing a duplicate request.
