@@ -2974,7 +2974,7 @@ table #navbarDropdownUserImage {
     object-fit: cover;
 }
 
-@media (min-width: 280px) and (max-width: 991px) {
+@media (min-width: 280px) and (max-width: 1024.98px) {
     .innerpage_topbanner h2 {
         top: 20%;
         font-size: 24px !important;
@@ -3073,7 +3073,8 @@ table #navbarDropdownUserImage {
 }
 
 .timepicker-dial__item_active {
-    background: #f2d0b369 !important;
+    color: #fff !important;
+    background-color: #f0883d !important;
 }
 
 .timepicker__body {

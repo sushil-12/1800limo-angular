@@ -14,7 +14,7 @@
 
 	<form class="container-fluid position-relative" [formGroup]="BookingForm" appInvalidControlScroll>
 
-		<div class="d-flex  mb-2 section-container justify-content-between align-items-center flex-wrap" [class.position-sticky]="!isGuestMode" style="border-radius:0px !important; margin-bottom: 0px !important; box-shadow: none !important; z-index:9999">
+		<div class="d-flex  mb-2 section-container justify-content-between align-items-center" [class.position-sticky]="!isGuestMode" style="border-radius:0px !important; margin-bottom: 0px !important; box-shadow: none !important; z-index:9999">
 				<div>
 				   <h4 class="border-0 m-0 mr-3">{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking</h4>
 				</div>
@@ -772,7 +772,7 @@
 						</div>
 
 						<!-- Passenger Count -->
-						<div class="col-md-6 col-lg-4">
+						<div class="col-md-3 col-lg-4">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label>No. of Passengers <span class="asterisk"></span></mat-label>
 								<input #passengerAutoInput type="number" matInput formControlName="total_passengers"
@@ -794,7 +794,7 @@
 						</div>
 
 						<!-- Luggage Count -->
-						<div class="col-md-6 col-lg-4">
+						<div class="col-md-3 col-lg-4">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
 								<input #luggageAutoInput type="number" matInput formControlName="luggage_count"

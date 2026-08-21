@@ -44,6 +44,9 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 	pinnedBookingIds: string[] = [];
 	pinnedBookings: any[] = [];
 
+	// Booking ids whose extra stops are currently expanded in the Trip Route column
+	expandedStopsBookingIds: any[] = [];
+
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -127,6 +130,20 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 			['clean']
 		]
 	};
+
+	isStopsExpanded(bookingId: any): boolean {
+		return this.expandedStopsBookingIds.includes(bookingId);
+	}
+
+	toggleStops(bookingId: any, event?: Event): void {
+		event?.stopPropagation();
+		const index = this.expandedStopsBookingIds.indexOf(bookingId);
+		if (index > -1) {
+			this.expandedStopsBookingIds.splice(index, 1);
+		} else {
+			this.expandedStopsBookingIds.push(bookingId);
+		}
+	}
 
 	constructor(
 		private adminService: AdminService,
