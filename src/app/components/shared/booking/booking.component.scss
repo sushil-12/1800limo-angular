@@ -1077,6 +1077,9 @@ quill-editor {
   --ink-700: #374151;
   --ink-500: #6B7280;
 
+  /* Connector between the route points. */
+  --bk-rail: #E5E7EB;
+
   --border:        #D8DBE0;
   --surface:        #f5f4fe;
   --surface-muted:  #E7E9EC;   /* darker page background, was #F7F8FA */
@@ -1550,45 +1553,210 @@ $secnav-green: #21a45d;
 }
 
 /* ---------------------------------------------------------------------------
-   Route reordering (pickup / drop-off / extra stops share one cdkDropList)
+   Route builder (pickup / extra stops / drop-off share one cdkDropList)
 
-   Deliberately adds no chrome: there is no drag handle and no grip icon, so the
-   layout is byte-for-byte what it was. Only the drag preview and the drop gap
-   are styled, and both exist only while a section is actually being dragged.
+   The list is rendered in travel order and drawn as a sequence rail: a node per
+   point joined by a connector. The rail is informational - it is the order the
+   reorder acts on - and every point carries a persistent grab handle plus move
+   up / move down buttons, so reordering is discoverable and reachable without a
+   pointer.
    --------------------------------------------------------------------------- */
 
 .bk-route-list {
 	display: block;
+	padding: 0 0.5rem;
 }
 
+/* Rail column | field column. Grid rather than floats so the tall airport and
+   cruise variants stretch the connector to their own height for free. */
 .bk-route-point {
 	position: relative;
+	display: grid;
+	grid-template-columns: 28px 1fr;
+	column-gap: 12px;
+	align-items: start;
+	padding: 6px 0 2px;
+	background: $bk-surface;
 }
 
-/* The section heading is the grab area for pickup and drop-off - no icon is added,
-   the existing "Pickup" / "Dropoff" text simply becomes draggable. */
-.bk-route-point > h4[cdkDragHandle] {
-	cursor: move;
+/* `min-width: 0` keeps a long address from blowing the grid column out wider
+   than the card. */
+.bk-route-body {
+	min-width: 0;
+}
+
+.bk-route-rail {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-self: stretch;
+	padding-top: 3px;
+}
+
+/* The connector runs the full height of the row and is clipped back to the node
+   on the first and last points, so the line starts at the pickup and stops at the
+   drop-off instead of trailing off both ends. */
+.bk-route-rail::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	width: 2px;
+	margin-left: -1px;
+	background: var(--bk-rail);
+}
+
+.bk-route-point:first-child .bk-route-rail::before {
+	top: 14px;
+}
+
+.bk-route-point:last-child .bk-route-rail::before {
+	bottom: calc(100% - 14px);
+}
+
+.bk-route-rail__node {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	flex: none;
+	font-size: 0.72rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+}
+
+/* Pickup, stop and drop-off differ by shape as well as color, so the sequence
+   still reads at a glance and without relying on hue. */
+.bk-route-rail__node--pickup {
+	width: 14px;
+	height: 14px;
+	margin-top: 6px;
+	border-radius: 50%;
+	background: var(--brand-orange);
+	box-shadow: 0 0 0 4px $bk-surface, 0 0 0 5px rgba(240, 136, 62, 0.35);
+}
+
+.bk-route-rail__node--stop {
+	width: 22px;
+	height: 22px;
+	border: 1.5px solid var(--ink-500);
+	border-radius: 50%;
+	background: $bk-surface;
+	color: var(--ink-700);
+}
+
+.bk-route-rail__node--dropoff {
+	width: 15px;
+	height: 15px;
+	margin-top: 6px;
+	border-radius: 3px;
+	background: var(--brand-orange-dark);
+	box-shadow: 0 0 0 4px $bk-surface;
+}
+
+/* Header line: the point's name on the left, its controls on the right. */
+.bk-route-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	min-height: 28px;
+	margin-bottom: 4px;
+}
+
+.bk-route-eyebrow {
+	margin: 0;
+	border: 0;
+	padding: 0;
+	color: var(--ink-500);
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.bk-route-actions {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	flex: none;
+}
+
+.bk-route-actions__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--ink-500);
+	font-size: 0.85rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.bk-route-actions__btn:hover:not(:disabled) {
+	background: var(--brand-orange-light);
+	color: var(--ink-900);
+}
+
+.bk-route-actions__btn:focus-visible {
+	outline: 2px solid rgba(240, 136, 62, 0.55);
+	outline-offset: 1px;
+}
+
+.bk-route-actions__btn:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.bk-route-actions__btn--danger:hover {
+	background: $bk-danger-bg;
+	color: $bk-danger;
+}
+
+/* Always visible, never hover-revealed: a handle nobody can see is a feature
+   nobody finds, and hover does not exist on touch. */
+.bk-route-handle {
+	cursor: grab;
+	touch-action: none;
 	user-select: none;
 }
 
-/* A stop row is short and has no heading, so the row itself is the grab area. The
-   address input keeps its own text cursor and stays clickable. */
-.bk-route-point.row {
-	cursor: move;
+.bk-route-handle:active {
+	cursor: grabbing;
+	background: var(--brand-orange-light);
+	color: var(--ink-900);
 }
 
-.bk-route-point.row input,
-.bk-route-point.row .address-clear-btn,
-.bk-route-point.row .delete-icon,
-.bk-route-point.row .quote-ui-dropdown-panel {
-	cursor: auto;
+.bk-route-handle svg {
+	display: block;
+	pointer-events: none;
 }
 
-.bk-route-point.row .address-clear-btn,
-.bk-route-point.row .delete-icon,
-.bk-route-point.row .quote-ui-dropdown-option {
-	cursor: pointer;
+/* Where the point will land. Without this the list just opens a blank gap and
+   the user has to release to find out what happens. */
+.bk-route-point.cdk-drag-placeholder {
+	border: 2px dashed var(--brand-orange);
+	border-radius: $bk-radius;
+	background: var(--brand-orange-light);
+}
+
+.bk-route-point.cdk-drag-placeholder > * {
+	opacity: 0;
+}
+
+.bk-route-point.cdk-drag-placeholder .bk-route-rail::before {
+	display: none;
 }
 
 /* Compact stand-in for the dragged block - cloning a pickup section verbatim
@@ -1599,27 +1767,93 @@ $secnav-green: #21a45d;
 	gap: 10px;
 	max-width: 520px;
 	padding: 12px 16px;
-	background: #fff;
-	border: 1px solid rgba(249, 156, 52, 0.35);
-	border-radius: 8px;
-	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+	border: 1px solid $bk-border-light;
+	border-left: 3px solid var(--brand-orange);
+	border-radius: $bk-radius;
+	background: $bk-surface;
+	box-shadow: 0 12px 28px rgba(16, 24, 40, 0.16);
 	pointer-events: none;
 }
 
 .bk-route-drag-preview__label {
-	font-weight: 600;
+	flex: none;
+	color: var(--ink-500);
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
 	white-space: nowrap;
 }
 
 .bk-route-drag-preview__address {
 	overflow: hidden;
-	color: #6b6b6b;
+	color: var(--ink-900);
+	font-weight: 500;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
+/* Sits below the finished route and reads as the next empty point on the rail. */
+.bk-add-stop {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	margin: 10px 0 4px;
+	padding: 11px 16px;
+	border: 1.5px dashed $bk-border;
+	border-radius: $bk-radius;
+	background: transparent;
+	color: var(--ink-700);
+	font-family: "Roboto", sans-serif;
+	font-size: 0.92rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.bk-add-stop:hover {
+	border-color: var(--brand-orange);
+	background: var(--brand-orange-light);
+	color: var(--brand-orange-dark);
+}
+
+.bk-add-stop:focus-visible {
+	outline: 2px solid rgba(240, 136, 62, 0.45);
+	outline-offset: 2px;
+}
+
+.bk-route-footer {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 0 0.5rem;
+	margin-bottom: 0.75rem;
+}
 
 .cdk-drag-animating,
 .bk-route-list.cdk-drop-list-dragging .bk-route-point:not(.cdk-drag-placeholder) {
 	transition: transform 220ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (max-width: 767.98px) {
+	.bk-route-point {
+		grid-template-columns: 22px 1fr;
+		column-gap: 8px;
+	}
+
+	.bk-route-rail__node--stop {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cdk-drag-animating,
+	.bk-route-list.cdk-drop-list-dragging .bk-route-point:not(.cdk-drag-placeholder),
+	.bk-route-actions__btn,
+	.bk-add-stop {
+		transition: none;
+	}
 }
