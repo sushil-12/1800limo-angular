@@ -2138,8 +2138,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 			? this.mergeCustomAirportAndTerminalPredictions(airportPredictions, terminalPredictions, baseSearchText)
 			: this.dedupeCustomAirportOptions(airportPredictions);
 
+		// Nothing airport-like matched - rather than leave the dropdown empty (Google did
+		// return results for the query, they just aren't airports), fall back to the raw
+		// predictions so a plain street address is still selectable. `selectCustomAirportOption`
+		// re-checks each pick and demotes the leg back to `city` for anything that isn't
+		// really an airport, so this can't leave a street address stuck in airport fields.
+		const fallbackOptions = options.length ? options : this.dedupeCustomAirportOptions(airportOptions);
+
 		if (this.isLatestCustomSearchVersion('airport', fieldName, requestVersion)) {
-			this.setCustomOptions('airport', fieldName, options.length ? options : (selectedOption ? [selectedOption] : []));
+			this.setCustomOptions('airport', fieldName, fallbackOptions.length ? fallbackOptions : (selectedOption ? [selectedOption] : []));
 			this.setCustomSearchLoading('airport', fieldName, false);
 		}
 	}
@@ -2173,25 +2180,63 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Flips the leg's transfer type to `airport` on this end once an airport has been
-	 * detected in the plain address field, so the existing `transfer_type`/
-	 * `return_transfer_type` valueChanges pipeline (validators, return-leg mirroring,
-	 * round-trip swap detection) takes over exactly as it would for a manual dropdown pick.
+	 * Flips one end of a leg's transfer type to `kind`, preserving whatever the other end
+	 * currently is, so the existing `transfer_type`/`return_transfer_type` valueChanges
+	 * pipeline (validators, return-leg mirroring, round-trip swap detection) takes over
+	 * exactly as it would for a manual dropdown pick.
 	 */
-	private promoteAddressFieldToAirport(fieldName: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff'): void {
+	private setLegEndpointKind(fieldName: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff', kind: 'airport' | 'city'): void {
 		const controlName = fieldName.startsWith('return_') ? 'return_transfer_type' : 'transfer_type';
 		const control = this.BookingForm.get(controlName);
 		const [from, to] = String(control?.value || 'city_to_city').split('_to_');
 		const isPickupEnd = fieldName === 'pickup' || fieldName === 'return_pickup';
-		const nextType = isPickupEnd ? `airport_to_${to || 'city'}` : `${from || 'city'}_to_airport`;
-
-		this.BookingForm.get(fieldName)?.setValue('');
-		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('');
-		this.BookingForm.get(`${fieldName}_longitude`)?.setValue('');
+		const nextType = isPickupEnd ? `${kind}_to_${to || 'city'}` : `${from || 'city'}_to_${kind}`;
 
 		if (control && nextType !== control.value) {
 			control.setValue(nextType);
 		}
+	}
+
+	/** Called once a place typed into the plain address field is detected as an airport. */
+	private promoteAddressFieldToAirport(fieldName: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff'): void {
+		this.BookingForm.get(fieldName)?.setValue('');
+		this.BookingForm.get(`${fieldName}_latitude`)?.setValue('');
+		this.BookingForm.get(`${fieldName}_longitude`)?.setValue('');
+		this.setLegEndpointKind(fieldName, 'airport');
+	}
+
+	/**
+	 * The reverse: called once a place selected in the *airport-specific* field turns out to
+	 * be an ordinary street address (the airport search falls back to plain predictions when
+	 * nothing airport-like matches - see `searchCustomAirport`). Fills the plain address
+	 * field instead and clears the airport identity so it doesn't linger.
+	 */
+	private demoteAirportFieldToCity(fieldName: 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff', place: google.maps.places.PlaceResult): void {
+		const location = place.geometry?.location;
+		if (!location) {
+			return;
+		}
+		const formattedAddress = place.formatted_address ?? '';
+		const placeName = place.name ?? '';
+		const displayAddress = placeName ? `${placeName} - ${formattedAddress}` : formattedAddress;
+		this.fillAddress(fieldName, {
+			...place,
+			formatted_address: formattedAddress,
+			display_address: displayAddress
+		});
+		this.fillLocationPoints(fieldName, {
+			latitude: location.lat(),
+			longitude: location.lng()
+		});
+
+		const airportField = `${fieldName}_airport`;
+		this.BookingForm.get(airportField)?.setValue('');
+		this.BookingForm.get(`${airportField}_option`)?.setValue('');
+		this.BookingForm.get(`${airportField}_name`)?.setValue('');
+		this.BookingForm.get(`${airportField}_latitude`)?.setValue('');
+		this.BookingForm.get(`${airportField}_longitude`)?.setValue('');
+
+		this.setLegEndpointKind(fieldName, 'city');
 	}
 
 	async selectCustomAddressOption(fieldName: string, option: any): Promise<void> {
@@ -2253,7 +2298,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.clearSameLocationErrors();
 		const place = await this.fetchPlaceDetails(option?.placeId);
 		if (place?.geometry?.location) {
-			this.handleAirportPlaceSelection(fieldName, place);
+			if (this.isAirportAddressSelection(option, place)) {
+				this.handleAirportPlaceSelection(fieldName, place);
+			} else {
+				// The airport search falls back to plain address predictions when nothing
+				// airport-like matches (see searchCustomAirport), so a pick here can turn out
+				// to be an ordinary street address - demote the leg back to `city` instead of
+				// storing it as an airport.
+				const baseFieldName = fieldName.replace(/_airport$/, '') as 'pickup' | 'dropoff' | 'return_pickup' | 'return_dropoff';
+				this.demoteAirportFieldToCity(baseFieldName, place);
+			}
 		}
 		this.resetCustomAirportSessionToken(fieldName);
 		this.closeCustomAirportDropdown(fieldName);
