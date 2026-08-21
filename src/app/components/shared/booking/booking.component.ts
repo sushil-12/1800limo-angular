@@ -5606,6 +5606,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * True while the outbound leg sits exactly on the threshold, so the next stop is the one
+	 * that promotes the booking to charter/tour. Says so on the Add stop button, so the switch
+	 * is a choice the user makes rather than something that happens to them. A booking that is
+	 * already charter/tour has nothing left to warn about.
+	 */
+	get willNextStopConvertToCharterTour(): boolean {
+		return this.BookingForm?.get('service_type')?.value != 'charter_tour'
+			&& this.outboundExtraStopsCount() == this.charterTourStopThreshold;
+	}
+
+	/**
 	 * More than two stops on the outbound leg is charter work rather than a point-to-point
 	 * transfer, so promote the service type as soon as the extra stop is added. Only the
 	 * outbound leg is counted: return stops exist only while the booking is a round trip,

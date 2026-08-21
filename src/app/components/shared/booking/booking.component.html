@@ -1685,12 +1685,13 @@
 				<div class="bk-route-footer">
 					<button type="button" class="bk-add-stop" (click)="addExtraStop(false)">
 						<i class="fa fa-plus" aria-hidden="true"></i>
-						Add stop
+						<span *ngIf="!willNextStopConvertToCharterTour">Add stop</span>
+						<span *ngIf="willNextStopConvertToCharterTour">Add stop - switches this booking to Charter/Tour</span>
 					</button>
-					<div class="bk-callout bk-callout--info" *ngIf="autoConvertedToCharterTour">
+					<!-- <div class="bk-callout bk-callout--info" *ngIf="autoConvertedToCharterTour">
 						<i class="bi bi-info-circle-fill bk-callout__icon"></i>
 						<span>More than 2 stops - this booking has been switched to Charter/Tour.</span>
-					</div>
+					</div> -->
 					<div class="bk-callout bk-callout--info">
 						<i class="bi bi-info-circle-fill bk-callout__icon"></i>
 						<span>Enter pickup and drop-off locations first, then add extra stops.</span>
@@ -3159,7 +3160,7 @@
 									</button>
 									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
 										title="Drag to reorder" aria-label="Drag to reorder return stop {{ stop_index + 1 }}">
-										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true" style="height:20px; width:20px">
 											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
 											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
 											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
