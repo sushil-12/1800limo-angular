@@ -1635,13 +1635,18 @@ $secnav-green: #21a45d;
 	line-height: 1;
 }
 
-/* Pickup, stop and drop-off differ by shape as well as color, so the sequence
-   still reads at a glance and without relying on hue. */
+/* Pickup and drop-off are labelled A and B, the stops keep their numbers, so the
+   sequence reads at a glance and without relying on hue. */
+.bk-route-rail__node--pickup,
+.bk-route-rail__node--dropoff {
+	width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+}
+
 .bk-route-rail__node--pickup {
-	width: 14px;
-	height: 14px;
-	margin-top: 6px;
-	border-radius: 50%;
 	background: var(--brand-orange);
 	box-shadow: 0 0 0 4px $bk-surface, 0 0 0 5px rgba(240, 136, 62, 0.35);
 }
@@ -1656,10 +1661,6 @@ $secnav-green: #21a45d;
 }
 
 .bk-route-rail__node--dropoff {
-	width: 15px;
-	height: 15px;
-	margin-top: 6px;
-	border-radius: 3px;
 	background: var(--brand-orange-dark);
 	box-shadow: 0 0 0 4px $bk-surface;
 }
@@ -1844,7 +1845,9 @@ $secnav-green: #21a45d;
 		column-gap: 8px;
 	}
 
-	.bk-route-rail__node--stop {
+	.bk-route-rail__node--pickup,
+	.bk-route-rail__node--stop,
+	.bk-route-rail__node--dropoff {
 		width: 20px;
 		height: 20px;
 	}
