@@ -1505,6 +1505,12 @@ $secnav-green: #21a45d;
     flex: 0 0 100% !important;
     max-width: 100% !important;
   }
+
+  /* Honour an explicit md size when one is set (No. of Passengers / Luggage Count) */
+  .col-md-3[class*="col-lg-"] {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+  }
   
   /* Fix extra stops layout */
   .extra-stop-field {
