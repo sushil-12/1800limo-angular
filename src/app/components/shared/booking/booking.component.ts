@@ -5776,6 +5776,59 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * The return leg is a mirror of the outbound one - it starts where the outbound ends and
+	 * ends where it started - and is normally kept in step by the `pickup` / `dropoff` /
+	 * `*_airport` subscriptions as the user fills the outbound in. A reorder writes those
+	 * controls with `emitEvent: false`, so none of them run and the return leg keeps the
+	 * route the user has just moved away from. Those mirrors also go through `SetFormValue`,
+	 * which ignores empty values, so they can never blank the airport controls of an endpoint
+	 * that is now a plain address - the return leg would show the old airport and the new
+	 * address at once, and the two legs would resolve to the same point.
+	 *
+	 * So rebuild both return endpoints from the outbound here, writing the empty fields too,
+	 * and point `return_transfer_type` back the other way.
+	 *
+	 * This runs whatever the service type is, exactly like the subscriptions it stands in for:
+	 * the return leg is mirrored on a one-way booking as well, so that it is already correct
+	 * if Round Trip is picked afterwards.
+	 */
+	private syncReturnLegFromOutbound(): void {
+		if (this.isPrefillingForm || this.isPrefillingTransferTypes) {
+			return;
+		}
+
+		const [outboundPickup, outboundDropoff] = this.readRoutePoints(false);
+
+		const setReturnEndpoint = (leg: 'pickup' | 'dropoff', point: Record<string, any>) => {
+			BookingComponent.ROUTE_ENDPOINT_FIELDS.forEach(([suffix, key]) => {
+				this.BookingForm.get(`return_${leg}${suffix}`)?.setValue(point?.[key] ?? '', { emitEvent: false });
+			});
+		};
+
+		// The return leg starts at the outbound drop-off and ends at the outbound pickup.
+		setReturnEndpoint('pickup', outboundDropoff);
+		setReturnEndpoint('dropoff', outboundPickup);
+
+		// `<from>_to_<to>` read backwards. Set without emitting: the `return_transfer_type`
+		// subscription would swap the two ends it has just been given. The validators it would
+		// have refreshed are applied here instead.
+		const returnTransferType = `${outboundDropoff?.kind || 'city'}_to_${outboundPickup?.kind || 'city'}`;
+		const returnTransferTypeControl = this.BookingForm.get('return_transfer_type');
+		if (returnTransferTypeControl && returnTransferTypeControl.value !== returnTransferType) {
+			returnTransferTypeControl.setValue(returnTransferType, { emitEvent: false });
+			this.return_transfer_type = returnTransferType;
+			this.updateReturnLegValidators(returnTransferType);
+		}
+
+		this.BookingForm.updateValueAndValidity();
+		this.syncRouteEndpointInputs(true);
+
+		if (this.Form.service_type.value == 'round_trip') {
+			this.MapController(true);
+		}
+	}
+
+	/**
 	 * The form stores a leg as `[pickup, dropoff, ...stops]`, but the screen lists it in
 	 * travel order - pickup, then every stop, then the drop-off. These two convert between
 	 * the two orderings so a drop index taken off the page means what it looks like it means.
@@ -5817,6 +5870,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.writeRoutePoints(this.toDataOrder(display), is_return);
 
 		this.syncRouteEndpointInputs(is_return);
+
+		// Reordering the outbound leg moves the return leg with it - the return is derived from
+		// it, and the subscriptions that would normally carry the change across cannot see a
+		// silent write. Reordering the return leg is the user arranging that leg on its own.
+		if (!is_return) {
+			this.syncReturnLegFromOutbound();
+		}
+
 		this.MapController(is_return);
 		this.buildBookingData();
 	}
