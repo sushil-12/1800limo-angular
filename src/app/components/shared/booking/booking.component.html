@@ -1026,7 +1026,7 @@
 
 						<!-- Pickup - Address Field -->
 						<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-							<div class="row px-3">
+							<div class="row px-2">
 								<div class="col-md-12 quote-ui-dropdown-host" id="pickup_address">
 									<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 										[ngClass]="{ 'error-field': (submitBookingForm && Form.pickup.invalid) || (Form.pickup.touched && Form.pickup.invalid) }">
@@ -1083,7 +1083,7 @@
 
 						<!-- Pickup - Airport Fields -->
 						<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
-							<div class="row px-4">
+							<div class="row px-2">
 								<!-- Airport -->
 								<div class="col-md-6 mb-2 quote-ui-dropdown-host">
 									<mat-form-field appearance="outline"
@@ -1265,7 +1265,7 @@
 
 						<!-- Pickup - Cruise Details -->
 						<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-							<div class="row px-3">
+							<div class="row px-2">
 								<!-- Cruise Port -->
 								<div class="col-md-4">
 									<mat-form-field appearance="outline">
@@ -1362,11 +1362,11 @@
 									<button type="button" class="bk-route-actions__btn bk-route-actions__btn--danger"
 										(click)="deleteExtraStop(false, stop_index)"
 										aria-label="Remove stop {{ stop_index + 1 }}">
-										<i class="bi bi-trash" aria-hidden="true"></i>
+										<i class="bi bi-trash text-danger text-xl" aria-hidden="true"></i>
 									</button>
 								</div>
 							</div>
-							<div class="quote-ui-dropdown-host">
+							<div class="quote-ui-dropdown-host px-2">
 								<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 									[ngClass]="{ 'error-field': isSameLocationStop(false, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
 									<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
@@ -1453,7 +1453,7 @@
 
 						<!-- Dropoff - Address Field -->
 						<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-							<div class="row px-3" id="dropoff_address">
+							<div class="row px-2" id="dropoff_address">
 								<div class="col-md-12 quote-ui-dropdown-host">
 									<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 										[ngClass]="{ 'error-field': (submitBookingForm && Form.dropoff.invalid) || (Form.dropoff.touched && Form.dropoff.invalid) }">
@@ -1513,7 +1513,7 @@
 
 						<!-- Dropoff - Airport Field -->
 						<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-							<div class="row px-4">
+							<div class="row px-2">
 								<!-- Airport -->
 								<div class="col-md-6 mb-2 quote-ui-dropdown-host">
 									<mat-form-field appearance="outline"
@@ -1613,7 +1613,7 @@
 
 						<!-- Dropoff - Cruise Details -->
 						<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-							<div class="row px-3">
+							<div class="row px-2">
 								<!-- Cruise Port -->
 								<div class="col-md-4">
 									<mat-form-field appearance="outline">
@@ -2830,7 +2830,7 @@
 
 						<!-- Return Pickup - Address Field -->
 						<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
-							<div class="row px-3" id="return_pickup_address">
+							<div class="row px-2" id="return_pickup_address">
 								<div class="col-md-12 quote-ui-dropdown-host">
 									<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 										[ngClass]="{ 'error-field': (submitBookingForm && Form.return_pickup.invalid) || (Form.return_pickup.touched && Form.return_pickup.invalid) }">
@@ -2886,7 +2886,7 @@
 
 						<!-- Return Pickup - Airport Fields -->
 						<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
-							<div class="row px-3">
+							<div class="row px-2">
 								<!-- Airport -->
 								<div class="col-md-6 mb-2 quote-ui-dropdown-host">
 									<mat-form-field appearance="outline"
@@ -3071,7 +3071,7 @@
 
 						<!-- Return Pickup - Cruise Details -->
 						<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
-							<div class="row px-3">
+							<div class="row px-2">
 								<!-- Cruise Port -->
 								<div class="col-md-4">
 									<mat-form-field appearance="outline">
@@ -3168,11 +3168,11 @@
 									<button type="button" class="bk-route-actions__btn bk-route-actions__btn--danger"
 										(click)="deleteExtraStop(true, stop_index)"
 										aria-label="Remove return stop {{ stop_index + 1 }}">
-										<i class="bi bi-trash" aria-hidden="true"></i>
+										<i class="bi bi-trash text-danger text-xl" aria-hidden="true"></i>
 									</button>
 								</div>
 							</div>
-							<div class="quote-ui-dropdown-host">
+							<div class="quote-ui-dropdown-host px-2">
 								<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 									[ngClass]="{ 'error-field': isSameLocationStop(true, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
 									<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
@@ -3260,7 +3260,7 @@
 
 						<!-- Return Dropoff - Address Field -->
 						<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
-							<div class="row px-3" id="return_dropoff_address">
+							<div class="row px-2" id="return_dropoff_address">
 								<div class="col-md-12 quote-ui-dropdown-host">
 									<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
 										[ngClass]="{ 'error-field': (submitBookingForm && Form.return_dropoff.invalid) || (Form.return_dropoff.touched && Form.return_dropoff.invalid) }">
@@ -3418,7 +3418,7 @@
 
 						<!-- Return Dropoff - Cruise Details -->
 						<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
-							<div class="row px-3">
+							<div class="row px-2">
 								<!-- Cruise Port -->
 								<div class="col-md-4">
 									<mat-form-field appearance="outline">

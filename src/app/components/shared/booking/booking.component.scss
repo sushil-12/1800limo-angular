@@ -1697,14 +1697,15 @@ $secnav-green: #21a45d;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 28px;
-	height: 28px;
+	width: 32px;
+    height: 32px;
+    margin-right: 5px;
 	padding: 0;
 	border: 0;
 	border-radius: 6px;
 	background: transparent;
 	color: var(--ink-500);
-	font-size: 0.85rem;
+	font-size: 18px;
 	line-height: 1;
 	cursor: pointer;
 	transition: background-color 0.15s ease, color 0.15s ease;
@@ -1808,21 +1809,15 @@ $secnav-green: #21a45d;
 	width: 100%;
 	margin: 10px 0 4px;
 	padding: 11px 16px;
-	border: 1.5px dashed $bk-border;
+	border: 1.5px dashed green;
 	border-radius: $bk-radius;
-	background: transparent;
-	color: var(--ink-700);
+	background: green;
+	color: #fff;
 	font-family: "Roboto", sans-serif;
 	font-size: 0.92rem;
 	font-weight: 600;
 	cursor: pointer;
 	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-}
-
-.bk-add-stop:hover {
-	border-color: var(--brand-orange);
-	background: var(--brand-orange-light);
-	color: var(--brand-orange-dark);
 }
 
 .bk-add-stop:focus-visible {
