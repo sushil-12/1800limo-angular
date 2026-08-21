@@ -991,16 +991,38 @@
 				</div>
 
 
-				<!-- Pickup, drop-off and the extra stops form one sortable list. The order on
-				     screen is unchanged - dragging rewrites the underlying controls, so the
-				     first position is always the pickup, the second the drop-off and the rest
-				     the extra stops. Press and hold a section to pick it up. -->
+				<!-- Pickup, the extra stops and the drop-off form one sortable list, listed in
+				     travel order. Dragging a point - or using its move buttons - rewrites the
+				     underlying controls, so the first position is always the pickup, the last
+				     is always the drop-off and everything between is a stop. -->
 				<div class="bk-route-list" cdkDropList
 					(cdkDropListDropped)="dropRoutePoint($event, false)">
 					<div class="bk-route-point" cdkDrag>
-						<h4 class="border-0 pl-2 mt-2" id="pickup_adress" cdkDragHandle title="Drag to reorder">
-							Pickup
-						</h4>
+						<div class="bk-route-rail">
+							<span class="bk-route-rail__node bk-route-rail__node--pickup"></span>
+						</div>
+						<div class="bk-route-body">
+							<div class="bk-route-head">
+								<h4 class="bk-route-eyebrow" id="pickup_adress">Pickup</h4>
+								<div class="bk-route-actions">
+									<button type="button" class="bk-route-actions__btn" disabled
+										aria-label="Move pickup up">
+										<i class="fa fa-chevron-up" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn" (click)="moveRoutePoint(false, 0, 1)"
+										aria-label="Move pickup down">
+										<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
+										title="Drag to reorder" aria-label="Drag to reorder pickup">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
+											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
+											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
+										</svg>
+									</button>
+								</div>
+							</div>
 
 						<!-- Pickup - Address Field -->
 						<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
@@ -1300,6 +1322,7 @@
 								</div>
 							</div>
 						</div>
+						</div><!-- /bk-route-body -->
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Pickup</span>
@@ -1308,10 +1331,125 @@
 						</ng-template>
 					</div>
 
+					<!-- Extra Stop Address Field -->
+					<div class="bk-route-point" cdkDrag
+						*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index">
+						<div class="bk-route-rail">
+							<span class="bk-route-rail__node bk-route-rail__node--stop">{{ stop_index + 1 }}</span>
+						</div>
+						<div class="bk-route-body">
+							<div class="bk-route-head">
+								<span class="bk-route-eyebrow">Stop {{ stop_index + 1 }}</span>
+								<div class="bk-route-actions">
+									<button type="button" class="bk-route-actions__btn"
+										(click)="moveRoutePoint(false, stop_index + 1, -1)"
+										aria-label="Move stop {{ stop_index + 1 }} up">
+										<i class="fa fa-chevron-up" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn"
+										(click)="moveRoutePoint(false, stop_index + 1, 1)"
+										aria-label="Move stop {{ stop_index + 1 }} down">
+										<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
+										title="Drag to reorder" aria-label="Drag to reorder stop {{ stop_index + 1 }}">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
+											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
+											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
+										</svg>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-actions__btn--danger"
+										(click)="deleteExtraStop(false, stop_index)"
+										aria-label="Remove stop {{ stop_index + 1 }}">
+										<i class="bi bi-trash" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+							<div class="quote-ui-dropdown-host">
+								<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+									[ngClass]="{ 'error-field': isSameLocationStop(false, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
+									<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
+									<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+									<input #extraStopInput type="text" matInput placeholder="Type your address"
+										[value]="fetchStopValue('extra_stops', stop_index)" autocomplete="off" autocorrect="off"
+										autocapitalize="off" spellcheck="false"
+										(focus)="onCustomAddressFocus(getExtraStopFieldKey(false, stop_index), extraStopInput)"
+										(click)="openCustomAddressDropdown(getExtraStopFieldKey(false, stop_index))"
+										(input)="onCustomAddressInput(getExtraStopFieldKey(false, stop_index), $any($event.target).value)"
+										(blur)="onCustomAddressBlur(getExtraStopFieldKey(false, stop_index))" />
+									<button matSuffix type="button" class="address-clear-btn"
+										*ngIf="fetchStopValue('extra_stops', stop_index) || extraStopInput?.value"
+										(click)="clearExtraStopAddress(false, stop_index, extraStopInput)"
+										aria-label="Clear extra stop address">
+										<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+											<path fill="#1f1f1f" fill-rule="evenodd"
+												d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+												clip-rule="evenodd"></path>
+										</svg>
+									</button>
+								</mat-form-field>
+								<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(false, stop_index))"
+									class="quote-ui-dropdown-panel">
+									<button type="button" class="quote-ui-dropdown-option"
+										*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(false, stop_index))"
+										(mousedown)="$event.preventDefault()"
+										(click)="selectCustomAddressOption(getExtraStopFieldKey(false, stop_index), option)">
+										<span class="quote-ui-dropdown-option__content">
+											<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
+											<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
+												}}</span>
+										</span>
+									</button>
+									<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))"
+										class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+									<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(false, stop_index))"
+										class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+									<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))"
+										class="quote-ui-dropdown-empty">No Result found</div>
+								</div>
+								<div *ngIf="isSameLocationStop(false, stop_index)"
+									class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
+								<div *ngIf="extra_stop.get('address')?.errors?.suggestionRequired && (submitBookingForm || extra_stop.get('address')?.touched)"
+									class="text-danger my-mat-hint" style="margin-bottom: 10px;">Please select an address from the suggestions list</div>
+								<div *ngIf="!isSameLocationStop(false, stop_index) && !extra_stop.get('address')?.errors?.suggestionRequired && (extra_stop.get('address')?.errors?.required || extra_stop.get('address')?.errors?.whitespace) && (submitBookingForm || extra_stop.get('address')?.touched)"
+									class="text-danger my-mat-hint" style="margin-bottom: 10px;">Extra stop address is required</div>
+							</div>
+						</div>
+						<ng-template cdkDragPreview>
+							<div class="bk-route-drag-preview">
+								<span class="bk-route-drag-preview__label">Stop {{ stop_index + 1 }}</span>
+								<span class="bk-route-drag-preview__address">{{ fetchStopValue('extra_stops', stop_index) || 'No address selected' }}</span>
+							</div>
+						</ng-template>
+					</div>
+
 					<div class="bk-route-point" cdkDrag>
-						<h4 class="border-0 pl-2 mt-3" cdkDragHandle title="Drag to reorder">
-							Dropoff
-						</h4>
+						<div class="bk-route-rail">
+							<span class="bk-route-rail__node bk-route-rail__node--dropoff"></span>
+						</div>
+						<div class="bk-route-body">
+							<div class="bk-route-head">
+								<span class="bk-route-eyebrow">Dropoff</span>
+								<div class="bk-route-actions">
+									<button type="button" class="bk-route-actions__btn"
+										(click)="moveRoutePoint(false, routePointCount(false) - 1, -1)"
+										aria-label="Move dropoff up">
+										<i class="fa fa-chevron-up" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn" disabled aria-label="Move dropoff down">
+										<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
+										title="Drag to reorder" aria-label="Drag to reorder dropoff">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
+											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
+											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
+										</svg>
+									</button>
+								</div>
+							</div>
 
 						<!-- Dropoff - Address Field -->
 						<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
@@ -1532,6 +1670,7 @@
 								</div>
 							</div>
 						</div>
+						</div><!-- /bk-route-body -->
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Dropoff</span>
@@ -1539,95 +1678,19 @@
 							</div>
 						</ng-template>
 					</div>
-
-					<!-- Extra Stops -->
-					<div class="row mt-3">
-						<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-							<div class="px-2">
-								<button type="button" class="bk-btn bk-btn--primary" (click)="addExtraStop(false)">
-									<i class="fa fa-plus" style="margin-right: 6px;"></i>
-									Add Stop
-								</button>
-							</div>
-							<div class="px-2 text-muted" *ngIf="autoConvertedToCharterTour">
-								<i class="fa fa-info-circle" style="margin-right: 6px;"></i>
-								More than 2 stops - this booking has been switched to Charter/Tour.
-							</div>
-						</div>
-					</div>
-
-					<!-- Extra Stop Address Field -->
-
-					<div class="row mt-2 mb-4 align-items-center m-0 bk-route-point"
-						*ngFor="let extra_stop of ExtraStops.controls; let stop_index = index"
-						cdkDrag>
-						<div class="extra-stop-field col-11 quote-ui-dropdown-host">
-							<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
-								[ngClass]="{ 'error-field': isSameLocationStop(false, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
-								<mat-label>Extra Stop Address {{ stop_index + 1 }}</mat-label>
-								<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
-								<input #extraStopInput type="text" matInput placeholder="Type your address"
-									[value]="fetchStopValue('extra_stops', stop_index)" autocomplete="off" autocorrect="off"
-									autocapitalize="off" spellcheck="false"
-									(focus)="onCustomAddressFocus(getExtraStopFieldKey(false, stop_index), extraStopInput)"
-									(click)="openCustomAddressDropdown(getExtraStopFieldKey(false, stop_index))"
-									(input)="onCustomAddressInput(getExtraStopFieldKey(false, stop_index), $any($event.target).value)"
-									(blur)="onCustomAddressBlur(getExtraStopFieldKey(false, stop_index))" />
-								<button matSuffix type="button" class="address-clear-btn"
-									*ngIf="fetchStopValue('extra_stops', stop_index) || extraStopInput?.value"
-									(click)="clearExtraStopAddress(false, stop_index, extraStopInput)"
-									aria-label="Clear extra stop address">
-									<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-										<path fill="#1f1f1f" fill-rule="evenodd"
-											d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
-											clip-rule="evenodd"></path>
-									</svg>
-								</button>
-							</mat-form-field>
-							<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(false, stop_index))"
-								class="quote-ui-dropdown-panel">
-								<button type="button" class="quote-ui-dropdown-option"
-									*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(false, stop_index))"
-									(mousedown)="$event.preventDefault()"
-									(click)="selectCustomAddressOption(getExtraStopFieldKey(false, stop_index), option)">
-									<span class="quote-ui-dropdown-option__content">
-										<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-										<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
-											}}</span>
-									</span>
-								</button>
-								<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(false, stop_index))"
-									class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-								<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(false, stop_index))"
-									class="quote-ui-dropdown-empty">Loading Suggestions...</div>
-								<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(false, stop_index))"
-									class="quote-ui-dropdown-empty">No Result found</div>
-							</div>
-							<div *ngIf="isSameLocationStop(false, stop_index)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
-							<div *ngIf="extra_stop.get('address')?.errors?.suggestionRequired && (submitBookingForm || extra_stop.get('address')?.touched)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Please select an address from the suggestions list</div>
-							<div *ngIf="!isSameLocationStop(false, stop_index) && !extra_stop.get('address')?.errors?.suggestionRequired && (extra_stop.get('address')?.errors?.required || extra_stop.get('address')?.errors?.whitespace) && (submitBookingForm || extra_stop.get('address')?.touched)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Extra stop address is required</div>
-						</div>
-						<div class="col-1 p-0 p-md-3">
-							<div class="delete-icon">
-								<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
-									(click)="deleteExtraStop(false, stop_index)"></i>
-							</div>
-						</div>
-						<ng-template cdkDragPreview>
-							<div class="bk-route-drag-preview">
-								<span class="bk-route-drag-preview__label">Stop {{ stop_index + 1 }}</span>
-								<span class="bk-route-drag-preview__address">{{ fetchStopValue('extra_stops', stop_index) || 'No address selected' }}</span>
-							</div>
-						</ng-template>
-					</div>
 				</div>
 
-				<!-- Extra Stop Address Field Ends -->
-
-				<div class="row m-2">
+				<!-- Add Stop sits under the finished route: a new stop lands just before the
+				     drop-off, which is where it reads as going. -->
+				<div class="bk-route-footer">
+					<button type="button" class="bk-add-stop" (click)="addExtraStop(false)">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+						Add stop
+					</button>
+					<div class="bk-callout bk-callout--info" *ngIf="autoConvertedToCharterTour">
+						<i class="bi bi-info-circle-fill bk-callout__icon"></i>
+						<span>More than 2 stops - this booking has been switched to Charter/Tour.</span>
+					</div>
 					<div class="bk-callout bk-callout--info">
 						<i class="bi bi-info-circle-fill bk-callout__icon"></i>
 						<span>Enter pickup and drop-off locations first, then add extra stops.</span>
@@ -2734,16 +2797,36 @@
 
 
 
-				<!-- Pickup, drop-off and the extra stops form one sortable list. The order on
-				     screen is unchanged - dragging rewrites the underlying controls, so the
-				     first position is always the pickup, the second the drop-off and the rest
-				     the extra stops. Press and hold a section to pick it up. -->
+				<!-- The return leg is the same sortable list as the outbound one, listed in
+				     travel order: pickup first, drop-off last, stops in between. -->
 				<div class="bk-route-list" cdkDropList
 					(cdkDropListDropped)="dropRoutePoint($event, true)">
 					<div class="bk-route-point" cdkDrag>
-						<h4 class="pl-2" style="margin-bottom: 0;" cdkDragHandle title="Drag to reorder">
-							Return Pickup
-						</h4>
+						<div class="bk-route-rail">
+							<span class="bk-route-rail__node bk-route-rail__node--pickup"></span>
+						</div>
+						<div class="bk-route-body">
+							<div class="bk-route-head">
+								<span class="bk-route-eyebrow">Return Pickup</span>
+								<div class="bk-route-actions">
+									<button type="button" class="bk-route-actions__btn" disabled
+										aria-label="Move return pickup up">
+										<i class="fa fa-chevron-up" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn" (click)="moveRoutePoint(true, 0, 1)"
+										aria-label="Move return pickup down">
+										<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
+										title="Drag to reorder" aria-label="Drag to reorder return pickup">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
+											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
+											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
+										</svg>
+									</button>
+								</div>
+							</div>
 
 						<!-- Return Pickup - Address Field -->
 						<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
@@ -3045,6 +3128,7 @@
 								</div>
 							</div>
 						</div>
+						</div><!-- /bk-route-body -->
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Return Pickup</span>
@@ -3053,10 +3137,126 @@
 						</ng-template>
 					</div>
 
+					<!-- Return Extra Stop Address Field -->
+					<div class="bk-route-point" cdkDrag
+						*ngFor="let extra_stop of ReturnExtraStops.controls; let stop_index = index">
+						<div class="bk-route-rail">
+							<span class="bk-route-rail__node bk-route-rail__node--stop">{{ stop_index + 1 }}</span>
+						</div>
+						<div class="bk-route-body">
+							<div class="bk-route-head">
+								<span class="bk-route-eyebrow">Return Stop {{ stop_index + 1 }}</span>
+								<div class="bk-route-actions">
+									<button type="button" class="bk-route-actions__btn"
+										(click)="moveRoutePoint(true, stop_index + 1, -1)"
+										aria-label="Move return stop {{ stop_index + 1 }} up">
+										<i class="fa fa-chevron-up" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn"
+										(click)="moveRoutePoint(true, stop_index + 1, 1)"
+										aria-label="Move return stop {{ stop_index + 1 }} down">
+										<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
+										title="Drag to reorder" aria-label="Drag to reorder return stop {{ stop_index + 1 }}">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
+											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
+											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
+										</svg>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-actions__btn--danger"
+										(click)="deleteExtraStop(true, stop_index)"
+										aria-label="Remove return stop {{ stop_index + 1 }}">
+										<i class="bi bi-trash" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+							<div class="quote-ui-dropdown-host">
+								<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
+									[ngClass]="{ 'error-field': isSameLocationStop(true, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
+									<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
+									<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
+									<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
+										[value]="fetchStopValue('return_extra_stops', stop_index)" autocomplete="off"
+										autocorrect="off" autocapitalize="off" spellcheck="false"
+										(focus)="onCustomAddressFocus(getExtraStopFieldKey(true, stop_index), returnExtraStopInput)"
+										(click)="openCustomAddressDropdown(getExtraStopFieldKey(true, stop_index))"
+										(input)="onCustomAddressInput(getExtraStopFieldKey(true, stop_index), $any($event.target).value)"
+										(blur)="onCustomAddressBlur(getExtraStopFieldKey(true, stop_index))" />
+									<button matSuffix type="button" class="address-clear-btn"
+										*ngIf="fetchStopValue('return_extra_stops', stop_index) || returnExtraStopInput?.value"
+										(click)="clearExtraStopAddress(true, stop_index, returnExtraStopInput)"
+										aria-label="Clear return extra stop address">
+										<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
+											<path fill="#1f1f1f" fill-rule="evenodd"
+												d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
+												clip-rule="evenodd"></path>
+										</svg>
+									</button>
+								</mat-form-field>
+								<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(true, stop_index))"
+									class="quote-ui-dropdown-panel">
+									<button type="button" class="quote-ui-dropdown-option"
+										*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(true, stop_index))"
+										(mousedown)="$event.preventDefault()"
+										(click)="selectCustomAddressOption(getExtraStopFieldKey(true, stop_index), option)">
+										<span class="quote-ui-dropdown-option__content">
+											<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
+											<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
+												}}</span>
+										</span>
+									</button>
+									<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))"
+										class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
+									<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(true, stop_index))"
+										class="quote-ui-dropdown-empty">Loading Suggestions...</div>
+									<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))"
+										class="quote-ui-dropdown-empty">No Result found</div>
+								</div>
+								<div *ngIf="isSameLocationStop(true, stop_index)"
+									class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
+								<div *ngIf="extra_stop.get('address')?.errors?.suggestionRequired && (submitBookingForm || extra_stop.get('address')?.touched)"
+									class="text-danger my-mat-hint" style="margin-bottom: 10px;">Please select an address from the suggestions list</div>
+								<div *ngIf="!isSameLocationStop(true, stop_index) && !extra_stop.get('address')?.errors?.suggestionRequired && (extra_stop.get('address')?.errors?.required || extra_stop.get('address')?.errors?.whitespace) && (submitBookingForm || extra_stop.get('address')?.touched)"
+									class="text-danger my-mat-hint" style="margin-bottom: 10px;">Return extra stop address is required</div>
+							</div>
+						</div>
+						<ng-template cdkDragPreview>
+							<div class="bk-route-drag-preview">
+								<span class="bk-route-drag-preview__label">Return Stop {{ stop_index + 1 }}</span>
+								<span class="bk-route-drag-preview__address">{{ fetchStopValue('return_extra_stops', stop_index) || 'No address selected' }}</span>
+							</div>
+						</ng-template>
+					</div>
+
 					<div class="bk-route-point" cdkDrag>
-						<h4 class="pl-2" style="margin-bottom: 0;" cdkDragHandle title="Drag to reorder">
-							Dropoff
-						</h4>
+						<div class="bk-route-rail">
+							<span class="bk-route-rail__node bk-route-rail__node--dropoff"></span>
+						</div>
+						<div class="bk-route-body">
+							<div class="bk-route-head">
+								<span class="bk-route-eyebrow">Return Dropoff</span>
+								<div class="bk-route-actions">
+									<button type="button" class="bk-route-actions__btn"
+										(click)="moveRoutePoint(true, routePointCount(true) - 1, -1)"
+										aria-label="Move return dropoff up">
+										<i class="fa fa-chevron-up" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn" disabled
+										aria-label="Move return dropoff down">
+										<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="bk-route-actions__btn bk-route-handle" cdkDragHandle
+										title="Drag to reorder" aria-label="Drag to reorder return dropoff">
+										<svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
+											<circle cx="2" cy="2" r="1.5" /><circle cx="8" cy="2" r="1.5" />
+											<circle cx="2" cy="8" r="1.5" /><circle cx="8" cy="8" r="1.5" />
+											<circle cx="2" cy="14" r="1.5" /><circle cx="8" cy="14" r="1.5" />
+										</svg>
+									</button>
+								</div>
+							</div>
 
 						<!-- Return Dropoff - Address Field -->
 						<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
@@ -3275,6 +3475,7 @@
 								</div>
 							</div>
 						</div>
+						</div><!-- /bk-route-body -->
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Return Dropoff</span>
@@ -3282,87 +3483,20 @@
 							</div>
 						</ng-template>
 					</div>
-
-					<!-- Extra Stops -->
-					<div class="row my-3 justify-items-end">
-						<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
-							<div class="px-2">
-								<button type="button" class="bk-btn bk-btn--primary" (click)="addExtraStop(true)">
-									<i class="fa fa-plus" style="margin-right: 6px;"></i>
-									Add Stop
-								</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="row my-2 align-items-center bk-route-point"
-						*ngFor="let extra_stop of ReturnExtraStops.controls; let stop_index = index"
-						cdkDrag>
-						<div class="extra-stop-field col-md-11 quote-ui-dropdown-host">
-							<mat-form-field appearance="outline" class="quote-ui-field quote-ui-field--address"
-								[ngClass]="{ 'error-field': isSameLocationStop(true, stop_index) || ((submitBookingForm || extra_stop.get('address')?.touched) && extra_stop.get('address')?.invalid) }">
-								<mat-label>Return Extra Stop Address {{ stop_index + 1 }}</mat-label>
-								<i matPrefix class="fas fa-search quote-ui-field__prefix quote-ui-field__prefix--address"></i>
-								<input #returnExtraStopInput type="text" matInput placeholder="Type your address"
-									[value]="fetchStopValue('return_extra_stops', stop_index)" autocomplete="off"
-									autocorrect="off" autocapitalize="off" spellcheck="false"
-									(focus)="onCustomAddressFocus(getExtraStopFieldKey(true, stop_index), returnExtraStopInput)"
-									(click)="openCustomAddressDropdown(getExtraStopFieldKey(true, stop_index))"
-									(input)="onCustomAddressInput(getExtraStopFieldKey(true, stop_index), $any($event.target).value)"
-									(blur)="onCustomAddressBlur(getExtraStopFieldKey(true, stop_index))" />
-								<button matSuffix type="button" class="address-clear-btn"
-									*ngIf="fetchStopValue('return_extra_stops', stop_index) || returnExtraStopInput?.value"
-									(click)="clearExtraStopAddress(true, stop_index, returnExtraStopInput)"
-									aria-label="Clear return extra stop address">
-									<svg width="21" height="20" fill="none" viewBox="0 0 21 20">
-										<path fill="#1f1f1f" fill-rule="evenodd"
-											d="M10.8 0a10 10 0 100 20 10 10 0 100-20m2.59 6L10.8 8.59 8.21 6 6.8 7.41 9.39 10 6.8 12.59 8.21 14l2.59-2.59L13.39 14l1.41-1.41L12.21 10l2.59-2.59zM2.8 10a8.01 8.01 0 0016 0 8.01 8.01 0 00-16 0"
-											clip-rule="evenodd"></path>
-									</svg>
-								</button>
-							</mat-form-field>
-							<div *ngIf="isCustomAddressDropdownOpen(getExtraStopFieldKey(true, stop_index))"
-								class="quote-ui-dropdown-panel">
-								<button type="button" class="quote-ui-dropdown-option"
-									*ngFor="let option of getCustomAddressOptions(getExtraStopFieldKey(true, stop_index))"
-									(mousedown)="$event.preventDefault()"
-									(click)="selectCustomAddressOption(getExtraStopFieldKey(true, stop_index), option)">
-									<span class="quote-ui-dropdown-option__content">
-										<span class="quote-ui-dropdown-option__label">{{ getCustomOptionLabel(option) }}</span>
-										<span class="quote-ui-dropdown-option__secondary">{{ getCustomOptionSecondary(option)
-											}}</span>
-									</span>
-								</button>
-								<div *ngIf="shouldShowCustomPrompt('address', getExtraStopFieldKey(true, stop_index))"
-									class="quote-ui-dropdown-empty">Enter address and select from suggestions</div>
-								<div *ngIf="isCustomSearchLoading('address', getExtraStopFieldKey(true, stop_index))"
-									class="quote-ui-dropdown-empty">Loading Suggestions...</div>
-								<div *ngIf="shouldShowCustomEmpty('address', getExtraStopFieldKey(true, stop_index))"
-									class="quote-ui-dropdown-empty">No Result found</div>
-							</div>
-							<div *ngIf="isSameLocationStop(true, stop_index)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Pickup, drop-off and stop locations must be different</div>
-							<div *ngIf="extra_stop.get('address')?.errors?.suggestionRequired && (submitBookingForm || extra_stop.get('address')?.touched)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Please select an address from the suggestions list</div>
-							<div *ngIf="!isSameLocationStop(true, stop_index) && !extra_stop.get('address')?.errors?.suggestionRequired && (extra_stop.get('address')?.errors?.required || extra_stop.get('address')?.errors?.whitespace) && (submitBookingForm || extra_stop.get('address')?.touched)"
-								class="text-danger my-mat-hint" style="margin-bottom: 10px;">Return extra stop address is required</div>
-						</div>
-						<div class="col-md-1">
-							<div class="delete-icons">
-								<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
-									(click)="deleteExtraStop(true, stop_index)"></i>
-							</div>
-						</div>
-						<ng-template cdkDragPreview>
-							<div class="bk-route-drag-preview">
-								<span class="bk-route-drag-preview__label">Return Stop {{ stop_index + 1 }}</span>
-								<span class="bk-route-drag-preview__address">{{ fetchStopValue('return_extra_stops', stop_index) || 'No address selected' }}</span>
-							</div>
-						</ng-template>
-					</div>
 				</div>
 
-				<!-- Extra Stop Address Field Ends -->
+				<!-- Add Stop sits under the finished route: a new stop lands just before the
+				     drop-off, which is where it reads as going. -->
+				<div class="bk-route-footer">
+					<button type="button" class="bk-add-stop" (click)="addExtraStop(true)">
+						<i class="fa fa-plus" aria-hidden="true"></i>
+						Add stop
+					</button>
+					<div class="bk-callout bk-callout--info">
+						<i class="bi bi-info-circle-fill bk-callout__icon"></i>
+						<span>Enter pickup and drop-off locations first, then add extra stops.</span>
+					</div>
+				</div>
 
 				<h4 class="pl-2" style="margin-bottom: 0;">
 					Return Special Instructions
@@ -3376,12 +3510,6 @@
 						(onEditorCreated)="onInstructionsEditorCreated($event)"
 						[styles]="{'min-height': '150px', 'background': 'rgb(226, 226, 226)', 'border-radius': '4px'}">
 					</quill-editor>
-				</div>
-				<div class="row m-2">
-					<div class="bk-callout bk-callout--info">
-						<i class="bi bi-info-circle-fill bk-callout__icon"></i>
-						<span>Enter pickup and drop-off locations first, then add extra stops.</span>
-					</div>
 				</div>
 
 				<!-- Extra Stop Address Field -->

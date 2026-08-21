@@ -5542,26 +5542,58 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Reordering the route is a data move, not a DOM move: the template renders from
-	 * `pickup` / `extra_stops` / `dropoff`, so the dropped position is written back to
-	 * those controls and the view re-renders from them. The map, the distance and the
-	 * rate payload all follow the new order.
+	 * The form stores a leg as `[pickup, dropoff, ...stops]`, but the screen lists it in
+	 * travel order - pickup, then every stop, then the drop-off. These two convert between
+	 * the two orderings so a drop index taken off the page means what it looks like it means.
 	 */
-	dropRoutePoint(event: CdkDragDrop<any[]>, is_return: boolean = false): void {
-		if (event.previousIndex === event.currentIndex) {
+	private toDisplayOrder(points: Array<Record<string, any>>): Array<Record<string, any>> {
+		return [points[0], ...points.slice(2), points[1]];
+	}
+
+	private toDataOrder(display: Array<Record<string, any>>): Array<Record<string, any>> {
+		return [display[0], display[display.length - 1], ...display.slice(1, -1)];
+	}
+
+	/** How many points the leg has on screen: the two endpoints plus every stop. */
+	routePointCount(is_return: boolean = false): number {
+		const stops = this.BookingForm?.get(is_return ? 'return_extra_stops' : 'extra_stops') as FormArray | null;
+		return 2 + (stops?.length ?? 0);
+	}
+
+	/**
+	 * Reordering the route is a data move, not a DOM move: the template renders from
+	 * `pickup` / `extra_stops` / `dropoff`, so the new position is written back to those
+	 * controls and the view re-renders from them. The map, the distance and the rate
+	 * payload all follow the new order.
+	 *
+	 * `from` and `to` are positions in travel order, which is what both the drag and the
+	 * move buttons work in.
+	 */
+	private applyRouteMove(is_return: boolean, from: number, to: number): void {
+		const count = this.routePointCount(is_return);
+		if (from === to || from < 0 || to < 0 || from >= count || to >= count) {
 			return;
 		}
 
 		this.clearSameLocationErrors();
 		this.closeCustomAddressDropdown();
 
-		const points = this.readRoutePoints(is_return);
-		moveItemInArray(points, event.previousIndex, event.currentIndex);
-		this.writeRoutePoints(points, is_return);
+		const display = this.toDisplayOrder(this.readRoutePoints(is_return));
+		moveItemInArray(display, from, to);
+		this.writeRoutePoints(this.toDataOrder(display), is_return);
 
 		this.syncRouteEndpointInputs(is_return);
 		this.MapController(is_return);
 		this.buildBookingData();
+	}
+
+	dropRoutePoint(event: CdkDragDrop<any[]>, is_return: boolean = false): void {
+		this.applyRouteMove(is_return, event.previousIndex, event.currentIndex);
+	}
+
+	/** The move up / move down buttons - the same reorder without a pointer. */
+	moveRoutePoint(is_return: boolean, displayIndex: number, delta: number): void {
+		this.applyRouteMove(is_return, displayIndex, displayIndex + delta);
 	}
 
 	/**
