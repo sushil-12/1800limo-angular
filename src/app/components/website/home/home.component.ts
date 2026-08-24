@@ -2115,6 +2115,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 		if (dropoffTypeSub) { this._subscriptions.push(dropoffTypeSub); }
 	}
+	fetchSectionData(section: string) {
+		if (section != undefined && this.homePageData != undefined) {
+			for (let item in this.homePageData) {
+				if (this.homePageData[item]['section'] != undefined && String(this.homePageData[item]['section']).toLowerCase() == section.toLowerCase()) {
+					return this.homePageData[item]
+				}
+			}
+		}
+	}
+
+	get bannerIntroHtml(): string {
+		const page = this.fetchSectionData('banner');
+		if (!page) { return ''; }
+		return [page['title'], page['subtitle'], page['content']]
+			.map((part: any) => (part == undefined ? '' : String(part).trim()))
+			.filter((part: string) => part !== '')
+			.join(' ');
+	}
+
 	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
 			if (this.homePageData) {

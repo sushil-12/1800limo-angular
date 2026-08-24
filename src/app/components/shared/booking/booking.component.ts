@@ -25,7 +25,7 @@ import { NgIf } from '@angular/common';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -5848,13 +5848,44 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * The address to print on a route point's drag preview.
+	 *
+	 * An airport endpoint keeps its plain `pickup` / `dropoff` control blank by convention -
+	 * its location lives in `<leg>_airport_option` / `<leg>_airport_name` (see
+	 * `writeRoutePoints`) - so reading the plain control alone makes an airport leg's preview
+	 * say "No address selected" while the field on screen clearly shows the airport. Read
+	 * whichever control the endpoint actually stores its address in, and keep the other as a
+	 * fallback so a leg caught mid-switch between kinds still shows what the user picked.
+	 */
+	routeEndpointAddress(leg: 'pickup' | 'dropoff', is_return: boolean = false): string {
+		const control = `${is_return ? 'return_' : ''}${leg}`;
+		const read = (name: string) => String(this.BookingForm?.get(name)?.value ?? '').trim();
+
+		const plain = read(control);
+		const airport = read(`${control}_airport_option`) || read(`${control}_airport_name`);
+		const isAirport = this.routeEndpointKinds(is_return)[leg === 'pickup' ? 0 : 1] === 'airport';
+
+		return isAirport ? (airport || plain) : (plain || airport);
+	}
+
+	/**
+	 * The same for a stop. A stop selected as an airport does fill its plain `address`, so
+	 * this is normally just that value, with the airport name as a fallback.
+	 */
+	routeStopAddress(index: number, is_return: boolean = false): string {
+		const stop = (this.BookingForm?.get(is_return ? 'return_extra_stops' : 'extra_stops') as FormArray | null)?.at(index);
+		const read = (name: string) => String(stop?.get(name)?.value ?? '').trim();
+		return read('address') || read('airport_name') || read('airport_option');
+	}
+
+	/**
 	 * Reordering the route is a data move, not a DOM move: the template renders from
 	 * `pickup` / `extra_stops` / `dropoff`, so the new position is written back to those
 	 * controls and the view re-renders from them. The map, the distance and the rate
 	 * payload all follow the new order.
 	 *
 	 * `from` and `to` are positions in travel order, which is what both the drag and the
-	 * move buttons work in.
+	 * move buttons work in. 
 	 */
 	private applyRouteMove(is_return: boolean, from: number, to: number): void {
 		const count = this.routePointCount(is_return);
@@ -5866,7 +5897,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.closeCustomAddressDropdown();
 
 		const display = this.toDisplayOrder(this.readRoutePoints(is_return));
-		moveItemInArray(display, from, to);
+		const dragged = display[from];
+		display[from] = display[to];
+		display[to] = dragged;
 		this.writeRoutePoints(this.toDataOrder(display), is_return);
 
 		this.syncRouteEndpointInputs(is_return);

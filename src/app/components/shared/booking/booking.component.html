@@ -1326,7 +1326,7 @@
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Pickup</span>
-								<span class="bk-route-drag-preview__address">{{ Form.pickup.value || 'No address selected' }}</span>
+								<span class="bk-route-drag-preview__address">{{ routeEndpointAddress('pickup') || 'No address selected' }}</span>
 							</div>
 						</ng-template>
 					</div>
@@ -1419,7 +1419,7 @@
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Stop {{ stop_index + 1 }}</span>
-								<span class="bk-route-drag-preview__address">{{ fetchStopValue('extra_stops', stop_index) || 'No address selected' }}</span>
+								<span class="bk-route-drag-preview__address">{{ routeStopAddress(stop_index) || 'No address selected' }}</span>
 							</div>
 						</ng-template>
 					</div>
@@ -1674,7 +1674,7 @@
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Dropoff</span>
-								<span class="bk-route-drag-preview__address">{{ Form.dropoff.value || 'No address selected' }}</span>
+								<span class="bk-route-drag-preview__address">{{ routeEndpointAddress('dropoff') || 'No address selected' }}</span>
 							</div>
 						</ng-template>
 					</div>
@@ -3133,7 +3133,7 @@
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Return Pickup</span>
-								<span class="bk-route-drag-preview__address">{{ Form.return_pickup.value || 'No address selected' }}</span>
+								<span class="bk-route-drag-preview__address">{{ routeEndpointAddress('pickup', true) || 'No address selected' }}</span>
 							</div>
 						</ng-template>
 					</div>
@@ -3226,7 +3226,7 @@
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Return Stop {{ stop_index + 1 }}</span>
-								<span class="bk-route-drag-preview__address">{{ fetchStopValue('return_extra_stops', stop_index) || 'No address selected' }}</span>
+								<span class="bk-route-drag-preview__address">{{ routeStopAddress(stop_index, true) || 'No address selected' }}</span>
 							</div>
 						</ng-template>
 					</div>
@@ -3480,7 +3480,7 @@
 						<ng-template cdkDragPreview>
 							<div class="bk-route-drag-preview">
 								<span class="bk-route-drag-preview__label">Return Dropoff</span>
-								<span class="bk-route-drag-preview__address">{{ Form.return_dropoff.value || 'No address selected' }}</span>
+								<span class="bk-route-drag-preview__address">{{ routeEndpointAddress('dropoff', true) || 'No address selected' }}</span>
 							</div>
 						</ng-template>
 					</div>
