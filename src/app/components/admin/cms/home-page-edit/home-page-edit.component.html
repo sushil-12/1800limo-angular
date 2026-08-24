@@ -15,12 +15,12 @@
 									<input matInput placeholder="Title" formControlName="title">
 								</mat-form-field>
 							</div>
-							<div class="col-md-12" *ngIf="subtitle">
+							<!-- <div class="col-md-12" *ngIf="subtitle">
 								<mat-form-field appearance="outline">
 									<mat-label>Subtitle</mat-label>
 									<input matInput placeholder="Subtitle" formControlName="subtitle">
 								</mat-form-field>
-							</div>
+							</div> -->
 							<div class="col-md-12" *ngIf="video_url">
 								<mat-form-field appearance="outline">
 									<mat-label>Video Link</mat-label>
@@ -28,11 +28,11 @@
 								</mat-form-field>
 							</div>
 							<div class="col-md-12" *ngIf="content">
-								<mat-form-field appearance="outline">
-									<mat-label>Content</mat-label>
-									<textarea matInput placeholder="Content" cdkTextareaAutosize rows="5"
-										#autosize="cdkTextareaAutosize" formControlName="content"></textarea>
-								</mat-form-field>
+								<label class="quill-label" style="margin-top: 14px; font-size: 18px !important;">Content</label>
+								<quill-editor #contentEditor formControlName="content" [modules]="quillModules"
+									placeholder="Content"
+									[styles]="{'min-height': '150px', 'background': '#fff', 'border-radius': '4px'}">
+								</quill-editor>
 							</div>
 						</div>
 

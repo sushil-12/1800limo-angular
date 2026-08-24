@@ -6311,14 +6311,14 @@ gmp-place-autocomplete {
  
 /* ── Minute numbers ── */
 .clock-face__number--outer > span {
-  font-size: 14px !important;
+  font-size: 17px !important;
   font-weight: 600 !important;
   color: #555 !important;
   transition: all 0.2s ease !important;
 }
 .clock-face__number--outer > span:hover {
   color: #f3933d !important;
-  transform: scale(1.15) !important;
+  /* transform: scale(1.15) !important; */
 }
  
 /* ── Active number bubble ── */
@@ -6326,7 +6326,8 @@ gmp-place-autocomplete {
   background: linear-gradient(135deg, #f3933d, #e07828) !important;
   color: #fff !important;
   box-shadow: 0 2px 8px rgba(243,147,61,0.55) !important;
-  transform: scale(1.1) !important;
+  /* transform: scale(1.1) !important; */
+  font-size:18px !important;
 }
  
 /* ── Clock hand ── */

@@ -33,6 +33,16 @@ export class HomePageEditComponent implements OnInit
 	public imageSrc: string;
 	public imagesRecords: Array<any> = [];
 
+	public quillModules = {
+		toolbar: [
+			['bold', 'italic', 'underline', 'strike'],
+			[{ 'list': 'ordered' }, { 'list': 'bullet' }],
+			[{ 'color': [] }, { 'background': [] }],
+			['link'],
+			['clean']
+		]
+	};
+
 	constructor(
 		private fb: FormBuilder,
 		private router: Router,
