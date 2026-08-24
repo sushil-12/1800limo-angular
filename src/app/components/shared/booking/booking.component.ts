@@ -26,6 +26,7 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { BookingPreviewComponent } from '../../affiliate/booking-preview/booking-preview.component';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -113,6 +114,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 	@ViewChild('return_lose_affiliate_phoneInput') return_lose_affiliate_phoneInput!: ElementRef;
 	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
 	@ViewChild('return_loose_driver_cellInput') return_loose_driver_cellInput!: ElementRef;
+	/** Shared receipt modal reused by the Preview button instead of the inline #previewBooking markup. */
+	@ViewChild('bookingPreviewModal') bookingPreviewModal!: BookingPreviewComponent;
 
 	/* ---------- Section navigator (fixed "On this page" panel) ---------- */
 	sectionNavOpen = false;
@@ -6837,8 +6840,154 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		}
 		else {
-			$('#previewBooking').modal('handleUpdate').modal('show')
+			this.openBookingReceiptPreview()
 		}
+	}
+
+	/** Which receipt persona the shared preview should render for this portal. */
+	private get previewUserRole(): 'admin' | 'affiliate' | 'individual' | 'travel_agent' {
+		if (this.isAdminMode) {
+			return 'admin'
+		}
+		if (this.isAffiliateMode) {
+			return 'affiliate'
+		}
+		if (this.isTravelAgentMode) {
+			return 'travel_agent'
+		}
+		return 'individual'
+	}
+
+	/**
+	 * Shape the live form into the object the shared receipt component expects,
+	 * so an unsaved booking renders through the same template as a saved one.
+	 */
+	private buildBookingPreviewPayload(): any {
+		const v = this.BookingForm.value
+		const isEdit = this.Form.updateType.value == 'edit' || this.updateType == 'edit'
+		const isRoundTrip = v.service_type == 'round_trip'
+
+		let share_array: any = null
+		try {
+			share_array = this.RatesForm ? this.createReservationShareArray() : null
+		} catch (e) {
+			console.error('[BookingPreview] Failed to build share array for preview', e)
+		}
+
+		const affiliateName = [
+			this.AffiliateInformation?.FirstName,
+			this.AffiliateInformation?.MiddleName,
+			this.AffiliateInformation?.LastName
+		].filter(part => !!part).join(' ')
+
+		const extra_stops = (v.extra_stops || []).map((stop: any) => ({
+			address: stop?.address,
+			latitude: stop?.latitude,
+			longitude: stop?.longitude
+		}))
+
+		return {
+			reservation_id: isEdit ? (this.booking_id || v.reservation_id) : '',
+			booking_status: isEdit
+				? (this.bookingResponse?.booking_status || 'pending')
+				: (v.driver_name ? 'pending' : 'driver_unassigned'),
+			payment_status: this.bookingResponse?.payment_status || 'unpaid',
+			reservation_type: this.isFarmoutBooking ? 'farmout' : (this.bookingResponse?.reservation_type || 'booking'),
+			account_type: v.account_type,
+			created_by: this.isCreatedByAdmin ? 1 : 0,
+
+			// ── Trip basics ──
+			service_type: v.service_type,
+			transfer_type: v.transfer_type || '',
+			return_transfer_type: v.return_transfer_type || '',
+			cancellation_hours: v.cancellation_hours,
+			number_of_hours: this.number_of_hours,
+			pickup_date: v.pickup_date,
+			pickup_time: v.pickup_time,
+			total_passengers: v.total_passengers,
+			luggage_count: v.luggage_count,
+
+			// ── Vehicle ──
+			vehicle_type_name: v.vehicle_type_name,
+			vehicle_make: v.vehicle_make_name || v.vehicle_make,
+			vehicle_model: v.vehicle_model_name || v.vehicle_model,
+			vehicle_year: v.vehicle_year_name || v.vehicle_year,
+			vehicle_color: v.vehicle_color_name || v.vehicle_color,
+
+			// ── Route ──
+			pickup: v.pickup,
+			pickup_latitude: v.pickup_latitude,
+			pickup_longitude: v.pickup_longitude,
+			pickup_address: v.fbo_address,
+			pickup_airport_name: this.getPreviewAirportDisplay(v.pickup_airport_name, v.pickup_airport_option),
+			pickup_airport_latitude: v.pickup_airport_latitude,
+			pickup_airport_longitude: v.pickup_airport_longitude,
+			pickup_airline_name: v.pickup_airline_name,
+			pickup_flight: v.pickup_flight,
+			cruise_port: v.cruise_port,
+			cruise_name: v.cruise_name,
+			cruise_time: v.cruise_time,
+			extra_stops: extra_stops,
+			dropoff: v.dropoff,
+			dropoff_latitude: v.dropoff_latitude,
+			dropoff_longitude: v.dropoff_longitude,
+			dropoff_address: v.return_fbo_address,
+			dropoff_airport_name: this.getPreviewAirportDisplay(v.dropoff_airport_name, v.dropoff_airport_option),
+			dropoff_airport_latitude: v.dropoff_airport_latitude,
+			dropoff_airport_longitude: v.dropoff_airport_longitude,
+			dropoff_airline_name: v.dropoff_airline_name,
+			dropoff_flight: v.dropoff_flight,
+			distance: this.distance,
+			duration: v.journeyTime,
+
+			// ── Instructions ──
+			booking_instructions: v.booking_instructions,
+			meet_greet_choice_name: v.meet_greet_choices_name,
+			return_meet_greet_choice_name: isRoundTrip ? v.return_meet_greet_choices_name : '',
+
+			// ── Passenger ──
+			passenger_name: v.passenger_name,
+			passenger_email: v.passenger_email,
+			passenger_cell: v.passenger_cell,
+			passenger_cell_isd: v.passenger_cell_isd,
+
+			// ── Driver ──
+			driver_name: v.driver_name,
+			driver_email: v.driver_email,
+			driver_cell: v.driver_cell,
+			driver_cell_isd: v.driver_cell_isd,
+
+			// ── Affiliate ──
+			affiliate_type: v.affiliate_type,
+			affiliate_name: affiliateName,
+			affiliate_email: this.AffiliateInformation?.Email,
+			affiliate_phone: this.AffiliateInformation?.CellNumber,
+			affiliate_phone_isd: this.AffiliateInformation?.CellIsd,
+			lose_affiliate_name: v.lose_affiliate_name,
+			lose_affiliate_email: v.lose_affiliate_email,
+			lose_affiliate_phone: v.lose_affiliate_phone,
+			lose_affiliate_phone_isd: v.lose_affiliate_phone_isd,
+
+			// ── Money ──
+			currency_symbol: this.currencySymbol,
+			share_array: share_array,
+			grand_total: this.RatesForm?.grand_total
+		}
+	}
+
+	/** Preview button: render the current form through the shared receipt modal. */
+	openBookingReceiptPreview(): void {
+		if (!this.bookingPreviewModal) {
+			console.error('[BookingPreview] Preview modal component is not available')
+			return
+		}
+
+		const isEdit = this.Form.updateType.value == 'edit' || this.updateType == 'edit'
+		this.bookingPreviewModal.openLocalPreview(
+			this.buildBookingPreviewPayload(),
+			this.previewUserRole,
+			isEdit ? 'edit' : 'create'
+		)
 	}
 
 	/** Fetch booking data for edit from the portal-specific endpoint. */

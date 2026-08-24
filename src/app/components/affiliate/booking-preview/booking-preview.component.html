@@ -8,13 +8,15 @@
 			</button>
 
 			<div class="modal-body">
-				<div class="rcpt" *ngIf="bookingPreview" #receiptContent>
+				<div class="rcpt" [class.rcpt--headless]="previewMode === 'create'" *ngIf="bookingPreview"
+					#receiptContent>
 
 					<!-- ── Title ── -->
-					<div class="rcpt-head">
+					<!-- create-mode previews come from the unsaved booking form: no id, no actions -->
+					<div class="rcpt-head" *ngIf="previewMode !== 'create'">
 						<h2 class="rcpt-head-title">Booking #{{ bookingPreview?.reservation_id }}</h2>
 						<!-- ── Action buttons ── -->
-						<div class="rcpt-actions mt-4">
+						<div class="rcpt-actions mt-4" *ngIf="previewMode === 'view'">
 							<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onEdit()"
 								*ngIf="(bookingPreview?.booking_status != 'paid' && bookingPreview?.booking_status != 'paid_cash') && !((userRole == 'individual' || userRole == 'travel_agent') && bookingPreview?.booking_status == 'cancelled')">
 								<i class="bi bi-pencil-square"></i> Edit

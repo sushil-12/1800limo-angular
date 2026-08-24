@@ -55,6 +55,13 @@ export class BookingPreviewComponent implements OnInit {
   deducted_stripe_fee: number;
   userRole: string;
   isAdminView: boolean = false;
+  /**
+   * How the receipt was opened.
+   * 'view'   — from a bookings list: full header with Edit/Copy/Download.
+   * 'edit'   — from the booking form while editing: booking id only, no actions.
+   * 'create' — from the booking form before saving: no header at all.
+   */
+  previewMode: 'view' | 'edit' | 'create' = 'view';
 
   @Output() editBooking = new EventEmitter<any>();
   @Output() shareBooking = new EventEmitter<any>();
@@ -448,6 +455,7 @@ export class BookingPreviewComponent implements OnInit {
     this.$spinner.show();
     this.userRole = userRole;
     this.isAdminView = userRole === 'admin';
+    this.previewMode = 'view';
 
 
     const request = userRole === 'admin'
@@ -550,6 +558,76 @@ export class BookingPreviewComponent implements OnInit {
           this.$spinner.hide();
         }
       });
+  }
+
+  /**
+   * Render the receipt from an in-memory booking object instead of fetching one.
+   * The booking form uses this for its Preview button, where the booking may not
+   * exist server-side yet. `mode` drives the header: 'create' hides it entirely,
+   * 'edit' keeps the booking id but drops the Edit/Copy/Download actions.
+   */
+  openLocalPreview(
+    data: any,
+    userRole: 'admin' | 'affiliate' | 'individual' | 'travel_agent' = 'affiliate',
+    mode: 'create' | 'edit' = 'create'
+  ): void {
+    console.debug('[BookingPreview] openLocalPreview called — userRole=%s, mode=%s', userRole, mode, data);
+
+    this.userRole = userRole;
+    this.isAdminView = userRole === 'admin';
+    this.previewMode = mode;
+    this.bookingPreview = data || {};
+
+    this.showRateDistribution =
+      userRole === 'admin' ||
+      userRole === 'travel_agent' ||
+      (userRole === 'affiliate' && this.bookingPreview?.reservation_type !== 'farmout');
+
+    try {
+      const grandTotal = this.bookingPreview?.share_array?.grandTotal
+        ? this.bookingPreview?.share_array?.grandTotal
+        : this.bookingPreview?.share_array?.returnGrandTotal;
+      this.deducted_stripe_fee = (grandTotal * 0.029) + 0.30;
+    } catch (e) {
+      console.error('[BookingPreview] openLocalPreview: Failed to calc deducted_stripe_fee', e);
+    }
+
+    try {
+      if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
+        this.adminSharePercent = 15;
+      } else if (this.bookingPreview?.share_array?.farmoutShare) {
+        this.adminSharePercent = 15;
+      } else {
+        this.adminSharePercent = 25;
+      }
+    } catch (shareErr) {
+      console.error('[BookingPreview] openLocalPreview: Failed to calculate adminSharePercent', shareErr);
+    }
+
+    this.shareArray = this.bookingPreview?.share_array;
+    this.rates_preview = this.bookingPreview?.rates_preview;
+    this.isAffiliate = this.bookingPreview?.affiliate_type == 'affiliate';
+    this.isLooseAffiliate = this.bookingPreview?.affiliate_type == 'loose_affiliate';
+
+    if (this.bookingPreview?.booking_instructions) {
+      try {
+        this.bookingPreview.booking_instructions =
+          String(this.bookingPreview.booking_instructions).split('<br />').join('');
+      } catch (instrErr) {
+        console.error('[BookingPreview] openLocalPreview: Failed to process booking_instructions', instrErr);
+      }
+    }
+
+    $('#previewBookingOnID').modal('show');
+
+    // The map canvas only exists once the modal body renders, so draw after it opens.
+    setTimeout(() => {
+      try {
+        this.MapController();
+      } catch (mapErr) {
+        console.error('[BookingPreview] openLocalPreview: MapController() threw an error', mapErr);
+      }
+    }, 300);
   }
 
   MapController() {

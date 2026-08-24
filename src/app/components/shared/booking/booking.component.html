@@ -4220,7 +4220,7 @@
 </div>
 
 
-<div class="modal fade" id="previewBooking" aria-labelledby="previewBookingLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="previewBooking" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -4230,13 +4230,13 @@
 				<button type="button" class="close x-circle-btn rcpt-close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
-			</div>
+			</div> -->
 			<!-- *ngIf="Form.affiliate_type.value == 'loose_affiliate' -->
-			<div class="modal-body" style="font-family: 'PT Serif', serif;">
-				<div class="container text-lg">
+			<!-- <div class="modal-body" style="font-family: 'PT Serif', serif;">
+				<div class="container text-lg"> -->
 
 					<!-- Travel Information -->
-					<h5 class="font-weight-bolder m-0">
+					<!-- <h5 class="font-weight-bolder m-0">
 						Travel Information
 					</h5>
                     
@@ -4253,10 +4253,10 @@
 								</span>
 							</span>
 						</div>
-					</div>
+					</div>  -->
 
 					<!-- Number of Hours -->
-					<div *ngIf="Form.service_type.value == 'charter_tour'">
+					<!-- <div *ngIf="Form.service_type.value == 'charter_tour'">
 						<div class="row">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -4269,13 +4269,13 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- Pickup -->
-					<h6 class="m-0 my-2">
+					<!-- <h6 class="m-0 my-2">
 						Pickup Details
-					</h6>
+					</h6> -->
 					<!-- Pickup > Date -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -4292,9 +4292,9 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- Pickup > Time -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
@@ -4311,9 +4311,9 @@
 
 						</div>
 					</div>
-					<hr>
+					<hr> -->
 					<!-- Pickup > City Details -->
-					<div class="mx-2 "
+					<!-- <div class="mx-2 "
 						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
 						<div class="row m-0">
 							<div class="col-md-4">
@@ -4329,12 +4329,12 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2 " *ngIf="Form.transfer_type.value.includes('airport_')">
+					<!-- <div class="mx-2 " *ngIf="Form.transfer_type.value.includes('airport_')"> -->
 						<!-- Airport -->
-						<div class="row m-0">
+						<!-- <div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Airport
@@ -4349,11 +4349,11 @@
 									(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.pickup_airport_name.value, Form.pickup_airport_option.value))"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Airport -->
 						<!-- Airline -->
-						<hr>
-						<div class="row m-0">
+						<!-- <hr> -->
+						<!-- <div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Airline
@@ -4364,10 +4364,10 @@
 									{{ textFormatter(Form.pickup_airline_name.value) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Airline -->
 						<!-- Flight / Tail # -->
-						<div class="row m-0">
+						<!-- <div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Flight / Tail #
@@ -4378,10 +4378,10 @@
 									{{ textFormatter(Form.pickup_flight.value) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight / Tail # -->
 						<!-- Distance Details -->
-						<div class="row m-0">
+						<!-- <div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Total Distance
@@ -4405,14 +4405,14 @@
 									{{convertToMinutes(Form.journeyTime.value)}}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Distance Details -->
-					</div>
+					<!-- </div> -->
 
 					<!-- Pickup > Cruise Details -->
-					<div class="mx-2 " *ngIf="Form.transfer_type.value.includes('cruise_')">
+					<!-- <div class="mx-2 " *ngIf="Form.transfer_type.value.includes('cruise_')"> -->
 						<!-- Cruise Port -->
-						<div class="row m-0">
+						<!-- <div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Port
@@ -4423,10 +4423,10 @@
 									{{ textFormatter(Form.cruise_port.value) | titlecase }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Cruise Port -->
 						<!-- Cruise Ship Name -->
-						<div class="row m-0">
+						<!-- <div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Ship Name
@@ -4437,11 +4437,11 @@
 									{{ textFormatter(Form.cruise_name.value) | titlecase }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Cruise Ship Name -->
 						<!-- Ship Arrival time -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
+						<!-- <div class="row m-0"> -->
+							<!-- <div class="col-md-4 key">
 								<span>
 									Ship Arrival time
 								</span>
@@ -4454,11 +4454,11 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- Extra Stops -->
 					<!-- <hr *ngIf="Form.extra_stops.value.length > 0" /> -->
 
-					<div *ngIf="Form.extra_stops.value.length > 0" class="preview-extra-stop-color">
+					<!-- <div *ngIf="Form.extra_stops.value.length > 0" class="preview-extra-stop-color">
 						<hr>
 						<h5 class="p-2 m-0 text-xl" style="color: darkblue;">
 							Extra Stops
@@ -4482,14 +4482,14 @@
 						</div>
 					</div>
 
-					<hr *ngIf="Form.extra_stops.value.length == 0" />
+					<hr *ngIf="Form.extra_stops.value.length == 0" /> -->
 
 					<!-- ############# Dropoff ################# -->
-					<h5 class="m-1 text-xl preview-dropoff-color">
+					<!-- <h5 class="m-1 text-xl preview-dropoff-color">
 						Drop Off Details
-					</h5>
+					</h5> -->
 					<!-- Dropoff > City Details -->
-					<div class="mx-2 preview-dropoff-color"
+					<!-- <div class="mx-2 preview-dropoff-color"
 						*ngIf="Form.transfer_type.value.includes('_city') || Form.transfer_type.value.includes('_cruise')">
 						<div class="row p-2">
 							<div class="col-md-4 key">
@@ -4505,12 +4505,12 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_airport')">
+					<!-- <div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_airport')"> -->
 						<!-- Airport -->
-						<div class="row p-2">
+						<!-- <div class="row p-2">
 							<div class="col-md-4 key ">
 								<span>
 									Airport
@@ -4525,10 +4525,10 @@
 									(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.dropoff_airport_name.value, Form.dropoff_airport_option.value))"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Airport -->
 						<!-- Airline -->
-						<hr>
+						<!-- <hr>
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
@@ -4540,10 +4540,10 @@
 									{{ textFormatter(Form.dropoff_airline_name.value) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Airline -->
 						<!-- Flight / Tail # -->
-						<div class="row p-2">
+						<!-- <div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
 									Flight / Tail #
@@ -4554,14 +4554,14 @@
 									{{ textFormatter(Form.dropoff_flight.value) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight / Tail # -->
-					</div>
+					<!-- </div> -->
 
 					<!-- Dropoff > Cruise Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_cruise')">
+					<!-- <div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_cruise')"> -->
 						<!-- Cruise Port -->
-						<div class="row p-2">
+						<!-- <div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Port
@@ -4572,10 +4572,10 @@
 									{{ textFormatter(Form.cruise_port.value) | titlecase }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Cruise Port -->
 						<!-- Cruise Ship Name -->
-						<div class="row p-2">
+						<!-- <div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Ship Name
@@ -4586,10 +4586,10 @@
 									{{ textFormatter(Form.cruise_name.value) | titlecase }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Cruise Ship Name -->
 						<!-- Ship Departure time -->
-						<div class="row p-2">
+						<!-- <div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
 									Ship Departure time
@@ -4602,16 +4602,16 @@
 									{{ timeFormat(Form.cruise_time.value) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Ship Departure time -->
-					</div>
+					<!-- </div>
 					<hr>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
-					</h4>
+					</h4> -->
 
 					<!-- Passenger > Name -->
-					<div class="mx-2 ">
+					<!-- <div class="mx-2 ">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -4624,9 +4624,9 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- Passenger > Phone -->
-					<div class="mx-2 ">
+					<!-- <div class="mx-2 ">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span style="color: #1e7500;">
@@ -4639,16 +4639,16 @@
 									href="tel:{{Form.passenger_cell_isd.value}}{{Form.passenger_cell.value}}">
 									({{ Form.passenger_cell_isd.value }})
 									{{ textFormatter(Form.passenger_cell.value) }}
-								</a>
+								</a> -->
 								<!-- <span class="font-weight-bolder">
 					({{ Form.passenger_cell_isd.value }})
 					{{ textFormatter(Form.passenger_cell.value) }}
 				</span> -->
-							</div>
+							<!-- </div>
 						</div>
-					</div>
+					</div> -->
 					<!-- Passenger > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -4704,7 +4704,7 @@
 							<div class="value box-special-instruction">
 								<span class="font-weight-bolder" style="white-space: pre-wrap;"
 									[innerHTML]="highlightNumbers(Form?.booking_instructions.value || ' ')">
-									<!-- {{Form?.booking_instructions.value}} -->
+									{{Form?.booking_instructions.value}}
 								</span>
 							</div>
 						</div>
@@ -4723,21 +4723,21 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Return Information -->
 					<!-- style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" / -->
-					<div *ngIf="Form.service_type.value == 'round_trip'">
+					<!-- <div *ngIf="Form.service_type.value == 'round_trip'">
 						<hr>
 						<h4 class="font-weight-bolder">
 							Return Trip
 						</h4>
 						<h5 class="px-3 m-1 text-xl">
 							Pickup Details
-						</h5>
+						</h5> -->
 
 						<!-- Return > Pickup > Date -->
-						<div class="mx-2 ">
+						<!-- <div class="mx-2 ">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
@@ -4754,10 +4754,10 @@
 									</span>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 						<!-- Return > Pickup > Time -->
-						<div class="mx-2 ">
+						<!-- <div class="mx-2 ">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
@@ -4773,10 +4773,10 @@
 								</div>
 							</div>
 							<hr>
-						</div>
+						</div> -->
 
 						<!-- Return > Pickup > City Details -->
-						<div class="mx-2 "
+						<!-- <div class="mx-2 "
 							*ngIf="Form.return_transfer_type.value.includes('city_') || Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -4793,12 +4793,12 @@
 								</div>
 							</div>
 							<hr>
-						</div>
+						</div> -->
 
 						<!-- Return > Pickup > Airline Details -->
-						<div class="mx-2 " *ngIf="Form.return_transfer_type.value.includes('airport_')">
+						<!-- <div class="mx-2 " *ngIf="Form.return_transfer_type.value.includes('airport_')"> -->
 							<!-- Airport -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Airport
@@ -4813,9 +4813,9 @@
 										(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.return_pickup_airport_name.value, Form.return_pickup_airport_option.value))"><i
 											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
-							</div>
+							</div> -->
 							<!-- Airline -->
-							<hr>
+							<!-- <hr>
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -4827,10 +4827,10 @@
 										{{ textFormatter(Form.return_pickup_airline_name.value) }}
 									</span>
 								</div>
-							</div>
+							</div> -->
 
 							<!-- Flight / Tail # -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Flight / Tail #
@@ -4842,10 +4842,10 @@
 									</span>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 						<!-- Return > Pickup > Cruise Details -->
-						<div class="mx-2 " *ngIf="Form.return_transfer_type.value.includes('cruise_')">
+						<!-- <div class="mx-2 " *ngIf="Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -4858,9 +4858,9 @@
 										}}
 									</span>
 								</div>
-							</div>
+							</div> -->
 							<!-- Cruise Ship Name -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Cruise Ship Name
@@ -4872,10 +4872,10 @@
 										}}
 									</span>
 								</div>
-							</div>
+							</div> -->
 
 							<!-- Ship Arrival time -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Ship Arrival time
@@ -4889,10 +4889,10 @@
 									</span>
 								</div>
 							</div>
-						</div>
-						<hr *ngIf="Form.return_extra_stops.value.length > 0">
+						</div> -->
+						<!-- <hr *ngIf="Form.return_extra_stops.value.length > 0"> -->
 						<!-- Return > Extra Stops -->
-						<div *ngIf="Form.return_extra_stops.value.length > 0" class="preview-extra-stop-color">
+						<!-- <div *ngIf="Form.return_extra_stops.value.length > 0" class="preview-extra-stop-color">
 							<h5 class="p-2 m-0 text-xl">
 								Extra Stops
 							</h5>
@@ -4913,16 +4913,16 @@
 								</div>
 								<hr>
 							</div>
-						</div>
+						</div> -->
 						<!-- style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" -->
 						<!-- <hr *ngIf="Form.return_extra_stops.value.length == 0" /> -->
 
 						<!-- ############## Dropoff #################### -->
-						<h5 class="px-3 m-1 text-xl preview-dropoff-color">
+						<!-- <h5 class="px-3 m-1 text-xl preview-dropoff-color">
 							Dropoff Details
-						</h5>
+						</h5> -->
 						<!-- Return > Dropoff > City Details  -->
-						<div class="mx-2 preview-dropoff-color"
+						<!-- <div class="mx-2 preview-dropoff-color"
 							*ngIf="Form.return_transfer_type.value.includes('_city')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -4938,13 +4938,13 @@
 											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 						<!-- Return > Dropoff > Airline Details -->
-						<div class="mx-2 preview-dropoff-color"
-							*ngIf="Form.return_transfer_type.value.includes('_airport')">
+						<!-- <div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_airport')"> -->
 							<!-- Airport -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Airport
@@ -4960,10 +4960,10 @@
 										(click)="showLocationPointOnMap(getPreviewAirportDisplay(Form.return_dropoff_airport_name.value, Form.return_dropoff_airport_option.value))"><i
 											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
-							</div>
+							</div> -->
 
 							<!-- Airline -->
-							<hr>
+							<!-- <hr>
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -4975,10 +4975,10 @@
 										{{ textFormatter(Form.return_dropoff_airline_name.value) }}
 									</span>
 								</div>
-							</div>
+							</div> -->
 
 							<!-- Flight / Tail # -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Flight / Tail #
@@ -4990,13 +4990,13 @@
 									</span>
 								</div>
 							</div>
-						</div>
+						</div> -->
 
 						<!-- Return > Dropoff > Cruise Details -->
-						<div class="mx-2 preview-dropoff-color"
-							*ngIf="Form.return_transfer_type.value.includes('_cruise')">
+						<!-- <div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_cruise')"> -->
 							<!-- Cruise Port -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Cruise Port
@@ -5008,10 +5008,10 @@
 										}}
 									</span>
 								</div>
-							</div>
+							</div> -->
 
 							<!-- Cruise Ship Name -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Cruise Ship Name
@@ -5023,10 +5023,10 @@
 										}}
 									</span>
 								</div>
-							</div>
+							</div> -->
 
 							<!-- Ship Departure time -->
-							<div class="row p-2">
+							<!-- <div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
 										Ship Departure time
@@ -5044,11 +5044,11 @@
 						</div>
 					</div>
 				</div>
-				<hr>
+				<hr> -->
 
 
 
-				<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+				<!-- <div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div class="row m-0">
 						<div class="key">
 							<span style="font-weight: 550 !important;">
@@ -5058,8 +5058,8 @@
 						<div class="value box-special-instruction">
 							<span class="font-weight-bolder" style="white-space: pre-wrap;"
 								[innerHTML]="highlightNumbers(Form?.return_booking_instructions.value || ' ')">
-								<!-- {{Form?.return_booking_instructions.value}} -->
-							</span>
+								{{Form?.return_booking_instructions.value}} -->
+							<!-- </span>
 						</div>
 					</div>
 					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
@@ -5190,11 +5190,11 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 					
-					<hr>
+					<!-- <hr> -->
 
-				<h4 class="font-weight-bolder m-0">
+				<!-- <h4 class="font-weight-bolder m-0">
 					Vehicle Preferences
 				</h4>
 				<div class="row p-2">
@@ -5280,22 +5280,22 @@
 							{{ Form.vehicle_seats.value}}
 						</span>
 				</div>
-              </div>
+              </div> -->
 
-				<hr *ngIf="!usesQuoteFlow">
+				<!-- <hr *ngIf="!usesQuoteFlow"> -->
 				<!-- Affiliate Information -->
-				<ng-container
+				<!-- <ng-container
 					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' && !usesQuoteFlow then affiliateUser">
-				</ng-container>
+				</ng-container> -->
 
 				<!-- Affiliate -->
-				<ng-template #affiliateUser>
+				<!-- <ng-template #affiliateUser>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Affiliate Information
-					</h4>
+					</h4> -->
 
 					<!-- Affiliate > Name -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5317,10 +5317,10 @@
 								</ng-template>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Affiliate > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5333,10 +5333,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Affiliate > Phone -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5351,22 +5351,22 @@
 							</div>
 						</div>
 					</div>
-				</ng-template>
+				</ng-template> -->
 
 				<!--Return Affiliate Information -->
-				<ng-container
+				<!-- <ng-container
 					*ngIf="Form.return_affiliate_type.value == 'affiliate' && Form.service_type.value == 'round_trip'  && booking_created_from == 'admin' && isAdminMode then returnaffiliateUser">
-				</ng-container>
+				</ng-container> -->
 
 				<!-- Affiliate -->
-				<ng-template #returnaffiliateUser>
+				<!-- <ng-template #returnaffiliateUser>
 					<hr>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Affiliate Information
-					</h4>
+					</h4> -->
 
 					<!-- Affiliate > Name -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5388,10 +5388,10 @@
 								</ng-template>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Affiliate > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5404,10 +5404,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Affiliate > Phone -->
-					<div class="mx-2">
+					<!-- <div class="mx-2"> 
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5422,20 +5422,20 @@
 							</div>
 						</div>
 					</div>
-				</ng-template>
+				</ng-template> -->
 
 				<!-- Loose Affiliate Information -->
-				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' && !usesQuoteFlow then looseAffiliate">
-				</ng-container>
+				<!-- <ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' && !usesQuoteFlow then looseAffiliate">
+				</ng-container> -->
 
 				<!-- Loose Affiliate -->
-				<ng-template #looseAffiliate>
+				<!-- <ng-template #looseAffiliate>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Loose Affiliate Information
-					</h4>
+					</h4> -->
 
 					<!-- Loose Affiliate > Name -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5448,10 +5448,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Loose Affiliate > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5464,10 +5464,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Loose Affiliate > Phone -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5482,22 +5482,22 @@
 							</div>
 						</div>
 					</div>
-				</ng-template>
-				<hr *ngIf="!isIndividualMode || !isTravelAgentMode">
+				</ng-template> -->
+				<!-- <hr *ngIf="!isIndividualMode || !isTravelAgentMode"> -->
 
 				<!-- Return Loose Affiliate Information -->
-				<ng-container
+				<!-- <ng-container
 					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && Form.service_type.value == 'round_trip' && !usesQuoteFlow then returnlooseAffiliate">
-				</ng-container>
+				</ng-container> -->
 
 				<!-- Loose Affiliate -->
-				<ng-template #returnlooseAffiliate>
+				<!-- <ng-template #returnlooseAffiliate>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Loose Affiliate Information
-					</h4>
+					</h4> -->
 
 					<!-- Loose Affiliate > Name -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5510,10 +5510,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Loose Affiliate > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5526,10 +5526,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div>. -->
 
 					<!-- Loose Affiliate > Phone -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5545,14 +5545,14 @@
 						</div>
 					</div>
 				<hr *ngIf="!usesQuoteFlow">
-				</ng-template>
+				</ng-template> -->
 				<!-- Driver Information -->
 
-				<h4 class="font-weight-bolder m-0 mt-3">
+				<!-- <h4 class="font-weight-bolder m-0 mt-3">
 					Driver Information
-				</h4>
+				</h4> -->
 				<!-- Driver Name -->
-				<div class="mx-2">
+				<!-- <div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
 							<span>
@@ -5565,10 +5565,10 @@
 							</span>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<!-- Driver Email -->
-				<div class="mx-2">
+				<!-- <div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
 							<span>
@@ -5581,10 +5581,10 @@
 							</span>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<!-- Driver Cell -->
-				<div class="mx-2">
+				<!-- <div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
 							<span>
@@ -5600,16 +5600,16 @@
 					</div>
 				</div>
 
-				<hr *ngIf="!isIndividualMode || !isTravelAgentMode">
+				<hr *ngIf="!isIndividualMode || !isTravelAgentMode">. -->
 
-				<div *ngIf="Form.service_type.value == 'round_trip' && isAdminMode">
+				<!-- <div *ngIf="Form.service_type.value == 'round_trip' && isAdminMode"> -->
 					<!-- Driver Information -->
 
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<!-- <h4 class="font-weight-bolder m-0 mt-3">
 						Return Driver Information
-					</h4>
+					</h4> -->
 					<!-- Driver Name -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5622,10 +5622,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Driver Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5638,10 +5638,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Driver Cell -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5657,20 +5657,20 @@
 						</div>
 					</div>
 					<hr>
-				</div>
+				</div> -->
 
 				<!-- Loose Customer Information -->
-				<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
-				</ng-container>
+				<!-- <ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
+				</ng-container> -->
 
 				<!-- Loose Customer -->
-				<ng-template #LooseCustomerSec>
+				<!-- <ng-template #LooseCustomerSec>
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Loose Customer Information
-					</h4>
+					</h4> -->
 
 					<!-- Loose Customer > Name -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5685,10 +5685,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Loose Customer > Email -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5701,10 +5701,10 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- Loose Customer > Phone -->
-					<div class="mx-2">
+					<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -5848,25 +5848,28 @@
 							{{ getCancellationTime(Form?.cancellation_hours.value) }}
 						</span>
 					</div>
-				</div>
+				</div> 
 
 
 
 
-				<!-- *ngIf="Form.affiliate_type.value === 'affiliate'" -->
+				*ngIf="Form.affiliate_type.value === 'affiliate'"
 
-			</div>
+			</div> -->
 
 
 
-			<div class="modal-footer justify-content-end">
+			<!-- <div class="modal-footer justify-content-end">
 				<button type="button" class="bk-btn bk-btn--secondary" data-dismiss="modal">
 					Close
 				</button>
 				<button type="submit" class="bk-btn bk-btn--primary" data-dismiss="modal" (click)="submitForm(true)">
 					Save
 				</button>
-			</div>
-		</div>
-	</div>
-</div>
+			</div> -->
+		<!-- </div> -->
+	<!-- </div> -->
+<!-- </div> -->
+
+<!-- Shared booking receipt used by the Preview button -->
+<app-booking-preview #bookingPreviewModal></app-booking-preview>

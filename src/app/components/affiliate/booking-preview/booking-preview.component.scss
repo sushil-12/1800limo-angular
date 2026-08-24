@@ -77,6 +77,11 @@
 	color: #1f2937;
 }
 
+// Create-mode preview has no sticky header — keep the first row clear of the close button.
+.rcpt--headless {
+	padding-top: 40px;
+}
+
 %rcpt-pad {
 	padding-left: clamp(16px, 4vw, 32px);
 	padding-right: clamp(16px, 4vw, 32px);
