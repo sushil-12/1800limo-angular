@@ -11,7 +11,7 @@ export class InvestorsComponent implements OnInit {
   investorsData = {
     meta: {
       title: 'Investors | 1-800-LIMO.COM',
-      description: 'Discover our growth story, financial performance, and investment opportunities in the luxury ground transportation industry.',
+      description: 'Discover our growth story, financial performance, and investment opportunities in the premium ground transportation industry.',
       keywords: 'investors, investment, 1800 limo, corporate'
     },
     badge: {
@@ -20,7 +20,7 @@ export class InvestorsComponent implements OnInit {
     },
     title: 'Investors',
     lastUpdated: 'February 27, 2026',
-    description: 'Building value through excellence in luxury ground transportation. Discover our growth story, financial performance, and investment opportunities.',
+    description: 'Building value through excellence in premium ground transportation. Discover our growth story, financial performance, and investment opportunities.',
     videoUrl: 'https://www.youtube.com/embed/mSLOtFhp1ks',
     founder: {
       image: 'assets/images/new-founder.jpg', // Using an existing image asset

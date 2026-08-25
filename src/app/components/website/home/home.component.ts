@@ -361,21 +361,21 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.spinner.hide('savespinner');
 
 		// Set SEO Metadata for Home Page matching index.html
-		this.titleService.setTitle('1800 Limo - Premium Chauffeur & Luxury Transportation Services');
-		this.metaService.updateTag({ name: 'description', content: '1800 Limo offers premium chauffeur services, luxury vehicle hire, and airport transfers worldwide. Book your ride today.' });
-		this.metaService.updateTag({ name: 'keywords', content: 'limo service, chauffeur service, luxury transportation, airport transfer, 1800 limo' });
+		this.titleService.setTitle('1800 Limo - Premium Chauffeur & Transportation Services');
+		this.metaService.updateTag({ name: 'description', content: '1800 Limo offers premium chauffeur services, premium vehicle hire, and airport transfers worldwide. Book your ride today.' });
+		this.metaService.updateTag({ name: 'keywords', content: 'limo service, chauffeur service, premium transportation, airport transfer, 1800 limo' });
 
 		// Open Graph
-		this.metaService.updateTag({ property: 'og:title', content: '1800 Limo - Premium Chauffeur & Luxury Transportation Services' });
-		this.metaService.updateTag({ property: 'og:description', content: '1800 Limo offers premium chauffeur services, luxury vehicle hire, and airport transfers worldwide.' });
+		this.metaService.updateTag({ property: 'og:title', content: '1800 Limo - Premium Chauffeur & Transportation Services' });
+		this.metaService.updateTag({ property: 'og:description', content: '1800 Limo offers premium chauffeur services, premium vehicle hire, and airport transfers worldwide.' });
 		this.metaService.updateTag({ property: 'og:type', content: 'website' });
 		this.metaService.updateTag({ property: 'og:url', content: 'https://www.1800limo.com' });
 		this.metaService.updateTag({ property: 'og:site_name', content: '1800 Limo' });
 
 		// Twitter Card
 		this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-		this.metaService.updateTag({ name: 'twitter:title', content: '1800 Limo - Premium Chauffeur & Luxury Transportation Services' });
-		this.metaService.updateTag({ name: 'twitter:description', content: '1800 Limo offers premium chauffeur services, luxury vehicle hire, and airport transfers worldwide.' });
+		this.metaService.updateTag({ name: 'twitter:title', content: '1800 Limo - Premium Chauffeur & Transportation Services' });
+		this.metaService.updateTag({ name: 'twitter:description', content: '1800 Limo offers premium chauffeur services, premium vehicle hire, and airport transfers worldwide.' });
 
 		this.isVehicleLoading = true;
 		try {

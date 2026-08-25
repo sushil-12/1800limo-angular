@@ -8,7 +8,7 @@ export interface FAQ {
 export const customerFaqMetaData = {
     title: "Customer FAQ | 1-800-LIMO.COM",
     description: "Find answers to frequently asked questions about booking, payments, fleet, and policies at 1-800-LIMO.COM.",
-    keywords: "customer FAQ, limo service questions, booking limo, luxury transportation FAQ"
+    keywords: "customer FAQ, limo service questions, booking limo, premium transportation FAQ"
 };
 
 export const customerFaqData: FAQ[] = [

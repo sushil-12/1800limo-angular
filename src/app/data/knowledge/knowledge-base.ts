@@ -93,7 +93,7 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
 		category: 'fleet',
 		tags: ['fleet', 'vehicles', 'cars', 'types', 'sedan', 'suv', 'limo', 'van', 'bus', 'options'],
 		content:
-			'Available vehicle categories typically include luxury sedans, SUVs, stretch ' +
+			'Available vehicle categories typically include premium sedans, SUVs, stretch ' +
 			'limousines, sprinter/passenger vans, and larger party buses or motor coaches. ' +
 			'Exact availability and capacity are shown when you select a vehicle for your ' +
 			'specific date, time, and location.',

@@ -1080,7 +1080,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 				this.affiliateInstruction = `
 				<ul>
 				<li>Operate a new Mid-Size Sedan or Larger</li>
-				<li>Operate any like new luxury Mid-Size Sedan or Larger</li>
+				<li>Operate any like new premium Mid-Size Sedan or Larger</li>
 				<li>$ 500,000 Insurance</li>
 				<li>6 months Driving Experience</li>
 				<li><strong>4.5 Stars</strong> or better</li>

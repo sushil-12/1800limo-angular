@@ -32,7 +32,7 @@ export class BlogComponent implements OnInit {
 
   ngOnInit(): void {
     const title = 'Blog | 1-800-LIMO.COM';
-    const description = 'Expert tips, industry news, and inspiring stories from the world of luxury transportation';
+    const description = 'Expert tips, industry news, and inspiring stories from the world of premium transportation';
 
     this.titleService.setTitle(title);
     this.metaService.updateTag({ name: 'description', content: description });

@@ -1,19 +1,19 @@
 export const aboutUsData = {
     meta: {
         title: "About Us | 1-800-LIMO.COM",
-        description: "Three decades of excellence in luxury transportation. Discover the story, values, and people behind 1-800-LIMO.COM's commitment to delivering unparalleled comfort and reliability.",
-        keywords: "luxury transportation, limo service, corporate travel, chauffeur, 1-800-LIMO.COM, reliable ground transportation"
+        description: "Three decades of excellence in premium transportation. Discover the story, values, and people behind 1-800-LIMO.COM's commitment to delivering unparalleled comfort and reliability.",
+        keywords: "premium transportation, limo service, corporate travel, chauffeur, 1-800-LIMO.COM, reliable ground transportation"
     },
     hero: {
         badge: "Established Since 1994",
         title: "About Us",
-        subtitle: "Three decades of excellence in luxury transportation. Discover the story, values, and people behind our commitment to delivering unparalleled comfort and reliability on every journey.",
+        subtitle: "Three decades of excellence in premium transportation. Discover the story, values, and people behind our commitment to delivering unparalleled comfort and reliability on every journey.",
         videoUrl: "assets/videos/limo-promo.mp4",
         videoPoster: "assets/images/placeholder.jpg"
     },
     whoWeAre: {
         badge: "Who We Are",
-        title: "Leading Luxury Transportation Since 1994",
+        title: "Leading Premium Transportation Since 1994",
         description: "We are the value proposition in safe and reliable ground transportation around locally and the world. Our web-based digital sales platform matches quality-minded travelers with friendly and professional drivers. Travel in clean, comfortable and well-maintained vehicles at the most competitive available rate.",
         image: "assets/images/abtnwhistory.jpg",
         features: [
@@ -23,7 +23,7 @@ export const aboutUsData = {
             },
             {
                 title: "Budget to value",
-                description: "Our Mission 1-800-LIMO.COM is a web-based digital sales platform that matches value and quality minded luxury travelers with friendly and attentive drivers with safe, reliable, on-time ground transportation anywhere around the world; in clean, comfortable, and well maintained non-autonomous vehicles, at the lowest available rates."
+                description: "Our Mission 1-800-LIMO.COM is a web-based digital sales platform that matches value and quality minded premium travelers with friendly and attentive drivers with safe, reliable, on-time ground transportation anywhere around the world; in clean, comfortable, and well maintained non-autonomous vehicles, at the lowest available rates."
             }
         ]
     },
@@ -44,7 +44,7 @@ export const aboutUsData = {
     milestones: {
         badge: "Our Journey",
         title: "Milestones & Innovation",
-        subtitle: "Three decades of pioneering innovation and setting new standards in luxury transportation",
+        subtitle: "Three decades of pioneering innovation and setting new standards in premium transportation",
         events: [
             {
                 year: "1994",
@@ -122,7 +122,7 @@ export const aboutUsData = {
                 icon: "bi-crown",
                 iconImage: "assets/images/Premium-Fleet.png",
                 title: "Premium Fleet",
-                description: "Latest model luxury vehicles maintained to perfection"
+                description: "Latest model premium vehicles maintained to perfection"
             },
             {
                 icon: "bi-headset",
@@ -153,7 +153,7 @@ export const aboutUsData = {
     services: {
         badge: "Our Expertise",
         title: "Services We Specialize In",
-        subtitle: "Comprehensive luxury transportation solutions for every occasion",
+        subtitle: "Comprehensive premium transportation solutions for every occasion",
         list: [
             "Corporate transportation and executive travel",
             "Airport transfers with flight tracking",
@@ -190,7 +190,7 @@ export const aboutUsData = {
     },
     ctaSection: {
         title: "Ready to Experience the Difference?",
-        subtitle: "Join over 100,000 satisfied customers who trust 1800 LIMO.COM for their luxury transportation needs",
+        subtitle: "Join over 100,000 satisfied customers who trust 1800 LIMO.COM for their premium transportation needs",
         buttonText: "Book Your Ride Now",
         phone: "1-800-LIMO-COM",
         features: [
