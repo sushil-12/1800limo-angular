@@ -849,11 +849,27 @@
 	letter-spacing: 0.02em;
 }
 
+// ── Form footer (create / edit previews only) ──
+.rcpt-form-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 14px clamp(16px, 4vw, 32px);
+	background: #fff;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+	.rcpt-btn {
+		flex: 0 0 auto;
+		min-width: 120px;
+	}
+}
+
 // ── Print ──
 @media print {
 
 	.rcpt-close,
 	.rcpt-actions,
+	.rcpt-form-footer,
 	.bp-scroll-controls {
 		display: none !important;
 	}

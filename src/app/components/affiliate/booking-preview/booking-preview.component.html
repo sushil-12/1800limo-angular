@@ -197,6 +197,155 @@
 						</div>
 					</div>
 
+					<!-- ── Return Trip Information ── -->
+					<div class="rcpt-section" *ngIf="returnLeg">
+						<div class="rcpt-section-title">Return Trip Information</div>
+
+						<div class="rcpt-row" *ngIf="returnLeg?.pickup_date">
+							<span class="rcpt-row-label">Return Date &amp; Time</span>
+							<span class="rcpt-row-value">{{ formatDate(returnLeg?.pickup_date) }} | {{
+								formatTime(returnLeg?.pickup_time) }}</span>
+						</div>
+
+						<div class="rcpt-row" *ngIf="returnLeg?.transfer_type">
+							<span class="rcpt-row-label">Transfer Type</span>
+							<span class="rcpt-row-value">{{ textFormatter(returnLeg?.transfer_type) | titlecase
+								}}</span>
+						</div>
+
+						<div class="rcpt-row" *ngIf="returnLeg?.vehicle?.type_name">
+							<span class="rcpt-row-label">Vehicle</span>
+							<span class="rcpt-row-value">{{ returnLeg?.vehicle?.type_name }}<span *ngIf="(returnLeg?.vehicle?.make && returnLeg?.vehicle?.make !== 'N/A') ||
+										(returnLeg?.vehicle?.model && returnLeg?.vehicle?.model !== 'N/A') ||
+										(returnLeg?.vehicle?.year  && returnLeg?.vehicle?.year  !== 'N/A') ||
+										(returnLeg?.vehicle?.color && returnLeg?.vehicle?.color !== 'N/A')"> | {{
+									returnLeg?.vehicle?.make }} · {{ returnLeg?.vehicle?.model }} ·
+									{{ returnLeg?.vehicle?.year }} · {{ returnLeg?.vehicle?.color }}</span></span>
+						</div>
+
+						<div class="bp-route-timeline rcpt-timeline">
+
+							<!-- Return Pickup -->
+							<div class="bp-rt-row">
+								<div class="bp-rt-indicator">
+									<div class="bp-rt-dot bp-rt-dot--pickup"></div>
+									<div class="bp-rt-line"></div>
+								</div>
+								<div class="bp-rt-body">
+									<span class="bp-rt-label">Pickup</span>
+
+									<div *ngIf="returnLeg?.transfer_type.includes('city_') || returnLeg?.transfer_type.includes('cruise_')"
+										class="bp-rt-address"
+										(click)="showLocationPointOnMapByAddress(returnLeg?.pickup)">
+										<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
+										{{ textFormatter(returnLeg?.pickup) }}
+									</div>
+
+									<ng-container *ngIf="returnLeg?.transfer_type.includes('airport_')">
+										<div class="bp-rt-address bp-rt-address--airport"
+											(click)="showLocationPointOnMapByAddress(returnLeg?.pickup_airport_name)">
+											<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
+											{{ textFormatter(returnLeg?.pickup_fbo_address ?
+											returnLeg?.pickup_fbo_address : returnLeg?.pickup_airport_name) }}
+										</div>
+
+										<div class="bp-rt-meta-row">
+											<span class="bp-rt-flight-chip"
+												(click)="searchOnGoogle(returnLeg?.pickup_airline_name + ' ' + returnLeg?.pickup_flight)">
+												<i class="bi bi-airplane-fill"></i>
+												{{ textFormatter(returnLeg?.pickup_airline_name) }} #{{
+												textFormatter(returnLeg?.pickup_flight) }}
+											</span>
+										</div>
+									</ng-container>
+
+									<div *ngIf="returnLeg?.transfer_type.includes('cruise_')" class="bp-rt-cruise-row">
+										<span class="bp-rt-cruise-chip"><i class="bi bi-anchor"></i> {{
+											textFormatter(returnLeg?.cruise_port) | titlecase }}</span>
+										<span class="bp-rt-cruise-chip">{{ textFormatter(returnLeg?.cruise_name) |
+											titlecase }}</span>
+										<span class="bp-rt-cruise-chip"><i class="bi bi-clock"></i> {{
+											textFormatter(returnLeg?.cruise_time) | titlecase }}</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Return Extra Stops -->
+							<ng-container *ngIf="returnLeg?.stops?.length > 0">
+								<div class="bp-rt-row" *ngFor="let stop of returnLeg?.stops; index as stop_index">
+									<div class="bp-rt-indicator">
+										<div class="bp-rt-dot bp-rt-dot--stop"></div>
+										<div class="bp-rt-line"></div>
+									</div>
+									<div class="bp-rt-body">
+										<span class="bp-rt-label">Stop {{ stop_index + 1 }}</span>
+										<div class="bp-rt-address bp-rt-address--stop"
+											(click)="showLocationPointOnMapByAddress(stop?.address)">
+											<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
+											{{ stop?.address }}
+										</div>
+									</div>
+								</div>
+							</ng-container>
+
+							<!-- Return Dropoff -->
+							<div class="bp-rt-row bp-rt-row--last">
+								<div class="bp-rt-indicator">
+									<div class="bp-rt-dot bp-rt-dot--dropoff"></div>
+								</div>
+								<div class="bp-rt-body">
+									<span class="bp-rt-label">Drop Off</span>
+
+									<div *ngIf="returnLeg?.transfer_type.includes('_city') || returnLeg?.transfer_type.includes('_cruise')"
+										class="bp-rt-address bp-rt-address--dropoff"
+										(click)="showLocationPointOnMapByAddress(returnLeg?.dropoff)">
+										<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
+										{{ textFormatter(returnLeg?.dropoff) }}
+									</div>
+
+									<ng-container *ngIf="returnLeg?.transfer_type.includes('_airport')">
+										<div class="bp-rt-address bp-rt-address--airport"
+											(click)="showLocationPointOnMapByAddress(returnLeg?.dropoff_airport_name)">
+											<i class="bi bi-geo-alt-fill bp-rt-pin"></i>
+											{{ textFormatter(returnLeg?.dropoff_airport_name) }}
+										</div>
+										<div class="bp-rt-meta-row">
+											<span class="bp-rt-flight-chip bp-rt-flight-chip--dropoff"
+												(click)="searchOnGoogle(returnLeg?.dropoff_airline_name + ' ' + returnLeg?.dropoff_flight)">
+												<i class="bi bi-airplane-fill"></i>
+												{{ textFormatter(returnLeg?.dropoff_airline_name) }} #{{
+												textFormatter(returnLeg?.dropoff_flight) }}
+											</span>
+										</div>
+									</ng-container>
+
+									<div *ngIf="returnLeg?.transfer_type.includes('_cruise')" class="bp-rt-cruise-row">
+										<span class="bp-rt-cruise-chip"><i class="bi bi-anchor"></i> {{
+											textFormatter(returnLeg?.cruise_port) | titlecase }}</span>
+										<span class="bp-rt-cruise-chip">{{ textFormatter(returnLeg?.cruise_name) |
+											titlecase }}</span>
+										<span class="bp-rt-cruise-chip"><i class="bi bi-clock"></i> {{
+											textFormatter(returnLeg?.cruise_time) }}</span>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="rcpt-metrics" *ngIf="returnLeg?.distance">
+							<div class="rcpt-metric">
+								<span class="rcpt-row-label">Distance</span>
+								<span class="rcpt-row-value">
+									{{ mToMi(returnLeg?.distance) }} mi / {{ mToKm(returnLeg?.distance) }} km
+								</span>
+							</div>
+							<div class="rcpt-metric" *ngIf="returnLeg?.duration">
+								<span class="rcpt-row-label">Est. Duration</span>
+								<span class="rcpt-row-value">{{ convertToMinutes(returnLeg?.duration) }}</span>
+							</div>
+						</div>
+					</div>
+
 					<!-- ── Special Instruction / Meet & Greet ── -->
 					<div class="rcpt-section">
 						<div class="rcpt-section-title">Meet &amp; Greet</div>
@@ -222,12 +371,22 @@
 									titlecase }}</div>
 							</div>
 						</div>
-						<div class="rcpt-greet" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+						<div class="rcpt-note" *ngIf="returnLeg?.booking_instructions?.trim()">
+							<i class="bi bi-info-circle rcpt-note-icon"></i>
+							<div>
+								<div class="rcpt-greet-label" style="color:#d97706">Return Special Instruction</div>
+								<div class="rcpt-note-body"
+									[innerHTML]="highlightNumbers(returnLeg?.booking_instructions)">
+								</div>
+							</div>
+						</div>
+
+						<div class="rcpt-greet" *ngIf="returnLeg?.meet_greet_choice_name">
 							<i class="bi bi-person-raised-hand rcpt-greet-icon"></i>
 							<div>
 								<div class="rcpt-greet-label">Departure Instruction</div>
 								<div class="rcpt-greet-value">{{
-									textFormatter(bookingPreview?.return_meet_greet_choice_name) | titlecase }}</div>
+									textFormatter(returnLeg?.meet_greet_choice_name) | titlecase }}</div>
 							</div>
 						</div>
 					</div>
@@ -290,6 +449,30 @@
 						</div>
 					</div>
 
+					<!-- ── Return Driver Information ── -->
+					<div class="rcpt-section" *ngIf="returnLeg?.driver?.name">
+						<div class="rcpt-section-title">Return Driver Information</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Name</span>
+							<span class="rcpt-row-value">{{ textFormatter(returnLeg?.driver?.name) | titlecase }}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="returnLeg?.driver?.email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link" href="mailto:{{returnLeg?.driver?.email}}">
+								<i class="bi bi-envelope"></i>
+								{{ textFormatter(returnLeg?.driver?.email) }}
+							</a>
+						</div>
+						<div class="rcpt-row" *ngIf="returnLeg?.driver?.cell">
+							<span class="rcpt-row-label">Phone</span>
+							<a class="rcpt-row-value rcpt-link"
+								href="tel:{{returnLeg?.driver?.cell_isd}}{{returnLeg?.driver?.cell}}">
+								<i class="bi bi-telephone"></i>
+								({{ returnLeg?.driver?.cell_isd }}) {{ returnLeg?.driver?.cell }}
+							</a>
+						</div>
+					</div>
+
 					<!-- ── Affiliate Information ── -->
 					<div class="rcpt-section">
 						<div class="rcpt-section-title">
@@ -323,6 +506,33 @@
 								? ('(' + bookingPreview?.affiliate_phone_isd + ') ' + bookingPreview?.affiliate_phone)
 								: ('(' + bookingPreview?.lose_affiliate_phone_isd + ') ' +
 								bookingPreview?.lose_affiliate_phone) }}
+							</a>
+						</div>
+					</div>
+
+					<!-- ── Return Affiliate Information ── -->
+					<div class="rcpt-section" *ngIf="returnLeg?.affiliate?.name">
+						<div class="rcpt-section-title">
+							{{ returnLeg?.affiliate?.type == 'affiliate' ? 'Return Affiliate Information' : 'Return
+							Loose Affiliate Information' }}
+						</div>
+						<div class="rcpt-row">
+							<span class="rcpt-row-label">Name</span>
+							<span class="rcpt-row-value">{{ textFormatter(returnLeg?.affiliate?.name) }}</span>
+						</div>
+						<div class="rcpt-row" *ngIf="returnLeg?.affiliate?.email">
+							<span class="rcpt-row-label">Email</span>
+							<a class="rcpt-row-value rcpt-link" href="mailto:{{returnLeg?.affiliate?.email}}">
+								<i class="bi bi-envelope"></i>
+								{{ returnLeg?.affiliate?.email }}
+							</a>
+						</div>
+						<div class="rcpt-row" *ngIf="returnLeg?.affiliate?.phone">
+							<span class="rcpt-row-label">Phone</span>
+							<a class="rcpt-row-value rcpt-link"
+								href="tel:{{returnLeg?.affiliate?.phone_isd}}{{returnLeg?.affiliate?.phone}}">
+								<i class="bi bi-telephone"></i>
+								({{ returnLeg?.affiliate?.phone_isd }}) {{ returnLeg?.affiliate?.phone }}
 							</a>
 						</div>
 					</div>
@@ -477,6 +687,122 @@
 						</div>
 					</div>
 
+					<!-- ── Return Rates Distribution ── -->
+					<div class="rcpt-section bp-rate-card" *ngIf="showRateDistribution && returnShareArray">
+						<div class="rcpt-section-title">Return Rates Distribution</div>
+
+						<div class="mx-2 mb-1"
+							*ngIf="!isAdminView && userRole !== 'travel_agent' && returnShareArray?.affiliateShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Affliate
+										Payout</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.affiliateShare)}}
+									</span>
+									<span class="preview-output-desc">( Total Price - (Ride Base Rate + Other Taxes)
+										)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Base Rate</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.baseRate)}}
+									</span>
+									<span class="preview-output-desc">(Fare Base Rate)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1" *ngIf="returnShareArray?.adminShare != '0'">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span
+										style="font-weight: 500 !important; color: #1e7500">Admin Share</span></div>
+								<div class="col-md-8 value" style="color: #1e7500">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.deducted_admin_share
+										? returnShareArray?.deducted_admin_share : returnShareArray?.adminShare)}}
+									</span>
+									<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate - deducted
+										stripe fee)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1" *ngIf="returnShareArray?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Travel Advisor
+										Share</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.travelAgentShare)}}
+									</span>
+									<span class="preview-output-desc">(10% of Base Rate)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Stripe fees</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.stripeFee)}}
+									</span>
+									<span class="preview-output-desc">(Platform fee 5% + 30 cents - <b>Paid from Admin
+											share</b>)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1" *ngIf="isAdminView && returnShareArray?.affiliateShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Affliate
+										Payout</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.affiliateShare)}}
+									</span>
+									<span class="preview-output-desc">( Total Price - (Ride Base Rate + Other Taxes)
+										)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1" *ngIf="returnShareArray?.farmoutShare">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Affliate Farm out
+										income</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.farmoutShare)}}
+									</span>
+									<span class="preview-output-desc">( 10 % of Base Rate)</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2 mb-1 bp-rate-total">
+							<div class="row m-0">
+								<div class="col-md-4 key"><span style="font-weight: 500 !important;">Total Client
+										Cost</span></div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="preview-output-field">
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnGrandTotal
+										? returnGrandTotal : returnShareArray?.returnGrandTotal)}}
+									</span>
+									<span class="preview-output-desc">(Actual Cost to Customer)</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<!-- ── Total ── -->
 					<div class="rcpt-total" *ngIf="bookingPreview?.grand_total">
 						<span class="rcpt-total-label">Total Amount</span>
@@ -484,6 +810,14 @@
 							class="rcpt-total-amount">{{currencySymbol}}{{formatBaseRate(bookingPreview?.grand_total)}}</span>
 					</div>
 				</div>
+			</div>
+
+			<!-- Form-driven previews can commit the booking straight from here -->
+			<div class="rcpt-form-footer" *ngIf="previewMode !== 'view'">
+				<button type="button" class="rcpt-btn" data-dismiss="modal">Close</button>
+				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onSave()">
+					<i class="bi bi-check2-circle"></i> Save Booking
+				</button>
 			</div>
 		</div>
 	</div>

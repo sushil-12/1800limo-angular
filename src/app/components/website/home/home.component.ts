@@ -1,4 +1,3 @@
-
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
@@ -305,14 +304,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			?.other_listing_arr?.length || 0;
 	}
 
-	// Plain no-arg getter so the template can bind/iterate directly instead of
-	// calling fetchPageData('...') with a string literal inside *ngIf/*ngFor —
-	// the Angular compiler fails to register the *ngFor loop variable's type
-	// when the "of" expression is a parameterized method call chained with `?.`.
-	get personalizedSection(): any {
-		return this.fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES');
-	}
-
 	initServiceCarousel() {
 		this.scDots = Array.from({ length: this.scTotal }, (_, i) => i);
 		this.scIndex = 0;
@@ -393,16 +384,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Add event listeners for focus and blur events to each element
 			console.log('home-- elementsWithTabIndex-->', elementsWithTabIndex)
 			// elementsWithTabIndex?.forEach((element) => {
-			// element.addEventListener('focus', () => {
-			// element.classList.add('focus-border'); // Add the focus-border class on focus
-			// setTimeout(() => {
-			// element.classList.remove('focus-border');
-			// }, 1500)
-			// });
+			// 	element.addEventListener('focus', () => {
+			// 		element.classList.add('focus-border'); // Add the focus-border class on focus
+			// 		setTimeout(() => {
+			// 			element.classList.remove('focus-border');
+			// 		}, 1500)
+			// 	});
 
-			// element.addEventListener('blur', () => {
-			// element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
-			// });
+			// 	element.addEventListener('blur', () => {
+			// 		element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
+			// 	});
 			// });
 		} catch (error) {
 			console.log(error)
@@ -460,7 +451,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 
-		this.initialiseQuotebot()  // initialise Quote Bot
+		this.initialiseQuotebot()  	// initialise Quote Bot
 		//Get In Touch Form
 		this.getInTouchForm = this.formBuilder.group({
 			getInTouchName: ['', Validators.required],
@@ -2124,40 +2115,35 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 		if (dropoffTypeSub) { this._subscriptions.push(dropoffTypeSub); }
 	}
-	// Lookup built once per data load so the ~20 `fetchPageData(...)` calls in the
-	// template (re-run on every change-detection cycle) don't each re-scan
-	// homePageData. See buildHomePageDataIndex().
-	private homePageDataByTitle: Record<string, any> = {};
-	// Sections we've already warned about, so repeated template calls (every CD
-	// cycle) don't spam the console with the same "not found" warning.
-	private _loggedMissingSections = new Set<string>();
-
-	private buildHomePageDataIndex(): void {
-		this.homePageDataByTitle = {};
-		const titles: string[] = [];
-		if (this.homePageData) {
-			for (const item in this.homePageData) {
-				const section = this.homePageData[item];
-				if (section && Object.prototype.hasOwnProperty.call(section, 'title') && section.title != null) {
-					const key = String(section.title).toLowerCase().trim();
-					this.homePageDataByTitle[key] = section;
-					titles.push(section.title);
+	fetchSectionData(section: string) {
+		if (section != undefined && this.homePageData != undefined) {
+			for (let item in this.homePageData) {
+				if (this.homePageData[item]['section'] != undefined && String(this.homePageData[item]['section']).toLowerCase() == section.toLowerCase()) {
+					return this.homePageData[item]
 				}
 			}
 		}
-		console.debug('[home] homePageData indexed, available section titles:', titles);
+	}
+
+	get bannerIntroHtml(): string {
+		const page = this.fetchSectionData('banner');
+		if (!page) { return ''; }
+		return [page['title'], page['subtitle'], page['content']]
+			.map((part: any) => (part == undefined ? '' : String(part).trim()))
+			.filter((part: string) => part !== '')
+			.join(' ');
 	}
 
 	fetchPageData(section: string) {
-		if (section == undefined || this.homePageData == undefined) {
-			return undefined;
+		if (section != undefined && this.homePageData != undefined) {
+			if (this.homePageData) {
+				for (let item in this.homePageData) {
+					if (this.homePageData[item].hasOwnProperty('title') && this.homePageData[item]['title'].toLowerCase() == section.toLowerCase()) {
+						return this.homePageData[item]
+					}
+				}
+			}
 		}
-		const match = this.homePageDataByTitle[String(section).toLowerCase().trim()];
-		if (!match && !this._loggedMissingSections.has(section)) {
-			this._loggedMissingSections.add(section);
-			console.warn(`[home] fetchPageData: no section titled "${section}" found. Available titles:`, Object.keys(this.homePageDataByTitle));
-		}
-		return match;
 	}
 
 	fetchHomePageData() {
@@ -2169,16 +2155,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				catchError(err => {
 					this.isHomePageLoading = false;
 					// this.spinner.hide()
-					console.error('[home] fetchHomePageData failed', err);
 					return throwError(err)
 				})
 			).subscribe(({ data }: any) => {
 				this.isHomePageLoading = false;
 				// this.spinner.hide()
-				console.debug('[home] fetchHomePageData response', data);
+				console.log(data, "gsducgjsdgcfugsdu")
 				this.homePageData = data;
-				this._loggedMissingSections.clear();
-				this.buildHomePageDataIndex();
 				this.clientImages = this.fetchPageData('SOME OF OUR CLIENTS')?.images || [];
 				// Initialize all carousels after data is loaded
 				setTimeout(() => {
@@ -2191,7 +2174,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	}
 
-	// --------------------------------- Quotebot Data ----------------------------------------------
+	// --------------------------------- 	Quotebot Data 		----------------------------------------------
 
 	/**
 	 * after generating Form, prefills and fetches airport data
@@ -2212,10 +2195,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	 * @param field_name [string] Required. input field and key of the form
 	 */
 	// onAutocompleteSelected(location: any, field_name: string) {
-	// this.SetFormValue(field_name, location.formatted_address)
+	// 	this.SetFormValue(field_name, location.formatted_address)
 
-	// // fill return address and airport for round trip
-	// this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
+	// 	// fill return address and airport for round trip
+	// 	this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
 	// }
 
 	/**
@@ -2224,10 +2207,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	 * @param field_name [string] Required. input field and key of the form
 	 */
 	// onLocationSelected(coordinates: any, field_name: string) {
-	// this.SetFormValue(field_name + '_lat', coordinates['latitude'])
-	// this.SetFormValue(field_name + '_long', coordinates['longitude'])
+	// 	this.SetFormValue(field_name + '_lat', coordinates['latitude'])
+	// 	this.SetFormValue(field_name + '_long', coordinates['longitude'])
 
-	// this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
+	// 	this.QBForm.service_type.value == 'round_trip' && !field_name.includes('return_') && this.fillReturnDetails()
 
 	// }
 
@@ -2383,8 +2366,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	 */
 	generateQBForm() {
 		this.quoteBotForm = this.formBuilder.group({
-			service_type: ['', Validators.required],// form type
-			booking_hour: ['', Validators.required],// charte tour
+			service_type: ['', Validators.required],		// form type
+			booking_hour: ['', Validators.required],	// charte tour
 			pickup_type: ['', Validators.required],
 			dropoff_type: ['', Validators.required],
 			pickup_date: [new Date().toISOString().split('T')[0], Validators.required],
@@ -2735,14 +2718,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			})
 			this.syncPrefilledAirportSelections()
 			this.vars = { ...previousOtherDetails }
-				// other_details can come back empty when the stored form was rewritten by
-				// the booking page; rebuild the airport display names from the top-level
-				// fields so the next fileTheQuote() still carries them in other_details.
-				;['pickup_airport_name', 'dropoff_airport_name', 'return_pickup_airport_name', 'return_dropoff_airport_name'].forEach((key: string) => {
-					if (!this.vars[key] && previous_quotebot?.[key]) {
-						this.vars[key] = previous_quotebot[key];
-					}
-				});
+			// other_details can come back empty when the stored form was rewritten by
+			// the booking page; rebuild the airport display names from the top-level
+			// fields so the next fileTheQuote() still carries them in other_details.
+			;['pickup_airport_name', 'dropoff_airport_name', 'return_pickup_airport_name', 'return_dropoff_airport_name'].forEach((key: string) => {
+				if (!this.vars[key] && previous_quotebot?.[key]) {
+					this.vars[key] = previous_quotebot[key];
+				}
+			});
 
 			// Restore extra stops and selected amenities from previous session
 			if (Array.isArray(previous_quotebot?.extra_stops)) {
@@ -2763,8 +2746,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.autoPickLocationOnLoad();
 
 			// if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
-			// console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
-			// this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
+			// 	console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
+			// 	this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
 			// }
 
 			// set values for data receiving from data.js
@@ -3461,11 +3444,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.refreshTimeSlots()
 		},
 		// pickupTime: (event: any = null, form_control: string) => {
-		// if (event == null) {
-		// return ''
-		// }
-		// console.log('Pickup Time Event: ', event.target.value)
-		// this.SetFormValue(form_control, event.target.value)
+		// 	if (event == null) {
+		// 		return ''
+		// 	}
+		// 	console.log('Pickup Time Event: ', event.target.value)
+		// 	this.SetFormValue(form_control, event.target.value)
 		// },
 		pickupTime: (event: any, form_control: string) => {
 			if (!event?.target?.value) return;
@@ -3765,61 +3748,61 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	// calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[]) {
-	// console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
-	// const newPromise = new Promise((resolve, reject) => {
-	// this.mapsAPILoader.load().then(() => {
-	// const distanceMatrixService = new google.maps.DistanceMatrixService()
+	// 	console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
+	// 	const newPromise = new Promise((resolve, reject) => {
+	// 		this.mapsAPILoader.load().then(() => {
+	// 			const distanceMatrixService = new google.maps.DistanceMatrixService()
 
-	// // generate request for distance matrix service
-	// const request = {
-	// origins: [pickup_coordinates[0]],
-	// destinations: [dropoff_coordinates[0]],
-	// travelMode: google.maps.TravelMode.DRIVING,
-	// unitSystem: google.maps.UnitSystem.METRIC,
-	// avoidHighways: false,
-	// avoidTolls: false
-	// }
+	// 			// generate request for distance matrix service
+	// 			const request = {
+	// 				origins: [pickup_coordinates[0]],
+	// 				destinations: [dropoff_coordinates[0]],
+	// 				travelMode: google.maps.TravelMode.DRIVING,
+	// 				unitSystem: google.maps.UnitSystem.METRIC,
+	// 				avoidHighways: false,
+	// 				avoidTolls: false
+	// 			}
 
-	// if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1) {
-	// request.origins = [pickup_coordinates[0], pickup_coordinates[1]]
-	// request.destinations = [dropoff_coordinates[0], dropoff_coordinates[1]]
-	// }
+	// 			if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1) {
+	// 				request.origins = [pickup_coordinates[0], pickup_coordinates[1]]
+	// 				request.destinations = [dropoff_coordinates[0], dropoff_coordinates[1]]
+	// 			}
 
-	// // get distance matrix of that route
-	// distanceMatrixService.getDistanceMatrix(request, (response) => {
-	// console.log(response)
-	// if (response) {
-	// try {
-	// if ((response.rows[0].elements[0].status == 'ZERO_RESULTS') || (pickup_coordinates.length > 1 && response.rows[1].elements[1].status == 'ZERO_RESULTS')) {
-	// reject('InvalidLocationPoints')
-	// return
-	// }
-	// // push into the desired field
-	// (<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
-	// distance: [response.rows[0].elements[0].distance, Validators.required],
-	// duration: [response.rows[0].elements[0].duration, Validators.required]
-	// }));
-	// if (response.rows.length > 1) {
-	// (<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
-	// distance: [response.rows[1].elements[1].distance, Validators.required],
-	// duration: [response.rows[1].elements[1].duration, Validators.required]
-	// }));
-	// }
-	// resolve(true)
-	// return
-	// } catch (err) {
-	// reject(err)
-	// return
-	// }
-	// }
-	// })
-	// }, (error) => {
-	// console.log('Error while calculating distance. \n', error)
-	// })
-	// return
-	// })
-	// console.groupEnd()
-	// return newPromise
+	// 			// get distance matrix of that route
+	// 			distanceMatrixService.getDistanceMatrix(request, (response) => {
+	// 				console.log(response)
+	// 				if (response) {
+	// 					try {
+	// 						if ((response.rows[0].elements[0].status == 'ZERO_RESULTS') || (pickup_coordinates.length > 1 && response.rows[1].elements[1].status == 'ZERO_RESULTS')) {
+	// 							reject('InvalidLocationPoints')
+	// 							return
+	// 						}
+	// 						// push into the desired field
+	// 						(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
+	// 							distance: [response.rows[0].elements[0].distance, Validators.required],
+	// 							duration: [response.rows[0].elements[0].duration, Validators.required]
+	// 						}));
+	// 						if (response.rows.length > 1) {
+	// 							(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
+	// 								distance: [response.rows[1].elements[1].distance, Validators.required],
+	// 								duration: [response.rows[1].elements[1].duration, Validators.required]
+	// 							}));
+	// 						}
+	// 						resolve(true)
+	// 						return
+	// 					} catch (err) {
+	// 						reject(err)
+	// 						return
+	// 					}
+	// 				}
+	// 			})
+	// 		}, (error) => {
+	// 			console.log('Error while calculating distance. \n', error)
+	// 		})
+	// 		return
+	// 	})
+	// 	console.groupEnd()
+	// 	return newPromise
 	// }
 
 	ValidateForm(form: FormGroup) {
@@ -4246,7 +4229,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
 
-	// --------------------------------- Quotebot Data Ends ----------------------------------------------
+	// --------------------------------- 	Quotebot Data Ends 	----------------------------------------------
 
 
 
@@ -4285,7 +4268,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.modalInformation = true;
 				this.selectedModal = 'modal_4';
 				this.modalHeading = "Consistent Quality Service";
-				this.modalInstructions = "Other TNCs claim to be Good, Fast and Cheap. We all know you can’t be all three and most would be happy to choose only two and hope for the best. <br> What’s the point of being in business if you’re not consistently Good, Cheap, or Fast? You can’tafford to be late for a meeting, a plane, or a group or business event! You don’t want to over pay, ever! You want service to be consistent! Does your TNC do all three? How about two? <br> 1-800-LIMO.COM’s only goal is to be Good, all of the time, for worry-free transportation! <br> <strong>Fast Invoicing</strong> Just get in and go. You’ll get a very accurate all-inclusive rate when you book a ride and you’ll get a receipt by the time you exit your ride. We started the cashless transaction 16 years ago. You’ll know the Total Cost of your ride before leaving your vehicle. Just click the Pay button. <br> If your driver blows you away with kindness and personality, tip your driver extra in cash or on the app, and you can request that same great driver whenever you travel. What could be better than an extra tip and a repeat booking? We love clients like you and share that love and letyour friends know how good we are.";
+				this.modalInstructions = "Other TNCs claim to be Good, Fast and Cheap. We all know you can’t be all three and most would be happy to choose only two and hope for the best. <br> What’s the point of being in business if you’re not consistently Good, Cheap, or Fast? You can’t	afford to be late for a meeting, a plane, or a group or business event! You don’t want to over pay, ever! You want service to be consistent! Does your TNC do all three? How about two? <br> 1-800-LIMO.COM’s only goal is to be Good, all of the time, for worry-free transportation! <br> <strong>Fast Invoicing</strong> Just get in and go. You’ll get a very accurate all-inclusive rate when you book a ride and you’ll get a receipt by the time you exit your ride. We started the cashless transaction 16 years ago. You’ll know the Total Cost of your ride before leaving your vehicle. Just click the Pay button. <br> If your driver blows you away with kindness and personality, tip your driver extra in cash or on the app, and you can request that same great driver whenever you travel. What could be better than an extra tip and a repeat booking? We love clients like you and share that love and let	your friends know how good we are.";
 				break;
 			}
 		}
@@ -4568,7 +4551,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				nav: true,
 				responsiveClass: true,
 				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-				// '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
 				responsive: {
 					0: {
 						items: 1,
@@ -4607,7 +4590,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				margin: 10,
 				responsiveClass: true,
 				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-				// '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
 				responsive: {
 					0: {
 						items: 1, // Mobile: 1 item
@@ -4675,7 +4658,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				margin: 10,
 				responsiveClass: true,
 				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-				// '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
 				responsive: {
 					0: {
 						items: 1, // Mobile: 1 item
@@ -4710,7 +4693,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				margin: 10,
 				responsiveClass: true,
 				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-				// '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
 				responsive: {
 					0: {
 						items: 1, // Mobile: 1 item
@@ -4745,7 +4728,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 				margin: 10,
 				responsiveClass: true,
 				// navText: ['<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"><g><path d="M64.96,111.2c2.65,2.73,2.59,7.08-0.13,9.73c-2.73,2.65-7.08,2.59-9.73-0.14L1.97,66.01l4.93-4.8l-4.95,4.8 c-2.65-2.74-2.59-7.1,0.15-9.76c0.08-0.08,0.16-0.15,0.24-0.22L55.1,2.09c2.65-2.73,7-2.79,9.73-0.14 c2.73,2.65,2.78,7.01,0.13,9.73L16.5,61.23L64.96,111.2L64.96,111.2L64.96,111.2z"/></g></svg>',
-				// '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
+				// 	'<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 66.91 122.88" style="enable-background:new 0 0 66.91 122.88" xml:space="preserve" fill="#fff"> <g><path d="M1.95,111.2c-2.65,2.72-2.59,7.08,0.14,9.73c2.72,2.65,7.08,2.59,9.73-0.14L64.94,66l-4.93-4.79l4.95,4.8 c2.65-2.74,2.59-7.11-0.15-9.76c-0.08-0.08-0.16-0.15-0.24-0.22L11.81,2.09c-2.65-2.73-7-2.79-9.73-0.14 C-0.64,4.6-0.7,8.95,1.95,11.68l48.46,49.55L1.95,111.2L1.95,111.2L1.95,111.2z"/></g></svg> '],
 				responsive: {
 					0: {
 						items: 1, // Mobile: 1 item

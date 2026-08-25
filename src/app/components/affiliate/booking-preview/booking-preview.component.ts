@@ -63,8 +63,15 @@ export class BookingPreviewComponent implements OnInit {
    */
   previewMode: 'view' | 'edit' | 'create' = 'view';
 
+  /** Round-trip state, normalised once so the template binds a single shape. */
+  isRoundTrip: boolean = false;
+  returnLeg: any = null;
+  returnShareArray: any = null;
+  returnGrandTotal: any = null;
+
   @Output() editBooking = new EventEmitter<any>();
   @Output() shareBooking = new EventEmitter<any>();
+  @Output() saveBooking = new EventEmitter<void>();
 
   shareEditorContent: string = '';
   shareSmsContent: string = '';
@@ -129,6 +136,17 @@ export class BookingPreviewComponent implements OnInit {
     else {
       this.editBooking.emit(this.bookingPreview);
     }
+  }
+
+  /**
+   * Footer Save, only rendered for the booking form's own previews. The host form owns
+   * the submit; here we just close the receipt and hand control back to it.
+   */
+  onSave(): void {
+    try {
+      $('#previewBookingOnID').modal('hide');
+    } catch (e) { }
+    this.saveBooking.emit();
   }
 
   onShare(): void {
@@ -345,7 +363,7 @@ export class BookingPreviewComponent implements OnInit {
     // Defer the heavy work to the next tick so the button re-renders first
     setTimeout(() => {
       const clone = node.cloneNode(true) as HTMLElement;
-      clone.querySelectorAll('google-map, .rcpt-map, .rcpt-actions, .rcpt-close')
+      clone.querySelectorAll('google-map, .rcpt-map, .rcpt-actions, .rcpt-close, .rcpt-form-footer')
         .forEach((el) => el.remove());
 
       const fileName = `Booking-${this.bookingPreview?.reservation_id || 'receipt'}.pdf`;
@@ -484,6 +502,8 @@ export class BookingPreviewComponent implements OnInit {
           this.bookingPreview = response.data;
           console.debug('[BookingPreview] openPreview: bookingPreview set', this.bookingPreview);
 
+          this.applyReturnTripState();
+
           this.showRateDistribution =
             userRole === 'admin' ||
             (userRole === 'affiliate' &&
@@ -578,6 +598,8 @@ export class BookingPreviewComponent implements OnInit {
     this.previewMode = mode;
     this.bookingPreview = data || {};
 
+    this.applyReturnTripState();
+
     this.showRateDistribution =
       userRole === 'admin' ||
       userRole === 'travel_agent' ||
@@ -628,6 +650,136 @@ export class BookingPreviewComponent implements OnInit {
         console.error('[BookingPreview] openLocalPreview: MapController() threw an error', mapErr);
       }
     }, 300);
+  }
+
+  /**
+   * Derive every round-trip field the template needs. Called from both entry points so
+   * a saved booking and an unsaved form render the return leg identically.
+   */
+  private applyReturnTripState(): void {
+    try {
+      this.isRoundTrip = this.bookingPreview?.service_type == 'round_trip';
+      this.returnLeg = this.buildReturnLeg(this.bookingPreview);
+      this.returnShareArray = this.isRoundTrip
+        ? (this.bookingPreview?.return_share_array || this.bookingPreview?.r_share_array || null)
+        : null;
+      this.returnGrandTotal = this.isRoundTrip
+        ? (this.bookingPreview?.return_grand_total ?? null)
+        : null;
+    } catch (e) {
+      console.error('[BookingPreview] applyReturnTripState: failed to normalise return leg', e);
+      this.isRoundTrip = false;
+      this.returnLeg = null;
+      this.returnShareArray = null;
+      this.returnGrandTotal = null;
+    }
+  }
+
+  /**
+   * Flatten the return leg into one shape. The form payload and the API response name
+   * these fields differently (`return_pickup` vs `return_pickup_address`, stops as an
+   * array vs a JSON string), so the fallbacks live here rather than in the template.
+   */
+  private buildReturnLeg(src: any): any {
+    if (!src || src.service_type != 'round_trip') {
+      return null;
+    }
+
+    const affiliateType = src.return_affiliate_type;
+    const isLoose = affiliateType == 'loose_affiliate';
+
+    return {
+      transfer_type: String(src.return_transfer_type || ''),
+      pickup_date: src.return_pickup_date,
+      pickup_time: src.return_pickup_time,
+
+      pickup: src.return_pickup || src.return_pickup_address || '',
+      pickup_fbo_address: src.return_fbo_address || '',
+      pickup_airport_name: src.return_pickup_airport_name || '',
+      pickup_airline_name: src.return_pickup_airline_name || '',
+      pickup_flight: src.return_pickup_flight || '',
+
+      dropoff: src.return_dropoff || src.return_dropoff_address || '',
+      dropoff_airport_name: src.return_dropoff_airport_name || '',
+      dropoff_airline_name: src.return_dropoff_airline_name || '',
+      dropoff_flight: src.return_dropoff_flight || '',
+
+      cruise_port: src.return_cruise_port || '',
+      cruise_name: src.return_cruise_name || '',
+      cruise_time: src.return_cruise_time || '',
+
+      stops: this.normaliseReturnStops(src),
+
+      booking_instructions: src.return_booking_instructions || '',
+      meet_greet_choice_name: src.return_meet_greet_choice_name || src.return_meet_greet_choices_name || '',
+      cancellation_hours: src.return_cancellation_hours ?? src.cancellation_hours,
+
+      distance: src.return_distance ?? src.returnJourneyDistance,
+      duration: src.return_duration ?? src.returnJourneyTime,
+
+      vehicle: {
+        type_name: src.return_vehicle_type_name || '',
+        make: src.return_vehicle_make || '',
+        model: src.return_vehicle_model || '',
+        year: src.return_vehicle_year || '',
+        color: src.return_vehicle_color || ''
+      },
+
+      driver: {
+        name: src.return_driver_name || '',
+        email: src.return_driver_email || '',
+        cell: src.return_driver_cell || '',
+        cell_isd: src.return_driver_cell_isd || ''
+      },
+
+      affiliate: {
+        type: affiliateType,
+        name: isLoose ? src.return_lose_affiliate_name : src.return_affiliate_name,
+        email: isLoose ? src.return_lose_affiliate_email : src.return_affiliate_email,
+        phone: isLoose ? src.return_lose_affiliate_phone : src.return_affiliate_phone,
+        phone_isd: isLoose ? src.return_lose_affiliate_phone_isd : src.return_affiliate_phone_isd
+      }
+    };
+  }
+
+  /**
+   * Return stops arrive as an array (form), a JSON string (edit/preview API) or the
+   * flat `return_stop_1` / `return_stop_2` pairs the finalize endpoint uses.
+   */
+  private normaliseReturnStops(src: any): any[] {
+    let raw = src?.return_extra_stops;
+
+    if (typeof raw === 'string') {
+      try {
+        raw = JSON.parse(raw);
+      } catch (e) {
+        console.error('[BookingPreview] normaliseReturnStops: could not parse return_extra_stops', e);
+        raw = null;
+      }
+    }
+
+    if (Array.isArray(raw) && raw.length) {
+      return raw
+        .filter((stop: any) => !!stop?.address)
+        .map((stop: any) => ({
+          address: stop?.address,
+          latitude: stop?.latitude,
+          longitude: stop?.longitude
+        }));
+    }
+
+    const flatStops: any[] = [];
+    for (let i = 1; i <= 5; i++) {
+      const address = src?.[`return_stop_${i}`];
+      if (address) {
+        flatStops.push({
+          address: address,
+          latitude: src?.[`return_stop_${i}_latitude`],
+          longitude: src?.[`return_stop_${i}_longitude`]
+        });
+      }
+    }
+    return flatStops;
   }
 
   MapController() {

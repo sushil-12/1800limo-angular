@@ -6286,7 +6286,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (this.BookingForm.value.number_of_vehicles != 0) {
 				base_rate *= this.BookingForm.value.number_of_vehicles
 			}
-			let returnGrandTotal = this.BookingForm.value.return_grand_total
+			// `return_grand_total` is not a form control - it only exists on the submit
+			// payload, where it is copied off the return rates. Read it there directly.
+			let returnGrandTotal = this.BookingForm.value.return_grand_total ?? this.ReturnRatesForm?.r_grandtotal
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			adminShare = adminShare + (this.ReturnRatesForm?.misc?.Extra_Gratuity?.amount * 0.25)
@@ -6874,17 +6876,32 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.error('[BookingPreview] Failed to build share array for preview', e)
 		}
 
+		let return_share_array: any = null
+		try {
+			return_share_array = isRoundTrip ? (this.createReservationReturnShareArray() || null) : null
+		} catch (e) {
+			console.error('[BookingPreview] Failed to build return share array for preview', e)
+		}
+
 		const affiliateName = [
 			this.AffiliateInformation?.FirstName,
 			this.AffiliateInformation?.MiddleName,
 			this.AffiliateInformation?.LastName
 		].filter(part => !!part).join(' ')
 
-		const extra_stops = (v.extra_stops || []).map((stop: any) => ({
+		const returnAffiliateName = [
+			this.ReturnAffiliateInformation?.FirstName,
+			this.ReturnAffiliateInformation?.MiddleName,
+			this.ReturnAffiliateInformation?.LastName
+		].filter(part => !!part).join(' ')
+
+		const mapStops = (stops: any) => (stops || []).map((stop: any) => ({
 			address: stop?.address,
 			latitude: stop?.latitude,
 			longitude: stop?.longitude
 		}))
+
+		const extra_stops = mapStops(v.extra_stops)
 
 		return {
 			reservation_id: isEdit ? (this.booking_id || v.reservation_id) : '',
@@ -6931,7 +6948,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			dropoff: v.dropoff,
 			dropoff_latitude: v.dropoff_latitude,
 			dropoff_longitude: v.dropoff_longitude,
-			dropoff_address: v.return_fbo_address,
+			// FBO details are pickup-only (see routePickupOnlyFields), so a drop-off has none.
+			dropoff_address: '',
 			dropoff_airport_name: this.getPreviewAirportDisplay(v.dropoff_airport_name, v.dropoff_airport_option),
 			dropoff_airport_latitude: v.dropoff_airport_latitude,
 			dropoff_airport_longitude: v.dropoff_airport_longitude,
@@ -6943,7 +6961,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// ── Instructions ──
 			booking_instructions: v.booking_instructions,
 			meet_greet_choice_name: v.meet_greet_choices_name,
-			return_meet_greet_choice_name: isRoundTrip ? v.return_meet_greet_choices_name : '',
 
 			// ── Passenger ──
 			passenger_name: v.passenger_name,
@@ -6968,10 +6985,60 @@ export class BookingComponent implements OnInit, OnDestroy {
 			lose_affiliate_phone: v.lose_affiliate_phone,
 			lose_affiliate_phone_isd: v.lose_affiliate_phone_isd,
 
+			// ── Return leg ──
+			// Emitted as empty strings on a one-way so the receipt's normaliser sees nothing.
+			return_pickup_date: isRoundTrip ? v.return_pickup_date : '',
+			return_pickup_time: isRoundTrip ? v.return_pickup_time : '',
+			return_pickup: isRoundTrip ? v.return_pickup : '',
+			return_fbo_address: isRoundTrip ? v.return_fbo_address : '',
+			return_pickup_airport_name: isRoundTrip
+				? this.getPreviewAirportDisplay(v.return_pickup_airport_name, v.return_pickup_airport_option)
+				: '',
+			return_pickup_airline_name: isRoundTrip ? v.return_pickup_airline_name : '',
+			return_pickup_flight: isRoundTrip ? v.return_pickup_flight : '',
+			return_extra_stops: isRoundTrip ? mapStops(v.return_extra_stops) : [],
+			return_dropoff: isRoundTrip ? v.return_dropoff : '',
+			return_dropoff_airport_name: isRoundTrip
+				? this.getPreviewAirportDisplay(v.return_dropoff_airport_name, v.return_dropoff_airport_option)
+				: '',
+			return_dropoff_airline_name: isRoundTrip ? v.return_dropoff_airline_name : '',
+			return_dropoff_flight: isRoundTrip ? v.return_dropoff_flight : '',
+			return_cruise_port: isRoundTrip ? v.return_cruise_port : '',
+			return_cruise_name: isRoundTrip ? v.return_cruise_name : '',
+			return_cruise_time: isRoundTrip ? v.return_cruise_time : '',
+			return_booking_instructions: isRoundTrip ? v.return_booking_instructions : '',
+			return_meet_greet_choice_name: isRoundTrip ? v.return_meet_greet_choices_name : '',
+			return_cancellation_hours: isRoundTrip ? v.return_cancellation_hours : '',
+			return_distance: isRoundTrip ? this.return_distance : '',
+			return_duration: isRoundTrip ? v.returnJourneyTime : '',
+
+			return_vehicle_type_name: isRoundTrip ? v.return_vehicle_type_name : '',
+			return_vehicle_make: isRoundTrip ? (v.return_vehicle_make_name || v.return_vehicle_make) : '',
+			return_vehicle_model: isRoundTrip ? (v.return_vehicle_model_name || v.return_vehicle_model) : '',
+			return_vehicle_year: isRoundTrip ? (v.return_vehicle_year_name || v.return_vehicle_year) : '',
+			return_vehicle_color: isRoundTrip ? (v.return_vehicle_color_name || v.return_vehicle_color) : '',
+
+			return_driver_name: isRoundTrip ? v.return_driver_name : '',
+			return_driver_email: isRoundTrip ? v.return_driver_email : '',
+			return_driver_cell: isRoundTrip ? v.return_driver_cell : '',
+			return_driver_cell_isd: isRoundTrip ? v.return_driver_cell_isd : '',
+
+			return_affiliate_type: isRoundTrip ? v.return_affiliate_type : '',
+			return_affiliate_name: isRoundTrip ? returnAffiliateName : '',
+			return_affiliate_email: isRoundTrip ? this.ReturnAffiliateInformation?.Email : '',
+			return_affiliate_phone: isRoundTrip ? this.ReturnAffiliateInformation?.CellNumber : '',
+			return_affiliate_phone_isd: isRoundTrip ? this.ReturnAffiliateInformation?.CellIsd : '',
+			return_lose_affiliate_name: isRoundTrip ? v.return_lose_affiliate_name : '',
+			return_lose_affiliate_email: isRoundTrip ? v.return_lose_affiliate_email : '',
+			return_lose_affiliate_phone: isRoundTrip ? v.return_lose_affiliate_phone : '',
+			return_lose_affiliate_phone_isd: isRoundTrip ? v.return_lose_affiliate_phone_isd : '',
+
 			// ── Money ──
 			currency_symbol: this.currencySymbol,
 			share_array: share_array,
-			grand_total: this.RatesForm?.grand_total
+			grand_total: this.RatesForm?.grand_total,
+			return_share_array: return_share_array,
+			return_grand_total: isRoundTrip ? this.ReturnRatesForm?.r_grandtotal : null
 		}
 	}
 
