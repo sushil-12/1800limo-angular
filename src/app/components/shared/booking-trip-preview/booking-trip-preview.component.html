@@ -15,32 +15,14 @@
 					<!-- create-mode previews come from the unsaved booking form: no id, no actions -->
 					<div class="rcpt-head" *ngIf="previewMode !== 'create'">
 						<h2 class="rcpt-head-title">Booking #{{ bookingPreview?.reservation_id }}</h2>
-						<!-- ── Action buttons ── -->
-						<div class="rcpt-actions mt-4" *ngIf="previewMode === 'view'">
-							<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onEdit()"
-								*ngIf="(bookingPreview?.booking_status != 'paid' && bookingPreview?.booking_status != 'paid_cash') && !((userRole == 'individual' || userRole == 'travel_agent') && bookingPreview?.booking_status == 'cancelled')">
-								<i class="bi bi-pencil-square"></i> Edit
-							</button>
-							<button type="button" class="rcpt-btn" (click)="onShare()">
-								<i class="bi bi-clipboard"></i> Copy
-							</button>
-							<button type="button" class="rcpt-btn" (click)="printReceipt()"
-								[disabled]="isGeneratingPdf">
-								<i class="bi"
-									[ngClass]="isGeneratingPdf ? 'bi-arrow-repeat rcpt-spin' : 'bi-file-earmark-pdf'"></i>
-								{{ isGeneratingPdf ? 'Generating…' : 'Download' }}
-							</button>
-						</div>
 					</div>
-
-
 
 					<!-- ── Trip tabs — one per leg, round trips only ── -->
 					<div class="rcpt-trips" *ngIf="legs.length > 1">
 						<button type="button" class="rcpt-trip" *ngFor="let leg of legs; index as i"
 							[class.rcpt-trip--active]="i === activeLegIndex" (click)="selectLeg(i)">
 							<span class="rcpt-trip-label">{{ leg.label }}</span>
-							<span class="rcpt-trip-caption">{{ leg.caption }}</span>
+							<!-- <span class="rcpt-trip-caption">{{ leg.caption }}</span> -->
 						</button>
 					</div>
 
@@ -49,7 +31,6 @@
 						<span class="rcpt-idrow-label">Booking Date & Time</span>
 						<span class="rcpt-idrow-value">{{ formatDate(bookingPreview?.pickup_date) }} | {{
 							formatTime(bookingPreview?.pickup_time) }}</span>
-
 					</div>
 
 					<div class="rcpt-idrow" >
@@ -82,11 +63,11 @@
 					<div class="rcpt-section">
 						<div class="rcpt-section-title" style="display: flex; justify-content: space-between; align-items: center;">
 							Trip Information
-							<span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
+							<!-- <span class="rcpt-status-pill" [ngClass]="bookingPreview?.booking_status || 'pending'">
 								{{ bookingPreview?.booking_status == 'driver_unassigned'
 								? 'Unassigned'
 								: (textFormatter(bookingPreview?.booking_status || 'pending') | titlecase) }}
-							</span>
+							</span> -->
 						</div>
 
 						<div class="bp-route-timeline rcpt-timeline">
@@ -476,20 +457,15 @@
 						</div>
 					</div>
 
-					<!-- ── Total ── -->
-					<div class="rcpt-total" *ngIf="bookingPreview?.grand_total">
-						<span class="rcpt-total-label">Total Amount</span>
-						<span
-							class="rcpt-total-amount">{{currencySymbol}}{{formatBaseRate(bookingPreview?.grand_total)}}</span>
-					</div>
+					
 				</div>
 			</div>
 
 			<!-- Form-driven previews can commit the booking straight from here -->
 			<div class="rcpt-form-footer" *ngIf="previewMode !== 'view'">
 				<button type="button" class="rcpt-btn" data-dismiss="modal">Close</button>
-				<button type="button" class="rcpt-btn rcpt-btn--primary" (click)="onSave()">
-					<i class="bi bi-check2-circle"></i> Save Booking
+				<button type="button" class="rcpt-btn" style="background-color:#F0883E; border-color:#F0883E; color:#fff" (click)="onSave()">
+					Save Booking 
 				</button>
 			</div>
 		</div>
