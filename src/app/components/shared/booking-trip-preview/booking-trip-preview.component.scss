@@ -1,0 +1,1063 @@
+// ══════════════════════════════════════════════════════════════
+//  Booking Preview — clean single-column receipt
+// ══════════════════════════════════════════════════════════════
+
+// ── Modal sizing ──
+@media (min-width: 576px) and (max-width: 991px) {
+	#previewBookingTrips .modal-dialog {
+		max-width: 94vw !important;
+		width: 94vw !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+}
+
+@media (min-width: 992px) {
+	#previewBookingTrips .modal-dialog {
+		max-width: 680px !important;
+	}
+}
+
+.rcpt-shell {
+	position: relative;
+	background: #fff !important;
+	border: none !important;
+	border-radius: 14px !important;
+	overflow: hidden;
+	box-shadow: 0 24px 60px rgba(17, 24, 39, 0.25) !important;
+}
+
+.modal-body {
+	padding: 0 !important;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(17, 24, 39, 0.28) transparent;
+
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: rgba(17, 24, 39, 0.22);
+		border-radius: 999px;
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		background: rgba(17, 24, 39, 0.4);
+	}
+}
+
+// ── Close button (stays pinned over the sticky header) ──
+.rcpt-close {
+	position: absolute;
+	top: 12px;
+	right: 14px;
+	z-index: 30;
+	opacity: 0.85;
+	color: #e11d1d !important;
+	font-size: 36px;
+	background: none !important;
+	border: none !important;
+	padding: 4px !important;
+	line-height: 1 !important;
+	cursor: pointer;
+
+	&:hover {
+		opacity: 1;
+		color: #c20d0d !important;
+	}
+}
+
+// ── Receipt body ──
+.rcpt {
+	font-size: 14px;
+	color: #1f2937;
+}
+
+// Create-mode preview has no sticky header — keep the first row clear of the close button.
+.rcpt--headless {
+	padding-top: 40px;
+}
+
+
+// ── Trip tabs (round trip) ──
+.rcpt-trips {
+	padding-left: clamp(16px, 4vw, 32px);
+	padding-right: clamp(16px, 4vw, 32px);
+	display: flex;
+	gap: 8px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	background: #fff;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.rcpt-trip {
+	flex: 1 1 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 9px 10px;
+	background: #f3f4f6;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+	&:hover {
+		background: #e9ecef;
+	}
+
+	&--active {
+		background: #2563eb;
+		border-color: #2563eb;
+		box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+
+		.rcpt-trip-label,
+		.rcpt-trip-caption {
+			color: #fff;
+		}
+
+		&:hover {
+			background: #1d4ed8;
+		}
+	}
+}
+
+.rcpt-trip-label {
+	font-size: 0.86rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	color: #374151;
+}
+
+.rcpt-trip-caption {
+	font-size: 0.72rem;
+	font-weight: 600;
+	color: #6b7280;
+}
+
+%rcpt-pad {
+	padding-left: clamp(16px, 4vw, 32px);
+	padding-right: clamp(16px, 4vw, 32px);
+}
+
+// ── Title (sticky header) ──
+.rcpt-head {
+	@extend %rcpt-pad;
+	position: sticky;
+	top: 0;
+	z-index: 15;
+	text-align: center;
+	padding-top: 18px;
+	padding-bottom: 14px;
+	background: #fff;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.rcpt-head-title {
+	font-size: clamp(1.35rem, 4vw, 1.7rem);
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	color: #111827;
+	margin: 0;
+}
+
+.rcpt-head-sub {
+	font-size: 0.85rem;
+	color: #6b7280;
+	margin-top: 4px;
+}
+
+// ── Action buttons ──
+.rcpt-actions {
+	@extend %rcpt-pad;
+	display: flex;
+	gap: 10px;
+	padding-bottom: 18px;
+	flex-wrap: wrap;
+}
+
+.rcpt-btn {
+	flex: 1 1 0;
+	min-width: 84px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 9px 12px;
+	font-size: 0.86rem;
+	font-weight: 700;
+	color: #374151;
+	background: #fff;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+
+	i {
+		font-size: 0.95em;
+	}
+
+	&:hover {
+		background: #f3f4f6;
+		border-color: #9ca3af;
+	}
+
+	&:active {
+		transform: translateY(1px);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: progress;
+	}
+
+	&--primary {
+		color: #fff;
+		background: #2563eb;
+		border-color: #2563eb;
+		box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+
+		&:hover {
+			background: #1d4ed8;
+			border-color: #1d4ed8;
+			color: #fff;
+		}
+	}
+}
+
+.rcpt-spin {
+	display: inline-block;
+	animation: rcpt-spin 0.8s linear infinite;
+}
+
+@keyframes rcpt-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+// ── Booking date ──
+.rcpt-idrow {
+	@extend %rcpt-pad;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	padding-top: 14px;
+	padding-bottom: 16px;
+}
+
+.rcpt-idrow-label {
+	font-size: 0.88rem;
+	color: #6b7280;
+	font-weight: 600;
+}
+
+.rcpt-idrow-value {
+	font-size: 1rem;
+	font-weight: 700;
+	color: #111827;
+	text-align: right;
+}
+
+// ── Status strip ──
+.rcpt-status {
+	@extend %rcpt-pad;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 14px;
+	padding-bottom: 14px;
+	background: #f9fafb;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.rcpt-status-label {
+	font-size: 0.82rem;
+	font-weight: 700;
+	color: #4b5563;
+}
+
+// Status pill — same palette as daily-bookings status pills
+.rcpt-status-pill {
+	display: inline-block;
+	font-size: 0.82rem;
+	font-weight: 700;
+	color: #fff;
+	padding: 5px 14px;
+	border-radius: 3rem;
+	min-width: 80px;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	background-color: #0474fc; // default / pending fallback
+
+	&.pending {
+		background-color: #0474fc;
+	}
+
+	&.rejection_requested {
+		background-color: #dc3545;
+	}
+
+	&.partial_paid {
+		background-color: #00CCCC;
+	}
+
+	&.partial_refund {
+		background-color: #212529;
+	}
+
+	&.paid_cash,
+	&.paid {
+		background-color: #D1B000;
+	}
+
+	&.driver_unassigned {
+		background-color: #dc3545;
+	}
+
+	&.assigned {
+		background-color: var(--green-color);
+	}
+
+	&.rejected {
+		background-color: #dc3545;
+	}
+
+	&.cancelled {
+		background-color: #FF69B4;
+	}
+
+	&.en_route_pu {
+		background-color: #6454ac;
+	}
+
+	&.on_location {
+		background-color: #7289da;
+	}
+
+	&.en_route_do {
+		background-color: #1abc9c ;
+	}
+
+	&.ended {
+		background-color: #8cc43c;
+	}
+
+	&.finalized {
+		background-color: #71c5e8;
+	}
+
+	&.non_payable {
+		background-color: #ec4c8c;
+	}
+}
+
+// ── Generic label / value row ──
+.rcpt-row {
+	@extend %rcpt-pad;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 16px;
+	padding-top: 9px;
+	padding-bottom: 9px;
+}
+
+.rcpt-row--solo {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+.rcpt-row-label {
+	font-size: 0.88rem;
+	color: #6b7280;
+	flex-shrink: 0;
+}
+
+.rcpt-row-value {
+	font-size: 0.92rem;
+	font-weight: 600;
+	color: #111827;
+	text-align: right;
+	word-break: break-word;
+}
+
+.rcpt-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	color: #2563eb !important;
+	text-decoration: none;
+
+	i {
+		font-size: 0.85em;
+		opacity: 0.8;
+	}
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.rcpt-danger {
+	color: #dc2626 !important;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.rcpt-time-icon {
+	color: #6b7280;
+	margin-right: 4px;
+}
+
+// ── Section ──
+.rcpt-section {
+	@extend %rcpt-pad;
+	padding-top: 0;
+	padding-bottom: 18px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+	.rcpt-row {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+.rcpt-section-title {
+	// full-bleed band: cancel the section's horizontal padding
+	margin-left: clamp(-32px, -4vw, -16px);
+	margin-right: clamp(-32px, -4vw, -16px);
+	padding: 10px clamp(16px, 4vw, 32px);
+	margin-bottom: 14px;
+	background: #f3f4f6;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #374151;
+}
+
+// ── Route timeline ──
+.rcpt-timeline {
+	margin-top: 14px;
+	display: flex;
+	flex-direction: column;
+}
+
+.bp-rt-row {
+	display: flex;
+	align-items: stretch;
+	gap: 12px;
+	min-height: 38px;
+}
+
+.bp-rt-row--last .bp-rt-indicator {
+	justify-content: flex-start;
+}
+
+.bp-rt-indicator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-shrink: 0;
+	width: 14px;
+	padding-top: 4px;
+}
+
+.bp-rt-dot {
+	width: 12px;
+	height: 12px;
+	flex-shrink: 0;
+	border-radius: 50%;
+}
+
+.bp-rt-dot--pickup {
+	background: #16a34a;
+}
+
+.bp-rt-dot--stop {
+	background: #2563eb;
+}
+
+.bp-rt-dot--dropoff {
+	background: #dc2626;
+}
+
+.bp-rt-line {
+	width: 2px;
+	flex: 1;
+	min-height: 14px;
+	background: #e5e7eb;
+	margin-top: 3px;
+}
+
+.bp-rt-body {
+	flex: 1;
+	padding-bottom: 16px;
+	min-width: 0;
+}
+
+.bp-rt-row--last .bp-rt-body {
+	padding-bottom: 0;
+}
+
+.bp-rt-label {
+	display: block;
+	font-size: 0.9rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #16a34a;
+	margin-bottom: 3px;
+}
+
+.bp-rt-row:has(.bp-rt-dot--stop) .bp-rt-label {
+	color: #2563eb;
+}
+
+.bp-rt-row--last .bp-rt-label {
+	color: #dc2626;
+}
+
+.bp-rt-address {
+	display: flex;
+	align-items: flex-start;
+	gap: 5px;
+	font-size: 1rem;
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.35;
+	cursor: pointer;
+	word-break: break-word;
+}
+
+.bp-rt-pin {
+	font-size: 15px;
+	flex-shrink: 0;
+	margin-top: 2px;
+	opacity: 0.55;
+}
+
+.bp-rt-meta-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 5px;
+}
+
+.bp-rt-flight-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #eff6ff;
+	border: 1px solid #bfdbfe;
+	border-radius: 20px;
+	padding: 2px 10px;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #1d4ed8;
+	cursor: pointer;
+}
+
+.bp-rt-cruise-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 5px;
+}
+
+.bp-rt-cruise-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	background: #f0f7ff;
+	border: 1px solid #c0d8f0;
+	border-radius: 6px;
+	padding: 2px 8px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #1a4a7a;
+}
+
+.rcpt-link-action {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 6px;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #2563eb;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// ── Special instruction ──
+.rcpt-note {
+	display: flex;
+	gap: 10px;
+	background: #fffaf0;
+	border: 1px solid #fde8c4;
+	border-radius: 8px;
+	padding: 12px 14px;
+	margin-bottom: 4px;
+}
+
+.rcpt-note-icon {
+	flex-shrink: 0;
+	font-size: 1rem;
+	line-height: 1.55;
+	color: #d97706;
+}
+
+.rcpt-note-body {
+	font-size: 0.9rem;
+	color: #3f3f46;
+	line-height: 1.55;
+	white-space: pre-wrap;
+	word-break: break-word;
+	flex: 1;
+	min-width: 0;
+
+	::ng-deep p:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.rcpt-empty {
+	font-size: 0.88rem;
+	color: #9ca3af;
+	font-style: italic;
+	padding: 4px 0;
+}
+
+// ── Meet & Greet (highlighted) ──
+.rcpt-greet {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	background: #eff6ff;
+	border: 1px solid #c7dbff;
+	border-radius: 8px;
+	padding: 10px 14px;
+	margin-top: 10px;
+}
+
+.rcpt-greet-icon {
+	flex-shrink: 0;
+	font-size: 1rem;
+	color: #2563eb;
+	margin-top: 1px;
+}
+
+.rcpt-greet-label {
+	font-size: 0.72rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #2563eb;
+	margin-bottom: 2px;
+}
+
+.rcpt-greet-value {
+	font-size: 0.92rem;
+	font-weight: 600;
+	color: #1e3a8a;
+	line-height: 1.4;
+	word-break: break-word;
+}
+
+// ── Map ──
+.rcpt-map {
+	border-radius: 10px;
+	overflow: hidden;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	margin: 10px 0 12px;
+}
+
+// ── Route metrics (single line) ──
+.rcpt-metrics {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px 28px;
+	margin-top: 4px;
+}
+
+.rcpt-metric {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	flex: 1 1 auto;
+
+	.rcpt-row-label {
+		font-size: 0.88rem;
+		color: #6b7280;
+	}
+
+	.rcpt-row-value {
+		font-size: 0.92rem;
+		font-weight: 600;
+		color: #111827;
+	}
+}
+
+// ── Vehicle ──
+.rcpt-vehicle {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	background: #f9fafb;
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	border-radius: 10px;
+	padding: 14px;
+}
+
+.rcpt-vehicle-icon {
+	width: 46px;
+	height: 46px;
+	border-radius: 10px;
+	background: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.07);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.4rem;
+	color: #4b5563;
+	flex-shrink: 0;
+}
+
+.rcpt-vehicle-name {
+	font-size: 1.02rem;
+	font-weight: 800;
+	color: #111827;
+}
+
+.rcpt-vehicle-sub {
+	font-size: 0.85rem;
+	color: #6b7280;
+	margin-top: 2px;
+}
+
+.rcpt-vehicle-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 8px;
+	font-size: 0.82rem;
+	color: #4b5563;
+
+	i {
+		margin-right: 4px;
+		opacity: 0.7;
+	}
+}
+
+.rcpt-vehicle-plate {
+	display: inline-block;
+	margin-top: 8px;
+	font-size: 0.82rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	color: #374151;
+	background: #fff;
+	border: 1px dashed rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+	padding: 2px 8px;
+}
+
+// ── Rates distribution (itemized) ──
+.bp-rate-card {
+	.mx-2.mb-1 {
+		padding: 8px 0;
+		border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.row.m-0 {
+			display: flex !important;
+			flex-direction: row !important;
+			flex-wrap: nowrap !important;
+			align-items: baseline !important;
+			justify-content: space-between !important;
+			gap: 10px !important;
+			margin: 0 !important;
+		}
+
+		[class*="col-"] {
+			padding: 0 !important;
+			margin: 0 !important;
+			width: auto !important;
+			max-width: none !important;
+			flex: none !important;
+		}
+
+		.col-md-4.key {
+			flex: 0 1 auto !important;
+			max-width: 58% !important;
+
+			span {
+				font-size: 0.88rem !important;
+				color: #374151;
+			}
+		}
+
+		.col-md-8.value {
+			flex: 1 1 auto !important;
+			display: flex !important;
+			flex-direction: column !important;
+			align-items: flex-end !important;
+			text-align: right !important;
+		}
+	}
+
+	.preview-output-field {
+		font-size: 1.02rem !important;
+		font-weight: 800;
+		color: #111827;
+		white-space: nowrap;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.preview-output-desc {
+		font-size: 0.7rem !important;
+		color: #9ca3af !important;
+		font-weight: 400 !important;
+		text-align: right;
+		line-height: 1.3;
+		margin-top: 2px;
+		display: block;
+		overflow: hidden;
+		word-break: break-word;
+	}
+
+	.bp-rate-total {
+		margin-top: 8px !important;
+		padding: 12px 14px !important;
+		background: #ecfdf3;
+		border: 1px solid #bbf7d0;
+		border-radius: 10px;
+		border-bottom: none !important;
+
+		.col-md-4.key span {
+			font-size: 0.95rem !important;
+			font-weight: 800 !important;
+			color: #15803d;
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+		}
+
+		.preview-output-field {
+			font-size: 1.3rem !important;
+			color: #15803d;
+		}
+	}
+}
+
+.preview-airport-color {
+	color: #1d4ed8;
+}
+
+// ── Total ──
+.rcpt-total {
+	@extend %rcpt-pad;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 22px;
+	padding-bottom: 22px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.rcpt-total-label {
+	font-size: 1.05rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #111827;
+}
+
+.rcpt-total-amount {
+	font-size: clamp(1.5rem, 5vw, 2rem);
+	font-weight: 900;
+	color: #111827;
+	font-variant-numeric: tabular-nums;
+}
+
+// ── Footer ──
+.rcpt-footer {
+	background: #111827;
+	color: #d1d5db;
+	text-align: center;
+	font-size: 0.85rem;
+	padding: 18px 16px;
+	letter-spacing: 0.02em;
+}
+
+// ── Form footer (create / edit previews only) ──
+.rcpt-form-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 14px clamp(16px, 4vw, 32px);
+	background: #fff;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+	.rcpt-btn {
+		flex: 0 0 auto;
+		min-width: 120px;
+	}
+}
+
+// ── Print ──
+@media print {
+
+	.rcpt-close,
+	.rcpt-actions,
+	.rcpt-form-footer,
+	.bp-scroll-controls {
+		display: none !important;
+	}
+
+	.rcpt-shell {
+		box-shadow: none !important;
+	}
+}
+
+// ── Share booking modal ──
+.rcpt-share {
+	border: none;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 24px 60px rgba(17, 24, 39, 0.25);
+}
+
+.rcpt-share-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 18px 20px 14px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.rcpt-share-title {
+	font-size: 1.15rem;
+	font-weight: 800;
+	color: #111827;
+	margin: 0;
+}
+
+.rcpt-share-sub {
+	font-size: 0.84rem;
+	color: #6b7280;
+	margin: 4px 0 0;
+}
+
+.rcpt-share-header .rcpt-close {
+	position: static;
+	flex-shrink: 0;
+}
+
+.rcpt-share-tabs {
+	display: flex;
+	gap: 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+	background: #fff;
+	padding: 0 20px;
+}
+
+.rcpt-share-email, .rcpt-share-sms {
+	background: none;
+	border: none;
+	border-bottom: 2px solid transparent;
+	padding: 10px 18px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: color 0.15s, border-color 0.15s;
+
+	&.active {
+		border-bottom-color: #111827;
+	}
+}
+
+.rcpt-share-email {
+	color: red;
+}
+
+.rcpt-share-sms {
+	color: green;
+}
+
+.rcpt-share-body {
+	padding: 16px 20px !important;
+	background: #f9fafb;
+
+	quill-editor,
+	::ng-deep quill-editor {
+		display: block;
+		width: 100%;
+		font-size: 18px !important;
+	}
+
+	::ng-deep .ql-toolbar {
+		border-radius: 6px 6px 0 0;
+		background: #fff;
+	}
+
+	::ng-deep .ql-container {
+		border-radius: 0 0 6px 6px;
+		font-size: 0.9rem;
+	}
+}
+
+.rcpt-share-sms-textarea {
+	width: 100%;
+	resize: vertical;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 12px 14px;
+	font-size: 0.9rem;
+	font-family: inherit;
+	line-height: 1.6;
+	color: #111827;
+	background: #fff;
+	outline: none;
+	min-height: 320px;
+
+	&:focus {
+		border-color: #6b7280;
+		box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.12);
+	}
+}
+
+.rcpt-share-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	padding: 14px 20px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+	.rcpt-btn {
+		flex: 0 0 auto;
+		min-width: 110px;
+	}
+}

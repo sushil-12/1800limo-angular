@@ -17,7 +17,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SharedModule } from '../shared.module';
 import { BookingComponent } from './booking.component';
 import { RatesFormComponent } from '../../admin/rates-form/rates-form.component';
-import { BookingPreviewModule } from '../../affiliate/booking-preview/booking-preview.module';
+import { BookingTripPreviewModule } from '../booking-trip-preview/booking-trip-preview.module';
 
 /**
  * Shared booking form used by both the admin portal (admin/new-booking-v2)
@@ -45,7 +45,7 @@ import { BookingPreviewModule } from '../../affiliate/booking-preview/booking-pr
 		GoogleMapsModule,
 		DragDropModule,
 		SharedModule,
-		BookingPreviewModule,
+		BookingTripPreviewModule,
 	],
 	exports: [
 		BookingComponent,

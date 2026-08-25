@@ -26,7 +26,7 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { BookingPreviewComponent } from '../../affiliate/booking-preview/booking-preview.component';
+import { BookingTripPreviewComponent } from '../booking-trip-preview/booking-trip-preview.component';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -115,7 +115,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
 	@ViewChild('return_loose_driver_cellInput') return_loose_driver_cellInput!: ElementRef;
 	/** Shared receipt modal reused by the Preview button instead of the inline #previewBooking markup. */
-	@ViewChild('bookingPreviewModal') bookingPreviewModal!: BookingPreviewComponent;
+	@ViewChild('bookingPreviewModal') bookingPreviewModal!: BookingTripPreviewComponent;
 
 	/* ---------- Section navigator (fixed "On this page" panel) ---------- */
 	sectionNavOpen = false;
@@ -6990,17 +6990,25 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_pickup_date: isRoundTrip ? v.return_pickup_date : '',
 			return_pickup_time: isRoundTrip ? v.return_pickup_time : '',
 			return_pickup: isRoundTrip ? v.return_pickup : '',
+			return_pickup_latitude: isRoundTrip ? v.return_pickup_latitude : '',
+			return_pickup_longitude: isRoundTrip ? v.return_pickup_longitude : '',
 			return_fbo_address: isRoundTrip ? v.return_fbo_address : '',
 			return_pickup_airport_name: isRoundTrip
 				? this.getPreviewAirportDisplay(v.return_pickup_airport_name, v.return_pickup_airport_option)
 				: '',
+			return_pickup_airport_latitude: isRoundTrip ? v.return_pickup_airport_latitude : '',
+			return_pickup_airport_longitude: isRoundTrip ? v.return_pickup_airport_longitude : '',
 			return_pickup_airline_name: isRoundTrip ? v.return_pickup_airline_name : '',
 			return_pickup_flight: isRoundTrip ? v.return_pickup_flight : '',
 			return_extra_stops: isRoundTrip ? mapStops(v.return_extra_stops) : [],
 			return_dropoff: isRoundTrip ? v.return_dropoff : '',
+			return_dropoff_latitude: isRoundTrip ? v.return_dropoff_latitude : '',
+			return_dropoff_longitude: isRoundTrip ? v.return_dropoff_longitude : '',
 			return_dropoff_airport_name: isRoundTrip
 				? this.getPreviewAirportDisplay(v.return_dropoff_airport_name, v.return_dropoff_airport_option)
 				: '',
+			return_dropoff_airport_latitude: isRoundTrip ? v.return_dropoff_airport_latitude : '',
+			return_dropoff_airport_longitude: isRoundTrip ? v.return_dropoff_airport_longitude : '',
 			return_dropoff_airline_name: isRoundTrip ? v.return_dropoff_airline_name : '',
 			return_dropoff_flight: isRoundTrip ? v.return_dropoff_flight : '',
 			return_cruise_port: isRoundTrip ? v.return_cruise_port : '',
