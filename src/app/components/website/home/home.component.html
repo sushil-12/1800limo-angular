@@ -1694,15 +1694,15 @@
 </section>
 
 <section class="personalized_wrapper" id="section-services"
-  *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
+*ngIf="personalizedSection?.section_status == 'enable' ">
   <div class="container-fluid">
     <h2>Personalized Destination and Amenities <span></span></h2>
-    <h6 [innerHTML]="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.subtitle"></h6>
+    <h6 [innerHTML]="personalizedSection?.subtitle"></h6>
 
     <div class="owl-carousel owl-theme destinationCarousel mb-3"
-      *ngIf="fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.section_status == 'enable' ">
+      *ngIf="personalizedSection?.section_status == 'enable' ">
       <div class="item outer_div_pw mb-3"
-        *ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
+        *ngFor="let sliderData of personalizedSection?.slider_type_content">
         <img src="{{sliderData?.image}}" alt="a1" class="order-img">
         <div class="personalized_text">
           <h3 class="order-two">{{sliderData?.title}}</h3>
