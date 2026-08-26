@@ -531,6 +531,8 @@ export class BookingTripPreviewComponent implements OnInit {
     userRole: 'admin' | 'affiliate' | 'individual' | 'travel_agent' = 'affiliate',
     mode: 'create' | 'edit' = 'create'
   ): void {
+	    console.log("DEBUG - BOOKING PREVIEW", data)
+
     console.debug('[BookingTripPreview] openLocalPreview called — userRole=%s, mode=%s', userRole, mode, data);
 
     this.userRole = userRole;
@@ -1044,47 +1046,6 @@ export class BookingTripPreviewComponent implements OnInit {
       } catch (err) {
         console.error(`[BookingTripPreview] resolveCoordinate: Error processing key="${key}"`, err);
       }
-    }
-    return null;
-  }
-
-  private resolveLatLng(keyPairs: Array<[string, string]>): google.maps.LatLng | null {
-    for (const [latKey, lngKey] of keyPairs) {
-      try {
-        const lat = this.resolveCoordinate(latKey);
-        const lng = this.resolveCoordinate(lngKey);
-
-        if (lat !== null && lng !== null) {
-          if (lat === 0 && lng === 0) {
-            console.warn(`[BookingTripPreview] resolveLatLng: skipping (0,0) for keys [${latKey}, ${lngKey}]`);
-            continue;
-          }
-          console.debug(`[BookingTripPreview] resolveLatLng: resolved [${latKey}=${lat}, ${lngKey}=${lng}]`);
-          return new google.maps.LatLng(lat, lng);
-        }
-      } catch (err) {
-        console.error(`[BookingTripPreview] resolveLatLng: Error for keys [${latKey}, ${lngKey}]`, err);
-      }
-    }
-    return null;
-  }
-
-  private resolveRouteLocation(
-    coords: google.maps.LatLng | null,
-    textKeys: string[]
-  ): string | google.maps.LatLng | null {
-    try {
-      if (coords) return coords;
-      for (const key of textKeys) {
-        const rawValue = this.bookingPreview?.[key];
-        if (typeof rawValue === 'string' && rawValue.trim()) {
-          console.debug(`[BookingTripPreview] resolveRouteLocation: using text key="${key}", value="${rawValue.trim()}"`);
-          return rawValue.trim();
-        }
-      }
-      console.warn('[BookingTripPreview] resolveRouteLocation: no valid coords or text found', { coords, textKeys });
-    } catch (err) {
-      console.error('[BookingTripPreview] resolveRouteLocation: Unexpected error', err);
     }
     return null;
   }

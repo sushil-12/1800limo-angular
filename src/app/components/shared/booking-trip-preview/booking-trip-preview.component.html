@@ -54,7 +54,7 @@
 						<span class="rcpt-idrow-value">{{ bookingPreview?.total_passengers }} Passengers / {{ bookingPreview?.luggage_count }} Luggage</span>
 					</div>
 
-					<div class="rcpt-idrow" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+					<div class="rcpt-idrow" *ngIf="bookingPreview?.service_type == 'charter_tour' || bookingPreview?.service_type == 'Charter Tour'">
 						<span class="rcpt-idrow-label">Booking Hours</span>
 						<span class="rcpt-idrow-value">{{ bookingPreview?.number_of_hours }}</span>
 					</div>
@@ -246,7 +246,7 @@
 					</div>
 
 					<!-- ── Driver Information ── -->
-					<div class="rcpt-section" *ngIf="bookingPreview?.booking_status !== 'driver_unassigned'">
+					<div class="rcpt-section">
 						<div class="rcpt-section-title">Driver Information</div>
 						<div class="rcpt-row">
 							<span class="rcpt-row-label">Name</span>
@@ -271,7 +271,7 @@
 					</div>
 
 					<!-- ── Affiliate Information ── -->
-					<div class="rcpt-section">
+					<div class="rcpt-section" *ngIf="userRole !== 'individual' && userRole !== 'travel_agent'">
 						<div class="rcpt-section-title">
 							{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'Loose
 							Affiliate Information' }}

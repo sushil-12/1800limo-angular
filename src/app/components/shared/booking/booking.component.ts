@@ -6623,21 +6623,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.BookingForm.get('return_vehicle_type')?.clearValidators()
 			this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity()
 		}
-		// let EditedKeys = []
-		// Object.keys(this.bookingResponse)?.map(i=>{
-		// 	let value = this.bookingResponse[`${i}`] === null ? '' :this.bookingResponse[`${i}`]
-		// 	let value1 = this.BookingForm.value[`${i}`] === undefined ? '' :this.BookingForm.value[`${i}`]
-		// 	console.log('value',i,'--->>>',value1,'--->>>' , value )
-		// 	if(value1 != value && this.BookingForm.value[`${i}`] !== undefined){
-		// 		EditedKeys.push(i)
-		// 	} 
-		// })
-
-		// console.log(' Edited keys  ---->>>>' , EditedKeys)
-
-
-
-		// Sanitize return_driver_cell
+		
 		const rDrCell = this.BookingForm.get('return_driver_cell');
 		const rDrIsd = this.BookingForm.get('return_driver_cell_isd');
 		if (rDrCell && rDrCell.value && rDrIsd && rDrIsd.value) {
@@ -6810,6 +6796,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 
 		if (preview) {
+			console.log("THIS BOOKING FORN ", this.BookingForm.value())
 			if (this.RatesForm.all_inclusive_rates["Base_Rate"].baserate <= 0) {
 				this.logPreviewBlocked('base rate is empty — rates never resolved for this vehicle', {
 					baserate: this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
@@ -6842,6 +6829,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		}
 		else {
+			console.log("DEBUG - BOOKING PREVIEW")
 			this.openBookingReceiptPreview()
 		}
 	}
@@ -7052,6 +7040,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	/** Preview button: render the current form through the shared receipt modal. */
 	openBookingReceiptPreview(): void {
+		console.log("DEBUG - BOOKING PREVIEW")
 		if (!this.bookingPreviewModal) {
 			console.error('[BookingPreview] Preview modal component is not available')
 			return
@@ -7063,6 +7052,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.previewUserRole,
 			isEdit ? 'edit' : 'create'
 		)
+	console.log("DEBUG - BOOKING PREVIEW")
+
 	}
 
 	/** Fetch booking data for edit from the portal-specific endpoint. */
