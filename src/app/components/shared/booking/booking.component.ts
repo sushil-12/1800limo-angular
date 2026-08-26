@@ -6796,7 +6796,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 
 		if (preview) {
-			console.log("THIS BOOKING FORN ", this.BookingForm.value())
 			if (this.RatesForm.all_inclusive_rates["Base_Rate"].baserate <= 0) {
 				this.logPreviewBlocked('base rate is empty — rates never resolved for this vehicle', {
 					baserate: this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
