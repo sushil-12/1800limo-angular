@@ -961,7 +961,8 @@ export class FarmOutBookingsComponent implements OnInit {
 
 	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
-		// this.spinner.show();
+		this.bookingPreview = null;
+		this.spinner.show();
 		this.adminService
 			.getBookingPreview(booking_id)
 			.subscribe((response: any) => {

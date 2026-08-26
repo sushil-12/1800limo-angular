@@ -414,14 +414,6 @@
 								textFormatter(bookingPreview?.passenger_cell) }}
 							</a>
 						</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Passengers</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.total_passengers }}</span>
-						</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Luggage</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.luggage_count }}</span>
-						</div>
 					</div>
 
 					<!-- ── Driver Information ── -->
@@ -801,13 +793,6 @@
 								</div>
 							</div>
 						</div>
-					</div>
-
-					<!-- ── Total ── -->
-					<div class="rcpt-total" *ngIf="bookingPreview?.grand_total">
-						<span class="rcpt-total-label">Total Amount</span>
-						<span
-							class="rcpt-total-amount">{{currencySymbol}}{{formatBaseRate(bookingPreview?.grand_total)}}</span>
 					</div>
 				</div>
 			</div>

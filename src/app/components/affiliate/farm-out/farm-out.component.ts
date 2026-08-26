@@ -296,6 +296,32 @@ export class FarmOutComponent implements OnInit {
 		return moment(value, "YYYY-MM-DD").format('dddd');
 	}
 
+	//for pagination
+	counter() {
+		var currentPage;
+		var startFrom;
+		var endTo;
+
+		if (this.currentPage as number < 5) {
+			startFrom = 0;
+			endTo = this.totalPage;
+		} else if (this.currentPage < this.totalPage) {
+			currentPage = this.currentPage;
+			endTo = currentPage + 1;
+			startFrom = endTo - 5;
+		} else {
+			endTo = this.totalPage;
+			startFrom = endTo - 5;
+		}
+
+		var i;
+		var udpArr = new Array();
+		for (i = startFrom; i < endTo; i++) {
+			udpArr.push(i + 1);
+		}
+		return udpArr;
+	}
+
 	changeDate(dateType, date) {
 		if (!date) {
 			return;

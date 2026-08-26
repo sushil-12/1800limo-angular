@@ -2018,6 +2018,57 @@
 					</div>
 				</div>
 				<!-- Loose Affiliate Section Ends -->
+
+				<!-- Visible in only In-Progress Affiliate Section -->
+				<!-- In-Progress Affiliate Section -->
+				<div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
+					<div class="col-md-12">
+						<ng-select [searchable]="true" appearance="outline"
+							[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
+							placeholder="Select In-Progress Affiliate" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="affiliate_id"
+							(change)="handleAffiliateChange($event); choosePendingAffiliate($event)">
+						</ng-select>
+					</div>
+
+					<!-- Name -->
+					<div class="col-md-6 col-lg-4">
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>
+								Name
+							</mat-label>
+							<input type="text" matInput placeholder="Name" (focus)="$event.target.select()"
+								[value]="selectedPendingAffiliate?.driver_name || selectedPendingAffiliate?.name || ''"
+								readonly />
+						</mat-form-field>
+					</div>
+
+					<!-- Phone -->
+					<div class="col-md-6 col-lg-4">
+						<mat-form-field appearance="outline" class="mobileField m-0">
+							<mat-label>
+								Phone
+							</mat-label>
+							<input type="text" matInput placeholder="Phone" class="phoneNumberClass"
+								(focus)="$event.target.select()"
+								[value]="selectedPendingAffiliate?.phone || selectedPendingAffiliate?.driver_phone || ''"
+								readonly />
+						</mat-form-field>
+					</div>
+
+					<!-- Email -->
+					<div class="col-md-6 col-lg-4">
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>
+								Email
+							</mat-label>
+							<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
+								[value]="selectedPendingAffiliate?.email || selectedPendingAffiliate?.driver_email || ''"
+								readonly />
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- In-Progress Affiliate Section Ends -->
 			</div>
 
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
@@ -2247,6 +2298,115 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- In-Progress affiliate vehicle information -->
+				<div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
+					<!-- Vehicle Type -->
+					<div id="vehicle-type" [ngClass]="Form.vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+							placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_type"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
+							style="height:66px;">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.vehicle_type.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+							<div *ngIf="Form.vehicle_type.errors.required">Please select a vehicle type</div>
+						</div>
+					</div>
+
+					<!-- Make -->
+					<div id="make" *ngIf="Form.vehicle_type.value" class="col-md-4">
+						<!-- Make - Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
+							placeholder="Select Make" formControlName="vehicle_make">
+						</ng-select>
+					</div>
+
+					<!-- Model -->
+					<div id="model" class="col-md-4" *ngIf="Form.vehicle_type.value">
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
+							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="vehicle_model">
+						</ng-select>
+					</div>
+
+					<!-- Year -->
+					<div id="year" class="col-md-3">
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
+							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="vehicle_year">
+						</ng-select>
+					</div>
+
+					<!-- Color -->
+					<div id="color" class="col-md-3">
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
+							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="vehicle_color">
+						</ng-select>
+					</div>
+
+					<!-- License Plate -->
+					<div class="col-md-3">
+						<mat-form-field appearance="outline" style="margin-top: 0 !important;">
+							<mat-label>
+								License Plate #
+							</mat-label>
+							<input type="text" matInput (focus)="$event.target.select()"
+								formControlName="vehicle_license_plate" placeholder="License Plate #">
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_license_plate.errors?.whitespace">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Number of Seats -->
+					<div class="col-md-3">
+						<mat-form-field appearance="outline" style="margin-top: 0 !important;">
+							<mat-label>
+								Number of Seats
+							</mat-label>
+							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
+									Only Numbers are Allowed
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="cancellation_policy col-md-6" style="margin-top: -10px;margin-bottom: 10px;">
+						<ng-select appearance="outline" [items]="canceloptions" bindLabel="label" bindValue="value"
+							placeholder="Cancellation Policy" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="cancellation_hours" [searchFn]="onSearchCancellation"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.cancellation_hours.invalid) }"
+							style="height:66px;">
+						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.cancellation_hours.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 12px;">
+							<div *ngIf="Form.cancellation_hours.errors.required">The Cancellation Policy is
+								required
+							</div>
+							<div *ngIf="Form.cancellation_hours.errors.pattern">The Cancellation Policy should be
+								a
+								number</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<!-- Affiliate Vehicle Information Ends -->
 
@@ -2260,7 +2420,7 @@
 				</h4>
 				<div class="row px-4">
 					<!-- Affiliate Driver Name -->
-					<div id="driver" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<div id="driver" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate' && Form.affiliate_type.value != 'in_progress_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Choose Driver
@@ -2277,7 +2437,7 @@
 					</div>
 
 					<!-- Loose Affiliate Driver Name -->
-					<div id="driver-name" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+					<div id="driver-name" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_type.value == 'in_progress_affiliate' ">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Driver Name

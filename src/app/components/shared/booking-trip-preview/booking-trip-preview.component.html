@@ -235,14 +235,6 @@
 								textFormatter(bookingPreview?.passenger_cell) }}
 							</a>
 						</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Passengers</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.total_passengers }}</span>
-						</div>
-						<div class="rcpt-row">
-							<span class="rcpt-row-label">Luggage</span>
-							<span class="rcpt-row-value">{{ bookingPreview?.luggage_count }}</span>
-						</div>
 					</div>
 
 					<!-- ── Driver Information ── -->
@@ -271,7 +263,7 @@
 					</div>
 
 					<!-- ── Affiliate Information ── -->
-					<div class="rcpt-section" *ngIf="userRole !== 'individual' && userRole !== 'travel_agent'">
+					<div class="rcpt-section" *ngIf="userRole !== 'individual' && userRole !== 'travel_agent' && bookingPreview?.reservation_type !== 'farmout'">
 						<div class="rcpt-section-title">
 							{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'Loose
 							Affiliate Information' }}
@@ -279,8 +271,7 @@
 						<div class="rcpt-row">
 							<span class="rcpt-row-label">Name</span>
 							<span class="rcpt-row-value">
-								{{ isAffiliate ? bookingPreview?.affiliate_name : bookingPreview?.lose_affiliate_name }}
-							</span>
+								{{ isAffiliate ? bookingPreview?.affiliate_name : bookingPreview?.lose_affiliate_name }} </span>
 						</div>
 						<div class="rcpt-row"
 							*ngIf="isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email">

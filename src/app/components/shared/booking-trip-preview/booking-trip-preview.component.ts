@@ -618,7 +618,6 @@ export class BookingTripPreviewComponent implements OnInit {
       this.userRole === 'admin' ||
       this.userRole === 'travel_agent' ||
       (this.userRole === 'affiliate' &&
-        b.reservation_type !== 'farmout' &&
         b.payment_status != 'paid' &&
         b.payment_status != 'transfer_failed');
 

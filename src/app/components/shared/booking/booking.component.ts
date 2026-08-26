@@ -146,7 +146,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
 		client_account_types_subscriber: ['individual', 'loose_customer'],
-		affiliate_accounts: ["affiliate", "loose_affiliate"],
+		affiliate_accounts: ["affiliate", "loose_affiliate","in_progress_affiliate"],
 		
 		numbers: (() => {
 			let arr = []
@@ -212,6 +212,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	BigData: any
 	BigData_COPY: any
 	AffiliateInformation: Record<string, any> = {}
+	selectedPendingAffiliate: Record<string, any> = null
 	activeCustomAddressDropdown: string | null = null;
 	activeCustomAirportDropdown: string | null = null;
 	private customAddressDropdownBlurTimeout?: ReturnType<typeof setTimeout>;
@@ -2903,6 +2904,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			}
 			console.log('[DEBUG edit-load] after loop, travel_client_id control value:', this.BookingForm.get('travel_client_id')?.value);
+			// The API signals a pending-driver booking via a standalone is_pending_affiliate
+			// flag rather than affiliate_type itself — reselect the radio button explicitly,
+			// after the generic loop above, so it isn't left on whatever affiliate_type came back as.
+			if (this.updateType != 'reaffiliate' && (editing_data.is_pending_affiliate === 1 || editing_data.is_pending_affiliate === true || editing_data.is_pending_affiliate === '1')) {
+				this.SetFormValue('affiliate_type', 'in_progress_affiliate')
+			}
 			// Handle field name mismatches
 			if (editing_data.meet_greet_choice_name) {
 				this.SetFormValue('meet_greet_choices_name', editing_data.meet_greet_choice_name);
@@ -4434,7 +4441,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}))
 	}
 
-	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
+	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate' | 'in_progress_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
 			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
@@ -4447,8 +4454,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.AffiliateAccounts = []
 			if(this.usesQuoteFlow) {return;};
 			this.$spinner.show()
+			const accountType = affiliate_type == 'in_progress_affiliate' ? 'pending_driver' : 'driver';
 			if(this.isAdminMode){
-					this.$api.getAccountBytype('driver').subscribe((response: any) => {
+					this.$api.getAccountBytype(accountType).subscribe((response: any) => {
 					if (response.success && response.data.length > 0) {
 						this.AffiliateAccounts = response.data.map((item) => {
 							item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
@@ -4468,7 +4476,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 					this.$spinner.hide()
 				})
 			}else{
-				this.affiliateService.getAccountBytype('driver').subscribe((response: any) => {
+				this.affiliateService.getAccountBytype(accountType).subscribe((response: any) => {
 					if (response.success && response.data.length > 0) {
 						this.AffiliateAccounts = response.data.map((item) => {
 							item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
@@ -4708,6 +4716,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchLooseAffiliateVehicles(this.BookingForm.get('loose_affiliate_id').value)
 		// this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
+	}
+
+	choosePendingAffiliate(selectedAffiliate: any) {
+		this.selectedPendingAffiliate = selectedAffiliate
+		// has_vehicle comes from the get-account-by-type/pending_driver API response item
+		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
+			this.fetchAffiliateVehicles(selectedAffiliate.id)
+			this.fetchAffiliateDrivers(selectedAffiliate.id)
+		}
 	}
 
 	chooseReturnAffiliate() {
@@ -6775,6 +6792,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		value['currency'] = this.currencyObj?.currency
 		value['platform_type'] = 'web'
 		value['is_master_vehicle'] = this.is_master_vehicle
+		value['is_pending_affiliate'] = this.Form.affiliate_type.value == 'in_progress_affiliate'
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']
@@ -8258,7 +8276,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
 				}
-				this.fetchAffiliates('affiliate')
+				this.fetchAffiliates(value == 'in_progress_affiliate' ? 'in_progress_affiliate' : 'affiliate')
 				this.chooseAffiliate()
 			}
 		})
@@ -8386,7 +8404,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// })
 
 		this.BookingForm.get('vehicle_type').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate') {
+			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 				if (value) {
 					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
 				}
@@ -8457,7 +8475,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate') {
+			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 			} else {
 				if (value && this.BigData) {
 					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
@@ -8489,7 +8507,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_model').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate') {
+			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 
 			} else {
 				if (value && this.BigData) {
@@ -8519,7 +8537,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_year').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate') {
+			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 			} else {
 				if (value && this.BigData) {
 					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
@@ -8547,7 +8565,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_color').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate') {
+			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 
 			} else {
 				if (value && this.BigData) {
