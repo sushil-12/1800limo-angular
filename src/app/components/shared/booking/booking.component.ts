@@ -6869,6 +6869,18 @@ export class BookingComponent implements OnInit, OnDestroy {
 	 * Shape the live form into the object the shared receipt component expects,
 	 * so an unsaved booking renders through the same template as a saved one.
 	 */
+	/**
+	 * The affiliate vehicle-type flow only fills `vehicle_type_name` when a VehicleList
+	 * row matches by unique_key; on edit/repeat and some first loads it stays empty
+	 * while `vehicle_type` (the category id) is set. Fall back to the BigData label so
+	 * the preview's Vehicle Type row still renders.
+	 */
+	private resolveVehicleTypeName(name: any, typeId: any): string {
+		if (name) return name
+		const match = (this.BigData?.vehicleCategories || []).find((c: any) => c?.id == typeId)
+		return match?.name || ''
+	}
+
 	private buildBookingPreviewPayload(): any {
 		const v = this.BookingForm.value
 		const isEdit = this.Form.updateType.value == 'edit' || this.updateType == 'edit'
@@ -6930,7 +6942,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			luggage_count: v.luggage_count,
 
 			// ── Vehicle ──
-			vehicle_type_name: v.vehicle_type_name,
+			vehicle_type_name: this.resolveVehicleTypeName(v.vehicle_type_name, v.vehicle_type),
 			vehicle_make: v.vehicle_make_name || v.vehicle_make,
 			vehicle_model: v.vehicle_model_name || v.vehicle_model,
 			vehicle_year: v.vehicle_year_name || v.vehicle_year,
@@ -7025,7 +7037,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_distance: isRoundTrip ? this.return_distance : '',
 			return_duration: isRoundTrip ? v.returnJourneyTime : '',
 
-			return_vehicle_type_name: isRoundTrip ? v.return_vehicle_type_name : '',
+			return_vehicle_type_name: isRoundTrip ? this.resolveVehicleTypeName(v.return_vehicle_type_name, v.return_vehicle_type) : '',
 			return_vehicle_make: isRoundTrip ? (v.return_vehicle_make_name || v.return_vehicle_make) : '',
 			return_vehicle_model: isRoundTrip ? (v.return_vehicle_model_name || v.return_vehicle_model) : '',
 			return_vehicle_year: isRoundTrip ? (v.return_vehicle_year_name || v.return_vehicle_year) : '',

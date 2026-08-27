@@ -1059,6 +1059,53 @@ section {
 	}
 }
 
+.text_desktop {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+
+	h2 {
+		font-weight: 700;
+		font-size: clamp(34px, 3.2vw, 50px);
+		line-height: 1.25;
+		color: #ffffff !important;
+		margin-bottom: 1.25rem;
+		text-align: left;
+		text-transform: none;
+
+		::ng-deep span, span {
+			color: #f3933d !important;
+			font-weight: 700;
+			display: block;
+		}
+	}
+
+	h4 {
+		color: #ffffff !important;
+		font-weight: 400;
+		font-size: clamp(15px, 1.2vw, 18px);
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+		text-align: left;
+		max-width: 95%;
+
+		::ng-deep p, p {
+			display: inline;
+			margin: 0;
+			padding: 0;
+			color: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			line-height: inherit;
+		}
+
+		::ng-deep strong, strong, ::ng-deep b, b {
+			font-weight: 700;
+			color: #ffffff;
+		}
+	}
+}
+
 a.user-profile::after {
 	display: inline-block !important;
 }

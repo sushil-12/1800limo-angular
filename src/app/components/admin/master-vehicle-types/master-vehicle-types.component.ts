@@ -22,6 +22,9 @@ export class MasterVehicleTypesComponent implements OnInit {
 	allVehicles: any[] = [];
 	vehiclesRes: any;
 
+	// Vehicle types available to link the currently edited vehicle type to (excludes itself)
+	linkedCatOptions: any[] = [];
+
 	public addVehicleTypeForm: FormGroup;
 	public editVehicleTypeForm: FormGroup;
 
@@ -109,6 +112,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 			badge_text: [''],
 			features: [''],
 			descriptions: [''],
+			linked_cat: [''],
 			status: ['enable'],
 			sort_order: [1],
 			seats: [1, Validators.required],
@@ -405,6 +409,23 @@ export class MasterVehicleTypesComponent implements OnInit {
 				this.response = result;
 				this.vehicleId = this.response.data.ID
 
+				// Build the linked category options from the vehicle types already loaded on the page,
+				// excluding the vehicle type currently being edited.
+				const currentVehicleIds = [
+					id,
+					this.response.data.id,
+					this.response.data.ID
+				]
+					.filter(value => value !== undefined && value !== null && value !== '')
+					.map(value => String(value));
+				const currentVehicleName = (this.response.data.vehicle_cat_name || '').trim().toLowerCase();
+				this.linkedCatOptions = this.allVehicles.filter((vehicle: any) => {
+					const vehicleId = String(vehicle.id ?? vehicle.ID);
+					const vehicleName = (vehicle.vehicle_name || '').trim().toLowerCase();
+					return !currentVehicleIds.includes(vehicleId)
+						&& !(currentVehicleName && vehicleName === currentVehicleName);
+				});
+
 				this.editVehicleTypeForm.patchValue({
 					vehicleId: this.response.data.id,
 					vehicleType: this.response.data.vehicle_cat_name,
@@ -412,6 +433,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 					badge_text: this.response.data.badge_text || '',
 					features: this.response.data.features ? this.response.data.features.join(', ') : '',
 					descriptions: this.response.data.descriptions || '',
+					linked_cat: this.response.data.linked_cat || '',
 					sort_order: this.response.data.sort_order !== undefined && this.response.data.sort_order !== null ? this.response.data.sort_order : 1,
 					status: this.response.data.status || 'enable',
 					vehicle_homepage_img: this.response.data.vehicle_homepage_img || '',
@@ -645,6 +667,6 @@ export class MasterVehicleTypesComponent implements OnInit {
 		this.galleryImagesArrEdit = [];
 
 		this.addVehicleTypeForm.reset({ seats: 1, luggage: 0, status: 'enable', sort_order: 1, gallery_images: [] });
-		this.editVehicleTypeForm.reset({ seats: 1, luggage: 0, status: 'enable', sort_order: 1, gallery_images: [] });
+		this.editVehicleTypeForm.reset({ seats: 1, luggage: 0, status: 'enable', sort_order: 1, gallery_images: [], linked_cat: '' });
 	}
 }

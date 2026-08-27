@@ -2146,6 +2146,28 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
+	formatBannerTitle(title: string | undefined): string {
+		if (!title) return '';
+		const trimmed = title.trim();
+		const lastSpaceIndex = trimmed.lastIndexOf(' ');
+		if (lastSpaceIndex === -1) {
+			return `<span style="color: #f3933d; display: block;">${trimmed}</span>`;
+		}
+		const mainPart = trimmed.substring(0, lastSpaceIndex);
+		const lastWord = trimmed.substring(lastSpaceIndex + 1);
+		return `${mainPart}<br><span style="color: #f3933d; display: block;">${lastWord}</span>`;
+	}
+
+	formatBannerContent(content: string | undefined): string {
+		if (!content) return '';
+		let text = content
+			.replace(/<\/p>\s*<p>/gi, ' ')
+			.replace(/<\/?p[^>]*>/gi, '')
+			.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+			.trim();
+		return text;
+	}
+
 	fetchHomePageData() {
 		this.isHomePageLoading = true;
 		// this.spinner.show()
