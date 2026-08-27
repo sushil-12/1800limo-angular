@@ -7,8 +7,8 @@
         <div>
           <!-- DESKTOP -->
           <div class="text_desktop">
-            <h2 [innerHTML]="formatBannerTitle(fetchPageData('go anywhere with 1-800-limo.com')?.title)"></h2>
-            <h4 [innerHTML]="formatBannerContent(fetchPageData('go anywhere with 1-800-limo.com')?.content)"></h4>
+            <h2 [innerHTML]="formatBannerTitle(fetchPageData('Banner')?.subtitle)"></h2>
+            <h4 [innerHTML]="formatBannerContent(fetchPageData('Banner')?.content)"></h4>
             <!-- <h4 style="margin-top: 20px;">
               1-800-LIMO<sub>&bull;</sub>COM delivers the best driver / chauffeur anywhere your essential
               travel takes you. On-Demand service in now available in new york city and close suburbs for
@@ -1792,7 +1792,7 @@
 
 <!---------------RIDE NOW--------------------------->
 <section class="ourmisservice_wrap_ride my-4 ride-now-container"
-	*ngIf="fetchPageData('RIDE NOW OR RIDE LATER')?.section_status == 'enable' ">
+	*ngIf="fetchPageData('Last Paragraph')?.section_status == 'enable' ">
 	<div class="container-fluid">
 		<div class="d-flex flex-column flex-md-row col-12 ride-flex-wrapper">
 			<h2 class="ride-mobile-heading"> Ride Later Today Or <span>Anytime</span> </h2>
@@ -1800,10 +1800,10 @@
 				<img src="../../../../assets/images/new ride now.webp" />
 			</div>
 			<div class="ourmisservice_wrap_content d-flex flex-column col-12f col-md-6 remove_col_padding ride-nw-cl">
-				<h2 class="ride-desktop-heading"> Ride Later Today Or <span>Anytime</span> </h2>
+				<h2 class="ride-desktop-heading" [innerHTML]="formatBannerTitle(fetchPageData('Last Paragraph')?.subtitle)"></h2>
 				<div class="ride-text-block">
-					<p class="ride-subtitle">{{ fetchPageData('RIDE NOW OR RIDE LATER')?.subtitle }}</p>
-					<p class="ride-body">{{ fetchPageData('RIDE NOW OR RIDE LATER')?.content }}</p>
+					<!-- <p class="ride-subtitle">{{formatBannerTitle(fetchPageData('Last Paragraph')?.subtitle) }}</p> -->
+					<p class="ride-body" [innerHTML]="formatBannerContent('Last Paragraph')?.content"></p>
 				</div>
 			</div>
 		</div>

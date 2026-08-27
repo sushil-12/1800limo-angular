@@ -2148,13 +2148,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	formatBannerTitle(title: string | undefined): string {
 		if (!title) return '';
+
 		const trimmed = title.trim();
-		const lastSpaceIndex = trimmed.lastIndexOf(' ');
-		if (lastSpaceIndex === -1) {
-			return `<span style="color: #f3933d; display: block;">${trimmed}</span>`;
+		const words = trimmed.split(/\s+/);
+
+		if (words.length === 1) {
+			return `<span style="color: #f3933d; display: block;">${words[0]}</span>`;
 		}
-		const mainPart = trimmed.substring(0, lastSpaceIndex);
-		const lastWord = trimmed.substring(lastSpaceIndex + 1);
+
+		const lastWord = words.pop();
+		const mainPart = words.join(' ');
+
 		return `${mainPart}<br><span style="color: #f3933d; display: block;">${lastWord}</span>`;
 	}
 

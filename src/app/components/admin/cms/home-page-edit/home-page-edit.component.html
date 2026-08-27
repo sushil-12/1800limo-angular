@@ -12,15 +12,15 @@
 							<div class="col-md-12 {{title + ' test'}}" *ngIf="title">
 								<mat-form-field appearance="outline">
 									<mat-label>Title</mat-label>
-									<input matInput placeholder="Title" formControlName="title">
+									<input matInput placeholder="Title" formControlName="title" readonly>
 								</mat-form-field>
 							</div>
-							<!-- <div class="col-md-12" *ngIf="subtitle">
+							<div class="col-md-12" *ngIf="subtitle">
 								<mat-form-field appearance="outline">
 									<mat-label>Subtitle</mat-label>
 									<input matInput placeholder="Subtitle" formControlName="subtitle">
 								</mat-form-field>
-							</div> -->
+							</div>
 							<div class="col-md-12" *ngIf="video_url">
 								<mat-form-field appearance="outline">
 									<mat-label>Video Link</mat-label>
