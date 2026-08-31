@@ -263,7 +263,7 @@
 					</div>
 
 					<!-- ── Affiliate Information ── -->
-					<div class="rcpt-section" *ngIf="userRole !== 'individual' && userRole !== 'travel_agent' && bookingPreview?.reservation_type !== 'farmout'">
+					<div class="rcpt-section" *ngIf="userRole !== 'individual' && userRole !== 'travel_agent' && bookingPreview?.reservation_type !== 'farmout' && bookingPreview?.affiliate_type !== 'in_progress_affiliate' && !bookingPreview?.is_pending_affiliate">
 						<div class="rcpt-section-title">
 							{{ bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'Loose
 							Affiliate Information' }}

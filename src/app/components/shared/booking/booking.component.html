@@ -2030,45 +2030,6 @@
 							(change)="handleAffiliateChange($event); choosePendingAffiliate($event)">
 						</ng-select>
 					</div>
-
-					<ng-container *ngIf="selectedPendingAffiliate">
-						<!-- Name -->
-						<div class="col-md-6 col-lg-4">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label>
-									Name
-								</mat-label>
-								<input type="text" matInput placeholder="Name" (focus)="$event.target.select()"
-									[value]="selectedPendingAffiliate?.driver_name || selectedPendingAffiliate?.name || ''"
-									readonly />
-							</mat-form-field>
-						</div>
-
-						<!-- Phone -->
-						<div class="col-md-6 col-lg-4">
-							<mat-form-field appearance="outline" class="mobileField m-0">
-								<mat-label>
-									Phone
-								</mat-label>
-								<input type="text" matInput #in_progress_phoneInput placeholder="Phone" class="phoneNumberClass"
-									(focus)="$event.target.select()"
-									[value]="selectedPendingAffiliate?.phone || selectedPendingAffiliate?.driver_phone || ''"
-									readonly />
-							</mat-form-field>
-						</div>
-
-						<!-- Email -->
-						<div class="col-md-6 col-lg-4">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label>
-									Email
-								</mat-label>
-								<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
-									[value]="selectedPendingAffiliate?.email || selectedPendingAffiliate?.driver_email || ''"
-									readonly />
-							</mat-form-field>
-						</div>
-					</ng-container>
 				</div>
 				<!-- In-Progress Affiliate Section Ends -->
 			</div>
@@ -2457,8 +2418,8 @@
 						</div>
 					</div>
 
-					<!-- Affiliate Driver Email -->
-					<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<!-- Affiliate Driver Email (Readonly for regular affiliate) -->
+					<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
@@ -2476,8 +2437,8 @@
 						</div>
 					</div>
 
-					<!--  Loose Affiliate Driver Email -->
-					<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+					<!--  Loose / In-Progress Affiliate Driver Email (Editable) -->
+					<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_type.value == 'in_progress_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
@@ -2495,8 +2456,8 @@
 						</div>
 					</div>
 
-					<!-- Affiliate Driver Cell -->
-					<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<!-- Affiliate Driver Cell (Readonly for regular affiliate) -->
+					<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'affiliate'">
 						<mat-form-field appearance="outline" class="mobileField m-0">
 							<mat-label>
 								Phone
@@ -2508,8 +2469,8 @@
 						<div class="error-box"></div>
 					</div>
 
-					<!-- Loose Affiliate Driver Cell -->
-					<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+					<!-- Loose / In-Progress Affiliate Driver Cell (Editable) -->
+					<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_type.value == 'in_progress_affiliate'">
 						<mat-form-field appearance="outline" class="mobileField m-0">
 							<mat-label>Phone
 							</mat-label>
@@ -2530,8 +2491,8 @@
 						</div>
 					</div>
 
-					<!-- Affiliate Diver Gender -->
-					<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<!-- Affiliate Driver Gender (Readonly for regular affiliate) -->
+					<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value == 'affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
@@ -2542,8 +2503,8 @@
 						</mat-form-field>
 					</div>
 
-					<!-- Loose Affiliate Diver Gender -->
-					<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+					<!-- Loose / In-Progress Affiliate Driver Gender (Editable) -->
+					<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_type.value == 'in_progress_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
@@ -3880,11 +3841,25 @@
 				</div>
 				<!-- Loose Affiliate Section Ends -->
 
+				<!-- Visible in only In-Progress Affiliate Section -->
+				<!-- In-Progress Affiliate Section -->
+				<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
+					<div class="col-md-12">
+						<ng-select [searchable]="true" appearance="outline"
+							[items]="Return_AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
+							placeholder="Select In-Progress Affiliate" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="return_affiliate_id"
+							(change)="handleReturnAffiliateChange($event); chooseReturnPendingAffiliate($event)">
+						</ng-select>
+					</div>
+				</div>
+				<!-- In-Progress Affiliate Section Ends -->
+
 					<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 					<!-- Affiliate Vehicle Information -->
 					<!-- New section conatiner for Vehicle details -->
 					<div class="mt-2" data-bksec="return-vehicle-preferences"
-						*ngIf="Form.service_type.value == 'round_trip' && Form.return_affiliate_type.value == 'affiliate' && isAdminMode">
+						*ngIf="Form.service_type.value == 'round_trip' && (Form.return_affiliate_type.value == 'affiliate' || Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate') && isAdminMode">
 						<h4>
 							Vehicle Preferences
 						</h4>
@@ -4111,6 +4086,117 @@
 								</div>
 							</div>
 						</div>
+
+						<!-- In-Progress affiliate vehicle information -->
+						<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
+							<!-- Vehicle Type -->
+							<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
+								<!-- Ng-Select -->
+								<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+									placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
+									[virtualScroll]="true" formControlName="return_vehicle_type"
+									[ngClass]="{ 'border-red': (submitBookingForm && Form.return_vehicle_type.invalid) }"
+									style="height:66px;">
+								</ng-select>
+								<div *ngIf="(submitBookingForm && Form.return_vehicle_type.invalid) "
+									class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+									<div *ngIf="Form.return_vehicle_type.errors.required">Please select a vehicle type</div>
+								</div>
+							</div>
+
+							<!-- Make -->
+							<div id="make" *ngIf="Form.return_vehicle_type.value" class="col-md-4">
+								<!-- Make - Ng-Select -->
+								<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
+									[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
+									placeholder="Select Make" formControlName="return_vehicle_make">
+								</ng-select>
+							</div>
+
+							<!-- Model -->
+							<div id="model" class="col-md-4" *ngIf="Form.return_vehicle_type.value">
+								<!-- Ng-Select -->
+								<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
+									placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+									formControlName="return_vehicle_model">
+								</ng-select>
+							</div>
+
+							<!-- Year -->
+							<div id="year" class="col-md-3">
+								<!-- Ng-Select -->
+								<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
+									placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+									formControlName="return_vehicle_year">
+								</ng-select>
+							</div>
+
+							<!-- Color -->
+							<div id="color" class="col-md-3">
+								<!-- Ng-Select -->
+								<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
+									placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+									formControlName="return_vehicle_color">
+								</ng-select>
+							</div>
+
+							<!-- License Plate -->
+							<div class="col-md-3">
+								<mat-form-field appearance="outline" style="margin-top: 0 !important;">
+									<mat-label>
+										License Plate #
+									</mat-label>
+									<input type="text" matInput (focus)="$event.target.select()"
+										formControlName="return_vehicle_license_plate" placeholder="License Plate #">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="Form.return_vehicle_license_plate.invalid && (Form.return_vehicle_license_plate.touched || Form.return_vehicle_license_plate.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="Form.return_vehicle_license_plate.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Number of Seats -->
+							<div class="col-md-3">
+								<mat-form-field appearance="outline" style="margin-top: 0 !important;">
+									<mat-label>
+										Number of Seats
+									</mat-label>
+									<input type="text" matInput formControlName="return_vehicle_seats" placeholder="Number of Seats"
+										(focus)="$event.target.select()" />
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="Form.return_vehicle_seats.invalid && (Form.return_vehicle_seats.touched || Form.return_vehicle_seats.dirty)">
+										<p class="text-danger text-lg m-0" *ngIf="Form.return_vehicle_seats.errors?.pattern">
+											Only Numbers are Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="cancellation_policy col-md-6" style="margin-top: -10px;margin-bottom: 10px;">
+								<ng-select appearance="outline" [items]="canceloptions" bindLabel="label" bindValue="value"
+									placeholder="Cancellation Policy" dropdownPosition="bottom" [markFirst]="true"
+									[virtualScroll]="true" formControlName="return_cancellation_hours"
+									[searchFn]="onSearchCancellation"
+									[ngClass]="{ 'border-red': (submitBookingForm && Form.return_cancellation_hours.invalid) }"
+									style="height:66px;">
+								</ng-select>
+								<div *ngIf="(submitBookingForm && Form.return_cancellation_hours.invalid) "
+									class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 12px;">
+									<div *ngIf="Form.return_cancellation_hours.errors.required">The Cancellation Policy is
+										required
+									</div>
+									<div *ngIf="Form.return_cancellation_hours.errors.pattern">The Cancellation Policy should be
+										a
+										number</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<!-- Affiliate Vehicle Information Ends -->
 
@@ -4118,13 +4204,13 @@
 					<!-- Affiliate Driver Information -->
 					<!-- && currentUser?.created_by_role != 'subscriber' -->
 					<div class="mt-2" data-bksec="return-driver-preferences"
-						*ngIf="Form.service_type.value == 'round_trip' && isAdminMode && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)">
+						*ngIf="Form.service_type.value == 'round_trip' && isAdminMode && (Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate' || Form.return_affiliate_id.value)">
 						<h4 style="margin-bottom: 0;">
 							Driver Preferences
 						</h4>
 						<div class="row px-4">
 							<!-- Affiliate Driver Name -->
-							<div id="driver" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+							<div id="driver" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'affiliate'">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Choose Driver
@@ -4141,14 +4227,14 @@
 								<div class="error-box"></div>
 							</div>
 
-							<!-- Loose Affiliate Driver Name -->
-							<div id="driver-name" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+							<!-- Loose / In-Progress Affiliate Driver Name -->
+							<div id="driver-name" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate'">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Driver Name
 									</mat-label>
 									<input matInput formControlName="return_driver_name" type="text" placeholder="Driver Name"
-										(focus)="$event.target.select()" readonly />
+										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -4160,8 +4246,8 @@
 								</div>
 							</div>
 
-							<!-- Affiliate Driver Email -->
-							<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+							<!-- Affiliate Driver Email (Readonly for regular affiliate) -->
+							<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'affiliate'">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Email
@@ -4179,14 +4265,14 @@
 								</div>
 							</div>
 
-							<!--  Loose Affiliate Driver Email -->
-							<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+							<!-- Loose / In-Progress Affiliate Driver Email (Editable) -->
+							<div id="driver-email" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate'">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Email
 									</mat-label>
 									<input matInput formControlName="return_driver_email" type="text"
-										(focus)="$event.target.select()" placeholder="Email" readonly>
+										(focus)="$event.target.select()" placeholder="Email">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -4198,8 +4284,8 @@
 								</div>
 							</div>
 
-							<!-- Affiliate Driver Cell -->
-							<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+							<!-- Affiliate Driver Cell (Readonly for regular affiliate) -->
+							<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'affiliate'">
 								<mat-form-field appearance="outline" class="mobileField m-0">
 									<mat-label>
 										Phone
@@ -4211,8 +4297,8 @@
 								<div class="error-box"></div>
 							</div>
 
-							<!-- Loose Affiliate Driver Cell -->
-							<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+							<!-- Loose / In-Progress Affiliate Driver Cell (Editable) -->
+							<div id="driver-cell" class="col-md-6 col-lg-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate'">
 								<mat-form-field appearance="outline" class="mobileField m-0">
 									<mat-label>Phone
 									</mat-label>
@@ -4220,23 +4306,13 @@
 									<input pattern="[0-9+]*" maxlength="16" matInput #return_loose_driver_cellInput
 										placeholder="1234567890" formControlName="return_driver_cell" class="phoneNumberClass"
 										tabindex="1" (focus)="$event.target.select()" (input)="validateReturnDriverCell()"
-										(blur)="validateReturnDriverCell()" readonly />
+										(blur)="validateReturnDriverCell()" />
 
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
 										*ngIf="Form.return_driver_cell.invalid && (Form.return_driver_cell.touched || Form.return_driver_cell.dirty)">
-										<!-- <p class="text-danger text-lg m-0"
-											*ngIf="Form.return_driver_cell.errors?.pattern;else looseAffError">
-											Only Numbers are Allowed
-										</p> -->
 										<ng-template #looseAffError>
-											<!-- <p class="text-danger text-lg m-0" *ngIf="Form.return_driver_cell.errors?.minlength">
-												Minimum length should be 4
-											</p>
-											<p class="text-danger text-lg m-0" *ngIf="Form.return_driver_cell.errors?.maxlength">
-												Maximum length should be 15
-											</p> -->
 											<p class="text-danger text-lg m-0" *ngIf="Form.return_driver_cell.errors?.invalidIntl">
 												{{Form.return_driver_cell.errors?.invalidIntl}}
 											</p>
@@ -4245,29 +4321,27 @@
 								</div>
 							</div>
 
-							<!-- Affiliate Diver Gender -->
+							<!-- Affiliate Driver Gender (Readonly for regular affiliate) -->
 							<div id="driver-gender" class="col-md-6 col-lg-3 mb-3"
-								*ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+								*ngIf="Form.return_affiliate_type.value == 'affiliate'">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Gender
 									</mat-label>
-									<mat-select formControlName="return_driver_gender" [disabled]="true">
-										<mat-option value="male"> Male </mat-option>
-										<mat-option value="female"> Female </mat-option>
-										<mat-option value="lgbtqia+">Non-Binary</mat-option>
-									</mat-select>
+									<input matInput
+										[value]="(Form.return_driver_gender.value?.toLowerCase()?.includes('lgbtq')) ? 'Non-Binary' : (Form.return_driver_gender.value | titlecase)"
+										type="text" placeholder="Gender" readonly />
 								</mat-form-field>
 							</div>
 
-							<!-- Loose Affiliate Diver Gender -->
+							<!-- Loose / In-Progress Affiliate Driver Gender (Editable) -->
 							<div id="driver-gender" class="col-md-6 col-lg-3 mb-3"
-								*ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+								*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate'">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Gender
 									</mat-label>
-									<mat-select formControlName="return_driver_gender" [disabled]="true">
+									<mat-select formControlName="return_driver_gender">
 										<mat-option value="male"> Male </mat-option>
 										<mat-option value="female"> Female </mat-option>
 										<mat-option value="lgbtqia+">Non-Binary</mat-option>

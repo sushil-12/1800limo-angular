@@ -215,6 +215,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 	BigData_COPY: any
 	AffiliateInformation: Record<string, any> = {}
 	selectedPendingAffiliate: Record<string, any> = null
+	selectedReturnPendingAffiliate: Record<string, any> = null
 	activeCustomAddressDropdown: string | null = null;
 	activeCustomAirportDropdown: string | null = null;
 	private customAddressDropdownBlurTimeout?: ReturnType<typeof setTimeout>;
@@ -2920,6 +2921,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (this.updateType != 'reaffiliate' && (editing_data.is_pending_affiliate === 1 || editing_data.is_pending_affiliate === true || editing_data.is_pending_affiliate === '1')) {
 				this.SetFormValue('affiliate_type', 'in_progress_affiliate')
 			}
+			if (this.updateType != 'reaffiliate' && (editing_data.return_is_pending_affiliate === 1 || editing_data.return_is_pending_affiliate === true || editing_data.return_is_pending_affiliate === '1')) {
+				this.SetFormValue('return_affiliate_type', 'in_progress_affiliate')
+			}
 			// Handle field name mismatches
 			if (editing_data.meet_greet_choice_name) {
 				this.SetFormValue('meet_greet_choices_name', editing_data.meet_greet_choice_name);
@@ -4505,7 +4509,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate') {
+	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate' | 'in_progress_affiliate') {
 		if (return_affiliate_type == 'loose_affiliate') {
 			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
@@ -4523,6 +4527,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.Return_AffiliateAccounts = []
 			if(this.shouldBlockAdminApi) {return;};
 			this.$spinner.show()
+			const accountType = return_affiliate_type == 'in_progress_affiliate' ? 'pending_driver' : 'driver';
 			const handleResponse = (response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.Return_AffiliateAccounts = response.data.map((item) => {
@@ -4530,21 +4535,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 						return item
 					})
 					this.ReturnAffiliateAccounts_Original = [...this.Return_AffiliateAccounts]
-					//lose all affiliate vehicle and driver data on change of affiliate type
-					// for (let key in this.Form)
-					// {
-					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-					// 	{
-					// 		this.BookingForm.get(key).reset()
-					// 	}
-					// }
+					if (return_affiliate_type == 'in_progress_affiliate' && this.BookingForm.get('return_affiliate_id')?.value) {
+						this.selectedReturnPendingAffiliate = this.Return_AffiliateAccounts.find((a: any) => a.id == this.BookingForm.get('return_affiliate_id')?.value) || null;
+						if (this.selectedReturnPendingAffiliate) {
+							setTimeout(() => { this.initphonefield(); }, 200);
+						}
+					}
 				}
 				this.$spinner.hide()
 			};
 			if (this.isAffiliateMode) {
-				this.affiliateService.getAccountBytype('driver').subscribe(handleResponse);
+				this.affiliateService.getAccountBytype(accountType).subscribe(handleResponse);
 			} else {
-				this.$api.getAccountBytype('driver').subscribe(handleResponse);
+				this.$api.getAccountBytype(accountType).subscribe(handleResponse);
 			}
 		}
 	}
@@ -4779,6 +4782,63 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
 			this.fetchAffiliateVehicles(selectedAffiliate.id);
 			this.fetchAffiliateDrivers(selectedAffiliate.id);
+		}
+	}
+
+	chooseReturnPendingAffiliate(selectedAffiliate: any) {
+		this.selectedReturnPendingAffiliate = selectedAffiliate;
+
+		const fieldsToReset = [
+			'return_vehicle_type',
+			'return_vehicle_type_name',
+			'return_vehicle_id',
+			'return_vehicle_make',
+			'return_vehicle_make_name',
+			'return_vehicle_model',
+			'return_vehicle_model_name',
+			'return_vehicle_color',
+			'return_vehicle_color_name',
+			'return_vehicle_year',
+			'return_vehicle_year_name',
+			'return_vehicle_license_plate',
+			'return_driver_id',
+			'return_driver_name',
+			'return_driver_gender',
+			'return_driver_cell',
+			'return_driver_email'
+		];
+
+		fieldsToReset.forEach((item: string) => {
+			if (this.BookingForm.get(item)) {
+				this.BookingForm.get(item).reset();
+			}
+		});
+
+		this.return_VehicleList = [];
+		this.return_DriverList = [];
+
+		if (selectedAffiliate) {
+			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
+			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
+			this.BookingForm.patchValue({
+				...(dName ? { return_driver_name: dName } : {}),
+				...(dPhone ? { return_driver_cell: dPhone } : {}),
+				...(dEmail ? { return_driver_email: dEmail } : {})
+			});
+		}
+
+		this.BookingForm.updateValueAndValidity();
+
+		if (selectedAffiliate) {
+			setTimeout(() => {
+				this.initphonefield();
+			}, 200);
+		}
+
+		if (this.BookingForm.get('return_affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
+			this.fetchReturnAffiliateVehicles(selectedAffiliate.id);
+			this.fetchReturnAffiliateDrivers(selectedAffiliate.id);
 		}
 	}
 
@@ -6848,6 +6908,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		value['platform_type'] = 'web'
 		value['is_master_vehicle'] = this.is_master_vehicle
 		value['is_pending_affiliate'] = this.Form.affiliate_type.value == 'in_progress_affiliate'
+		value['return_is_pending_affiliate'] = this.Form.return_affiliate_type.value == 'in_progress_affiliate'
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']
@@ -8414,8 +8475,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
 				}
-				this.fetchReturnAffiliates('affiliate')
-				this.chooseReturnAffiliate()
+				this.fetchReturnAffiliates(value == 'in_progress_affiliate' ? 'in_progress_affiliate' : 'affiliate')
+				if (value === 'affiliate') {
+					this.chooseReturnAffiliate()
+				}
 			}
 		})
 
@@ -8962,14 +9025,49 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	resetReturnDriverAndVehicle(return_affiliate_type: string) {
-		if (return_affiliate_type == 'loose_affiliate') {
-			['return_vehicle_type', 'return_vehicle_id', 'return_vehicle_make', 'return_vehicle_model', 'return_vehicle_color', 'return_vehicle_year', 'return_driver_name', 'return_driver_email', 'return_driver_gender', 'return_driver_cell', 'return_vehicle_license_plate'].forEach((item: any) => {
+		this.selectedReturnPendingAffiliate = null;
+		const fieldsToReset = [
+			'return_affiliate_id',
+			'return_loose_affiliate_id',
+			'return_is_old_loose_affiliate',
+			'return_lose_affiliate_name',
+			'return_lose_affiliate_phone',
+			'return_lose_affiliate_email',
+			'return_vehicle_type',
+			'return_vehicle_type_name',
+			'return_vehicle_id',
+			'return_vehicle_make',
+			'return_vehicle_make_name',
+			'return_vehicle_model',
+			'return_vehicle_model_name',
+			'return_vehicle_year',
+			'return_vehicle_year_name',
+			'return_vehicle_color',
+			'return_vehicle_color_name',
+			'return_vehicle_license_plate',
+			'return_vehicle_seats',
+			'return_driver_id',
+			'return_driver_name',
+			'return_driver_gender',
+			'return_driver_cell',
+			'return_driver_email'
+		];
+
+		fieldsToReset.forEach((item: string) => {
+			if (this.BookingForm.get(item)) {
 				this.BookingForm.get(item).reset();
-				this.BookingForm.updateValueAndValidity();
-			})
-			this.SetFormValue('return_driver_cell_isd', '+1');
-			this.SetFormValue('return_driver_cell_country', 'us');
-		}
+			}
+		});
+
+		this.SetFormValue('return_lose_affiliate_phone_isd', '+1');
+		this.SetFormValue('return_lose_affiliate_phone_country', 'us');
+		this.SetFormValue('return_driver_cell_isd', '+1');
+		this.SetFormValue('return_driver_cell_country', 'us');
+
+		this.return_VehicleList = [];
+		this.return_DriverList = [];
+
+		this.BookingForm.updateValueAndValidity();
 	}
 
 	RateFormValue(data: any) {
