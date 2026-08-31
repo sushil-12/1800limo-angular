@@ -3863,7 +3863,7 @@
 						<h4>
 							Vehicle Preferences
 						</h4>
-						<div class="row px-4">
+						<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'affiliate'">
 							<!-- Vehicle Type -->
 							<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
 								<ng-select appearance="outline" [items]="return_vehicleType_arr" bindLabel="formatted_name"

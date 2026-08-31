@@ -8486,12 +8486,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 			// Affiliate portal farm-outs are booking_created_from 'subscriber', but picking
 			// an affiliate must still load that affiliate's vehicles/drivers.
 			if (value && (this.booking_created_from == 'admin' || this.isAffiliateMode)) {
-				this.chooseAffiliate()
-				this.fetchAffiliateInformation(value)
-				if (this.BookingForm.get('service_type').value == 'round_trip') {
-					this.BookingForm.patchValue({
-						return_affiliate_id: value
-					})
+				if (this.Form.affiliate_type.value === 'in_progress_affiliate') {
+					const pendingAff = this.AffiliateAccounts?.find((a: any) => a.id == value) || null;
+					this.choosePendingAffiliate(pendingAff);
+				} else {
+					this.chooseAffiliate();
+					this.fetchAffiliateInformation(value);
+					if (this.BookingForm.get('service_type').value == 'round_trip' && this.Form.affiliate_type.value == 'affiliate' && this.Form.return_affiliate_type.value == 'affiliate') {
+						this.BookingForm.patchValue({
+							return_affiliate_id: value
+						});
+					}
 				}
 			}
 		})
@@ -8499,22 +8504,18 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.BookingForm.get('loose_affiliate_id').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
 			if (value && this.booking_created_from == 'admin') {
 				this.chooseLooseAffiliate()
-				// this.fetchAffiliateInformation(value)
-				// if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
-				// 	this.scroll('booking_detail_section')
-				// }
-				// if (this.BookingForm.get('service_type').value == 'round_trip') {
-				// 	this.BookingForm.patchValue({
-				// 		return_affiliate_id: value
-				// 	})
-				// }
 			}
 		})
 
 		this.BookingForm.get('return_affiliate_id').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: number) => {
 			if (value && (this.booking_created_from == 'admin' || this.isAffiliateMode)) {
-				this.chooseReturnAffiliate()
-				this.fetchReturnAffiliateInformation(value)
+				if (this.Form.return_affiliate_type.value === 'in_progress_affiliate') {
+					const pendingReturnAff = this.Return_AffiliateAccounts?.find((a: any) => a.id == value) || null;
+					this.chooseReturnPendingAffiliate(pendingReturnAff);
+				} else {
+					this.chooseReturnAffiliate();
+					this.fetchReturnAffiliateInformation(value);
+				}
 			}
 		})
 
