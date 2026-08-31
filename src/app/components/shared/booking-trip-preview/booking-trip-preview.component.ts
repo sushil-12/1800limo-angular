@@ -614,12 +614,19 @@ export class BookingTripPreviewComponent implements OnInit {
   private applyActiveLeg(): void {
     const b = this.bookingPreview || {};
 
-    this.showRateDistribution =
-      this.userRole === 'admin' ||
+    const isTravelAgentBooking =
       this.userRole === 'travel_agent' ||
-      (this.userRole === 'affiliate' &&
-        b.payment_status != 'paid' &&
-        b.payment_status != 'transfer_failed');
+      b?.account_type === 'travel_planner' ||
+      b?.account_type === 'travel_agent' ||
+      b?.created_by_role === 'travel_agent' ||
+      b?.created_by_role === 'travel_planner';
+
+    this.showRateDistribution =
+      !isTravelAgentBooking &&
+      (this.userRole === 'admin' ||
+        (this.userRole === 'affiliate' &&
+          b.payment_status != 'paid' &&
+          b.payment_status != 'transfer_failed'));
 
     try {
       const grandTotal = b?.share_array?.grandTotal

@@ -114,6 +114,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 	@ViewChild('return_lose_affiliate_phoneInput') return_lose_affiliate_phoneInput!: ElementRef;
 	@ViewChild('return_driver_cellInput') return_driver_cellInput!: ElementRef;
 	@ViewChild('return_loose_driver_cellInput') return_loose_driver_cellInput!: ElementRef;
+	@ViewChild('in_progress_phoneInput') in_progress_phoneInput!: ElementRef;
+	inProgressPhoneTelInput: any;
 	/** Shared receipt modal reused by the Preview button instead of the inline #previewBooking markup. */
 	@ViewChild('bookingPreviewModal') bookingPreviewModal!: BookingTripPreviewComponent;
 
@@ -1261,6 +1263,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 			});
 		}
 
+		if (this.in_progress_phoneInput) {
+			const existing = (window as any).intlTelInputGlobals?.getInstance(this.in_progress_phoneInput.nativeElement);
+			if (existing) existing.destroy();
+			const inProgressCountry = this.selectedPendingAffiliate?.phone_country || this.selectedPendingAffiliate?.driver_phone_country || this.selectedPendingAffiliate?.country || getInitCountry('driver_cell_country');
+			this.inProgressPhoneTelInput = intlTelInput(this.in_progress_phoneInput.nativeElement, this.commonServices.getTelInputOptions(inProgressCountry));
+
+			this.addCustomCountrySearch(this.in_progress_phoneInput.nativeElement);
+		}
 
 	}
 
@@ -4464,14 +4474,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 						})
 						this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
 						this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-						//lose all affiliate vehicle and driver data on change of affiliate type
-						// for (let key in this.Form)
-						// {
-						// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-						// 	{
-						// 		this.BookingForm.get(key).reset()
-						// 	}
-						// }
+						if (affiliate_type == 'in_progress_affiliate' && this.BookingForm.get('affiliate_id')?.value) {
+							this.selectedPendingAffiliate = this.AffiliateAccounts.find((a: any) => a.id == this.BookingForm.get('affiliate_id')?.value) || null;
+							if (this.selectedPendingAffiliate) {
+								setTimeout(() => { this.initphonefield(); }, 200);
+							}
+						}
 					}
 					this.$spinner.hide()
 				})
@@ -4484,14 +4492,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 						})
 						this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
 						this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-						//lose all affiliate vehicle and driver data on change of affiliate type
-						// for (let key in this.Form)
-						// {
-						// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-						// 	{
-						// 		this.BookingForm.get(key).reset()
-						// 	}
-						// }
+						if (affiliate_type == 'in_progress_affiliate' && this.BookingForm.get('affiliate_id')?.value) {
+							this.selectedPendingAffiliate = this.AffiliateAccounts.find((a: any) => a.id == this.BookingForm.get('affiliate_id')?.value) || null;
+							if (this.selectedPendingAffiliate) {
+								setTimeout(() => { this.initphonefield(); }, 200);
+							}
+						}
 					}
 					this.$spinner.hide()
 				})
@@ -4719,11 +4725,60 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	choosePendingAffiliate(selectedAffiliate: any) {
-		this.selectedPendingAffiliate = selectedAffiliate
+		this.selectedPendingAffiliate = selectedAffiliate;
+
+		const fieldsToReset = [
+			'vehicle_type',
+			'vehicle_type_name',
+			'vehicle_id',
+			'vehicle_make',
+			'vehicle_make_name',
+			'vehicle_model',
+			'vehicle_model_name',
+			'vehicle_color',
+			'vehicle_color_name',
+			'vehicle_year',
+			'vehicle_year_name',
+			'vehicle_license_plate',
+			'driver_id',
+			'driver_name',
+			'driver_gender',
+			'driver_cell',
+			'driver_email'
+		];
+
+		fieldsToReset.forEach((item: string) => {
+			if (this.BookingForm.get(item)) {
+				this.BookingForm.get(item).reset();
+			}
+		});
+
+		this.VehicleList = [];
+		this.DriverList = [];
+
+		if (selectedAffiliate) {
+			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
+			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
+			this.BookingForm.patchValue({
+				...(dName ? { driver_name: dName } : {}),
+				...(dPhone ? { driver_cell: dPhone } : {}),
+				...(dEmail ? { driver_email: dEmail } : {})
+			});
+		}
+
+		this.BookingForm.updateValueAndValidity();
+
+		if (selectedAffiliate) {
+			setTimeout(() => {
+				this.initphonefield();
+			}, 200);
+		}
+
 		// has_vehicle comes from the get-account-by-type/pending_driver API response item
 		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
-			this.fetchAffiliateVehicles(selectedAffiliate.id)
-			this.fetchAffiliateDrivers(selectedAffiliate.id)
+			this.fetchAffiliateVehicles(selectedAffiliate.id);
+			this.fetchAffiliateDrivers(selectedAffiliate.id);
 		}
 	}
 
@@ -8289,7 +8344,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 					this.init_return_rates = true;
 				}
 				this.fetchAffiliates(value == 'in_progress_affiliate' ? 'in_progress_affiliate' : 'affiliate')
-				this.chooseAffiliate()
+				if (value === 'affiliate') {
+					this.chooseAffiliate()
+				}
 			}
 		})
 
@@ -8859,14 +8916,49 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	resetDriverAndVehicle(affiliate_type: string) {
-		if (affiliate_type == 'loose_affiliate') {
-			['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'vehicle_license_plate'].forEach((item: any) => {
+		this.selectedPendingAffiliate = null;
+		const fieldsToReset = [
+			'affiliate_id',
+			'loose_affiliate_id',
+			'is_old_loose_affiliate',
+			'lose_affiliate_name',
+			'lose_affiliate_phone',
+			'lose_affiliate_email',
+			'vehicle_type',
+			'vehicle_type_name',
+			'vehicle_id',
+			'vehicle_make',
+			'vehicle_make_name',
+			'vehicle_model',
+			'vehicle_model_name',
+			'vehicle_year',
+			'vehicle_year_name',
+			'vehicle_color',
+			'vehicle_color_name',
+			'vehicle_license_plate',
+			'vehicle_seats',
+			'driver_id',
+			'driver_name',
+			'driver_gender',
+			'driver_cell',
+			'driver_email'
+		];
+
+		fieldsToReset.forEach((item: string) => {
+			if (this.BookingForm.get(item)) {
 				this.BookingForm.get(item).reset();
-				this.BookingForm.updateValueAndValidity();
-			})
-			this.SetFormValue('driver_cell_isd', '+1');
-			this.SetFormValue('driver_cell_country', 'us');
-		}
+			}
+		});
+
+		this.SetFormValue('lose_affiliate_phone_isd', '+1');
+		this.SetFormValue('lose_affiliate_phone_country', 'us');
+		this.SetFormValue('driver_cell_isd', '+1');
+		this.SetFormValue('driver_cell_country', 'us');
+
+		this.VehicleList = [];
+		this.DriverList = [];
+
+		this.BookingForm.updateValueAndValidity();
 	}
 
 	resetReturnDriverAndVehicle(return_affiliate_type: string) {

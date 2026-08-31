@@ -1803,7 +1803,7 @@
 				<h2 class="ride-desktop-heading" [innerHTML]="formatBannerTitle(fetchPageData('Last Paragraph')?.subtitle)"></h2>
 				<div class="ride-text-block">
 					<!-- <p class="ride-subtitle">{{formatBannerTitle(fetchPageData('Last Paragraph')?.subtitle) }}</p> -->
-					<p class="ride-body" [innerHTML]="formatBannerContent('Last Paragraph')?.content"></p>
+					<p class="ride-body" [innerHTML]="formatBannerContent(fetchPageData('Last Paragraph')?.content)"></p>
 				</div>
 			</div>
 		</div>

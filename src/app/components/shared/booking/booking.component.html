@@ -2031,42 +2031,44 @@
 						</ng-select>
 					</div>
 
-					<!-- Name -->
-					<div class="col-md-6 col-lg-4">
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Name
-							</mat-label>
-							<input type="text" matInput placeholder="Name" (focus)="$event.target.select()"
-								[value]="selectedPendingAffiliate?.driver_name || selectedPendingAffiliate?.name || ''"
-								readonly />
-						</mat-form-field>
-					</div>
+					<ng-container *ngIf="selectedPendingAffiliate">
+						<!-- Name -->
+						<div class="col-md-6 col-lg-4">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label>
+									Name
+								</mat-label>
+								<input type="text" matInput placeholder="Name" (focus)="$event.target.select()"
+									[value]="selectedPendingAffiliate?.driver_name || selectedPendingAffiliate?.name || ''"
+									readonly />
+							</mat-form-field>
+						</div>
 
-					<!-- Phone -->
-					<div class="col-md-6 col-lg-4">
-						<mat-form-field appearance="outline" class="mobileField m-0">
-							<mat-label>
-								Phone
-							</mat-label>
-							<input type="text" matInput placeholder="Phone" class="phoneNumberClass"
-								(focus)="$event.target.select()"
-								[value]="selectedPendingAffiliate?.phone || selectedPendingAffiliate?.driver_phone || ''"
-								readonly />
-						</mat-form-field>
-					</div>
+						<!-- Phone -->
+						<div class="col-md-6 col-lg-4">
+							<mat-form-field appearance="outline" class="mobileField m-0">
+								<mat-label>
+									Phone
+								</mat-label>
+								<input type="text" matInput #in_progress_phoneInput placeholder="Phone" class="phoneNumberClass"
+									(focus)="$event.target.select()"
+									[value]="selectedPendingAffiliate?.phone || selectedPendingAffiliate?.driver_phone || ''"
+									readonly />
+							</mat-form-field>
+						</div>
 
-					<!-- Email -->
-					<div class="col-md-6 col-lg-4">
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Email
-							</mat-label>
-							<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
-								[value]="selectedPendingAffiliate?.email || selectedPendingAffiliate?.driver_email || ''"
-								readonly />
-						</mat-form-field>
-					</div>
+						<!-- Email -->
+						<div class="col-md-6 col-lg-4">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label>
+									Email
+								</mat-label>
+								<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
+									[value]="selectedPendingAffiliate?.email || selectedPendingAffiliate?.driver_email || ''"
+									readonly />
+							</mat-form-field>
+						</div>
+					</ng-container>
 				</div>
 				<!-- In-Progress Affiliate Section Ends -->
 			</div>
