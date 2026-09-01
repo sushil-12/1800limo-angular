@@ -148,7 +148,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
 		client_account_types_subscriber: ['individual', 'loose_customer'],
-		affiliate_accounts: ["affiliate", "loose_affiliate","in_progress_affiliate"],
+		affiliate_accounts: ["affiliate", "loose_affiliate"],
 		
 		numbers: (() => {
 			let arr = []

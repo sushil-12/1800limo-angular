@@ -1883,10 +1883,12 @@
 				<div class="row">
 					<div class="col-md-12 col-lg-10">
 						<mat-radio-group aria-label="Select an option" formControlName="affiliate_type">
-							<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
-								(click)="resetDriverAndVehicle(aa)" *ngFor="let aa of booking_params.affiliate_accounts">
-								{{ textFormatter(aa) | titlecase }}
-							</mat-radio-button>
+							<ng-container *ngFor="let aa of booking_params.affiliate_accounts">
+								<mat-radio-button *ngIf="aa !== 'in_progress_affiliate'" [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
+									(click)="resetDriverAndVehicle(aa)">
+									{{ textFormatter(aa) | titlecase }}
+								</mat-radio-button>
+							</ng-container>
 						</mat-radio-group>
 					</div>
 				</div>
@@ -2021,7 +2023,7 @@
 
 				<!-- Visible in only In-Progress Affiliate Section -->
 				<!-- In-Progress Affiliate Section -->
-				<div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
+				<!-- <div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
 					<div class="col-md-12">
 						<ng-select [searchable]="true" appearance="outline"
 							[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
@@ -2030,7 +2032,7 @@
 							(change)="handleAffiliateChange($event); choosePendingAffiliate($event)">
 						</ng-select>
 					</div>
-				</div>
+				</div> -->
 				<!-- In-Progress Affiliate Section Ends -->
 			</div>
 
@@ -2263,10 +2265,10 @@
 				</div>
 
 				<!-- In-Progress affiliate vehicle information -->
-				<div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
-					<!-- Vehicle Type -->
+				<!-- <div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
+					Vehicle Type
 					<div id="vehicle-type" [ngClass]="Form.vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
-						<!-- Ng-Select -->
+						Ng-Select
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
 							placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="vehicle_type"
@@ -2279,43 +2281,43 @@
 						</div>
 					</div>
 
-					<!-- Make -->
+					Make
 					<div id="make" *ngIf="Form.vehicle_type.value" class="col-md-4">
-						<!-- Make - Ng-Select -->
+						Make - Ng-Select
 						<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
 							placeholder="Select Make" formControlName="vehicle_make">
 						</ng-select>
 					</div>
 
-					<!-- Model -->
+					Model
 					<div id="model" class="col-md-4" *ngIf="Form.vehicle_type.value">
-						<!-- Ng-Select -->
+						Ng-Select
 						<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_model">
 						</ng-select>
 					</div>
 
-					<!-- Year -->
+					Year
 					<div id="year" class="col-md-3">
-						<!-- Ng-Select -->
+						Ng-Select
 						<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_year">
 						</ng-select>
 					</div>
 
-					<!-- Color -->
+					Color
 					<div id="color" class="col-md-3">
-						<!-- Ng-Select -->
+						Ng-Select
 						<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_color">
 						</ng-select>
 					</div>
 
-					<!-- License Plate -->
+					License Plate
 					<div class="col-md-3">
 						<mat-form-field appearance="outline" style="margin-top: 0 !important;">
 							<mat-label>
@@ -2334,7 +2336,7 @@
 						</div>
 					</div>
 
-					<!-- Number of Seats -->
+					Number of Seats
 					<div class="col-md-3">
 						<mat-form-field appearance="outline" style="margin-top: 0 !important;">
 							<mat-label>
@@ -2369,7 +2371,7 @@
 								number</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<!-- Affiliate Vehicle Information Ends -->
 
@@ -3697,11 +3699,12 @@
 				<div class="row">
 					<div class="col-md-12 col-lg-10">
 						<mat-radio-group aria-label="Select an option" formControlName="return_affiliate_type">
-							<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
-								(click)="resetReturnDriverAndVehicle(aa)"
-								*ngFor="let aa of booking_params.affiliate_accounts">
-								{{ textFormatter(aa) | titlecase }}
-							</mat-radio-button>
+							<ng-container *ngFor="let aa of booking_params.affiliate_accounts">
+								<mat-radio-button *ngIf="aa !== 'in_progress_affiliate'" [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
+									(click)="resetReturnDriverAndVehicle(aa)">
+									{{ textFormatter(aa) | titlecase }}
+								</mat-radio-button>
+							</ng-container>
 						</mat-radio-group>
 					</div>
 				</div>
@@ -3843,7 +3846,7 @@
 
 				<!-- Visible in only In-Progress Affiliate Section -->
 				<!-- In-Progress Affiliate Section -->
-				<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
+				<!-- <div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
 					<div class="col-md-12">
 						<ng-select [searchable]="true" appearance="outline"
 							[items]="Return_AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
@@ -3852,7 +3855,7 @@
 							(change)="handleReturnAffiliateChange($event); chooseReturnPendingAffiliate($event)">
 						</ng-select>
 					</div>
-				</div>
+				</div> -->
 				<!-- In-Progress Affiliate Section Ends -->
 
 					<!-- Visible in Affiliate as well as Loose Affiliate Section -->
@@ -4088,10 +4091,10 @@
 						</div>
 
 						<!-- In-Progress affiliate vehicle information -->
-						<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
-							<!-- Vehicle Type -->
+						<!-- <div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
+							Vehicle Type
 							<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
-								<!-- Ng-Select -->
+								Ng-Select
 								<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
 									placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 									[virtualScroll]="true" formControlName="return_vehicle_type"
@@ -4104,43 +4107,43 @@
 								</div>
 							</div>
 
-							<!-- Make -->
+							Make
 							<div id="make" *ngIf="Form.return_vehicle_type.value" class="col-md-4">
-								<!-- Make - Ng-Select -->
+								Make - Ng-Select
 								<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
 									[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
 									placeholder="Select Make" formControlName="return_vehicle_make">
 								</ng-select>
 							</div>
 
-							<!-- Model -->
+							Model
 							<div id="model" class="col-md-4" *ngIf="Form.return_vehicle_type.value">
-								<!-- Ng-Select -->
+								Ng-Select
 								<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 									placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 									formControlName="return_vehicle_model">
 								</ng-select>
 							</div>
 
-							<!-- Year -->
+							Year
 							<div id="year" class="col-md-3">
-								<!-- Ng-Select -->
+								Ng-Select
 								<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 									placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 									formControlName="return_vehicle_year">
 								</ng-select>
 							</div>
 
-							<!-- Color -->
+							Color
 							<div id="color" class="col-md-3">
-								<!-- Ng-Select -->
+								Ng-Select
 								<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 									placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 									formControlName="return_vehicle_color">
 								</ng-select>
 							</div>
 
-							<!-- License Plate -->
+							License Plate
 							<div class="col-md-3">
 								<mat-form-field appearance="outline" style="margin-top: 0 !important;">
 									<mat-label>
@@ -4160,7 +4163,7 @@
 								</div>
 							</div>
 
-							<!-- Number of Seats -->
+							Number of Seats
 							<div class="col-md-3">
 								<mat-form-field appearance="outline" style="margin-top: 0 !important;">
 									<mat-label>
@@ -4196,7 +4199,7 @@
 										number</div>
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<!-- Affiliate Vehicle Information Ends -->
 
