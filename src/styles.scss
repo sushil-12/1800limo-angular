@@ -787,6 +787,52 @@ gmp-basic-place-autocomplete {
 	display: none;
 }
 
+/* Onboarding progress, pending affiliates only. Graded so a signup that
+   stalled at step 1 is distinguishable from one that is nearly done. */
+.aff-step {
+	display: inline-flex;
+	align-items: center;
+	padding: 2px 8px;
+	border-radius: 999px;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 18px;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+	border: 1px solid transparent;
+}
+
+.aff-step.is-early {
+	background: #fef2f2;
+	color: #b91c1c;
+	border-color: #fca5a5;
+}
+
+.aff-step.is-mid {
+	background: #fef3c7;
+	color: #b45309;
+	border-color: #fcd34d;
+}
+
+.aff-step.is-late {
+	background: #dbeafe;
+	color: #1d4ed8;
+	border-color: #93c5fd;
+}
+
+.aff-step.is-complete {
+	background: #dcfce7;
+	color: #15803d;
+	border-color: #86efac;
+}
+
+.aff-step.is-none {
+	background: transparent;
+	color: #94a3b8;
+	border-style: dashed;
+	border-color: #cbd5e1;
+}
+
 /* Onboarding state, pending affiliates only. */
 .aff-flag {
 	display: inline-flex;

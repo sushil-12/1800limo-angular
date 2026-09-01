@@ -33,6 +33,8 @@ import {
 	RankedAffiliate,
 	affiliateRankBadge,
 	affiliateRankModifier,
+	affiliateStepBadge,
+	affiliateStepModifier,
 	buildRankedAffiliateLabel,
 	createAffiliateLookupState,
 	formatAffiliateDistance,
@@ -4862,6 +4864,32 @@ export class BookingComponent implements OnInit, OnDestroy {
 	/** Full band name, used as the badge's tooltip. */
 	affiliateRankTitle(item: any): string {
 		return formatAffiliateDistance(item);
+	}
+
+	/** Onboarding progress badge text for a pending affiliate, e.g. "Step 3/5". */
+	affiliateStepBadgeText(item: any): string {
+		return affiliateStepBadge(item);
+	}
+
+	/** Colour modifier for the onboarding badge, graded by progress. */
+	affiliateStepClass(item: any): string {
+		return affiliateStepModifier(item);
+	}
+
+	/** Tooltip spelling out which onboarding steps are done. */
+	affiliateStepTitle(item: any): string {
+		const steps = item?.step_completed;
+
+		if (!Array.isArray(steps) || !steps.length) {
+			return 'Onboarding not started';
+		}
+
+		const ordered = steps
+			.map((step) => Number(step))
+			.filter((step) => Number.isFinite(step))
+			.sort((a, b) => a - b);
+
+		return `Completed onboarding steps: ${ordered.join(', ')}`;
 	}
 
 	/** "Showing 50 of 190" hint for the dropdown footer. */

@@ -2061,9 +2061,13 @@
 										{{ item.name }}<span class="aff-option__driver" *ngIf="item.driver_name"> / {{ item.driver_name }}</span>
 									</span>
 									<span class="aff-option__meta">
-									<span class="aff-flag" [ngClass]="item.has_vehicle ? 'is-ready' : 'is-blocked'">
-										{{ item.has_vehicle ? 'Has vehicle' : 'No vehicle' }}
-									</span>
+										<span class="aff-step" [ngClass]="affiliateStepClass(item)"
+											[title]="affiliateStepTitle(item)" *ngIf="affiliateStepBadgeText(item)">
+											{{ affiliateStepBadgeText(item) }}
+										</span>
+										<span class="aff-flag" [ngClass]="item.has_vehicle ? 'is-ready' : 'is-blocked'">
+											{{ item.has_vehicle ? 'Has vehicle' : 'No vehicle' }}
+										</span>
 										<span class="aff-badge" [ngClass]="affiliateRankClass(item)"
 											[title]="affiliateRankTitle(item)" *ngIf="affiliateShowRank(false) && affiliateRankBadgeText(item)">
 											{{ affiliateRankBadgeText(item) }}
@@ -3927,9 +3931,13 @@
 										{{ item.name }}<span class="aff-option__driver" *ngIf="item.driver_name"> / {{ item.driver_name }}</span>
 									</span>
 									<span class="aff-option__meta">
-									<span class="aff-flag" [ngClass]="item.has_vehicle ? 'is-ready' : 'is-blocked'">
-										{{ item.has_vehicle ? 'Has vehicle' : 'No vehicle' }}
-									</span>
+										<span class="aff-step" [ngClass]="affiliateStepClass(item)"
+											[title]="affiliateStepTitle(item)" *ngIf="affiliateStepBadgeText(item)">
+											{{ affiliateStepBadgeText(item) }}
+										</span>
+										<span class="aff-flag" [ngClass]="item.has_vehicle ? 'is-ready' : 'is-blocked'">
+											{{ item.has_vehicle ? 'Has vehicle' : 'No vehicle' }}
+										</span>
 										<span class="aff-badge" [ngClass]="affiliateRankClass(item)"
 											[title]="affiliateRankTitle(item)" *ngIf="affiliateShowRank(true) && affiliateRankBadgeText(item)">
 											{{ affiliateRankBadgeText(item) }}

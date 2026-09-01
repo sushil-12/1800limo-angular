@@ -43,6 +43,21 @@ export interface RankedAffiliate {
 	rank_label: string;
 	/** Built client-side for `bindLabel`. */
 	bindNameAffiliate?: string;
+
+	/* ---- pending (`pending_driver`) rows only ---- */
+	email?: string;
+	/** Has an enabled vehicle with a fare on file. */
+	has_vehicle?: boolean;
+	/** Onboarding step 4 done, so the driver API can return their details. */
+	has_driver_info?: boolean;
+	/** Every onboarding step completed so far, as stored. */
+	step_completed?: Array<number | string>;
+	/** Furthest onboarding step reached. Zero-indexed. */
+	current_step?: number | null;
+	/** Highest step index in the flow, so the badge needs no hardcoded total. */
+	onboarding_total_steps?: number;
+	affiliate_type?: string;
+	account_approval?: string;
 }
 
 /** Pagination envelope returned when `per_page` is supplied. */
@@ -214,6 +229,60 @@ export function affiliateRankModifier(item: RankedAffiliate): string {
 		case 5: return 'is-far';
 		default: return 'is-unranked';
 	}
+}
+
+/**
+ * Onboarding progress badge for a pending affiliate, e.g. "Step 3/5".
+ *
+ * Steps are zero-indexed, so `current_step` is the furthest step reached and
+ * `onboarding_total_steps` is the highest index in the flow - reaching the
+ * total means the flow is finished. Returns '' for rows that carry no step
+ * data, which is every approved row.
+ */
+export function affiliateStepBadge(item: RankedAffiliate): string {
+	const step = item?.current_step;
+
+	if (step === null || step === undefined) {
+		return '';
+	}
+
+	const total = item?.onboarding_total_steps;
+
+	return total ? `Step ${step}/${total}` : `Step ${step}`;
+}
+
+/**
+ * Modifier class for the onboarding badge, graded by how far through the flow
+ * the affiliate is so a stalled signup is visible at a glance.
+ */
+export function affiliateStepModifier(item: RankedAffiliate): string {
+	const step = item?.current_step;
+
+	if (step === null || step === undefined) {
+		return 'is-none';
+	}
+
+	const total = Number(item?.onboarding_total_steps) || 0;
+
+	if (total <= 0) {
+		return 'is-mid';
+	}
+
+	if (step >= total) {
+		return 'is-complete';
+	}
+
+	const progress = step / total;
+
+	if (progress >= 0.6) {
+		return 'is-late';
+	}
+
+	if (progress >= 0.3) {
+		return 'is-mid';
+	}
+
+	return 'is-early';
 }
 
 /**
