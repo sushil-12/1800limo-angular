@@ -6743,7 +6743,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// this.BookingForm['currency'] = this.currencyObj?.currency
 		if (this.service_type == 'round_trip') {
 			this.BookingForm.get('return_vehicle_type')?.setValidators([Validators.required]);
-			this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity()
+			this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity({ emitEvent: false })
 
 			this.BookingForm.patchValue({
 				return_driver_cell_isd: this.ensurePlusPrefix(this.BookingForm?.get('return_driver_cell_isd')?.value),
@@ -6753,7 +6753,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		}
 		else {
 			this.BookingForm.get('return_vehicle_type')?.clearValidators()
-			this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity()
+			this.BookingForm.get('return_vehicle_type')?.updateValueAndValidity({ emitEvent: false })
 		}
 		
 		const rDrCell = this.BookingForm.get('return_driver_cell');
@@ -8536,7 +8536,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// 	}
 		// })
 
-		this.BookingForm.get('vehicle_type').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+		this.BookingForm.get('vehicle_type').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 				if (value) {
 					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
@@ -8572,7 +8572,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 
-		this.BookingForm.get('return_vehicle_type').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+		this.BookingForm.get('return_vehicle_type').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				if (value) {
 					this.return_VehicleList.map(i => (i.unique_key == this.return_unique_key) ? this.handleReturnSelectVehicleType(i) : '')

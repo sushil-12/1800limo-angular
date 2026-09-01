@@ -750,10 +750,10 @@ export class BookingTripPreviewComponent implements OnInit {
 
       // ── vehicle ──
       vehicle_type_name: src.return_vehicle_type_name || '',
-      vehicle_make: src.return_vehicle_make || '',
-      vehicle_model: src.return_vehicle_model || '',
-      vehicle_year: src.return_vehicle_year || '',
-      vehicle_color: src.return_vehicle_color || '',
+      vehicle_make: src.return_vehicle_make || src.return_vehicle_make_name || '',
+      vehicle_model: src.return_vehicle_model || src.return_vehicle_model_name || '',
+      vehicle_year: src.return_vehicle_year || src.return_vehicle_year_name || '',
+      vehicle_color: src.return_vehicle_color || src.return_vehicle_color_name || '',
 
       // ── driver ──
       driver_name: src.return_driver_name || '',
