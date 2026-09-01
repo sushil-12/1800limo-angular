@@ -3,7 +3,7 @@ import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBooki
 import { Component, EventEmitter, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { pluck, distinctUntilChanged } from 'rxjs/operators';
+import { pluck, distinctUntilChanged, debounceTime, map } from 'rxjs/operators';
 
 import { AdminService } from '../../../services/admin.service';
 import { SharedModule } from '../../shared/shared.module'
@@ -11,7 +11,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
+import {
+	AffiliateLookupParams,
+	AffiliateLookupState,
+	affiliateRankBadge,
+	affiliateRankModifier,
+	buildRankedAffiliateLabel,
+	createAffiliateLookupState,
+	formatAffiliateDistance,
+	readAffiliateLookupResponse
+} from '../../../utils/affiliate-lookup';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { param } from 'jquery';
 import { CommonService } from '../../../services/common.service';
@@ -210,9 +220,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 	adminSharePercent: number = 25;
 	isFarmoutBooking: boolean = false;
 	private isPrefillingTransferTypes: boolean = false;
-	AffiliateAccounts_copy: any;
-	private AffiliateAccounts_Original: Array<Record<string, any>> = [];
-	private ReturnAffiliateAccounts_Original: Array<Record<string, any>> = [];
+	/**
+	 * Server-side affiliate lookup state, one set per leg. The list is
+	 * searched, ranked by distance from the pickup and paged by the API.
+	 */
+	affiliateLookup: AffiliateLookupState = createAffiliateLookupState();
+	returnAffiliateLookup: AffiliateLookupState = createAffiliateLookupState();
+	affiliateTypeahead$ = new Subject<string>();
+	returnAffiliateTypeahead$ = new Subject<string>();
+	private readonly affiliatePageSize = 50;
 	public canceloptions: Array<Object>;
 	currencySymbol: any;
 	currencyObj: any;
@@ -247,6 +263,7 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 		// build the form first 
 		this.buildBookingForm()
+		this.initAffiliateSearchStream()
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			const isNewBookingFlow = params?.new === true || params?.new === 'true';
 			const hasMasterVehicleParam = params?.is_master_vehicle !== undefined;
@@ -3509,20 +3526,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		}))
 	}
 
-	private getAffiliateSearchText(item: any): string {
-		return [
-			item?.name,
-			item?.driver_name,
-			item?.badge_city_name,
-			item?.phone,
-			item?.last_name,
-			item?.LastName
-		]
-			.map((value) => (value ?? '').toString().trim().toLowerCase())
-			.filter((value) => !!value)
-			.join(' ');
-	}
-
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
@@ -3531,31 +3534,11 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
+			return;
 		}
-		else {
-			this.AffiliateAccounts = []
-			this.$spinner.show()
-			this.$api.getAccountBytype('driver').subscribe((response: any) => {
-				if (response.success && response.data.length > 0) {
-					this.AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
-						return item
-					})
-					console.log('affiliate accounts', this.AffiliateAccounts)
-					this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
-					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-					//lose all affiliate vehicle and driver data on change of affiliate type
-					// for (let key in this.Form)
-					// {
-					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-					// 	{
-					// 		this.BookingForm.get(key).reset()
-					// 	}
-					// }
-				}
-				this.$spinner.hide()
-			})
-		}
+
+		this.AffiliateAccounts = []
+		this.loadAffiliates(false, { reset: true });
 	}
 
 	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate') {
@@ -3565,63 +3548,191 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 				this.Return_LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
+			return;
 		}
-		else {
-			this.Return_AffiliateAccounts = []
-			this.$spinner.show()
-			this.$api.getAccountBytype('driver').subscribe((response: any) => {
-				if (response.success && response.data.length > 0) {
-					this.Return_AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
-						return item
-					})
-					console.log('affiliate accounts', this.Return_AffiliateAccounts)
-					this.ReturnAffiliateAccounts_Original = [...this.Return_AffiliateAccounts]
-					//lose all affiliate vehicle and driver data on change of affiliate type
-					// for (let key in this.Form)
-					// {
-					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-					// 	{
-					// 		this.BookingForm.get(key).reset()
-					// 	}
-					// }
+
+		this.Return_AffiliateAccounts = []
+		this.loadAffiliates(true, { reset: true });
+	}
+
+	/**
+	 * Load a page of affiliates from the API.
+	 *
+	 * The list is searched, ranked by distance from the pickup and paged server
+	 * side. `reset` starts a new list; without it the next page is appended for
+	 * infinite scroll.
+	 */
+	private loadAffiliates(isReturn: boolean, opts: { reset?: boolean; term?: string } = {}) {
+		const state = isReturn ? this.returnAffiliateLookup : this.affiliateLookup;
+
+		if (state.loading) {
+			return;
+		}
+
+		if (opts.reset) {
+			state.page = 1;
+			state.items = [];
+			state.hasMore = false;
+			state.total = 0;
+			if (opts.term !== undefined) {
+				state.term = opts.term;
+			}
+		} else {
+			if (!state.hasMore) {
+				return;
+			}
+			state.page += 1;
+		}
+
+		const requestId = ++state.requestId;
+		state.loading = true;
+
+		const coords = this.getPickupCoords(isReturn);
+		state.ranked = !!coords;
+		const selectedId = this.BookingForm.get(isReturn ? 'return_affiliate_id' : 'affiliate_id')?.value;
+
+		const params: AffiliateLookupParams = {
+			search: state.term,
+			lat: coords?.lat ?? null,
+			lng: coords?.lng ?? null,
+			page: state.page,
+			per_page: this.affiliatePageSize,
+			// Keeps an already-selected affiliate in the payload even when it
+			// falls outside the current page or search term.
+			ids: selectedId ? [selectedId] : []
+		};
+
+		if (state.page === 1) {
+			this.$spinner.show();
+		}
+
+		this.$api.getAccountBytype('driver', params).subscribe({
+			next: (response: any) => {
+				// A slower earlier request must not overwrite a newer one.
+				if (requestId !== state.requestId) {
+					return;
 				}
-				this.$spinner.hide()
-			})
-		}
+
+				const { rows, meta } = readAffiliateLookupResponse(response);
+
+				const mapped = rows.map((item) => {
+					item.bindNameAffiliate = buildRankedAffiliateLabel(item);
+					return item;
+				});
+
+				if (state.page === 1) {
+					state.items = mapped;
+				} else {
+					const seen = new Set(state.items.map((existing) => existing.id));
+					state.items = state.items.concat(mapped.filter((item) => !seen.has(item.id)));
+				}
+
+				state.hasMore = meta ? meta.has_more : false;
+				state.total = meta ? meta.total : state.items.length;
+				state.loading = false;
+
+				if (isReturn) {
+					this.Return_AffiliateAccounts = state.items;
+				} else {
+					this.AffiliateAccounts = state.items;
+				}
+
+				this.$spinner.hide();
+			},
+			error: () => {
+				if (requestId === state.requestId) {
+					state.loading = false;
+					if (!opts.reset && state.page > 1) {
+						state.page -= 1;
+					}
+				}
+				this.$spinner.hide();
+			}
+		});
 	}
 
-	changeAffiliateAccount(event) {
-		console.log('in change aff acc', event)
-		this.AffiliateAccounts = this.AffiliateAccounts_Original.filter((item) =>
-			this.getAffiliateSearchText(item).includes((event.target.value || '').toLowerCase())
-		)
-		console.log('in change aff acc', this.AffiliateAccounts)
+	/**
+	 * Pickup coordinates for the given leg, or null when none are set yet.
+	 *
+	 * Airport pickups keep their coordinates in a different pair of controls
+	 * from address pickups, chosen by transfer type.
+	 */
+	getPickupCoords(isReturn: boolean = false): { lat: number; lng: number } | null {
+		const transferType = isReturn ? this.Form.return_transfer_type.value : this.Form.transfer_type.value;
+		const prefix = isReturn ? 'return_' : '';
 
-	}
+		const latControl = transferType?.includes('airport_')
+			? `${prefix}pickup_airport_latitude`
+			: `${prefix}pickup_latitude`;
+		const lngControl = transferType?.includes('airport_')
+			? `${prefix}pickup_airport_longitude`
+			: `${prefix}pickup_longitude`;
 
-	handleAffiliateSearch(event: { term?: string }) {
-		const term = (event?.term || '').toLowerCase().trim();
-		if (!term) {
-			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
-			return;
+		const lat = Number(this.BookingForm.get(latControl)?.value);
+		const lng = Number(this.BookingForm.get(lngControl)?.value);
+
+		if (!Number.isFinite(lat) || !Number.isFinite(lng) || (lat === 0 && lng === 0)) {
+			return null;
 		}
 
-		this.AffiliateAccounts = this.AffiliateAccounts_Original.filter((item) =>
-			this.getAffiliateSearchText(item).includes(term)
-		);
+		return { lat, lng };
 	}
 
-	handleReturnAffiliateSearch(event: { term?: string }) {
-		const term = (event?.term || '').toLowerCase().trim();
-		if (!term) {
-			this.Return_AffiliateAccounts = [...this.ReturnAffiliateAccounts_Original];
-			return;
+	/** ng-select `[typeahead]` - debounced, then re-queries the API. */
+	private initAffiliateSearchStream() {
+		const wire = (source: Subject<string>, isReturn: boolean) => {
+			source
+				.pipe(
+					debounceTime(300),
+					map((term: string) => (term || '').trim()),
+					distinctUntilChanged()
+				)
+				.subscribe((term: string) => this.loadAffiliates(isReturn, { reset: true, term }));
+		};
+
+		wire(this.affiliateTypeahead$, false);
+		wire(this.returnAffiliateTypeahead$, true);
+	}
+
+	/** ng-select `(scrollToEnd)` - pulls the next page. */
+	loadMoreAffiliates(isReturn: boolean = false) {
+		this.loadAffiliates(isReturn, {});
+	}
+
+	/** Distance/rank caption shown under each option. */
+	affiliateDistanceLabel(item: any): string {
+		return formatAffiliateDistance(item);
+	}
+
+	/** Whether this leg's list was ranked against a pickup. */
+	affiliateShowRank(isReturn: boolean = false): boolean {
+		return (isReturn ? this.returnAffiliateLookup : this.affiliateLookup).ranked;
+	}
+
+	/** Colour modifier for the rank badge. */
+	affiliateRankClass(item: any): string {
+		return affiliateRankModifier(item);
+	}
+
+	/** Badge text - the distance once ranked, otherwise the band name. */
+	affiliateRankBadgeText(item: any): string {
+		return affiliateRankBadge(item);
+	}
+
+	/** Full band name, used as the badge's tooltip. */
+	affiliateRankTitle(item: any): string {
+		return formatAffiliateDistance(item);
+	}
+
+	/** "Showing 50 of 190" hint for the dropdown footer. */
+	affiliateLookupHint(isReturn: boolean = false): string {
+		const state = isReturn ? this.returnAffiliateLookup : this.affiliateLookup;
+
+		if (!state.total || state.items.length >= state.total) {
+			return '';
 		}
 
-		this.Return_AffiliateAccounts = this.ReturnAffiliateAccounts_Original.filter((item) =>
-			this.getAffiliateSearchText(item).includes(term)
-		);
+		return `Showing ${state.items.length} of ${state.total} — scroll for more`;
 	}
 	// custom search function
 	airportSearchFunction(term: string, item: any) {
@@ -7354,14 +7465,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		} else {
 			return `${cancellationHours} hours`;
 		}
-	}
-
-	onSearchAffiliateId(term, item) {
-		console.log("term", term, "item", item)
-		return this.getAffiliateSearchText(item).includes((term || '').toLowerCase())
-
-		//   console.log("in search",event)
-		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))
 	}
 
 	onSearchLooseAffiliateId(term, item) {

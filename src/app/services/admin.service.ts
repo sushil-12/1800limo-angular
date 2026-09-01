@@ -7,6 +7,7 @@ import * as moment from 'moment';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AmenitiesService } from './amenities.service';
+import { AffiliateLookupParams, buildAffiliateLookupParams } from '../utils/affiliate-lookup';
 
 @Injectable({
 	providedIn: 'root'
@@ -918,8 +919,10 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'amenities-languages-dresses');
 	}
 
-	getAccountBytype(accountType) {
-		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType);
+	getAccountBytype(accountType, params?: AffiliateLookupParams) {
+		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType, {
+			params: buildAffiliateLookupParams(params)
+		});
 	}
 
 	chooseUser(id: number, accountType: string) {

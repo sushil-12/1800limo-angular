@@ -2597,29 +2597,15 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		})
 	}
 
+	/**
+	 * No-op: this screen has no affiliate picker.
+	 *
+	 * It used to load the full affiliate list into `AffiliateAccounts`, but
+	 * nothing in this template ever bound to it, so the request was pure
+	 * overhead on a lookup that scans every affiliate.
+	 */
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
-		if (affiliate_type == 'loose_affiliate') {
-			return
-		}
-		else {
-			this.AffiliateAccounts = []
-			this.$spinner.show()
-			this.$api.getAccountBytype('driver').subscribe((response: any) => {
-				if (response.success && response.data.length > 0) {
-					this.AffiliateAccounts = response.data
-
-					//lose all affiliate vehicle and driver data on change of affiliate type
-					// for (let key in this.Form)
-					// {
-					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-					// 	{
-					// 		this.BookingForm.get(key).reset()
-					// 	}
-					// }
-				}
-				this.$spinner.hide()
-			})
-		}
+		return
 	}
 
 

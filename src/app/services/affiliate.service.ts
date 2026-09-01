@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as moment from 'moment';
+import { AffiliateLookupParams, buildAffiliateLookupParams } from '../utils/affiliate-lookup';
 
 @Injectable({
 	providedIn: 'root'
@@ -417,8 +418,10 @@ export class AffiliateService {
 		return this.httpClient.get(this.environmentServerUrl + 'amenities-languages-dresses');
 
 	}
-	getAccountBytype(accountType) {
-		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType);
+	getAccountBytype(accountType, params?: AffiliateLookupParams) {
+		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType, {
+			params: buildAffiliateLookupParams(params)
+		});
 	}
 	getBookingDataForEdit(id) {
 		return this.httpClient.get(this.serverUrl + 'get-reservation/' + id);
