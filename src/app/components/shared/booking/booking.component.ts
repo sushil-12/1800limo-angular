@@ -4841,11 +4841,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.loadAffiliates(isReturn, {});
 	}
 
-	/** Distance/rank caption shown under each option. */
-	affiliateDistanceLabel(item: any): string {
-		return formatAffiliateDistance(item);
-	}
-
 	/** Whether this leg's list was ranked against a pickup. */
 	affiliateShowRank(isReturn: boolean = false): boolean {
 		return (isReturn ? this.returnAffiliateLookup : this.affiliateLookup).ranked;
@@ -5465,7 +5460,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isAffiliateMode) {
 			this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then(handleResponse);
 		} else {
-			this.$api.adminAffiliateVehicleList(affiliate_id, false).then(handleResponse);
+			this.$api.adminAffiliateVehicleList(affiliate_id, true).then(handleResponse);
 		}
 	}
 

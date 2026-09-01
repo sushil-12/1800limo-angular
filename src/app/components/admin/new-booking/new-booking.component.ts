@@ -3699,11 +3699,6 @@ export class NewBookingComponent implements OnInit, OnDestroy {
 		this.loadAffiliates(isReturn, {});
 	}
 
-	/** Distance/rank caption shown under each option. */
-	affiliateDistanceLabel(item: any): string {
-		return formatAffiliateDistance(item);
-	}
-
 	/** Whether this leg's list was ranked against a pickup. */
 	affiliateShowRank(isReturn: boolean = false): boolean {
 		return (isReturn ? this.returnAffiliateLookup : this.affiliateLookup).ranked;

@@ -246,7 +246,7 @@ export function affiliateStepBadge(item: RankedAffiliate): string {
 		return '';
 	}
 
-	const total = item?.onboarding_total_steps;
+	const total = 6;
 
 	return total ? `Step ${step}/${total}` : `Step ${step}`;
 }
@@ -298,5 +298,8 @@ export function affiliateRankBadge(item: RankedAffiliate): string {
 		return item.rank_label;
 	}
 
-	return `${item.distance_miles} miles`;
+	// The band name stays in the text rather than being left to the pill
+	// colour alone: colour on its own is not perceivable for every reader, and
+	// the tooltip that also carries it is unreachable on touch.
+	return `${item.rank_label} · ${item.distance_miles} miles`;
 }
