@@ -9030,17 +9030,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		this.BookingForm.get('vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 			if (value) {
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value || item.makeId == value);
+				}
 				let name = '';
-				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+				if (this.Form.affiliate_type.value == 'affiliate' || (this.Form.affiliate_type.value == 'in_progress_affiliate' && this.selectedPendingAffiliate?.has_vehicle)) {
 					const match = (this.vehicleMake_arr || []).find((item: any) => item.make_id == value || item.id == value);
 					if (match) {
 						name = match.make || match.name || '';
 					}
 				}
 				if (!name && this.BigData) {
-					if (this.BigData_COPY?.vehicleModels) {
-						this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value);
-					}
 					const match = (this.BigData['vehicleMakes'] || []).find((item: any) => item.id == value);
 					if (match) {
 						name = match.name || match.make || '';
@@ -9048,6 +9048,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 				this.SetFormValue('vehicle_make_name', name);
 			} else {
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels;
+				}
 				this.BookingForm.get('vehicle_make_name').setValue('');
 				this.BookingForm.updateValueAndValidity();
 			}
@@ -9055,17 +9058,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		this.BookingForm.get('return_vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 			if (value) {
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value || item.makeId == value);
+				}
 				let name = '';
-				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+				if (this.Form.return_affiliate_type.value == 'affiliate' || (this.Form.return_affiliate_type.value == 'in_progress_affiliate' && this.selectedReturnPendingAffiliate?.has_vehicle)) {
 					const match = (this.return_vehicleMake_arr || []).find((item: any) => item.make_id == value || item.id == value);
 					if (match) {
 						name = match.make || match.name || '';
 					}
 				}
 				if (!name && this.BigData) {
-					if (this.BigData_COPY?.vehicleModels) {
-						this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value);
-					}
 					const match = (this.BigData['vehicleMakes'] || []).find((item: any) => item.id == value);
 					if (match) {
 						name = match.name || match.make || '';
@@ -9073,6 +9076,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 				this.SetFormValue('return_vehicle_make_name', name);
 			} else {
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels;
+				}
 				this.BookingForm.get('return_vehicle_make_name').setValue('');
 				this.BookingForm.updateValueAndValidity();
 			}
