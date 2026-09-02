@@ -2316,10 +2316,12 @@
 				<div class="row px-4" *ngIf="Form.affiliate_type.value == 'in_progress_affiliate'">
 					<!-- Vehicle Type -->
 					<div id="vehicle-type" [ngClass]="Form.vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+						<ng-select appearance="outline"
+							[items]="selectedPendingAffiliate?.has_vehicle ? vehicleType_arr : BigData?.vehicleCategories"
+							bindLabel="name" bindValue="id"
 							placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="vehicle_type"
+							[disabled]="selectedPendingAffiliate?.has_vehicle"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
 							style="height:66px;">
 						</ng-select>
@@ -2334,7 +2336,8 @@
 						<!-- Make - Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
-							placeholder="Select Make" formControlName="vehicle_make">
+							placeholder="Select Make" formControlName="vehicle_make"
+							[disabled]="selectedPendingAffiliate?.has_vehicle">
 						</ng-select>
 					</div>
 
@@ -2343,7 +2346,8 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="vehicle_model">
+							formControlName="vehicle_model"
+							[disabled]="selectedPendingAffiliate?.has_vehicle">
 						</ng-select>
 					</div>
 
@@ -2352,7 +2356,8 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="vehicle_year">
+							formControlName="vehicle_year"
+							[disabled]="selectedPendingAffiliate?.has_vehicle">
 						</ng-select>
 					</div>
 
@@ -2361,7 +2366,8 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							formControlName="vehicle_color">
+							formControlName="vehicle_color"
+							[disabled]="selectedPendingAffiliate?.has_vehicle">
 						</ng-select>
 					</div>
 
@@ -2372,7 +2378,8 @@
 								License Plate #
 							</mat-label>
 							<input type="text" matInput (focus)="$event.target.select()"
-								formControlName="vehicle_license_plate" placeholder="License Plate #">
+								formControlName="vehicle_license_plate" placeholder="License Plate #"
+								[readonly]="selectedPendingAffiliate?.has_vehicle">
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -2391,7 +2398,8 @@
 								Number of Seats
 							</mat-label>
 							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()"
+								[readonly]="selectedPendingAffiliate?.has_vehicle" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -4189,10 +4197,12 @@
 						<div class="row px-4" *ngIf="Form.return_affiliate_type.value == 'in_progress_affiliate'">
 							<!-- Vehicle Type -->
 							<div id="vehicle-type" [ngClass]="Form.return_vehicle_type.value ? 'col-md-4 mb-3' : 'col-md-12 mb-3'">
-								<!-- Ng-Select -->
-								<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+								<ng-select appearance="outline"
+									[items]="selectedReturnPendingAffiliate?.has_vehicle ? return_vehicleType_arr : BigData?.vehicleCategories"
+									bindLabel="name" bindValue="id"
 									placeholder="Select Vehicle Type" dropdownPosition="bottom" [markFirst]="true"
 									[virtualScroll]="true" formControlName="return_vehicle_type"
+									[disabled]="selectedReturnPendingAffiliate?.has_vehicle"
 									[ngClass]="{ 'border-red': (submitBookingForm && Form.return_vehicle_type.invalid) }"
 									style="height:66px;">
 								</ng-select>
@@ -4207,7 +4217,8 @@
 								<!-- Make - Ng-Select -->
 								<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
 									[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
-									placeholder="Select Make" formControlName="return_vehicle_make">
+									placeholder="Select Make" formControlName="return_vehicle_make"
+									[disabled]="selectedReturnPendingAffiliate?.has_vehicle">
 								</ng-select>
 							</div>
 
@@ -4216,7 +4227,8 @@
 								<!-- Ng-Select -->
 								<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 									placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-									formControlName="return_vehicle_model">
+									formControlName="return_vehicle_model"
+									[disabled]="selectedReturnPendingAffiliate?.has_vehicle">
 								</ng-select>
 							</div>
 
@@ -4225,7 +4237,8 @@
 								<!-- Ng-Select -->
 								<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 									placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-									formControlName="return_vehicle_year">
+									formControlName="return_vehicle_year"
+									[disabled]="selectedReturnPendingAffiliate?.has_vehicle">
 								</ng-select>
 							</div>
 
@@ -4234,7 +4247,8 @@
 								<!-- Ng-Select -->
 								<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 									placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-									formControlName="return_vehicle_color">
+									formControlName="return_vehicle_color"
+									[disabled]="selectedReturnPendingAffiliate?.has_vehicle">
 								</ng-select>
 							</div>
 
@@ -4245,7 +4259,8 @@
 										License Plate #
 									</mat-label>
 									<input type="text" matInput (focus)="$event.target.select()"
-										formControlName="return_vehicle_license_plate" placeholder="License Plate #">
+										formControlName="return_vehicle_license_plate" placeholder="License Plate #"
+										[readonly]="selectedReturnPendingAffiliate?.has_vehicle">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -4265,7 +4280,8 @@
 										Number of Seats
 									</mat-label>
 									<input type="text" matInput formControlName="return_vehicle_seats" placeholder="Number of Seats"
-										(focus)="$event.target.select()" />
+										(focus)="$event.target.select()"
+										[readonly]="selectedReturnPendingAffiliate?.has_vehicle" />
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"

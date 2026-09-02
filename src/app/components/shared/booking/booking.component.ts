@@ -5425,7 +5425,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
-				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+				this.VehicleList.map((item: any) => {
+					item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`;
+					item['name'] = item['formatted_name'] || item.vehicleType;
+					item['id'] = item.vehicleType_id ?? item.id ?? item.ID;
+				});
 				// autofill data if isRatesCompleted:true
 				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
 				for (let i = 0; i < this.VehicleList.length; i++) {
@@ -5524,7 +5528,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.return_VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
-				this.return_VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+				this.return_VehicleList.map((item: any) => {
+					item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`;
+					item['name'] = item['formatted_name'] || item.vehicleType;
+					item['id'] = item.vehicleType_id ?? item.id ?? item.ID;
+				});
 				// autofill data if isRatesCompleted:true
 				this.return_vehicleType_arr = this.return_VehicleList = this.return_vehicleMake_arr = this.return_VehicleList = this.return_vehicleModal_arr = this.return_VehicleList = this.return_vehicleYear_arr = this.return_VehicleList = this.return_vehicleColor_arr = this.return_VehicleList
 				for (let i = 0; i < this.return_VehicleList.length; i++) {
