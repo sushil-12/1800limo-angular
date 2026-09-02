@@ -75,7 +75,7 @@ export const customerFaqData: FAQ[] = [
     {
         category: 'fleet',
         question: "What is a private car?",
-        answer: "A private car ride means the vehicle is reserved exclusively for you and your party. You will not share the vehicle with other passengers, and there will be no scheduled stops to pick up or drop off other riders. You can travel directly to your destination with the privacy and convenience of a dedicated vehicle."
+        answer: "A private car ride is reserved exclusively for you and your party. You will not share the vehicle with other passengers, and there will be no scheduled stops to pick up or drop off other riders. You can travel directly to your destination with the privacy and convenience of a dedicated vehicle."
     },
     {
         category: 'fleet',
