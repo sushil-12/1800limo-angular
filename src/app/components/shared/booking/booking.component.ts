@@ -7306,10 +7306,64 @@ export class BookingComponent implements OnInit, OnDestroy {
 	 * while `vehicle_type` (the category id) is set. Fall back to the BigData label so
 	 * the preview's Vehicle Type row still renders.
 	 */
-	private resolveVehicleTypeName(name: any, typeId: any): string {
-		if (name) return name
-		const match = (this.BigData?.vehicleCategories || []).find((c: any) => c?.id == typeId)
-		return match?.name || ''
+	private resolveVehicleTypeName(name: any, typeId: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name
+		if (!typeId) return name || ''
+		const matchBig = (this.BigData?.vehicleCategories || []).find((c: any) => c?.id == typeId)
+		if (matchBig?.name) return matchBig.name
+		const arr = isReturn ? this.return_vehicleType_arr : this.vehicleType_arr
+		const matchArr = (arr || []).find((c: any) => c?.vehicleType_id == typeId || c?.id == typeId)
+		return matchArr?.vehicleType || matchArr?.name || name || ''
+	}
+
+	private resolveVehicleMakeName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleMake_arr : this.vehicleMake_arr;
+		const matchArr = (arr || []).find((item: any) => item.make_id == val || item.id == val);
+		if (matchArr?.make || matchArr?.name) return matchArr.make || matchArr.name;
+		const matchBig = (this.BigData?.vehicleMakes || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.make) return matchBig.name || matchBig.make;
+		if (isNaN(Number(val))) return val;
+		return name || '';
+	}
+
+	private resolveVehicleModelName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleModal_arr : this.vehicleModal_arr;
+		const matchArr = (arr || []).find((item: any) => item.model_id == val || item.id == val);
+		if (matchArr?.model || matchArr?.name) return matchArr.model || matchArr.name;
+		const matchBig = (this.BigData?.vehicleModels || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.model) return matchBig.name || matchBig.model;
+		if (isNaN(Number(val))) return val;
+		return name || '';
+	}
+
+	private resolveVehicleYearName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleYear_arr : this.vehicleYear_arr;
+		const matchArr = (arr || []).find((item: any) => item.year_id == val || item.id == val);
+		if (matchArr?.year || matchArr?.name) return matchArr.year || matchArr.name;
+		const matchBig = (this.BigData?.vehicleYears || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.year) return matchBig.name || matchBig.year;
+		if (typeof val === 'number' && val > 1900 && val < 2100) return String(val);
+		if (typeof val === 'string' && !isNaN(Number(val)) && Number(val) > 1900 && Number(val) < 2100) return val;
+		if (isNaN(Number(val))) return val;
+		return name || '';
+	}
+
+	private resolveVehicleColorName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleColor_arr : this.vehicleColor_arr;
+		const matchArr = (arr || []).find((item: any) => item.color_id == val || item.id == val);
+		if (matchArr?.color || matchArr?.name) return matchArr.color || matchArr.name;
+		const matchBig = (this.BigData?.vehicleColors || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.color) return matchBig.name || matchBig.color;
+		if (isNaN(Number(val))) return val;
+		return name || '';
 	}
 
 	private buildBookingPreviewPayload(): any {
@@ -7373,11 +7427,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			luggage_count: v.luggage_count,
 
 			// ── Vehicle ──
-			vehicle_type_name: this.resolveVehicleTypeName(v.vehicle_type_name, v.vehicle_type),
-			vehicle_make: v.vehicle_make_name || v.vehicle_make,
-			vehicle_model: v.vehicle_model_name || v.vehicle_model,
-			vehicle_year: v.vehicle_year_name || v.vehicle_year,
-			vehicle_color: v.vehicle_color_name || v.vehicle_color,
+			vehicle_type_name: this.resolveVehicleTypeName(v.vehicle_type_name, v.vehicle_type, false),
+			vehicle_make: this.resolveVehicleMakeName(v.vehicle_make_name, v.vehicle_make, false),
+			vehicle_model: this.resolveVehicleModelName(v.vehicle_model_name, v.vehicle_model, false),
+			vehicle_year: this.resolveVehicleYearName(v.vehicle_year_name, v.vehicle_year, false),
+			vehicle_color: this.resolveVehicleColorName(v.vehicle_color_name, v.vehicle_color, false),
 
 			// ── Route ──
 			pickup: v.pickup,
@@ -7444,8 +7498,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_pickup_airport_name: isRoundTrip
 				? this.getPreviewAirportDisplay(v.return_pickup_airport_name, v.return_pickup_airport_option)
 				: '',
-			return_pickup_airport_latitude: isRoundTrip ? v.return_pickup_airport_latitude : '',
-			return_pickup_airport_longitude: isRoundTrip ? v.return_pickup_airport_longitude : '',
+			return_pickup_latitude_airport: isRoundTrip ? v.return_pickup_airport_latitude : '',
+			return_pickup_longitude_airport: isRoundTrip ? v.return_pickup_airport_longitude : '',
 			return_pickup_airline_name: isRoundTrip ? v.return_pickup_airline_name : '',
 			return_pickup_flight: isRoundTrip ? v.return_pickup_flight : '',
 			return_extra_stops: isRoundTrip ? mapStops(v.return_extra_stops) : [],
@@ -7455,8 +7509,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_dropoff_airport_name: isRoundTrip
 				? this.getPreviewAirportDisplay(v.return_dropoff_airport_name, v.return_dropoff_airport_option)
 				: '',
-			return_dropoff_airport_latitude: isRoundTrip ? v.return_dropoff_airport_latitude : '',
-			return_dropoff_airport_longitude: isRoundTrip ? v.return_dropoff_airport_longitude : '',
+			return_dropoff_latitude_airport: isRoundTrip ? v.return_dropoff_airport_latitude : '',
+			return_dropoff_longitude_airport: isRoundTrip ? v.return_dropoff_airport_longitude : '',
 			return_dropoff_airline_name: isRoundTrip ? v.return_dropoff_airline_name : '',
 			return_dropoff_flight: isRoundTrip ? v.return_dropoff_flight : '',
 			return_cruise_port: isRoundTrip ? v.return_cruise_port : '',
@@ -7468,11 +7522,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_distance: isRoundTrip ? this.return_distance : '',
 			return_duration: isRoundTrip ? v.returnJourneyTime : '',
 
-			return_vehicle_type_name: isRoundTrip ? this.resolveVehicleTypeName(v.return_vehicle_type_name, v.return_vehicle_type) : '',
-			return_vehicle_make: isRoundTrip ? (v.return_vehicle_make_name || v.return_vehicle_make) : '',
-			return_vehicle_model: isRoundTrip ? (v.return_vehicle_model_name || v.return_vehicle_model) : '',
-			return_vehicle_year: isRoundTrip ? (v.return_vehicle_year_name || v.return_vehicle_year) : '',
-			return_vehicle_color: isRoundTrip ? (v.return_vehicle_color_name || v.return_vehicle_color) : '',
+			return_vehicle_type_name: isRoundTrip ? this.resolveVehicleTypeName(v.return_vehicle_type_name, v.return_vehicle_type, true) : '',
+			return_vehicle_make: isRoundTrip ? this.resolveVehicleMakeName(v.return_vehicle_make_name, v.return_vehicle_make, true) : '',
+			return_vehicle_model: isRoundTrip ? this.resolveVehicleModelName(v.return_vehicle_model_name, v.return_vehicle_model, true) : '',
+			return_vehicle_year: isRoundTrip ? this.resolveVehicleYearName(v.return_vehicle_year_name, v.return_vehicle_year, true) : '',
+			return_vehicle_color: isRoundTrip ? this.resolveVehicleColorName(v.return_vehicle_color_name, v.return_vehicle_color, true) : '',
 
 			return_driver_name: isRoundTrip ? v.return_driver_name : '',
 			return_driver_email: isRoundTrip ? v.return_driver_email : '',
@@ -8190,6 +8244,20 @@ export class BookingComponent implements OnInit, OnDestroy {
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
 					return_affiliate_id: this.BookingForm?.get('affiliate_id')?.value
 				})
+				if (this.Form.affiliate_type.value === 'in_progress_affiliate') {
+					this.BookingForm.patchValue({
+						return_affiliate_type: 'in_progress_affiliate'
+					});
+					const firstAffId = this.BookingForm?.get('affiliate_id')?.value;
+					if (firstAffId) {
+						this.BookingForm.patchValue({
+							return_affiliate_id: firstAffId
+						});
+						if (this.selectedPendingAffiliate) {
+							this.chooseReturnPendingAffiliate(this.selectedPendingAffiliate);
+						}
+					}
+				}
 				if (this.booking_created_from == 'subscriber') {
 					this.BookingForm.patchValue({
 						return_susbcriber_name: this.BookingForm?.get('susbcriber_name')?.value,
@@ -8726,6 +8794,20 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (value === 'affiliate') {
 					this.chooseAffiliate()
 				}
+				if (value === 'in_progress_affiliate' && this.Form.service_type.value === 'round_trip') {
+					this.BookingForm.patchValue({
+						return_affiliate_type: 'in_progress_affiliate'
+					});
+					const firstAffId = this.BookingForm.get('affiliate_id')?.value;
+					if (firstAffId) {
+						this.BookingForm.patchValue({
+							return_affiliate_id: firstAffId
+						});
+						if (this.selectedPendingAffiliate) {
+							this.chooseReturnPendingAffiliate(this.selectedPendingAffiliate);
+						}
+					}
+				}
 			}
 		})
 
@@ -8807,6 +8889,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (this.Form.affiliate_type.value === 'in_progress_affiliate') {
 					const pendingAff = this.AffiliateAccounts?.find((a: any) => a.id == value) || null;
 					this.choosePendingAffiliate(pendingAff);
+					if (this.BookingForm.get('service_type').value == 'round_trip') {
+						if (this.Form.return_affiliate_type.value !== 'in_progress_affiliate') {
+							this.BookingForm.patchValue({
+								return_affiliate_type: 'in_progress_affiliate'
+							});
+						}
+						this.BookingForm.patchValue({
+							return_affiliate_id: value
+						});
+						if (pendingAff || this.selectedPendingAffiliate) {
+							this.chooseReturnPendingAffiliate(pendingAff || this.selectedPendingAffiliate);
+						}
+					}
 				} else {
 					this.chooseAffiliate();
 					this.fetchAffiliateInformation(value);
@@ -8855,7 +8950,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// })
 
 		this.BookingForm.get('vehicle_type').valueChanges.pipe(distinctUntilChanged(),takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+			if (this.Form.affiliate_type.value == 'affiliate') {
 				if (value) {
 					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
 				}
@@ -8874,7 +8969,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					let name = (this.BigData['vehicleCategories'] || []).find(item => item.id == value)?.['name'] || ''
 					this.SetFormValue('vehicle_type_name', name);
 					this.BookingForm.get('vehicle_make').setValue('')
 					this.BookingForm.get('vehicle_make_name').setValue('')
@@ -8910,7 +9005,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					let name = (this.BigData['vehicleCategories'] || []).find(item => item.id == value)?.['name'] || ''
 					this.SetFormValue('return_vehicle_type_name', name);
 					this.BookingForm.get('return_vehicle_make').setValue('')
 					this.BookingForm.get('return_vehicle_make_name').setValue('')
@@ -8926,124 +9021,190 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleMake_arr || []).find((item: any) => item.make_id == value || item.id == value);
+					if (match) {
+						name = match.make || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					if (this.BigData_COPY?.vehicleModels) {
+						this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value);
+					}
+					const match = (this.BigData['vehicleMakes'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.make || '';
+					}
+				}
+				this.SetFormValue('vehicle_make_name', name);
 			} else {
-				if (value && this.BigData) {
-					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
-					this.SetFormValue('vehicle_make_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_make_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('vehicle_make_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleMake_arr || []).find((item: any) => item.make_id == value || item.id == value);
+					if (match) {
+						name = match.make || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					if (this.BigData_COPY?.vehicleModels) {
+						this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value);
+					}
+					const match = (this.BigData['vehicleMakes'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.make || '';
+					}
+				}
+				this.SetFormValue('return_vehicle_make_name', name);
 			} else {
-				if (value && this.BigData) {
-					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_model', this.BigData?.vehicleModels[0]['id'])
-					this.SetFormValue('return_vehicle_make_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_make_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('return_vehicle_make_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('vehicle_model').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleModal_arr || []).find((item: any) => item.model_id == value || item.id == value);
+					if (match) {
+						name = match.model || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleModels'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.model || '';
+					}
+				}
+				this.SetFormValue('vehicle_model_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_model_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_model_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('vehicle_model_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_model').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleModal_arr || []).find((item: any) => item.model_id == value || item.id == value);
+					if (match) {
+						name = match.model || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleModels'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.model || '';
+					}
+				}
+				this.SetFormValue('return_vehicle_model_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_model_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_model_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('return_vehicle_model_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('vehicle_year').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleYear_arr || []).find((item: any) => item.year_id == value || item.id == value);
+					if (match) {
+						name = match.year || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleYears'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.year || '';
+					}
+				}
+				if (!name && !isNaN(Number(value)) && Number(value) > 1900 && Number(value) < 2100) {
+					name = String(value);
+				}
+				this.SetFormValue('vehicle_year_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_year_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_year_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('vehicle_year_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_year').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleYear_arr || []).find((item: any) => item.year_id == value || item.id == value);
+					if (match) {
+						name = match.year || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleYears'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.year || '';
+					}
+				}
+				if (!name && !isNaN(Number(value)) && Number(value) > 1900 && Number(value) < 2100) {
+					name = String(value);
+				}
+				this.SetFormValue('return_vehicle_year_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_year_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_year_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('return_vehicle_year_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('vehicle_color').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleColor_arr || []).find((item: any) => item.color_id == value || item.id == value);
+					if (match) {
+						name = match.color || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleColors'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.color || '';
+					}
+				}
+				this.SetFormValue('vehicle_color_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_color_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_color_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-
-				}
+				this.BookingForm.get('vehicle_color_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_color').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleColor_arr || []).find((item: any) => item.color_id == value || item.id == value);
+					if (match) {
+						name = match.color || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleColors'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.color || '';
+					}
+				}
+				this.SetFormValue('return_vehicle_color_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_color_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_color_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-
-				}
+				this.BookingForm.get('return_vehicle_color_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
@@ -9387,6 +9548,25 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.return_DriverList = [];
 
 		this.BookingForm.updateValueAndValidity();
+
+		if (return_affiliate_type === 'in_progress_affiliate' && this.Form.affiliate_type.value === 'in_progress_affiliate') {
+			const firstAffId = this.BookingForm.get('affiliate_id')?.value;
+			if (firstAffId) {
+				this.BookingForm.patchValue({
+					return_affiliate_id: firstAffId
+				});
+				if (this.selectedPendingAffiliate) {
+					this.chooseReturnPendingAffiliate(this.selectedPendingAffiliate);
+				}
+			}
+		} else if (return_affiliate_type === 'affiliate' && this.Form.affiliate_type.value === 'affiliate') {
+			const firstAffId = this.BookingForm.get('affiliate_id')?.value;
+			if (firstAffId) {
+				this.BookingForm.patchValue({
+					return_affiliate_id: firstAffId
+				});
+			}
+		}
 	}
 
 	RateFormValue(data: any) {
