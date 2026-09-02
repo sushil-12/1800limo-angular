@@ -75,7 +75,7 @@ export const customerFaqData: FAQ[] = [
     {
         category: 'fleet',
         question: "What is a private car?",
-        answer: "A share ride is when you share a ride with a stranger, like in airplane, boat or rail. Multiple stops are scheduled along the same route. We normally only allow up to three stops total for most vehicles. You will be notified if a share rider cancels and if only a private car is available. All taxes and tolls will be split by all parties."
+        answer: "A private car ride means the vehicle is reserved exclusively for you and your party. You will not share the vehicle with other passengers, and there will be no scheduled stops to pick up or drop off other riders. You can travel directly to your destination with the privacy and convenience of a dedicated vehicle."
     },
     {
         category: 'fleet',
