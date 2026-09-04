@@ -1192,6 +1192,45 @@ export class BookingComponent implements OnInit, OnDestroy {
 		tryAttach(attempts);
 	}
 
+	private resolveCountryFromAffiliate(affiliate: any): string {
+		if (!affiliate) return '';
+
+		// 1. Check explicit country code properties
+		const explicitCountry = affiliate.driver_phone_country || affiliate.phone_country || affiliate.country || affiliate.cell_country || affiliate.driver_country || affiliate.PhoneCountry || affiliate.phoneCountry || affiliate.mobileCountry;
+		if (explicitCountry && typeof explicitCountry === 'string') {
+			return explicitCountry.toLowerCase();
+		}
+
+		// 2. Check ISD / dial code against intlTelInputGlobals country data
+		const rawIsd = (affiliate.driver_phone_isd || affiliate.driver_isd || affiliate.phone_isd || affiliate.isd || affiliate.cell_isd || affiliate.CellIsd || '').toString();
+		const cleanIsd = rawIsd.replace(/[^0-9]/g, '');
+		if (cleanIsd) {
+			const countryData = (window as any).intlTelInputGlobals?.getCountryData?.();
+			if (countryData && Array.isArray(countryData)) {
+				const match = countryData.find((c: any) => c.dialCode === cleanIsd);
+				if (match?.iso2) {
+					return match.iso2.toLowerCase();
+				}
+			}
+		}
+
+		// 3. Check if phone number includes international dial code starting with +
+		const phone = (affiliate.driver_phone || affiliate.phone || affiliate.cell || affiliate.driver_cell || '').toString().trim();
+		if (phone.startsWith('+')) {
+			const countryData = (window as any).intlTelInputGlobals?.getCountryData?.();
+			if (countryData && Array.isArray(countryData)) {
+				const sorted = [...countryData].sort((a: any, b: any) => b.dialCode.length - a.dialCode.length);
+				const cleanPhone = phone.replace(/[^0-9]/g, '');
+				const match = sorted.find((c: any) => cleanPhone.startsWith(c.dialCode));
+				if (match?.iso2) {
+					return match.iso2.toLowerCase();
+				}
+			}
+		}
+
+		return '';
+	}
+
 	initphonefield() {
 
 		let countryCode = 'auto';
@@ -1239,8 +1278,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 			const input = this.driver_cellInput || this.loose_driver_cellInput;
 			const existing = (window as any).intlTelInputGlobals?.getInstance(input.nativeElement);
 			if (existing) existing.destroy();
-			const driverCountry = getInitCountry('driver_cell_country');
+			let driverCountry = getInitCountry('driver_cell_country');
+			if (this.Form.affiliate_type.value === 'in_progress_affiliate' && this.selectedPendingAffiliate) {
+				const affCountry = this.resolveCountryFromAffiliate(this.selectedPendingAffiliate);
+				if (affCountry) {
+					driverCountry = affCountry;
+				}
+			}
 			this.driverCellTelInput = intlTelInput(input.nativeElement, this.commonServices.getTelInputOptions(driverCountry));
+			if (driverCountry && driverCountry !== 'auto') {
+				this.driverCellTelInput.setCountry(driverCountry);
+			}
 
 			this.addCustomCountrySearch(input.nativeElement);
 			this.bindCountryChange(input.nativeElement, () => {
@@ -1254,8 +1302,17 @@ export class BookingComponent implements OnInit, OnDestroy {
 			const input = this.return_driver_cellInput || this.return_loose_driver_cellInput;
 			const existing = (window as any).intlTelInputGlobals?.getInstance(input.nativeElement);
 			if (existing) existing.destroy();
-			const returnDriverCountry = getInitCountry('return_driver_cell_country');
+			let returnDriverCountry = getInitCountry('return_driver_cell_country');
+			if (this.Form.return_affiliate_type.value === 'in_progress_affiliate' && this.selectedReturnPendingAffiliate) {
+				const affCountry = this.resolveCountryFromAffiliate(this.selectedReturnPendingAffiliate);
+				if (affCountry) {
+					returnDriverCountry = affCountry;
+				}
+			}
 			this.returnDriverCellTelInput = intlTelInput(input.nativeElement, this.commonServices.getTelInputOptions(returnDriverCountry));
+			if (returnDriverCountry && returnDriverCountry !== 'auto') {
+				this.returnDriverCellTelInput.setCountry(returnDriverCountry);
+			}
 
 			this.addCustomCountrySearch(input.nativeElement);
 			this.bindCountryChange(input.nativeElement, () => {
@@ -2934,6 +2991,27 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.SetFormValue('return_affiliate_type', 'in_progress_affiliate')
 			}
 
+			const isOutboundNoVehicle = this.isAffiliateNoVehicle(
+				editing_data.affiliate_type,
+				editing_data.is_pending_affiliate,
+				editing_data.vehicle_id
+			);
+			const isReturnNoVehicle = this.isAffiliateNoVehicle(
+				editing_data.return_affiliate_type || editing_data.affiliate_type,
+				editing_data.return_is_pending_affiliate ?? editing_data.is_pending_affiliate,
+				editing_data.return_vehicle_id
+			);
+			const outboundVehicleFields = [
+				'vehicle_type', 'vehicle_type_name', 'vehicle_make', 'vehicle_make_name',
+				'vehicle_model', 'vehicle_model_name', 'vehicle_year', 'vehicle_year_name',
+				'vehicle_color', 'vehicle_color_name', 'vehicle_license_plate', 'vehicle_seats', 'vehicle_id'
+			];
+			const returnVehicleFields = [
+				'return_vehicle_type', 'return_vehicle_type_name', 'return_vehicle_make', 'return_vehicle_make_name',
+				'return_vehicle_model', 'return_vehicle_model_name', 'return_vehicle_year', 'return_vehicle_year_name',
+				'return_vehicle_color', 'return_vehicle_color_name', 'return_vehicle_license_plate', 'return_vehicle_seats', 'return_vehicle_id'
+			];
+
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses') || item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
@@ -2955,6 +3033,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 					// flag — don't let the API's raw affiliate_type ('affiliate') overwrite it.
 					if (isPendingAffiliate && item == 'affiliate_type') continue;
 					if (isReturnPendingAffiliate && item == 'return_affiliate_type') continue;
+					if (isOutboundNoVehicle && outboundVehicleFields.includes(item)) continue;
+					if (isReturnNoVehicle && returnVehicleFields.includes(item)) continue;
 
 					if (item === 'travel_client_id') {
 						console.log('[DEBUG edit-load] loop is about to SetFormValue travel_client_id ->', editing_data[item]);
@@ -2967,6 +3047,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			}
 			console.log('[DEBUG edit-load] after loop, travel_client_id control value:', this.BookingForm.get('travel_client_id')?.value);
+
+			if (isOutboundNoVehicle) {
+				this.clearVehiclePreferences(false);
+			}
+			if (isReturnNoVehicle) {
+				this.clearVehiclePreferences(true);
+			}
+
 			// Safety net: affiliate_type for pending-driver bookings is resolved before the
 			// loop above (and the loop skips the raw API value). Only re-apply here if
 			// something in between left the control on the wrong value — avoids an extra
@@ -5064,10 +5152,56 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('return_lose_affiliate_phone_country', 'us')
 		}
 	}
+	isAffiliateNoVehicle(affiliateType: any, isPendingAffiliateVal: any, vehicleIdVal: any): boolean {
+		const isAffiliate = affiliateType === 'affiliate';
+		const isPending = isPendingAffiliateVal === 1 || isPendingAffiliateVal === '1' || isPendingAffiliateVal === true;
+		const isVehicleNull = vehicleIdVal === null || vehicleIdVal === undefined || vehicleIdVal === '' || vehicleIdVal === 0 || vehicleIdVal === '0';
+
+		return isAffiliate && !isPending && isVehicleNull;
+	}
+
+	clearVehiclePreferences(isReturn: boolean = false): void {
+		const prefix = isReturn ? 'return_' : '';
+		const fieldsToReset = [
+			`${prefix}vehicle_type`,
+			`${prefix}vehicle_type_name`,
+			`${prefix}vehicle_make`,
+			`${prefix}vehicle_make_name`,
+			`${prefix}vehicle_model`,
+			`${prefix}vehicle_model_name`,
+			`${prefix}vehicle_year`,
+			`${prefix}vehicle_year_name`,
+			`${prefix}vehicle_color`,
+			`${prefix}vehicle_color_name`,
+			`${prefix}vehicle_license_plate`,
+			`${prefix}vehicle_seats`,
+			`${prefix}vehicle_id`
+		];
+
+		fieldsToReset.forEach((field: string) => {
+			if (this.BookingForm.get(field)) {
+				this.BookingForm.get(field).setValue('', { emitEvent: false });
+			}
+		});
+
+		if (isReturn) {
+			this.return_selectedVehicle = null;
+		} else {
+			this.selectedVehicle = null;
+		}
+	}
+
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchAffiliateVehicles(this.BookingForm.get('affiliate_id').value)
 		this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
+
+		const affType = this.Form.affiliate_type.value;
+		const isPending = this.selectedPendingAffiliate ? 1 : (this.bookingResponse?.is_pending_affiliate ?? 0);
+		const vehId = this.Form.vehicle_id.value;
+		if (this.isAffiliateNoVehicle(affType, isPending, vehId)) {
+			this.clearVehiclePreferences(false);
+		}
 	}
 
 	chooseLooseAffiliate() {
@@ -5112,10 +5246,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
 			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
 			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
+			const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate) || 'us';
+			const rawIsd = selectedAffiliate.driver_phone_isd || selectedAffiliate.driver_isd || selectedAffiliate.phone_isd || selectedAffiliate.isd || selectedAffiliate.cell_isd || '';
+			const dIsd = rawIsd ? (rawIsd.startsWith('+') ? rawIsd : `+${rawIsd}`) : '';
+
 			this.BookingForm.patchValue({
 				...(dName ? { driver_name: dName } : {}),
 				...(dPhone ? { driver_cell: dPhone } : {}),
-				...(dEmail ? { driver_email: dEmail } : {})
+				...(dEmail ? { driver_email: dEmail } : {}),
+				driver_cell_country: dCountry,
+				...(dIsd ? { driver_cell_isd: dIsd } : {})
 			});
 		}
 
@@ -5124,6 +5264,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (selectedAffiliate) {
 			setTimeout(() => {
 				this.initphonefield();
+				if (this.driverCellTelInput && selectedAffiliate) {
+					const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate);
+					if (dCountry) {
+						this.driverCellTelInput.setCountry(dCountry);
+					}
+				}
 			}, 200);
 		}
 
@@ -5174,10 +5320,16 @@ export class BookingComponent implements OnInit, OnDestroy {
 			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
 			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
 			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
+			const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate) || 'us';
+			const rawIsd = selectedAffiliate.driver_phone_isd || selectedAffiliate.driver_isd || selectedAffiliate.phone_isd || selectedAffiliate.isd || selectedAffiliate.cell_isd || '';
+			const dIsd = rawIsd ? (rawIsd.startsWith('+') ? rawIsd : `+${rawIsd}`) : '';
+
 			this.BookingForm.patchValue({
 				...(dName ? { return_driver_name: dName } : {}),
 				...(dPhone ? { return_driver_cell: dPhone } : {}),
-				...(dEmail ? { return_driver_email: dEmail } : {})
+				...(dEmail ? { return_driver_email: dEmail } : {}),
+				return_driver_cell_country: dCountry,
+				...(dIsd ? { return_driver_cell_isd: dIsd } : {})
 			});
 		}
 
@@ -5186,6 +5338,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (selectedAffiliate) {
 			setTimeout(() => {
 				this.initphonefield();
+				if (this.returnDriverCellTelInput && selectedAffiliate) {
+					const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate);
+					if (dCountry) {
+						this.returnDriverCellTelInput.setCountry(dCountry);
+					}
+				}
 			}, 200);
 		}
 
@@ -5199,6 +5357,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchReturnAffiliateVehicles(this.BookingForm.get('return_affiliate_id').value)
 		this.fetchReturnAffiliateDrivers(this.BookingForm.get('return_affiliate_id').value)
+
+		const returnAffType = this.Form.return_affiliate_type.value;
+		const isReturnPending = this.selectedReturnPendingAffiliate ? 1 : (this.bookingResponse?.return_is_pending_affiliate ?? 0);
+		const returnVehId = this.Form.return_vehicle_id.value;
+		if (this.isAffiliateNoVehicle(returnAffType, isReturnPending, returnVehId)) {
+			this.clearVehiclePreferences(true);
+		}
 	}
 
 	chooseReturnLooseAffiliate() {
