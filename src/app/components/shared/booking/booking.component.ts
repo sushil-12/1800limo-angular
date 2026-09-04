@@ -1285,7 +1285,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 					driverCountry = affCountry;
 				}
 			}
-			this.driverCellTelInput = intlTelInput(input.nativeElement, this.commonServices.getTelInputOptions(driverCountry));
+			const driverTelOpts = {
+				...this.commonServices.getTelInputOptions(driverCountry),
+				autoFormat: false,
+				formatOnDisplay: false,
+				autoPlaceholder: 'off'
+			};
+			this.driverCellTelInput = intlTelInput(input.nativeElement, driverTelOpts);
 			if (driverCountry && driverCountry !== 'auto') {
 				this.driverCellTelInput.setCountry(driverCountry);
 			}
@@ -1309,7 +1315,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 					returnDriverCountry = affCountry;
 				}
 			}
-			this.returnDriverCellTelInput = intlTelInput(input.nativeElement, this.commonServices.getTelInputOptions(returnDriverCountry));
+			const returnDriverTelOpts = {
+				...this.commonServices.getTelInputOptions(returnDriverCountry),
+				autoFormat: false,
+				formatOnDisplay: false,
+				autoPlaceholder: 'off'
+			};
+			this.returnDriverCellTelInput = intlTelInput(input.nativeElement, returnDriverTelOpts);
 			if (returnDriverCountry && returnDriverCountry !== 'auto') {
 				this.returnDriverCellTelInput.setCountry(returnDriverCountry);
 			}
@@ -5244,7 +5256,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (selectedAffiliate) {
 			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
-			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhoneRaw = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhone = dPhoneRaw ? dPhoneRaw.toString().replace(/[^0-9+]/g, '') : '';
 			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
 			const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate) || 'us';
 			const rawIsd = selectedAffiliate.driver_phone_isd || selectedAffiliate.driver_isd || selectedAffiliate.phone_isd || selectedAffiliate.isd || selectedAffiliate.cell_isd || '';
@@ -5277,11 +5290,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
 			this.fetchAffiliateVehicles(selectedAffiliate.id);
 		}
-		// if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_driver_info) {
-		// 	 console.log(this.updateType, "simran ghai")
-		// 	 console.log(this.Form.affiliate_type.value,"affiliate type value")
-			
-		// }
+		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_driver_info) {
+			this.fetchAffiliateDrivers(selectedAffiliate?.id);
+		}
 	}
 
 	chooseReturnPendingAffiliate(selectedAffiliate: any) {
@@ -5318,7 +5329,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (selectedAffiliate) {
 			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
-			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhoneRaw = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhone = dPhoneRaw ? dPhoneRaw.toString().replace(/[^0-9+]/g, '') : '';
 			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
 			const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate) || 'us';
 			const rawIsd = selectedAffiliate.driver_phone_isd || selectedAffiliate.driver_isd || selectedAffiliate.phone_isd || selectedAffiliate.isd || selectedAffiliate.cell_isd || '';
@@ -5855,8 +5867,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 	}
 
 	fetchAffiliateDrivers(affiliate_id: number) {
-		console.log(this.updateType,"simran");
-		console.log(this.Form.affiliate_type.value, "simran");
 		if(this.updateType == 'edit' && this.Form.affiliate_type.value === 'in_progress_affiliate'){
 			 return;
 		}
