@@ -2917,6 +2917,23 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.log('DEBUGRATES - PREFILL CP3 flags/chooseUser ok');
 			this.autofillData('cruise', editing_data);
 			console.log('DEBUGRATES - PREFILL CP4 autofillData ok');
+
+			// The API signals a pending-driver booking via a standalone is_pending_affiliate
+			// flag rather than affiliate_type itself. Resolve the radio button BEFORE the
+			// generic SetFormValue loop below: the loop patches affiliate_id, and the
+			// affiliate_id / affiliate_type valueChanges handlers branch on affiliate_type.
+			// If we correct it only after the loop, those handlers have already run with
+			// affiliate_type === 'affiliate' and fired fetchAffiliateDrivers() (the confirmed-
+			// driver API) for what is really a pending-affiliate booking.
+			const isPendingAffiliate = this.updateType != 'reaffiliate' && (editing_data.is_pending_affiliate === 1 || editing_data.is_pending_affiliate === true || editing_data.is_pending_affiliate === '1')
+			const isReturnPendingAffiliate = this.updateType != 'reaffiliate' && (editing_data.return_is_pending_affiliate === 1 || editing_data.return_is_pending_affiliate === true || editing_data.return_is_pending_affiliate === '1')
+			if (isPendingAffiliate) {
+				this.SetFormValue('affiliate_type', 'in_progress_affiliate')
+			}
+			if (isReturnPendingAffiliate) {
+				this.SetFormValue('return_affiliate_type', 'in_progress_affiliate')
+			}
+
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses') || item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
@@ -2934,6 +2951,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (editing_data[item] && item != "passenger_cell_isd" && typeof editing_data[item] !== 'object') {
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_id') continue;
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_type') continue;
+					// affiliate_type is already resolved above from the is_pending_affiliate
+					// flag — don't let the API's raw affiliate_type ('affiliate') overwrite it.
+					if (isPendingAffiliate && item == 'affiliate_type') continue;
+					if (isReturnPendingAffiliate && item == 'return_affiliate_type') continue;
 
 					if (item === 'travel_client_id') {
 						console.log('[DEBUG edit-load] loop is about to SetFormValue travel_client_id ->', editing_data[item]);
@@ -2946,13 +2967,14 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			}
 			console.log('[DEBUG edit-load] after loop, travel_client_id control value:', this.BookingForm.get('travel_client_id')?.value);
-			// The API signals a pending-driver booking via a standalone is_pending_affiliate
-			// flag rather than affiliate_type itself — reselect the radio button explicitly,
-			// after the generic loop above, so it isn't left on whatever affiliate_type came back as.
-			if (this.updateType != 'reaffiliate' && (editing_data.is_pending_affiliate === 1 || editing_data.is_pending_affiliate === true || editing_data.is_pending_affiliate === '1')) {
+			// Safety net: affiliate_type for pending-driver bookings is resolved before the
+			// loop above (and the loop skips the raw API value). Only re-apply here if
+			// something in between left the control on the wrong value — avoids an extra
+			// valueChanges cycle on the common path.
+			if (isPendingAffiliate && this.Form.affiliate_type.value !== 'in_progress_affiliate') {
 				this.SetFormValue('affiliate_type', 'in_progress_affiliate')
 			}
-			if (this.updateType != 'reaffiliate' && (editing_data.return_is_pending_affiliate === 1 || editing_data.return_is_pending_affiliate === true || editing_data.return_is_pending_affiliate === '1')) {
+			if (isReturnPendingAffiliate && this.Form.return_affiliate_type.value !== 'in_progress_affiliate') {
 				this.SetFormValue('return_affiliate_type', 'in_progress_affiliate')
 			}
 			// Handle field name mismatches
@@ -4641,6 +4663,18 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		const selected = items.find((item: any) => item.id == selectedId) || null;
 
+		// This runs on every list reload for the pending-affiliate picker, including
+		// ones unrelated to the selection itself (e.g. ng-select clearing its search
+		// box after a pick, which re-triggers an unsearched page-1 fetch). That page
+		// may simply not include the already-selected row. Don't let a page that
+		// doesn't happen to contain the selection clobber a selection we already
+		// resolved correctly - only replace it when we either found a fresh match or
+		// the current value doesn't match the selected id (i.e. it's genuinely stale).
+		const current = isReturn ? this.selectedReturnPendingAffiliate : this.selectedPendingAffiliate;
+		if (!selected && current?.id == selectedId) {
+			return;
+		}
+
 		if (isReturn) {
 			this.selectedReturnPendingAffiliate = selected;
 		} else {
@@ -5096,8 +5130,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// has_vehicle comes from the get-account-by-type/pending_driver API response item
 		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
 			this.fetchAffiliateVehicles(selectedAffiliate.id);
-			this.fetchAffiliateDrivers(selectedAffiliate.id);
 		}
+		// if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_driver_info) {
+		// 	 console.log(this.updateType, "simran ghai")
+		// 	 console.log(this.Form.affiliate_type.value,"affiliate type value")
+			
+		// }
 	}
 
 	chooseReturnPendingAffiliate(selectedAffiliate: any) {
@@ -5650,7 +5688,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.$spinner.hide()
 		})
 	}
+
 	fetchAffiliateDrivers(affiliate_id: number) {
+		console.log(this.updateType,"simran");
+		console.log(this.Form.affiliate_type.value, "simran");
+		if(this.updateType == 'edit' && this.Form.affiliate_type.value === 'in_progress_affiliate'){
+			 return;
+		}
 		if(this.usesQuoteFlow) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_data', affiliate_id)
@@ -9474,6 +9518,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	resetDriverAndVehicle(affiliate_type: string) {
 		this.selectedPendingAffiliate = null;
+
 		const fieldsToReset = [
 			'affiliate_id',
 			'loose_affiliate_id',

@@ -2462,7 +2462,8 @@
 								Driver Name
 							</mat-label>
 							<input matInput formControlName="driver_name" type="text" placeholder="Driver Name"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()" 
+								[readonly]="Form.affiliate_type.value == 'in_progress_affiliate' && selectedPendingAffiliate?.has_driver_info" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -2500,7 +2501,8 @@
 								Email
 							</mat-label>
 							<input matInput formControlName="driver_email" type="text" (focus)="$event.target.select()"
-								placeholder="Email">
+								placeholder="Email"
+								[readonly]="Form.affiliate_type.value == 'in_progress_affiliate' && selectedPendingAffiliate?.has_driver_info">
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -2533,7 +2535,8 @@
 							<input pattern="[0-9+]*" maxlength="16" matInput #loose_driver_cellInput
 								placeholder="1234567890" formControlName="driver_cell" class="phoneNumberClass" tabindex="1"
 								(focus)="$event.target.select()" (input)="validateDriverCell()"
-								(blur)="validateDriverCell()" />
+								(blur)="validateDriverCell()"
+								[readonly]="Form.affiliate_type.value == 'in_progress_affiliate' && selectedPendingAffiliate?.has_driver_info" />
 						</mat-form-field>
 						<div class="error-message"
 							*ngIf="Form.driver_cell.invalid && (Form.driver_cell.touched || Form.driver_cell.dirty)">
@@ -2561,11 +2564,11 @@
 
 					<!-- Loose / In-Progress Affiliate Driver Gender (Editable) -->
 					<div id="driver-gender" class="col-md-6 col-lg-3 mb-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_type.value == 'in_progress_affiliate'">
-						<mat-form-field appearance="outline" class="m-0">
+						<mat-form-field appearance="outline" class="m-0" [class.block-cursor]="Form.affiliate_type.value == 'in_progress_affiliate' && selectedPendingAffiliate?.has_driver_info">
 							<mat-label>
 								Gender
 							</mat-label>
-							<mat-select formControlName="driver_gender">
+							<mat-select formControlName="driver_gender" [readonly]="Form.affiliate_type.value == 'in_progress_affiliate'  && selectedPendingAffiliate?.has_driver_info">
 								<mat-option value="male"> Male </mat-option>
 								<mat-option value="female"> Female </mat-option>
 								<mat-option value="lgbtqia+">Non-Binary</mat-option>
@@ -4344,7 +4347,8 @@
 										Driver Name
 									</mat-label>
 									<input matInput formControlName="return_driver_name" type="text" placeholder="Driver Name"
-										(focus)="$event.target.select()" />
+										(focus)="$event.target.select()"
+										[readonly]="Form.return_affiliate_type.value == 'in_progress_affiliate' && selectedReturnPendingAffiliate?.has_driver_info" />
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -4382,7 +4386,8 @@
 										Email
 									</mat-label>
 									<input matInput formControlName="return_driver_email" type="text"
-										(focus)="$event.target.select()" placeholder="Email">
+										(focus)="$event.target.select()" placeholder="Email"
+										[readonly]="Form.return_affiliate_type.value == 'in_progress_affiliate' && selectedReturnPendingAffiliate?.has_driver_info">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -4416,7 +4421,8 @@
 									<input pattern="[0-9+]*" maxlength="16" matInput #return_loose_driver_cellInput
 										placeholder="1234567890" formControlName="return_driver_cell" class="phoneNumberClass"
 										tabindex="1" (focus)="$event.target.select()" (input)="validateReturnDriverCell()"
-										(blur)="validateReturnDriverCell()" />
+										(blur)="validateReturnDriverCell()"
+										[readonly]="Form.return_affiliate_type.value == 'in_progress_affiliate' && selectedReturnPendingAffiliate?.has_driver_info" />
 
 								</mat-form-field>
 								<div class="error-box">
@@ -4447,11 +4453,11 @@
 							<!-- Loose / In-Progress Affiliate Driver Gender (Editable) -->
 							<div id="driver-gender" class="col-md-6 col-lg-3 mb-3"
 								*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_type.value == 'in_progress_affiliate'">
-								<mat-form-field appearance="outline" class="m-0">
+								<mat-form-field appearance="outline" class="m-0" [class.block-cursor]="Form.return_affiliate_type.value == 'in_progress_affiliate' && selectedReturnPendingAffiliate?.has_driver_info">
 									<mat-label>
 										Gender
 									</mat-label>
-									<mat-select formControlName="return_driver_gender">
+									<mat-select formControlName="return_driver_gender" [readonly]="Form.return_affiliate_type.value == 'in_progress_affiliate' && selectedReturnPendingAffiliate?.has_driver_info">
 										<mat-option value="male"> Male </mat-option>
 										<mat-option value="female"> Female </mat-option>
 										<mat-option value="lgbtqia+">Non-Binary</mat-option>
