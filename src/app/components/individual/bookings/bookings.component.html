@@ -360,7 +360,7 @@
                         <h5 class="mb-5"
                             *ngIf="passengerDetails?.selection_button == 'Affiliate' || passengerDetails?.selection_button == 'Driver'">
                             Connect with '{{ passengerDetails?.driver_first_name }} {{
-                            passengerDetails?.driver_last_name
+                            passengerDetails?.is_pending_affiliate == 1 ? '' : passengerDetails?.driver_last_name
                             }}' (Driver) Via</h5>
                         <h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
                             Connect with '{{ passengerDetails?.passenger_name }}' (Passenger) Via</h5>

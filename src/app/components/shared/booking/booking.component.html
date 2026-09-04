@@ -305,7 +305,7 @@
 						</ng-template>
 					</div>
 					<!-- Acc Type TA -->
-					<div *ngIf="Form['account_type'].value == 'travel_planner'">
+					<div *ngIf="Form['account_type'].value == 'travel_planner' && currentUser?.roleName != 'individual'">
 						<div class="row">
 							<div class="col-md-12 col-lg-10 d-flex justify-content-center">
 								<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
