@@ -625,6 +625,9 @@ export class BookingPreviewComponent implements OnInit {
     } catch (shareErr) {
       console.error('[BookingPreview] openLocalPreview: Failed to calculate adminSharePercent', shareErr);
     }
+    console.log(this.adminSharePercent, this.bookingPreview?.created_by ,  this.bookingPreview?.share_array, "SHARE ARRAY")
+
+
 
     this.shareArray = this.bookingPreview?.share_array;
     this.rates_preview = this.bookingPreview?.rates_preview;
