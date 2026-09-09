@@ -4484,7 +4484,7 @@
 				<app-rates-form class="d-flex flex-wrap gap-4" [hideBuckets]="usesQuoteFlow" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 					[preventRateOverride]="Form.prevent_rate_override.value" [return_affiliate_type]="Form.return_affiliate_type.value" [distance]="distance"
 					[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
-					[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates" [isAffiliateMode]="isAffiliateMode"
+					[initReturnRates]="Form.service_type.value == 'round_trip' || init_return_rates" [isAffiliateMode]="isAffiliateMode" [userRole]="userRole"
 					(formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value"
 					[isCreatedByAdmin]="isCreatedByAdmin" [parentError]="numberOfHoursError"
 					(hoursErrorChange)="numberOfHoursError = $event" [vehicles]="Form.number_of_vehicles?.value"

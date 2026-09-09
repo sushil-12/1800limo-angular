@@ -80,6 +80,22 @@ export class BookingComponent implements OnInit, OnDestroy {
 		return this.mode === 'guest';
 	}
 
+	get userRole(): string {
+		if (this.isAffiliateMode || this.currentUser?.roleName === 'affiliate' || this.currentUser?.role === 'affiliate') {
+			return 'affiliate';
+		}
+		if (this.isAdminMode || this.currentUser?.roleName === 'admin' || this.currentUser?.role === 'admin') {
+			return 'admin';
+		}
+		if (this.isTravelAgentMode || this.currentUser?.roleName === 'travel_agent' || this.currentUser?.role === 'travel_agent') {
+			return 'travel_agent';
+		}
+		if (this.isGuestMode) {
+			return 'guest';
+		}
+		return 'individual';
+	}
+
 	/**
 	 * loose_customer controls that must never be auto-marked required.
 	 * country/state/city/zipCode have no input in the template — they are only

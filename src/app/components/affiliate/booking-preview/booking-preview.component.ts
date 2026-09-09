@@ -559,7 +559,8 @@ export class BookingPreviewComponent implements OnInit {
           // ── Admin share percent ──────────────────────────────────────────
           try {
             const b = this.bookingPreview || {};
-            const isTravelPlanner = (b?.account_type === 'travel_planner' || b?.account_type === 'travel_agent' || b?.created_by_role === 'travel_agent' || b?.created_by_role === 'travel_planner') && b?.created_by != 1;
+            const isCreatedByAdmin = b?.created_by == 1 || b?.created_by_role === 'admin' || (userRole === 'admin' && !b?.share_array?.travelAgentShare);
+            const isTravelPlanner = (b?.account_type === 'travel_planner' || b?.account_type === 'travel_agent' || b?.created_by_role === 'travel_agent' || b?.created_by_role === 'travel_planner') && !isCreatedByAdmin;
             const isFarmoutShare = b?.share_array?.farmoutShare && b?.share_array?.farmoutShare != '0' && b?.share_array?.farmoutShare != 0;
             const isFarmoutType = b?.reservation_type === 'farmout';
 
@@ -664,7 +665,8 @@ export class BookingPreviewComponent implements OnInit {
 
     try {
       const b = this.bookingPreview || {};
-      const isTravelPlanner = (b?.account_type === 'travel_planner' || b?.account_type === 'travel_agent' || b?.created_by_role === 'travel_agent' || b?.created_by_role === 'travel_planner') && b?.created_by != 1;
+      const isCreatedByAdmin = b?.created_by == 1 || b?.created_by_role === 'admin' || (userRole === 'admin' && !b?.share_array?.travelAgentShare);
+      const isTravelPlanner = (b?.account_type === 'travel_planner' || b?.account_type === 'travel_agent' || b?.created_by_role === 'travel_agent' || b?.created_by_role === 'travel_planner') && !isCreatedByAdmin;
       const isFarmoutShare = b?.share_array?.farmoutShare && b?.share_array?.farmoutShare != '0' && b?.share_array?.farmoutShare != 0;
       const isFarmoutType = b?.reservation_type === 'farmout';
 

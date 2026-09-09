@@ -638,7 +638,8 @@ export class BookingTripPreviewComponent implements OnInit {
     }
 
     try {
-      if (b?.account_type == 'travel_planner' && b?.created_by != 1) {
+      const isCreatedByAdmin = b?.created_by == 1 || b?.created_by_role === 'admin' || (this.userRole === 'admin' && !b?.share_array?.travelAgentShare);
+      if ((b?.account_type == 'travel_planner' || b?.account_type == 'travel_agent') && !isCreatedByAdmin) {
         this.adminSharePercent = 15;
       } else if (b?.share_array?.farmoutShare) {
         this.adminSharePercent = 15;

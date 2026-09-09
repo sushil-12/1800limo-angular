@@ -29,6 +29,7 @@ export class RatesFormsComponent implements OnInit, OnChanges, OnDestroy {
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	@Input("currencyObject") currencyObject: any;
 	@Input("service_type") service_type: string = "";
+	@Input() userRole: string = "";
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
