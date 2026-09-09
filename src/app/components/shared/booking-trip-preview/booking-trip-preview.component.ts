@@ -645,8 +645,6 @@ export class BookingTripPreviewComponent implements OnInit {
       } else {
         this.adminSharePercent = 25;
       }
-
-      console.log("Simran", this.adminSharePercent, b?.share_array, b?.created_by )
     } catch (shareErr) {
       console.error('[BookingTripPreview] applyActiveLeg: Failed to calculate adminSharePercent', shareErr);
     }
@@ -655,8 +653,6 @@ export class BookingTripPreviewComponent implements OnInit {
     if (b?.payment_status == 'unpaid' || this.previewMode !== 'view') {
       this.shareArray = b?.share_array;
       this.rates_preview = b?.rates_preview;
-    }else{
-      console.log("simran ki bchi snn nia");
     }
 
     this.isAffiliate = b?.affiliate_type == 'affiliate';

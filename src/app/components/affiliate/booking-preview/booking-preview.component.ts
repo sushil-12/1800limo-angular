@@ -469,7 +469,7 @@ export class BookingPreviewComponent implements OnInit {
   }
 
   openPreview(booking_id: number, userRole: 'admin' | 'affiliate' | 'individual' | 'travel_agent' = 'affiliate') {
-    console.debug(`[BookingPreview] openPreview called — booking_id=${booking_id}, userRole=${userRole}`);
+    console.log(`[BookingPreview] openPreview called — booking_id=${booking_id}, userRole=${userRole}`);
     this.$spinner.show();
     this.userRole = userRole;
     this.isAdminView = userRole === 'admin';
@@ -502,15 +502,38 @@ export class BookingPreviewComponent implements OnInit {
           this.bookingPreview = response.data;
           console.debug('[BookingPreview] openPreview: bookingPreview set', this.bookingPreview);
 
+          if (typeof this.bookingPreview?.share_array === 'string') {
+            try {
+              this.bookingPreview.share_array = JSON.parse(this.bookingPreview.share_array);
+            } catch (e) {
+              console.error('[BookingPreview] Error parsing share_array', e);
+            }
+          }
+          if (typeof this.bookingPreview?.return_share_array === 'string') {
+            try {
+              this.bookingPreview.return_share_array = JSON.parse(this.bookingPreview.return_share_array);
+            } catch (e) {
+              console.error('[BookingPreview] Error parsing return_share_array', e);
+            }
+          }
+
           this.applyReturnTripState();
+
+          const isTravelAgentBooking =
+            userRole === 'travel_agent' ||
+            this.bookingPreview?.account_type === 'travel_planner' ||
+            this.bookingPreview?.account_type === 'travel_agent' ||
+            this.bookingPreview?.created_by_role === 'travel_agent' ||
+            this.bookingPreview?.created_by_role === 'travel_planner';
 
           this.showRateDistribution =
             userRole === 'admin' ||
-            (userRole === 'affiliate' &&
-              !!this.bookingPreview &&
-              this.bookingPreview.reservation_type !== 'farmout' &&
-              this.bookingPreview?.payment_status != 'paid' &&
-              this.bookingPreview?.payment_status != 'transfer_failed') || userRole === 'travel_agent';
+            (!isTravelAgentBooking &&
+              (userRole === 'affiliate' &&
+                !!this.bookingPreview &&
+                this.bookingPreview.reservation_type !== 'farmout' &&
+                this.bookingPreview?.payment_status != 'paid' &&
+                this.bookingPreview?.payment_status != 'transfer_failed'));
 
           console.log('--- showRateDistribution Logic ---');
           console.log('userRole:', userRole);
@@ -535,16 +558,19 @@ export class BookingPreviewComponent implements OnInit {
 
           // ── Admin share percent ──────────────────────────────────────────
           try {
-            if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
-              this.adminSharePercent = 15;
-            } else if (this.bookingPreview?.share_array?.farmoutShare) {
+            const b = this.bookingPreview || {};
+            const isTravelPlanner = (b?.account_type === 'travel_planner' || b?.account_type === 'travel_agent' || b?.created_by_role === 'travel_agent' || b?.created_by_role === 'travel_planner') && b?.created_by != 1;
+            const isFarmoutShare = b?.share_array?.farmoutShare && b?.share_array?.farmoutShare != '0' && b?.share_array?.farmoutShare != 0;
+            const isFarmoutType = b?.reservation_type === 'farmout';
+
+            if (isTravelPlanner || isFarmoutShare || isFarmoutType) {
               this.adminSharePercent = 15;
             } else {
               this.adminSharePercent = 25;
             }
-            console.debug('[BookingPreview] openPreview: adminSharePercent =', this.adminSharePercent);
+            console.log('[BookingPreview] openPreview: adminSharePercent =', this.adminSharePercent);
           } catch (shareErr) {
-            console.error('[BookingPreview] openPreview: Failed to calculate adminSharePercent', shareErr);
+            console.log('[BookingPreview] openPreview: Failed to calculate adminSharePercent', shareErr);
           }
 
           // ── Payment status ───────────────────────────────────────────────
@@ -598,12 +624,34 @@ export class BookingPreviewComponent implements OnInit {
     this.previewMode = mode;
     this.bookingPreview = data || {};
 
+    if (typeof this.bookingPreview?.share_array === 'string') {
+      try {
+        this.bookingPreview.share_array = JSON.parse(this.bookingPreview.share_array);
+      } catch (e) {
+        console.error('[BookingPreview] Error parsing share_array', e);
+      }
+    }
+    if (typeof this.bookingPreview?.return_share_array === 'string') {
+      try {
+        this.bookingPreview.return_share_array = JSON.parse(this.bookingPreview.return_share_array);
+      } catch (e) {
+        console.error('[BookingPreview] Error parsing return_share_array', e);
+      }
+    }
+
     this.applyReturnTripState();
+
+    const isTravelAgentBooking =
+      userRole === 'travel_agent' ||
+      this.bookingPreview?.account_type === 'travel_planner' ||
+      this.bookingPreview?.account_type === 'travel_agent' ||
+      this.bookingPreview?.created_by_role === 'travel_agent' ||
+      this.bookingPreview?.created_by_role === 'travel_planner';
 
     this.showRateDistribution =
       userRole === 'admin' ||
-      userRole === 'travel_agent' ||
-      (userRole === 'affiliate' && this.bookingPreview?.reservation_type !== 'farmout');
+      (!isTravelAgentBooking &&
+        (userRole === 'affiliate' && this.bookingPreview?.reservation_type !== 'farmout'));
 
     try {
       const grandTotal = this.bookingPreview?.share_array?.grandTotal
@@ -615,9 +663,12 @@ export class BookingPreviewComponent implements OnInit {
     }
 
     try {
-      if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
-        this.adminSharePercent = 15;
-      } else if (this.bookingPreview?.share_array?.farmoutShare) {
+      const b = this.bookingPreview || {};
+      const isTravelPlanner = (b?.account_type === 'travel_planner' || b?.account_type === 'travel_agent' || b?.created_by_role === 'travel_agent' || b?.created_by_role === 'travel_planner') && b?.created_by != 1;
+      const isFarmoutShare = b?.share_array?.farmoutShare && b?.share_array?.farmoutShare != '0' && b?.share_array?.farmoutShare != 0;
+      const isFarmoutType = b?.reservation_type === 'farmout';
+
+      if (isTravelPlanner || isFarmoutShare || isFarmoutType) {
         this.adminSharePercent = 15;
       } else {
         this.adminSharePercent = 25;
@@ -625,7 +676,6 @@ export class BookingPreviewComponent implements OnInit {
     } catch (shareErr) {
       console.error('[BookingPreview] openLocalPreview: Failed to calculate adminSharePercent', shareErr);
     }
-    console.log(this.adminSharePercent, this.bookingPreview?.created_by ,  this.bookingPreview?.share_array, "SHARE ARRAY")
 
 
 
