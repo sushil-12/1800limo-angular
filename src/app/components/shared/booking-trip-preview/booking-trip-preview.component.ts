@@ -624,8 +624,8 @@ export class BookingTripPreviewComponent implements OnInit {
     this.showRateDistribution =
       this.userRole === 'admin' ||
       (!isTravelAgentBooking &&
-        (this.userRole === 'affiliate' &&
-          b.payment_status != 'paid' &&
+      (this.userRole === 'affiliate' &&
+        b.payment_status != 'paid' &&
           b.payment_status != 'transfer_failed'));
 
     try {

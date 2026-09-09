@@ -528,12 +528,11 @@ export class BookingPreviewComponent implements OnInit {
 
           this.showRateDistribution =
             userRole === 'admin' ||
-            (!isTravelAgentBooking &&
-              (userRole === 'affiliate' &&
-                !!this.bookingPreview &&
-                this.bookingPreview.reservation_type !== 'farmout' &&
-                this.bookingPreview?.payment_status != 'paid' &&
-                this.bookingPreview?.payment_status != 'transfer_failed'));
+            (userRole === 'affiliate' &&
+              !!this.bookingPreview &&
+              this.bookingPreview.reservation_type !== 'farmout' &&
+              this.bookingPreview?.payment_status != 'paid' &&
+              this.bookingPreview?.payment_status != 'transfer_failed');
 
           console.log('--- showRateDistribution Logic ---');
           console.log('userRole:', userRole);
@@ -651,8 +650,7 @@ export class BookingPreviewComponent implements OnInit {
 
     this.showRateDistribution =
       userRole === 'admin' ||
-      (!isTravelAgentBooking &&
-        (userRole === 'affiliate' && this.bookingPreview?.reservation_type !== 'farmout'));
+      (userRole === 'affiliate' && this.bookingPreview?.reservation_type !== 'farmout');
 
     try {
       const grandTotal = this.bookingPreview?.share_array?.grandTotal
