@@ -5076,21 +5076,4 @@ export class CreateNewBookingComponent implements OnInit, OnDestroy {
 		return item.name.toLowerCase().indexOf(term) > -1 || (item?.mobile && item.mobile.toString().includes(term));
 	}
 
-	handleAffiliateSearch(event) {
-		const term = event.term;
-		if (!term) {
-			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
-			return;
-		}
-		const lowerTerm = term.toLowerCase();
-		this.AffiliateAccounts = [...this.AffiliateAccounts_Original].sort((a, b) => {
-			const aName = a.name.toLowerCase();
-			const bName = b.name.toLowerCase();
-			const aStarts = aName.startsWith(lowerTerm);
-			const bStarts = bName.startsWith(lowerTerm);
-			if (aStarts && !bStarts) return -1;
-			if (!aStarts && bStarts) return 1;
-			return 0;
-		});
-	}
 }

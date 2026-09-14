@@ -3,7 +3,7 @@ import { attachPlaceAutocompleteElement, clearPlaceAutocompleteDisplay, getBooki
 import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, ViewChild, isDevMode, ElementRef, ViewChildren, QueryList, viewChild, NgZone, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { pluck, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { pluck, distinctUntilChanged, takeUntil, debounceTime, map } from 'rxjs/operators';
 
 import { AdminService } from '../../../services/admin.service';
 import { IndividualService } from '../../../services/individual.service';
@@ -27,6 +27,19 @@ import { QuotebotService } from '../../../services/quotebot.service';
 import { InvalidControlScrollDirective } from '../../../directives/scroll-to-invalid.directive';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { BookingTripPreviewComponent } from '../booking-trip-preview/booking-trip-preview.component';
+import {
+	AffiliateLookupParams,
+	AffiliateLookupState,
+	RankedAffiliate,
+	affiliateRankBadge,
+	affiliateRankModifier,
+	affiliateStepBadge,
+	affiliateStepModifier,
+	buildRankedAffiliateLabel,
+	createAffiliateLookupState,
+	formatAffiliateDistance,
+	readAffiliateLookupResponse
+} from '../../../utils/affiliate-lookup';
 
 declare var $: any
 console.log('BookingComponent new version form ,,,loaded');
@@ -65,6 +78,22 @@ export class BookingComponent implements OnInit, OnDestroy {
 	/** Unauthenticated quotebot visitor. No currentUser, no portal APIs. */
 	get isGuestMode(): boolean {
 		return this.mode === 'guest';
+	}
+
+	get userRole(): string {
+		if (this.isAffiliateMode || this.currentUser?.roleName === 'affiliate' || this.currentUser?.role === 'affiliate') {
+			return 'affiliate';
+		}
+		if (this.isAdminMode || this.currentUser?.roleName === 'admin' || this.currentUser?.role === 'admin') {
+			return 'admin';
+		}
+		if (this.isTravelAgentMode || this.currentUser?.roleName === 'travel_agent' || this.currentUser?.role === 'travel_agent') {
+			return 'travel_agent';
+		}
+		if (this.isGuestMode) {
+			return 'guest';
+		}
+		return 'individual';
 	}
 
 	/**
@@ -317,9 +346,27 @@ export class BookingComponent implements OnInit, OnDestroy {
 	isFarmoutBooking: boolean = false;
 	private isPrefillingForm: boolean = false;
 	private isPrefillingTransferTypes: boolean = false;
-	AffiliateAccounts_copy: any;
-	private AffiliateAccounts_Original: Array<Record<string, any>> = [];
-	private ReturnAffiliateAccounts_Original: Array<Record<string, any>> = [];
+	/**
+	 * Server-side affiliate lookup state, one set per leg.
+	 *
+	 * The list is searched, ranked by distance from the pickup and paged by the
+	 * API, so the component holds only the pages it has actually loaded rather
+	 * than the full affiliate table.
+	 */
+	affiliateLookup: AffiliateLookupState = createAffiliateLookupState();
+	returnAffiliateLookup: AffiliateLookupState = createAffiliateLookupState();
+	/**
+	 * Bound to ng-select's `[typeahead]`, which both feeds us the term and
+	 * switches the dropdown off its own client-side filtering - without that
+	 * it would filter the server's results a second time and hide rows that
+	 * matched on a field the label does not show (phone, driver name).
+	 */
+	affiliateTypeahead$ = new Subject<string>();
+	returnAffiliateTypeahead$ = new Subject<string>();
+	/** Rows per page for the affiliate dropdown's infinite scroll. */
+	private readonly affiliatePageSize = 50;
+	/** Debounce on affiliate search keystrokes, in ms. */
+	private readonly affiliateSearchDebounceMs = 300;
 	public canceloptions: Array<Object>;
 	currencySymbol: any;
 	currencyObj: any;
@@ -1161,6 +1208,45 @@ export class BookingComponent implements OnInit, OnDestroy {
 		tryAttach(attempts);
 	}
 
+	private resolveCountryFromAffiliate(affiliate: any): string {
+		if (!affiliate) return '';
+
+		// 1. Check explicit country code properties
+		const explicitCountry = affiliate.driver_phone_country || affiliate.phone_country || affiliate.country || affiliate.cell_country || affiliate.driver_country || affiliate.PhoneCountry || affiliate.phoneCountry || affiliate.mobileCountry;
+		if (explicitCountry && typeof explicitCountry === 'string') {
+			return explicitCountry.toLowerCase();
+		}
+
+		// 2. Check ISD / dial code against intlTelInputGlobals country data
+		const rawIsd = (affiliate.driver_phone_isd || affiliate.driver_isd || affiliate.phone_isd || affiliate.isd || affiliate.cell_isd || affiliate.CellIsd || '').toString();
+		const cleanIsd = rawIsd.replace(/[^0-9]/g, '');
+		if (cleanIsd) {
+			const countryData = (window as any).intlTelInputGlobals?.getCountryData?.();
+			if (countryData && Array.isArray(countryData)) {
+				const match = countryData.find((c: any) => c.dialCode === cleanIsd);
+				if (match?.iso2) {
+					return match.iso2.toLowerCase();
+				}
+			}
+		}
+
+		// 3. Check if phone number includes international dial code starting with +
+		const phone = (affiliate.driver_phone || affiliate.phone || affiliate.cell || affiliate.driver_cell || '').toString().trim();
+		if (phone.startsWith('+')) {
+			const countryData = (window as any).intlTelInputGlobals?.getCountryData?.();
+			if (countryData && Array.isArray(countryData)) {
+				const sorted = [...countryData].sort((a: any, b: any) => b.dialCode.length - a.dialCode.length);
+				const cleanPhone = phone.replace(/[^0-9]/g, '');
+				const match = sorted.find((c: any) => cleanPhone.startsWith(c.dialCode));
+				if (match?.iso2) {
+					return match.iso2.toLowerCase();
+				}
+			}
+		}
+
+		return '';
+	}
+
 	initphonefield() {
 
 		let countryCode = 'auto';
@@ -1208,8 +1294,23 @@ export class BookingComponent implements OnInit, OnDestroy {
 			const input = this.driver_cellInput || this.loose_driver_cellInput;
 			const existing = (window as any).intlTelInputGlobals?.getInstance(input.nativeElement);
 			if (existing) existing.destroy();
-			const driverCountry = getInitCountry('driver_cell_country');
-			this.driverCellTelInput = intlTelInput(input.nativeElement, this.commonServices.getTelInputOptions(driverCountry));
+			let driverCountry = getInitCountry('driver_cell_country');
+			if (this.Form.affiliate_type.value === 'in_progress_affiliate' && this.selectedPendingAffiliate) {
+				const affCountry = this.resolveCountryFromAffiliate(this.selectedPendingAffiliate);
+				if (affCountry) {
+					driverCountry = affCountry;
+				}
+			}
+			const driverTelOpts = {
+				...this.commonServices.getTelInputOptions(driverCountry),
+				autoFormat: false,
+				formatOnDisplay: false,
+				autoPlaceholder: 'off'
+			};
+			this.driverCellTelInput = intlTelInput(input.nativeElement, driverTelOpts);
+			if (driverCountry && driverCountry !== 'auto') {
+				this.driverCellTelInput.setCountry(driverCountry);
+			}
 
 			this.addCustomCountrySearch(input.nativeElement);
 			this.bindCountryChange(input.nativeElement, () => {
@@ -1223,8 +1324,23 @@ export class BookingComponent implements OnInit, OnDestroy {
 			const input = this.return_driver_cellInput || this.return_loose_driver_cellInput;
 			const existing = (window as any).intlTelInputGlobals?.getInstance(input.nativeElement);
 			if (existing) existing.destroy();
-			const returnDriverCountry = getInitCountry('return_driver_cell_country');
-			this.returnDriverCellTelInput = intlTelInput(input.nativeElement, this.commonServices.getTelInputOptions(returnDriverCountry));
+			let returnDriverCountry = getInitCountry('return_driver_cell_country');
+			if (this.Form.return_affiliate_type.value === 'in_progress_affiliate' && this.selectedReturnPendingAffiliate) {
+				const affCountry = this.resolveCountryFromAffiliate(this.selectedReturnPendingAffiliate);
+				if (affCountry) {
+					returnDriverCountry = affCountry;
+				}
+			}
+			const returnDriverTelOpts = {
+				...this.commonServices.getTelInputOptions(returnDriverCountry),
+				autoFormat: false,
+				formatOnDisplay: false,
+				autoPlaceholder: 'off'
+			};
+			this.returnDriverCellTelInput = intlTelInput(input.nativeElement, returnDriverTelOpts);
+			if (returnDriverCountry && returnDriverCountry !== 'auto') {
+				this.returnDriverCellTelInput.setCountry(returnDriverCountry);
+			}
 
 			this.addCustomCountrySearch(input.nativeElement);
 			this.bindCountryChange(input.nativeElement, () => {
@@ -2867,7 +2983,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.isUserManualReturnSelection = false;
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours === 0 ? 2 : response?.data?.number_of_hours
-			this.isTravelShare = this.isTravelAgentMode || response?.data?.account_type == 'travel_planner' ? true : false
+			this.isTravelShare = (this.isTravelAgentMode || response?.data?.account_type == 'travel_planner') && this.updateType != 'repeat' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
@@ -2886,6 +3002,44 @@ export class BookingComponent implements OnInit, OnDestroy {
 			console.log('DEBUGRATES - PREFILL CP3 flags/chooseUser ok');
 			this.autofillData('cruise', editing_data);
 			console.log('DEBUGRATES - PREFILL CP4 autofillData ok');
+
+			// The API signals a pending-driver booking via a standalone is_pending_affiliate
+			// flag rather than affiliate_type itself. Resolve the radio button BEFORE the
+			// generic SetFormValue loop below: the loop patches affiliate_id, and the
+			// affiliate_id / affiliate_type valueChanges handlers branch on affiliate_type.
+			// If we correct it only after the loop, those handlers have already run with
+			// affiliate_type === 'affiliate' and fired fetchAffiliateDrivers() (the confirmed-
+			// driver API) for what is really a pending-affiliate booking.
+			const isPendingAffiliate = this.updateType != 'reaffiliate' && (editing_data.is_pending_affiliate === 1 || editing_data.is_pending_affiliate === true || editing_data.is_pending_affiliate === '1')
+			const isReturnPendingAffiliate = this.updateType != 'reaffiliate' && (editing_data.return_is_pending_affiliate === 1 || editing_data.return_is_pending_affiliate === true || editing_data.return_is_pending_affiliate === '1')
+			if (isPendingAffiliate) {
+				this.SetFormValue('affiliate_type', 'in_progress_affiliate')
+			}
+			if (isReturnPendingAffiliate) {
+				this.SetFormValue('return_affiliate_type', 'in_progress_affiliate')
+			}
+
+			const isOutboundNoVehicle = this.isAffiliateNoVehicle(
+				editing_data.affiliate_type,
+				editing_data.is_pending_affiliate,
+				editing_data.vehicle_id
+			);
+			const isReturnNoVehicle = this.isAffiliateNoVehicle(
+				editing_data.return_affiliate_type || editing_data.affiliate_type,
+				editing_data.return_is_pending_affiliate ?? editing_data.is_pending_affiliate,
+				editing_data.return_vehicle_id
+			);
+			const outboundVehicleFields = [
+				'vehicle_type', 'vehicle_type_name', 'vehicle_make', 'vehicle_make_name',
+				'vehicle_model', 'vehicle_model_name', 'vehicle_year', 'vehicle_year_name',
+				'vehicle_color', 'vehicle_color_name', 'vehicle_license_plate', 'vehicle_seats', 'vehicle_id'
+			];
+			const returnVehicleFields = [
+				'return_vehicle_type', 'return_vehicle_type_name', 'return_vehicle_make', 'return_vehicle_make_name',
+				'return_vehicle_model', 'return_vehicle_model_name', 'return_vehicle_year', 'return_vehicle_year_name',
+				'return_vehicle_color', 'return_vehicle_color_name', 'return_vehicle_license_plate', 'return_vehicle_seats', 'return_vehicle_id'
+			];
+
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses') || item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
@@ -2903,6 +3057,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (editing_data[item] && item != "passenger_cell_isd" && typeof editing_data[item] !== 'object') {
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_id') continue;
 					if (this.updateType == 'reaffiliate' && item == 'affiliate_type') continue;
+					// affiliate_type is already resolved above from the is_pending_affiliate
+					// flag — don't let the API's raw affiliate_type ('affiliate') overwrite it.
+					if (isPendingAffiliate && item == 'affiliate_type') continue;
+					if (isReturnPendingAffiliate && item == 'return_affiliate_type') continue;
+					if (isOutboundNoVehicle && outboundVehicleFields.includes(item)) continue;
+					if (isReturnNoVehicle && returnVehicleFields.includes(item)) continue;
 
 					if (item === 'travel_client_id') {
 						console.log('[DEBUG edit-load] loop is about to SetFormValue travel_client_id ->', editing_data[item]);
@@ -2915,13 +3075,22 @@ export class BookingComponent implements OnInit, OnDestroy {
 				}
 			}
 			console.log('[DEBUG edit-load] after loop, travel_client_id control value:', this.BookingForm.get('travel_client_id')?.value);
-			// The API signals a pending-driver booking via a standalone is_pending_affiliate
-			// flag rather than affiliate_type itself — reselect the radio button explicitly,
-			// after the generic loop above, so it isn't left on whatever affiliate_type came back as.
-			if (this.updateType != 'reaffiliate' && (editing_data.is_pending_affiliate === 1 || editing_data.is_pending_affiliate === true || editing_data.is_pending_affiliate === '1')) {
+
+			if (isOutboundNoVehicle) {
+				this.clearVehiclePreferences(false);
+			}
+			if (isReturnNoVehicle) {
+				this.clearVehiclePreferences(true);
+			}
+
+			// Safety net: affiliate_type for pending-driver bookings is resolved before the
+			// loop above (and the loop skips the raw API value). Only re-apply here if
+			// something in between left the control on the wrong value — avoids an extra
+			// valueChanges cycle on the common path.
+			if (isPendingAffiliate && this.Form.affiliate_type.value !== 'in_progress_affiliate') {
 				this.SetFormValue('affiliate_type', 'in_progress_affiliate')
 			}
-			if (this.updateType != 'reaffiliate' && (editing_data.return_is_pending_affiliate === 1 || editing_data.return_is_pending_affiliate === true || editing_data.return_is_pending_affiliate === '1')) {
+			if (isReturnPendingAffiliate && this.Form.return_affiliate_type.value !== 'in_progress_affiliate') {
 				this.SetFormValue('return_affiliate_type', 'in_progress_affiliate')
 			}
 			// Handle field name mismatches
@@ -3070,6 +3239,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.numberOfHoursError = false;
 			}
 			this.isPrefillingForm = false;
+			// The affiliate list is paged, so the saved affiliate may not be on
+			// the page that loaded while the form was still being patched.
+			// Pull it in explicitly or the dropdown renders blank on edit.
+			this.ensureSelectedAffiliateLoaded(false);
+			this.ensureSelectedAffiliateLoaded(true);
 			// The loaded stop list is subject to the same rule as a manually added one, so a
 			// booking that arrives with more than two stops opens as a Charter/Tour.
 			this.enforceCharterTourForExtraStops();
@@ -4433,20 +4607,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 			.join(' / ');
 	}
 
-	private getAffiliateSearchText(item: any): string {
-		return [
-			item?.name,
-			item?.driver_name,
-			item?.badge_city_name,
-			item?.phone,
-			item?.last_name,
-			item?.LastName
-		]
-			.map((value) => (value ?? '').toString().trim().toLowerCase())
-			.filter((value) => !!value)
-			.join(' ');
-	}
-
 
 	private appendOperatorToLooseAffiliates(data: any[]): any[] {
 		return (data || []).map((item) => ({
@@ -4463,50 +4623,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 				this.LooseAffiliateAccounts = this.appendOperatorToLooseAffiliates(response?.data)
 				this.$spinner.hide()
 			})
+			return;
 		}
-		else {
-			this.AffiliateAccounts = []
-			if(this.usesQuoteFlow) {return;};
-			this.$spinner.show()
-			const accountType = affiliate_type == 'in_progress_affiliate' ? 'pending_driver' : 'driver';
-			if(this.isAdminMode){
-					this.$api.getAccountBytype(accountType).subscribe((response: any) => {
-					if (response.success && response.data.length > 0) {
-						this.AffiliateAccounts = response.data.map((item) => {
-							item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
-							return item
-						})
-						this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
-						this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-						if (affiliate_type == 'in_progress_affiliate' && this.BookingForm.get('affiliate_id')?.value) {
-							this.selectedPendingAffiliate = this.AffiliateAccounts.find((a: any) => a.id == this.BookingForm.get('affiliate_id')?.value) || null;
-							if (this.selectedPendingAffiliate) {
-								setTimeout(() => { this.initphonefield(); }, 200);
-							}
-						}
-					}
-					this.$spinner.hide()
-				})
-			}else{
-				this.affiliateService.getAccountBytype(accountType).subscribe((response: any) => {
-					if (response.success && response.data.length > 0) {
-						this.AffiliateAccounts = response.data.map((item) => {
-							item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
-							return item
-						})
-						this.AffiliateAccounts_Original = [...this.AffiliateAccounts]
-						this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
-						if (affiliate_type == 'in_progress_affiliate' && this.BookingForm.get('affiliate_id')?.value) {
-							this.selectedPendingAffiliate = this.AffiliateAccounts.find((a: any) => a.id == this.BookingForm.get('affiliate_id')?.value) || null;
-							if (this.selectedPendingAffiliate) {
-								setTimeout(() => { this.initphonefield(); }, 200);
-							}
-						}
-					}
-					this.$spinner.hide()
-				})
-			}
-		}
+
+		this.AffiliateAccounts = []
+		if(this.usesQuoteFlow) {return;};
+
+		this.loadAffiliates(false, { reset: true });
 	}
 
 	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate' | 'in_progress_affiliate') {
@@ -4522,65 +4645,407 @@ export class BookingComponent implements OnInit, OnDestroy {
 			} else {
 				this.$api.getAccountBytype('loose_affiliate').subscribe(handleResponse);
 			}
+			return;
 		}
-		else {
-			this.Return_AffiliateAccounts = []
-			if(this.shouldBlockAdminApi) {return;};
-			this.$spinner.show()
-			const accountType = return_affiliate_type == 'in_progress_affiliate' ? 'pending_driver' : 'driver';
-			const handleResponse = (response: any) => {
-				if (response.success && response.data.length > 0) {
-					this.Return_AffiliateAccounts = response.data.map((item) => {
-						item.bindNameAffiliate = this.buildAffiliateDisplayName(item)
-						return item
-					})
-					this.ReturnAffiliateAccounts_Original = [...this.Return_AffiliateAccounts]
-					if (return_affiliate_type == 'in_progress_affiliate' && this.BookingForm.get('return_affiliate_id')?.value) {
-						this.selectedReturnPendingAffiliate = this.Return_AffiliateAccounts.find((a: any) => a.id == this.BookingForm.get('return_affiliate_id')?.value) || null;
-						if (this.selectedReturnPendingAffiliate) {
-							setTimeout(() => { this.initphonefield(); }, 200);
-						}
+
+		this.Return_AffiliateAccounts = []
+		if(this.shouldBlockAdminApi) {return;};
+
+		this.loadAffiliates(true, { reset: true });
+	}
+
+	/**
+	 * Load a page of approved affiliates from the API.
+	 *
+	 * The list is searched, ranked and paged server side. `reset` starts a new
+	 * list (affiliate type change, new search term, pickup moved); without it
+	 * the next page is appended for infinite scroll.
+	 */
+	private loadAffiliates(isReturn: boolean, opts: { reset?: boolean; term?: string } = {}) {
+		const state = isReturn ? this.returnAffiliateLookup : this.affiliateLookup;
+
+		if (state.loading) {
+			return;
+		}
+
+		if (opts.reset) {
+			state.page = 1;
+			state.items = [];
+			state.hasMore = false;
+			state.total = 0;
+			if (opts.term !== undefined) {
+				state.term = opts.term;
+			}
+		} else {
+			if (!state.hasMore) {
+				return;
+			}
+			state.page += 1;
+		}
+
+		const requestId = ++state.requestId;
+		state.loading = true;
+
+		const coords = this.getPickupCoords(isReturn);
+		state.ranked = !!coords;
+		const selectedId = this.BookingForm.get(isReturn ? 'return_affiliate_id' : 'affiliate_id')?.value;
+
+		const params: AffiliateLookupParams = {
+			search: state.term,
+			lat: coords?.lat ?? null,
+			lng: coords?.lng ?? null,
+			page: state.page,
+			per_page: this.affiliatePageSize,
+			// Keeps an already-selected affiliate in the payload even when it
+			// falls outside the current page or search term, so editing an
+			// existing booking never renders a blank dropdown.
+			ids: selectedId ? [selectedId] : []
+		};
+
+		if (state.page === 1) {
+			this.$spinner.show();
+		}
+
+		const service = this.isAffiliateMode ? this.affiliateService : this.$api;
+		const accountType = this.affiliateAccountType(isReturn);
+
+		service.getAccountBytype(accountType, params).subscribe({
+			next: (response: any) => {
+				// A slower earlier request must not overwrite a newer one.
+				if (requestId !== state.requestId) {
+					return;
+				}
+
+				const { rows, meta } = readAffiliateLookupResponse(response);
+
+				const mapped = rows.map((item) => {
+					item.bindNameAffiliate = buildRankedAffiliateLabel(item);
+					return item;
+				});
+
+				state.items = state.page === 1 ? mapped : this.mergeAffiliates(state.items, mapped);
+				state.hasMore = meta ? meta.has_more : false;
+				state.total = meta ? meta.total : state.items.length;
+				state.loading = false;
+
+				this.setAffiliateItems(isReturn, state.items);
+
+				if (accountType === 'pending_driver') {
+					this.syncSelectedPendingAffiliate(isReturn, state.items);
+				}
+
+				this.$spinner.hide();
+			},
+			error: () => {
+				if (requestId === state.requestId) {
+					state.loading = false;
+					// Undo the optimistic page bump so a retry re-requests the
+					// page that failed rather than skipping it.
+					if (!opts.reset && state.page > 1) {
+						state.page -= 1;
 					}
 				}
-				this.$spinner.hide()
-			};
-			if (this.isAffiliateMode) {
-				this.affiliateService.getAccountBytype(accountType).subscribe(handleResponse);
-			} else {
-				this.$api.getAccountBytype(accountType).subscribe(handleResponse);
+				this.$spinner.hide();
 			}
-		}
+		});
 	}
 
-	changeAffiliateAccount(event) {
-		this.AffiliateAccounts = this.AffiliateAccounts_Original.filter((item) =>
-			this.getAffiliateSearchText(item).includes((event.target.value || '').toLowerCase())
-		)
+	/**
+	 * Which account list backs the picker for this leg.
+	 *
+	 * Both lists come from the same endpoint and are searched, ranked and paged
+	 * the same way; `pending_driver` just carries the extra onboarding fields.
+	 */
+	private affiliateAccountType(isReturn: boolean): 'driver' | 'pending_driver' {
+		const affiliateType = isReturn
+			? this.Form.return_affiliate_type.value
+			: this.Form.affiliate_type.value;
 
+		return affiliateType === 'in_progress_affiliate' ? 'pending_driver' : 'driver';
 	}
 
-	handleAffiliateSearch(event: { term?: string }) {
-		const term = (event?.term || '').toLowerCase().trim();
-		if (!term) {
-			this.AffiliateAccounts = [...this.AffiliateAccounts_Original];
+	/**
+	 * Keep the pending-affiliate detail panel in step with the loaded page.
+	 *
+	 * The panel reads off the selected row rather than the form, so it has to
+	 * be re-resolved whenever the list is replaced by a search or a new page.
+	 */
+	private syncSelectedPendingAffiliate(isReturn: boolean, items: any[]) {
+		const selectedId = this.BookingForm.get(isReturn ? 'return_affiliate_id' : 'affiliate_id')?.value;
+
+		if (!selectedId) {
 			return;
 		}
 
-		this.AffiliateAccounts = this.AffiliateAccounts_Original.filter((item) =>
-			this.getAffiliateSearchText(item).includes(term)
-		);
-	}
+		const selected = items.find((item: any) => item.id == selectedId) || null;
 
-	handleReturnAffiliateSearch(event: { term?: string }) {
-		const term = (event?.term || '').toLowerCase().trim();
-		if (!term) {
-			this.Return_AffiliateAccounts = [...this.ReturnAffiliateAccounts_Original];
+		// This runs on every list reload for the pending-affiliate picker, including
+		// ones unrelated to the selection itself (e.g. ng-select clearing its search
+		// box after a pick, which re-triggers an unsearched page-1 fetch). That page
+		// may simply not include the already-selected row. Don't let a page that
+		// doesn't happen to contain the selection clobber a selection we already
+		// resolved correctly - only replace it when we either found a fresh match or
+		// the current value doesn't match the selected id (i.e. it's genuinely stale).
+		const current = isReturn ? this.selectedReturnPendingAffiliate : this.selectedPendingAffiliate;
+		if (!selected && current?.id == selectedId) {
 			return;
 		}
 
-		this.Return_AffiliateAccounts = this.ReturnAffiliateAccounts_Original.filter((item) =>
-			this.getAffiliateSearchText(item).includes(term)
-		);
+		if (isReturn) {
+			this.selectedReturnPendingAffiliate = selected;
+		} else {
+			this.selectedPendingAffiliate = selected;
+		}
+
+		if (selected) {
+			setTimeout(() => { this.initphonefield(); }, 200);
+		}
+	}
+
+	/**
+	 * Make sure the affiliate currently selected on the form is present in the
+	 * dropdown's items, fetching it on its own if the loaded pages missed it.
+	 *
+	 * Without this, opening an existing booking whose affiliate ranks below the
+	 * first page shows an empty control and a save would silently clear it.
+	 */
+	private ensureSelectedAffiliateLoaded(isReturn: boolean) {
+		const affiliateType = isReturn
+			? this.Form.return_affiliate_type.value
+			: this.Form.affiliate_type.value;
+
+		if (affiliateType !== 'affiliate' && affiliateType !== 'in_progress_affiliate') {
+			return;
+		}
+
+		const selectedId = this.BookingForm.get(isReturn ? 'return_affiliate_id' : 'affiliate_id')?.value;
+		if (!selectedId) {
+			return;
+		}
+
+		const state = isReturn ? this.returnAffiliateLookup : this.affiliateLookup;
+		if (state.items.some((item: any) => item.id == selectedId)) {
+			return;
+		}
+
+		const service = this.isAffiliateMode ? this.affiliateService : this.$api;
+		const accountType = this.affiliateAccountType(isReturn);
+
+		service.getAccountBytype(accountType, { ids: [selectedId], only_ids: true }).subscribe((response: any) => {
+			const { rows } = readAffiliateLookupResponse(response);
+			const match = rows.find((item: any) => item.id == selectedId);
+
+			if (!match) {
+				return;
+			}
+
+			match.bindNameAffiliate = buildRankedAffiliateLabel(match);
+			state.items = this.mergeAffiliates([match], state.items);
+			this.setAffiliateItems(isReturn, state.items);
+		});
+	}
+
+	/** Append a page, dropping ids already present (the pinned `ids` row repeats). */
+	private mergeAffiliates(existing: RankedAffiliate[], incoming: RankedAffiliate[]): RankedAffiliate[] {
+		const seen = new Set(existing.map((item) => item.id));
+		return existing.concat(incoming.filter((item) => !seen.has(item.id)));
+	}
+
+	/** Publish the loaded rows to whichever array the template binds for this leg. */
+	private setAffiliateItems(isReturn: boolean, items: any[]) {
+		if (isReturn) {
+			this.Return_AffiliateAccounts = items;
+		} else {
+			this.AffiliateAccounts = items;
+		}
+	}
+
+	/**
+	 * Pickup coordinates for the given leg, or null when none are set yet.
+	 *
+	 * Airport pickups keep their coordinates in a different pair of controls
+	 * from address pickups, chosen by transfer type - the same rule
+	 * `hasValidRouteCoordinates` uses.
+	 */
+	getPickupCoords(isReturn: boolean = false): { lat: number; lng: number } | null {
+		const transferType = isReturn ? this.Form.return_transfer_type.value : this.Form.transfer_type.value;
+		const prefix = isReturn ? 'return_' : '';
+
+		const latControl = transferType?.includes('airport_')
+			? `${prefix}pickup_airport_latitude`
+			: `${prefix}pickup_latitude`;
+		const lngControl = transferType?.includes('airport_')
+			? `${prefix}pickup_airport_longitude`
+			: `${prefix}pickup_longitude`;
+
+		const lat = this.parseRouteCoordinate(this.BookingForm.get(latControl)?.value);
+		const lng = this.parseRouteCoordinate(this.BookingForm.get(lngControl)?.value);
+
+		if (lat === null || lng === null || (lat === 0 && lng === 0)) {
+			return null;
+		}
+
+		return { lat, lng };
+	}
+
+	/**
+	 * Debounce affiliate search keystrokes into one request per leg.
+	 *
+	 * `distinctUntilChanged` on leg+term stops a re-render or a repeated
+	 * keystroke from re-requesting a list that is already on screen.
+	 */
+	private initAffiliateSearchStream() {
+		const wire = (source: Subject<string>, isReturn: boolean) => {
+			source
+				.pipe(
+					debounceTime(this.affiliateSearchDebounceMs),
+					map((term: string) => (term || '').trim()),
+					distinctUntilChanged(),
+					takeUntil(this.formSubscriptionsReset$)
+				)
+				.subscribe((term: string) => {
+					const affiliateType = isReturn
+						? this.Form.return_affiliate_type.value
+						: this.Form.affiliate_type.value;
+
+					// Loose affiliates are a different list with its own picker.
+					if (affiliateType !== 'affiliate' && affiliateType !== 'in_progress_affiliate') {
+						return;
+					}
+
+					this.loadAffiliates(isReturn, { reset: true, term });
+				});
+		};
+
+		wire(this.affiliateTypeahead$, false);
+		wire(this.returnAffiliateTypeahead$, true);
+
+		this.initAffiliatePickupWatch();
+	}
+
+	/**
+	 * Reload the affiliate list when the pickup moves.
+	 *
+	 * The ordering is relative to the pickup, so a list ranked against the old
+	 * address is stale the moment the address changes. Coordinates are compared
+	 * before refetching because these controls are rewritten with identical
+	 * values on several paths (round-trip mirroring, quote hydration).
+	 */
+	private initAffiliatePickupWatch() {
+		const legs: Array<{ isReturn: boolean; controls: string[] }> = [
+			{
+				isReturn: false,
+				controls: ['pickup_latitude', 'pickup_longitude', 'pickup_airport_latitude', 'pickup_airport_longitude', 'transfer_type']
+			},
+			{
+				isReturn: true,
+				controls: ['return_pickup_latitude', 'return_pickup_longitude', 'return_pickup_airport_latitude', 'return_pickup_airport_longitude', 'return_transfer_type']
+			}
+		];
+
+		legs.forEach(({ isReturn, controls }) => {
+			const changes$ = new Subject<void>();
+
+			controls.forEach((name) => {
+				this.BookingForm.get(name)?.valueChanges
+					.pipe(takeUntil(this.formSubscriptionsReset$))
+					.subscribe(() => changes$.next());
+			});
+
+			changes$
+				.pipe(
+					debounceTime(this.affiliateSearchDebounceMs),
+					map(() => {
+						const coords = this.getPickupCoords(isReturn);
+						return coords ? `${coords.lat},${coords.lng}` : '';
+					}),
+					distinctUntilChanged(),
+					takeUntil(this.formSubscriptionsReset$)
+				)
+				.subscribe(() => {
+					if (this.isPrefillingForm) {
+						return;
+					}
+
+					const affiliateType = isReturn
+						? this.Form.return_affiliate_type.value
+						: this.Form.affiliate_type.value;
+
+					if (affiliateType !== 'affiliate' && affiliateType !== 'in_progress_affiliate') {
+						return;
+					}
+
+					this.loadAffiliates(isReturn, { reset: true });
+				});
+		});
+	}
+
+	/** ng-select `(scrollToEnd)` - pulls the next page. */
+	loadMoreAffiliates(isReturn: boolean = false) {
+		const affiliateType = isReturn ? this.Form.return_affiliate_type.value : this.Form.affiliate_type.value;
+
+		if (affiliateType !== 'affiliate' && affiliateType !== 'in_progress_affiliate') {
+			return;
+		}
+
+		this.loadAffiliates(isReturn, {});
+	}
+
+	/** Whether this leg's list was ranked against a pickup. */
+	affiliateShowRank(isReturn: boolean = false): boolean {
+		return (isReturn ? this.returnAffiliateLookup : this.affiliateLookup).ranked;
+	}
+
+	/** Colour modifier for the rank badge. */
+	affiliateRankClass(item: any): string {
+		return affiliateRankModifier(item);
+	}
+
+	/** Badge text - the distance once ranked, otherwise the band name. */
+	affiliateRankBadgeText(item: any): string {
+		return affiliateRankBadge(item);
+	}
+
+	/** Full band name, used as the badge's tooltip. */
+	affiliateRankTitle(item: any): string {
+		return formatAffiliateDistance(item);
+	}
+
+	/** Onboarding progress badge text for a pending affiliate, e.g. "Step 3/5". */
+	affiliateStepBadgeText(item: any): string {
+		return affiliateStepBadge(item);
+	}
+
+	/** Colour modifier for the onboarding badge, graded by progress. */
+	affiliateStepClass(item: any): string {
+		return affiliateStepModifier(item);
+	}
+
+	/** Tooltip spelling out which onboarding steps are done. */
+	affiliateStepTitle(item: any): string {
+		const steps = item?.step_completed;
+
+		if (!Array.isArray(steps) || !steps.length) {
+			return 'Onboarding not started';
+		}
+
+		const ordered = steps
+			.map((step) => Number(step))
+			.filter((step) => Number.isFinite(step))
+			.sort((a, b) => a - b);
+
+		return `Completed onboarding steps: ${ordered.join(', ')}`;
+	}
+
+	/** "Showing 50 of 190" hint for the dropdown footer. */
+	affiliateLookupHint(isReturn: boolean = false): string {
+		const state = isReturn ? this.returnAffiliateLookup : this.affiliateLookup;
+
+		if (!state.total || state.items.length >= state.total) {
+			return '';
+		}
+
+		return `Showing ${state.items.length} of ${state.total} — scroll for more`;
 	}
 	// custom search function
 	airportSearchFunction(term: string, item: any) {
@@ -4715,10 +5180,56 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.SetFormValue('return_lose_affiliate_phone_country', 'us')
 		}
 	}
+	isAffiliateNoVehicle(affiliateType: any, isPendingAffiliateVal: any, vehicleIdVal: any): boolean {
+		const isAffiliate = affiliateType === 'affiliate';
+		const isPending = isPendingAffiliateVal === 1 || isPendingAffiliateVal === '1' || isPendingAffiliateVal === true;
+		const isVehicleNull = vehicleIdVal === null || vehicleIdVal === undefined || vehicleIdVal === '' || vehicleIdVal === 0 || vehicleIdVal === '0';
+
+		return isAffiliate && !isPending && isVehicleNull;
+	}
+
+	clearVehiclePreferences(isReturn: boolean = false): void {
+		const prefix = isReturn ? 'return_' : '';
+		const fieldsToReset = [
+			`${prefix}vehicle_type`,
+			`${prefix}vehicle_type_name`,
+			`${prefix}vehicle_make`,
+			`${prefix}vehicle_make_name`,
+			`${prefix}vehicle_model`,
+			`${prefix}vehicle_model_name`,
+			`${prefix}vehicle_year`,
+			`${prefix}vehicle_year_name`,
+			`${prefix}vehicle_color`,
+			`${prefix}vehicle_color_name`,
+			`${prefix}vehicle_license_plate`,
+			`${prefix}vehicle_seats`,
+			`${prefix}vehicle_id`
+		];
+
+		fieldsToReset.forEach((field: string) => {
+			if (this.BookingForm.get(field)) {
+				this.BookingForm.get(field).setValue('', { emitEvent: false });
+			}
+		});
+
+		if (isReturn) {
+			this.return_selectedVehicle = null;
+		} else {
+			this.selectedVehicle = null;
+		}
+	}
+
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchAffiliateVehicles(this.BookingForm.get('affiliate_id').value)
 		this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
+
+		const affType = this.Form.affiliate_type.value;
+		const isPending = this.selectedPendingAffiliate ? 1 : (this.bookingResponse?.is_pending_affiliate ?? 0);
+		const vehId = this.Form.vehicle_id.value;
+		if (this.isAffiliateNoVehicle(affType, isPending, vehId)) {
+			this.clearVehiclePreferences(false);
+		}
 	}
 
 	chooseLooseAffiliate() {
@@ -4761,12 +5272,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (selectedAffiliate) {
 			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
-			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhoneRaw = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhone = dPhoneRaw ? dPhoneRaw.toString().replace(/[^0-9+]/g, '') : '';
 			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
+			const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate) || 'us';
+			const rawIsd = selectedAffiliate.driver_phone_isd || selectedAffiliate.driver_isd || selectedAffiliate.phone_isd || selectedAffiliate.isd || selectedAffiliate.cell_isd || '';
+			const dIsd = rawIsd ? (rawIsd.startsWith('+') ? rawIsd : `+${rawIsd}`) : '';
+
 			this.BookingForm.patchValue({
 				...(dName ? { driver_name: dName } : {}),
 				...(dPhone ? { driver_cell: dPhone } : {}),
-				...(dEmail ? { driver_email: dEmail } : {})
+				...(dEmail ? { driver_email: dEmail } : {}),
+				driver_cell_country: dCountry,
+				...(dIsd ? { driver_cell_isd: dIsd } : {})
 			});
 		}
 
@@ -4775,13 +5293,21 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (selectedAffiliate) {
 			setTimeout(() => {
 				this.initphonefield();
+				if (this.driverCellTelInput && selectedAffiliate) {
+					const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate);
+					if (dCountry) {
+						this.driverCellTelInput.setCountry(dCountry);
+					}
+				}
 			}, 200);
 		}
 
 		// has_vehicle comes from the get-account-by-type/pending_driver API response item
 		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_vehicle) {
 			this.fetchAffiliateVehicles(selectedAffiliate.id);
-			this.fetchAffiliateDrivers(selectedAffiliate.id);
+		}
+		if (this.BookingForm.get('affiliate_type')?.value == 'in_progress_affiliate' && selectedAffiliate?.has_driver_info) {
+			this.fetchAffiliateDrivers(selectedAffiliate?.id);
 		}
 	}
 
@@ -4819,12 +5345,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 		if (selectedAffiliate) {
 			const dName = selectedAffiliate.driver_name || selectedAffiliate.name || '';
-			const dPhone = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhoneRaw = selectedAffiliate.driver_phone || selectedAffiliate.phone || '';
+			const dPhone = dPhoneRaw ? dPhoneRaw.toString().replace(/[^0-9+]/g, '') : '';
 			const dEmail = selectedAffiliate.driver_email || selectedAffiliate.email || '';
+			const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate) || 'us';
+			const rawIsd = selectedAffiliate.driver_phone_isd || selectedAffiliate.driver_isd || selectedAffiliate.phone_isd || selectedAffiliate.isd || selectedAffiliate.cell_isd || '';
+			const dIsd = rawIsd ? (rawIsd.startsWith('+') ? rawIsd : `+${rawIsd}`) : '';
+
 			this.BookingForm.patchValue({
 				...(dName ? { return_driver_name: dName } : {}),
 				...(dPhone ? { return_driver_cell: dPhone } : {}),
-				...(dEmail ? { return_driver_email: dEmail } : {})
+				...(dEmail ? { return_driver_email: dEmail } : {}),
+				return_driver_cell_country: dCountry,
+				...(dIsd ? { return_driver_cell_isd: dIsd } : {})
 			});
 		}
 
@@ -4833,6 +5366,12 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (selectedAffiliate) {
 			setTimeout(() => {
 				this.initphonefield();
+				if (this.returnDriverCellTelInput && selectedAffiliate) {
+					const dCountry = this.resolveCountryFromAffiliate(selectedAffiliate);
+					if (dCountry) {
+						this.returnDriverCellTelInput.setCountry(dCountry);
+					}
+				}
 			}, 200);
 		}
 
@@ -4846,6 +5385,13 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchReturnAffiliateVehicles(this.BookingForm.get('return_affiliate_id').value)
 		this.fetchReturnAffiliateDrivers(this.BookingForm.get('return_affiliate_id').value)
+
+		const returnAffType = this.Form.return_affiliate_type.value;
+		const isReturnPending = this.selectedReturnPendingAffiliate ? 1 : (this.bookingResponse?.return_is_pending_affiliate ?? 0);
+		const returnVehId = this.Form.return_vehicle_id.value;
+		if (this.isAffiliateNoVehicle(returnAffType, isReturnPending, returnVehId)) {
+			this.clearVehiclePreferences(true);
+		}
 	}
 
 	chooseReturnLooseAffiliate() {
@@ -5110,7 +5656,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
-				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+				this.VehicleList.map((item: any) => {
+					item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`;
+					item['name'] = item['formatted_name'] || item.vehicleType;
+					item['id'] = item.vehicleType_id ?? item.id ?? item.ID;
+				});
 				// autofill data if isRatesCompleted:true
 				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
 				for (let i = 0; i < this.VehicleList.length; i++) {
@@ -5145,7 +5695,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		if (this.isAffiliateMode) {
 			this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then(handleResponse);
 		} else {
-			this.$api.adminAffiliateVehicleList(affiliate_id, false).then(handleResponse);
+			this.$api.adminAffiliateVehicleList(affiliate_id, true).then(handleResponse);
 		}
 	}
 
@@ -5209,7 +5759,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.return_VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
-				this.return_VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+				this.return_VehicleList.map((item: any) => {
+					item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`;
+					item['name'] = item['formatted_name'] || item.vehicleType;
+					item['id'] = item.vehicleType_id ?? item.id ?? item.ID;
+				});
 				// autofill data if isRatesCompleted:true
 				this.return_vehicleType_arr = this.return_VehicleList = this.return_vehicleMake_arr = this.return_VehicleList = this.return_vehicleModal_arr = this.return_VehicleList = this.return_vehicleYear_arr = this.return_VehicleList = this.return_vehicleColor_arr = this.return_VehicleList
 				for (let i = 0; i < this.return_VehicleList.length; i++) {
@@ -5327,7 +5881,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			this.$spinner.hide()
 		})
 	}
+
 	fetchAffiliateDrivers(affiliate_id: number) {
+		if(this.updateType == 'edit' && this.Form.affiliate_type.value === 'in_progress_affiliate'){
+			 return;
+		}
 		if(this.usesQuoteFlow) {return;};
 		if (!affiliate_id) {
 			console.error('Invalid Parameter affiliate_data', affiliate_id)
@@ -6386,7 +6944,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				affiliateShare: grandTotal - base_rate * 0.25
 			}
 			// travelAgentShare : 
-			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
+			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin && this.updateType != 'repeat' && this.Form?.updateType?.value != 'repeat') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
@@ -6435,7 +6993,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 				affiliateShare: returnGrandTotal - adminShare
 			}
 			// travelAgentShare : 
-			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
+			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin && this.updateType != 'repeat' && this.Form?.updateType?.value != 'repeat') {
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10
@@ -6991,10 +7549,64 @@ export class BookingComponent implements OnInit, OnDestroy {
 	 * while `vehicle_type` (the category id) is set. Fall back to the BigData label so
 	 * the preview's Vehicle Type row still renders.
 	 */
-	private resolveVehicleTypeName(name: any, typeId: any): string {
-		if (name) return name
-		const match = (this.BigData?.vehicleCategories || []).find((c: any) => c?.id == typeId)
-		return match?.name || ''
+	private resolveVehicleTypeName(name: any, typeId: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name
+		if (!typeId) return name || ''
+		const matchBig = (this.BigData?.vehicleCategories || []).find((c: any) => c?.id == typeId)
+		if (matchBig?.name) return matchBig.name
+		const arr = isReturn ? this.return_vehicleType_arr : this.vehicleType_arr
+		const matchArr = (arr || []).find((c: any) => c?.vehicleType_id == typeId || c?.id == typeId)
+		return matchArr?.vehicleType || matchArr?.name || name || ''
+	}
+
+	private resolveVehicleMakeName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleMake_arr : this.vehicleMake_arr;
+		const matchArr = (arr || []).find((item: any) => item.make_id == val || item.id == val);
+		if (matchArr?.make || matchArr?.name) return matchArr.make || matchArr.name;
+		const matchBig = (this.BigData?.vehicleMakes || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.make) return matchBig.name || matchBig.make;
+		if (isNaN(Number(val))) return val;
+		return name || '';
+	}
+
+	private resolveVehicleModelName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleModal_arr : this.vehicleModal_arr;
+		const matchArr = (arr || []).find((item: any) => item.model_id == val || item.id == val);
+		if (matchArr?.model || matchArr?.name) return matchArr.model || matchArr.name;
+		const matchBig = (this.BigData?.vehicleModels || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.model) return matchBig.name || matchBig.model;
+		if (isNaN(Number(val))) return val;
+		return name || '';
+	}
+
+	private resolveVehicleYearName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleYear_arr : this.vehicleYear_arr;
+		const matchArr = (arr || []).find((item: any) => item.year_id == val || item.id == val);
+		if (matchArr?.year || matchArr?.name) return matchArr.year || matchArr.name;
+		const matchBig = (this.BigData?.vehicleYears || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.year) return matchBig.name || matchBig.year;
+		if (typeof val === 'number' && val > 1900 && val < 2100) return String(val);
+		if (typeof val === 'string' && !isNaN(Number(val)) && Number(val) > 1900 && Number(val) < 2100) return val;
+		if (isNaN(Number(val))) return val;
+		return name || '';
+	}
+
+	private resolveVehicleColorName(name: any, val: any, isReturn = false): string {
+		if (name && isNaN(Number(name))) return name;
+		if (!val) return name || '';
+		const arr = isReturn ? this.return_vehicleColor_arr : this.vehicleColor_arr;
+		const matchArr = (arr || []).find((item: any) => item.color_id == val || item.id == val);
+		if (matchArr?.color || matchArr?.name) return matchArr.color || matchArr.name;
+		const matchBig = (this.BigData?.vehicleColors || []).find((c: any) => c?.id == val);
+		if (matchBig?.name || matchBig?.color) return matchBig.name || matchBig.color;
+		if (isNaN(Number(val))) return val;
+		return name || '';
 	}
 
 	private buildBookingPreviewPayload(): any {
@@ -7058,11 +7670,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			luggage_count: v.luggage_count,
 
 			// ── Vehicle ──
-			vehicle_type_name: this.resolveVehicleTypeName(v.vehicle_type_name, v.vehicle_type),
-			vehicle_make: v.vehicle_make_name || v.vehicle_make,
-			vehicle_model: v.vehicle_model_name || v.vehicle_model,
-			vehicle_year: v.vehicle_year_name || v.vehicle_year,
-			vehicle_color: v.vehicle_color_name || v.vehicle_color,
+			vehicle_type_name: this.resolveVehicleTypeName(v.vehicle_type_name, v.vehicle_type, false),
+			vehicle_make: this.resolveVehicleMakeName(v.vehicle_make_name, v.vehicle_make, false),
+			vehicle_model: this.resolveVehicleModelName(v.vehicle_model_name, v.vehicle_model, false),
+			vehicle_year: this.resolveVehicleYearName(v.vehicle_year_name, v.vehicle_year, false),
+			vehicle_color: this.resolveVehicleColorName(v.vehicle_color_name, v.vehicle_color, false),
 
 			// ── Route ──
 			pickup: v.pickup,
@@ -7129,8 +7741,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_pickup_airport_name: isRoundTrip
 				? this.getPreviewAirportDisplay(v.return_pickup_airport_name, v.return_pickup_airport_option)
 				: '',
-			return_pickup_airport_latitude: isRoundTrip ? v.return_pickup_airport_latitude : '',
-			return_pickup_airport_longitude: isRoundTrip ? v.return_pickup_airport_longitude : '',
+			return_pickup_latitude_airport: isRoundTrip ? v.return_pickup_airport_latitude : '',
+			return_pickup_longitude_airport: isRoundTrip ? v.return_pickup_airport_longitude : '',
 			return_pickup_airline_name: isRoundTrip ? v.return_pickup_airline_name : '',
 			return_pickup_flight: isRoundTrip ? v.return_pickup_flight : '',
 			return_extra_stops: isRoundTrip ? mapStops(v.return_extra_stops) : [],
@@ -7140,8 +7752,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_dropoff_airport_name: isRoundTrip
 				? this.getPreviewAirportDisplay(v.return_dropoff_airport_name, v.return_dropoff_airport_option)
 				: '',
-			return_dropoff_airport_latitude: isRoundTrip ? v.return_dropoff_airport_latitude : '',
-			return_dropoff_airport_longitude: isRoundTrip ? v.return_dropoff_airport_longitude : '',
+			return_dropoff_latitude_airport: isRoundTrip ? v.return_dropoff_airport_latitude : '',
+			return_dropoff_longitude_airport: isRoundTrip ? v.return_dropoff_airport_longitude : '',
 			return_dropoff_airline_name: isRoundTrip ? v.return_dropoff_airline_name : '',
 			return_dropoff_flight: isRoundTrip ? v.return_dropoff_flight : '',
 			return_cruise_port: isRoundTrip ? v.return_cruise_port : '',
@@ -7153,11 +7765,11 @@ export class BookingComponent implements OnInit, OnDestroy {
 			return_distance: isRoundTrip ? this.return_distance : '',
 			return_duration: isRoundTrip ? v.returnJourneyTime : '',
 
-			return_vehicle_type_name: isRoundTrip ? this.resolveVehicleTypeName(v.return_vehicle_type_name, v.return_vehicle_type) : '',
-			return_vehicle_make: isRoundTrip ? (v.return_vehicle_make_name || v.return_vehicle_make) : '',
-			return_vehicle_model: isRoundTrip ? (v.return_vehicle_model_name || v.return_vehicle_model) : '',
-			return_vehicle_year: isRoundTrip ? (v.return_vehicle_year_name || v.return_vehicle_year) : '',
-			return_vehicle_color: isRoundTrip ? (v.return_vehicle_color_name || v.return_vehicle_color) : '',
+			return_vehicle_type_name: isRoundTrip ? this.resolveVehicleTypeName(v.return_vehicle_type_name, v.return_vehicle_type, true) : '',
+			return_vehicle_make: isRoundTrip ? this.resolveVehicleMakeName(v.return_vehicle_make_name, v.return_vehicle_make, true) : '',
+			return_vehicle_model: isRoundTrip ? this.resolveVehicleModelName(v.return_vehicle_model_name, v.return_vehicle_model, true) : '',
+			return_vehicle_year: isRoundTrip ? this.resolveVehicleYearName(v.return_vehicle_year_name, v.return_vehicle_year, true) : '',
+			return_vehicle_color: isRoundTrip ? this.resolveVehicleColorName(v.return_vehicle_color_name, v.return_vehicle_color, true) : '',
 
 			return_driver_name: isRoundTrip ? v.return_driver_name : '',
 			return_driver_email: isRoundTrip ? v.return_driver_email : '',
@@ -7821,6 +8433,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// Tear down any previously wired form subscriptions (queryParams can re-run this
 		// on in-place navigation), otherwise every handler fires once per wiring pass.
 		this.formSubscriptionsReset$.next();
+		// Wired here rather than in ngOnInit because the reset above would
+		// otherwise tear these streams down on the first re-wiring pass.
+		this.initAffiliateSearchStream();
 		if (this.updateType == 'edit') {
 			this.BookingForm?.get('pickup_time')?.valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 				this.clearPastDateTimeError();
@@ -7872,6 +8487,20 @@ export class BookingComponent implements OnInit, OnDestroy {
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours?.toString() ?? '24',
 					return_affiliate_id: this.BookingForm?.get('affiliate_id')?.value
 				})
+				if (this.Form.affiliate_type.value === 'in_progress_affiliate') {
+					this.BookingForm.patchValue({
+						return_affiliate_type: 'in_progress_affiliate'
+					});
+					const firstAffId = this.BookingForm?.get('affiliate_id')?.value;
+					if (firstAffId) {
+						this.BookingForm.patchValue({
+							return_affiliate_id: firstAffId
+						});
+						if (this.selectedPendingAffiliate) {
+							this.chooseReturnPendingAffiliate(this.selectedPendingAffiliate);
+						}
+					}
+				}
 				if (this.booking_created_from == 'subscriber') {
 					this.BookingForm.patchValue({
 						return_susbcriber_name: this.BookingForm?.get('susbcriber_name')?.value,
@@ -8408,6 +9037,20 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (value === 'affiliate') {
 					this.chooseAffiliate()
 				}
+				if (value === 'in_progress_affiliate' && this.Form.service_type.value === 'round_trip') {
+					this.BookingForm.patchValue({
+						return_affiliate_type: 'in_progress_affiliate'
+					});
+					const firstAffId = this.BookingForm.get('affiliate_id')?.value;
+					if (firstAffId) {
+						this.BookingForm.patchValue({
+							return_affiliate_id: firstAffId
+						});
+						if (this.selectedPendingAffiliate) {
+							this.chooseReturnPendingAffiliate(this.selectedPendingAffiliate);
+						}
+					}
+				}
 			}
 		})
 
@@ -8489,6 +9132,19 @@ export class BookingComponent implements OnInit, OnDestroy {
 				if (this.Form.affiliate_type.value === 'in_progress_affiliate') {
 					const pendingAff = this.AffiliateAccounts?.find((a: any) => a.id == value) || null;
 					this.choosePendingAffiliate(pendingAff);
+					if (this.BookingForm.get('service_type').value == 'round_trip') {
+						if (this.Form.return_affiliate_type.value !== 'in_progress_affiliate') {
+							this.BookingForm.patchValue({
+								return_affiliate_type: 'in_progress_affiliate'
+							});
+						}
+						this.BookingForm.patchValue({
+							return_affiliate_id: value
+						});
+						if (pendingAff || this.selectedPendingAffiliate) {
+							this.chooseReturnPendingAffiliate(pendingAff || this.selectedPendingAffiliate);
+						}
+					}
 				} else {
 					this.chooseAffiliate();
 					this.fetchAffiliateInformation(value);
@@ -8556,7 +9212,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					let name = (this.BigData['vehicleCategories'] || []).find(item => item.id == value)?.['name'] || ''
 					this.SetFormValue('vehicle_type_name', name);
 					this.BookingForm.get('vehicle_make').setValue('')
 					this.BookingForm.get('vehicle_make_name').setValue('')
@@ -8592,7 +9248,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 			} else {
 				if (value && this.BigData) {
-					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					let name = (this.BigData['vehicleCategories'] || []).find(item => item.id == value)?.['name'] || ''
 					this.SetFormValue('return_vehicle_type_name', name);
 					this.BookingForm.get('return_vehicle_make').setValue('')
 					this.BookingForm.get('return_vehicle_make_name').setValue('')
@@ -8608,124 +9264,196 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 		this.BookingForm.get('vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+			if (value) {
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value || item.makeId == value);
+				}
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || (this.Form.affiliate_type.value == 'in_progress_affiliate' && this.selectedPendingAffiliate?.has_vehicle)) {
+					const match = (this.vehicleMake_arr || []).find((item: any) => item.make_id == value || item.id == value);
+					if (match) {
+						name = match.make || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleMakes'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.make || '';
+					}
+				}
+				this.SetFormValue('vehicle_make_name', name);
 			} else {
-				if (value && this.BigData) {
-					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
-					this.SetFormValue('vehicle_make_name', name)
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels;
 				}
-				else {
-					this.BookingForm.get('vehicle_make_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('vehicle_make_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_make').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
+			if (value) {
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels.filter((item: any) => item.make_id == value || item.makeId == value);
+				}
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || (this.Form.return_affiliate_type.value == 'in_progress_affiliate' && this.selectedReturnPendingAffiliate?.has_vehicle)) {
+					const match = (this.return_vehicleMake_arr || []).find((item: any) => item.make_id == value || item.id == value);
+					if (match) {
+						name = match.make || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleMakes'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.make || '';
+					}
+				}
+				this.SetFormValue('return_vehicle_make_name', name);
 			} else {
-				if (value && this.BigData) {
-					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_model', this.BigData?.vehicleModels[0]['id'])
-					this.SetFormValue('return_vehicle_make_name', name)
+				if (this.BigData_COPY?.vehicleModels && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY.vehicleModels;
 				}
-				else {
-					this.BookingForm.get('return_vehicle_make_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('return_vehicle_make_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('vehicle_model').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleModal_arr || []).find((item: any) => item.model_id == value || item.id == value);
+					if (match) {
+						name = match.model || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleModels'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.model || '';
+					}
+				}
+				this.SetFormValue('vehicle_model_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_model_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_model_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('vehicle_model_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_model').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleModal_arr || []).find((item: any) => item.model_id == value || item.id == value);
+					if (match) {
+						name = match.model || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleModels'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.model || '';
+					}
+				}
+				this.SetFormValue('return_vehicle_model_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_model_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_model_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('return_vehicle_model_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('vehicle_year').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleYear_arr || []).find((item: any) => item.year_id == value || item.id == value);
+					if (match) {
+						name = match.year || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleYears'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.year || '';
+					}
+				}
+				if (!name && !isNaN(Number(value)) && Number(value) > 1900 && Number(value) < 2100) {
+					name = String(value);
+				}
+				this.SetFormValue('vehicle_year_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_year_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_year_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('vehicle_year_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_year').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleYear_arr || []).find((item: any) => item.year_id == value || item.id == value);
+					if (match) {
+						name = match.year || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleYears'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.year || '';
+					}
+				}
+				if (!name && !isNaN(Number(value)) && Number(value) > 1900 && Number(value) < 2100) {
+					name = String(value);
+				}
+				this.SetFormValue('return_vehicle_year_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_year_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_year_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-				}
+				this.BookingForm.get('return_vehicle_year_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('vehicle_color').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.vehicleColor_arr || []).find((item: any) => item.color_id == value || item.id == value);
+					if (match) {
+						name = match.color || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleColors'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.color || '';
+					}
+				}
+				this.SetFormValue('vehicle_color_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-					this.SetFormValue('vehicle_color_name', name)
-				}
-				else {
-					this.BookingForm.get('vehicle_color_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-
-				}
+				this.BookingForm.get('vehicle_color_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
 		this.BookingForm.get('return_vehicle_color').valueChanges.pipe(takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.return_affiliate_type.value == 'affiliate') {
-
+			if (value) {
+				let name = '';
+				if (this.Form.return_affiliate_type.value == 'affiliate' || this.Form.return_affiliate_type.value == 'in_progress_affiliate') {
+					const match = (this.return_vehicleColor_arr || []).find((item: any) => item.color_id == value || item.id == value);
+					if (match) {
+						name = match.color || match.name || '';
+					}
+				}
+				if (!name && this.BigData) {
+					const match = (this.BigData['vehicleColors'] || []).find((item: any) => item.id == value);
+					if (match) {
+						name = match.name || match.color || '';
+					}
+				}
+				this.SetFormValue('return_vehicle_color_name', name);
 			} else {
-				if (value && this.BigData) {
-					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-					this.SetFormValue('return_vehicle_color_name', name)
-				}
-				else {
-					this.BookingForm.get('return_vehicle_color_name').setValue('')
-					this.BookingForm.updateValueAndValidity();
-
-				}
+				this.BookingForm.get('return_vehicle_color_name').setValue('');
+				this.BookingForm.updateValueAndValidity();
 			}
 		})
 
@@ -8981,6 +9709,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
 	resetDriverAndVehicle(affiliate_type: string) {
 		this.selectedPendingAffiliate = null;
+
 		const fieldsToReset = [
 			'affiliate_id',
 			'loose_affiliate_id',
@@ -9069,6 +9798,25 @@ export class BookingComponent implements OnInit, OnDestroy {
 		this.return_DriverList = [];
 
 		this.BookingForm.updateValueAndValidity();
+
+		if (return_affiliate_type === 'in_progress_affiliate' && this.Form.affiliate_type.value === 'in_progress_affiliate') {
+			const firstAffId = this.BookingForm.get('affiliate_id')?.value;
+			if (firstAffId) {
+				this.BookingForm.patchValue({
+					return_affiliate_id: firstAffId
+				});
+				if (this.selectedPendingAffiliate) {
+					this.chooseReturnPendingAffiliate(this.selectedPendingAffiliate);
+				}
+			}
+		} else if (return_affiliate_type === 'affiliate' && this.Form.affiliate_type.value === 'affiliate') {
+			const firstAffId = this.BookingForm.get('affiliate_id')?.value;
+			if (firstAffId) {
+				this.BookingForm.patchValue({
+					return_affiliate_id: firstAffId
+				});
+			}
+		}
 	}
 
 	RateFormValue(data: any) {
@@ -9661,13 +10409,6 @@ export class BookingComponent implements OnInit, OnDestroy {
 		} else {
 			return `${cancellationHours} hours`;
 		}
-	}
-
-	onSearchAffiliateId(term, item) {
-		return this.getAffiliateSearchText(item).includes((term || '').toLowerCase())
-
-		//   console.log("in search",event)
-		//   this.AffiliateAccounts_copy = this.AffiliateAccounts.filter(option => option.bindNameAffiliate.toLoweCase().startsWith(event.term.toLowerCase()))
 	}
 
 	onSearchLooseAffiliateId(term, item) {

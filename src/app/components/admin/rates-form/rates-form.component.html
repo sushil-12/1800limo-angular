@@ -58,6 +58,7 @@
 						<input type="number" matInput placeholder="0" formControlName="baserate"
 							[tabIndex]="getTabIndex(item.key)" class="font-weight-bolder rate-input-field text-right"
 							(focus)="$event.target.select()"
+							[readonly]="(userRole === 'affiliate' || isAffiliateMode) && sub_item.key === 'Base_Rate'"
 							(change)="sub_item.key != 'Misc_Charges' && handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
@@ -296,6 +297,7 @@
 						<input type="number" matInput placeholder="0" [tabIndex]="getTabIndex('r_'+item.key)"
 							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()"
 							formControlName="baserate"
+							[readonly]="(userRole === 'affiliate' || isAffiliateMode) && sub_item.key === 'Base_Rate'"
 							(change)="sub_item.key != 'Misc_Charges' && handleNegtiveValuReturn(item.key,sub_item.key,'baserate',$event.target.value)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">

@@ -595,10 +595,9 @@
 									<span class="preview-output-field">
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate((bookingPreview?.share_array?.adminShare
 										? bookingPreview?.share_array?.adminShare :
-										bookingPreview?.rates_preview?.admin_share) - deducted_stripe_fee)}}
+										bookingPreview?.rates_preview?.admin_share))}}
 									</span>
-									<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate - deducted
-										stripe fee)</span>
+									<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate)</span>
 								</div>
 							</div>
 						</div>
@@ -720,8 +719,7 @@
 										{{bookingPreview?.currency_symbol}}{{formatBaseRate(returnShareArray?.deducted_admin_share
 										? returnShareArray?.deducted_admin_share : returnShareArray?.adminShare)}}
 									</span>
-									<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate - deducted
-										stripe fee)</span>
+									<span class="preview-output-desc">({{adminSharePercent}}% of Base Rate)</span>
 								</div>
 							</div>
 						</div>
@@ -834,6 +832,14 @@
 					(click)="shareActiveTab = 'sms'">
 					<i class="bi bi-chat-dots"></i> SMS
 				</button>
+				<button type="button" class="rcpt-btn bg-danger text-white" (click)="copyShareHtml()"
+					*ngIf="shareActiveTab === 'email'">
+					<i class="bi bi-clipboard-check"></i> Copy
+				</button>
+				<button type="button" class="rcpt-btn bg-success text-white" (click)="copySmsText()"
+					*ngIf="shareActiveTab === 'sms'">
+					<i class="bi bi-clipboard-check"></i> Copy
+				</button>
 			</div>
 
 			<div class="modal-body rcpt-share-body">
@@ -853,14 +859,6 @@
 
 			<div class="rcpt-share-footer">
 				<button type="button" class="rcpt-btn" data-dismiss="modal">Close</button>
-				<button type="button" class="rcpt-btn rcpt-btn bg-danger text-white"  (click)="copyShareHtml()"
-					*ngIf="shareActiveTab === 'email'">
-					<i class="bi bi-clipboard-check"></i> Copy
-				</button>
-				<button type="button" class="rcpt-btn rcpt-btn bg-success text-white" (click)="copySmsText()"
-					*ngIf="shareActiveTab === 'sms'">
-					<i class="bi bi-clipboard-check"></i> Copy
-				</button>
 			</div>
 		</div>
 	</div>

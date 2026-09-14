@@ -1616,11 +1616,32 @@
 							formControlName="susbcriber_name" readonly />
 					</mat-form-field>
 					<!-- Ng-Select -->
+					<!-- Searched, distance-ranked and paged server side: [typeahead] hands the
+					     term to the API and turns off ng-select's own filtering. -->
 					<ng-select [searchable]="true" appearance="outline"
 						[items]="AffiliateAccounts" bindLabel="bindNameAffiliate" bindValue="id"
 						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)"
+						[typeahead]="affiliateTypeahead$" [loading]="affiliateLookup.loading"
+						loadingText="Searching affiliates…" notFoundText="No affiliates found"
+						(scrollToEnd)="loadMoreAffiliates(false)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
+						<ng-template ng-option-tmp let-item="item">
+							<div class="aff-option">
+								<span class="aff-option__text">
+									{{ item.name }}<span class="aff-option__driver" *ngIf="item.driver_name"> / {{ item.driver_name }}</span>
+								</span>
+								<span class="aff-option__meta">
+									<span class="aff-badge" [ngClass]="affiliateRankClass(item)"
+										[title]="affiliateRankTitle(item)" *ngIf="affiliateShowRank(false) && affiliateRankBadgeText(item)">
+										{{ affiliateRankBadgeText(item) }}
+									</span>
+								</span>
+							</div>
+						</ng-template>
+						<ng-template ng-footer-tmp *ngIf="affiliateLookupHint(false)">
+							<div class="aff-footer">{{ affiliateLookupHint(false) }}</div>
+						</ng-template>
 					</ng-select>
 				</div>
 			</div>
@@ -3219,12 +3240,32 @@
 					</mat-form-field>
 
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [searchable]="true" appearance="outline"
+					<!-- Ranked against the return leg's own pickup, paged server side. -->
+					<ng-select appearance="outline" [searchable]="true"
 						[items]="Return_AffiliateAccounts"
 						bindLabel="bindNameAffiliate" bindValue="id" placeholder="Select Affiliate"
 						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 						formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)"
+						[typeahead]="returnAffiliateTypeahead$" [loading]="returnAffiliateLookup.loading"
+						loadingText="Searching affiliates…" notFoundText="No affiliates found"
+						(scrollToEnd)="loadMoreAffiliates(true)"
 						*ngIf="currentUser?.created_by_role != 'subscriber' ">
+						<ng-template ng-option-tmp let-item="item">
+							<div class="aff-option">
+								<span class="aff-option__text">
+									{{ item.name }}<span class="aff-option__driver" *ngIf="item.driver_name"> / {{ item.driver_name }}</span>
+								</span>
+								<span class="aff-option__meta">
+									<span class="aff-badge" [ngClass]="affiliateRankClass(item)"
+										[title]="affiliateRankTitle(item)" *ngIf="affiliateShowRank(true) && affiliateRankBadgeText(item)">
+										{{ affiliateRankBadgeText(item) }}
+									</span>
+								</span>
+							</div>
+						</ng-template>
+						<ng-template ng-footer-tmp *ngIf="affiliateLookupHint(true)">
+							<div class="aff-footer">{{ affiliateLookupHint(true) }}</div>
+						</ng-template>
 					</ng-select>
 				</div>
 			</div>

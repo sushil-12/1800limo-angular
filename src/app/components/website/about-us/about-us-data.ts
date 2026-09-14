@@ -30,13 +30,13 @@ export const aboutUsData = {
     ourHistory: {
         badge: "Our History",
         content: [
-            `Joseph Anselmo, Founder & CEO, With over 25 years in the industry, he has built a premier global chauffeured transportation network. His business philosophy is rooted in a career defined by integrity, quiet confidence, and the belief that true quality does not require the noise of traditional advertising.`,
-            "Joseph’s leadership style was forged in the United States Army, where he excelled as a squad leader, mortar team commander, and a standout in leadership preparation school. During his service, he earned the distinction of being named the 100,000th trainee at Fort Lewis, Washington, in 1971. His path took a pivotal turn when his aptitude for typing—a skill he initially viewed as mundane—led him away from the gun line and into a role as a division newspaper Editor-in-Chief by age 20. This experience taught him the essential lesson that creativity requires a disciplined structure to be effective.",
-            "Following his service, Joseph applied that same discipline to the transportation industry, patiently developing a proprietary platform over decades to meet his exacting standards. By prioritizing organic, relationship-driven growth over hype, he built a company capable of competing with the industry’s largest players. Today, Joseph continues to emphasize the 'small room'—fostering meaningful professional connections—while leading a firm built on reliability, purpose, and a commitment to excellence.",
+            `Joseph Anselmo is an entrepreneur, U.S. Army veteran, and longtime luxury transportation professional with more than three decades of hands-on experience in chauffeured transportation. His career has taken him from behind the wheel—where he drove more than 1,000,000 customer miles for executives, politicians, entertainers, and other high-profile clients—to building innovative transportation networks and technology designed around reliability, service, and trust.`,
+            "After founding Black and White Limousine in 1989, he recognized the power of building relationships with trusted independent operators rather than relying solely on fleet growth. His philosophy shaped his affiliate networking approach and led to the creation of 1-800-LIMO.COM in 2001.",
+            "For more than two decades, Joseph has continued to evolve his vision for the industry, from pioneering SKYLIMO to personally designing the software, website, and app behind today’s 1-800-LIMO.COM platform. His focus remains simple: make professional transportation easier to access, improve communication and booking efficiency, and create a more transparent environment for customers, operators, and affiliates. Built on experience, disciplined execution, and meaningful relationships, his vision continues to shape the future of luxury ground transportation.",
         ],
-        image: "assets/images/history-jo.png",
+        image: "assets/images/history-joe.jpeg",
         yearsBadge: {
-            number: "20+",
+            number: "30+",
             text: "Years of Excellence"
         },
         buttonText: "Learn More"

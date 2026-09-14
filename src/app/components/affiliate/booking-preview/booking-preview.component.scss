@@ -125,12 +125,12 @@
 
 .rcpt-btn {
 	flex: 1 1 0;
-	min-width: 84px;
+	min-width: 75px;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	gap: 6px;
-	padding: 9px 12px;
+	padding: 7px 10px;
 	font-size: 0.86rem;
 	font-weight: 700;
 	color: #374151;
@@ -916,10 +916,16 @@
 
 .rcpt-share-tabs {
 	display: flex;
+	align-items: center;
 	gap: 0;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 	background: #fff;
 	padding: 0 20px;
+
+	.rcpt-btn {
+		flex: 0 0 auto;
+		margin-left: auto;
+	}
 }
 
 .rcpt-share-email, .rcpt-share-sms {

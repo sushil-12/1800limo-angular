@@ -37,6 +37,7 @@ export class RatesFormComponent implements OnInit, OnChanges, OnDestroy {
 	/** Individual portal: hide the editable rate buckets and share rows, show totals only. */
 	@Input() hideBuckets: boolean = false;
 	@Input() isAffiliateMode: boolean = false;
+	@Input() userRole: string = "";
 
 
 	// Throw Events.

@@ -2149,24 +2149,44 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	formatBannerTitle(title: string | undefined): string {
 		if (!title) return '';
 
-		const trimmed = title.trim();
-		const words = trimmed.split(/\s+/);
+		// Convert Quill <p> structure into text with <br> tags for paragraph breaks / empty line spaces
+		const converted = title
+			.replace(/<p\b[^>]*>\s*(?:<br\s*\/?>|&nbsp;)?\s*<\/p>/gi, '<br>')
+			.replace(/<\/p>/gi, '<br>')
+			.replace(/<p\b[^>]*>/gi, '')
+			.replace(/(?:<br\s*\/?>\s*)+$/gi, '')
+			.trim();
 
-		if (words.length === 1) {
-			return `<span style="color: #f3933d; display: block;">${words[0]}</span>`;
+		if (!converted) return '';
+
+		// If explicit line breaks (<br>) exist in title, preserve line breaks and highlight last part
+		if (converted.includes('<br>')) {
+			const parts = converted.split(/<br\s*\/?>/i);
+			const lastPart = parts.pop() || '';
+			const mainPart = parts.join('<br>');
+			return `${mainPart}<br><span style="color: #f3933d; display: block; margin-top: 4px;">${lastPart}</span>`;
 		}
 
-		const lastWord = words.pop();
+		// Otherwise, split single paragraph into words and show last 2 words in second line (orange span)
+		const words = converted.split(/\s+/);
+
+		if (words.length <= 2) {
+			return `<span style="color: #f3933d; display: block;">${converted}</span>`;
+		}
+
+		const lastTwoWords = words.splice(-2).join(' ');
 		const mainPart = words.join(' ');
 
-		return `${mainPart}<br><span style="color: #f3933d; display: block;">${lastWord}</span>`;
+		return `${mainPart}<br><span style="color: #f3933d; display: block; margin-top: 4px;">${lastTwoWords}</span>`;
 	}
 
 	formatBannerContent(content: string | undefined): string {
 		if (!content) return '';
 		let text = content
-			.replace(/<\/p>\s*<p>/gi, ' ')
-			.replace(/<\/?p[^>]*>/gi, '')
+			.replace(/<p\b[^>]*>\s*(?:<br\s*\/?>|&nbsp;)?\s*<\/p>/gi, '<br>')
+			.replace(/<\/p>/gi, '<br>')
+			.replace(/<p\b[^>]*>/gi, '')
+			.replace(/(?:<br\s*\/?>\s*)+$/gi, '')
 			.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
 			.trim();
 		return text;

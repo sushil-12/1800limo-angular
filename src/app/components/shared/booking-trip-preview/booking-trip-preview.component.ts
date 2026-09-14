@@ -622,10 +622,10 @@ export class BookingTripPreviewComponent implements OnInit {
       b?.created_by_role === 'travel_planner';
 
     this.showRateDistribution =
-      !isTravelAgentBooking &&
-      (this.userRole === 'admin' ||
-        (this.userRole === 'affiliate' &&
-          b.payment_status != 'paid' &&
+      this.userRole === 'admin' ||
+      (!isTravelAgentBooking &&
+      (this.userRole === 'affiliate' &&
+        b.payment_status != 'paid' &&
           b.payment_status != 'transfer_failed'));
 
     try {
@@ -638,7 +638,8 @@ export class BookingTripPreviewComponent implements OnInit {
     }
 
     try {
-      if (b?.account_type == 'travel_planner' && b?.created_by != 1) {
+      const isCreatedByAdmin = b?.created_by == 1 || b?.created_by_role === 'admin' || (this.userRole === 'admin' && !b?.share_array?.travelAgentShare);
+      if ((b?.account_type == 'travel_planner' || b?.account_type == 'travel_agent') && !isCreatedByAdmin) {
         this.adminSharePercent = 15;
       } else if (b?.share_array?.farmoutShare) {
         this.adminSharePercent = 15;
@@ -649,6 +650,7 @@ export class BookingTripPreviewComponent implements OnInit {
       console.error('[BookingTripPreview] applyActiveLeg: Failed to calculate adminSharePercent', shareErr);
     }
 
+    console.log("b?.share_array", b?.share_array)
     if (b?.payment_status == 'unpaid' || this.previewMode !== 'view') {
       this.shareArray = b?.share_array;
       this.rates_preview = b?.rates_preview;

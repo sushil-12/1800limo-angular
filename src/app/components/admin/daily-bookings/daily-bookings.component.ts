@@ -632,6 +632,7 @@ export class DailyBookingsComponent implements OnInit, AfterViewInit, OnDestroy 
 		this.saveCookie("admin_startDate", this.startDate);
 		this.saveCookie("admin_endDate", this.endDate);
 		localStorage.setItem("DBSearch", this.searchText);
+		this.applySearchOrdering();
 		this.loadBookings(
 			null,
 			this.startDate,
@@ -1663,10 +1664,22 @@ sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatu
 		return formattedText;
 	}
 
+	// Resolve the sort order based on the search box state.
+	// Empty search box -> keep the previous behaviour (saved/default ordering).
+	// Non-empty search box -> always show results in descending order by pickup date.
+	applySearchOrdering() {
+		if (this.searchText?.trim()) {
+			this.orderBy = "pickup_date_desc";
+		} else {
+			this.orderBy = localStorage.getItem("orderByCreatedAt") || "pickup_date_asc";
+		}
+	}
+
 	timer: any;
 	runBookingsSearch(searchValue: string = this.searchText) {
 		this.searchText = searchValue ?? "";
 		localStorage.setItem("DBSearch", this.searchText);
+		this.applySearchOrdering();
 		if (this.startDate) {
 			this.saveCookie("admin_startDate", this.startDate);
 		}
@@ -1688,6 +1701,7 @@ sendEmailClicked(bookingId, emailTarget, showChangedFields = false, bookingStatu
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem("DBSearch", this.searchText);
+			this.applySearchOrdering();
 			if (this.startDate) {
 				this.saveCookie("admin_startDate", this.startDate);
 			}
