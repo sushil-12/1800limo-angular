@@ -177,7 +177,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
 		client_account_types_subscriber: ['individual', 'loose_customer'],
-		affiliate_accounts: ["affiliate", "loose_affiliate","in_progress_affiliate"],
+		affiliate_accounts: ["affiliate", "loose_affiliate"],
 		
 		numbers: (() => {
 			let arr = []
@@ -9192,8 +9192,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 		// 	}
 		// })
 
-		this.BookingForm.get('vehicle_type').valueChanges.pipe(distinctUntilChanged(),takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
-			if (this.Form.affiliate_type.value == 'affiliate') {
+		this.BookingForm.get('vehicle_type').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate' || this.Form.affiliate_type.value == 'in_progress_affiliate') {
 				if (value) {
 					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
 				}
@@ -9228,7 +9228,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 		})
 
 
-		this.BookingForm.get('return_vehicle_type').valueChanges.pipe(distinctUntilChanged(),takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
+		this.BookingForm.get('return_vehicle_type').valueChanges.pipe(distinctUntilChanged(), takeUntil(this.formSubscriptionsReset$)).subscribe((value: string) => {
 			if (this.Form.return_affiliate_type.value == 'affiliate') {
 				if (value) {
 					this.return_VehicleList.map(i => (i.unique_key == this.return_unique_key) ? this.handleReturnSelectVehicleType(i) : '')
