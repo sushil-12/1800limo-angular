@@ -574,7 +574,15 @@ export class VehicleDetailsComponent implements OnInit {
 	}
 
 	formatTime(value: string): string {
-		return moment(value, 'HH:mm:ss').format('hh:mm a')
+		if (!value) return '';
+		const formats = [
+			'hh:mm A', 'hh:mm a', 'h:mm A', 'h:mm a',
+			'hh:mm:ss A', 'hh:mm:ss a', 'h:mm:ss A', 'h:mm:ss a',
+			'HH:mm:ss', 'HH:mm', 'H:mm:ss', 'H:mm'
+		];
+		const m = moment(value, formats);
+		if (!m.isValid()) return value;
+		return m.format('hh:mm a');
 	}
 
  // helper function for images

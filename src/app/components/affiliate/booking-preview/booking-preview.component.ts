@@ -214,7 +214,11 @@ export class BookingPreviewComponent implements OnInit {
     const dateStr = b.pickup_date
       ? `${moment(b.pickup_date).format('MM/DD/YYYY')} | ${moment(b.pickup_date).format('MMM D, YYYY')}`
       : '';
-    const timeM = b.pickup_time ? moment(b.pickup_time, ['HH:mm:ss', 'HH:mm']) : null;
+    const timeM = b.pickup_time ? moment(b.pickup_time, [
+      'hh:mm A', 'hh:mm a', 'h:mm A', 'h:mm a',
+      'hh:mm:ss A', 'hh:mm:ss a', 'h:mm:ss A', 'h:mm:ss a',
+      'HH:mm:ss', 'HH:mm', 'H:mm:ss', 'H:mm'
+    ]) : null;
     const timeStr = timeM && timeM.isValid()
       ? `${timeM.format('h:mm a')} | ${timeM.format('HHmm')} h`
       : '';
@@ -277,7 +281,11 @@ export class BookingPreviewComponent implements OnInit {
     const dateStr = b.pickup_date
       ? `${moment(b.pickup_date).format('MM/DD/YYYY')} | ${moment(b.pickup_date).format('MMM D, YYYY')}`
       : '';
-    const timeM = b.pickup_time ? moment(b.pickup_time, ['HH:mm:ss', 'HH:mm']) : null;
+    const timeM = b.pickup_time ? moment(b.pickup_time, [
+      'hh:mm A', 'hh:mm a', 'h:mm A', 'h:mm a',
+      'hh:mm:ss A', 'hh:mm:ss a', 'h:mm:ss A', 'h:mm:ss a',
+      'HH:mm:ss', 'HH:mm', 'H:mm:ss', 'H:mm'
+    ]) : null;
     const timeStr = timeM && timeM.isValid()
       ? `${timeM.format('h:mm a')} | ${timeM.format('HHmm')} h`
       : '';
@@ -1213,7 +1221,14 @@ export class BookingPreviewComponent implements OnInit {
   }
 
   formatTime(time: string): string {
-    const m = moment(time, 'HH:mm:ss');
+    if (!time) return '';
+    const formats = [
+      'hh:mm A', 'hh:mm a', 'h:mm A', 'h:mm a',
+      'hh:mm:ss A', 'hh:mm:ss a', 'h:mm:ss A', 'h:mm:ss a',
+      'HH:mm:ss', 'HH:mm', 'H:mm:ss', 'H:mm'
+    ];
+    const m = moment(time, formats);
+    if (!m.isValid()) return time;
     return `${m.format('LT')} | ${m.format('HHmm')} h`;
   }
 
